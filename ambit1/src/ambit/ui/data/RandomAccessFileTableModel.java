@@ -54,18 +54,22 @@ public class RandomAccessFileTableModel extends AbstractTableModel implements Pr
 	protected IAtomContainersList reader;
 
     public RandomAccessFileTableModel()  {
-       this(null);
+       this(null,new Dimension(200,200));
     }
     
-    public RandomAccessFileTableModel(IAtomContainersList atomContainersList) {
+    public RandomAccessFileTableModel(IAtomContainersList atomContainersList, Dimension cellSize) {
         super();
         setReader(atomContainersList);
-        imageTools = new CompoundImageTools(new Dimension(200,200));
+        imageTools = new CompoundImageTools(cellSize);
         
         ArrayList<String> properties = new ArrayList<String>();
         properties.add(CDKConstants.CASRN);
         properties.add(CDKConstants.NAMES);
         setProperties(properties);
+    }
+    public void setCellSize(Dimension cell) {
+    	imageTools.setImageSize(cell);
+    	fireTableStructureChanged();
     }
     public int getRowCount() {
         if (reader ==null) return 0;

@@ -27,15 +27,23 @@ package ambit.ui.data.molecule;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import ambit.data.molecule.DataContainer;
 import ambit.data.molecule.IAtomContainersList;
+import ambit.data.molecule.PropertyTranslator;
+import ambit.ui.UITools;
 import ambit.ui.data.RandomAccessFileTableModel;
+import ambit.ui.data.SelectPropertiesPanel;
 
 public class CompoundsPanel extends JPanel implements Observer {
 	protected JPanel panel;
@@ -53,9 +61,10 @@ public class CompoundsPanel extends JPanel implements Observer {
 		
 	}
 	protected JPanel createPanel(Color bgColor, Color fColor,int split) {
-		RandomAccessFileTableModel model = new RandomAccessFileTableModel(dataContainer.getContainers());
+		Dimension cell = new Dimension(150,150);
+		RandomAccessFileTableModel model = new RandomAccessFileTableModel(dataContainer.getContainers(),cell);
 		model.setMultiColumn(true);
-		return new AtomcontainersListSpreadsheet(model,new Dimension(150,150)) {
+		return new AtomcontainersListSpreadsheet(model,cell) {
 			@Override
 			protected void cellSelected(int row, int column) {
 				if (row >=0)
@@ -75,6 +84,52 @@ public class CompoundsPanel extends JPanel implements Observer {
 			protected void nextRecord(int move) throws Exception {
 				super.nextRecord(move);
 				dataContainer.setSelectedIndex(dataContainer.getSelectedIndex());
+			}
+			@Override
+			protected JComponent addControls() {
+				final JToolBar p = (JToolBar) super.addControls();
+		        p.add(new MoleculesTableAction("Size",UITools.createImageIcon("ambit/ui/images/size.png"),
+		    	"Modify picture size") {
+		        	public void actionPerformed(ActionEvent e) {
+		        		try {
+		    	        	String size = JOptionPane.showInputDialog(p,
+		   	        			 "Setting the size of picture showing structure diagram (in pixels) " , 
+		   	        			 cellSize.getHeight() 
+		   	        			 );
+		    	        	
+		    	        	int h = Integer.parseInt(size);
+		    	        	setCellSize(new Dimension(h,h));
+		    	        	table.setRowHeight(h);
+		    	        	table.getColumnModel().getColumn(1).setWidth(h);
+		        		} catch (Exception x) {
+		        			
+		        		}
+		        	}
+		        });
+		        
+		        p.add(new MoleculesTableAction("Fields",UITools.createImageIcon("ambit/ui/images/settings.png"),
+		    	"Select fields to display") {
+		        	public void actionPerformed(ActionEvent e) {
+		        		try {
+		        			RandomAccessFileTableModel model = (RandomAccessFileTableModel)table.getModel();
+		        	        ArrayList<String> selected = model.getProperties();
+		        	        SelectPropertiesPanel sp = new SelectPropertiesPanel(
+		        	        		model.getReader().getAvailableProperties()
+		        	        		,new String[] {"identifiers","descriptors","endpoint","similarity","subsets"},
+		        	        		selected);
+		        	        if (JOptionPane.showConfirmDialog(p,sp,"Select data fields to display",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE)       
+		        	                ==JOptionPane.OK_OPTION) {
+		        	            ArrayList<String> fields = sp.getFields();
+		        	            if (fields.size()>0)
+		        	            	model.setProperties(fields);
+		        	        }
+		        		} catch (Exception x) {
+		        			
+		        		}
+		        	}
+		        });     	
+		        
+	        	return p;
 			}
 		};
 		//return new CompoundPanel(model,editAction,bgColor,fColor,split);

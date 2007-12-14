@@ -28,6 +28,8 @@ public class ListOfMoleculesWriter extends DefaultChemObjectWriter {
 	public ListOfMoleculesWriter(DataContainer list) {
 		super();
 		this.list = list;
+		//TODO
+		//list.getContainers().getAvailableProperties().addProperty("CAS", "CAS");
 	}
 
 	public void write(IChemObject arg0) throws CDKException {

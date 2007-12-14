@@ -148,12 +148,12 @@ public class CompoundImageTools {
             
             Dimension d = r2dm.getBackgroundDimension();
             g.setColor(Color.white);
-            g.fillRect(0,0,d.width,d.height);            
+            g.fillRect(0,0,d.width,d.height);
             Point2d dd[] = new Point2d[molecules.size()];
             
             switch (molecules.size()) {
             case 1: { dd[0] = new Point2d(0,0); 
-                GeometryTools.translateAllPositive((Molecule)molecules.get(0)); break;}
+                GeometryTools.translateAllPositive((IMolecule)molecules.get(0)); break;}
             case 2: {
                 dd[0] = new Point2d(d.width/4,d.height/2);
                 dd[1] = new Point2d(3*d.width/4,d.height/2);
@@ -267,7 +267,10 @@ public class CompoundImageTools {
         return imageSize;
     }
     public synchronized void setImageSize(Dimension imageSize) {
+        buffer = new BufferedImage(imageSize.width, imageSize.height,
+				BufferedImage.TYPE_INT_RGB);
         this.imageSize = imageSize;
+        r2dm.setBackgroundDimension(imageSize);
     }
 	public Image getDefaultImage() {
 		return defaultImage;

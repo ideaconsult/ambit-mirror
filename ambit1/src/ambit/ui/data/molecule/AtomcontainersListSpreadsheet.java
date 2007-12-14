@@ -29,10 +29,15 @@
 
 package ambit.ui.data.molecule;
 
+
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Hashtable;
@@ -46,7 +51,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -74,7 +81,7 @@ public class AtomcontainersListSpreadsheet extends JPanel {
 
     protected boolean spreadsheet = true;
 
-    protected final Dimension cellSize;
+    protected Dimension cellSize;
     
     public AtomcontainersListSpreadsheet(RandomAccessFileTableModel model, Dimension cellSize) {
         super(new BorderLayout());
@@ -88,6 +95,34 @@ public class AtomcontainersListSpreadsheet extends JPanel {
         table.setPreferredScrollableViewportSize(new Dimension(600, 200));
         table.setDefaultRenderer(Hashtable.class, new PropertiesCellRenderer());
         table.setDefaultEditor(Hashtable.class, new PropertiesCellRenderer());
+        final String title = "Sizing";
+        table.getInputMap().put(      
+        		KeyStroke.getKeyStroke(KeyEvent.VK_S , InputEvent.CTRL_MASK) ,
+        		title);    
+        table.getActionMap().put(title, new AbstractAction(title) {
+            public void actionPerformed(ActionEvent e) {
+                RandomAccessFileTableModel model = (RandomAccessFileTableModel) table.getModel();
+                IAtomContainersList list = model.getReader();
+                if (list == null) return;
+                else {
+                	int record = list.getSelectedIndex();
+                	if (record >=0) {
+        	        	String size = JOptionPane.showInputDialog(
+        	        			table,
+        	        			"Setting the height of the row: " + record , 
+        	        			table.getRowHeight(record) );         
+        	        	if(size == null) return; 
+        	        	int h = Integer.parseInt(size);
+        	        	table.setRowHeight(record, h);
+        	        	setCellHeight(h);
+                	}
+                }
+            }  
+            }
+        ); 
+        HeightListener hl = new HeightListener();
+        table.addMouseListener(hl);
+        table.addMouseMotionListener(hl);
         table.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
@@ -100,6 +135,10 @@ public class AtomcontainersListSpreadsheet extends JPanel {
         add(addControls(), BorderLayout.SOUTH);
         setMinimumSize(new Dimension(200, 200));
         setSpreadsheet(false);        
+    }
+    protected void setCellHeight(int h) {
+    	cellSize.height = h;
+    	
     }
     protected void cellSelected(int row,int column) {
     	
@@ -413,8 +452,38 @@ public class AtomcontainersListSpreadsheet extends JPanel {
         this.table = table;
     }
 
-    
-    
+    class HeightListener extends MouseInputAdapter {   
+    	Point first , last;    
+    public void mouseDragged(MouseEvent e) {      
+    	if(first == null) {        
+    		first = e.getPoint();        
+    		table.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));      
+    	}
+    	last = e.getPoint();    
+    }    
+    public void mouseReleased(MouseEvent e) {      
+    	if(first == null) return;      
+    	int height = (int) (last.getY() - first.getY());      
+    	if(height == 0) {        
+    		table.setCursor(Cursor.getDefaultCursor());        
+    		first = null;        return;      
+    	}      
+    	int row = table.rowAtPoint(first);      
+    	int rowHeight = table.getRowHeight(row);      
+    	table.setRowHeight(row, rowHeight + height);      
+    	table.setCursor(Cursor.getDefaultCursor());      
+    		first = null;    
+    }           
+    }
+
+	public Dimension getCellSize() {
+		return cellSize;
+	}
+	public void setCellSize(Dimension cellSize) {
+		this.cellSize = cellSize;
+		((RandomAccessFileTableModel) table.getModel()).setCellSize(cellSize);
+	}
+
 }
 abstract class  MoleculesTableAction extends AbstractAction {
     public MoleculesTableAction(String caption, Icon icon, String hint) {
