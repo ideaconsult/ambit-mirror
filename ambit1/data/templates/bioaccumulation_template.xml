@@ -1,0 +1,27 @@
+﻿﻿<?xml version="1.0" encoding="UTF-8"?>
+<template name="Bioaccumulation" >
+<field name="Endpoint" units="" numeric="False" result="False"/>
+<field name="EC Categorization decision (yes, no, uncertain, under review)" units="" numeric="False" result="True"/>
+<field name="EC color code" units="" numeric="False" result="True"/>
+<field name="Confidence (H,M,L) if Categorization criteria met" units="" numeric="False" result="True"/>
+<field name="HC exposure tier if on maximal list (GPE, IPE, LPE)" units="" numeric="False" result="True"/>
+
+
+
+<field name="Which EC list (Organics, Inorganics, polymer, organometallics, UVCBs-biological, UVCB-organics, UVCB-polymer) etc." units="" numeric="False" result="True"/>
+
+<field name="Chemical under challenge?" units="" numeric="False" result="True"/>
+<field name="HC priority (high, moderate, low) if on HC maximal list" units="" numeric="False" result="True"/>
+
+<field name="DSL Quantity" units="" numeric="False" result="True"/>
+<field name="EC Basis for Categorization (PiT, BiT, PBiT) if categorizied" units="" numeric="False" result="True"/>
+<field name="P? (P-exp, P-QSAR, not-P)" units="" numeric="False" result="True"/>
+<field name="medium of concern (A, W, S) leading to categorization" units="" numeric="False" result="True"/>
+<field name="B? (B-exp, B-QSAR, not-B-exp, not-B)" units="" numeric="False" result="True"/>
+<field name="iT(iT-exp, iT-QSAR, not iT, etc.)" units="" numeric="False" result="True"/>
+<field name="iT step" units="" numeric="True" result="True"/>
+<field name="iT pivotal value" units="" numeric="True" result="True"/>
+
+<field name="moiety of concern (e.g. organic, Ag, Hg, Cd, etc.)" units="" numeric="false" result="True"/>
+
+</template>

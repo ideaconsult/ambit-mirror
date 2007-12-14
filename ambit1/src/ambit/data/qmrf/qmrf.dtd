@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- QMRF DTD -->
+<!--DOCTYPE QMRF SYSTEM "qmrf.dtd"-->
+<!ELEMENT QMRF (QMRF_chapters,Catalogs)>
+<!ATTLIST QMRF
+          schema_version CDATA  #FIXED "1.0"
+          version CDATA  #FIXED "1.2"
+          name CDATA #FIXED "(Q)SAR Model Reporting Format"
+          author CDATA #FIXED "European Chemicals Bureau"
+          date CDATA #FIXED "July 2007"
+          contact CDATA #FIXED "European Chemicals Bureau, IHCP, Joint Research Centre, European Commission"
+          email CDATA #FIXED "ecb.qsar@jrc.it"
+          url CDATA #FIXED "http://ecb.jrc.it/QSAR/"
+          >
+
+
+<!ELEMENT QMRF_chapters (QSAR_identifier,QSAR_General_information,QSAR_Endpoint,
+QSAR_Algorithm,QSAR_Applicability_domain+,QSAR_Robustness,QSAR_Predictivity+,
+QSAR_Interpretation,QSAR_Miscelaneous,QMRF_Summary) >
+
+<!-- Chapter 1 -->
+<!ELEMENT QSAR_identifier (QSAR_title,QSAR_models,QSAR_software) >
+<!ATTLIST QSAR_identifier chapter CDATA #FIXED "1" name CDATA #FIXED "QSAR identifier" help CDATA #IMPLIED>
+<!ELEMENT QSAR_title (#PCDATA)>
+<!ATTLIST QSAR_title chapter CDATA  #FIXED "1.1" name CDATA #FIXED "QSAR identifier (title)" help CDATA "">
+<!ELEMENT QSAR_models (#PCDATA)>
+<!ATTLIST QSAR_models chapter CDATA  #FIXED "1.2" name CDATA #FIXED "Other related models" help CDATA "">
+<!ELEMENT QSAR_software (software_ref*) >
+<!-- Reference to Software_catalog -->
+<!ATTLIST QSAR_software chapter CDATA  #FIXED "1.3" name CDATA #FIXED "Software coding the model" help CDATA "">
+
+
+
+<!-- Chapter 2 -->
+<!ELEMENT QSAR_General_information (qmrf_date,qmrf_authors,qmrf_date_revision,qmrf_revision,model_authors,model_date,references,info_availability,related_models)>
+<!ATTLIST QSAR_General_information chapter CDATA  #FIXED "2" name CDATA  #FIXED  "General information" help CDATA "">
+<!-- 2.1 Date of QMRF -->
+<!ELEMENT qmrf_date (#PCDATA)>
+<!ATTLIST qmrf_date chapter CDATA  #FIXED "2.1" name CDATA #FIXED "Date of QMRF" help CDATA "">
+<!-- 2.2. QMRF authors -->
+<!ELEMENT qmrf_authors (author_ref+)>
+<!ATTLIST qmrf_authors chapter CDATA  #FIXED "2.2" name CDATA #FIXED "QMRF author(s) and contact details" help CDATA "">
+<!-- 2.3 Date of QMRF update -->
+<!ELEMENT qmrf_date_revision (#PCDATA)>
+<!ATTLIST qmrf_date_revision chapter CDATA  #FIXED "2.3" name CDATA #FIXED "Date of QMRF update(s)" help CDATA "">
+<!-- 2.4 QMRF update(s) -->
+<!ELEMENT qmrf_revision (#PCDATA)>
+<!ATTLIST qmrf_revision chapter CDATA  #FIXED "2.4" name CDATA #FIXED "QMRF update(s)" help CDATA "">
+<!-- Model developers -->
+<!ELEMENT model_authors (author_ref+)>
+<!ATTLIST model_authors chapter CDATA  #FIXED "2.5" name CDATA #FIXED "Model developer(s) and contact details" help CDATA "">
+<!-- Date of model development -->
+<!ELEMENT model_date (#PCDATA)>
+<!ATTLIST model_date chapter CDATA  #FIXED "2.6" name CDATA #FIXED "Date of model development and/or publication" help CDATA "">
+<!-- 2.7	Reference(s) to main scientific papers and/or software package -->
+<!ELEMENT references (publication_ref*)>
+<!ATTLIST references chapter CDATA  #FIXED "2.7" name CDATA #FIXED "Reference(s) to main scientific papers and/or software package" help CDATA "">
+<!-- 2.8	Availability of information about the model -->
+<!ELEMENT info_availability (#PCDATA)>
+<!ATTLIST info_availability chapter CDATA  #FIXED "2.8" name CDATA #FIXED "Availability of information about the model" help CDATA "">
+<!-- 2.9	Availability of another QMRF for exactly the same model -->
+<!ELEMENT related_models (#PCDATA)>
+<!ATTLIST related_models chapter CDATA  #FIXED "2.9" name CDATA #FIXED "Availability of another QMRF for exactly the same model" help CDATA "">
+
+<!-- Chapter 3 -->
+<!ELEMENT QSAR_Endpoint (model_species,model_endpoint,endpoint_comments,
+endpoint_units,endpoint_variable,endpoint_protocol,endpoint_data_quality)>
+<!ATTLIST QSAR_Endpoint chapter CDATA  #FIXED "3" name CDATA #FIXED "Defining the endpoint - OECD Principle 1" help CDATA "">
+<!-- Link to species catalog -->
+<!ELEMENT model_species (#PCDATA)>
+<!ATTLIST model_species chapter CDATA  #FIXED "3.1" name CDATA #FIXED "Species" help CDATA "">
+
+<!-- Link to endpoint catalog -->
+<!ELEMENT model_endpoint (endpoint_ref*)>
+<!ATTLIST model_endpoint chapter CDATA  #FIXED "3.2" name CDATA #FIXED "Endpoint" help CDATA "">
+
+<!-- endpoints units -->
+<!ELEMENT endpoint_comments (#PCDATA)>
+<!ATTLIST endpoint_comments chapter CDATA  #FIXED "3.3" name CDATA #FIXED "Comment on endpoint" help CDATA "">
+<!-- endpoints units -->
+<!ELEMENT endpoint_units (#PCDATA)>
+<!ATTLIST endpoint_units chapter CDATA  #FIXED "3.4" name CDATA #FIXED "Endpoint units" help CDATA "">
+<!-- dependent variable -->
+<!ELEMENT endpoint_variable (#PCDATA)>
+<!ATTLIST endpoint_variable chapter CDATA  #FIXED "3.5" name CDATA #FIXED "Dependent variable" help CDATA "">
+<!-- Experimental protocol -->
+<!ELEMENT endpoint_protocol (#PCDATA)>
+<!ATTLIST endpoint_protocol chapter CDATA  #FIXED "3.6" name CDATA #FIXED "Experimental protocol" help CDATA "" >
+<!-- Endpoint data quality -->
+<!ELEMENT endpoint_data_quality (#PCDATA)>
+<!ATTLIST endpoint_data_quality chapter CDATA  #FIXED "3.7" name CDATA #FIXED "Endpoint data quality and variability" help CDATA "">
+
+<!-- Chapter 4 -->
+<!ELEMENT QSAR_Algorithm (algorithm_type,algorithm_explicit,algorithms_descriptors,
+descriptors_selection,descriptors_generation,descriptors_generation_software,descriptors_chemicals_ratio)>
+<!ATTLIST QSAR_Algorithm chapter CDATA  #FIXED "4" name CDATA #FIXED "Defining the algorithm - OECD Principle 2" help CDATA "">
+<!-- 4.1 Types of model -->
+<!ELEMENT algorithm_type (#PCDATA)>
+<!ATTLIST algorithm_type chapter CDATA  #FIXED "4.1" name CDATA #FIXED "Type of model" help CDATA "">
+<!-- 4.2 Explicit algorithm -->
+<!ELEMENT algorithm_explicit (algorithm_ref*,equation)>
+<!ATTLIST algorithm_explicit chapter CDATA  #FIXED "4.2" name CDATA #FIXED "Explicit algorithm" help CDATA "">
+<!ELEMENT equation (#PCDATA)>
+<!-- 4.3 Comments on algorithm - removed in 1.2
+<!ELEMENT algorithm_comments (#PCDATA)>
+<!ATTLIST algorithm_comments chapter CDATA  #FIXED "4.3" name CDATA #FIXED "Comments on algorithm" help CDATA "" >
+-->
+<!-- 4.3 Descriptors in model -->
+<!ELEMENT algorithms_descriptors (descriptor_ref*)>
+<!ATTLIST algorithms_descriptors chapter CDATA  #FIXED "4.3" name CDATA #FIXED "Descriptors in the model" help CDATA "">
+<!-- 4.4 Descriptor selection -->
+<!ELEMENT descriptors_selection (#PCDATA)>
+<!ATTLIST descriptors_selection chapter CDATA  #FIXED "4.4" name CDATA #FIXED "Descriptor selection" help CDATA "">
+<!-- 4.5 Descriptor generator -->
+<!ELEMENT descriptors_generation (#PCDATA)>
+<!ATTLIST descriptors_generation chapter CDATA  #FIXED "4.5" name CDATA #FIXED "Algorithm and descriptor generation" help CDATA "">
+<!-- 4.6	Software name and version for descriptor generation  todo - ref to Software catalog-->
+<!ELEMENT descriptors_generation_software (software_ref*)>
+<!ATTLIST descriptors_generation_software chapter CDATA  #FIXED "4.6" name CDATA #FIXED "Software name and version for descriptor generation" help CDATA "" options CDATA #IMPLIED>
+<!-- 4.7	Descriptors/Chemicals ratio -->
+<!ELEMENT descriptors_chemicals_ratio (#PCDATA)>
+<!ATTLIST descriptors_chemicals_ratio chapter CDATA  #FIXED "4.7" name CDATA #FIXED "Descriptors/Chemicals ratio" help CDATA "">
+
+
+<!-- Chapter 5 -->
+<!ELEMENT QSAR_Applicability_domain (app_domain_description,app_domain_method,app_domain_software,applicability_limits)>
+<!ATTLIST QSAR_Applicability_domain chapter CDATA  #FIXED "5" name CDATA #FIXED "Defining the applicability domain - OECD Principle 3" help CDATA "">
+<!-- 5.1	Description of the applicability domain of the model -->
+<!ELEMENT app_domain_description (#PCDATA)>
+<!ATTLIST app_domain_description chapter CDATA  #FIXED "5.1" name CDATA #FIXED "Description of the applicability domain of the model" help CDATA "">
+<!-- 5.2	Description of the applicability domain of the model -->
+<!ELEMENT app_domain_method (#PCDATA)>
+<!ATTLIST app_domain_method chapter CDATA  #FIXED "5.2" name CDATA #FIXED "Method used to assess the applicability domain" help CDATA "">
+<!-- 5.3	Software name and version for applicability domain assessment -->
+<!ELEMENT app_domain_software (software_ref*)>
+<!ATTLIST app_domain_software chapter CDATA  #FIXED "5.3" name CDATA #FIXED "Software name and version for applicability domain assessment" help CDATA "">
+<!-- 5.4	Description of the applicability domain of the model -->
+<!ELEMENT applicability_limits (#PCDATA)>
+<!ATTLIST applicability_limits chapter CDATA  #FIXED "5.4" name CDATA #FIXED "Limits of applicability" help CDATA "">
+
+<!-- Chapter 6 -->
+<!ELEMENT QSAR_Robustness (training_set_availability,training_set_data,training_set_descriptors,dependent_var_availability,other_info,
+preprocessing,goodness_of_fit,loo,lmo,yscrambling,bootstrap,other_statistics)>
+<!ATTLIST QSAR_Robustness chapter CDATA  #FIXED "6" name CDATA #FIXED "Internal validation - OECD Principle 4" help CDATA "">
+<!-- 6.1	Availability of the training set -->
+<!ELEMENT training_set_availability (#PCDATA)>
+<!ATTLIST training_set_availability chapter CDATA  #FIXED "6.1" answer (Yes|No) #REQUIRED name CDATA #FIXED "Availability of the training set" help CDATA "">
+<!-- 6.2	Available information for the training set -->
+<!ELEMENT training_set_data (#PCDATA)>
+<!ATTLIST training_set_data chapter CDATA  #FIXED "6.2"
+			name CDATA #FIXED "Available information for the training set"
+			help CDATA ""
+			chemname (Yes|No) #REQUIRED
+			cas (Yes|No) #REQUIRED
+			smiles (Yes|No) #REQUIRED
+			inchi (Yes|No) #REQUIRED
+			mol (Yes|No) #REQUIRED
+			formula (Yes|No) #REQUIRED
+			>
+<!-- 6.3	Data for each descriptor variable for the training set -->
+<!ELEMENT training_set_descriptors (#PCDATA)>
+<!ATTLIST training_set_descriptors
+          chapter CDATA  #FIXED "6.3" name CDATA #FIXED "Data for each descriptor variable for the training set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 6.4	Data for the dependent variable for the training set -->
+<!ELEMENT dependent_var_availability (#PCDATA)>
+<!ATTLIST dependent_var_availability
+          chapter CDATA  #FIXED "6.4" name CDATA #FIXED "Data for the dependent variable for the training set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 6.5	Other information about the training set -->
+<!ELEMENT other_info (#PCDATA)>
+<!ATTLIST other_info  chapter CDATA  #FIXED "6.5" name CDATA #FIXED "Other information about the training set" help CDATA "">
+<!-- 6.6	Pre-processing of data before modelling -->
+<!ELEMENT preprocessing (#PCDATA)>
+<!ATTLIST preprocessing  chapter CDATA  #FIXED "6.6" name CDATA #FIXED "Pre-processing of data before modelling" help CDATA "">
+<!-- 6.7	Statistics for goodness-of-fit -->
+<!ELEMENT goodness_of_fit (#PCDATA)>
+<!ATTLIST goodness_of_fit  chapter CDATA  #FIXED "6.7" name CDATA #FIXED "Statistics for goodness-of-fit" help CDATA "">
+<!-- 6.8	Robustness - Statistics obtained by leave-one-out cross-validation -->
+<!ELEMENT loo (#PCDATA)>
+<!ATTLIST loo  chapter CDATA  #FIXED "6.8" name CDATA #FIXED "Robustness - Statistics obtained by leave-one-out cross-validation" help CDATA "">
+<!-- 6.9	Robustness - Statistics obtained by leave-many-out cross-validation -->
+<!ELEMENT lmo (#PCDATA)>
+<!ATTLIST lmo  chapter CDATA  #FIXED "6.9" name CDATA #FIXED "Robustness - Statistics obtained by leave-many-out cross-validation" help CDATA "">
+<!-- 6.10	Robustness - Statistics obtained by Y-scrambling -->
+<!ELEMENT yscrambling (#PCDATA)>
+<!ATTLIST yscrambling  chapter CDATA  #FIXED "6.10" name CDATA #FIXED "Robustness - Statistics obtained by Y-scrambling" help CDATA "">
+<!-- 6.11	Robustness - Statistics obtained by bootstrap -->
+<!ELEMENT bootstrap (#PCDATA)>
+<!ATTLIST bootstrap  chapter CDATA  #FIXED "6.11" name CDATA #FIXED "Robustness - Statistics obtained by bootstrap" help CDATA "">
+<!-- 6.12	Robustness - Statistics obtained by other methods -->
+<!ELEMENT other_statistics (#PCDATA)>
+<!ATTLIST other_statistics  chapter CDATA  #FIXED "6.12" name CDATA #FIXED "Robustness - Statistics obtained by other methods" help CDATA "">
+
+<!-- Chapter 7 -->
+<!ELEMENT QSAR_Predictivity (validation_set_availability,validation_set_data,validation_set_descriptors,validation_dependent_var_availability,validation_other_info,experimental_design,validation_predictivity,validation_assessment,validation_comments)>
+<!ATTLIST QSAR_Predictivity chapter CDATA  #FIXED "7" name CDATA #FIXED  "External validation - OECD Principle 4" help CDATA "">
+<!-- 7.1	Availability of the external validation set -->
+<!ELEMENT validation_set_availability (#PCDATA)>
+<!ATTLIST validation_set_availability chapter CDATA  #FIXED "7.1"        answer (Yes|No) #REQUIRED
+		name CDATA #FIXED "Availability of the external validation set" help CDATA "">
+<!-- 7.2	Available information for the external validation set -->
+<!ELEMENT validation_set_data (#PCDATA)>
+<!ATTLIST validation_set_data chapter CDATA  #FIXED "7.2"
+			name CDATA #FIXED "Available information for the external validation set"
+			help CDATA ""
+			chemname (Yes|No) #REQUIRED
+			cas (Yes|No) #REQUIRED
+			smiles (Yes|No) #REQUIRED
+			inchi (Yes|No) #REQUIRED
+			mol (Yes|No) #REQUIRED
+			formula (Yes|No) #REQUIRED
+			>
+
+<!-- 7.3	Data for each descriptor variable for the external validation set -->
+<!ELEMENT validation_set_descriptors (#PCDATA)>
+<!ATTLIST validation_set_descriptors
+          chapter CDATA  #FIXED "7.3" name CDATA #FIXED "Data for each descriptor variable for the external validation set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 7.4	Data for the dependent variable for the external validation set -->
+<!ELEMENT validation_dependent_var_availability (#PCDATA)>
+<!ATTLIST validation_dependent_var_availability
+          chapter CDATA  #FIXED "7.4" name CDATA #FIXED  "Data for the dependent variable for the external validation set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 7.5	Other information about the external validation set-->
+<!ELEMENT validation_other_info (#PCDATA)>
+<!ATTLIST validation_other_info  chapter CDATA  #FIXED "7.5" name CDATA #FIXED  "Other information about the external validation set" help CDATA "">
+<!-- 7.6	Experimental design for data splitting-->
+<!ELEMENT experimental_design (#PCDATA)>
+<!ATTLIST experimental_design  chapter CDATA  #FIXED "7.6" name CDATA #FIXED "Experimental design of test set" help CDATA "">
+<!-- 7.7	Predictivity - Statistics obtained by external validation-->
+<!ELEMENT validation_predictivity (#PCDATA)>
+<!ATTLIST validation_predictivity  chapter CDATA  #FIXED "7.7" name CDATA #FIXED "Predictivity - Statistics obtained by external validation" help CDATA "">
+<!-- 7.8	Predictivity - Assessment of the external validation set-->
+<!ELEMENT validation_assessment (#PCDATA)>
+<!ATTLIST validation_assessment  chapter CDATA  #FIXED "7.8" name CDATA #FIXED "Predictivity - Assessment of the external validation set" help CDATA "">
+<!-- 7.9	Comments on the external validation of the model-->
+<!ELEMENT validation_comments (#PCDATA)>
+<!ATTLIST validation_comments  chapter CDATA  #FIXED "7.9" name CDATA #FIXED "Comments on the external validation of the model" help CDATA "">
+
+
+<!-- Chapter 8 -->
+<!ELEMENT QSAR_Interpretation (mechanistic_basis,mechanistic_basis_comments,mechanistic_basis_info)>
+<!ATTLIST QSAR_Interpretation chapter CDATA  #FIXED "8" name CDATA #FIXED  "Providing a mechanistic interpretation - OECD Principle 5" help CDATA "">
+<!-- 8.1	Mechanistic basis of the model:-->
+<!ELEMENT mechanistic_basis (#PCDATA)>
+<!ATTLIST mechanistic_basis  chapter CDATA  #FIXED "8.1" name CDATA #FIXED "Mechanistic basis of the model" help CDATA "">
+<!-- 8.2	A priori or a posteriori mechanistic interpretation-->
+<!ELEMENT mechanistic_basis_comments (#PCDATA)>
+<!ATTLIST mechanistic_basis_comments  chapter CDATA  #FIXED "8.2" name CDATA #FIXED "A priori or a posteriori mechanistic interpretation" help CDATA "">
+<!-- 8.3	Other information about the mechanistic interpretation-->
+<!ELEMENT mechanistic_basis_info (#PCDATA)>
+<!ATTLIST mechanistic_basis_info  chapter CDATA  #FIXED "8.3" name CDATA #FIXED "Other information about the mechanistic interpretation" help CDATA "">
+
+
+
+<!-- Chapter 9 -->
+<!ELEMENT QSAR_Miscelaneous (comments,bibliography,attachments)>
+<!ATTLIST QSAR_Miscelaneous chapter CDATA  #FIXED "9" name CDATA #FIXED "Miscellaneous information" help CDATA "">
+<!-- 9.1	Comments-->
+<!ELEMENT comments (#PCDATA)>
+<!ATTLIST comments  chapter CDATA  #FIXED "9.1" name CDATA #FIXED "Comments" help CDATA "">
+<!-- 9.2	Bibliography-->
+<!ELEMENT bibliography (publication_ref*)>
+<!ATTLIST bibliography  chapter CDATA  #FIXED "9.2" name CDATA #FIXED "Bibliography" help CDATA "">
+
+<!-- 9.3	Supporting information-->
+<!-- added embedded attribute, expecting CDATA in Base64 v1.2-->
+<!ELEMENT attachments (attachment_training_data,attachment_validation_data,attachment_documents)>
+<!ATTLIST attachments  chapter CDATA  #FIXED "9.3" name CDATA #FIXED "Supporting information" help CDATA "">
+<!ELEMENT attachment_training_data (molecules*) >
+<!ELEMENT attachment_validation_data (molecules*) >
+<!ELEMENT attachment_documents (document*)>
+
+<!ELEMENT molecules EMPTY>
+<!-- http://www.ch.ic.ac.uk/chemime/Chemical MIME types -->
+<!ATTLIST molecules embedded (Yes|No) #IMPLIED url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
+<!ELEMENT document EMPTY>
+<!ATTLIST document  embedded (Yes|No) #IMPLIED url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
+
+<!-- 10. Summary (ECB Inventory) -->
+<!ELEMENT QMRF_Summary (QMRF_number,date_publication,keywords,summary_comments)>
+<!ATTLIST QMRF_Summary  chapter CDATA  #FIXED "10" name CDATA #FIXED "Summary (ECB Inventory)" help CDATA "">
+
+<!-- 10.1	QMRF number-->
+<!ELEMENT QMRF_number (#PCDATA)>
+<!ATTLIST QMRF_number  chapter CDATA  #FIXED "10.1" name CDATA #FIXED "QMRF number" help CDATA "">
+<!ELEMENT date_publication (#PCDATA)>
+<!ATTLIST date_publication  chapter CDATA  #FIXED "10.2" name CDATA #FIXED "Publication date" help CDATA "">
+<!ELEMENT keywords (#PCDATA)>
+<!ATTLIST keywords  chapter CDATA  #FIXED "10.3" name CDATA #FIXED "Keywords" help CDATA "">
+<!ELEMENT summary_comments (#PCDATA)>
+<!ATTLIST summary_comments  chapter CDATA  #FIXED "10.4" name CDATA #FIXED "Comments" help CDATA "">
+
+<!-- Misc repositories -->
+<!ELEMENT Catalogs (software_catalog*,algorithms_catalog*,descriptors_catalog*,
+          endpoints_catalog*,
+          publications_catalog*,authors_catalog*)>
+
+<!-- Software catalog-->
+<!ELEMENT software_catalog (software*)>
+<!ELEMENT software EMPTY>
+<!ATTLIST software id ID #REQUIRED
+		name CDATA #REQUIRED
+		url CDATA #IMPLIED
+		number CDATA #REQUIRED
+		description CDATA #IMPLIED
+		version CDATA #IMPLIED
+		contact CDATA #IMPLIED
+		>
+<!ELEMENT software_ref EMPTY>		
+<!ATTLIST software_ref idref IDREF #REQUIRED catalog CDATA #FIXED "software_catalog">
+
+<!-- Algorithms catalog-->
+<!ELEMENT algorithms_catalog (algorithm*)>
+<!ELEMENT algorithm EMPTY>
+<!ATTLIST algorithm id ID #REQUIRED
+			definition CDATA #REQUIRED
+			description CDATA #REQUIRED
+			publication_ref IDREF #IMPLIED
+			>
+
+<!ELEMENT algorithm_ref EMPTY>
+<!ATTLIST algorithm_ref idref IDREF #REQUIRED catalog CDATA #FIXED "algorithms_catalog" >
+
+<!-- Descriptors catalog-->
+<!ELEMENT descriptors_catalog (descriptor*)>
+<!ELEMENT descriptor EMPTY>
+<!ATTLIST descriptor id ID #REQUIRED
+			name CDATA #REQUIRED
+			units CDATA #REQUIRED
+			description CDATA #REQUIRED
+			publication_ref IDREF #IMPLIED
+
+			>
+<!ELEMENT descriptor_ref EMPTY>
+<!ATTLIST descriptor_ref idref IDREF #REQUIRED catalog CDATA #FIXED "descriptors_catalog" >
+
+
+<!-- Endpoints catalog-->
+<!-- subgroup attribute added version 0.9 -->
+<!ELEMENT endpoints_catalog (endpoint*)>
+<!ELEMENT endpoint EMPTY>
+<!ATTLIST endpoint id ID #REQUIRED
+			name CDATA #REQUIRED
+			subgroup CDATA #IMPLIED
+			group CDATA #IMPLIED
+			 >
+
+<!ELEMENT endpoint_ref EMPTY>
+<!ATTLIST endpoint_ref idref IDREF #REQUIRED catalog CDATA #FIXED "endpoints_catalog">
+
+
+<!-- Authors catalog. Number attribute should be unique, will be used in QMRF number generation-->
+<!ELEMENT authors_catalog (author*)>
+<!ELEMENT author EMPTY>
+<!ATTLIST author id ID #REQUIRED name CDATA #REQUIRED
+		affiliation CDATA #IMPLIED
+		contact CDATA #IMPLIED
+		url CDATA #IMPLIED
+		email CDATA #IMPLIED
+		number CDATA #REQUIRED>
+
+
+<!ELEMENT author_ref EMPTY>
+<!ATTLIST author_ref idref IDREF #REQUIRED catalog CDATA #FIXED "authors_catalog">
+
+<!-- Publications catalog-->
+<!ELEMENT publications_catalog (publication*)>
+<!ELEMENT publication EMPTY>
+<!ATTLIST publication id ID #REQUIRED title CDATA #REQUIRED url CDATA #IMPLIED>
+
+<!ELEMENT publication_ref EMPTY>
+<!ATTLIST publication_ref idref IDREF #REQUIRED number CDATA "" catalog CDATA #FIXED "publications_catalog">
+
+

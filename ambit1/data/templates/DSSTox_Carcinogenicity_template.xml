@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="DSSTox-carcinogenicity" >
+<field name="StudyType" units="" numeric="False" result="False"/>
+<field name="Species" units="" numeric="False" result="False"/>
+<field name="Endpoint" units="" numeric="False" result="False"/>
+<field name="SAL CPDB" units="" numeric="False" result="True"/>
+<field name="TD50 Mouse notext" units="" numeric="True" result="True"/>
+<field name="TD50 Mouse Note" units="" numeric="False" result="True"/>
+<field name="Target Sites Mouse Male" units="" numeric="False" result="True"/>
+<field name="Target Sites Mouse Female" units="" numeric="False" result="True"/>
+<field name="TD50 Rat" units="" numeric="True" result="True"/>
+<field name="Target Sites Rat Female" units="" numeric="False" result="True"/>
+<field name="Target Sites Mouse Female" units="" numeric="False" result="True"/>
+<field name="Target Sites Rat Male" units="" numeric="False" result="True"/>
+<field name="Target Sites Rat Both Sexes" units="" numeric="False" result="True"/>
+<field name="Target Sites Cynomolgus" units="" numeric="False" result="True"/>
+<field name="TD50 Cynomolgus" units="" numeric="True" result="True"/>
+<field name="TD50 Hamster notext" units="" numeric="True" result="True"/>
+<field name="TD50 Rat notext" units="" numeric="True" result="True"/>
+<field name="Target Sites Dog" units="" numeric="False" result="True"/>
+<field name="Target Sites Hamster Female" units="" numeric="False" result="True"/>
+<field name="TD50 Rat" units="" numeric="False" result="True"/>
+<field name="TD50 Rhesus" units="" numeric="False" result="True"/>
+<field name="ToxNote" units="" numeric="False" result="True"/>
+<field name="Target Sites Hamster Male" units="" numeric="False" result="True"/>
+<field name="TD50 Dog" units="" numeric="False" result="True"/>
+<field name="TD50 Hamster" units="" numeric="False" result="True"/>
+<field name="Target Sites Rhesus" units="" numeric="False" result="True"/>
+</template>

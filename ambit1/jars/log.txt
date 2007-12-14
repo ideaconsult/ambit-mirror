@@ -1,0 +1,172 @@
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  %f 
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  antlr.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  avalon-framework-4.2.0.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  batik-awt-util.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  batik-dom.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  batik-svggen.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  batik-util.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  batik-xml.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  baysmith-io.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  bcel-5.1.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  biojava-1.4.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  commons-cli-1.0.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  commons-codec-1.3.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  commons-io-1.1.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  commons-lang-2.3.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  commons-logging-1.0.4.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  dadml.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  fop.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  itext-1.4.5.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  jai_codec.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  jai_core.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  Jama-1.0.1.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  Jama-1.0.2.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  javacc.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  jfontchooser.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  jgrapht-0.6.0.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  Jmol.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  Jmol_bioclipse.jar 
+jar verified.
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  JRI.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  jumbo52.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  junit.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  log4j.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  mail.jar 
+jar verified.
+
+Warning: This jar contains unsigned entries which have not been integrity-checked. Re-run with the -verbose option for more details.
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  mysql-2.0.4.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  opsin-big-0.1.0.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  postgresql7.0-1.2.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  sjava-0.68.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  swing-layout-1.0.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  vecmath1.2-1.14.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  weka-3.4.6.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  weka.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  weka_cvs.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  wizard.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xercesImpl.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xercesSamples.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xindice.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xml-apis.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xmldb.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xmlgraphics-commons-1.1.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xom-1.1.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>"C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  xom-1.1b2.jar 
+jar is unsigned. (signatures missing or not parsable)
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\axis\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\cdk\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\help\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\hypergraph\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\jfree\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\junit\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\l2fprod\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\mysql\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs %f 
+
+D:\src\ambit-oldcdk\jars>FOR %f IN (jars\toxtree\*.jar) DO "C:\Program Files\Java\jdk1.5.0_14\bin\jarsigner" -verify -certs  %f 

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<template name="Mutagenicity-TA98" >
+<field name="StudyType" units="" numeric="False" result="False"/>
+<field name="Species" units="" numeric="False" result="False"/>
+<field name="Species.strain" units="" numeric="False" result="False"/>
+<field name="Endpoint" units="" numeric="False" result="False"/>
+<field name="logTA98" units="" numeric="True" result="True"/>
+
+</template>

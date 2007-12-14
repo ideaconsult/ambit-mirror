@@ -1,0 +1,2 @@
+Manifest-Version: 0.1
+Class-Path: ambit-data.jar ambit-database.jar Jama-1.0.1.jar cmlAll.jar base.jar pmrlib.jar cdk-data.jar cdk-core.jar cdk-extra.jar cdk-io.jar cdk-libio.jar cdk-render.jar cdk-standard.jar cdk-qsar.jar jgrapht-0.5.3.jar vecmath1.2-1.14.jar jfreechart-1.0.0.jar jcommon-1.0.0.jar log4j.jar demoData.jar itext-1.4.5.jar

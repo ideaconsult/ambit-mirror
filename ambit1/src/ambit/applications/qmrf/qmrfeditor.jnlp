@@ -1,0 +1,74 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://ambit.acad.bg/qmrf/jws" href="qmrfeditor.jnlp" >
+<information>
+<title>QMRF Editor</title>
+<vendor>Nina Jeliazkova</vendor>
+<description>(Q)SAR Model Reporting Format Editor</description>
+<description kind="short">(Q)SAR Model Reporting Format Editor</description>
+<icon href="kolelce.gif" />
+<icon kind="splash" href="header.gif" />
+</information>
+<resources>
+<j2se version="1.5+" java-vm-args="-Xincgc"/>
+
+<jar href="QMRFEditor.jar" download="eager" main="true"/>
+<jar href="jars/log4j.jar" download="eager"/>
+<jar href="ambit/ambit-data.jar" download="eager"/>
+<jar href="ambit/ambit-ui.jar" download="eager" />
+<jar href="ambit/ambit-io.jar" download="eager" />
+<jar href="ambit/ambit-processors.jar" download="lazy" />
+<jar href="ambit/ambit-processors.jar" download="lazy" />
+<jar href="ambit/ambit-database.jar" download="lazy" />
+<jar href="jars/cdk/cdk-charges.jar" download="lazy" />
+<jar href="jars/cdk/cdk-applications.jar" download="lazy" />
+<jar href="jars/cdk/cdk-core.jar" download="lazy" />
+<jar href="jars/cdk/cdk-datas.jar" download="lazy" />
+<jar href="jars/cdk/cdk-experimental.jar" download="lazy" />
+<jar href="jars/cdk/cdk-extra.jar" download="lazy" />
+<jar href="jars/cdk/cdk-interfaces.jar" download="lazy" />
+<jar href="jars/cdk/cdk-io.jar" download="lazy" />
+<jar href="jars/cdk/cdk-jchempaint.application.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-jchempaint.application.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-jchempaint.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-libio-cml.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-nonotify.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-pdb-cml.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-pdb.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-qsar-cml.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-qsar.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-render.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-smiles.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-standard.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-svg.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-qsar-cml.jar" download="lazy"/>
+<jar href="jars/cdk/cdk-valencycheck.jar" download="lazy"/>
+
+<jar href="jars/jgrapht-0.6.0.jar" download="lazy"/>
+<jar href="jars/jumbo52.jar" download="lazy"/>
+<jar href="jars/xom-1.1.jar" download="lazy"/>
+<jar href="jars/xom-1.1b2.jar" download="lazy"/>
+<jar href="jars/vecmath1.2-1.14.jar" download="lazy"/>
+
+<jar href="jars/gnujaxp.jar" download="lazy"/>
+<jar href="jars/jai_codec.jar" download="lazy"/>
+<jar href="jars/jai_core.jar" download="lazy"/>
+<jar href="jars/jh.jar" download="lazy"/>
+<jar href="jars/mysql-connector-java-3.1.11-bin.jar" download="lazy"/>
+<jar href="jars/jai_codec.jar" download="lazy"/>
+<jar href="jars/jai_core.jar" download="lazy"/>
+<jar href="jars/jh.jar" download="lazy"/>
+<jar href="images.jar" download="lazy"/>
+
+<jar href="jars/l2fprod/l2fprod-common-all.jar" download="eager" />
+</resources>
+<application-desc main-class="ambit.applications.qmrf.QMRFEditor">
+<!--
+<argument>-ehttp://wiki.perfsonar.net/jra1-wiki/images/1/18/MAs.conf</argument>
+-->
+</application-desc> 
+<!-- runs in a sandbox by default
+<security>
+    <all-permissions/>
+</security>
+-->
+</jnlp>

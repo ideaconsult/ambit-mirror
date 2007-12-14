@@ -1,0 +1,12 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+<!-- an example web.xml entry -->
+	  <display-name>Ambit Tag Demo</display-name>
+    <description>An application for testing custom tags</description>
+    <taglib>
+        <taglib-uri>/ambit</taglib-uri>
+        <taglib-location>/WEB-INF/tld/ambit.tld</taglib-location>
+    </taglib>
+</web-app>

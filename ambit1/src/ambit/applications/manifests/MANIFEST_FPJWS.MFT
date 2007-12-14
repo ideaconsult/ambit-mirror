@@ -1,0 +1,4 @@
+Manifest-Version: 0.1
+Main-Class: ambit.applications.FingerprinterJWSTestApp
+Class-Path: cmlAll.jar base.jar pmrlib.jar cdk-data.jar cdk-core.jar cdk-extra.jar cdk-io.jar cdk-libio.jar cdk-render.jar cdk-standard.jar jgrapht-0.5.3.jar vecmath1.2-1.14.jar
+

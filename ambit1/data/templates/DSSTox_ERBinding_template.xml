@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="DSSTox-ERBinding" >
+<field name="StudyType" units="" numeric="False" result="False"/>
+<field name="Species" units="" numeric="False" result="False"/>
+<field name="Endpoint" units="" numeric="False" result="False"/>
+<field name="ChemClass ERB" units="" numeric="False" result="True"/>
+<field name="ER_RBA" units="" numeric="True" result="True"/>
+<field name="LOG ER_RBA" units="" numeric="True" result="True"/>
+<field name="ActivityCategory ER_RBA" units="" numeric="False" result="True"/>
+<field name="Mean ER_RBA ChemClass" units="" numeric="True" result="True"/>
+<field name="Rationale ChemClass ERB" units="" numeric="False" result="True"/>
+</template>

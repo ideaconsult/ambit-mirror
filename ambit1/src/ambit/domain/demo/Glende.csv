@@ -1,0 +1,19 @@
+Code,Compound,Obs,Pred,Dev.,log P,eLumo,eHomo,IL
+1,2-Aminonaphthalene,-1.43,-0.33,1.1,2.28,-0.1750,-8.227,0
+2,1-Ethyl-2-aminonaphthalene,0.36,0.82,0.46,3.29,-0.1690,-8.127,0
+3,1-iPropyl-2-aminonaphthalene,-0.62,1.28,1.9,3.71,-0.1720,-8.102,0
+4,1-nButyl-2-aminonaphthalene,-0.29,1.88,2.17,4.27,-0.1710,-8.124,0
+5,1-tButyl-2-aminonaphthalene,-2,1.79,3.79,4.16,-0.1790,-8.052,0
+6,2-Aminofluorene,1.54,1.75,0.21,3.14,-0.0980,-8.107,1
+7,1-Ethyl-2-aminofluorene,1.85,2.87,1.02,4.14,-0.0730,-8.060,1
+8,1-iPropyl-2-aminofluorene,2.23,3.34,1.11,4.55,-0.0510,-8.023,1
+9,1-nButyl-2-aminofluorene,2.86,3.94,1.08,5.12,-0.0650,-8.045,1
+10,1-tButyl-2-aminofluorene,0.07,3.86,3.79,5.01,-0.0410,-7.997,1
+11,4-Aminobiphenyl,0.65,-0.33,-0.98,2.86,0.0450,-8.274,0
+12,3-Ethyl-4-aminobiphenyl,0.17,0.82,0.65,3.88,0.0730,-8.214,0
+13,3-iPropyl-4-aminobiphenyl,-0.01,1.28,1.29,4.3,0.0760,-8.210,0
+14,3-nButyl-4-aminobiphenyl,-0.17,1.88,2.05,4.86,0.0720,-8.212,0
+15,3-tButyl-4-aminobiphenyl,-0.39,1.79,2.18,4.75,0.1080,-8.170,0
+16,"3,5-Dimethyl-4-aminobiphenyl",-1.34,0.92,2.26,3.93,0.0880,-8.166,0
+17,"3,5-Diethyl-4-aminobiphenyl",-1.71,2.01,3.72,4.92,0.0960,-8.150,0
+18,"3,5-Dipropyl-4-aminobiphenyl",-1.95,2.9,4.85,5.75,0.1140,-8.144,0

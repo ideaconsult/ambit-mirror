@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<template name="DSSTox-EPAFHM" >
+<field name="StudyType" units="" numeric="False" result="False"/>
+<field name="Species" units="" numeric="False" result="False"/>
+<field name="Endpoint" units="" numeric="False" result="False">LC50</field>
+<field name="ChemClass FHM" units="" numeric="False" result="True"/>
+<field name="LC50" units="" numeric="True" result="True"/>
+<field name="LC50NOTE" units="" numeric="False" result="True"/>
+<field name="LC50RATIO" units="" numeric="True" result="True"/>
+<field name="MOA" units="" numeric="False" result="True"/>
+<field name="MOACONF" units="" numeric="False" result="True"/>
+<field name="MIXMOA" units="" numeric="False" result="True"/>
+<field name="TOXINDEX" units="" numeric="True" result="True"/>
+<field name="FATS" units="" numeric="False" result="True"/>
+<field name="BEHAVIOR" units="" numeric="False" result="True"/>
+</template>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jardesc>
+    <jar path="D:/src/ambit/dist/AmbitGenerateConsole.jar"/>
+    <options overwrite="false" compress="true" exportErrors="false" exportWarnings="true" saveDescription="true" descriptionLocation="/ambit/src/ambit/applications/AmbitGenerate.jardesc" useSourceFolders="false" buildIfNeeded="true"/>
+    <manifest manifestVersion="1.0" usesManifest="true" reuseManifest="false" saveManifest="true" generateManifest="false" manifestLocation="/ambit/src/ambit/applications/MANIFEST_Generate.MFT">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportOutputFolder="false" exportJavaFiles="false">
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.database.compounds"/>
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.datastructures"/>
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.database"/>
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.applications{AmbitGenerateConsole.java"/>
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.convertor"/>
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.benchmark"/>
+        <javaElement handleIdentifier="=ambit/src&lt;ambit.log"/>
+    </selectedElements>
+</jardesc>

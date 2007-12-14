@@ -1,0 +1,3 @@
+Manifest-Version: 0.01
+Main-Class: ambit.applets.QMRFApplet
+Class-Path: QMRFApplet.jar QMRFEditor.jar ambit-ui.jar ambit-data.jar ambit-database.jar ambit-io.jar ambit-processors.jar log4j.jar commons-io-1.1.jar commons-cli-1.0.jar fop.jar l2fprod-common-all.jar itext-1.4.5.jar cmlAll.jar base.jar pmrlib.jar cdk-data.jar cdk-core.jar cdk-extra.jar cdk-io.jar cdk-libio.jar cdk-render.jar cdk-standard.jar cdk-qsar.jar jgrapht-0.5.3.jar poi-3.0.jar commons-lang-2.3.jar images.jar

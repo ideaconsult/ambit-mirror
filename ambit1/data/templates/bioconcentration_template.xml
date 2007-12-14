@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<template name="Bioconcentration factor (EURAS)" >
+<field name="Endpoint" units="" numeric="False" result="False"/>
+<field name="species scientific name" units="" numeric="False" result="False"/>
+<field name="species common name" units="" numeric="False" result="False"/>
+<field name="sex" units="M/F/MF" numeric="False" result="False"/>
+<field name="fish weight" units="g" numeric="false" result="false"/>
+<field name="fish length" units="cm" numeric="False" result="false"/>
+<field name="fish age" units="" numeric="False" result="false"/>
+<field name="temperature" units="°C" numeric="False" result="false"/>
+<field name="pH" units="" numeric="False" result="false"/>
+<field name="TOC" units="" numeric="False" result="false"/>
+<field name="flow-through/static/renewal" units="FT/S/R/other" numeric="False" result="false"/>
+<field name="measured/nominal water concentration" units="m/n" numeric="False" result="false"/>
+<field name="exposure concentration" units="mg/L" numeric="true" result="false"/>
+<field name="fresh/marine" units="" numeric="false" result="false"/>
+<field name="tissue analyzed" units="" numeric="false" result="false"/>
+
+<field name="k1" units="d-1" numeric="true" result="true"/>
+<field name="uptake phase duration" units="d" numeric="true" result="true"/>
+
+<field name="k2" units="d-1" numeric="true" result="true"/>
+<field name="elimination phase duration" units="d" numeric="true" result="true"/>
+<field name="T95" units="d" numeric="true" result="true"/>
+<field name="T80" units="d" numeric="true" result="true"/>
+<field name="uptake>T80" units="y/n/prob" numeric="false" result="true"/>
+<field name="T50,elim" units="" numeric="false" result="true"/>
+<field name="elimination>5xT50" units="y/n/prob" numeric="false" result="true"/>
+<field name="BCFss ww" units="Cf/Cw (L/kg)" numeric="true" result="true"/>
+<field name="BCFss lipid" units="Cf/Cw (L/kg)" numeric="true" result="true"/>
+<field name="BCFk ww" units="k1/k2" numeric="true" result="true"/>
+<field name="BCFk lipid" units="BCFk ww/lipid%" numeric="true" result="true"/>
+<field name="lipid" units="%" numeric="true" result="true"/>
+<field name="lipidMethod" units="method" numeric="false" result="true"/>
+<field name="statistics" units="" numeric="false" result="true"/>
+<field name="MITI data (y/n)" units="" numeric="false" result="true"/>
+<field name="ref" units="" numeric="true" result="true"/>
+<field name="remarks" units="" numeric="false" result="true"/>
+<field name="reliability score" units="" numeric="false" result="true"/>
+<field name="Reason for reliability 3/4" units="" numeric="false" result="true"/>
+
+
+
+
+</template>

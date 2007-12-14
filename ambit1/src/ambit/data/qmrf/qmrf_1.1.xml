@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QMRF PUBLIC "http://ambit.acad.bg/qmrf/qmrf.dtd" "qmrf.dtd" >
+<QMRF author="European Chemicals Bureau" contact="European Chemicals Bureau, IHCP, Joint Research Centre, European Commission" date="June 2006" email="ecb.qsar@jrc.it" name="(Q)SAR Model Reporting Format" schema_version="0.8" url="http://ecb.jrc.it/QSAR/" version="1.1">
+  <QMRF_chapters>
+    <QSAR_identifier chapter="1" help="" name="QSAR identifier">
+      <QSAR_title chapter="1.1" help="" name="QSAR identifier (title)"></QSAR_title>
+      <QSAR_models chapter="1.2" help="" name="Other related models"></QSAR_models>
+      <QSAR_software chapter="1.3" help="" name="Software coding the model">
+			<software_ref idref="firstsoftware" />
+      </QSAR_software>
+    </QSAR_identifier>
+    <QSAR_General_information chapter="2" help="" name="General information">
+      <qmrf_date chapter="2.1" help="" name="Date of QMRF"></qmrf_date>
+      <qmrf_authors chapter="2.2" help="" name="QMRF author(s) and contact details">
+		<author_ref idref="firstauthor"/>
+      </qmrf_authors>
+      <qmrf_date_revision chapter="2.3" help="" name="Date of QMRF update(s)"></qmrf_date_revision>
+      <qmrf_revision chapter="2.4" help="" name="QMRF update(s)"></qmrf_revision>
+      <model_authors chapter="2.5" help="" name="Model developer(s) and contact details">
+		<author_ref idref="modelauthor"/>
+      </model_authors>
+      <model_date chapter="2.6" help="" name="Date of model development and/or publication"></model_date>
+      <references chapter="2.7" help="" name="Reference(s) to main scientific papers and/or software package">
+
+      </references>
+      <info_availability chapter="2.8" help="" name="Availability of information about the model"></info_availability>
+      <related_models chapter="2.9" help="" name="Availability of another QMRF for exactly the same model"></related_models>
+    </QSAR_General_information>
+    <QSAR_Endpoint chapter="3" help="" name="Defining the endpoint - OECD Principle 1">
+      <model_species chapter="3.1" help="" name="Species"></model_species>
+      <model_endpoint chapter="3.2" help="" name="Endpoint">
+
+      </model_endpoint>
+      <endpoint_comments chapter="3.3" help="" name="Comment on endpoint"></endpoint_comments>
+      <endpoint_units chapter="3.4" help="" name="Endpoint units"></endpoint_units>
+      <endpoint_variable chapter="3.5" help="" name="Dependent variable"></endpoint_variable>
+      <endpoint_protocol chapter="3.6" help="" name="Experimental protocol"></endpoint_protocol>
+      <endpoint_data_quality chapter="3.7" help="" name="Endpoint data quality"></endpoint_data_quality>
+    </QSAR_Endpoint>
+    <QSAR_Algorithm chapter="4" help="" name="Defining the algorithm - OECD Principle 2">
+      <algorithm_type chapter="4.1" help="" name="Type of model"></algorithm_type>
+      <algorithm_explicit chapter="4.2" help="" name="Explicit algorithm">
+        <equation></equation>
+
+      </algorithm_explicit>
+      <algorithm_comments chapter="4.3" help="" name="Comments on algorithm"></algorithm_comments>
+      <algorithms_descriptors chapter="4.4" help="" name="Descriptors in the model"></algorithms_descriptors>
+      <descriptors_selection chapter="4.5" help="" name="Descriptor selection"></descriptors_selection>
+      <descriptors_generation chapter="4.6" help="" name="Descriptor generation"></descriptors_generation>
+      <descriptors_generation_software chapter="4.7" help="" name="Software name and version for descriptor generation" options="">
+
+      </descriptors_generation_software>
+      <descriptors_chemicals_ratio chapter="4.8" help="" name="Descriptors/Chemicals ratio"></descriptors_chemicals_ratio>
+    </QSAR_Algorithm>
+    <QSAR_Applicability_domain chapter="5" help="" name="Defining the applicability domain - OECD Principle 3">
+      <app_domain_description chapter="5.1" help="" name="Description of the applicability domain of the model"></app_domain_description>
+      <app_domain_method chapter="5.2" help="" name="Method used to assess the applicability domain"></app_domain_method>
+      <app_domain_software chapter="5.3" help="" name="Software name and version for applicability domain assessment">
+
+      </app_domain_software>
+      <applicability_limits chapter="5.4" help="" name="Limits of applicability"></applicability_limits>
+    </QSAR_Applicability_domain>
+    <QSAR_Robustness chapter="6" help="" name="Internal validation - OECD Principle 4">
+      <training_set_availability answer="Yes" chapter="6.1" help="" name="Availability of the training set"></training_set_availability>
+      <training_set_data cas="Yes" chapter="6.2" chemname="Yes" formula="Yes" help="" inchi="Yes" mol="Yes" name="Available information for the training set" smiles="Yes"></training_set_data>
+      <training_set_descriptors answer="All" chapter="6.3" help="" name="Data for each descriptor variable for the training set"></training_set_descriptors>
+      <dependent_var_availability answer="All" chapter="6.4" help="" name="Data for the dependent variable for the training set"></dependent_var_availability>
+      <other_info chapter="6.5" help="" name="Other information about the training set:"></other_info>
+      <preprocessing chapter="6.6" help="" name="Pre-processing of data before modelling"></preprocessing>
+      <goodness_of_fit chapter="6.7" help="" name="Statistics for goodness-of-fit"></goodness_of_fit>
+      <loo chapter="6.8" help="" name="Robustness - Statistics obtained by leave-one-out cross-validation"></loo>
+      <lmo chapter="6.9" help="" name="Robustness - Statistics obtained by leave-many-out cross-validation"></lmo>
+      <yscrambling chapter="6.10" help="" name="Robustness - Statistics obtained by Y-scrambling"></yscrambling>
+      <bootstrap chapter="6.11" help="" name="Robustness - Statistics obtained by bootstrap"></bootstrap>
+      <other_statistics chapter="6.12" help="" name="Robustness - Statistics obtained by other methods"></other_statistics>
+    </QSAR_Robustness>
+    <QSAR_Predictivity chapter="7" help="" name="External validation - OECD Principle 4">
+      <validation_set_availability answer="Yes" chapter="7.1" help="" name="Availability of the external validation set"></validation_set_availability>
+      <validation_set_data cas="Yes" chapter="7.2" chemname="Yes" formula="Yes" help="" inchi="Yes" mol="Yes" name="Available information for the external validation set" smiles="Yes"></validation_set_data>
+      <validation_set_descriptors answer="All" chapter="7.3" help="" name="Data for each descriptor variable for the external validation set"></validation_set_descriptors>
+      <validation_dependent_var_availability answer="All" chapter="7.4" help="" name="Data for the dependent variable for the external validation set"></validation_dependent_var_availability>
+      <validation_other_info chapter="7.5" help="" name="Other information about the external validation set"></validation_other_info>
+      <experimental_design chapter="7.6" help="" name="Experimental design of test set"></experimental_design>
+      <validation_predictivity chapter="7.7" help="" name="Predictivity – Statistics obtained by external validation"></validation_predictivity>
+      <validation_assessment chapter="7.8" help="" name="Predictivity - Assessment of the external validation set"></validation_assessment>
+      <validation_comments chapter="7.9" help="" name="Comments on the external validation of the model"></validation_comments>
+    </QSAR_Predictivity>
+    <QSAR_Interpretation chapter="8" help="" name="Providing a mechanistic interpretation - OECD Principle 5">
+      <mechanistic_basis chapter="8.1" help="" name="Mechanistic basis of the model"></mechanistic_basis>
+      <mechanistic_basis_comments chapter="8.2" help="" name="A priori or a posteriori mechanistic interpretatio"></mechanistic_basis_comments>
+      <mechanistic_basis_info chapter="8.3" help="" name="Other information about the mechanistic interpretation"></mechanistic_basis_info>
+    </QSAR_Interpretation>
+    <QSAR_Miscelaneous chapter="9" help="" name="Miscellaneous information">
+      <comments chapter="9.1" help="" name="Comments"></comments>
+      <bibliography chapter="9.2" help="" name="Bibliography">
+
+      </bibliography>
+      <attachments chapter="9.3" help="" name="Supporting information">
+        <attachment_training_data>
+          <molecules description="" filetype="" url=""/>
+        </attachment_training_data>
+        <attachment_validation_data>
+          <molecules description="" filetype="" url=""/>
+        </attachment_validation_data>
+        <attachment_documents>
+          <document description="" filetype="" url=""/>
+        </attachment_documents>
+      </attachments>
+    </QSAR_Miscelaneous>
+    <QMRF_Summary chapter="10" help="" name="Summary (ECB Inventory)">
+      <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by ECB</QMRF_number>
+      <date_publication chapter="10.2" help="" name="Publication date">To be entered by ECB</date_publication>
+      <keywords chapter="10.3" help="" name="Keywords">To be entered by ECB</keywords>
+      <summary_comments chapter="10.4" help="" name="Comments">To be entered by ECB</summary_comments>
+    </QMRF_Summary>
+  </QMRF_chapters>
+  <Catalogs>
+    <software_catalog>
+    	<software
+    		id="firstsoftware"
+    		name=""
+    		url=""
+    		number=""
+    		description=""
+    		version=""
+    		contact=""
+    	/>
+    </software_catalog>
+    <algorithms_catalog>
+    </algorithms_catalog>
+    <descriptors_catalog>
+    </descriptors_catalog>
+    <endpoints_catalog>
+
+    </endpoints_catalog>
+    <publications_catalog>
+    </publications_catalog>
+    <authors_catalog>
+    	<author id="firstauthor"
+ 	    		name=""
+			affiliation=""
+			contact=""
+			url=""
+			email=""
+			number=""
+    	/>
+    	<author id="modelauthor"
+    		name=""
+			affiliation=""
+			contact=""
+			url=""
+			email=""
+			number=""
+    	/>
+    </authors_catalog>
+  </Catalogs>
+</QMRF>

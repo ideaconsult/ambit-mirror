@@ -1,0 +1,32 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://luna.acad.bg/nina/projects/ambit" href="AmbitQuery.jnlp" >
+<information>
+<title>Ambit Disclosure</title>
+<vendor>Nina</vendor>
+<description>A demo application of searching for chemical compounds in database</description>
+<description kind="short">CAS , SMILES, name and formula search</description>
+<icon href="ambit.gif" />
+<icon kind="splash" href="AmbitDisclosure.gif" />
+</information>
+<resources>
+<j2se version="1.4+"/>
+<jar href="AmbitQuery.jar" download="eager" main="true"/>
+<jar href="jfreechart-0.9.21.jar" download="lazy" />
+<jar href="jcommon-0.9.6.jar" download="lazy" />
+<jar href="cmlAll.jar" download="lazy" />
+<jar href="base.jar" download="lazy" />
+<jar href="pmrlib.jar" download="lazy" />
+<jar href="cdk-core.jar" download="eager" />
+<jar href="cdk-experimental.jar" download="lazy" />
+<jar href="cdk-extra.jar" download="lazy" />
+<jar href="cdk-extra.jar" download="lazy" />
+<jar href="cdk-io.jar" download="lazy" />
+<jar href="cdk-libio.jar" download="lazy" />
+<jar href="cdk-render.jar" download="lazy" />
+<jar href="cdk-standard.jar" download="eager" />
+<jar href="jgrapht-0.5.3.jar" download="lazy" />
+<jar href="vecmath1.2-1.14.jar" download="lazy" />
+<jar href="mysql-connector-java-3.1.5-gamma-bin.jar" download="eager" />
+</resources>
+<application-desc main-class="ambit.applications.AmbitQueryApp"/>
+</jnlp>

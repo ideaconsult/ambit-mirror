@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<template name="BCF-Simple" >
+<field name="Species" units="" numeric="False" result="False"/>
+<field name="Endpoint" units="" numeric="False" result="False">Bioconcentration factor</field>
+<field name="LogBCF" units="" numeric="False" result="True"/>
+</template>

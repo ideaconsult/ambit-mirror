@@ -1,0 +1,384 @@
+21.09
+when disconnect and connect to another database, test conditions are not updated when clicking on study.
+(search experiment window)
+
+
+
+9.07
+start mysql first
+do UI
+then connect
+then retrieve
+
+splash
+arrange all first 100 compounds to have 3D, metabolites, aquire
+
+30.06
+view template + load template for experimental data (2 buttons)  DONE
+get templates from database
+transaction for templates
+
+fields are truncated when storing in study_fieldnames ....
+Confidence (H,M,L) if Categorization criteria met
+29.06
+Maxdiameter descriptor  DONE    also add atom radius 
+switch to new cdk ....
+implement registration
+
+for BCF:
+Molecular weight
+Maximum diameter (DMax) -length -  the minimum diameter of spheres ciscumscribed the molecule
+Effective cross sectional diameter DiamEff -  the minimum diameter of infinite cyllinders circumscribed the molecule
+Maximum distance DMax - the largest distance between non-hydrogen (heavy) atoms in the molecule
+Ehomo
+Elumo
+Electronegativity
+
+27.06
+synchronize Identifiers processor with Molproperties DONE
+exclude getreader time from processed time	DONE
+
+23.06
+> 5- I have searched for aquire data, but I do not seem to be able to find the
+> LC50 values, the output search does give conc. range and end point (LC%), BCF
+> etc), but no value. It would be nice to have that included !!!
+
+could be based on spherosity descriptor
+> 6- Just thought about his now: For the bioconcentation end point, it is being
+> discussed that some molecular descriptors can be used to predict whether a
+> molec
+> will enter a celll or not etc
+> 
+> 
+> It would be also very nice if we could as well include ;
+> - molecular length, and MCSD max cross sectional diameter.
+> This could be used and verified upon the cut off values of 36 and 17.4 A
+> (accepted actual values ?), above which molec are not expected to be taken up
+> by
+> cells. ...I think this would be very very attractive,,,,, in principle.
+> 
+
+
+
+ 
+22.06. 
+code ...
+tables for metabolites DONE
+-- blob holds CML reaction
+CREATE TABLE reaction (
+  idreaction int(10) unsigned NOT NULL auto_increment,
+  name varchar(64) NOT NULL,
+  idref int(10) unsigned NOT NULL,
+  reaction blob NOT NULL,
+  PRIMARY KEY  (idreaction),
+  KEY reaction_name (name),
+  KEY idref(idref),
+  CONSTRAINT `reaction_ibfk_1` FOREIGN KEY (`idref`) REFERENCES `literature` (`idref`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
+
+-- to store metaboliets and eaction products
+create table products (
+  idsubstance int(10) unsigned NOT NULL,
+  idproduct int(10) unsigned NOT NULL,
+  idreaction int(10) unsigned NOT NULL,
+  quantity int(6) unsigned NOT NULL default 1,
+  PRIMARY KEY (idsubstance,idproduct,idreaction),
+  KEY key_reaction(idreaction),
+  KEY key_metabolite(idproduct),
+  CONSTRAINT `transformation_1` FOREIGN KEY (`idreaction`) REFERENCES `reaction` (`idreaction`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `substance_ibfk_2` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE,  
+  CONSTRAINT `substance_ibfk_3` FOREIGN KEY (`idproduct`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE    
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
+
+21.06
+fixed bug when reading names and aliases - DONE
+updated servlets to read name, cas, smiles, alases - DONE
+insret qsar models - DONE?
+
+UI to enter sourcedataset and reference
+
+20.06
+moved batch search menu to search DONE
+
+14.06
+check box for training/validation when inserting models
+
+
+11.06
+http://sourceforge.net/projects/jguard/
+http://www.josso.org/tomcat55-howto.html
+
+web.xml - store/read servlet parameters
+use destroy servlet method to close database connection (closing stuff)
+One reason for setting up a custom URL for a servlet or JSP page is so that you can
+register initialization parameters to be read from the init (servlets) or jspInit
+(JSP pages) methods. However, as discussed in Section 5.5 (Initializing and Preloading
+Servlets and JSP Pages), the initialization parameters are available only when the
+servlet or JSP page is accessed by means of a custom URL pattern or a registered
+name, not when it is accessed with the default URL of http://host/webAppPrefix/
+servlet/ServletName. Consequently, you might want to turn off the default URL so
+that nobody accidentally calls the uninitialized servlet. This process is sometimes
+known as disabling the invoker servlet, since most servers have a standard servlet that
+is registered with the default servlet URLs and simply invokes the real servlet that
+the URL refers to.
+There are two main approaches for disabling the default URL:
+• Remapping the /servlet/ pattern in each Web application.
+• Globally turning off the invoker servlet.
+comment invoker server in tomcat-specific web.xml
+
+filters - filters can
+intercept and modify the request coming into or the response going out of a servlet
+or JSP page. Before a servlet or JSP page is executed, the doFilter method of the
+first associated filter is executed. When that filter calls doFilter on its Filter-
+Chain object, the next filter in the chain is executed. If there is no other filter, the
+servlet or JSP page itself is executed. Filters have full access to the incoming
+ServletRequest object, so they can check the client’s hostname, look for incoming
+cookies, and so forth. To access the output of the servlet or JSP page, a filter can
+wrap the response object inside a stand-in object that, for example, accumulates the
+output into a buffer.
+
+http://www.ericsson.com/mobilityworld/sub/open/technologies/open_development_tips/docs/odt_j2ee_tomcat
+http://tomcat.apache.org/tomcat-5.0-doc/realm-howto.html#Quick%20Start
+http://tomcat.apache.org/tomcat-5.0-doc/realm-howto.html#Digested%20Passwords
+http://tomcat.apache.org/tomcat-5.0-doc/realm-howto.html#Example%20Application
+
+10.06
+on query structure window add a button to get the current compound from main window  DONE
+UI to search qsar models
+tyrseneto po exper. results da wzema predwid izbranoto study
+
+see if jakarta common classess are of help
+http://www.getfreesofts.com/scriptscategory/7/50/1/0.html
+see what is available for eclipse and tomcat
+http://plato.acadiau.ca/courses/comp/dsilver/2513/EclipseAndTomcatTutorial/
+http://www.sipages.com/jet.html
+http://www.devarticles.com/c/a/Java/JavaServer-Pages-conclusion/2/
+
+05.06
+select file with compounds, calculate atom environments/fingerprints and then screen the database.
+import QSAR models  DONE 21.06
+
+31.05
+da se pokazwat wuzmojnote stoinosti na kriteriite za tursene po test data  - samo default
+Synchronise field selections by IteratingReader with templates  DONE
+UI za triene na structuri
+Chemical name search  DONE (regexp) - add options for exact search
+Enter structure interactively
+database statistics  DONE
+Search by DATASET only - to be able to view/export entire dataset  - DatasetSearchAction - UI for dataset selection  DONE
+
+IAmbitEditor for importing experimental data  DONE
+
+30.05
+fixed several bugs in batch import, improved performance DONE
+
+25.05
+zapiswane na dataacoverage w XML
+UI za batch action tyrsene na fail s CAS nomera   - DONE
+
+24.05
+AmbitDiscovery 
+use batch actions for reading/writing/processing  
+density plot on the same chart as scatter plot
+make use of ISharedData 
+
+23.05
+UI for template selection;   DONE
+store xml templates in database
+delete table template_def
+present list of templates from DB
+allow importing a new template  DONE
+load template from DB
+
+TODO remove IReadData, rewrite outbcfwin as iteratingreader
+
+otdelen prozorec  za izbor na structure za similarity i subsearch  DONE (may be a better interaction with JCP could be done...)
+
+import descriptors
+IOSettings -> select descriptors, each molecule carries list of selected descriptors -> property descriptor writer DONE
+same for test data / templates ?  - DONE  
+
+22.05
+grafika za atom environments - rank (x) vs number of AE  (y)
+
+16.05
+CAS numbers beginning with 0 004904-61-4  - strip zeros!  - DONE
+Write/read templates to/from XML  DONE
+
+15.05 
+ambit.dbconf as XML , not binary  DONE
+Login prompt if unable to start database
+
+Web : Online:
+I have just 1 small bug for you to-do-list:
+for the ENTRY: smiles-string:
+     
+CNC(=N)c1ccc(cc1)NC(=O)Nc2ccc(cc2)C(=N)Nc3ccc(cc3)C(=N)Nc4ccc(cc4)C(=N)NC
+it generates a very long name in one line (without writing it to more 
+than 1 line, CR)
+therefore the 2D picture ofvthat entry is out of the screen, please 
+FORMAT "names of compounds"
+> Dear Nina,
+> I have just located the compound in question (but there are maybe some 
+> others too ??)
+> I have used Netscape 7.0:
+> STATISTICS
+> SSSR
+> going to NUMBER of COMPOUND = 141
+> Entry No = 15
+> Click on the Bruttoformula gives the details (3D structure on the left 
+> side on so on)
+> If you click on "2D structure" , then the right side of that windows 
+> moves (because of the long name of that compound) out of my screen to 
+> the right side.
+> 
+> maybe you can find this entry.
+> 
+> I have just repeated the some search using Internet Explorer 6.0 and 
+> this was fully o.K.
+> So it may only happen with the browser: netscape.
+> 
+> With IE. the compounds name is written over 2 lines
+> With Netscape the name is in 1 line (that is the reason);
+
+
+14.05
+ProcessorsChainEditor  DONE
+BatchDialog uses processor editors instead of just label  DONE
+batch dialog - each reader/writer to have its own editor
+
+13.05
+-introduce enabled flag for IAmbitProcessor DONE
+-batch action to calculate descriptors, AE, FP  DONE
+-IO for selecting descriptors, experiments	DONE 21.06
+-storage for metabolites (idsubstance parent, idsubstance metabolite, reaction -> CML reaction, name, reference)
+-get rid of GAMUT table and relevant actions, introduce timeout instead - related classes marked as deprecated
+-introduce paging mehanism by mysql LIMIT from, to
+-more efficient result representation - e.g. don't load all compounds, only those in the current page;
+-UI for paging 
+-different storage/UI for query and result  DONE 
+-update servlet code
+
+12.05
+search by structure + exp. data + descriptor
+i.e. combine queries (e:g: get all phenols with lc50 =???)
+search by multiple structures
+
+store PDB files (perhaps introduce different storages / CML, etc)
+store / search QSAR models
+
+
+7.05
+
+invoke VERHAAR scheme - DONE
+- use batch classes to import compounds  DONE
+- use batch classes to import descriptors  DONE 21.06
+- use batch classes to import experiments  DONE, but with fixed template , need UI for template selection/ editing DONE
+-reader to read compounds from elsewhere
+-iosettings to assign descriptors/experiments
+-processor to find existing compounds  DONE
+-writer to write compounds  DONE
+-writer to write descriptors DONE
+-writer to write experiments DONE
+
+2.05
+changed db scheme for experiments
++ relevant sources
+
+24.02
+ambitdisclosure renamed to ambit discovery DONE
+installation NSI script created
+old CSV.java removed - now IteratiingReader descendants are used ! DONE
+
+servlet to use CML structure  (or idsubstance) instead of SMILES
+regrenerate SMILES (some aromatic smiles can't be parsed)
+
+
+21.02.2006
+update AmbitDisclosure to use IteratingChemObjectReader
+Write descendant of IteratingChemObjectReader to read SRC OUT files 
+Write descendant of IteratingChemObjectReader to read compounds from database  - DONE
+use the same approach to read other objects from database
+
+Write descendant of IteratingChemObjectReader to read Mol , etc
+
+Create descendant of IAmbitProcessor to calculate fingerprints DONE
+Create descendant of IAmbitProcessor to calculate atomenvironmens DONE
+Create descendant of ChemObjectWriter to write fingerprints DONE 
+Create descendant of ChemObjectWriter to write atomenvironmens  DONE
+
+Servlets: 
+update search by atom environments to use datasource as a search criteria DONE
+
+
+30.12.2005
+1- substructure search - DONE
+1- InChi
+
+19.12.2005
+
+1 - error on fingerprint generation -DONE
+1 - why results are 19  - DONE
+1- Query-New da prawi nowa molecula, ne list
+1- Query -save da proweria dali rabotui
+moze bi filtera traibwa da prema glwani bukwi
+
+16.12.2005
+1 - fast search CAS/SMILES
+1 - conf file with default user/host/database  - DONE
+1 - and last accessed directory - DONE
+
+1- load all type of files with file/open (for query) DONE
+1- for import and batch processing 
+1 - file export - for results and queries DONE
+1 - edit compound for search DONE
+1- option to add structure if already exists; look up method (smiles, cas, fp)
+
+1- return name and cas on similarity search (and data source)
+1- default button for db open dialog
+1 - add menu for creating atom environments  DONE
+1- option to create fp, etc right after the import DONE
+
+1 - insert compound from drawing
+1 - hide add / delete links if list is read only
+1 - smth better for the top panel  MB
+
+2 - option to select compounds and store selections; use a selection afterwards
+2 - present open /connect database dialog when necessary
+
+2 - progress status when importing DONE
+2- keep stereo smiles DONE
+2 - present options for different sdf / csv fields  DONE 21.06
+2 - import descriptors / exp data from these fields  DONE 21.06
+2 - similarity search in descriptor space ; use imported descriptors 
+
+3 - create fingerprints from structure, not smiles DONE
+3- verify if they are the same as from smiles
+3- option whether to keep/generate smiles   DONE
+3- valid smiles 
+3 - calculate descriptors  DONE (fixed set of descriptors, a better UI needed for selction/flexibility)
+3- edit/search for things others than compounds - do we need this?
+3 - buttons/icons
+
+
+3 - arrange ambit in different packages; use package versions  DONE
+3-replace mylogger with log4j  DONE
+-------------
+smiles = gen.createSMILES((Molecule) ac);
+to throw exception on timeout
+
+
+Compounds
+	insert compounds from a file
+	insert compound with a drawing
+	generate smiles
+	generate fingerprints
+	Search compounds
+	edit compound
+Descriptors
+	insert descriptor to the dictionary
+	insert value for a descriptor
+Experimental results
+QSARs
+References
+Users

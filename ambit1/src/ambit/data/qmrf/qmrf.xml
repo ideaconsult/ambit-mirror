@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QMRF PUBLIC "http://ambit.acad.bg/qmrf/qmrf.dtd" "qmrf.dtd" >
+<QMRF author="European Chemicals Bureau" contact="European Chemicals Bureau, IHCP, Joint Research Centre, European Commission"
+	date="July 2007" email="ecb.qsar@jrc.it" name="(Q)SAR Model Reporting Format" schema_version="0.9" url="http://ecb.jrc.it/QSAR/" version="1.2">
+  <QMRF_chapters>
+    <QSAR_identifier chapter="1" help="" name="QSAR identifier">
+      <QSAR_title chapter="1.1" help="" name="QSAR identifier (title)"></QSAR_title>
+      <QSAR_models chapter="1.2" help="" name="Other related models"></QSAR_models>
+      <QSAR_software chapter="1.3" help="" name="Software coding the model">
+			<software_ref idref="firstsoftware" />
+      </QSAR_software>
+    </QSAR_identifier>
+    <QSAR_General_information chapter="2" help="" name="General information">
+      <qmrf_date chapter="2.1" help="" name="Date of QMRF"></qmrf_date>
+      <qmrf_authors chapter="2.2" help="" name="QMRF author(s) and contact details">
+		<author_ref idref="firstauthor"/>
+      </qmrf_authors>
+      <qmrf_date_revision chapter="2.3" help="" name="Date of QMRF update(s)"></qmrf_date_revision>
+      <qmrf_revision chapter="2.4" help="" name="QMRF update(s)"></qmrf_revision>
+      <model_authors chapter="2.5" help="" name="Model developer(s) and contact details">
+		<author_ref idref="modelauthor"/>
+      </model_authors>
+      <model_date chapter="2.6" help="" name="Date of model development and/or publication"></model_date>
+      <references chapter="2.7" help="" name="Reference(s) to main scientific papers and/or software package">
+
+      </references>
+      <info_availability chapter="2.8" help="" name="Availability of information about the model"></info_availability>
+      <related_models chapter="2.9" help="" name="Availability of another QMRF for exactly the same model"></related_models>
+    </QSAR_General_information>
+    <QSAR_Endpoint chapter="3" help="" name="Defining the endpoint - OECD Principle 1">
+      <model_species chapter="3.1" help="" name="Species"></model_species>
+      <model_endpoint chapter="3.2" help="" name="Endpoint">
+
+      </model_endpoint>
+      <endpoint_comments chapter="3.3" help="" name="Comment on endpoint"></endpoint_comments>
+      <endpoint_units chapter="3.4" help="" name="Endpoint units"></endpoint_units>
+      <endpoint_variable chapter="3.5" help="" name="Dependent variable"></endpoint_variable>
+      <endpoint_protocol chapter="3.6" help="" name="Experimental protocol"></endpoint_protocol>
+      <endpoint_data_quality chapter="3.7" help="" name="Endpoint data quality and variability"></endpoint_data_quality>
+    </QSAR_Endpoint>
+    <QSAR_Algorithm chapter="4" help="" name="Defining the algorithm - OECD Principle 2">
+      <algorithm_type chapter="4.1" help="" name="Type of model"></algorithm_type>
+      <algorithm_explicit chapter="4.2" help="" name="Explicit algorithm">
+	      <algorithm_ref idref="algorithms_catalog_1"/>
+        <equation></equation>
+
+      </algorithm_explicit>
+      <!-- deleted in 1.2 , all numbering moved one up
+      <algorithm_comments chapter="4.3" help="" name="Comments on algorithm"></algorithm_comments>
+      -->
+      <algorithms_descriptors chapter="4.3" help="" name="Descriptors in the model">
+      <descriptor_ref idref="descriptors_catalog_1"/>
+      </algorithms_descriptors>
+      <descriptors_selection chapter="4.4" help="" name="Descriptor selection"></descriptors_selection>
+      <descriptors_generation chapter="4.5" help="" name="Algorithm and descriptor generation"></descriptors_generation>
+      <descriptors_generation_software chapter="4.6" help="" name="Software name and version for descriptor generation" options="">
+				<software_ref idref="software_catalog_2"/>
+      </descriptors_generation_software>
+      <descriptors_chemicals_ratio chapter="4.7" help="" name="Descriptors/Chemicals ratio"></descriptors_chemicals_ratio>
+    </QSAR_Algorithm>
+    <QSAR_Applicability_domain chapter="5" help="" name="Defining the applicability domain - OECD Principle 3">
+      <app_domain_description chapter="5.1" help="" name="Description of the applicability domain of the model"></app_domain_description>
+      <app_domain_method chapter="5.2" help="" name="Method used to assess the applicability domain"></app_domain_method>
+      <app_domain_software chapter="5.3" help="" name="Software name and version for applicability domain assessment">
+<software_ref idref="software_catalog_3"/>
+      </app_domain_software>
+      <applicability_limits chapter="5.4" help="" name="Limits of applicability"></applicability_limits>
+    </QSAR_Applicability_domain>
+    <QSAR_Robustness chapter="6" help="" name="Internal validation - OECD Principle 4">
+      <training_set_availability answer="Yes" chapter="6.1" help="" name="Availability of the training set"></training_set_availability>
+      <training_set_data cas="Yes" chapter="6.2" chemname="Yes" formula="Yes" help="" inchi="Yes" mol="Yes" name="Available information for the training set" smiles="Yes"></training_set_data>
+      <training_set_descriptors answer="All" chapter="6.3" help="" name="Data for each descriptor variable for the training set"></training_set_descriptors>
+      <dependent_var_availability answer="All" chapter="6.4" help="" name="Data for the dependent variable for the training set"></dependent_var_availability>
+      <other_info chapter="6.5" help="" name="Other information about the training set"></other_info>
+      <preprocessing chapter="6.6" help="" name="Pre-processing of data before modelling"></preprocessing>
+      <goodness_of_fit chapter="6.7" help="" name="Statistics for goodness-of-fit"></goodness_of_fit>
+      <loo chapter="6.8" help="" name="Robustness - Statistics obtained by leave-one-out cross-validation"></loo>
+      <lmo chapter="6.9" help="" name="Robustness - Statistics obtained by leave-many-out cross-validation"></lmo>
+      <yscrambling chapter="6.10" help="" name="Robustness - Statistics obtained by Y-scrambling"></yscrambling>
+      <bootstrap chapter="6.11" help="" name="Robustness - Statistics obtained by bootstrap"></bootstrap>
+      <other_statistics chapter="6.12" help="" name="Robustness - Statistics obtained by other methods"></other_statistics>
+    </QSAR_Robustness>
+    <QSAR_Predictivity chapter="7" help="" name="External validation - OECD Principle 4">
+      <validation_set_availability answer="Yes" chapter="7.1" help="" name="Availability of the external validation set"></validation_set_availability>
+      <validation_set_data cas="Yes" chapter="7.2" chemname="Yes" formula="Yes" help="" inchi="Yes" mol="Yes" name="Available information for the external validation set" smiles="Yes"></validation_set_data>
+      <validation_set_descriptors answer="All" chapter="7.3" help="" name="Data for each descriptor variable for the external validation set"></validation_set_descriptors>
+      <validation_dependent_var_availability answer="All" chapter="7.4" help="" name="Data for the dependent variable for the external validation set"></validation_dependent_var_availability>
+      <validation_other_info chapter="7.5" help="" name="Other information about the external validation set"></validation_other_info>
+      <experimental_design chapter="7.6" help="" name="Experimental design of test set"></experimental_design>
+      <validation_predictivity chapter="7.7" help="" name="Predictivity - Statistics obtained by external validation"></validation_predictivity>
+      <validation_assessment chapter="7.8" help="" name="Predictivity - Assessment of the external validation set"></validation_assessment>
+      <validation_comments chapter="7.9" help="" name="Comments on the external validation of the model"></validation_comments>
+    </QSAR_Predictivity>
+    <QSAR_Interpretation chapter="8" help="" name="Providing a mechanistic interpretation - OECD Principle 5">
+      <mechanistic_basis chapter="8.1" help="" name="Mechanistic basis of the model"></mechanistic_basis>
+      <mechanistic_basis_comments chapter="8.2" help="" name="A priori or a posteriori mechanistic interpretation"></mechanistic_basis_comments>
+      <mechanistic_basis_info chapter="8.3" help="" name="Other information about the mechanistic interpretation"></mechanistic_basis_info>
+    </QSAR_Interpretation>
+    <QSAR_Miscelaneous chapter="9" help="" name="Miscellaneous information">
+      <comments chapter="9.1" help="" name="Comments"></comments>
+      <bibliography chapter="9.2" help="" name="Bibliography">
+				<publication_ref idref="publications_catalog_1"/>
+      </bibliography>
+      <attachments chapter="9.3" help="" name="Supporting information">
+        <attachment_training_data>
+        </attachment_training_data>
+        <attachment_validation_data>
+        </attachment_validation_data>
+        <attachment_documents>
+        </attachment_documents>
+      </attachments>
+    </QSAR_Miscelaneous>
+    <QMRF_Summary chapter="10" help="" name="Summary (ECB Inventory)">
+      <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by ECB</QMRF_number>
+      <date_publication chapter="10.2" help="" name="Publication date">To be entered by ECB</date_publication>
+      <keywords chapter="10.3" help="" name="Keywords">To be entered by ECB</keywords>
+      <summary_comments chapter="10.4" help="" name="Comments">To be entered by ECB</summary_comments>
+    </QMRF_Summary>
+  </QMRF_chapters>
+  <Catalogs>
+    <software_catalog>
+    	<software 
+    		id="firstsoftware"  		name=""
+    		url=""
+    		number=""
+    		description=""
+    		version=""
+    		contact=""
+    	/>
+    	<software id="software_catalog_2"
+    		name=""
+    		url=""
+    		number=""
+    		description=""
+    		version=""
+    		contact=""
+    		/>
+    		<software id="software_catalog_3"
+    		name=""
+				url=""
+    		number=""
+    		description=""
+    		version=""
+    		contact=""
+    		/>
+    </software_catalog>
+    <algorithms_catalog>
+	    <algorithm definition="" description="" id="algorithms_catalog_1"/>
+    </algorithms_catalog>
+    <descriptors_catalog>
+    <descriptor id="descriptors_catalog_1" name="" units="" description=""/>
+    </descriptors_catalog>
+   <endpoints_catalog>
+	<endpoint id="endpoint73"	group="1.Physicochemical effects " subgroup="" name="1.1.Melting point" />
+	  <endpoint id="endpoint74"	group="1.Physicochemical effects " subgroup="" name="1.2.Boiling point" />
+	  <endpoint id="endpoint75"	group="1.Physicochemical effects " subgroup="" name="1.3.Water solubility" />
+	  <endpoint id="endpoint76"	group="1.Physicochemical effects " subgroup="" name="1.4.Vapour pressure" />
+	  <endpoint id="endpoint77"	group="1.Physicochemical effects " subgroup="" name="1.5.Surface tension" />
+	  <endpoint id="endpoint78"	group="1.Physicochemical effects " subgroup="" name="1.6.Octanol-water partition coefficient (Kow)" />
+	  <endpoint id="endpoint79"	group="1.Physicochemical effects " subgroup="" name="1.7.Octanol-water distribution coefficient (D)" />
+	  <endpoint id="endpoint80"	group="1.Physicochemical effects " subgroup="" name="1.8.Octanol-air partition coefficient (Koa)" />
+	  <endpoint id="endpoint81"	group="1.Physicochemical effects " subgroup="" name="1.9.Air- water partition coefficient (Henry?s law constant, H)" />
+	  <endpoint id="endpoint82"	group="1.Physicochemical effects " subgroup="" name="1.10.Dissociation constant (pKa)" />
+	  <endpoint id="endpoint83"	group="2.Environmental fate parameters" subgroup="1.Persistence: Abiotic degradation in water" name="2.1.a.Hydrolysis " />
+	  <endpoint id="endpoint84"	group="2.Environmental fate parameters" subgroup="1.Persistence: Abiotic degradation in water" name="2.1.b.Oxidation " />
+	  <endpoint id="endpoint85"	group="2.Environmental fate parameters" subgroup="1.Persistence: Abiotic degradation in water" name="2.1.c.Other " />
+	  <endpoint id="endpoint86"	group="2.Environmental fate parameters" subgroup="2.Persistence: Abiotic degradation in air (Phototransformation)" name="2.2.a.Direct photolysis" />
+	  <endpoint id="endpoint87"	group="2.Environmental fate parameters" subgroup="2.Persistence: Abiotic degradation in air (Phototransformation)" name="2.2.b.Indirect photolysis (OH-radical reaction, ozone-radical reaction, other)" />
+	  <endpoint id="endpoint88"	group="2.Environmental fate parameters" subgroup="3.Persistence: Biodegradation" name="2.3.a.Ready/not ready biodegradability" />
+	  <endpoint id="endpoint89"	group="2.Environmental fate parameters" subgroup="3.Persistence: Biodegradation" name="2.3.b.Biodegradation time frame (primary, ultimate degradation)" />
+	  <endpoint id="endpoint90"	group="2.Environmental fate parameters" subgroup="4.Bioconcentration " name="2.4.a.BCF fish" />
+	  <endpoint id="endpoint91"	group="2.Environmental fate parameters" subgroup="4.Bioconcentration " name="2.4.b.BCF other organisms " />
+	  <endpoint id="endpoint92"	group="2.Environmental fate parameters" subgroup="5.Bioaccumulation" name="2.5.a.BAF fish" />
+	  <endpoint id="endpoint93"	group="2.Environmental fate parameters" subgroup="5.Bioaccumulation" name="2.5.b.BAF other organisms " />
+	  <endpoint id="endpoint94"	group="2.Environmental fate parameters " subgroup="" name="2.6.Organic carbon-sorption partition coefficient (organic carbon; Koc)" />
+	  <endpoint id="endpoint95"	group="2.Environmental fate parameters " subgroup="" name="2.7.Adsorption/Desorption in soil " />
+	  <endpoint id="endpoint96"	group="2.Environmental fate parameters " subgroup="" name="2.8.Adsorption/Desorption in sediment" />
+	  <endpoint id="endpoint97"	group="2.Environmental fate parameters " subgroup="" name="2.9.Vegetation-water partition coefficient" />
+	  <endpoint id="endpoint98"	group="2.Environmental fate parameters " subgroup="" name="2.10.Vegetation-air partition coefficient" />
+	  <endpoint id="endpoint99"	group="2.Environmental fate parameters " subgroup="" name="2.11.Vegetation-soil partition coefficient" />
+	  <endpoint id="endpoint100"	group="3.Ecotoxic effects" subgroup="" name="3.1.Short-term toxicity to Daphnia (immobilisation)" />
+	  <endpoint id="endpoint101"	group="3.Ecotoxic effects" subgroup="" name="3.2.Short-term toxicity to algae (inhibition of the exponential growth rate)" />
+	  <endpoint id="endpoint102"	group="3.Ecotoxic effects" subgroup="" name="3.3.Acute toxicity to fish (lethality)" />
+	  <endpoint id="endpoint103"	group="3.Ecotoxic effects" subgroup="" name="3.4.Long-term toxicity to Daphnia (lethality, inhibition of reproduction)" />
+	  <endpoint id="endpoint104"	group="3.Ecotoxic effects" subgroup="" name="3.5.Long-term toxicity to fish (egg/sac fry, growth inhibition of juveniles, early life stage, full life cycle) " />
+	  <endpoint id="endpoint105"	group="3.Ecotoxic effects" subgroup="" name="3.6.Microbial inhibition (activated sludge respiration inhibition, inhibition of nitrification, other)" />
+	  <endpoint id="endpoint106"	group="3.Ecotoxic effects" subgroup="" name="3.7.Toxicity to soil microorganisms (inhibition of C-mineralisation, inhibition of N-mineralisation, other)" />
+	  <endpoint id="endpoint107"	group="3.Ecotoxic effects" subgroup="" name="3.8.Toxicity to earthworms (survival, growth, reproduction)" />
+	  <endpoint id="endpoint108"	group="3.Ecotoxic effects" subgroup="" name="3.9.Toxicity to plants (leaves, seed germination, root elongation)" />
+	  <endpoint id="endpoint109"	group="3.Ecotoxic effects" subgroup="" name="3.10.Toxicity to soil invertebrates (survival, growth, reproduction)" />
+	  <endpoint id="endpoint110"	group="3.Ecotoxic effects" subgroup="" name="3.11.Toxicity to sediment organisms (survival, growth, reproduction)" />
+	  <endpoint id="endpoint111"	group="3.Ecotoxic effects" subgroup="12.Toxicity to birds" name="3.12.a.Short term toxicity (feeding, gavage, other)" />
+	  <endpoint id="endpoint112"	group="3.Ecotoxic effects" subgroup="12.Toxicity to birds" name="3.12.b.Long-term toxicity (survival, growth, reproduction)" />
+	  <endpoint id="endpoint113"	group="4.Human health effects" subgroup="" name="4.1.Acute inhalation toxicity" />
+	  <endpoint id="endpoint114"	group="4.Human health effects" subgroup="" name="4.2.Acute oral toxicity" />
+	  <endpoint id="endpoint115"	group="4.Human health effects" subgroup="" name="4.3.Acute dermal toxicity" />
+	  <endpoint id="endpoint116"	group="4.Human health effects" subgroup="" name="4.4.Skin irritation /corrosion" />
+	  <endpoint id="endpoint117"	group="4.Human health effects" subgroup="" name="4.5.Acute photoirritation" />
+	  <endpoint id="endpoint118"	group="4.Human health effects" subgroup="" name="4.6.Skin sensitisation" />
+	  <endpoint id="endpoint119"	group="4.Human health effects" subgroup="" name="4.7.Respiratory sensitisation" />
+	  <endpoint id="endpoint120"	group="4.Human health effects" subgroup="" name="4.8.Photosensitisation" />
+	  <endpoint id="endpoint121"	group="4.Human health effects" subgroup="" name="4.9.Eye irritation/corrosion" />
+	  <endpoint id="endpoint122"	group="4.Human health effects" subgroup="" name="4.10.Mutagenicity " />
+	  <endpoint id="endpoint123"	group="4.Human health effects" subgroup="" name="4.11.Photomutagenicity" />
+	  <endpoint id="endpoint124"	group="4.Human health effects" subgroup="" name="4.12.Carcinogenicity" />
+	  <endpoint id="endpoint125"	group="4.Human health effects" subgroup="" name="4.13.Photocarcinogenicity" />
+	  <endpoint id="endpoint126"	group="4.Human health effects" subgroup="" name="4.14.Repeated dose toxicity " />
+	  <endpoint id="endpoint127"	group="4.Human health effects" subgroup="" name="4.15.In vitro reproductive toxicity (e.g. embryotoxic effects in cell culture such as embryo stem cells)  " />
+	  <endpoint id="endpoint128"	group="4.Human health effects" subgroup="" name="4.16.In vivo pre-natal-developmental toxicity" />
+	  <endpoint id="endpoint129"	group="4.Human health effects" subgroup="" name="4.17.In vivo pre-, peri-, post natal development and / or fertility (1 or 2 gen. Study or enhanced 1 gen study) " />
+	  <endpoint id="endpoint130"	group="4.Human health effects" subgroup="18.Endocrine Activity" name="4.18.a.Receptor-binding (specify receptor)" />
+	  <endpoint id="endpoint131"	group="4.Human health effects" subgroup="18.Endocrine Activity" name="4.18.b.Receptor binding and gene expression (specify receptor)" />
+	  <endpoint id="endpoint132"	group="4.Human health effects" subgroup="18.Endocrine Activity" name="4.18.c.Other (e.g. inhibition of specific enzymes involved in hormone synthesis or regulation, specify enzyme(s) and hormone)" />
+	  <endpoint id="endpoint133"	group="5.Toxicokinetics " subgroup="" name="5.1.Skin penetration" />
+	  <endpoint id="endpoint134"	group="5.Toxicokinetics " subgroup="" name="5.2.Ocular membrane penetration" />
+	  <endpoint id="endpoint135"	group="5.Toxicokinetics " subgroup="" name="5.3.Gastrointestinal absorption" />
+	  <endpoint id="endpoint136"	group="5.Toxicokinetics " subgroup="" name="5.4.Blood-brain barrier penetration" />
+	  <endpoint id="endpoint137"	group="5.Toxicokinetics " subgroup="" name="5.5.Placental barrier penetration" />
+	  <endpoint id="endpoint138"	group="5.Toxicokinetics " subgroup="" name="5.6.Blood-testis barrier penetration" />
+	  <endpoint id="endpoint139"	group="5.Toxicokinetics " subgroup="" name="5.7.Blood-lung barrier penetration" />
+	  <endpoint id="endpoint140"	group="5.Toxicokinetics " subgroup="" name="5.8.Metabolism (including metabolic clearance)" />
+	  <endpoint id="endpoint141"	group="5.Toxicokinetics " subgroup="" name="5.9.Protein-binding" />
+	  <endpoint id="endpoint142"	group="5.Toxicokinetics " subgroup="" name="5.10.DNA-binding" />
+	  <endpoint id="endpoint143"	group="6.Other" subgroup="" name="6.6.Other" />
+	  </endpoints_catalog>
+    <publications_catalog>
+    <publication id="publications_catalog_1" title="" url=""/>
+    </publications_catalog>
+    <authors_catalog>
+    	<author id="firstauthor"
+ 	    		name=""
+			affiliation=""
+			contact=""
+			url=""
+			email=""
+			number=""
+    	/>
+    	<author id="modelauthor"
+    		name=""
+			affiliation=""
+			contact=""
+			url=""
+			email=""
+			number=""
+    	/>
+    </authors_catalog>
+  </Catalogs>
+</QMRF>
