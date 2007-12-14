@@ -3,8 +3,10 @@ package ambit.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-import org.openscience.cdk.Molecule;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -12,9 +14,13 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.ISetOfMolecules;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.formats.IResourceFormat;
+import org.openscience.cdk.qsar.DescriptorSpecification;
+import org.openscience.cdk.qsar.IDescriptor;
 
 import ambit.data.molecule.DataContainer;
+import ambit.data.molecule.PropertyTranslator;
 import ambit.log.AmbitLogger;
+import ambit.misc.AmbitCONSTANTS;
 
 /**
  * {@link org.openscience.cdk.io.DefaultChemObjectWriter} descendant to add compounds into {@link ambit.data.molecule.DataContainer}.
@@ -23,23 +29,50 @@ import ambit.log.AmbitLogger;
  * <b>Modified</b> Aug 31, 2006
  */
 public class ListOfMoleculesWriter extends DefaultChemObjectWriter {
+	protected PropertyTranslator translator; 
 	protected DataContainer list = null;
 	protected static AmbitLogger logger = new AmbitLogger(ListOfMoleculesWriter.class);
 	public ListOfMoleculesWriter(DataContainer list) {
 		super();
 		this.list = list;
 		//TODO
-		//list.getContainers().getAvailableProperties().addProperty("CAS", "CAS");
+		PropertyTranslator p = list.getContainers().getAvailableProperties();
+		
 	}
 
 	public void write(IChemObject arg0) throws CDKException {
 		if (list == null) return;
 		try {
 		    logger.debug("Write "+ arg0.toString());
+		    if (translator == null) {
+			    Hashtable pp = arg0.getProperties();
+			    Enumeration keys = pp.keys();
+			    translator = list.getContainers().getAvailableProperties();
+			    while (keys.hasMoreElements()) {
+			    	Object key = keys.nextElement();
+			    	if ((key instanceof String)	&& 
+					(!key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
+					&& (!key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
+					&& (!key.equals("CRAMERFLAGS"))
+					&& (!key.equals(CDKConstants.ALL_RINGS))
+					&& (!key.equals(CDKConstants.SMALLEST_RINGS)))
+			    		translator.addProperty(PropertyTranslator.type_identifiers,key,key);
+			    	else if (key instanceof DescriptorSpecification) { 
+						 String s =((DescriptorSpecification) key).getImplementationTitle();
+						 translator.addProperty(PropertyTranslator.type_descriptors,s,s);
+					 } else if (key instanceof IDescriptor) {
+						 String s =((DescriptorSpecification)((IDescriptor) key).getSpecification()).getImplementationTitle();
+						 translator.addProperty(PropertyTranslator.type_descriptors,s,s);
+					 } else
+						 translator.addProperty(PropertyTranslator.type_descriptors,key,key);
+			    		
+			    }
+		    }
+		    
 			if (list.getMoleculesCount() == 0)
-				list.addMolecule((Molecule) arg0);
+				list.addMolecule((IMolecule) arg0);
 			else
-				list.addMoleculeNoNotify((Molecule) arg0);
+				list.addMoleculeNoNotify((IMolecule) arg0);
 		} catch (Exception x) {
 			throw new CDKException(x.getMessage());
 		}
