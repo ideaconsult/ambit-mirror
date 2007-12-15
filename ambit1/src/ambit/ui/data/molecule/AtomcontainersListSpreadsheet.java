@@ -196,13 +196,13 @@ public class AtomcontainersListSpreadsheet extends JPanel {
                 lookup(CDKConstants.CASRN);
             }
         });
-        p.add(new MoleculesTableAction("Append",UITools.createImageIcon("ambit/ui/images/plus.png"),"Append a new record") {
+        p.add(new MoleculesTableAction("Append",UITools.createImageIcon("ambit/ui/images/add.gif"),"Append a new record") {
             public void actionPerformed(ActionEvent e) {
                 addAtomContainter();
             }
         });
         p.add(new MoleculesTableAction("Delete",
-                UITools.createImageIcon("ambit/ui/images/minus.png"),"Delete current record") {
+                UITools.createImageIcon("ambit/ui/images/delete.gif"),"Delete current record") {
             public void actionPerformed(ActionEvent e) {
                 deleteAtomContainter();
             }

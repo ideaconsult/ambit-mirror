@@ -37,6 +37,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.ISetOfMolecules;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
+import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.LoggingTool;
 
@@ -44,7 +45,7 @@ import ambit.misc.AmbitCONSTANTS;
 
 public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);
-	protected ArrayList header = null;
+	protected Header header = null;
 	protected int smilesIndex = -1;
 	protected SmilesGenerator sg = new SmilesGenerator(DefaultChemObjectBuilder.getInstance());
 	public static String defaultSMILESHeader = "SMILES";
@@ -58,7 +59,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	 * @see org.openscience.cdk.io.ChemObjectWriter#write(org.openscience.cdk.ChemObject)
 	 */
 	public void write(IChemObject object) throws CDKException {
-		
+		fireIOSettingQuestion(null);
 		if (object instanceof ISetOfMolecules) {
 		    writeSetOfMolecules((ISetOfMolecules)object);
 		} else if (object instanceof IMolecule) {
@@ -73,7 +74,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	/**
 	 * @return Returns the header.
 	 */
-	public synchronized ArrayList getHeader() {
+	public synchronized Header getHeader() {
 		return header;
 	}
 	/**
@@ -84,11 +85,12 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 			logger.error("Can't change header while writing !!!!");
 			return; //cant' change header !
 		}
-		this.header = header;
+		if (this.header == null) this.header = new Header();
+		this.header.list = header;
 		smilesIndex = -1;
 		for (int i=0; i < header.size(); i++) 
-			if (header.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
-		if (smilesIndex == -1) { header.add(0,defaultSMILESHeader); smilesIndex = 0; }
+			if (this.header.list.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
+		if (smilesIndex == -1) { this.header.list.add(0,defaultSMILESHeader); smilesIndex = 0; }
 		logger.info("Header created\t",header);
 	}
 	/**
@@ -101,7 +103,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 			logger.error("Can't change header while writing !!!!");
 			return; //cant' change header !
 		}		
-		header = new ArrayList();
+		header = new Header();
 		Enumeration e = properties.keys();
 		smilesIndex = -1; int i = 0;
 		while (e.hasMoreElements()) {
@@ -113,12 +115,12 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 		            (column.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))) continue;
 		    else {
 
-				header.add(column);
-				if (header.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
+				header.list.add(column);
+				if (header.list.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
 				i++;
 		    }
 		}
-		if (smilesIndex == -1) { header.add(0,defaultSMILESHeader); smilesIndex = 0; }
+		if (smilesIndex == -1) { header.list.add(0,defaultSMILESHeader); smilesIndex = 0; }
 		logger.info("Header created from hashtable\t",header);
 	}
 	public abstract void writeMolecule(IMolecule molecule) ;
@@ -143,3 +145,61 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 }
 
 
+class Header extends IOSetting {
+	protected ArrayList list;
+	public Header() {
+		super("Header",IOSetting.HIGH,"Header",null);
+		list = new ArrayList();
+	}
+	
+	@Override
+	public void setSetting(String setting) throws CDKException {
+		// TODO Auto-generated method stub
+		super.setSetting(setting);
+	}
+
+	@Override
+	public String getSetting() {
+		// TODO Auto-generated method stub
+		return super.getSetting();
+	}
+
+	@Override
+	public String getQuestion() {
+		// TODO Auto-generated method stub
+		return super.getQuestion();
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return super.getName();
+	}
+
+	@Override
+	public int getLevel() {
+		// TODO Auto-generated method stub
+		return super.getLevel();
+	}
+
+	@Override
+	public String getDefaultSetting() {
+		// TODO Auto-generated method stub
+		return super.getDefaultSetting();
+	}
+	public ArrayList getList() {
+		return list;
+	}
+	public void setList(ArrayList list) {
+		this.list = list;
+	}
+	public void clear() {
+		list.clear();
+	}
+	
+	public int size() {
+		return list.size();
+	}
+
+
+}

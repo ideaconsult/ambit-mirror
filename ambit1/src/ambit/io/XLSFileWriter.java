@@ -63,7 +63,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
 	protected void writeHeader() throws IOException {
 		HSSFRow row     = sheet.createRow((short)0);
 		for (int i=0;i<header.size();i++) {
-			row.createCell((short)(i+1)).setCellValue(header.get(i).toString()); 
+			row.createCell((short)(i+1)).setCellValue(header.list.get(i).toString()); 
 		}
 
 		logger.debug("\tHeader written\t",header);
@@ -82,7 +82,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
     		HSSFRow row     = sheet.createRow((short)(sheet.getLastRowNum()+1));
         	String s;
         	for (int i =0; i< header.size(); i++) {
-        		value = molecule.getProperty(header.get(i));
+        		value = molecule.getProperty(header.list.get(i));
         		if (i == smilesIndex) {
         			
         			if (value == null) //no SMILES available

@@ -296,13 +296,16 @@ public class PropertyTranslator extends Observable {
 
     }
     public static String guessType(Object key) {
-    	if ((key instanceof String)	&& 
-				(!key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
-				&& (!key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
-				&& (!key.equals("CRAMERFLAGS"))
-				&& (!key.equals(CDKConstants.ALL_RINGS))
-				&& (!key.equals(CDKConstants.SMALLEST_RINGS)))
-		    		return type_identifiers;
+		if ((key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
+				|| (key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
+				|| (key.equals("CRAMERFLAGS"))
+				|| (key.equals(CDKConstants.ALL_RINGS))
+				|| (key.equals(CDKConstants.SMALLEST_RINGS))) return null;
+    	
+		if (AmbitCONSTANTS.AQUIRE.equals(key))
+			return PropertyTranslator.type_results;		
+    	if (key instanceof String)
+		    return type_identifiers;
 		else if (key instanceof DescriptorSpecification) { 
 			 return PropertyTranslator.type_descriptors;
 		} else if (key instanceof IDescriptor) {
@@ -315,6 +318,38 @@ public class PropertyTranslator extends Observable {
 		} else
 			 return null;
     }
+    
+    public void  guessAndAdd(Object key) {
+    	if (key == null) return;
+    	String uf = key.toString();
+    	String type = null;
+		if ((key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
+		|| (key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
+		|| (key.equals("CRAMERFLAGS"))
+		|| (key.equals(CDKConstants.ALL_RINGS))
+		|| (key.equals(CDKConstants.SMALLEST_RINGS))) return;
+    	
+		if (AmbitCONSTANTS.AQUIRE.equals(key))
+			type = PropertyTranslator.type_results;
+		else if (key instanceof String)
+		    type = type_identifiers;
+		else if (key instanceof DescriptorSpecification) {
+			 uf =((DescriptorSpecification) key).getImplementationTitle();
+			 type =  PropertyTranslator.type_descriptors;
+		} else if (key instanceof IDescriptor) {
+			 String s =((DescriptorSpecification)((IDescriptor) key).getSpecification()).getImplementationTitle();
+			 uf = s.substring(s.lastIndexOf('.')+1);
+			 type = PropertyTranslator.type_descriptors;
+		} else if (key instanceof Experiment) {
+			uf = ((Experiment)key).getStudy().toString();
+			type = PropertyTranslator.type_results;
+		} else if (key instanceof ExperimentList) {
+			type = PropertyTranslator.type_results;
+		} 
+    	if (type != null)
+    		addProperty(type,uf,key);	
+    }
+
     
 	public Object getSelectedProperty() {
 		return selectedProperty;

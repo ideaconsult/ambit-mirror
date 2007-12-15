@@ -66,7 +66,7 @@ public class DelimitedFileWriter extends FileWithHeaderWriter {
         char fieldDelimiter = format.getFieldDelimiter();
         char textDelimiter = format.getTextDelimiter();		
 		for (int i=0;i<header.size();i++) {
-			String h = header.get(i).toString();
+			String h = header.list.get(i).toString();
 			if (h.indexOf(fieldDelimiter) >  -1) {
 				writer.write(textDelimiter);
 				writer.write(h);
@@ -92,7 +92,7 @@ public class DelimitedFileWriter extends FileWithHeaderWriter {
         	}
         	String s;
         	for (int i =0; i< header.size(); i++) {
-        		value = molecule.getProperty(header.get(i));
+        		value = molecule.getProperty(header.list.get(i));
         		if (i == smilesIndex) {
         			
         			if (value == null) //no SMILES available

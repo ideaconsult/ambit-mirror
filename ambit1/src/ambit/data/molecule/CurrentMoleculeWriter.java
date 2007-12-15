@@ -37,9 +37,7 @@ public class CurrentMoleculeWriter extends DefaultChemObjectWriter {
 	    PropertyTranslator translator = list.getContainers().getAvailableProperties();
 	    while (keys.hasMoreElements()) {
 	    	Object key = keys.nextElement();
-	    	String type = PropertyTranslator.guessType(key);
-	    	if (type != null)
-				 translator.addProperty(type,key.toString(),key);
+    		translator.guessAndAdd(key);
 	    }	    
 		list.setMolecule((IMolecule) arg0);
 

@@ -59,7 +59,7 @@ public class HashtableModel extends AbstractTableModel {
     		}
         else
             switch (col) {
-            case 1: { Object o = table.get(key); 
+            case 1: { Object o =key; 
                 if (o==null) return "NA"; 
                 else return o; 
                 }

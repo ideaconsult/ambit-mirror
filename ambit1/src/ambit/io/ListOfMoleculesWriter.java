@@ -48,9 +48,7 @@ public class ListOfMoleculesWriter extends DefaultChemObjectWriter {
 			    translator = list.getContainers().getAvailableProperties();
 			    while (keys.hasMoreElements()) {
 			    	Object key = keys.nextElement();
-			    	String type = PropertyTranslator.guessType(key);
-			    	if (type != null)
-						 translator.addProperty(PropertyTranslator.type_descriptors,key.toString(),key);
+		    		translator.guessAndAdd(key);
 			    }
 		    }
 		    
