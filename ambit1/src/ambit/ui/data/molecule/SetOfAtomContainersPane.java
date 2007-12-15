@@ -49,6 +49,7 @@ import javax.swing.table.TableModel;
 
 import org.openscience.cdk.interfaces.ISetOfAtomContainers;
 
+import ambit.ui.AmbitColors;
 import ambit.ui.data.RandomAccessFileTableModel;
 
 /**
@@ -129,7 +130,7 @@ public class SetOfAtomContainersPane extends JScrollPane implements PropertyChan
         table.setShowHorizontalLines(false);
         table.setShowVerticalLines(false);
         table.setIntercellSpacing(new Dimension(0,0));
-        table.setSelectionBackground(Color.blue);
+        table.setSelectionBackground(AmbitColors.DarkClr);
 
         /*
         table.setDefaultRenderer(Compound.class, new MoleculeGridCellRenderer(cellSize));

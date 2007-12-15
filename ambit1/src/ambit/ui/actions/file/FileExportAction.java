@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.io.listener.IChemObjectIOListener;
+import org.openscience.cdk.io.setting.IOSetting;
 
 import ambit.data.IDataContainers;
 import ambit.data.ISharedData;
@@ -48,7 +50,14 @@ public class FileExportAction extends BatchAction {
 	}
 
 	public IChemObjectWriter getWriter() {
-		return getFileWriter("");
+		IChemObjectWriter writer = getFileWriter("");
+		writer.addChemObjectIOListener(new IChemObjectIOListener() {
+			public void processIOSettingQuestion(IOSetting arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		return writer;
 	}
 	   public IBatchStatistics getBatchStatistics() {
 	    	

@@ -41,6 +41,7 @@ public class DataContainer extends Observable implements PropertyChangeListener 
 
     public void clear() {
     	containers.removeAllAtomContainers();
+    	containers.clearAvailableProperties();
     }
     public void newMolecule() {
     	if (!enabled) return;

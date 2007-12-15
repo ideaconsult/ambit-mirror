@@ -3,6 +3,8 @@ package ambit.data.molecule;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -30,7 +32,15 @@ public class CurrentMoleculeWriter extends DefaultChemObjectWriter {
 	public void write(IChemObject arg0) throws CDKException {
 	    arg0.removeProperty("EIGENVALUES");
 	    arg0.removeProperty("NO. OF FILLED LEVELS");
-	    
+	    Hashtable pp = arg0.getProperties();
+	    Enumeration keys = pp.keys();	    
+	    PropertyTranslator translator = list.getContainers().getAvailableProperties();
+	    while (keys.hasMoreElements()) {
+	    	Object key = keys.nextElement();
+	    	String type = PropertyTranslator.guessType(key);
+	    	if (type != null)
+				 translator.addProperty(type,key.toString(),key);
+	    }	    
 		list.setMolecule((IMolecule) arg0);
 
 	}

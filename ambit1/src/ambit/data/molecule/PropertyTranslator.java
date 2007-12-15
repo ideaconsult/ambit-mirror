@@ -35,8 +35,12 @@ import java.util.Iterator;
 import java.util.Observable;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.qsar.DescriptorSpecification;
+import org.openscience.cdk.qsar.IDescriptor;
 
 import ambit.data.IAmbitEditor;
+import ambit.data.experiment.Experiment;
+import ambit.data.experiment.ExperimentList;
 import ambit.misc.AmbitCONSTANTS;
 import ambit.processors.IdentifiersProcessor;
 
@@ -217,22 +221,44 @@ public class PropertyTranslator extends Observable {
     public void guess(Object type) {
     	guess(type,null);
     }
+    /*
+			    	if ((key instanceof String)	&& 
+					(!key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
+					&& (!key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
+					&& (!key.equals("CRAMERFLAGS"))
+					&& (!key.equals(CDKConstants.ALL_RINGS))
+					&& (!key.equals(CDKConstants.SMALLEST_RINGS)))
+			    		translator.addProperty(PropertyTranslator.type_identifiers,key,key);
+			    	else if (key instanceof DescriptorSpecification) { 
+						 String s =((DescriptorSpecification) key).getImplementationTitle();
+						 translator.addProperty(PropertyTranslator.type_descriptors,s,s);
+					 } else if (key instanceof IDescriptor) {
+						 String s =((DescriptorSpecification)((IDescriptor) key).getSpecification()).getImplementationTitle();
+						 translator.addProperty(PropertyTranslator.type_descriptors,s,s);
+					 } else
+						 translator.addProperty(PropertyTranslator.type_descriptors,key,key);
+			    		
+     */
     public void guess(Object type, PropertyTranslator dictionary) {
     	if (type ==null) return;
     	else if (type.equals(type_descriptors)) {
             Enumeration e = properties.keys();
             while (e.hasMoreElements()) {
-                Object object = e.nextElement();
+                Object key = e.nextElement();
                 if (dictionary != null) {
-                	Object newname = dictionary.getProperty(type,object);
+                	Object newname = dictionary.getProperty(type,key);
                 	if (newname != null) {
-                		moveTo(type, object, newname);
+                		moveTo(type, key, newname);
                 		continue;
                 	}	
                 }
         		try {
-        		    Double.parseDouble(properties.get(object).toString());
-                    moveTo(type, object, object);
+        			if ((key instanceof DescriptorSpecification) || (key instanceof IDescriptor)) { 
+						 moveTo(type,key,key);
+					} else {
+	        		    Double.parseDouble(properties.get(key).toString());
+	                    moveTo(type, key, key);
+					}
         		} catch (Exception x) {
                     
         		}
@@ -269,6 +295,27 @@ public class PropertyTranslator extends Observable {
     		}
 
     }
+    public static String guessType(Object key) {
+    	if ((key instanceof String)	&& 
+				(!key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
+				&& (!key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
+				&& (!key.equals("CRAMERFLAGS"))
+				&& (!key.equals(CDKConstants.ALL_RINGS))
+				&& (!key.equals(CDKConstants.SMALLEST_RINGS)))
+		    		return type_identifiers;
+		else if (key instanceof DescriptorSpecification) { 
+			 return PropertyTranslator.type_descriptors;
+		} else if (key instanceof IDescriptor) {
+			 String s =((DescriptorSpecification)((IDescriptor) key).getSpecification()).getImplementationTitle();
+			 return PropertyTranslator.type_descriptors;
+		} else if (key instanceof Experiment) {
+			return PropertyTranslator.type_results;
+		} else if (key instanceof ExperimentList) {
+			return PropertyTranslator.type_results;
+		} else
+			 return null;
+    }
+    
 	public Object getSelectedProperty() {
 		return selectedProperty;
 	}

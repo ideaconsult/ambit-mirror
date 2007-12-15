@@ -368,9 +368,16 @@ public class MoleculesIterator extends ChemObject implements IMoleculesIterator,
     	return containers.getAtomContainer(index).getProperties();
     }
     public Object getProperty(int index, Object arg0) {
-    	if ((arg0 != null) && (containers.getAtomContainer(index)!=null))
-    		return containers.getAtomContainer(index).getProperty(arg0);
-    	else return null;
+    	if ((arg0 != null) && (containers.getAtomContainer(index)!=null)) {
+    		Object key = availableProperties.getProperty(PropertyTranslator.type_identifiers, arg0);
+    		if (key == null)
+    			key = availableProperties.getProperty(PropertyTranslator.type_descriptors, arg0);
+    		else 
+    			key = availableProperties.getProperty(PropertyTranslator.type_results, arg0);
+    		if (key == null) key = arg0;
+    		
+    		return containers.getAtomContainer(index).getProperty(key);
+    	} else return null;
     }
     public void setProperty(int index, Object key, Object value) {
     	containers.getAtomContainer(index).setProperty(key,value);
@@ -394,8 +401,12 @@ public class MoleculesIterator extends ChemObject implements IMoleculesIterator,
     public void updateTranslator() {	
 		IdentifiersProcessor ip = new IdentifiersProcessor();
 		if (availableProperties != null) {
-			ip.addIdentifiers(availableProperties.getIdentifiers());
-			ip.addIdentifiers(availableProperties.getDescriptorProperties());
+			Hashtable h = availableProperties.getIdentifiers();
+			if (h != null)
+				ip.addIdentifiers(h);
+			h = availableProperties.getDescriptorProperties();
+			if (h != null)
+				ip.addIdentifiers(availableProperties.getDescriptorProperties());
 		}	
         for (int i=0; i < containers.getAtomContainerCount();i++)
         	try {

@@ -14,6 +14,7 @@ import ambit.data.IDataContainers;
 import ambit.data.ISharedData;
 import ambit.data.descriptors.DescriptorsHashtable;
 import ambit.data.molecule.DataContainer;
+import ambit.data.molecule.PropertyTranslator;
 import ambit.io.AmbitSettingsListener;
 import ambit.io.FileInputState;
 import ambit.io.IteratingMolFolderReader;
@@ -35,6 +36,7 @@ import ambit.ui.actions.BatchAction;
 public class FileOpenAction extends BatchAction {
     protected IdentifiersProcessor identifiersProcessor = null;
     protected DescriptorsHashtable descriptorLookup = null;
+    
 	public FileOpenAction(Object userData, JFrame mainFrame) {
 		this(userData, mainFrame,"Open");
 	}
@@ -75,6 +77,12 @@ public class FileOpenAction extends BatchAction {
 	    			//descriptorLookup.putAll(((MolPropertiesIOSetting)setting).getProperties().getDescriptors());
 	    			if (identifiersProcessor == null) identifiersProcessor = new IdentifiersProcessor();
 	    			identifiersProcessor.addIdentifiers(((MolPropertiesIOSetting)setting).getProperties().getIdentifiers());
+	    			if (userData instanceof IDataContainers) {
+	    				IDataContainers dbaData = ((IDataContainers) userData);
+	    				DataContainer list = (DataContainer) dbaData.getMolecules();
+ 
+	    				list.getContainers().addAvailableProperties(((MolPropertiesIOSetting)setting).getProperties());
+	    			}	
 	    		}	
 	    	}
 	    };
@@ -91,6 +99,7 @@ public class FileOpenAction extends BatchAction {
 			IDataContainers dbaData = ((IDataContainers) userData);
 			DataContainer list = (DataContainer) dbaData.getMolecules();
 			list.clear();
+
 			return new ListOfMoleculesWriter(list);
 		} else return null;	
 	}

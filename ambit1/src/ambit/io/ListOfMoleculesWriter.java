@@ -35,9 +35,7 @@ public class ListOfMoleculesWriter extends DefaultChemObjectWriter {
 	public ListOfMoleculesWriter(DataContainer list) {
 		super();
 		this.list = list;
-		//TODO
-		PropertyTranslator p = list.getContainers().getAvailableProperties();
-		
+
 	}
 
 	public void write(IChemObject arg0) throws CDKException {
@@ -50,22 +48,9 @@ public class ListOfMoleculesWriter extends DefaultChemObjectWriter {
 			    translator = list.getContainers().getAvailableProperties();
 			    while (keys.hasMoreElements()) {
 			    	Object key = keys.nextElement();
-			    	if ((key instanceof String)	&& 
-					(!key.equals(AmbitCONSTANTS.AMBIT_IDSTRUCTURE)) 
-					&& (!key.equals(AmbitCONSTANTS.AMBIT_IDSUBSTANCE))
-					&& (!key.equals("CRAMERFLAGS"))
-					&& (!key.equals(CDKConstants.ALL_RINGS))
-					&& (!key.equals(CDKConstants.SMALLEST_RINGS)))
-			    		translator.addProperty(PropertyTranslator.type_identifiers,key,key);
-			    	else if (key instanceof DescriptorSpecification) { 
-						 String s =((DescriptorSpecification) key).getImplementationTitle();
-						 translator.addProperty(PropertyTranslator.type_descriptors,s,s);
-					 } else if (key instanceof IDescriptor) {
-						 String s =((DescriptorSpecification)((IDescriptor) key).getSpecification()).getImplementationTitle();
-						 translator.addProperty(PropertyTranslator.type_descriptors,s,s);
-					 } else
-						 translator.addProperty(PropertyTranslator.type_descriptors,key,key);
-			    		
+			    	String type = PropertyTranslator.guessType(key);
+			    	if (type != null)
+						 translator.addProperty(PropertyTranslator.type_descriptors,key.toString(),key);
 			    }
 		    }
 		    

@@ -115,7 +115,7 @@ public class CompoundsPanel extends JPanel implements Observer {
 		        	        ArrayList<String> selected = model.getProperties();
 		        	        SelectPropertiesPanel sp = new SelectPropertiesPanel(
 		        	        		model.getReader().getAvailableProperties()
-		        	        		,new String[] {"identifiers","descriptors","endpoint","similarity","subsets"},
+		        	        		,new String[] {"identifiers","descriptors","endpoint"},
 		        	        		selected);
 		        	        if (JOptionPane.showConfirmDialog(p,sp,"Select data fields to display",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE)       
 		        	                ==JOptionPane.OK_OPTION) {
