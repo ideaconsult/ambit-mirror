@@ -60,7 +60,7 @@
 </c:if>
 
 <c:if test="${empty(sessionScope.p_freetext)}">
-	<c:set var="p_freetext" value="salmonella" scope="session"/>
+	<c:set var="p_freetext" value=" " scope="session"/>
 </c:if>
 
 <c:if test="${!empty(param.freetext_enabled)}">

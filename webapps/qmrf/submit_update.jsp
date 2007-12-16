@@ -28,22 +28,7 @@
 <c:set var="qmrf_update" value="" scope="session"/>
 
 <c:set var="state" value="draft"/>
-<!--
-<c:choose>
-	<c:when test="${empty param.submit_state}">
-		<c:set var="state" value="draft"/>
-	</c:when>
-	<c:when test="${param.submit_state eq 'submitted'}">
-		<c:set var="state" value="submitted"/>
-	</c:when>
-	<c:when test="${param.submit_state eq 'draft'}">
-		<c:set var="state" value="draft"/>
-	</c:when>
-	<c:otherwise>
-		<c:set var="state" value="draft"/>
-	</c:otherwise>
-</c:choose>
--->
+
 
 <c:set var="uname" value='${sessionScope["username"]}'/>
 <c:set var="updateCount" value="0"/>
@@ -87,55 +72,21 @@
 </c:choose>
 
 
-
-
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-	<meta http-equiv="Content-Type" contentType="text/xml;charset=utf-8">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
-
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuuser.jsp" flush="true">
-    <jsp:param name="highlighted" value="user"/>
-</jsp:include>
-
-<p>
-
-	<c:choose>
+<c:choose>
 <c:when test='${not empty transactionException_update}'>
-		<div class="error">
-		Error on updating document ${transactionException_update}
-	</div>
+	<c:redirect url="edit_attachmentsdb.jsp">
+	 <c:param name="id" value="${param.id}"/>
+	<c:param name="status">
+		${transactionException_update}
+	</c:param>
+	</c:redirect>	
 </c:when>
 <c:otherwise>
-	<c:out value='${updateCount}'/>	 document (<c:out value="${fn:length(param.xml)}"/> bytes) updated.
+	<c:redirect url="edit_attachmentsdb.jsp">
+	 <c:param name="id" value="${param.id}"/>
+	<c:param name="status">
+		Saving as draft successful.
+	</c:param>
+	</c:redirect>
 </c:otherwise>
 </c:choose>
-
-<c:set var="report">
-	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}
-</c:set>
-
-<jsp:include page="records.jsp" flush="true">
-    <jsp:param name="sql" value="${report}"/>
-
-		<jsp:param name="qmrf_number" value="QMRF#"/>
-    <jsp:param name="user_name" value="Author"/>
-    <jsp:param name="updated" value="Last updated"/>
-		<jsp:param name="status" value="Status"/>
-		<jsp:param name="actions" value=""/>
-
-</jsp:include>
-
-<table width="100%" border="0">
-<jsp:include page="list_attachments.jsp" flush="true">
-		<jsp:param name="id" value="${param.id}"/>
-</jsp:include>
-</table>
-  </body>
-</html>
-

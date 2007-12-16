@@ -49,60 +49,54 @@
 </c:choose>
 -->
 <c:catch var="transactionException_update">
-<sql:transaction dataSource="jdbc/qmrf_documents">
-<sql:update var="updateCount" >
-    INSERT INTO documents (xml,user_name,status) VALUES (?,?,?);
+	<sql:transaction dataSource="jdbc/qmrf_documents">
+		<sql:update var="updateCount" >
+			INSERT INTO documents (xml,user_name,status) VALUES (?,?,?);
+		<sql:param value="${param.xml}"/>
+		<sql:param value="${sessionScope['username']}"/>
+		<sql:param value="${state}"/>
+	
+	
+		</sql:update>
+		<sql:query var="rs" sql="SELECT LAST_INSERT_ID() AS id" />
+	</sql:transaction>
+	<c:forEach var="row" items="${rs.rows}">
 
-	<sql:param value="${param.xml}"/>
-	<sql:param value="${sessionScope['username']}"/>
-	<sql:param value="${state}"/>
-
-
-</sql:update>
-	<sql:query var="rs" sql="SELECT LAST_INSERT_ID() AS id" />
-</sql:transaction>
+		<c:redirect url="edit_attachmentsdb.jsp">
+		<c:param name="id" value="${row.id}"/>
+		<c:param name="status">
+			New document added to QMRF inventory.
+		</c:param>
+		</c:redirect>
+		
+	</c:forEach>	
 </c:catch>
+
+
+<c:if test='${not empty transactionException_update}'>
+<%-- prepare the page --%>
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "DTD/xhtml1-transitional.dtd">
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<head>
+<title>QMRF documents</title>
 
+</head>
+<body>
 
 <jsp:include page="menu.jsp" flush="true"/>
 
 <jsp:include page="menuuser.jsp" flush="true">
-	    <jsp:param name="highlighted" value="user"/>
-  </jsp:include>
-
-<br>
-<c:choose>
-<c:when test='${not empty transactionException_update}'>
-	<div class="error">
-		Error on updating document <br> ${transactionException_update}
-	</div>
-</c:when>
-<c:otherwise>
-	<c:forEach var="row" items="${rs.rows}">
-		New document added (${updateCount}).
-		<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${row.id}"/>
-		<jsp:include page="records.jsp" flush="true">
-			<jsp:param name="sql" value="${sql}"/>
-			<jsp:param name="qmrf_number" value="QMRF#"/>
-			<jsp:param name="version" value="Version"/>
-			<jsp:param name="user_name" value="Author"/>
-			<jsp:param name="updated" value="Last updated"/>
-			<jsp:param name="status" value="Status"/>
-			<jsp:param name="actions" value="user"/>
-			<jsp:param name="sqlparam" value="${sessionScope['username']}"/>
-			<jsp:param name="paging" value="false"/>
-			<jsp:param name="viewpage" value="user.jsp"/>
-		</jsp:include>
-	</c:forEach>	
-</c:otherwise>
-</c:choose>
-
+    <jsp:param name="highlighted" value="create"/>
+</jsp:include>    
+    <div class="error">
+    	${transactionException_update}
+    </div>
   </body>
 </html>
+
+</c:if>
+
 

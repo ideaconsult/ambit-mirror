@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 
 <c:set var="thispage" value='submit_update.jsp'/>
 
@@ -22,38 +23,6 @@
 </c:if>
 
 
-<c:set var="state" value="draft"/>
-<c:choose>
-	<c:when test="${empty param.submit_state}">
-		<c:set var="state" value="draft"/>
-	</c:when>
-	<c:when test="${param.submit_state} eq 'submitted'">
-		<c:set var="state" value="submitted"/>
-	</c:when>
-	<c:when test="${param.submit_state} eq 'draft'">
-		<c:set var="state" value="draft"/>
-	</c:when>
-	<c:otherwise>
-		<c:set var="state" value="submitted"/>
-	</c:otherwise>
-</c:choose>
-
-<c:set var="uname" value='${sessionScope["username"]}'/>
-<c:set var="updateCount" value="0"/>
-
-
-		<sql:update var="updateCount" dataSource="jdbc/qmrf_documents">
-			    update documents set status="submitted" where idqmrf=? and user_name=?;
-
-			  <sql:param value="${param.id}"/>
-				<sql:param value="${sessionScope['username']}"/>
-
-			</sql:update>
-
-
-
-
-
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
   <head>
@@ -64,27 +33,104 @@
 <jsp:include page="menu.jsp" flush="true"/>
 
 <jsp:include page="menuuser.jsp" flush="true">
-    <jsp:param name="highlighted" value="user"/>
+    <jsp:param name="highlighted" value="create"/>
 </jsp:include>
 
-<p>
-<c:out value='${updateCount}'/>	 document updated.
 
-<c:set var="report">
-	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}
-</c:set>
+<c:set var="uname" value='${sessionScope["username"]}'/>
+<c:set var="updateCount" value="0"/>
+
+
+<c:if test="${(!empty param.verify) && (param.verify eq 'false')}">
+	<c:catch var="update_error">
+		<sql:update var="updateCount" dataSource="jdbc/qmrf_documents">
+			update documents set status="submitted" where idqmrf=? and user_name=? and status='draft';
+			<sql:param value="${param.id}"/>
+			<sql:param value="${sessionScope['username']}"/>
+		</sql:update>
+		<blockquote>
+		<div class="success">
+			${updateCount}  document updated.
+		</div>
+		</blockquote>
+	</c:catch>
+	<c:if test="${!empty update_error}">
+		<div class="error">
+		${update_error}
+		</div>
+	</c:if>
+</c:if>
+
+
+<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${param.id}"/>
 
 <jsp:include page="records.jsp" flush="true">
-    <jsp:param name="sql" value="${report}"/>
+    <jsp:param name="sql" value="${sql}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
-    <jsp:param name="user_name" value="Author"/>
-    <jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="version" value="Version"/>
+		<jsp:param name="user_name" value="Author"/>
+		<jsp:param name="updated" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
-		<jsp:param name="actions" value=""/>
+		<jsp:param name="actions" value="user"/>
+
+		<jsp:param name="sqlparam" value="${sessionScope['username']}"/>
+
+		<jsp:param name="paging" value="false"/>
+		<jsp:param name="page" value="1"/>
+		<jsp:param name="pagesize" value="1"/>
+		<jsp:param name="viewpage" value="user.jsp"/>
+
 
 </jsp:include>
 
-  </body>
+<c:if test="${(empty param.verify) || (param.verify ne 'false')}">
+<form>
+<table width="90%">
+<tr>
+<td valign="top">
+<div class="success">Check up: The following fields have to be filled in!</div>
+	<c:catch var ="error">
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			select idqmrf,qmrf_number,xml from documents where user_name=? and idqmrf=?
+			<sql:param value="${sessionScope['username']}"/>
+			<sql:param value="${param.id}"/>
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<c:import var="xsl" url="/WEB-INF/xslt/qmrfvalidate.xsl"/>
+			<x:transform xml="${row.xml}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd"/>
+		</c:forEach>
+	</c:catch>
+</td>
+<td valign="top">
+<div class="success">Submit the document to QMRF Inventory</div>
+<br>
+<input type="hidden" name="id" value="${param.id}"/>
+<input type="hidden" name="verify" value="false"/>
+<input type="submit" value="Final submission">
+<br>
+	<div class="help">
+		The document will be submitted for revision.<br> No further editing will be allowed.
+	</div>
+	<br>
+	<div class="help">
+	The following fields will be used to assign unique QMRF number:
+	<p>
+	4.2. Explicit algorithm 
+	<p>
+	2.5. Model developer(s) and contact details 
+	<p>
+	1.3. Software coding the model 
+	<p>
+	If data is not present in these fields the document will not be published!
+	</div>
+</td>	
+
+</tr>	
+</table>
+</form>
+</c:if>
+
+</body>
 </html>
 

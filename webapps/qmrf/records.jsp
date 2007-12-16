@@ -51,7 +51,9 @@
 						</c:forEach>
 
 		</c:if>
+		<c:if test="${param.paging eq 'true'}">
 		&nbsp;Sorted by: <i>${param[sessionScope.order]}</i>
+		</c:if>
 		</div>
 					
 		<table width="100%" border="0" bgcolor="${tablecolor}">
@@ -304,7 +306,7 @@
 											<c:url value="update_status.jsp">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
-											">Submit</a>
+											">Validate and submit</a>
 							  </c:when>
 							  <c:when test="${row.status eq 'returned for revision'}">
 											<a href="

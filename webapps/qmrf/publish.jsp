@@ -275,7 +275,7 @@ response.setHeader("Expires", "0");
 		</c:set>
 		<a href="
 		<c:url value="#algorithms_form"/>
-			">${aChapter} ${aName}
+			">${aChapter}<xsl:text>.</xsl:text>${aName}
 		</a>
 
 	<x:forEach select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/algorithm_ref">
@@ -388,27 +388,29 @@ Q
 </tr>
 </table>
 
-<table>
-<tr align="left" bgcolor="#FFFFFF">
-<td bgcolor="#FFFFFF" colspan="4">
-
 	<input type="hidden" name="status" value="${param.status}">
 	<input type="hidden" name="id" value="${param.id}">
-
-
-</td>
-
-</td>
-</tr>
 </form>
-	<tr>
 
-	<td colspan='4'>
-
+<table border="0" width="95%">
+<tr align="left" bgcolor="#FFFFFF">
+	<td bgcolor="#FFFFFF">
 		<c:import var="xsl" url="/WEB-INF/xslt/qmrfnumber.xsl"/>
-		<x:transform xml="${doc}" xslt="${xsl}"/>
+		<x:transform xml="${doc}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd"/>
+
+
+	</td>
+	<td valign="top" width="25%">
+	<div class="success">
+	Assign QMRF number
+	</div>
+	<br/>	
+	<div class="help">
+	TODO help
+	</div>
 	</td>
 	</tr>
+
 </c:forEach>
 
 </table>

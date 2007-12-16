@@ -43,73 +43,7 @@
 
 			<xsl:choose>
 
-			<xsl:when test="contains(@chapter,'1.3')">
-				<h3>
-				<a name="software_form">
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</a>
-				</h3>
-
-			</xsl:when>
-			<xsl:when test="contains(@chapter,'2.5')">
-				<h3>
-				<a name="authors_form">
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</a>
-				</h3>
-
-			</xsl:when>
-
-			<xsl:when test="contains(@chapter,'3.2')">
-				<h3>
-				<a name="endpoints_form">
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</a>
-				</h3>
-
-			</xsl:when>
-
-			<xsl:when test="contains(@chapter,'4.2')">
-				<h3>
-				<a name="algorithms_form">
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</a>
-				</h3>
-
-			</xsl:when>
-
-			<xsl:when test="contains(@chapter,'4.6')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
-			<xsl:when test="contains(@chapter,'2.2')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
-			<xsl:when test="contains(@chapter,'5.3')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
+			
 			<xsl:when test="@idref">
 				<xsl:value-of select="id(@idref)/@name"/>
 
@@ -126,6 +60,171 @@
 
 </xsl:template>
 
+<xsl:template match="qmrf_authors">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+		<xsl:choose>
+		<xsl:when test="author_ref">
+			<img src="images/ok.png" alt="QMRF author entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No QMRF author available!"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
+
+
+
+<xsl:template match="model_authors">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+		<xsl:choose>
+		<xsl:when test="author_ref">
+			<img src="images/ok.png" alt="Model author entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No model author available!"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+		<xsl:choose>
+		<xsl:when test="author_ref">
+		</xsl:when>
+		<xsl:otherwise>
+			<div class="error">
+				No model developer defined!<br/>
+				Return to the author for revision!
+			</div>
+		</xsl:otherwise>
+		</xsl:choose>	
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
+
+
+<xsl:template match="app_domain_software">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+		<xsl:choose>
+		<xsl:when test="software_ref">
+			<img src="images/ok.png" alt="Applicability domain software entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No applicability domain software defined!"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
+
+<xsl:template match="descriptors_generation_software">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+		<xsl:choose>
+		<xsl:when test="software_ref">
+			<img src="images/ok.png" alt="Description generation software entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No descriptor generation software defined!"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
+
+
+<xsl:template match="model_endpoint">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+	
+		<xsl:choose>
+		<xsl:when test="endpoint_ref">
+			<img src="images/ok.png" alt="Endpoint entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No endpoint defined!"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+		<xsl:choose>
+		<xsl:when test="endpoint_ref">
+		</xsl:when>
+		<xsl:otherwise>
+			<div class="error">
+				No endpoint defined!<br/>
+				Return to the author for revision!
+			</div>
+		</xsl:otherwise>
+		</xsl:choose>				
+
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
+
+
+<xsl:template match="algorithm_explicit">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+		<xsl:choose>
+		<xsl:when test="algorithm_ref">
+			<img src="images/ok.png" alt="Algorithm entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No algorithm defined"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+		<xsl:choose>
+		<xsl:when test="algorithm_ref">
+		</xsl:when>
+		<xsl:otherwise>
+			<div class="error">
+				No algorithm defined!<br/>
+				Return to the author for revision!
+			</div>
+		</xsl:otherwise>
+		</xsl:choose>	
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
+
+<xsl:template match="QSAR_software">
+	<h3>
+	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+	<xsl:text>.</xsl:text>
+	<xsl:value-of disable-output-escaping="no" select="@name"/>
+		<xsl:choose>
+		<xsl:when test="software_ref">
+			<img src="images/ok.png" alt="QSAR software entry found."/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/warning.png" alt="No QSAR software defined!"/>
+		</xsl:otherwise>
+		</xsl:choose>		
+	</h3>		
+		<xsl:choose>
+		<xsl:when test="software_ref">
+		</xsl:when>
+		<xsl:otherwise>
+			<div class="error">
+				No software coding the model defined!<br/>
+				Return to the author for revision!
+			</div>
+		</xsl:otherwise>
+		</xsl:choose>	
+	<xsl:apply-templates select="*"/>	
+</xsl:template>
 
 <xsl:template match="training_set_data">
 </xsl:template>
@@ -140,56 +239,65 @@
 <xsl:template match="software_ref">
 	<form method="POST" name="software_form">
 
-	<table bgcolor="#FFB0B0">
-	<tr><th>Name</th>
+	<table bgcolor="#FFFFFF">
+	<tr bgcolor="#FFB0B0"><th>Name</th>
 	<td>
-	<input type="text" name="software_name" size="80">
+	<input type="text" name="software_name" size="80" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@name"/>
 		</xsl:attribute>
 	</input>
 	</td>
+	<td bgcolor="#FFFFFF">
+		<xsl:choose>
+		<xsl:when test="id(@idref)/@name=''">
+			<img src="images/warning.png" alt="Empty name!"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/ok.png"/>
+		</xsl:otherwise>
+		</xsl:choose>	
+	</td>	
 	</tr>
-	<tr><th>Version</th>
+	<tr bgcolor="#FFB0B0"><th>Version</th>
 	<td>
-	<input type="text" name="software_version" size="80">
+	<input type="text" name="software_version" size="80" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@version"/>
 		</xsl:attribute>
 	</input>
-	</td>
-	<td>
-	<input type="hidden" name="catalog" value="software" />
+		<input type="hidden" name="catalog" value="software" />
+
 	</td>
 	</tr>
-	<tr><th>Description</th>
+	<tr bgcolor="#FFB0B0"><th>Description</th>
 	<td>
-	<input type="text" name="software_description" size="80">
+	<input type="text" name="software_description" size="80" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@description"/>
 		</xsl:attribute>
 	</input>
 	</td>
 	</tr>
-	<tr><th>Contact</th>
+	<tr bgcolor="#FFB0B0"><th>Contact</th>
 	<td>
-	<input type="text" name="software_contact" size="80">
+	<input type="text" name="software_contact" size="80" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@contact"/>
 		</xsl:attribute>
 	</input>
 	</td>
 	</tr>
-	<tr><th>WWW</th>
+	<tr bgcolor="#FFB0B0"><th>WWW</th>
 	<td>
-	<input type="text" name="software_url" size="80">
+	<input type="text" name="software_url" size="80" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@url"/>
 		</xsl:attribute>
 	</input>
 	</td>
 	</tr>
-	<tr>
+	<tr bgcolor="#FFFFFF">
 	<td colspan="2">
 	<input type="submit" value="Retrieve software number from software catalog" />
 	</td>
@@ -201,26 +309,32 @@
 
 <xsl:template match="algorithm_ref">
 	<form method="POST" name="algorithms_form">
-	<table bgcolor="#B0FFB0">
-	<tr><th>Definition</th>
+	<table bgcolor="#FFFFFF">
+	<tr bgcolor="#B0FFB0"><th>Definition</th>
 	<td>
-	<input type="text" size="80" name="alg_definition">
+	<input type="text" size="80" name="alg_definition" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@definition"/>
 		</xsl:attribute>
 	</input>
 	</td>
+	<td bgcolor="#FFFFFF">
+		<xsl:choose>
+		<xsl:when test="id(@idref)/@definition=''">
+			<img src="images/warning.png" alt="Empty definition!"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/ok.png"/>
+		</xsl:otherwise>
+		</xsl:choose>	
+	</td>		
 	</tr>
-	<tr><th>Description</th>
+	<tr bgcolor="#B0FFB0"><th>Description</th>
 	<td>
-	<input type="text" size="80" name="alg_description">
-		<xsl:attribute name="value">
+	<textarea rows="6" cols="60" name="alg_description" readonly="true">
   		<xsl:value-of select="id(@idref)/@description"/>
-		</xsl:attribute>
-	</input>
-	</td>
-	<td>
-	<input type="hidden" name="catalog" value="algorithms" />
+	</textarea>
+	<input type="hidden" name="catalog" value="algorithms" />	
 	</td>
 	</tr>
 	<tr>
@@ -236,36 +350,58 @@
 <xsl:template match="endpoint_ref">
 
 	<form method="POST" name="endpoints_form">
-	<table bgcolor="#FFFFB0">
-	<tr><th>Group</th>
+	<table bgcolor="#FFFFFF">
+	<tr bgcolor="#FFFFB0"><th>Group</th>
 	<td>
-	<input type="text" size="80" name="endpoint_group">
+	<input type="text" size="80" name="endpoint_group" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@group"/>
 		</xsl:attribute>
 	</input>
 	</td>
+	<td bgcolor="#FFFFFF">
+		<xsl:choose>
+		<xsl:when test="id(@idref)/@name=''">
+			<img src="images/warning.png" alt="Empty endpoint group!"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/ok.png"/>
+		</xsl:otherwise>
+		</xsl:choose>	
+
+	</td>			
 	</tr>
-	<tr><th>Subgroup</th>
+	<tr bgcolor="#FFFFB0"><th>Subgroup</th>
 	<td>
-	<input type="text" size="80" name="endpoint_subgroup">
+	<input type="text" size="80" name="endpoint_subgroup" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@subgroup"/>
 		</xsl:attribute>
 	</input>
 	</td>
 	</tr>
-	<tr><th>Name</th>
+	<tr bgcolor="#FFFFB0"><th>Name</th>
 	<td>
-	<input type="text" size="80" name="endpoint_name">
+	<input type="text" size="80" name="endpoint_name" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@name"/>
 		</xsl:attribute>
 	</input>
+			<input type="hidden" name="catalog" value="endpoints" />	
 	</td>
-	<td>
-	<input type="hidden" name="catalog" value="endpoints" />
-	</td>
+	<td bgcolor="#FFFFFF">
+		<xsl:choose>
+		<xsl:when test="id(@idref)/@name=''">
+			<img src="images/warning.png" alt="Empty endpoint name!"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/ok.png"/>
+		</xsl:otherwise>
+		</xsl:choose>	
+
+	</td>			
+
+
 	</tr>
 	<tr>
 	<td colspan="2">
@@ -283,55 +419,75 @@
 
 <xsl:template match="author_ref">
 	<form method="POST" name="authors_form">
-	<table bgcolor="#B0B0FF">
-	<tr><th>Name</th>
+	<table bgcolor="#FFFFFF">
+	<tr bgcolor="#B0B0FF"><th>Name</th>
 	<td>
-	<input type="text" size="80" name="author_name">
+	<input type="text" size="80" name="author_name" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@name"/>
 		</xsl:attribute>
 	</input>
 	</td>
+	<td bgcolor="#FFFFFF">
+		<xsl:choose>
+		<xsl:when test="id(@idref)/@name=''">
+			<img src="images/warning.png" alt="Empty name!"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/ok.png"/>
+		</xsl:otherwise>
+		</xsl:choose>	
+	</td>		
 	</tr>
-	<tr><th>Affiliation</th>
+	<tr  bgcolor="#B0B0FF"><th>Affiliation</th>
 	<td>
-	<input type="text" size="80" name="author_affiliation">
+	<input type="text" size="80" name="author_affiliation" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@affiliation"/>
 		</xsl:attribute>
 	</input>
+	<input type="hidden" name="catalog" value="authors" />	
 	</td>
-	<td>
-	<input type="hidden" name="catalog" value="authors" />
-	</td>
+
 	</tr>
-	<tr><th>Contact</th>
+	<tr  bgcolor="#B0B0FF"><th>Contact</th>
 	<td>
 
-	<input type="text" size="80" name="author_address">
+	<input type="text" size="80" name="author_address" readonly="true">
 		<xsl:attribute name="value">
   			<xsl:value-of select="id(@idref)/@contact"/>
 		</xsl:attribute>
 	</input>
 
 	</td></tr>
-	<tr><th>e-mail</th>
+	<tr  bgcolor="#B0B0FF"><th>e-mail</th>
 	<td>
-	<input type="text" size="80" name="author_email">
+	<input type="text" size="80" name="author_email" readonly="true">
 		<xsl:attribute name="value">
   			<xsl:value-of select="id(@idref)/@email"/>
 		</xsl:attribute>
 	</input>
-	</td></tr>
-	<tr><th>WWW</th>
+	</td>
+	<td bgcolor="#FFFFFF">
+		<xsl:choose>
+		<xsl:when test="id(@idref)/@email=''">
+			<img src="images/warning.png" alt="Empty email!"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<img src="images/ok.png"/>
+		</xsl:otherwise>
+		</xsl:choose>	
+	</td>		
+	</tr>
+	<tr  bgcolor="#B0B0FF"><th>WWW</th>
 	<td>
-			<input type="text" size="80" name="author_www">
+			<input type="text" size="80" name="author_www" readonly="true">
 		<xsl:attribute name="value">
   		<xsl:value-of select="id(@idref)/@url"/>
 		</xsl:attribute>
 	</input>
 	</td></tr>
-	<tr>
+	<tr  bgcolor="#FFFFFF">
 	<td colspan="2">
 	<input type="submit" value="Retrieve author number from authors catalog" />
 	</td>

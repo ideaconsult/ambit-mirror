@@ -68,7 +68,7 @@ response.setHeader("Expires", "0");
 <jsp:include page="menu.jsp" flush="true"/>
 
 <jsp:include page="menuuser.jsp" flush="true">
-    <jsp:param name="highlighted" value="user"/>
+    <jsp:param name="highlighted" value="create"/>
 </jsp:include>
 
 <c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>
@@ -79,7 +79,7 @@ response.setHeader("Expires", "0");
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
-		<jsp:param name="updated" value="Creation date"/>
+		<jsp:param name="updated" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="user"/>
 
@@ -92,6 +92,7 @@ response.setHeader("Expires", "0");
 
 
 </jsp:include>
+
 			 <!-- Note the user should have delete privilege -->
 <c:if test="${action eq 'delete'}">
 
@@ -145,7 +146,11 @@ response.setHeader("Expires", "0");
 </c:if>
 
 
-
+<c:if test="${!empty param.status}">
+<div class="success">
+	${param.status}
+</div>
+</c:if>
 
 
 <table width="80%">
@@ -219,7 +224,7 @@ response.setHeader("Expires", "0");
 						<c:otherwise>
 							<blockquote>
 							<div class="success">
-							File <b>${remotePath}</b> <br> File size: <fup:size/> bytes <br> uploaded as attachment ${filename}
+							File <b>${remotePath}</b> <br> File size: <fup:size/> bytes uploaded as attachment ${filename}
 							</div>
 							</blockquote>
 						</c:otherwise>

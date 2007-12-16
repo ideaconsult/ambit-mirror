@@ -187,6 +187,18 @@ A:hover
   	border-style: solid;
   	border: 1px solid #0000FF;
   }
+  
+  .help {
+  	background:#F3FA74;
+  	color:#000000;
+  	text-align:justify;
+  	border-width:2px;
+  	border-color: #D6DFF7;
+  	border-style: solid;
+  	border: 1px solid #0000FF;
+  	FONT-SIZE: 8pt;
+  }
+    
   .center {
   	background:#FFFFFF;
   	color:#000000;

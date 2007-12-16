@@ -157,21 +157,19 @@ response.setHeader("Expires", "0");
 			<input type="hidden" name="id" value="${row.idqmrf}">
 			<input type="hidden" name="status" value="${param.status}">
 	
-			<table bgcolor="#D6DFF7" width="90%">
+			
 				
 				<c:catch var="error">
 					<c:import var="xsl" url="${xslt_url}"/>
 					<x:transform xml="${doc}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd" />
 				</c:catch>
 	
-				<tr><td>
 				<c:if test="${!empty error}">
 					<div class="error">ERROR ${error}</div>
 				</c:if>			
-				</td><td>
-				<input type="submit" value="${submit_caption}">
-				</td></tr>
-				</table>
+
+				
+
 		</c:forEach>
 	</form>
 </c:if>

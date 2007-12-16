@@ -5,8 +5,9 @@
 <xsl:output method="html"  indent="yes"/>
 
 <xsl:template match="QMRF">
+	<table bgcolor="#FFFFFF" width="95%">
 	<xsl:apply-templates select="* "/>
-
+	</table>
 
 
 </xsl:template>
@@ -34,49 +35,9 @@
 </xsl:template>
 
 <xsl:template match="*">
+	
+		<xsl:apply-templates select="*"/>
 
-			<xsl:choose>
-
-			<xsl:when test="contains(@chapter,'10.1')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
-			<xsl:when test="contains(@chapter,'10.2')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
-			<xsl:when test="contains(@chapter,'10.3')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
-			<xsl:when test="contains(@chapter,'10.4')">
-				<h3>
-				<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-				<xsl:text>.</xsl:text>
-				<xsl:value-of disable-output-escaping="no" select="@name"/>
-				</h3>
-
-			</xsl:when>
-
-
-			<xsl:otherwise>
-
-			</xsl:otherwise>
-			</xsl:choose>
-
-			<xsl:apply-templates select="*"/>
 
 </xsl:template>
 
@@ -91,10 +52,75 @@
 </xsl:template>
 
 
+<xsl:template match="QMRF_number">
+		<h3>
+		<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of disable-output-escaping="no" select="@name"/>
+		</h3>
+</xsl:template>
+
+<xsl:template match="date_publication">
+		<h3>
+		<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of disable-output-escaping="no" select="@name"/>
+		</h3>
+</xsl:template>
+<xsl:template match="keywords">
+		<h3>
+		<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of disable-output-escaping="no" select="@name"/>
+		</h3>
+</xsl:template>
+
+<xsl:template match="summary_comments">
+		<h3>
+		<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of disable-output-escaping="no" select="@name"/>
+		</h3>
+</xsl:template>
 
 <xsl:template match="QMRF_chapters/QSAR_identifier/QSAR_title">
-<tr><th colspan="2"><h3>1. QSAR identifier </h3></th></tr>
-	<tr><th>1.1.QSAR identifier (title)</th>
+<tr bgcolor="#CCCCCC"><th colspan="2"><h3>1. QSAR identifier </h3></th>
+	<td width="25%" bgcolor="#FFFFFF" valign="top" rowspan="7">
+			<div class="success">
+			Review QMRF document
+			</div>
+			<br/>
+			<input type="submit" value="Update"/>
+			<br/>
+			<div class="help">
+			Please review the QMRF document (you could download the document from the links above).
+			<br/>Enter keywords and comments and click <u>Update</u> button.
+			<br/>
+			<a>
+				<xsl:attribute name="href">
+				http://ecb.jrc.it/qsar/qsar-tools/qrf/Guidelines_for_reviewing_the_QMRF.pdf
+				</xsl:attribute>
+				<xsl:attribute name="target">
+				_blank
+				</xsl:attribute>				
+				Guidelines for reviewing QMRFs
+			</a>
+			</div>
+			<br/>
+			<div class="help">
+			NOTE: Clicking on <u>Review</u> link will loose changes to keywords and comments fields, which has not been followed by <u>Update</u>
+			</div>
+			<br/>
+			<div class="help">
+			NOTE: Click on <u>Publish</u> when the document is ready to be published.
+			</div>			
+			<br/>
+			<div class="help">
+			NOTE: Click on <u>Return to author</u> when the document has to be returned to the author for revision.
+			</div>						
+	</td>
+</tr>
+	<tr bgcolor="#CCCCCC"><th>1.1.QSAR identifier (title)</th>
 	<td>
   		<xsl:value-of disable-output-escaping="yes" select="text()"/>
 	</td>
@@ -104,9 +130,9 @@
 
 <xsl:template match="QMRF_chapters/QMRF_Summary/QMRF_number">
 
-	<tr><th colspan="2"><h3>10. Summary (ECB Inventory)</h3></th></tr>
+	<tr bgcolor="#CCCCCC"><th colspan="2"><h3>10. Summary (ECB Inventory)</h3></th></tr>
 
-	<tr><th>10.1.QMRF number</th>
+	<tr bgcolor="#CCCCCC"><th>10.1.QMRF number</th>
 	<td>
   		<xsl:value-of select="text()"/>
 	</td>
@@ -115,7 +141,7 @@
 </xsl:template>
 <xsl:template match="QMRF_chapters/QMRF_Summary/date_publication">
 
-	<tr><th>10.2.Publication date</th>
+	<tr bgcolor="#CCCCCC"><th>10.2.Publication date</th>
 	<td>
   		<xsl:value-of select="text()"/>
 	</td>
@@ -124,7 +150,7 @@
 </xsl:template>
 <xsl:template match="QMRF_chapters/QMRF_Summary/keywords">
 
-	<tr><th>10.3.Keywords</th>
+	<tr bgcolor="#CCCCCC"><th>10.3.Keywords</th>
 	<td>
 	<input type="text" name="keywords" size="80">
 		<xsl:attribute name="value">
@@ -137,7 +163,7 @@
 </xsl:template>
 <xsl:template match="QMRF_chapters/QMRF_Summary/summary_comments">
 
-	<tr><th>10.4.Summary comments</th>
+	<tr bgcolor="#CCCCCC"><th>10.4.Summary comments</th>
 	<td>
 	<textarea cols="80" rows="10" name="summary_comments">
   		<xsl:value-of disable-output-escaping="yes" select="text()"/>

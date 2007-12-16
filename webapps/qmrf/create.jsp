@@ -62,7 +62,7 @@ function getXML(){
 
 	<c:set var="qmrf_create" value="true" scope="session"/>
 
-<div class="success">Create new document by QMRF Editor</div>
+
 <form method="POST" action='<%= response.encodeURL("submit.jsp") %>' method='POST' name="qmrfform" onSubmit="return getXML()" >
 <table border="0" cellspacing="5">
 <tr>
@@ -79,12 +79,28 @@ function getXML(){
 		</applet>
       	</td>
     
-      <td halign="top" align="left">
+      <td valign="top" align="left">
+		<div class="success">Create new document by QMRF Editor</div>
+		<br>
+		      <input type="submit" value="Save as draft">
+       <br>
+      <div class="help">
+      Click <u>Save as draft</u> when ready with filling in QMRF document. This is REQUIRED in order to update the QMRF document in the inventory.
+      </div>             
+		<br>
+      <div class="help">
+      After updating the document, the next screen will provide fields to browse and select files to be attached to this document.
+      </div>
+		<br>
+      <div class="help">
+      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory. 
+      </div>      
       <!--
       <input type="radio" name="submit_state" value="draft" checked>Save as draft<br>
       <input type="radio" name="submit_state" value="submitted">Final submission (no further editing will be allowed).<br>
       -->
-      <input type="submit" value="Save as draft"><br>
+
+
     </tr>
   </table>
 </form>

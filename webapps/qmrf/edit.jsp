@@ -48,16 +48,39 @@ function getXML(){
 </jsp:include>
 
 
+
+	<c:set var="qmrf_update" value="true" scope="session"/>
+	
+<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${param.id}"/>
+
+<jsp:include page="records.jsp" flush="true">
+    <jsp:param name="sql" value="${sql}"/>
+
+		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="version" value="Version"/>
+		<jsp:param name="user_name" value="Author"/>
+		<jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="status" value="Status"/>
+		<jsp:param name="actions" value="user"/>
+
+		<jsp:param name="sqlparam" value="${sessionScope['username']}"/>
+
+		<jsp:param name="paging" value="false"/>
+		<jsp:param name="page" value="1"/>
+		<jsp:param name="pagesize" value="1"/>
+		<jsp:param name="viewpage" value="user.jsp"/>
+
+
+</jsp:include>
+	
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">
-	select idqmrf,qmrf_number,xml from documents where idqmrf=? and user_name=? limit 1
+	select idqmrf,qmrf_number,xml,status from documents where idqmrf=? and user_name=? limit 1
 	<sql:param value="${param.id}"/>
 	<sql:param value="${sessionScope['username']}"/>
 
-</sql:query>
-<div class="success">Edit document by QMRF Editor</div>
-	<c:set var="qmrf_update" value="true" scope="session"/>
+</sql:query>	
   <form method="POST" id="qmrfform" name="qmrfform" action='<%= response.encodeURL("submit_update.jsp") %>' onSubmit="return getXML()">
-  <table border="0" cellspacing="5">
+  <table border="0" cellspacing="5" border="1">
 	<c:forEach var="row" items="${rs.rows}">
 		<c:set var="data" value="${row.xml}"/>
 
@@ -92,15 +115,39 @@ function getXML(){
 			Applet not supported by browser.
 		</applet>
 		</td>
-          <td halign="top">
+          <td valign="top">
     	<input type="hidden" id="xml" name="xml" value="" checked>
     	<!--
       <input type="radio" name="submit_state" value="draft" checked>Submit as draft<br>
       <input type="radio" name="submit_state" value="submitted">Final submission (no further editing will be allowed).<br>
       -->
 
-
+		<div class="success">Edit document by QMRF Editor</div>
       <input type="submit" value="Save as draft">
+      <c:if test="${row.status eq 'returned for revision'}">
+            <br>
+      <div class="error">
+      The document has been returned for revission. Please pay attention to Section 10 of the document!
+      </div>      
+      </c:if>      
+      <br>
+      <div class="help">
+      Click <u>Save as draft</u> when ready with filling in QMRF document. This is REQUIRED in order to update the QMRF document in the inventory.
+      </div>
+      <br>
+      <div class="help">
+      After updating the document, the next screen will provide fields to browse and select files to be attached to this document.
+      </div>
+		<br>
+      <div class="help">
+      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory. 
+      </div>      
+      <br>
+      <div class="help">
+      NOTE: By using links <u>Edit</u>, <u>Attachments</u> or <u>Submit</u> from this page, the current changes in QMRF document will be LOST!
+      </div>
+
+
           </td>
     </tr>
     </tr>
