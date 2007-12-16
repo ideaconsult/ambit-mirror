@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="UTF-8"?><!-- QMRF DTD -->
+<!--DOCTYPE QMRF SYSTEM "qmrf.dtd"--> 
+<!ELEMENT QMRF (QMRF_chapters,Catalogs)>  
+<!ATTLIST QMRF 
+          schema_version CDATA  #FIXED "0.7"
+          version CDATA  #FIXED "1.1"
+          name CDATA #FIXED "(Q)SAR Model Reporting Format" 
+          author CDATA #FIXED "European Chemicals Bureau" 
+          date CDATA #FIXED "June 2006" 
+          contact CDATA #FIXED "European Chemicals Bureau, IHCP, Joint Research Centre, European Commission" 
+          email CDATA #FIXED "ecb.qsar@jrc.it" 
+          url CDATA #FIXED "http://ecb.jrc.it/QSAR/" 
+          >
+
+
+<!ELEMENT QMRF_chapters (QSAR_identifier,QSAR_General_information,QSAR_Endpoint,
+QSAR_Algorithm,QSAR_Applicability_domain+,QSAR_Robustness,QSAR_Predictivity+,
+QSAR_Interpretation,QSAR_Miscelaneous,QMRF_Summary) >  
+
+<!-- Chapter 1 -->
+<!ELEMENT QSAR_identifier (QSAR_title,QSAR_models,QSAR_software) >  
+<!ATTLIST QSAR_identifier chapter CDATA #FIXED "1" name CDATA #FIXED "QSAR identifier" help CDATA #IMPLIED>
+<!ELEMENT QSAR_title (#PCDATA)>
+<!ATTLIST QSAR_title chapter CDATA  #FIXED "1.1" name CDATA #FIXED "QSAR identifier (title)" help CDATA "">
+<!ELEMENT QSAR_models (#PCDATA)>
+<!ATTLIST QSAR_models chapter CDATA  #FIXED "1.2" name CDATA #FIXED "Other related models" help CDATA "">
+<!ELEMENT QSAR_software (software_ref*) >
+<!-- Reference to Software_catalog -->
+<!ATTLIST QSAR_software chapter CDATA  #FIXED "1.3" name CDATA #FIXED "Software coding the model" help CDATA "">
+<!ELEMENT software_ref EMPTY>
+<!ATTLIST software_ref idref IDREF #REQUIRED>
+
+<!-- Chapter 2 -->
+<!ELEMENT QSAR_General_information (qmrf_date,qmrf_authors,qmrf_date_revision,qmrf_revision,model_authors,model_date,references,info_availability,related_models)>
+<!ATTLIST QSAR_General_information chapter CDATA  #FIXED "2" name CDATA  #FIXED  "General information" help CDATA "">
+<!-- 2.1 Date of QMRF -->
+<!ELEMENT qmrf_date (#PCDATA)>
+<!ATTLIST qmrf_date chapter CDATA  #FIXED "2.1" name CDATA #FIXED "Date of QMRF" help CDATA ""> 
+<!-- 2.2. QMRF authors -->
+<!ELEMENT qmrf_authors (author_ref+)>
+<!ATTLIST qmrf_authors chapter CDATA  #FIXED "2.2" name CDATA #FIXED "QMRF author(s) and contact details" help CDATA ""> 
+<!-- 2.3 Date of QMRF update -->
+<!ELEMENT qmrf_date_revision (#PCDATA)>
+<!ATTLIST qmrf_date_revision chapter CDATA  #FIXED "2.3" name CDATA #FIXED "Date of QMRF update(s)" help CDATA ""> 
+<!-- 2.4 QMRF update(s) -->
+<!ELEMENT qmrf_revision (#PCDATA)>
+<!ATTLIST qmrf_revision chapter CDATA  #FIXED "2.4" name CDATA #FIXED "QMRF update(s)" help CDATA ""> 
+<!-- Model developers -->
+<!ELEMENT model_authors (author_ref+)>
+<!ATTLIST model_authors chapter CDATA  #FIXED "2.5" name CDATA #FIXED "Model developer(s) and contact details" help CDATA "">
+<!-- Date of model development -->
+<!ELEMENT model_date (#PCDATA)>
+<!ATTLIST model_date chapter CDATA  #FIXED "2.6" name CDATA #FIXED "Date of model development and/or publication" help CDATA ""> 
+<!-- 2.7	Reference(s) to main scientific papers and/or software package -->
+<!ELEMENT references (publication_ref*)>
+<!ATTLIST references chapter CDATA  #FIXED "2.7" name CDATA #FIXED "Reference(s) to main scientific papers and/or software package" help CDATA "">
+<!-- 2.8	Availability of information about the model -->
+<!ELEMENT info_availability (#PCDATA)>
+<!ATTLIST info_availability chapter CDATA  #FIXED "2.8" name CDATA #FIXED "Availability of information about the model" help CDATA ""> 
+<!-- 2.9	Availability of another QMRF for exactly the same model -->
+<!ELEMENT related_models (#PCDATA)>
+<!ATTLIST related_models chapter CDATA  #FIXED "2.9" name CDATA #FIXED "Availability of another QMRF for exactly the same model" help CDATA ""> 
+
+<!-- Chapter 3 -->
+<!ELEMENT QSAR_Endpoint (model_species,model_endpoint,endpoint_comments,
+endpoint_units,endpoint_variable,endpoint_protocol,endpoint_data_quality)>
+<!ATTLIST QSAR_Endpoint chapter CDATA  #FIXED "3" name CDATA #FIXED "Defining the endpoint – OECD Principle 1" help CDATA "">
+<!-- Link to species catalog -->
+<!ELEMENT model_species (#PCDATA)>
+<!ATTLIST model_species chapter CDATA  #FIXED "3.1" name CDATA #FIXED "Species" help CDATA "">
+
+<!-- Link to endpoint catalog -->
+<!ELEMENT model_endpoint (endpoint_ref*)>
+<!ATTLIST model_endpoint chapter CDATA  #FIXED "3.2" name CDATA #FIXED "Endpoint" help CDATA "">
+
+<!-- endpoints units -->
+<!ELEMENT endpoint_comments (#PCDATA)>
+<!ATTLIST endpoint_comments chapter CDATA  #FIXED "3.3" name CDATA #FIXED "Comment on endpoint" help CDATA "">
+<!-- endpoints units -->
+<!ELEMENT endpoint_units (#PCDATA)>
+<!ATTLIST endpoint_units chapter CDATA  #FIXED "3.4" name CDATA #FIXED "Endpoint units" help CDATA "">
+<!-- dependent variable -->
+<!ELEMENT endpoint_variable (#PCDATA)>
+<!ATTLIST endpoint_variable chapter CDATA  #FIXED "3.5" name CDATA #FIXED "Dependent variable" help CDATA "">
+<!-- Experimental protocol -->
+<!ELEMENT endpoint_protocol (#PCDATA)>
+<!ATTLIST endpoint_protocol chapter CDATA  #FIXED "3.6" name CDATA #FIXED "Experimental protocol" help CDATA "" >
+<!-- Endpoint data quality -->
+<!ELEMENT endpoint_data_quality (#PCDATA)>
+<!ATTLIST endpoint_data_quality chapter CDATA  #FIXED "3.7" name CDATA #FIXED "Endpoint data quality" help CDATA "">
+
+<!-- Chapter 4 -->
+<!ELEMENT QSAR_Algorithm (algorithm_type,algorithm_explicit,algorithm_comments,algorithms_descriptors,
+descriptors_selection,descriptors_generation,descriptors_generation_software,descriptors_chemicals_ratio)> 
+<!ATTLIST QSAR_Algorithm chapter CDATA  #FIXED "4" name CDATA #FIXED "Defining the algorithm – OECD Principle 2" help CDATA ""> 
+<!-- 4.1 Types of model -->
+<!ELEMENT algorithm_type (#PCDATA)>
+<!ATTLIST algorithm_type chapter CDATA  #FIXED "4.1" name CDATA #FIXED "Type of model" help CDATA "">
+<!-- 4.2 Explicit algorithm -->
+<!ELEMENT algorithm_explicit (algorithm_ref*,equation)>
+<!ATTLIST algorithm_explicit chapter CDATA  #FIXED "4.2" name CDATA #FIXED "Explicit algorithm" help CDATA "">
+<!ELEMENT equation (#PCDATA)>
+<!-- 4.3 Comments on algorithm -->
+<!ELEMENT algorithm_comments (#PCDATA)>
+<!ATTLIST algorithm_comments chapter CDATA  #FIXED "4.3" name CDATA #FIXED "Comments on algorithm" help CDATA "" >
+<!-- 4.4 Descriptors in model -->
+<!ELEMENT algorithms_descriptors (descriptor_ref*)>
+<!ATTLIST algorithms_descriptors chapter CDATA  #FIXED "4.4" name CDATA #FIXED "Descriptors in the model" help CDATA "">
+<!-- 4.5 Descriptor selection -->
+<!ELEMENT descriptors_selection (#PCDATA)>
+<!ATTLIST descriptors_selection chapter CDATA  #FIXED "4.5" name CDATA #FIXED "Descriptor selection" help CDATA "">
+<!-- 4.6 Descriptor generator -->
+<!ELEMENT descriptors_generation (#PCDATA)>
+<!ATTLIST descriptors_generation chapter CDATA  #FIXED "4.6" name CDATA #FIXED "Descriptor generation" help CDATA "">
+<!-- 4.7	Software name and version for descriptor generation  todo - ref to Software catalog-->
+<!ELEMENT descriptors_generation_software (software_ref*)>
+<!ATTLIST descriptors_generation_software chapter CDATA  #FIXED "4.7" name CDATA #FIXED "Software name and version for descriptor generation" help CDATA "" options CDATA #IMPLIED>
+<!-- 4.8	Descriptors/Chemicals ratio -->
+<!ELEMENT descriptors_chemicals_ratio (#PCDATA)>
+<!ATTLIST descriptors_chemicals_ratio chapter CDATA  #FIXED "4.8" name CDATA #FIXED "Descriptors/Chemicals ratio" help CDATA "">
+
+
+<!-- Chapter 5 -->
+<!ELEMENT QSAR_Applicability_domain (app_domain_description,app_domain_method,app_domain_software,applicability_limits)>
+<!ATTLIST QSAR_Applicability_domain chapter CDATA  #FIXED "5" name CDATA #FIXED "Defining the applicability domain – OECD Principle 3" help CDATA "">
+<!-- 5.1	Description of the applicability domain of the model -->
+<!ELEMENT app_domain_description (#PCDATA)>
+<!ATTLIST app_domain_description chapter CDATA  #FIXED "5.1" name CDATA #FIXED "Description of the applicability domain of the model" help CDATA "">
+<!-- 5.2	Description of the applicability domain of the model -->
+<!ELEMENT app_domain_method (#PCDATA)>
+<!ATTLIST app_domain_method chapter CDATA  #FIXED "5.2" name CDATA #FIXED "Method used to assess the applicability domain" help CDATA "">
+<!-- 5.3	Software name and version for applicability domain assessment -->
+<!ELEMENT app_domain_software (software_ref*)>
+<!ATTLIST app_domain_software chapter CDATA  #FIXED "5.3" name CDATA #FIXED "Software name and version for applicability domain assessment" help CDATA "">
+<!-- 5.4	Description of the applicability domain of the model -->
+<!ELEMENT applicability_limits (#PCDATA)>
+<!ATTLIST applicability_limits chapter CDATA  #FIXED "5.4" name CDATA #FIXED "Limits of applicability" help CDATA "">
+
+<!-- Chapter 6 -->
+<!ELEMENT QSAR_Robustness (training_set_availability,training_set_data,training_set_descriptors,dependent_var_availability,other_info,
+preprocessing,goodness_of_fit,loo,lmo,yscrambling,bootstrap,other_statistics)>
+<!ATTLIST QSAR_Robustness chapter CDATA  #FIXED "6" name CDATA #FIXED "Defining goodness-of-fit and robustness – OECD Principle 4" help CDATA "">
+<!-- 6.1	Availability of the training set -->
+<!ELEMENT training_set_availability (#PCDATA)>
+<!ATTLIST training_set_availability chapter CDATA  #FIXED "6.1" answer (Yes|No) #REQUIRED name CDATA #FIXED "Availability of the training set" help CDATA "">
+<!-- 6.2	Available information for the training set -->
+<!ELEMENT training_set_data (#PCDATA)>
+<!ATTLIST training_set_data chapter CDATA  #FIXED "6.2" 
+			name CDATA #FIXED "Available information for the training set" 
+			help CDATA ""
+			chemname (Yes|No) #REQUIRED
+			cas (Yes|No) #REQUIRED			
+			smiles (Yes|No) #REQUIRED			
+			inchi (Yes|No) #REQUIRED									
+			mol (Yes|No) #REQUIRED												
+			formula (Yes|No) #REQUIRED									
+			>
+<!-- 6.3	Data for each descriptor variable for the training set -->
+<!ELEMENT training_set_descriptors (#PCDATA)>
+<!ATTLIST training_set_descriptors 
+          chapter CDATA  #FIXED "6.3" name CDATA #FIXED "Data for each descriptor variable for the training set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 6.4	Data for the dependent variable for the training set -->
+<!ELEMENT dependent_var_availability (#PCDATA)>
+<!ATTLIST dependent_var_availability 
+          chapter CDATA  #FIXED "6.4" name CDATA #FIXED "Data for the dependent variable for the training set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 6.5	Other information about the training set -->
+<!ELEMENT other_info (#PCDATA)>
+<!ATTLIST other_info  chapter CDATA  #FIXED "6.5" name CDATA #FIXED "Other information about the training set:" help CDATA "">
+<!-- 6.6	Pre-processing of data before modelling -->
+<!ELEMENT preprocessing (#PCDATA)>
+<!ATTLIST preprocessing  chapter CDATA  #FIXED "6.6" name CDATA #FIXED "Pre-processing of data before modelling" help CDATA "">
+<!-- 6.7	Statistics for goodness-of-fit -->
+<!ELEMENT goodness_of_fit (#PCDATA)>
+<!ATTLIST goodness_of_fit  chapter CDATA  #FIXED "6.7" name CDATA #FIXED "Statistics for goodness-of-fit" help CDATA "">
+<!-- 6.8	Robustness - Statistics obtained by leave-one-out cross-validation -->
+<!ELEMENT loo (#PCDATA)>
+<!ATTLIST loo  chapter CDATA  #FIXED "6.8" name CDATA #FIXED "Robustness – Statistics obtained by leave-one-out cross-validation" help CDATA "">
+<!-- 6.9	Robustness - Statistics obtained by leave-many-out cross-validation -->
+<!ELEMENT lmo (#PCDATA)>
+<!ATTLIST lmo  chapter CDATA  #FIXED "6.9" name CDATA #FIXED "Robustness – Statistics obtained by leave-many-out cross-validation" help CDATA "">
+<!-- 6.10	Robustness - Statistics obtained by Y-scrambling -->
+<!ELEMENT yscrambling (#PCDATA)>
+<!ATTLIST yscrambling  chapter CDATA  #FIXED "6.10" name CDATA #FIXED "Robustness – Statistics obtained by Y-scrambling" help CDATA "">
+<!-- 6.11	Robustness - Statistics obtained by bootstrap -->
+<!ELEMENT bootstrap (#PCDATA)>
+<!ATTLIST bootstrap  chapter CDATA  #FIXED "6.11" name CDATA #FIXED "Robustness – Statistics obtained by bootstrap" help CDATA "">
+<!-- 6.12	Robustness - Statistics obtained by other methods -->
+<!ELEMENT other_statistics (#PCDATA)>
+<!ATTLIST other_statistics  chapter CDATA  #FIXED "6.12" name CDATA #FIXED "Robustness – Statistics obtained by other methods" help CDATA "">
+
+<!-- Chapter 7 -->
+<!ELEMENT QSAR_Predictivity (validation_set_availability,validation_set_data,validation_set_descriptors,validation_dependent_var_availability,validation_other_info,experimental_design,validation_predictivity,validation_assessment,validation_comments)>
+<!ATTLIST QSAR_Predictivity chapter CDATA  #FIXED "7" name CDATA #FIXED  "Defining predictivity – OECD Principle 4" help CDATA "">
+<!-- 7.1	Availability of the external validation set -->
+<!ELEMENT validation_set_availability (#PCDATA)>
+<!ATTLIST validation_set_availability chapter CDATA  #FIXED "7.1"        answer (Yes|No) #REQUIRED 
+		name CDATA #FIXED "Availability of the external validation set" help CDATA "">
+<!-- 7.2	Available information for the external validation set -->
+<!ELEMENT validation_set_data (#PCDATA)>
+<!ATTLIST validation_set_data chapter CDATA  #FIXED "7.2" 
+			name CDATA #FIXED "Available information for the external validation set" 
+			help CDATA ""
+			chemname (Yes|No) #REQUIRED
+			cas (Yes|No) #REQUIRED			
+			smiles (Yes|No) #REQUIRED			
+			inchi (Yes|No) #REQUIRED									
+			mol (Yes|No) #REQUIRED												
+			formula (Yes|No) #REQUIRED									
+			>
+
+<!-- 7.3	Data for each descriptor variable for the external validation set -->
+<!ELEMENT validation_set_descriptors (#PCDATA)>
+<!ATTLIST validation_set_descriptors 
+          chapter CDATA  #FIXED "7.3" name CDATA #FIXED "Data for each descriptor variable for the external validation set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 7.4	Data for the dependent variable for the external validation set -->
+<!ELEMENT validation_dependent_var_availability (#PCDATA)>
+<!ATTLIST validation_dependent_var_availability 
+          chapter CDATA  #FIXED "7.4" name CDATA #FIXED  "Data for the dependent variable for the external validation set"
+          answer (All|Some|No|Unknown) #REQUIRED help CDATA "">
+<!-- 7.5	Other information about the external validation set-->
+<!ELEMENT validation_other_info (#PCDATA)>
+<!ATTLIST validation_other_info  chapter CDATA  #FIXED "7.5" name CDATA #FIXED  "Other information about the external validation set" help CDATA "">
+<!-- 7.6	Experimental design for data splitting-->
+<!ELEMENT experimental_design (#PCDATA)>
+<!ATTLIST experimental_design  chapter CDATA  #FIXED "7.6" name CDATA #FIXED "Experimental design of test set" help CDATA "">
+<!-- 7.7	Predictivity - Statistics obtained by external validation-->
+<!ELEMENT validation_predictivity (#PCDATA)>
+<!ATTLIST validation_predictivity  chapter CDATA  #FIXED "7.7" name CDATA #FIXED "Predictivity – Statistics obtained by external validation" help CDATA "">
+<!-- 7.8	Predictivity - Assessment of the external validation set-->
+<!ELEMENT validation_assessment (#PCDATA)>
+<!ATTLIST validation_assessment  chapter CDATA  #FIXED "7.8" name CDATA #FIXED "Predictivity – Assessment of the external validation set" help CDATA "">
+<!-- 7.9	Comments on the external validation of the model-->
+<!ELEMENT validation_comments (#PCDATA)>
+<!ATTLIST validation_comments  chapter CDATA  #FIXED "7.9" name CDATA #FIXED "Comments on the external validation of the model" help CDATA "">
+
+
+<!-- Chapter 8 -->
+<!ELEMENT QSAR_Interpretation (mechanistic_basis,mechanistic_basis_comments,mechanistic_basis_info)>
+<!ATTLIST QSAR_Interpretation chapter CDATA  #FIXED "8" name CDATA #FIXED  "Providing a mechanistic interpretation – OECD Principle 5" help CDATA "">
+<!-- 8.1	Mechanistic basis of the model:-->
+<!ELEMENT mechanistic_basis (#PCDATA)>
+<!ATTLIST mechanistic_basis  chapter CDATA  #FIXED "8.1" name CDATA #FIXED "Mechanistic basis of the model" help CDATA "">
+<!-- 8.2	A priori or a posteriori mechanistic interpretation-->
+<!ELEMENT mechanistic_basis_comments (#PCDATA)>
+<!ATTLIST mechanistic_basis_comments  chapter CDATA  #FIXED "8.2" name CDATA #FIXED "A priori or a posteriori mechanistic interpretatio" help CDATA "">
+<!-- 8.3	Other information about the mechanistic interpretation-->
+<!ELEMENT mechanistic_basis_info (#PCDATA)>
+<!ATTLIST mechanistic_basis_info  chapter CDATA  #FIXED "8.3" name CDATA #FIXED "Other information about the mechanistic interpretation" help CDATA "">
+
+
+
+<!-- Chapter 9 -->
+<!ELEMENT QSAR_Miscelaneous (comments,bibliography,attachments)>
+<!ATTLIST QSAR_Miscelaneous chapter CDATA  #FIXED "9" name CDATA #FIXED "Miscellaneous information" help CDATA "">
+<!-- 9.1	Comments-->
+<!ELEMENT comments (#PCDATA)>
+<!ATTLIST comments  chapter CDATA  #FIXED "9.1" name CDATA #FIXED "Comments" help CDATA "">
+<!-- 9.2	Bibliography-->
+<!ELEMENT bibliography (publication_ref*)>
+<!ATTLIST bibliography  chapter CDATA  #FIXED "9.2" name CDATA #FIXED "Bibliography" help CDATA "">
+
+<!-- 9.3	Supporting information-->
+<!ELEMENT attachments (attachment_training_data,attachment_validation_data,attachment_documents)>
+<!ATTLIST attachments  chapter CDATA  #FIXED "9.3" name CDATA #FIXED "Supporting information" help CDATA "">
+<!ELEMENT attachment_training_data (molecules*) >
+<!ELEMENT attachment_validation_data (molecules*) >
+<!ELEMENT attachment_documents (document*)>
+
+<!ELEMENT molecules EMPTY>
+<!-- http://www.ch.ic.ac.uk/chemime/ Chemical MIME types -->
+<!ATTLIST molecules url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
+<!ELEMENT document EMPTY>
+<!ATTLIST document url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
+
+<!-- 10. Summary (ECB Inventory) -->
+<!ELEMENT QMRF_Summary (QMRF_number,date_publication,keywords,summary_comments)>
+<!ATTLIST QMRF_Summary  chapter CDATA  #FIXED "10" name CDATA #FIXED "Summary (ECB Inventory)" help CDATA "">
+
+<!-- 10.1	QMRF number-->
+<!ELEMENT QMRF_number (#PCDATA)> 
+<!ATTLIST QMRF_number  chapter CDATA  #FIXED "10.1" name CDATA #FIXED "QMRF number" help CDATA "">
+<!ELEMENT date_publication (#PCDATA)> 
+<!ATTLIST date_publication  chapter CDATA  #FIXED "10.2" name CDATA #FIXED "Publication date" help CDATA "">
+<!ELEMENT keywords (#PCDATA)> 
+<!ATTLIST keywords  chapter CDATA  #FIXED "10.3" name CDATA #FIXED "Keywords" help CDATA "">
+<!ELEMENT summary_comments (#PCDATA)> 
+<!ATTLIST summary_comments  chapter CDATA  #FIXED "10.4" name CDATA #FIXED "Comments" help CDATA "">
+
+<!-- Misc repositories -->
+<!ELEMENT Catalogs (software_catalog*,algorithms_catalog*,descriptors_catalog*,
+          endpoints_catalog*,
+          publications_catalog*,authors_catalog*)>
+
+<!-- Software catalog-->
+<!ELEMENT software_catalog (software*)>
+<!ELEMENT software EMPTY>
+<!ATTLIST software id ID #REQUIRED 
+		name CDATA #REQUIRED 
+		url CDATA #IMPLIED 
+		number CDATA #REQUIRED 
+		description CDATA #IMPLIED 
+		version CDATA #IMPLIED
+		contact CDATA #IMPLIED 
+		catalog CDATA #FIXED "software_catalog">
+
+
+<!-- Algorithms catalog-->
+<!ELEMENT algorithms_catalog (algorithm*)>
+<!ELEMENT algorithm EMPTY>
+<!ATTLIST algorithm id ID #REQUIRED 
+			definition CDATA #REQUIRED 
+			description CDATA #REQUIRED 			
+			publication_ref IDREF #IMPLIED
+			catalog CDATA #FIXED "algorithms_catalog">
+
+<!ELEMENT algorithm_ref EMPTY>
+<!ATTLIST algorithm_ref idref IDREF #REQUIRED catalog CDATA #FIXED "algorithms_catalog" >
+
+<!-- Descriptors catalog-->
+<!ELEMENT descriptors_catalog (descriptor*)>
+<!ELEMENT descriptor EMPTY>
+<!ATTLIST descriptor id ID #REQUIRED 
+			name CDATA #REQUIRED
+			units CDATA #REQUIRED
+			description CDATA #REQUIRED
+			publication_ref IDREF #IMPLIED
+
+			>
+<!ELEMENT descriptor_ref EMPTY>
+<!ATTLIST descriptor_ref idref IDREF #REQUIRED catalog CDATA #FIXED "descriptors_catalog" >
+
+
+<!-- Endpoints catalog-->
+<!ELEMENT endpoints_catalog (endpoint*)>
+<!ELEMENT endpoint EMPTY>
+<!ATTLIST endpoint id ID #REQUIRED name CDATA #REQUIRED  
+			group CDATA #IMPLIED 
+			catalog CDATA #FIXED "endpoints_catalog" >
+
+<!ELEMENT endpoint_ref EMPTY>
+<!ATTLIST endpoint_ref idref IDREF #REQUIRED>
+
+
+<!-- Authors catalog. Number attribute should be unique, will be used in QMRF number generation-->
+<!ELEMENT authors_catalog (author*)>
+<!ELEMENT author EMPTY>
+<!ATTLIST author id ID #REQUIRED name CDATA #REQUIRED contact CDATA #IMPLIED number CDATA #REQUIRED>
+
+<!ELEMENT author_ref EMPTY>
+<!ATTLIST author_ref idref IDREF #REQUIRED catalog CDATA #FIXED "authors_catalog">
+
+<!-- Publications catalog-->
+<!ELEMENT publications_catalog (publication*)>
+<!ELEMENT publication EMPTY>
+<!ATTLIST publication id ID #REQUIRED title CDATA #REQUIRED url CDATA #IMPLIED>          
+<!ELEMENT publication_ref EMPTY>
+<!ATTLIST publication_ref idref IDREF #REQUIRED number CDATA "" catalog CDATA #FIXED "publications_catalog">          
+
+<!ENTITY help_1 "">
+<!ENTITY help_1_1 "Provide a short and indicative title for the model including relevant keyword. Some possible keywords are: endpoint modelled (as specified in field 3.2, recommended), name of the model, name of the modeller, and name of the software coding the model. Examples: “BIOWIN for Biodegradation”; “TOPKAT Developmental Toxicity Potential Aliphatic Model”.">
+<!ENTITY help_1_2 "If appropriate, identify any model that is related to the model described in the present QMRF. Example: “TOPKAT Developmental Toxicity Potential Heteroaromatic Model and TOPKAT Developmental Toxicity Potential Carboaromatic Model” (these two models are related to the primary model “TOPKAT Developmental Toxicity Potential Aliphatic Model”).">
+<!ENTITY help_1_3 "If appropriate, specify the name and the version of the software that implements the model. Examples: “BIOWIN v. 4.2 (EPI Suite)”; “TOPKAT v. 6.2”.">
+
+<!ENTITY help_2 "">
+<!ENTITY help_2_1 "Report the date of QMRF drafting (month/year). Example: “November 2006”.">
+<!ENTITY help_2_2 "Indicate the name and the contact details of the author(s) of the QMRF (first version of the QMRF).">
+<!ENTITY help_2_3 "Indicate the date (month/year) of any update of the QMRF. The QMRF can be updated for a number of reasons such as additions of new information (e.g. addition of new information about the applicability domain in section 5 or of new validation studies in section 7) and corrections of information. ">
+<!ENTITY help_2_4 "Indicate the name and the contact details of the author(s) of the updates QMRF (see field 2.3) and list which sections and fields have been modified.">
+<!ENTITY help_2_5 "Indicate the name of model developer(s)/author(s), and the corresponding contact details; possibly report the contact details of the corresponding author.">
+<!ENTITY help_2_6 "Report the year of release/publication of the model described in the current QMRF.">
+<!ENTITY help_2_7 "List the main bibliographic references (if any) to original paper(s) explaining the model development and/or software implementation. Any other reference such as references to original experimental data and related models can be reported in field 9.2 “Bibliography”.">
+<!ENTITY help_2_8 "Indicate whether the model is proprietary or non-proprietary and specify (if possible) what kind of information about the model cannot be disclosed or are not available (e.g., training and external validation sets, source code, and algorithm). Example: “The model is non-proprietary but the training and test sets are not available”; “The model is proprietary and the algorithm and the datasets are confidential”.">
+<!ENTITY help_2_9 "Indicate if you are aware or suspect that another QMRF is available for the current model you are describing. If possible, identify this other QMRF.">
+
+<!ENTITY help_3 'PRINCIPLE 1: “A DEFINED ENDPOINT". ENDPOINT refers to any physicochemical, biological, or environmental effect that can be measured and therefore modelled. The intent of PRINCIPLE 1 (a (Q)SAR should be associated with a defined endpoint) is to ensure clarity in the endpoint being predicted by a given model, since a given endpoint could be determined by different experimental protocols and under different experimental conditions. It is therefore important to identify the experimental system that is being modelled by the (Q)SAR.'>
+<!ENTITY help_3_1 "Indicate the species for the endpoint being modelled.">
+<!ENTITY help_3_2 "Choose the endpoint (physicochemical, biological, or environmental effect) from the pre-defined classification. If the pre-defined classification does not include the endpoint of interest, select “Other” and report the endpoint in the subsequent field 3.3.">
+<!ENTITY help_3_3 "Include in this field any other information to define the endpoint being modelled. You can define here the endpoint of interest in case this is not listed in the pre-defined classification (see field 3.2) or you can add information about a second endpoint modelled by the same model. Example: Nitrate radical degradation rate constant: kNO3.">
+<!ENTITY help_3_4 "Specify the units of the endpoint measured.">
+<!ENTITY help_3_5 "Specify the relationship between the dependent variable being modelled and the endpoint measured since the two quantities may be different. Example: For modelling purposes all rate constants (i.e. Nitrate radical degradation rate constant kNO3) were transformed to logarithmic units and multiplied by -1 to obtain positive values. The dependent variable is: -log(kNO3).">
+<!ENTITY help_3_6 "Make any useful reference to a specific experimental protocol (or protocols) followed in the collection of the experimental datasets.">
+<!ENTITY help_3_7 "Provide available information about the data quality used to develop the model.">
+
+<!ENTITY help_4 "PRINCIPLE 2: “AN UNAMBIGUOUS ALGORITHM”. The (Q)SAR estimate of an endpoint is the result of applying an ALGORITHM to a set of structural parameters which describe the chemical structure. The intent of PRINCIPLE 2 (a (Q)SAR should be associated with a unambiguous algorithm) is to ensure transparency in the model algorithm that generates predictions of an endpoint from information on chemical structure and/or physicochemical properties.">
+<!ENTITY help_4_1 "Describe the type of model (e.g., SAR, QSAR, Expert System, Neural Network, etc.).">
+<!ENTITY help_4_2 "Report the algorithm (only the algorithm) for generating predictions from the descriptors; more text information about the algorithm can be reported in the following fields of this section or as supporting information (see field 9.3). If the algorithm is too long and complicated and thus cannot be reported here, include in this field a reference to a paper or a document where the algorithm is described in detail. This material can be attached as supporting information.">
+<!ENTITY help_4_3 "If necessary, include the description of the algorithm and/or any comment about it. If in the previous field, only a reference to a paper is reported, it is advised to provide a brief description of the algorithm in this field.">
+<!ENTITY help_4_4 "Identify the number and the name of the descriptors included in the model.">
+<!ENTITY help_4_5 "Indicate the number and the type (name) of descriptors initially screened, and explain the method used to select the descriptors and develop the model from them.">
+<!ENTITY help_4_6 "Explain in detail the method (approach) used to generate each descriptor.">
+<!ENTITY help_4_7 "Specify the name and the version of the software used to generate the descriptors. If relevant, report the specific settings chosen in the software to generate a descriptor.">
+<!ENTITY help_4_8 "Report the following ratio: number of descriptors to number of chemicals (chemicals from the training set), if applicable (if not, explain why).">
+
+<!ENTITY help_5 "PRINCIPLE 3: “A DEFINED DOMAIN OF APPLICABILITY”. APPLICABILITY DOMAIN refers to the response and chemical structure space in which the model makes predictions with a given reliability. Ideally the applicability domain should express the structural, physicochemical and response space of the model. The CHEMICAL STRUCTURE (x variable) space can be expressed by information on physicochemical properties and/or structural fragments. The RESPONSE (y variable) can be any physicochemical, biological or environmental effect that is being predicted. According to PRINCIPLE 3 a (Q)SAR should be associated with a defined domain of applicability. Section 5 can be repeated (e.g., 5.a, 5.b, 5.c, etc) as many time as necessary if more than one method has been used to assess the applicability domain.">
+<!ENTITY help_5_1 "Describe the response and chemical structure space in which the model makes predictions with a given reliability. You may want to discuss in detail if: 
+a.	Fixed or probabilistic boundaries define the applicability domain; 
+b.	Structural features or a response space defines the applicability domain; 
+c.	In the case of SAR, there exists a description of the limits on its applicability (inclusion and/or exclusion rules regarding the chemical classes to which the substructure is applicable);
+d.	In the case of SAR, there exist rules describing the modularity effects of the substructure’s molecular environment;
+e.	In the case of QSAR, there exist inclusion and/or exclusion rules that define the descriptor variable ranges for which the QSAR is applicable;
+f.	In the case of QSAR, there exist inclusion and/or exclusion rules that define the response variable ranges for which the QSAR is applicable;
+g.	There exists a (graphical) expression of how the descriptor values of the chemicals in the training set are distributed in relation to the endpoint values predicted by the model.
+">
+<!ENTITY help_5_2 "Describe the method used to assess the applicability domain of the model.">
+<!ENTITY help_5_3 "Specify the name and the version of the software used to apply the applicability domain method, where applicable. If relevant, report the specific settings chosen in the software to apply the method.">
+<!ENTITY help_5_4 "Describe for example the inclusion and/or exclusion rules (fixed or probabilistic boundaries, structural features, response space) that define the applicability domain.">
+
+<!ENTITY help_6 "PRINCIPLE 4: “APPROPRIATE MEASURES OF GOODNESS-OF-FIT, ROBUSTENESS AND PREDICTIVITY”. PRINCIPLE 4 expresses the need to perform validation to establish the performance of the model. GOODNESS-OF-FIT and ROBUSTNESS refer to the internal model performance.">
+<!ENTITY help_6_1 "Indicate whether the training set is somehow available (e.g., published in a paper, embedded in the software implementing the model, stored in a database) and appended to the current QMRF as supporting information (field 9.3). If it is not available, explain why. Example: “It is available and attached” “It is available but not attached”; “It is not available because the dataset is proprietary”; “The dataset could not be retrieved”">
+<!ENTITY help_6_2 "Indicate whether the following information for the training set is reported as supporting information (see field 9.3): a) Chemical names (common names and/or IUPAC names); b) CAS numbers; c) SMILES; d) InChI codes; e) MOL files; f) Structural formula; g) Any other structural information.">
+<!ENTITY help_6_3 " Indicate whether the descriptor values of the training set are available and are attached as supporting information (see field 9.3).">
+<!ENTITY help_6_4 "Indicate whether dependent variable values of the training set are available and attached as supporting information (see field 9.3).">
+<!ENTITY help_6_5 "Indicate any other relevant information about the training set (e.g., number of compounds in the training set).">
+<!ENTITY help_6_6 "Indicate whether raw data have been processed before modelling (e.g. averaging of replicate values); if yes, report whether both raw data and processed data are given.">
+<!ENTITY help_6_7 "Report here goodness-of-fit statistics (r2, r2 adjusted, standard error, sensitivity, specificity, false negatives, etc).">
+<!ENTITY help_6_8 "Report here the corresponding statistics.">
+<!ENTITY help_6_9 "Report here the corresponding statistics, the strategy for splitting the dataset (e.g. random), the percentage of left out compounds and the number of cross-validations.">
+<!ENTITY help_6_10 "Report here the corresponding statistics and the number of iterations.">
+<!ENTITY help_6_11 "Report here the corresponding statistics and the number of iterations.">
+<!ENTITY help_6_12 "Report here the corresponding statistics.">
+
+<!ENTITY help_7 "PRINCIPLE 4: “APPROPRIATE MEASURES OF GOODNESS-OF-FIT, ROBUSTENESS AND PREDICTIVITY”. PRINCIPLE 4 expresses the need to perform validation to establish the performance of the model. PREDICTIVITY refers to the external model validation. Section 7 can be repeated (e.g., 7.a, 7.b, 7.c, etc) as many time as necessary if more validation studies needs to be reported in the QMRF.">
+<!ENTITY help_7_1 "Indicate whether an external validation set is available and appended to the current QMRF as supporting information (field 9.3). If it is not available, explain why.">
+<!ENTITY help_7_2 "Indicate whether the following information for the external validation set is reported as supporting information (see field 9.3): a) Chemical names (common names and/or IUPAC names); b) CAS numbers; c) SMILES; d) InChI codes; e) MOL files; f) Structural formula; g) Any other structural information.">
+<!ENTITY help_7_3 "Indicate whether descriptor values of the external validation set are somehow available and attached as supporting information (see field 9.3).">
+<!ENTITY help_7_4 "Indicate whether dependent variable values of the external validation set are somehow available and attached as supporting information (see field 9.3).">
+<!ENTITY help_7_5 "Indicate any other relevant information about the validation set. Example: “External validation set with 56 compounds appended”.">
+<!ENTITY help_7_6 "Indicate any experimental design for getting the test set (e.g. by randomly setting aside chemicals before modelling, by literature search after modelling, by prospective experimental testing after modelling, etc.).">
+<!ENTITY help_7_7 "Report here the corresponding statistics. In the case of classification models, include false positive and negative rates.">
+<!ENTITY help_7_8 "Discuss whether the external validation set is sufficiently large and representative of the applicability domain.">
+<!ENTITY help_7_9 "Add any other useful comments about the external validation procedure.">
+
+<!ENTITY help_8 "PRINCIPLE 5: “A MECHANISTIC INTERPRETATION, IF POSSIBLE”. According to PRINCIPLE 5, a (Q)SAR should be associated with a mechanistic interpretation, if possible.">
+<!ENTITY help_8_1 "Provide information on the mechanistic basis of the model (if possible). In the case of SAR, you may want to describe (if possible) the molecular features that underlie the properties of the molecules containing the substructure (e.g. a description of how sub-structural features could act as nucleophiles or electrophiles, or form part or all of a receptor-binding region). In the case of QSAR, you may give (if possible) a physicochemical interpretation of the descriptors used (consistent with a known mechanism of biological action). If it is not possible to provide a mechanistic interpretation, try to explain why.">
+<!ENTITY help_8_2 "Indicate whether the mechanistic basis of the model was determined a priori (i.e. before modelling, by ensuring that the initial set of training structures and/or descriptors were selected to fit pre-defined mechanism of action) or a posteriori (i.e. after modelling, by interpretation of the final set of training structures and or descriptors).">
+<!ENTITY help_8_3 "Report any other useful information about the (purported) mechanistic interpretation described in the previous fields (8.1 and 8.2) such as any reference supporting the mechanistic basis. ">
+
+<!ENTITY help_9 "">
+<!ENTITY help_9_1 "Add here other relevant and useful comments (e.g. other related models, known applications of the model) that may facilitate regulatory considerations on the model described. You may also want to add any useful information that will aid the interpretation of the reliability of a specific model prediction.">
+<!ENTITY help_9_2 "Report useful references other than those directly associated with the model development (references describing the model development are reported in field 2.5).">
+<!ENTITY help_9_3 "Indicate whether supporting information is attached (e.g. external documents) to this QMRF and specify its content and possibly its utility.">
+
+<!ENTITY help_10 "The summary section is specific for the ECB Inventory. If the model is submitted to ECB for inclusion in the ECB Inventory of QSAR models, then this summary is compiled by ECB after QMRF submission. The QMRF author does not have to fill in any of the fields of the summary section.">
+<!ENTITY help_10_1 "A unique number (numeric identifier) is assigned to any QMRF that is published in the ECB inventory. The number encodes the following information: model described in the QMRF (as derived from field 4.2), software implementing the model (as derived from field 1.3), version of the QMRF for the same model and the same software (as derived from the information included in field 2.4) and author of the QMRF (as derived from field 2.2). The number is unique for any QMRF uploaded and stored in the ECB inventory.">
+<!ENTITY help_10_2 "The date (month/year) of publication in the ECB inventory is reported here.">
+<!ENTITY help_10_3 "Any relevant keywords associated with the present QMRF are reported here.">
+<!ENTITY help_10_4 "Any comments that are relevant for the publication of the QMRF in the ECB Inventory (e.g., comments about updates and about supporting information) are reported here.">
+
+

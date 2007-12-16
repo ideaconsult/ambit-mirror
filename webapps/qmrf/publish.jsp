@@ -1,0 +1,417 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
+
+<%
+response.setHeader("Pragma", "no-cache");
+response.setHeader("Cache-Control", "no-store");
+response.setHeader("Expires", "0");
+%>
+
+
+<c:set var="thispage" value='edit.jsp'/>
+
+
+<c:if test="${empty sessionScope['username']}" >
+  <c:redirect url="/protected.jsp"/>
+</c:if>
+
+<c:if test="${empty sessionScope['isadmin']}" >
+  <c:redirect url="/protected.jsp"/>
+</c:if>
+
+<c:if test="${sessionScope['isadmin'] eq 'false'}" >
+  <c:redirect url="/user.jsp"/>
+</c:if>
+
+<c:if test="${empty param.id}" >
+  <c:redirect url="/admin.jsp"/>
+</c:if>
+
+<html>
+	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
+  <head>
+    <title>QMRF documents</title>
+
+
+<jsp:include page="menu.jsp" flush="true"/>
+
+<jsp:include page="menuadmin.jsp" flush="true">
+    <jsp:param name="highlighted" value="admin"/>
+</jsp:include>
+
+<c:set var="report">
+	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}
+</c:set>
+
+<jsp:include page="records.jsp" flush="true">
+    <jsp:param name="sql" value="${report}"/>
+
+		<jsp:param name="qmrf_number" value="QMRF#"/>
+    <jsp:param name="user_name" value="Author"/>
+    <jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="status" value="Status"/>
+		<jsp:param name="actions" value="admin"/>
+
+</jsp:include>
+
+<div class="success">
+	<c:choose>
+	<c:when test="${empty param.catalog}">
+	</c:when>
+	<c:when test="${param.catalog eq 'endpoints'}">
+		<c:if test="${!empty param.endpoint_name}">
+
+			<c:set value="${fn:split(param.endpoint_name,'.')}" var="endpoint_name"/>
+			<c:if test="${fn:length(endpoint_name)>0}">
+              			<c:set var="endpoint_name" value="${endpoint_name[fn:length(endpoint_name)-1]}" />
+
+              			<c:catch var="transactionException_archive">
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+
+					<sql:update var="updateCount">
+						delete from doc_endpoint where idqmrf=?
+						<sql:param value="${param.id}"/>
+					</sql:update>
+					<sql:update var="updateCount">
+			insert into doc_endpoint (idqmrf,id_endpoint) values (?,(SELECT id_endpoint FROM catalog_endpoints where name=?))
+						<sql:param value="${param.id}"/>
+					  	<sql:param value="${endpoint_name}"/>
+					</sql:update>
+				</sql:transaction>
+				</c:catch>
+				<c:choose>
+				<c:when test="${!empty transactionException_archive}">
+					${transactionException_archive}
+				</c:when>
+	  			<c:otherwise>
+	  				"${param.endpoint_name}" found in endpoints catalog
+	  			</c:otherwise>
+	  			</c:choose>
+
+
+              		</c:if>
+		</c:if>
+	</c:when>
+	<c:when test="${param.catalog eq 'authors'}">
+		<c:if test="${!empty param.author_name}">
+
+          		<c:catch var="transactionException_archive">
+          			<c:if test="${empty param.author_address}">
+          				<c:set var="param.author_address" value="N/A"/>
+          			</c:if>
+          			<c:if test="${empty param.author_www}">
+          				<c:set var="param.author_www" value="N/A"/>
+          			</c:if>
+          			<c:if test="${empty param.author_affiliation}">
+          				<c:set var="param.author_affiliation" value="N/A"/>
+          			</c:if>
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+
+					<sql:update var="updateCount">
+						delete from doc_authors where idqmrf=?
+						<sql:param value="${param.id}"/>
+					</sql:update>
+					<sql:update var="updateCount">
+						insert into catalog_authors (name,affiliation,address,webpage,email) values (?,?,?,?,?) ON DUPLICATE KEY UPDATE webpage=?,email=?
+						<sql:param value="${param.author_name}"/>
+						<sql:param value="${param.author_affiliation}"/>
+						<sql:param value="${param.author_address}"/>
+						<sql:param value="${param.author_www}"/>
+						<sql:param value="${param.author_email}"/>
+						<sql:param value="${param.author_www}"/>
+						<sql:param value="${param.author_email}"/>
+					</sql:update>
+				</sql:transaction>
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+					<sql:update var="updateCount">
+			insert into doc_authors (idqmrf,id_author) values (?,(SELECT id_author FROM catalog_authors where name=? and email=?))
+						<sql:param value="${param.id}"/>
+					  	<sql:param value="${param.author_name}"/>
+					  	<sql:param value="${param.author_email}"/>
+					</sql:update>
+				</sql:transaction>
+			</c:catch>
+			<c:choose>
+				<c:when test="${!empty transactionException_archive}">
+					${param.author_name}<br/>
+					${param.author_email}<br/>
+					${transactionException_archive}
+				</c:when>
+	  			<c:otherwise>
+	  				"${param.author_name} , ${param.author_email}" found in authors catalog
+	  			</c:otherwise>
+	  		</c:choose>
+
+
+		</c:if>
+	</c:when>
+	<c:when test="${param.catalog eq 'software'}">
+		<c:if test="${!empty param.software_name}">
+
+          		<c:catch var="transactionException_archive">
+          			<c:if test="${empty param.software_name}">
+          				<c:set var="param.software_name" value="N/A"/>
+          			</c:if>
+          			<c:if test="${empty param.software_url}">
+          				<c:set var="param.software_url" value="N/A"/>
+          			</c:if>
+          			<c:if test="${empty param.software_decription}">
+          				<c:set var="param.software_decription" value="N/A"/>
+          			</c:if>
+          			<c:if test="${empty param.software_contact}">
+          				<c:set var="param.software_contact" value="N/A"/>
+          			</c:if>
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+
+					<sql:update var="updateCount">
+						delete from doc_software where idqmrf=?
+						<sql:param value="${param.id}"/>
+					</sql:update>
+					<sql:update var="updateCount">
+						insert into catalog_software (name,description,contact,url) values (?,?,?,?) ON DUPLICATE KEY UPDATE url=?
+						<sql:param value="${param.software_name}"/>
+						<sql:param value="${param.software_description}"/>
+						<sql:param value="${param.software_contact}"/>
+						<sql:param value="${param.software_url}"/>
+						<sql:param value="${param.software_url}"/>
+					</sql:update>
+				</sql:transaction>
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+					<sql:update var="updateCount">
+			insert into doc_software (idqmrf,id_software) values (?,(SELECT id_software FROM catalog_software where name=?))
+						<sql:param value="${param.id}"/>
+					  	<sql:param value="${param.software_name}"/>
+					</sql:update>
+				</sql:transaction>
+			</c:catch>
+			<c:choose>
+				<c:when test="${!empty transactionException_archive}">
+					${transactionException_archive}
+				</c:when>
+	  			<c:otherwise>
+	  				"${param.software_name}" found in software catalog
+	  			</c:otherwise>
+	  		</c:choose>
+
+
+		</c:if>
+	</c:when>
+	<c:when test="${param.catalog eq 'algorithms'}">
+
+		<c:if test="${!empty param.alg_definition}">
+
+          		<c:catch var="transactionException_archive">
+          			<c:if test="${empty param.alg_definition}">
+          				<c:set var="param.alg_definition" value="N/A"/>
+          			</c:if>
+          			<c:if test="${empty param.alg_decription}">
+          				<c:set var="param.alg_decription" value="N/A"/>
+          			</c:if>
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+
+					<sql:update var="updateCount">
+						delete from doc_algorithms where idqmrf=?
+						<sql:param value="${param.id}"/>
+					</sql:update>
+					<sql:update var="updateCount">
+						insert into catalog_algorithms (definition,description) values (?,?) ON DUPLICATE KEY UPDATE description=?
+						<sql:param value="${param.alg_definition}"/>
+						<sql:param value="${param.alg_description}"/>
+						<sql:param value="${param.alg_description}"/>
+					</sql:update>
+				</sql:transaction>
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+					<sql:update var="updateCount">
+			insert into doc_algorithms (idqmrf,id_algorithm) values (?,(SELECT id_algorithm FROM catalog_algorithms where definition=?))
+						<sql:param value="${param.id}"/>
+					  	<sql:param value="${param.alg_definition}"/>
+					</sql:update>
+				</sql:transaction>
+			</c:catch>
+			<c:choose>
+				<c:when test="${!empty transactionException_archive}">
+					${transactionException_archive}
+				</c:when>
+	  			<c:otherwise>
+	  				"${param.alg.definition}" found in algorithms catalog
+	  			</c:otherwise>
+	  		</c:choose>
+
+
+		</c:if>
+	</c:when>
+	</c:choose>
+
+</div>
+
+<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+	select idqmrf,qmrf_number,xml from documents where idqmrf=?
+	<sql:param value="${param.id}"/>
+</sql:query>
+
+
+
+<form method="POST" name="publish_form" action='<%= response.encodeURL("admin_review.jsp") %>'>
+
+	<c:forEach var="row" items="${rs.rows}">
+<table width="99%" bgcolor="#D6DFF7"  cellspacing="4" border="0">
+
+<tr align="center">
+<td >
+	<a href="help.jsp#publish" target="_blank">Assign QMRF number</a>
+</td>
+<td>Q</td>
+<td bgcolor="#B0FFB0">
+	<x:parse xml="${row.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
+		<c:set var="aChapter">
+		<x:out  select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/@chapter"/>
+		</c:set>
+		<c:set var="aName">
+		<x:out  select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/@name"/>
+		</c:set>
+		<a href="
+		<c:url value="#algorithms_form"/>
+			">${aChapter} ${aName}
+		</a>
+
+	<x:forEach select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/algorithm_ref">
+		<x:out select="id(@idref)/@name"/>
+	</x:forEach>
+
+</td>
+<td>-</td>
+<td bgcolor="#B0B0FF">
+
+				<a href="
+		<c:url value="#authors_form"/>
+			">
+	<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@chapter"/>
+		<xsl:text>.</xsl:text>
+	<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@name"/>
+		</a>
+</td>
+<td>-</td>
+<td bgcolor="#FFB0B0">
+
+		<a href="
+		<c:url value="#software_form">
+		</c:url>
+			"><x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@chapter"/>
+		<xsl:text>.</xsl:text>
+	<x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@name"/>
+		</a>
+
+</td>
+<td>-</td>
+<td bgcolor="#FFFFB0">
+
+		Version
+
+</td>
+</tr>
+
+
+<tr align="center">
+<td>	<h3>10.1	QMRF number</h3></td>
+<td colspan="9">
+Q
+
+
+
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			select idqmrf,id_algorithm from doc_algorithms where idqmrf=? and chapter='4.2'
+			<sql:param value="${param.id}"/>
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<input type="text" name="A" value="${row.id_algorithm}" size="5" ALT="A"/>-
+		</c:forEach>
+		<c:if test="${rs.rowCount eq 0}">
+				<a href="
+		<c:url value="#algorithms_form"/>
+			"><img src="images/warning.png" alt="Algorithm not defined! User Retrieve Algorithm Number." border="0"/>
+			</a>
+			<input type="text" size="5" name="A"/>-
+		</c:if>
+
+
+
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			select idqmrf,id_author from doc_authors where idqmrf=? and chapter='2.5'
+			<sql:param value="${param.id}"/>
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<input type="text" name="B" value="${row.id_author}" size="5"/>-
+		</c:forEach>
+		<c:if test="${rs.rowCount eq 0}">
+		<a href="
+		<c:url value="#authors_form"/>
+			"><img src="images/warning.png" alt="Model developer not defined! Use Retrieve Author Number." border="0"/>
+			</a>
+			<input type="text" size="5" name="B"/>-
+		</c:if>
+
+
+
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			select idqmrf,id_software from doc_software where idqmrf=? and chapter='1.3'
+			<sql:param value="${param.id}"/>
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<input type="text" name="D" size="5" value="${row.id_software}"/>-
+		</c:forEach>
+		<c:if test="${rs.rowCount eq 0}">
+				<a href="
+		<c:url value="#software_form"/>
+			"><img src="images/warning.png" alt="Software not defined! Use Retrieve Software Number." border="0"/>
+			</a>
+			<input type="text" size="5" name="D"/>-
+		</c:if>
+
+
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			select idqmrf,version from documents where idqmrf=?
+			<sql:param value="${param.id}"/>
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<input type="text" name="C" size="5" value="${row.version}" readonly="true"/>
+		</c:forEach>
+		<c:if test="${rs.rowCount eq 0}">
+			<img src="images/warning.png" alt="not defined!"/><input type="text" size="5" name="C" value="1"/>-
+		</c:if>
+
+		<input type="submit" value="Publish" />
+</td>
+</tr>
+</table>
+
+<table>
+<tr align="left" bgcolor="#FFFFFF">
+<td bgcolor="#FFFFFF" colspan="4">
+
+	<input type="hidden" name="status" value="${param.status}">
+	<input type="hidden" name="id" value="${param.id}">
+
+
+</td>
+
+</td>
+</tr>
+</form>
+	<tr>
+
+	<td colspan='4'>
+
+		<c:import var="xsl" url="/WEB-INF/xslt/qmrfnumber.xsl"/>
+		<x:transform xml="${doc}" xslt="${xsl}"/>
+	</td>
+	</tr>
+</c:forEach>
+
+</table>
+</div>
+ </body>
+</html>

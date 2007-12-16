@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qmrf_help name="QMRF Repository user guide">
+
+<chapter anchor="background" name="Background" level="1">
+<help>TODO</help>
+</chapter>
+
+<chapter anchor="ui" name="User interface" level="1">
+<help>TODO</help>
+
+<chapter anchor="guest" name="Guest actions" level="2">
+		<help>
+		Anonymous user is allowed access to already published documents and is able to search using simple or advanced options.
+		</help>
+		<chapter anchor="home" name="Home">
+		<help>TODO</help>
+		</chapter>
+		<chapter anchor="search_simple" name="Simple search">
+		<help>TODO</help>
+		</chapter>
+		<chapter anchor="search_advanced" name="Advanced search">
+		<help>TODO</help>
+		</chapter>
+</chapter>
+<chapter anchor="user" name="User actions" level="2">
+			<chapter anchor="register" name = "Register">
+			<help>TODO</help>
+			</chapter>
+			<chapter anchor="login" name = "Log in">
+			<help>TODO</help>
+			</chapter>
+			<chapter anchor="documents" name = "My documents">
+			<help>TODO</help>
+			</chapter>
+			<chapter anchor="new_document" name = "Create new document">
+			<help>TODO</help>
+			</chapter>
+</chapter>
+<chapter anchor="admin" name="Administrative actions" level="2">
+			<chapter anchor="register" name = "Register">
+			<help>TODO</help>
+			</chapter>
+			<chapter anchor="login" name = "Log in">
+					<help>TODO</help>
+			</chapter>
+			<chapter anchor="pending" name = "Pending QMRF documents">
+		<help>
+			A list of documents that await administrative action.
+		</help>
+			</chapter>
+
+		<chapter anchor="review" name="Review document">
+		<help>
+				Enter keywords and/or comments. Click Update button.
+		</help>
+</chapter>
+
+		<chapter anchor="publish" name="Publish new document">
+				<help>
+				Click publish button will assign QMRF number of the form A-B-C-D, where A,B,C and D are defined below and publish the QMRF document.
+				</help>
+				<help>
+				Click "Retrieve number from catalog" to obtain corresponding numbers.
+				If one of the fields is missing, return the document to the author to insert the missing data.
+				</help>
+		</chapter>
+</chapter>
+</chapter>
+</qmrf_help>

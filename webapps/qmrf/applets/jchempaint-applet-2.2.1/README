@@ -1,0 +1,1 @@
+This Zip-file contains all which is necessary for using the JChemPaint applet. You need all jars in one directory on your web server. For usage examples, see EditorApplet.jar and ViewerApplet.jar. These files (and a-pinene.mol) are for demonstration and not needed on your server. 

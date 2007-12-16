@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml:stylesheet type="html/xsl" href="qmrf2html.xsl"?>
+<QMRF author="European Chemicals Bureau" contact="European Chemicals Bureau, IHCP, Joint Research Centre, European Commission" date="June 2006" email="ecb.qsar@jrc.it" name="(Q)SAR Model Reporting Format" schema_version="0.7" url="http://ecb.jrc.it/QSAR/" version="1.1">
+<QMRF_chapters>
+<QSAR_identifier chapter="1" help="" name="QSAR identifier">
+<QSAR_title chapter="1.1" help="" name="QSAR identifier (title)">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Mutagenic activity in Salmonella typhimurium TA100; &amp;#945;&amp;#946;-unsaturated     aliphatic aldehydes.  &lt;/body&gt;&lt;/html&gt;</QSAR_title>
+<QSAR_models chapter="1.2" help="" name="Other related models">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    June 2007  &lt;/body&gt;&lt;/html&gt;</QSAR_models>
+<QSAR_software chapter="1.3" help="" name="Software coding the model"/>
+</QSAR_identifier>
+<QSAR_General_information chapter="2" help="" name="General information">
+<qmrf_date chapter="2.1" help="" name="Date of QMRF">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    June 2007  &lt;/body&gt;&lt;/html&gt;</qmrf_date>
+<qmrf_authors chapter="2.2" help="" name="QMRF author(s) and contact details">
+
+<author_ref idref="authors_catalog_2"/>
+</qmrf_authors>
+<qmrf_date_revision chapter="2.3" help="" name="Date of QMRF update(s)">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;  &lt;/body&gt;&lt;/html&gt;</qmrf_date_revision>
+<qmrf_revision chapter="2.4" help="" name="QMRF update(s)">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;  &lt;/body&gt;&lt;/html&gt;</qmrf_revision>
+<model_authors chapter="2.5" help="" name="Model developer(s) and contact details">
+
+<author_ref idref="authors_catalog_2"/>
+</model_authors>
+<model_date chapter="2.6" help="" name="Date of model development and/or publication">model_date</model_date>
+<references chapter="2.7" help="" name="Reference(s) to main scientific papers and/or software package">
+
+
+<publication_ref idref="publications_catalog_4"/>
+<publication_ref idref="publications_catalog_5"/>
+</references>
+<info_availability chapter="2.8" help="" name="Availability of information about the model">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    The model is non-proprietary; the training and test sets are available  &lt;/body&gt;&lt;/html&gt;</info_availability>
+<related_models chapter="2.9" help="" name="Availability of another QMRF for exactly the same model">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;  &lt;/body&gt;&lt;/html&gt;</related_models>
+</QSAR_General_information>
+<QSAR_Endpoint chapter="3" help="" name="Defining the endpoint ЎV OECD Principle 1">
+<model_species chapter="3.1" help="" name="Species">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Salmonella typhimirium TA100 strain  &lt;/body&gt;&lt;/html&gt;</model_species>
+<model_endpoint chapter="3.2" help="" name="Endpoint">
+
+<endpoint_ref idref="Endpoint46"/>
+</model_endpoint>
+<endpoint_comments chapter="3.3" help="" name="Comment on endpoint">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;  &lt;/body&gt;&lt;/html&gt;</endpoint_comments>
+<endpoint_units chapter="3.4" help="" name="Endpoint units">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Nonmutagen/ Mutagen  &lt;/body&gt;&lt;/html&gt;</endpoint_units>
+<endpoint_variable chapter="3.5" help="" name="Dependent variable">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Nonmutagen / mutagen  &lt;/body&gt;&lt;/html&gt;</endpoint_variable>
+<endpoint_protocol chapter="3.6" help="" name="Experimental protocol">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Training set data from literature (different laboratories); mostly using     pre-incubation at 37&amp;#176; without exogenous metabolic activation.  Test set     data from one laboratory using pre-incubation at 37&amp;#176; without exogenous     metabolic activation.   &lt;/body&gt;&lt;/html&gt;</endpoint_protocol>
+<endpoint_data_quality chapter="3.7" help="" name="Endpoint data quality">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Literature sources have been critically reviewed by the authors of the     model.  &lt;/body&gt;&lt;/html&gt;</endpoint_data_quality>
+</QSAR_Endpoint>
+<QSAR_Algorithm chapter="4" help="" name="Defining the algorithm ЎV OECD Principle 2">
+<algorithm_type chapter="4.1" help="" name="Type of model">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    QSAR  &lt;/body&gt;&lt;/html&gt;</algorithm_type>
+<algorithm_explicit chapter="4.2" help="" name="Explicit algorithm">
+<equation>&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    w =  0.387 MR &amp;#8211; 3.12 logP +  3.23 LUMO          w(mean,Class1)  = 9.689	    N1 = 3  (non-mutagens)       w(mean,Class2)  = 6.373	N2 = 17 (mutagens)    Threshold   = 8.032  &lt;/body&gt;&lt;/html&gt;</equation>
+</algorithm_explicit>
+<algorithm_comments chapter="4.3" help="" name="Comments on algorithm">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    The algorithm was originally derived through Linear Discriminant Analysis.     The present form is mathematically equivalent to the original one, and has     been generated through Canonical Discriminant Analysis for the sake of     simplicity and ease of implementation.W(mean, Class) is the average value for each of the two classes in the     training set. When calculated for an individual chemical, W indicates to     which class the chemical should be assigned, based on the Threshold (given     above) that separates the two classes.   &lt;/body&gt;&lt;/html&gt;</algorithm_comments>
+<algorithms_descriptors chapter="4.4" help="" name="Descriptors in the model">
+
+
+
+<descriptor_ref idref="descriptors_catalog_2"/>
+<descriptor_ref idref="descriptors_catalog_3"/>
+<descriptor_ref idref="descriptors_catalog_4"/>
+</algorithms_descriptors>
+<descriptors_selection chapter="4.5" help="" name="Descriptor selection">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Descriptors initially screened: MR, logP, LUMO, energy of the Highest     Occupied Molecular Orbital (HOMO), partial charge on the carbonilic     carbon; partial charge on the &amp;#946; carbon. The descriptors were selected by     testing different combinations based on mechanistic hypotheses, together     with the use of Stepwise Linear Discriminant Analysis  &lt;/body&gt;&lt;/html&gt;</descriptors_selection>
+<descriptors_generation chapter="4.6" help="" name="Descriptor generation">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    MR: from the Daylight software freely available on-line in the period 2003     &amp;#8211; 2005 (values transformed by multiplying X 10); logP:  from the Daylight     software freely available on-line in the period 2003 &amp;#8211; 2005; LUMO, HOMO,     and partial charges were generated with the PM3 Hamiltonian in MOPAC 6.0.  &lt;/body&gt;&lt;/html&gt;</descriptors_generation>
+<descriptors_generation_software chapter="4.7" help="" name="Software name and version for descriptor generation" options="">
+
+
+<software_ref idref="software_catalog_3"/>
+<software_ref idref="software_catalog_4"/>
+</descriptors_generation_software>
+<descriptors_chemicals_ratio chapter="4.8" help="" name="Descriptors/Chemicals ratio">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    number of descriptors to number of chemicals  from the training set =3 (6     originally screened) to 20   &lt;/body&gt;&lt;/html&gt;</descriptors_chemicals_ratio>
+</QSAR_Algorithm>
+<QSAR_Applicability_domain chapter="5" help="" name="Defining the applicability domain ЎV OECD Principle 3">
+<app_domain_description chapter="5.1" help="" name="Description of the applicability domain of the model">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;     The applicability domain of the model is defined in terms of: a)     structures to which it applies; b) range of values of the descriptors in     the model. In the comparison of the test to the training set, mathematical     chemical structural similarity is also applied.    &lt;/body&gt;&lt;/html&gt;</app_domain_description>
+<app_domain_method chapter="5.2" help="" name="Method used to assess the applicability domain">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;     Structures were checked by human experts.  Ranges of descriptors values     were calculated. Mathematical chemical similarity between test and     training set was assessed as follows. The training and test sets are     combined, and the overall Tanimoto similarity matrix is calculated with     the computer software Leadscope. An Euclidian distance matrix is     calculated from the similarity matrix and then subjected to Principal     Component Analysis. Finally, the ranges of PC scores for the training and     test sets are compared.  &lt;/body&gt;&lt;/html&gt;</app_domain_method>
+<app_domain_software chapter="5.3" help="" name="Software name and version for applicability domain assessment">
+
+<software_ref idref="software_catalog_5"/>
+</app_domain_software>
+<applicability_limits chapter="5.4" help="" name="Limits of applicability">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    The models applies to &amp;#945;&amp;#946; -unsaturated aldehydes with both aliphatic and     aromatic substituents. Chemicals with different functional groups, such as     carboxylates, should be excluded, as well as  aldehydes with the     unsaturated bond within a ring structure, since they may have a different     type of reactivity.Ranges of descriptors for the training set:MR (10xDaylight):  16.55     51.71logP:                          -0.01      2.95LUMO:                   -1.159    -0.101  &lt;/body&gt;&lt;/html&gt;</applicability_limits>
+</QSAR_Applicability_domain>
+<QSAR_Robustness chapter="6" help="" name="Defining goodness-of-fit and robustness - OECD Principle 4">
+<training_set_availability answer="Yes" chapter="6.1" help="" name="Availability of the training set">It is available and attached.</training_set_availability>
+<training_set_data cas="Yes" chapter="6.2" chemname="Yes" formula="Yes" help="" inchi="No" mol="No" name="Available information for the training set" smiles="Yes">The following information for the training set is reported as supporting information: a) Chemical names (common names); b) CAS numbers; c) SMILES; d) Structural formula</training_set_data>
+<training_set_descriptors answer="All" chapter="6.3" help="" name="Data for each descriptor variable for the training set">The descriptor values of the training set are available and are attached as supporting information.</training_set_descriptors>
+<dependent_var_availability answer="All" chapter="6.4" help="" name="Data for the dependent variable for the training set">The dependent variable values of the training set are available and attached as supporting information</dependent_var_availability>
+<other_info chapter="6.5" help="" name="Other information about the training set:">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;     Number of compounds in the training set = 20 (Negatives = 3; Positives =     17).  &lt;/body&gt;&lt;/html&gt;</other_info>
+<preprocessing chapter="6.6" help="" name="Pre-processing of data before modelling">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    no  &lt;/body&gt;&lt;/html&gt;</preprocessing>
+<goodness_of_fit chapter="6.7" help="" name="Statistics for goodness-of-fit">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Squared Canonical Correlation = 0.61; 100% correct re-classification.  &lt;/body&gt;&lt;/html&gt;</goodness_of_fit>
+<loo chapter="6.8" help="" name="Robustness : Statistics obtained by leave-one-out cross-validation">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    LOO 85% correct.  &lt;/body&gt;&lt;/html&gt;</loo>
+<lmo chapter="6.9" help="" name="Robustness : Statistics obtained by leave-many-out cross-validation">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Since the training set includes only 3 negatives, no meaningful LMO     cross-validation is possible.  &lt;/body&gt;&lt;/html&gt;</lmo>
+<yscrambling chapter="6.10" help="" name="Robustness : Statistics obtained by Y-scrambling">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    no  &lt;/body&gt;&lt;/html&gt;</yscrambling>
+<bootstrap chapter="6.11" help="" name="Robustness : Statistics obtained by bootstrap">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    no  &lt;/body&gt;&lt;/html&gt;</bootstrap>
+<other_statistics chapter="6.12" help="" name="Robustness : Statistics obtained by other methods">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    no  &lt;/body&gt;&lt;/html&gt;</other_statistics>
+</QSAR_Robustness>
+<QSAR_Predictivity chapter="7" help="" name="Defining predictivity - OECD Principle 4">
+<validation_set_availability answer="Yes" chapter="7.1" help="" name="Availability of the external validation set">An external validation set is available and appended to the current QMRF as supporting information</validation_set_availability>
+<validation_set_data cas="Yes" chapter="7.2" chemname="Yes" formula="Yes" help="" inchi="No" mol="No" name="Available information for the external validation set" smiles="Yes">he following information for the external validation set is reported as supporting information: a) Chemical names (common names); b) CAS numbers; c) SMILES;  d) Structural formula.</validation_set_data>
+<validation_set_descriptors answer="All" chapter="7.3" help="" name="Data for each descriptor variable for the external validation set">The descriptor values of the external validation set are available and are attached as supporting information.</validation_set_descriptors>
+<validation_dependent_var_availability answer="All" chapter="7.4" help="" name="Data for the dependent variable for the external validation set">The dependent variable values of the external validation set are available and attached as supporting information.</validation_dependent_var_availability>
+<validation_other_info chapter="7.5" help="" name="Other information about the external validation set">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    External validation set with 5 compounds appended.  &lt;/body&gt;&lt;/html&gt;</validation_other_info>
+<experimental_design chapter="7.6" help="" name="Experimental design of test set">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Whereas the training set chemicals were retrieved from literature, the     test set was generated by prospective experimental testing after     modelling. The applicability domain was taken into account by considering the factors of     chemical structure, range of descriptors values, chemical similarity.Chemicals with different functional groups, such as carboxylates, were     excluded, as well as  aldehydes  with the unsaturated bond within a ring     structure, since they may have a different type of reactivity.Ranges of descriptors for the test set:MR (10xDaylight):  25.80    69.10logP:                          0.59      3.49LUMO:                   -0.827     0.074Range of chemical similarity indices (PCs):                                  Training set (N=20)		Test set (N=5)	                   Minimum         Maximum      Minimum         Maximum Factor1 	-0.976       1.524		-0.866       1.753 Factor2 	-1.707       1.853 		0.005        2.764 Factor3 	-2.616       1.238		-2.508       1.717  &lt;/body&gt;&lt;/html&gt;</experimental_design>
+<validation_predictivity chapter="7.7" help="" name="Predictivity ЎV Statistics obtained by external validation">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    Correct prediction 100%.  &lt;/body&gt;&lt;/html&gt;</validation_predictivity>
+<validation_assessment chapter="7.8" help="" name="Predictivity ЎV Assessment of the external validation set">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    The test set is representative of the applicability domain; no further     chemicals to test experimentally were available from commercial     catalogues.   &lt;/body&gt;&lt;/html&gt;</validation_assessment>
+<validation_comments chapter="7.9" help="" name="Comments on the external validation of the model">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;  &lt;/body&gt;&lt;/html&gt;</validation_comments>
+</QSAR_Predictivity>
+<QSAR_Interpretation chapter="8" help="" name="Providing a mechanistic interpretation ЎV OECD Principle 5">
+<mechanistic_basis chapter="8.1" help="" name="Mechanistic basis of the model">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    High electrophilicity, low steric hindrance and high lipophilicity favor     the activity. This result is concordant with the scientific evidence on     mechanism of action of these chemicals, which react as direct     electrophiles to form adducts with DNA (and proteins).  &lt;/body&gt;&lt;/html&gt;</mechanistic_basis>
+<mechanistic_basis_comments chapter="8.2" help="" name="A priori or a posteriori mechanistic interpretatio">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;    The descriptors to be screened were selected based on the knowledge on the     mechanisms of action. The descriptors actually accepted in the model     confirm the a priori hypotheses  &lt;/body&gt;&lt;/html&gt;</mechanistic_basis_comments>
+<mechanistic_basis_info chapter="8.3" help="" name="Other information about the mechanistic interpretation">&lt;html&gt;
+  &lt;head&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    references supporting the mechanistic basis: 
+Woo YT, Lai DY, McLain JL, Ko Manibusan M, Dellarco V. Use of mechanism-based 
+    structure-activity relationships analysis in carcinogenic potential 
+    ranking for drinking water disinfection by-products. Environ.Health 
+    Perspect. 2002; 110: 75-87. 
+Feron VJ, Til HP, de Vrijer F, Woutersen RA, Cassee FR, van Bladeren PJ. 
+    Aldehydes: occurrence, carcinogenic potential, mechanism of action and 
+    risk assessment. Mutat.Res. 1991; 259: 363-385. 
+Eder E, Deininger C. Mutagenicity of 2-Alkylpropenals in Salmonella 
+    typhimurium strain TA 100: structural influences. Environ.Mol.Mutagen. 
+    2001; 37: 324-328. 
+Yang I-Y, Johnson F, Grollman AP, Moriya M. Genotoxic mechanism for the major 
+    acrolein-derived deoxyguanosine adduct in human cells. Chem.Res.Toxicol. 
+    2002; 15: 160-164.
+  &lt;/body&gt;
+&lt;/html&gt;
+</mechanistic_basis_info>
+</QSAR_Interpretation>
+<QSAR_Miscelaneous chapter="9" help="" name="Miscellaneous information">
+<comments chapter="9.1" help="" name="Comments">&lt;html&gt;  &lt;head&gt;      &lt;/head&gt;  &lt;body&gt;  &lt;/body&gt;&lt;/html&gt;</comments>
+<bibliography chapter="9.2" help="" name="Bibliography"/>
+<attachments chapter="9.3" help="" name="Supporting information">
+<attachment_training_data>
+<molecules description="" filetype="" url=""/>
+</attachment_training_data>
+<attachment_validation_data>
+<molecules description="" filetype="" url=""/>
+</attachment_validation_data>
+<attachment_documents>
+<document description="" filetype="" url=""/>
+</attachment_documents>
+</attachments>
+</QSAR_Miscelaneous>
+<QMRF_Summary chapter="10" help="" name="Summary (ECB Inventory)">
+<QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by ECB</QMRF_number>
+<date_publication chapter="10.2" help="" name="Publication date">To be entered by ECB</date_publication>
+<keywords chapter="10.3" help="" name="Keywords">To be entered by ECB</keywords>
+<summary_comments chapter="10.4" help="" name="Comments">To be entered by ECB</summary_comments>
+</QMRF_Summary>
+</QMRF_chapters>
+<Catalogs>
+<software_catalog>
+<software contact="" description="" id="software_catalog_3" name="Daylight software, freely available on-line in the period 2003 ЎV 2005" number="" url=""/>
+<software contact="" description="" id="software_catalog_4" name="MOPAC 6.0 Quantum Chemistry Program Exchange, Bloomington " number="" url=""/>
+<software contact="" description="" id="software_catalog_5" name="Leadscope v 2.4 for the Tanimoto chemical similarity index." number="" url=""/>
+</software_catalog>
+<algorithms_catalog/>
+<descriptors_catalog>
+<descriptor description="Molar Refractivity" id="descriptors_catalog_2" name="MR" publication_ref="" units=""/>
+<descriptor description="logarithm of the partition coefficient between octanol and water" id="descriptors_catalog_3" name="logP" publication_ref="" units=""/>
+<descriptor description=" energy of the Lowest Unoccupied Molecular Orbital" id="descriptors_catalog_4" name="LUMO" publication_ref="" units=""/>
+</descriptors_catalog>
+<endpoints_catalog>
+<endpoint group="4. Human health effects" id="Endpoint46" name="Mutagenicity"/>
+</endpoints_catalog>
+<publications_catalog>
+<publication id="publications_catalog_4" title="R. Benigni, L. Passerini, and A. Rodomonte (2003)  Structure-activity relationships for the mutagenicity and carcinogenicity of simple and αβ-unsaturated aldehydes. Environ.Mol.Mutag., 42: 136-143." url=""/>
+<publication id="publications_catalog_5" title="R. Benigni, L. Conti, R. Crebelli, A. Rodomonte, and M. R. VariЎ¦ (2005) Simple and  αβ unsaturated aldehydes: correct prediction of genotoxic activity through  structure-activity relationship models. Environ.Mol.Mutagenesis, 46: 268-280." url=""/>
+</publications_catalog>
+<authors_catalog>
+<author affiliation="" contact="" email="rbenigni@iss.it" id="authors_catalog_2" name="Romualdo Benigni" number="" url=""/>
+</authors_catalog>
+</Catalogs>
+</QMRF>

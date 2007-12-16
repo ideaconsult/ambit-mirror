@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+  <display-name>Welcome to QMRF</display-name>
+  <description>
+     Welcome to QMRF
+  </description>
+
+  <session-config>
+    <session-timeout>120</session-timeout>
+  </session-config>
+
+	<resource-ref>
+      <description>DB Connection to qmrf_documents</description>
+      <res-ref-name>jdbc/qmrf_documents</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
+
+
+	<context-param>
+		<param-name>support-email</param-name>
+		<param-value>nina@acad.bg</param-value>
+	</context-param>
+	<!-- 	Required in order to send confirmation mails upon registration. Please change to a valid email server.
+	-->
+	<context-param>
+		<param-name>mail-server</param-name>
+		<param-value>amigo.acad.bg</param-value>
+	</context-param>
+		<!-- 	Required in order to send confirmation mails upon registration.Please change to a valid email address  -->
+	<context-param>
+		<param-name>mail-from</param-name>
+		<param-value>qmrf@acad.bg</param-value>
+	</context-param>
+	<!-- 	This folder is used to store attachments uploaded by users. Please ensure the web appliaction server has write permission. -->
+	<context-param>
+		<param-name>attachments-dir</param-name>
+		<param-value>/var/lib/qmrf</param-value>
+
+	</context-param>
+	 <!-- Servlets -->
+ <servlet>
+      <servlet-name>AmbitImageServlet</servlet-name>
+      <description>
+        generates 2d structure diagrams on the fly
+      </description>
+      <servlet-class>ambit.servlets.AmbitImageServlet</servlet-class>
+      <init-param>
+        <param-name>width</param-name>
+        <param-value>200</param-value>
+      </init-param>
+      <init-param>
+        <param-name>height</param-name>
+        <param-value>200</param-value>
+      </init-param>
+      <init-param>
+        <param-name>background</param-name>
+        <param-value>#FFFFFF</param-value>
+      </init-param>
+      <init-param>
+        <param-name>smiles</param-name>
+        <param-value>CCCO</param-value>
+      </init-param>
+<init-param>
+				<param-name>database</param-name>
+				<param-value>ambit_qmrf</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>host</param-name>
+				<param-value>localhost</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>port</param-name>
+				<param-value>3306</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>user</param-name>
+				<param-value>guest</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>password</param-name>
+				<param-value>guest</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>imageurl</param-name>
+				<param-value>/qmrf/image?width=200&amp;height=200</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>displayurl</param-name>
+				<param-value>/qmrf/image?width=200&amp;height=200</param-value>
+      </init-param>
+      <!-- Load this servlet at server startup time -->
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+		<servlet>
+      <servlet-name>AmbitSimilarityServlet</servlet-name>
+      <description>
+        AmbitSimilarityServlet
+      </description>
+      <servlet-class>ambit.servlets.AmbitSimilarityServlet</servlet-class>
+      <init-param>
+        <param-name>smiles</param-name>
+        <param-value>CCCO</param-value>
+      </init-param>
+		<init-param>
+				<param-name>database</param-name>
+				<param-value>ambit_qmrf</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>host</param-name>
+				<param-value>localhost</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>port</param-name>
+				<param-value>3306</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>user</param-name>
+				<param-value>guest</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>password</param-name>
+				<param-value>guest</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>imageurl</param-name>
+				<param-value>/qmrf/image?width=200&amp;height=200</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>displayurl</param-name>
+				<param-value>/qmrf/proxydisplay.jsp?width=200&amp;height=200</param-value>
+      </init-param>
+      <!-- Load this servlet at server startup time -->
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+
+    	     <servlet>
+      <servlet-name>AmbitServlet</servlet-name>
+      <description>
+        AmbitServlet
+      </description>
+      <servlet-class>ambit.servlets.AmbitServlet</servlet-class>
+      <init-param>
+        <param-name>smiles</param-name>
+        <param-value>CCCO</param-value>
+      </init-param>
+      <init-param>
+        <param-name>formula</param-name>
+        <param-value>C3O</param-value>
+      </init-param>
+      <init-param>
+				<param-name>database</param-name>
+				<param-value>ambit_qmrf</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>host</param-name>
+				<param-value>localhost</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>port</param-name>
+				<param-value>3306</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>user</param-name>
+				<param-value>guest</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>password</param-name>
+				<param-value>guest</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>imageurl</param-name>
+				<param-value>/qmrf/image?width=200&amp;height=200</param-value>
+	    </init-param>
+	    <init-param>
+				<param-name>displayurl</param-name>
+				<param-value>/qmrf/proxydisplay.jsp?width=200&amp;height=200</param-value>
+      </init-param>
+      <!-- Load this servlet at server startup time -->
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+
+    <servlet-mapping>
+      <servlet-name>AmbitImageServlet</servlet-name>
+      <url-pattern>/image</url-pattern>
+    </servlet-mapping>
+
+	  <servlet-mapping>
+      <servlet-name>AmbitSimilarityServlet</servlet-name>
+      <url-pattern>/similarity</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>AmbitServlet</servlet-name>
+      <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+
+    <security-constraint>
+	  <web-resource-collection>
+		<web-resource-name>qmrf_protected</web-resource-name>
+			<url-pattern>/protected.jsp</url-pattern>
+			<url-pattern>/user.jsp</url-pattern>
+			<url-pattern>/create.jsp</url-pattern>
+			<url-pattern>/edit.jsp</url-pattern>
+
+			<url-pattern>/attachments_xml.jsp</url-pattern>
+			<url-pattern>/edit_attachments.jsp</url-pattern>
+			<url-pattern>/list_attachments.jsp</url-pattern>
+
+			<url-pattern>/admin.jsp</url-pattern>
+			<url-pattern>/admin_import.jsp</url-pattern>
+			<url-pattern>/admin_review.jsp</url-pattern>
+			<url-pattern>/admin_status.jsp</url-pattern>
+			<url-pattern>/catalogs.jsp</url-pattern>
+
+			<url-pattern>/menuadmin.jsp</url-pattern>
+			<url-pattern>/menuuser.jsp</url-pattern>
+			<url-pattern>/mypassword.jsp</url-pattern>
+			<url-pattern>/myprofile.jsp</url-pattern>
+			<url-pattern>/menurole.jsp</url-pattern>
+
+			<url-pattern>/publish.jsp</url-pattern>
+			<url-pattern>/submit.jsp</url-pattern>
+			<url-pattern>/submit_update.jsp</url-pattern>
+			<url-pattern>/update_status.jsp</url-pattern>
+			<url-pattern>/import.jsp</url-pattern>
+			<url-pattern>/download_users.jsp</url-pattern>
+
+	  </web-resource-collection>
+
+	  <auth-constraint>
+		<role-name>qmrf_admin</role-name>
+		<role-name>qmrf_user</role-name>
+	</auth-constraint>
+
+  </security-constraint>
+
+  <login-config>
+	<auth-method>FORM</auth-method>
+	<form-login-config>
+	<form-login-page>/login.jsp</form-login-page>
+	<form-error-page>/login-error.jsp</form-error-page>
+	</form-login-config>
+  </login-config>
+
+    <security-role>
+      <role-name>qmrf_admin</role-name>
+    </security-role>
+    <security-role>
+      <role-name>qmrf_user</role-name>
+    </security-role>
+
+
+	<!-- Ambit taglibs-->
+    <taglib>
+        <taglib-uri>/ambit</taglib-uri>
+        <taglib-location>/WEB-INF/tld/ambit.tld</taglib-location>
+    </taglib>
+	<!-- jakarta mailer taglibs -->
+	<taglib>
+			<taglib-uri>http://jakarta.apache.org/taglibs/taglibs-mailer</taglib-uri>
+			<taglib-location>/WEB-INF/tld/taglibs-mailer.tld</taglib-location>
+	    </taglib>
+		    <!-- xephyrus file upload-->
+	<taglib>
+  	<taglib-uri>/xephyrus-fileupload</taglib-uri>
+  	<taglib-location>/WEB-INF/tld/xephyrus-fileupload.tld</taglib-location>
+	</taglib>
+</web-app>
