@@ -58,6 +58,9 @@
 				<c:param name="xml" value="${param.xml}"/>
 			</c:import>
 			<sql:transaction dataSource="jdbc/qmrf_documents">
+			<sql:update>
+					set names utf8
+			</sql:update>
 
 			<sql:update var="updateCount" >
 				update documents set status=?,xml=?,updated=now() where idqmrf=? and user_name=?;

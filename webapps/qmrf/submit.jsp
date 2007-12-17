@@ -50,13 +50,16 @@
 -->
 <c:catch var="transactionException_update">
 	<sql:transaction dataSource="jdbc/qmrf_documents">
+		<sql:update>
+				set names 'utf8'
+		</sql:update>
 		<sql:update var="updateCount" >
 			INSERT INTO documents (xml,user_name,status) VALUES (?,?,?);
 		<sql:param value="${param.xml}"/>
 		<sql:param value="${sessionScope['username']}"/>
 		<sql:param value="${state}"/>
-	
-	
+
+
 		</sql:update>
 		<sql:query var="rs" sql="SELECT LAST_INSERT_ID() AS id" />
 	</sql:transaction>
@@ -68,8 +71,8 @@
 			New document added to QMRF inventory.
 		</c:param>
 		</c:redirect>
-		
-	</c:forEach>	
+
+	</c:forEach>
 </c:catch>
 
 
@@ -90,7 +93,7 @@
 
 <jsp:include page="menuuser.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
-</jsp:include>    
+</jsp:include>
     <div class="error">
     	${transactionException_update}
     </div>
