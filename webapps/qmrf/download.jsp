@@ -21,7 +21,7 @@
 	</c:when>
 	<c:otherwise>
 		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-				select idqmrf,qmrf_number,xml from documents where idqmrf=? and user_name=? limit 1;
+				select idqmrf,qmrf_number,xml from documents where idqmrf=? and ((user_name=?) || (status='published')) limit 1;
 				<sql:param value="${param.id}"/>
 				<sql:param value="${sessionScope['username']}"/>
 		</sql:query>
