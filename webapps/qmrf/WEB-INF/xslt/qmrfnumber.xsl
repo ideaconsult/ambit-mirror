@@ -80,7 +80,9 @@
 
 
 <xsl:template match="model_authors">
+	
 	<h3>
+	<img src="images/user_suit.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -174,6 +176,7 @@
 
 <xsl:template match="algorithm_explicit">
 	<h3>
+	<img src="images/chart_curve.png" alt="This field is mandatory!" border="0"/>	
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -201,6 +204,7 @@
 
 <xsl:template match="QSAR_software">
 	<h3>
+	<img src="images/application_form.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -240,7 +244,7 @@
 	<form method="POST" name="software_form">
 
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#FFB0B0"><th>Name</th>
+	<tr bgcolor="#D6DFF7"><th>Name</th>
 	<td>
 	<input type="text" name="software_name" size="80" readonly="true">
 		<xsl:attribute name="value">
@@ -259,7 +263,7 @@
 		</xsl:choose>	
 	</td>	
 	</tr>
-	<tr bgcolor="#FFB0B0"><th>Version</th>
+	<tr bgcolor="#D6DFF7"><th>Version</th>
 	<td>
 	<input type="text" name="software_version" size="80" readonly="true">
 		<xsl:attribute name="value">
@@ -270,7 +274,7 @@
 
 	</td>
 	</tr>
-	<tr bgcolor="#FFB0B0"><th>Description</th>
+	<tr bgcolor="#D6DFF7"><th>Description</th>
 	<td>
 	<input type="text" name="software_description" size="80" readonly="true">
 		<xsl:attribute name="value">
@@ -279,7 +283,7 @@
 	</input>
 	</td>
 	</tr>
-	<tr bgcolor="#FFB0B0"><th>Contact</th>
+	<tr bgcolor="#D6DFF7"><th>Contact</th>
 	<td>
 	<input type="text" name="software_contact" size="80" readonly="true">
 		<xsl:attribute name="value">
@@ -288,7 +292,7 @@
 	</input>
 	</td>
 	</tr>
-	<tr bgcolor="#FFB0B0"><th>WWW</th>
+	<tr bgcolor="#D6DFF7"><th>WWW</th>
 	<td>
 	<input type="text" name="software_url" size="80" readonly="true">
 		<xsl:attribute name="value">
@@ -310,7 +314,7 @@
 <xsl:template match="algorithm_ref">
 	<form method="POST" name="algorithms_form">
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#B0FFB0"><th>Definition</th>
+	<tr bgcolor="#D6DFF7"><th>Definition</th>
 	<td>
 	<input type="text" size="80" name="alg_definition" readonly="true">
 		<xsl:attribute name="value">
@@ -329,7 +333,7 @@
 		</xsl:choose>	
 	</td>		
 	</tr>
-	<tr bgcolor="#B0FFB0"><th>Description</th>
+	<tr bgcolor="#D6DFF7"><th>Description</th>
 	<td>
 	<textarea rows="6" cols="60" name="alg_description" readonly="true">
   		<xsl:value-of select="id(@idref)/@description"/>
@@ -380,7 +384,7 @@
 	</input>
 	</td>
 	</tr>
-	<tr bgcolor="#FFFFB0"><th>Name</th>
+	<tr bgcolor="#D6DFF7"><th>Name</th>
 	<td>
 	<input type="text" size="80" name="endpoint_name" readonly="true">
 		<xsl:attribute name="value">
@@ -420,7 +424,7 @@
 <xsl:template match="author_ref">
 	<form method="POST" name="authors_form">
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#B0B0FF"><th>Name</th>
+	<tr bgcolor="#D6DFF7"><th>Name</th>
 	<td>
 	<input type="text" size="80" name="author_name" readonly="true">
 		<xsl:attribute name="value">
@@ -439,7 +443,7 @@
 		</xsl:choose>	
 	</td>		
 	</tr>
-	<tr  bgcolor="#B0B0FF"><th>Affiliation</th>
+	<tr  bgcolor="#D6DFF7"><th>Affiliation</th>
 	<td>
 	<input type="text" size="80" name="author_affiliation" readonly="true">
 		<xsl:attribute name="value">
@@ -450,7 +454,7 @@
 	</td>
 
 	</tr>
-	<tr  bgcolor="#B0B0FF"><th>Contact</th>
+	<tr  bgcolor="#D6DFF7"><th>Contact</th>
 	<td>
 
 	<input type="text" size="80" name="author_address" readonly="true">
@@ -460,7 +464,7 @@
 	</input>
 
 	</td></tr>
-	<tr  bgcolor="#B0B0FF"><th>e-mail</th>
+	<tr  bgcolor="#D6DFF7"><th>e-mail</th>
 	<td>
 	<input type="text" size="80" name="author_email" readonly="true">
 		<xsl:attribute name="value">
@@ -479,7 +483,7 @@
 		</xsl:choose>	
 	</td>		
 	</tr>
-	<tr  bgcolor="#B0B0FF"><th>WWW</th>
+	<tr  bgcolor="#D6DFF7"><th>WWW</th>
 	<td>
 			<input type="text" size="80" name="author_www" readonly="true">
 		<xsl:attribute name="value">

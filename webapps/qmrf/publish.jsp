@@ -258,14 +258,31 @@ response.setHeader("Expires", "0");
 <form method="POST" name="publish_form" action='<%= response.encodeURL("admin_review.jsp") %>'>
 
 	<c:forEach var="row" items="${rs.rows}">
-<table width="99%" bgcolor="#D6DFF7"  cellspacing="4" border="0">
 
-<tr align="center">
-<td >
-	<a href="help.jsp#publish" target="_blank">Assign QMRF number</a>
+<table width="95%" bgcolor="#FFFFFF"  cellspacing="4" border="0">
+<tr bgcolor="D6DFF7" align="center">
+<td align="left" bgcolor="#FFFFFF" colspan="8">
+<h3>10.1	QMRF number</h3>	
 </td>
-<td>Q</td>
-<td bgcolor="#B0FFB0">
+<td align="left" width="25%" rowspan="3" bgcolor="#FFFFFF" valign="top">
+	<div class="success">
+	Assign QMRF number
+	</div>
+	<br/>
+	<div>
+	<input type="submit" value="Publish" />
+	</div>
+	<br/>
+	<div class="help">
+	In order to be published, each QMRF documenthave to be assigned a number of the form <b>Q [Field 4.2]-[Field 2.5]-[Field 1.3]-Version</b>.
+		</div>	
+
+</td>
+</tr>
+<tr bgcolor="D6DFF7" align="center">
+
+<td bgcolor="#FFFFFF">Q</td>
+<td bgcolor="#D6DFF7">
 	<x:parse xml="${row.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
 		<c:set var="aChapter">
 		<x:out  select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/@chapter"/>
@@ -275,49 +292,46 @@ response.setHeader("Expires", "0");
 		</c:set>
 		<a href="
 		<c:url value="#algorithms_form"/>
-			">${aChapter}<xsl:text>.</xsl:text>${aName}
-		</a>
-
+			"><img src="images/chart_curve.png" border="0" alt="Click here to go to the algorithm form and retriebe algorithm number"/></a>
+		${aChapter}<xsl:text>.</xsl:text>${aName}
 	<x:forEach select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/algorithm_ref">
 		<x:out select="id(@idref)/@name"/>
 	</x:forEach>
 
 </td>
-<td>-</td>
-<td bgcolor="#B0B0FF">
-
-				<a href="
+<td bgcolor="#FFFFFF">-</td>
+<td bgcolor="#D6DFF7" >
+			<a href="
 		<c:url value="#authors_form"/>
-			">
-	<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@chapter"/>
+			"><img src="images/user_suit.png" border="0" alt="Click here to go to the model developer' form and retrieve the model developer number"/></a>
+		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@chapter"/>
 		<xsl:text>.</xsl:text>
-	<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@name"/>
-		</a>
+		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@name"/>
+		
+		
 </td>
-<td>-</td>
-<td bgcolor="#FFB0B0">
-
+<td bgcolor="#FFFFFF">-</td>
+<td bgcolor="#D6DFF7">
+		
 		<a href="
 		<c:url value="#software_form">
 		</c:url>
-			"><x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@chapter"/>
+		"><img src="images/application_form.png"  border="0" alt="Click here to go to the model software form and retrieve software number"/></a>
+		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@chapter"/>
 		<xsl:text>.</xsl:text>
-	<x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@name"/>
-		</a>
-
+		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@name"/>
 </td>
-<td>-</td>
-<td bgcolor="#FFFFB0">
-
+<td bgcolor="#FFFFFF">-</td>
+<td bgcolor="#D6DFF7">
 		Version
-
 </td>
+
 </tr>
 
 
 <tr align="center">
-<td>	<h3>10.1	QMRF number</h3></td>
-<td colspan="9">
+
+<td colspan="9" align="center" valign="top">
 Q
 
 
@@ -332,8 +346,7 @@ Q
 		<c:if test="${rs.rowCount eq 0}">
 				<a href="
 		<c:url value="#algorithms_form"/>
-			"><img src="images/warning.png" alt="Algorithm not defined! User Retrieve Algorithm Number." border="0"/>
-			</a>
+			"><img src="images/warning.png" alt="Algorithm not defined! User Retrieve Algorithm Number." border="0"/></a>
 			<input type="text" size="5" name="A"/>-
 		</c:if>
 
@@ -349,8 +362,7 @@ Q
 		<c:if test="${rs.rowCount eq 0}">
 		<a href="
 		<c:url value="#authors_form"/>
-			"><img src="images/warning.png" alt="Model developer not defined! Use Retrieve Author Number." border="0"/>
-			</a>
+			"><img src="images/warning.png" alt="Model developer not defined! Use Retrieve Author Number." border="0"/></a>
 			<input type="text" size="5" name="B"/>-
 		</c:if>
 
@@ -366,8 +378,7 @@ Q
 		<c:if test="${rs.rowCount eq 0}">
 				<a href="
 		<c:url value="#software_form"/>
-			"><img src="images/warning.png" alt="Software not defined! Use Retrieve Software Number." border="0"/>
-			</a>
+			"><img src="images/warning.png" alt="Software not defined! Use Retrieve Software Number." border="0"/></a>
 			<input type="text" size="5" name="D"/>-
 		</c:if>
 
@@ -383,7 +394,7 @@ Q
 			<img src="images/warning.png" alt="not defined!"/><input type="text" size="5" name="C" value="1"/>-
 		</c:if>
 
-		<input type="submit" value="Publish" />
+		
 </td>
 </tr>
 </table>
@@ -401,12 +412,10 @@ Q
 
 	</td>
 	<td valign="top" width="25%">
-	<div class="success">
-	Assign QMRF number
-	</div>
+
 	<br/>	
 	<div class="help">
-	TODO help
+	Click "Retrieve number from catalog" to obtain corresponding numbers. If one of the fields is missing, return the document to the author to insert the missing data.
 	</div>
 	</td>
 	</tr>
