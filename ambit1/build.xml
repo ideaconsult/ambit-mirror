@@ -77,7 +77,7 @@
 		    <include name="xml-apis.jar" />
 		    <include name="commons-lang-2.3.jar" />
 	    	<!-- Java Matrix library -->
-			<include name="Jama-1.0.1.jar" />
+			<include name="Jama-1.0.2.jar" />
 	    	<!-- Logging -->
 		    <include name="misc/log4j.jar" />
 	    	<!-- JPEG stuff -->
