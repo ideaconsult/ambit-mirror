@@ -255,7 +255,7 @@ response.setHeader("Expires", "0");
 
 
 
-<form method="POST" name="publish_form" action='<%= response.encodeURL("admin_review.jsp") %>'>
+<form method="POST" name="publish_form" action='<%= response.encodeURL("admin_publish.jsp") %>'>
 
 	<c:forEach var="row" items="${rs.rows}">
 

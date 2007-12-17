@@ -1,4 +1,4 @@
-﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <c:set var="thispage" value='create.jsp'/>
@@ -25,7 +25,7 @@
 <SCRIPT>
 function getXML(){
    document.qmrfform.xml.value = document.QMRFApplet.getXML();
-   
+
    return trim(document.qmrfform.xml.value);
    }
 </SCRIPT>
@@ -78,7 +78,7 @@ function getXML(){
 			Applet not supported by browser.
 		</applet>
       	</td>
-    
+
       <td valign="top" align="left">
 		<div class="success">Create new document by QMRF Editor</div>
 		<br>
@@ -86,15 +86,15 @@ function getXML(){
        <br>
       <div class="help">
       Click <u>Save as draft</u> when ready with filling in QMRF document. This is REQUIRED in order to update the QMRF document in the inventory.
-      </div>             
+      </div>
 		<br>
       <div class="help">
       After updating the document, the next screen will provide fields to browse and select files to be attached to this document.
       </div>
 		<br>
       <div class="help">
-      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory. 
-      </div>      
+      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory.
+      </div>
       <!--
       <input type="radio" name="submit_state" value="draft" checked>Save as draft<br>
       <input type="radio" name="submit_state" value="submitted">Final submission (no further editing will be allowed).<br>

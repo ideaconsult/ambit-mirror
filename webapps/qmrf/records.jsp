@@ -248,7 +248,7 @@
 									  </c:when>
 									  <c:when test="${row.status eq 'submitted'}">
 											<a href="
-											<c:url value="admin_edit.jsp">
+											<c:url value="admin_review.jsp">
 											  <c:param name="status" value="under review"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
