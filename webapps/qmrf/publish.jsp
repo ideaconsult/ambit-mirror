@@ -262,7 +262,7 @@ response.setHeader("Expires", "0");
 <table width="95%" bgcolor="#FFFFFF"  cellspacing="4" border="0">
 <tr bgcolor="D6DFF7" align="center">
 <td align="left" bgcolor="#FFFFFF" colspan="8">
-<h3>10.1	QMRF number</h3>	
+<h3>10.1	QMRF number</h3>
 </td>
 <td align="left" width="25%" rowspan="3" bgcolor="#FFFFFF" valign="top">
 	<div class="success">
@@ -274,8 +274,8 @@ response.setHeader("Expires", "0");
 	</div>
 	<br/>
 	<div class="help">
-	In order to be published, each QMRF documenthave to be assigned a number of the form <b>Q [Field 4.2]-[Field 2.5]-[Field 1.3]-Version</b>.
-		</div>	
+	In order to be published, each QMRF document have to be assigned a number of the form <b>Q [Field 4.2]-[Field 2.5]-[Field 1.3]-Version</b>.
+		</div>
 
 </td>
 </tr>
@@ -307,12 +307,12 @@ response.setHeader("Expires", "0");
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@chapter"/>
 		<xsl:text>.</xsl:text>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@name"/>
-		
-		
+
+
 </td>
 <td bgcolor="#FFFFFF">-</td>
 <td bgcolor="#D6DFF7">
-		
+
 		<a href="
 		<c:url value="#software_form">
 		</c:url>
@@ -394,7 +394,7 @@ Q
 			<img src="images/warning.png" alt="not defined!"/><input type="text" size="5" name="C" value="1"/>-
 		</c:if>
 
-		
+
 </td>
 </tr>
 </table>
@@ -413,7 +413,7 @@ Q
 	</td>
 	<td valign="top" width="25%">
 
-	<br/>	
+	<br/>
 	<div class="help">
 	Click "Retrieve number from catalog" to obtain corresponding numbers. If one of the fields is missing, return the document to the author to insert the missing data.
 	</div>

@@ -30,9 +30,15 @@ response.setHeader("Expires", "0");
 
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
+	<meta http-equiv="Content-Type" contentType="text/xml;charset=utf-8">
   <head>
     <title>QMRF documents</title>
-
+<SCRIPT>
+function getXML(){
+	document.getElementById("qmrfform").xml.value = document.QMRFApplet.getXML();
+	return document.qmrfform.xml.value;
+}
+</SCRIPT>
   </head>
   <body>
 
@@ -44,84 +50,33 @@ response.setHeader("Expires", "0");
 </jsp:include>
 
 
-<c:set var="xslt_url" value="/WEB-INF/xslt/qmrf_adminedit.xsl"/>
-<c:set var="title" value="Reviewing"/>
-<c:set var="submit_caption" value="Update"/>
+<c:choose>
+	<c:when test="${empty param.xml}" >
 
-<c:if test="${param.status eq 'published'}">
-		<c:set var="xslt_url" value="/WEB-INF/xslt/qmrf_adminpublish.xsl"/>
-		<c:set var="title" value="Publishing"/>
-		<c:set var="submit_caption" value="Publish"/>
-</c:if>
-<c:if test="${param.status eq 'returned for revision'}">
-		<c:set var="submit_caption" value="Return for revision"/>
-</c:if>
+	</c:when>
+	<c:otherwise>
 
-<c:set var="updateXML" value="false"/>
-<c:if test="${!empty param.QMRF_number}">
-	<c:set var="updateXML" value="true"/>
-</c:if>
-<c:if test="${!empty param.date_publication}">
-	<c:set var="updateXML" value="true"/>
-</c:if>
-<c:if test="${!empty param.keywords}">
-	<c:set var="updateXML" value="true"/>
-</c:if>
-<c:if test="${!empty param.summary_comments}">
-	<c:set var="updateXML" value="true"/>
-</c:if>
-<c:if test="${updateXML eq true}">
-		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-			select xml from documents where idqmrf=?
-			<sql:param value="${param.id}"/>
-		</sql:query>
+			<!-- data  update -->
+		<c:catch var="transactionException_update">
 
-		<c:forEach var="row" items="${rs.rows}">
-			<catch var="error">
-				<c:import var="qmrfToHtml" url="/WEB-INF/xslt/update_keywords_comments.xsl"/>
-				<c:set var="docnew" scope="page">
-					<x:transform xml="${fn:trim(row.xml)}" xslt="${qmrfToHtml}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd">
-							<x:param name="keywords" value="${param.keywords}"/>
-							<x:param name="summary_comments" value="${param.summary_comments}"/>
-					</x:transform>
-				</c:set>
-			</catch>
-			<c:if test="${!empty error}">
-				<div class="error">
-					${error}
-				</div>
-			</c:if>
-		</c:forEach>
+			<c:import url="include_attachments.jsp" var="newxml" >
+				<c:param name="id" value="${param.id}"/>
+				<c:param name="xml" value="${param.xml}"/>
+			</c:import>
+			<sql:transaction dataSource="jdbc/qmrf_documents">
 
-		<c:choose>
-			<c:when test="${param.status eq 'under review'}">
-				<c:catch var="error_update">
-					<sql:update var="updateCount" dataSource="jdbc/qmrf_documents">
-						 update documents set qmrf_number=null,xml=?,updated=now(),status='under review',reviewer=? where idqmrf=?
-						<sql:param value="${docnew}"/>
-						<sql:param value="${sessionScope['username']}"/>
-						<sql:param value="${param.id}"/>
-					</sql:update>
-				</c:catch>
-				<c:if test="${!empty error_update}">
-					<div class="error">${error_update}</div>
-				</c:if>
-			</c:when>
-			<c:otherwise>
-				<div class="error">Status ${param.status} different than expected!</div>
-			</c:otherwise>
-		</c:choose>
-		
-		<c:choose>
-		<c:when test="${!empty error_update}">
-			<div class="error">Error updating the document 	<br> ${error_update}</div>
-		</c:when>
-		<c:otherwise/>
-		</c:choose>
-
-</c:if>
-
-
+			<sql:update var="updateCount" >
+				update documents set xml=?,updated=now() where idqmrf=? and status='under review';
+				<sql:param value="${newxml}"/>
+			  <sql:param value="${param.id}"/>
+			</sql:update>
+			<div class="success">
+					Document updated.
+			</div>
+			</sql:transaction>
+		</c:catch>
+	</c:otherwise>
+</c:choose>
 
 <c:set var="report">
 	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id} and (status = 'submitted' || status = 'under review')
@@ -137,41 +92,96 @@ response.setHeader("Expires", "0");
 </jsp:include>
 
 
-					
+		<c:if test="${!empty transactionException_update}">
+			<div class="error">
+					${transactionException_update}
+					<br>
+					${newxml}
+			</div>
+		</c:if>
+
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">
-	select idqmrf,qmrf_number,xml from documents where idqmrf=? and (status = 'submitted' || status = 'under review')
+	select idqmrf,qmrf_number,xml from documents where idqmrf=? and status = 'under review'
 	<sql:param value="${param.id}"/>
 </sql:query>
 
 <c:if test="${rs.rowCount>0}">
-	<table width="100%" border="0">
-		<jsp:include page="list_attachments.jsp" flush="true">
-			<jsp:param name="id" value="${param.id}"/>
-		</jsp:include>
-	</table>
+ <form method="POST" id="qmrfform" name="qmrfform" action='<%= response.encodeURL("admin_edit.jsp") %>' onSubmit="return getXML()">
+  <table border="0" cellspacing="5" border="1">
+	<c:forEach var="row" items="${rs.rows}">
+		<c:set var="data" value="${row.xml}"/>
 
-	<form method="POST" name="qmrfform" action='<%= response.encodeURL("admin_edit.jsp") %>'>
-	
-		<c:forEach var="row" items="${rs.rows}">
-			<c:set var="doc" value="${fn:trim(row.xml)}"/>
-			<input type="hidden" name="id" value="${row.idqmrf}">
-			<input type="hidden" name="status" value="${param.status}">
-	
-			
-				
-				<c:catch var="error">
-					<c:import var="xsl" url="${xslt_url}"/>
-					<x:transform xml="${doc}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd" />
-				</c:catch>
-	
-				<c:if test="${!empty error}">
-					<div class="error">ERROR ${error}</div>
-				</c:if>			
+	<tr>
 
-				
+	<td align="left" colspan="2">
+		<input type="hidden" name="id" value="${row.idqmrf}">
 
-		</c:forEach>
-	</form>
+    <c:set var="u">http://${header["host"]}${pageContext.request.contextPath}</c:set>
+
+      <c:set var="dataurl">
+      	<c:url value="${u}/download_xml.jsp"> <c:param name="id" value="${row.idqmrf}"/>
+					<c:param name="action" value="noattachments"/>
+				</c:url>
+    	</c:set>
+
+				<c:set var="external">
+      	<c:url value="${u}/catalogs_xml.jsp"> <c:param name="all" value="true"/>
+				</c:url>
+    	</c:set>
+
+		<c:set var="dtd">
+			<c:url value="${u}/qmrf.dtd"/>
+		</c:set>
+
+		<applet code="ambit.applets.QMRFApplet"
+			archive="applets/ambit/QMRFApplet.jar"	name="QMRFApplet" width="800" height="650">
+				<param  name="xmlcontent" value="${dataurl}"/>
+				<param  name="external" value="${external}"/>
+				<param name="user" value="user"/>
+				<param name="cleancatalogs" value="true"/>
+			Applet not supported by browser.
+		</applet>
+		</td>
+          <td valign="top">
+    	<input type="hidden" id="xml" name="xml" value="" checked>
+    	<!--
+      <input type="radio" name="submit_state" value="draft" checked>Submit as draft<br>
+      <input type="radio" name="submit_state" value="submitted">Final submission (no further editing will be allowed).<br>
+      -->
+
+		<div class="success">Edit document by QMRF Editor</div>
+      <input type="submit" value="Update">
+      <c:if test="${row.status eq 'returned for revision'}">
+            <br>
+      <div class="error">
+      The document has been returned for revission. Please pay attention to Section 10 of the document!
+      </div>
+      </c:if>
+      <br>
+      <div class="help">
+      Click <u>Save as draft</u> when ready with filling in QMRF document. This is REQUIRED in order to update the QMRF document in the inventory.
+      </div>
+      <br>
+      <div class="help">
+      After updating the document, the next screen will provide fields to browse and select files to be attached to this document.
+      </div>
+		<br>
+      <div class="help">
+      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory.
+      </div>
+      <br>
+      <div class="help">
+      NOTE: By using links <u>Edit</u>, <u>Attachments</u> or <u>Submit</u> from this page, the current changes in QMRF document will be LOST!
+      </div>
+
+
+          </td>
+    </tr>
+    </tr>
+
+  </c:forEach>
+  </table>
+</form>
 </c:if>
 </body>
 </html>

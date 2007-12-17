@@ -1,4 +1,4 @@
-﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <c:set var="thispage" value='edit.jsp'/>
@@ -50,7 +50,7 @@ function getXML(){
 
 
 	<c:set var="qmrf_update" value="true" scope="session"/>
-	
+
 <c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${param.id}"/>
 
 <jsp:include page="records.jsp" flush="true">
@@ -72,13 +72,13 @@ function getXML(){
 
 
 </jsp:include>
-	
+
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">
 	select idqmrf,qmrf_number,xml,status from documents where idqmrf=? and user_name=? limit 1
 	<sql:param value="${param.id}"/>
 	<sql:param value="${sessionScope['username']}"/>
 
-</sql:query>	
+</sql:query>
   <form method="POST" id="qmrfform" name="qmrfform" action='<%= response.encodeURL("submit_update.jsp") %>' onSubmit="return getXML()">
   <table border="0" cellspacing="5" border="1">
 	<c:forEach var="row" items="${rs.rows}">
@@ -128,8 +128,8 @@ function getXML(){
             <br>
       <div class="error">
       The document has been returned for revission. Please pay attention to Section 10 of the document!
-      </div>      
-      </c:if>      
+      </div>
+      </c:if>
       <br>
       <div class="help">
       Click <u>Save as draft</u> when ready with filling in QMRF document. This is REQUIRED in order to update the QMRF document in the inventory.
@@ -140,8 +140,8 @@ function getXML(){
       </div>
 		<br>
       <div class="help">
-      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory. 
-      </div>      
+      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory.
+      </div>
       <br>
       <div class="help">
       NOTE: By using links <u>Edit</u>, <u>Attachments</u> or <u>Submit</u> from this page, the current changes in QMRF document will be LOST!

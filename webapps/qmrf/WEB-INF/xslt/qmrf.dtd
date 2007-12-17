@@ -307,7 +307,7 @@ preprocessing,goodness_of_fit,loo,lmo,yscrambling,bootstrap,other_statistics)>
 		version CDATA #IMPLIED
 		contact CDATA #IMPLIED
 		>
-<!ELEMENT software_ref EMPTY>		
+<!ELEMENT software_ref EMPTY>
 <!ATTLIST software_ref idref IDREF #REQUIRED catalog CDATA #FIXED "software_catalog">
 
 <!-- Algorithms catalog-->

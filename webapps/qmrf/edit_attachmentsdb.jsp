@@ -59,6 +59,7 @@ response.setHeader("Expires", "0");
   "DTD/xhtml1-transitional.dtd">
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
+	<meta http-equiv="Content-Type" contentType="text/xml;charset=utf-8">
   <head>
     <title>QMRF documents</title>
 
@@ -155,7 +156,7 @@ response.setHeader("Expires", "0");
 
 <table width="80%">
 	<tr><td>
-		<c:catch var="upload_error">	
+		<c:catch var="upload_error">
 			<fup:parse nonUpload="error" sizeMax="33554432"/>
 		</c:catch>
 		<c:if test="${empty upload_error}">
@@ -177,14 +178,14 @@ response.setHeader("Expires", "0");
 				<c:if test="${fn:length(paths)>0}">
 					<c:set var="filename" value="${paths[fn:length(paths)-1]}" />
 				</c:if>
-	
+
 				<c:set value="${fn:split(remotePath,'.')}" var="paths"/>
 				<c:set var="fileext" value="txt" />
 				<c:if test="${fn:length(paths)>0}">
 					<c:set var="fileext" value="${fn:toLowerCase(paths[fn:length(paths)-1])}" />
 				</c:if>
-	
-	
+
+
 	              <%-- the '~' means 'the file path to this jsp'
 	                   the output of write is the new path
 	                   you can assign it to a junk var with something like
@@ -192,10 +193,10 @@ response.setHeader("Expires", "0");
 	              --%>
 				<c:set var="attachment_path" value="${initParam['attachments-dir']}/qmrf${sessionScope.qmrf_document}_${filename}" scope="page"  />
 				<fup:contents var="content"/>
-				
+
 				<c:catch var='transactionException_insert'>
 						<fup:write to="${attachment_path}" var="silent" /><br />
-	
+
 						<sql:transaction dataSource="jdbc/qmrf_documents">
 						<sql:update>
 							INSERT INTO attachments (idqmrf,name,format,type,description,original_name) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=?,format=?,type=?,description=?,original_name=?;
@@ -210,7 +211,7 @@ response.setHeader("Expires", "0");
 								<sql:param value="${pageScope.param['type']}"/>
 								<sql:param value="${pageScope.param['description']}"/>
 								<sql:param value="${remotePath}"/>
-	
+
 						</sql:update>
 						</sql:transaction>
 				</c:catch>
@@ -229,17 +230,17 @@ response.setHeader("Expires", "0");
 							</blockquote>
 						</c:otherwise>
 					</c:choose>
-	
+
 			</fup:file>
 			</c:otherwise>
-			</c:choose>			
+			</c:choose>
 		</c:catch>
 		<c:if test="${!empty upload_error}">
 			<div class="error">${upload_error}</div>
-		</c:if>			
+		</c:if>
 		</c:if>
       </td></tr></table>
-    
+
   <table border="0" cellspacing="5" width="100%">
 	<!-- here goes the list of attachmennt as read from database -->
   <jsp:include page="list_attachments.jsp" flush="true"/>

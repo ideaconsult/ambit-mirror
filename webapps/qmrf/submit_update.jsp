@@ -52,7 +52,7 @@
 
 			<!-- data  update -->
 		<c:catch var="transactionException_update">
-		
+
 			<c:import url="include_attachments.jsp" var="newxml" >
 				<c:param name="id" value="${param.id}"/>
 				<c:param name="xml" value="${param.xml}"/>
@@ -73,13 +73,13 @@
 
 
 <c:choose>
-<c:when test='${not empty transactionException_update}'>
+<c:when test='${!empty transactionException_update}'>
 	<c:redirect url="edit_attachmentsdb.jsp">
 	 <c:param name="id" value="${param.id}"/>
 	<c:param name="status">
 		${transactionException_update}
 	</c:param>
-	</c:redirect>	
+	</c:redirect>
 </c:when>
 <c:otherwise>
 	<c:redirect url="edit_attachmentsdb.jsp">

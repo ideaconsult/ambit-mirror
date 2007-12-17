@@ -24,16 +24,16 @@
 <c:otherwise>
 
 	<div  style="color:#36393D;background:#FFFFFF;text-align:left" >
-	
+
 	<c:choose>
 	<c:when test="${sessionScope.maxpages eq 0}">
 		No records.
 	</c:when>
 	<c:otherwise>
 		<c:if test="${param.paging eq 'true'}">
-		
+
 						Pages:
-		
+
 						<c:forEach var='item' begin='0' end='${sessionScope.maxpages-1}'>
 								<c:if test="${param.page eq item}">
 									[
@@ -46,8 +46,8 @@
 									">${item+1}</a>
 								<c:if test="${param.page eq item}">
 									]
-								</c:if>		
-								&nbsp;							
+								</c:if>
+								&nbsp;
 						</c:forEach>
 
 		</c:if>
@@ -55,7 +55,7 @@
 		&nbsp;Sorted by: <i>${param[sessionScope.order]}</i>
 		</c:if>
 		</div>
-					
+
 		<table width="100%" border="0" bgcolor="${tablecolor}">
 		<tr bgcolor="#DDDDDD">
 			<th>#</th>
@@ -83,7 +83,7 @@
 		</c:forEach>
 			<th align="left"> View</th>
 			<th align="left"> Download</th>
-		
+
 				<c:choose>
 				<c:when test="${empty param.actions}">
 			  </c:when>
@@ -96,9 +96,9 @@
 			  <c:otherwise>
 			</c:otherwise>
 			</c:choose>
-		
+
 		</tr>
-		
+
 		<c:set var="counter" value="${param.page*param.pagesize}"/>
 		<c:forEach var="row" items="${rs.rows}">
 			<c:set var="counter" value="${counter+1}"/>
@@ -110,7 +110,7 @@
 						<td align="left">
 		    				${counter}
 				    </td>
-		
+
 			<c:forEach var="columnName" items="${rs.columnNames}">
 					<c:set var="title">${param[columnName]}</c:set>
 					<c:choose>
@@ -135,8 +135,8 @@
 								</c:url>
 							" >	${row[columnName]}
 								</a>
-								
-							</c:when>					
+
+							</c:when>
 							<c:when test="${columnName eq 'status'}">
 											<c:choose>
 											<c:when test="${row[columnName] eq 'draft'}">
@@ -145,7 +145,7 @@
 														${row[columnName]}
 													</b>
 													  </font>
-										  </c:when>									
+										  </c:when>
 											<c:when test="${row[columnName] eq 'returned for revision'}">
 														<font color="#FF4444">
 														<b>
@@ -173,7 +173,7 @@
 			    </c:otherwise>
 			  </c:choose>
 			</c:forEach>
-		
+
 		    <td>
 							<a href="
 								<c:url value="${param.viewpage}">
@@ -181,7 +181,7 @@
 							  <c:param name="idstructure" value="${param.idstructure}"/>
 								</c:url>
 							" ><img src="images/view.png" height="18" width="18" alt="View" border="0"/></a>
-		
+
 							<a href="
 								<c:url value="${param.viewpage}">
 							  <c:param name="id" value="${row.idqmrf}"/>
@@ -189,8 +189,8 @@
 								<c:param name="viewmode" value="attachments"/>
 								</c:url>
 							" ><img src="images/attachment.png" alt="Attachments" border="0"/></a>
-		
-		
+
+
 							<c:if test="${row['version']>1}">
 								<a href="
 								<c:url value="${param.viewpage}">
@@ -201,37 +201,37 @@
 		  				</c:if>
 				</td>
 				<td>
-		
+
 							<a href="
 								<c:url value="download.jsp">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="html"/>
 								</c:url>
 							"><img src="images/html.png"  alt="HTML file" border="0"/></a>
-		
+
 							<a href="
 								<c:url value="download.jsp">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="pdf"/>
 								</c:url>
 							"><img src="images/pdf.png" border="0" alt="Adobe PDF"/></a>
-		
-		
+
+
 							<a href="
 								<c:url value="download.jsp">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="xls"/>
 								</c:url>
 							" ><img src="images/xls.png" " alt="MS Excel XLS file" border="0"/></a>
-							
+
 							<a href="
 								<c:url value="download.jsp">
-							  <c:param name="filetype" value="xml"/>						
+							  <c:param name="filetype" value="xml"/>
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="action" value="dbattachments"/>
 								</c:url>
 							"><img src="images/xml.png"  alt="QMRF XML" border="0"/></a>
-		
+
 				 </td>
 				   <td>
 						<c:choose>
@@ -241,7 +241,7 @@
 							<!-- Admin actions -->
 									<c:choose>
 									  <c:when test="${row.status eq 'published'}">
-		
+
 									  </c:when>
 									  <c:when test="${row.status eq 'archived'}">
 											<i>newer revisions exist - TODO link</i>
@@ -256,26 +256,33 @@
 									  </c:when>
 									  <c:when test="${row.status eq 'under review'}">
 											<a href="
-											<c:url value="admin_edit.jsp">
+											<c:url value="admin_review.jsp">
 											  <c:param name="status" value="under review"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
 											">Review</a>
-		
+
+											<a href="
+											<c:url value="admin_edit.jsp">
+											  <c:param name="status" value="under review"/>
+											  <c:param name="id" value="${row.idqmrf}"/>
+											</c:url>
+											">Edit</a>
+
 											<a href="
 											<c:url value="publish.jsp">
 											  <c:param name="status" value="published"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
 											">Publish</a>
-		
+
 											<a href="
-											<c:url value="admin_review.jsp">
+											<c:url value="admin_return.jsp">
 											  <c:param name="status" value="returned for revision"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
 											">Return to author</a>
-		
+
 									  </c:when>
 									  <c:when test="${row.status eq 'returned for revision'}">
 									    <i>User action required</i>
@@ -333,21 +340,21 @@
 					  <c:otherwise>
 						</c:otherwise>
 						</c:choose>
-		
+
 				</td>
-		
+
 		  </tr>
 		</c:forEach>
-		
+
 		</table>
-		
+
 		<div>
 		<c:if test="${param.paging eq 'true'}">
 		Current page ${param.page+1}  Results per page: ${param.pagesize}
 		</c:if>
 		</div>
 	</c:otherwise>
-	</c:choose>	
+	</c:choose>
 </c:otherwise>
 </c:choose>
 

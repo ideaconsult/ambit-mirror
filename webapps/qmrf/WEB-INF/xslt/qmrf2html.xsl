@@ -149,7 +149,7 @@
  	        <xsl:for-each select="attachment_training_data">
  	      	        <xsl:for-each select="molecules">
  	      	        <blockquote>
-						  <xsl:call-template name="print_href"/>
+						  <xsl:call-template name="print_href_attachment"/>
 					</blockquote>
 	 		     </xsl:for-each>
  		     </xsl:for-each>
@@ -160,7 +160,7 @@
  	        <xsl:for-each select="attachment_validation_data">
  	      	        <xsl:for-each select="molecules">
  	      	        	  <blockquote>
-						  <xsl:call-template name="print_href"/>
+						  <xsl:call-template name="print_href_attachment"/>
 						  </blockquote>
 	 		     </xsl:for-each>
  		     </xsl:for-each>
@@ -171,7 +171,7 @@
  	        <xsl:for-each select="attachment_documents">
  	      	        <xsl:for-each select="document">
  	      	        <blockquote>
-						  <xsl:call-template name="print_href"/>
+						  <xsl:call-template name="print_href_attachment"/>
 					</blockquote>
 	 		     </xsl:for-each>
  		     </xsl:for-each>
@@ -273,6 +273,14 @@
  </xsl:template>
 
 
+ <xsl:template name="print_href_attachment">
+	 		<a>
+			<xsl:attribute name="href">
+			<xsl:value-of select="@url" />
+			</xsl:attribute>
+			<xsl:value-of select="@description"/>
+			</a>
+ </xsl:template>
 
 
  </xsl:stylesheet>

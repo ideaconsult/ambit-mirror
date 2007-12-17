@@ -35,7 +35,7 @@
 </xsl:template>
 
 <xsl:template match="*">
-	
+
 		<xsl:apply-templates select="*"/>
 
 
@@ -102,22 +102,22 @@
 				</xsl:attribute>
 				<xsl:attribute name="target">
 				_blank
-				</xsl:attribute>				
+				</xsl:attribute>
 				Guidelines for reviewing QMRFs
 			</a>
 			</div>
 			<br/>
 			<div class="help">
-			NOTE: Clicking on <u>Review</u> link will loose changes to keywords and comments fields, which has not been followed by <u>Update</u>
+			NOTE: Clicking on <u>Review</u> link will result in keywords and comments changes lost, if those has not been followed by <u>Update</u>
 			</div>
 			<br/>
 			<div class="help">
 			NOTE: Click on <u>Publish</u> when the document is ready to be published.
-			</div>			
+			</div>
 			<br/>
 			<div class="help">
 			NOTE: Click on <u>Return to author</u> when the document has to be returned to the author for revision.
-			</div>						
+			</div>
 	</td>
 </tr>
 	<tr bgcolor="#CCCCCC"><th>1.1.QSAR identifier (title)</th>

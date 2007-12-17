@@ -39,12 +39,7 @@
 		    <jsp:param name="highlighted" value="search" />
 </jsp:include>
 
-<!--
-<jsp:include page="submenu.jsp" flush="true">
-	<jsp:param name="highlighted" value="search_catalogs.jsp" />
-</jsp:include>
--->
-<!-- initializing session variables with param.x values -->
+<hr>
 <c:if test="${!empty(param.qmrfno_enabled)}">
 
 		<c:set var="p_qmrfno_enabled" value="${param.qmrfno_enabled}" scope="session"/>
@@ -171,11 +166,16 @@
 <th>Endpoint
 </th>
 <td>
+		<c:catch var="err">
 		<c:import var="xsl" url="/WEB-INF/xslt/catalogs2form.xsl"/>
 		<c:import var="xml" url="endpoints_xml.jsp"/>
-		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}">
+		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd">
 			<x:param name="selected" value="${p_endpoints_catalog}"/>
 	  </x:transform>
+	  	</c:catch>
+		<c:if test="$!empty err">
+			${err}
+		</c:if>
 </td>
 </tr>
 <!--
@@ -201,11 +201,16 @@
 <th>Algorithm
 </th>
 <td>
+		<c:catch var="err">
 		<c:import var="xsl" url="/WEB-INF/xslt/catalogs2form.xsl"/>
 		<c:import var="xml" url="algorithm_xml.jsp"/>
-		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}">
+		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd">
 			<x:param name="selected" value="${p_algorithms_catalog}"/>
 	  </x:transform>
+	  </c:catch>
+		<c:if test="$!empty err">
+			${err}
+		</c:if>
 </td>
 </tr>
 <tr>
@@ -221,11 +226,16 @@
 <th>Software
 </th>
 <td>
+		<c:catch var="err">
 		<c:import var="xsl" url="/WEB-INF/xslt/catalogs2form.xsl"/>
 		<c:import var="xml" url="software_xml.jsp"/>
-		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}">
+		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd">
 			<x:param name="selected" value="${p_software_catalog}"/>
 	  </x:transform>
+		</c:catch>
+		<c:if test="$!empty err">
+			${err}
+		</c:if>
 </td>
 </tr>
 <tr>
@@ -241,11 +251,16 @@
 <th>Authors
 </th>
 <td>
-		<c:import var="xsl" url="/WEB-INF/xslt/catalogs2form.xsl"/>
-		<c:import var="xml" url="authors_xml.jsp"/>
-		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}">
-			<x:param name="selected" value="${p_authors_catalog}"/>
-	  </x:transform>
+		<c:catch var="err">
+			<c:import var="xsl" url="/WEB-INF/xslt/catalogs2form.xsl"/>
+			<c:import var="xml" url="authors_xml.jsp"/>
+			<x:transform xml="${fn:trim(xml)}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd">
+				<x:param name="selected" value="${p_authors_catalog}"/>
+		  </x:transform>
+		</c:catch>
+		<c:if test="$!empty err">
+			${err}
+		</c:if>
 </td>
 </tr>
 
@@ -331,7 +346,7 @@
 <c:choose>
 <c:when test="${!empty where}">
 		<c:catch var="error">
-			
+
 			<sql:query var="rs" dataSource="jdbc/qmrf_documents">
 				SELECT count(idqmrf) as c FROM documents left join doc_endpoint using (idqmrf) left join doc_algorithms using (idqmrf) left join doc_authors using (idqmrf) left join doc_software using (idqmrf) left join catalog_software as s using (id_software) left join catalog_endpoints as e using (id_endpoint) left join catalog_algorithms as a using (id_algorithm) left join catalog_authors as r using (id_author) where status = 'published' and (${where})
 			</sql:query>
