@@ -429,7 +429,8 @@ public class DescriptorFactory {
 		
 		cdkDescriptor = new WeightDescriptor();
 		hashtable.addDescriptorPair(cdkDescriptor, createAmbitDescriptorFromCDKdescriptor(cdkDescriptor, gSize,"","Molecular weight"));
-		
+
+		/*
 		try {
 			final DescriptorGroups gr = new DescriptorGroups();
 			gr.addItem(new DescriptorGroup("Functional groups"));
@@ -449,6 +450,7 @@ public class DescriptorFactory {
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
+		*/
 		return hashtable;
     }
     
