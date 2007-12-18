@@ -1,6 +1,9 @@
-﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<fmt:requestEncoding value="UTF-8"/> 
 
 <c:set var="thispage" value='submit_update.jsp'/>
 
@@ -58,9 +61,6 @@
 				<c:param name="xml" value="${param.xml}"/>
 			</c:import>
 			<sql:transaction dataSource="jdbc/qmrf_documents">
-			<sql:update>
-					set names utf8
-			</sql:update>
 
 			<sql:update var="updateCount" >
 				update documents set status=?,xml=?,updated=now() where idqmrf=? and user_name=?;
