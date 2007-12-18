@@ -2,7 +2,7 @@
                  xmlns="http://www.w3.org/1999/xhtml">
 
 
-<xsl:output method="html"  indent="yes"/>
+<xsl:output method="html"  encoding="UTF-8" indent="yes"/>
 
 <xsl:template match="QMRF">
  		<xsl:apply-templates select="* "/>
@@ -43,7 +43,7 @@
 
 			<xsl:choose>
 
-			
+
 			<xsl:when test="@idref">
 				<xsl:value-of select="id(@idref)/@name"/>
 
@@ -72,15 +72,15 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No QMRF author available!"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
 
 <xsl:template match="model_authors">
-	
+
 	<h3>
 	<img src="images/user_suit.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
@@ -93,8 +93,8 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No model author available!"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
+		</xsl:choose>
+	</h3>
 		<xsl:choose>
 		<xsl:when test="author_ref">
 		</xsl:when>
@@ -104,8 +104,8 @@
 				Return to the author for revision!
 			</div>
 		</xsl:otherwise>
-		</xsl:choose>	
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
@@ -121,9 +121,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No applicability domain software defined!"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="descriptors_generation_software">
@@ -138,9 +138,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No descriptor generation software defined!"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
@@ -149,7 +149,7 @@
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
-	
+
 		<xsl:choose>
 		<xsl:when test="endpoint_ref">
 			<img src="images/ok.png" alt="Endpoint entry found."/>
@@ -157,8 +157,8 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No endpoint defined!"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
+		</xsl:choose>
+	</h3>
 		<xsl:choose>
 		<xsl:when test="endpoint_ref">
 		</xsl:when>
@@ -168,15 +168,15 @@
 				Return to the author for revision!
 			</div>
 		</xsl:otherwise>
-		</xsl:choose>				
+		</xsl:choose>
 
-	<xsl:apply-templates select="*"/>	
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
 <xsl:template match="algorithm_explicit">
 	<h3>
-	<img src="images/chart_curve.png" alt="This field is mandatory!" border="0"/>	
+	<img src="images/chart_curve.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -187,8 +187,8 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No algorithm defined"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
+		</xsl:choose>
+	</h3>
 		<xsl:choose>
 		<xsl:when test="algorithm_ref">
 		</xsl:when>
@@ -198,8 +198,8 @@
 				Return to the author for revision!
 			</div>
 		</xsl:otherwise>
-		</xsl:choose>	
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="QSAR_software">
@@ -215,8 +215,8 @@
 		<xsl:otherwise>
 			<img src="images/warning.png" alt="No QSAR software defined!"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
+		</xsl:choose>
+	</h3>
 		<xsl:choose>
 		<xsl:when test="software_ref">
 		</xsl:when>
@@ -226,8 +226,8 @@
 				Return to the author for revision!
 			</div>
 		</xsl:otherwise>
-		</xsl:choose>	
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="training_set_data">
@@ -260,8 +260,8 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
-	</td>	
+		</xsl:choose>
+	</td>
 	</tr>
 	<tr bgcolor="#D6DFF7"><th>Version</th>
 	<td>
@@ -330,15 +330,15 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
-	</td>		
+		</xsl:choose>
+	</td>
 	</tr>
 	<tr bgcolor="#D6DFF7"><th>Description</th>
 	<td>
 	<textarea rows="6" cols="60" name="alg_description" readonly="true">
   		<xsl:value-of select="id(@idref)/@description"/>
 	</textarea>
-	<input type="hidden" name="catalog" value="algorithms" />	
+	<input type="hidden" name="catalog" value="algorithms" />
 	</td>
 	</tr>
 	<tr>
@@ -371,9 +371,9 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
+		</xsl:choose>
 
-	</td>			
+	</td>
 	</tr>
 	<tr bgcolor="#FFFFB0"><th>Subgroup</th>
 	<td>
@@ -391,7 +391,7 @@
   		<xsl:value-of select="id(@idref)/@name"/>
 		</xsl:attribute>
 	</input>
-			<input type="hidden" name="catalog" value="endpoints" />	
+			<input type="hidden" name="catalog" value="endpoints" />
 	</td>
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
@@ -401,9 +401,9 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
+		</xsl:choose>
 
-	</td>			
+	</td>
 
 
 	</tr>
@@ -440,8 +440,8 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
-	</td>		
+		</xsl:choose>
+	</td>
 	</tr>
 	<tr  bgcolor="#D6DFF7"><th>Affiliation</th>
 	<td>
@@ -450,7 +450,7 @@
   		<xsl:value-of select="id(@idref)/@affiliation"/>
 		</xsl:attribute>
 	</input>
-	<input type="hidden" name="catalog" value="authors" />	
+	<input type="hidden" name="catalog" value="authors" />
 	</td>
 
 	</tr>
@@ -480,8 +480,8 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
-	</td>		
+		</xsl:choose>
+	</td>
 	</tr>
 	<tr  bgcolor="#D6DFF7"><th>WWW</th>
 	<td>

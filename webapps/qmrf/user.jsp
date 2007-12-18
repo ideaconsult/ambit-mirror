@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -31,7 +32,7 @@
 
 <c:set var="startpage" value="${sessionScope.page}"/>
 <c:set var="startrecord" value="${sessionScope.page * sessionScope.pagesize}"/>
-	
+
 <c:set var="uname" value='${sessionScope["username"]}'/>
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">
 	select user_name,qmrf_number,status,updated from documents where user_name=? order by ?
@@ -72,7 +73,7 @@
 <jsp:include page="records_status.jsp" flush="true">
     <jsp:param name="status" value="${param.status}"/>
     <jsp:param name="status_allowed" value="all,draft,submitted,under review,returned for revision,published,archived"/>
-    
+
 </jsp:include>
 
 <!-- count max pages -->
@@ -80,7 +81,7 @@
 	<c:choose>
 		<c:when test="${(empty sessionScope.record_status) || (sessionScope.record_status eq 'all')}">
 			<c:set var="sql" value="select count(idqmrf) as c from documents where user_name=? and status != 'archived'"/>
-		</c:when>	
+		</c:when>
 		<c:otherwise>
 			<c:set var="sql" value="select count(idqmrf) as c from documents where user_name=? and status = '${sessionScope.record_status}'"/>
 		</c:otherwise>

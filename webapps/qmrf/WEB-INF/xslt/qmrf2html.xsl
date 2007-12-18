@@ -2,11 +2,12 @@
                  xmlns="http://www.w3.org/1999/xhtml">
 
 
-<xsl:output method="html"  indent="yes"/>
+<xsl:output method="html" encoding="UTF-8" indent="yes"/>
 
 <xsl:template match="QMRF">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<link href="styles/nstyle.css" rel="stylesheet" type="text/css"/>
+		<meta http-equiv="Content-Type" contentType="text/xml;charset=utf-8"/>
 		<title>QMRF</title><body>
        	 <h2>QSAR Model Reporting Format</h2>
        	 <table>
@@ -185,9 +186,9 @@
 <xsl:template match="software_ref">
 	<blockquote>
 	<b>
-	<xsl:value-of select="id(@idref)/@name"/>
+	<xsl:value-of disable-output-escaping="yes" select="id(@idref)/@name"/>
 	</b>
-	<xsl:value-of select="id(@idref)/@version"/>
+	<xsl:value-of disable-output-escaping="yes" select="id(@idref)/@version"/>
 	<br/>
 	<xsl:value-of select="id(@idref)/@description"/>
 	<br/>

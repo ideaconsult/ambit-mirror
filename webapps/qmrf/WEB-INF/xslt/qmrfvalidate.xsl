@@ -2,7 +2,7 @@
                  xmlns="http://www.w3.org/1999/xhtml">
 
 
-<xsl:output method="html"  indent="yes"/>
+<xsl:output method="html"  encoding="UTF-8" indent="yes"/>
 
 <xsl:template match="QMRF">
  		<xsl:apply-templates select="* "/>
@@ -35,7 +35,7 @@
 
 <xsl:template match="QMRF_chapters/QSAR_identifier/QSAR_title">
 	<h3>1.1.QSAR identifier (title)
-	  		
+
 		<xsl:choose>
 		<xsl:when test="text()=''">
 			<img src="images/warning.png"/>
@@ -43,7 +43,7 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
+		</xsl:choose>
 		</h3>
 		<xsl:value-of disable-output-escaping="yes" select="text()"/>
 	</xsl:template>
@@ -119,9 +119,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
@@ -138,9 +138,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
@@ -156,9 +156,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="descriptors_generation_software">
@@ -173,9 +173,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
@@ -191,9 +191,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 
@@ -209,9 +209,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="QSAR_software">
@@ -226,9 +226,9 @@
 		<xsl:otherwise>
 			<img src="images/warning.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
-	</h3>		
-	<xsl:apply-templates select="*"/>	
+		</xsl:choose>
+	</h3>
+	<xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="training_set_data">
@@ -259,7 +259,7 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>	
+		</xsl:choose>
 	</td>
 	</tr>
 	</table>
@@ -276,7 +276,7 @@
 		</xsl:attribute>
 	</input>
 	</td>
-	<td bgcolor="#FFFFFF">	
+	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@definition=''">
 			<img src="images/warning.png"/>
@@ -284,7 +284,7 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
+		</xsl:choose>
 	</td>
 	</tr>
 	</table>
@@ -293,7 +293,7 @@
 
 
 <xsl:template match="endpoint_ref">
-	<table bgcolor="#FFFFFF">	
+	<table bgcolor="#FFFFFF">
 	<tr  bgcolor="#FFFFB0"><th>Name</th>
 	<td>
 	<input type="text" size="80" name="endpoint_name"  readonly='true' >
@@ -302,7 +302,7 @@
 		</xsl:attribute>
 	</input>
 	</td>
-	<td bgcolor="#FFFFFF">	
+	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
 			<img src="images/warning.png"/>
@@ -310,7 +310,7 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
+		</xsl:choose>
 	</td>
 	</tr>
 
@@ -333,7 +333,7 @@
 		</xsl:attribute>
 	</input>
 	</td>
-	<td bgcolor="#FFFFFF">	
+	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
 			<img src="images/warning.png"/>
@@ -341,7 +341,7 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
+		</xsl:choose>
 	</td>
 	</tr>
 	<tr bgcolor="#B0B0FF">
@@ -353,7 +353,7 @@
 		</xsl:attribute>
 	</input>
 	</td>
-	<td bgcolor="#FFFFFF">	
+	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@email=''">
 			<img src="images/warning.png"/>
@@ -361,9 +361,9 @@
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
-		</xsl:choose>		
+		</xsl:choose>
 	</td></tr>
-	
+
 	</table>
 </xsl:template>
 

@@ -2,7 +2,7 @@
                  xmlns="http://www.w3.org/1999/xhtml">
 
 
-<xsl:output method="html"  indent="yes"/>
+<xsl:output method="html"  encoding="UTF-8" indent="yes"/>
 
 <xsl:param name="admin"/>
 

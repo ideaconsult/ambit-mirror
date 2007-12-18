@@ -2,7 +2,7 @@
                  xmlns="http://www.w3.org/1999/xhtml">
 
 
-<xsl:output method="html"  indent="yes"/>
+<xsl:output method="html"  encoding="UTF-8" indent="yes"/>
 
 <xsl:param name="selected"/>
 
@@ -29,7 +29,7 @@
 		<tr bgcolor="#FFFFFF" align="left">
 		<td>
 					<xsl:value-of select="@group"/>
-						<xsl:text> </xsl:text>					
+						<xsl:text> </xsl:text>
 		</td>
 		<td>
 						<xsl:value-of select="@subgroup"/>
@@ -49,7 +49,7 @@
 		<tr bgcolor="#D6DFF7">
 		<th>Description</th>
 		<th>Definition</th>
-		</tr>		
+		</tr>
 				<xsl:apply-templates select="* "/>
 		</table>
 </xsl:template>
@@ -82,7 +82,7 @@
 		<th>Contact</th>
 		<th>E-mail</th>
 		<th>WWW</th>
-		</tr>		
+		</tr>
 				<xsl:apply-templates select="* "/>
 		</table>
 </xsl:template>
@@ -93,16 +93,16 @@
 		<tr bgcolor="#FFFFFF" align="left">
 		<td>
   			<xsl:value-of select="@number"/>
-  		</td>		
+  		</td>
 		<td>
   			<xsl:value-of select="@name"/>
   		</td>
 		<td>
   			<xsl:value-of select="@affiliation"/>
-  		</td>  		
+  		</td>
 		<td>
   			<xsl:value-of select="@contact"/>
-  		</td>  		
+  		</td>
   		<td>
   			<xsl:value-of select="@email"/>
   		</td>
@@ -113,7 +113,7 @@
 			</xsl:attribute>
 			<xsl:value-of select="@url"/>
 			</a>
-  		</td>  		
+  		</td>
 		</tr>
 
 </xsl:template>
@@ -131,7 +131,7 @@
 		<th>Description</th>
 		<th>Contact</th>
 		<th>WWW</th>
-		</tr>		
+		</tr>
 				<xsl:apply-templates select="* "/>
 		</table>
 
