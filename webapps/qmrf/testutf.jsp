@@ -96,84 +96,31 @@ response.setHeader("Expires", "0");
 	</table>
 
 <hr>
-	<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-		select idqmrf,xml from documents where idqmrf=7
-	</sql:query>
-	Attachments<br/>
-	<c:forEach var="row" items="${rs.rows}">
-		 ${row.idqmrf}
-		 <textarea cols="100" rows="10">
-		 	${row.xml}
-		</textarea>
-			<br/>
-
-			<sql:query var="rsa" dataSource="jdbc/qmrf_documents">
-				select * from attachments where idqmrf=?
-				<sql:param value="${row.idqmrf}"/>
-			</sql:query>
-			<c:import var="xsl" url="/WEB-INF/xslt/qmrf2html.xsl"/>
-			<x:transform xml="${row.xml}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd"/>
-			Attachments<br/>
-			<c:forEach var="rowa" items="${rsa.rows}">
-					${rowa.name}&nbsp;${rowa.description}&nbsp;${rowa.type}
-					<br/>
-			</c:forEach>
-		<hr>
-
-
-	</c:forEach>
-<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-	SHOW VARIABLES LIKE 'character_set%'
-</sql:query>
-<c:forEach var="row" items="${rs.rows}">
-	${row.Variable_name}&nbsp;${row.Value}
-	<br>
-</c:forEach>
-
-
 <!--
-At the start of the page
+<h4>At the start of the page</h4>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:requestEncoding value="UTF-8"/>
-
-Between <head> tags
+<h4>Between <head> tags of the page</h4>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <meta http-equiv="Content-Type" contentType="text/xml;charset=UTF-8">
-
-server.xml
-  useBodyEncodingForURI="true"  - otherwise the statement above will have no effect
-    <Connector
-               port="80"  maxHttpHeaderSize="8192"
-               maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
-               enableLookups="false" redirectPort="8443" acceptCount="100"
-               connectionTimeout="20000" disableUploadTimeout="true"
+<h4>server.xml</h4> - useBodyEncodingForURI="true"  - otherwise the statement above will have no effect
+      <Connector
+               port="80"
+               .......
                useBodyEncodingForURI="true"
                URIEncoding="UTF-8"
                />
-
-JDBC connector
-				  <Resource name="jdbc/qmrf_documents" auth="Container" type="javax.sql.DataSource"
+<h4>server.xml</h4> - JDBC connector
+				  <Resource name="jdbc/yourdatabase" auth="Container" type="javax.sql.DataSource"
 				               maxActive="100" maxIdle="30" maxWait="10000"
-				               username="qmrf" password="qmrf2007" driverClassName="com.mysql.jdbc.Driver"
+				               username="user" password="thepassword" driverClassName="com.mysql.jdbc.Driver"
 				               useUnicode="true" characterEncoding="UTF-8"
-				               url="jdbc:mysql://localhost:3306/qmrf_documents"/>
+				               url="jdbc:mysql://localhost:3306/yourdatabase"/>
+<h4>Start mysql witth default charset utf8 !</h4>
 
-not sure if mandatory - seems not to
-Start tomcat with
--Dfile.encoding=UTF-8
-
-Start mysql witth default charset utf8 !!!!!!!!!!!!
+	Try
 	SHOW VARIABLES LIKE 'character_set%'
-output:
-character_set_client utf8
-character_set_connection utf8
-character_set_database utf8
-character_set_filesystem binary
-character_set_results utf8
-character_set_server utf8
-character_set_system utf8
-character_sets_dir D:\Program Files\MySQL\MySQL Server 5.0\share\charsets\
-
+</textarea>
 -->
 
 </body>
