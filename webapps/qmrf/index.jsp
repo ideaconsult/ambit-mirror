@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <html>
 <link href="styles/nstyle.css" rel="stylesheet" type="text/css">
@@ -117,13 +118,19 @@ You can view and change your registration details under the <u>My profile</u> ta
 <h3>Most recent QMRF documents</h3>
 
 
+<c:set var="sql">
+	select idqmrf,qmrf_number,user_name,updated,status,xml from documents where status = 'published' order by updated desc limit 3
+</c:set>
+
+<c:set var="maxpages" scope="session" value="1"/>
 <jsp:include page="records.jsp" flush="true">
-    <jsp:param name="sql" value="select idqmrf,qmrf_number,user_name,updated,status,xml from documents where status = 'published' order by updated desc limit 3" />
+    <jsp:param name="sql" value="${sql}" />
 
 		<jsp:param name="xml" value="xml"/>
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="updated" value="Last updated"/>
 
+		<jsp:param name="paging" value="false"/>
 		<jsp:param name="actions" value=""/>
 		<jsp:param name="viewpage" value="index.jsp"/>
 		<jsp:param name="maxpages" value="10"/>

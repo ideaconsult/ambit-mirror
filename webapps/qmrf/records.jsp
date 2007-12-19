@@ -12,7 +12,6 @@
 </sql:query>
 </c:catch>
 
-
 <c:choose>
 <c:when test="${!empty exception}">
 	<blockquote>
@@ -25,8 +24,9 @@
 
 	<div  style="color:#36393D;background:#FFFFFF;text-align:left" >
 
+
 	<c:choose>
-	<c:when test="${sessionScope.maxpages eq 0}">
+	<c:when test="${(sessionScope.maxpages eq 0)}">
 		No records.
 	</c:when>
 	<c:otherwise>

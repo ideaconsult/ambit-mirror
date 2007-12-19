@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<fmt:requestEncoding value="UTF-8"/>
 <html>
 <link href="styles/nstyle.css" rel="stylesheet" type="text/css">
 <head>
@@ -299,7 +299,7 @@
 	<c:if test="${!empty where}">
 			<c:set var="cond" value="${where} ${op} "/>
 	</c:if>
-	<c:set var="where" value="${cond} (match (xml) against ('${p_freetext}' in boolean mode))"/>
+	<c:set var="where" value="${cond} (match (xml) against ('${p_freetext}' ))"/>
 </c:if>
 
 <c:if test="${(p_endpoint_enabled eq 'selected') and !empty p_endpoints_catalog}">
@@ -366,6 +366,7 @@
 			<c:set var="maxpages" scope="session" value="10"/>
 		</c:if>
 		<c:set var="sql" value="SELECT idqmrf,qmrf_number,updated,id_endpoint,id_algorithm,id_author,id_software,s.name as software,e.name as endpoint,a.definition as alg,r.name as author FROM documents left join doc_endpoint using (idqmrf) left join doc_algorithms using (idqmrf) left join doc_authors using (idqmrf) left join doc_software using (idqmrf) left join catalog_software as s using (id_software) left join catalog_endpoints as e using (id_endpoint) left join catalog_algorithms as a using (id_algorithm) left join catalog_authors as r using (id_author) where status = 'published' and (${where}) limit ${startrecord},${sessionScope.pagesize}"/>
+
 		<table width="99%">
 		<jsp:include page="records.jsp" flush="true">
 		    <jsp:param name="sql" value="${sql}"/>
