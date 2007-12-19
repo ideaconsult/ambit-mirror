@@ -50,7 +50,7 @@ public class InsertSymbolAction extends TextAction {
     			Document doc = target.getDocument();
     			try {
     				doc.insertString(
-    					doc.getStartPosition().getOffset(), 
+    					target.getCaretPosition(), 
     					JUnicodePanel.getChar(p.getCodepoint()).toString(), null);
     				
     			} catch (Exception x) {
