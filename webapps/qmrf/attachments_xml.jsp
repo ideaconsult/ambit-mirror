@@ -33,7 +33,8 @@
 <c:set var="atag" value= ""/>
 <c:set var="btag" value= ""/>
 
-	<c:set var="u">http://${header["host"]}</c:set>
+<c:set var="u">http://${header["host"]}${pageContext.request.contextPath}</c:set>
+
 		<c:forEach var="row" items="${rs.rows}">
 			<c:set var="filename" value="${row.original_name}" />
 			<c:set var="delim" value="\//" />
@@ -67,7 +68,7 @@
 				<xsl:attribute name="description">${row.description}</xsl:attribute>
 
 				<xsl:attribute name="filetype">${row.format}</xsl:attribute>
-				<xsl:attribute name="url">download_attachment.jsp?name=${row.name}</xsl:attribute>
+				<xsl:attribute name="url">${u}/download_attachment.jsp?name=${row.name}</xsl:attribute>
 			</xsl:element>
 		</c:forEach>
 	<c:if test="${!empty atype}">

@@ -1,8 +1,8 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
-<fmt:requestEncoding value="UTF-8"/> 
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:set var="thispage" value='edit.jsp'/>
 
@@ -130,7 +130,7 @@ function getXML(){
       <c:if test="${row.status eq 'returned for revision'}">
             <br>
       <div class="error">
-      The document has been returned for revission. Please pay attention to Section 10 of the document!
+      The document has been returned for revision. Please pay attention to Section 10 of the document!
       </div>
       </c:if>
       <br>
