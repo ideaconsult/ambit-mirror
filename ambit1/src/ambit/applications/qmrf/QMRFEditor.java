@@ -25,30 +25,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit.applications.qmrf;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.Action;
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 
 import ambit.data.qmrf.QMRFData;
-import ambit.data.qmrf.QMRFFileOpenAction;
-import ambit.data.qmrf.QMRFFileSaveAction;
-import ambit.data.qmrf.QMRFFileSaveAsAction;
 import ambit.data.qmrf.QMRFGUITools;
-import ambit.data.qmrf.QMRFNewAction;
 import ambit.data.qmrf.QMRFPanel;
 import ambit.log.AmbitLogger;
-import ambit.ui.AmbitStatusBar;
 import ambit.ui.CoreApp;
 
 /**
@@ -161,6 +151,10 @@ public class QMRFEditor extends CoreApp implements Observer {
 	@Override
 	protected JMenuBar createMenuBar() {
 		return QMRFGUITools.createMenuBar(toolBar,qmrfData,mainFrame);
+	}
+	@Override
+	protected JComponent createToolbar() {
+		return null;
 	}
 	
 

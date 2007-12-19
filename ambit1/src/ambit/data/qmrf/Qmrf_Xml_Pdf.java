@@ -105,7 +105,10 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
         }
 
     }
-	public void xml2pdf(String xml, OutputStream pdf) {
+    public void xml2pdf(String xml, OutputStream pdf) {
+    	xml2pdf(new InputSource(new StringReader(xml)), pdf);
+    }
+	public void xml2pdf(InputSource xml, OutputStream pdf) {
 
 		try {
 			Document document = new Document(PageSize.A4, 80, 50, 30, 65);
@@ -125,7 +128,18 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 			QMRFSchemaResolver resolver = new QMRFSchemaResolver("http://ambit.acad.bg/qmrf/qmrf.dtd",null);
 			resolver.setIgnoreSystemID(true);
 			docBuilder.setEntityResolver(resolver);
-			org.w3c.dom.Document doc = docBuilder.parse(new InputSource(new StringReader(xml)));
+			
+			org.w3c.dom.Document doc = null;
+			try {
+				doc = docBuilder.parse(xml);
+			} catch (Exception x) {
+				document.addCreationDate();
+				document.addCreator(getClass().getName());
+				document.open();
+				document.add(new Paragraph(new Chunk(x.getMessage())));
+				document.close();
+				return;
+			}
 
 			document.addCreationDate();
 			document.addCreator(getClass().getName());
@@ -141,6 +155,7 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 			} catch (Exception x) {
 				document.addSubject("QMRF");
 			}
+			try {
 			document.addAuthor(
 					listNodeAttributes(doc,
 							"qmrf_authors",
@@ -149,11 +164,20 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 							att_author,
 							new Boolean(true)
 							));
+			} catch (Exception x) {
+				document.addAuthor(getClass().getName());				
+			}
 			
 			document.open();
 			PdfContentByte cb = writer.getDirectContent();			
 			
-			headerTable(document,doc);
+			try {
+				headerTable(document,doc);
+			} catch (Exception x) {
+				document.add(new Paragraph(new Chunk(x.getMessage())));
+				document.close();
+				return;
+			}
 			
 			PdfOutline root = writer.getDirectContent().getRootOutline();
 			
@@ -254,19 +278,23 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 							break;
 						}
 						case reference: {
+							try {
+								String value = listNodeAttributes(doc,subchapters[i][0].toString(),
+										subchapters[i][3].toString(),
+										subchapters[i][4].toString(),
+										(String[])subchapters[i][5],
+										(Boolean)subchapters[i][6]
+										);
+	
+								Chunk reference = new Chunk(value);
+								reference.setFont(font);
+	                            align = Paragraph.ALIGN_JUSTIFIED;
+								phrase.add(reference);
+							} catch (Exception x) {
 
-							String value = listNodeAttributes(doc,subchapters[i][0].toString(),
-									subchapters[i][3].toString(),
-									subchapters[i][4].toString(),
-									(String[])subchapters[i][5],
-									(Boolean)subchapters[i][6]
-									);
-
-							Chunk reference = new Chunk(value);
-							reference.setFont(font);
-                            align = Paragraph.ALIGN_JUSTIFIED;
-							phrase.add(reference);
+							}
 							break;
+							
 
 						}
 						}

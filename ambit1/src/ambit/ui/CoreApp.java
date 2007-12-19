@@ -82,7 +82,8 @@ abstract public class CoreApp implements ActionListener {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.add(menuBar,BorderLayout.NORTH);
-        topPanel.add(toolBar,BorderLayout.CENTER);
+        if (toolBar != null)
+        	topPanel.add(toolBar,BorderLayout.CENTER);
         
         createWidgets(mainFrame,mainPanel);
         //Add the panel to the window.

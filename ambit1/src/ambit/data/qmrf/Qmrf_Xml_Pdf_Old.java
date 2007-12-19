@@ -482,7 +482,7 @@ XmlParser.parse(documentB, "Chap0703.xml", "tagmap0703.xml");
 		}
 
 		protected XmlPeer createSubchapterXMLPeer(org.w3c.dom.Document doc, String xml_tag, String pdf_tag, Mode mode,
-				String ref_name, String catalog_name, String[] attributes, boolean line) {
+				String ref_name, String catalog_name, String[] attributes, boolean line) throws Exception {
 			XmlPeer peer = new XmlPeer(ElementTags.CHUNK,pdf_tag);
 			peer.addValue(ElementTags.SIZE, "12");
 			peer.addValue(ElementTags.FONT,BaseFont_Url);

@@ -199,6 +199,17 @@ public class QMRFObjectTest extends TestCase {
          assertTrue(pdf.length()>0);
     }   
     
+    public void testPDFReader() throws Exception {
+    	Qmrf_Xml_Pdf qpdf = new Qmrf_Xml_Pdf("c:\\windows\\fonts\\times.ttf");
+         File pdf = new File("data/qmrf/qmrf_1_2.pdf");
+         if (pdf.exists()) pdf.delete();
+         
+         qpdf.xml2pdf(new InputSource(new FileReader(new File("data/qmrf/test_1_2.xml"))),new FileOutputStream(pdf));
+         //qpdf.xml2pdf(new FileReader("data/qmrf/test_1_2.xml"),new FileOutputStream(pdf));
+         File newpdf = new File("data/qmrf/qmrf_1_2.pdf");
+         assertTrue(pdf.exists());
+         assertTrue(pdf.length()>0);
+    }   
     public void xtestXLS() throws  Exception {
 	         Qmrf_Xml_Excel qpdf = new Qmrf_Xml_Excel();
 	         File xls = new File("data/qmrf/qmrf_1_2.xls");

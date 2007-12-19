@@ -344,7 +344,7 @@ public abstract class QMRFConverter {
 				}
 			return b.toString();
 	}
-	public String listNodeAttributes(Document doc,String name_node,String ref_name, String catalog_name, String[] attributes, boolean line) {
+	public String listNodeAttributes(Document doc,String name_node,String ref_name, String catalog_name, String[] attributes, boolean line) throws Exception {
 	    ArrayList node_list = findNodeIDRef(name_node,ref_name, catalog_name, doc);
 
 	    int r = 1;
@@ -400,7 +400,7 @@ public abstract class QMRFConverter {
 		return org.apache.commons.lang.StringEscapeUtils.unescapeXml(replaceTags(attribute.getNodeValue()).trim());
 	}
 	
-	public static ArrayList findNodeIDRef(String name_node,String ref_name, String catalog_name, org.w3c.dom.Document source) {
+	public static ArrayList findNodeIDRef(String name_node,String ref_name, String catalog_name, org.w3c.dom.Document source) throws Exception {
 
 		source.getDocumentElement();
 		ArrayList return_list = new ArrayList();

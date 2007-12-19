@@ -51,6 +51,7 @@ public class QMRFGUITools {
 		fileMenu.add(createMenuItem(toolBar,new QMRFFileOpenAction(qmrfData,mainFrame)));
         fileMenu.add(createMenuItem(toolBar,new QMRFFileSaveAction(qmrfData,mainFrame)));
 		fileMenu.add(createMenuItem(toolBar,new QMRFFileSaveAsAction(qmrfData,mainFrame)));
+		fileMenu.add(createMenuItem(toolBar,new QMRFBatchAction(qmrfData,mainFrame)));
 		menuBar.add(fileMenu);
 		menuBar.add(UITools.createEditMenu(mainFrame));
 		menuBar.add(UITools.createStyleMenu());
