@@ -54,7 +54,7 @@ public class DescriptorCalculatorAction extends MoleculeCalculationAction {
 
 	public DescriptorCalculatorAction(Object userData, JFrame mainFrame,
 			String name) {
-		this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/descriptors.png"));
+		this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/chart_bar.png"));
 	}
 
 	public DescriptorCalculatorAction(Object userData, JFrame mainFrame,

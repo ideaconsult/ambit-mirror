@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 
 import org.xml.sax.InputSource;
 
@@ -17,12 +18,12 @@ import ambit.ui.UITools;
 public class QMRFBatchAction extends QMRFFileOpenAction {
 
 	public QMRFBatchAction(QMRFData userData, Container mainFrame) {
-		this(userData, mainFrame,"Batch");
+		this(userData, mainFrame,"Batch PDF Generation");
 	}
 
 
 	public QMRFBatchAction(QMRFData userData, Container mainFrame, String name) {
-		this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/batch.png"));
+		this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/disk_multiple.png"));
 	}
 
 	public QMRFBatchAction(QMRFData userData, Container mainFrame,
@@ -36,6 +37,7 @@ public class QMRFBatchAction extends QMRFFileOpenAction {
                 defaultDir,
                 new String[] {".xml"},new String[]{"QMRF files (*.xml)"},true,null);
         if (files != null) {
+        	int error = 0;
         	mainFrame.setCursor(hourglassCursor);
 	        Qmrf_Xml_Pdf converter = new Qmrf_Xml_Pdf(((QMRFData)userData).qmrf.getTtfFontUrl());
 	        for (int i=0; i < files.length;i++) 
@@ -57,9 +59,19 @@ public class QMRFBatchAction extends QMRFFileOpenAction {
 	        	converter.xml2pdf(new InputSource(reader), pdf);
 	        	reader.close();
 	        } catch (Exception x) {
+	        	error ++;
 	        	logger.error(x);
 	        }
+	        StringBuffer b = new StringBuffer();
+	        b.append(files.length);
+	        b.append(" files processed; ");
+	        b.append(files.length-error);
+	        b.append(" pdf files generated.");
 	        mainFrame.setCursor(normalCursor);
+    		JOptionPane.showMessageDialog(mainFrame,
+    				b.toString(),
+    			    "PDF Generation ",						
+    			    JOptionPane.INFORMATION_MESSAGE);        	        
         }
         
 	}

@@ -31,6 +31,9 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.fop.pdf.PDFAction;
+import org.apache.fop.pdf.PDFGoToRemote;
+import org.apache.fop.pdf.PDFUri;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -48,6 +51,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.HyphenationAuto;
+import com.lowagie.text.pdf.PdfAction;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfDestination;
 import com.lowagie.text.pdf.PdfOutline;
@@ -265,6 +269,23 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 							break;
 						}
 						case attachments: {
+							PdfPTable table = getAttachmentsAsTable(doc,"attachment_training_data");
+							if (table != null) {
+								phrase.add(new Paragraph("Training set(s)"));
+								phrase.add(table);
+							}
+							table = getAttachmentsAsTable(doc,"attachment_validation_data");
+							if (table != null) {
+								phrase.add(new Paragraph("Test set(s)"));
+								phrase.add(table);
+							}
+							table = getAttachmentsAsTable(doc,"attachment_documents");
+							if (table != null) {
+								phrase.add(new Paragraph("Supporting information"));
+								phrase.add(table);
+							}
+							break;
+							/*
 							StringBuffer b = new StringBuffer();
 							b.append("Training set(s)\n");
 						    b.append(listAttachments(doc,"attachment_training_data"));
@@ -275,7 +296,9 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 							Chunk attachments = new Chunk(b.toString());
 							attachments.setFont(font);
 							phrase.add(attachments);
+							
 							break;
+							*/
 						}
 						case reference: {
 							try {
@@ -320,6 +343,44 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
+	}
+	
+	protected PdfPTable getAttachmentsAsTable(org.w3c.dom.Document doc, String attachments) {
+		NodeList nodes = doc.getElementsByTagName(attachments);
+		if (nodes.getLength() >  0) { 
+		
+			float[] widths = {3f,3f};
+			PdfPTable table = new PdfPTable(widths);
+			table.setWidthPercentage(100);
+			for (int i =0; i < nodes.getLength(); i++)
+				if (nodes.item(i) instanceof org.w3c.dom.Element) {
+					NodeList attachment = nodes.item(i).getChildNodes();
+					if (attachment.getLength() ==  0) ;//b.append("N/A\n");
+					else
+						for (int j =0; j < attachment.getLength(); j++) 
+							if (attachment.item(j) instanceof org.w3c.dom.Element) {
+								org.w3c.dom.Element e = ((org.w3c.dom.Element)attachment.item(j));
+								
+								Paragraph p = new Paragraph(org.apache.commons.lang.StringEscapeUtils.unescapeXml(e.getAttribute("description")));
+								PdfPCell cell = new PdfPCell(p);
+								cell.setBackgroundColor(Color.white);
+								table.addCell(cell);
+								
+								String c = org.apache.commons.lang.StringEscapeUtils.unescapeXml(e.getAttribute("url"));
+								
+								PdfAction action = new PdfAction(c);
+								p = new Paragraph();
+								p.add(new Chunk(c).setAction(action));
+								cell = new PdfPCell(p);
+								cell.setBackgroundColor(Color.white);
+								table.addCell(cell);								
+
+							}
+				}
+			return table;	
+		} else return null;
+			
+		
 	}
 	public void headerTable(Document pdfdoc, org.w3c.dom.Document xmldoc) {
 		try {

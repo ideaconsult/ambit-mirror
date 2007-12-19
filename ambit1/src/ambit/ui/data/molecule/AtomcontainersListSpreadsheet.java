@@ -155,13 +155,13 @@ public class AtomcontainersListSpreadsheet extends JPanel {
                 info();
             }
         });                     
-        p.add(new MoleculesTableAction("First",UITools.createImageIcon("ambit/ui/images/nav_first.gif"),
+        p.add(new MoleculesTableAction("First",UITools.createImageIcon("ambit/ui/images/resultset_first.png"),
                 "Go to the first record") {
             public void actionPerformed(ActionEvent e) {
                 first();
             }
         });
-        p.add(new MoleculesTableAction("Previous",UITools.createImageIcon("ambit/ui/images/nav_prev.gif"),
+        p.add(new MoleculesTableAction("Previous",UITools.createImageIcon("ambit/ui/images/resultset_previous.png"),
         	"Go to the previous record") {
 	    public void actionPerformed(ActionEvent e) {
 	    	try {
@@ -171,7 +171,7 @@ public class AtomcontainersListSpreadsheet extends JPanel {
 	    	}
 	    }
         });        
-        p.add(new MoleculesTableAction("Previous",UITools.createImageIcon("ambit/ui/images/nav_next.gif"),
+        p.add(new MoleculesTableAction("Previous",UITools.createImageIcon("ambit/ui/images/resultset_next.png"),
 	    	"Go to the next record") {
 	    public void actionPerformed(ActionEvent e) {
 	    	try {
@@ -181,7 +181,7 @@ public class AtomcontainersListSpreadsheet extends JPanel {
 		    }
 	    }
 	    });         
-        p.add(new MoleculesTableAction("Last",UITools.createImageIcon("ambit/ui/images/nav_last.gif"),"Go to the last record") {
+        p.add(new MoleculesTableAction("Last",UITools.createImageIcon("ambit/ui/images/resultset_last.png"),"Go to the last record") {
             public void actionPerformed(ActionEvent e) {
                 last();
             }
@@ -196,13 +196,13 @@ public class AtomcontainersListSpreadsheet extends JPanel {
                 lookup(CDKConstants.CASRN);
             }
         });
-        p.add(new MoleculesTableAction("Append",UITools.createImageIcon("ambit/ui/images/add.gif"),"Append a new record") {
+        p.add(new MoleculesTableAction("Append",UITools.createImageIcon("ambit/ui/images/table_row_insert.png"),"Append a new record") {
             public void actionPerformed(ActionEvent e) {
                 addAtomContainter();
             }
         });
         p.add(new MoleculesTableAction("Delete",
-                UITools.createImageIcon("ambit/ui/images/delete.gif"),"Delete current record") {
+                UITools.createImageIcon("ambit/ui/images/table_row_delete.png"),"Delete current record") {
             public void actionPerformed(ActionEvent e) {
                 deleteAtomContainter();
             }

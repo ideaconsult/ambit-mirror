@@ -97,6 +97,7 @@ public class UITools {
 		mainMenu.setMnemonic(KeyEvent.VK_E);
 		JMenuItem menuItem;
 		menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
+		menuItem.setIcon(UITools.createImageIcon("ambit/ui/images/cut.png"));
 		menuItem.setText("Cut (Ctr-T)");
 		menuItem.setMnemonic(KeyEvent.VK_T);
 		mainMenu.add(menuItem);
@@ -105,12 +106,14 @@ public class UITools {
 		menuItem.setMnemonic(KeyEvent.VK_C);
 		mainMenu.add(menuItem);
 		menuItem = new JMenuItem(new DefaultEditorKit.PasteAction());
+		menuItem.setIcon(UITools.createImageIcon("ambit/ui/images/paste_plain.png"));
 		menuItem.setText("Paste (Ctrl-V)");
 		menuItem.setMnemonic(KeyEvent.VK_P);
 		mainMenu.add(menuItem);
 		
 		mainMenu.add(new Separator());
 		menuItem = new JMenuItem(new InsertSymbolAction(mainFrame,"Insert symbol"));
+		menuItem.setIcon(UITools.createImageIcon("ambit/ui/images/text_letter_omega.png"));
 		menuItem.setText("Insert symbol");
 		menuItem.setMnemonic(KeyEvent.VK_P);
 		mainMenu.add(menuItem);
@@ -123,14 +126,17 @@ public class UITools {
 
         
         Action action = new StyledEditorKit.BoldAction();
+        action.putValue(Action.SMALL_ICON, UITools.createImageIcon("ambit/ui/images/text_bold.png"));
         action.putValue(Action.NAME, "Bold");
         menu.add(new JCheckBoxMenuItem(action));
 
         action = new StyledEditorKit.ItalicAction();
+        action.putValue(Action.SMALL_ICON, UITools.createImageIcon("ambit/ui/images/text_italic.png"));
         action.putValue(Action.NAME, "Italic");
         menu.add(new JCheckBoxMenuItem(action));
 
         action = new StyledEditorKit.UnderlineAction();
+        action.putValue(Action.SMALL_ICON, UITools.createImageIcon("ambit/ui/images/text_underline.png"));
         action.putValue(Action.NAME, "Underline");
         menu.add(new JCheckBoxMenuItem(action));
         
@@ -153,11 +159,11 @@ public class UITools {
         Object[][] fontssize = {{"12",12},{"14",14},{"18",18}};
         
         g = new ButtonGroup();
+        ImageIcon f = UITools.createImageIcon("ambit/ui/images/style.png");
         for (int i=0; i < fontssize.length; i++) {
-        	JRadioButtonMenuItem b = new JRadioButtonMenuItem(new StyledEditorKit.FontSizeAction(
-        			(String)fontssize[i][0],(Integer)fontssize[i][1]
-        			                 )
-        	);
+        	Action a = new StyledEditorKit.FontSizeAction((String)fontssize[i][0],(Integer)fontssize[i][1]);
+        	a.putValue(Action.SMALL_ICON, f);
+        	JRadioButtonMenuItem b = new JRadioButtonMenuItem(a);
         	b.setSelected(i==0);
         	g.add(b);
         	menu.add(b);
@@ -170,10 +176,11 @@ public class UITools {
         
         g = new ButtonGroup();
         for (int i=0; i < fonts.length; i++) {
-        	JRadioButtonMenuItem b = new JRadioButtonMenuItem(new StyledEditorKit.FontFamilyAction(
+        	Action a = new StyledEditorKit.FontFamilyAction(
         			(String)fonts[i][0],(String)fonts[i][0]
-        			                 )
-        	);
+            );
+        	a.putValue(Action.SMALL_ICON, f);
+        	JRadioButtonMenuItem b = new JRadioButtonMenuItem(a);
         	b.setSelected(i==0);
         	g.add(b);
         	menu.add(b);
@@ -217,6 +224,7 @@ class SubscriptAction extends StyledEditorKit.StyledTextAction{
 
 		super("<html>x<sub>2</sub></html>"); //StyleConstants.Subscript.toString());
 		putValue(SHORT_DESCRIPTION,"Subscript");
+		putValue(Action.SMALL_ICON, UITools.createImageIcon("ambit/ui/images/text_subscript.png"));
 	}		
 	public void actionPerformed(ActionEvent ae){			
 		JEditorPane editor = getEditor(ae);			
@@ -233,7 +241,9 @@ class SubscriptAction extends StyledEditorKit.StyledTextAction{
 class NormalScriptAction extends StyledEditorKit.StyledTextAction{			
 	public NormalScriptAction(){			
 		super("<html>x</html>"); 
-		putValue(SHORT_DESCRIPTION,"Subscript");
+		putValue(SHORT_DESCRIPTION,"Normal script");
+		putValue(Action.SMALL_ICON, UITools.createImageIcon("ambit/ui/images/font.png"));
+
 	}		
 	public void actionPerformed(ActionEvent ae){			
 		JEditorPane editor = getEditor(ae);			
@@ -253,6 +263,7 @@ class SuperscriptAction extends StyledEditorKit.StyledTextAction{
 	public SuperscriptAction(){			
 		super("<html>x<sup>2</sup></html>"); //StyleConstants.Superscript.toString());
 		putValue(SHORT_DESCRIPTION,"Superscript");
+		putValue(Action.SMALL_ICON, UITools.createImageIcon("ambit/ui/images/text_superscript.png"));
 	}		
 	public void actionPerformed(ActionEvent ae){			
 		JEditorPane editor = getEditor(ae);			

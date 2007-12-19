@@ -80,7 +80,7 @@ public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
         setLayout(new BorderLayout());
         JToolBar toolbar = new JToolBar(JToolBar.VERTICAL);
         toolbar.setFloatable(true);
-        JButton button = new JButton(new AbstractAction("Add",UITools.createImageIcon("ambit/ui/images/add.gif")) {
+        JButton button = new JButton(new AbstractAction("Add",UITools.createImageIcon("ambit/ui/images/attachment.png")) {
             public void actionPerformed(ActionEvent arg0) {
             	try {
             		addAttachment();

@@ -28,6 +28,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
@@ -49,14 +50,23 @@ public class QMRFPanel extends JPanel implements IAmbitObjectListener {
 	protected JButtonBar toolbar;
 	protected ArrayList<ShowChapterAction> actions;
 	protected EditorPanel editorPanel;
-	
+	protected Hashtable<String,String> chapterIcons;
 	
 	
 	public QMRFPanel(QMRFObject qmrf) {
 		super(new BorderLayout());
 		toolbar = new JButtonBar(JButtonBar.VERTICAL);
 		editorPanel = new EditorPanel();
-		
+		chapterIcons = new Hashtable<String,String>();
+		chapterIcons.put("1","ambit/ui/images/application_form.png");
+		chapterIcons.put("2","ambit/ui/images/user_suit.png");
+		chapterIcons.put("3","ambit/ui/images/experiment_16.png");
+		chapterIcons.put("4","ambit/ui/images/chart_curve.png");
+		chapterIcons.put("5","ambit/ui/images/chart_pie.png");
+		chapterIcons.put("6","ambit/ui/images/benzene_16.jpg");
+		chapterIcons.put("7","ambit/ui/images/benzene_16.jpg");
+		chapterIcons.put("8","ambit/ui/images/book_open.png");
+		chapterIcons.put("9","ambit/ui/images/attachment.png");
 		actions = new ArrayList<ShowChapterAction>();
 		setQmrf(qmrf);
 		add(toolbar,BorderLayout.WEST);
@@ -87,7 +97,11 @@ public class QMRFPanel extends JPanel implements IAmbitObjectListener {
 		
 		while (chapters.hasNext()) {
 			QMRFChapter chapter = chapters.next();
-			action = new ShowChapterAction(chapter,editorPanel,UITools.createImageIcon("ambit/ui/images/draw_16.png"));
+			//
+
+			String icon = chapterIcons.get(chapter.getChapter());
+			if (icon == null) icon = "ambit/ui/images/draw_16.png";
+			action = new ShowChapterAction(chapter,editorPanel,UITools.createImageIcon(icon));
 			b = new JToggleButton(action);
 			b.setToolTipText(chapter.getTitle());
             actions.add(action);

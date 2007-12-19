@@ -155,7 +155,7 @@ public class AbstractAmbitListEditor extends JPanel implements IAmbitEditor {
 			toolbar.setFloatable(true);
 			
 			
-			newAction = new AbstractActionWithTooltip("",UITools.createImageIcon("ambit/ui/images/add.gif"),"Add new item") {
+			newAction = new AbstractActionWithTooltip("",UITools.createImageIcon("ambit/ui/images/table_row_insert.png"),"Add new item") {
 				public void actionPerformed(ActionEvent e) {
 					addNewItem();
 
@@ -165,7 +165,7 @@ public class AbstractAmbitListEditor extends JPanel implements IAmbitEditor {
 			b.setFocusable(false);
 			toolbar.add(b);
 			newAction.setEnabled(isEditable());
-			deleteAction = new AbstractActionWithTooltip("",UITools.createImageIcon("ambit/ui/images/delete.gif"),"Delete selected items") {
+			deleteAction = new AbstractActionWithTooltip("",UITools.createImageIcon("ambit/ui/images/table_row_delete.png"),"Delete selected items") {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						deleteSelected();

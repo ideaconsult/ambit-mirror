@@ -39,7 +39,7 @@ public class AmbitListOneItemEditor extends AbstractAmbitListEditor implements I
 		JToolBar t = super.createJToolbar();
 		 currentIndexLabel = new JLabel();
 		AbstractActionWithTooltip action = new AbstractActionWithTooltip("",
-				UITools.createImageIcon("ambit/ui/images/nav_first.gif"),"First") {
+				UITools.createImageIcon("ambit/ui/images/resultset_first.png"),"First") {
 			public void actionPerformed(ActionEvent e) {
 				AmbitObject o = selectItem(0, isEditable());
 			}
@@ -49,7 +49,7 @@ public class AmbitListOneItemEditor extends AbstractAmbitListEditor implements I
 		t.add(b);
 		
 		action = new AbstractActionWithTooltip("",
-				UITools.createImageIcon("ambit/ui/images/nav_prev.gif"),"Previous item") {
+				UITools.createImageIcon("ambit/ui/images/resultset_previous.png"),"Previous item") {
 			public void actionPerformed(ActionEvent e) {
 				AmbitObject o =  selectItem(currentIndex-1, isEditable());
 			}
@@ -60,7 +60,7 @@ public class AmbitListOneItemEditor extends AbstractAmbitListEditor implements I
 		
 		t.add(currentIndexLabel);
 		action = new AbstractActionWithTooltip("",
-				UITools.createImageIcon("ambit/ui/images/nav_next.gif"),"Next item") {
+				UITools.createImageIcon("ambit/ui/images/resultset_next.png"),"Next item") {
 			public void actionPerformed(ActionEvent e) {
 				AmbitObject o =  selectItem(currentIndex+1, isEditable());
 			}
@@ -70,7 +70,7 @@ public class AmbitListOneItemEditor extends AbstractAmbitListEditor implements I
 		t.add(b);		
 		
 		action = new AbstractActionWithTooltip("",
-				UITools.createImageIcon("ambit/ui/images/nav_last.gif"),"Last item") {
+				UITools.createImageIcon("ambit/ui/images/resultset_last.png"),"Last item") {
 			public void actionPerformed(ActionEvent e) {
 				AmbitObject o = selectItem(list.size()-1, isEditable());
 				

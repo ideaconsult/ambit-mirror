@@ -77,7 +77,7 @@ public class DBCalculateDescriptorsAction extends BatchAction {
      */
     public DBCalculateDescriptorsAction(Object userData, JFrame mainFrame,
             String name) {
-        this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/descriptors.png"));
+        this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/chart_bar.png"));
     }
 
     /**

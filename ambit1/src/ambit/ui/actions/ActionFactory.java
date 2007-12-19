@@ -145,7 +145,7 @@ public class ActionFactory {
     }        
     public static void createDatabaseActions(ActionMap actions, Object userData, JFrame mainFrame) {
         actions.put("Import compounds",new DbBatchImportAction(userData,mainFrame));
-        actions.put("Import descriptors",new AmbitAction(userData,mainFrame,"Import descriptors",UITools.createImageIcon("ambit/ui/images/descriptors.png")) {
+        actions.put("Import descriptors",new AmbitAction(userData,mainFrame,"Import descriptors",UITools.createImageIcon("ambit/ui/images/chart_bar.png")) {
         	public void actionPerformed(ActionEvent arg0) {
         		JOptionPane.showMessageDialog(mainFrame,"Use \"Import compounds\" menu and select descriptors to be imported when asked.");
         	}
