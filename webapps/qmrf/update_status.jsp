@@ -1,6 +1,9 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:set var="thispage" value='submit_update.jsp'/>
 
@@ -116,17 +119,17 @@
 	<div class="help">
 	The following fields will be used to assign unique QMRF number:
 	<p>
-	4.2. Explicit algorithm 
+	4.2. Explicit algorithm
 	<p>
-	2.5. Model developer(s) and contact details 
+	2.5. Model developer(s) and contact details
 	<p>
-	1.3. Software coding the model 
+	1.3. Software coding the model
 	<p>
 	If data is not present in these fields the document will not be published!
 	</div>
-</td>	
+</td>
 
-</tr>	
+</tr>
 </table>
 </form>
 </c:if>

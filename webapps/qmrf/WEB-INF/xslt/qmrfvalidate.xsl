@@ -128,6 +128,7 @@
 
 <xsl:template match="model_authors">
 	<h3>
+	<img src="images/user_suit.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -199,6 +200,7 @@
 
 <xsl:template match="algorithm_explicit">
 	<h3>
+	<img src="images/chart_curve.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -216,6 +218,7 @@
 
 <xsl:template match="QSAR_software">
 	<h3>
+	<img src="images/application_form.png" alt="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
