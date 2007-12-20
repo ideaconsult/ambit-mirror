@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" contentType="text/xml;charset=utf-8" %>
+﻿<%@ page pageEncoding="UTF-8" contentType="text/xml;charset=utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -57,8 +57,10 @@
 		</div>
 
 		<table width="100%" border="0" bgcolor="${tablecolor}">
+		<c:if test="${empty param.noheader || (param.noheader eq 'false')}">		
 		<tr bgcolor="#DDDDDD">
 			<th>#</th>
+
 		<c:forEach var="columnName" items="${rs.columnNames}">
 				<c:set var="title">${param[columnName]}</c:set>
 				<c:choose>
@@ -98,7 +100,7 @@
 			</c:choose>
 
 		</tr>
-
+		</c:if>
 		<c:set var="counter" value="${param.page*param.pagesize}"/>
 		<c:forEach var="row" items="${rs.rows}">
 			<c:set var="counter" value="${counter+1}"/>
@@ -182,14 +184,30 @@
 								</c:url>
 							" ><img src="images/view.png" height="18" width="18" alt="View" border="0"/></a>
 
-							<a href="
-								<c:url value="${param.viewpage}">
-							  <c:param name="id" value="${row.idqmrf}"/>
-							  <c:param name="idstructure" value="${param.idstructure}"/>
-								<c:param name="viewmode" value="attachments"/>
-								</c:url>
-							" ><img src="images/attachment.png" alt="Attachments" border="0"/></a>
+							<c:catch var="exception_attachments">
+								<sql:query var="rsa" dataSource="jdbc/qmrf_documents">
+									select count(idqmrf) as c from attachments where idqmrf=?
+									<sql:param value="${row.idqmrf}"/>
+								</sql:query>
+								<c:forEach var="att_count" items="${rsa.rows}">
+									<c:choose>
+									<c:when test="${att_count.c > 0}">
+										<a href="
+											<c:url value="${param.viewpage}">
+										  <c:param name="id" value="${row.idqmrf}"/>
+										  <c:param name="idstructure" value="${param.idstructure}"/>
+											<c:param name="viewmode" value="attachments"/>
+											</c:url>
+										" ><img src="images/attachment.png" alt="Attachment(s) available (${att_count.c})" border="0"/></a>								
+									</c:when>										
+									<c:otherwise>
+										<img src="images/placeholder.png" alt="No attachments" border="0"/>
+									</c:otherwise>
+									</c:choose>
+								</c:forEach>
 
+							</c:catch>
+							
 
 							<c:if test="${row['version']>1}">
 								<a href="
@@ -198,7 +216,7 @@
 								<c:param name="history" value="true"/>
 								</c:url>
 							" ><img src="images/revision.png"  alt="Previous versions" border="0"/></a>
-		  				</c:if>
+		  					</c:if>
 				</td>
 				<td>
 
