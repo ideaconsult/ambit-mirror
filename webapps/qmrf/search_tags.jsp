@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/ambit" prefix="a" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:set var="thispage" value='search.jsp'/>
 
@@ -158,15 +160,18 @@
 		<c:if test="${!empty param.formula}">
 				Formula=${param.formula}&nbsp;
 		</c:if>
-			<c:if test="${!empty sessionScope.search_smiles}">
-								<img src="
-							<c:url value="image">
-								<c:param name="smiles" value="${sessionScope.search_smiles}"/>
-								<c:param name="weight" value="60"/>
-								<c:param name="height" value="60"/>
-							</c:url>
-							" border="0"/>
-			</c:if>
+			<c:choose>
+				<c:when test="${!empty sessionScope.search_smiles}">
+									<img src="
+								<c:url value="image.jsp">
+									<c:param name="mol" value="${sessionScope.search_smiles}"/>
+									<c:param name="molType" value="smiles"/>
+									<c:param name="weight" value="60"/>
+									<c:param name="height" value="60"/>
+								</c:url>
+								" border="0"/>
+				</c:when>
+			</c:choose>
 
 </h4>
 
@@ -243,8 +248,8 @@
 							</c:url>
 							" target="_blank">
 							<img src="
-							<c:url value="image">
-								<c:param name="id" value="${row.idsubstance}"/>
+							<c:url value="image.jsp">
+								<c:param name="idsubstance" value="${row.idsubstance}"/>
 								<c:param name="weight" value="100"/>
 								<c:param name="height" value="100"/>
 							</c:url>
@@ -270,8 +275,8 @@
 					<td width="50%">
 					<c:set var="qview">
 						<a href="<c:url value="view.jsp"><c:param name="id" value="${qdoc.idqmrf}"/></c:url>" target='_blank'>${qdoc.qmrf_number}</a>
-					</c:set>				
-					${qview}	
+					</c:set>
+					${qview}
 
 					<a href="
 						<c:url value="download.jsp">
@@ -294,15 +299,15 @@
 					  <c:param name="filetype" value="xls"/>
 						</c:url>
 					" ><img src="images/xls.png" " alt="MS Excel XLS file" border="0"/></a>
-					
+
 					<a href="
 						<c:url value="download.jsp">
-					  <c:param name="filetype" value="xml"/>						
+					  <c:param name="filetype" value="xml"/>
 					  <c:param name="id" value="${qdoc.idqmrf}"/>
 					  <c:param name="action" value="dbattachments"/>
 						</c:url>
 					"><img src="images/xml.png"  alt="QMRF XML" border="0"/></a>
-										
+
 					</td>
 					<td width="50%">
 					<c:choose>

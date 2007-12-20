@@ -87,12 +87,13 @@
 <td>
 
 <img src="
-	<c:url value="image">
+	<c:url value="image.jsp">
 	<c:param name="idstructure" value="${param.idstructure}"/>
 	<c:param name="weight" value="200"/>
 	<c:param name="height" value="200"/>
 	</c:url>
 	" border="0">
+
 </td>
 </tr>
 </table>
