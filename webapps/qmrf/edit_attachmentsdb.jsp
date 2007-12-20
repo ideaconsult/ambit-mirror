@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/xephyrus-fileupload"   prefix="fup" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
@@ -193,7 +193,9 @@ response.setHeader("Expires", "0");
 	                   you can assign it to a junk var with something like
 	                  <fup:write to="~/uploaded.jpg" var="silent" />
 	              --%>
-				<c:set var="attachment_path" value="${initParam['attachments-dir']}/qmrf${sessionScope.qmrf_document}_${filename}" scope="page"  />
+				
+				<c:set var="attachment_name" value="qmrf${sessionScope.qmrf_document}_${filename}" scope="page"  />
+				<c:set var="attachment_path" value="${initParam['attachments-dir']}/${attachment_name}" scope="page"  />
 				<fup:contents var="content"/>
 
 				<c:catch var='transactionException_insert'>
@@ -203,12 +205,12 @@ response.setHeader("Expires", "0");
 						<sql:update>
 							INSERT INTO attachments (idqmrf,name,format,type,description,original_name) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=?,format=?,type=?,description=?,original_name=?;
 								<sql:param value="${sessionScope.qmrf_document}"/>
-								<sql:param value="${attachment_path}"/>
+								<sql:param value="${attachment_name}"/>
 								<sql:param value="${fileext}"/>
 								<sql:param value="${pageScope.param['type']}"/>
 								<sql:param value="${pageScope.param['description']}"/>
 								<sql:param value="${remotePath}"/>
-								<sql:param value="${attachment_path}"/>
+								<sql:param value="${attachment_name}"/>
 								<sql:param value="${fileext}"/>
 								<sql:param value="${pageScope.param['type']}"/>
 								<sql:param value="${pageScope.param['description']}"/>

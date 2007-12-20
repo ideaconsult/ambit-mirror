@@ -5,8 +5,11 @@
 	int i = fname.lastIndexOf('/');
 	if (i > 0)
 		fname = fname.substring(i+1);
-	response.setHeader("Content-Disposition","attachment;filename="+fname);
-            String file = request.getParameter("name");
+		
+		ServletContext context = getServletContext();
+		String dir = context.getInitParameter("attachments-dir");
+        String file = dir + "/" + request.getParameter("name");
+        response.setHeader("Content-Disposition","attachment;filename="+fname);
 			InputStream in = null;
 			try {
 				in = new BufferedInputStream(new FileInputStream(file) );

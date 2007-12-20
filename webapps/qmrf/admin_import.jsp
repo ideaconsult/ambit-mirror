@@ -75,8 +75,8 @@ response.setHeader("Expires", "0");
 
 	<c:forEach var="row" items="${rs.rows}">
 		  <c:catch var='exception'>
-			Importing ${row.type}  ${row.name}
-			<a:importfile filename="${row.name}" datasetname="${row.name}" user="lri_admin" password="lri" database="ambit_qmrf"/>
+			Importing&nbsp;${row.type}&nbsp;${row.name}
+			<a:importfile filename="${initParam['attachments-dir']}/${row.name}" datasetname="${row.name}" user="lri_admin" password="lri" database="ambit_qmrf"/>
 
 
 							<sql:transaction dataSource="jdbc/qmrf_documents">
