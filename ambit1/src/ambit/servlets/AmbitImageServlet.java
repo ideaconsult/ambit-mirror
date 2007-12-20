@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import ambit.database.AmbitID;
 import ambit.database.data.DbCompoundImageTools;
-import ambit.ui.actions.search.GetMetabolizableCompoundsAction;
+import ambit.ui.data.CompoundImageTools;
 
 /**
  * Generates png image given a SMILES string. Parameters:
@@ -70,7 +70,7 @@ public class AmbitImageServlet extends AmbitServlet {
             try {
             	ImageIO.write(buffer, "png", os);
             } catch (Exception x) {
-                ImageIO.write(emptyImage(width, height, background, x.getMessage()), "png", os);
+                ImageIO.write(CompoundImageTools.emptyImage(width, height, background, x.getMessage()), "png", os);
             }
         } else {
             try {
@@ -79,11 +79,11 @@ public class AmbitImageServlet extends AmbitServlet {
             	buffer = tools.getImage(c, id);
             	pool.returnConnection(c);
             	if (buffer == null) 
-            			buffer = emptyImage(width, height, background, "");
+            			buffer = CompoundImageTools.emptyImage(width, height, background, "");
             	ImageIO.write(buffer, "png", os);
             } catch (Exception x) {
             	x.printStackTrace();
-                ImageIO.write(emptyImage(width, height, background, x.getMessage()), "png", os);
+                ImageIO.write(CompoundImageTools.emptyImage(width, height, background, x.getMessage()), "png", os);
             }
 
         
@@ -94,15 +94,7 @@ public class AmbitImageServlet extends AmbitServlet {
 		//System.out.print(this.getClass().getName());
 		//System.out.println("\tSTOP");
 	}
-	protected BufferedImage emptyImage(int width, int height, Color background, String message) {
-		BufferedImage buffer = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_RGB);
-        Graphics g = buffer.createGraphics();
-        g.setColor(background);
-        g.fillRect(0, 0, width, height);
-        g.drawString(message, 10,10);
-        return buffer;
-	}
+
 	protected BufferedImage generateTestImage(int width, int height,
 			Color background) {
 		String[] slices = new String[] { "60", "300" };

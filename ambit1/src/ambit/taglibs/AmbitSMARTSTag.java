@@ -25,32 +25,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit.taglibs;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import joelib.smarts.JOESmartsPattern;
-
-import org.openscience.cdk.interfaces.IMolecule;
-
-import ambit.data.molecule.Compound;
-import ambit.data.molecule.MoleculeTools;
 import ambit.data.molecule.SmartsQuery;
-import ambit.data.molecule.SmilesParserWithTimeout;
 
-public class AmbitSMARTSTag extends SimpleTagSupport {
-	public static final String type_mol = "mol";
-	public static final String type_cml = "cml";
-	public static final String type_smiles = "smiles";
-	protected String  mol = null;
-	protected String molType = "mol";
+public class AmbitSMARTSTag extends AmbitMolTag {
 	protected String  var ="match";
 	protected String smarts = "";
-	
-	
-
 	
 	@Override
 	public void doTag() throws JspException, IOException {
@@ -73,18 +57,7 @@ public class AmbitSMARTSTag extends SimpleTagSupport {
         	throw new JspException("Empty SMARTS");
 	}	
 
-	protected IMolecule getMolecule(String mol) throws Exception {
-		if (type_cml.equals(molType)) {
-			return Compound.readMolecule(mol);
-		} else if (type_mol.equals(molType)) { 
-			String s = URLDecoder.decode(mol,"UTF-8");
-		    return  MoleculeTools.readMolfile(s);
-		} else if (type_smiles.equals(molType)) {
-			SmilesParserWithTimeout p = new SmilesParserWithTimeout();
-			return p.parseSmiles(mol, 30000);
-    
-		} else throw new Exception("Invalid type "+molType);
-	}
+
 
 	public String getVar() {
 		return var;
@@ -94,21 +67,6 @@ public class AmbitSMARTSTag extends SimpleTagSupport {
 		this.var = var;
 	}
 
-	public String getMol() {
-		return mol;
-	}
-
-	public void setMol(String mol) {
-		this.mol = mol;
-	}
-
-	public String getMolType() {
-		return molType;
-	}
-
-	public void setMolType(String molType) {
-		this.molType = molType;
-	}
 
 	public String getSmarts() {
 		return smarts;

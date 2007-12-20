@@ -67,6 +67,8 @@ public class QMRFApplet extends JApplet implements Runnable,Observer {
 		 {"cleancatalogs",   "boolean",     "When saving as XML, include only catalog entries which have an idref reference"},
 		 {"external",   "url",     "URL to retrieve external catalogs in XML format as defined by <!ELEMENT Catalogs > in QMRF DTD schema"},
 		 {"xmlcontent",   "url",     "URL to retrieve XML content"},
+		 {"readonly-attachments",   "boolean",     "If true forbids adding/deleting attachments "},
+		 
 	 };
 	protected QMRFData qmrfData;
 	protected final String QmrfEditorVersion = "0.01";
@@ -118,10 +120,12 @@ public class QMRFApplet extends JApplet implements Runnable,Observer {
 		
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
+        /*
         JComponent toolBar = UITools.createToolbar(200,24);
         topPanel.add(QMRFGUITools.createMenuBar(toolBar, qmrfData,ct),BorderLayout.NORTH);
         topPanel.add(toolBar,BorderLayout.CENTER);
-        
+        */
+        topPanel.add(QMRFGUITools.createMenuBar(null, qmrfData,ct),BorderLayout.NORTH);
         
         mainPanel.add(topPanel,BorderLayout.NORTH);
         
@@ -178,7 +182,6 @@ public class QMRFApplet extends JApplet implements Runnable,Observer {
 
 	        		try {
 	        			String dataurl = getParameter("xmlcontent");
-	        			System.out.println(dataurl);
 	        			URL url = new URL(dataurl);
 
 	        			//qmrfData.getQmrf().transform_and_read(new InputStreamReader(url.openStream(),"UTF-8"),true);

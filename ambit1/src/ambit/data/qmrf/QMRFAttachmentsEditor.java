@@ -71,7 +71,7 @@ public class QMRFAttachmentsEditor extends QMRFSubChapterTextEditor {
         */
         JComponent[] c = new JComponent[a.getAttachments().length];
         for (int i=0; i < a.getAttachments().length; i++) {
-            c[i] = new QMRFAttachmentsBrowser(a.getAttachments()[i]);
+            c[i] = new QMRFAttachmentsBrowser(a.getAttachments()[i],!a.isReadOnly());
             c[i].setBorder(BorderFactory.createTitledBorder(a.getAttachments()[i].getTitle()));
             c[i].setPreferredSize(new Dimension(200,200));
 	        c[i].setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);

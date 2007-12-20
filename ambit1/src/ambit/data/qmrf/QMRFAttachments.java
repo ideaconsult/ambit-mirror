@@ -44,7 +44,7 @@ public class QMRFAttachments extends QMRFSubChapterText {
             {"attachment_documents","document","Other documents"} };
     protected QMRFAttachmentsList[] attachments;
 
-    public QMRFAttachments(String elementID) {
+	public QMRFAttachments(String elementID) {
         super(elementID);
         attachments = new QMRFAttachmentsList[attachments_id.length];
         for (int i=0; i < attachments_id.length; i++)

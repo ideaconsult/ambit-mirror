@@ -40,6 +40,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -63,6 +64,7 @@ import ambit.ui.ColorTableCellRenderer;
 import ambit.ui.UITools;
 
 public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
+	protected boolean attachment_editable = true;
     protected final JTable table;
     public transient static final String[] structures_extensions = {".sdf",".csv",".smi",".txt",".mol",".cml"};
 	public transient static final String[] structures_extensions_Description = 
@@ -75,12 +77,14 @@ public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
 		};	
     
     
-    protected QMRFAttachmentsBrowser(QMRFAttachmentsList attachments) {
+    protected QMRFAttachmentsBrowser(QMRFAttachmentsList attachments, boolean editable) {
         super();
+        setEnabled(editable);
+        setAttachment_editable(editable);
         setLayout(new BorderLayout());
         JToolBar toolbar = new JToolBar(JToolBar.VERTICAL);
         toolbar.setFloatable(true);
-        JButton button = new JButton(new AbstractAction("Add",UITools.createImageIcon("ambit/ui/images/attachment.png")) {
+        Action a = new AbstractAction("Add",UITools.createImageIcon("ambit/ui/images/attachment.png")) {
             public void actionPerformed(ActionEvent arg0) {
             	try {
             		addAttachment();
@@ -89,8 +93,13 @@ public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
             	}
                 
             }
-        });
-        button.setToolTipText("Click here to select a file and add it to the list");
+        };
+        a.setEnabled(editable);
+        JButton button = new JButton(a);
+        if (editable)
+        	button.setToolTipText("Click here to select a file and add it to the list");
+        else
+        	button.setToolTipText("Attachment adding not allowed.");
         toolbar.add(button);
 
         AbstractTableModel model = new QMRFAttachmentsTableModel(attachments);
@@ -107,7 +116,10 @@ public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
                 int row = table.rowAtPoint(e.getPoint());
                 int col = table.columnAtPoint(e.getPoint());
                 if (col==4) {
-                    ((QMRFAttachmentsTableModel)table.getModel()).delete(row);
+                	if (isAttachment_editable())
+                		((QMRFAttachmentsTableModel)table.getModel()).delete(row);
+                	else 
+                		JOptionPane.showMessageDialog(null,"Removing attachments not allowed!");	
                 } else if (col==5) {
                     QMRFAttachment q = ((QMRFAttachmentsTableModel)table.getModel()).getAttachments().get(row);
                     boolean text = false;
@@ -227,6 +239,12 @@ public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
         fc = null;
         return null;
 	}
+	public boolean isAttachment_editable() {
+		return attachment_editable;
+	}
+	public void setAttachment_editable(boolean attachment_editable) {
+		this.attachment_editable = attachment_editable;
+	}
 }
 
 class QMRFAttachmentsTableModel extends AbstractTableModel {
@@ -312,6 +330,7 @@ class QMRFAttachmentsTableModel extends AbstractTableModel {
          }
     }
     public QMRFAttachment delete(int row) {
+    	
         QMRFAttachment a = attachments.remove(row);
         fireTableStructureChanged();
         return a;

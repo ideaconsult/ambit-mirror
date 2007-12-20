@@ -278,4 +278,13 @@ public class CompoundImageTools {
 	public void setDefaultImage(BufferedImage defaultImage) {
 		this.defaultImage = defaultImage;
 	}
+	public static BufferedImage emptyImage(int width, int height, Color background, String message) {
+		BufferedImage buffer = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics g = buffer.createGraphics();
+        g.setColor(background);
+        g.fillRect(0, 0, width, height);
+        g.drawString(message, 10,10);
+        return buffer;
+	}	
 }

@@ -52,7 +52,7 @@ public class AmbitBodyTag extends BodyTagSupport {
 
         try
         {
-        		// Ask the body content to write itself out to the response.
+      		// Ask the body content to write itself out to the response.
             body.writeOut(body.getEnclosingWriter());
         }
         catch (IOException exc)

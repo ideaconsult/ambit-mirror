@@ -40,7 +40,7 @@ import ambit.data.IAmbitEditor;
 import ambit.io.XMLException;
 
 public class AbstractQMRFChapter extends AmbitObject {
-	
+	protected boolean readOnly = false;
     protected QMRFAttributes attributes;    
 
     public AbstractQMRFChapter() {
@@ -170,5 +170,11 @@ public class AbstractQMRFChapter extends AmbitObject {
         attributes.put(attribute, value);
         setModified(true);
     }
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
 }
 

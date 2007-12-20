@@ -32,7 +32,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ambit.data.AmbitList;
-import ambit.data.AmbitListChanged;
 import ambit.data.AmbitObjectChanged;
 import ambit.data.IAmbitEditor;
 import ambit.data.IAmbitObjectListener;
@@ -41,8 +40,7 @@ import ambit.io.XMLException;
 public class QMRFChapter extends AbstractQMRFChapter implements InterfaceQMRF, IAmbitObjectListener {
 	protected AmbitList subchapters;
     protected Hashtable<String, Catalog> catalogs;
-    //ArrayList<AbstractQMRFChapter>
-	
+    
 	public synchronized Hashtable<String, Catalog> getCatalogs() {
         return catalogs;
     }
@@ -100,9 +98,9 @@ public class QMRFChapter extends AbstractQMRFChapter implements InterfaceQMRF, I
             	else
             		if ("training_set_data".equals(name) || "validation_set_data".equals(name))
             			subchapter = new QMRFSubChapterDataset(name);
-            		else if ("attachments".equals(name))
+            		else if ("attachments".equals(name)) {
                         subchapter = new QMRFAttachments(name);
-                    else if ("model_endpoint".equals(name)) {
+            		} else if ("model_endpoint".equals(name)) {
                         	subchapter = new QMRFSubChapterReference(name);
                         	((QMRFSubChapterReference) subchapter).setCatalog(
                                     catalogs.get("endpoints_catalog"));

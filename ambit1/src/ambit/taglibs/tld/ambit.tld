@@ -294,6 +294,38 @@
         </attribute>                     
         
      <body-content>empty</body-content>
+
    </tag>
    
+   <tag>
+   		<name>image</name>
+   		<tag-class>ambit.taglibs.AmbitImageTag</tag-class>
+        <attribute>
+            <name>mol</name>
+            <required>yes</required>
+            <fragment>true</fragment>
+        </attribute>        
+        <attribute>
+            <name>molType</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>    
+        <attribute>
+            <name>width</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>                     
+        <attribute>
+            <name>height</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>           
+        <attribute>
+            <name>bgcolor</name>
+            <required>no</required>
+        </attribute>                     
+        
+     <body-content>empty</body-content>
+
+   </tag>   
 </taglib>

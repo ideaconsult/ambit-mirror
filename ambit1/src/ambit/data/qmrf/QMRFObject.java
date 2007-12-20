@@ -116,6 +116,7 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
     protected String source = "New";
     protected QMRFChapter selectedChapter = null;
     protected boolean saveSelectedOnly = false;
+    protected boolean attachmentReadOnly = false;
 	
 	protected static final String[] attrNames = {"name","version","author","date","contact","email","url"};
 	protected String[] attrValues = {"(Q)SAR Model Reporting Format",
@@ -368,6 +369,12 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
                     	chapter.setEditable(adminUser);
                     else 
                     	chapter.setEditable(true);
+                    AmbitList subchapters = chapter.getSubchapters();
+                    for (int j=0; j < subchapters.size();j++) {
+                    	if (subchapters.getItem(j) instanceof QMRFAttachments)
+                    		((QMRFAttachments)subchapters.getItem(j)).setReadOnly(isAttachmentReadOnly());	
+                    }
+                    
                     		
                     addChapter(chapter);
                 }
@@ -700,7 +707,11 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
 
         Option catalog_cleanup   = OptionBuilder.withLongOpt("cleancatalogs")
         .withDescription(  "When saving as XML, include only catalog entries which have an idref reference")
-        .create( "c" );          
+        .create( "c" );
+        
+        Option readonlyAttachments   = OptionBuilder.withLongOpt("readonly-attachments")
+        .withDescription(  "Forbids adding/deleting attachments")
+        .create( "r" );                  
         
         options.addOption(dtdschema);
         options.addOption(content);
@@ -709,6 +720,7 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
         options.addOption(endpoints);
         options.addOption(catalog_cleanup);
         options.addOption(ttf);
+        options.addOption(readonlyAttachments);
         
 
         return options;
@@ -752,6 +764,11 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
         if( line.hasOption( "t" ) ) {
         	setTtfFontUrl(line.getOptionValue( "t" ));
         }
+        if( line.hasOption( "r" ) ) {
+        	setAttachmentReadOnly(true);
+        }   else 
+        	setAttachmentReadOnly(false);
+        
         if( line.hasOption( "u" ) ) {
         	adminUser = "admin".equals(line.getOptionValue( "u" ));
         }        
@@ -875,6 +892,12 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
 		if (ttfFontUrl.indexOf("http://") != -1) {
 			System.out.println("font have to be retrieved from URL '"+ttfFontUrl+"'");
 		}	
+	}
+	public boolean isAttachmentReadOnly() {
+		return attachmentReadOnly;
+	}
+	public void setAttachmentReadOnly(boolean attachmentReadOnly) {
+		this.attachmentReadOnly = attachmentReadOnly;
 	}
 }
 
