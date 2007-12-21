@@ -327,5 +327,37 @@
         
      <body-content>empty</body-content>
 
-   </tag>   
+   </tag>
+   
+   <tag>
+     	<name>fileproperties</name>
+     		<tag-class>ambit.taglibs.AmbitFilePropertiesTag</tag-class>
+				<variable>
+				<name-from-attribute>properties</name-from-attribute>
+				<variable-class>java.util.Hashtable</variable-class>
+				<declare>true</declare>
+				<scope>AT_END</scope>
+				<description>Structure properties</description>
+				</variable>
+							
+        <attribute>
+            <name>recordsToRead</name>
+            <required>no</required>
+			<fragment>true</fragment>
+            
+        </attribute>
+            
+        <attribute>
+            <name>params</name>
+            <required>no</required>
+        </attribute>
+        <attribute>
+            <name>filename</name>
+            <required>yes</required>
+            <fragment>true</fragment>
+        </attribute>
+        
+
+     <body-content>empty</body-content>
+   </tag>      
 </taglib>
