@@ -115,6 +115,14 @@ You can view and change your registration details under the <u>My profile</u> ta
 <a href="help.html" target="_blank">Help</a>
 </blockquote>
 
+<h3>How to create an QMRF Document?</h3>
+<blockquote>
+<ul>
+<li>log in into QMRF Inventory and use the <i>New document</i> tab;
+<li>by <a href="http://ambit.acad.bg/qmrf/jws/qmrfeditor.jnlp">QMRF editor</a>&nbsp;: once started, it will create shortcut on your desktop and can be started later even offline.
+</ul>
+</blockquote>
+
 <h3>Most recent QMRF documents</h3>
 
 
