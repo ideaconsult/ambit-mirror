@@ -96,7 +96,7 @@ function getXML(){
 
       <c:set var="dataurl">
       	<c:url value="${u}/download_xml.jsp"> <c:param name="id" value="${row.idqmrf}"/>
-					<c:param name="action" value="noattachments"/>
+
 				</c:url>
     	</c:set>
 
@@ -115,7 +115,7 @@ function getXML(){
 				<param  name="external" value="${external}"/>
 				<param name="user" value="user"/>
 				<param name="cleancatalogs" value="true"/>
-				<param name="r" value="true"/>
+				<param name="readonly-attachments" value="true"/>
 			Applet not supported by browser.
 		</applet>
 		</td>
