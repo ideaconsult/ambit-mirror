@@ -302,7 +302,7 @@ response.setHeader("Expires", "0");
 		</c:set>
 		<a href="
 		<c:url value="#algorithms_form"/>
-			"><img src="images/chart_curve.png" border="0" alt="Click here to go to the algorithm form and retriebe algorithm number"/></a>
+			"><img src="images/chart_curve.png" border="0" alt="Algorithm picture" title="Click here to go to the algorithm form and retrieve algorithm number"/></a>
 		${aChapter}<xsl:text>.</xsl:text>${aName}
 	<x:forEach select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/algorithm_ref">
 		<x:out select="id(@idref)/@name"/>
@@ -313,7 +313,7 @@ response.setHeader("Expires", "0");
 <td bgcolor="#D6DFF7" >
 			<a href="
 		<c:url value="#authors_form"/>
-			"><img src="images/user_suit.png" border="0" alt="Click here to go to the model developer' form and retrieve the model developer number"/></a>
+			"><img src="images/user_suit.png" border="0" alt="user icon" title="Click here to go to the model developer' form and retrieve the model developer number"/></a>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@chapter"/>
 		<xsl:text>.</xsl:text>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@name"/>
@@ -326,7 +326,7 @@ response.setHeader("Expires", "0");
 		<a href="
 		<c:url value="#software_form">
 		</c:url>
-		"><img src="images/application_form.png"  border="0" alt="Click here to go to the model software form and retrieve software number"/></a>
+		"><img src="images/application_form.png"  border="0" alt="software icon" title="Click here to go to the model software form and retrieve software number"/></a>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@chapter"/>
 		<xsl:text>.</xsl:text>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_software/@name"/>
@@ -356,7 +356,7 @@ Q
 		<c:if test="${rs.rowCount eq 0}">
 				<a href="
 		<c:url value="#algorithms_form"/>
-			"><img src="images/warning.png" alt="Algorithm not defined! User Retrieve Algorithm Number." border="0"/></a>
+			"><img src="images/warning.png" alt="warning sign" title="Algorithm not defined! User Retrieve Algorithm Number." border="0"/></a>
 			<input type="text" size="5" name="A"/>-
 		</c:if>
 
@@ -372,7 +372,7 @@ Q
 		<c:if test="${rs.rowCount eq 0}">
 		<a href="
 		<c:url value="#authors_form"/>
-			"><img src="images/warning.png" alt="Model developer not defined! Use Retrieve Author Number." border="0"/></a>
+			"><img src="images/warning.png" alt="warning sign" title="Model developer not defined! Use Retrieve Author Number." border="0"/></a>
 			<input type="text" size="5" name="B"/>-
 		</c:if>
 
@@ -388,7 +388,7 @@ Q
 		<c:if test="${rs.rowCount eq 0}">
 				<a href="
 		<c:url value="#software_form"/>
-			"><img src="images/warning.png" alt="Software not defined! Use Retrieve Software Number." border="0"/></a>
+			"><img src="images/warning.png" alt="warning sign" title="Software not defined! Use Retrieve Software Number." border="0"/></a>
 			<input type="text" size="5" name="D"/>-
 		</c:if>
 
@@ -401,7 +401,7 @@ Q
 			<input type="text" name="C" size="5" value="${row.version}" readonly="true"/>
 		</c:forEach>
 		<c:if test="${rs.rowCount eq 0}">
-			<img src="images/warning.png" alt="not defined!"/><input type="text" size="5" name="C" value="1"/>-
+			<img src="images/warning.png" alt="warning sign" title="not defined!"/><input type="text" size="5" name="C" value="1"/>-
 		</c:if>
 
 

@@ -67,10 +67,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="author_ref">
-			<img src="images/ok.png" alt="QMRF author entry found."/>
+			<img src="images/ok.png" alt="OK" title="QMRF author entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No QMRF author available!"/>
+			<img src="images/warning.png" alt="warning" title="No QMRF author available!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -82,16 +82,16 @@
 <xsl:template match="model_authors">
 
 	<h3>
-	<img src="images/user_suit.png" alt="This field is mandatory!" border="0"/>
+	<img src="images/user_suit.png" alt="user icon" title="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="author_ref">
-			<img src="images/ok.png" alt="Model author entry found."/>
+			<img src="images/ok.png" alt="OK" title="Model author entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No model author available!"/>
+			<img src="images/warning.png" alt="warning" title="No model author available!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -116,10 +116,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="software_ref">
-			<img src="images/ok.png" alt="Applicability domain software entry found."/>
+			<img src="images/ok.png" alt="OK" title="Applicability domain software entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No applicability domain software defined!"/>
+			<img src="images/warning.png" alt="warning" title="No applicability domain software defined!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -133,10 +133,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="software_ref">
-			<img src="images/ok.png" alt="Description generation software entry found."/>
+			<img src="images/ok.png" alt="OK" title="Description generation software entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No descriptor generation software defined!"/>
+			<img src="images/warning.png" alt="warning" title="No descriptor generation software defined!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -152,10 +152,10 @@
 
 		<xsl:choose>
 		<xsl:when test="endpoint_ref">
-			<img src="images/ok.png" alt="Endpoint entry found."/>
+			<img src="images/ok.png" alt="OK" title="Endpoint entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No endpoint defined!"/>
+			<img src="images/warning.png" alt="warning" title="No endpoint defined!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -176,16 +176,16 @@
 
 <xsl:template match="algorithm_explicit">
 	<h3>
-	<img src="images/chart_curve.png" alt="This field is mandatory!" border="0"/>
+	<img src="images/chart_curve.png" alt="algorithm icon" title="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="algorithm_ref">
-			<img src="images/ok.png" alt="Algorithm entry found."/>
+			<img src="images/ok.png" alt="OK" title="Algorithm entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No algorithm defined"/>
+			<img src="images/warning.png" alt="warning" title="No algorithm defined"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -204,16 +204,16 @@
 
 <xsl:template match="QSAR_software">
 	<h3>
-	<img src="images/application_form.png" alt="This field is mandatory!" border="0"/>
+	<img src="images/application_form.png" alt="software icon" title="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="software_ref">
-			<img src="images/ok.png" alt="QSAR software entry found."/>
+			<img src="images/ok.png" alt="OK" title="QSAR software entry found."/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png" alt="No QSAR software defined!"/>
+			<img src="images/warning.png" alt="warning" title="No QSAR software defined!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -255,7 +255,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png" alt="Empty name!"/>
+			<img src="images/warning.png" alt="warning" title="Empty name!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -325,7 +325,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@definition=''">
-			<img src="images/warning.png" alt="Empty definition!"/>
+			<img src="images/warning.png" alt="warning" title="Empty definition!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -366,7 +366,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png" alt="Empty endpoint group!"/>
+			<img src="images/warning.png" alt="warning" title="Empty endpoint group!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -396,7 +396,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png" alt="Empty endpoint name!"/>
+			<img src="images/warning.png" alt="warning" title="Empty endpoint name!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -435,7 +435,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png" alt="Empty name!"/>
+			<img src="images/warning.png" alt="warning" title="Empty name!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -475,7 +475,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@email=''">
-			<img src="images/warning.png" alt="Empty email!"/>
+			<img src="images/warning.png" alt="warning" title="Empty email!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>

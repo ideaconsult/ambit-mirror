@@ -128,16 +128,16 @@
 
 <xsl:template match="model_authors">
 	<h3>
-	<img src="images/user_suit.png" alt="This field is mandatory!" border="0"/>
+	<img src="images/user_suit.png" alt="user icon" title="This field is mandatory!" border="0"/>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="author_ref">
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok" title="Author entry found"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png"/>
+			<img src="images/warning.png"  alt="warning" title="No author entries!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -152,10 +152,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="software_ref">
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok" title="Software entry found"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="No software entries!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -169,10 +169,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="software_ref">
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok" title="Software entry found"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="No software entries!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -187,10 +187,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="endpoint_ref">
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok" title="Endpoint entry found"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="No endpoint entries!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -206,10 +206,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="algorithm_ref">
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok" title="Algorithm entry found"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="No algorithm entries!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -224,10 +224,10 @@
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
 		<xsl:choose>
 		<xsl:when test="software_ref">
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok" title="Software entry found"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="No software name entries!"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</h3>
@@ -257,10 +257,10 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="Empty software name entry!"/>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="images/ok.png"/>
+			<img src="images/ok.png" alt="ok"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</td>
@@ -282,7 +282,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@definition=''">
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="Empty algorithm definition entry!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -308,7 +308,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="Empty endpoint name entry!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -339,7 +339,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@name=''">
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="Empty author name entry!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>
@@ -359,7 +359,7 @@
 	<td bgcolor="#FFFFFF">
 		<xsl:choose>
 		<xsl:when test="id(@idref)/@email=''">
-			<img src="images/warning.png"/>
+			<img src="images/warning.png" alt="warning" title="Empty author email entry!"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<img src="images/ok.png"/>

@@ -71,7 +71,7 @@
 					  <c:param name="name" value="${row.name}"/>
 						</c:url>
 					">
-					<img src="images/download.gif" height="16" width="16" alt="Download attachment" border="0"/></a>
+					<img src="images/download.gif" height="16" width="16" alt="download.gif" title="Download attachment" border="0"/></a>
 
 
 	    	<c:if test="${(row.status eq 'draft' || row.status eq 'returned for revision') && (row.imported eq '0') }" >
@@ -82,7 +82,7 @@
 						<c:param name="idattachment" value="${row.idattachment}"/>
 						<c:param name="action" value="delete"/>
 						</c:url>
-					" ><img src="images/delete.png" height="16" width="16" alt="Delete attachment" border="0"/></a>
+					" ><img src="images/delete.png" height="16" width="16" alt="delete.png" title="Delete attachment" border="0"/></a>
 
 
 	    	</c:if>
@@ -93,7 +93,7 @@
 					  <c:param name="id" value="${row.idqmrf}"/>
 						<c:param name="idattachment" value="${row.idattachment}"/>
 						</c:url>
-					"><img src="images/import.png" height="16" width="16" alt="Import structures" border="0"/></a>
+					"><img src="images/import.png" height="16" width="16" alt="import.png" title="Import structures from the selected attachment into structure searchable database" border="0"/></a>
 					</c:if>
 
 	    		<c:if test="${row.imported eq 'true'}" >
@@ -103,7 +103,7 @@
 					  <c:param name="idattachment" value="${row.idattachment}"/>
 						<c:param name="changedirection" value="false"/>
 						</c:url>
-					" target="_blank"><img src="images/benzene.gif" height="16" width="16" alt="View structures" border="0"/></a>
+					" target="_blank"><img src="images/benzene.gif" height="16" width="16" alt="benzene.gif" title="View structures" border="0"/></a>
 					</c:if>
 
 	    	</td>

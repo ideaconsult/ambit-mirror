@@ -115,6 +115,7 @@ function getXML(){
 				<param  name="external" value="${external}"/>
 				<param name="user" value="user"/>
 				<param name="cleancatalogs" value="true"/>
+				<param name="r" value="true"/>
 			Applet not supported by browser.
 		</applet>
 		</td>

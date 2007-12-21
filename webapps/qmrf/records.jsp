@@ -57,7 +57,7 @@
 		</div>
 
 		<table width="100%" border="0" bgcolor="${tablecolor}">
-		<c:if test="${empty param.noheader || (param.noheader eq 'false')}">		
+		<c:if test="${empty param.noheader || (param.noheader eq 'false')}">
 		<tr bgcolor="#DDDDDD">
 			<th>#</th>
 
@@ -182,7 +182,7 @@
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="idstructure" value="${param.idstructure}"/>
 								</c:url>
-							" ><img src="images/view.png" height="18" width="18" alt="View" border="0"/></a>
+							" ><img src="images/view.png" height="18" width="18" alt="View" title="View" border="0"/></a>
 
 							<c:catch var="exception_attachments">
 								<sql:query var="rsa" dataSource="jdbc/qmrf_documents">
@@ -192,22 +192,24 @@
 								<c:forEach var="att_count" items="${rsa.rows}">
 									<c:choose>
 									<c:when test="${att_count.c > 0}">
+										<c:set var="title" value="Attachment(s) available (${att_count.c})"/>
 										<a href="
 											<c:url value="${param.viewpage}">
 										  <c:param name="id" value="${row.idqmrf}"/>
 										  <c:param name="idstructure" value="${param.idstructure}"/>
 											<c:param name="viewmode" value="attachments"/>
 											</c:url>
-										" ><img src="images/attachment.png" alt="Attachment(s) available (${att_count.c})" border="0"/></a>								
-									</c:when>										
+										" ><img src="images/attachment.png" alt="${title}" title="${title}" border="0"/></a>
+									</c:when>
 									<c:otherwise>
-										<img src="images/placeholder.png" alt="No attachments" border="0"/>
+										<c:set var="title" value="No attachments"/>
+										<img src="images/placeholder.png" alt="${title}" title="${title}" border="0"/>
 									</c:otherwise>
 									</c:choose>
 								</c:forEach>
 
 							</c:catch>
-							
+
 
 							<c:if test="${row['version']>1}">
 								<a href="
@@ -215,7 +217,7 @@
 							  <c:param name="id" value="${row.idqmrf}"/>
 								<c:param name="history" value="true"/>
 								</c:url>
-							" ><img src="images/revision.png"  alt="Previous versions" border="0"/></a>
+							" ><img src="images/revision.png"  alt="Previous versions" title="Previous versions" border="0"/></a>
 		  					</c:if>
 				</td>
 				<td>
@@ -225,14 +227,14 @@
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="html"/>
 								</c:url>
-							"><img src="images/html.png"  alt="HTML file" border="0"/></a>
+							"><img src="images/html.png"  alt="html.png" title="Download QMRF document as HTML file" border="0"/></a>
 
 							<a href="
 								<c:url value="download.jsp">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="pdf"/>
 								</c:url>
-							"><img src="images/pdf.png" border="0" alt="Adobe PDF"/></a>
+							"><img src="images/pdf.png" border="0" alt="pdf.png" title="Download QMRF document as Adobe PDF" /></a>
 
 
 							<a href="
@@ -240,7 +242,7 @@
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="xls"/>
 								</c:url>
-							" ><img src="images/xls.png" " alt="MS Excel XLS file" border="0"/></a>
+							" ><img src="images/xls.png" " alt="xls.png" title="Download QMRF document as MS Excel XLS file" border="0"/></a>
 
 							<a href="
 								<c:url value="download.jsp">
@@ -248,7 +250,7 @@
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="action" value="dbattachments"/>
 								</c:url>
-							"><img src="images/xml.png"  alt="QMRF XML" border="0"/></a>
+							"><img src="images/xml.png"  alt="xml.png" title="Download QMRF document as XML file" border="0"/></a>
 
 				 </td>
 				   <td>
