@@ -22,7 +22,6 @@ import ambit.io.FileInputState;
 import ambit.io.FileOutputState;
 import ambit.io.FileServices;
 import ambit.io.MyIOUtilities;
-import ambit.ranking.DataCoverageAtomEnvironmentRank;
 import ambit.ui.domain.ADDataSetDialog;
 
 
@@ -348,10 +347,19 @@ public class DataModule extends DefaultSharedDbData{
 			break;			
 		}
 		case (ADomainMethodType._modeATOMENVIRONMENTRANK): {
+		      try {
+		          Class classDefinition = Class.forName("ambit.ranking.DataCoverageAtomEnvironmentRank");
+		          method = (DataCoverage)classDefinition.newInstance();
+		      } catch (Exception e) {
+		    	  method = null;
+		    	  throw new AmbitException(e);
+		      }
+		      /*
 			method = new DataCoverageAtomEnvironmentRank(ADomainMethodType._modeATOMENVIRONMENTRANK);
 	        //  Object obj = AmbitObject.createObject("ambit.ranking.DataCoverageAtomEnvironmentRank.class");
 	          //if (obj != null) method = (DataCoverage)obj;
-			break;			
+			break;
+			*/			
 		}				
 	
 		}

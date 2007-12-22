@@ -26,7 +26,7 @@
 	<property name="sourcedist.dir" value="sourcedist" />
 
 	<!-- Used when signing jars (Thawte freemail cert) -->
-    <property name="keystore" value="../../../certificates/keystore/keystore.ks" />
+    <property name="keystore" value="../certificates/keystore/keystore.ks" />
 
     <!-- CLASSPATH -->
     <path id="project.class.path">
