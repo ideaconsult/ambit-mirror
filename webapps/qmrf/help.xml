@@ -64,6 +64,19 @@
 				If one of the fields is missing, return the document to the author to insert the missing data.
 				</help>
 		</chapter>
+		
+		<chapter anchor="verify_author" name="Verify if an user is a member of QMRF and model authors list.">
+				<help>
+				Verifies if an author with the same e-mail address as for the user is a member of QMRF documents and models authors list.
+				If not, provides a form to add a new author to the list.
+				</help>
+				<help>
+				The author names are usually appended when publishing documents into QMRF inventory.
+				</help>
+				<help>
+				The author list will be available as a lookup for relevant fields within QMRF editor.
+				</help>				
+		</chapter>		
 </chapter>
 </chapter>
 </qmrf_help>

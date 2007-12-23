@@ -21,12 +21,15 @@
 </sql:update>		
 
 <c:if test="${updateCount < 1}">
+		<c:catch var = "err">
 		<sql:update var="rs" dataSource="jdbc/qmrf_documents">
-				INSERT INTO u_hits VALUES (?,?,?, 1,now(),now())
+				INSERT INTO u_hits VALUES (?,?,substring(?,1,128), 1,now(),now())
 				<sql:param value="${this_page}"/>	
 				<sql:param value="${ip}"/>		
 				<sql:param value="${calling_page}"/>			
 		</sql:update>		
+		</c:catch>
+		${err}
 </c:if>	
 
 		<sql:query var="rs" dataSource="jdbc/qmrf_documents">

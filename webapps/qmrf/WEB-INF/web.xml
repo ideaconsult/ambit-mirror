@@ -92,6 +92,8 @@
 			<url-pattern>/import.jsp</url-pattern>
 			<url-pattern>/download_users.jsp</url-pattern>
 
+			<url-pattern>/author.jsp</url-pattern>
+			
 	  </web-resource-collection>
 
 	  <auth-constraint>

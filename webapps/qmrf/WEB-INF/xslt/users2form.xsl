@@ -28,7 +28,7 @@
 	<tr bgcolor="#D6DFF7">
 
 	<th>
-
+	<img src="images/user.png" border="0"/>
 	User name
 	</th>
 	<td>
@@ -40,6 +40,9 @@
 				</a>
 
 	</td>
+	<th width="5%" bgcolor="#FFFFFF" rowspan="14"></th>
+	<th bgcolor="#C5CEE6"></th>
+	
 	</tr>
 
 	<tr bgcolor="#D6DFF7">
@@ -51,6 +54,10 @@
 
   		<xsl:value-of select="@email"/>
 		</td>
+		<td rowspan="1">
+	<a href="author.jsp">Verify</a> if a member of QMRF and model authors list.
+	<a href="help.jsp?anchor=verify_author" target="help"><img src="images/help.png" alt="help" title="What is QMRF and model authors list?" border="0"/></a>
+	</td>
 	</tr>
 	<tr bgcolor="#D6DFF7">
 	<th>
@@ -144,6 +151,7 @@
 	</td>
 	</tr>
 </form>
+<tr height="20"></tr>
 <form method="POST" name="profile_form_@user_name" >
 	<tr bgcolor="#D6DFF7">
 	<th>
@@ -258,9 +266,12 @@
 	</td>
 	</tr>
 </form>
-<tr ></tr>
 
-	</table>
+
+
+
+
+</table>
 
 
 </xsl:template>
