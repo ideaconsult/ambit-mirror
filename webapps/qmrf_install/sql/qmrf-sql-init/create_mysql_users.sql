@@ -9,7 +9,7 @@ GRANT SELECT ON `ambit\_qmrf`.* TO 'guest'@'localhost';
 
 -- Grants for qmrf@localhost
 GRANT USAGE ON *.* TO 'qmrf'@'localhost' IDENTIFIED BY PASSWORD '*E2D5CC2802B4A31B95BD72ED4FE530BAF2E0DAA1';
-GRANT SELECT, INSERT, UPDATE ON `tomcat\_users`.* TO 'qmrf'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `tomcat\_users`.* TO 'qmrf'@'localhost';
 GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `qmrf\_documents`.* TO 'qmrf'@'localhost';
 GRANT SELECT ON `ambit\_qmrf`.* TO 'qmrf'@'localhost';
 
