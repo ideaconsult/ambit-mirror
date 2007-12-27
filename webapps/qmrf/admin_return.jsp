@@ -105,7 +105,7 @@ Dear ${row.title}&nbsp;${row.firstname}&nbsp;${row.lastname},
 <p>
 Your QMRF document <x:out escapeXml="true" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/> has been returned to you for revision.
 <p>
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
+QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>

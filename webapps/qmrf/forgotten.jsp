@@ -78,7 +78,7 @@ Dear ${row.title} ${row.firstname} ${row.lastname},
 Your username: ${row.user_name}
 Your password has been reset to ${newpass}. You may change the password via My profile tab.
 
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
+QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>

@@ -19,12 +19,12 @@
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
+<c:if test="${empty sessionScope['iseditor']}" >
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin']=='false'}" >
-  <c:redirect url="/user.jsp"/>
+<c:if test="${sessionScope['iseditor']=='false'}" >
+  <c:redirect url="/index.jsp"/>
 </c:if>
 
 <jsp:include page="query_settings.jsp" flush="true"/>
@@ -59,7 +59,6 @@
 				<sql:param value="${param.reviewer}"/>
 			</sql:update>
 		</c:catch>
-		${updateCount}
 		<c:if test="${updateCount > 0}">
 			<sql:query var="rs" dataSource="jdbc/qmrf_documents">
 					select title,firstname,lastname,email from users where user_name=?
@@ -75,9 +74,9 @@
 					<mt:message>
 Dear ${row.title} ${row.firstname} ${row.lastname},
 
-You have been assigned as a reviewer of a QMRF Document ${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}/admin_review.jsp?id=${param.id}.
+You have been assigned as a reviewer of a QMRF Document ${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}/admin_review.jsp?id=${param.id}.
 
-You are invited to log in into QMRF Inventory at ${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}.
+You are invited to log in into QMRF Inventory at ${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}.
 
 QMRF Inventory
 					</mt:message>
