@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -6,17 +6,23 @@
 
 <c:set var="thispage" value='edit.jsp'/>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_user'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
 
 <c:if test="${empty sessionScope['username']}" >
   <c:redirect url="protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
-  <c:redirect url="protected.jsp"/>
+<c:if test="${empty sessionScope['isauthor']}" >
+  <c:redirect url="index.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin'] eq 'true'}" >
-  <c:redirect url="admin.jsp"/>
+<c:if test="${sessionScope['isauthor'] eq 'false'}" >
+  <c:redirect url="index.jsp"/>
 </c:if>
 
 <c:if test="${empty param.id}" >
@@ -44,10 +50,9 @@ function getXML(){
 
 -->
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuuser.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 

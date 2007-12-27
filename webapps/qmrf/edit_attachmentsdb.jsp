@@ -14,20 +14,23 @@ response.setHeader("Expires", "0");
 
 <c:set var="thispage" value='edit_attachmentsdb.jsp'/>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_user'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
+
 <c:catch var="exception">
 		<c:if test="${empty sessionScope['username']}" >
 		  <c:redirect url="protected.jsp"/>
 		</c:if>
 
-		<c:if test="${empty sessionScope['isadmin']}" >
+		<c:if test="${empty sessionScope['isauthor']}" >
 
 		  <c:redirect url="protected.jsp"/>
 		</c:if>
-<!--
-		<c:if test="${sessionScope['isadmin'] eq 'true'}" >
-		  <c:redirect url="admin.jsp"/>
-		</c:if>
--->
+
 </c:catch>
 <c:if test="${not empty exception}">
   <c:redirect url="index.jsp"/>
@@ -48,10 +51,10 @@ response.setHeader("Expires", "0");
 </c:if>
 
 <c:if test="${empty sessionScope['qmrf_document']}" >
-	<c:if test="${sessionScope['isadmin'] eq 'true'}" >
-		  <c:redirect url="admin.jsp"/>
-		</c:if>
-  <c:redirect url="user.jsp"/>
+	<c:if test="${sessionScope['isauthor'] eq 'false'}" >
+		  <c:redirect url="index.jsp"/>
+	</c:if>
+	<c:redirect url="user.jsp"/>
 </c:if>
 
 
@@ -68,10 +71,9 @@ response.setHeader("Expires", "0");
   </head>
   <body>
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuuser.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 <c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>

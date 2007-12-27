@@ -24,15 +24,8 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="welcome"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
-
-
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="welcome" />
-</jsp:include>
-
-
 
 <c:if test="${!empty sessionScope['username']}" >
 		<c:catch var="exception">

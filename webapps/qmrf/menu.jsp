@@ -1,7 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<%@ include file="header.html"%>
-
+<jsp:include page="header.html" flush="true"/>
 <c:if test="${empty sessionScope.tablecolor}">
 	<c:set var="tablecolor" value='#FFFFFF' scope="session"/>
 </c:if>
@@ -13,57 +11,96 @@
 <c:if test="${empty sessionScope.querycolor}">
 	<c:set var="querycolor" value='#D6DFF7' scope="session"/>
 </c:if>
-<c:if test="${empty sessionScope.headerColor}">
+<c:if test="${empty sessionScope.headercolor}">
 	<c:set var="headercolor" value='#C5CEE6' scope="session"/>
 </c:if>
 
-<div style="text-align:right">
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
 
-	<%
+<table width="98%" border="0">
+<tr>
+<td>
+<div style="float:left;text-align:left">
+	<c:if test="${!empty pageContext.request.userPrincipal.name}">
+		<c:if test="${empty sessionScope.viewmode}">
+			<c:forEach var="a" items="${pageContext.request.userPrincipal.roles}">
+				<c:set var="viewmode" value="${a}" scope="session"/>
+			</c:forEach>		
+		</c:if>
 
-		String status1 = "<a href='protected.jsp' nobr>Log in&nbsp;</a>";
-		String status2 = "<a href='register.jsp' nobr>Register</a>";
-
-		if (session.getAttribute("username")  != null) {
-			status1 = "Welcome ";
-		  Object isadmin = session.getAttribute("isadmin");
-		  if ((isadmin != null) && "true".equals(isadmin))
-		  	status1 = status1 + "<font color='#FF4444'>";
-
-		  status1 = status1 + "<b>" + session.getAttribute("username") + "</b>";
-		  if ((isadmin != null) && "true".equals(isadmin))
-		  	status1 = status1 + "</font>";
-
-			status2 = "<a href='protected.jsp?logoff=true' nobr>&nbsp;Log out</a>";
-		}
-	%>
-	<%= status1%>
-	<%= " "%>
-	<%= status2%>
-
+		View: 
+		<c:forEach var="a" items="${pageContext.request.userPrincipal.roles}">
+			<c:choose>
+				<c:when test="${a eq 'qmrf_user'}">
+					<c:set var="title" value="Author"/>
+				</c:when>
+				<c:when test="${a eq 'qmrf_admin'}">
+					<c:set var="title" value="Reviewer"/>
+				</c:when>
+				<c:when test="${a eq 'qmrf_manager'}">
+					<c:set var="title" value="Administrator"/>
+				</c:when>				
+				<c:when test="${a eq 'qmrf_editor'}">
+					<c:set var="title" value="Editor"/>
+				</c:when>								
+				<c:otherwise>
+					<c:set var="title" value="${a}"/>
+				</c:otherwise>
+			</c:choose>
+					
+			<c:choose>
+				<c:when test="${sessionScope.viewmode eq a}">
+					<img src="images/user_edit.png" alt="${title}" title="Current view : ${title}" border="0"/>
+					<b><i><font color="#FF4444">${title}</font></i></b>
+				</c:when>
+				<c:otherwise>
+					<a href="<c:url value="">
+							<c:param name="viewmode" value="${a}"/>
+						</c:url>">
+					<img src="images/user.png" alt="${title}" border="0" title="Click here to switch to ${title} view"/>
+					<i>${title}</i>
+					</a>
+				</c:otherwise>
+			</c:choose>
+			&nbsp;
+		</c:forEach>
+	</c:if>
 </div>
-<!-- Search  bgcolor="#356AA0"
+<div style="float:right;text-align:right">
 
-<%
-		String highlighted = request.getParameter("highlighted");
-		if (highlighted == null) highlighted = "search";
-    if (highlighted.equalsIgnoreCase("advancedsearch")) {
-    } else   {
-
-%>
-
-<form method="POST" action='<%= response.encodeURL("search.jsp") %>' >
-<div  id="search">
-      <input type="text" name="qmrf_simple" size="80">
-      <input type="submit" value="Search">
-		<a href="search_substances.jsp" nobr>Advanced</a>
-
-		<a href="help.html" target="_blank">Help</a>
+	<c:choose>
+	<c:when test="${empty pageContext.request.userPrincipal.name}">
+		<a href="
+			<c:url value="protected.jsp"/>
+		">Log in</a>
+		&nbsp;
+		<a href="
+			<c:url value="register.jsp"/>
+		">Register</a>	
+	</c:when>
+	<c:otherwise>
+		<c:set var="clr" value="#000000"/>
+		<c:forEach var="a" items="${pageContext.request.userPrincipal.roles}">
+			<c:if test="${a eq 'qmrf_admin'}">
+				<c:set var="clr" value="#FF4444"/>
+			</c:if>
+		</c:forEach>
+		Welcome <b><font color="${clr}">${pageContext.request.userPrincipal.name}</font></b>
+	
+		<a href="
+			<c:url value="protected.jsp">
+				<c:param name="logoff" value="true"/>
+			</c:url>
+		">Log out</a>	
+	</c:otherwise>
+	</c:choose>
 </div>
-</form>
+</td>
+</tr>
+</table>
 
-<%
-		}
-%>
-
--->
+<jsp:include page="menuqmrf.jsp" flush="true">
+	<jsp:param name="highlighted" value="${param.highlighted}" />
+</jsp:include>

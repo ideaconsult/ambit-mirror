@@ -11,6 +11,13 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
+
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
   <head>
@@ -18,10 +25,9 @@ response.setHeader("Expires", "0");
   </head>
   <body>
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuadmin.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="review"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <c:set var="thispage" value='admin_return.jsp'/>
@@ -63,8 +69,8 @@ response.setHeader("Expires", "0");
 				<c:catch var="transactionException_archive">
 				<sql:transaction dataSource="jdbc/qmrf_documents">
 				<sql:update var="updateCount">
-						insert into documents (idqmrf_origin,user_name,xml,version,status,updated)
-				    select idqmrf,user_name,xml,version+1,'returned for revision',now() from documents where idqmrf=?;
+						insert into documents (idqmrf_origin,user_name,xml,version,status,updated,reviewer)
+				    select idqmrf,user_name,xml,version+1,'returned for revision',now(),reviewer from documents where idqmrf=?;
 				  <sql:param value="${param.id}"/>
 				  </sql:update>
 					<sql:update var="updateCount">

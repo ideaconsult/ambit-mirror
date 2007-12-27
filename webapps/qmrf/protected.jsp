@@ -25,26 +25,21 @@ response.setHeader("Expires", "0");
 <body bgcolor="white">
 <%
 	
-  if (request.getUserPrincipal() != null) 
+  if (request.getUserPrincipal() != null)  {
   	session.setAttribute("username",request.getUserPrincipal().getName());
-  if (request.isUserInRole("qmrf_admin")) {  	
-  	 session.setAttribute("isadmin","true");
-  	 response.sendRedirect("admin.jsp");
-  }	 else {
-  	session.setAttribute("isadmin","false");
-  	response.sendRedirect("user.jsp");
-  }	
+  
+	  session.setAttribute("ismanager",request.isUserInRole("qmrf_manager"));	
+	  session.setAttribute("isadmin",request.isUserInRole("qmrf_admin"));	
+	  session.setAttribute("isauthor",request.isUserInRole("qmrf_user"));	
+	  response.sendRedirect("index.jsp");
+  }
+
 %>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="login"/>
+	<jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
-
-
-
-
-
-
 
 </body>
 </html>

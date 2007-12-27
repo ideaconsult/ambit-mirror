@@ -17,10 +17,9 @@
   <body>
 
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuall.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="structures"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <c:choose>

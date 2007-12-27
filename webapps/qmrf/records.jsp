@@ -197,7 +197,7 @@
 											<c:url value="${param.viewpage}">
 										  <c:param name="id" value="${row.idqmrf}"/>
 										  <c:param name="idstructure" value="${param.idstructure}"/>
-											<c:param name="viewmode" value="attachments"/>
+											<c:param name="view" value="attachments"/>
 											</c:url>
 										" ><img src="images/attachment.png" alt="${title}" title="${title}" border="0"/></a>
 									</c:when>

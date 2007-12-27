@@ -29,22 +29,22 @@
 </c:choose>
 
 
-<c:set var="viewmode" value="html"/>
+<c:set var="view" value="html"/>
 <c:choose>
-	<c:when test="${empty param.viewmode}">
-			<c:set var="viewmode" value="html"/>
+	<c:when test="${empty param.view}">
+			<c:set var="view" value="html"/>
 	</c:when>
-	<c:when test="${param.viewmode eq 'applet'}">
-			<c:set var="viewmode" value="applet"/>
+	<c:when test="${param.view eq 'applet'}">
+			<c:set var="view" value="applet"/>
 	</c:when>
-	<c:when test="${param.viewmode eq 'html'}">
-			<c:set var="viewmode" value="html"/>
+	<c:when test="${param.view eq 'html'}">
+			<c:set var="view" value="html"/>
 	</c:when>
-	<c:when test="${param.viewmode eq 'attachments'}">
-			<c:set var="viewmode" value="attachments"/>
+	<c:when test="${param.view eq 'attachments'}">
+			<c:set var="view" value="attachments"/>
 	</c:when>
 	<c:otherwise>
-			<c:set var="viewmode" value="html"/>
+			<c:set var="vie" value="html"/>
 	</c:otherwise>
 </c:choose>
 
@@ -53,7 +53,7 @@
 <c:forEach var="row" items="${rs.rows}">
 
 	<c:choose>
-		<c:when test="${param.viewmode eq 'applet'}">
+		<c:when test="${param.view eq 'applet'}">
 			<form name="qmrfform">
 
 							<input type="hidden" NAME="xml" />
@@ -79,7 +79,7 @@
 					</jsp:plugin>
 			</form>
 		</c:when>
-		<c:when test="${param.viewmode eq 'attachments'}">
+		<c:when test="${param.view eq 'attachments'}">
 					<h4>Attachments ${qmrf_number}</h4>
 					<table width="100%" border="0">
 						<jsp:include page="list_attachments.jsp" flush="true">
@@ -104,7 +104,7 @@
 				<tr><td>
 				<jsp:include page="structures.jsp" flush="true">
 					<jsp:param name="highlighted" value="${param.id}"/>
-					<jsp:param name="viewmode" value="${viewmode}"/>
+					<jsp:param name="view" value="${view}"/>
 				</jsp:include>
 				</td></tr>
 

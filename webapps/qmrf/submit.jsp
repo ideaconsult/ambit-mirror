@@ -15,12 +15,12 @@
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
-  <c:redirect url="/protected.jsp"/>
+<c:if test="${empty sessionScope['isauthor']}" >
+  <c:redirect url="/index.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin']=='true'}" >
-  <c:redirect url="/admin.jsp"/>
+<c:if test="${sessionScope['isauthor']=='false'}" >
+  <c:redirect url="/index.jsp"/>
 </c:if>
 
 <!-- Not launched from create.jsp -->
@@ -91,9 +91,8 @@
 </head>
 <body>
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuuser.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
+	<jsp:param name="viewmode" value="${param.viewmode}"/>
     <jsp:param name="highlighted" value="create"/>
 </jsp:include>
     <div class="error">

@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -22,19 +22,16 @@
 <title>(Q)SAR Model Reporting Format (QMRF) Inventory</title>
 <body bgcolor="#ffffff">
 
-
 <jsp:include page="menu.jsp" flush="true">
-    <jsp:param name="highlighted" value="welcome"/>
-</jsp:include>
-
-
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="profile" />
-
+    <jsp:param name="highlighted" value="profile"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 <c:set var="user" value="${sessionScope['username']}" />
+
+<c:if test="${(!empty param.name) && sessionScope.ismanager}">
+	<c:set var="user" value="${param.name}" />
+</c:if>
 
 <c:if test="${!empty param.name && !empty param.email}">
 	<c:catch var="err">
@@ -102,19 +99,21 @@
 		<form name="authordb">
 			<c:forEach var="row" items="${rs.rows}">
 				<tr bgcolor="#C5CEE6">
-				<td>Name</td><td><input type="text" size="80" maxlength="255" name="name" value="${row.name}" ></td>
+				<td>Name</td><td><input type="text" size="80" maxlength="255" name="name" value="${row.name}" /></td>
 				</tr>
 				<tr bgcolor="#C5CEE6">
-				<td>Affiliation</td><td><input type="text" size="80" maxlength="128" name="affiliation" value="${row.affiliation}" ></td>
+				<td>Affiliation</td><td><input type="text" size="80" maxlength="128" name="affiliation" value="${row.affiliation}" /></td>
 				</tr>
-				<tr bgcolor="#C5CEE6">			
-				<td>Contact</td><td><input type="text" size="80" maxlength="128" name="address" value=${row.address}" ></td>
+				<tr bgcolor="#C5CEE6">
+				<td>Address</td><td>
+				<input type="text" size="80" maxlength="128" name="address" value="${row.address}" /></td>
 				</tr>
-				<tr bgcolor="#C5CEE6">			
-				<td>WWW</td><td><input type="text" size="80" maxlength="255" name="webpage" value="${row.webpage}" ></td>
+				<tr bgcolor="#C5CEE6">
+				<td>WWW</td><td>
+				<input type="text" size="80" maxlength="255" name="webpage" value="${row.webpage}" /></td>
 				</tr>
-				<tr bgcolor="#C5CEE6">			
-				<td>Email</td><td><input type="text" size="45" maxlength="45" name="email" readonly="true" value="${row.email}" ></td>
+				<tr bgcolor="#C5CEE6">
+				<td>Email</td><td><input type="text" size="45" maxlength="45" name="email" readonly="true" value="${row.email}" /></td>
 				</tr>
 			</c:forEach>
 			<tr>

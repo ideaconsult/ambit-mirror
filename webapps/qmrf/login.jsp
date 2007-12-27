@@ -13,10 +13,7 @@ response.setHeader("Expires", "0");
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="login"/>
-</jsp:include>
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="login" />
+	<jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 <form method="POST" action='<%= response.encodeURL("j_security_check") %>' >

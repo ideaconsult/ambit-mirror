@@ -77,6 +77,31 @@
 				The author list will be available as a lookup for relevant fields within QMRF editor.
 				</help>				
 		</chapter>		
+		<chapter anchor="roles" name="What are user roles and how to change/update roles.">
+				<help>
+				There are four role types: Author, Reviewer, Chief Editor and Administrator, which can be assigned to the registered users.
+				</help>
+				<help>
+				The Author can create and submit QMRF documents. Once submitted, the documents are reviewed by a Reviewer.
+				The Reviewer can publish the document, or return it to the Author, if there is insufficient/unclear information.
+				</help>
+				<help>
+				The Chief Editor assigns Reviewers to the newly submitted documents.
+				</help>				
+				<help>
+				Upon registration, the new user is assigned only an Author role. The Reviewer role can be assigned to any user, but assignment can be done only by Administrator.
+				This can be done via the User profiles tab.
+				</help>
+				<help>
+				Note: The Author role can not be removed if there are documents under preparation (e.g. draft, under_revision, submitted, returned for revision).
+				</help>				
+		</chapter>	
+		<chapter anchor="review_forbidden" name="Reviewing not allowed">
+				<help>
+				Reviewing a document where the reviewer is the document author is forbidden!
+				</help>
+		</chapter>			
+		
 </chapter>
 </chapter>
 </qmrf_help>

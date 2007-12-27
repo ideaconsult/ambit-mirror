@@ -19,6 +19,13 @@ response.setHeader("Expires", "0");
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
+
 <c:if test="${empty sessionScope['isadmin']}" >
   <c:redirect url="/protected.jsp"/>
 </c:if>
@@ -31,6 +38,22 @@ response.setHeader("Expires", "0");
   <c:redirect url="/admin.jsp"/>
 </c:if>
 
+<c:catch>
+	<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+		select user_name from documents where idqmrf=? and user_name != ?
+		<sql:param value="${param.id}"/>
+		<sql:param value="${sessionScope['username']}"/>
+	</sql:query>
+	${rs.rowCount}
+	<c:if test="${rs.rowCount eq 0}">
+		<c:redirect url="/review_forbidden.jsp">
+			<c:param name="id" value="${param.id}"/>
+			<c:param name="message" value="Can't review QMRF document"/>
+		</c:redirect>
+	</c:if>
+	</
+</c:catch>
+
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
   <head>
@@ -39,12 +62,11 @@ response.setHeader("Expires", "0");
   </head>
   <body>
 
-
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuadmin.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="review"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
+
 
 
 <c:set var="xslt_url" value="/WEB-INF/xslt/qmrf_adminedit.xsl"/>

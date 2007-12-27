@@ -41,14 +41,8 @@
 
 
 <jsp:include page="menu.jsp" flush="true">
-    <jsp:param name="highlighted" value="welcome"/>
-</jsp:include>
-
-
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="profile" />
-
+    <jsp:param name="highlighted" value="profile"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 
@@ -77,8 +71,6 @@
 <c:if test="${!empty param.affiliation}">
 	<c:set var="update" value="ok"/>
 </c:if>
-
-
 
 <c:if test="${!empty update}">
 
@@ -116,15 +108,14 @@
 	<c:import var="xsl" url="/WEB-INF/xslt/users2form.xsl"/>
 	<c:import var="xml" url="users_xml.jsp"/>
 	<x:transform xml="${fn:trim(xml)}" xslt="${fn:trim(xsl)}">
-			<x:param name="admin" value="${isadmin}"/>
+		<x:param name="admin" value="${sessionScope.ismanager && (sessionScope.viewmode eq 'qmrf_manager')}"/>
 	</x:transform>
 </c:catch>
 
 <div id="hits">
 		<p>
-		<jsp:include page="hits.jsp" flush="true">
-    <jsp:param name="id" value="${isadmin}"/>
-		</jsp:include>
+		<jsp:include page="hits.jsp" flush="true"/>
+
 	</p>
 </div>
 </body>

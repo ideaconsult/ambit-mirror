@@ -5,19 +5,25 @@
 
 <c:set var="thispage" value='create.jsp'/>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
 
 <c:if test="${empty sessionScope['username']}" >
   <c:redirect url="protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
-  <c:redirect url="protected.jsp"/>
+<c:if test="${empty sessionScope['isauthor']}" >
+  <c:redirect url="index.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin']=='true'}" >
-  <c:redirect url="admin.jsp"/>
+<c:if test="${sessionScope['isauthor']=='false'}" >
+  <c:redirect url="index.jsp"/>
 </c:if>
 
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_user'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
 
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
@@ -35,10 +41,9 @@ function getXML(){
   <body>
 
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuuser.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 

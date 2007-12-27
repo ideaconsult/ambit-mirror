@@ -5,21 +5,27 @@
 
 <c:set var="thispage" value='user.jsp'/>
 
-
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_user'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
 <c:catch var="exception">
 		<c:if test="${empty sessionScope['username']}" >
 		  <c:redirect url="protected.jsp"/>
 		</c:if>
 
-		<c:if test="${empty sessionScope['isadmin']}" >
+		<c:if test="${empty sessionScope['isauthor']}" >
 
-		  <c:redirect url="protected.jsp"/>
+		  <c:redirect url="index.jsp"/>
 		</c:if>
 
-		<c:if test="${sessionScope['isadmin'] eq 'true'}" >
-		  <c:redirect url="admin.jsp"/>
+		<c:if test="${sessionScope['isauthor'] eq 'false'}" >
+		  <c:redirect url="index.jsp"/>
 		</c:if>
 </c:catch>
+
 <c:if test="${not empty exception}">
   <c:redirect url="index.jsp"/>
 </c:if>
@@ -48,9 +54,9 @@
   </head>
   <body>
 
-<jsp:include page="menu.jsp" flush="true"/>
-<jsp:include page="menuuser.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="user"/>
+	<jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 

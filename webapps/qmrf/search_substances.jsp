@@ -60,20 +60,15 @@ function load(){
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="structures"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>        
 </jsp:include>
 
-<c:set var="thispage" value="search_catalogs.jsp"/>
+<c:set var="thispage" value="search_substances.jsp"/>
 
 <c:set var="op" value="${param.operation}" />
 <c:if test="${empty param.operation}">
 	<c:set var="op" value="AND"/>
 </c:if>
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="structures" />
-</jsp:include>
-
-
 
 <!-- end initialization -->
 

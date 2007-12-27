@@ -1,5 +1,6 @@
 
 <html>
+	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
 <head>
 <title>QMRF Login </title>
 </head>
@@ -8,20 +9,19 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="login"/>
+	<jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="login" />
-</jsp:include>     
 
 <%
   
     session.invalidate();
 %>
-<h3>
-Invalid username and/or password, please try
+<p>
+
+Invalid username and/or password, please try 
 <a href='<%= response.encodeURL("protected.jsp") %>'>again</a>.
-</h3>
+
+</p>
 
 </body>
 </html>

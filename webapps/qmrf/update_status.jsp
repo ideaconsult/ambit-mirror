@@ -5,8 +5,14 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:requestEncoding value="UTF-8"/>
 
-<c:set var="thispage" value='submit_update.jsp'/>
+<c:set var="thispage" value='update_status.jsp'/>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_user'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
 
 <c:if test="${empty param.id}" >
 	no id
@@ -17,12 +23,12 @@
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
+<c:if test="${empty sessionScope['isauthor']}" >
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin']=='true'}" >
-  <c:redirect url="/admin.jsp"/>
+<c:if test="${sessionScope['isauthor']=='false'}" >
+  <c:redirect url="/index.jsp"/>
 </c:if>
 
 
@@ -33,10 +39,9 @@
   </head>
   <body>
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuuser.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 

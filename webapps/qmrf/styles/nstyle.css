@@ -177,6 +177,8 @@ A:hover
   	border-color: #FF0000;
   	border-style: solid;
   	border: 1px solid #e68200;
+  	FONT-FAMILY: Verdana, Arial;
+  	FONT-SIZE: 10pt;  	
   }
   .success {
   	background:#D6DFF7;
@@ -186,6 +188,7 @@ A:hover
   	border-color: #D6DFF7;
   	border-style: solid;
   	border: 1px solid #0000FF;
+    FONT-FAMILY: Verdana, Arial;  	
   }
   
   .help {
@@ -207,6 +210,8 @@ A:hover
   	border-color: #0000FF;
   	border-style: solid;
   	border: 1px solid #D6DFF7;
+  	FONT-FAMILY: Verdana, Arial;
+  	FONT-SIZE: 10pt;
   }
   .A {
   	float: left;

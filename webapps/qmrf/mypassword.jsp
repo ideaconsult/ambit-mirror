@@ -39,16 +39,9 @@
 <title>(Q)SAR Model Reporting Format (QMRF) Inventory</title>
 <body bgcolor="#ffffff">
 
-
 <jsp:include page="menu.jsp" flush="true">
-    <jsp:param name="highlighted" value="welcome"/>
-</jsp:include>
-
-
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="profile" />
-
+    <jsp:param name="highlighted" value="profile"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 

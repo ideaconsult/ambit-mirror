@@ -11,6 +11,13 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
+
 <html>
 	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
   <head>
@@ -19,9 +26,8 @@ response.setHeader("Expires", "0");
   <body>
 
 <jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuadmin.jsp" flush="true">
-    <jsp:param name="highlighted" value="review"/>
+	<jsp:param name="highlighted" value="review"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <c:set var="thispage" value='admin_review.jsp'/>

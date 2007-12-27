@@ -27,6 +27,7 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="search"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>        
 </jsp:include>
 
 <c:set var="thispage" value="search_catalogs.jsp"/>
@@ -36,11 +37,7 @@
 	<c:set var="op" value="AND"/>
 </c:if>
 
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="search" />
-</jsp:include>
 
-<hr>
 <c:if test="${!empty(param.qmrfno_enabled)}">
 
 		<c:set var="p_qmrfno_enabled" value="${param.qmrfno_enabled}" scope="session"/>

@@ -6,6 +6,13 @@
 
 <c:set var="thispage" value='admin.jsp'/>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
+
 <c:if test="${empty sessionScope['username']}" >
   <c:redirect url="/protected.jsp"/>
 </c:if>
@@ -36,20 +43,19 @@
   <body>
 
 <jsp:include page="menu.jsp" flush="true">
-    <jsp:param name="highlighted" value="login"/>
-</jsp:include>
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="admin" />
+    <jsp:param name="highlighted" value="admin"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 <c:catch var="exception">
 	<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-		select count(*)as no,status from documents where status = 'under review' || status = 'submitted'  group by status;
+		select count(*)as no,status from documents where (status = 'under review' || status = 'submitted') and ((reviewer is null) or (reviewer = ?)) group by status ;
+		<sql:param value="${sessionScope['username']}"/>
 	</sql:query>
 	<c:if test="${rs.rowCount > 0}">
 		<div class="center">
-		<font color="red">Pending documents:
+		${sessionScope['username']}:
+		<font color="red">Pending documents :
 		<c:forEach var="row" items="${rs.rows}">
 			<b>${row.status}</b>&nbsp;(${row.no})&nbsp;
 		</c:forEach>
@@ -68,15 +74,16 @@
 <c:if test="${startrecord eq 0}">
 	<c:choose>
 		<c:when test="${(empty sessionScope.record_status) || (sessionScope.record_status eq 'all')}">
-			<c:set var="sql" value="select count(idqmrf) as c from documents where status != 'published' && status != 'draft' && status != 'archived'"/>
+			<c:set var="sql" value="select count(idqmrf) as c from documents where (status != 'published' && status != 'draft' && status != 'archived') and ((reviewer is null) or (reviewer = ?))"/>
 		</c:when>
 		<c:otherwise>
-			<c:set var="sql" value="select count(idqmrf) as c from documents where  status = '${sessionScope.record_status}'"/>
+			<c:set var="sql" value="select count(idqmrf) as c from documents where  (status = '${sessionScope.record_status}') and ((reviewer is null) or (reviewer = ?))"/>
 		</c:otherwise>
 	</c:choose>
 	<c:catch var="error">
 		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
 			${sql}
+			<sql:param value="${sessionScope['username']}"/>
 		</sql:query>
 		<c:forEach var="row" items="${rs.rows}">
 			<c:set var="maxpages" scope="session">
@@ -93,9 +100,9 @@
 	</c:if>
 </c:if>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status,reviewer from documents where  status = '${sessionScope.record_status}' order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status,reviewer from documents where  (status = '${sessionScope.record_status}') and ((reviewer is null) or (reviewer = '${sessionScope.username}')) order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
 <c:if test="${(empty sessionScope.record_status) || (sessionScope.record_status eq 'all')}">
-	<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status,reviewer from documents where status != 'published' && status != 'draft' && status != 'archived' order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
+	<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status,reviewer from documents where (status != 'published' && status != 'draft' && status != 'archived') and ((reviewer is null) or (reviewer = '${sessionScope.username}')) order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
 </c:if>
 
 <!--

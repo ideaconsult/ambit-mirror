@@ -79,11 +79,9 @@
 			<url-pattern>/admin_status.jsp</url-pattern>
 			<url-pattern>/catalogs.jsp</url-pattern>
 
-			<url-pattern>/menuadmin.jsp</url-pattern>
-			<url-pattern>/menuuser.jsp</url-pattern>
 			<url-pattern>/mypassword.jsp</url-pattern>
 			<url-pattern>/myprofile.jsp</url-pattern>
-			<url-pattern>/menurole.jsp</url-pattern>
+			<url-pattern>/myrole.jsp</url-pattern>
 
 			<url-pattern>/publish.jsp</url-pattern>
 			<url-pattern>/submit.jsp</url-pattern>
@@ -93,6 +91,7 @@
 			<url-pattern>/download_users.jsp</url-pattern>
 
 			<url-pattern>/author.jsp</url-pattern>
+			<url-pattern>/headers.jsp</url-pattern>
 			
 	  </web-resource-collection>
 

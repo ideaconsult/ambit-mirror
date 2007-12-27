@@ -17,10 +17,7 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="register"/>
-</jsp:include>
-
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="register" />
+    <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">

@@ -14,8 +14,14 @@ response.setHeader("Expires", "0");
 %>
 
 
-<c:set var="thispage" value='edit.jsp'/>
+<c:set var="thispage" value='publish.jsp'/>
 
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
+</c:if>
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+  <c:redirect url="index.jsp"/>
+</c:if>
 
 <c:if test="${empty sessionScope['username']}" >
   <c:redirect url="/protected.jsp"/>
@@ -39,10 +45,9 @@ response.setHeader("Expires", "0");
     <title>QMRF documents</title>
 
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuadmin.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="admin"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <c:set var="report">

@@ -11,12 +11,26 @@
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
-  <c:redirect url="/protected.jsp"/>
+<c:if test="${!empty param.viewmode}">
+	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin']=='false'}" >
-  <c:redirect url="/user.jsp"/>
+<c:if test="${(empty sessionScope.viewmode) || (sessionScope.viewmode ne 'qmrf_manager')}" >
+  <c:redirect url="/index.jsp">
+  	<c:param name="highlighted" value="welcome"/>
+  </c:redirect>
+</c:if>
+
+<c:if test="${empty sessionScope['ismanager']}" >
+  <c:redirect url="/index.jsp">
+  	<c:param name="highlighted" value="welcome"/>
+  </c:redirect>
+</c:if>
+
+<c:if test="${sessionScope['ismanager']=='false'}" >
+  <c:redirect url="/index.jsp">
+  	<c:param name="highlighted" value="welcome"/>
+  </c:redirect>
 </c:if>
 
 <jsp:include page="query_settings.jsp" flush="true"/>
@@ -60,11 +74,9 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="catalog"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>        
 </jsp:include>
 
-<jsp:include page="menuall.jsp" flush="true">
-		    <jsp:param name="highlighted" value="catalog" />
-</jsp:include>
 
 <table width="50%" bgcolor="#FFFFFF"><tr bgcolor="#D6DFF7">
 <td>

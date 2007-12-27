@@ -17,10 +17,9 @@ response.setHeader("Expires", "0");
 </head>
 <body>
 
-<jsp:include page="menu.jsp" flush="true"/>
-
-<jsp:include page="menuadmin.jsp" flush="true">
+<jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="import"/>
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <p>
