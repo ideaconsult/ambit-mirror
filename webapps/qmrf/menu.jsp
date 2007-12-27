@@ -27,10 +27,10 @@
 		<c:if test="${empty sessionScope.viewmode}">
 			<c:forEach var="a" items="${pageContext.request.userPrincipal.roles}">
 				<c:set var="viewmode" value="${a}" scope="session"/>
-			</c:forEach>		
+			</c:forEach>
 		</c:if>
 
-		View: 
+		View:
 		<c:forEach var="a" items="${pageContext.request.userPrincipal.roles}">
 			<c:choose>
 				<c:when test="${a eq 'qmrf_user'}">
@@ -41,30 +41,32 @@
 				</c:when>
 				<c:when test="${a eq 'qmrf_manager'}">
 					<c:set var="title" value="Administrator"/>
-				</c:when>				
+				</c:when>
 				<c:when test="${a eq 'qmrf_editor'}">
 					<c:set var="title" value="Editor"/>
-				</c:when>								
-				<c:otherwise>
-					<c:set var="title" value="${a}"/>
-				</c:otherwise>
-			</c:choose>
-					
-			<c:choose>
-				<c:when test="${sessionScope.viewmode eq a}">
-					<img src="images/user_edit.png" alt="${title}" title="Current view : ${title}" border="0"/>
-					<b><i><font color="#FF4444">${title}</font></i></b>
 				</c:when>
 				<c:otherwise>
-					<a href="<c:url value="">
-							<c:param name="viewmode" value="${a}"/>
-						</c:url>">
-					<img src="images/user.png" alt="${title}" border="0" title="Click here to switch to ${title} view"/>
-					<i>${title}</i>
-					</a>
+					<c:set var="title" value=""/>
 				</c:otherwise>
 			</c:choose>
-			&nbsp;
+
+			<c:if test="${title ne ''}">
+				<c:choose>
+					<c:when test="${sessionScope.viewmode eq a}">
+						<img src="images/user_edit.png" alt="${title}" title="Current view : ${title}" border="0"/>
+						<b><i><font color="#FF4444">${title}</font></i></b>
+					</c:when>
+					<c:otherwise>
+						<a href="<c:url value="">
+								<c:param name="viewmode" value="${a}"/>
+							</c:url>">
+						<img src="images/user.png" alt="${title}" border="0" title="Click here to switch to ${title} view"/>
+						<i>${title}</i>
+						</a>
+					</c:otherwise>
+				</c:choose>
+				&nbsp;
+			</c:if>
 		</c:forEach>
 	</c:if>
 </div>
@@ -78,7 +80,7 @@
 		&nbsp;
 		<a href="
 			<c:url value="register.jsp"/>
-		">Register</a>	
+		">Register</a>
 	</c:when>
 	<c:otherwise>
 		<c:set var="clr" value="#000000"/>
@@ -88,12 +90,12 @@
 			</c:if>
 		</c:forEach>
 		Welcome <b><font color="${clr}">${pageContext.request.userPrincipal.name}</font></b>
-	
+
 		<a href="
 			<c:url value="protected.jsp">
 				<c:param name="logoff" value="true"/>
 			</c:url>
-		">Log out</a>	
+		">Log out</a>
 	</c:otherwise>
 	</c:choose>
 </div>

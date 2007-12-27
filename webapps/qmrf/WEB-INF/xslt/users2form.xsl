@@ -19,7 +19,7 @@
 
 <xsl:template match="user">
 
-	<table bgcolor="#FFFFFF">
+	<table bgcolor="#FFFFFF" border="0">
 
 	<tr bgcolor="#D6DFF7">
 
@@ -38,7 +38,7 @@
 	</td>
 	<th width="5%" bgcolor="#FFFFFF" rowspan="14"></th>
 	<th bgcolor="#C5CEE6"></th>
-	
+
 	</tr>
 
 	<tr bgcolor="#D6DFF7">
@@ -58,7 +58,7 @@
 				Verify
 			</xsl:element>
 	<xsl:text>if a member of QMRF and model authors list.</xsl:text>
-	
+
 	<a href="help.jsp?anchor=verify_author" target="help"><img src="images/help.png" alt="help" title="What is QMRF and model authors list?" border="0"/></a>
 	</td>
 	</tr>
@@ -97,14 +97,14 @@
 		<xsl:element name="input">
 			<xsl:attribute name="name">
 				<xsl:text>user_name</xsl:text>
-			</xsl:attribute>		
+			</xsl:attribute>
 			<xsl:attribute name="value">
 				<xsl:value-of select="@user_name"/>
 			</xsl:attribute>
 			<xsl:attribute name="type">
 				<xsl:text>hidden</xsl:text>
-			</xsl:attribute>			
-		</xsl:element>	
+			</xsl:attribute>
+		</xsl:element>
 	<xsl:for-each select="role">
 		<xsl:choose>
 		<xsl:when test="$admin = 'true'">
@@ -116,25 +116,25 @@
 				<xsl:if test="@selected = 'true'">
 					<xsl:attribute name="checked">
 					</xsl:attribute>
-				</xsl:if>			
+				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="@name = 'qmrf_admin'">
 						<xsl:text>Reviewer </xsl:text>
 					</xsl:when>
 					<xsl:when test="@name = 'qmrf_editor'">
 						<xsl:text>Editor </xsl:text>
-					</xsl:when>					
+					</xsl:when>
 					<xsl:when test="@name = 'qmrf_user'">
 						<xsl:text>Author </xsl:text>
-					</xsl:when>				
+					</xsl:when>
 					<xsl:when test="@name = 'qmrf_manager'">
 						<xsl:text>Administrator </xsl:text>
-					</xsl:when>									
+					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>Unknown </xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
-			</xsl:element>	
+			</xsl:element>
 
 			<xsl:element name="input">
 				<xsl:attribute name="type">hidden</xsl:attribute>
@@ -147,7 +147,7 @@
 					<xsl:value-of select="@selected"/>
 				</xsl:attribute>
 
-			</xsl:element>	
+			</xsl:element>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:if test="@selected = 'true'">
@@ -157,13 +157,13 @@
 					</xsl:when>
 					<xsl:when test="@name = 'qmrf_user'">
 						<xsl:text>Author </xsl:text>
-					</xsl:when>		
+					</xsl:when>
 					<xsl:when test="@name = 'qmrf_editor'">
 						<xsl:text>Editor </xsl:text>
-					</xsl:when>							
+					</xsl:when>
 					<xsl:when test="@name = 'qmrf_manager'">
 						<xsl:text>Administrator </xsl:text>
-					</xsl:when>									
+					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>Unknown </xsl:text>
 					</xsl:otherwise>
@@ -171,13 +171,14 @@
 			</xsl:if>
 		</xsl:otherwise>
 		</xsl:choose>
-	</xsl:for-each> 
-	
+	</xsl:for-each>
+
 	<xsl:if test="$admin = 'true'">
-		<input type="submit" name="role" value="Update roles"/>	
+		<input type="submit" name="role" value="Update roles"/>
 	</xsl:if>
 	<a href="help.jsp?anchor=roles" target="help"><img src="images/help.png" alt="help" title="How to add/change roles?" border="0"/></a>
 	</td>
+
 </tr>
 </form>
 
@@ -280,6 +281,72 @@
 
 	</td>
 	</tr>
+
+<tr bgcolor="#D6DFF7">
+	<th>
+	Would you like to become a reviewer?
+	</th>
+	<td>
+
+
+	<xsl:element name="input">
+		<xsl:attribute name="type">
+			<xsl:text>radio</xsl:text>
+		</xsl:attribute>
+		<xsl:attribute name="name">
+			<xsl:text>reviewer</xsl:text>
+		</xsl:attribute>
+		<xsl:choose>
+		<xsl:when test="@reviewer = 'true'">
+			<xsl:attribute name="checked">
+			<xsl:text></xsl:text>
+			</xsl:attribute>
+		</xsl:when>
+		<xsl:otherwise>
+		</xsl:otherwise>
+		</xsl:choose>
+		Yes
+	</xsl:element>
+
+	<xsl:element name="input">
+		<xsl:attribute name="type">
+			<xsl:text>radio</xsl:text>
+		</xsl:attribute>
+		<xsl:attribute name="name">
+			<xsl:text>reviewer</xsl:text>
+		</xsl:attribute>
+		<xsl:choose>
+		<xsl:when test="@reviewer = 'false'">
+			<xsl:attribute name="checked">
+			<xsl:text></xsl:text>
+			</xsl:attribute>
+		</xsl:when>
+		<xsl:otherwise>
+		</xsl:otherwise>
+		</xsl:choose>
+		No
+	</xsl:element>
+
+
+	</td>
+	</tr>
+
+	<tr bgcolor="#D6DFF7">
+	<th>
+	Keywords <a href="help.jsp?anchor=user_keywords" target="help"><img src="images/help.png" alt="help" title="To become a reviewer of QMRF documents, enter keywords of the scientific field you would like to review" border="0"/></a>
+	</th>
+	<td>
+
+	<input type="text" name="keywords" size="60" maxchars="128">
+		<xsl:attribute name="value">
+  		<xsl:value-of select="@keywords"/>
+		</xsl:attribute>
+	</input>
+
+	</td>
+	</tr>
+
+
 
 
 

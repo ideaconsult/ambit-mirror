@@ -2,18 +2,18 @@
                  xmlns="http://www.w3.org/1999/xhtml">
 
 
-<xsl:output method="xml"  encoding="utf-8" doctype-system="qmrf.dtd"
+<xsl:output method="xml"  encoding="utf-8" doctype-system="/WEB-INF/xslt/qmrf.dtd"
 		doctype-public="http://ambit.acad.bg/qmrf/qmrf.dtd" indent="yes"/>
 
 <xsl:param name="keywords"/>
 <xsl:param name="summary_comments"/>
 
 <xsl:template match="QMRF_chapters/QMRF_Summary/keywords/text()">
-	<xsl:value-of select="$keywords" />
+	<xsl:value-of disable-output-escaping="no" select="$keywords" />
 </xsl:template>
 
 <xsl:template match="QMRF_chapters/QMRF_Summary/summary_comments/text()">
-	<xsl:value-of select="$summary_comments" />
+	<xsl:value-of disable-output-escaping="no" select="$summary_comments" />
 </xsl:template>
 
 

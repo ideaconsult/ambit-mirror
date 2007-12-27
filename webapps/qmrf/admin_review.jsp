@@ -3,8 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
-<fmt:requestEncoding value="UTF-8"/> 
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
 
 <%
 response.setHeader("Pragma", "no-cache");
@@ -44,7 +44,6 @@ response.setHeader("Expires", "0");
 		<sql:param value="${param.id}"/>
 		<sql:param value="${sessionScope['username']}"/>
 	</sql:query>
-	${rs.rowCount}
 	<c:if test="${rs.rowCount eq 0}">
 		<c:redirect url="/review_forbidden.jsp">
 			<c:param name="id" value="${param.id}"/>
@@ -66,7 +65,6 @@ response.setHeader("Expires", "0");
     <jsp:param name="highlighted" value="review"/>
     <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
-
 
 
 <c:set var="xslt_url" value="/WEB-INF/xslt/qmrf_adminedit.xsl"/>
@@ -100,6 +98,8 @@ response.setHeader("Expires", "0");
 			select xml from documents where idqmrf=?
 			<sql:param value="${param.id}"/>
 		</sql:query>
+
+		${param.summary_comments}
 
 		<c:forEach var="row" items="${rs.rows}">
 			<catch var="error">

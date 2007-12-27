@@ -29,7 +29,7 @@ response.setHeader("Expires", "0");
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="login"/>
-	<jsp:param name="viewmode" value="${param.viewmode}"/>    
+	<jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 
@@ -47,7 +47,7 @@ response.setHeader("Expires", "0");
 		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
 				${sql}
 				<sql:param value="${param.email}"/>
-				<sql:param value="${param.username}"/>				
+				<sql:param value="${param.username}"/>
 		</sql:query>
 		<c:catch var ="error">
 		<c:if test="${rs.rowCount eq 0}">
@@ -59,7 +59,7 @@ response.setHeader("Expires", "0");
 				<rand:string id="rnd" charset="a-zA-Z0-9! @ # $" length='15'/>
 				<c:set var="newpass">
 					<jsp:getProperty name="rnd" property="random" />
-				</c:set>		
+				</c:set>
 				<sql:update var="rs1" dataSource="jdbc/tomcat_users">
 					update users set user_pass=md5(?) where user_name=?
 					<sql:param value="${newpass}"/>
@@ -78,7 +78,7 @@ Dear ${row.title} ${row.firstname} ${row.lastname},
 Your username: ${row.user_name}
 Your password has been reset to ${newpass}. You may change the password via My profile tab.
 
-QMRF Inventory at 	<c:set var="u">http://${header["host"]}${pageContext.request.contextPath}</c:set>
+QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>
@@ -88,8 +88,8 @@ QMRF Inventory at 	<c:set var="u">http://${header["host"]}${pageContext.request.
 						       </mt:error>
 							</mt:send>
 						</mt:mail>
-						
-						
+
+
 						<p>
 						Email sent to user name ${row.user_name} at <i>${row.email}</i>
 						</p>
@@ -107,7 +107,7 @@ QMRF Inventory at 	<c:set var="u">http://${header["host"]}${pageContext.request.
   <table border="0" cellspacing="5">
   	<tr>
       <th align="right">User name:</th>
-      <td align="left"><input type="text" name="username"></td>      	
+      <td align="left"><input type="text" name="username"></td>
   	</tr>
     <tr>
 

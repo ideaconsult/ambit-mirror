@@ -60,7 +60,7 @@ function load(){
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="structures"/>
-    <jsp:param name="viewmode" value="${param.viewmode}"/>        
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <c:set var="thispage" value="search_substances.jsp"/>
@@ -194,7 +194,7 @@ function load(){
 <tr bgcolor="${headercolor}">
 <th ></th >
 <th ><input type="submit" value="Search"/>
-
+<a href="help.jsp?anchor=search_structures" target="help"><img src="images/help.png" alt="help" title="How to search structures in QMRF inventory?" border="0"/></a>
 	</th>
 </tr>
 

@@ -10,23 +10,23 @@
 	<tr bgcolor="${tablecolor}">
 	<td>
 		<c:set var="status">${status_allowed}</c:set>
-		<b>View</b>:&nbsp;
+		<b>Filter documents by status</b>:&nbsp;
 		<c:forTokens var="t" items="${status}" delims=",">
-			
+
 			<c:if test="${sessionScope.record_status eq t}">
 				[
 			</c:if>
 			<a href="
 				<c:url value="">
-					
+
 					<c:param name="status" value="${t}"/>
-			
+
 				</c:url>
 			">${t}&nbsp;</a>
-			
+
 			<c:if test="${sessionScope.record_status eq t}">
 				]
-			</c:if>		
+			</c:if>
 		</c:forTokens>
 	</td>
 	</tr>

@@ -1,7 +1,7 @@
-﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
-<fmt:requestEncoding value="UTF-8"/> 
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:set var="thispage" value='create.jsp'/>
 
@@ -48,7 +48,7 @@ function getXML(){
 
 
 
-<c:set var="u">http://${header["host"]}${pageContext.request.contextPath}</c:set>
+<c:set var="u">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
 
 	<c:set var="dataurl">
 		<c:url value="${u}/download_xml.jsp">

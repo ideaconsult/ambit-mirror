@@ -27,7 +27,7 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="search"/>
-    <jsp:param name="viewmode" value="${param.viewmode}"/>        
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 <c:set var="thispage" value="search_catalogs.jsp"/>
@@ -132,6 +132,7 @@
 </th>
 <td>
 		 <input type="text" name="qmrfno" size="16" value="${p_qmrfno}">
+		 <a href="help.jsp?anchor=qmrf_number" target="help"><img src="images/help.png" alt="help" title="What is QMRF Number?" border="0"/></a>
 </td>
 </tr>
 
@@ -281,6 +282,7 @@
 </th>
 <td>
 		<input type="submit" value="Search" />
+		<a href="help.jsp?anchor=search_documents" target="help"><img src="images/help.png" alt="help" title="How to search QMRF documents?" border="0"/></a>
 </td>
 </tr>
 

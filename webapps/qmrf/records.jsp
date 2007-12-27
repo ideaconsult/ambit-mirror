@@ -56,7 +56,7 @@
 		</c:if>
 		</div>
 
-		<table width="100%" border="0" bgcolor="${tablecolor}">
+		<table width="95%" border="0" bgcolor="${tablecolor}">
 		<c:if test="${empty param.noheader || (param.noheader eq 'false')}">
 		<tr bgcolor="#DDDDDD">
 			<th>#</th>
@@ -69,9 +69,11 @@
 				<c:when test="${title eq 'ID'}">
 			  </c:when>
 				<c:when test="${title eq 'xml'}">
-					<th>QMRF Title</th>
+					<th width="25%">QMRF Title</th>
 			  </c:when>
 			  <c:otherwise>
+
+			  	<c:set var="anchor">${columnName}</c:set>
 					<th align="left">
 						<a href="
 						<c:url value="${thispage}">
@@ -79,21 +81,26 @@
 							<c:param name="changedirection" value="true"/>
 						</c:url>
 						">${title}</a>
+
+						<c:if test="${!empty anchor}">
+							<a href="help.jsp?anchor=${anchor}" target="help"><img src="images/help.png" alt="help" title="What is ${param[columnName]}?" border="0"/></a>
+						</c:if>
 			    </th>
 		    </c:otherwise>
 		  </c:choose>
 		</c:forEach>
 			<th align="left"> View</th>
-			<th align="left"> Download</th>
+			<th align="left"> Download
+				<a href="help.jsp?anchor=download" target="help"><img src="images/help.png" alt="help" title="Download QMRF document as html,pdf,xls or xml file." border="0"/></a>
+				</th>
 
 				<c:choose>
 				<c:when test="${empty param.actions}">
 			  </c:when>
-				<c:when test="${param.actions eq 'admin'}">
-					<th align="left"> Actions</th>
-			  </c:when>
-				<c:when test="${param.actions eq 'user'}">
-					<th align="left"> Actions</th>
+				<c:when test="${(param.actions eq 'admin') || (param.actions eq 'user') || (param.actions eq 'editor') }">
+					<th align="left"> Actions
+						<a href="help.jsp?anchor=actions" target="help"><img src="images/help.png" alt="help" title="What is an Action?" border="0"/></a>
+						</th>
 			  </c:when>
 			  <c:otherwise>
 			</c:otherwise>
@@ -258,13 +265,13 @@
 						<c:when test="${empty param.actions}">
 					  </c:when>
 						<c:when test="${param.actions eq 'admin'}">
-							<!-- Admin actions -->
+							<!-- Reviewer actions -->
 									<c:choose>
 									  <c:when test="${row.status eq 'published'}">
 
 									  </c:when>
 									  <c:when test="${row.status eq 'archived'}">
-											<i>newer revisions exist - TODO link</i>
+											<i>newer revisions exist</i>
 									  </c:when>
 									  <c:when test="${row.status eq 'submitted'}">
 											<a href="
@@ -312,6 +319,19 @@
 									</c:choose>
 							<!-- Admin actions end-->
 					  </c:when>
+					  <c:when test="${param.actions eq 'editor'}">
+					  		<c:choose>
+					  			<c:when test="${(row.status eq 'submitted') || (row.status eq 'under review')}">
+											<a href="
+											<c:url value="assign_reviewer.jsp">
+											  <c:param name="id" value="${row.idqmrf}"/>
+											</c:url>
+											">Assign a Reviewer</a>
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose>
+						</c:when>
 						<c:when test="${param.actions eq 'user'}">
 							<!-- User actions -->
 								<c:choose>

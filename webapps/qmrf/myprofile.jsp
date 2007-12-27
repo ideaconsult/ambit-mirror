@@ -1,8 +1,11 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
+
 
 	<c:choose>
 	<c:when test="${empty sessionScope['username']}">
@@ -71,12 +74,22 @@
 <c:if test="${!empty param.affiliation}">
 	<c:set var="update" value="ok"/>
 </c:if>
+<c:if test="${!empty param.keywords}">
+	<c:set var="update" value="ok"/>
+</c:if>
+<c:set var="areviewer" value="0"/>
+<c:if test="${!empty param.reviewer}">
+	<c:set var="update" value="ok"/>
+	<c:set var="areviewer" value="1"/>
+</c:if>
+
+
 
 <c:if test="${!empty update}">
 
 		<c:catch var='exception'>
 		<sql:update var="rs" dataSource="jdbc/qmrf_documents">
-			update users set title=?,firstname=?,lastname=?,address=?,country=?,affiliation=?,webpage=?,registration_date=registration_date where user_name=?
+			update users set title=?,firstname=?,lastname=?,address=?,country=?,affiliation=?,webpage=?,keywords=?,reviewer=?,registration_date=registration_date where user_name=?
 
 		  <sql:param value="${param.title}"/>
 		  <sql:param value="${param.firstname}"/>
@@ -85,7 +98,10 @@
 			<sql:param value="${param.country}"/>
 			<sql:param value="${param.affiliation}"/>
 			<sql:param value="${param.webpage}"/>
+			<sql:param value="${param.keywords}"/>
+			<sql:param value="${areviewer}"/>
 			<sql:param value="${param.user_name}"/>
+
 
 		</sql:update>
 		</c:catch>

@@ -72,6 +72,7 @@
 			<b>${row.status}</b>&nbsp;(${row.no})&nbsp;
 		</c:forEach>
 		</font>
+		<a href="help.jsp?anchor=pending" target="help"><img src="images/help.png" alt="help" title="What is it?" border="0"/></a>
 		</div>
 	</c:if>
 </c:catch>

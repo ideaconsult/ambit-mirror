@@ -18,7 +18,7 @@
 				<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${sessionScope['isadmin'] eq 'true'}">
+	<c:when test="${(sessionScope['isadmin'] eq 'true') || (sessionScope['ismanager'] eq 'true') || (sessionScope['iseditor'] eq 'true')}">
 		<sql:update dataSource="jdbc/qmrf_documents">
 				set names 'utf8'
 		</sql:update>

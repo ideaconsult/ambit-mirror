@@ -121,7 +121,7 @@ function getXML(){
 	<td align="left" colspan="2">
 		<input type="hidden" name="id" value="${row.idqmrf}">
 
-    <c:set var="u">http://${header["host"]}${pageContext.request.contextPath}</c:set>
+    <c:set var="u">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
 
       <c:set var="dataurl">
       	<c:url value="${u}/download_xml.jsp"> <c:param name="id" value="${row.idqmrf}"/>
@@ -142,7 +142,7 @@ function getXML(){
 			archive="applets/ambit/QMRFApplet.jar"	name="QMRFApplet" width="800" height="650">
 				<param  name="xmlcontent" value="${dataurl}"/>
 				<param  name="external" value="${external}"/>
-				<param name="user" value="user"/>
+				<param name="user" value="admin"/>
 				<param name="cleancatalogs" value="true"/>
 			Applet not supported by browser.
 		</applet>

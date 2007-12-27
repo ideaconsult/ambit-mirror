@@ -139,7 +139,7 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="register"/>
-    <jsp:param name="viewmode" value="${param.viewmode}"/>    
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 
@@ -205,7 +205,7 @@ E-mail </td>
 Thank you for registering as a user with QMRF repository. To  confirm the registration, simply point your browser to the following URL:
 
       <c:set var="u">
-      		http://${header["host"]}/qmrf/rconfirm.jsp
+      		${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}/rconfirm.jsp
     	</c:set>
 <c:url value="${u}"><c:param name="id" value="${pageContext.session.id}"/></c:url>
 
