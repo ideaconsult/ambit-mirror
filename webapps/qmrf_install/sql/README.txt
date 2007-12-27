@@ -1,0 +1,1 @@
+Start MySQL server with default encoding UTF8.

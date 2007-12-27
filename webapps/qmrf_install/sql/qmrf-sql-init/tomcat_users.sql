@@ -22,11 +22,19 @@ CREATE TABLE  `tomcat_users`.`users` (
 
 use `tomcat_users`;
 set names 'utf8';
+-- author (ordinary user)
 insert into roles (role_name) values ("qmrf_user");
+-- reviewer
 insert into roles (role_name) values ("qmrf_admin");
-insert into users (user_name,user_pass) values ("admin",md5("qmrfadmin"));
+-- administrative user
+insert into roles (role_name) values ("qmrf_manager");
+-- chief editor
+insert into roles (role_name) values ("qmrf_editor");
+insert into users (user_name,user_pass) values ("admin","90ccd6798c380a61df628a73895c5fb2");
 insert into user_roles (user_name,role_name) values ("admin","qmrf_admin");
+insert into user_roles (user_name,role_name) values ("admin","qmrf_manager");
+insert into user_roles (user_name,role_name) values ("admin","qmrf_editor");
 
-insert into users (user_name,user_pass) values ("guest",md5("qmrf"));
+insert into users (user_name,user_pass) values ("guest","4f0d4a73e581a9e08f2ce26a59582428");
 insert into user_roles (user_name,role_name) values ("guest","qmrf_user");
 
