@@ -111,6 +111,8 @@ CREATE TABLE  `qmrf_documents`.`users` (
   `country` varchar(128) collate utf8_bin NOT NULL default '""',
   `webpage` varchar(255) collate utf8_bin NOT NULL default '""',
   `affiliation` varchar(128) collate utf8_bin NOT NULL default '""',
+  `keywords` varchar(128) collate utf8_bin NOT NULL default '""',
+  `reviewer` tinyint(1) NOT NULL default '0' COMMENT 'true if wants to become a reviewer',
   PRIMARY KEY  (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
