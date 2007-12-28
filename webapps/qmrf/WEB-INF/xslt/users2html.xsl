@@ -5,125 +5,117 @@
 <xsl:output method="html"  encoding="UTF-8" indent="yes"/>
 
 <xsl:param name="selected"/>
+<xsl:param name="header"/>
 
 <xsl:template match="QMRF">
 </xsl:template>
 
-<!-- Hide catalogs  -->
 <xsl:template match="users">
 
-<xsl:apply-templates select="* "/>
+<table width="95%" rules="groups" frame="box">
+<thead>
+<tr valign="top">
+<td colspan="14">
+<xsl:value-of select="$header"/>
+</td>
+</tr>
+<tr>
+<th>User name</th>
+<th>E-mail</th>
+<th>Title</th>
+<th>First name</th>
+<th>Last name</th>
+<th>Affiliation</th>
+<th>Address</th>
+<th>Country</th>
+<th>Webpage</th>
+<th>Role</th>
+<th>Available as a reviewer</th>
+<th>Keywords</th>
+<th>Registration status</th>
+<th>Registration Date</th>
 
+</tr>
+</thead>
+<tbody>
+<xsl:apply-templates select="* "/>
+</tbody>
+</table>
 </xsl:template>
 
-
-
-
-
-
 <xsl:template match="user">
-	<table bgcolor="#DDDDDD">
 	<tr>
-	<th>
-	User name
-	</th>
 	<td>
 	<xsl:value-of select="@user_name"/>
 	</td>
-	</tr>
-	<tr>
-	<th>
-	email
-	</th>
 	<td>
 	<xsl:value-of select="@email"/>
 	</td>
-	</tr>
-	<tr>
 
-	<th>
-	Registration status
-	</th>
-	<td>
-	<xsl:value-of select="@registration_status"/>
-	</td>
-	</tr>
-	<tr>
 
-	<th>
-	Registration Date
-	</th>
-	<td>
-	<xsl:value-of select="@registration_date"/>
-	</td>
-	</tr>
-	<tr>
-
-	<th>
-	Title
-	</th>
 	<td>
 	<xsl:value-of select="@title"/>
 	</td>
-	</tr>
-	<tr>
-
-	<th>
-	First name
-	</th>
 	<td>
 	<xsl:value-of select="@firstname"/>
 	</td>
-	</tr>
-	<tr>
-
-	<th>
-	Last name
-	</th>
 	<td>
 	<xsl:value-of select="@lastname"/>
 	</td>
-	</tr>
-	<tr>
-
-	<th>
-	Affiliation
-	</th>
 	<td>
 	<xsl:value-of select="@affiliation"/>
 	</td>
-	</tr>
-	<tr>
-
-	<th>
-	Address
-	</th>
 	<td>
 	<xsl:value-of select="@address"/>
 	</td>
-	</tr>
-	<tr>
-
-	<th>
-	Country
-	</th>
 	<td>
 	<xsl:value-of select="@country"/>
 	</td>
-	</tr>
-	<tr>
-
-	<th>
-	WWW
-	</th>
 	<td>
-	<xsl:value-of select="@webpage"/>
+	 		<a>
+			<xsl:attribute name="href">
+				<xsl:value-of select="@webpage" />
+			</xsl:attribute>
+			<xsl:value-of select="@webpage"/>
+			</a>	
 	</td>
+	<td>
+		<xsl:for-each select="role">
+				<xsl:if test="@selected = 'true'">
+					<xsl:choose>
+						<xsl:when test="@name = 'qmrf_admin'">
+							<xsl:text>Reviewer </xsl:text>
+						</xsl:when>
+						<xsl:when test="@name = 'qmrf_user'">
+							<xsl:text>Author </xsl:text>
+						</xsl:when>
+						<xsl:when test="@name = 'qmrf_editor'">
+							<xsl:text>Editor </xsl:text>
+						</xsl:when>
+						<xsl:when test="@name = 'qmrf_manager'">
+							<xsl:text>Administrator </xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>Unknown </xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>	
+		</xsl:for-each>
+	</td>	
+	<td>
+	<xsl:value-of select="@reviewer"/>
+	</td>
+	<td>
+	<xsl:value-of select="@keywords"/>
+	</td>		
+	<td>
+	<xsl:value-of select="@registration_status"/>
+	</td>
+	<td>
+	<xsl:value-of select="@registration_date"/>
+	</td>	
 	</tr>
-	<tr bgcolor="#FFFFFF">
-	<td colspan="2"></td>
-	</tr>
-	</table>
+
 </xsl:template>
 
 <xsl:template match="author1">

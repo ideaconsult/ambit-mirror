@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:if test="${empty sessionScope['username']}" >
   <c:redirect url="/protected.jsp"/>
@@ -22,8 +23,9 @@
 	<sql:param value="${param.status}"/>
 </sql:query>
 
-<table width="100%" bgcolor="#DDDDDD">
-<tr bgcolor="#D6DFF7">
+<table width="95%" rules="groups" frame="box">
+<thead>
+<tr>
 <th>QMRF number</th>
 <th>Title</th>
 <th>Keywords</th>
@@ -37,10 +39,10 @@
 <th>Last modified</th>
 <th>Download</th>
 </tr>
+</thead>
 
-<c:set var="url">
-http://${header['host']}${pageContext.request.contextPath}
-</c:set>
+<tbody>
+<c:set var="url">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
 <c:forEach var="row" items="${rs.rows}">
 	<tr bgcolor="#FFFFFF">
 	<sql:query var="subrs" dataSource="jdbc/qmrf_documents">
@@ -133,5 +135,5 @@ http://${header['host']}${pageContext.request.contextPath}
 
 	</tr>
 </c:forEach>
-
+</tbody>
 </table>

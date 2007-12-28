@@ -41,7 +41,10 @@
 
 <c:if test="${rs.rowCount == 0}">
 	<%response.setHeader("Content-Disposition","attachment;filename=download_qmrf.txt");%>
-	No documents found. Are you logged in?
+	No documents found. Are you logged in? 
+	${header["host"]}
+	<br/>
+	${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}
 </c:if>
 <c:forEach var="row" items="${rs.rows}">
 	<c:set var="filename" value="${row.idqmrf}" />
@@ -55,7 +58,8 @@
 	</c:when>
 	<c:when test="${param.filetype eq 'pdf'}">
 		<%response.setHeader("Content-Disposition","attachment;filename=download_qmrf.pdf");%>
-		<a:qmrfexport xml="${row.xml}" type="${param.filetype}"  fontURL="http://${header['host']}${pageContext.request.contextPath}/times.ttf"/>
+		<c:set var="url">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
+		<a:qmrfexport xml="${row.xml}" type="${param.filetype}"  fontURL="${url}/times.ttf"/>
 	</c:when>
 	<c:when test="${param.filetype eq 'xls'}">
 		<%response.setHeader("Content-Disposition","attachment;filename=download_qmrf.xls");%>

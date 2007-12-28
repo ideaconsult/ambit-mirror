@@ -20,10 +20,10 @@ response.setHeader("Expires", "0");
 </c:when>
 
 <c:when test="${sessionScope['ismanager'] && (sessionScope.viewmode eq 'qmrf_manager')}" >
-	<c:set var="sql" value="SELECT user_name,email,registration_status,registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users order by user_name" />
+	<c:set var="sql" value="SELECT user_name,email,registration_status,date_format(registration_date,'${sessionScope.dateformat}') as registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users order by user_name" />
 </c:when>
 <c:otherwise>
-	<c:set var="sql" value="SELECT user_name,email,registration_status,registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users where user_name= \"${sessionScope['username']}\" order by user_name" />
+	<c:set var="sql" value="SELECT user_name,email,registration_status,date_format(registration_date,'${sessionScope.dateformat}') as registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users where user_name= \"${sessionScope['username']}\" order by user_name" />
 </c:otherwise>
 </c:choose>
 <users>

@@ -5,6 +5,8 @@
 <xsl:output method="html"  encoding="UTF-8" indent="yes"/>
 
 <xsl:param name="selected"/>
+<xsl:param name="footer"/>
+<xsl:param name="reportdate"/>
 
 <xsl:template match="QMRF">
 </xsl:template>
@@ -17,11 +19,25 @@
 </xsl:template>
 
 <xsl:template match="endpoints_catalog">
-		<table border="0" width="100%" bgcolor="#EEEEEE">
-		<tr bgcolor="#D6DFF7">
-		<th colspan="3" align="left">Endpoints</th>
+		<table width="95%" rules="groups" frame="box">
+		<thead>
+		<tr >
+		<th colspan="3" align="center">Endpoints</th>
 		</tr>
+		<tr >
+		<th colspan="2" align="left">Group</th>
+		<th colspan="2" align="left">Name</th>
+		</tr>
+		</thead>
+		<tbody>
 				<xsl:apply-templates select="* "/>
+		</tbody>
+		<tfoot>
+			<tr>
+			<td colspan="2" align="left"><xsl:value-of select="$footer"/></td>
+			<td align="right"><xsl:value-of select="$reportdate"/></td>
+			</tr>
+		</tfoot>
 		</table>
 </xsl:template>
 
@@ -42,15 +58,25 @@
 </xsl:template>
 
 <xsl:template match="algorithms_catalog">
-		<table border="0" width="100%" bgcolor="#EEEEEE">
-		<tr bgcolor="#D6DFF7" >
+		<table width="95%" rules="groups" frame="box">
+		<thead>
+		<tr >
 		<th colspan="2">Algorithms</th>
 		</tr>
-		<tr bgcolor="#D6DFF7">
-		<th>Description</th>
-		<th>Definition</th>
+		<tr >
+		<th align="left">Description</th>
+		<th align="left">Definition</th>
 		</tr>
+		</thead>
+		<tbody>
 				<xsl:apply-templates select="* "/>
+		</tbody>
+		<tfoot>
+			<tr>
+			<td colspan="2" align="left"><xsl:value-of select="$footer"/></td>
+			<td align="right"><xsl:value-of select="$reportdate"/></td>
+			</tr>
+		</tfoot>		
 		</table>
 </xsl:template>
 
@@ -71,19 +97,29 @@
 
 
 <xsl:template match="authors_catalog">
-		<table border="0" width="100%" bgcolor="#EEEEEE">
-		<tr bgcolor="#D6DFF7" >
-		<th colspan="6">Authors</th>
+		<table width="95%" rules="groups" frame="box">
+		<thead>
+		<tr >
+		<th colspan="6" align="center">Authors</th>
 		</tr>
-		<tr bgcolor="#D6DFF7">
-		<th>Number</th>
-		<th>Name</th>
-		<th>Affiliation</th>
-		<th>Contact</th>
-		<th>E-mail</th>
-		<th>WWW</th>
+		<tr >
+		<th align="left">Number</th>
+		<th align="left">Name</th>
+		<th align="left">Affiliation</th>
+		<th align="left">Contact</th>
+		<th align="left">E-mail</th>
+		<th align="left">WWW</th>
 		</tr>
+		</thead>
+		<tbody>
 				<xsl:apply-templates select="* "/>
+		</tbody>
+		<tfoot>
+			<tr>
+			<td colspan="2" align="left"><xsl:value-of select="$footer"/></td>
+			<td align="right"><xsl:value-of select="$reportdate"/></td>
+			</tr>
+		</tfoot>		
 		</table>
 </xsl:template>
 
@@ -121,18 +157,28 @@
 
 
 <xsl:template match="software_catalog">
-		<table border="0" width="100%" bgcolor="#EEEEEE">
-		<tr bgcolor="#D6DFF7" >
-		<th colspan="6">Software</th>
+		<table width="95%" rules="groups" frame="box">
+		<thead>
+		<tr  >
+		<th align="center" colspan="6">Software packages</th>
 		</tr>
-		<tr bgcolor="#D6DFF7">
-		<th>Number</th>
-		<th>Name</th>
-		<th>Description</th>
-		<th>Contact</th>
-		<th>WWW</th>
+		<tr >
+		<th align="left">Number</th>
+		<th align="left">Name</th>
+		<th align="left">Description</th>
+		<th align="left">Contact</th>
+		<th align="left">WWW</th>
 		</tr>
+		</thead>
+		<tbody>
 				<xsl:apply-templates select="* "/>
+		</tbody>
+		<tfoot>
+			<tr>
+			<td colspan="2" align="left"><xsl:value-of select="$footer"/></td>
+			<td align="right"><xsl:value-of select="$reportdate"/></td>
+			</tr>
+		</tfoot>		
 		</table>
 
 </xsl:template>
