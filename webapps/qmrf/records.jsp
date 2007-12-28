@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" contentType="text/xml;charset=utf-8" %>
+﻿<%@ page pageEncoding="UTF-8" contentType="text/xml;charset=utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -58,7 +58,7 @@
 
 		<table width="95%" border="0" bgcolor="${tablecolor}">
 		<c:if test="${empty param.noheader || (param.noheader eq 'false')}">
-		<tr bgcolor="#DDDDDD">
+		<tr valign="top" bgcolor="#DDDDDD">
 			<th>#</th>
 
 		<c:forEach var="columnName" items="${rs.columnNames}">

@@ -99,14 +99,14 @@
 </table>
 
 Found in following QMRFs:
-<c:set var="sql" value="select xml,qmrf_documents.documents.idqmrf,qmrf_number,version,user_name,qmrf_documents.documents.updated,concat(qa.description,' (',qa.type,')') as attachment,type from ambit_qmrf.struc_dataset join ambit_qmrf.src_dataset using(id_srcdataset) join qmrf_documents.attachments as qa using(name) join qmrf_documents.documents using(idqmrf) where idstructure=${param.idstructure} order by qmrf_documents.documents.${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
+<c:set var="sql" value="select xml,qmrf_documents.documents.idqmrf,qmrf_number,version,user_name,date_format(qmrf_documents.documents.updated,'${sessionScope.dateformat}') as lastdate,concat(qa.description,' (',qa.type,')') as attachment,type from ambit_qmrf.struc_dataset join ambit_qmrf.src_dataset using(id_srcdataset) join qmrf_documents.attachments as qa using(name) join qmrf_documents.documents using(idqmrf) where idstructure=${param.idstructure} order by qmrf_documents.documents.${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="xml" value="xml"/>
 		<jsp:param name="version" value="Version"/>
-    <jsp:param name="updated" value="Creation date"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="attachment" value="Found in"/>
 		<jsp:param name="attachment type" value="Attachment type"/>
 		<jsp:param name="actions" value=""/>

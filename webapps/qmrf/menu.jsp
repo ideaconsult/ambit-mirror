@@ -7,6 +7,10 @@
 	<c:set var="rowcolor" value='#EEEEEE' scope="session"/>
 </c:if>
 
+<c:if test="${empty sessionScope.dateformat}">
+	<c:set var="dateformat" value='%Y-%c-%d %H:%i' scope="session"/>
+</c:if>
+
 <!-- D6DFF7 -->
 <c:if test="${empty sessionScope.querycolor}">
 	<c:set var="querycolor" value='#D6DFF7' scope="session"/>

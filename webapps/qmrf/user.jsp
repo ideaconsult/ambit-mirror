@@ -114,9 +114,9 @@
 	</c:if>
 </c:if>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and status = '${sessionScope.record_status}' order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and status = '${sessionScope.record_status}' order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
 <c:if test="${(empty sessionScope.record_status) || (sessionScope.record_status eq 'all')}">
-	<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and status != 'archived' order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
+	<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and status != 'archived' order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
 </c:if>
 
 <jsp:include page="records.jsp" flush="true">
@@ -124,8 +124,8 @@
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="version" value="Version"/>
-    <jsp:param name="user_name" value="Author"/>
-    <jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="user_name" value="Author"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="user"/>
 
