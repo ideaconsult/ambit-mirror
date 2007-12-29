@@ -34,13 +34,9 @@
 <c:set var="startpage" value="${sessionScope.page}"/>
 <c:set var="startrecord" value="${sessionScope.page * sessionScope.pagesize}"/>
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-	<meta http-equiv="Content-Type" contentType="text/xml;charset=UTF-8">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Chief editor"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="editor"/>

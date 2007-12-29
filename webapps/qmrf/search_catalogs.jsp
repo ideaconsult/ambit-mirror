@@ -5,20 +5,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:requestEncoding value="UTF-8"/>
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<head>
-<meta name="description" content="(Q)MRF database">
-<meta name="keywords" content="ambit,qsar,qmrf,structure search">
-<meta name="robots"content="index,follow">
-<META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
-<meta name="copyright" content="Copyright 2007. Nina Jeliazkova nina@acad.bg">
-<meta name="author" content="Nina Jeliazkova">
-<meta name="language" content="English">
-<meta name="revisit-after" content="7">
 
-<title>Search documents in QMRF repository</title>
-<body bgcolor="#ffffff">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="Search documents in QMRF Inventory"/>
+</jsp:include>
 
 <jsp:include page="query_settings.jsp" flush="true"/>
 
@@ -111,7 +101,7 @@
 
 <!-- end initialization -->
 
-<form method="POST" name="searchform" >
+<form method="POST" name="searchform" action="">
 <table bgcolor="${querycolor}" width="90%">
 <tr bgcolor="${headercolor}">
 <th>Use</th>
@@ -269,12 +259,12 @@
 		<SELECT NAME="operation">
 				<c:choose>
 				<c:when test="${op eq 'AND'}">
-					<OPTION value="AND" selected="yes">And</Option>
+					<OPTION value="AND" selected="SELECTED">And</Option>
 					<OPTION value="OR">Or</Option>
 				</c:when>
 				<c:otherwise>
 					<OPTION value="AND">And</Option>
-					<OPTION value="OR" selected="yes">Or</Option>
+					<OPTION value="OR" selected="SELECTED">Or</Option>
 				</c:otherwise>
 				</c:choose>
 
@@ -366,7 +356,7 @@
 		</c:if>
 		<c:set var="sql" value="SELECT idqmrf,qmrf_number,updated,id_endpoint,id_algorithm,id_author,id_software,s.name as software,e.name as endpoint,a.definition as alg,r.name as author FROM documents left join doc_endpoint using (idqmrf) left join doc_algorithms using (idqmrf) left join doc_authors using (idqmrf) left join doc_software using (idqmrf) left join catalog_software as s using (id_software) left join catalog_endpoints as e using (id_endpoint) left join catalog_algorithms as a using (id_algorithm) left join catalog_authors as r using (id_author) where status = 'published' and (${where}) limit ${startrecord},${sessionScope.pagesize}"/>
 
-		<table width="99%">
+		<table width="95%">
 		<jsp:include page="records.jsp" flush="true">
 		    <jsp:param name="sql" value="${sql}"/>
 
@@ -384,15 +374,12 @@
 				<jsp:param name="pagesize" value="${sessionScope.pagesize}"/>
 				<jsp:param name="viewmode" value="html"/>
 		</jsp:include>
-
+		</table>
 
 		<jsp:include page="view.jsp" flush="true">
 		<jsp:param name="highlighted" value="${param.id}"/>
-
-
 		</jsp:include>
 
-		</table>
 </c:when>
 <c:otherwise>
 		<div class="error">
@@ -402,6 +389,14 @@
 </c:choose>
 
 </form>
+
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
 </body>
 </html>
 

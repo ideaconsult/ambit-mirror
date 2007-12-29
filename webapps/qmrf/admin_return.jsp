@@ -18,12 +18,9 @@ response.setHeader("Expires", "0");
   <c:redirect url="index.jsp"/>
 </c:if>
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Return QMRF document for revision"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="review"/>
@@ -105,7 +102,7 @@ Dear ${row.title}&nbsp;${row.firstname}&nbsp;${row.lastname},
 <p>
 Your QMRF document <x:out escapeXml="true" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/> has been returned to you for revision.
 <p>
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>
@@ -236,7 +233,13 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host
 </c:otherwise>
 </c:choose>
 
-
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
   </body>
 </html>
 

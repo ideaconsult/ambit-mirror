@@ -6,13 +6,9 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <fmt:requestEncoding value="UTF-8"/> 
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-	<meta http-equiv="Content-Type" contentType="text/xml;charset=UTF-8">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="review"/>
@@ -43,7 +39,6 @@ ${param.message}
 		<jsp:include page="hits.jsp" flush="true">
     <jsp:param name="id" value=""/>
 		</jsp:include>
-	</p>
 </div>
 
   </body>

@@ -3,22 +3,22 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html> 
 
 <head>
+<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
 <meta name="description" content="(Q)MRF database">
 <meta name="keywords" content="ambit,qsar,qmrf,structure search">
 <meta name="robots"content="index,follow">
 <META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
-<meta name="copyright" content="Copyright 2007. Nina Jeliazkova nina@acad.bg">
+<meta name="copyright" content="Copyright 2007. Ideaconsult Ltd. nina@acad.bg">
 <meta name="author" content="Nina Jeliazkova">
 <meta name="language" content="English">
 <meta name="revisit-after" content="7">
-<title>Search substances in QMRF repository</title>
-
-<SCRIPT>
+<link rel="SHORTCUT ICON" href="favicon.ico">
+<title>Search substances in QMRF Inventory</title>
+<SCRIPT type="text/javascript">
 function clearFields(){
    document.searchForm.cas.value = "";
 
@@ -72,7 +72,7 @@ function load(){
 
 <!-- end initialization -->
 
-<form action="search_tags.jsp"  name="searchForm" method="post"  onSubmit="return getMol()" onReset="return clearFields()"  border=1 bordercolor="#FF0000">
+<form action="search_tags.jsp"  name="searchForm" method="post"  onSubmit="return getMol()" onReset="return clearFields()">
 
 <table bgcolor="#FFFFFF" width="90%" border="0">
 
@@ -105,7 +105,7 @@ function load(){
 					<c:set var="search_threshold" value="0.5" scope="session"/>
 				</c:if>
 
-				<select name="threshold">
+				<select name="threshold" id="threshold">
 					<c:forTokens var="t" items="${thresholds}" delims=",">
 						<c:set	var="checked" value=""/>
 						<c:if test="${t eq sessionScope.search_threshold}">
@@ -144,47 +144,47 @@ function load(){
 
 <tr bgcolor="${querycolor}">
 <th><label for="cas">CAS Registry Number: </label></th>
-<td><input type="text" name="cas" value="${sessionScope.search_cas}" size="14" MAXLENGTH="14"/></td>
+<td><input type="text" id="cas" name="cas" value="${sessionScope.search_cas}" size="14" MAXLENGTH="14"></td>
 </tr>
 
 <tr bgcolor="${querycolor}">
 <th><label for="formula">Formula</label></th>
-<td><input type="text" name="formula"  value="${search_formula}" size="40" MAXLENGTH="40"/></td>
+<td><input type="text" id="formula" name="formula"  value="${search_formula}" size="40" MAXLENGTH="40"></td>
 </tr>
 
 <tr bgcolor="${querycolor}">
 <th><label for="name">Chemical name:</label></th>
-<td><input type="text" name="name"  value="${search_name}" size="40" MAXLENGTH="40"/>
+<td><input type="text" id="name" name="name"  value="${search_name}" size="40" MAXLENGTH="40">
 	<br>
-	<input type="checkbox" name="soundsLike" UNCHECKED />Sounds like</td>
+	<input type="checkbox" name="soundsLike" >Sounds like</td>
 </tr>
 
 <tr bgcolor="${querycolor}">
 <th><label for="identifier">Alias</label></th>
-<td><input type="text" name="identifier"  value="${search_identifier}" size="40" MAXLENGTH="40"/>
+<td><input type="text" id="identifier" name="identifier"  value="${search_identifier}" size="40" MAXLENGTH="40">
 	<br>
-	<input type="checkbox" name="soundsLikealias" UNCHECKED />Sounds like
+	<input type="checkbox" name="soundsLikealias">Sounds like
 	</td>
 </tr>
 
 <tr bgcolor="${querycolor}">
 <th><label for="smiles">SMILES: </label></th>
-<td><input type="text" name="smiles"  value="${search_smiles}" size="40" MAXLENGTH="40"/></td>
+<td><input type="text" id="smiles" name="smiles"  value="${search_smiles}" size="40" MAXLENGTH="40"></td>
 </tr>
 
 
 <tr bgcolor="${headercolor}">
 <th colspan="2">Results appearance
 	<input type="hidden" name="page" value="0" size="5" MAXLENGTH="4">
-	<input type="hidden" name="mol" value="" />
+	<input type="hidden" name="mol" value="" >
 	</th>
 </tr>
 
 <tr bgcolor="${querycolor}">
 <td><label for="pagesize">Structures per page</label></td>
-<td><select name="pagesize">
+<td><select name="pagesize" id="pagesize">
 		  		<option value ="5">5</option>
-					<option value ="10" selected="true">10</option>
+					<option value ="10" selected="SELECTED">10</option>
 		  		<option value ="25">25</option>
 					<option value ="50">50</option>
 		  		<option value ="100">100</option>
@@ -193,8 +193,8 @@ function load(){
 
 <tr bgcolor="${headercolor}">
 <th ></th >
-<th ><input type="submit" value="Search"/>
-<a href="help.jsp?anchor=search_structures" target="help"><img src="images/help.png" alt="help" title="How to search structures in QMRF inventory?" border="0"/></a>
+<th ><input type="submit" value="Search">
+<a href="help.jsp?anchor=search_structures" target="help"><img src="images/help.png" alt="help" title="How to search structures in QMRF inventory?" border="0"></a>
 	</th>
 </tr>
 
@@ -202,6 +202,14 @@ function load(){
 </table>
 
 </form>
+
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	
+</div>
 </body>
 </html>
 

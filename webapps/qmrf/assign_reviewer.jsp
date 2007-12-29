@@ -36,13 +36,9 @@
 <c:set var="startpage" value="${sessionScope.page}"/>
 <c:set var="startrecord" value="${sessionScope.page * sessionScope.pagesize}"/>
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-	<meta http-equiv="Content-Type" contentType="text/xml;charset=UTF-8">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory Editor: Assign a reviewer"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="editor"/>
@@ -74,9 +70,9 @@
 					<mt:message>
 Dear ${row.title} ${row.firstname} ${row.lastname},
 
-You have been assigned as a reviewer of a QMRF Document ${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}/admin_review.jsp?id=${param.id}.
+You have been assigned as a reviewer of a QMRF Document ${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/admin_review.jsp?id=${param.id}.
 
-You are invited to log in into QMRF Inventory at ${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}.
+You are invited to log in into QMRF Inventory at ${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}.
 
 QMRF Inventory
 					</mt:message>
@@ -148,7 +144,7 @@ select idqmrf,qmrf_number,version,user_name,updated,status from documents where 
 
 		<input type="radio" name="reviewer" value="${row.user_name}" ${checked}/>
 		</td>
-		<td>${row.title}&nbsp;${row.firstname}&nbsp;${rowlastname}</td>
+		<td>${row.title}&nbsp;${row.firstname}&nbsp;${row.lastname}</td>
 		<td>${row.email}</td>
 		<td>${row.keywords}</td>
 		<td>${row.affiliation}</td>

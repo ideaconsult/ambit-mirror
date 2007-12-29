@@ -3,20 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<head>
-<meta name="description" content="(Q)MRF database">
-<meta name="keywords" content="ambit,qsar,qmrf,structure search">
-<meta name="robots"content="index,follow">
-<META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
-<meta name="copyright" content="Copyright 2007. Nina Jeliazkova nina@acad.bg">
-<meta name="author" content="Nina Jeliazkova">
-<meta name="language" content="English">
-<meta name="revisit-after" content="7">
-
-<title>(Q)SAR Model Reporting Format database</title>
-<body bgcolor="#ffffff">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Catalogues"/>
+</jsp:include>
 
 
 <jsp:include page="menu.jsp" flush="true">

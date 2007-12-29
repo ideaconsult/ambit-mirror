@@ -11,12 +11,9 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-  <head>
-    <title>QMRF Help</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory Help"/>
+</jsp:include>
 
 <table>
 

@@ -1,15 +1,18 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<fmt:requestEncoding value="UTF-8"/>
+
 <%
 response.setHeader("Pragma", "no-cache");
 response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
-<html>
-<head>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<link rel="SHORTCUT ICON" href="favicon.ico"/>
-</head>
-<title>QMRF Login Page</title>
-<body bgcolor="white">
+
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory Log in page"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="login"/>
@@ -38,5 +41,11 @@ Please note that log in is not required for browsing reviewed and published QMRF
 <br>
 <a href="forgotten.jsp">Forgotten password?</a>
 
+<div id="hits">
+<p>
+<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+</jsp:include>
+</div>
 </body>
 </html>

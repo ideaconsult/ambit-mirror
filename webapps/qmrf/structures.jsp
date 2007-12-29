@@ -170,7 +170,8 @@
 -->
 
 <!--
-<c:set var="url">http://${header["host"]}${pageContext.request.requestURI}</c:set>
+
+<c:set var="url">${pageContext.request.scheme}://${header["host"]}${pageContext.request.requestURI}</c:set>
 <br>
 		<a href="
 			<c:url value="${url}#qmrf_doc">

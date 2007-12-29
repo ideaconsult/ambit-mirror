@@ -1,6 +1,9 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:if test="${empty param.id}" >
 	<jsp:forward page="register.jsp">
@@ -9,11 +12,9 @@
   </jsp:forward>
 </c:if>
 
-<html>
-<head>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<title>QMRF Register Page</title>
-<body bgcolor="white">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory Registration page"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="register"/>
@@ -115,6 +116,12 @@ Your confirmation was malformed. Please check whether you have followed the corr
 Please note that log in is required only for submitting new (Q)MRF documents.
 </h6>
 
+<div id="hits">
+<p>
+<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+</jsp:include>
+</div>
 
 </body>
 </html>

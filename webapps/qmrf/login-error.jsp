@@ -1,10 +1,7 @@
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<head>
-<title>QMRF Login </title>
-</head>
-<body bgcolor="white">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Invalid username/password"/>
+</jsp:include>
 	
 
 <jsp:include page="menu.jsp" flush="true">

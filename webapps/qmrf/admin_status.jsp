@@ -65,12 +65,9 @@
 	</c:otherwise>
 </c:choose>
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory statistics"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="catalog"/>
@@ -458,6 +455,14 @@ character_set_system utf8<br/>
 		${err}
 	</c:forTokens>
 </c:if>
+
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
   </body>
 </html>
 

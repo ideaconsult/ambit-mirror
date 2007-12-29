@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -48,7 +49,7 @@ function getXML(){
 
 
 
-<c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 
 	<c:set var="dataurl">
 		<c:url value="${u}/download_xml.jsp">
@@ -112,6 +113,13 @@ function getXML(){
   </table>
 </form>
 
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
   </body>
 </html>
 

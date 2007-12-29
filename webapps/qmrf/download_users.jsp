@@ -22,7 +22,7 @@
 		<c:set var="date">
 		<fmt:formatDate value="${now}" type="DATE" pattern="yyyy-MM-dd hh:mm"/>
 		</c:set>
-		<c:set var="u">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
+		<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 		
 		<c:import var="xsl" url="/WEB-INF/xslt/users2html.xsl"/>
 		<c:import var="xml" url="users_xml.jsp"/>

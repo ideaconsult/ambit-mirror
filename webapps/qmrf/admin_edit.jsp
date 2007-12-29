@@ -121,7 +121,7 @@ function getXML(){
 	<td align="left" colspan="2">
 		<input type="hidden" name="id" value="${row.idqmrf}">
 
-    <c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+    <c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 
       <c:set var="dataurl">
       	<c:url value="${u}/download_xml.jsp"> <c:param name="id" value="${row.idqmrf}"/>
@@ -188,5 +188,11 @@ function getXML(){
   </table>
 </form>
 </c:if>
+
+<div id="hits">
+	<p>
+	<jsp:include page="hits.jsp" flush="true"/>
+	</p>
+</div>
 </body>
 </html>

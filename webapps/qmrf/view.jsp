@@ -58,7 +58,7 @@
 
 							<input type="hidden" NAME="xml" />
 					  <c:set var="u">
-      						http://${header["host"]}/qmrf/download_xml.jsp
+      						${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/download_xml.jsp
     				</c:set>
 						<c:set var="dataurl">
 

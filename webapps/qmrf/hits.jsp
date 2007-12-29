@@ -48,11 +48,13 @@
 <tr>
 <td width="50%" align="left">
 <h6>
-	<font color='#AAAAAA'>For information about this site please contact ${initParam['support-email']}</h6></font>
+	<font color='#AAAAAA'>For information about this site please contact ${initParam['support-email']}</font>
+</h6>	
 </td>
 <td width="50%" align="right">
-	<h6>
-	<font color='#AAAAAA'>This page has been accessed ${nhits} times since ${fromhits} </h6></font>
+<h6>
+	<font color='#AAAAAA'>This page has been accessed ${nhits} times since ${fromhits} </font>
+</h6>	
 </td>
 </tr>
 <tr>
@@ -60,6 +62,17 @@
 <font color='#D6DFF7'>
 Developed by Ideaconsult Ltd. (2007) on behalf of ECB
 </font>
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right">
+  <A HREF="http://validator.w3.org/check?uri=referer">
+    <IMG SRC="images/valid-html401-blue-small.png" ALT="Valid HTML 4.01 Transitional" TITLE="Valid HTML 4.01 Transitional" HEIGHT="16" WIDTH="45" border="0">
+  </A>
+
+  <A HREF="http://jigsaw.w3.org/css-validator/check/referer">
+    <IMG SRC="images/valid-css-blue-small.png" TITLE="Valid CSS" ALT="Valid CSS" HEIGHT="16" WIDTH="45" border="0">
+  </A>
 </td>
 </tr>
 </table>

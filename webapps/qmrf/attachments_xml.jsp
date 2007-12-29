@@ -33,7 +33,7 @@
 <c:set var="atag" value= ""/>
 <c:set var="btag" value= ""/>
 
-<c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 
 		<c:forEach var="row" items="${rs.rows}">
 			<c:set var="filename" value="${row.original_name}" />

@@ -46,7 +46,14 @@
 <xsl:template match="user">
 	<tr>
 	<td>
-	<xsl:value-of select="@user_name"/>
+	<a>
+		<xsl:attribute name="href">
+			<xsl:text>?selected=</xsl:text>
+			<xsl:value-of select="@user_name"/>
+		</xsl:attribute>
+		<xsl:value-of select="@user_name"/>
+	</a>		
+	
 	</td>
 	<td>
 	<xsl:value-of select="@email"/>

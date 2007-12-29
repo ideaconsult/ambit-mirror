@@ -42,7 +42,7 @@
 </thead>
 
 <tbody>
-<c:set var="url">${pageContext.request.scheme}://${header["host"]}${pageContext.request.contextPath}</c:set>
+<c:set var="url">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:forEach var="row" items="${rs.rows}">
 	<tr bgcolor="#FFFFFF">
 	<sql:query var="subrs" dataSource="jdbc/qmrf_documents">

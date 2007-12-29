@@ -4,7 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!-- expects ?id=qmrfid-->
-
 <c:set var="idqmrf" value="${sessionScope['qmrf_document']}" />
 <c:if test="${!empty param.id}" >
 	<c:set var="idqmrf" value="${param.id}" />
@@ -45,6 +44,9 @@
 			<c:set var="clr" value="#FFFFFF"/>
 			<c:if test="${(r % 2)==0}" >
 				<c:set var="clr" value="#EEEEEE"/>
+		  </c:if>
+		  <c:if test="${!empty param.idattachment && (param.idattachment eq row.idattachment)}">
+			  <c:set var="clr" value="#FFFF99"/>
 		  </c:if>
 	    <tr bgcolor="${clr}">
 	    	<td>${r}</td>
@@ -87,6 +89,17 @@
 
 	    	</c:if>
 
+	    		<c:if test="${(row.type ne 'document') && (row.imported eq 'false')}" >
+	    			<a href="
+						<c:url value="edit_attachmentsdb.jsp">
+					  <c:param name="id" value="${row.idqmrf}"/>
+						<c:param name="idattachment" value="${row.idattachment}"/>					  
+						<c:param name="name" value="${row.name}"/>
+						<c:param name="action" value="properties"/>						
+						</c:url>
+					"><img src="images/information.png" height="16" width="16" alt="information.png" title="Configure properties to import" border="0"/></a>
+				</c:if>
+					
 	    		<c:if test="${(row.type ne 'document') && (row.imported eq 'false') && (sessionScope['isadmin'] eq 'true')}" >
 	    			<a href="
 						<c:url value="admin_import.jsp">

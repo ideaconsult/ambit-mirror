@@ -139,6 +139,13 @@
 </form>
 </c:if>
 
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
 </body>
 </html>
 

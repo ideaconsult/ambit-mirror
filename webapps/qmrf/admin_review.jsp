@@ -53,13 +53,9 @@ response.setHeader("Expires", "0");
 	</
 </c:catch>
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-  <head>
-    <title>QMRF documents</title>
-
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF document review"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="review"/>
@@ -198,5 +194,13 @@ response.setHeader("Expires", "0");
 		</c:forEach>
 	</form>
 </c:if>
+
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
 </body>
 </html>

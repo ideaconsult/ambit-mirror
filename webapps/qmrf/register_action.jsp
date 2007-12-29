@@ -205,7 +205,7 @@ E-mail </td>
 Thank you for registering as a user with QMRF repository. To  confirm the registration, simply point your browser to the following URL:
 
       <c:set var="u">
-      		${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
+      		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
     	</c:set>
 <c:url value="${u}"><c:param name="id" value="${pageContext.session.id}"/></c:url>
 

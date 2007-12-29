@@ -19,13 +19,9 @@ response.setHeader("Expires", "0");
 </c:if>
 
 
-<html>
-<head>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<link rel="SHORTCUT ICON" href="favicon.ico"/>
-</head>
-<title>QMRF Login Page</title>
-<body bgcolor="white">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Forgotten password page"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="login"/>
@@ -78,7 +74,7 @@ Dear ${row.title} ${row.firstname} ${row.lastname},
 Your username: ${row.user_name}
 Your password has been reset to ${newpass}. You may change the password via My profile tab.
 
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${header["host"]}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>

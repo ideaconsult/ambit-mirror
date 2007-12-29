@@ -1,7 +1,7 @@
 	body,
 	html {
 		margin:0;
-		padding:0;
+		padding:0em;
 		background:#FFFFFF;
 		color:#000;
 	}
@@ -26,13 +26,13 @@
 	}
 	#nav ul{
 		margin:0;
-		padding:0;
+		padding:0em;
 		list-style:none;
 	}
 	#nav li{
 		display:inline;
 		margin:0;
-		padding:0;
+		padding:0em;
 	}
 	#main {
 		background:#FFFFFF;
@@ -40,7 +40,7 @@
 		width:500px;
 	}
 	#main h2,#main h3, #main h4, #main p {
-		padding:0 10px;
+		padding:0em 10px;
     }
 	#options {
 		background:#FFFFFF;
@@ -51,7 +51,7 @@
 		margin-bottom:0;
   }
   #options h3, #options p {
-		padding:0 10px 0 0;
+		padding:0em 10px 0em 0em;
   }
   #suboptions {
   	border-width:1px;

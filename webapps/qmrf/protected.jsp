@@ -18,11 +18,9 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
-<html>
-<head>
-<title>QMRF Login</title>
-</head>
-<body bgcolor="white">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Log in page"/>
+</jsp:include>
 <%
 
   if (request.getUserPrincipal() != null)  {

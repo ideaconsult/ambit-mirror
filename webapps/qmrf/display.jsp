@@ -24,9 +24,9 @@
 	</c:otherwise>
 </c:choose>
 
-<html>
-<title>Substance in QMRF repository</title>
-<body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="Substance in QMRF repository"/>
+</jsp:include>
 
 <c:if test="${!empty param.idstructure}">
 

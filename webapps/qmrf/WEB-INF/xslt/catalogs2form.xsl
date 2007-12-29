@@ -32,7 +32,7 @@
 				<xsl:choose>
 					<xsl:when test="contains(@id,$selected)">
 							<xsl:attribute name="selected">
-							<xsl:text>yes</xsl:text>
+							<xsl:text>SELECTED</xsl:text>
 							</xsl:attribute>
 					</xsl:when>
 
@@ -62,7 +62,7 @@
 				<xsl:choose>
 					<xsl:when test="contains(@id,$selected)">
 							<xsl:attribute name="selected">
-							<xsl:text>yes</xsl:text>
+							<xsl:text>SELECTED</xsl:text>
 							</xsl:attribute>
 					</xsl:when>
 										<xsl:otherwise>
@@ -93,7 +93,7 @@
 				<xsl:choose>
 					<xsl:when test="contains(@id,$selected)">
 							<xsl:attribute name="selected">
-							<xsl:text>yes</xsl:text>
+							<xsl:text>SELECTED</xsl:text>
 							</xsl:attribute>
 					</xsl:when>
 					<xsl:otherwise>
@@ -163,7 +163,7 @@
 				<xsl:choose>
 					<xsl:when test="contains(@id,$selected)">
 							<xsl:attribute name="selected">
-							<xsl:text>yes</xsl:text>
+							<xsl:text>SELECTED</xsl:text>
 							</xsl:attribute>
 					</xsl:when>
 					<xsl:otherwise>

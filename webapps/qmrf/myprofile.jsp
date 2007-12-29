@@ -26,21 +26,9 @@
 	</c:otherwise>
 </c:choose>
 
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<head>
-<meta name="description" content="(Q)MRF database">
-<meta name="keywords" content="ambit,qsar,qmrf,structure search">
-<meta name="robots"content="index,follow">
-<META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
-<meta name="copyright" content="Copyright 2007. Nina Jeliazkova nina@acad.bg">
-<meta name="author" content="Nina Jeliazkova">
-<meta name="language" content="English">
-<meta name="revisit-after" content="7">
-<link rel="SHORTCUT ICON" href="favicon.ico"/>
-</head>
-<title>(Q)SAR Model Reporting Format (QMRF) Inventory</title>
-<body bgcolor="#ffffff">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: User' profile"/>
+</jsp:include>
 
 
 <jsp:include page="menu.jsp" flush="true">
@@ -121,11 +109,17 @@
 
 
 <c:catch var="error">
-	
-	<c:import var="xsl" url="/WEB-INF/xslt/users2form.xsl"/>
 	<c:import var="xml" url="users_xml.jsp"/>
+	<c:set var="admin" value="${sessionScope.ismanager && (sessionScope.viewmode eq 'qmrf_manager')}"/>	
+	<c:if test="${admin}">	
+		<c:import var="xsl" url="/WEB-INF/xslt/users2html.xsl"/>
+		<x:transform xml="${fn:trim(xml)}" xslt="${fn:trim(xsl)}">
+			<x:param name="header" value="Registered users in QMRF Inventory:"/>
+		</x:transform>	
+	</c:if>
+	<c:import var="xsl" url="/WEB-INF/xslt/users2form.xsl"/>
 	<x:transform xml="${fn:trim(xml)}" xslt="${fn:trim(xsl)}">
-		<x:param name="admin" value="${sessionScope.ismanager && (sessionScope.viewmode eq 'qmrf_manager')}"/>
+		<x:param name="admin" value="${admin}"/>
 	</x:transform>
 </c:catch>
 

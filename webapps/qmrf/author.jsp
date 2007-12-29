@@ -6,21 +6,9 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:requestEncoding value="UTF-8"/>
 
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<head>
-<meta name="description" content="(Q)MRF database">
-<meta name="keywords" content="ambit,qsar,qmrf,structure search">
-<meta name="robots"content="index,follow">
-<META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
-<meta name="copyright" content="Copyright 2007. Nina Jeliazkova nina@acad.bg">
-<meta name="author" content="Nina Jeliazkova">
-<meta name="language" content="English">
-<meta name="revisit-after" content="7">
-<link rel="SHORTCUT ICON" href="favicon.ico"/>
-</head>
-<title>(Q)SAR Model Reporting Format (QMRF) Inventory</title>
-<body bgcolor="#ffffff">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Author' data"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="profile"/>

@@ -1,4 +1,4 @@
-﻿<%@ page pageEncoding="UTF-8" contentType="text/xml;charset=utf-8" %>
+<%@ page pageEncoding="UTF-8" contentType="text/xml;charset=utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -22,39 +22,40 @@
 </c:when>
 <c:otherwise>
 
-	<div  style="color:#36393D;background:#FFFFFF;text-align:left" >
 
 
 	<c:choose>
 	<c:when test="${(sessionScope.maxpages eq 0)}">
+		<div  style="color:#36393D;background:#FFFFFF;text-align:left" >
 		No records.
+		</div>
 	</c:when>
 	<c:otherwise>
 		<c:if test="${param.paging eq 'true'}">
+			<div  style="color:#36393D;background:#FFFFFF;text-align:left" >
 
-						Pages:
+			Pages:
 
-						<c:forEach var='item' begin='0' end='${sessionScope.maxpages-1}'>
-								<c:if test="${param.page eq item}">
-									[
-								</c:if>
-									<a href="
-									<c:url value="${thispage}">
-										<c:param name="page" value="${item}"/>
-										<c:param name="pagesize" value="${param.pagesize}"/>
-									</c:url>
-									">${item+1}</a>
-								<c:if test="${param.page eq item}">
-									]
-								</c:if>
-								&nbsp;
-						</c:forEach>
-
-		</c:if>
-		<c:if test="${param.paging eq 'true'}">
+			<c:forEach var='item' begin='0' end='${sessionScope.maxpages-1}'>
+					<c:if test="${param.page eq item}">
+						[
+					</c:if>
+						<c:url value="${thispage}" var="url">
+							<c:param name="page" value="${item}"/>
+							<c:param name="pagesize" value="${param.pagesize}"/>
+						</c:url>
+					<a href="
+						<c:out value="${url}" escapeXml="true" />
+					">${item+1}</a>
+					<c:if test="${param.page eq item}">
+						]
+					</c:if>
+					&nbsp;
+			</c:forEach>
 		&nbsp;Sorted by: <i>${param[sessionScope.order]}</i>
-		</c:if>
+			
 		</div>
+		</c:if>
 
 		<table width="95%" border="0" bgcolor="${tablecolor}">
 		<c:if test="${empty param.noheader || (param.noheader eq 'false')}">
@@ -75,15 +76,16 @@
 
 			  	<c:set var="anchor">${columnName}</c:set>
 					<th align="left">
-						<a href="
-						<c:url value="${thispage}">
+						<c:url value="${thispage}" var="url">
 						  <c:param name="order" value="${columnName}"/>
 							<c:param name="changedirection" value="true"/>
-						</c:url>
+						</c:url>					
+						<a href="
+						<c:out value="${url}" escapeXml="true" />
 						">${title}</a>
 
 						<c:if test="${!empty anchor}">
-							<a href="help.jsp?anchor=${anchor}" target="help"><img src="images/help.png" alt="help" title="What is ${param[columnName]}?" border="0"/></a>
+							<a href="help.jsp?anchor=${anchor}" target="help"><img src="images/help.png" alt="help" title="What is ${param[columnName]}?" border="0"></a>
 						</c:if>
 			    </th>
 		    </c:otherwise>
@@ -91,7 +93,7 @@
 		</c:forEach>
 			<th align="left"> View</th>
 			<th align="left"> Download
-				<a href="help.jsp?anchor=download" target="help"><img src="images/help.png" alt="help" title="Download QMRF document as html,pdf,xls or xml file." border="0"/></a>
+				<a href="help.jsp?anchor=download" target="help"><img src="images/help.png" alt="help" title="Download QMRF document as html,pdf,xls or xml file." border="0"></a>
 				</th>
 
 				<c:choose>
@@ -99,7 +101,7 @@
 			  </c:when>
 				<c:when test="${(param.actions eq 'admin') || (param.actions eq 'user') || (param.actions eq 'editor') }">
 					<th align="left"> Actions
-						<a href="help.jsp?anchor=actions" target="help"><img src="images/help.png" alt="help" title="What is an Action?" border="0"/></a>
+						<a href="help.jsp?anchor=actions" target="help"><img src="images/help.png" alt="help" title="What is an Action?" border="0"></a>
 						</th>
 			  </c:when>
 			  <c:otherwise>
@@ -137,11 +139,12 @@
 						<td align="left">
 							<c:choose>
 							<c:when test="${columnName eq 'qmrf_number'}">
-							<a href="
-								<c:url value="${param.viewpage}">
+								<c:url value="${param.viewpage}" var="url">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="idstructure" value="${param.idstructure}"/>
 								</c:url>
+							<a href="
+								<c:out value="${url}" escapeXml="true" />
 							" >	${row[columnName]}
 								</a>
 
@@ -184,12 +187,13 @@
 			</c:forEach>
 
 		    <td>
+					<c:url value="${param.viewpage}" var="url">
+					  <c:param name="id" value="${row.idqmrf}"/>
+					  <c:param name="idstructure" value="${param.idstructure}"/>
+					</c:url>		    	
 							<a href="
-								<c:url value="${param.viewpage}">
-							  <c:param name="id" value="${row.idqmrf}"/>
-							  <c:param name="idstructure" value="${param.idstructure}"/>
-								</c:url>
-							" ><img src="images/view.png" height="18" width="18" alt="View" title="View" border="0"/></a>
+								<c:out value="${url}" escapeXml="true" />
+							" ><img src="images/view.png" height="18" width="18" alt="View" title="View" border="0"></a>
 
 							<c:catch var="exception_attachments">
 								<sql:query var="rsa" dataSource="jdbc/qmrf_documents">
@@ -200,17 +204,18 @@
 									<c:choose>
 									<c:when test="${att_count.c > 0}">
 										<c:set var="title" value="Attachment(s) available (${att_count.c})"/>
-										<a href="
-											<c:url value="${param.viewpage}">
+										<c:url value="${param.viewpage}" var="url">
 										  <c:param name="id" value="${row.idqmrf}"/>
 										  <c:param name="idstructure" value="${param.idstructure}"/>
 											<c:param name="view" value="attachments"/>
-											</c:url>
-										" ><img src="images/attachment.png" alt="${title}" title="${title}" border="0"/></a>
+										</c:url>										
+										<a href="
+											<c:out value="${url}" escapeXml="true" />
+										" ><img src="images/attachment.png" alt="${title}" title="${title}" border="0"></a>
 									</c:when>
 									<c:otherwise>
 										<c:set var="title" value="No attachments"/>
-										<img src="images/placeholder.png" alt="${title}" title="${title}" border="0"/>
+										<img src="images/placeholder.png" alt="${title}" title="${title}" border="0">
 									</c:otherwise>
 									</c:choose>
 								</c:forEach>
@@ -219,45 +224,48 @@
 
 
 							<c:if test="${row['version']>1}">
-								<a href="
-								<c:url value="${param.viewpage}">
+								<c:url value="${param.viewpage}" var="url">
 							  <c:param name="id" value="${row.idqmrf}"/>
 								<c:param name="history" value="true"/>
-								</c:url>
-							" ><img src="images/revision.png"  alt="Previous versions" title="Previous versions" border="0"/></a>
+								</c:url>							
+								<a href="
+								<c:out value="${url}" escapeXml="true" />
+							" ><img src="images/revision.png"  alt="Previous versions" title="Previous versions" border="0"></a>
 		  					</c:if>
 				</td>
 				<td>
-
-							<a href="
-								<c:url value="download.jsp">
+								<c:url value="download.jsp" var="url">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="html"/>
 								</c:url>
-							"><img src="images/html.png"  alt="html.png" title="Download QMRF document as HTML file" border="0"/></a>
-
 							<a href="
-								<c:url value="download.jsp">
+							<c:out value="${url}" escapeXml="true" />
+							"><img src="images/html.png"  alt="html.png" title="Download QMRF document as HTML file" border="0"></a>
+
+								<c:url value="download.jsp" var="url">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="pdf"/>
 								</c:url>
-							"><img src="images/pdf.png" border="0" alt="pdf.png" title="Download QMRF document as Adobe PDF" /></a>
-
-
 							<a href="
-								<c:url value="download.jsp">
+								<c:out value="${url}" escapeXml="true" />
+							"><img src="images/pdf.png" border="0" alt="pdf.png" title="Download QMRF document as Adobe PDF" ></a>
+
+								<c:url value="download.jsp" var="url">
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="filetype" value="xls"/>
 								</c:url>
-							" ><img src="images/xls.png" " alt="xls.png" title="Download QMRF document as MS Excel XLS file" border="0"/></a>
-
 							<a href="
-								<c:url value="download.jsp">
+							<c:out value="${url}" escapeXml="true" />
+							" ><img src="images/xls.png" alt="xls.png" title="Download QMRF document as MS Excel XLS file" border="0"></a>
+
+								<c:url value="download.jsp" var="url">
 							  <c:param name="filetype" value="xml"/>
 							  <c:param name="id" value="${row.idqmrf}"/>
 							  <c:param name="action" value="dbattachments"/>
 								</c:url>
-							"><img src="images/xml.png"  alt="xml.png" title="Download QMRF document as XML file" border="0"/></a>
+							<a href="
+								<c:out value="${url}" escapeXml="true" />
+							"><img src="images/xml.png"  alt="xml.png" title="Download QMRF document as XML file" border="0"></a>
 
 				 </td>
 				   <td>
@@ -274,40 +282,45 @@
 											<i>newer revisions exist</i>
 									  </c:when>
 									  <c:when test="${row.status eq 'submitted'}">
-											<a href="
-											<c:url value="admin_review.jsp">
+											<c:url value="admin_review.jsp" var="url">
 											  <c:param name="status" value="under review"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Review</a>
 									  </c:when>
 									  <c:when test="${row.status eq 'under review'}">
-											<a href="
-											<c:url value="admin_review.jsp">
+											<c:url value="admin_review.jsp" var="url">
 											  <c:param name="status" value="under review"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Review</a>
 
-											<a href="
-											<c:url value="admin_edit.jsp">
+											<c:url value="admin_edit.jsp" var="url">
 											  <c:param name="status" value="under review"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Edit</a>
 
-											<a href="
-											<c:url value="publish.jsp">
+											<c:url value="publish.jsp" var="url">
 											  <c:param name="status" value="published"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Publish</a>
 
-											<a href="
-											<c:url value="admin_return.jsp">
+											<c:url value="admin_return.jsp" var="url">
 											  <c:param name="status" value="returned for revision"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Return to author</a>
 
 									  </c:when>
@@ -322,10 +335,11 @@
 					  <c:when test="${param.actions eq 'editor'}">
 					  		<c:choose>
 					  			<c:when test="${(row.status eq 'submitted') || (row.status eq 'under review')}">
-											<a href="
-											<c:url value="assign_reviewer.jsp">
+											<c:url value="assign_reviewer.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Assign a Reviewer</a>
 									</c:when>
 									<c:otherwise>
@@ -339,20 +353,25 @@
 									<i>Waiting for administrator approval</i>
 								</c:when>
 							  <c:when test="${row.status eq 'draft'}">
-											<a href="
-											<c:url value="edit.jsp">
+											<c:url value="edit.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Edit</a>
-											<a href="
-											<c:url value="edit_attachmentsdb.jsp">
+											<c:url value="edit_attachmentsdb.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Attachments</a>
-											<a href="
-											<c:url value="update_status.jsp">
+											
+											<c:url value="update_status.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
 											">Validate and submit</a>
 							  </c:when>
 							  <c:when test="${row.status eq 'returned for revision'}">

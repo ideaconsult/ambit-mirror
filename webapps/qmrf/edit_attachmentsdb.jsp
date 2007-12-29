@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/xephyrus-fileupload"   prefix="fup" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
@@ -28,7 +28,7 @@ response.setHeader("Expires", "0");
 
 		<c:if test="${empty sessionScope['isauthor']}" >
 
-		  <c:redirect url="protected.jsp"/>
+		  <c:redirect url="index.jsp"/>
 		</c:if>
 
 </c:catch>
@@ -58,18 +58,9 @@ response.setHeader("Expires", "0");
 </c:if>
 
 
-<%-- prepare the page --%>
-<!DOCTYPE html PUBLIC
-  "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "DTD/xhtml1-transitional.dtd">
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-	<meta http-equiv="Content-Type" contentType="text/xml;charset=utf-8">
-  <head>
-    <title>QMRF documents</title>
-
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Upload QMRF document attachments"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
@@ -149,7 +140,6 @@ response.setHeader("Expires", "0");
 		  </c:choose>
 
 </c:if>
-
 
 <c:if test="${!empty param.status}">
 <div class="success">
@@ -247,7 +237,7 @@ response.setHeader("Expires", "0");
 		</c:if>
       </td></tr></table>
 
-  <table border="0" cellspacing="5" width="100%">
+  <table border="0" cellspacing="5" width="95%">
 	<!-- here goes the list of attachmennt as read from database -->
   <jsp:include page="list_attachments.jsp" flush="true"/>
 
@@ -276,6 +266,19 @@ response.setHeader("Expires", "0");
   	</tr>
 </c:forEach>
   </table>
+  
+<c:if test="${action eq 'properties'}">
+  <jsp:include page="fileproperties.jsp" flush="true">
+	<jsp:param name="id" value="${param.id}"/>
+	<jsp:param name="idattachment" value="${param.idattachment}"/>	  
+  	<jsp:param name="name" value="${param.name}"/>
+  </jsp:include>
+</c:if>  
 
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true"/>
+	</p>
+</div>
   </body>
 </html>
