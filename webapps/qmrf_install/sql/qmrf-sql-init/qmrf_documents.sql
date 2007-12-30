@@ -13,11 +13,22 @@ CREATE TABLE  `qmrf_documents`.`attachments` (
   `format` varchar(32) NOT NULL default 'txt',
   `original_name` text,
   `imported` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`idqmrf`,`name`),
-  UNIQUE KEY `Index_4` (`idattachment`),
+  `content` blob,
+  PRIMARY KEY  USING BTREE (`idattachment`),
+  UNIQUE KEY `Index_4` USING BTREE (`idqmrf`,`name`),
   KEY `name` (`name`),
   KEY `type` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qmrf_documents`.`attachments_description`;
+CREATE TABLE  `qmrf_documents`.`attachments_description` (
+  `idattachment` int(10) unsigned NOT NULL auto_increment,
+  `fieldname` varchar(128) NOT NULL,
+  `fieldtype` varchar(45) NOT NULL,
+  `newname` varchar(128) NOT NULL,
+  PRIMARY KEY  USING BTREE (`idattachment`,`fieldname`),
+  CONSTRAINT `FK_attachments_description_1` FOREIGN KEY (`idattachment`) REFERENCES `attachments` (`idattachment`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `qmrf_documents`.`catalog_algorithms`;
 CREATE TABLE  `qmrf_documents`.`catalog_algorithms` (
@@ -170,8 +181,9 @@ UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` values ('guest',md5('qmrf'),'guest@acad.bg','confirmed',now(),'','','Guest','User','','','','');
-INSERT INTO `users` values ('admin',md5('qmrfadmin'),'admin@acad.bg','confirmed',now(),'','','Admin','User','','','','');
+INSERT INTO `users` values ('editor',"4f0d4a73e581a9e08f2ce26a59582428",'nina@acad.bg','confirmed',now(),'','','QMRF','Editor','','','','','',1);
+INSERT INTO `users` values ('guest',"4f0d4a73e581a9e08f2ce26a59582428",'nina@acad.bg','confirmed',now(),'','','Guest','User','','','','','',0);
+INSERT INTO `users` values ('admin',"90ccd6798c380a61df628a73895c5fb2",'nina@acad.bg','confirmed',now(),'','','Admin','User','','','','','',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 

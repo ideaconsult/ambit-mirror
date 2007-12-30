@@ -4,7 +4,7 @@ GRANT SELECT, INSERT, UPDATE ON `ambitlog`.* TO 'hits'@'localhost';
 
 -- Grants for guest@localhost
 GRANT USAGE ON *.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
-GRANT SELECT ON `ambitlog`.* TO 'guest'@'localhost';
+-- GRANT SELECT ON `ambitlog`.* TO 'guest'@'localhost';
 GRANT SELECT ON `ambit\_qmrf`.* TO 'guest'@'localhost';
 
 -- Grants for qmrf@localhost
