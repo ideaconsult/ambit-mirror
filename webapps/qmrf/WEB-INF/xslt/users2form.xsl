@@ -296,6 +296,9 @@
 		<xsl:attribute name="name">
 			<xsl:text>reviewer</xsl:text>
 		</xsl:attribute>
+		<xsl:attribute name="value">
+			<xsl:text>Yes</xsl:text>
+		</xsl:attribute>		
 		<xsl:choose>
 		<xsl:when test="@reviewer = 'true'">
 			<xsl:attribute name="checked">
@@ -315,6 +318,9 @@
 		<xsl:attribute name="name">
 			<xsl:text>reviewer</xsl:text>
 		</xsl:attribute>
+		<xsl:attribute name="value">
+			<xsl:text>No</xsl:text>
+		</xsl:attribute>				
 		<xsl:choose>
 		<xsl:when test="@reviewer = 'false'">
 			<xsl:attribute name="checked">

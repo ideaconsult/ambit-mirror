@@ -186,41 +186,46 @@
    		<tag-class>ambit.taglibs.AmbitImportTag</tag-class>
         <attribute>
             <name>filename</name>
-            <required>yes</required>
+            <required>no</required>
             <fragment>true</fragment>
         </attribute>
         <attribute>
-            <name>datasetname</name>
-            <required>yes</required>
+            <name>xml</name>
+            <required>no</required>
             <fragment>true</fragment>
-        </attribute>
+        </attribute>        
+        <attribute>
+            <name>datasetname</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>        
         <attribute>
             <name>database</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>
+        </attribute>         
         <attribute>
             <name>host</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>
+        </attribute>    
         <attribute>
             <name>port</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>
+        </attribute>            
         <attribute>
             <name>user</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>
+        </attribute>   
         <attribute>
             <name>password</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>
+        </attribute>                                   
      <body-content>empty</body-content>
-</tag>
+</tag>	  
 
 <tag>
    		<name>generator</name>

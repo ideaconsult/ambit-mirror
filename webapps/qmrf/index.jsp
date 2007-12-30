@@ -32,12 +32,16 @@
 </c:if>
 
 
-<c:if test="${sessionScope['isadmin']=='false'}" >
+<c:if test="${sessionScope['isauthor']=='true'}" >
 
 	<blockquote>
   <p>
-  You are logged in as a QMRF repository user and can create and edit new QMRF documents as well as submit them for reviewing.<br/>
-The submitted documents will be approved and published or returned to you for further editing if essential information is missing.<br/>
+  You are logged in as a QMRF Inventory <b>Author</b>
+  <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
+   and can create and edit new QMRF documents as well as submit them for reviewing.<br/>
+The submitted documents will be approved and published or returned to you for further editing if essential information is missing.
+<a href="help.jsp?anchor=status" target="help" rev="help" ><img src="images/help.png" alt="help" title="Documents life cycle" border="0"/></a>
+<br/>
 Your documents are available under the <u>My documents</u> tab. You can create a new document through the <u>New document</u> tab.<br/>
 You can view and change your registration details under the <u>My profile</u> tab.
 </p>
@@ -49,10 +53,35 @@ You can view and change your registration details under the <u>My profile</u> ta
 
 	<blockquote>
   <p>
-  You are logged in as an administrator and can review and publish QMRF documents.
+  You are logged in as an QMRF Inventory <b>Reviewer</b>
+  <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
+   and can review and publish QMRF documents.
   <br/>
   The new documents to be processed are listed under <u>Pending documents</u> tab.
 
+	</p>
+</blockquote>
+</c:if>
+
+<c:if test="${sessionScope['iseditor']=='true'}" >
+
+	<blockquote>
+  <p>
+  You are logged in as an QMRF Inventory <b>Editor</b>
+  <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
+   and you can assign reviewers to newly submitted documents <a href="help.jsp?anchor=status" target="help" rev="help" ><img src="images/help.png" alt="help" title="Documents life cycle" border="0"/></a>.
+	</p>
+</blockquote>
+</c:if>
+
+
+<c:if test="${sessionScope['ismanager']=='true'}" >
+
+	<blockquote>
+  <p>
+  You are logged in as an QMRF Inventory <b>Administrator</b>
+  <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
+   which entitles you to running various system reports and statistics.
 	</p>
 </blockquote>
 </c:if>

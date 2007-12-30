@@ -10,12 +10,9 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
-<html>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<head>
-<title>QMRF documents</title>
-</head>
-<body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Import structures"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="import"/>

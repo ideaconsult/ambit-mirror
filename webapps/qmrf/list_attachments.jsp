@@ -111,7 +111,7 @@
 
 	    		<c:if test="${row.imported eq 'true'}" >
 	    			<a href="
-						<c:url value="structures.jsp">
+						<c:url value="list_structures.jsp">
 					  <c:param name="id" value="${row.idqmrf}"/>
 					  <c:param name="idattachment" value="${row.idattachment}"/>
 						<c:param name="changedirection" value="false"/>

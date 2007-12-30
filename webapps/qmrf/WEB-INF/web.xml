@@ -98,6 +98,8 @@
 	  <auth-constraint>
 		<role-name>qmrf_admin</role-name>
 		<role-name>qmrf_user</role-name>
+		<role-name>qmrf_editor</role-name>
+		<role-name>qmrf_manager</role-name>		
 	</auth-constraint>
 
   </security-constraint>

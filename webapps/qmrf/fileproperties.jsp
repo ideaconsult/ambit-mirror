@@ -21,12 +21,26 @@
 	</c:if>
 	<c:set var="tokens" value="ignore,Chemical Name (IUPAC),Chemical Name (Not IUPAC),CAS Number,SMILES,InChI,Structural Formula,Dependent Variable Value,Descriptor,Experimental data,other"/>
 
-<c:if test="${!empty param.name && !empty param.idattachment}">
+<c:if test="${!empty param.idattachment}">
 	<c:choose>
 	<c:when test="${empty param.properties}">
-		
+		<c:set var="filename" value=""/>
+		<c:catch var="err">
+			<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+				SELECT name FROM attachments where idattachment=?
+				<sql:param value="${param.idattachment}"/>
+			</sql:query>		
+			<c:forEach var="row" items="${rs.rows}">
+				<c:set var="filename" value="${row.name}"/>
+			</c:forEach>
+		</c:catch>
+		<c:if test="${!empty err}">
+			${err}
+			<c:set var="parse" value="true"/>		
+		</c:if>
 		<c:if test="${parse}">
-			<a:fileproperties params="params" recordsToRead="3" filename="${initParam['attachments-dir']}/${param.name}"/>
+			parse
+			<a:fileproperties params="params" recordsToRead="3" filename="${initParam['attachments-dir']}/${filename}"/>
 			<c:catch var ="err">
 			<sql:transaction dataSource="jdbc/qmrf_documents">
 				<sql:update var="updateCount" >
@@ -56,9 +70,12 @@
 					
 					<c:set var="n" value="name_${p}"/>
 					<c:set var="r" value="property_${p}"/>
+					<c:set var="w" value="newname_${p}"/>
+										
 					<sql:update var="updateCount" >
-						update attachments_description set fieldtype=? where idattachment=? and fieldname=?
+						update attachments_description set fieldtype=?,newname=? where idattachment=? and fieldname=?
 						<sql:param value="${param[r]}"/>
+						<sql:param value="${param[w]}"/>						
 						<sql:param value="${param.idattachment}"/>
 						<sql:param value="${param[n]}"/>
 					</sql:update>
@@ -79,16 +96,17 @@
 		</sql:query>	
 
 		<c:set var="r" value="0"/>	
-		<form method="POST">
+		<form method="POST" action="">
 			<table width="95%" rules="groups" frame="box" >
 				<thead>
 				<tr bgcolor="#FFFF99">
 					<th>Attachment</th>
-					<th colspan="10">${param.name}</th>
+					<th colspan="10">${filename}</th>
 				</tr>
 				<tr valign="top" bgcolor="#FFFF99">
 					<th>#</th>
-					<th>Properties</th>
+					<th>Properties
+					<a href="help.jsp?anchor=properties" target="help"><img src="images/help.png" alt="help" title="What is it?" border="0"></a></th>
 					<th>Import as (type)</th>
 					<th>Import as (name)</th>
 				</tr>
@@ -121,7 +139,7 @@
 						
 						</td>
 						<td>
-						<input type="text" size="40" name="${row.fieldname}_text" value="${row.newname}"/>
+						<input type="text" size="40" name="newname_${r}" value="${row.newname}"/>
 						</td>
 					</tr>
 				</c:forEach>

@@ -1,6 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="/ambit" prefix="a" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <jsp:include page="query_settings.jsp" flush="true"/>
 <c:set var="thispage" value='display.jsp'/>
@@ -29,74 +34,25 @@
 </jsp:include>
 
 <c:if test="${!empty param.idstructure}">
-
-
-<sql:query var="rsname" dataSource="jdbc/qmrf_documents">
-			select name from ambit_qmrf.name where idstructure=?
-			<sql:param value="${param.idstructure}"/>
-</sql:query>
-<sql:query var="rscas" dataSource="jdbc/qmrf_documents">
-			select casno from ambit_qmrf.cas where idstructure=?
-			<sql:param value="${param.idstructure}"/>
-</sql:query>
-<sql:query var="rsdesc" dataSource="jdbc/qmrf_documents">
-			select name,value from ambit_qmrf.dvalues join ambit_qmrf.ddictionary using(iddescriptor) where idstructure=?
-			<sql:param value="${param.idstructure}"/>
-</sql:query>
-<sql:query var="rsexp" dataSource="jdbc/qmrf_documents">
-			select d.name,c,f.name as field,s.value from ambit_qmrf.study_fieldnames as f join ambit_qmrf.study_results as s using (id_fieldname) join ambit_qmrf.experiment using(idexperiment) join (select idstudy,value as c,fn.name from ambit_qmrf.study_conditions join  ambit_qmrf.study_fieldnames as fn using(id_fieldname)) as d using(idstudy) where idstructure=? and (d.c != "")
-			<sql:param value="${param.idstructure}"/>
-</sql:query>
-
-
-<table>
-<tr>
-<td>
-	<c:forEach var="row" items="${rsname.rows}">
-		<h3><c:out value="${row.name}"/></h3>
-	</c:forEach>
-
-	CAS RN:
-	<c:forEach var="row" items="${rscas.rows}">
-		<c:out value="${row.casno}"/> <br>
-	</c:forEach>
-
-	<h4>Descriptors:</h4>
-	<ul>
-	<c:forEach var="row" items="${rsdesc.rows}">
-		<li>
-		<b><c:out value="${row.name}"/></b>=
-		<c:out value="${row.value}"/>
-	</c:forEach>
-	</ul>
-
-	<c:if test="${rsExp.rowCount > 0}">
-
-	<h4>Toxicity:</h4>
-	<ul>
-	<c:forEach var="row" items="${rsexp.rows}">
-		<li>
-		<b><c:out value="${row.name}"/></b>
-		<i><c:out value="${row.c}"/></i>
-		<b><c:out value="${row.field}"/></b>
-		<i><c:out value="${row.value}"/><i>
-	</c:forEach>
-	</ul>
-	</c:if>
-</td>
-<td>
-
-<img src="
-	<c:url value="image.jsp">
-	<c:param name="idstructure" value="${param.idstructure}"/>
-	<c:param name="weight" value="200"/>
-	<c:param name="height" value="200"/>
-	</c:url>
-	" border="0">
-
-</td>
-</tr>
-</table>
+	<table>
+	<tr>
+	<td valign="top">
+	<c:import var="xml" url="structure_xml.jsp?idstructure=${param.idstructure}"/>
+	<c:import var="xsl" url="/WEB-INF/xslt/cml2html.xsl"/>
+	<x:transform xml="${fn:trim(xml)}" xslt="${fn:trim(xsl)}"/>
+	</td>
+	<td valign="top">
+		<c:url var="url" value="image.jsp">
+		<c:param name="idstructure" value="${param.idstructure}"/>
+		<c:param name="weight" value="200"/>
+		<c:param name="height" value="200"/>
+		</c:url>
+		<img src="
+			<c:out value="${url}" escapeXml="true" />
+			" border="0">			
+	</td>
+	</tr>
+	</table>
 
 Found in following QMRFs:
 <c:set var="sql" value="select xml,qmrf_documents.documents.idqmrf,qmrf_number,version,user_name,date_format(qmrf_documents.documents.updated,'${sessionScope.dateformat}') as lastdate,concat(qa.description,' (',qa.type,')') as attachment,type from ambit_qmrf.struc_dataset join ambit_qmrf.src_dataset using(id_srcdataset) join qmrf_documents.attachments as qa using(name) join qmrf_documents.documents using(idqmrf) where idstructure=${param.idstructure} order by qmrf_documents.documents.${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
@@ -141,6 +97,11 @@ Found in following QMRFs:
 
 </c:if>
 
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true"/>
 
+	</p>
+</div>
 </body>
 </html>

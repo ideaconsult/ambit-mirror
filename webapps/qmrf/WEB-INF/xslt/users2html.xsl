@@ -48,7 +48,7 @@
 	<td>
 	<a>
 		<xsl:attribute name="href">
-			<xsl:text>?selected=</xsl:text>
+			<xsl:text>#</xsl:text>
 			<xsl:value-of select="@user_name"/>
 		</xsl:attribute>
 		<xsl:value-of select="@user_name"/>

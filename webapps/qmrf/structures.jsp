@@ -75,9 +75,9 @@
 
 
 <c:set var="tabletitle" value="Structures"/>
-<table width="100%">
-
-	<tr bgcolor="#D6DFF7">
+<table width="95%" frame="box" rules="groups">
+	<thead>
+	<tr>
 		<th>#</th>
 		<th><a name="#qmrf_struc">Structure diagram</a></th>
 		<th>Substance identifier</th>
@@ -85,6 +85,8 @@
 		<th colspan="2">Found in</th>
 		<th>View</th>
 	</tr>
+	</thead>
+	<tbody>
 	<c:set var="record" value="1"/>
 	<c:forEach var="row" items="${rs.rows}">
 		<c:set var="tabletitle" value="${qmrf_number}"/>
@@ -107,22 +109,46 @@
 		<td>
 		<c:catch var="exception">
 			<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
-				select idsubstance,casno,name,alias from structure left join cas using(idstructure) left join name using(idstructure) left join alias using(idstructure) where structure.idstructure=?;
+				select casno from cas where idstructure=?;
 				<sql:param value="${row.idstructure}"/>
 			</sql:query>
+			<c:forEach var="subrow" items="${subrs.rows}">
+				<u>CAS RN</u>:<b>${subrow.casno}</b> <br>
+			</c:forEach>
+			<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+				select name from name where idstructure=?;
+				<sql:param value="${row.idstructure}"/>
+			</sql:query>
+			<c:forEach var="subrow" items="${subrs.rows}">
+				<u>Chemical name</u>:&nbsp;<b>${subrow.name}</b> <br>
+			</c:forEach>			
+			<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+				select alias,alias_type from alias where idstructure=?;
+				<sql:param value="${row.idstructure}"/>
+			</sql:query>
+			<c:forEach var="subrow" items="${subrs.rows}">
+				<u>${subrow.alias_type}</u>:&nbsp;<b>${subrow.alias}</b> <br>
+			</c:forEach>			
+			<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+				select idsubstance from structure where idstructure=? limit 1;
+				<sql:param value="${row.idstructure}"/>
+			</sql:query>
+			<c:forEach var="subrow" items="${subrs.rows}">
+				<c:set var="idsubstance" value="${subrow.idsubstance}"/>
+			</c:forEach>			
 		</c:catch>
 		<c:choose>
 
 		<c:when test="${empty exception}">
 			<c:forEach var="subrow" items="${subrs.rows}">
 				<c:if test="${!empty subrow.casno}">
-					${subrow.casno} <br>
+					CAS RN ${subrow.casno} <br>
 				</c:if>
 				<c:if test="${!empty subrow.name}">
-					${subrow.name} <br>
+					NAME ${subrow.name} <br>
 				</c:if>
 				<c:if test="${!empty subrow.alias}">
-					${subrow.alias}
+					ALIAS ${subrow.alias}
 				</c:if>
 
 				<c:set var="idsubstance" value="${subrow.idsubstance}"/>
@@ -135,7 +161,23 @@
 		</c:choose>
 
 		</td>
-		<td> ${row.type}	</td>
+		<td>
+		<c:choose>
+		<c:when test="${row.type eq 'data_training'}">
+			Training data set
+		</c:when>
+		<c:when test="${row.type eq 'data_validation'}">
+			Validation data set
+		</c:when>
+		<c:when test="${row.type eq 'document'}">
+			Other document
+		</c:when>				
+		<c:otherwise>
+			Unknown
+		</c:otherwise>
+		</c:choose>
+		 
+		</td>
 		<td> ${row.description}	</td>
 		<td>
 					<a href="
@@ -158,37 +200,7 @@
 		<c:set var="record" value="${record+1}"/>
 
 	</c:forEach>
+	</tbody>
 </table>
 
-<!--
-<c:forEach var="hname" items="${pageContext.request.headerNames}">
-    <c:forEach var="hvalue" items="${headerValues[hname]}">
-        ${hname}&nbsp;${hvalue}
-        <p>
-    </c:forEach>
-</c:forEach>
--->
-
-<!--
-
-<c:set var="url">${pageContext.request.scheme}://${header["host"]}${pageContext.request.requestURI}</c:set>
-<br>
-		<a href="
-			<c:url value="${url}#qmrf_doc">
-			<c:param name="id" value="${param.id}"/>
-			<c:param name="idstructure" value="${param.idstructure}"/>
-			<c:param name="viewmode" value="${param.viewmode}"/>
-			</c:url>
-		">Back to the begining of QMRF document</a>
-
-		<a href="
-			<c:url value="${url}#qmrf_struc">
-			<c:param name="id" value="${param.id}"/>
-			<c:param name="idstructure" value="${param.idstructure}"/>
-			<c:param name="viewmode" value="${param.viewmode}"/>
-
-			</c:url>
-		">Back to the begining of structures list</a>
-
--->
 </c:if>

@@ -271,9 +271,13 @@ preprocessing,goodness_of_fit,loo,lmo,yscrambling,bootstrap,other_statistics)>
 <!ELEMENT attachment_validation_data (molecules*) >
 <!ELEMENT attachment_documents (document*)>
 
-<!ELEMENT molecules EMPTY>
+<!ELEMENT molecules (property*)>
 <!-- http://www.ch.ic.ac.uk/chemime/Chemical MIME types -->
 <!ATTLIST molecules embedded (Yes|No) #IMPLIED url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property fieldname CDATA #REQUIRED fieldtype CDATA #REQUIRED newname CDATA #IMPLIED>
+
 <!ELEMENT document EMPTY>
 <!ATTLIST document  embedded (Yes|No) #IMPLIED url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
 

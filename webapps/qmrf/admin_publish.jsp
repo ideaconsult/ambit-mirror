@@ -18,12 +18,9 @@ response.setHeader("Expires", "0");
   <c:redirect url="index.jsp"/>
 </c:if>
 
-<html>
-	<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-  <head>
-    <title>QMRF documents</title>
-  </head>
-  <body>
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory: Publish a document"/>
+</jsp:include>
 
 <jsp:include page="menu.jsp" flush="true"/>
 	<jsp:param name="highlighted" value="review"/>

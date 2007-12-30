@@ -196,10 +196,10 @@ If data is not present in these fields the document will not be published!
 				Draft: The document is a draft, when just created by an Author, or when edited by an Author, after being returned for a revision. Visible only to the Author.
 				</help>
 				<help>
-				Submitted: This status is assigned after the Author submits the document to QMRF Inventory through Final Submission page. Visible only to the Author and Reviewer.
+				Submitted: This status is assigned after the Author submits the document to QMRF Inventory through Final Submission page. Visible to the Author and Editor. The Editor assigns the document to a Reviewer and the document becomes visible to the assigned reviewer.
 				</help>
 				<help>
-				Under revision: This status is assigned when the Reviewer is assigned a document to review. Visible only to the Author and Reviewer.
+				Under revision: This status is set when the Reviewer is assigned a document to review. Visible only to the Author and Reviewer.
 				</help>
 				<help>
 				Returned for revision: This status is assigned if the Reviewer considers information in the document insufficients and returns it to the Author. Visible only to the Author and Reviewer.

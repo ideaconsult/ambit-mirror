@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -66,11 +66,10 @@
 	<c:set var="update" value="ok"/>
 </c:if>
 <c:set var="areviewer" value="0"/>
-<c:if test="${!empty param.reviewer}">
+<c:if test="${param.reviewer eq 'Yes'}">
 	<c:set var="update" value="ok"/>
 	<c:set var="areviewer" value="1"/>
 </c:if>
-
 
 
 <c:if test="${!empty update}">
