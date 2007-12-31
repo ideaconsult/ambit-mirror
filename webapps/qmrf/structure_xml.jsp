@@ -33,7 +33,8 @@
 		<c:forEach var="row" items="${rs.rows}">
 			<identifier convention="Chemical name" value="${row.name}"/>			
 		</c:forEach>
-		
+
+				
 		<sql:query var="rs" dataSource="jdbc/ambit_qmrf">
 			select casno from cas join structure using(idstructure) where idsubstance=? group by casno;
 			<sql:param value="${substance}"/>
@@ -50,6 +51,16 @@
 			<identifier convention="${row.alias_type}" value="${row.alias}"/>			
 		</c:forEach>
 		
+		<sql:query var="rs" dataSource="jdbc/ambit_qmrf">
+			select smiles,formula,molweight from substance where idsubstance=?;
+			<sql:param value="${substance}"/>
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<identifier convention="SMILES" value="${row.smiles}"/>			
+			<identifier convention="FORMULA" value="${row.formula}"/>
+			<identifier convention="Molecular weight" value="${row.molweight}"/>
+		</c:forEach>
+				
 		<propertyList>			
 			<sql:query var="rs" dataSource="jdbc/ambit_qmrf">
 				select name,value,units,v.error from ambit_qmrf.ddictionary join ambit_qmrf.dvalues as v using(iddescriptor) join structure using(idstructure) where idsubstance=?

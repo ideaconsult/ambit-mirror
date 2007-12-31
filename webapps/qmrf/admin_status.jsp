@@ -97,6 +97,12 @@
 </td><td>
 <a href="
 	<c:url value="${thispage}">
+	<c:param name="source" value="structures"/>
+	</c:url>
+">Structures</a>
+</td><td>
+<a href="
+	<c:url value="${thispage}">
 	<c:param name="source" value="config"/>
 	</c:url>
 ">Configuration</a>
@@ -203,6 +209,150 @@
 </c:otherwise>
 </c:choose>
 
+</c:if>
+
+<c:if test="${param.source eq 'structures'}">
+	<table width="95%" frame="box" rules="groups">
+		<thead>
+		<tr>
+		<th bgcolor="#CCCCCC" colspan="6" align="center">Structures</th>
+		<th bgcolor="#DDDDDD" colspan="3" align="center">Imported from attachment</th>
+		<th bgcolor="#CCCCCC" align="center" colspan="3">QMRF Document</th>
+		</tr>
+		<tr valign="top" align="left">
+		<th bgcolor="#CCCCCC">#</th>
+		<th bgcolor="#CCCCCC" width="5%">Number of structures</th>
+		<th bgcolor="#CCCCCC" width="5%">CAS Numbers</th>
+		<th bgcolor="#CCCCCC" width="5%">IUPAC names</th>
+		<th bgcolor="#CCCCCC" width="5%">Identifiers</th>
+		<th bgcolor="#CCCCCC" width="5%">Number of descriptors values</th>		
+		<th colspan="2" bgcolor="#DDDDDD">Name</th>
+		<th bgcolor="#DDDDDD" >Type</th>		
+		<th bgcolor="#CCCCCC">Number</th>
+		<th bgcolor="#CCCCCC" width="25%">Title</th>
+		<th bgcolor="#CCCCCC">Download</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<c:catch var="exception">
+			<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+				select idattachment,idqmrf,qmrf_number,qmrf_title,name,description,type,count(s.idstructure) as c,s.id_srcdataset as iddataset from ambit_qmrf.struc_dataset as s join ambit_qmrf.src_dataset using(id_srcdataset) right join qmrf_documents.attachments using(name) join documents using(idqmrf) group by id_srcdataset order by idqmrf
+			</sql:query>
+			<c:set var="r" value="1"/>
+			<c:forEach var="row" items="${rs.rows}">
+
+
+				<tr>
+				<td>${r}</td>
+
+				<td align="left">
+	    			<a href="
+						<c:url value="structures.jsp">
+					  <c:param name="id" value="${row.idqmrf}"/>
+					  <c:param name="idattachment" value="${row.idattachment}"/>
+						<c:param name="changedirection" value="false"/>
+						</c:url>
+					" target="_blank">${row.c}</a>				
+				</td>
+
+				<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+					select count(casno) as c from cas join struc_dataset using(idstructure) where id_srcdataset=?
+					<sql:param value="${row.iddataset}"/>
+				</sql:query>				
+				
+				<td>
+				<c:forEach var="subrow" items="${subrs.rows}">
+					${subrow.c}&nbsp;	
+				</c:forEach>
+				</td>	
+								
+				<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+					select count(name) as c from name join struc_dataset using(idstructure) where id_srcdataset=?
+					<sql:param value="${row.iddataset}"/>
+				</sql:query>				
+				
+				<td>
+				<c:forEach var="subrow" items="${subrs.rows}">
+					${subrow.c}&nbsp;	
+				</c:forEach>
+				</td>	
+										
+				<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+					select count(alias) as c from alias join struc_dataset using(idstructure) where id_srcdataset=?
+					<sql:param value="${row.iddataset}"/>
+				</sql:query>				
+				
+				<td>
+				<c:forEach var="subrow" items="${subrs.rows}">
+					${subrow.c}&nbsp;	
+				</c:forEach>
+				</td>	
+				
+				<sql:query var="subrs" dataSource="jdbc/ambit_qmrf">
+					select count(iddescriptor) as descr from dvalues join ddictionary using(iddescriptor) join struc_dataset using(idstructure) where id_srcdataset=?
+					<sql:param value="${row.iddataset}"/>
+				</sql:query>				
+				<td>
+				<c:forEach var="subrow" items="${subrs.rows}">
+					${subrow.descr}&nbsp;	
+				</c:forEach>
+				</td>				
+				
+				<td>
+					${row.description}
+				</td><td><a href="
+						<c:url value="download_attachment.jsp">
+					  <c:param name="name" value="${row.name}"/>
+						</c:url>
+					"><img src="images/download.gif" height="16" width="16" alt="download.gif" title="Download attachment" border="0"/></a>				
+				</td>
+				<td>${row.type}</td>
+				<td>${row.qmrf_number}</td>
+				<td>${row.qmrf_title}</td>				
+				<td>
+					<c:url value="download.jsp" var="url">
+					  <c:param name="id" value="${row.idqmrf}"/>
+					  <c:param name="filetype" value="html"/>
+					</c:url>
+					<a href="
+					<c:out value="${url}" escapeXml="true" />
+					"><img src="images/html.png"  alt="html.png" title="Download QMRF document as HTML file" border="0"></a>
+				
+					<c:url value="download.jsp" var="url">
+						<c:param name="id" value="${row.idqmrf}"/>
+						<c:param name="filetype" value="pdf"/>
+					</c:url>
+					<a href="
+						<c:out value="${url}" escapeXml="true" />
+					"><img src="images/pdf.png" border="0" alt="pdf.png" title="Download QMRF document as Adobe PDF" ></a>				
+					
+					<c:url value="download.jsp" var="url">
+					 <c:param name="id" value="${row.idqmrf}"/>
+					 <c:param name="filetype" value="xls"/>
+					</c:url>
+					<a href="
+						<c:out value="${url}" escapeXml="true" />
+					" ><img src="images/xls.png" alt="xls.png" title="Download QMRF document as MS Excel XLS file" border="0"></a>
+
+					<c:url value="download.jsp" var="url">
+					  <c:param name="filetype" value="xml"/>
+					  <c:param name="id" value="${row.idqmrf}"/>
+					  <c:param name="action" value="dbattachments"/>
+						</c:url>
+					<a href="
+						<c:out value="${url}" escapeXml="true" />
+					"><img src="images/xml.png"  alt="xml.png" title="Download QMRF document as XML file" border="0"></a>
+					
+				</td>
+
+				</tr>
+				<c:set var="r" value="${r+1}"/>
+			</c:forEach>		
+		</c:catch>
+		${exception}
+		</tbody>
+	</table>
 </c:if>
 
 <c:if test="${param.source eq 'catalogues'}">
