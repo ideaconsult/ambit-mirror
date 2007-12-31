@@ -18,9 +18,6 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
-<jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Log in page"/>
-</jsp:include>
 <%
 
   if (request.getUserPrincipal() != null)  {
@@ -33,11 +30,3 @@ response.setHeader("Expires", "0");
   }
 
 %>
-
-<jsp:include page="menu.jsp" flush="true">
-    <jsp:param name="highlighted" value="login"/>
-	<jsp:param name="viewmode" value="${param.viewmode}"/>
-</jsp:include>
-
-</body>
-</html>

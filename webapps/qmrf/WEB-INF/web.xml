@@ -21,21 +21,25 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
-  <display-name>Welcome to QMRF</display-name>
-  <description>
-     Welcome to QMRF
-  </description>
-
-  <session-config>
-    <session-timeout>120</session-timeout>
-  </session-config>
+	<display-name>Welcome to QMRF</display-name>
+	<description>
+		(Q)SAR Model Reporting Format Inventory application. Developed by Ideaconsult Ltd., Sofia, Bulgaria 2007.
+	</description>
+	
+	<session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
 
 	<resource-ref>
-      <description>DB Connection to qmrf_documents</description>
-      <res-ref-name>jdbc/qmrf_documents</res-ref-name>
-      <res-type>javax.sql.DataSource</res-type>
-      <res-auth>Container</res-auth>
-  </resource-ref>
+		<description>DB Connection to qmrf_documents</description>
+		<res-ref-name>jdbc/qmrf_documents</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
 
 
 	<context-param>
@@ -95,7 +99,7 @@
 			
 	  </web-resource-collection>
 
-	  <auth-constraint>
+	<auth-constraint>
 		<role-name>qmrf_admin</role-name>
 		<role-name>qmrf_user</role-name>
 		<role-name>qmrf_editor</role-name>
@@ -112,32 +116,32 @@
 	</form-login-config>
   </login-config>
 
-    <security-role>
-      <role-name>qmrf_admin</role-name>
-    </security-role>
-    <security-role>
-      <role-name>qmrf_user</role-name>
-    </security-role>
-    <security-role>
-      <role-name>qmrf_editor</role-name>
-    </security-role>
-    <security-role>
-      <role-name>qmrf_manager</role-name>
-    </security-role>
+	<security-role>
+		<role-name>qmrf_admin</role-name>
+	</security-role>
+	<security-role>
+		<role-name>qmrf_user</role-name>
+	</security-role>
+	<security-role>
+		<role-name>qmrf_editor</role-name>
+	</security-role>
+	<security-role>
+		<role-name>qmrf_manager</role-name>
+	</security-role>
 
 	<!-- Ambit taglibs-->
-    <taglib>
-        <taglib-uri>/ambit</taglib-uri>
-        <taglib-location>/WEB-INF/tld/ambit.tld</taglib-location>
-    </taglib>
+	<taglib>
+		<taglib-uri>/ambit</taglib-uri>
+		<taglib-location>/WEB-INF/tld/ambit.tld</taglib-location>
+	</taglib>
 	<!-- jakarta mailer taglibs -->
 	<taglib>
 			<taglib-uri>http://jakarta.apache.org/taglibs/taglibs-mailer</taglib-uri>
 			<taglib-location>/WEB-INF/tld/taglibs-mailer.tld</taglib-location>
-	    </taglib>
+		</taglib>
 		    <!-- xephyrus file upload-->
 	<taglib>
-  	<taglib-uri>/xephyrus-fileupload</taglib-uri>
-  	<taglib-location>/WEB-INF/tld/xephyrus-fileupload.tld</taglib-location>
+		<taglib-uri>/xephyrus-fileupload</taglib-uri>
+		<taglib-location>/WEB-INF/tld/xephyrus-fileupload.tld</taglib-location>
 	</taglib>
 </web-app>
