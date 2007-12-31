@@ -70,7 +70,7 @@
 			<url-pattern>/edit.jsp</url-pattern>
 
 			<url-pattern>/attachments_xml.jsp</url-pattern>
-			<url-pattern>/edit_attachments.jsp</url-pattern>
+			<url-pattern>/edit_attachmentsdb.jsp</url-pattern>
 			<url-pattern>/list_attachments.jsp</url-pattern>
 
 			<url-pattern>/admin.jsp</url-pattern>
@@ -118,7 +118,12 @@
     <security-role>
       <role-name>qmrf_user</role-name>
     </security-role>
-
+    <security-role>
+      <role-name>qmrf_editor</role-name>
+    </security-role>
+    <security-role>
+      <role-name>qmrf_manager</role-name>
+    </security-role>
 
 	<!-- Ambit taglibs-->
     <taglib>
