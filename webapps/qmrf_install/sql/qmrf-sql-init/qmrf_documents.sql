@@ -78,6 +78,15 @@ CREATE TABLE  `qmrf_documents`.`catalog_software` (
   UNIQUE KEY `Index_2` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `qmrf_documents`.`catalog_references`;
+CREATE TABLE  `qmrf_documents`.`catalog_references` (
+  `id_reference` int(10) unsigned NOT NULL auto_increment,
+  `title` varchar(255) NOT NULL,
+  `url` varchar(45) NOT NULL,
+  PRIMARY KEY  (`id_reference`),
+  KEY `Index_2` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='References';
+
 DROP TABLE IF EXISTS `qmrf_documents`.`documents`;
 CREATE TABLE  `qmrf_documents`.`documents` (
   `idqmrf` int(10) unsigned NOT NULL auto_increment,
@@ -89,10 +98,12 @@ CREATE TABLE  `qmrf_documents`.`documents` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `version` int(3) unsigned NOT NULL default '1',
   `reviewer` varchar(16) default NULL,
+  `qmrf_title` varchar(128) default NULL,
   PRIMARY KEY  (`idqmrf`),
   UNIQUE KEY `qmrf_number` USING BTREE (`qmrf_number`),
   KEY `status` (`status`),
   KEY `qmrf_ibfk_3` (`user_name`),
+  KEY `Index_6` (`qmrf_title`),
   FULLTEXT KEY `xml` (`xml`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -168,6 +179,16 @@ CREATE TABLE  `qmrf_documents`.`doc_endpoint` (
   PRIMARY KEY  (`idqmrf`,`id_endpoint`,`chapter`),
   KEY `soft` (`id_endpoint`),
   CONSTRAINT `FK_doc_endpoint_1` FOREIGN KEY (`id_endpoint`) REFERENCES `catalog_endpoints` (`id_endpoint`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qmrf_documents`.`doc_references`;
+CREATE TABLE  `qmrf_documents`.`doc_references` (
+  `idqmrf` int(10) unsigned NOT NULL default '0',
+  `id_reference` int(10) unsigned NOT NULL default '0',
+  `chapter` varchar(6) NOT NULL default '9.2',
+  PRIMARY KEY  (`idqmrf`,`id_reference`,`chapter`),
+  KEY `alg` (`id_reference`),
+  CONSTRAINT `FK_doc_references_1` FOREIGN KEY (`id_reference`) REFERENCES `catalog_references` (`id_reference`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 use qmrf_documents;
