@@ -24,13 +24,13 @@
 		<c:choose>
 			<c:when test="${empty sessionScope['username']}">
 				<c:set var="sql">
-					select idqmrf,idqmrf_origin,qmrf_number,version,user_name,updated,status documents where idqmrf=(select idqmrf_origin from documents where idqmrf=${thisid}) and status='published' 
+					select idqmrf,idqmrf_origin,qmrf_number,qmrf_title,version,user_name,updated,status documents where idqmrf=(select idqmrf_origin from documents where idqmrf=${thisid}) and status='published' 
 				</c:set>				
 				<c:set var="actions" value=""/>
 			</c:when>	
 			<c:otherwise>
 				<c:set var="sql">
-					select idqmrf,idqmrf_origin,qmrf_number,version,user_name,updated,status from documents where idqmrf=(select idqmrf_origin from documents where idqmrf=${thisid}) and ((user_name=?) or (status='published'))
+					select idqmrf,idqmrf_origin,qmrf_number,qmrf_title,version,user_name,updated,status from documents where idqmrf=(select idqmrf_origin from documents where idqmrf=${thisid}) and ((user_name=?) or (status='published'))
 				</c:set>				
 				<c:set var="actions" value="user"/>
 			</c:otherwise>		
@@ -45,6 +45,7 @@
 		    <jsp:param name="sql" value="${sql}"/>
 					    				    	
 				<jsp:param name="qmrf_number" value="QMRF#"/>    	
+				<jsp:param name="qmrf_title" value="Title"/>    				
 				<jsp:param name="version" value="Version"/>    				
 		    <jsp:param name="user_name" value="Author"/>    				
 		    <jsp:param name="updated" value="Last updated"/>    				

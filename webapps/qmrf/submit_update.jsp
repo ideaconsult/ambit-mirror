@@ -1,8 +1,10 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
+
 <fmt:requestEncoding value="UTF-8"/> 
 
 <c:set var="thispage" value='submit_update.jsp'/>
@@ -55,7 +57,23 @@
 
 			<!-- data  update -->
 		<c:catch var="transactionException_update">
-
+			<c:catch var="title_err">
+				<x:parse xml="${param.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
+				<c:set var="qmrf_tmp">
+					<x:out escapeXml="false" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/>			
+				</c:set>
+				<x:parse xml="${fn:trim(qmrf_tmp)}" var="doc"/>			
+				<c:set var="qmrf_title">
+					<x:out select="$doc//body"/>			
+				</c:set>			
+				<c:if test="${empty qmrf_title}">
+					<c:set var="qmrf_title" value="${qmrf_tmp}"/>
+				</c:if>
+				<c:set var="qmrf_title" value="${fn:trim(qmrf_title)}"/>
+			</c:catch>
+			<c:if test="${!empty title_err}">
+				<c:set var="qmrf_title" value=""/>
+			</c:if>
 			<c:import url="include_attachments.jsp" var="newxml" >
 				<c:param name="id" value="${param.id}"/>
 				<c:param name="xml" value="${param.xml}"/>
@@ -63,10 +81,11 @@
 			<sql:transaction dataSource="jdbc/qmrf_documents">
 
 			<sql:update var="updateCount" >
-				update documents set status=?,xml=?,updated=now() where idqmrf=? and user_name=?;
-			<sql:param value="${state}"/>
-			<sql:param value="${newxml}"/>
-			  <sql:param value="${param.id}"/>
+				update documents set qmrf_title=substring(?,1,128),status=?,xml=?,updated=now() where idqmrf=? and user_name=?;
+				<sql:param value="${qmrf_title}"/>
+				<sql:param value="${state}"/>
+				<sql:param value="${newxml}"/>
+				<sql:param value="${param.id}"/>
 				<sql:param value="${sessionScope['username']}"/>
 			</sql:update>
 			</sql:transaction>

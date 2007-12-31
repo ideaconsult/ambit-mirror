@@ -39,7 +39,6 @@
 			<c:set var="parse" value="true"/>		
 		</c:if>
 		<c:if test="${parse}">
-			parse
 			<a:fileproperties params="params" recordsToRead="3" filename="${initParam['attachments-dir']}/${filename}"/>
 			<c:catch var ="err">
 			<sql:transaction dataSource="jdbc/qmrf_documents">

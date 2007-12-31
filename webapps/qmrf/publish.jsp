@@ -49,13 +49,14 @@ response.setHeader("Expires", "0");
 </jsp:include>
 
 <c:set var="report">
-	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}
+	select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}
 </c:set>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${report}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
     <jsp:param name="user_name" value="Author"/>
     <jsp:param name="updated" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>

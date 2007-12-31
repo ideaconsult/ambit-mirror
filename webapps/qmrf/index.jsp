@@ -137,15 +137,15 @@ You can view and change your registration details under the <u>My profile</u> ta
 
 
 <c:set var="sql">
-	select idqmrf,qmrf_number,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,xml from documents where status = 'published' order by updated desc limit 3
+	select idqmrf,qmrf_number,qmrf_title,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where status = 'published' order by updated desc limit 3
 </c:set>
 
 <c:set var="maxpages" scope="session" value="1"/>
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}" />
 
-		<jsp:param name="xml" value="xml"/>
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="lastdate" value="Last updated"/>
 
 		<jsp:param name="paging" value="false"/>

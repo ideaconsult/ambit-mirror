@@ -52,7 +52,7 @@ response.setHeader("Expires", "0");
 </c:if>
 
 
-<c:set var="sql_report" value="select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf_origin = ${param.id}"/>
+<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf_origin = ${param.id}"/>
 
 <!-- returned for revision' -->
 <!-- copy the document into new one, increment version and set archive status to the odler one -->
@@ -118,7 +118,7 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 
 </c:when>
 	<c:when test="${param.status eq 'published'}">
-		<c:set var="sql_report" value="select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}"/>
+		<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}"/>
 			<c:set var="updateXML" value="true"/>
 			<c:if test="${empty param.A}">
 				<c:set var="updateXML" value="false"/>
@@ -177,7 +177,7 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 					</c:forEach>
 		</c:when>
 		<c:otherwise>
-			<c:set var="sql_report" value="select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}"/>
+			<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}"/>
 	</c:otherwise>
 		</c:choose>
 
@@ -207,6 +207,7 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 	<jsp:include page="records.jsp" flush="true">
 	<jsp:param name="sql" value="${sql_report}"/>
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="updated" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>

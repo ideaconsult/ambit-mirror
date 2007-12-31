@@ -318,7 +318,7 @@
 	<td>
 	<input type="text" size="80" name="alg_definition" readonly="true">
 		<xsl:attribute name="value">
-  		<xsl:value-of select="id(@idref)/@definition"/>
+  		<xsl:value-of select="id(@idref)/@definition" disable-output-escaping="no"/>
 		</xsl:attribute>
 	</input>
 	</td>
@@ -335,9 +335,14 @@
 	</tr>
 	<tr bgcolor="#D6DFF7"><th>Description</th>
 	<td>
-	<textarea rows="6" cols="60" name="alg_description" readonly="true">
-  		<xsl:value-of select="id(@idref)/@description"/>
-	</textarea>
+	<xsl:element name="input">
+		<xsl:attribute name="name">alg_description</xsl:attribute>	
+		<xsl:attribute name="readonly">true</xsl:attribute>	
+		<xsl:attribute name="size">80</xsl:attribute>	
+		<xsl:attribute name="value">
+  		<xsl:value-of select="id(@idref)/@description" disable-output-escaping="no"/>
+  		</xsl:attribute>	
+	</xsl:element>
 	<input type="hidden" name="catalog" value="algorithms" />
 	</td>
 	</tr>

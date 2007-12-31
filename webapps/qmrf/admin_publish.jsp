@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://jakarta.apache.org/taglibs/taglibs-mailer" prefix="mt" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <%
 response.setHeader("Pragma", "no-cache");
@@ -22,8 +23,8 @@ response.setHeader("Expires", "0");
     <jsp:param name="title" value="QMRF Inventory: Publish a document"/>
 </jsp:include>
 
-<jsp:include page="menu.jsp" flush="true"/>
-	<jsp:param name="highlighted" value="review"/>
+<jsp:include page="menu.jsp" flush="true">
+    <jsp:param name="highlighted" value="review"/>
     <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
@@ -233,7 +234,13 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 </c:otherwise>
 </c:choose>
 
-
+<div id="hits">
+		<p>
+		<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+		</jsp:include>
+	</p>
+</div>
   </body>
 </html>
 

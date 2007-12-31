@@ -43,6 +43,23 @@
     <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
+<c:catch var="exception">
+	<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+		select count(*)as no,status from documents where ((status = 'submitted') || (status='under review')) and reviewer is null group by status ;
+	</sql:query>
+	<c:if test="${rs.rowCount > 0}">
+		<div class="center">
+		${sessionScope['username']}:
+		<font color="red">Documents without a reviewer assigned :
+		<c:forEach var="row" items="${rs.rows}">
+			<b>${row.status}</b>&nbsp;(${row.no})&nbsp;
+		</c:forEach>
+		</font>
+		<a href="help.jsp?anchor=pending" target="help"><img src="images/help.png" alt="help" title="What ist?" border="0"/></a>
+		</div>
+	</c:if>
+</c:catch>
+
 <jsp:include page="records_status.jsp" flush="true">
     <jsp:param name="status" value="${param.status}"/>
 	<jsp:param name="status_allowed" value="all,submitted,under review,published"/>
@@ -77,9 +94,9 @@
 	</c:if>
 </c:if>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where  (status = '${sessionScope.record_status}') order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where  (status = '${sessionScope.record_status}') order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
 <c:if test="${(empty sessionScope.record_status) || (sessionScope.record_status eq 'all')}">
-	<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where (status != 'draft' && status != 'archived') order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
+	<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where (status != 'draft' && status != 'archived') order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
 </c:if>
 
 <!--
@@ -89,6 +106,7 @@ select idqmrf,qmrf_number,version,user_name,updated,status from documents where 
     <jsp:param name="sql" value="${sql}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="lastdate" value="Last updated"/>

@@ -97,12 +97,13 @@ QMRF Inventory
 
 <c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status,reviewer,xml from documents where  idqmrf=${param.id}"/>
 <!--
-select idqmrf,qmrf_number,version,user_name,updated,status from documents where status != 'published' && status != 'draft' && status != 'archived' order by ${sessionScope.order} ${sessionScope.order_direction}
+select idqmrf,qmrf_number,qmrf_title,version,user_name,updated,status from documents where status != 'published' && status != 'draft' && status != 'archived' order by ${sessionScope.order} ${sessionScope.order_direction}
 -->
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="xml" value="xml"/>
 		<jsp:param name="user_name" value="Author"/>

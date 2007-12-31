@@ -1,8 +1,11 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="/ambit" prefix="a" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:requestEncoding value="UTF-8"/>
 
 <%
 response.setHeader("Pragma", "no-cache");
@@ -59,13 +62,14 @@ response.setHeader("Expires", "0");
 
 
 <c:set var="report">
-	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id}
+	select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}
 </c:set>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${report}"/>
 
 	<jsp:param name="qmrf_number" value="QMRF#"/>
+	<jsp:param name="qmrf_title" value="Title"/>	
     <jsp:param name="user_name" value="Author"/>
     <jsp:param name="updated" value="Last updated"/>
 	<jsp:param name="status" value="Status"/>

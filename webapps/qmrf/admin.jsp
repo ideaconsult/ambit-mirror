@@ -53,7 +53,7 @@
 	<c:if test="${rs.rowCount > 0}">
 		<div class="center">
 		${sessionScope['username']}:
-		<font color="red">Pending documents :
+		<font color="red">Documents to be reviewed :
 		<c:forEach var="row" items="${rs.rows}">
 			<b>${row.status}</b>&nbsp;(${row.no})&nbsp;
 		</c:forEach>
@@ -99,9 +99,9 @@
 	</c:if>
 </c:if>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where  (status = '${sessionScope.record_status}') and ( (reviewer = '${sessionScope.username}')) order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where  (status = '${sessionScope.record_status}') and ( (reviewer = '${sessionScope.username}')) order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${sessionScope.pagesize}"/>
 <c:if test="${(empty sessionScope.record_status) || (sessionScope.record_status eq 'all')}">
-	<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where (status != 'published' && status != 'draft' && status != 'archived') and ( (reviewer = '${sessionScope.username}')) order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
+	<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status,reviewer from documents where (status != 'published' && status != 'draft' && status != 'archived') and ( (reviewer = '${sessionScope.username}')) order by ${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
 </c:if>
 
 <!--
@@ -111,6 +111,7 @@ select idqmrf,qmrf_number,version,user_name,updated,status from documents where 
     <jsp:param name="sql" value="${sql}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="lastdate" value="Last updated"/>

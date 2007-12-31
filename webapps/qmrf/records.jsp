@@ -178,7 +178,8 @@
 										  </c:choose>
 		    			</c:when>
 		    			<c:otherwise>
-		    				${row[columnName]}
+		    			<c:out value="${row[columnName]}" escapeXml="true" />
+		    				
 		    			</c:otherwise>
 		    			</c:choose>
 				    </td>

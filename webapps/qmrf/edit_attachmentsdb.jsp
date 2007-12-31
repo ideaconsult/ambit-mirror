@@ -67,12 +67,13 @@ response.setHeader("Expires", "0");
     <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,updated,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="updated" value="Last updated"/>

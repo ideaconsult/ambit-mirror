@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <fmt:requestEncoding value="UTF-8"/> 
 
 <c:set var="thispage" value='submit.jsp'/>
@@ -52,11 +54,29 @@
 -->
 <c:catch var="transactionException_update">
 	<sql:transaction dataSource="jdbc/qmrf_documents">
+			<c:catch var="title_err">
+				<x:parse xml="${param.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
+				<c:set var="qmrf_tmp">
+					<x:out escapeXml="false" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/>			
+				</c:set>
+				<x:parse xml="${fn:trim(qmrf_tmp)}" var="doc"/>			
+				<c:set var="qmrf_title">
+					<x:out select="$doc//body"/>			
+				</c:set>			
+				<c:if test="${empty qmrf_title}">
+					<c:set var="qmrf_title" value="${qmrf_tmp}"/>
+				</c:if>
+				<c:set var="qmrf_title" value="${fn:trim(qmrf_title)}"/>				
+			</c:catch>
+			<c:if test="${!empty title_err}">
+				<c:set var="qmrf_title" value=""/>
+			</c:if>
 		<sql:update>
 				set names 'utf8'
 		</sql:update>
 		<sql:update var="updateCount" >
-			INSERT INTO documents (xml,user_name,status) VALUES (?,?,?);
+			INSERT INTO documents (qmrf_title,xml,user_name,status) VALUES (substring(?,1,128),?,?,?);
+		<sql:param value="${qmrf_title}"/>			
 		<sql:param value="${param.xml}"/>
 		<sql:param value="${sessionScope['username']}"/>
 		<sql:param value="${state}"/>
