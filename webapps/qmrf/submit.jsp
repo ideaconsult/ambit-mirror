@@ -74,10 +74,15 @@
 		<sql:update>
 				set names 'utf8'
 		</sql:update>
+		<c:import var="xsl" url="/WEB-INF/xslt/delete_attachments.xsl"/>
+		<c:set var="newxml">
+		<x:transform xml="${param.xml}" xslt="${xsl}" xmlSystemId="/WEB-INF/xslt/qmrf.dtd"/>
+		</c:set>
+
 		<sql:update var="updateCount" >
 			INSERT INTO documents (qmrf_title,xml,user_name,status) VALUES (substring(?,1,128),?,?,?);
 		<sql:param value="${qmrf_title}"/>			
-		<sql:param value="${param.xml}"/>
+		<sql:param value="${newxml}"/>
 		<sql:param value="${sessionScope['username']}"/>
 		<sql:param value="${state}"/>
 

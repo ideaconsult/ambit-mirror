@@ -107,16 +107,14 @@ response.setHeader("Expires", "0");
 			</c:forEach>
 
 		<c:set value="delete attachments from attachments,documents where attachments.idqmrf=documents.idqmrf and attachments.idqmrf=? and idattachment=? and user_name=?" var="delete_sql"/>
-	  <c:catch var="transactionException_delete">
-		<sql:transaction dataSource="jdbc/qmrf_documents">
-		<sql:update>
-				${delete_sql}
-				<sql:param value="${sessionScope.qmrf_document}"/>
-				<sql:param value="${param.idattachment}"/>
-				<sql:param value="${sessionScope['username']}"/>
-		 </sql:update>
-
-
+		<c:catch var="transactionException_delete">
+			<sql:transaction dataSource="jdbc/qmrf_documents">
+			<sql:update>
+					${delete_sql}
+					<sql:param value="${sessionScope.qmrf_document}"/>
+					<sql:param value="${param.idattachment}"/>
+					<sql:param value="${sessionScope['username']}"/>
+			</sql:update>
 		</sql:transaction>
 		</c:catch>
 			<c:choose>
@@ -131,6 +129,23 @@ response.setHeader("Expires", "0");
 			</c:when>
 			<c:otherwise>
 				<a:deletefile filename="${file_to_delete_page}"/>
+				
+						<sql:transaction dataSource="jdbc/qmrf_documents">
+						<sql:query var="rs">
+							select idqmrf,xml from documents where idqmrf=? limit 1
+							<sql:param value="${sessionScope.qmrf_document}"/>
+						</sql:query>
+						<c:forEach var="row"  items="${rs.rows}">
+							<c:import url="include_attachments.jsp" var="newxml" >
+								<c:param name="id" value="${row.idqmrf}"/>
+								<c:param name="xml" value="${row.xml}"/>
+							</c:import>
+							<sql:update>
+								update documents set xml=?
+								<sql:param value="${newxml}"/>
+							</sql:update>
+						</c:forEach>
+						</sql:transaction>
 				<blockquote>
 					<div class="success">
 						Attachment ${file_description} deleted.
@@ -193,7 +208,6 @@ response.setHeader("Expires", "0");
 
 				<c:catch var='transactionException_insert'>
 						<fup:write to="${attachment_path}" var="silent" /><br />
-
 						<sql:transaction dataSource="jdbc/qmrf_documents">
 						<sql:update>
 							INSERT INTO attachments (idqmrf,name,format,type,description,original_name) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=?,format=?,type=?,description=?,original_name=?;
@@ -211,6 +225,23 @@ response.setHeader("Expires", "0");
 
 						</sql:update>
 						</sql:transaction>
+						<sql:transaction dataSource="jdbc/qmrf_documents">
+						<sql:query var="rs">
+							select idqmrf,xml from documents where idqmrf=? limit 1
+							<sql:param value="${sessionScope.qmrf_document}"/>
+						</sql:query>
+						<c:forEach var="row"  items="${rs.rows}">
+							<c:import url="include_attachments.jsp" var="newxml" >
+								<c:param name="id" value="${row.idqmrf}"/>
+								<c:param name="xml" value="${row.xml}"/>
+							</c:import>
+							<sql:update>
+								update documents set xml=?
+								<sql:param value="${newxml}"/>
+							</sql:update>
+						</c:forEach>
+						</sql:transaction>
+						
 				</c:catch>
 				<c:choose>
 						<c:when test="${!empty transactionException_insert}">
