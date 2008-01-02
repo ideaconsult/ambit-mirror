@@ -71,6 +71,62 @@
 	<c:set var="areviewer" value="1"/>
 </c:if>
 
+<c:if test="${!empty param.action  && (param.action eq 'delete') && (pageContext.request.method eq 'POST')}">
+	
+	<c:set var="update" value=""/>
+	<c:catch var="err">
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			select count(idqmrf) as c from documents where user_name=? or reviewer =?
+			<sql:param value="${param.user_name}"/>
+			<sql:param value="${param.user_name}"/>
+		</sql:query>
+		<c:set var="docs" value="0"/>
+		<c:forEach var="row" items="${rs.rows}">
+			<c:set var="docs" value="${row.c}"/>
+		</c:forEach>
+		<c:choose>
+			<c:when test="${docs eq 0}">
+				
+				<sql:query var="rs" dataSource="jdbc/tomcat_users">
+					SELECT count(user_name) as c,role_name FROM tomcat_users.user_roles where role_name in (select role_name from user_roles where user_name=?) group by role_name
+					<sql:param value="${param.user_name}"/>
+				</sql:query>
+			
+				<c:forEach var="row" items="${rs.rows}">
+					<c:if test="${row.c eq 1}">
+						<div class="error">Can not remove a single user of <b>${row.role_name}</b> role.</div>
+						<c:set var="docs" value="1"/>
+					</c:if>
+				</c:forEach>
+				
+				<c:if test="${docs eq 0}">
+					Delete ${param.user_name}
+					<c:catch var="transactionException_delete">
+						<sql:transaction dataSource="jdbc/tomcat_users">
+						<sql:update>
+							delete from users where user_name=?
+							<sql:param value="${param.user_name}"/>
+						</sql:update>
+						<sql:update>
+							delete from user_roles where user_name=?
+							<sql:param value="${param.user_name}"/>
+						</sql:update>
+						<sql:update>
+							delete from qmrf_documents.users where user_name=?
+							<sql:param value="${param.user_name}"/>
+						</sql:update>						
+					</sql:transaction>
+					</c:catch>								
+					${transactionException_delete}	
+					<c:set var="docs" value=""/>
+				</c:if>
+			</c:when>
+			<c:otherwise>
+				<div class="error">Can not remove username ${param.user_name}, there are ${docs} QMRF documents authored or reviewed by this user!</div>
+			</c:otherwise>
+		</c:choose>
+	</c:catch>
+</c:if>
 
 <c:if test="${!empty update}">
 

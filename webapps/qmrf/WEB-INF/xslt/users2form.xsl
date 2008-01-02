@@ -36,8 +36,27 @@
 				</a>
 
 	</td>
-	<th width="5%" bgcolor="#FFFFFF" rowspan="14"></th>
-	<th bgcolor="#C5CEE6"></th>
+	<th width="5%" bgcolor="#FFFFFF" rowspan="14">
+
+	</th>
+	<th bgcolor="#C5CEE6">
+		<xsl:choose>
+		<xsl:when test="$admin = 'true'">
+			<form method="POST" name="delete">			
+			<input type="hidden" name="action" value="delete"/>
+			<xsl:element name="input">
+				<xsl:attribute name="type">hidden</xsl:attribute>
+				<xsl:attribute name="name">user_name</xsl:attribute>
+				<xsl:attribute name="value"><xsl:value-of select="@user_name"/></xsl:attribute>
+			</xsl:element>
+			<input type="submit" value ="Remove user"/>
+			</form>
+			
+		</xsl:when>
+		<xsl:otherwise>
+		</xsl:otherwise>
+		</xsl:choose>	
+	</th>
 
 	</tr>
 
