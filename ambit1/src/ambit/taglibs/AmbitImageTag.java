@@ -43,11 +43,12 @@ public class AmbitImageTag extends AmbitMolTag {
             try {
             	ImageIO.write(buffer, "png", os);
             } catch (Exception x) {
-                ImageIO.write(tools.emptyImage(width, height, bgcolor, x.getMessage()), "png", os);
+            	throw new JspException(x.toString());
+                //ImageIO.write(tools.emptyImage(width, height, bgcolor, x.getMessage()), "png", os);
             }
     		tools = null;
     		
-    		os.close();            
+    		//os.close();            
         }
         catch (Exception x)
         {
