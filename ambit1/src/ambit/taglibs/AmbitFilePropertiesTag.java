@@ -38,6 +38,7 @@ public class AmbitFilePropertiesTag extends AmbitFileTag {
 			File file = getFile();
 			IIteratingChemObjectReader reader = FileInputState.getReader(
 					new FileInputStream(file), file.getName());
+			System.out.println("reader");
 			if (reader instanceof IteratingFilesWithHeaderReader) 
 				this.recordsToRead = 1;
 			Hashtable<String, String> p = new Hashtable<String, String>();
@@ -59,8 +60,9 @@ public class AmbitFilePropertiesTag extends AmbitFileTag {
 			}
 			reader.close();
 			JspContext pageContext = getJspContext();
-			pageContext.setAttribute(params, p);    
+			pageContext.setAttribute(params, p);
 		} catch (Exception x) {
+			x.printStackTrace();
 			throw new JspException(x);
 		}
 	}

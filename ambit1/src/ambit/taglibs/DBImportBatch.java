@@ -26,13 +26,25 @@ package ambit.taglibs;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.StringReader;
 import java.sql.Connection;
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import ambit.data.descriptors.Descriptor;
 import ambit.data.descriptors.DescriptorsHashtable;
+import ambit.data.literature.ReferenceFactory;
 import ambit.data.molecule.SourceDataset;
 import ambit.database.DbConnection;
 import ambit.database.core.DbSrcDataset;
@@ -44,6 +56,7 @@ import ambit.io.FileInputState;
 import ambit.io.batch.BatchProcessingException;
 import ambit.io.batch.DefaultBatchProcessing;
 import ambit.io.batch.EmptyBatchConfig;
+import ambit.misc.AmbitCONSTANTS;
 import ambit.processors.AromaticityProcessor;
 import ambit.processors.IAmbitProcessor;
 import ambit.processors.IdentifiersProcessor;
@@ -51,19 +64,28 @@ import ambit.processors.ProcessorsChain;
 import ambit.processors.structure.SmilesGeneratorProcessor;
 
 public class DBImportBatch extends DefaultBatchProcessing {
-	public DBImportBatch(IIteratingChemObjectReader reader, SourceDataset dataset, DbConnection dbConnection) throws BatchProcessingException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9029262569765535978L;
+	public DBImportBatch(IIteratingChemObjectReader reader, SourceDataset dataset, 
+			 ArrayList<String> aliases, DescriptorsHashtable descriptorslookup, IdentifiersProcessor identifiers,
+			DbConnection dbConnection) throws BatchProcessingException {
 		super(reader,
-  			 getWriter(dbConnection,dataset),
-				getProcessor(dbConnection.getConn()),
+  			 getWriter(dbConnection,dataset,aliases,descriptorslookup),
+				getProcessor(dbConnection.getConn(),identifiers),
 				new EmptyBatchConfig()
   			 );
-						
+	}	
+	public DBImportBatch(IIteratingChemObjectReader reader, SourceDataset dataset, DbConnection dbConnection) throws BatchProcessingException {
+		this(reader,dataset,getAliases(),new DescriptorsHashtable(),null,dbConnection);
 	}
-	protected static IChemObjectWriter getWriter(DbConnection dbConnection,  SourceDataset dataset) {
+	protected static IChemObjectWriter getWriter(DbConnection dbConnection,  SourceDataset dataset, ArrayList<String> aliases, DescriptorsHashtable descriptorslookup) {
 		return  new DbSubstanceWriter(dbConnection,
 				dataset,
-				getAliases(),
-				new DescriptorsHashtable());
+				aliases,
+				descriptorslookup);
 	}
 	protected static ArrayList<String> getAliases() {
 		ArrayList<String> aliases = new ArrayList<String>();
@@ -75,10 +97,10 @@ public class DBImportBatch extends DefaultBatchProcessing {
 		aliases.add("KEGG");
 		return aliases;
 	}
-	protected static IAmbitProcessor getProcessor(Connection connection) {
+	protected static IAmbitProcessor getProcessor(Connection connection, IdentifiersProcessor identifiers) {
 		ProcessorsChain processors = new ProcessorsChain();
-		IdentifiersProcessor identifiersProcessor = new IdentifiersProcessor();
-		processors.add(identifiersProcessor);
+		if (identifiers == null) identifiers = new IdentifiersProcessor();
+		processors.add(identifiers);
 		
 		    try {
 		        IAmbitProcessor p = new CASSmilesLookup(connection,false);
@@ -93,14 +115,78 @@ public class DBImportBatch extends DefaultBatchProcessing {
 		    }
  
 		return processors;
+	}
+	public static void import2DB_xml(String xml,String host,String port, String database,String user,String password) throws Exception  {
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = docBuilderFactory.newDocumentBuilder();
+		Document doc = builder.parse(new InputSource(new StringReader(xml)));
+		Element e = doc.getDocumentElement();
+		String url = e.getAttribute("url");
+		String datasetName = e.getAttribute("dataset");
+		NodeList n = e.getChildNodes();
+		
+		SourceDataset dataset = new SourceDataset(datasetName,
+				ReferenceFactory.createDatasetReference(url,datasetName));
+		/*
+		 * 	"Structural Formula,Dependent Variable Value,,Experimental data,other"/>
+
+		 */
+		ArrayList<String> aliases = new ArrayList<String>();
+		DescriptorsHashtable descriptorslookup = new DescriptorsHashtable();
+		IdentifiersProcessor identifiers = new IdentifiersProcessor();
+		for (int i=0; i < n.getLength(); i++) {
+			Node node = n.item(i);
+			if (node instanceof Element) {
+				String type = ((Element) node).getAttribute("fieldtype");
+				String fieldname = ((Element) node).getAttribute("fieldname");
+				String newname = ((Element) node).getAttribute("newname"); 
+				if ("ignore".equals(type)) continue;
+				if ("Chemical Name (IUPAC)".equals(type)) 
+					identifiers.getIdentifiers().put(fieldname,CDKConstants.NAMES);
+				else
+				if ("Chemical Name (Not IUPAC)".equals(type)) 
+					aliases.add(fieldname);
+				else 
+				if ("CAS Number".equals(type)) 
+					identifiers.getIdentifiers().put(fieldname,CDKConstants.CASRN);	
+				else
+				if ("SMILES".equals(type)) 
+					identifiers.getIdentifiers().put(fieldname,AmbitCONSTANTS.SMILES);	
+				else
+				if ("InChI".equals(type)) 
+					aliases.add(fieldname);					
+				else
+				if ("Descriptor".equals(type)) {
+					Descriptor d = new Descriptor(newname,ReferenceFactory.createEmptyReference());					
+					descriptorslookup.addDescriptorPair(fieldname,d);
+				}
+			}
+		}
+		doc = null;
+		import2DB(new File(url), dataset,aliases, descriptorslookup, identifiers,
+				host, port, database, user, password);
+/*
+ * 	public DBImportBatch(IIteratingChemObjectReader reader, SourceDataset dataset, 
+			 ArrayList<String> aliases, DescriptorsHashtable descriptorslookup,
+			DbConnection dbConnection) throws BatchProcessingException {
+ */		
 	}	
-	public static void import2DB(File file,SourceDataset dataset,String host,String port, String database,String user,String password) throws Exception  {
+	public static void import2DB(File file,SourceDataset dataset,
+			String host,String port, String database,String user,String password) throws Exception  {
+		import2DB(file, dataset, getAliases(), new DescriptorsHashtable(), null, host, port, database, user, password);
+	}
+	public static void import2DB(File file,SourceDataset dataset,
+			ArrayList<String> aliases, DescriptorsHashtable descriptorslookup, IdentifiersProcessor identifiers,
+			String host,String port, String database,String user,String password) throws Exception  {
 		IIteratingChemObjectReader reader = FileInputState.getReader(new FileInputStream(file), file.getName());
 		
 		DbConnection dbConnection = new DbConnection(host,port,database,user,password);
 		dbConnection.open(false);
 		DBImportBatch batch = new DBImportBatch(reader,
-				dataset,
+				dataset,				
+				aliases,
+				descriptorslookup,
+				identifiers,
 				dbConnection);
 		
 		batch.start();

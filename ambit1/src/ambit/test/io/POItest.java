@@ -24,7 +24,6 @@
 
 package ambit.test.io;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,10 +40,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.io.setting.IOSetting;
 
-import ambit.io.AmbitSettingsListener;
-import ambit.io.IteratingFileReader;
+import ambit.io.FileInputState;
 
 
 
@@ -85,9 +82,10 @@ public class POItest extends TestCase {
 		System.out.println("done.");
 	}
 
-	public void xtest() {
+	public void test() {
 		try {
 			readXLSFile("data/misc/Debnath_smiles.xls");
+			
 			assertTrue(true);
 		} catch (IOException x) {
 			x.printStackTrace();
@@ -122,19 +120,18 @@ public class POItest extends TestCase {
 		}
 		
 	}
-	public void xxtestIteratingXLSReader() {
+	public void testIteratingXLSReader() {
 		readXLS("data/misc/Debnath_smiles.xls",88);		
 	}
+	
 	public void testFormulaReader() {
 		readXLS("data/misc/BCF-example.xls",36);		
 	}	
-	public void xxtestBigXLSReader() {
-		readXLS("d:\\nina\\LRI_Ambit\\Sylvia\\DSL APR 2006 IndexOfSubstancesOnDSL.csv",20000);		
-	}	
+
 	public void readXLS(String file, int rows) {
 		try {
-			IIteratingChemObjectReader reader = new IteratingFileReader(new File(file));
-			reader.addChemObjectIOListener(new AmbitSettingsListener(null,IOSetting.LOW));
+			IIteratingChemObjectReader reader = FileInputState.getReader(
+					new FileInputStream(file), file);
 			int r = 0;
 			while (reader.hasNext()) {
 				Object mol = reader.next();

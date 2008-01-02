@@ -31,6 +31,20 @@ import javax.servlet.jsp.JspException;
 import ambit.data.literature.ReferenceFactory;
 import ambit.data.molecule.SourceDataset;
 
+/**
+ * 
+ * @author Nina Jeliazkova nina@acad.bg
+ <pre>
+xml is expected of the following format
+<!ELEMENT molecules (property*)>
+<!ATTLIST molecules embedded (Yes|No) #IMPLIED url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property fieldname CDATA #REQUIRED fieldtype CDATA #REQUIRED newname CDATA #IMPLIED>
+ 
+ </pre>
+ 
+ */
 public class AmbitImportTag extends AmbitFileTag {	
 	protected String datasetname;
 	protected String database="ambit";
@@ -38,6 +52,8 @@ public class AmbitImportTag extends AmbitFileTag {
 	protected String user="";
 	protected String password="";
 	protected String port="3306";
+	protected String xml=""; 
+	
 	public String getDatasetname() {
 		return datasetname;
 	}
@@ -51,6 +67,10 @@ public class AmbitImportTag extends AmbitFileTag {
 	@Override
 	public void doTag() throws JspException, IOException {
 		try {
+			if (!"".equals(getXml())) {
+				DBImportBatch.import2DB_xml(getXml(), 
+						host, port, database, user, password);
+			} else
 			DBImportBatch.import2DB(getFile(), 
 					new SourceDataset(getDatasetname(),ReferenceFactory.createDatasetReference(getFilename(),getDatasetname())),	
 					host, port, database, user, password);
@@ -58,6 +78,7 @@ public class AmbitImportTag extends AmbitFileTag {
 			throw new JspException(x);
 		}
 	}
+
 
 	public String getDatabase() {
 		return database;
@@ -88,6 +109,12 @@ public class AmbitImportTag extends AmbitFileTag {
 	}
 	public void setPort(String port) {
 		this.port = port;
+	}
+	public String getXml() {
+		return xml;
+	}
+	public void setXml(String xml) {
+		this.xml = xml;
 	}
 
 }

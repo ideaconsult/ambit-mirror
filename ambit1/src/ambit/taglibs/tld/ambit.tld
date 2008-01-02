@@ -186,12 +186,17 @@
    		<tag-class>ambit.taglibs.AmbitImportTag</tag-class>
         <attribute>
             <name>filename</name>
-            <required>yes</required>
+            <required>no</required>
             <fragment>true</fragment>
         </attribute>
         <attribute>
+            <name>xml</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>        
+        <attribute>
             <name>datasetname</name>
-            <required>yes</required>
+            <required>no</required>
             <fragment>true</fragment>
         </attribute>        
         <attribute>
