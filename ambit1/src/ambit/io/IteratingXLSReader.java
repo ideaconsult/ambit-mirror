@@ -109,7 +109,6 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 			while (cols.hasNext()) {
 				HSSFCell cell = (HSSFCell) cols.next();
 				
-				
 				Object value = cell.toString();
 				if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
 					/*
@@ -170,16 +169,23 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 			while (cols.hasNext()) {
 				HSSFCell cell = (HSSFCell) cols.next();
 				String value = cell.getStringCellValue();
+				/*
 				System.out.print(cell.getCellNum());
 				System.out.print("\t");
 				System.out.println(value);
+				*/
 				if (value.equals(defaultSMILESHeader))
 					smilesIndex = cell.getCellNum();
 				columns.put(new Integer(cell.getCellNum()), value);
 			}
 			Iterator i = columns.keySet().iterator();
-			while (i.hasNext())
-				header.add(columns.get(i.next()));
+			while (i.hasNext()) {
+				Integer key = (Integer)i.next();
+				header.ensureCapacity(key);
+				while (key.intValue() >= header.size())
+					header.add("");
+				header.set(key,columns.get(key));
+			}
 	}
 
 	public String toString() {
