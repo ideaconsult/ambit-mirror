@@ -208,7 +208,7 @@ Dear ${param.title} ${param.firstname} ${param.lastname},
 
 Thank you for applying for user registration with the QMRF Inventory.
 
-Please point your browser to the following URL in order to confirm the registration of the ${param.username} user:
+Please point your browser to the following URL in order to confirm the registration of the "${param.username}" user:
 
       <c:set var="u">
       		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
@@ -229,8 +229,7 @@ The QMRF Inventory team
 </mt:mail>
 
 <p>
-
-A confirmation mail has been sent to ${param.email}. Please follow the instruction in the confirmation e-mail. The registration is invalid without being confirmed.
+Please follow the instructions in the confirmation mail, which has been sent to ${param.email}, in order to complete the registration procedure.
 </p>
 </c:otherwise>
 </c:choose>
