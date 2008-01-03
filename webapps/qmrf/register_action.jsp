@@ -1,7 +1,10 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
  <%@ taglib uri="http://jakarta.apache.org/taglibs/taglibs-mailer" prefix="mt" %>
+ <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <c:set var="mailserver" value="${initParam['mail-server']}" />
 <c:if test="${empty mailserver}">
@@ -131,11 +134,10 @@
 	</c:choose>
 </c:forEach>
 
-<html>
-<head>
-<link href="styles/nstyle.css" rel="stylesheet" type="text/css">
-<title>QMRF Register Page</title>
-<body bgcolor="white">
+<jsp:include page="top.jsp" flush="true">
+    <jsp:param name="title" value="QMRF Inventory Registration page"/>
+</jsp:include>
+
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="register"/>
@@ -199,17 +201,25 @@ E-mail </td>
 		<mt:from>${mailfrom}</mt:from>
 		<mt:setrecipient type="to">${param.email}</mt:setrecipient>
 		<mt:setrecipient type="bcc">${bccadmin}</mt:setrecipient>
-		<mt:subject>QMRF Website registration : your username, ${param.username}, has been created</mt:subject>
+		<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
 
     <mt:message>
-Thank you for registering as a user with QMRF repository. To  confirm the registration, simply point your browser to the following URL:
+Dear ${param.title} ${param.firstname} ${param.lastname},
+
+Thank you for applying for user registration with the QMRF Inventory.
+
+Please point your browser to the following URL in order to confirm the registration of the ${param.username} user:
 
       <c:set var="u">
       		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
     	</c:set>
 <c:url value="${u}"><c:param name="id" value="${pageContext.session.id}"/></c:url>
 
-Finally, your  registration will be  cancelled automatically if QMRF repository does not receive your confirmation within 48h. After that time, you must start over and resend the command to get a new confirmation code. If you change your mind and decide that you do  NOT want to confirm the command, simply discard the present message and let the request expire on its own.
+Please note that your registration will be cancelled automatically if it is not confirmed within 48 hours. If you miss this deadline you should start over the registration procedure and get a new confirmation code.
+
+If you change your mind and decide that you do NOT want to confirm the registration, then please discard this message and let the request expire on its own.
+
+The QMRF Inventory team
     </mt:message>
     <mt:send>
     	<mt:error id="err">
@@ -230,6 +240,11 @@ A confirmation mail has been sent to ${param.email}. Please follow the instructi
 Please note that log in is required only for submitting new (Q)MRF documents.
 </h6>
 
-
+<div id="hits">
+<p>
+<jsp:include page="hits.jsp" flush="true">
+    <jsp:param name="id" value=""/>
+</jsp:include>
+</div>
 </body>
 </html>
