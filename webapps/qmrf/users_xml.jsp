@@ -50,18 +50,23 @@ response.setHeader("Expires", "0");
 					>
 						<c:set var="roles">qmrf_user,qmrf_admin,qmrf_manager,qmrf_editor</c:set>
 						<c:forTokens var="t" items="${roles}" delims=",">
-							<sql:query var="rs_user" dataSource="jdbc/qmrf_documents">
-									SELECT user_name,role_name from tomcat_users.user_roles where user_name=? and role_name=?;
-									<sql:param value="${row.user_name}"/>
-									<sql:param value="${t}"/>
-							</sql:query>
+							<c:catch var="err">
+								<sql:query var="rs_user" dataSource="jdbc/qmrf_documents">
+										SELECT user_name,role_name from tomcat_users.user_roles where user_name=? and role_name=?;
+										<sql:param value="${row.user_name}"/>
+										<sql:param value="${t}"/>
+								</sql:query>
 
-							<c:if test="${rs_user.rowCount eq 0}">
-								<role name='${t}' selected='false' />
+								<c:if test="${rs_user.rowCount eq 0}">
+									<role name='${t}' selected='false' />
+								</c:if>
+								<c:forEach var="rs_row" items="${rs_user.rows}">
+									<role name='${t}' selected='true' />
+								</c:forEach>
+							</c:catch>
+							<c:if test="${!empty err}">
+								<error>${err}</error>
 							</c:if>
-							<c:forEach var="rs_row" items="${rs_user.rows}">
-								<role name='${t}' selected='true' />
-							</c:forEach>
 						</c:forTokens>
 					</user>
 		  	</c:forEach>
