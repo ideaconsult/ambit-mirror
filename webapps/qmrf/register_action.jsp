@@ -197,6 +197,7 @@ E-mail </td>
 
 </c:when>
 <c:otherwise>
+	<c:set var="space" value=" "/>
 <mt:mail server="${mailserver}" >
 		<mt:from>${mailfrom}</mt:from>
 		<mt:setrecipient type="to">${param.email}</mt:setrecipient>
@@ -204,7 +205,7 @@ E-mail </td>
 		<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
 
     <mt:message>
-Dear ${param.title} ${param.firstname} ${param.lastname},
+Dear ${param.title}${space}${param.firstname}${space}${param.lastname},
 
 Thank you for applying for user registration with the QMRF Inventory.
 

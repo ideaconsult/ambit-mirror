@@ -152,6 +152,15 @@ If data is not present in these fields the document will not be published!
 				</help>
 		</chapter>
 
+		<chapter anchor="user_keywords" name="Reviewer keywords">
+				<help>
+				Fill in "Keywords" field if you would like to become a QMRF Inventory Reviewer.
+				</help>
+				<help>
+				These keywords will be used by the QMRF Inventory Editor, in order to assign a reviewer to a QMRF document. The editor will seek a match between QMRF document keywords and available Reviewers' keywords.
+				</help>
+
+		</chapter>
 		<chapter anchor="verify_author" name="Verify if an user is a member of QMRF and model authors list.">
 				<help>
 				Verifies if an author with the same e-mail address as for the user is a member of QMRF documents and models authors list.
