@@ -1,9 +1,11 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://jakarta.apache.org/taglibs/taglibs-mailer" prefix="mt" %>
+<fmt:requestEncoding value="UTF-8"/>
 
 <%
 response.setHeader("Pragma", "no-cache");
@@ -66,8 +68,8 @@ response.setHeader("Expires", "0");
 				<c:catch var="transactionException_archive">
 				<sql:transaction dataSource="jdbc/qmrf_documents">
 				<sql:update var="updateCount">
-						insert into documents (idqmrf_origin,user_name,xml,version,status,updated,reviewer)
-				    select idqmrf,user_name,xml,version+1,'returned for revision',now(),reviewer from documents where idqmrf=?;
+						insert into documents (idqmrf_origin,qmrf_title,user_name,xml,version,status,updated,reviewer)
+				    select idqmrf,qmrf_title,user_name,xml,version+1,'returned for revision',now(),reviewer from documents where idqmrf=?;
 				  <sql:param value="${param.id}"/>
 				  </sql:update>
 					<sql:update var="updateCount">
@@ -207,7 +209,7 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 	<jsp:include page="records.jsp" flush="true">
 	<jsp:param name="sql" value="${sql_report}"/>
 		<jsp:param name="qmrf_number" value="QMRF#"/>
-		<jsp:param name="qmrf_title" value="Title"/>		
+		<jsp:param name="qmrf_title" value="Title"/>
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="updated" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
