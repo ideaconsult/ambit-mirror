@@ -118,10 +118,10 @@ response.setHeader("Expires", "0");
 			<c:when test="${param.status eq 'under review'}">
 				<c:catch var="error_update">
 					<sql:update var="updateCount" dataSource="jdbc/qmrf_documents">
-						 update documents set qmrf_number=null,xml=?,updated=now(),status='under review',reviewer=? where idqmrf=?
+						 update documents set qmrf_number=null,xml=?,updated=now(),status='under review' where idqmrf=? and reviewer=? and (status='submitted' || status='under review')
 						<sql:param value="${docnew}"/>
-						<sql:param value="${sessionScope['username']}"/>
 						<sql:param value="${param.id}"/>
+						<sql:param value="${sessionScope['username']}"/>
 					</sql:update>
 				</c:catch>
 				<c:if test="${!empty error_update}">

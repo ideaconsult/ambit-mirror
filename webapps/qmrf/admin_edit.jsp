@@ -63,6 +63,23 @@ function getXML(){
 
 			<!-- data  update -->
 		<c:catch var="transactionException_update">
+			<c:catch var="title_err">
+				<x:parse xml="${param.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
+				<c:set var="qmrf_tmp">
+					<x:out escapeXml="false" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/>
+				</c:set>
+				<x:parse xml="${fn:trim(qmrf_tmp)}" var="doc"/>
+				<c:set var="qmrf_title">
+					<x:out select="$doc//body"/>
+				</c:set>
+				<c:if test="${empty qmrf_title}">
+					<c:set var="qmrf_title" value="${qmrf_tmp}"/>
+				</c:if>
+				<c:set var="qmrf_title" value="${fn:trim(qmrf_title)}"/>
+			</c:catch>
+			<c:if test="${!empty title_err}">
+				<c:set var="qmrf_title" value=""/>
+			</c:if>
 
 			<c:import url="include_attachments.jsp" var="newxml" >
 				<c:param name="id" value="${param.id}"/>
@@ -71,9 +88,11 @@ function getXML(){
 			<sql:transaction dataSource="jdbc/qmrf_documents">
 
 			<sql:update var="updateCount" >
-				update documents set xml=?,updated=now() where idqmrf=? and status='under review';
+				update documents set qmrf_title=substring(?,1,128),xml=?,updated=now() where idqmrf=? and status='under review' and reviewer = ?
+				<sql:param value="${qmrf_title}"/>
 				<sql:param value="${newxml}"/>
 			  <sql:param value="${param.id}"/>
+				<sql:param value="${sessionScope['username']}"/>
 			</sql:update>
 			<div class="success">
 					Document updated.
@@ -84,12 +103,13 @@ function getXML(){
 </c:choose>
 
 <c:set var="report">
-	select idqmrf,qmrf_number,user_name,updated,status from documents where idqmrf = ${param.id} and (status = 'submitted' || status = 'under review')
+	select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id} and (status = 'submitted' || status = 'under review')
 </c:set>
 
 <jsp:include page="records.jsp" flush="true">
 	<jsp:param name="sql" value="${report}"/>
 	<jsp:param name="qmrf_number" value="QMRF#"/>
+	<jsp:param name="qmrf_title" value="Title"/>
     <jsp:param name="user_name" value="Author"/>
     <jsp:param name="updated" value="Last updated"/>
 	<jsp:param name="status" value="Status"/>
