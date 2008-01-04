@@ -62,19 +62,24 @@ response.setHeader("Expires", "0");
 					<sql:param value="${row.user_name}"/>
 				</sql:update>
 
-
+					<c:set var="space" value=" "/>
 						<mt:mail server="${initParam['mail-server']}" >
 								<mt:from>${initParam['mail-from']}</mt:from>
 								<mt:setrecipient type="to">${row.email}</mt:setrecipient>
 								<mt:subject>QMRF Inventory forgotten password</mt:subject>
 
 						    <mt:message>
-Dear ${row.title} ${row.firstname} ${row.lastname},
+Dear ${row.title}${space}${row.firstname}${space}${row.lastname},
 
-Your username: ${row.user_name}
-Your password has been reset to ${newpass}. You may change the password via My profile tab.
+We would like to inform you that the password for the ${row.user_name} user has been reset upon your request.
 
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+Your new login credentials are as follows:
+Username: ${row.user_name}
+Password: ${newpass}
+You could change your password through the "My Profile" tab.
+
+The QMRF Inventory team
+<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>
@@ -87,7 +92,7 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 
 
 						<p>
-						Email sent to user name ${row.user_name} at <i>${row.email}</i>
+						An email with your new login credentials has been sent to <i>${row.email}</i>
 						</p>
 			</c:forEach>
 			<p>

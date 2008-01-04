@@ -70,11 +70,11 @@
 					<mt:message>
 Dear ${row.title} ${row.firstname} ${row.lastname},
 
-You have been assigned as a reviewer of a QMRF Document ${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/admin_review.jsp?id=${param.id}.
-
-You are invited to log in into QMRF Inventory at ${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}.
-
-QMRF Inventory
+You have been appointed as a reviewer of a QMRF document.
+Please perform your reviewing duties at your earliest convenience.
+The QMRF Inventory team
+<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+<c:url value="${u}"></c:url>
 					</mt:message>
 					<mt:send>
 						<mt:error id="err">

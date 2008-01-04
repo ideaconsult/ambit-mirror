@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://jakarta.apache.org/taglibs/taglibs-mailer" prefix="mt" %>
 <fmt:requestEncoding value="UTF-8"/>
 
 <c:set var="thispage" value='update_status.jsp'/>
@@ -41,7 +42,7 @@
 
 <jsp:include page="menu.jsp" flush="true">
     <jsp:param name="highlighted" value="create"/>
-    <jsp:param name="viewmode" value="${param.viewmode}"/>    
+    <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
 
@@ -51,11 +52,56 @@
 
 <c:if test="${(!empty param.verify) && (param.verify eq 'false')}">
 	<c:catch var="update_error">
+
 		<sql:update var="updateCount" dataSource="jdbc/qmrf_documents">
 			update documents set status="submitted" where idqmrf=? and user_name=? and status='draft';
 			<sql:param value="${param.id}"/>
 			<sql:param value="${sessionScope['username']}"/>
 		</sql:update>
+		
+		<sql:query var="rrs" dataSource="jdbc/qmrf_documents">
+			select reviewer from documents where idqmrf=? and reviewer is not null
+		</sql:query>
+		<c:set var="sql" value="select email,title,firstname,lastname,user_name from tomcat_users.user_roles join users using(user_name) where role_name='qmrf_editor'"/>
+		<c:set var="message">
+We would like to inform you that a new QMRF document has been submitted in the QMRF Inventory.
+Please perform your editorial duties and assign a reviewer at your earliest convenience.		
+		</c:set>
+		<c:if test="${rrs.rowCount > 0}">
+			<c:forEach var="rrow" items="${rrs.rows}">
+				<c:set var="sql">
+					select email,title,firstname,lastname,user_name from users where user_name='${rrow.user_name}'
+				</c:set>
+				<c:set var="message">
+You have been appointed as a reviewer of a QMRF document.
+Please perform your reviewing duties at your earliest convenience.				
+				</c:set>				
+			</c:forEach>
+		</c:if>	
+		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+			${sql}
+		</sql:query>
+		<c:forEach var="row" items="${rs.rows}">
+			<mt:mail server="${initParam['mail-server']}" >
+				<mt:from>${initParam['mail-from']}</mt:from>
+				<mt:setrecipient type="to">${row.email}</mt:setrecipient>
+				<mt:subject>[QMRF Inventory] Document returned for revision</mt:subject>
+				<mt:message>
+Dear ${row.title} ${row.firstname} ${row.lastname},
+
+${message}				
+The QMRF Inventory team
+
+<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+<c:url value="${u}"></c:url>				
+			    </mt:message>
+			    <mt:send>
+			    	<mt:error id="err">
+			         <jsp:getProperty name="err" property="error"/>
+	 		        </mt:error>
+			 	</mt:send>
+			</mt:mail>			
+		</c:forEach>
 		<blockquote>
 		<div class="success">
 			${updateCount}  document updated.
@@ -70,7 +116,7 @@
 </c:if>
 
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,updated,status from documents where user_name=? and idqmrf=${param.id}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and idqmrf=${param.id}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
@@ -78,7 +124,7 @@
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
-		<jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="user"/>
 

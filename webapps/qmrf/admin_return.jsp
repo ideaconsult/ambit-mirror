@@ -88,23 +88,26 @@ response.setHeader("Expires", "0");
 			<c:if test="${empty transactionException_archive}">
 				<c:catch var="transactionException_archive">
 					<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-						SELECT xml,idqmrf,d.user_name,title,firstname,lastname,email FROM documents as d join users using(user_name) where idqmrf=?
+						SELECT idqmrf,qmrf_title,d.user_name,title,firstname,lastname,email,date_format(updated,'%Y-%c-%d') as qdate,date_format(updated,'%H:%i') as qtime FROM documents as d join users using(user_name) where idqmrf=?
 						<sql:param value="${param.id}"/>
 					</sql:query>
+
 					<c:forEach var="row" items="${rs.rows}">
-						<x:parse xml="${row.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
 
 						<mt:mail server="${initParam['mail-server']}" >
 							<mt:from>${initParam['mail-from']}</mt:from>
 							<mt:setrecipient type="to">${row.email}</mt:setrecipient>
 							<mt:subject>[QMRF Inventory] Document returned for revision</mt:subject>
 
-							<mt:message type="html">
-Dear ${row.title}&nbsp;${row.firstname}&nbsp;${row.lastname},
-<p>
-Your QMRF document <x:out escapeXml="true" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/> has been returned to you for revision.
-<p>
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
+							<mt:message>
+Dear ${row.title} ${row.firstname} ${row.lastname},
+
+A QMRF document, which you submitted in the QMRF Inventory on ${row.qdate} at ${row.qtime}, has been reviewed and returned to you for revision.
+Please perform the required actions and then re-submit the revised document in the QMRF Inventory at your earliest convenience.
+
+The QMRF Inventory team
+
+<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>
 						    </mt:message>
 						    <mt:send>

@@ -109,18 +109,22 @@
 		</help>
 	</chapter>
 
-		<chapter anchor="author" name="QMRF document author">
+		<chapter anchor="user_name" name="QMRF document author">
 		<help>
-				The author of the document.
+				The QMRF Inventory user name of the document author.
 		</help>
 	</chapter>
 
-		<chapter anchor="updated" name="QMRF document date">
+		<chapter anchor="lastdate" name="QMRF document date">
 		<help>
 				The timestamp of the last update of the document.
 		</help>
 	</chapter>
-
+		<chapter anchor="qmrf_title" name="QMRF document title">
+		<help>
+First 128 characters of the QMRF document title (Section 1.1)
+		</help>
+	</chapter>
 		<chapter anchor="qmrf_number" name="QMRF Number">
 		<help>
 				QMRF number is an unique identifier, assigned to a published QMRF document, in a form of Q A-B-C-D.
@@ -161,16 +165,15 @@ If data is not present in these fields the document will not be published!
 				</help>
 
 		</chapter>
-		<chapter anchor="verify_author" name="Verify if an user is a member of QMRF and model authors list.">
+		<chapter anchor="verify_author" name="Verify if an user is a member of the QMRF and model authors list.">
 				<help>
-				Verifies if an author with the same e-mail address as for the user is a member of QMRF documents and models authors list.
-				If not, provides a form to add a new author to the list.
+Verifies if an author with a matching e-mail address exists in the QMRF documents and models authors list. If not, provides a form to add a new author to the list.
 				</help>
 				<help>
-				The author names are usually appended when publishing documents into QMRF inventory.
+The author names are usually appended when publishing documents in the QMRF Inventory.
 				</help>
 				<help>
-				The author list will be available as a lookup for relevant fields within QMRF editor.
+The author list will be available as a lookup for relevant fields within the QMRF editor.
 				</help>
 		</chapter>
 		<chapter anchor="roles" name="What are user roles and how to change/update roles.">

@@ -175,7 +175,7 @@ response.setHeader("Expires", "0");
 			<c:when test="${empty pageScope.param['description']}">
 				<blockquote>
 				<div class="error">
-				File description might not be empty!
+				File description should not be empty!
 				</div>
 				</blockquote>
 			</c:when>

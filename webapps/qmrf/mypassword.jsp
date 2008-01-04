@@ -41,7 +41,7 @@
 <c:choose>
 <c:when test="${fn:length(param.newpassword)<6}">
 				<div class="error">
-				Password should consists of at least 6 characters
+				Password should consist of at least 6 characters
 			</div>
 </c:when>
 <c:when test="${!empty param.password && !empty param.newpassword && !empty param.confirm && (param.newpassword eq param.confirm)}">
