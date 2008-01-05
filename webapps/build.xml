@@ -1,0 +1,23 @@
+<project name="webapps" default="all" basedir=".">
+	<property name="version" value="0.1" />
+	<property name="dist" value="dist" />
+	<property name="qmrf_dir" value="qmrf" />
+
+<target id="all" name="all" depends= "qmrf"/>
+<target name="clean" description="clean dist folder">
+	<delete dir="${dist}/${qmrf_dir}" />
+</target>
+<target name="qmrf" description="QMRF Inventory web application">
+	<delete dir="${dist}/${qmrf_dir}" />
+	<mkdir dir="${dist}/${qmrf_dir}" />
+	<copy todir="${dist}/${qmrf_dir}">
+		<fileset dir="${qmrf_dir}" includes="**/*" >
+			<exclude name="*.bak" />
+		</fileset>
+	</copy>
+	<jar jarfile="${dist}/qmrf.war" compress="true">
+		<fileset dir="${dist}/${qmrf_dir}" includes="**/*" />
+	</jar>	
+	<delete dir="${dist}/${qmrf_dir}" />
+</target>
+</project>
