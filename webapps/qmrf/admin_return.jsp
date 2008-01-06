@@ -100,16 +100,14 @@ response.setHeader("Expires", "0");
 							<mt:subject>[QMRF Inventory] Document returned for revision</mt:subject>
 
 							<mt:message>
-Dear ${row.title} ${row.firstname} ${row.lastname},
-
-A QMRF document, which you submitted in the QMRF Inventory on ${row.qdate} at ${row.qtime}, has been reviewed and returned to you for revision.
-Please perform the required actions and then re-submit the revised document in the QMRF Inventory at your earliest convenience.
-
-The QMRF Inventory team
-
-<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
-<c:url value="${u}"></c:url>
-						    </mt:message>
+<jsp:include page="mail_return.jsp" flush="true">
+    <jsp:param name="title" value="${row.title}"/>
+    <jsp:param name="firstname" value="${row.firstname}"/>
+    <jsp:param name="lastname" value="${row.lastname}"/>        
+    <jsp:param name="qdate" value="${row.qdate}"/>
+    <jsp:param name="qtime" value="${row.qtime}"/>    
+</jsp:include>							
+</mt:message>
 						    <mt:send>
 						    	<mt:error id="err">
 						         <jsp:getProperty name="err" property="error"/>

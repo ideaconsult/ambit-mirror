@@ -341,7 +341,7 @@
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Assign a Reviewer</a>
+											" title="Select and assign a reviewer for this document">Assign a Reviewer</a>
 									</c:when>
 									<c:otherwise>
 									</c:otherwise>
@@ -359,40 +359,41 @@
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Edit</a>
+											" title="Launch QMRF Editor">Edit</a>
 											<c:url value="edit_attachmentsdb.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
 											
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Attachments</a>
+											" title="Upload attachments">Attachments</a>
 											
 											<c:url value="update_status.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
+											  											  
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Validate and submit</a>
+											" title="Go to validation page">Validate and submit</a>
 							  </c:when>
 							  <c:when test="${row.status eq 'returned for revision'}">
 											<a href="
 											<c:url value="edit.jsp">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
-											">Edit</a>
+											" title="Launch QMRF Editor">Edit</a>
 											<a href="
 											<c:url value="edit_attachmentsdb.jsp">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
-											">Attachments</a>
+											" title="Upload attachments">Attachments</a>
 							  </c:when>
 							  <c:otherwise>
 										<a href="
 											<c:url value="edit_attachmentsdb.jsp">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
-											">Attachments</a>
+											" title="View attachments">Attachments</a>
 							  </c:otherwise>
 							</c:choose>
 							<!-- User actions end-->

@@ -96,6 +96,7 @@
 
 			<url-pattern>/author.jsp</url-pattern>
 			<url-pattern>/headers.jsp</url-pattern>
+			<url-pattern>/mail.jsp</url-pattern>			
 			
 	  </web-resource-collection>
 
