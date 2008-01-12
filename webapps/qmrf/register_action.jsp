@@ -44,7 +44,9 @@
 	<c:set var="invalid" value="true"/>		
 </c:if>
 
-
+<c:if test="${fn:length(param.password1)<6}">
+	<c:set var="status_password" value="Password should consist of at least 6 characters"/>
+</c:if>
 <c:if test="${(empty param.password1) or (empty param.password2)}" >
 	<c:set var="status_password" value="Empty password"/>
 	<c:set var="invalid" value="true"/>	
