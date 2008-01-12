@@ -14,7 +14,7 @@
 </jsp:include>
 
 <c:if test="${!empty param.registerstatus}">
-		<div style="color:#FF0000;text-align:center">
+		<div class="error">
 				${param.registerstatus}
 		</div>
 </c:if>
@@ -26,51 +26,97 @@
       <td align="left"><input type="text" name="username" value="${param.username}">
       	<font color="#FF0000">*</font>
       </td>
+      <td> 
+      <c:if test="${!empty(param.status_username)}">
+      <div class="error">${param.status_username}</div>
+      </c:if>
+      </td>
     </tr>
     <tr>
-      <th align="right">E-mail:</th>
-      <td align="left"><input type="text" name="email" value="${param.email}">
+      <th align="right">E-mail:
+      <a href="help.jsp?anchor=email" target="help">
+	  <img src="images/help.png" alt="help" title="Please provide a valid e-mail" border="0" /></a>      
+      </th>
+      <td align="left"><input type="text" name="email" value="${param.email}" >
       	<font color="#FF0000">*</font>
       	</td>
+      <td> 
+      <c:if test="${!empty(param.status_email)}">
+      <div class="error">${param.status_email}</div>
+      </c:if>
+      </td>
     </tr>
 
     <tr>
       <th align="right">Title:</th>
-      <td align="left"><input type="text" name="title"></td>
+      <td align="left"><input type="text" name="title" value="${param.title}"></td>
     </tr>
 
     <tr>
       <th align="right">First name:</th>
-      <td align="left"><input type="text" name="firstname">
+      <td align="left"><input type="text" name="firstname" value="${param.firstname}">
       	<font color="#FF0000">*</font></td>
+      <td> 
+      <c:if test="${!empty(param.status_firstname)}">
+      <div class="error">${param.status_firstname}</div>
+      </c:if>
+      </td>      	
     </tr>
 
     <tr>
       <th align="right">Last name:</th>
-      <td align="left"><input type="text" name="lastname">
+      <td align="left"><input type="text" name="lastname" value="${param.lastname}">
       	<font color="#FF0000">*</font></td>
+      <td> 
+      <c:if test="${!empty(param.status_lastname)}">
+      <div class="error">${param.status_lastname}</div>
+      </c:if>
+      </td>      	
     </tr>
 
     <tr>
       <th align="right">Affiliation:</th>
-      <td align="left"><input type="text" name="affiliation"></td>
+      <td align="left"><input type="text" name="affiliation" value="${param.affiliation}" size="60"></td>
     </tr>
 
     <tr>
       <th align="right">Contact details:</th>
-      <td align="left"><input type="text" name="address"></td>
+      <td align="left"><input type="text" name="address" value="${param.address}" size="60"></td>
     </tr>
 
     <tr>
       <th align="right">Country:</th>
-      <td align="left"><input type="text" name="country"></td>
+      <td align="left"><input type="text" name="country" value="${param.country}" size="60"></td>
     </tr>
-
+    <tr>
+      <th align="right">WWW page:</th>
+      <td align="left"><input type="text" name="webpage" value="${param.webpage}" size="60"></td>
+    </tr>    
+    <tr>
+      <th align="right">Reviewer:
+      <a href="help.jsp?anchor=roles" target="help">
+	  <img src="images/help.png" alt="help" title="Check this box if you would like to become a reviewer of QMRF documents." border="0" /></a>
+      </th>
+      <td align="left">
+      <input type="checkbox" name="reviewer" value="checked" ${param.reviewer}></td>
+    </tr>      
+    <tr>
+      <th align="right">Keywords:
+      <a href="help.jsp?anchor=user_keywords" target="help">
+	  <img src="images/help.png" alt="help" title="If you would like to become a reviewer of QMRF documents,please enter keywords of the scientific field you would like to review" border="0" /></a>
+      </th>
+      <td align="left"><input type="text" name="keywords" value="${param.keywords}" size="60"></td>
+    </tr>    
     <tr>
       <th align="right">Password:</th>
       <td align="left"><input type="password" name="password1">
       	<font color="#FF0000">*</font>
       	</td>
+      <td> 
+      <c:if test="${!empty(param.status_password)}">
+      <div class="error">${param.status_password}</div>
+      </c:if>
+      </td>      	
     </tr>
     <tr>
       <th align="right">Password (confirm again):</th>

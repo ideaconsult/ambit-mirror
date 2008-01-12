@@ -18,64 +18,73 @@
 		<c:set var="mailfrom" value="qmrf@acad.bg" />
 </c:if>
 
+<c:set var="invalid" value=""/>
 <c:if test="${empty param.username}" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="User name empty"/>
-			<jsp:param name="email" value="${param.email}"/>
-			<jsp:param name="firstname" value="${param.firstname}"/>
-			<jsp:param name="lastname" value="${param.lastname}"/>
-  </jsp:forward>
+	<c:set var="status_username" value="Empty user name"/>
+	<c:set var="invalid" value="true"/>	
 </c:if>
 
 <c:if test="${empty param.email}" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="e-mail empty"/>
-		<jsp:param name="username" value="${param.username}"/>
-			<jsp:param name="firstname" value="${param.firstname}"/>
-			<jsp:param name="lastname" value="${param.lastname}"/>
-  </jsp:forward>
+	<c:set var="status_email" value="Empty e-mail"/>
+	<c:set var="invalid" value="true"/>		
 </c:if>
 
 <c:if test="${!fn:contains(param.email, '@') }" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="Invalid e-mail"/>
-		<jsp:param name="username" value="${param.username}"/>
-			<jsp:param name="firstname" value="${param.firstname}"/>
-			<jsp:param name="lastname" value="${param.lastname}"/>
-  </jsp:forward>
+	<c:set var="status_email" value="Invalid e-mail"/>
+	<c:set var="invalid" value="true"/>		
 </c:if>
 
 <c:if test="${empty param.firstname}" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="First name empty"/>
-		<jsp:param name="username" value="${param.username}"/>
-		<jsp:param name="email" value="${param.email}"/>
-		<jsp:param name="lastname" value="${param.lastname}"/>
-  </jsp:forward>
+	<c:set var="status_firstname" value="Empty first name"/>
+	<c:set var="invalid" value="true"/>		
 </c:if>
 
 <c:if test="${empty param.lastname}" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="Last name empty"/>
-		<jsp:param name="username" value="${param.username}"/>
-		<jsp:param name="firstname" value="${param.firstname}"/>
-		<jsp:param name="email" value="${param.email}"/>
-  </jsp:forward>
+	<c:set var="status_lastname" value="Empty last name"/>
+	<c:set var="invalid" value="true"/>		
 </c:if>
 
+
 <c:if test="${(empty param.password1) or (empty param.password2)}" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="Password empty"/>
-		<jsp:param name="username" value="${param.username}"/>
-		<jsp:param name="email" value="${param.email}"/>
-  </jsp:forward>
+	<c:set var="status_password" value="Empty password"/>
+	<c:set var="invalid" value="true"/>	
 </c:if>
 
 <c:if test="${!(param.password1 eq param.password2)}" >
+	<c:set var="status_password" value="Passwords don't match!"/>
+	<c:set var="invalid" value="true"/>	
+</c:if>
+
+<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+	select user_name,(now()-registration_date) as seconds_since_registered, registration_status from users where user_name=?
+	<sql:param value="${param.username}"/>
+</sql:query>
+
+<c:forEach var="row" items="${rs.rows}">
+	<c:if test="${row.registration_status != 'commenced'}">
+		<c:set var="status_username" value="This username already exists!"/>
+		<c:set var="invalid" value="true"/>			  
+	</c:if>
+</c:forEach>		
+
+<c:if test="${invalid eq 'true'}" >
 	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value="Passwords don't match!"/>
-		<jsp:param name="username" value="${param.username}"/>
-		<jsp:param name="email" value="${param.email}"/>
+		<jsp:param name="status_password" value="${status_password}"/>
+		<jsp:param name="status_username" value="${status_username}"/>
+		<jsp:param name="status_email" value="${status_email}"/>
+		<jsp:param name="status_firstname" value="${status_firstname}"/>
+		<jsp:param name="status_lastname" value="${status_lastname}"/>										
+			<jsp:param name="email" value="${param.email}"/>		
+			<jsp:param name="username" value="${param.username}"/>
+			<jsp:param name="firstname" value="${param.firstname}"/>
+			<jsp:param name="lastname" value="${param.lastname}"/>
+			<jsp:param name="address" value="${param.address}"/>			
+			<jsp:param name="affiliation" value="${param.affiliation}"/>			
+			<jsp:param name="title" value="${param.title}"/>			
+			<jsp:param name="country" value="${param.country}"/>	
+			<jsp:param name="reviewer" value="${param.reviewer}"/>				
+			<jsp:param name="webpage" value="${param.webpage}"/>							
+			<jsp:param name="keywords" value="${param.keywords}"/>					
 
   </jsp:forward>
 </c:if>
@@ -118,17 +127,17 @@
 	<c:choose>
 		<c:when test="${row.registration_status != 'commenced'}">
 			<jsp:forward page="register.jsp">
-				<jsp:param name="registerstatus" value="This username already exists! "/>
+				<jsp:param name="status_username" value="This username already exists!"/>
 				<jsp:param name="email" value="${param.email}"/>
 		  </jsp:forward>
 		</c:when>
 		<c:otherwise>
-						<c:if test="${row.seconds_since_registered le 172800}">
-											<jsp:forward page="register.jsp">
-												<jsp:param name="registerstatus" value="This username already exists! "/>
-												<jsp:param name="email" value="${param.email}"/>
-								  		</jsp:forward>
-	  				</c:if>
+			<c:if test="${row.seconds_since_registered le 172800}">
+				<jsp:forward page="register.jsp">
+					<jsp:param name="status_username" value="This username already exists!"/>
+					<jsp:param name="email" value="${param.email}"/>
+				</jsp:forward>
+	  		</c:if>
 		</c:otherwise>
 
 	</c:choose>
@@ -163,8 +172,12 @@ E-mail </td>
 </table>
 
 <c:catch var='exception'>
+	<c:set var="reviewer" value="0"/>
+	<c:if test="${param.reviewer eq 'checked'}">
+		<c:set var="reviewer" value="1"/>	
+	</c:if>
 <sql:update var="rs" dataSource="jdbc/qmrf_documents">
-	insert into users (user_name,`password`,email,registration_id,title,firstname,lastname,address,country,affiliation) values (?,md5(?),?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE password=md5(?),registration_id=?,registration_date=now(),title=?,firstname=?,lastname=?,address=?,country=?,affiliation=?
+	insert into users (user_name,`password`,email,registration_id,title,firstname,lastname,address,country,affiliation,webpage,keywords,reviewer) values (?,md5(?),?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE password=md5(?),registration_id=?,registration_date=now(),title=?,firstname=?,lastname=?,address=?,country=?,affiliation=?,webpage=?,keywords=?,reviewer=?
 	<sql:param value="${param.username}"/>
   <sql:param value="${param.password1}"/>
   <sql:param value="${param.email}"/>
@@ -175,6 +188,9 @@ E-mail </td>
 	<sql:param value="${param.address}"/>
 	<sql:param value="${param.country}"/>
 	<sql:param value="${param.affiliation}"/>
+	<sql:param value="${param.webpage}"/>
+	<sql:param value="${param.keywords}"/>	
+	<sql:param value="${reviewer}"/>	
 
   <sql:param value="${param.password1}"/>
   <sql:param value="${pageContext.session.id}"/>
@@ -184,6 +200,9 @@ E-mail </td>
 	<sql:param value="${param.address}"/>
 	<sql:param value="${param.country}"/>
 	<sql:param value="${param.affiliation}"/>
+	<sql:param value="${param.webpage}"/>
+	<sql:param value="${param.keywords}"/>	
+	<sql:param value="${reviewer}"/>		
 
 </sql:update>
 </c:catch>
@@ -192,42 +211,45 @@ E-mail </td>
 <c:when test='${not empty exception}'>
 
 					<div class="error">
-							Registration error ${transactionException2}
+							Registration error ${exception}
 				</div>
 
 </c:when>
 <c:otherwise>
-	<c:set var="space" value=" "/>
-<mt:mail server="${mailserver}" >
-		<mt:from>${mailfrom}</mt:from>
-		<mt:setrecipient type="to">${param.email}</mt:setrecipient>
-		<mt:setrecipient type="bcc">${bccadmin}</mt:setrecipient>
-		<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
-
-    <mt:message>
-Dear ${param.title}${space}${param.firstname}${space}${param.lastname},
-
-Thank you for applying for user registration with the QMRF Inventory.
-
-Please point your browser to the following URL in order to confirm the registration of the "${param.username}" user:
-
-      <c:set var="u">
-      		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
-    	</c:set>
-<c:url value="${u}"><c:param name="id" value="${pageContext.session.id}"/></c:url>
-
-Please note that your registration will be cancelled automatically if it is not confirmed within 48 hours. If you miss this deadline you should start over the registration procedure and get a new confirmation code.
-
-If you change your mind and decide that you do NOT want to confirm the registration, then please discard this message and let the request expire on its own.
-
-The QMRF Inventory team
-    </mt:message>
-    <mt:send>
-    	<mt:error id="err">
-         <jsp:getProperty name="err" property="error"/>
-       </mt:error>
-	</mt:send>
-</mt:mail>
+	<c:set var="text">
+	Thank you for applying for user registration with the QMRF Inventory.
+	
+	Please point your browser to the following URL in order to confirm the registration of the "${param.username}" user:
+	
+	      <c:set var="u">
+	      		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
+	    	</c:set>
+	<c:url value="${u}"><c:param name="id" value="${pageContext.session.id}"/></c:url>
+	
+	Please note that your registration will be cancelled automatically if it is not confirmed within 48 hours. If you miss this deadline you should start over the registration procedure and get a new confirmation code.
+	
+	If you change your mind and decide that you do NOT want to confirm the registration, then please discard this message and let the request expire on its own.
+	</c:set>
+	<mt:mail server="${mailserver}" >
+			<mt:from>${mailfrom}</mt:from>
+			<mt:setrecipient type="to">${param.email}</mt:setrecipient>
+			<mt:setrecipient type="bcc">${bccadmin}</mt:setrecipient>
+			<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
+	
+	    <mt:message>
+<jsp:include page="mail.jsp" flush="true">
+	    <jsp:param name="title" value="${param.title}"/>
+	    <jsp:param name="firstname" value="${param.firstname}"/>
+	    <jsp:param name="lastname" value="${param.lastname}"/>        
+	    <jsp:param name="text" value="${text}"/>
+</jsp:include>	    
+	    </mt:message>
+	    <mt:send>
+	    	<mt:error id="err">
+	         <jsp:getProperty name="err" property="error"/>
+	       </mt:error>
+		</mt:send>
+	</mt:mail>
 
 <p>
 Please follow the instructions in the confirmation mail, which has been sent to ${param.email}, in order to complete the registration procedure.
