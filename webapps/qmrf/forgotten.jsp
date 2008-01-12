@@ -29,7 +29,7 @@ response.setHeader("Expires", "0");
 </jsp:include>
 
 
-<h3>Forgotten password</h3>
+<h3>New password</h3>
 <c:if test="${!empty param.registerstatus}" >
 			<div class="error">${param.registerstatus}</div>
 </c:if>
