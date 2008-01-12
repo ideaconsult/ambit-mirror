@@ -68,7 +68,7 @@ response.setHeader("Expires", "0");
 </jsp:include>
 
 <c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>
-
+<c:set var="maxpages" value="1" scope="session"/>
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
 

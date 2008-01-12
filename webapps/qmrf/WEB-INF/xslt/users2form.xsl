@@ -74,11 +74,22 @@
 				<xsl:attribute name="href">
 					<xsl:text>author.jsp</xsl:text>?name=<xsl:value-of select="@user_name"/>
 				</xsl:attribute>
-				Verify
+				<xsl:attribute name="title">Verify if the user is a member of the QMRF and model authors list.</xsl:attribute>					
+				<xsl:text>Verify</xsl:text>
 			</xsl:element>
-	<xsl:text>if a member of QMRF and model authors list.</xsl:text>
-
-	<a href="help.jsp?anchor=verify_author" target="help"><img src="images/help.png" alt="help" title="What is QMRF and model authors list?" border="0"/></a>
+	<xsl:text> if a member of QMRF and model authors </xsl:text>
+	<xsl:element name="a">
+		<xsl:attribute name="href">
+			<xsl:text>help.jsp?anchor=verify_author</xsl:text>
+		</xsl:attribute>
+			<xsl:attribute name="title">What is QMRF and model authors list?</xsl:attribute>								
+		<xsl:attribute name="target">help</xsl:attribute>list<xsl:element name="img">
+			<xsl:attribute name="src">images/help.png</xsl:attribute>
+			<xsl:attribute name="alt">Help</xsl:attribute>
+			<xsl:attribute name="title">What is QMRF and model authors list?</xsl:attribute>						
+			<xsl:attribute name="border">0</xsl:attribute>			
+		</xsl:element>
+		</xsl:element>
 	</td>
 	</tr>
 	<tr bgcolor="#D6DFF7">
@@ -294,7 +305,7 @@
 
 	<input type="text" name="webpage" size="40">
 		<xsl:attribute name="value">
-  		<xsl:value-of select="@webpage"/>
+  		<xsl:value-of disable-output-escaping="no" select="@webpage"/>
 		</xsl:attribute>
 	</input>
 
@@ -304,6 +315,8 @@
 <tr bgcolor="#D6DFF7">
 	<th>
 	Would you like to become a reviewer?
+<a href="help.jsp?anchor=roles" target="help"><img src="images/help.png" alt="help" title="Learn more about Reviewer' duties" border="0"/></a>	
+
 	</th>
 	<td>
 
@@ -364,7 +377,7 @@
 
 	<input type="text" name="keywords" size="60" maxchars="128">
 		<xsl:attribute name="value">
-  		<xsl:value-of select="@keywords"/>
+  		<xsl:value-of disable-output-escaping="no" select="@keywords"/>
 		</xsl:attribute>
 	</input>
 
