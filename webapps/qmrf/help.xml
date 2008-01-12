@@ -115,6 +115,11 @@
 		</help>
 	</chapter>
 
+		<chapter anchor="email" name="E-mail of a QMRF user">
+		<help>
+A valid e-mail is required in order to register in QMRF Repository. The QMRF Inventory will send various notifications to the user email.
+		</help>
+	</chapter>
 		<chapter anchor="lastdate" name="QMRF document date">
 		<help>
 				The timestamp of the last update of the document.

@@ -61,21 +61,24 @@
 		
 		<sql:query var="rrs" dataSource="jdbc/qmrf_documents">
 			select reviewer from documents where idqmrf=? and reviewer is not null
+			<sql:param value="${param.id}"/>			
 		</sql:query>
 		<c:set var="sql" value="select email,title,firstname,lastname,user_name from tomcat_users.user_roles join users using(user_name) where role_name='qmrf_editor'"/>
 		<c:set var="message">
 We would like to inform you that a new QMRF document has been submitted in the QMRF Inventory.
 Please perform your editorial duties and assign a reviewer at your earliest convenience.		
 		</c:set>
+		<c:set var="subject">New QMRF document submitted</c:set>
 		<c:if test="${rrs.rowCount > 0}">
 			<c:forEach var="rrow" items="${rrs.rows}">
 				<c:set var="sql">
-					select email,title,firstname,lastname,user_name from users where user_name='${rrow.user_name}'
+					select email,title,firstname,lastname,user_name from users where user_name='${rrow.reviewer}'
 				</c:set>
 				<c:set var="message">
-You have been appointed as a reviewer of a QMRF document.
-Please perform your reviewing duties at your earliest convenience.				
-				</c:set>				
+We would like to inform you that a revised QMRF document, for which you have been previously appointed as a reviewer, has been re-submitted in the QMRF Inventory.
+Please perform your reviewing duties at your earliest convenience.
+				</c:set>		
+				<c:set var="subject">Revised QMRF document submitted</c:set>		
 			</c:forEach>
 		</c:if>	
 		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
@@ -85,15 +88,14 @@ Please perform your reviewing duties at your earliest convenience.
 			<mt:mail server="${initParam['mail-server']}" >
 				<mt:from>${initParam['mail-from']}</mt:from>
 				<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-				<mt:subject>[QMRF Inventory] Document returned for revision</mt:subject>
+				<mt:subject>[QMRF Inventory] ${subject}</mt:subject>
 				<mt:message>
-Dear ${row.title} ${row.firstname} ${row.lastname},
-
-${message}				
-The QMRF Inventory team
-
-<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
-<c:url value="${u}"></c:url>				
+<jsp:include page="mail.jsp" flush="true">
+	    <jsp:param name="title" value="${row.title}"/>
+	    <jsp:param name="firstname" value="${row.firstname}"/>
+	    <jsp:param name="lastname" value="${row.lastname}"/>        
+	    <jsp:param name="text" value="${message}"/>
+</jsp:include>	    
 			    </mt:message>
 			    <mt:send>
 			    	<mt:error id="err">
@@ -116,12 +118,13 @@ The QMRF Inventory team
 </c:if>
 
 
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and idqmrf=${param.id}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and idqmrf=${param.id}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
 
 		<jsp:param name="qmrf_number" value="QMRF#"/>
+		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="lastdate" value="Last updated"/>
@@ -168,14 +171,14 @@ The QMRF Inventory team
 	</div>
 	<br>
 	<div class="help">
-	The following fields will be used to assign unique QMRF number:
-	<p>
+	The following fields will be used to assign an unique QMRF number:
+	<br>
 	4.2. Explicit algorithm
-	<p>
+	<br>
 	2.5. Model developer(s) and contact details
-	<p>
+	<br>
 	1.3. Software coding the model
-	<p>
+	<br>
 	If data is not present in these fields the document will not be published!
 	</div>
 </td>

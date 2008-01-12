@@ -305,7 +305,7 @@ response.setHeader("Expires", "0");
 		<x:out  select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/@name"/>
 		</c:set>
 		<a href="
-		<c:url value="#algorithms_form"/>
+		<c:url value="#algorithm_explicit"/>
 			"><img src="images/chart_curve.png" border="0" alt="Algorithm picture" title="Click here to go to the algorithm form and retrieve algorithm number"/></a>
 		${aChapter}<xsl:text>.</xsl:text>${aName}
 	<x:forEach select="$doc//QMRF/QMRF_chapters/QSAR_Algorithm/algorithm_explicit/algorithm_ref">
@@ -315,9 +315,7 @@ response.setHeader("Expires", "0");
 </td>
 <td bgcolor="#FFFFFF">-</td>
 <td bgcolor="#D6DFF7" >
-			<a href="
-		<c:url value="#authors_form"/>
-			"><img src="images/user_suit.png" border="0" alt="user icon" title="Click here to go to the model developer' form and retrieve the model developer number"/></a>
+			<a href="#model_authors"/><img src="images/user_suit.png" border="0" alt="user icon" title="Click here to go to the model developer' form and retrieve the model developer number"/></a>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@chapter"/>
 		<xsl:text>.</xsl:text>
 		<x:out select="$doc//QMRF/QMRF_chapters/QSAR_General_information/model_authors/@name"/>
@@ -375,7 +373,7 @@ Q
 		</c:forEach>
 		<c:if test="${rs.rowCount eq 0}">
 		<a href="
-		<c:url value="#authors_form"/>
+		<c:url value="#model_authors"/>
 			"><img src="images/warning.png" alt="warning sign" title="Model developer not defined! Use Retrieve Author Number." border="0"/></a>
 			<input type="text" size="5" name="B"/>-
 		</c:if>

@@ -170,12 +170,40 @@ QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.
 					<c:catch var="transactionException_archive">
 						<sql:update var="updateCount" dataSource="jdbc/qmrf_documents">
 		   					 update documents set qmrf_number=?,xml=?,updated=now(),status='published' where idqmrf=?
-		   			<sql:param value="${qnumber}"/>
-		  			<sql:param value="${docnew}"/>
-		  			<sql:param value="${param.id}"/>
+				   			<sql:param value="${qnumber}"/>
+				  			<sql:param value="${docnew}"/>
+				  			<sql:param value="${param.id}"/>
 						</sql:update>
-						</c:catch>
+						<sql:query var="urs" dataSource="jdbc/qmrf_documents">
+							select email,title,firstname,lastname from documents join users using(user_name) where idqmrf=?
+				  			<sql:param value="${param.id}"/>							
+						</sql:query>
+						<c:forEach var="urow" items="${urs.rows}">
+						<c:set var="message">
+We would like to inform you that a QMRF document, which you submitted in the QMRF Inventory, has been published under number ${qnumber}.
+						</c:set>
+						<mt:mail server="${initParam['mail-server']}" >
+							<mt:from>${initParam['mail-from']}</mt:from>
+							<mt:setrecipient type="to">${urow.email}</mt:setrecipient>
+							<mt:subject>[QMRF Inventory] New QMRF document published</mt:subject>
 
+							<mt:message>
+<jsp:include page="mail.jsp" flush="true">
+    <jsp:param name="title" value="${urow.title}"/>
+    <jsp:param name="firstname" value="${urow.firstname}"/>
+    <jsp:param name="lastname" value="${urow.lastname}"/>        
+    <jsp:param name="text" value="${message}"/>
+</jsp:include>							
+</mt:message>
+						    <mt:send>
+						    	<mt:error id="err">
+						         <jsp:getProperty name="err" property="error"/>
+
+						       </mt:error>
+							</mt:send>
+						</mt:mail>						
+						</c:forEach>
+					</c:catch>
 					</c:forEach>
 		</c:when>
 		<c:otherwise>

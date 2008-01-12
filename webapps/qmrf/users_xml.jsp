@@ -10,6 +10,18 @@ response.setHeader("Expires", "0");
 
 <c:set var="sql" value =""/>
 
+<c:set var="user_name" value="${param.user_name}"/>
+
+<c:if test="${empty param.user_name}">
+	<c:set var="user_name" value="${pageContext.request.userPrincipal.name}"/>
+</c:if>
+
+<c:if test="${(!empty param.user_name) && (pageContext.request.userPrincipal.name ne param.user_name) && (!sessionScope['ismanager']) && (!sessionScope['iseditor']) && (!sessionScope['isadmin'])}">	
+	<c:set var="stop" value="true"/>
+	<users user_name="You are not authorized to retrieve user information"/>
+</c:if>
+
+<c:if test="${!stop}">
 <c:choose>
 <c:when test="${empty pageContext.request.userPrincipal.name}">
   <users/>
@@ -23,7 +35,7 @@ response.setHeader("Expires", "0");
 	<c:set var="sql" value="SELECT user_name,email,registration_status,date_format(registration_date,'${sessionScope.dateformat}') as registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users order by user_name" />
 </c:when>
 <c:otherwise>
-	<c:set var="sql" value="SELECT user_name,email,registration_status,date_format(registration_date,'${sessionScope.dateformat}') as registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users where user_name= \"${sessionScope['username']}\" order by user_name" />
+	<c:set var="sql" value="SELECT user_name,email,registration_status,date_format(registration_date,'${sessionScope.dateformat}') as registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer from users where user_name= \"${user_name}\" order by user_name" />
 </c:otherwise>
 </c:choose>
 <users>
@@ -79,3 +91,4 @@ response.setHeader("Expires", "0");
 	  </c:if>
 
 </users>
+</c:if>

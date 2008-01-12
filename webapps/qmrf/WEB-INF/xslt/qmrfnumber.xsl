@@ -82,7 +82,10 @@
 <xsl:template match="model_authors">
 
 	<h3>
-	<img src="images/user_suit.png" alt="user icon" title="This field is mandatory!" border="0"/>
+	<xsl:element name="a">
+		<xsl:attribute name="name">model_authors</xsl:element>
+		<img src="images/user_suit.png" alt="user icon" title="This field is mandatory!" border="0"/>
+	</xsl:element>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -146,9 +149,12 @@
 
 <xsl:template match="model_endpoint">
 	<h3>
-	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
-	<xsl:text>.</xsl:text>
-	<xsl:value-of disable-output-escaping="no" select="@name"/>
+	<xsl:element name="a">
+		<xsl:attribute name="name">model_endpoint</xsl:element>
+		<xsl:value-of disable-output-escaping="no" select="@chapter"/>
+		<xsl:text>.</xsl:text>
+		<xsl:value-of disable-output-escaping="no" select="@name"/>
+	</xsl:element>
 
 		<xsl:choose>
 		<xsl:when test="endpoint_ref">
@@ -176,7 +182,10 @@
 
 <xsl:template match="algorithm_explicit">
 	<h3>
-	<img src="images/chart_curve.png" alt="algorithm icon" title="This field is mandatory!" border="0"/>
+	<xsl:element name="a">
+		<xsl:attribute name="name">algorithm_explicit</xsl:element>		
+		<img src="images/chart_curve.png" alt="algorithm icon" title="This field is mandatory!" border="0"/>
+	</xsl:element>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 	<xsl:text>.</xsl:text>
 	<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -261,19 +270,11 @@
 			<img src="images/ok.png"/>
 		</xsl:otherwise>
 		</xsl:choose>
+				<input type="hidden" name="catalog" value="software" />
+		
 	</td>
 	</tr>
-	<tr bgcolor="#D6DFF7"><th>Version</th>
-	<td>
-	<input type="text" name="software_version" size="80" readonly="true">
-		<xsl:attribute name="value">
-  		<xsl:value-of select="id(@idref)/@version"/>
-		</xsl:attribute>
-	</input>
-		<input type="hidden" name="catalog" value="software" />
 
-	</td>
-	</tr>
 	<tr bgcolor="#D6DFF7"><th>Description</th>
 	<td>
 	<input type="text" name="software_description" size="80" readonly="true">
@@ -360,7 +361,7 @@
 
 	<form method="POST" name="endpoints_form">
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#FFFFB0"><th>Group</th>
+	<tr bgcolor="#D6DFF7"><th>Group</th>
 	<td>
 	<input type="text" size="80" name="endpoint_group" readonly="true">
 		<xsl:attribute name="value">
@@ -380,7 +381,7 @@
 
 	</td>
 	</tr>
-	<tr bgcolor="#FFFFB0"><th>Subgroup</th>
+	<tr bgcolor="#D6DFF7"><th>Subgroup</th>
 	<td>
 	<input type="text" size="80" name="endpoint_subgroup" readonly="true">
 		<xsl:attribute name="value">

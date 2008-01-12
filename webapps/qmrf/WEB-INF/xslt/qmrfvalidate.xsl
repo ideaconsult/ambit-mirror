@@ -246,7 +246,7 @@
 
 <xsl:template match="software_ref">
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#FFB0B0"><th>Name</th>
+	<tr bgcolor="#D6DFF7"><th>Name</th>
 	<td>
 	<input type="text" name="software_name" size="80"  readonly='true' >
 		<xsl:attribute name="value">
@@ -271,7 +271,7 @@
 
 <xsl:template match="algorithm_ref">
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#B0FFB0"><th>Definition</th>
+	<tr bgcolor="#D6DFF7"><th>Definition</th>
 	<td>
 	<input type="text" size="80" name="alg_definition"  readonly='true' >
 		<xsl:attribute name="value">
@@ -297,7 +297,7 @@
 
 <xsl:template match="endpoint_ref">
 	<table bgcolor="#FFFFFF">
-	<tr  bgcolor="#FFFFB0"><th>Name</th>
+	<tr  bgcolor="#D6DFF7"><th>Name</th>
 	<td>
 	<input type="text" size="80" name="endpoint_name"  readonly='true' >
 		<xsl:attribute name="value">
@@ -327,7 +327,7 @@
 
 <xsl:template match="author_ref">
 	<table bgcolor="#FFFFFF">
-	<tr bgcolor="#B0B0FF">
+	<tr bgcolor="#D6DFF7">
 	<th>Name</th>
 	<td>
 	<input type="text" size="80" name="author_name"  readonly='true' >
@@ -347,7 +347,7 @@
 		</xsl:choose>
 	</td>
 	</tr>
-	<tr bgcolor="#B0B0FF">
+	<tr bgcolor="#D6DFF7">
 	<th>e-mail</th>
 	<td>
 	<input type="text" size="80" name="author_email"  readonly='true' >

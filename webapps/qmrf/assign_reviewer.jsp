@@ -61,20 +61,25 @@
 					<sql:param value="${param.reviewer}"/>
 			</sql:query>
 
+			<c:set var="subject">Reviewing assignment</c:set>	
+			<c:set var="message">
+You have been appointed as a reviewer of a QMRF document.
+Please perform your reviewing duties at your earliest convenience.
+			</c:set>
 			<c:forEach var="row" items="${rs.rows}">
+			
 				<mt:mail server="${initParam['mail-server']}" >
 					<mt:from>${initParam['mail-from']}</mt:from>
 					<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-					<mt:subject>QMRF Inventory : your have been assigned as a reviewer</mt:subject>
+				<mt:subject>[QMRF Inventory] ${subject}</mt:subject>
 
 					<mt:message>
-Dear ${row.title} ${row.firstname} ${row.lastname},
-
-You have been appointed as a reviewer of a QMRF document.
-Please perform your reviewing duties at your earliest convenience.
-The QMRF Inventory team
-<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
-<c:url value="${u}"></c:url>
+<jsp:include page="mail.jsp" flush="true">
+	    <jsp:param name="title" value="${row.title}"/>
+	    <jsp:param name="firstname" value="${row.firstname}"/>
+	    <jsp:param name="lastname" value="${row.lastname}"/>        
+	    <jsp:param name="text" value="${message}"/>
+</jsp:include>	 					
 					</mt:message>
 					<mt:send>
 						<mt:error id="err">

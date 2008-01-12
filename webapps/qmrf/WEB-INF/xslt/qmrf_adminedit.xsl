@@ -108,7 +108,7 @@
 			</div>
 			<br/>
 			<div class="help">
-			NOTE: Clicking on <u>Review</u> link will result in keywords and comments changes lost, if those has not been followed by <u>Update</u>
+			NOTE: Clicking on <u>Review</u> link will result in keywords and comments changes being lost, if those has not been followed by <u>Update</u>
 			</div>
 			<br/>
 			<div class="help">

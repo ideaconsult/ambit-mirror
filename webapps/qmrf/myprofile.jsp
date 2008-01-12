@@ -16,7 +16,7 @@
 			<c:redirect url="protected.jsp"/>
 		</c:if>
 	</c:when>
-	<c:when test="${sessionScope['isadmin'] eq 'true'}">
+	<c:when test="${(sessionScope['isadmin'] eq 'true') || (sessionScope['iseditor'] eq 'true') || (sessionScope['ismanager'] eq 'true')}">
 
 	</c:when>
 	<c:otherwise>
@@ -70,6 +70,7 @@
 	<c:set var="update" value="ok"/>
 	<c:set var="areviewer" value="1"/>
 </c:if>
+
 
 <c:if test="${!empty param.action  && (param.action eq 'delete') && (pageContext.request.method eq 'POST')}">
 	
@@ -130,7 +131,7 @@
 	</c:catch>
 </c:if>
 
-<c:if test="${!empty update}">
+<c:if test="${!empty update && (param.action ne 'view')}">
 
 		<c:catch var='exception'>
 		<sql:update var="rs" dataSource="jdbc/qmrf_documents">

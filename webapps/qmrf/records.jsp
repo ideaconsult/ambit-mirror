@@ -149,6 +149,25 @@
 								</a>
 
 							</c:when>
+							<c:when test="${columnName eq 'reviewer'}">
+								<c:url value="userinfo.jsp" var="url">
+								  <c:param name="user_name" value="${row.reviewer}"/>
+								</c:url>							
+							<a href="
+							<c:out value="${url}" escapeXml="true"/> 
+							" onClick="return popup(this, '_blank')" target="help" >
+							${row.reviewer}</a>								
+							</c:when>	
+							
+							<c:when test="${columnName eq 'user_name'}">
+								<c:url value="userinfo.jsp" var="url">
+								  <c:param name="user_name" value="${row.user_name}"/>
+								</c:url>							
+							<a href="
+							<c:out value="${url}" escapeXml="true"/> 
+							" onClick="return popup(this, '_blank')" target="help" >
+							${row.user_name}</a>								
+							</c:when>														
 							<c:when test="${columnName eq 'status'}">
 											<c:choose>
 											<c:when test="${row[columnName] eq 'draft'}">
@@ -336,12 +355,20 @@
 					  <c:when test="${param.actions eq 'editor'}">
 					  		<c:choose>
 					  			<c:when test="${(row.status eq 'submitted') || (row.status eq 'under review')}">
+					  				<c:set var="message" value="Assign a Reviewer"/>
+					  				<c:set var="hint" value="This is a newly submitted document. Select and assign a reviewer for this document"/>					  				
+					  				<c:catch>
+					  					<c:if test="${!empty row.reviewer}">
+						  				<c:set var="message" value="Reassign a Reviewer"/>
+						  				<c:set var="hint" value="This is a resubmission. You can reassign a new reviewer, if necessary."/>					  										  				
+						  				</c:if>
+					  				</c:catch>
 											<c:url value="assign_reviewer.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											" title="Select and assign a reviewer for this document">Assign a Reviewer</a>
+											" title="${hint}">${message}</a>
 									</c:when>
 									<c:otherwise>
 									</c:otherwise>
