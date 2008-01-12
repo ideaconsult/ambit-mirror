@@ -100,7 +100,9 @@
 				</c:forEach>
 				
 				<c:if test="${docs eq 0}">
-					Delete ${param.user_name}
+					<div class="success">
+					User "${param.user_name}" deleted.
+					</div>
 					<c:catch var="transactionException_delete">
 						<sql:transaction dataSource="jdbc/tomcat_users">
 						<sql:update>
