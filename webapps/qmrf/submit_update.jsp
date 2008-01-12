@@ -66,9 +66,7 @@
 				<c:set var="qmrf_title">
 					<x:out select="$doc//body"/>			
 				</c:set>			
-				<c:if test="${empty qmrf_title}">
-					<c:set var="qmrf_title" value="${qmrf_tmp}"/>
-				</c:if>
+
 				<c:set var="qmrf_title" value="${fn:trim(qmrf_title)}"/>
 			</c:catch>
 			<c:if test="${!empty title_err}">
