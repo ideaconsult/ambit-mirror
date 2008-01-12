@@ -62,26 +62,27 @@ response.setHeader("Expires", "0");
 					<sql:param value="${row.user_name}"/>
 				</sql:update>
 
-					<c:set var="space" value=" "/>
-						<mt:mail server="${initParam['mail-server']}" >
-								<mt:from>${initParam['mail-from']}</mt:from>
-								<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-								<mt:subject>QMRF Inventory forgotten password</mt:subject>
-
-						    <mt:message>
-Dear ${row.title}${space}${row.firstname}${space}${row.lastname},
-
-We would like to inform you that the password for the ${row.user_name} user has been reset upon your request.
+					<c:set var="text">
+We would like to inform you that the password for the "${row.user_name}" user has been reset upon your request.
 
 Your new login credentials are as follows:
 Username: ${row.user_name}
 Password: ${newpass}
-You could change your password through the "My Profile" tab.
+You could change your password through the "My Profile" tab.					
+					</c:set>
+						<mt:mail server="${initParam['mail-server']}" >
+								<mt:from>${initParam['mail-from']}</mt:from>
+								<mt:setrecipient type="to">${row.email}</mt:setrecipient>
+								<mt:subject>[QMRF Inventory] New password</mt:subject>
 
-The QMRF Inventory team
-<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
-<c:url value="${u}"></c:url>
-						    </mt:message>
+						    <mt:message>
+<jsp:include page="mail.jsp" flush="true">
+	    <jsp:param name="title" value="${row.title}"/>
+	    <jsp:param name="firstname" value="${row.firstname}"/>
+	    <jsp:param name="lastname" value="${row.lastname}"/>        
+	    <jsp:param name="text" value="${text}"/>
+</jsp:include>						    
+</mt:message>
 						    <mt:send>
 						    	<mt:error id="err">
 						         <jsp:getProperty name="err" property="error"/>
