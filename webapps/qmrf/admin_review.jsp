@@ -83,10 +83,10 @@ response.setHeader("Expires", "0");
 <c:if test="${!empty param.date_publication}">
 	<c:set var="updateXML" value="true"/>
 </c:if>
-<c:if test="${!empty param.keywords}">
+<c:if test="${!empty param.keywords || (fn:trim(param.keywords) eq '')}">
 	<c:set var="updateXML" value="true"/>
 </c:if>
-<c:if test="${!empty param.summary_comments}">
+<c:if test="${!empty param.summary_comments || (fn:trim(param.summary_comments) eq '')}">
 	<c:set var="updateXML" value="true"/>
 </c:if>
 <c:if test="${updateXML eq true}">
@@ -94,8 +94,6 @@ response.setHeader("Expires", "0");
 			select xml from documents where idqmrf=?
 			<sql:param value="${param.id}"/>
 		</sql:query>
-
-		${param.summary_comments}
 
 		<c:forEach var="row" items="${rs.rows}">
 			<catch var="error">
