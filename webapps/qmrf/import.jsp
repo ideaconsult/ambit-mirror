@@ -26,7 +26,7 @@ To import structres, please click on <img src="images/import.png" height="16" wi
 		On successful import the icon will change to <img src="images/benzene.gif" height="16" width="16" alt="View structures" border="0"/> and the document will disappear from this page.
 </p>
 <c:set var="sql">
-	select d.idqmrf,qmrf_number,qmrf_title,name,format,description,type,a.updated,idattachment,original_name,imported,status from documents as d join attachments as a using(idqmrf) where status='published' and type != 'document' and imported=0  group by idqmrf;
+	select d.idqmrf,qmrf_number,qmrf_title,name,format,description,type,date_format(a.updated,'${sessionScope.dateformat}') as lastdate,idattachment,original_name,imported,status from documents as d join attachments as a using(idqmrf) where status='published' and type != 'document' and imported=0  group by idqmrf;
 </c:set>
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
@@ -35,7 +35,7 @@ To import structres, please click on <img src="images/import.png" height="16" wi
 		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
-		<jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="admin"/>
 

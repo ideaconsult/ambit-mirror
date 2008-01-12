@@ -59,7 +59,7 @@ function getXML(){
 
 	<c:set var="qmrf_update" value="true" scope="session"/>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,updated,status from documents where user_name=? and idqmrf=${param.id}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and idqmrf=${param.id}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
@@ -68,7 +68,7 @@ function getXML(){
 		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
-		<jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="user"/>
 

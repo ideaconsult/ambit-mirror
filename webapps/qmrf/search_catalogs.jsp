@@ -354,7 +354,7 @@
 			${error}
 			<c:set var="maxpages" scope="session" value="10"/>
 		</c:if>
-		<c:set var="sql" value="SELECT idqmrf,qmrf_number,qmrf_title,updated,id_endpoint,id_algorithm,id_author,id_software,s.name as software,e.name as endpoint,a.definition as alg,r.name as author FROM documents left join doc_endpoint using (idqmrf) left join doc_algorithms using (idqmrf) left join doc_authors using (idqmrf) left join doc_software using (idqmrf) left join catalog_software as s using (id_software) left join catalog_endpoints as e using (id_endpoint) left join catalog_algorithms as a using (id_algorithm) left join catalog_authors as r using (id_author) where status = 'published' and (${where}) limit ${startrecord},${sessionScope.pagesize}"/>
+		<c:set var="sql" value="SELECT idqmrf,qmrf_number,qmrf_title,date_format(updated,'${sessionScope.dateformat}') as lastdate,id_endpoint,id_algorithm,id_author,id_software,s.name as software,e.name as endpoint,a.definition as alg,r.name as author FROM documents left join doc_endpoint using (idqmrf) left join doc_algorithms using (idqmrf) left join doc_authors using (idqmrf) left join doc_software using (idqmrf) left join catalog_software as s using (id_software) left join catalog_endpoints as e using (id_endpoint) left join catalog_algorithms as a using (id_algorithm) left join catalog_authors as r using (id_author) where status = 'published' and (${where}) limit ${startrecord},${sessionScope.pagesize}"/>
 
 		<table width="95%">
 		<jsp:include page="records.jsp" flush="true">
@@ -362,7 +362,7 @@
 
 				<jsp:param name="qmrf_number" value="QMRF#"/>
 				<jsp:param name="qmrf_title" value="Title"/>				
-		    <jsp:param name="updated" value="Last updated"/>
+		    	<jsp:param name="lastdate" value="Last updated"/>
 				<jsp:param name="endpoint" value="Endpoint"/>
 				<jsp:param name="alg" value="Algorithm"/>
 				<jsp:param name="software" value="Software"/>

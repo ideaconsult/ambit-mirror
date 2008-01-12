@@ -36,9 +36,9 @@ response.setHeader("Expires", "0");
   </table>
 </form>
 
-<hr>
+<p>
 Please note that log in is not required for browsing reviewed and published QMRF documents in read-only mode.
-<br>
+<p>
 <a href="forgotten.jsp">Forgotten password?</a>
 
 <div id="hits">

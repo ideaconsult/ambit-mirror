@@ -100,7 +100,7 @@ function getXML(){
 </c:choose>
 
 <c:set var="report">
-	select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id} and (status = 'submitted' || status = 'under review')
+	select idqmrf,qmrf_number,qmrf_title,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where idqmrf = ${param.id} and (status = 'submitted' || status = 'under review')
 </c:set>
 
 <jsp:include page="records.jsp" flush="true">
@@ -108,7 +108,7 @@ function getXML(){
 	<jsp:param name="qmrf_number" value="QMRF#"/>
 	<jsp:param name="qmrf_title" value="Title"/>
     <jsp:param name="user_name" value="Author"/>
-    <jsp:param name="updated" value="Last updated"/>
+    <jsp:param name="lastdate" value="Last updated"/>
 	<jsp:param name="status" value="Status"/>
 	<jsp:param name="actions" value="admin"/>
 </jsp:include>

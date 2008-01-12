@@ -112,7 +112,7 @@
 </tr>
 </table>
 Found in following QMRFs:
-<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,qmrf_documents.documents.updated,name as attachment,type from ambit_qmrf.struc_dataset join ambit_qmrf.src_dataset using(id_srcdataset) join qmrf_documents.attachments using(name) join qmrf_documents.documents using(idqmrf) where idstructure=${param.idstructure} order by qmrf_documents.documents.${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,version,user_name,date_format(qmrf_documents.documents.updated,'${sessionScope.dateformat}') as lastdate,name as attachment,type from ambit_qmrf.struc_dataset join ambit_qmrf.src_dataset using(id_srcdataset) join qmrf_documents.attachments using(name) join qmrf_documents.documents using(idqmrf) where idstructure=${param.idstructure} order by qmrf_documents.documents.${sessionScope.order} ${sessionScope.order_direction} limit ${startrecord},${pagesize}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
@@ -120,7 +120,7 @@ Found in following QMRFs:
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="version" value="Version"/>
     <jsp:param name="user_name" value="Author"/>
-    <jsp:param name="updated" value="Creation date"/>
+    <jsp:param name="lastdate" value="Last update"/>
 		<jsp:param name="attachment" value="Attachment"/>
 		<jsp:param name="attachment type" value="Attachment type"/>
 		<jsp:param name="actions" value=""/>

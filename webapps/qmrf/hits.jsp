@@ -60,7 +60,7 @@
 <tr>
 <td colspan="2" align="right">
 <font color='#D6DFF7'>
-Developed by Ideaconsult Ltd. (2007) on behalf of ECB
+Developed by Ideaconsult Ltd. (2007-2008) on behalf of ECB
 </font>
 </td>
 </tr>

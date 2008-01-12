@@ -54,7 +54,7 @@ response.setHeader("Expires", "0");
 </c:if>
 
 
-<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf_origin = ${param.id}"/>
+<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where idqmrf_origin = ${param.id}"/>
 
 <!-- returned for revision' -->
 <!-- copy the document into new one, increment version and set archive status to the odler one -->
@@ -121,7 +121,7 @@ response.setHeader("Expires", "0");
 
 </c:when>
 	<c:when test="${param.status eq 'published'}">
-		<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}"/>
+		<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where idqmrf = ${param.id}"/>
 			<c:set var="updateXML" value="true"/>
 			<c:if test="${empty param.A}">
 				<c:set var="updateXML" value="false"/>
@@ -180,7 +180,7 @@ response.setHeader("Expires", "0");
 					</c:forEach>
 		</c:when>
 		<c:otherwise>
-			<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}"/>
+			<c:set var="sql_report" value="select idqmrf,qmrf_number,qmrf_title,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where idqmrf = ${param.id}"/>
 	</c:otherwise>
 		</c:choose>
 
@@ -212,7 +212,7 @@ response.setHeader("Expires", "0");
 		<jsp:param name="qmrf_number" value="QMRF#"/>
 		<jsp:param name="qmrf_title" value="Title"/>
 		<jsp:param name="user_name" value="Author"/>
-		<jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="admin"/>
 	</jsp:include>

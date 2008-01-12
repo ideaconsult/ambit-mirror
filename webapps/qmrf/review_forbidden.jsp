@@ -16,7 +16,7 @@
 </jsp:include>
 
 <c:set var="report">
-	select idqmrf,qmrf_number,qmrf_title,user_name,updated,status from documents where idqmrf = ${param.id}
+	select idqmrf,qmrf_number,qmrf_title,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where idqmrf = ${param.id}
 </c:set>
 
 <jsp:include page="records.jsp" flush="true">
@@ -24,7 +24,7 @@
 	<jsp:param name="qmrf_number" value="QMRF#"/>
 	<jsp:param name="qmrf_title" value="Title"/>	
     <jsp:param name="user_name" value="Author"/>
-    <jsp:param name="updated" value="Last updated"/>
+    <jsp:param name="lastdate" value="Last updated"/>
 	<jsp:param name="status" value="Status"/>
 </jsp:include>
 

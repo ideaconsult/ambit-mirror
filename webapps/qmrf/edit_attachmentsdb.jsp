@@ -67,7 +67,7 @@ response.setHeader("Expires", "0");
     <jsp:param name="viewmode" value="${param.viewmode}"/>    
 </jsp:include>
 
-<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,updated,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>
+<c:set var="sql" value="select idqmrf,qmrf_number,qmrf_title,version,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where user_name=? and idqmrf=${sessionScope.qmrf_document}"/>
 
 <jsp:include page="records.jsp" flush="true">
     <jsp:param name="sql" value="${sql}"/>
@@ -76,7 +76,7 @@ response.setHeader("Expires", "0");
 		<jsp:param name="qmrf_title" value="Title"/>		
 		<jsp:param name="version" value="Version"/>
 		<jsp:param name="user_name" value="Author"/>
-		<jsp:param name="updated" value="Last updated"/>
+		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
 		<jsp:param name="actions" value="user"/>
 
@@ -141,7 +141,7 @@ response.setHeader("Expires", "0");
 								<c:param name="xml" value="${row.xml}"/>
 							</c:import>
 							<sql:update>
-								update documents set xml=?
+								update documents set xml=?,updated=now()
 								<sql:param value="${newxml}"/>
 							</sql:update>
 						</c:forEach>
@@ -236,7 +236,7 @@ response.setHeader("Expires", "0");
 								<c:param name="xml" value="${row.xml}"/>
 							</c:import>
 							<sql:update>
-								update documents set xml=?
+								update documents set xml=?,updated=now()
 								<sql:param value="${newxml}"/>
 							</sql:update>
 						</c:forEach>
@@ -283,7 +283,7 @@ response.setHeader("Expires", "0");
     <tr  bgColor="#DDDDDD">
     	  <form method="POST" name="qmrfform" action='<%= response.encodeURL("edit_attachmentsdb.jsp") %>' enctype="multipart/form-data">
     	<td>New</td>
-    	<td colspan="2"><input type="file" name="up" /></td>
+    	<td colspan="2"><input type="file" name="up" accept=""/></td>
     	<td><input type="text" name="description" value="" /></td>
     	<td>
 				<select name="type">
