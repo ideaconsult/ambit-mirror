@@ -29,6 +29,8 @@
 
 package ambit.data.qmrf;
 
+import java.text.BreakIterator;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -57,6 +59,29 @@ public class AbstractQMRFChapter extends AmbitObject {
         setHelp(help);
         
     }
+    public String getWrappedHelp(int maxchars) {
+    	String source = getHelp();
+    	BreakIterator boundary = BreakIterator.getWordInstance();
+        boundary.setText(source);
+
+    	StringBuffer wrappedHelp = new StringBuffer();
+        wrappedHelp.append("<html><body>");
+        int chars = 0;
+        int start = boundary.first();
+        for (int end = boundary.next();
+	        end != BreakIterator.DONE;
+	        start = end, end = boundary.next()) {
+        	if ((chars >= maxchars) || ((chars + end - start) > maxchars)) {
+        		wrappedHelp.append("<p>");
+        		chars = 0;
+        	}
+        	wrappedHelp.append(source.substring(start,end));
+        	chars += (end - start);
+        }
+        wrappedHelp.append("</body></html>");
+        return wrappedHelp.toString();
+    }    
+/*    
     public String getWrappedHelp(int chars) {
     	String help = getHelp();
     	StringBuffer wrappedHelp = new StringBuffer();
@@ -74,6 +99,7 @@ public class AbstractQMRFChapter extends AmbitObject {
         wrappedHelp.append("</body></html>");
         return wrappedHelp.toString();
     }
+*/    
     public String getHelp() {
     	return attributes.get("help");
     }
