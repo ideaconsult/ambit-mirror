@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -400,7 +400,7 @@ Q
 			<sql:param value="${param.id}"/>
 		</sql:query>
 		<c:forEach var="row" items="${rs.rows}">
-			<input type="text" name="C" size="5" value="${row.version}" readonly="true"/>
+			<input type="text" name="C" size="5" value="${row.idqmrf}" readonly="true"/>
 		</c:forEach>
 		<c:if test="${rs.rowCount eq 0}">
 			<img src="images/warning.png" alt="warning sign" title="not defined!"/><input type="text" size="5" name="C" value="1"/>-

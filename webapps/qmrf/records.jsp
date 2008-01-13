@@ -378,8 +378,11 @@
 							<!-- User actions -->
 								<c:choose>
 								<c:when test="${row.status eq 'submitted'}">
-									<i>Waiting for administrator approval</i>
+									<i>Waiting for a reviewer to be assigned</i>
 								</c:when>
+								<c:when test="${row.status eq 'under review'}">
+									<i>This document is being reviewed</i>
+								</c:when>								
 							  <c:when test="${row.status eq 'draft'}">
 											<c:url value="edit.jsp" var="url">
 											  <c:param name="id" value="${row.idqmrf}"/>
