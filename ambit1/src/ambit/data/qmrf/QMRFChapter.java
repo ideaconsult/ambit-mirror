@@ -124,8 +124,9 @@ public class QMRFChapter extends AbstractQMRFChapter implements InterfaceQMRF, I
                     } else if ("algorithm_explicit".equals(name)) {
                         subchapter = new QMRFSubchapterAlgorithm(name);
                         ((QMRFSubchapterAlgorithm) subchapter).setCatalog(
-                                catalogs.get("algorithms_catalog"));    
-                                            	
+                                catalogs.get("algorithms_catalog"));
+                    } else if ("QMRF_number".equals(name) || "date_publication".equals(name)){// || "qmrf_date".equals(name) || "qmrf_date_revision".equals(name) || "model_date".equals(name) ) {
+                    	subchapter = new QMRFSubChapterDate(name);                   	
                     } else	
             			subchapter = new QMRFSubChapterText(name);
                 subchapter.fromXML((Element)children.item(i));

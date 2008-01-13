@@ -134,7 +134,7 @@ public class QMRFSubChapterTextEditor extends AbstractQMRFChapterEditor implemen
 	        */
 	        
 	        JScrollPane p = new JScrollPane(textPane);
-            p.setPreferredSize(new Dimension(300,100));
+            p.setPreferredSize(new Dimension(300,46));
             return p;
         } else {
         	textField = new JFormattedTextField();

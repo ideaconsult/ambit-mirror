@@ -44,13 +44,13 @@ import ambit.ui.data.AmbitListEditor;
 
 public class CatalogEditor extends AmbitListEditor {
     public CatalogEditor(Catalog list,
-            boolean searchPanel) {
-        super(list,false,"");
-        setPreferredSize(new Dimension(450,300));
+            boolean searchPanel,Dimension dimension) {
+        super(list,false,"",dimension);
+        setPreferredSize(new Dimension(450,250));
     }
     @Override
-    protected JComponent createListPanel(AmbitList list, boolean searchPanel) {
-        JComponent c = super.createListPanel(list, searchPanel);
+    protected JComponent createListPanel(AmbitList list, boolean searchPanel,Dimension dimension) {
+        JComponent c = super.createListPanel(list, searchPanel,dimension);
         table.setTableHeader(new JTableHeader(table.getColumnModel()));
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(true);

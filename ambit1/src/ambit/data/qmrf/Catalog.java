@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit.data.qmrf;
 
+import java.awt.Dimension;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,6 @@ import ambit.data.IAmbitObjectListener;
 import ambit.data.IAmbitSearchable;
 import ambit.exceptions.AmbitException;
 import ambit.io.XMLException;
-import ambit.ui.data.AmbitListEditor;
 
 public class Catalog extends AmbitList implements InterfaceQMRF, IAmbitSearchable, IAmbitObjectListener {
 	protected static String _id= "id";
@@ -206,7 +206,7 @@ public class Catalog extends AmbitList implements InterfaceQMRF, IAmbitSearchabl
     }
     @Override
     public IAmbitEditor editor(boolean editable) {
-    	CatalogEditor e = new CatalogEditor(this,true);
+    	CatalogEditor e = new CatalogEditor(this,true,new Dimension(200,80));
         e.setNoDataText("Click on <+> to add a new item");
         e.setEditable(editable);
         return e;

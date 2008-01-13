@@ -53,8 +53,8 @@ public class CatalogReferenceEditor extends CatalogEditor {
 	*/
 	public CatalogReferenceEditor(CatalogReference list,
 			boolean searchPanel) {
-		super(list,false);
-		setPreferredSize(new Dimension(200,300));
+		super(list,false,new Dimension(200,58));
+		setPreferredSize(new Dimension(200,250));
 	}
 	@Override
 	public JToolBar createJToolbar() {
