@@ -64,22 +64,31 @@ public class AmbitListEditor extends AmbitListOneItemEditor {
 	protected AmbitListTableModelNew model;
 	
 	public AmbitListEditor() {
-		this(null,false,"");
+		this(null,false,"",new Dimension(300,200));
 	}
 	public AmbitListEditor(AmbitList list, boolean searchPanel) {
-		this(list,searchPanel,"");
+		this(list,searchPanel,"",new Dimension(300,200));
 	}
+	public AmbitListEditor(AmbitList list, boolean searchPanel,Dimension dimension) {
+		this(list,searchPanel,"",dimension);
+	}	
 	public AmbitListEditor(AmbitList list, boolean searchPanel, String title) {
-		this(list,JSplitPane.VERTICAL_SPLIT,searchPanel,title);
+		this(list,JSplitPane.VERTICAL_SPLIT,searchPanel,title,new Dimension(300,200));
 	}
-
+	
+	public AmbitListEditor(AmbitList list, boolean searchPanel, String title,Dimension dimension) {
+		this(list,JSplitPane.VERTICAL_SPLIT,searchPanel,title,dimension);
+	}
 	public AmbitListEditor(AmbitList list,int newOrientation, boolean searchPanel) {
-		this(list,newOrientation,searchPanel,"");
+		this(list,newOrientation,searchPanel,"",new Dimension(300,200));
 	}
-	public AmbitListEditor(AmbitList list,int newOrientation, boolean searchPanel, String title) {
+	public AmbitListEditor(AmbitList list,int newOrientation, boolean searchPanel,Dimension dimension) {
+		this(list,newOrientation,searchPanel,"",dimension);
+	}
+	public AmbitListEditor(AmbitList list,int newOrientation, boolean searchPanel, String title,Dimension dimension) {
 		super(list,list.isEditable(),title);
 		add(editorPanel,BorderLayout.CENTER);
-		add(createListPanel(list,searchPanel),BorderLayout.SOUTH);
+		add(createListPanel(list,searchPanel,dimension),BorderLayout.SOUTH);
 		setBorder(BorderFactory.createTitledBorder(title));
 		/*
 		splitPane = new JSplitPane(newOrientation);
@@ -116,12 +125,12 @@ public class AmbitListEditor extends AmbitListOneItemEditor {
 	protected AmbitListTableModelNew createTableModel(AmbitList list) {
 		return new AmbitListTableModelNew(list,false);
 	}
-	protected JComponent createListPanel(AmbitList list, boolean searchPanel) {
+	protected JComponent createListPanel(AmbitList list, boolean searchPanel,Dimension dimension) {
 		model = createTableModel(list);
 		table = new JTable(model, createColumnsModel(model));
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setToolTipText("Click to see item details");
-		table.setPreferredScrollableViewportSize(new Dimension(300,200));
+		table.setPreferredScrollableViewportSize(dimension);
 		table.setShowHorizontalLines(false);
 		table.setShowVerticalLines(false);
         table.setTableHeader(null);
@@ -150,7 +159,7 @@ public class AmbitListEditor extends AmbitListOneItemEditor {
 //		table.getParent().setOpaque(true);
 		table.getParent().setBackground(Color.white);
 		sp.setMinimumSize(new Dimension(60,60));
-		sp.setPreferredSize(new Dimension(120,120));
+		sp.setPreferredSize(dimension); //new Dimension(120,120)
 
 		
         JComponent c = null;
