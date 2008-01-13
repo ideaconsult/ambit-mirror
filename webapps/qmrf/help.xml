@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <qmrf_help name="QMRF Repository user guide">
 
 <chapter anchor="background" name="Background" level="1">
@@ -10,7 +10,7 @@
 
 <chapter anchor="guest" name="Guest actions" level="2">
 		<help>
-		Anonymous user is allowed access to already published documents and is able to search using simple or advanced options.
+		The anonymous user is granted access to all published documents and can perform searching through simple or advanced options.
 		</help>
 		<chapter anchor="home" name="Home">
 		<help>TODO</help>
@@ -19,35 +19,35 @@
 		<chapter anchor="search_documents" name="How to search for QMRF documents?">
 		<help>
 			Enter QMRF No. or some text in the relevant fields. Select Endpoint, Algorithm, Software or Authors from the list box.
-			Check the fields you would like to include in the query.
-			Select "And" or "Or" from the drop down box at the left of Search button, in order to specify how to combine the selected criteria.
-			Press Search button.
+			Check the fields which you would like to include in the query.
+			Select "And" or "Or" from the drop down box at the left of the Search button, in order to specify how to combine the selected criteria.
+			Press the Search button.
 		</help>
 		<help>
-			Please note the search is only available within Published documents. if you are an Author of e.g. Draft document, it will not be visible through this search.
+			Please note that searching is performed only within Published documents. In particular, Draft documents will not be visible through this search.
 		</help>
 		<help>
-			Please note the Endpoint list box contains predefined endpoint names, there might not be QMRF documents for all listed endpoints.
+			Please note that the Endpoint list box contains predefined endpoint names. Some of the endpoints might not have associated QMRF documents.
 		</help>
 		</chapter>
 
 
 		<chapter anchor="search_structures" name="How to search for chemical structures">
 		<help>
-			Select "Exact structure" or "Similarity". if the latter, specify a threshold for the Tanimoto distance.
+			Select "Exact structure" or "Similarity". In case of "Similarity", please specify a threshold for the Tanimoto distance.
 		</help>
 		<help>
-			Draw compound on the Structure Diagram Editor on the right, or specify CAS RN., Formula, Chemical names or SMILES.
+			Draw a compound in the Structure Diagram Editor on the right, or specify CAS RN., Formula, Chemical name or SMILES.
 		</help>
 			<help>
 			All fields are combined by "AND".
 		</help>
 			<help>
-			Structures in QMRF Inventory come from attachments of type training set and validation set, uploaded by Authors.
-			When the documents are published, the chemical structures are imported in to QMRF Inventory and are linked to the corresponding document.
+			The structures in the QMRF Inventory are imported from attachments of type "training set" or "validation set", uploaded by the Authors.
+			When a document is published, the chemical structures are imported in the QMRF Inventory and are linked to the corresponding document.
 		</help>
 			<help>
-			The search results list structures along with links to the corresponding QMRF document.
+			The search returns a list of structures along with links to the corresponding QMRF documents.
 			</help>
 		</chapter>
 </chapter>
@@ -77,41 +77,41 @@
 			A list of documents that await your action.
 		</help>
 			<help>
-				For example a draft document will appear in Author' pending documents list until it is submitted to the QMRF Inventory.
-				A document "under revision" will appear in Reviewer' pending documents list, until it is published or returned to the author.
+				For example a draft document will appear in Author's pending documents list until it is submitted to the QMRF Inventory.
+				A document under revision will appear in Reviewer's pending documents list until it is published or returned to the Author.
 		</help>
 			</chapter>
 
 		<chapter anchor="review" name="Review document">
 		<help>
-				Enter keywords and/or comments. Click Update button.
+				Enter keywords and/or comments. Click the Update button.
 		</help>
 		</chapter>
 
 		<chapter anchor="download" name="Download QMRF Document">
 		<help>
-				Allows to download QMRF documents in different formats. Please note XML is the native format for a QMRF document and can be opened and edited by QMRF Editor.
+				Allows downloading QMRF documents in different formats. Please note that XML is the native format for QMRF documents. QMRF documents in XML format can be opened and edited through the QMRF Editor.
 				HTML, PDF and XLS formats are useful for archiving and printing purposes.
 		</help>
 	</chapter>
 
 		<chapter anchor="actions" name="Actions available on QMRF Documents">
 		<help>
-				A set of links, allowing to perform different actions, according to the document status and user roles. for example
-				an Author can edit a document, and a Reviewer can review a document.
+				A set of links, allowing to perform different actions, according to the document status and user roles. For example
+				an Author can edit a document and a Reviewer can review a document.
 		</help>
 	</chapter>
 
 		<chapter anchor="version" name="QMRF document version">
 		<help>
-				Version is a number, used to track different versions of a document. When document is created, it has version of 1.
-				When the document is returned for a revisio, the version is incremented by 1.
+				Version is a number, used to track the different versions of a document. When a document is created, it has version "1" assigned.
+				When the document is returned for a revision, the version is incremented by 1.
 		</help>
 	</chapter>
 
-		<chapter anchor="user_name" name="QMRF document author">
+		<chapter anchor="user_name" name="QMRF document Author">
 		<help>
-				The QMRF Inventory user name of the document author.
+				The QMRF Inventory user name of the document Author.
 		</help>
 	</chapter>
 
@@ -127,13 +127,13 @@ A valid e-mail is required in order to register in QMRF Repository. The QMRF Inv
 	</chapter>
 		<chapter anchor="qmrf_title" name="QMRF document title">
 		<help>
-First 128 characters of the QMRF document title (Section 1.1)
+The first 128 characters of the QMRF document title (Section 1.1)
 		</help>
 	</chapter>
 		<chapter anchor="qmrf_number" name="QMRF Number">
 		<help>
-				QMRF number is an unique identifier, assigned to a published QMRF document, in a form of Q A-B-C-D.
-				The following fields will be used to assign an unique identifier:
+				The QMRF number is a unique identifier, assigned to a published QMRF document, in the form of Q A-B-C-D.
+				The following fields will be used to assign a unique identifier:
 		</help>
 		<help>
 		A: 4.2. Explicit algorithm
@@ -148,25 +148,26 @@ First 128 characters of the QMRF document title (Section 1.1)
 		D: Version
 </help>
 		<help>
-If data is not present in these fields the document will not be published!
+If data is not present in these fields the document will not be published.
 </help>
 		</chapter>
 		<chapter anchor="publish" name="Publish new document">
 				<help>
-				Click publish button will assign QMRF number of the form A-B-C-D, where A,B,C and D are defined below and publish the QMRF document.
+				Clicking the Publish button will assign a QMRF number of the form A-B-C-D, where A,B,C and D are defined below, and publish the QMRF document.
 				</help>
 				<help>
-				Click "Retrieve number from catalog" to obtain corresponding numbers.
-				If one of the fields is missing, return the document to the author to insert the missing data.
+				Click "Retrieve number from catalog" to obtain the 
+				corresponding numbers.
+				If some of the fields are empty, return the document to the author to insert the missing data.
 				</help>
 		</chapter>
 
 		<chapter anchor="user_keywords" name="Reviewer keywords">
 				<help>
-				Fill in "Keywords" field if you would like to become a QMRF Inventory Reviewer.
+				Fill in the "Keywords" field if you would like to become a QMRF Inventory Reviewer.
 				</help>
 				<help>
-				These keywords will be used by the QMRF Inventory Editor, in order to assign a reviewer to a QMRF document. The editor will seek a match between QMRF document keywords and available Reviewers' keywords.
+				These keywords will be used by the QMRF Inventory Editor when assigning reviewers for QMRF documents. The editor will seek a match between the QMRF document keywords and the available Reviewers' keywords.
 				</help>
 
 		</chapter>
@@ -183,49 +184,49 @@ The author list will be available as a lookup for relevant fields within the QMR
 		</chapter>
 		<chapter anchor="roles" name="What are user roles and how to change/update roles.">
 				<help>
-				There are four role types: Author, Reviewer, Chief Editor and Administrator, which can be assigned to the registered users.
+				There are four role types: Author, Reviewer, Editor and Administrator, which can be assigned to the registered users.
 				</help>
 				<help>
 				The Author can create and submit QMRF documents. Once submitted, the documents are reviewed by a Reviewer.
 				The Reviewer can publish the document, or return it to the Author, if there is insufficient/unclear information.
 				</help>
 				<help>
-				The Chief Editor assigns Reviewers to the newly submitted documents.
+				The Editor assigns Reviewers to the newly submitted documents.
 				</help>
 				<help>
-				Upon registration, the new user is assigned only an Author role. The Reviewer role can be assigned to any user, but assignment can be done only by Administrator.
+				Upon registration, a new user is assigned only the Author role. The Reviewer role can be assigned to any user, but assignment can be done only by the Administrator.
 				This can be done via the User profiles tab.
 				</help>
 				<help>
-				Note: The Author role can not be removed if there are documents under preparation (e.g. draft, under_revision, submitted, returned for revision).
+				Note: The Author role can not be withdrawn while there are documents under preparation (e.g. "Draft", "Under revision", "Submitted", "Returned for revision") for the respective Author.
 				</help>
 		</chapter>
 		<chapter anchor="review_forbidden" name="Reviewing not allowed">
 				<help>
-				Reviewing a document where the reviewer is the document author is forbidden!
+				Document reviewing when the Reviewer and the Author share the same QMRF Inventory user name is not allowed.
 				</help>
 		</chapter>
 		<chapter anchor="status" name="Document status">
 				<help>
-				A QMRF document can be in one of the following states: draft, under revision, submitted, returned for revision, published.
+				A QMRF document can be in one of the following states: "Draft", "Under revision", "Submitted", "Returned for revision", "Archived", "Published".
 				</help>
 				<help>
-				Draft: The document is a draft, when just created by an Author, or when edited by an Author, after being returned for a revision. Visible only to the Author.
+				Draft: The document has "Draft" status, when just created by an Author, or when edited by an Author, after being returned for a revision. The document is visible only to the Author and the Administrator.
 				</help>
 				<help>
-				Submitted: This status is assigned after the Author submits the document to QMRF Inventory through Final Submission page. Visible to the Author and Editor. The Editor assigns the document to a Reviewer and the document becomes visible to the assigned reviewer.
+				Submitted: This status is assigned after the Author submits the document in the QMRF Inventory through the Final Submission page. The document is visible to the Author, the Editor and the Administrator. The Editor assigns the document to a Reviewer and the document becomes visible to the assigned Reviewer.
 				</help>
 				<help>
-				Under revision: This status is set when the Reviewer is assigned a document to review. Visible only to the Author and Reviewer.
+				Under revision: This status is set when the Reviewer is assigned a document to review. The document is visible only to the Author, the assigned Reviewer, the Editor and the Administrator.
 				</help>
 				<help>
-				Returned for revision: This status is assigned if the Reviewer considers information in the document insufficients and returns it to the Author. Visible only to the Author and Reviewer.
+				Returned for revision: This status is assigned if the assigned Reviewer considers the information in the document insufficient and returns the document to the Author. The document is visible only to the Author, the assigned Reviewer, the Editor and the Administrator.
 				</help>
 				<help>
-				Archived: Upon returning for a revision, the original document is assigned Archived status and a copy of the document is assigned "Returned for revision" status and is returned to the Author. Visible only to the Author and Reviewer.
+				Archived: Upon returning for a revision, the original document is assigned "Archived" status, while a copy of the document is assigned "Returned for revision" status and is returned to the Author. Both documents are visible only to the Author, the assigned Reviewer, the Editor and the Administrator.
 				</help>
 				<help>
-				Published: The document is assigned published status, if approved by the Reviewer and assigned an unique QMRF number. Published documents are visible to everybody, not only to registered users.
+				Published: The document is assigned Published status when approved by the Reviewer. A unique QMRF number is assigned to the document. Published documents are visible to everybody, not only to registered users.
 				</help>
 		</chapter>
 </chapter>
