@@ -17,7 +17,7 @@ response.setHeader("Expires", "0");
 <c:if test="${!empty param.viewmode}">
 	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
 </c:if>
-<c:if test="${sessionScope['viewmode'] ne 'qmrf_user'}" >
+<c:if test="${(sessionScope['viewmode'] ne 'qmrf_user') && (sessionScope['viewmode'] ne 'qmrf_admin')}" >
   <c:redirect url="index.jsp"/>
 </c:if>
 
