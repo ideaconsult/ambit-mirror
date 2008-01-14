@@ -13,6 +13,7 @@
           >
 
 
+
 <!ELEMENT QMRF_chapters (QSAR_identifier,QSAR_General_information,QSAR_Endpoint,
 QSAR_Algorithm,QSAR_Applicability_domain+,QSAR_Robustness,QSAR_Predictivity+,
 QSAR_Interpretation,QSAR_Miscelaneous,QMRF_Summary) >
