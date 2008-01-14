@@ -75,7 +75,7 @@ response.setDateHeader("Expires",0);
 			<?xml version="1.0" encoding="UTF-8"?>
 			<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns="http://www.w3.org/1999/xhtml">
 			<xsl:output method="xml"  encoding="utf-8" doctype-system="qmrf.dtd"
-				doctype-public="http://ambit.acad.bg/qmrf/qmrf.dtd" indent="yes"/>
+				 indent="yes"/>
 
 			<xsl:template match="@*|node()">
 				<xsl:copy>

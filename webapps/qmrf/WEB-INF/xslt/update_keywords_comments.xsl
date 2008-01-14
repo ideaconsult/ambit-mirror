@@ -2,8 +2,7 @@
                  xmlns="">
 
 
-<xsl:output method="xml"  encoding="utf-8" doctype-system="/WEB-INF/xslt/qmrf.dtd"
-		doctype-public="http://ambit.acad.bg/qmrf/qmrf.dtd" indent="yes"/>
+<xsl:output method="xml"  encoding="utf-8" doctype-system="WEB-INF/xslt/qmrf.dtd" indent="yes"/>
 
 <xsl:param name="keywords"/>
 <xsl:param name="summary_comments"/>
