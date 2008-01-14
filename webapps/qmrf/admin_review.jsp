@@ -89,6 +89,11 @@ response.setHeader("Expires", "0");
 <c:if test="${!empty param.summary_comments || (fn:trim(param.summary_comments) eq '')}">
 	<c:set var="updateXML" value="true"/>
 </c:if>
+
+<c:if test="${pageContext.request.method ne 'POST'}">
+	<c:set var="updateXML" value="false"/>
+</c:if>
+
 <c:if test="${updateXML eq true}">
 		<sql:query var="rs" dataSource="jdbc/qmrf_documents">
 			select xml from documents where idqmrf=?
