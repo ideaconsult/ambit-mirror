@@ -6,6 +6,7 @@
 <%@ taglib uri="http://jakarta.apache.org/taglibs/taglibs-mailer" prefix="mt" %>
 <fmt:requestEncoding value="UTF-8"/>
 
+
 <c:set var="thispage" value='update_status.jsp'/>
 
 <c:if test="${!empty param.viewmode}">
