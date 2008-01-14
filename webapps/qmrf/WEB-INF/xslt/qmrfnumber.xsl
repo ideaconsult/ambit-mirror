@@ -83,7 +83,7 @@
 
 	<h3>
 	<xsl:element name="a">
-		<xsl:attribute name="name">model_authors</xsl:element>
+		<xsl:attribute name="name">model_authors</xsl:attribute>
 		<img src="images/user_suit.png" alt="user icon" title="This field is mandatory!" border="0"/>
 	</xsl:element>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
@@ -150,7 +150,7 @@
 <xsl:template match="model_endpoint">
 	<h3>
 	<xsl:element name="a">
-		<xsl:attribute name="name">model_endpoint</xsl:element>
+		<xsl:attribute name="name">model_endpoint</xsl:attribute>
 		<xsl:value-of disable-output-escaping="no" select="@chapter"/>
 		<xsl:text>.</xsl:text>
 		<xsl:value-of disable-output-escaping="no" select="@name"/>
@@ -183,7 +183,7 @@
 <xsl:template match="algorithm_explicit">
 	<h3>
 	<xsl:element name="a">
-		<xsl:attribute name="name">algorithm_explicit</xsl:element>		
+		<xsl:attribute name="name">algorithm_explicit</xsl:attribute>		
 		<img src="images/chart_curve.png" alt="algorithm icon" title="This field is mandatory!" border="0"/>
 	</xsl:element>
 	<xsl:value-of disable-output-escaping="no" select="@chapter"/>
