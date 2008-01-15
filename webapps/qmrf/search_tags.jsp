@@ -269,9 +269,13 @@
 			<c:set var="qmrftype" value="" />
 			<td colspan="2">
 			<table width="95%" border="0">
+			<c:if test="${rsdocs.rowCount eq 0}">
+			<tr><td>No published QMRF documents</td></tr>
+			</c:if>
 			<c:forEach var="qdoc" items="${rsdocs.rows}">
 					<tr >
 					<td width="50%">
+
 					<c:set var="qview">
 						<a href="<c:url value="view.jsp"><c:param name="id" value="${qdoc.idqmrf}"/></c:url>" target='_blank'>${qdoc.qmrf_number}</a>
 					</c:set>
