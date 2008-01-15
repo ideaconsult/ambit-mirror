@@ -15,17 +15,19 @@ response.setHeader("Expires", "0");
     <jsp:param name="title" value="QMRF Inventory Help"/>
 </jsp:include>
 
+
 <table>
 
 		<c:import var="helpxml" url="help.xml" scope="page"/>
-		<x:parse var="doc" xml="${helpxml}"/>
-
+		<x:parse var="doc" xml="${fn:trim(helpxml)}"/>
+		
 		<c:import var="help2html" url="/WEB-INF/xslt/help2anchor.xsl"/>
-	  	<x:transform xml="${doc}" xslt="${help2html}">
+	  	<x:transform xml="${doc}" xslt="${fn:trim(help2html)}">
 	  		<x:param name="anchor" value="${param.anchor}"/>
 	  	</x:transform>
-
+		
 </table>
+
   </body>
 </html>
 

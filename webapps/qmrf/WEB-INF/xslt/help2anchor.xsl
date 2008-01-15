@@ -8,8 +8,11 @@
 
 <xsl:template match="qmrf_help">
 		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
 		<link href="styles/nstyle.css" rel="stylesheet" type="text/css"/>
-		<title>QMRF help</title><body>
+		<title>QMRF help</title>
+		</head>
+		<body>
 				<xsl:apply-templates select="* "/>
 	  </body></html>
 </xsl:template>
