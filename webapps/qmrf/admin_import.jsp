@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
@@ -54,8 +54,9 @@ response.setHeader("Expires", "0");
 			<c:param name="url" value="file"/>			
 		</c:import>
   	    <c:catch var='exception'>
-			Importing&nbsp;${row.type}&nbsp;${row.name}
-			<a:importfile xml="${xml}" user="lri_admin" password="lri" database="ambit_qmrf"/>
+			Importing...&nbsp;${row.type}&nbsp;${row.name}...
+			<a:importfile xml="${fn:trim(xml)}" user="lri_admin" password="lri" database="ambit_qmrf"/>
+			Done.
 		</c:catch>
 		${exception}
 </c:if>
@@ -78,15 +79,13 @@ response.setHeader("Expires", "0");
 </jsp:include>
 
   <table border="0" cellspacing="5" width="95%">
+  <c:catch var="err">
 <jsp:include page="list_attachments.jsp" flush="true"/>
+</c:catch>
 </table>
-<!--
-		<c:import var="xsl" url="/WEB-INF/xslt/property2form.xsl"/>
-		<c:import var="xml" url="properties_xml.jsp">
-			<c:param name="idattachment" value="${param.idattachment}"/>
-		</c:import>
-		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}"/>
--->		
+${err}
+
+
 <table width="95%">
 <tr>
 <td>
@@ -104,6 +103,7 @@ response.setHeader("Expires", "0");
 </td>
 </tr>
 </table>
+
 
 
 
