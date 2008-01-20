@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <?xml:stylesheet type="html/xsl" href="qmrf2html.xsl"?>
 <!DOCTYPE QMRF SYSTEM "qmrf.dtd" >
 
@@ -201,7 +201,7 @@
       <Endpoint id="Endpoint6" name="Octanol-water partition coefficient (Kow)"/>                              
       <Endpoint id="Endpoint7" name="Octanol-water distribution coefficient (D)"/>
       <Endpoint id="Endpoint8" name="Octanol-air partition coefficient (Koa)"/>
-      <Endpoint id="Endpoint9" name="Air- water partition coefficient (Henry’s law constant, H)"/>
+      <Endpoint id="Endpoint9" name="Air- water partition coefficient (Henry�s law constant, H)"/>
       <Endpoint id="Endpoint10" name="Dissociation constant"/>
       <!-- 2. Environmental fate parameters  -->
       <Endpoint id="Endpoint11" name="Persistence: Abiotic degradation in water (Hydrolysis, Oxidation, Reduction)"/>

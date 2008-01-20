@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <?xml:stylesheet type="html/xsl" href="qmrf2html.xsl"?>
 <!DOCTYPE QMRF PUBLIC "http://ambit.acad.bg/qmrf/qmrf.dtd" "qmrf.dtd">
 <QMRF author="European Chemicals Bureau" contact="European Chemicals Bureau, IHCP, Joint Research Centre, European Commission" date="July 2007" email="ecb.qsar@jrc.it" name="(Q)SAR Model Reporting Format" schema_version="0.9" url="http://ecb.jrc.it/QSAR/" version="1.2">
