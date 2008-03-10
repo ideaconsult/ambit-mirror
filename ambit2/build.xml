@@ -125,7 +125,7 @@
             <delete dir="${test.reports}" />
 
     </target>
-	<target name="all" depends="smarts,tests">
+	<target name="all" depends="smarts,tests" description="Compiles and builds ambit2 jars (to be found in dist directory)">
 	</target>
 
 	<target name="init" >
@@ -152,7 +152,7 @@
 	</target>
 
     <!-- ambit-smarts-version.jar -->
-	<target	id="smarts" name="smarts" depends="compile-smarts" description="Compiles ambit-smarts-version.jar package">
+	<target	id="smarts" name="smarts" depends="compile-smarts" description="Compiles ambit-smarts-vX.X.jar package">
 		<jar jarfile="${dist}/ambit-smarts-${version}.jar" compress="true">
 		    <fileset dir="${build}"
 						includes="ambit2/smarts/**"
@@ -162,7 +162,7 @@
 	</target>
 
     <!-- ambit-test-version.jar -->
-	<target	id="tests" name="tests" depends="compile-tests" description="Compiles ambit-tests-version.jar package">
+	<target	id="tests" name="tests" depends="compile-tests" description="Compiles ambit-tests-vX.X.jar package">
 		<jar jarfile="${dist}/ambit-tests-${version}.jar" compress="true">
 		    <fileset dir="${build}/ambit2/test">
 		   </fileset>
@@ -193,7 +193,7 @@
 	</target>
 
 	<!-- Run tests and generate HTML report for all packages -->
-	<target name="test-html" depends="compile,compile-tests" description="Run tests and generate HTML report">
+	<target name="test-html" depends="compile,compile-tests" description="Run tests and generate HTML report (to be found in reports directory)">
  	  <mkdir dir="${test.reports}" />
 	  <junit fork="yes" printsummary="yes" haltonfailure="no">
 	  	<!--
@@ -223,7 +223,7 @@
 	</target>
 
 	<!-- Generate source distribution  -->
-	<target name="srcdist1" description="Backs up all source into a tar file.">
+	<target name="srcdist1" description="Backs up all source into a ambit2-source-vX.X-date.zip file (dist directory).">
 		<mkdir dir="${sourcedist}" />
 		<tstamp/>
 		<property name="backupFile" value ="${ant.project.name}-${version}-${DSTAMP}.tar.gz" />
@@ -291,17 +291,6 @@
 		<delete dir="${sourcedist}"/>
 	</target>
 
-	<!-- Generate Javadoc distribution  -->
-	<target name="backupDoc" description="Backs up all doc/api into a tar file.">
-		<mkdir dir="${sourcedist}" />
-		<tstamp/>
-		<property name="backupFile" value ="${ant.project.name}_doc_${DSTAMP}.tar.gz" />
-
-		<tar tarfile="${sourcedist}/${backupFile}"
-			basedir="${doc}/api" compression="gzip" />
-
-		<echo message="API documentation backup file ${backupFile} has been created." />
-	</target>
 
 
 </project>
