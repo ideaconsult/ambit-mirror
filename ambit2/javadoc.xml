@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="package" author="true" classpath="lib/junit.jar;lib/cdk-1.1.svn-19012008.jar" destdir="doc" doctitle="AMBIT2" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" overview="D:\src\ambit-svn\trunk\ambit2\src\overview.html" packagenames="ambit2.test.smarts,ambit2.smarts" source="1.5" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>
