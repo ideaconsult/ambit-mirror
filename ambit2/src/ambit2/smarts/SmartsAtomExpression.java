@@ -122,13 +122,23 @@ public class SmartsAtomExpression extends SMARTSAtom
     			return(false);
     		
     	case SmartsConst.AP_X:
-    		if (tok.param == atom.getFormalNeighbourCount() + atom.getHydrogenCount())
+    	{	
+    		Integer hci = atom.getHydrogenCount();
+    		int hc = 0;
+    		if (hci != null)
+    			hc = hci.intValue();
+    		if (tok.param == atom.getFormalNeighbourCount() + hc)
     			return(true);
     		else	
     			return(false);	
-    	
+    	}
     	case SmartsConst.AP_H:
-    		int totalH = atom.getHydrogenCount();
+    	{	
+    		Integer hci = atom.getHydrogenCount();
+    		int totalH = 0;
+    		if (hci != null)
+    			totalH = hci.intValue();    		
+    		
     		Integer explicitH = (Integer)atom.getProperty("ExplicitH");
     		if (explicitH != null)
     			totalH+=explicitH.intValue();
@@ -136,7 +146,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     			return(true);
     		else	
     			return(false);	
-    		
+    	}	
     	case SmartsConst.AP_R:    		 
     		int atomRings[] = (int[])atom.getProperty("RingData");
     		return(match_R(atomRings, tok.param, atom));
