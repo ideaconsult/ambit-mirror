@@ -1,0 +1,6 @@
+ambit2/log/*.class
+ambit2/log/log4.console
+ambit2/log/log4.properties
+ambit2/external/*.class
+ambit2/smiles/*.class
+ambit2/io/*.class
