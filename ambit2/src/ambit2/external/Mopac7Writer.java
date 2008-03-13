@@ -1,5 +1,5 @@
 
-package ambit2.io;
+package ambit2.external;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,7 +28,6 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.tools.LoggingTool;
 
-import ambit2.external.DescriptorMopacShell;
 
 
 /**

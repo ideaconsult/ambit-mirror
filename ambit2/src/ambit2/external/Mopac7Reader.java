@@ -27,7 +27,7 @@
  * 
  */
 
-package ambit2.io;
+package ambit2.external;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,7 +45,6 @@ import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.tools.LoggingTool;
 
-import ambit2.external.DescriptorMopacShell;
 
 /**
  * Reads MOPAC output, extracts several electronic parameters and assigns them as a molecule properties.<br>
