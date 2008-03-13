@@ -42,8 +42,8 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.DataFeatures;
 
 /**
- * TODO add description
- * @author ThinClient
+ * Writes delimited files
+ * @author Nina Jeliazkova
  * <b>Modified</b> 2005-9-6
  */
 public class DelimitedFileWriter extends FilesWithHeaderWriter {

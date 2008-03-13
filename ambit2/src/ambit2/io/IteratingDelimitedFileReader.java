@@ -40,7 +40,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 
 /**
- * TODO add description
+ * Iterating reader for delimited files.
  * 
  * @author Nina Jeliazkova <b>Modified</b> 2005-9-5
  */

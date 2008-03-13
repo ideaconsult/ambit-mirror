@@ -27,8 +27,6 @@ import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.tools.MFAnalyser;
 
-import ambit2.io.Mopac7Reader;
-import ambit2.io.Mopac7Writer;
 import ambit2.log.AmbitLogger;
 
 

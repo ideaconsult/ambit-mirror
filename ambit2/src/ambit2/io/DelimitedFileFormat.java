@@ -28,8 +28,8 @@ import org.openscience.cdk.io.formats.IChemFormatMatcher;
 import org.openscience.cdk.tools.DataFeatures;
 
 /**
- * TODO add description
- * @author ThinClient
+ * File format for delimited files
+ * @author Nina Jeliazkova
  * <b>Modified</b> 2005-9-5
  */
 public class DelimitedFileFormat implements IChemFormatMatcher {
