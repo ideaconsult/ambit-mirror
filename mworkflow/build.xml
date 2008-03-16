@@ -1,12 +1,13 @@
-<project name="Micro-workflow" default="dist" basedir=".">
-    <description>
-       Build the distribution to be uploaded on SourceForge
-    </description>
+<project name="Micro-workflow" default="mworkflow" basedir=".">
+  <property name="version" value="1.0" />	
+  <description>
+       Micro-workflow package by Dragos Manolescu (dam@micro-workflow.com)
+   </description>
   <property name="src" location="src"/>
   <property name="concurrent_src" location="concurrent"/>
   <property name="bin" location="bin"/>
   <property name="dist"  location="dist"/>
-  <property name="junit_jar" location="/usr/local/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+  <property name="junit_jar" location="lib/junit.jar"/>
 
   <target name="init">
     <tstamp/>
@@ -19,8 +20,10 @@
 	</javac>
   </target>
 
- <target name="concurrent" depends="init"
-        description="compile Doug Lea's concurrent package" >
+	<!--
+	TODO This package can be replaced by Java 1.5 java.util.concurrent 
+	-->
+ <target name="concurrent" depends="init" description="compile Doug Lea's concurrent package" >
     <javac srcdir="${concurrent_src}" destdir="${bin}">
 	</javac>
   </target>
@@ -38,6 +41,16 @@
  </tar>
  </target>
 
+    <!-- mworkflow-version.jar -->
+	<target	id="mworkflow" name="mworkflow" depends="compile" description="Compiles mworkflow-vX.X.jar package">
+		 <mkdir dir="${dist}"/>
+		<jar jarfile="${dist}/mworkflow-${version}.jar" compress="true">
+		    <fileset dir="${bin}" includes="**/*" 
+			excludes="**/com/microworkflow/test/**"/>
+
+		</jar>
+	</target>
+	
   <target name="clean"
         description="clean up" >
     <delete dir="${bin}"/>
