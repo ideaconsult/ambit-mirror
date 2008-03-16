@@ -13,7 +13,6 @@
 */
 
 package EDU.oswego.cs.dl.util.concurrent;
-import java.util.Comparator;
 import java.util.Date;
 
 /**

@@ -12,7 +12,6 @@
 */
 
 package EDU.oswego.cs.dl.util.concurrent;
-import java.io.*;
 
 /**
  * A simple class maintaining a single reference variable that
