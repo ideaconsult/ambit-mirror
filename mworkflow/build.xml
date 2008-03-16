@@ -1,0 +1,46 @@
+<project name="Micro-workflow" default="dist" basedir=".">
+    <description>
+       Build the distribution to be uploaded on SourceForge
+    </description>
+  <property name="src" location="src"/>
+  <property name="concurrent_src" location="concurrent"/>
+  <property name="bin" location="bin"/>
+  <property name="dist"  location="dist"/>
+  <property name="junit_jar" location="/usr/local/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${bin}"/>
+  </target>
+
+  <target name="compile" depends="concurrent"
+        description="compile the source" >
+    <javac srcdir="${src}" destdir="${bin}" classpath="${junit_jar}:.${bin}">
+	</javac>
+  </target>
+
+ <target name="concurrent" depends="init"
+        description="compile Doug Lea's concurrent package" >
+    <javac srcdir="${concurrent_src}" destdir="${bin}">
+	</javac>
+  </target>
+
+ <target name="dist"
+  	depends="compile"
+	description="generate the distribution" >
+ <mkdir dir="${dist}"/>
+ <tar destfile="${dist}/Micro-workflow.tar.gz" compression="gzip">
+	<tarfileset dir="./">
+		<exclude name="bin/**"/> <!-- ${bin} expands to absolute path :( -->
+		<exclude name="dist/**"/>
+		<exclude name="**/pcexample/**"/>
+	</tarfileset> 
+ </tar>
+ </target>
+
+  <target name="clean"
+        description="clean up" >
+    <delete dir="${bin}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
