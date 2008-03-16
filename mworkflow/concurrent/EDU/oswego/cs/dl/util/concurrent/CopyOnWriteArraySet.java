@@ -66,7 +66,11 @@ import java.util.*;
 
 public class CopyOnWriteArraySet extends AbstractSet implements Cloneable, java.io.Serializable {
 
-  protected final CopyOnWriteArrayList al;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -7377569541496517854L;
+protected final CopyOnWriteArrayList al;
 
   /**
    * Constructs an empty set

@@ -19,7 +19,11 @@ package EDU.oswego.cs.dl.util.concurrent;
 
 public class BrokenBarrierException extends RuntimeException {
 
-  /** 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -147457780021240026L;
+/** 
    * The index that barrier would have returned upon
    * normal return;
    **/

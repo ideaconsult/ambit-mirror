@@ -113,6 +113,12 @@ public class VetoableChangeMulticaster implements Serializable {
   // interoperability with beans versions.
 
   /**
+     * 
+     */
+    private static final long serialVersionUID = -1658935129351293677L;
+
+
+/**
    * The array of listeners. Copied on each update
    **/
 

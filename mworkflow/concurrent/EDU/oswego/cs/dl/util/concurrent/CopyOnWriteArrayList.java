@@ -80,6 +80,10 @@ import java.util.*;
 
 public class CopyOnWriteArrayList implements List, Cloneable, java.io.Serializable {
   /**
+     * 
+     */
+    private static final long serialVersionUID = -7462087621709176033L;
+/**
    * The held array. Directly access only within synchronized
    *  methods
    */

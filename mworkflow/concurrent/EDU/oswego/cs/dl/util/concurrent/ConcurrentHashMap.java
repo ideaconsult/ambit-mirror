@@ -161,6 +161,12 @@ public class ConcurrentHashMap
   */
 
   /**
+     * 
+     */
+    private static final long serialVersionUID = -6714594232516465772L;
+
+
+/**
    * The hash table data.
    */
   protected transient Entry[] table;

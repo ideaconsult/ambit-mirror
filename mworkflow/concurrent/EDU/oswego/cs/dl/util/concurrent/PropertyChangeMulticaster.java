@@ -77,6 +77,12 @@ public class PropertyChangeMulticaster implements Serializable {
   // This also makes it barely faster.
 
   /**
+     * 
+     */
+    private static final long serialVersionUID = 2015832332684279521L;
+
+
+/**
    * The array of listeners. Copied on each update
    **/
 

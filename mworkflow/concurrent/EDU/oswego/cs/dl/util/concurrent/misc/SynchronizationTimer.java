@@ -1825,7 +1825,11 @@ abstract class RNG implements Serializable, Comparable {
 
 
 class UpdateCommand implements Runnable, Serializable, Comparable {
-  private final RNG obj_;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 2828606424184627322L;
+private final RNG obj_;
   final long cmpVal;
   public UpdateCommand(RNG o) { 
     obj_ = o; 
@@ -1857,7 +1861,11 @@ class NextFunction implements Callable {
 
 
 class NoSynchRNG extends RNG {
-  protected long current_ = nextSeed();
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -2186580020204025899L;
+protected long current_ = nextSeed();
 
   protected void set(long l) { current_ = l; }
   protected long internalGet() { return current_; }  
@@ -1865,20 +1873,32 @@ class NoSynchRNG extends RNG {
 }
 
 class PublicSynchRNG extends NoSynchRNG {
-  public synchronized long get() { return internalGet(); }  
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 7560165052062621902L;
+public synchronized long get() { return internalGet(); }  
   public synchronized void update() { internalUpdate();  }
   public synchronized long next() { internalUpdate(); return internalGet(); }
 }
 
 class AllSynchRNG extends PublicSynchRNG {
-  protected synchronized void set(long l) { current_ = l; }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -4886837652420263238L;
+protected synchronized void set(long l) { current_ = l; }
   protected synchronized long internalGet() { return current_; }
   protected synchronized void internalUpdate() { set(compute(internalGet())); }
 }
 
 
 class AClongRNG extends RNG {
-  protected final SynchronizedLong acurrent_ = 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 2233974671238012431L;
+protected final SynchronizedLong acurrent_ = 
     new SynchronizedLong(nextSeed());
 
   protected void set(long l) { throw new Error("No set allowed"); }
@@ -1908,7 +1928,11 @@ class AClongRNG extends RNG {
 }
 
 class SynchLongRNG extends RNG {
-  protected final SynchronizedLong acurrent_ = 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -5611577737595343770L;
+protected final SynchronizedLong acurrent_ = 
     new SynchronizedLong(nextSeed());
 
   protected void set(long l) { acurrent_.set(l); }
@@ -1933,7 +1957,11 @@ abstract class DelegatedRNG extends RNG  {
 }
 
 class SDelegatedRNG extends DelegatedRNG {
-  public SDelegatedRNG() { setDelegate(new NoSynchRNG()); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 7623981261448952790L;
+public SDelegatedRNG() { setDelegate(new NoSynchRNG()); }
   public synchronized long get() { return getDelegate().get(); }
   public synchronized void update() { getDelegate().update(); }
   public synchronized long next() { return getDelegate().next(); }
@@ -1941,7 +1969,11 @@ class SDelegatedRNG extends DelegatedRNG {
 
 
 class SyncDelegatedRNG extends DelegatedRNG {
-  protected final Sync cond_;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 4800886425222934105L;
+protected final Sync cond_;
   public SyncDelegatedRNG(Sync c) { 
     cond_ = c; 
     setDelegate(new NoSynchRNG());
@@ -2000,33 +2032,67 @@ class SyncDelegatedRNG extends DelegatedRNG {
 }
 
 class MutexRNG extends SyncDelegatedRNG {
-  public MutexRNG() { super(new Mutex()); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 4025745059429492127L;
+
+public MutexRNG() { super(new Mutex()); }
 }
 
 
 class SemRNG extends SyncDelegatedRNG {
-  public SemRNG() { super(new Semaphore(1)); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -6386910435779405865L;
+
+public SemRNG() { super(new Semaphore(1)); }
 }
 
 class WpSemRNG extends SyncDelegatedRNG {
-  public WpSemRNG() { super(new WaiterPreferenceSemaphore(1)); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -3192027585988336972L;
+
+public WpSemRNG() { super(new WaiterPreferenceSemaphore(1)); }
 }
 
 class FifoRNG extends SyncDelegatedRNG {
-  public FifoRNG() { super(new FIFOSemaphore(1)); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 8158761294789068508L;
+
+public FifoRNG() { super(new FIFOSemaphore(1)); }
 }
 
 class PrioritySemRNG extends SyncDelegatedRNG {
-  public PrioritySemRNG() { super(new PrioritySemaphore(1)); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 6862751122556974710L;
+
+public PrioritySemRNG() { super(new PrioritySemaphore(1)); }
 }
 
 class RlockRNG extends SyncDelegatedRNG {
-  public RlockRNG() { super(new ReentrantLock()); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -2775828196594889768L;
+
+public RlockRNG() { super(new ReentrantLock()); }
 }
 
 
 class RWLockRNG extends NoSynchRNG {
-  protected final ReadWriteLock lock_;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -220758801152830604L;
+protected final ReadWriteLock lock_;
   public RWLockRNG(ReadWriteLock l) { 
     lock_ = l; 
   }
@@ -2118,11 +2184,21 @@ class RWLockRNG extends NoSynchRNG {
 }
 
 class WpRWlockRNG extends RWLockRNG {
-  public WpRWlockRNG() { super(new WriterPreferenceReadWriteLock()); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 5073092196038024785L;
+
+public WpRWlockRNG() { super(new WriterPreferenceReadWriteLock()); }
 }
 
 class ReaderPrefRWlockRNG extends RWLockRNG {
-  public ReaderPrefRWlockRNG() { 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 971035568087939137L;
+
+public ReaderPrefRWlockRNG() { 
     super(new ReaderPreferenceReadWriteLock()); 
   }
 
@@ -2130,12 +2206,22 @@ class ReaderPrefRWlockRNG extends RWLockRNG {
 }
 
 class FIFORWlockRNG extends RWLockRNG {
-  public FIFORWlockRNG() { super(new FIFOReadWriteLock()); }
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 9182201994280450864L;
+
+public FIFORWlockRNG() { super(new FIFOReadWriteLock()); }
 }
 
 
 class ReentrantRWlockRNG extends RWLockRNG {
-  public ReentrantRWlockRNG() { 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 3541837031107722247L;
+
+public ReentrantRWlockRNG() { 
     super(new ReentrantWriterPreferenceReadWriteLock()); 
   }
 
@@ -2230,21 +2316,35 @@ abstract class ExecutorRNG extends DelegatedRNG {
 }
 
 class DirectExecutorRNG extends ExecutorRNG {
-  public DirectExecutorRNG() { 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 1759618372413235753L;
+
+public DirectExecutorRNG() { 
     setDelegate(new PublicSynchRNG()); 
     setExecutor(new DirectExecutor()); 
   }
 }
 
 class LockedSemRNG extends ExecutorRNG {
-  public LockedSemRNG() { 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -1067175949254385334L;
+
+public LockedSemRNG() { 
     setDelegate(new NoSynchRNG()); 
     setExecutor(new LockedExecutor(new Semaphore(1))); 
   }
 }
 
 class QueuedExecutorRNG extends ExecutorRNG {
-  static final QueuedExecutor exec = new QueuedExecutor();
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 5016640881604207814L;
+static final QueuedExecutor exec = new QueuedExecutor();
   static { exec.setThreadFactory(Threads.factory); }
   public QueuedExecutorRNG() { 
     setDelegate(new PublicSynchRNG()); 
@@ -2276,7 +2376,11 @@ class ForcedStartThreadedExecutor extends ThreadedExecutor {
 }
 
 class ThreadedExecutorRNG extends ExecutorRNG {
-  static final ThreadedExecutor exec = new ThreadedExecutor();
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -6796933344836431418L;
+static final ThreadedExecutor exec = new ThreadedExecutor();
   static { exec.setThreadFactory(Threads.factory); }
 
   public ThreadedExecutorRNG() { 
@@ -2287,7 +2391,11 @@ class ThreadedExecutorRNG extends ExecutorRNG {
 
 
 class PooledExecutorRNG extends ExecutorRNG {
-  static final PooledExecutor exec = Threads.pool;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 9196583239053245058L;
+static final PooledExecutor exec = Threads.pool;
 
   public PooledExecutorRNG() { 
     setDelegate(new PublicSynchRNG()); 
@@ -2298,7 +2406,11 @@ class PooledExecutorRNG extends ExecutorRNG {
 
 class ChanRNG extends DelegatedRNG {
 
-  boolean single_;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 8896441893874313049L;
+boolean single_;
 
   ChanRNG() {
     setDelegate(new PublicSynchRNG());

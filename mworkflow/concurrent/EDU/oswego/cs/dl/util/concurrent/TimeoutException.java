@@ -24,7 +24,11 @@ package EDU.oswego.cs.dl.util.concurrent;
 
 public class TimeoutException extends InterruptedException {
 
-  /** 
+  /**
+     * 
+     */
+    private static final long serialVersionUID = 3131847742139976720L;
+/** 
    * The approximate time that the operation lasted before 
    * this timeout exception was thrown.
    **/

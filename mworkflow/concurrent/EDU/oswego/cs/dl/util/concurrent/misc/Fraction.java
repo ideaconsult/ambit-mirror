@@ -20,7 +20,11 @@ package EDU.oswego.cs.dl.util.concurrent.misc;
  * Fractions are always maintained in reduced form.
  **/
 public class Fraction implements Cloneable, Comparable, java.io.Serializable {
-  protected final long numerator_;
+  /**
+     * 
+     */
+    private static final long serialVersionUID = -7132829334925257348L;
+protected final long numerator_;
   protected final long denominator_;
 
   /** Return the numerator **/
