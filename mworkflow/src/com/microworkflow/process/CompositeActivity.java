@@ -13,8 +13,8 @@ import java.util.List;
 
 import com.microworkflow.execution.Continuation;
 
-public abstract class CompositeActivity extends Activity {
-	protected ArrayList components = new ArrayList();
+public abstract class CompositeActivity extends Activity implements ICompositeActivity {
+	protected ArrayList<Activity> components = new ArrayList<Activity>();
 
 	/**
 	 * Delay generating the set of continuations for a CompositeActivity. 
@@ -45,5 +45,22 @@ public abstract class CompositeActivity extends Activity {
 	protected Iterator getContinuationsForComponentsWith(Continuation parent) {
 		return new DelayedContinuationIterator(parent, this.components);
 	}
-
+	@Override
+	public String toString() {
+	    Iterator<Activity> i = components.iterator();
+	    StringBuffer b = new StringBuffer();
+        b.append(super.toString());
+        String del = "{";
+        
+        while (i.hasNext()) {
+            b.append(del);
+            b.append(i.next());
+            del = ",";
+        }
+        b.append("}");
+        return b.toString();
+	}
+    public ArrayList<Activity> getComponents() {
+        return components;
+    }
 }

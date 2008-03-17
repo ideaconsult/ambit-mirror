@@ -16,7 +16,24 @@ import com.microworkflow.execution.Continuation;
  * control structures in my <a href="http://micro-workflow.com/PhDThesis/">thesis</a>.
  */
 public abstract class Activity {
-	public Sequence addStep(Activity anActivity) {
+    protected String name;
+    public Activity() {
+        setName(getClass().getName());
+    }
+    public Activity(String name) {
+        this();
+        setName(name);
+    }
+        
+	public synchronized String getName() {
+        return name;
+    }
+
+    public synchronized void setName(String name) {
+        this.name = name;
+    }
+
+    public Sequence addStep(Activity anActivity) {
 		Sequence seq=new Sequence();
 		seq.addStep(this);
 		seq.addStep(anActivity);
@@ -26,5 +43,8 @@ public abstract class Activity {
 	public abstract Continuation continuationWith(Continuation continuation);
 	
 	public abstract void computeStateFor(Continuation k);
-
+	@Override
+	public String toString() {
+	    return getName();
+	}
 }

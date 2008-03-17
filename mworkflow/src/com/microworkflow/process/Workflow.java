@@ -7,13 +7,18 @@
 
 package com.microworkflow.process;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
-import com.microworkflow.execution.*;
-
 import sun.misc.Queue;
+
+import com.microworkflow.events.ObjectWithPropertyChangeSupport;
+import com.microworkflow.events.WorkflowEvent;
+import com.microworkflow.execution.Continuation;
+import com.microworkflow.execution.NullContinuation;
+import com.microworkflow.execution.Scheduler;
 
 /**
  * @author dam
@@ -24,11 +29,10 @@ import sun.misc.Queue;
  * <a href="http://micro-workflow.com/PDF/wecfo.pdf">Workflow Enactment with
  * Continuation and Future Objects</a>.
  */
-public class Workflow {
-	
+public class Workflow extends ObjectWithPropertyChangeSupport {
 	protected Queue queue; 
 	protected Activity definition;
-	protected ArrayList additionalContinuations;
+	protected ArrayList<Continuation> additionalContinuations;
 	protected Scheduler scheduler;
 	protected Logger logger;
 	
@@ -38,26 +42,30 @@ public class Workflow {
 
 	protected void initialize() {
 		queue=new Queue();
-		additionalContinuations=new ArrayList();
+		additionalContinuations=new ArrayList<Continuation>();
 		scheduler=new Scheduler();
 		logger=Logger.getLogger("com.microworklfow.process.workflow");
+		psp = new PropertyChangeSupport(this);
 	}
 
 	public WorkflowContext executeWith(WorkflowContext context) {
+        firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_START,null,context));
 		WorkflowContext currentContext = context;
 		Continuation continuation = firstContinuation();
 		while (continuation.getClass() != NullContinuation.class) {
 			continuation = bounce(continuation, currentContext);
 		}
 		scheduler.shutdown();
+        firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_COMPLETE,null,currentContext));
 		return currentContext;
 	}
 
 	protected Continuation bounce(Continuation continuation, WorkflowContext context) {
 		Continuation ret = null;
 		
-		logger.finer("trampoline bouncing");
-		queue.enqueue(continuation.applyContinuationIn(context));
+		logger.finer("trampoline bouncing "+continuation);
+        Continuation nextContinuation = continuation.applyContinuationIn(context);
+		queue.enqueue(nextContinuation);
 		if (hasAdditionalContinuations()) {
 			enqueueAdditionalContinuations();
 		}
@@ -98,10 +106,20 @@ public class Workflow {
 	}
 
 	public void setDefinition(Activity definition) {
+        Activity old_definition = this.definition;
 		this.definition = definition;
+        firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_DEFINITION,old_definition,definition));
 	}
 
 	public Scheduler getScheduler() {
 		return scheduler;
 	}
+    public void fireExecuteActivityEvent(Activity activity) {
+        firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_EXECUTE,null,activity));
+    }
+       
+    public void fireAnimateEvent(boolean enable) {
+        firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_ANIMATE,null,new Boolean(enable)));
+    }    
+    
 }

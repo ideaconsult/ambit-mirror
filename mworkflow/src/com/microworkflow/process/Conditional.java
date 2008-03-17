@@ -16,7 +16,7 @@ import com.microworkflow.execution.Continuation;
  * This activity node represents an if-then-else conditional; not both branches are
  * required. The calling continuation replaces the missing branch.
  */
-public class Conditional extends Activity {
+public class Conditional extends Activity implements IConditionalActivity {
 	protected TestCondition test;
 	protected Activity thenBranch;
 	protected Activity elseBranch;
@@ -60,4 +60,12 @@ public class Conditional extends Activity {
 			ck.setElseContinuation(next);
 		}		
 	}
+
+    public Activity getElseBranch() {
+        return elseBranch;
+    }
+
+    public Activity getThenBranch() {
+        return thenBranch;
+    }
 }

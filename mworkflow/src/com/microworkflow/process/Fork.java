@@ -10,7 +10,7 @@ package com.microworkflow.process;
 import com.microworkflow.execution.Continuation;
 import com.microworkflow.execution.ForkContinuation;
 
-public class Fork extends CompositeActivity {
+public class Fork extends CompositeActivity implements IEmbeddedActivity {
 	protected JoinActivity join=null;
 	Activity theJoin = new NullActivity();
 	
@@ -37,5 +37,7 @@ public class Fork extends CompositeActivity {
 		Continuation joinContinuation = theJoin.continuationWith(k.getNextContinuation());
 		((ForkContinuation)k).setBranches(getContinuationsForComponentsWith(joinContinuation)); 
 	}	
-
+	public Activity getBody() {
+	    return join;
+	}
 }

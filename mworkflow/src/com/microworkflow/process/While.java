@@ -10,7 +10,7 @@ package com.microworkflow.process;
 import com.microworkflow.execution.Continuation;
 import com.microworkflow.execution.WhileContinuation;
 
-public class While extends Activity {
+public class While extends Activity implements IEmbeddedActivity {
 	protected Activity body;
 	protected TestCondition test;
 
@@ -31,5 +31,7 @@ public class While extends Activity {
 	public void computeStateFor(Continuation k) {
 		((WhileContinuation)k).setBody(body.continuationWith(k));	
 	}
-
+    public Activity getBody() {
+        return body;
+    }
 }

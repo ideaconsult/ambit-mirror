@@ -16,7 +16,7 @@ import com.microworkflow.execution.Performer;
  * This activity node obtains the components of a domain object (e.g., a premium) and
  * then executes its body on each component (e.g., premium charges or credits).
  */
-public class Iterative extends Activity {
+public class Iterative extends Activity implements IEmbeddedActivity {
 	protected String targetKey;
 	protected String iterationTargetKey;
 	protected Performer performer;
@@ -41,5 +41,7 @@ public class Iterative extends Activity {
 	public void computeStateFor(Continuation k) {
 		((IterativeContinuation)k).setBody(body.continuationWith(k));		
 	}
-
+	public Activity getBody() {
+	    return body;
+	}
 }

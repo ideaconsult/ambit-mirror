@@ -7,7 +7,7 @@
 
 package com.microworkflow.process;
 
-public abstract class JoinActivity extends Activity {
+public abstract class JoinActivity extends Activity implements IEmbeddedActivity {
 	protected Activity body=null;
 	protected int numberOfBranches=0;
 
@@ -17,5 +17,7 @@ public abstract class JoinActivity extends Activity {
 	public void setNumberOfBranches(int numberOfBranches) {
 		this.numberOfBranches = numberOfBranches;
 	}
-
+	public Activity getBody() {
+	    return body;
+	}
 }

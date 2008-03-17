@@ -26,5 +26,9 @@ public class Sequence extends CompositeActivity {
 	public void computeStateFor(Continuation k) {
 		((SequenceContinuation)k).setContinuations(getContinuationsForComponentsWith(k));
 	}
+    @Override
+    public synchronized String getName() {
+        return "Block";
+    }
 	
 }
