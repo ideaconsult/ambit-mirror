@@ -15,6 +15,7 @@ public class NullContinuation extends Continuation {
 		super(null, w);
 	}
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		return this;
 	}
 }

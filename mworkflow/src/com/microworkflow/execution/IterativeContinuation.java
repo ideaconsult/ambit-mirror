@@ -26,6 +26,7 @@ public class IterativeContinuation extends Continuation {
 	}
 
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		if (!iterating) {
 			iterating=true;
 			performer.setContext(context);

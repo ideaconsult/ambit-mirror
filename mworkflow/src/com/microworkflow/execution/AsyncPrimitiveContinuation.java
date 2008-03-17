@@ -20,6 +20,7 @@ public class AsyncPrimitiveContinuation extends Continuation {
 		super(continuation, continuation.getWorkflow());
 	}
 	public Continuation applyContinuationIn(final WorkflowContext context) {
+        fireUnderExecution();        
 		Continuation ret = getNextContinuation().makeNullContinuation();
 		
 		if (!isScheduled) {

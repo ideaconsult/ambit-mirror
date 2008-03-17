@@ -19,6 +19,7 @@ public class SequenceContinuation extends Continuation {
 	}
 
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		if (continuations.hasNext()) {
 			Continuation step = (Continuation) continuations.next();
 			return step.applyContinuationIn(context);

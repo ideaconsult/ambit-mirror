@@ -23,6 +23,7 @@ public class OrJoinContinuation extends JoinContinuation {
 	}
 
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		counter=counter+1;
 		if (counter==1) {
 			return body;

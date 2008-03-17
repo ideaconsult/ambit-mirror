@@ -7,7 +7,9 @@
 
 package com.microworkflow.execution;
 
-import com.microworkflow.process.*;
+import com.microworkflow.process.Activity;
+import com.microworkflow.process.Workflow;
+import com.microworkflow.process.WorkflowContext;
 
 public abstract class Continuation {
 	protected Continuation nextContinuation;
@@ -110,5 +112,8 @@ public abstract class Continuation {
 		ret.setActivity(activity);
 		return ret;
 	}
-
+    protected void fireUnderExecution() {
+        workflow.fireExecuteActivityEvent(getActivity());
+    }
+    
 }

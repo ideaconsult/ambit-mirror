@@ -38,6 +38,7 @@ public class ConditionalContinuation extends Continuation {
 	}
 
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();        
 		Continuation ret =
 			test.evaluateInContext(context) ? thenContinuation : elseContinuation;
 		resetState();

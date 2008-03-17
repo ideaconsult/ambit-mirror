@@ -27,6 +27,7 @@ public class AndJoinContinuation extends JoinContinuation {
 	}
 
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		counter = counter + 1;
 		if (counter == numberOfInputs) {
 			resetState();

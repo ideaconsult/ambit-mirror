@@ -19,6 +19,7 @@ public class WhileContinuation extends Continuation {
 	}
 
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		Continuation ret=bodyCurrentContinuation.applyContinuationIn(context);
 		if (ret!=this) {
 			bodyCurrentContinuation=ret;

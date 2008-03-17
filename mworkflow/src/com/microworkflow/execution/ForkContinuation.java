@@ -19,6 +19,7 @@ public class ForkContinuation extends Continuation {
 	}
 	
 	public Continuation applyContinuationIn(WorkflowContext context) {
+        fireUnderExecution();
 		Continuation branch = this.makeNullContinuation();		
 		if (branches.hasNext()) {
 			branch = (Continuation) branches.next();
