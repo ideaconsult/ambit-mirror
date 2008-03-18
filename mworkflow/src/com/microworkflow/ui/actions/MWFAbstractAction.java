@@ -76,7 +76,6 @@ public abstract class MWFAbstractAction extends AbstractAction {
             //Runs on the event-dispatching thread.
             public void finished() {
                 setEnabled(true);
-                System.out.println("Completed");
             }
         };
         worker.start();         

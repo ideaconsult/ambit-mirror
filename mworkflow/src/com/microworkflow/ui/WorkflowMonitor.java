@@ -30,13 +30,15 @@
 package com.microworkflow.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
@@ -44,9 +46,11 @@ import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.actions.WFActionAnimate;
 import com.microworkflow.ui.actions.WFActionExecute;
+import com.microworkflow.ui.actions.WFCActionAnimate;
 
-public class WorkflowMonitor extends JSplitPane {
-
+public class WorkflowMonitor extends JPanel {
+	protected JSplitPane verticalPane;
+	protected JSplitPane horizontalPane;
     /**
      * 
      */
@@ -55,18 +59,49 @@ public class WorkflowMonitor extends JSplitPane {
     public WorkflowMonitor(IWorkflowListenerUI workflowListener,
             IWorkflowContextListenerUI workflowContextListener,
             IWorkflowFactory wff, IWorkflowContextFactory wfcf) {
-        super();
+        super(new BorderLayout());
+
+        JPanel ph = new JPanel(new BorderLayout());
+        JLabel label = new JLabel("Results");
+        label.setOpaque(true);
+        label.setBackground(Color.orange);
+        ph.add(label,BorderLayout.NORTH);
+        ph.add(workflowContextListener.getUIComponent(),BorderLayout.CENTER);
+        
+        horizontalPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+        		ph,
+        		new JScrollPane(new JTextArea()));
+        
         JPanel p = new JPanel(new BorderLayout());
+        label = new JLabel("Workflow");
+        label.setOpaque(true);
+        label.setBackground(Color.orange);
+        p.add(label,BorderLayout.NORTH);
         p.add(workflowListener.getUIComponent(),BorderLayout.CENTER);
-        //p.add(navigator.getUIComponent(),BorderLayout.NORTH);
+        p.add(createToolBar(wff,wfcf),BorderLayout.SOUTH);
+        
+        verticalPane = new JSplitPane(
+        		JSplitPane.HORIZONTAL_SPLIT,
+        		p,
+        		horizontalPane
+        		);
+
+        
+        add(verticalPane,BorderLayout.CENTER);
+
+        
+
+        
         WorkflowProgressBar pb = new WorkflowProgressBar();
         Workflow wf = wff.getWorkflow();
-        //WorkflowContext wfc = wfcf.getWorkflowContext();
         wf.addPropertyChangeListener(WorkflowEvent.WF_EXECUTE,pb);
         wf.addPropertyChangeListener(WorkflowEvent.WF_COMPLETE,pb);
         wf.addPropertyChangeListener(WorkflowEvent.WF_START,pb);
-        p.add(pb,BorderLayout.SOUTH);
+
+        add(pb,BorderLayout.SOUTH);
         
+    }
+    protected JToolBar createToolBar(IWorkflowFactory wff, IWorkflowContextFactory wfcf) {
         JToolBar tb = new JToolBar();
         tb.add(new WFActionExecute(wff,wfcf));
         final WFActionAnimate wfaa = new WFActionAnimate(wff);
@@ -77,9 +112,16 @@ public class WorkflowMonitor extends JSplitPane {
             }
         });
         tb.add(b);
-        p.add(tb,BorderLayout.NORTH);
-        setLeftComponent(p);
-        setRightComponent(workflowContextListener.getUIComponent());
+        
+        final WFCActionAnimate wfca = new WFCActionAnimate(wfcf);
+        b = new JToggleButton(wfca);
+        b.addItemListener(new ItemListener()  {
+            public void itemStateChanged(ItemEvent arg0) {
+                wfca.setAnimate(!wfca.isAnimate());
+            }
+        });
+        
+        tb.add(b);
+        return tb;
     }
-    
 }

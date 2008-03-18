@@ -34,6 +34,9 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Activity;
@@ -52,8 +55,32 @@ public class WorkflowPanel extends JScrollPane implements IWorkflowListenerUI {
         super();
         wftm = new WorkflowTableModel(null);
         setWorkflow(wf);
-        table = new JTable(wftm);
+        
+
+        table = new JTable(wftm) {
+			public void createDefaultColumnsFromModel() {
+				TableModel m = getModel();
+				if (m != null) {
+					// Remove any current columns
+					TableColumnModel cm = getColumnModel();
+					while (cm.getColumnCount() > 0) {
+						cm.removeColumn(cm.getColumn(0));
+					}
+					// Create new columns from the data model info
+					final int columnSize[] = { 32, 32, 0};
+					for (int i = 0; i < m.getColumnCount(); i++) {
+						TableColumn newColumn = new TableColumn(i);
+						if (columnSize[i]>0) {
+							newColumn.setMaxWidth(columnSize[i]);
+						}
+						addColumn(newColumn);
+					}
+				}
+
+			};
+		};        
         table.getColumnModel().getColumn(0).setMaxWidth(32);
+        table.getColumnModel().getColumn(1).setMaxWidth(32);
         table.setShowVerticalLines(false);
         setViewportView(table);
     }
@@ -78,13 +105,15 @@ public class WorkflowPanel extends JScrollPane implements IWorkflowListenerUI {
         else if (WorkflowEvent.WF_EXECUTE.equals(arg0.getPropertyName())) {
             if (animate) {
                 int index = wftm.findRow((Activity)arg0.getNewValue());
-                if (index >=0)
-                    table.setRowSelectionInterval(index,index);
-            }
-            //table.scrollRectToVisible(table.getCellRect(index, 0, true));
+                table.scrollRectToVisible(table.getCellRect(index, 0, true));
+            } else ;
         } else if (WorkflowEvent.WF_ANIMATE.equals(arg0.getPropertyName())) {
              setAnimate((Boolean) arg0.getNewValue());
+        } else if (WorkflowEvent.WF_COMPLETE.equals(arg0.getPropertyName())) {
+            wftm.setSelected(-1);
+            //table.scrollRectToVisible(table.getCellRect(0, 0, true));
         }
+
         
     }
         public synchronized boolean isAnimate() {

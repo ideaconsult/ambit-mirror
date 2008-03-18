@@ -37,7 +37,10 @@ import com.microworkflow.process.Activity;
 
 public class WorkflowTableModel extends AbstractTableModel  {
     ArrayList<Activity> activities;
-    protected String[] columnNames = {"No.","Activity"};
+    protected String[] columnNames = {"No.","Running","Activity"};
+    protected int selected = -1;
+    protected static final String PTR= ">>";
+    protected static final String NA= "";
     /**
      * 
      */
@@ -48,7 +51,7 @@ public class WorkflowTableModel extends AbstractTableModel  {
         setActivity(activity);
     }
     public int getColumnCount() {
-        return 2;
+        return 3;
     }
 
     public int getRowCount() {
@@ -60,6 +63,10 @@ public class WorkflowTableModel extends AbstractTableModel  {
         case 0:
             return row+1;
         case 1:
+        	if (selected == row)
+        		return PTR; 
+        	else return NA;            
+        case 2:
             return activities.get(row);
 
         default:
@@ -77,11 +84,22 @@ public class WorkflowTableModel extends AbstractTableModel  {
         fireTableStructureChanged();        
     }
     public int findRow(Activity activity) {
-        return activities.indexOf(activity);
+    	int old_row = getSelected();
+        setSelected(activities.indexOf(activity));
+        int row = getSelected();
+        fireTableCellUpdated(old_row ,1);
+        fireTableCellUpdated(row ,1);
+        return row;
     }
     @Override
     public String getColumnName(int col) {
         return columnNames[col];
     }
+	public int getSelected() {
+		return selected;
+	}
+	public void setSelected(int selected) {
+		this.selected = selected;
+	}
 
 }

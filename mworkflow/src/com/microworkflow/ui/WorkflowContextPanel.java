@@ -65,22 +65,12 @@ public class WorkflowContextPanel extends JPanel implements
         properties.add("Molecule");
         setWfcfactory(wfcfactory);
         mtm = new MapTableModel();
-        mtm.setMode(Mode.labels_in_columns);
+        mtm.setMode(Mode.labels_in_rows);
         JTable table = new JTable(mtm);
         //table.setPreferredSize(new Dimension(200,200));
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        final WFCActionAnimate wfaa = new WFCActionAnimate(wfcfactory);
-        JToggleButton b = new JToggleButton(wfaa);
-        b.addItemListener(new ItemListener()  {
-            public void itemStateChanged(ItemEvent arg0) {
-                wfaa.setAnimate(!wfaa.isAnimate());
-            }
-        });
-        
-        JToolBar tb = new JToolBar();
-        tb.add(b);
-        add(tb, BorderLayout.SOUTH);
+
         
         
     }

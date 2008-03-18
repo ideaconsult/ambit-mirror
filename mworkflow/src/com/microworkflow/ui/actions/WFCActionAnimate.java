@@ -39,15 +39,16 @@ public class WFCActionAnimate extends WFCAbstractAction {
      */
     private static final long serialVersionUID = 8871257277903477542L;
     protected boolean animate = false;
-
+    protected static String title = "Animate results";
+    protected static String title_stop = "Stop results animation";
+    protected static String title_descr = "Animate workflow results";
     public WFCActionAnimate(IWorkflowContextFactory wfcf) {
         super(wfcf);
-        putValue(NAME,"Animate");
-        putValue(SHORT_DESCRIPTION,"Animate workflow context");
+        putValue(NAME,title);
+        putValue(SHORT_DESCRIPTION,title_descr);
     }    
     @Override
     public void runAction(ActionEvent arg0) throws Exception {
-        System.out.println("run" + isAnimate());
         getWfcFactory().getWorkflowContext().fireAnimateEvent(animate);
 
     }
@@ -58,7 +59,7 @@ public class WFCActionAnimate extends WFCAbstractAction {
 
     public synchronized void setAnimate(boolean animate) {
         this.animate = animate;
-        if (animate) putValue(NAME, "Stop animation");
-        else putValue(NAME, "Animate");
+        if (animate) putValue(NAME, title_stop);
+        else putValue(NAME, title);
     }
 }
