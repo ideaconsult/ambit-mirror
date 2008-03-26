@@ -2,9 +2,10 @@
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-DROP DATABASE ambit_repository;
+DROP DATABASE IF EXISTS ambit_repository ;
 CREATE SCHEMA IF NOT EXISTS `ambit_repository` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
 USE `ambit_repository`;
+
 
 -- -----------------------------------------------------
 -- Table `ambit_repository`.`chemicals`
@@ -25,9 +26,9 @@ CREATE INDEX formula ON `ambit_repository`.`chemicals` (`formula` ASC) ;
 
 
 -- -----------------------------------------------------
--- Table `ambit_repository`.`structures`
+-- Table `ambit_repository`.`structure`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `ambit_repository`.`structures` ;
+DROP TABLE IF EXISTS `ambit_repository`.`structure` ;
 
 CREATE  TABLE IF NOT EXISTS `ambit_repository`.`structure` (
   `idstructure` INT NOT NULL AUTO_INCREMENT ,
@@ -46,11 +47,11 @@ CREATE  TABLE IF NOT EXISTS `ambit_repository`.`structure` (
 DELIMITER //
 
 
-CREATE TRIGGER copy_history AFTER UPDATE ON STRUCTURE
-
+CREATE TRIGGER copy_history BEFORE UPDATE ON STRUCTURE
   FOR EACH ROW BEGIN
-    INSERT INTO HISTORY (idstructure,structure,format,updated)
-        SELECT idstructure,structure,format,updated FROM structure WHERE structure.idstructure = OLD.idstructure;
+   INSERT INTO HISTORY (idstructure,structure,format,updated)
+        SELECT idstructure,structure,format,updated FROM structure
+        WHERE structure.idstructure = OLD.idstructure;
 
   END//
 
@@ -81,7 +82,7 @@ CREATE  TABLE IF NOT EXISTS `ambit_repository`.`structure_fields` (
   INDEX (`idstructure`),
   CONSTRAINT `fk_structure`
     FOREIGN KEY (`idstructure` )
-    REFERENCES `ambit_repository`.`structures` (idstructure)
+    REFERENCES `ambit_repository`.`structure` (idstructure)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_field`
@@ -110,19 +111,41 @@ CREATE  TABLE IF NOT EXISTS `ambit_repository`.`history` (
   `format` VARCHAR(16) NOT NULL DEFAULT "CML" ,
   `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`version`) ,
-  CONSTRAINT `f_idstructure`
-    FOREIGN KEY (`idstructure` )
-    REFERENCES `ambit_repository`.`structures` (`idstructure`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+  KEY (`idstructure`)
+)
+;
 
 CREATE INDEX f_idstructure ON `ambit_repository`.`history` (`idstructure` ASC) ;
 
+DROP TABLE IF EXISTS `ambit_repository`.`src_dataset`;
+
+
+CREATE TABLE IF NOT EXISTS  `ambit_repository`.`src_dataset` (
+  `id_srcdataset` int  NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default 'default',
+  PRIMARY KEY  (`id_srcdataset`),
+  UNIQUE KEY `src_dataset_name` (`name`)
+) ;
+
+
+DROP TABLE IF EXISTS `ambit_repository`.`struc_dataset`;
+
+
+CREATE TABLE IF NOT EXISTS  `ambit_repository`.`struc_dataset` (
+  `idstructure` int  NOT NULL ,
+  `id_srcdataset` int  NOT NULL ,
+  PRIMARY KEY  (`idstructure`,`id_srcdataset`),
+  KEY `struc_dataset` (`id_srcdataset`),
+  CONSTRAINT `struc_dataset_ibfk_1`
+    FOREIGN KEY (`idstructure`)
+    REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `struc_dataset_ibfk_2`
+    FOREIGN KEY (`id_srcdataset`)
+    REFERENCES `src_dataset` (`id_srcdataset`) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-insert into chemicals (inchi,formula) values ("inchi","formula");
-insert into structure (idchemical,structure,format) values (1,"structure","my");
