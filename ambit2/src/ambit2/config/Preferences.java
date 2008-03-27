@@ -33,51 +33,27 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-/**
- * User preferences
- * @author nina
- *
- */
 public class Preferences {
 	protected static PropertyChangeSupport propertyChangeSupport;
-	/**
-	 * Show circle in an aromatic ring
-	 */
-	public static final String SHOW_AROMATICITY="showAromaticity";
-	/**
-	 * Generate 2d coordinates if none exist
-	 */
-	public static final String GENERATE2D="generate2D";
-	/**
-	 * Default directory
-	 */	
-	public static final String DEFAULT_DIR="defaultDir";
-	/**
-	 *  Use Openbabel or CDK SMILES parser
-	 */
-	public static final String SMILESPARSER="smilesParser";
-	/**
-	 *  file for storing preferences
-	 */
-	protected static final  String filename="toxtree.pref";
+	public static String SHOW_AROMATICITY="showAromaticity";
+	public static String GENERATE2D="generate2D";
+	public static String DEFAULT_DIR="defaultDir";
+	public static String SMILESPARSER="smilesParser";
+	protected final static String filename="toxtree.pref";
 	protected static Properties props = null;
-	/**
-	 * 
-	 */
-	public static final Object[][] default_values = {
+	public static Object[][] default_values = {
 		{DEFAULT_DIR,"Default directory","",String.class},		
 		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class},
 		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class},
 		{SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class}
 		
 	};
-	private Preferences() {
-	}
+	
 	protected static Properties getDefault() {
 		Properties p = new Properties();
-		for (Object[] value : default_values) 
-			p.setProperty(value[0].toString(),value[2].toString());			
-
+		for (int i=0; i < default_values.length; i++) {
+			p.setProperty(default_values[i][0].toString(),default_values[i][2].toString());			
+		}
 		return p;
 	}
 	protected static Properties loadProperties() throws IOException {
@@ -88,18 +64,16 @@ public class Preferences {
 		return p;
 	}
 	public static Properties getProperties() {
-		if (props == null)  {
+		if (props == null)  
 			try {
 				props = loadProperties();
-				if (props.size()==0) {
+				if (props.size()==0)
 					props = getDefault();
-				}	
 				propertyChangeSupport = new PropertyChangeSupport(props);
 			} catch (Exception x) {
 				props = getDefault();
 				propertyChangeSupport = new PropertyChangeSupport(props);
 			}
-		}	
 		return props;
 	}
 	/*
@@ -110,11 +84,10 @@ public class Preferences {
 	}
 	*/
 	public static void saveProperties(String comments) throws IOException {
-		if (props != null) {
-			OutputStream out = new FileOutputStream(new File(filename));
-			props.store(out,comments);
-			out.close();
-		}
+		if (props == null) return;
+		OutputStream out = new FileOutputStream(new File(filename));
+		props.store(out,comments);
+		out.close();
 	}
 	public static void setProperty(String key, String value) {
 		Properties p = getProperties();
@@ -127,9 +100,8 @@ public class Preferences {
 		return p.get(key).toString();
 	}
 	public static PropertyChangeSupport getPropertyChangeSupport() {
-		if (propertyChangeSupport == null) {
+		if (propertyChangeSupport == null)
 			getProperties();
-		}	
 		return propertyChangeSupport;
 	}
 	public static void setPropertyChangeSupport(

@@ -37,13 +37,9 @@ import org.openscience.cdk.tools.MFAnalyser;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools {
-	/**
-	 * default cell size
-	 */
-	public static final int default_cellSize=200;
     Renderer2DModel r2dm;
     Renderer2D renderer;
-    protected Dimension imageSize = new Dimension(default_cellSize,default_cellSize);
+    protected Dimension imageSize = new Dimension(200,200);
     protected Color background = Color.white;
     protected BufferedImage defaultImage = null;
     BufferedImage buffer = null;
@@ -52,9 +48,10 @@ public class CompoundImageTools {
      * 
      */
     public CompoundImageTools() {
-        this(new Dimension(default_cellSize,default_cellSize));
+        this(new Dimension(200,200));
     }
     public CompoundImageTools(Dimension cellSize) {
+        super();
 		r2dm = new Renderer2DModel();
 		renderer = new Renderer2D(r2dm);
 		r2dm.setBackgroundDimension(cellSize);
@@ -68,18 +65,15 @@ public class CompoundImageTools {
 		this.imageSize = cellSize;
     }
     public synchronized BufferedImage getImage(Object o) {
-        if (o instanceof IAtomContainer) {
+        if (o instanceof IAtomContainer)
             return getImage((IAtomContainer)o);
-        }    
-        else { return defaultImage; }
+        else return defaultImage;
     }
 
     public synchronized BufferedImage getImage(String smiles) {
         ArrayList<String> m = null;
         try {
-            if (parser == null) {
-            	parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-            }
+            if (parser == null) parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
             return getImage(parser.parseSmiles(smiles));
         } catch (Exception x) {
             m = new ArrayList<String>();
@@ -89,10 +83,9 @@ public class CompoundImageTools {
     }
     public synchronized BufferedImage getImage(IAtomContainer molecule) {    
         
-        if (buffer == null) {
+        if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
 				BufferedImage.TYPE_INT_RGB);
-        }    
         
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
@@ -119,12 +112,11 @@ public class CompoundImageTools {
         g.dispose();
 		return buffer;
     }
-    public static synchronized  void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
+    public synchronized static void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
     {
         if (molecule != null) {
-            if (molecule.getAtomCount() == 0) { 
+            if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
                 generateCoordinates=false;
-            }    
             //else if (GeometryTools.has2DCoordinates(molecule))   
               //  generateCoordinates=false;
             //System.out.println("panel 2D\t"+Boolean.toString(generateCoordinates));
@@ -141,9 +133,7 @@ public class CompoundImageTools {
                         m = null;
                         sdg.generateCoordinates(new Vector2d(0,1));
                         m = sdg.getMolecule();
-                    } else { 
-                    	m = mset.getMolecule(i);
-                    }
+                    } else m = mset.getMolecule(i);
                     molecules.addMolecule(m);
                 }
                 mset.removeAllAtomContainers();
@@ -153,21 +143,11 @@ public class CompoundImageTools {
             {
                 molecules.removeAllAtomContainers();
             }
-        } else {
-        	molecules.removeAllAtomContainers();        	
-        }
-        	
+        } else 
+        	molecules.removeAllAtomContainers();
     }
-	/**
-	 * 
-	 * @param renderer
-	 * @param molecules
-	 * @param explicitH
-	 * @param g
-	 * @param highlightedAtoms
-	 * @param highlightedBonds
-	 */
-	public static synchronized  void paint(Renderer2D renderer, 
+	
+	public synchronized static void paint(Renderer2D renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
@@ -187,25 +167,25 @@ public class CompoundImageTools {
 				GeometryTools.translateAllPositive((IMolecule)molecules.getAtomContainer(0),r2dm.getRenderingCoordinates()); 
 				break;}
 			case 2: {
-				dd[0] = new Point2d(d.width/4.0,d.height/2.0);
-				dd[1] = new Point2d(3.0*d.width/4.0,d.height/2.0);
+				dd[0] = new Point2d(d.width/4,d.height/2);
+				dd[1] = new Point2d(3*d.width/4,d.height/2);
 				break;
 			}
 			case 3: {
-				dd[2] = new Point2d(d.width/4.0,d.height/4.0);
-				dd[1] = new Point2d(3.0*d.width/4.0,d.height/4.0);
-				dd[0] = new Point2d(d.width/4.0,3.0*d.height/4.0);				
+				dd[2] = new Point2d(d.width/4,d.height/4);
+				dd[1] = new Point2d(3*d.width/4,d.height/4);
+				dd[0] = new Point2d(d.width/4,3*d.height/4);				
 				break;
 			}
 			case 4: {
-				dd[3] = new Point2d(d.width/4.0,d.height/4.0);
-				dd[2] = new Point2d(3.0*d.width/4.0,d.height/4.0);
-				dd[1] = new Point2d(d.width/4.0,3.0*d.height/4.0);				
-				dd[0] = new Point2d(3.0*d.width/4.0,3.0*d.height/4.0);				
+				dd[3] = new Point2d(d.width/4,d.height/4);
+				dd[2] = new Point2d(3*d.width/4,d.height/4);
+				dd[1] = new Point2d(d.width/4,3*d.height/4);				
+				dd[0] = new Point2d(3*d.width/4,3*d.height/4);				
 				break;
 			} 
 			default : {
-				for (int i=0;i<dd.length;i++) dd[i] = new Point2d(d.width/2.0,d.height/2.0);
+				for (int i=0;i<dd.length;i++) dd[i] = new Point2d(d.width/2,d.height/2);
 				break;
 			}
 			}
@@ -240,7 +220,7 @@ public class CompoundImageTools {
 	}
 
 
-    public static synchronized void paintBad(Renderer2D renderer, 
+    public synchronized static void paintBad(Renderer2D renderer, 
     		IMoleculeSet molecules,
     			boolean explicitH,  
     			Graphics g,
@@ -346,10 +326,9 @@ public class CompoundImageTools {
         
     }
     public synchronized BufferedImage getImage(ArrayList<?> list) {
-        if (buffer == null) {
+        if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
 				BufferedImage.TYPE_INT_RGB);
-        }    
         
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
