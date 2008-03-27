@@ -1,0 +1,12 @@
+Manifest-Version: 1.2
+Main-Class: ambit.ui.Splasher
+Class-Path: AmbitDatabase.jar ambit-toolbox.jar ambit-data.jar ambit-database.jar ambit-domain.jar ambit-processors.jar ambit-ui.jar ambit-io.jar images.jar ../jars/toxtree/toxui-1.20.jar ../jars/toxtree/toxcramer-1.20.jar ../jars/toxtree/toxcore-1.20.jar ../jars/toxtree/toxrules-1.20.jar ../jars/toxtree/toxconfig-1.20.jar ../jars/toxtree/toxfuncgroups-1.20.jar ../jars/toxtree/toxreactions-1.20.jar ../jars/toxtree/toxVerhaarScheme-1.20.jar ../jars/toxtree/toxSkinIrritation-1.20.jar ../jars/l2fprod/l2fprod-common-all.jar ../jars/cdk/cdk-charges.jar ../jars/cdk/cdk-applications.jar ../jars/cdk/cdk-core.jar ../jars/cdk/cdk-data.jar ../jars/cdk/cdk-experimental.jar ../jars/cdk/cdk-extra.jar ../jars/cdk/cdk-interfaces.jar ../jars/cdk/cdk-io.jar ../jars/cdk/cdk-jchempaint.application.jar ../jars/cdk/cdk-jchempaint.jar ../jars/cdk/cdk-libio-cml.jar ../jars/cdk/cdk-nonotify.jar ../jars/cdk/cdk-pdb-cml.jar ../jars/cdk/cdk-pdb.jar ../jars/cdk/cdk-qsar-cml.jar ../jars/cdk/cdk-qsar-pdb.jar ../jars/cdk/cdk-qsar.jar ../jars/cdk/cdk-reaction.jar ../jars/cdk/cdk-render.jar ../jars/cdk/cdk-smiles.jar ../jars/cdk/cdk-standard.jar ../jars/cdk/cdk-svg.jar ../jars/cdk/cdk-builder3d.jar ../jars/cdk/cdk-valencycheck.jar ../jars/jgrapht-0.6.0.jar ../jars/vecmath1.2-1.14.jar ../jars/log4j.jar ../jars/gnuaxp.jar ../jars/jai_codec.jar ../jars/jai_core.jar ../jars/jh.jar ../jars/mysql/mysql-connector-java-5.0.5-bin.jar ../jars/Jama-1.0.2.jar ../jars/batik-xml.jar ../jars/batik-dom.jar ../jars/batik-svggen.jar ../jars/batik-util.jar ../jars/jumbo52.jar ../jars/xom-1.1.jar ../jars/xom-1.1b2.jar ../jars/dadml.jar  ../jars/Jama-1.0.1.jar ../jars/help/jh.jar ../jars/joelib.jar ../jars/Jmol.jar ../jars/jmolApis.jar ../jars/jmolIO.jar ../jars/cdk/cdk-forcefield.jar ../jars/jfree/poi-3.0.jar ../jars/jfree/poi-contrib.jar ../jars/jfree/poi-scratchpad.jar
+Specification-Title: Ambit Database
+Specification-Version: 1.2
+Specification-Vendor: Nina Jeliazkova
+Package-Title: ambit.applications
+Package-Version: 1.21
+Package-Vendor: Nina Jeliazkova
+Implementation-Title: Ambit Database Tools
+Implementation-Version: 1.2
+Implementation-Vendor: Nina Jeliazkova

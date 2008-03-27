@@ -55,7 +55,7 @@ import sun.security.action.GetPropertyAction;
  * Random access to text files of compounds. First reads the file and builds an index in memory.
  * The index stores offset, length and number of atoms of the molecule in that record.
  * Subsequent access for a record N uses this index to seek the record and return the molecule.
- * Useful for very big file. Used in {@link ambit.io.FastTemplateHandler3D} to speed up {@link org.openscience.cdk.modeling.builder3d.ModelBuilder3D}. 
+ * Useful for very big file. Used in {@link ambit2.io.FastTemplateHandler3D} to speed up {@link org.openscience.cdk.modeling.builder3d.ModelBuilder3D}. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Jul 12, 2006
  */
@@ -367,7 +367,7 @@ public abstract class RandomAccessReader extends DefaultIteratingChemObjectReade
         return currentRecord > 0;
     }
     /* (non-Javadoc)
-     * @see ambit.io.IRandomAccessChemObjectReader#first()
+     * @see ambit2.io.IRandomAccessChemObjectReader#first()
      */
     public Object first() {
         try {
@@ -378,7 +378,7 @@ public abstract class RandomAccessReader extends DefaultIteratingChemObjectReade
         }
     }
     /* (non-Javadoc)
-     * @see ambit.io.IRandomAccessChemObjectReader#last()
+     * @see ambit2.io.IRandomAccessChemObjectReader#last()
      */
     public Object last() {
         try {
@@ -401,7 +401,7 @@ public abstract class RandomAccessReader extends DefaultIteratingChemObjectReade
         }
     }
     /* (non-Javadoc)
-     * @see ambit.io.IRandomAccessChemObjectReader#prev()
+     * @see ambit2.io.IRandomAccessChemObjectReader#prev()
      */
     public Object previous() {
         try {

@@ -48,6 +48,7 @@ public abstract class IteratingFilesWithHeaderReader extends
 	protected int smilesIndex = -1;
 	protected long timeout = 60000; //ms
 	protected IOSetting[] headerOptions = null;	
+	protected int numberOfHeaderLines = 1;
 	/**
 	 * 
 	 */
@@ -68,6 +69,12 @@ public abstract class IteratingFilesWithHeaderReader extends
 	public void setTimeout(long timeout) {
 		this.timeout = timeout;
 	}
+	public int getNumberOfHeaderLines() {
+		return numberOfHeaderLines;
+	}
+	public void setNumberOfHeaderLines(int numberOfHeaderLines) {
+		this.numberOfHeaderLines = numberOfHeaderLines;
+	}	
 }
 
 

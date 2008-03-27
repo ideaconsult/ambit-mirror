@@ -1,0 +1,551 @@
+<?xml version="1.0"?>
+<QMRF>
+<NEWLINE/><NEWLINE/>
+<QMRF_info_table>	 
+	<QMRF_info_row>
+		<QMRF_img_cell>	
+				<QMRF_img_phrase><QMRF_img_chunk><logoleft/></QMRF_img_chunk></QMRF_img_phrase>
+		</QMRF_img_cell>
+		<QMRF_info_cell>
+			<QMRF_info_table>	 
+					<QMRF_info_row>
+					<QMRF_info_cell>
+						<QMRF_header>QMRF identifier (ECB Inventory):</QMRF_header><QMRF_number_text/>
+					</QMRF_info_cell>
+					</QMRF_info_row>
+					<QMRF_info_row>
+						<QMRF_info_title>
+						<QMRF_header>QMRF Title:</QMRF_header><QSAR_title_text/>
+						</QMRF_info_title>
+					</QMRF_info_row>
+					<QMRF_info_row>
+						<QMRF_info_cell>		
+						<QMRF_header>Printing Date:</QMRF_header><PRINTING_DATE/>
+					</QMRF_info_cell>
+					</QMRF_info_row>			
+					
+			</QMRF_info_table>	
+		</QMRF_info_cell>
+		<QMRF_img_cell>	
+			<logoright/>
+		</QMRF_img_cell>		
+	</QMRF_info_row>
+</QMRF_info_table>	 
+
+<paragraph/>
+
+				
+				<QMRF_chapter_items>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_identifier/>											
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<QSAR_title/>
+						
+						<QSAR_title_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<QSAR_models/>
+					
+						<QSAR_models_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<QSAR_software/>
+
+						<QSAR_software_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_General_information/>
+											
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<qmrf_date/>
+					
+						<qmrf_date_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<qmrf_authors/>
+
+						<qmrf_authors_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<qmrf_date_revision/>
+					
+						<qmrf_date_revision_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<qmrf_revision/>
+					
+						<qmrf_revision_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<model_authors/>
+
+						<model_authors_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<model_date/>
+
+						<model_date_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<references/>
+						<references_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<info_availability/>
+						<info_availability_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<related_models/>
+						<related_models_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Endpoint/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<model_species/>
+						<model_species_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<model_endpoint/>
+						<model_endpoint_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<endpoint_comments/>
+						<endpoint_comments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<endpoint_units/>
+						<endpoint_units_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<endpoint_variable/>
+						<endpoint_variable_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<endpoint_protocol/>
+						<endpoint_protocol_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<endpoint_data_quality/>
+						<endpoint_data_quality_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Algorithm/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<algorithm_type/>
+						<algorithm_type_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<algorithm_explicit/>
+						<algorithm_explicit_text/>
+						<equation/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<algorithm_comments/>
+						<algorithm_comments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<algorithms_descriptors/>
+						<algorithms_descriptors_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<descriptors_selection/>
+						<descriptors_selection_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<descriptors_generation/>
+						<descriptors_generation_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<descriptors_generation_software/>
+						<descriptors_generation_software_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<descriptors_chemicals_ratio/>
+						<descriptors_chemicals_ratio_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+										
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Applicability_domain/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<app_domain_description/>
+						<app_domain_description_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<app_domain_method/>
+						<app_domain_method_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<app_domain_software/>
+						<app_domain_software_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<applicability_limits/>
+						<applicability_limits_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Robustness/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<training_set_availability/>
+						<training_set_availability_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<training_set_data/>
+						<training_set_data_dataset/>						
+						<training_set_data_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<training_set_descriptors/>
+						<training_set_descriptors_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<dependent_var_availability/>
+						<dependent_var_availability_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<other_info/>
+						<other_info_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<preprocessing/>
+						<preprocessing_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<goodness_of_fit/>
+						<goodness_of_fit_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<loo/>
+						<loo_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<lmo/>
+						<lmo_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<yscrambling/>
+						<yscrambling_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<bootstrap/>
+						<bootstrap_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<other_statistics/>
+						<other_statistics_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Predictivity/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_set_availability/>
+						<validation_set_availability_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_set_data/>
+						<validation_set_data_dataset/>		
+						<validation_set_data_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_set_descriptors/>
+						<validation_set_descriptors_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_dependent_var_availability/>
+						<validation_dependent_var_availability_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_other_info/>
+						<validation_other_info_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<experimental_design/>
+						<experimental_design_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_predictivity/>
+						<validation_predictivity_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_assessment/>
+						<validation_assessment_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<validation_comments/>
+						<validation_comments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Interpretation/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<mechanistic_basis/>
+						<mechanistic_basis_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<mechanistic_basis_comments/>
+						<mechanistic_basis_comments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<mechanistic_basis_info/>
+						<mechanistic_basis_info_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QSAR_Miscelaneous/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<comments/>
+						<comments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<bibliography/>
+						<bibliography_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<attachments/>
+						<attachments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell1>
+						<QMRF_Summary/>																
+					</QMRF_chapter_items_cell1>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<QMRF_number/>
+						<QMRF_number_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<date_publication/>
+						<date_publication_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<keywords/>
+						<keywords_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					<QMRF_chapter_items_row>
+					<QMRF_chapter_items_cell>
+						<summary_comments/>
+						<summary_comments_text/>
+					</QMRF_chapter_items_cell>
+					</QMRF_chapter_items_row>
+					
+				</QMRF_chapter_items>	
+				
+  			
+  
+</QMRF>

@@ -1,0 +1,52 @@
+Feb 3, 2005
+Creating keystore
+D:\src\ambit\dist>keytool -genkey -alias AmbitProject -keypass AmbitProject2005 -keystore d:\src\ambit\ambitkeystore -st
+orepass cefic2004
+
+listing keystore
+keytool -list -keystore d:/src/ambit/ambitkeystore
+
+D:\src\ambit\dist>keytool -list -keystore d:/src/ambit/ambitkeystore
+Enter keystore password:  cefic2004
+
+Keystore type: jks
+Keystore provider: SUN
+
+Your keystore contains 2 entries
+
+ambitproject, 2005-2-3, keyEntry,
+Certificate fingerprint (MD5): 84:15:68:44:42:0B:A8:EC:17:81:00:E4:EB:5B:FB:A2
+toxtree, 2005-1-4, keyEntry,
+Certificate fingerprint (MD5): BF:46:48:6C:FA:BA:CA:51:41:24:7C:47:EF:7E:B3:EE
+
+--------------- jarsigner
+D:\src\ambit\dist>jarsigner
+Usage: jarsigner [options] jar-file alias
+       jarsigner -verify [options] jar-file
+
+  [-keystore <url>]           keystore location
+
+  [-storepass <password>]     password for keystore integrity
+
+  [-storetype <type>]         keystore type
+
+  [-keypass <password>]       password for private key (if different)
+
+  [-sigfile <file>]           name of .SF/.DSA file
+
+  [-signedjar <file>]         name of signed JAR file
+
+  [-verify]                   verify a signed JAR file
+
+  [-verbose]                  verbose output when signing/verifying
+
+  [-certs]                    display certificates when verbose and verifying
+
+  [-internalsf]               include the .SF file inside the signature block
+
+  [-sectionsonly]             don't compute hash of entire manifest
+
+  [-provider]                 name of cryptographic service provider's master class file
+  ...
+
+jarsigner -keystore d:/src/ambit/ambitKeyStore -storepass cefic2004 AmbitQuery.jar AmbitProject

@@ -103,12 +103,12 @@ public class AmbitLogger {
           // Use a try {} to catch SecurityExceptions when used in applets
           try {
             // by default debugging is set off, but it can be turned on
-            // with starting java like "java -Dambit.debugging=true"
-            if (System.getProperty("ambit.debugging", "false").equals("true")) {
+            // with starting java like "java -Dambit2.debugging=true"
+            if (System.getProperty("ambit2.debugging", "false").equals("true")) {
             	System.out.println("Debug=true");
               debug = true;
             }
-            if (System.getProperty("ambit.debug.stdout", "false").equals("true")) {
+            if (System.getProperty("ambit2.debug.stdout", "false").equals("true")) {
               tostdout = true;
             }
           } catch (Exception e) {

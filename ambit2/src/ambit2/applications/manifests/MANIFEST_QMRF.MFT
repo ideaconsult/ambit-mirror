@@ -1,0 +1,12 @@
+Manifest-Version: 0.01
+Main-Class: ambit.applications.qmrf.QMRFEditor
+Class-Path: QMRFEditor.jar ambit-data.jar ambit-ui.jar ambit-io.jar ambit-processors.jar ambit-database.jar ../jars/cdk/cdk-charges.jar ../jars/cdk/cdk-applications.jar ../jars/cdk/cdk-core.jar ../jars/cdk/cdk-data.jar ../jars/cdk/cdk-experimental.jar ../jars/cdk/cdk-extra.jar ../jars/cdk/cdk-interfaces.jar ../jars/cdk/cdk-io.jar ../jars/cdk/cdk-jchempaint.application.jar ../jars/cdk/cdk-jchempaint.jar ../jars/cdk/cdk-libio-cml.jar ../jars/cdk/cdk-nonotify.jar ../jars/cdk/cdk-pdb-cml.jar ../jars/cdk/cdk-pdb.jar ../jars/cdk/cdk-qsar-cml.jar ../jars/cdk/cdk-qsar-pdb.jar ../jars/cdk/cdk-qsar.jar ../jars/cdk/cdk-reaction.jar ../jars/cdk/cdk-render.jar ../jars/cdk/cdk-smiles.jar ../jars/cdk/cdk-standard.jar ../jars/cdk/cdk-svg.jar ../jars/cdk/cdk-valencycheck.jar ../jars/jgrapht-0.6.0.jar ../jars/jumbo52.jar ../jars/xom-1.1.jar ../jars/xom-1.1b2.jar  ../jars/vecmath1.2-1.14.jar ../jars/log4j.jar ../jars/gnuaxp.jar ../jars/jai_codec.jar ../jars/jai_core.jar ../jars/jh.jar ../jars/mysql/mysql-connector-java-3.1.11-bin.jar ../jars/Jama-1.0.1.jar ../jars/batik-xml.jar ../jars/batik-dom.jar ../jars/batik-svggen.jar ../jars/batik-util.jar ../jars/jfree/bsf-2.3.0.jar ../jars/jfree/bsh-1.3.0.jar ../jars/gnujaxp.jar ../jars/itext-1.4.5.jar ../jars/jcommon-1.0.1.jar ../jars/jcommon-xml-1.0.1.jar ../jars/chart-1.0.1.jar  ../jars/jfreereport-0.8.7.jar ../jars/libfonts-0.1.4.jar ../jars/pixie-0.8.4.jar ../jars/jfree/poi-3.0.jar ../jars/jfree/poi-contrib.jar ../jars/jfree/poi-scratchpad.jar demoData.jar images.jar ../jars/l2fprod/l2fprod-common-all.jar ../jars/commons-cli-1.0.jar ../jars/commons-lang-2.3.jar ../jars/fop.jar ../jars/avalon-framework-4.2.0.jar ../jars/commons-io-1.1.jar ../jars/commons-logging-1.0.4.jar ../jars/commons-codec-1.3.jar
+Specification-Title: QMRFEditor 
+Specification-Version: 0.05
+Specification-Vendor: ECB & Ideaconsult Ltd.
+Package-Title: ambit.applications
+Package-Version: 0.05
+Package-Vendor: Ideaconsult Ltd.
+Implementation-Title: QMRF Editor
+Implementation-Version: 0.05
+Implementation-Vendor: QMRF Editor

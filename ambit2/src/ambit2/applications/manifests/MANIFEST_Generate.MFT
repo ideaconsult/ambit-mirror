@@ -1,0 +1,3 @@
+Manifest-Version: 0.1
+Main-Class: ambit.applications.AmbitGenerateConsole
+Class-Path: cmlAll.jar base.jar pmrlib.jar cdk-data cdk-core.jar cdk-experimental.jar cdk-data.jar cdk-extra.jar cdk-io.jar cdk-libio.jar cdk-render.jar cdk-standard.jar  jgrapht-0.5.3.jar vecmath1.2-1.14.jar mysql-connector-java-3.1.7-bin.jar 

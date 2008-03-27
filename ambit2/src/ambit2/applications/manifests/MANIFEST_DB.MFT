@@ -1,0 +1,12 @@
+Manifest-Version: 1.01
+Main-Class: ambit.applications.dbadmin.AmbitDBAdmin
+Class-Path: AmbitDb.jar ambit-data.jar ambit-database.jar ambit-domain.jar ambit-processors.jar ambit-ui.jar ambit-io.jar  ../jars/cmlAll_1.4.jar ../jars/base_1.4.jar ../jars/pmrlib.jar ../jars/cdk-data.jar ../jars/cdk-core.jar ../jars/cdk-extra.jar ../jars/cdk-libio-cml.jar ../jars/cdk-io.jar ../jars/cdk-interfaces.jar ../jars/cdk-libio.jar ../jars/cdk-render.jar ../jars/cdk-standard.jar ../jars/cdk-applications.jar ../jars/cdk-swing.jar ../jars/cdk-jchempaint.jar ../jars/cdk-qsar.jar ../jars/cdk-qsar-cml.jar ../jars/jgrapht-0.5.3.jar ../jars/vecmath1.2-1.14.jar ../jars/log4j.jar ../jars/gnuaxp.jar ../jars/jai_codec.jar ../jars/jai_core.jar ../jars/jh.jar ../jars/mysql-connector-java-3.1.11-bin.jar ../jars/Jama-1.0.1.jar ../jars/batik-xml.jar ../jars/batik-dom.jar ../jars/batik-svggen.jar ../jars/batik-util.jar  
+Specification-Title: Ambit Database Application
+Specification-Version: 1.01
+Specification-Vendor: Nina Jeliazkova & Joanna Jaworska
+Package-Title: ambit.applications
+Package-Version: 1.01
+Package-Vendor: Nina Jeliazkova & Joanna Jaworska
+Implementation-Title: Ambit Database Application
+Implementation-Version: 1.01
+Implementation-Vendor: Ambit Database Application

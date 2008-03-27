@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"  ?>
+<!DOCTYPE toc
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+            "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+<toc version="1.0">
+<tocitem text="Getting started" target="top">
+<tocitem text="How to search" target="search"/>
+<tocitem text="How to process current structure" target="process"/>
+<tocitem text="How to process set of structures from a file" target="batch"/>
+</tocitem>
+<tocitem text="Description" target="introduction" />
+<tocitem text="User interface" target="ui" >
+<tocitem text="Molecule browser" target="molecule_browser" />
+</tocitem>
+<tocitem text="System requirements and installation" target="requirements" />
+
+</toc>
+

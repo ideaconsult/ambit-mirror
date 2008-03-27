@@ -1,0 +1,12 @@
+Manifest-Version: 0.05
+Main-Class: ambit.applications.discovery.AmbitDiscoveryApp
+Class-Path: AmbitDisclosure.jar ambit-data.jar ambit-domain.jar ambit-ranking.jar ambit-ui.jar ambit-io.jar ambit-processors.jar ambit-database.jar ../jars/cdk/cdk-charges.jar ../jars/cdk/cdk-applications.jar ../jars/cdk/cdk-core.jar ../jars/cdk/cdk-data.jar ../jars/cdk/cdk-experimental.jar ../jars/cdk/cdk-extra.jar ../jars/cdk/cdk-interfaces.jar ../jars/cdk/cdk-io.jar ../jars/cdk/cdk-jchempaint.application.jar ../jars/cdk/cdk-jchempaint.jar ../jars/cdk/cdk-libio-cml.jar ../jars/cdk/cdk-nonotify.jar ../jars/cdk/cdk-pdb-cml.jar ../jars/cdk/cdk-pdb.jar ../jars/cdk/cdk-qsar-cml.jar ../jars/cdk/cdk-qsar-pdb.jar ../jars/cdk/cdk-qsar.jar ../jars/cdk/cdk-reaction.jar ../jars/cdk/cdk-render.jar ../jars/cdk/cdk-smiles.jar ../jars/cdk/cdk-standard.jar ../jars/cdk/cdk-svg.jar ../jars/cdk/cdk-valencycheck.jar ../jars/jgrapht-0.6.0.jar ../jars/jumbo52.jar ../jars/xom-1.1.jar ../jars/xom-1.1b2.jar  ../jars/jgrapht-0.5.3.jar ../jars/vecmath1.2-1.14.jar ../jars/log4j.jar ../jars/gnuaxp.jar ../jars/jai_codec.jar ../jars/jai_core.jar ../jars/jh.jar ../jars/mysql/mysql-connector-java-3.1.11-bin.jar ../jars/Jama-1.0.2.jar ../jars/batik-xml.jar ../jars/batik-dom.jar ../jars/batik-svggen.jar ../jars/batik-util.jar ../jars/jfree/bsf-2.3.0.jar ../jars/jfree/bsh-1.3.0.jar ../jars/gnujaxp.jar ../jars/jfree/itext-1.3.6.jar ../jars/jfree/jcommon-1.0.8.jar ../jars/jfree/jcommon-xml-1.0.1.jar ../jars/jfree/jfreechart-1.0.3.jar  ../jars/jfree/jfreereport-0.8.7.jar ../jars/jfree/libfonts-0.1.4.jar ../jars/jfree/pixie-0.8.4.jar ../jars/jfree/poi-3.0-alpha1-20050704.jar demoData.jar images.jar
+Specification-Title: Ambit Discovery
+Specification-Version: 0.05
+Specification-Vendor: Nina Jeliazkova & Joanna Jaworska
+Package-Title: ambit.applications
+Package-Version: 0.05
+Package-Vendor: Nina Jeliazkova & Joanna Jaworska
+Implementation-Title: Ambit Discovery
+Implementation-Version: 0.05
+Implementation-Vendor: Ambit Discovery

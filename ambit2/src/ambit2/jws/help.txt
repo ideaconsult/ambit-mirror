@@ -1,0 +1,4 @@
+The arguments Web Start (javaws) uses when kicking off the Java runtime (java) change from version to version. 
+
+To see what your Web Start copy uses under the hood turn on the environment variable JAVAWS_TRACE_NATIVE=1 and fire off Web Start on the command line e.g. javaws.exe http://java.sun.com/products/javawebstart/apps/notepad.jnlp Web Start will popup a message box that shows you the full command line that you can use to kick off your app for debugging. 
+
