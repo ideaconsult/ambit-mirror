@@ -12,7 +12,8 @@ public class TestUtilities
 	public static void main(String[] args)
 	{
 		TestUtilities tu = new TestUtilities();
-		tu.testSmartsManager("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
+		//tu.testSmartsManager("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
+		tu.testSmartsManager("[x1;C]", "CCCC");
 	}
 	
 	SmartsParser sp = new SmartsParser();

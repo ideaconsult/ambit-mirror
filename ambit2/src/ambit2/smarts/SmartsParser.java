@@ -822,7 +822,10 @@ public class SmartsParser
 				break;
 			case 'X':				
 				parseAP_AtomPrimitive(SmartsConst.AP_X,true);
-				break;					
+				break;
+			case 'x':				
+				parseAP_xPrimitive(false);
+				break;	
 			default:
 				parseAP_AtomSymbol();	
 			}
@@ -999,8 +1002,7 @@ public class SmartsParser
 	}
 	
 	void parseAP_RPrimitive(boolean elTest)
-	{
-		//This function is applied for primitive R
+	{	
 		testForDefaultAND();
 		if (elTest)
 			if (testFor2CharElement() == 1)
@@ -1011,8 +1013,7 @@ public class SmartsParser
 	}
 	
 	void parseAP_rPrimitive(boolean elTest)
-	{
-		//This function is applied for primitive R
+	{	
 		testForDefaultAND();
 		if (elTest)
 			if (testFor2CharElement() == 1)
@@ -1029,6 +1030,26 @@ public class SmartsParser
 				newError("Incorrect integer value for r-primitive!", curChar,"");
 		}
 		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_r,par));
+	}
+	
+	void parseAP_xPrimitive(boolean elTest)
+	{
+		testForDefaultAND();
+		if (elTest)
+			if (testFor2CharElement() == 1)
+				return;
+		curChar++;
+		int par = getInteger(); 
+		if (par == -1)
+		{
+			par = 1; //The default value
+		}
+		else
+		{
+			if (par < 1)
+				newError("Incorrect integer value for x-primitive!", curChar,"");
+		}
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_x,par));
 	}
 	
 	void parseAP_AtomNumber()

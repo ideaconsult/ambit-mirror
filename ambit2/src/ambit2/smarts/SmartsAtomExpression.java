@@ -213,7 +213,11 @@ public class SmartsAtomExpression extends SMARTSAtom
 					if (atomMaps.get(i) == atom)
 						return(true);
 				return(false);
-			}	
+			}
+    	case SmartsConst.AP_x:    		 
+    		//int atomRings3[] = (int[])atom.getProperty("RingData");    		
+    		return(match_x(tok.param, atom));
+    		
     		
     	default:
     		return(true);
@@ -247,6 +251,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     		case SmartsConst.AP_r:
     		case SmartsConst.AP_v:
     		case SmartsConst.AP_X:
+    		case SmartsConst.AP_x:
     			String s = Character.toString(SmartsConst.AtomPrimChars[tok.type]);
     			if (tok.param != 1)
     				s+= tok.param;
@@ -311,7 +316,6 @@ public class SmartsAtomExpression extends SMARTSAtom
 		}
     }
     
-    //The data from SSSR algorithm output is used directly
     public boolean match_r(int atomRings[], int param,  IAtom atom)
     {
     	if (atomRings == null)
@@ -341,6 +345,41 @@ public class SmartsAtomExpression extends SMARTSAtom
 			}
 		}
     }
+    
+    public boolean match_x(int param,  IAtom atom)
+    {
+    	return(true);
+    	//TODO to clarify the semantics of 'x' primitive 
+    	/*
+    	if (atomRings == null)
+		{
+			if (param == 0)
+				return(true);
+			else
+				return(false);
+		}
+		else
+		{
+			if (param < 3) // value 1 is possible here 
+			{
+				if (atomRings.length > 0)
+					return(true);
+				else
+					return(false);
+			}
+			else
+			{
+				for (int i = 0; i < atomRings.length; i++)
+				{
+					if (atomRings[i] == param)
+						return(true);
+				}
+				return(false);
+			}
+		}
+		*/
+    }
+    
     
     public String toString() 
     {

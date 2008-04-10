@@ -43,7 +43,8 @@ public class SmartsConst
 	public static final int LO = 1000;
 		
 	//Atom Primitives
-	public static char AtomPrimChars[] = {'*','a','A','D','H','h','R','r','v','X','-','#','@','i'};
+	public static char AtomPrimChars[] = {'*','a','A','D','H','h','R','r','v','X',
+										  '-','#','@','i','_','x'};
 	public static final int AP_ANY = 0;
 	public static final int AP_a =  1;
 	public static final int AP_A = 2;
@@ -59,6 +60,7 @@ public class SmartsConst
 	public static final int AP_Chiral = 12;
 	public static final int AP_Mass = 13;
 	public static final int AP_Recursive = 14;
+	public static final int AP_x = 15;
 	
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':','@','/','\\'};
