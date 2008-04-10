@@ -52,8 +52,8 @@ public class MySQLShell  extends Thread {
     protected StreamGobbler gin;
     protected StreamGobbler gerr;
     protected static AmbitLogger logger = new AmbitLogger(MySQLShell.class);
-    protected static String startFile = "ambit/database/mysql-start.txt";
-    protected static String stopFile = "ambit/database/mysql-stop.txt";
+    protected static String startFile = "ambit2/database/mysql-start.txt";
+    protected static String stopFile = "ambit2/database/mysql-stop.txt";
     //protected static String startFile = "mysql-start.txt";
     //protected static String stopFile = "mysql-stop.txt";
     //protected String mysqlPath = "D:/src/ambit/mysql/bin";
