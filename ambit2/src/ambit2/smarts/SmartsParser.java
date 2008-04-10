@@ -68,6 +68,7 @@ public class SmartsParser
 	boolean mNeedValencyData;
 	boolean mNeedRingData;
 	boolean mNeedExplicitHData;
+	boolean mNeedParentMoleculeData;
 	public boolean hasRecursiveSmarts;
 	boolean FlagAllowDisclosures = false;
 	
@@ -183,12 +184,18 @@ public class SmartsParser
 		return(mNeedRingData);
 	}
 	
+	public boolean needParentMoleculeData()
+	{
+		return(mNeedParentMoleculeData);
+	}
+	
 	void nullifyDataFlags()
 	{
 		mNeedNeighbourData = false;		
 		mNeedValencyData = false;
 		mNeedRingData = false;
 		mNeedExplicitHData = false;
+		mNeedParentMoleculeData = false;
 		hasRecursiveSmarts = false;
 	}
 	
@@ -211,14 +218,22 @@ public class SmartsParser
 						(tok.type == SmartsConst.AP_h))
 						mNeedNeighbourData = true;
 					else
-					{
-						if (tok.type == SmartsConst.AP_v) 
-							mNeedValencyData = true;
+					{						
+						if (tok.type == SmartsConst.AP_x)
+						{	
+							mNeedParentMoleculeData = true;
+							mNeedRingData = true;
+						}		
 						else
-							if ((tok.type == SmartsConst.AP_R) ||
-								(tok.type == SmartsConst.AP_r))
-								mNeedRingData = true;	
-					}		
+						{						
+							if (tok.type == SmartsConst.AP_v) 
+								mNeedValencyData = true;
+							else							
+								if ((tok.type == SmartsConst.AP_R) ||
+										(tok.type == SmartsConst.AP_r))
+									mNeedRingData = true;
+						}
+					}	
 				}	
 			}
 		}
@@ -1042,13 +1057,10 @@ public class SmartsParser
 		int par = getInteger(); 
 		if (par == -1)
 		{
-			par = 1; //The default value
-		}
-		else
-		{
-			if (par < 1)
-				newError("Incorrect integer value for x-primitive!", curChar,"");
-		}
+			//This code is not realy needed. But it is written
+			//to stress the handling of default case.
+			par = -1; //The default value 
+		}		
 		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_x,par));
 	}
 	
@@ -1724,11 +1736,13 @@ public class SmartsParser
 	public void setSMARTSData(IAtomContainer container)
 	{	
 		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData, 
-							mNeedRingData, mNeedExplicitHData, container);
+							mNeedRingData, mNeedExplicitHData, mNeedParentMoleculeData, 
+							container);
 	}
 	
 	static public void prepareTargetForSMARTSSearch(boolean neighbourData, boolean valenceData, 
-							boolean ringData, boolean explicitHData , IAtomContainer container)
+				boolean ringData, boolean explicitHData , boolean parentMoleculeData, 
+				IAtomContainer container)
 	{
 		if (neighbourData)
 			setNeighbourData(container);
@@ -1741,6 +1755,9 @@ public class SmartsParser
 		
 		if (explicitHData)
 			setExplicitHAtomData(container);
+		
+		if (parentMoleculeData)
+			setParentMoleculeData(container);
 	}
 	
 	
@@ -1827,6 +1844,15 @@ public class SmartsParser
 				}	
 				atom.setProperty("RingData", ringData);
 			}	
+		}
+	}
+	
+	static public void setParentMoleculeData(IAtomContainer container)
+	{	
+		for (int i = 0; i < container.getAtomCount(); i++)
+		{	
+			IAtom atom = container.getAtom(i);			
+			atom.setProperty("ParentMoleculeData", container);
 		}
 	}
 	

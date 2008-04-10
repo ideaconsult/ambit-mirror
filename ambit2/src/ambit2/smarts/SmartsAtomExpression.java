@@ -25,9 +25,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.smarts;
 
 import java.util.Vector;
+import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 //import org.openscience.cdk.interfaces.IRingSet;
 //import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -214,11 +216,9 @@ public class SmartsAtomExpression extends SMARTSAtom
 						return(true);
 				return(false);
 			}
-    	case SmartsConst.AP_x:    		 
-    		//int atomRings3[] = (int[])atom.getProperty("RingData");    		
+    	case SmartsConst.AP_x: 
     		return(match_x(tok.param, atom));
-    		
-    		
+    		    		
     	default:
     		return(true);
     	}
@@ -346,38 +346,51 @@ public class SmartsAtomExpression extends SMARTSAtom
 		}
     }
     
-    public boolean match_x(int param,  IAtom atom)
+    public boolean match_x(int param, IAtom atom)
     {
-    	return(true);
-    	//TODO to clarify the semantics of 'x' primitive 
-    	/*
+    	int atomRings[] = (int[])atom.getProperty("RingData");
     	if (atomRings == null)
-		{
-			if (param == 0)
-				return(true);
-			else
-				return(false);
-		}
-		else
-		{
-			if (param < 3) // value 1 is possible here 
-			{
-				if (atomRings.length > 0)
-					return(true);
-				else
-					return(false);
-			}
-			else
-			{
-				for (int i = 0; i < atomRings.length; i++)
-				{
-					if (atomRings[i] == param)
-						return(true);
-				}
-				return(false);
-			}
-		}
-		*/
+			return(false);
+		
+    	//System.out.print("target atom rings: ");
+    	//SmartsHelper.printIntArray(atomRings);
+    	
+    	IAtomContainer mol = (IAtomContainer)atom.getProperty("ParentMoleculeData");
+    	List ca = mol.getConnectedAtomsList(atom);
+    	int rbonds = 0;
+    	for (int i = 0; i < ca.size(); i++)
+    	{
+    		int atrings[] = (int[])((IAtom)ca.get(i)).getProperty("RingData");
+    		if (atrings == null)
+    			continue;
+    		//System.out.print("neigbour ("+i+")atom rings: ");
+        	//SmartsHelper.printIntArray(atrings);
+    		if (commonRingBond(atomRings, atrings))
+    			rbonds++;	
+    	}
+    	
+    	//Value -1 is interpreted as "at least one " - the default param value
+    	if (param == -1)
+    	{	
+    		if (rbonds > 0)
+    			return(true);
+    		else
+    			return(false);
+    	}	
+    	
+    	return(param == rbonds);
+    }
+    
+    boolean commonRingBond(int atomRingData1[], int atomRingData2[])
+    {    	
+    	for (int i = 0; i < atomRingData1.length; i++)
+    		for (int k = 0; k < atomRingData2.length; i++)
+    		{	
+    			if (atomRingData1[i] == atomRingData1[k])
+    				return(true);
+    		}
+    	
+    	return(false);
     }
     
     
