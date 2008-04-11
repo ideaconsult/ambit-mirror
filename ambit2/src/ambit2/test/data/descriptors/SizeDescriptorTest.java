@@ -46,6 +46,7 @@ import ambit2.data.descriptors.MaximumDiameterDescriptor;
 import ambit2.data.descriptors.PlanarityDescriptor;
 import ambit2.data.descriptors.SizeDescriptor;
 import ambit2.data.molecule.Compound;
+import ambit2.data.molecule.MoleculeTools;
 import ambit2.processors.descriptors.CalculateDescriptors;
 
 public class SizeDescriptorTest extends TestCase {
@@ -136,7 +137,7 @@ public class SizeDescriptorTest extends TestCase {
 		"</bondArray>"+
 		"</molecule>"
 		;
-		IMolecule mol = Compound.readMolecule(cml);
+		IMolecule mol = MoleculeTools.readCMLMolecule(cml);
 		//HydrogenAdder adder = new HydrogenAdder();
 		//adder.addExplicitHydrogensToSatisfyValency(mol);
 		return mol;

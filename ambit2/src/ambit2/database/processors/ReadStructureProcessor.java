@@ -43,6 +43,7 @@ import ambit2.database.AmbitID;
 import ambit2.exceptions.AmbitException;
 import ambit2.processors.IAmbitResult;
 import ambit2.data.molecule.Compound;
+import ambit2.data.molecule.MoleculeTools;
 
 /**
  * Reads structures from the database
@@ -88,7 +89,7 @@ public class ReadStructureProcessor extends DefaultDbProcessor {
         while (resultset.next()) {
             try {
                String cml = resultset.getString("ustructure");
-               IMolecule newMol = Compound.readMolecule(cml);
+               IMolecule newMol = MoleculeTools.readCMLMolecule(cml);
                newMol.setProperties(mol.getProperties());
                mol = newMol;
            } catch (SQLException x) {

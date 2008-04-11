@@ -17,6 +17,7 @@ import ambit2.data.descriptors.AtomEnvironment;
 import ambit2.data.descriptors.AtomEnvironmentDescriptor;
 import ambit2.data.descriptors.AtomEnvironmentList;
 import ambit2.data.molecule.Compound;
+import ambit2.data.molecule.MoleculeTools;
 import ambit2.data.molecule.SourceDataset;
 
 /**
@@ -130,7 +131,7 @@ on duplicate key update sab=sab+ifnull(freq*f,0) ,sb=sb+ifnull(freq*freq,0),sa=s
     			CMLWriter cmlWriter = new CMLWriter(w);						
     			cmlWriter.write(query);
     			cmlWriter = null;
-    			IMolecule mol = Compound.readMolecule(w.toString());
+    			IMolecule mol = MoleculeTools.readCMLMolecule(w.toString());
     			
 //    			IAtomContainer mol = query;
     			

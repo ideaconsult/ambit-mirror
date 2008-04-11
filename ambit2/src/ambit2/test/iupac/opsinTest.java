@@ -33,6 +33,7 @@ import org.openscience.cdk.templates.MoleculeFactory;
 
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import ambit2.data.molecule.Compound;
+import ambit2.data.molecule.MoleculeTools;
 
 
 public class opsinTest extends TestCase {
@@ -58,7 +59,7 @@ public class opsinTest extends TestCase {
 			NameToStructure nameToStructure = NameToStructure.getInstance();
 			//Element cmlElement = nameToStructure.parseToCML("acetonitrile");
 			Element cmlElement = nameToStructure.parseToCML("benzene");
-			IMolecule mol = Compound.readMolecule(cmlElement.toXML());
+			IMolecule mol = MoleculeTools.readCMLMolecule(cmlElement.toXML());
 			IMolecule benzene = MoleculeFactory.makeBenzene();
 			
 			assertTrue(UniversalIsomorphismTester.isIsomorph(mol,benzene));

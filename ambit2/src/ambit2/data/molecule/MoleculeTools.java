@@ -14,16 +14,19 @@ import java.util.BitSet;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.ChemFile;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.Renderer2D;
@@ -229,6 +232,46 @@ public class MoleculeTools {
         return som.getMolecule(0);
         
     }    
+    public static IMolecule readCMLMolecule(String cml) throws CDKException {
+        IMolecule mol = null;
         
+        StringReader strReader = null;
+        try {
+            strReader= new StringReader(cml);               
+        } catch (Exception e) {
+            e.printStackTrace();
+            return mol;
+        }
+
+         CMLReader reader = new CMLReader(strReader);
+         IChemFile obj = null;
+         
+            obj = (IChemFile) reader.read(DefaultChemObjectBuilder.getInstance().newChemFile());
+            int n = obj.getChemSequenceCount();
+            if (n > 1)
+                System.out.println("> 1 sequence in a record");      
+            for (int j=0; j < n; j++) {
+                IChemSequence seq = obj.getChemSequence(j);
+                int m = seq.getChemModelCount();
+                if (m > 1) 
+                    System.out.println("> 1 model in a record");            
+                for (int k = 0; k < m; k++) {
+                    IChemModel mod = seq.getChemModel(k);
+                    IMoleculeSet som = mod.getMoleculeSet();
+                    if (som.getMoleculeCount() > 1)
+                        System.out.println("> 1 molecule in a record");
+                    for (int l=0; l < som.getMoleculeCount(); l++) {
+                        mol = som.getMolecule(l);
+                    
+                    return mol;
+                    }
+            
+                }
+            }
+
+         reader = null;
+         strReader = null;
+         return mol;
+    }        
     
 }

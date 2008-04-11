@@ -30,6 +30,9 @@ import org.openscience.cdk.renderer.Renderer2D;
 import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
+
+import sun.security.x509.IssuerAlternativeNameExtension;
 
 import ambit2.data.molecule.AmbitPoint;
 import ambit2.data.molecule.Compound;
@@ -47,6 +50,7 @@ public class CompoundImageTools {
     protected BufferedImage defaultImage = null;
     BufferedImage buffer = null;
     protected SmilesParser parser = null;
+    protected boolean showHydrogens = false;
     /**
      * 
      */
@@ -103,7 +107,7 @@ public class CompoundImageTools {
 		
 		
 		IMoleculeSet molecules = new MoleculeSet();
-        generate2D(molecule, true, molecules);
+        generate2D(molecule, true, molecules,isShowHydrogens());
         paint(renderer,molecules, false, g,null,null);
         
         
@@ -121,7 +125,7 @@ public class CompoundImageTools {
 
 		return buffer;
     }
-    public synchronized static void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
+    public synchronized static void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules, boolean showHydrogens)
     {
         if (molecule != null) {
             if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
@@ -136,9 +140,14 @@ public class CompoundImageTools {
             {
                 StructureDiagramGenerator sdg = new StructureDiagramGenerator();
                 IMolecule m = null;
-                for (int i=0; i < mset.getAtomContainerCount();i++) { 
+                for (int i=0; i < mset.getAtomContainerCount();i++) {
+                    IAtomContainer mol = mset.getAtomContainer(i);
+                    if (!showHydrogens) {
+                        MFAnalyser mfa = new MFAnalyser(mol);
+                        mol = mfa.removeHydrogensPreserveMultiplyBonded();
+                    }
                     if (generateCoordinates) {
-                        sdg.setMolecule((IMolecule)mset.getAtomContainer(i));
+                        sdg.setMolecule((IMolecule)mol);
                         m = null;
                         sdg.generateCoordinates(new Vector2d(0,1));
                         m = sdg.getMolecule();
@@ -379,6 +388,12 @@ public class CompoundImageTools {
         g.fillRect(0, 0, width, height);
         g.drawString(message, 10,10);
         return buffer;
-	}	
+	}
+    public synchronized boolean isShowHydrogens() {
+        return showHydrogens;
+    }
+    public synchronized void setShowHydrogens(boolean showHydrogens) {
+        this.showHydrogens = showHydrogens;
+    }	
 	
 }

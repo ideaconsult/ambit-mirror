@@ -389,47 +389,7 @@ public class Compound extends AmbitObject {
 	public void writeIdsubstance(int idsubstance) {
 		this.idsubstance = idsubstance;
 	}
-	public static IMolecule readMolecule(String cml) throws CDKException {
-		IMolecule mol = null;
-		
-		StringReader strReader = null;
-		try {
-			strReader= new StringReader(cml);				
-		} catch (Exception e) {
-			e.printStackTrace();
-			return mol;
-		}
 
-		 CMLReader reader = new CMLReader(strReader);
-		 IChemFile obj = null;
-		 
-		 	obj = (IChemFile) reader.read(DefaultChemObjectBuilder.getInstance().newChemFile());
-		 	int n = obj.getChemSequenceCount();
-		 	if (n > 1)
-		 		System.out.println("> 1 sequence in a record");		 
-		 	for (int j=0; j < n; j++) {
-		 		IChemSequence seq = obj.getChemSequence(j);
-		 		int m = seq.getChemModelCount();
-		 		if (m > 1) 
-		 			System.out.println("> 1 model in a record");		 	
-		 		for (int k = 0; k < m; k++) {
-		 			IChemModel mod = seq.getChemModel(k);
-		 			IMoleculeSet som = mod.getMoleculeSet();
-		 			if (som.getMoleculeCount() > 1)
-		 				System.out.println("> 1 molecule in a record");
-		 			for (int l=0; l < som.getMoleculeCount(); l++) {
-		 				mol = som.getMolecule(l);
-		 		    
-		 		    return mol;
-		 			}
-		 	
-		 		}
-		 	}
-
-		 reader = null;
-   		 strReader = null;
-   		 return mol;
-	}
 	public int getOrderInModel() {
 		return orderInModel;
 	}

@@ -35,7 +35,7 @@ public abstract class AmbitMolTag extends SimpleTagSupport {
 	
 	protected IMolecule getMolecule(String mol) throws Exception {
 		if (type_cml.equals(molType)) {
-			return Compound.readMolecule(mol);
+			return MoleculeTools.readCMLMolecule(mol);
 		} else if (type_mol.equals(molType)) { 
 			String s = URLDecoder.decode(mol,"UTF-8");
 		    return  MoleculeTools.readMolfile(s);

@@ -41,6 +41,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import ambit2.database.AmbitID;
 import ambit2.exceptions.AmbitException;
 import ambit2.data.molecule.Compound;
+import ambit2.data.molecule.MoleculeTools;
 
 /**
  * Read structures from database, given an sql string or an already open {@link java.sql.ResultSet}.
@@ -114,7 +115,7 @@ public class DbStructureReader extends DbReader {
            String cml = "";
            try {
 		       cml = resultset.getString("ustructure");
-		       mol = Compound.readMolecule(cml);
+		       mol = MoleculeTools.readCMLMolecule(cml);
 	       } catch (SQLException x) {
 	           mol = new org.openscience.cdk.Molecule();
 	       } catch (Exception x) {

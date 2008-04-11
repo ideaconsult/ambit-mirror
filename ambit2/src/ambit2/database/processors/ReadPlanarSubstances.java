@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import ambit2.config.AmbitCONSTANTS;
 import ambit2.exceptions.AmbitException;
 import ambit2.data.molecule.Compound;
+import ambit2.data.molecule.MoleculeTools;
 
 /**
  * Reads only planar structures from the database. This is achieved by filtering compounds with {@link ambit2.data.descriptors.SpherosityDescriptor} < 0.2
@@ -56,7 +57,7 @@ public class ReadPlanarSubstances extends ReadStructureProcessor {
             	n++;
                 try {
  	 		       String cml = resultset.getString("ustructure");
- 	 		       IMolecule newMol = Compound.readMolecule(cml);
+ 	 		       IMolecule newMol = MoleculeTools.readCMLMolecule(cml);
  	 		       newMol.setProperties(mol.getProperties());
  	 		       mol = newMol;
  	 	       } catch (SQLException x) {
