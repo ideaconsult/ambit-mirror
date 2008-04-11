@@ -25,16 +25,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.workflow;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.List;
+import java.sql.SQLException;
 import java.util.Vector;
 
+import javax.sql.rowset.CachedRowSet;
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JToolBar;
 
-import ambit2.repository.StructureRecord;
+import ambit2.ui.data.ImageCellRenderer;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;
@@ -44,7 +49,7 @@ import com.microworkflow.ui.IWorkflowContextListenerUI;
 public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContextListenerUI {
 
     protected IWorkflowContextFactory wfcfactory;
-    protected StructureRecordsTableModel srtm;
+    protected CachedRowSetTableModel srtm;
     protected boolean animate = false;
     protected Vector<String> properties;
     /**
@@ -58,11 +63,34 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         properties.add("Result");
         properties.add("Query");
         setWfcfactory(wfcfactory);
-        srtm = new StructureRecordsTableModel();
+        srtm = new CachedRowSetTableModel();
         JTable table = new JTable(srtm);
+        table.setRowHeight(100);
+        table.setDefaultRenderer(Image.class, new ImageCellRenderer());
         //table.setPreferredSize(new Dimension(200,200));
         add(new JScrollPane(table), BorderLayout.CENTER);
-
+        JToolBar b = new JToolBar();
+        b.add(new AbstractAction("<<") {
+           public void actionPerformed(ActionEvent arg0) {
+               try {
+                srtm.previousPage();
+               } catch (SQLException x) {
+                   x.printStackTrace();
+               }
+                
+            } 
+        });
+        b.add(new AbstractAction(">>") {
+            public void actionPerformed(ActionEvent arg0) {
+                try {
+                 srtm.nextPage();
+                } catch (SQLException x) {
+                    x.printStackTrace();
+                }
+                 
+             } 
+         });        
+        add(b,BorderLayout.NORTH);
 
         
         
@@ -77,8 +105,8 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         else if (animate) {
         	if ("Result".equals(arg0.getPropertyName())) {
         		Object o = getWorkflowContext().get("Result");
-        		if (o instanceof List)
-        			srtm.setRecords((List<StructureRecord>)o);
+        		if (o instanceof CachedRowSet)
+        			srtm.setRecords((CachedRowSet)o);
         	}
 
         }
