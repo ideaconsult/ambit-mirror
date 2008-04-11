@@ -5,6 +5,7 @@
 package ambit2.ui.data;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.BorderFactory;
@@ -30,12 +31,17 @@ public class ImageCellRenderer extends DefaultTableCellRenderer implements
     /**
      * 
      */
-    public ImageCellRenderer() {
+    public ImageCellRenderer(Dimension dimension) {
         super();
         setHorizontalAlignment(JLabel.CENTER);
         setVerticalAlignment(JLabel.CENTER);
         setIcon(icon);
-        imageTools = new CompoundImageTools();
+        imageTools = new CompoundImageTools(dimension);
+        
+    }
+    
+    public ImageCellRenderer() {
+        this(new Dimension(100,100));
         
     }
     public Component getTableCellRendererComponent

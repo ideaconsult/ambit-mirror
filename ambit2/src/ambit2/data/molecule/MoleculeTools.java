@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.BitSet;
 
@@ -31,7 +32,6 @@ import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.Renderer2D;
 import org.openscience.cdk.renderer.Renderer2DModel;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.MFAnalyser;
 
@@ -223,27 +223,35 @@ public class MoleculeTools {
 		}	
 		while (true) {}
 	}
-	public static IMolecule readMolfile(String molfile) throws Exception {
-		MDLReader reader = new MDLReader(new StringReader(molfile));
+	public static IMolecule readMolfile(Reader molfile) throws Exception {
+		MDLReader reader = new MDLReader(molfile);
         ChemFile chemFile = (ChemFile) reader.read(new ChemFile());
         IChemSequence seq = chemFile.getChemSequence(0);
         IChemModel model = seq.getChemModel(0);
         IMoleculeSet som = model.getMoleculeSet();
         return som.getMolecule(0);
         
+    }    	
+	public static IMolecule readMolfile(String molfile) throws Exception {
+		return readMolfile(new StringReader(molfile));
     }    
     public static IMolecule readCMLMolecule(String cml) throws CDKException {
         IMolecule mol = null;
-        
         StringReader strReader = null;
         try {
-            strReader= new StringReader(cml);               
+            strReader= new StringReader(cml);
+            return readCMLMolecule(strReader);
         } catch (Exception e) {
             e.printStackTrace();
             return mol;
         }
 
-         CMLReader reader = new CMLReader(strReader);
+        
+    }     
+    public static IMolecule readCMLMolecule(Reader cmlReader) throws CDKException {
+        IMolecule mol = null;
+        
+         CMLReader reader = new CMLReader(cmlReader);
          IChemFile obj = null;
          
             obj = (IChemFile) reader.read(DefaultChemObjectBuilder.getInstance().newChemFile());
@@ -270,7 +278,6 @@ public class MoleculeTools {
             }
 
          reader = null;
-         strReader = null;
          return mol;
     }        
     
