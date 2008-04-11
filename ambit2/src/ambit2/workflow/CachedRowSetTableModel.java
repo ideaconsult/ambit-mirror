@@ -24,21 +24,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
-import java.awt.Dimension;
-import java.awt.Image;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.table.AbstractTableModel;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.data.molecule.MoleculeTools;
-import ambit2.ui.data.CompoundImageTools;
 
 public class CachedRowSetTableModel extends AbstractTableModel {
-    protected CompoundImageTools imageTools;
 	protected CachedRowSet records;
     protected int page=0;
     
@@ -47,9 +47,6 @@ public class CachedRowSetTableModel extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = -5428865165072188779L;
 
-    public CachedRowSetTableModel() {
-        imageTools = new CompoundImageTools(new Dimension(100,100));
-    }
 	public int getColumnCount() {
         if (records == null) return 1;
         else try {
@@ -65,7 +62,22 @@ public class CachedRowSetTableModel extends AbstractTableModel {
 		else 
 			return 0;
 	}
-
+	@Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		try {
+			int type = records.getMetaData().getColumnType(columnIndex);
+	        switch (type) {
+	        case java.sql.Types.BIT: {
+	        	records.updateBoolean(columnIndex, ((Boolean)aValue).booleanValue());
+	        	records.updateRow();
+	        }
+	        default: {
+	        }
+	        }
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	}
 	public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex ==0) return 1 + rowIndex + getOffset();
         else if (records == null) return "";
@@ -76,15 +88,33 @@ public class CachedRowSetTableModel extends AbstractTableModel {
             //records.absolute(rowIndex+1);
 
             if (records.getMetaData().getColumnName(columnIndex).equals("uncompress(structure)")) {
-                String s = records.getString(columnIndex);
-                IMolecule m = MoleculeTools.readCMLMolecule(s);
-                return imageTools.getImage(m);
+            	if (type == java.sql.Types.VARBINARY) {
+	                InputStream s = records.getBinaryStream(columnIndex);
+	                IMolecule m = null;
+	                if ("SDF".equals(records.getString("format")))
+	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
+	                else
+	                	m = MoleculeTools.readCMLMolecule(new InputStreamReader(s));
+	                s = null;
+	                return m;
+            	} else {
+
+            		return MoleculeTools.readCMLMolecule(records.getString(columnIndex));
+            	}
+                
             } else
                 switch (type) {
                 case java.sql.Types.INTEGER:  return records.getInt(columnIndex);
                 case java.sql.Types.BOOLEAN:  return records.getBoolean(columnIndex);
+                case java.sql.Types.TINYINT:  return records.getBoolean(columnIndex);
+                case java.sql.Types.BIT:  return records.getBoolean(columnIndex);
                 case java.sql.Types.CHAR:  return records.getString(columnIndex);
-                default: return records.getString(columnIndex);
+                case java.sql.Types.TIMESTAMP: return records.getDate(columnIndex);
+                case java.sql.Types.VARCHAR:  return records.getString(columnIndex);
+                default: {
+                	System.out.println(type);
+                	return records.getString(columnIndex);
+                }
                 }
         } catch (CDKException x) {
             x.printStackTrace();
@@ -92,6 +122,9 @@ public class CachedRowSetTableModel extends AbstractTableModel {
         } catch (SQLException x) {
             x.printStackTrace();
             return rowIndex + " " + x.getMessage();
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;            
         }
 	}
 	@Override
@@ -99,13 +132,17 @@ public class CachedRowSetTableModel extends AbstractTableModel {
 	    if (columnIndex == 0) return Integer.class;
         try {
             if (records.getMetaData().getColumnName(columnIndex).equals("uncompress(structure)")) {
-                return Image.class;
+                return IAtomContainer.class;
             } else {
                 int type = records.getMetaData().getColumnType(columnIndex);
                 switch (type) {
                 case java.sql.Types.INTEGER:  return Integer.class;
                 case java.sql.Types.BOOLEAN:  return Boolean.class;
+                case java.sql.Types.TINYINT:  return Boolean.class;
+                case java.sql.Types.BIT:  return Boolean.class;
                 case java.sql.Types.CHAR:  return String.class;
+                case java.sql.Types.TIMESTAMP:  return Date.class;
+                case java.sql.Types.VARCHAR:  return String.class;
                 default: return String.class;
                 }
             }
@@ -123,6 +160,11 @@ public class CachedRowSetTableModel extends AbstractTableModel {
             return "";
         }
 
+    }
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+    	// TODO Auto-generated method stub
+    	return true;
     }
 	public CachedRowSet getRecords() {
 		return records;

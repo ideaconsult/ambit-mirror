@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.workflow;
 
 import java.awt.BorderLayout;
-import java.awt.Image;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.ui.data.ImageCellRenderer;
 
@@ -65,8 +67,8 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         setWfcfactory(wfcfactory);
         srtm = new CachedRowSetTableModel();
         JTable table = new JTable(srtm);
-        table.setRowHeight(100);
-        table.setDefaultRenderer(Image.class, new ImageCellRenderer());
+        table.setRowHeight(150);
+        table.setDefaultRenderer(IAtomContainer.class, new ImageCellRenderer(new Dimension(150,150)));
         //table.setPreferredSize(new Dimension(200,200));
         add(new JScrollPane(table), BorderLayout.CENTER);
         JToolBar b = new JToolBar();
