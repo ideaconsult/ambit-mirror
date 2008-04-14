@@ -13,7 +13,7 @@ import com.microworkflow.process.WorkflowContext;
  * @author dam
  *
  */
-public abstract class Performer extends WorkflowClosure {
+public abstract class Performer<Target,Result> extends WorkflowClosure {
 	protected boolean hasExecuted;
 	protected String targetKey;
 	protected String resultKey;
@@ -33,7 +33,7 @@ public abstract class Performer extends WorkflowClosure {
 		this.resultKey = resultKey;
 	}
 	public Object performOperation() {
-		Object ret = null;
+		Result ret = null;
 		preExecute();
 		logger.finer("About to send execute() in " + this);
 		try {
@@ -44,13 +44,13 @@ public abstract class Performer extends WorkflowClosure {
 		}
 		return ret;
 	}
-	public abstract Object execute();
+	public abstract Result execute();
 
 	protected void preExecute() {
 		hasExecuted = false;
 	}
 
-	protected void postExecute(Object ret) {
+	protected void postExecute(Result ret) {
 		hasExecuted = true;
 		if (resultKey != null) {
 			context.put(resultKey, ret);
@@ -77,8 +77,8 @@ public abstract class Performer extends WorkflowClosure {
 		this.targetKey = targetKey;
 	}
 
-	protected Object getTarget() {
-		return get(targetKey);
+	protected Target getTarget() {
+		return (Target)get(targetKey);
 	}
     @Override
     public String toString() {
