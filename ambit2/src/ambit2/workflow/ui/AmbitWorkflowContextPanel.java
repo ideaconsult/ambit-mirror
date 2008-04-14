@@ -28,9 +28,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -41,13 +43,16 @@ import javax.swing.JToolBar;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.repository.QueryID;
 import ambit2.ui.data.ImageCellRenderer;
 import ambit2.workflow.CachedRowSetTableModel;
+import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
 import com.microworkflow.ui.IWorkflowContextListenerUI;
+import com.sun.rowset.CachedRowSetImpl;
 
 public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContextListenerUI {
 
@@ -110,11 +115,29 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         		Object o = getWorkflowContext().get("Result");
         		if (o instanceof CachedRowSet)
         			srtm.setRecords((CachedRowSet)o);
+        		else if (o instanceof QueryID) {
+        			try {
+        			srtm.setRecords(getQuery(((QueryID)o)));
+        			} catch (Exception x) {
+        				x.printStackTrace();
+        			}
+        		}
         	}
 
         }
     }
-
+    
+    protected CachedRowSet getQuery(QueryID query) throws SQLException {
+        CachedRowSet q = new CachedRowSetImpl();
+        q.setPageSize(5);
+        q.setCommand("SELECT s.idstructure,selected,uncompress(structure),format FROM query_results as q join structure as s using (idstructure) where idquery="+query.getId());
+        
+        Connection c = ((DataSource)wfcfactory.getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
+        q.execute(c);
+        c.close();
+        return q;
+    	
+    }
     protected synchronized WorkflowContext getWorkflowContext() {
         return getWfcfactory().getWorkflowContext();
     }

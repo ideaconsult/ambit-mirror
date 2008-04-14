@@ -34,16 +34,16 @@ import ambit2.repository.ProcessorException;
 
 import com.microworkflow.execution.Performer;
 
-public class ProcessorPerformer<Target,Result> extends Performer<Target,Result> {
+public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Result> extends Performer<Target,Result> {
     public static String errorTag="error";
-    protected IProcessor<Target,Result> processor;
-    public ProcessorPerformer(IProcessor<Target,Result> processor) {
+    protected P processor;
+    public ProcessorPerformer(P processor) {
         setProcessor(processor);
     }
-    public synchronized IProcessor<Target,Result> getProcessor() {
+    public synchronized P getProcessor() {
         return processor;
     }
-    public synchronized void setProcessor(IProcessor<Target,Result> processor) {
+    public synchronized void setProcessor(P processor) {
         this.processor = processor;
     }
     @Override

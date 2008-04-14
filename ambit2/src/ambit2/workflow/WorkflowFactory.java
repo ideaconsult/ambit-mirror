@@ -28,10 +28,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import ambit2.repository.StructureRecord;
+import ambit2.repository.IQuery;
+import ambit2.repository.QueryID;
+import ambit2.repository.QueryParam;
+import ambit2.repository.processors.ProcessorCreateQuery;
+import ambit2.repository.processors.ProcessorCreateSession;
 
-import com.microworkflow.execution.Performer;
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.IWorkflowFactory;
 
@@ -43,20 +45,15 @@ public class WorkflowFactory extends Hashtable <String,Workflow> implements IWor
 	protected String theTask;
 
 	public WorkflowFactory() {
-        Primitive test = new Primitive("Query", "Result",
-                new Performer() {
-                    public Object execute() {
+		
+		ActivityPrimitive test = new ActivityPrimitive(DBWorkflowContext.SESSION,DBWorkflowContext.SESSION,new ProcessorCreateSession());
+		test.setName("Session");
+		ActivityPrimitive p1 = new ActivityPrimitive("Query","Result",new ProcessorCreateQuery());
+		p1.setName("Query");
 
-                        List<StructureRecord> records = new ArrayList<StructureRecord>();
-                        for (int i=0; i < 100000; i++)
-                        	records.add(new StructureRecord(i,i,null,null));
-                        return records;
-                    }
-                });
-        test.setName("Test");
         theTask = "test";
         Workflow wf = new Workflow();
-        wf.setDefinition(test);
+        wf.setDefinition(test.addStep(p1));
         put(theTask,wf);
 	}
 	public Workflow getWorkflow() {

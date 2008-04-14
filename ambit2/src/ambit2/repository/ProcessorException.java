@@ -37,8 +37,8 @@ public class ProcessorException extends AmbitException {
      * 
      */
     private static final long serialVersionUID = 7644140308982655059L;
-    public ProcessorException() {
-        // TODO Auto-generated constructor stub
+    public ProcessorException(String message) {
+        super(message);
     }
     public ProcessorException(Exception x) {
         super(x);

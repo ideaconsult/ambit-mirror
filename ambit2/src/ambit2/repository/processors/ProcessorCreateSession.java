@@ -25,40 +25,47 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.repository.processors;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import ambit2.repository.AbstractDBProcessor;
 import ambit2.repository.ProcessorException;
+import ambit2.repository.SessionID;
 
-public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {
+public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, SessionID> {
 
-    public synchronized void setConnection(Connection connection)  throws SQLException  {
-        super.setConnection(connection);
-        prepareStatement(connection);        
-    }       
-	protected abstract void prepareStatement(Connection connection) throws SQLException;
-	public Result transaction(Target arg0) throws SQLException {
-	    Result result = null;
-		try {
-			connection.setAutoCommit(false);	
-			result = write(arg0);
-	        connection.commit();			
-	    } catch (SQLException x) {
-	    	connection.rollback();
-	    } finally {
-	        
-	    }
-        return result;
-	}	
-	public abstract Result write(Target arg0) throws SQLException ;
-    
-	public Result process(Target target) throws ProcessorException {
-        try {
-            return write(target);
-        } catch (SQLException x) {
-            throw new ProcessorException(x);
-        }
-	}
+		protected final String sql = "insert into sessions (user_name) values (SUBSTRING_INDEX(user(),'@',1))";
+		public SessionID process(SessionID target) throws ProcessorException {
+			if ((target!=null) && (target.getId()>0)) return target;
+			Connection c = getConnection();
+			try {
+				connection.setAutoCommit(false);
+				PreparedStatement s = c.prepareStatement(sql);
+				System.out.println(s);
+				if (s.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS)>0) {
+					ResultSet rss = s.getGeneratedKeys();
+					while (rss.next()) 
+						target = new SessionID(rss.getInt(1));
+					rss.close();
+				}
+				connection.commit();
+				s.close();
+				
+				close();
+				return target;
+			} catch (SQLException x) {
+				try {
+					connection.rollback();
+				} catch (SQLException xx) {
+					xx.printStackTrace();
+				}
+				throw new ProcessorException(x);
+			}
+		}
+		
+
 }
 
 

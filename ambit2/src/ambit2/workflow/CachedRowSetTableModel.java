@@ -180,12 +180,14 @@ public class CachedRowSetTableModel extends AbstractTableModel {
 		fireTableStructureChanged();
 	}
 	public boolean nextPage() throws SQLException {
+		if (records == null) return false;
 	    boolean ok = records.nextPage();
         if (ok) page++;
         fireTableStructureChanged();
         return ok;
     }
     public boolean previousPage() throws SQLException {
+    	if (records == null) return false;
         boolean ok = records.previousPage();
         if (ok) page--; else page = 0;
         fireTableStructureChanged();

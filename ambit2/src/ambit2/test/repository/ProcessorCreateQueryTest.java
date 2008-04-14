@@ -22,25 +22,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.workflow;
+package ambit2.test.repository;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import ambit2.database.DatasourceFactory;
 import ambit2.repository.IQuery;
 import ambit2.repository.QueryID;
 import ambit2.repository.QueryParam;
+import ambit2.repository.SessionID;
+import ambit2.repository.processors.ProcessorCreateQuery;
 
-import com.microworkflow.process.WorkflowContext;
-import com.microworkflow.ui.IWorkflowContextFactory;
 
-public class WorkflowContextFactory implements IWorkflowContextFactory {
-	protected WorkflowContext workflowContext;	
-	public WorkflowContextFactory() {
-		workflowContext = new DBWorkflowContext();
+public class ProcessorCreateQueryTest extends RepositoryTest {
+	public void test() throws Exception {
 		IQuery q = new QueryID() {
 			@Override
 			public String getSQL() {
@@ -54,23 +50,15 @@ public class WorkflowContextFactory implements IWorkflowContextFactory {
 			}
 		};
 		q.setName("test");
-		workflowContext.put("Query",q);
 		
-		try {
-			DataSource datasource = DatasourceFactory.getDataSource(
-					DatasourceFactory.getConnectionURI("jdbc:mysql", "localhost", "3306", "ambit2", "guest","guest" ));
-			
-			workflowContext.put(DBWorkflowContext.DATASOURCE,datasource);
-		} catch (Exception x) {
-			x.printStackTrace();
-		}
+		Connection c = datasource.getConnection();
+		
+		ProcessorCreateQuery pq = new ProcessorCreateQuery();
+		pq.setSession(new SessionID(1));
+		pq.setConnection(c);
+		pq.process(q);
+		assertEquals(10,q.getRows());
 	}
-	
-	public WorkflowContext getWorkflowContext() {
-		return workflowContext;
-	}
-
-
 }
 
 

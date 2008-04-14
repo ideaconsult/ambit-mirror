@@ -25,40 +25,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.repository.processors;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import ambit2.repository.AbstractDBProcessor;
 import ambit2.repository.ProcessorException;
+import ambit2.repository.SessionID;
 
-public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {
+/**
+ * Closes session designated by {@link SessionID} by updating the field "completed" in "sessions" table
+ * @author nina
+ *
+ */
+public class processorCloseSession extends AbstractDBProcessor<SessionID,SessionID> {
+		protected final String sql = "update sessions set completed=current_timestamp where idsessions=? and user_name=(SUBSTRING_INDEX(user(),'@',1))";
 
-    public synchronized void setConnection(Connection connection)  throws SQLException  {
-        super.setConnection(connection);
-        prepareStatement(connection);        
-    }       
-	protected abstract void prepareStatement(Connection connection) throws SQLException;
-	public Result transaction(Target arg0) throws SQLException {
-	    Result result = null;
-		try {
-			connection.setAutoCommit(false);	
-			result = write(arg0);
-	        connection.commit();			
-	    } catch (SQLException x) {
-	    	connection.rollback();
-	    } finally {
-	        
-	    }
-        return result;
-	}	
-	public abstract Result write(Target arg0) throws SQLException ;
-    
-	public Result process(Target target) throws ProcessorException {
-        try {
-            return write(target);
-        } catch (SQLException x) {
-            throw new ProcessorException(x);
-        }
-	}
+		public SessionID process(SessionID target) throws ProcessorException {
+			try {
+				Connection c = getConnection();
+				PreparedStatement s = c.prepareStatement(sql);
+				s.setInt(1,target.getId().intValue());
+				int rows = s.executeUpdate(sql);
+				s.close();
+				close();
+				if (rows == 0) throw new ProcessorException("Fails on closing session "+target);
+				return null;
+			} catch (SQLException x) {
+				throw new ProcessorException(x);
+			}
+		}		
 }
 
 

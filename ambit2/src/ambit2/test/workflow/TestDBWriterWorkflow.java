@@ -34,13 +34,11 @@ import javax.sql.DataSource;
 
 import junit.framework.TestCase;
 
-import org.jfree.report.modules.parser.ext.factory.datasource.DataSourceFactory;
 import org.junit.After;
 import org.junit.Before;
 
 import ambit2.database.DatasourceFactory;
 import ambit2.repository.processors.IRepositoryAccess;
-import ambit2.repository.processors.ProcessorDBWriter;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.InternalProcessorPerformer;
@@ -70,7 +68,7 @@ public class TestDBWriterWorkflow extends TestCase {
         final WorkflowContext wcc = new DBWorkflowContext();
 
         wcc.put(DBWorkflowContext.DATASOURCE, DatasourceFactory.getDataSource(
-                DatasourceFactory.getConnectionURI("jdbc:mysql","localhost",null,"ambit2","root","")
+                DatasourceFactory.getConnectionURI("jdbc:mysql","localhost",null,"ambit2","root","sinanica")
                 ));
         wcc.put("structure","test");
         wc.setDefinition(p.addStep(a));

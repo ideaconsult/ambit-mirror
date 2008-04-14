@@ -29,21 +29,21 @@
 
 package ambit2.workflow;
 
-import ambit2.repository.IProcessor;
+import ambit2.repository.IDBProcessor;
 
 import com.microworkflow.process.Primitive;
 
 public class ActivityPrimitive<Target,Result> extends Primitive {
 
-    public ActivityPrimitive(IProcessor<Target, Result> processor) {
-        super(new ProcessorPerformer<Target, Result>(processor));
+    public ActivityPrimitive(IDBProcessor<Target, Result> processor) {
+        super(new DBProcessorPerformer<Target, Result>(processor));
     }
-    public ActivityPrimitive(String targetKey, IProcessor<Target, Result> processor) {
-        super(targetKey,new ProcessorPerformer<Target, Result>(processor));
+    public ActivityPrimitive(String targetKey, IDBProcessor<Target, Result> processor) {
+        super(targetKey,new DBProcessorPerformer<Target, Result>(processor));
     }
     
-    public ActivityPrimitive(String targetKey, String resultKey, IProcessor<Target, Result> processor) {
-        super(targetKey,resultKey,new ProcessorPerformer<Target, Result>(processor));
+    public ActivityPrimitive(String targetKey, String resultKey, IDBProcessor<Target, Result> processor) {
+        super(targetKey,resultKey,new DBProcessorPerformer<Target, Result>(processor));
     }
 
 }

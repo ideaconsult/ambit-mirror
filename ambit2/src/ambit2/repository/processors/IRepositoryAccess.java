@@ -32,6 +32,11 @@ package ambit2.repository.processors;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import ambit2.repository.SessionID;
+
 public interface IRepositoryAccess {
     void setConnection(Connection connection) throws SQLException;
+	void close() throws SQLException ;
+	void setSession(SessionID session);
+	SessionID getSession();
 }

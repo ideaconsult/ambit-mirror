@@ -60,12 +60,7 @@ import com.microworkflow.ui.WorkflowPanel;
  *
  */
 /*
- * TODO delete experiments by template
-delete experiment FROM experiment,study where experiment.idstudy=study.idstudy and idtemplate=8
-delete  FROM study where idtemplate=8
-delete  FROM template where idtemplate=8
 
-introduce reference field into templates
  */
 public class AmbitWorkflowApp extends CoreApp {
 	IWorkflowFactory workflowFactory;

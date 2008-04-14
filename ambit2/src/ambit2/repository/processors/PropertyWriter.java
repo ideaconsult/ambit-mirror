@@ -68,13 +68,6 @@ public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord,Str
 	protected static final String insert_property_value = "INSERT INTO STRUCTURE_FIELDS (idstructure,idfieldname,value) values (?,?,left(?,256))";
 	protected PreparedStatement ps_propertyvalue;
 
-    public PropertyWriter() {
-        super();
-    }    
-	public PropertyWriter(Connection connection) throws SQLException {
-		super(connection);
-	}
-
 	@Override
 	protected void prepareStatement(Connection connection) throws SQLException {
 		ps_propertyname = connection.prepareStatement(insert_property_name);
@@ -126,15 +119,12 @@ public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord,Str
 	}
 	@Override
 	public void close() throws SQLException {
-		// TODO Auto-generated method stub
-
+		ps_propertyname.close();
+		ps_propertyvalue.close();
+		ps_selectproperty.close();
+		super.close();
 	}
 
-	@Override
-	public void open() throws SQLException {
-		// TODO Auto-generated method stub
-
-	}	
 
 }
 

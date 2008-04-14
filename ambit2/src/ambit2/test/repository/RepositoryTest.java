@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2007-2008  
+Copyright (C) 2005-2008  
 
 Contact: nina@acad.bg
 
@@ -22,27 +22,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.repository;
+package ambit2.test.repository;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.sql.DataSource;
 
-import ambit2.repository.processors.IRepositoryAccess;
+import ambit2.database.DatasourceFactory;
 
-public abstract class AbstractRepositoryAccess implements IRepositoryAccess {
-	protected Connection connection;
-    public AbstractRepositoryAccess() {
-    }
-	public AbstractRepositoryAccess(Connection connection) throws SQLException {
-		setConnection(connection);
+import junit.framework.TestCase;
+
+public class RepositoryTest extends TestCase {
+	protected DataSource datasource;
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		datasource = DatasourceFactory.getDataSource(
+				DatasourceFactory.getConnectionURI("jdbc:mysql", "localhost", "3306", "ambit2", "guest","guest" ));
+		
 	}
-	public abstract void open() throws SQLException;
-	public abstract void close() throws SQLException;
-    
-    public synchronized Connection getConnection() {
-        return connection;
-    }
-    public synchronized void setConnection(Connection connection) throws SQLException {
-        this.connection = connection;
-    }	
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		datasource = null;
+	}
 }
+
+

@@ -28,15 +28,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-public class RepositoryReader extends AbstractRepositoryAccess {
+/**
+ * TODO parameterize
+ * @author nina
+ *
+ * @param <Target>
+ */
+public class RepositoryReader<Target > extends AbstractDBProcessor<Target, StructureRecord> {
 	protected static final String read_structures = "SELECT idstructure,idchemical,format FROM STRUCTURE";
 	protected static final String read_structurebyid = "SELECT uncompress(structure) FROM STRUCTURE where idstructure=?";
 	protected PreparedStatement ps_structures;
 	protected PreparedStatement ps_structurebyid;	
 	protected ResultSet rs;
-	public RepositoryReader(Connection connection) throws SQLException  {
-		super(connection);
+	public RepositoryReader() {
+		super();
+	}
+	@Override
+	public void setConnection(Connection connection) throws SQLException {
+		super.setConnection(connection);
 		prepareStatement(connection);
 	}
 	public void open() throws SQLException {
@@ -67,6 +76,14 @@ public class RepositoryReader extends AbstractRepositoryAccess {
 	}	
 	public void close() throws SQLException {
 		ps_structures.close();
+		ps_structurebyid.close();
+	}
+	public StructureRecord process(Target target) throws ProcessorException {
+		try {
+			return next();
+		} catch (SQLException x) {
+			throw new ProcessorException(x);
+		}
 	}
 
 }

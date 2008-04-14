@@ -66,15 +66,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<String,List<Struc
 	protected PreparedStatement ps_chemicals;
 	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format) values (null,?,compress(?),?)";
 	protected PreparedStatement ps_structure;
-    public RepositoryWriter(){
-    }    
-	public RepositoryWriter(Connection connection) throws SQLException {
-		super(connection);
-	}
-	@Override
-	public void open() throws SQLException {
-
-	}
 
 	public List<StructureRecord> write(String arg0) throws SQLException {
         List<StructureRecord> sr = new ArrayList<StructureRecord>();
@@ -102,5 +93,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<String,List<Struc
 	public void close() throws SQLException {
 		ps_chemicals.close();
 		ps_structure.close();
+		super.close();
 	}
 }

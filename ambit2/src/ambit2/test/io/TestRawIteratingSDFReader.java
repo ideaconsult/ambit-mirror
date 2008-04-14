@@ -33,12 +33,13 @@ import com.sun.rowset.CachedRowSetImpl;
 public class TestRawIteratingSDFReader extends TestCase {
 	public void xtest() throws Exception  {
 		
-		ConnectionPool pool = new ConnectionPool("localhost","3306","ambit2","root","",1,1);
-        Connection connection = pool.getConnection();
+		DataSource dataSource = DatasourceFactory.getDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=");
+        Connection connection = dataSource.getConnection();
         
 		String filename = "D:/nina/Chemical Databases/EINECS/einecs_structures_V13Apr07.sdf";
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new FileReader(filename));
-		RepositoryWriter writer = new RepositoryWriter(connection);
+		RepositoryWriter writer = new RepositoryWriter();
+		writer.setConnection(connection);
 		int records = 0;
 		long now = System.currentTimeMillis();
 		while (reader.hasNext()) {
@@ -56,10 +57,12 @@ public class TestRawIteratingSDFReader extends TestCase {
 
 	public void xtestPropertyWriter() throws Exception {
 		
-		ConnectionPool pool = new ConnectionPool("localhost","3306","ambit_repository","root","sinanica",1,1);
-        Connection connection = pool.getConnection();
-        RepositoryReader reader = new RepositoryReader(connection);
-        PropertyWriter propertyWriter = new PropertyWriter(connection);
+		DataSource dataSource = DatasourceFactory.getDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=");
+        Connection connection = dataSource.getConnection();
+        RepositoryReader reader = new RepositoryReader();
+        reader.setConnection(connection);
+        PropertyWriter propertyWriter = new PropertyWriter();
+        propertyWriter.setConnection(connection);
         reader.open();
         int records = 0;
 		long now = System.currentTimeMillis();
