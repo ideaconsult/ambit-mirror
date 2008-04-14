@@ -31,6 +31,7 @@ import ambit2.data.AmbitUser;
  	//return second connection
  	pool.returnConnection(conn);     
  </pre>			
+ @deprecated Use {@link DatasourceFactory}.
  */
 public class ConnectionPool {
 	private Hashtable connections;

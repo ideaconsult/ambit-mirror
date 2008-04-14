@@ -22,31 +22,49 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.repository;
+package ambit2.repository.processors;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public abstract class AbstractRepositoryWriter<T> extends AbstractRepositoryAccess {
+import ambit2.repository.AbstractRepositoryAccess;
+import ambit2.repository.IDBProcessor;
+import ambit2.repository.ProcessorException;
 
+public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractRepositoryAccess  implements IDBProcessor<Target,Result>{
+
+    public AbstractRepositoryWriter() {
+    }    
 	public AbstractRepositoryWriter(Connection connection) throws SQLException {
 		super(connection);
-		prepareStatement(connection);
 	}
+    public synchronized void setConnection(Connection connection)  throws SQLException  {
+        super.setConnection(connection);
+        prepareStatement(connection);        
+    }       
 	protected abstract void prepareStatement(Connection connection) throws SQLException;
-	public void transaction(T arg0) throws SQLException {
-
+	public Result transaction(Target arg0) throws SQLException {
+	    Result result = null;
 		try {
 			connection.setAutoCommit(false);	
-			write(arg0);
+			result = write(arg0);
 	        connection.commit();			
 	    } catch (SQLException x) {
 	    	connection.rollback();
 	    } finally {
-
+	        
 	    }
+        return result;
 	}	
-	public abstract void write(T arg0) throws SQLException ;	
+	public abstract Result write(Target arg0) throws SQLException ;
+    
+	public Result process(Target target) throws ProcessorException {
+        try {
+            return write(target);
+        } catch (SQLException x) {
+            throw new ProcessorException(x);
+        }
+	}
 }
 
 

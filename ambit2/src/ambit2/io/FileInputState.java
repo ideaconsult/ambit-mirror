@@ -16,12 +16,14 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 
 import ambit2.exceptions.AmbitIOException;
+import ambit2.repository.processors.ProcessorFile2FileReader;
 
 /**
  * Use {@link #getReader(InputStream, String)} to get a reader of the right type.
  * 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
+ * @deprecated use {@link ProcessorFile2FileReader}
  */
 public class FileInputState extends FileState implements IInputState {
 	public transient static final int SDF_INDEX = 0;

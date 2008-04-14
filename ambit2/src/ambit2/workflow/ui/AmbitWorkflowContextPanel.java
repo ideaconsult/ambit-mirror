@@ -22,7 +22,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.workflow;
+package ambit2.workflow.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -42,6 +42,7 @@ import javax.swing.JToolBar;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.ui.data.ImageCellRenderer;
+import ambit2.workflow.CachedRowSetTableModel;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;

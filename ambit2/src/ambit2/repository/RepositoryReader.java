@@ -67,5 +67,6 @@ public class RepositoryReader extends AbstractRepositoryAccess {
 	}	
 	public void close() throws SQLException {
 		ps_structures.close();
-	}	
+	}
+
 }

@@ -30,7 +30,7 @@ import com.microworkflow.ui.IWorkflowContextFactory;
 public class WorkflowContextFactory implements IWorkflowContextFactory {
 	protected WorkflowContext workflowContext;	
 	public WorkflowContextFactory() {
-		workflowContext = new WorkflowContext();
+		workflowContext = new DBWorkflowContext();
 	}
 	
 	public WorkflowContext getWorkflowContext() {

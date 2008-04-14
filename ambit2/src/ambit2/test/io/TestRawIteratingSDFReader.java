@@ -4,45 +4,36 @@ import java.io.FileReader;
 import java.io.StringReader;
 import java.sql.Connection;
 
-import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.JoinRowSet;
-import javax.sql.rowset.Joinable;
 import javax.sql.rowset.spi.SyncProviderException;
 import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.JOptionPane;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 
 import ambit2.database.ConnectionPool;
+import ambit2.database.DatasourceFactory;
 import ambit2.io.RawIteratingSDFReader;
-import ambit2.repository.PropertyWriter;
 import ambit2.repository.RepositoryReader;
-import ambit2.repository.RepositoryWriter;
 import ambit2.repository.StructureRecord;
-import ambit2.workflow.AmbitWorkflowContextPanel;
+import ambit2.repository.processors.PropertyWriter;
+import ambit2.repository.processors.RepositoryWriter;
+import ambit2.workflow.ui.AmbitWorkflowContextPanel;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
 import com.sun.rowset.CachedRowSetImpl;
-import com.sun.rowset.JoinRowSetImpl;
 
 public class TestRawIteratingSDFReader extends TestCase {
 	public void xtest() throws Exception  {
 		
-		ConnectionPool pool = new ConnectionPool("localhost","3306","ambit2","root","sinanica",1,1);
+		ConnectionPool pool = new ConnectionPool("localhost","3306","ambit2","root","",1,1);
         Connection connection = pool.getConnection();
         
 		String filename = "D:/nina/Chemical Databases/EINECS/einecs_structures_V13Apr07.sdf";
@@ -62,6 +53,7 @@ public class TestRawIteratingSDFReader extends TestCase {
 		now = System.currentTimeMillis() - now;
 		System.out.println("Records "+records + " " + now + " ms.");
 	}
+
 	public void xtestPropertyWriter() throws Exception {
 		
 		ConnectionPool pool = new ConnectionPool("localhost","3306","ambit_repository","root","sinanica",1,1);
@@ -116,11 +108,11 @@ public class TestRawIteratingSDFReader extends TestCase {
   // supply the connection to the RowSet
   Contacts.execute(con);
  */        
-    	ConnectionPoolDataSource src;
+    	
         
-        Class.forName("com.mysql.jdbc.Driver");
+
         
-        DataSource dataSource = setupDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=sinanica");
+        DataSource dataSource = DatasourceFactory.getDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=sinanica");
          
         CachedRowSet join = new CachedRowSetImpl();
         join.setPageSize(10);
@@ -182,40 +174,7 @@ public class TestRawIteratingSDFReader extends TestCase {
         //System.out.println(pages+"\t"+records);
 
     }
-    public static DataSource setupDataSource(String connectURI) {
-        //
-        // First, we'll need a ObjectPool that serves as the
-        // actual pool of connections.
-        //
-        // We'll use a GenericObjectPool instance, although
-        // any ObjectPool implementation will suffice.
-        //
-        ObjectPool connectionPool = new GenericObjectPool(null);
-
-        //
-        // Next, we'll create a ConnectionFactory that the
-        // pool will use to create Connections.
-        // We'll use the DriverManagerConnectionFactory,
-        // using the connect string passed in the command line
-        // arguments.
-        //
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(connectURI,null);
-
-        //
-        // Now we'll create the PoolableConnectionFactory, which wraps
-        // the "real" Connections created by the ConnectionFactory with
-        // the classes that implement the pooling functionality.
-        //
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory,connectionPool,null,null,false,true);
-
-        //
-        // Finally, we create the PoolingDriver itself,
-        // passing in the object pool we created.
-        //
-        PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
-
-        return dataSource;
-    }
+ 
     /**
 select SUBSTRING_INDEX(user(),'@',1)
 

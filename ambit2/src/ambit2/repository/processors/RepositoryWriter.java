@@ -22,13 +22,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.repository;
+package ambit2.repository.processors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.repository.StructureRecord;
 
 /**
 <pre>
@@ -57,21 +61,23 @@ CREATE TABLE  `ambit_repository`.`structure` (
  * @author nina
  *
  */
-public class RepositoryWriter extends AbstractRepositoryWriter<String>  {
+public class RepositoryWriter extends AbstractRepositoryWriter<String,List<StructureRecord>> {
 	protected static final String insert_chemical = "INSERT INTO CHEMICALS (idchemical) values (null)";
 	protected PreparedStatement ps_chemicals;
 	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format) values (null,?,compress(?),?)";
 	protected PreparedStatement ps_structure;
+    public RepositoryWriter(){
+    }    
 	public RepositoryWriter(Connection connection) throws SQLException {
 		super(connection);
-		prepareStatement(connection);
 	}
 	@Override
 	public void open() throws SQLException {
 
 	}
 
-	public void write(String arg0) throws SQLException {
+	public List<StructureRecord> write(String arg0) throws SQLException {
+        List<StructureRecord> sr = new ArrayList<StructureRecord>();
 		ps_chemicals.executeUpdate();
 		ResultSet rs = ps_chemicals.getGeneratedKeys();
 		ps_structure.clearParameters();
@@ -80,8 +86,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<String>  {
 			ps_structure.setString(2,arg0);
 			ps_structure.setString(3,"SDF");
 			ps_structure.executeUpdate();
+            ResultSet rss = ps_structure.getGeneratedKeys();
+            while (rss.next()) 
+                sr.add(new StructureRecord(rs.getInt(1),rss.getInt(1),null,null));
+            rss.close();
 		} 
 		rs.close();
+        return sr;
+        
 	}
 	protected void prepareStatement(Connection connection) throws SQLException {
 		 ps_chemicals = connection.prepareStatement(insert_chemical,Statement.RETURN_GENERATED_KEYS);

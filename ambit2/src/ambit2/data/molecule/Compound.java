@@ -4,32 +4,23 @@
  */
 package ambit2.data.molecule;
 
-import java.io.StringReader;
-
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IChemFile;
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.MFAnalyser;
 
 import ambit2.config.AmbitCONSTANTS;
+import ambit2.data.AmbitObject;
 import ambit2.exceptions.AmbitException;
 import ambit2.processors.IAmbitProcessor;
 import ambit2.smiles.SmilesParserWrapper;
 import ambit2.ui.data.QCompoundPanel;
 import ambit2.ui.editors.IAmbitEditor;
-import ambit2.data.AmbitObject;
 
 /**
  * A chemical compound. Designed to encapsulate certain properties and functionality not available in {@link Molecule}

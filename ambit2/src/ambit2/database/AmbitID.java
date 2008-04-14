@@ -31,6 +31,12 @@ package ambit2.database;
 
 import ambit2.config.AmbitCONSTANTS;
 
+/**
+ * 
+ * @deprecated
+ * @author Nina Jeliazkova nina@acad.bg
+ * <b>Modified</b> Apr 13, 2008
+ */
 
 public class AmbitID  implements Comparable<AmbitID>{
     private int idstructure = -1;

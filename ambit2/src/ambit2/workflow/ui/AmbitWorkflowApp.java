@@ -26,7 +26,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * 
  */
-package ambit2.workflow;
+package ambit2.workflow.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -44,6 +44,8 @@ import javax.swing.border.BevelBorder;
 import ambit2.ui.AmbitStatusBar;
 import ambit2.ui.CoreApp;
 import ambit2.ui.UITools;
+import ambit2.workflow.WorkflowContextFactory;
+import ambit2.workflow.WorkflowFactory;
 
 import com.microworkflow.ui.IWorkflowContextFactory;
 import com.microworkflow.ui.IWorkflowFactory;

@@ -27,12 +27,22 @@ package ambit2.repository;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public abstract class AbstractRepositoryAccess {
-	protected Connection connection;
+import ambit2.repository.processors.IRepositoryAccess;
 
-	public AbstractRepositoryAccess(Connection connection) {
-		this.connection = connection;
+public abstract class AbstractRepositoryAccess implements IRepositoryAccess {
+	protected Connection connection;
+    public AbstractRepositoryAccess() {
+    }
+	public AbstractRepositoryAccess(Connection connection) throws SQLException {
+		setConnection(connection);
 	}
 	public abstract void open() throws SQLException;
-	public abstract void close() throws SQLException;	
+	public abstract void close() throws SQLException;
+    
+    public synchronized Connection getConnection() {
+        return connection;
+    }
+    public synchronized void setConnection(Connection connection) throws SQLException {
+        this.connection = connection;
+    }	
 }

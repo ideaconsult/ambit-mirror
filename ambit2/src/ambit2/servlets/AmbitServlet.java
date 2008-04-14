@@ -20,13 +20,12 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.MFAnalyser;
 
-import ambit2.database.ConnectionPool;
-import ambit2.smiles.SmilesParserWrapper;
 import ambit2.data.DefaultData;
 import ambit2.data.molecule.MoleculeTools;
+import ambit2.database.ConnectionPool;
+import ambit2.smiles.SmilesParserWrapper;
 
 /**
  * A descendant of {@link javax.servlet.http.HttpServlet} encapsulating common task for AMBIT servlets.

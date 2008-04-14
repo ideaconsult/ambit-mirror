@@ -22,14 +22,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.repository;
+package ambit2.repository.processors;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.Map;
+
+import ambit2.repository.StructureRecord;
 
 /**
  * <pre>
@@ -59,7 +60,7 @@ CREATE TABLE  `ambit_repository`.`structure_fields` (
  * @author nina
  *
  */
-public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord> {
+public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord,StructureRecord> {
 	protected static final String select_property_byname = "SELECT idfieldname,name FROM FIELD_NAMES WHERE name=?";
 	protected PreparedStatement ps_selectproperty;
 	protected static final String insert_property_name = "INSERT IGNORE INTO FIELD_NAMES (idfieldname,name) values (null,?)";
@@ -67,6 +68,9 @@ public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord> {
 	protected static final String insert_property_value = "INSERT INTO STRUCTURE_FIELDS (idstructure,idfieldname,value) values (?,?,left(?,256))";
 	protected PreparedStatement ps_propertyvalue;
 
+    public PropertyWriter() {
+        super();
+    }    
 	public PropertyWriter(Connection connection) throws SQLException {
 		super(connection);
 	}
@@ -79,7 +83,7 @@ public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord> {
 	}
 
 	@Override
-	public void write(StructureRecord record) throws SQLException {
+	public StructureRecord write(StructureRecord record) throws SQLException {
 		
 		Iterator e = record.getProperties().keySet().iterator();
 		while (e.hasNext()) {
@@ -107,6 +111,7 @@ public class PropertyWriter extends AbstractRepositoryWriter<StructureRecord> {
 			}
 			
 		}
+        return record;
 
 		
 	}
