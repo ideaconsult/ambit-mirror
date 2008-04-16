@@ -30,8 +30,6 @@
 package com.microworkflow.ui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 
@@ -39,13 +37,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.MapTableModel.Mode;
-import com.microworkflow.ui.actions.WFCActionAnimate;
 
 public class WorkflowContextPanel extends JPanel implements
         IWorkflowContextListenerUI {
@@ -124,6 +119,7 @@ public class WorkflowContextPanel extends JPanel implements
     }
     public synchronized void setProperties(Vector<String> properties) {
         this.properties = properties;
+        setWorkflowContext(wfcfactory.getWorkflowContext());        
     }
 
     public synchronized IWorkflowContextFactory getWfcfactory() {
