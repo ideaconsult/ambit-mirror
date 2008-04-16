@@ -29,6 +29,7 @@
 
 package com.microworkflow.ui;
 
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.JComponent;
@@ -79,10 +80,14 @@ public class WorkflowPanel extends JScrollPane implements IWorkflowListenerUI {
 
 			};
 		};        
+		
+		table.setRowHeight(32);
         table.getColumnModel().getColumn(0).setMaxWidth(32);
         table.getColumnModel().getColumn(1).setMaxWidth(32);
         table.setShowVerticalLines(false);
         setViewportView(table);
+        setPreferredSize(new Dimension(200,200));
+        setMaximumSize(new Dimension(200,200));
     }
     public void setWorkflow(Workflow wf) {
        if (this.workflow != null)

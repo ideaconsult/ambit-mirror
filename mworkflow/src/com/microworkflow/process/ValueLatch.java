@@ -56,5 +56,10 @@ public class ValueLatch<T> {
             return value;
         }
     }
+    @Override
+    public String toString() {
+    	if (isSet()) return value.toString();
+    	else return "Waiting for user input";
+    }
 }
 

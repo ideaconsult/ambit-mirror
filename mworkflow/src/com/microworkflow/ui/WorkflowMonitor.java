@@ -42,6 +42,8 @@ import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
+import com.l2fprod.common.swing.JTaskPane;
+import com.l2fprod.common.swing.JTaskPaneGroup;
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.actions.WFActionAnimate;
@@ -57,6 +59,7 @@ public class WorkflowMonitor extends JPanel {
     private static final long serialVersionUID = 3984550882955100106L;
 
     public WorkflowMonitor(IWorkflowListenerUI workflowListener,
+    		WorkflowContextListener workflowControl,
             IWorkflowContextListenerUI workflowContextListener,
             IWorkflowFactory wff, IWorkflowContextFactory wfcf) {
         super(new BorderLayout());
@@ -72,14 +75,38 @@ public class WorkflowMonitor extends JPanel {
         		ph,
         		new JScrollPane(new JTextArea()));
         
-        JPanel p = new JPanel(new BorderLayout());
+        JTaskPane p = new JTaskPane();
+        JTaskPaneGroup workflowgroup = new JTaskPaneGroup();
+        workflowgroup.setName("Workflow");
+        workflowgroup.setExpanded(true);
+        workflowgroup.setTitle("Workflow");
+        workflowgroup.setSpecial(true);	 
+        workflowgroup.add(workflowListener.getUIComponent());
+        workflowgroup.add(createToolBar(wff,wfcf));
+        p.add(workflowgroup);
+        
+        if (workflowControl != null) {
+        	JTaskPaneGroup control = new JTaskPaneGroup();
+        	control.setName("Workflow control");
+        	control.setExpanded(true);
+        	control.setTitle("Details");
+        	control.setSpecial(true);	 
+        	control.add(workflowControl.getUIComponent());
+            p.add(control);
+        }
+        
+        /*
         label = new JLabel("Workflow");
         label.setOpaque(true);
         label.setBackground(Color.orange);
         p.add(label,BorderLayout.NORTH);
-        p.add(workflowListener.getUIComponent(),BorderLayout.CENTER);
+        */
+        /*
+        p.add(workflowListener.getUIComponent(),BorderLayout.NORTH);
+        if (workflowControl != null)
+        	p.add(workflowControl.getUIComponent(),BorderLayout.CENTER);
         p.add(createToolBar(wff,wfcf),BorderLayout.SOUTH);
-        
+        	*/
         verticalPane = new JSplitPane(
         		JSplitPane.HORIZONTAL_SPLIT,
         		p,
@@ -103,6 +130,7 @@ public class WorkflowMonitor extends JPanel {
     }
     protected JToolBar createToolBar(IWorkflowFactory wff, IWorkflowContextFactory wfcf) {
         JToolBar tb = new JToolBar();
+        tb.setFloatable(false);
         tb.add(new WFActionExecute(wff,wfcf));
         final WFActionAnimate wfaa = new WFActionAnimate(wff);
         JToggleButton b = new JToggleButton(wfaa);
