@@ -24,6 +24,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import ambit2.io.MyIOUtilities;
 
 /**
+ * @deprecated
  * Holds some default data for a database connection. Can save and load this setting into/from XML file.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2005-12-18

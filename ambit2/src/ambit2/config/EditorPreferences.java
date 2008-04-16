@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2005-2007  
+Copyright (C) 2005-2008  
 
 Contact: nina@acad.bg
 
@@ -33,36 +33,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-public class Preferences {
+import ambit2.ui.editors.IAmbitEditor;
+
+public class EditorPreferences {
 	protected static PropertyChangeSupport propertyChangeSupport;
-	public static String SHOW_AROMATICITY="showAromaticity";
-	public static String GENERATE2D="generate2D";
-	public static String DEFAULT_DIR="defaultDir";
-	public static String SMILESPARSER="smilesParser";
-	public static String SCHEME="Scheme";
-	public static String DATABASE="Database";
-	public static String HOST="Host";
-	public static String PORT="Port";
-	public static String USER="User";
 	
-	protected final static String filename="ambit2.pref";
+	protected final static String filename="ambit2.ui.pref";
 	protected static Properties props = null;
 	public static Object[][] default_values = {
-		{DEFAULT_DIR,"Default directory","",String.class},		
-		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class},
-		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class},
-		{SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class},
-		{DATABASE,"Default database schema","ambit2",String.class},
-		{PORT,"Default database port","3306",String.class},
-		{HOST,"Host","localhost",String.class},
-		{SCHEME,"Scheme","jdbc:mysql",String.class},
 		
+		{"com.microworkflow.process.ValueLatchPair","ambit2.workflow.ui.ValueLatchPairEditor"},
+		{"ambit2.repository.LoginInfo","ambit2.data.qmrf.QMRFAttributesPanel"},		
 	};
 	
 	protected static Properties getDefault() {
 		Properties p = new Properties();
 		for (int i=0; i < default_values.length; i++) {
-			p.setProperty(default_values[i][0].toString(),default_values[i][2].toString());			
+			p.setProperty(default_values[i][0].toString(),default_values[i][1].toString());			
 		}
 		return p;
 	}
@@ -101,14 +88,7 @@ public class Preferences {
 	}
 	public static String getProperty(String key) {
 		Properties p = getProperties();
-        Object o = p.get(key);
-        if (o==null) {
-            Properties ps = getDefault();
-            o = ps.get(key);
-            if (o == null) o = "";
-            setProperty(key, o.toString());
-        }
-        return o.toString();
+		return p.get(key).toString();
 	}
 	public static PropertyChangeSupport getPropertyChangeSupport() {
 		if (propertyChangeSupport == null)
@@ -118,7 +98,26 @@ public class Preferences {
 	public static void setPropertyChangeSupport(
 			PropertyChangeSupport propertyChangeSupport) {
 		Preferences.propertyChangeSupport = propertyChangeSupport;
+	}
+	public static IAmbitEditor getEditor(Class key) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+		return getEditor(key.getName());
 	}	
+	public static IAmbitEditor getEditor(Object key) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+		IAmbitEditor e = getEditor(key.getClass().getName());
+		if (e != null)
+			e.setObject(key);
+		return e;
+	}
+	
+	public static IAmbitEditor getEditor(String key) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+		String s = getProperty(key);
+		Class clazz = Class.forName(s);
+		Object o = clazz.newInstance();
+		if (o instanceof IAmbitEditor) {
+			return (IAmbitEditor)o;
+		}
+		else return null;
+	}
 }
 
 

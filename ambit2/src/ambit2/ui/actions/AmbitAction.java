@@ -10,9 +10,9 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import ambit2.log.AmbitLogger;
 import ambit2.data.ISharedData;
 import ambit2.io.batch.IJobStatus;
+import ambit2.log.AmbitLogger;
 import ambit2.ui.GUIWorker;
 /**
  * 
@@ -20,10 +20,10 @@ import ambit2.ui.GUIWorker;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2005-12-4
  */
-public abstract class AmbitAction extends AbstractAction {
+public abstract class AmbitAction<Data> extends AbstractAction {
 	protected static AmbitLogger logger = new AmbitLogger(AmbitAction.class);
 	protected GUIWorker worker = null;
-	protected Object userData = null;
+	protected Data userData = null;
 	protected Object actionName ="";
 	protected Container mainFrame = null; //used as parent for child dialogs
 	protected ActionMap actions = null;
@@ -40,7 +40,7 @@ public abstract class AmbitAction extends AbstractAction {
 	 * @param userData Arbitrary data
 	 * @param mainFrame {@link JFrame} parent frame
 	 */
-	public AmbitAction(Object userData, Container mainFrame) {
+	public AmbitAction(Data userData, Container mainFrame) {
 		this(userData,mainFrame,"Go!",null);
 		
 	}
@@ -50,7 +50,7 @@ public abstract class AmbitAction extends AbstractAction {
 	 * @param mainFrame {@link JFrame} parent frame
 	 * @param name {@link javax.swing.Action} name
 	 */
-	public AmbitAction(Object userData, Container mainFrame, String name) {
+	public AmbitAction(Data userData, Container mainFrame, String name) {
 		this(userData,mainFrame,name,null);
 	}
 
@@ -61,7 +61,7 @@ public abstract class AmbitAction extends AbstractAction {
 	 * @param name {@link javax.swing.Action} name
 	 * @param icon
 	 */
-	public AmbitAction(Object userData, Container mainFrame, String name, Icon icon) {
+	public AmbitAction(Data userData, Container mainFrame, String name, Icon icon) {
 		super(name, icon);
 		setUserData(userData);
 		setMainFrame(mainFrame);
@@ -149,11 +149,11 @@ public abstract class AmbitAction extends AbstractAction {
         worker.start(); 
     }
 
-	public Object getUserData() {
+	public Data getUserData() {
 		return userData;
 	}
 
-	public void setUserData(Object userData) {
+	public void setUserData(Data userData) {
 		this.userData = userData;
 	}
 

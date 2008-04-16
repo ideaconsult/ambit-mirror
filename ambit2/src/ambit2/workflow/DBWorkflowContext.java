@@ -37,10 +37,11 @@ import ambit2.exceptions.AmbitException;
 import com.microworkflow.process.WorkflowContext;
 
 public class DBWorkflowContext extends WorkflowContext {
-	public static String SESSION = "SESSION";
-    public static String DATASOURCE = "DATASOURCE";
-    public static String DBCONNECTION_URI = "DBCONNECTIO" +
-    		"N_URI";
+	public static String SESSION = "ambit2.workflow.DBWorkflowContext.SESSION";
+    public static String DATASOURCE = "ambit2.workflow.DBWorkflowContext.DATASOURCE";
+    public static String DBCONNECTION_URI = "ambit2.workflow.DBWorkflowContext.DBCONNECTION_URI";
+    public static String LOGININFO = "ambit2.workflow.DBWorkflowContext.LOGININFO";
+    public static String ERROR = "ERROR";
     
     
     public DataSource getDataSource() throws AmbitException {

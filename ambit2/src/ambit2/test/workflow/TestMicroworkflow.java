@@ -60,6 +60,7 @@ import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
 import com.microworkflow.ui.IWorkflowFactory;
+import com.microworkflow.ui.WorkflowContextListener;
 import com.microworkflow.ui.WorkflowContextPanel;
 import com.microworkflow.ui.WorkflowMonitor;
 import com.microworkflow.ui.WorkflowPanel;
@@ -164,7 +165,7 @@ public class TestMicroworkflow extends TestCase {
         
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());        
         WorkflowMonitor panel = new WorkflowMonitor(new WorkflowPanel(
-                molWorkflow), new WorkflowContextPanel(wfcf),
+                molWorkflow), null,new WorkflowContextPanel(wfcf),
                 wff,wfcf
         );
         // panel.setPreferredSize(new Dimension(200,200));

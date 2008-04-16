@@ -30,13 +30,10 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Vector;
 
 import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
@@ -48,29 +45,16 @@ import ambit2.ui.data.ImageCellRenderer;
 import ambit2.workflow.CachedRowSetTableModel;
 import ambit2.workflow.DBWorkflowContext;
 
-import com.microworkflow.events.WorkflowContextEvent;
-import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
-import com.microworkflow.ui.IWorkflowContextListenerUI;
+import com.microworkflow.ui.WorkflowContextListener;
 import com.sun.rowset.CachedRowSetImpl;
 
-public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContextListenerUI {
-
-    protected IWorkflowContextFactory wfcfactory;
+public class AmbitWorkflowContextPanel extends WorkflowContextListener  {
     protected CachedRowSetTableModel srtm;
-    protected boolean animate = false;
-    protected Vector<String> properties;
-    /**
-     * 
-     */
     private static final long serialVersionUID = 2854619268267349642L;
     public AmbitWorkflowContextPanel(IWorkflowContextFactory wfcfactory) {
-        super(new BorderLayout());
-        
-        properties = new Vector<String>();
-        properties.add("Result");
-        properties.add("Query");
-        setWfcfactory(wfcfactory);
+        super(wfcfactory);
+
         srtm = new CachedRowSetTableModel();
         JTable table = new JTable(srtm);
         table.setRowHeight(150);
@@ -103,14 +87,8 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         
         
     }
-    public JComponent getUIComponent() {
-        return this;
-    }
-
-    public void propertyChange(PropertyChangeEvent arg0) {
-        if (WorkflowContextEvent.WF_ANIMATE.equals(arg0.getPropertyName()))
-            setAnimate((Boolean) arg0.getNewValue());
-        else if (animate) {
+    @Override
+    protected void animate(PropertyChangeEvent arg0) {
         	if ("Result".equals(arg0.getPropertyName())) {
         		Object o = getWorkflowContext().get("Result");
         		if (o instanceof CachedRowSet)
@@ -123,8 +101,6 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         			}
         		}
         	}
-
-        }
     }
     
     protected CachedRowSet getQuery(QueryID query) throws SQLException {
@@ -134,14 +110,16 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
         
         Connection c = ((DataSource)wfcfactory.getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
         q.execute(c);
-        c.close();
+        //c.close();
         return q;
     	
     }
-    protected synchronized WorkflowContext getWorkflowContext() {
-        return getWfcfactory().getWorkflowContext();
+    @Override
+    public void clear() {
+    	// TODO Auto-generated method stub
+    	
     }
-
+/*
     private synchronized void setWorkflowContext(WorkflowContext wfc) {
         clear();
         if (this.getWorkflowContext() != null) {
@@ -157,33 +135,7 @@ public class AmbitWorkflowContextPanel extends JPanel implements IWorkflowContex
             this.getWorkflowContext().addPropertyChangeListener(WorkflowContextEvent.WF_ANIMATE,this);   
         }
      }
-    public void clear() {
-        
-    }
-    public synchronized boolean isAnimate() {
-        return animate;
-    }
-    public synchronized void setAnimate(boolean animate) {
-        this.animate = animate;
-        /*
-        if (animate)
-            mtm.setMap(getWfcfactory().getWorkflowContext());
-            */            
-    }
-    public synchronized Vector<String> getProperties() {
-        return properties;
-    }
-    public synchronized void setProperties(Vector<String> properties) {
-        this.properties = properties;
-    }
-
-    public synchronized IWorkflowContextFactory getWfcfactory() {
-        return wfcfactory;
-    }
-    public synchronized void setWfcfactory(IWorkflowContextFactory wfcfactory) {
-        this.wfcfactory = wfcfactory;
-        setWorkflowContext(wfcfactory.getWorkflowContext());
-    }
+     */
 }
 
 

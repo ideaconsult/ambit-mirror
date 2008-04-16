@@ -115,7 +115,7 @@ public class TestRawIteratingSDFReader extends TestCase {
         
 
         
-        DataSource dataSource = DatasourceFactory.getDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=sinanica");
+        DataSource dataSource = DatasourceFactory.getDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=");
          
         CachedRowSet join = new CachedRowSetImpl();
         join.setPageSize(10);

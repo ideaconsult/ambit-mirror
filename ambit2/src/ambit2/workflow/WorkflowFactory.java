@@ -25,48 +25,115 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.workflow;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
-import ambit2.repository.IQuery;
-import ambit2.repository.QueryID;
-import ambit2.repository.QueryParam;
+import ambit2.database.DatasourceFactory;
+import ambit2.repository.LoginInfo;
 import ambit2.repository.processors.ProcessorCreateQuery;
 import ambit2.repository.processors.ProcessorCreateSession;
 
+import com.microworkflow.execution.Performer;
+import com.microworkflow.process.Activity;
+import com.microworkflow.process.Conditional;
+import com.microworkflow.process.Primitive;
+import com.microworkflow.process.TestCondition;
+import com.microworkflow.process.ValueLatchPair;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.IWorkflowFactory;
 
-public class WorkflowFactory extends Hashtable <String,Workflow> implements IWorkflowFactory {
+public class WorkflowFactory implements IWorkflowFactory {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6456499162628345432L;
-	protected String theTask;
+	protected Workflow workflow;
+	protected List<String> tasks;
 
 	public WorkflowFactory() {
-		
-		ActivityPrimitive test = new ActivityPrimitive(DBWorkflowContext.SESSION,DBWorkflowContext.SESSION,new ProcessorCreateSession());
-		test.setName("Session");
-		ActivityPrimitive p1 = new ActivityPrimitive("Query","Result",new ProcessorCreateQuery());
-		p1.setName("Query");
-
-        theTask = "test";
-        Workflow wf = new Workflow();
-        wf.setDefinition(test.addStep(p1));
-        put(theTask,wf);
+		tasks = new ArrayList<String>();
+        tasks.add("Find analogs");
+        tasks.add("Log in");
+        workflow = new Workflow();
+        setTheTask("Log in");
 	}
 	public Workflow getWorkflow() {
-		return get(theTask);
+		return workflow;
 	}
-	public String getTheTask() {
-		return theTask;
+	public Iterator<String> tasks() {
+		return tasks.iterator();
 	}
 
 	public void setTheTask(String theTask) {
-		this.theTask = theTask;
+		System.out.println(theTask);
+		if ("Log in".equals(theTask)) workflow.setDefinition(getLoginWorkflow());
+		else
+			if ("Find analogs".equals(theTask)) workflow.setDefinition(getFindAnalogsWorkflow());
 	}
 	
+	private Activity getFindAnalogsWorkflow() {
+		ActivityPrimitive test = new ActivityPrimitive(DBWorkflowContext.SESSION,DBWorkflowContext.SESSION,new ProcessorCreateSession());
+		test.setName("Session");
+		ActivityPrimitive p1 = new ActivityPrimitive("Query","Result",new ProcessorCreateQuery());
+		p1.setName("Query");	
+		return test.addStep(p1);
+	}
+	private Activity getLoginWorkflow() {
+
+		Primitive login = new Primitive(DBWorkflowContext.DBCONNECTION_URI,DBWorkflowContext.DBCONNECTION_URI,new Performer() {
+			@Override
+			public Object execute() {
+				Object o = getTarget();
+				if (o == null) {
+					ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>(new LoginInfo());
+					context.put(DBWorkflowContext.LOGININFO,latch);
+					//This is a blocking operation!
+					try {
+						LoginInfo li = latch.getLatch().getValue();
+						return DatasourceFactory.getConnectionURI(
+								li.getScheme(), li.getHostname(), li.getPort(), 
+								li.getDatabase(), li.getUser(), li.getPassword());
+					} catch (InterruptedException x) {
+						context.put(DBWorkflowContext.ERROR, x);
+						return null;
+					}
+					
+				} else return o;	
+			}
+		}); 
+		login.setName("Login");
+		Primitive thenP = new Primitive(DBWorkflowContext.DATASOURCE,new Performer() {
+			@Override
+			public Object execute() {
+				System.out.println(getTarget());
+				return null;
+			}
+		}); 			
+		thenP.setName("OK");
+		Conditional connect = new Conditional(
+				new TestCondition() {
+					public boolean evaluate() {
+						try {
+							Object o = context.get(DBWorkflowContext.DBCONNECTION_URI);
+							if (o != null) {
+								context.put(DBWorkflowContext.DATASOURCE,DatasourceFactory.getDataSource(o.toString()));
+								return  true;
+							} else {
+								context.remove(DBWorkflowContext.DBCONNECTION_URI);
+								return false;
+							}
+						} catch (Exception x) {
+							context.put(DBWorkflowContext.ERROR, x);
+							context.remove(DBWorkflowContext.DBCONNECTION_URI);
+							return false;
+						}
+					}
+				}, 
+				thenP,
+				login);
+		connect.setName("connect");
+		return login.addStep(connect);
+	}	
 }
 
 

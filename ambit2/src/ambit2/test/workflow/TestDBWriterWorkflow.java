@@ -68,7 +68,7 @@ public class TestDBWriterWorkflow extends TestCase {
         final WorkflowContext wcc = new DBWorkflowContext();
 
         wcc.put(DBWorkflowContext.DATASOURCE, DatasourceFactory.getDataSource(
-                DatasourceFactory.getConnectionURI("jdbc:mysql","localhost",null,"ambit2","root","sinanica")
+                DatasourceFactory.getConnectionURI("jdbc:mysql","localhost",null,"ambit2","root","")
                 ));
         wcc.put("structure","test");
         wc.setDefinition(p.addStep(a));

@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
@@ -53,7 +54,7 @@ public class DatasourceFactory {
     protected static final String amark="&";
     protected Map<String, DataSource> datasources;
     private DatasourceFactory() {
-        datasources = new Hashtable<String, DataSource>();
+        datasources = new ConcurrentHashMap<String, DataSource>();
     }
     private static class DatasourceFactoryHolder { 
         private final static DatasourceFactory instance = new DatasourceFactory();

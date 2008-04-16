@@ -33,22 +33,29 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
+import java.util.Vector;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.border.BevelBorder;
 
 import ambit2.ui.AmbitStatusBar;
 import ambit2.ui.CoreApp;
 import ambit2.ui.UITools;
+import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.WorkflowContextFactory;
 import ambit2.workflow.WorkflowFactory;
 
 import com.microworkflow.ui.IWorkflowContextFactory;
-import com.microworkflow.ui.IWorkflowFactory;
+import com.microworkflow.ui.WorkflowContextListener;
+import com.microworkflow.ui.WorkflowContextPanel;
 import com.microworkflow.ui.WorkflowMonitor;
 import com.microworkflow.ui.WorkflowPanel;
 
@@ -63,7 +70,7 @@ import com.microworkflow.ui.WorkflowPanel;
 
  */
 public class AmbitWorkflowApp extends CoreApp {
-	IWorkflowFactory workflowFactory;
+	WorkflowFactory workflowFactory;
 	IWorkflowContextFactory workflowContextFactory;
 	/**
 	 * @param title
@@ -99,7 +106,24 @@ public class AmbitWorkflowApp extends CoreApp {
 	 */
 	protected JMenuBar createMenuBar() {
 		
-		return new JMenuBar();
+		JMenuBar menuBar =  new JMenuBar();
+		Iterator<String> workflows = workflowFactory.tasks();
+		JMenu menu = new JMenu("Tasks");
+		menuBar.add(menu);
+		ButtonGroup bg = new ButtonGroup();
+		while (workflows.hasNext()) {
+			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
+					new SelectWorkflowAction(
+					workflowFactory,
+					mainFrame,
+					workflows.next().toString(),
+					null)
+			);
+			bg.add(mi);
+			menu.add(mi);
+			
+		}
+		return menuBar;
 	}
 
 	/* (non-Javadoc)
@@ -115,8 +139,15 @@ public class AmbitWorkflowApp extends CoreApp {
 	 */
 	protected void createWidgets(JFrame aFrame, JPanel aPanel) {
 		aPanel.setLayout(new BorderLayout());
+		ValueLatchPairEditor controlListener = new ValueLatchPairEditor(workflowContextFactory);
+		Vector<String> props = new Vector<String>();
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DBCONNECTION_URI);
+		props.add(DBWorkflowContext.DATASOURCE);
+		controlListener.setProperties(props);
         WorkflowMonitor panel = new WorkflowMonitor(
-        		new WorkflowPanel(workflowFactory.getWorkflow()), 
+        		new WorkflowPanel(workflowFactory.getWorkflow()),
+        		controlListener,
         		new AmbitWorkflowContextPanel(workflowContextFactory),
         		workflowFactory,workflowContextFactory
         );

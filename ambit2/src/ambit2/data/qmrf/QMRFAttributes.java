@@ -87,8 +87,16 @@ public class QMRFAttributes extends Hashtable<String,String>  {
 	public ArrayList<String> getNames() {
 		return names;
 	}
+	public void setNames(String[] names) {
+		if (this.names == null) this.names= new ArrayList<String>();
+		else this.names.clear();
+        for (int i=0; i < names.length;i++)
+            this.names.add(names[i]);
+	}	
 	public void setNames(ArrayList<String> names) {
-		this.names.clear();
+		if (this.names == null) this.names= new ArrayList<String>();
+		else this.names.clear();
+
         for (int i=0; i < names.size();i++)
             this.names.add(names.get(i));
 	}

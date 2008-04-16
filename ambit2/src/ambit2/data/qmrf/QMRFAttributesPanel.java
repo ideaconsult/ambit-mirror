@@ -35,7 +35,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
@@ -44,11 +43,18 @@ import ambit2.ui.AmbitColors;
 import ambit2.ui.SpringUtilities;
 import ambit2.ui.editors.IAmbitEditor;
 
-public class QMRFAttributesPanel extends JPanel implements IAmbitEditor, FocusListener{
+public class QMRFAttributesPanel extends JPanel implements IAmbitEditor<QMRFAttributes>, FocusListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3273797535238357131L;
 	protected boolean editable = true;
 	protected QMRFAttributes attributes;
 	protected JTextField[] field;
-	
+
+	public QMRFAttributesPanel() {
+		
+	}	
 	public QMRFAttributesPanel(QMRFAttributes attributes) {
 		this(attributes,attributes.getNames(),attributes.getNames());
 	}
@@ -67,6 +73,14 @@ public class QMRFAttributesPanel extends JPanel implements IAmbitEditor, FocusLi
 		this.attributes = attributes;
 		addWidgets(fields, fieldNames);
 	}
+	public QMRFAttributes getObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void setObject(QMRFAttributes object) {
+		this.attributes = object;
+		addWidgets(attributes.getNames(), attributes.getNames());
+	}	
 	@Override
 	public boolean isFocusable() {
 		return false;
@@ -140,6 +154,7 @@ public class QMRFAttributesPanel extends JPanel implements IAmbitEditor, FocusLi
 	public boolean isEditable() {
 		return editable;
 	}
+
 	
 }
 
