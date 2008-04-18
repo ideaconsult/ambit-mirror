@@ -43,7 +43,7 @@ public class SingleOrAromaticBond extends SMARTSBond
 		if (bond.getOrder() == IBond.Order.SINGLE)
 			return(true);
 		if (bond.getFlag(CDKConstants.ISAROMATIC))
-			return(true);
+			return(true);		
 		return false;
     };
 

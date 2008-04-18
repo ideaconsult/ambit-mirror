@@ -40,11 +40,13 @@ public class AromaticSymbolQueryAtom extends SMARTSAtom {
     
 	public boolean matches(IAtom atom) {
         if (atom.getFlag(CDKConstants.ISAROMATIC) && this.getSymbol().equals(atom.getSymbol())) 
-        {	
+        {	        	
         	return true;
         }
         else
+        {	
         	return false;
+        }	
     };
 
     public String toString() {

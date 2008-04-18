@@ -104,6 +104,30 @@ public class SmartsHelper
 		}	
 		return(sb.toString());
 	}
+	
+	static public String bondToStringExhaustive(QueryAtomContainer query, IBond bond)
+	{
+		StringBuffer sb = new StringBuffer();			
+		sb.append(bondToString(bond)+ " "+
+				bondAtomNumbersToString(query,bond)+ "  "+
+				atomToString(bond.getAtom(0))+ " "+atomToString(bond.getAtom(1))+"\n");			
+		return(sb.toString());
+	}
+	
+	static public String getBondsString(QueryAtomContainer query)
+	{
+		StringBuffer sb = new StringBuffer();			
+		for (int i = 0; i < query.getBondCount(); i++)
+		{	
+			sb.append(bondToString(query.getBond(i))+ " "+
+					bondAtomNumbersToString(query,query.getBond(i) )+ "  "+
+					atomToString(query.getBond(i).getAtom(0))+ " "+
+					atomToString(query.getBond(i).getAtom(1))+"\n");
+		}	
+		return(sb.toString());
+	}
+	
+	
 
 	static public String atomToString(IAtom a)
 	{
@@ -111,8 +135,27 @@ public class SmartsHelper
 			return(a.toString());		
 		if (a instanceof AliphaticSymbolQueryAtom)
 			return(a.getSymbol());
+		if (a instanceof AromaticSymbolQueryAtom)
+			return("Ar-"+a.getSymbol());
 		
 		return(a.getSymbol());		
+	}
+	
+	static public String bondToString(IBond b)
+	{
+		if (b instanceof SmartsBondExpression)
+			return(b.toString());		
+		if (b instanceof SingleOrAromaticBond)
+			return(":-");
+				
+		if (b.getOrder() == IBond.Order.SINGLE)
+			return("-");
+		if (b.getOrder() == IBond.Order.DOUBLE)
+			return("=");
+		if (b.getOrder() == IBond.Order.TRIPLE)
+			return("#");
+		
+		return("-");
 	}
 	
 	static public String bondAtomNumbersToString(IAtomContainer container, IBond b)

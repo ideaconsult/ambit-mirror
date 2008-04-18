@@ -17,8 +17,10 @@ public class TestUtilities
 		TestUtilities tu = new TestUtilities();
 		//tu.testSmartsManagerBoolSearch("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
 		//tu.testSmartsManagerBoolSearch("[x1;C]", "CCCC");
-		tu.testSmartsManagerAtomMapping("N", "CCNCCNCC");
-		tu.testSmartsManagerAtomMapping("[x3]", "C1CCC12CCC2");
+		//tu.testSmartsManagerAtomMapping("N", "CCNCCNCC");
+		//tu.testSmartsManagerAtomMapping("[x3]", "C1CCC12CCC2");
+		tu.testSmartsManagerBoolSearch("c1ccccc1C", "c1ccccc1C");		
+				
 	}
 	
 	SmartsParser sp = new SmartsParser();
@@ -46,7 +48,7 @@ public class TestUtilities
 		{
 			System.out.println(man.getErrors());
 			return;
-		}
+		}		
 		boolean res = man.searchIn(mol);
 		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
 	}

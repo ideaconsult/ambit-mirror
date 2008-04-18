@@ -264,8 +264,7 @@ public class SmartsParser
 						break;
 					}
 			}
-		}
-		//System.out.println("mNeedRingData = " + mNeedRingData);
+		}		
 	}
 	
 	
@@ -352,6 +351,8 @@ public class SmartsParser
 	    atoms[1] = (Atom)atom1;
 	    curBond.setAtoms(atoms);
 	    container.addBond(curBond);
+	    //System.out.println("--> " + SmartsHelper.bondToStringExhaustive(container,curBond));
+	    //System.out.println(SmartsHelper.getBondsString(container)+"\n");
 	}
 		
 	
@@ -449,7 +450,7 @@ public class SmartsParser
 		else
 		{	
 			registerIndex(Character.getNumericValue(smarts.charAt(curChar)));
-			curChar++;
+			curChar++;			
 		}	
 	}
 	
@@ -496,6 +497,9 @@ public class SmartsParser
 			if (rc.firstBond == SmartsConst.BT_UNDEFINED)
 			{	
 				addBond(rc.firstAtom, prevAtom);
+				//Reseting the "current" bond data
+				curBond = null; 
+				curBondType = SmartsConst.BT_UNDEFINED;				
 			}	
 			else
 			{
@@ -504,7 +508,12 @@ public class SmartsParser
 					if (rc.firstBond != curBondType)
 						newError("Atom index "+n+" is associated with two different bond types",-1,"");
 					else
+					{	
 						addBond(rc.firstAtom, prevAtom);
+						//Reseting the "current" bond data
+						curBond = null;
+						curBondType = SmartsConst.BT_UNDEFINED;						
+					}	
 				}
 				else
 					newError("Atom index "+n+" is associated with two different bond types",-1,"");
@@ -554,7 +563,7 @@ public class SmartsParser
 		case ')':
 			if (brackets.empty())
 			{	
-				System.out.println("curChar = " + curChar);
+				//System.out.println("curChar = " + curChar);
 				newError("Incorrect closing brackect", curChar+1,"");
 				return;
 			};				

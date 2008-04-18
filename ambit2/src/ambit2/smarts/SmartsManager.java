@@ -105,7 +105,14 @@ public class SmartsManager
 				if(mGenerateSubQueries)
 					genSubQueries();
 			}
-		}	
+		}
+		
+		//Print debug info
+		//System.out.println("query.getAtomCount() = "+query.getAtomCount());
+		//System.out.println("query.getBondCount() = "+query.getBondCount());
+		//System.out.println(query.toString());
+		//System.out.println(SmartsHelper.getAtomsString(query));
+		//System.out.println(SmartsHelper.getBondsString(query));
 	}
 	
 	public String getErrors()
