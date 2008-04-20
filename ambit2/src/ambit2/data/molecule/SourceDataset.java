@@ -4,50 +4,40 @@
  */
 package ambit2.data.molecule;
 
-import ambit2.ui.data.molecule.SourceDataSetTableModel;
-import ambit2.ui.editors.AbstractAmbitEditor;
-import ambit2.ui.editors.IAmbitEditor;
-import ambit2.ui.editors.SourceDatasetEditor;
-import ambit2.data.AmbitObject;
 import ambit2.data.literature.LiteratureEntry;
+import ambit2.data.qmrf.QMRFAttributes;
 
 
 /**
  * An origin dataset . See exapmle at {@link ambit2.database.writers.DbSubstanceWriter}.
  * @author Nina Jeliazkova <br>
- * <b>Modified</b> 2005-4-7
+ * <b>Modified</b> 2008-4-20
  */
-public class SourceDataset extends AmbitObject {
+public class SourceDataset extends QMRFAttributes {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6881106188176017447L;
 	protected LiteratureEntry reference = null;
-	protected int numberofstructures = 0;
+
+	protected static final String[] names={
+		"Name","User name"};	
 	/**
 	 * 
 	 */
 	public SourceDataset() {
-		super();
-		reference = new LiteratureEntry();
+		this("");
 	}
-
+	public SourceDataset(String name) {
+		this(name,new LiteratureEntry());
+	}
 	/**
 	 * @param name
 	 */
 	public SourceDataset(String name, LiteratureEntry reference) {
-		super();
+		super(names);
 		setName(name);
-		this.reference = reference;
-	}
-
-	/**
-	 * @param name
-	 * @param id
-	 */
-	public SourceDataset(String name, int id, LiteratureEntry reference) {
-		super("", id);
-		setName(name);
-		this.reference = reference;
-	}
-	public Object clone() throws CloneNotSupportedException {
-		return new SourceDataset(name,id,(LiteratureEntry)reference.clone());
+		setReference(reference);
 	}
 
 	public LiteratureEntry getReference() {
@@ -57,13 +47,16 @@ public class SourceDataset extends AmbitObject {
 		this.reference = reference;
 	}
 	public void setName(String name) {
-		int i = name.lastIndexOf("\\");
-		if (i > 0) name = name.substring(i+1);
-		super.setName(name);	
+		put(names[0],name);
 	}
-	@Override
-	public IAmbitEditor editor(boolean editable) {
-		return new SourceDatasetEditor("Dataset",this);
+	public void setUsername(String name) {
+		put(names[1],name);
+	}	
+	public String getName() {
+		return get(names[0]);
+	}
+	public String getUsername() {
+		return get(names[1]);
 	}
 	/* (non-Javadoc)
      * @see ambit2.data.AmbitObject#toString()
@@ -72,16 +65,4 @@ public class SourceDataset extends AmbitObject {
         return getName() + " Origin: " + reference.toString();
     }
 
-	public int getNumberofstructures() {
-		return numberofstructures;
-	}
-
-	public void setNumberofstructures(int numberofstructures) {
-		this.numberofstructures = numberofstructures;
-	}
-	@Override
-	public void setEditable(boolean editable) {
-			super.setEditable(editable);
-			if (reference!= null) reference.setEditable(editable);
-	}
 }

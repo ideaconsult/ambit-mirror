@@ -29,15 +29,17 @@ import java.awt.Dimension;
 import javax.swing.JOptionPane;
 
 import junit.framework.TestCase;
-import ambit2.ui.data.CompoundsGridPane;
-import ambit2.ui.data.GridTableModel;
-import ambit2.ui.editors.DescriptorsPanel;
+import ambit2.config.EditorPreferences;
 import ambit2.data.AmbitList;
 import ambit2.data.descriptors.DescriptorFactory;
 import ambit2.data.descriptors.DescriptorsList;
 import ambit2.data.literature.ReferenceFactory;
 import ambit2.data.molecule.SourceDataset;
 import ambit2.exceptions.AmbitException;
+import ambit2.ui.data.CompoundsGridPane;
+import ambit2.ui.data.GridTableModel;
+import ambit2.ui.editors.DescriptorsPanel;
+import ambit2.ui.editors.IAmbitEditor;
 
 public class SourceDatasetEditorTest extends TestCase {
 
@@ -45,16 +47,14 @@ public class SourceDatasetEditorTest extends TestCase {
 		junit.textui.TestRunner.run(SourceDatasetEditorTest.class);
 	}
 
-	public void test() {
+
+	public void test() throws Exception {
 		SourceDataset d = new SourceDataset("dataset", ReferenceFactory
 				.createDatasetReference("file.sdf", "file"));
-		try {
-			d.editor(true).view(null, true, "");
-		} catch (AmbitException x) {
-
-		}
-	}
-
+		IAmbitEditor<SourceDataset> e = EditorPreferences.getEditor(d);
+		JOptionPane.showMessageDialog(null,e.getJComponent());
+	}	
+/*
 	public void testGrid() {
 		AmbitList l = new AmbitList();
 		l.addItem(new SourceDataset("dataset", ReferenceFactory
@@ -110,4 +110,5 @@ public class SourceDatasetEditorTest extends TestCase {
 
 		}
 	}
+	*/
 }

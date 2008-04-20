@@ -43,7 +43,9 @@ public class EditorPreferences {
 	public static Object[][] default_values = {
 		
 		{"com.microworkflow.process.ValueLatchPair","ambit2.workflow.ui.ValueLatchPairEditor"},
-		{"ambit2.repository.LoginInfo","ambit2.data.qmrf.QMRFAttributesPanel"},		
+		{"ambit2.repository.LoginInfo","ambit2.data.qmrf.QMRFAttributesPanel"},
+		{"ambit2.data.literature.LiteratureEntry","ambit2.data.qmrf.QMRFAttributesPanel"},
+		{"ambit2.data.molecule.SourceDataset","ambit2.ui.editors.SourceDatasetEditor"},		
 	};
 	
 	protected static Properties getDefault() {

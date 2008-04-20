@@ -21,6 +21,7 @@ import ambit2.data.literature.LiteratureEntry;
  * Doesn't have functionality to derive a model! (yet)  
  * TODO make use of {@link org.openscience.cdk.qsar.model.IModel} 
  * @author Nina Jeliazkova <br>
+ * @deprecated use QMRFObject
  * <b>Modified</b> 2005-4-7
  */
 public class Model extends AmbitObject {
@@ -184,7 +185,7 @@ public class Model extends AmbitObject {
 	}
 	public boolean hasID() {
 		try {
-		return super.hasID() && modelType.hasID() && reference.hasID() && descriptors.hasID();
+		return super.hasID() && modelType.hasID() &&  && descriptors.hasID();
 		} catch (Exception x) {
 			return false;
 		}

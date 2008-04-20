@@ -31,6 +31,10 @@ import ambit2.ui.EditorPanel;
 import com.microworkflow.ui.WorkflowContextListener;
 
 public class UserInputPanel extends WorkflowContextListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5952892995720686034L;
 	protected EditorPanel editorPanel; 
 	@Override
 	protected void animate(PropertyChangeEvent arg0) {

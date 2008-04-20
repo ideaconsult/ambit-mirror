@@ -172,6 +172,7 @@ public class AbstractQMRFChapter extends AmbitObject {
         	protected JComponent[] createJComponents() {
         		return new JComponent[] {new JLabel("")};
         	}
+       	
         };
     }
     @Override

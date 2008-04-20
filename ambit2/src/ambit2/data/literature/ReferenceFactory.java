@@ -7,7 +7,7 @@ package ambit2.data.literature;
 /**
  * Provides static functions to create several literature entries 
  * @author Nina Jeliazkova <br>
- * <b>Modified</b> 2005-4-7
+ * <b>Modified</b> 2008-4-20
  */
 public class ReferenceFactory {
 
@@ -31,57 +31,19 @@ public class ReferenceFactory {
 	 * @return {@link LiteratureEntry}
 	 */
 	public static LiteratureEntry createDatasetReference(String reference, String www) {
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry(""));
-		JournalEntry journal = new JournalEntry("");
-		LiteratureEntry ref = new LiteratureEntry(
-				reference,
-				journal,
-				"","",0,authors
-				);
-		ref.setWWW(www);
-		return ref;
+		return new LiteratureEntry(reference,www);
 	}
-	/**
-	 * Demo
-	 * Create a JournalEntry for the journal "Mutation Research"
-	 * @return {@link JournalEntry}
-	 */
-	public static JournalEntry createJournalMutRes() {
-		JournalEntry journal = 
-			new JournalEntry("Mutation Res.","Mutation Research");
-		journal.setPublisher("Elsevier");
-		return journal;
-	}
+
 	/**
 	 * Creates a reference for the Ames test
 	 * @return the reference
 	 */
 	public static LiteratureEntry createAmesReference() {
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("Maron D.M."));
-		authors.addItem(new AuthorEntry("Ames B.N."));
-		
-		JournalEntry journal = createJournalMutRes();
-		LiteratureEntry ref = new LiteratureEntry(
-				"Revised methods for the Salmonella mutagenicity test",
-				journal,
-				"113","173-215",1983,authors
+		return new LiteratureEntry(
+				"Maron D.M.,Ames B.N.,Revised methods for the Salmonella mutagenicity test, Mutation Res., 113,pp.173-215,1983"
 				);
-		return ref;
 	}
-	/**
-	 * A demo how to create {@link AuthorEntries} from the reference in {@link ReferenceFactory#createDebnathReference()}
-	 * @return the author entries created
-	 */
-	public static AuthorEntries createDebnathRefAuthors() {
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("Debnath A.K."));
-		authors.addItem(new AuthorEntry("Debnath G."));
-		authors.addItem(new AuthorEntry("Shusterman A.J."));
-		authors.addItem(new AuthorEntry("Hansch C."));
-		return authors;
-	}
+		
 	/**
 	 * A demo how to create LiteratureEntry from
 	 * <code> 
@@ -95,105 +57,46 @@ public class ReferenceFactory {
 	 * @return the literature entry created
 	 */
 	public static LiteratureEntry createDebnathReference() {
-		AuthorEntries authors = createDebnathRefAuthors();
-		
-		JournalEntry journal = new JournalEntry("Environ. Mol. Mutagen.");
-		journal.setName("Environmental and Molecular Mutagenics");
-		LiteratureEntry reference = new LiteratureEntry(
-				"A QSAR investigation of the role of hydrophobicity in regulating mutagenicity in the Ames test:"+
-				"Part 1. Mutagenicity aromatic and heteroaromatic amines in Salmonella typhimurium TA98 and TA100",
-				journal,
-				"19",
-				"37-52",
-				1992,
-				authors
-				); 
-		return reference;
-		
+		return new LiteratureEntry(
+				"Debnath A.K.,Debnath G.,Shusterman A.J.,Hansch C.A QSAR investigation of the role of hydrophobicity in regulating mutagenicity in the Ames test:"+
+				"Part 1. Mutagenicity aromatic and heteroaromatic amines in Salmonella typhimurium TA98 and TA100"+
+				"Environ. Mol. Mutagen.,19,37-52,1992");
 	}
 	/**
 	 * Creates the reference for a test data set for the model in {@link ReferenceFactory#createDebnathReference()} 
 	 * @return {@link LiteratureEntry}
 	 */
 	public static LiteratureEntry createGlendeReference() {
-				AuthorEntries authors = new AuthorEntries();
-				authors.addItem(new AuthorEntry("Glende C."));
-				authors.addItem(new AuthorEntry("Schmitt H."));
-				authors.addItem(new AuthorEntry("Erdinger L."));
-				authors.addItem(new AuthorEntry("Boche G."));
-				
-				JournalEntry journal = createJournalMutRes();
-				journal.setPublisher("Elsevier");
-				LiteratureEntry reference = new LiteratureEntry(
+				return new LiteratureEntry(
+						"Glende C.,Schmitt H.,Erdinger L.,Boche G."+
 						"Transformation of mutagenic aromatic amines into non-mutagenic species by alkyl substituents "+
 						"Part I. Alkylation ortho to the amino function",
-						journal,
-						"498",
-						"19-37",
-						2001,
-						authors
-						); 
-				return reference;
+						"Mutation Res.,498,pp.19-37,2001");
 				
 			}
 	/**
 	 * Creates reference for P.Grammatica BCF model at QSAR Comb Sci 22 (2003)
 	 */
 	public static LiteratureEntry createBCFGrammaticaReference() {
-		JournalEntry journal = new JournalEntry("QSAR Comb. Sci.");
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("Grammatica P."));
-		authors.addItem(new AuthorEntry("Papa E."));
-		
-		LiteratureEntry reference = new LiteratureEntry(
-				"QSAR Modelling of Bioconcentration Factor by theoretical molecular descriptors",
-				journal,
-				"22",
-				"374-385",
-				2003,
-				authors
-				); 
-		reference.setWWW("http://www.syrres.com/esc/bcfwin.htm");
-		return reference;
+		return new LiteratureEntry(
+				"Grammatica P.,Papa E.,"+
+				"QSAR Modelling of Bioconcentration Factor by theoretical molecular descriptors"+
+				"QSAR Comb. Sci.,22,374-385,2003",
+				"http://www.syrres.com/esc/bcfwin.htm");
 	}
-	public static LiteratureEntry createSearchReference(String name) {
-		JournalEntry journal = new JournalEntry("Ambit Database Tools");
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("Ambit Database Tools"));
-		
-		LiteratureEntry reference = new LiteratureEntry(
-				name,
-				journal,
-				"",
-				"",
-				2007,
-				authors
-				); 
-		reference.setWWW("http://ambit2.acad.bg");
-		return reference;
-	}
+
 	/**
 	 * Creates SRC BCFWin reference
 	 * @return the reference created
 	 * <a href="http://www.syrres.com/esc/bcfwin.htm">SRC BcfWin program</a>	 * 
 	 */
 	public static LiteratureEntry createBCFWinReference() {
-		JournalEntry journal = new JournalEntry("Environ. Toxicol. Chem.");
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("Meylan,W.M."));
-		authors.addItem(new AuthorEntry("Howard,P.H."));
-		authors.addItem(new AuthorEntry("Boethling,RS"));
-		
-		LiteratureEntry reference = new LiteratureEntry(
-				"Improved Method for Estimating Bioconcentration / Bioaccumulation Factor from Octanol/Water Partition Coefficient",
-				journal,
-				"18(4)",
-				"664-672",
-				1996,
-				authors
+		return new LiteratureEntry(
+				"Meylan,W.M.,Howard,P.H.,Boethling,RS.,"+
+				"Improved Method for Estimating Bioconcentration / Bioaccumulation Factor from Octanol/Water Partition Coefficient"+
+				"Environ. Toxicol. Chem., 18(4),pp.664-672,1996",
+				"http://www.syrres.com/esc/bcfwin.htm"
 				); 
-		reference.setWWW("http://www.syrres.com/esc/bcfwin.htm");
-		return reference;
 	}
 	/**
 	 * Creates SRC KowWin reference
@@ -201,21 +104,13 @@ public class ReferenceFactory {
 	 * @return the reference
 	 */
 	public static LiteratureEntry createKOWWinReference() {
-		JournalEntry journal = new JournalEntry("J. Pharm. Sci.","J. Pharm. Sci.");
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("Meylan,W.M."));
-		authors.addItem(new AuthorEntry("Howard,P.H."));
-		
-		LiteratureEntry reference = new LiteratureEntry(
-				"Atom/fragment contribution method for estimating octanol-water partition coefficients",
-				journal,
-				"84",
-				"83-92",
-				1995,
-				authors
+
+		return new LiteratureEntry(
+				"Meylan,W.M.,Howard,P.H."+
+				"Atom/fragment contribution method for estimating octanol-water partition coefficients"+
+				"J. Pharm. Sci.,84,83-92,1995",
+				"http://www.syrres.com/esc/kowwin.htm"
 				);
-		reference.setWWW("http://www.syrres.com/esc/kowwin.htm");
-		return reference;
 	}	
 	
 	/**
@@ -224,20 +119,11 @@ public class ReferenceFactory {
 	 */
 	public static LiteratureEntry createECOTOXReference() {
 		
-		JournalEntry journal = new JournalEntry("U.S. Environmental Protection Agency");
-		AuthorEntries authors = new AuthorEntries();
-		authors.addItem(new AuthorEntry("U.S. EPA"));
-		
-		LiteratureEntry reference = new LiteratureEntry(
-				"U.S. Environmental Protection Agency. 2006. ECOTOX User Guide: ECOTOXicology Database System. Version 4.0. Available: http:/www.epa.gov/ecotox/",
-				journal,
-				"",
-				"",
-				2006,
-				authors
+		return new LiteratureEntry(
+				"U.S. Environmental Protection Agency. 2006. ECOTOX User Guide: ECOTOXicology Database System. Version 4.0.",
+				"http:/www.epa.gov/ecotox/"
 				);
-		reference.setWWW("http:/www.epa.gov/ecotox/");
-		return reference;		
+	
 
 
 	}

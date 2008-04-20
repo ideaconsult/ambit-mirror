@@ -51,7 +51,7 @@ import ambit2.ui.AmbitColors;
 import ambit2.ui.SpringUtilities;
 import ambit2.ui.editors.IAmbitEditor;
 
-public abstract class AbstractQMRFChapterEditor extends JPanel implements IAmbitEditor {
+public abstract class AbstractQMRFChapterEditor extends JPanel implements IAmbitEditor<AbstractQMRFChapter> {
     protected AbstractQMRFChapter chapter;
     protected int indent = 2;
     protected Color lightColor;
@@ -219,6 +219,13 @@ public abstract class AbstractQMRFChapterEditor extends JPanel implements IAmbit
 	}
     protected void showHelp(final AbstractQMRFChapter chapter) {
     	JOptionPane.showMessageDialog(this, createHelpComponent(chapter),chapter.toString()+chapter.getTitle(),JOptionPane.INFORMATION_MESSAGE);
-    }	
+    }
+    public AbstractQMRFChapter getObject() {
+    	return chapter;
+    }
+    public void setObject(AbstractQMRFChapter object) {
+    	this.chapter = object;
+    	
+    }
 }
 

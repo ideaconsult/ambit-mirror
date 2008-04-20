@@ -79,7 +79,8 @@ public class QMRFAttributesPanel extends JPanel implements IAmbitEditor<QMRFAttr
 	}
 	public void setObject(QMRFAttributes object) {
 		this.attributes = object;
-		addWidgets(attributes.getNames(), attributes.getNames());
+		if (object != null)
+			addWidgets(attributes.getNames(), attributes.getNames());
 	}	
 	@Override
 	public boolean isFocusable() {

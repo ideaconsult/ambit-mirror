@@ -41,6 +41,7 @@ public class DBWorkflowContext extends WorkflowContext {
     public static String DATASOURCE = "ambit2.workflow.DBWorkflowContext.DATASOURCE";
     public static String DBCONNECTION_URI = "ambit2.workflow.DBWorkflowContext.DBCONNECTION_URI";
     public static String LOGININFO = "ambit2.workflow.DBWorkflowContext.LOGININFO";
+    public static String DATASET = "ambit2.workflow.DBWorkflowContext.DATASET";    
     public static String ERROR = "ERROR";
     
     

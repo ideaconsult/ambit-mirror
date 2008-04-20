@@ -63,7 +63,11 @@ import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.UITools;
 import ambit2.ui.editors.IAmbitEditor;
 
-public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
+public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor<QMRFAttachmentsList> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9096127438496360904L;
 	protected boolean attachment_editable = true;
     protected final JTable table;
     public transient static final String[] structures_extensions = {".sdf",".csv",".smi",".txt",".mol",".cml"};
@@ -244,6 +248,14 @@ public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor {
 	}
 	public void setAttachment_editable(boolean attachment_editable) {
 		this.attachment_editable = attachment_editable;
+	}
+	public void setObject(QMRFAttachmentsList object) {
+		// TODO Auto-generated method stub
+		
+	}
+	public QMRFAttachmentsList getObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

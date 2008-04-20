@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ambit2.data.molecule.SourceDataset;
 import ambit2.database.DatasourceFactory;
 import ambit2.repository.LoginInfo;
 import ambit2.repository.processors.ProcessorCreateQuery;
@@ -66,7 +67,39 @@ public class WorkflowFactory implements IWorkflowFactory {
 
 	public void setTheTask(String theTask) {
 		System.out.println(theTask);
-		if ("Log in".equals(theTask)) workflow.setDefinition(getLoginWorkflow());
+		if ("Log in".equals(theTask)) {
+			/*
+			Primitive thenP = new Primitive(DBWorkflowContext.DATASOURCE,new Performer() {
+				@Override
+				public Object execute() {
+					System.out.println(getTarget());
+					return null;
+				}
+			}); 			
+			thenP.setName("OK");
+			*/
+			Primitive datasource = new Primitive(DBWorkflowContext.DATASET,DBWorkflowContext.DATASET,new Performer() {
+				@Override
+				public Object execute() {
+					Object o = getTarget();
+					if (o == null) {
+						ValueLatchPair<SourceDataset> latch = new ValueLatchPair<SourceDataset>(new SourceDataset());
+						context.put(DBWorkflowContext.DATASET,latch);
+						//This is a blocking operation!
+						try {
+							SourceDataset li = latch.getLatch().getValue();
+							return li;
+						} catch (InterruptedException x) {
+							context.put(DBWorkflowContext.ERROR, x);
+							return null;
+						}
+						
+					} else return o;	
+				}
+			}); 
+			datasource.setName("datasource");			
+			workflow.setDefinition(getLoginWorkflow(datasource));
+		}
 		else
 			if ("Find analogs".equals(theTask)) workflow.setDefinition(getFindAnalogsWorkflow());
 	}
@@ -78,7 +111,7 @@ public class WorkflowFactory implements IWorkflowFactory {
 		p1.setName("Query");	
 		return test.addStep(p1);
 	}
-	private Activity getLoginWorkflow() {
+	private Activity getLoginWorkflow(Activity onSuccess) {
 
 		Primitive login = new Primitive(DBWorkflowContext.DBCONNECTION_URI,DBWorkflowContext.DBCONNECTION_URI,new Performer() {
 			@Override
@@ -102,14 +135,7 @@ public class WorkflowFactory implements IWorkflowFactory {
 			}
 		}); 
 		login.setName("Login");
-		Primitive thenP = new Primitive(DBWorkflowContext.DATASOURCE,new Performer() {
-			@Override
-			public Object execute() {
-				System.out.println(getTarget());
-				return null;
-			}
-		}); 			
-		thenP.setName("OK");
+
 		Conditional connect = new Conditional(
 				new TestCondition() {
 					public boolean evaluate() {
@@ -129,7 +155,7 @@ public class WorkflowFactory implements IWorkflowFactory {
 						}
 					}
 				}, 
-				thenP,
+				onSuccess,
 				login);
 		connect.setName("connect");
 		return login.addStep(connect);

@@ -14,10 +14,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import ambit2.exceptions.AmbitIOException;
-import ambit2.ui.editors.AmbitListEditor;
 import ambit2.ui.editors.AmbitListOneItemEditor;
 import ambit2.ui.editors.IAmbitEditor;
 
@@ -31,34 +29,21 @@ import ambit2.ui.editors.IAmbitEditor;
  * Contact: nina@acad.bg
  * 
  */
-public class AmbitList extends AmbitObject  {
+public class AmbitList<T extends AmbitObject> extends AmbitObject  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8945972567823646896L;
 	protected AmbitListChanged listsEvent = null;
-	protected ArrayList list  = null;
+	protected ArrayList<T> list  = null;
 	protected int selectedIndex = -1;	
 	/**
 	 * 
 	 */
 	public AmbitList() {
 		super();
-		list = new ArrayList();
+		list = new ArrayList<T>();
 	}
-
-	/**
-	 * @param initialCapacity
-	 */
-	public AmbitList(int initialCapacity) {
-		super();
-		list = new ArrayList(initialCapacity);
-	}
-
-	/**
-	 * @param c
-	 */
-	public AmbitList(Collection c) {
-		super();
-		list = new ArrayList(c);
-	}
-	
 
 	
 	/**
@@ -71,7 +56,7 @@ public class AmbitList extends AmbitObject  {
 	public void setSelectedIndex(int selectedIndex) {
 		setSelectedIndex(selectedIndex,true);
 	}	
-	public AmbitObject getSelectedItem() {
+	public T getSelectedItem() {
 		if ((selectedIndex < 0) || (selectedIndex >= size()))  {
 			//System.err.println("getselectedDataSet\tnone" );
 			return null;
@@ -87,33 +72,33 @@ public class AmbitList extends AmbitObject  {
 		}
 		if (notify) {
 			fireAmbitListEvent();
-			AmbitObject s = getSelectedItem();
+			T s = getSelectedItem();
 			if (s != null) s.fireAmbitObjectEvent();
 		}
 	}
 	
-	public int addItem(AmbitObject entry) {
+	public int addItem(T entry) {
 		list.add(entry);
 		setSelectedIndex(size()-1,false);		
 		setModified(true);
 		return size()-1;
 	}
-	public int addItem(int index, AmbitObject entry) {
+	public int addItem(int index, T entry) {
 		list.add(index,entry);
 		setSelectedIndex(index,false);		
 		setModified(true);
 		return index;
 	}
-	public int setItem(int index, AmbitObject entry) {
+	public int setItem(int index, T entry) {
 		list.set(index,entry);
 		setSelectedIndex(index,false);		
 		setModified(true);
 		return index;
 	}	
-	public AmbitObject getItem(int index ) {
+	public T getItem(int index ) {
 	    if ((index <0) || (index >= list.size())) return null;
 	    Object o = list.get(index);
-	    if (o != null) return (AmbitObject) list.get(index); else return null;
+	    if (o != null) return list.get(index); else return null;
 	}	
 	public boolean hasID() {
 		boolean r = true;
@@ -157,9 +142,9 @@ public class AmbitList extends AmbitObject  {
 		super.clear();
 		setModified(true);
 	}
-	protected Object remove(int i, boolean notify) {
+	protected T remove(int i, boolean notify) {
 		if ((i >= 0) && (i < size())) {
-			Object o = list.remove(i);
+			T o = list.remove(i);
 			setSelectedIndex(size()-1,false);
 			if (notify)	setModified(true);
 			return o;
@@ -168,17 +153,17 @@ public class AmbitList extends AmbitObject  {
 	public void remove() {
 		remove(getSelectedIndex(),true);
 	}	
-	public Object remove(int i) {
+	public T remove(int i) {
 		return remove(i,true);
 	}
-	public boolean remove(Object o) {
+	public boolean remove(T o) {
 		boolean m =  list.remove(o);
 		if (m) setSelectedIndex(size()-1,false);		
 		setModified(m);
 		return m;
 	}
 	
-	public boolean equals(Object obj) {
+	public boolean equals(T obj) {
 		AmbitList alist = (AmbitList) obj;
 		if (super.equals(obj) && ((size() ==  alist.size()))) {
 			for (int i =0; i < size(); i++) 
@@ -267,13 +252,13 @@ public class AmbitList extends AmbitObject  {
 		aoListeners.remove(IAmbitListListener.class, listener);
 	}
 
-	public AmbitObject createNewItem() {
+	public T createNewItem() {
 		return null;
 	}
 	public int getRowID(int row) {
 		return row;
 	}
-	public int indexOf(Object o) {
+	public int indexOf(T o) {
 	    return list.indexOf(o);
 	}
 	public Object[] toArray() {

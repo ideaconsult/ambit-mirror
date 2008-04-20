@@ -20,9 +20,6 @@ import org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor;
 
-import ambit2.data.literature.AuthorEntries;
-import ambit2.data.literature.AuthorEntry;
-import ambit2.data.literature.JournalEntry;
 import ambit2.data.literature.LiteratureEntry;
 import ambit2.data.literature.ReferenceFactory;
 import ambit2.data.molecule.MolProperties;
@@ -63,13 +60,8 @@ public class DescriptorFactory {
 	 */
 	//used in Grammatica BCF model
 	public static Descriptor createvIm() {
-		AuthorEntries ae = new AuthorEntries();
-		ae.addItem(new AuthorEntry("Bonchev D."));
 		LiteratureEntry ref = new LiteratureEntry(
-				"Information Theoretic Indices for Characterization of Chemical Structures", 
-				new JournalEntry("Research Studies Press","Research Studies Press Chichester U.K."), 
-				"", "249", 1983, 
-				ae);		
+				"Bonchev D.,Information Theoretic Indices for Characterization of Chemical Structures,Research Studies Press Chichester U.K.,249,1983"); 
 		
 		Descriptor d = new Descriptor("vIm,D deg",ref);
 		d.setRemark("Mean information content of the distance degree magnitude");
@@ -89,13 +81,8 @@ public class DescriptorFactory {
 	}
 	//used in Grammatica BCF model
 	public static Descriptor createMATS2m() {
-		AuthorEntries ae = new AuthorEntries();
-		ae.addItem(new AuthorEntry("Moran P. A. P."));
 		LiteratureEntry ref = new LiteratureEntry(
-				"Notes on Continuous Stochastic Phenomena", 
-				new JournalEntry("Biometrika","Biometrika"), 
-				"37", "17-23", 1950, 
-				ae);		
+				"Moran P. A. P.,Notes on Continuous Stochastic Phenomena,Biometrika,37,pp.17-23,1950"); 
 		
 		Descriptor d = new Descriptor("MATS2m",ref);
 		d.setRemark("Moran autocorrelation of a topological structure - lag2/weighted by atomic mass");
@@ -106,13 +93,9 @@ public class DescriptorFactory {
 	}
 	//used in Grammatica BCF model
 	public static Descriptor createGATS2e() {
-		AuthorEntries ae = new AuthorEntries();
-		ae.addItem(new AuthorEntry("Geary R. C."));
+
 		LiteratureEntry ref = new LiteratureEntry(
-				"The Contiguity Ratio and Statistical Mapping", 
-				new JournalEntry("Incorp. Statist.","Incorp. Statist."), 
-				"5", "115-145", 1954, 
-				ae);		
+				"Geary R. C.,The Contiguity Ratio and Statistical Mapping,Incorp. Statist.,pp.115-145,1954"); 
 
 		Descriptor d = new Descriptor("GATS2e",ref);
 		d.setRemark("Geary autocorrelation ± lag2/weighted by atomic Sanderson electronegativities");
@@ -123,15 +106,9 @@ public class DescriptorFactory {
 	}
 	//used in Grammatica BCF model
 	public static Descriptor createH6p() {
-		AuthorEntries ae = new AuthorEntries();
-		ae.addItem(new AuthorEntry("Consonni V."));
-		ae.addItem(new AuthorEntry("Todeschini R."));		
-		ae.addItem(new AuthorEntry("Pavan M."));		
+	
 		LiteratureEntry ref = new LiteratureEntry(
-				"Structure/	Response Correlation and Similarity/Diversity Analysis by GETAWAY Descriptors. Part 1. Theory of the Novel 3D	Molecular Descriptors", 
-				new JournalEntry("J. Chem. Inf. Comput. Sci.","J. Chem. Inf. Comput. Sci."), 
-				"42", "682-692", 2002, 
-				ae);		
+				"Consonni V.,Todeschini R.,Pavan M.,Structure/	Response Correlation and Similarity/Diversity Analysis by GETAWAY Descriptors. Part 1. Theory of the Novel 3D	Molecular Descriptors,J. Chem. Inf. Comput. Sci.,42,pp.682-692,2002"); 
 		
 		Descriptor d = new Descriptor("H6p",ref);
 		d.setRemark("H autocorrelation ± lag 6/weighted by atomic polarizabilities");

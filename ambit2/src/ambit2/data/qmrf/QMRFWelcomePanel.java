@@ -38,14 +38,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.html.HTMLEditorKit;
 
 import ambit2.exceptions.AmbitException;
 import ambit2.ui.AmbitColors;
 import ambit2.ui.UITools;
 import ambit2.ui.editors.IAmbitEditor;
 
-public class QMRFWelcomePanel extends JPanel implements IAmbitEditor {
+public class QMRFWelcomePanel extends JPanel implements IAmbitEditor<QMRFObject> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3690010287036362966L;
 	protected QMRFObject qmrf;
 	protected static final String[] fields = {"version","name","author","date","contact","email","url"};
 	protected static final String[] fieldNames = {"Version","Name","Author","Date","Contact","Email","www"};
@@ -158,6 +161,12 @@ public class QMRFWelcomePanel extends JPanel implements IAmbitEditor {
 	}
 	public boolean isEditable() {
 		return centerPanel.isEditable();
+	}
+	public void setObject(QMRFObject object) {
+		this.qmrf = object;
+	}
+	public QMRFObject getObject() {
+		return qmrf;
 	}
 
 }

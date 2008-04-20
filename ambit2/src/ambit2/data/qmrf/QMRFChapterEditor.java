@@ -239,7 +239,7 @@ public class QMRFChapterEditor extends AbstractQMRFChapterEditor {
         for (int i=0; i < list.size(); i++) {
         	IAmbitEditor editor = list.getItem(i).editor(isEditable());
         	if (first == null) first = editor.getJComponent();
-        	editor.setEditable(chapter.isEditable());
+        	//editor.setEditable(chapter.isEditable());
             JComponent c = editor.getJComponent();
             c.addFocusListener(new java.awt.event.FocusAdapter() { 
             	public void focusGained(java.awt.event.FocusEvent evt) {     

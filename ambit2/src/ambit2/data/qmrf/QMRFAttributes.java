@@ -35,6 +35,10 @@ import ambit2.io.XMLException;
 
 
 public class QMRFAttributes extends Hashtable<String,String>  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8463974516821891755L;
 	protected ArrayList<String> names;
 	public QMRFAttributes() {
 		super();
