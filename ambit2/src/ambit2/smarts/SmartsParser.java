@@ -66,7 +66,8 @@ public class SmartsParser
 	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
 	boolean mNeedNeighbourData;
 	boolean mNeedValencyData;
-	boolean mNeedRingData;
+	boolean mNeedRingData;    //data with ring sizes for each atom
+	boolean mNeedRingData2;	  //data with ring 'internal formal numbers' for each atom
 	boolean mNeedExplicitHData;
 	boolean mNeedParentMoleculeData;
 	public boolean hasRecursiveSmarts;
@@ -184,6 +185,11 @@ public class SmartsParser
 		return(mNeedRingData);
 	}
 	
+	public boolean needRingData2()
+	{
+		return(mNeedRingData2);
+	}
+	
 	public boolean needParentMoleculeData()
 	{
 		return(mNeedParentMoleculeData);
@@ -194,6 +200,7 @@ public class SmartsParser
 		mNeedNeighbourData = false;		
 		mNeedValencyData = false;
 		mNeedRingData = false;
+		mNeedRingData2 = false;
 		mNeedExplicitHData = false;
 		mNeedParentMoleculeData = false;
 		hasRecursiveSmarts = false;
@@ -222,7 +229,7 @@ public class SmartsParser
 						if (tok.type == SmartsConst.AP_x)
 						{	
 							mNeedParentMoleculeData = true;
-							mNeedRingData = true;
+							mNeedRingData2 = true;
 						}		
 						else
 						{						
@@ -1745,12 +1752,12 @@ public class SmartsParser
 	public void setSMARTSData(IAtomContainer container)
 	{	
 		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData, 
-							mNeedRingData, mNeedExplicitHData, mNeedParentMoleculeData, 
+							mNeedRingData, mNeedRingData2, mNeedExplicitHData, mNeedParentMoleculeData, 
 							container);
 	}
 	
 	static public void prepareTargetForSMARTSSearch(boolean neighbourData, boolean valenceData, 
-				boolean ringData, boolean explicitHData , boolean parentMoleculeData, 
+				boolean ringData, boolean ringData2, boolean explicitHData , boolean parentMoleculeData, 
 				IAtomContainer container)
 	{
 		if (neighbourData)
@@ -1759,9 +1766,9 @@ public class SmartsParser
 		if (valenceData)
 			setValenceData(container);
 		
-		if (ringData)
-			setRingData(container);
-		
+		if (ringData || ringData2)
+			setRingData(container, ringData, ringData2);
+				
 		if (explicitHData)
 			setExplicitHAtomData(container);
 		
@@ -1834,26 +1841,60 @@ public class SmartsParser
 		}
 	}
 	
-	static public void setRingData(IAtomContainer container)
+	static public void setRingData(IAtomContainer container, boolean rData, boolean rData2)
 	{	
 		SSSRFinder sssrf = new SSSRFinder(container);
 		IRingSet ringSet = sssrf.findSSSR();
 		IRingSet atomRings;
-		for (int i = 0; i < container.getAtomCount(); i++)
-		{	
-			IAtom atom = container.getAtom(i);
-			atomRings = ringSet.getRings(atom);
-			int n = atomRings.getAtomContainerCount();
-			if (n > 0)
+		
+		if (rData)
+		{
+			for (int i = 0; i < container.getAtomCount(); i++)
 			{	
-				int ringData[] = new int [n];
-				for (int k = 0; k < n; k++ )
+				IAtom atom = container.getAtom(i);
+				atomRings = ringSet.getRings(atom);			
+				int n = atomRings.getAtomContainerCount();
+				if (n > 0)
 				{	
-					ringData[k] = atomRings.getAtomContainer(k).getAtomCount();					
+					int ringData[] = new int [n];
+					for (int k = 0; k < n; k++ )
+					{	
+						ringData[k] = atomRings.getAtomContainer(k).getAtomCount();
+					}	
+					atom.setProperty("RingData", ringData);				
 				}	
-				atom.setProperty("RingData", ringData);
-			}	
-		}
+			}
+		} //end of ringData
+		
+		if (rData2)
+		{
+			for (int i = 0; i < container.getAtomCount(); i++)
+			{	
+				IAtom atom = container.getAtom(i);
+				atomRings = ringSet.getRings(atom);			
+				int n = atomRings.getAtomContainerCount();
+				if (n > 0)
+				{	
+					int ringData2[] = new int [n];
+					for (int k = 0; k < n; k++ )
+					{	
+						ringData2[k] = getRingNumberInRingSet(atomRings.getAtomContainer(k), ringSet);
+					}	
+					atom.setProperty("RingData2", ringData2);				
+				}	
+			}
+		} //end of ringData2
+		
+	}
+	
+	static public int getRingNumberInRingSet(IAtomContainer ring, IRingSet rs)
+	{
+		for (int i = 0; i < rs.getAtomContainerCount(); i++)
+		{	
+			if (ring == rs.getAtomContainer(i))
+				return(i);
+		}	
+		return(-1);
 	}
 	
 	static public void setParentMoleculeData(IAtomContainer container)

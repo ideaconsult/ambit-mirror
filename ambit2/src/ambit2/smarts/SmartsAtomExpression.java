@@ -348,7 +348,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     
     public boolean match_x(int param, IAtom atom)
     {
-    	int atomRings[] = (int[])atom.getProperty("RingData");
+    	int atomRings[] = (int[])atom.getProperty("RingData2");
     	if (atomRings == null)
 			return(false);
 		
@@ -360,7 +360,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     	int rbonds = 0;
     	for (int i = 0; i < ca.size(); i++)
     	{
-    		int atrings[] = (int[])((IAtom)ca.get(i)).getProperty("RingData");
+    		int atrings[] = (int[])((IAtom)ca.get(i)).getProperty("RingData2");
     		if (atrings == null)
     			continue;
     		//System.out.print("neigbour ("+i+")atom rings: ");
