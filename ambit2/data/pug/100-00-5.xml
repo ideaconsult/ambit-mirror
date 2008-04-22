@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
+<eSearchResult>
+	<Count>1</Count>
+	<RetMax>1</RetMax>
+	<RetStart>0</RetStart>
+	<IdList>
+		<Id>7474</Id>
+	</IdList>
+	<TranslationSet>
+	</TranslationSet>
+	<TranslationStack>
+		<TermSet>
+			<Term>100-00-5[All Fields]</Term>
+			<Field>All Fields</Field>
+			<Count>1</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<OP>GROUP</OP>
+	</TranslationStack>
+	<QueryTranslation>100-00-5[All Fields]</QueryTranslation>
+</eSearchResult>

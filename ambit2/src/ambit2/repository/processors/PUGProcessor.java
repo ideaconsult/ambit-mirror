@@ -29,20 +29,25 @@
 
 package ambit2.repository.processors;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -50,10 +55,15 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import ambit2.data.qmrf.SimpleErrorHandler;
+import ambit2.io.RawIteratingSDFReader;
 import ambit2.repository.IProcessor;
 import ambit2.repository.ProcessorException;
+import ambit2.repository.StructureRecord;
 
 /**
  * 
@@ -64,7 +74,53 @@ import ambit2.repository.ProcessorException;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Apr 20, 2008
  */
-public class PUGProcessor implements IProcessor<List<String>,List<String>> {
+public class PUGProcessor implements IProcessor<List<StructureRecord>,List<StructureRecord>> {
+	public final static String PUBCHEM_CID = "CID";
+	protected static String pugURL = "http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi?tool="+PUGProcessor.class.getName();
+	protected QuerySupport<List<StructureRecord>,List<StructureRecord>> support = new QuerySupport<List<StructureRecord>,List<StructureRecord>>();
+	protected final static String PCT_attribute_value="value";
+	protected final static String[] PCT_status = {"unknown","success","server-error","hit-limit","time-limit","input-error","data-error","stopped","running","queued"};
+	
+	protected final static int PCT_download_compression_none=0;
+	protected final static int PCT_download_compression_gzip=1;
+	protected final static int PCT_download_compression_bzip2=2;	
+	protected final static String[] PCT_download_compression={"none","gzip","bzip2"};
+    
+	protected final static int PCT_download_format_text_asn=0;
+	protected final static int PCT_download_format_binary_asn=1;
+	protected final static int PCT_download_format_xml=2;
+	protected final static int PCT_download_format_sdf=3;
+	protected final static String[] PCT_download_format={"text-asn","binary-asn","xml","sdf"};
+	
+	protected final static String tag_PCT_Data="PCT-Data";
+	protected final static String tag_PCT_Data_input="PCT-Data_input";
+	protected final static String tag_PCT_Data_output="PCT-Data_output";
+	
+	protected final static String tag_PCT_InputData="PCT-InputData";
+	protected final static String tag_PCT_OutputData="PCT-OutputData";	
+	
+	protected final static String tag_PCT_OutputData_status="PCT-OutputData_status";
+	protected final static String tag_PCT_OutputData_output="PCT-OutputData_output";
+	protected final static String tag_PCT_OutputData_output_download_url="PCT-OutputData_output_download-url";
+	protected final static String tag_PCT_Download_URL="PCT-Download-URL";
+	protected final static String tag_PCT_Download_URL_url="PCT-Download-URL_url";
+	
+	protected final static String tag_PCT_OutputData_output_waiting="PCT-OutputData_output_waiting";
+	protected final static String tag_PCT_Waiting="PCT-Waiting";
+	protected final static String tag_PCT_Waiting_reqid="PCT-Waiting_reqid";
+	
+	protected final static String tag_PCT_InputData_download="PCT-InputData_download";
+	protected final static String tag_PCT_Download="PCT-Download";
+	protected final static String tag_PCT_Download_uids="PCT-Download_uids";
+	protected final static String tag_PCT_QueryUids="PCT-QueryUids";
+	protected final static String tag_PCT_QueryUids_ids="PCT-QueryUids_ids";
+	protected final static String tag_PCT_ID_List="PCT-ID-List";
+	
+	protected final static String tag_PCT_ID_List_uids="PCT-ID-List_uids";
+	protected final static String tag_PCT_ID_List_uids_E="PCT-ID-List_uids_E";
+	protected final static String tag_PCT_ID_List_db="PCT-ID-List_db";
+	protected final static String tag_PCT_Download_format="PCT-Download_format";
+	protected final static String tag_PCT_Download_compression="PCT-Download_compression";
     /**
 <pre>
 Example:   You want to download CID 1 and CID 99 – being uids 1 and 99 in the “pccompound” Entrez database – in SDF format with gzip compression.
@@ -168,19 +224,50 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
 
 </pre>
      */
-    public List<String> process(List<String> target) throws ProcessorException {
-        try {
-            URL url = new URL("http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi");
-            URLConnection connection= url.openConnection();
-            if (connection instanceof HttpURLConnection) {
-                HttpURLConnection hc = ((HttpURLConnection)connection);
-                hc.setRequestMethod("POST");
-                hc.setDoOutput(true);
-                Writer w = new OutputStreamWriter(hc.getOutputStream());
-                getInput(target, w);
-                w.flush ();
-                w.close ();
-                
+
+    public List<StructureRecord> process(List<StructureRecord> target) throws ProcessorException {
+
+    	final ResultListener<List<StructureRecord>> listener = new ResultListener<List<StructureRecord>>() {
+    		public void exception(Exception e) {
+    			e.printStackTrace();
+    			
+    		}
+    		public void result(List<StructureRecord> data) {
+    			/*
+    			for (StructureRecord datum : data)
+    				System.out.println(datum.getFormat());
+					*/
+    		}
+    	};
+    	HTTPRequest<List<StructureRecord>, List<StructureRecord>> downloadRequest = createDownloadHTTPRequest(target);    	
+    	Future<List<StructureRecord>> fresult = support.lookup(target, downloadRequest, listener);
+    	
+    	try {
+    		List<StructureRecord> data = fresult.get();
+    		boolean wait = true;
+        	HTTPRequest<List<StructureRecord>, List<StructureRecord>> pollRequest = null;
+    		
+    		while (wait) {
+    			long now = System.currentTimeMillis();
+	    		for (StructureRecord datum : data) {
+	    			wait = tag_PCT_Waiting_reqid.equals(datum.getFormat());
+	    			break;
+	    		}
+	    		if (wait) {
+	    			if (pollRequest == null) pollRequest = createPollRequest(data);
+	    			Future<List<StructureRecord>> fpollresult = support.lookup(data, pollRequest, listener);
+	    			System.out.println("Poll");
+	    			data = fpollresult.get();
+	    		}
+	    		now = System.currentTimeMillis()-now;
+	    		System.out.println(now);
+    		}
+    		return data;
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    		throw new ProcessorException(x);
+    	}
+    	/*
                 // getting the response is required to force the request, otherwise it might not even be sent at all
                 BufferedReader in = new BufferedReader(new InputStreamReader(hc.getInputStream()));
                 String input;
@@ -190,44 +277,88 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
                     response.append(input + "\r");
                 }
                 System.out.println(response);
-                return null;
+
 
             }
             return null;
         } catch (Exception x) {
             throw new ProcessorException(x);
         }
+        */
     }
-    /**
-<pre>
-<PCT-Data>
-  <PCT-Data_input>
-    <PCT-InputData>
-      <PCT-InputData_download>
-        <PCT-Download>
-          <PCT-Download_uids>
-            <PCT-QueryUids>
-              <PCT-QueryUids_ids>
-                <PCT-ID-List>
-                  <PCT-ID-List_db>pccompound</PCT-ID-List_db>
-                  <PCT-ID-List_uids>
-                    <PCT-ID-List_uids_E>1</PCT-ID-List_uids_E>
-                    <PCT-ID-List_uids_E>99</PCT-ID-List_uids_E>
-                  </PCT-ID-List_uids>
-                </PCT-ID-List>
-              </PCT-QueryUids_ids>
-            </PCT-QueryUids>
-          </PCT-Download_uids>
-          <PCT-Download_format value="sdf"/>
-          <PCT-Download_compression value="gzip"/>
-        </PCT-Download>
-      </PCT-InputData_download>
-    </PCT-InputData>
-  </PCT-Data_input>
-</PCT-Data>
-</pre>
-     */
-    public void getInput(List<String> sids,Writer out) throws Exception {
+	protected HTTPRequest<List<StructureRecord>, List<StructureRecord>> createDownloadHTTPRequest(List<StructureRecord> record) {
+    	HTTPRequest<List<StructureRecord>, List<StructureRecord>> request = new HTTPRequest<List<StructureRecord>, List<StructureRecord>>() {
+    		@Override
+    		protected List<StructureRecord> parseInput(List<StructureRecord> target, InputStream in) throws ProcessorException {
+    			try {
+	    	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    	        DocumentBuilder builder = factory.newDocumentBuilder();
+	    	        Document doc = builder.parse(new InputSource(new InputStreamReader(in)));
+	    	        doc.normalize();
+	    	        return parseOutput(doc);
+    			} catch (IOException x) {
+    				throw new ProcessorException(x);
+    			} catch (SAXException x) {
+    				throw new ProcessorException(x);
+    			} catch (ParserConfigurationException x) {
+    				throw new ProcessorException(x);
+    			}
+    		}
+    		@Override
+    		protected void prepareOutput(List<StructureRecord> target, OutputStream out) throws ProcessorException {
+    			try {
+    	            Writer w = new OutputStreamWriter(out);
+    	            createDownloadRequest(target, w);
+    	            w.flush ();
+    	            w.close ();
+    			} catch (ParserConfigurationException x) {
+    				throw new ProcessorException(x);
+    			} catch (TransformerException x) {
+    				throw new ProcessorException(x);
+    			} catch (IOException x) {
+    				throw new ProcessorException(x);
+    			}
+    		}
+    	};	
+    	request.setUrl(pugURL);		
+    	return request;
+	}
+	
+	protected HTTPRequest<List<StructureRecord>, List<StructureRecord>> createPollRequest(List<StructureRecord> waitingregids) {
+    	HTTPRequest<List<StructureRecord>, List<StructureRecord>>  request = new HTTPRequest<List<StructureRecord>, List<StructureRecord>>() {
+    		@Override
+    		protected List<StructureRecord> parseInput(List<StructureRecord> target, InputStream in) throws ProcessorException {
+    			try {
+	    	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    	        DocumentBuilder builder = factory.newDocumentBuilder();
+	    	        Document doc = builder.parse(new InputSource(new InputStreamReader(in)));
+	    	        doc.normalize();
+	    	        return parseOutput(doc);
+    			} catch (IOException x) {
+    				throw new ProcessorException(x);
+    			} catch (SAXException x) {
+    				throw new ProcessorException(x);
+    			} catch (ParserConfigurationException x) {
+    				throw new ProcessorException(x);
+    			}
+    		}
+    		@Override
+    		protected void prepareOutput(List<StructureRecord> target, OutputStream out) throws ProcessorException {
+    			try {
+    	            Writer w = new OutputStreamWriter(out);
+    	            createPollRequest(target.get(0), w);
+    	            w.flush ();
+    	            w.close ();
+    			} catch (IOException x) {
+    				throw new ProcessorException(x);
+    			}
+    		}
+    	};	
+    	request.setUrl(pugURL);		
+    	return request;
+	}
+    public static void createDownloadRequest(List<StructureRecord> sids,Writer out) throws 
+    						ParserConfigurationException, TransformerException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         
         factory.setNamespaceAware(true);      
@@ -235,31 +366,35 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
         DocumentBuilder builder = factory.newDocumentBuilder();
         builder.setErrorHandler( new SimpleErrorHandler(builder.getClass().getName()) );
         Document doc = builder.newDocument();
-        Element top = doc.createElement("PCT-Data");
-        Node node = top.appendChild(doc.createElement("PCT-Data_input"));
-        node = node.appendChild(doc.createElement("PCT-InputData"));
-        node = node.appendChild(doc.createElement("PCT-InputData_download"));
-        node = node.appendChild(doc.createElement("PCT-Download"));
-        Node dnode = node.appendChild(doc.createElement("PCT-Download_uids"));
+        Element top = doc.createElement(tag_PCT_Data);
+        Node node = top.appendChild(doc.createElement(tag_PCT_Data_input));
+        node = node.appendChild(doc.createElement(tag_PCT_InputData));
+        node = node.appendChild(doc.createElement(tag_PCT_InputData_download));
+        node = node.appendChild(doc.createElement(tag_PCT_Download));
+        Node dnode = node.appendChild(doc.createElement(tag_PCT_Download_uids));
         
-        dnode = dnode.appendChild(doc.createElement("PCT-QueryUids"));
-        dnode = dnode.appendChild(doc.createElement("PCT-QueryUids_ids"));
-        dnode = dnode.appendChild(doc.createElement("PCT-ID-List"));
-        Node unode = dnode.appendChild(doc.createElement("PCT-ID-List_db"));
+        dnode = dnode.appendChild(doc.createElement(tag_PCT_QueryUids));
+        dnode = dnode.appendChild(doc.createElement(tag_PCT_QueryUids_ids));
+        dnode = dnode.appendChild(doc.createElement(tag_PCT_ID_List));
+        Node unode = dnode.appendChild(doc.createElement(tag_PCT_ID_List_db));
         unode.appendChild(doc.createTextNode("pccompound"));
         
-        unode = dnode.appendChild(doc.createElement("PCT-ID-List_uids"));
+        unode = dnode.appendChild(doc.createElement(tag_PCT_ID_List_uids));
         
-        unode = unode.appendChild(doc.createElement("PCT-ID-List_uids_E"));
-        for (String sid : sids)
-            unode.appendChild(doc.createTextNode(sid));
+    	
+    	
+        for (StructureRecord sid : sids) {
+        	Node idnode = unode.appendChild(doc.createElement(tag_PCT_ID_List_uids_E));	
+        	if (PUBCHEM_CID.equals(sid.getFormat()))
+        		idnode.appendChild(doc.createTextNode(sid.getContent()));
+        }    
         
-        Element fnode = doc.createElement("PCT-Download_format");
-        fnode.setAttribute("value", "sdf");
+        Element fnode = doc.createElement(tag_PCT_Download_format);
+        fnode.setAttribute(PCT_attribute_value, PCT_download_format[PCT_download_format_sdf]);
         node.appendChild(fnode);
         
-        Element cnode = doc.createElement("PCT-Download_compression");
-        cnode.setAttribute("value", "gzip");
+        Element cnode = doc.createElement(tag_PCT_Download_compression);
+        cnode.setAttribute(PCT_attribute_value, PCT_download_compression[PCT_download_compression_gzip]);
         node.appendChild(cnode);
         
         doc.appendChild(top);
@@ -275,6 +410,109 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
         out.flush();
         //return out.toString();
     }
+    public static void createPollRequest(StructureRecord regid, Writer out) throws ProcessorException {
+    	if (!tag_PCT_Waiting_reqid.equals(regid.getFormat()))
+    		throw new ProcessorException(tag_PCT_Waiting_reqid + " expected instead of "+regid.getFormat());
+    	try {
+	    	out.write("<?xml version=\"1.0\"?>");
+	    	out.write("<PCT-Data>");
+	    	out.write("<PCT-Data_input>");
+	    	out.write("<PCT-InputData>");
+	    	out.write("<PCT-InputData_request>");
+	    	out.write("<PCT-Request>");
+	    	out.write("<PCT-Request_reqid>");
+	    	out.write(regid.getContent());
+	    	out.write("</PCT-Request_reqid>");
+	    	out.write("<PCT-Request_type value=\"status\"/>");
+	    	out.write("</PCT-Request>");
+	    	out.write("</PCT-InputData_request>");
+	    	out.write("</PCT-InputData>");
+	    	out.write("</PCT-Data_input>");
+	    	out.write("</PCT-Data>");
+    	} catch (IOException x) {
+    		throw new ProcessorException(x);
+    	}
+    }
+		/**
+		<!ELEMENT PCT-OutputData_output (
+		        PCT-OutputData_output_waiting | 
+		        PCT-OutputData_output_download-url | 
+		        PCT-OutputData_output_ids | 
+		        PCT-OutputData_output_entrez)>
 
+		 * @param doc
+		 */
+	public static List<StructureRecord> parseOutput(Document doc)  throws ProcessorException  {
+		
+		
+		Element top = getNodes(doc, null, tag_PCT_Data);
+		Element next = getNodes(doc, top, tag_PCT_Data_output);
+		Element outputData = getNodes(doc, next, tag_PCT_OutputData);
+		Element status = getNodes(doc, outputData, tag_PCT_OutputData_status);
+		//TODO process status
+		NodeList nodes = outputData.getElementsByTagName(tag_PCT_OutputData_output);
+		if ((nodes != null) && (nodes.getLength()==1)) { 
+			//Element output = getNodes(doc, outputData, tag_PCT_OutputData_output);
+			nodes = ((Element)nodes.item(0)).getChildNodes();
+			for (int i=0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				
+				String tag = node.getNodeName();
+				if (tag_PCT_OutputData_output_download_url.equals(tag))
+					return processDownloadURL(doc, (Element) node);
+				if (tag_PCT_OutputData_output_waiting.equals(tag))
+					return processWaiting(doc, (Element) node);
+			}
+		}
+		
+		return null;
 
+	}
+	protected static List<StructureRecord> processWaiting(Document doc, Element waiting) throws ProcessorException {
+		List<StructureRecord> result = new ArrayList<StructureRecord>();
+		Element waitingNode = getNodes(doc, waiting, tag_PCT_Waiting);
+		NodeList regid = waitingNode.getElementsByTagName(tag_PCT_Waiting_reqid);
+		if ((regid == null) || (regid.getLength() == 0)) 
+			throw new ProcessorException("Error - expected element "+tag_PCT_Waiting_reqid);
+		for (int i=0; i < regid.getLength();i++)
+			result.add(new StructureRecord(-1,-1,((Element)regid.item(i)).getTextContent(),tag_PCT_Waiting_reqid));
+		return result;		
+	}	
+	protected static List<StructureRecord> processDownloadURL(Document doc, Element download) throws ProcessorException {
+		List<StructureRecord> result = new ArrayList<StructureRecord>();
+		Element urlNode = getNodes(doc, download, tag_PCT_Download_URL);
+		Element url = getNodes(doc, urlNode, tag_PCT_Download_URL_url);
+		
+		try {
+	        URL theUrl = new URL(url.getTextContent());
+	        URLConnection connection= theUrl.openConnection();
+	        RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(new GZIPInputStream(connection.getInputStream())));
+	        while (reader.hasNext()) {
+	        	Object o = reader.next();
+	        	result.add(new StructureRecord(-1,-1,o.toString(),PCT_download_format[PCT_download_format_sdf]));
+	        }
+	        /*
+	        StringBuilder b = new StringBuilder();
+	        while((input = in.readLine()) != null) {
+	            b.append(input);
+	            b.append("\r");  
+	        }
+	        result.add(new StructureRecord(-1,-1,b.toString(),PCT_download_format[PCT_download_format_sdf]));
+	        */
+		} catch (IOException x) {
+			throw new ProcessorException(x);
+		}
+		return result;		
+	}
+	protected static Element getNodes(Document doc, Element parent, String tag) throws ProcessorException {
+		NodeList nodes = null;
+		if (parent == null)
+			nodes = doc.getElementsByTagName(tag);
+		else
+			nodes = parent.getElementsByTagName(tag);
+		if ((nodes == null) || (nodes.getLength() != 1)) 
+			throw new ProcessorException("Error - expected element "+tag);
+		return (Element) nodes.item(0);
+	}
+	
 }
