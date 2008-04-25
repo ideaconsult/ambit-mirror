@@ -27,6 +27,7 @@ package ambit2.repository.processors;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -34,9 +35,16 @@ import ambit2.repository.IProcessor;
 import ambit2.repository.ProcessorException;
 
 public abstract class HTTPRequest<Target, Result> implements IProcessor<Target, Result> {
-
+	protected int maxretry = 6;
 	protected String url;
 	protected String httpMethod = "POST";
+	protected boolean cancelled;
+	public boolean isCancelled() {
+		return cancelled;
+	}
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
 	public String getUrl() {
 		return url;
 	}
@@ -44,11 +52,15 @@ public abstract class HTTPRequest<Target, Result> implements IProcessor<Target, 
 		this.url = url;
 	}
 	public Result process(Target target) throws ProcessorException {
+		int retry = 0;
+		while (!isCancelled()) {
 	       try {
 	            URL url = new URL(getUrl());
 	            URLConnection connection= url.openConnection();
 	            if (connection instanceof HttpURLConnection) {
 	                HttpURLConnection hc = ((HttpURLConnection)connection);
+	                //System.out.println(hc.getConnectTimeout());
+	                //System.out.println(hc.getReadTimeout());
 	                hc.setRequestMethod(httpMethod);
 	                hc.setDoOutput(true);
 	                prepareOutput(target, hc.getOutputStream());
@@ -57,9 +69,14 @@ public abstract class HTTPRequest<Target, Result> implements IProcessor<Target, 
 
 	            } else
 	            	return null;
+	       	} catch (SocketTimeoutException x) {
+	    	   retry++;
+	    	   setCancelled(retry >= maxretry);
 	        } catch (Exception x) {
 	            throw new ProcessorException(x);
-	        }		
+	        }
+		}    
+		throw new ProcessorException("Maximum retry count reached "+maxretry);
 	}
 	protected abstract void prepareOutput(Target target, OutputStream out) throws ProcessorException;
 	protected abstract Result parseInput(Target target, InputStream in)  throws ProcessorException;
