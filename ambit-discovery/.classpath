@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ambit2"/>
+	<classpathentry kind="lib" path="/ambit2/lib/cdk-1.1.svn-19012008.jar" sourcepath="/cdk"/>
+	<classpathentry kind="lib" path="/ambit2/lib/jcommon-1.0.10.jar"/>
+	<classpathentry kind="lib" path="/ambit2/lib/jfreechart-1.0.6.jar"/>
+	<classpathentry kind="lib" path="/ambit2/lib/jfreereport-0.8.7.jar"/>
+	<classpathentry kind="lib" path="/ambit2/lib/junit.jar"/>
+	<classpathentry kind="output" path="build"/>
+</classpath>
