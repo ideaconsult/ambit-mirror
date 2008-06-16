@@ -94,7 +94,7 @@ CREATE TABLE  `qmrf_documents`.`documents` (
   `idqmrf_origin` int(10) unsigned default NULL,
   `user_name` varchar(16) NOT NULL,
   `xml` text NOT NULL,
-  `status` enum('draft','submitted','under review','returned for revision','published','archived') NOT NULL default 'draft',
+  `status` enum('draft','submitted','under review','returned for revision','review completed','published','archived') NOT NULL default 'draft',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `version` int(3) unsigned NOT NULL default '1',
   `reviewer` varchar(16) default NULL,
@@ -120,23 +120,23 @@ CREATE TABLE  `qmrf_documents`.`u_hits` (
 
 DROP TABLE IF EXISTS `qmrf_documents`.`users`;
 CREATE TABLE  `qmrf_documents`.`users` (
-  `user_name` varchar(16) character set utf8 NOT NULL,
-  `password` varchar(45) collate utf8_bin NOT NULL,
-  `email` varchar(45) character set utf8 NOT NULL,
-  `registration_status` enum('commenced','confirmed','deleted') character set utf8 NOT NULL default 'commenced',
+  `user_name` varchar(16) NOT NULL,
+  `password` varchar(45) character set utf8 collate utf8_bin NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `registration_status` enum('commenced','verified','confirmed','deleted') NOT NULL default 'commenced',
   `registration_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `registration_id` blob,
-  `title` varchar(6) collate utf8_bin NOT NULL default '""',
-  `firstname` varchar(128) collate utf8_bin NOT NULL default '""',
-  `lastname` varchar(128) collate utf8_bin NOT NULL default '""',
-  `address` varchar(128) collate utf8_bin NOT NULL default '""',
-  `country` varchar(128) collate utf8_bin NOT NULL default '""',
-  `webpage` varchar(255) collate utf8_bin NOT NULL default '""',
-  `affiliation` varchar(128) collate utf8_bin NOT NULL default '""',
-  `keywords` varchar(128) collate utf8_bin NOT NULL default '""',
+  `title` varchar(6) character set utf8 collate utf8_bin NOT NULL default '""',
+  `firstname` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
+  `lastname` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
+  `address` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
+  `country` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
+  `webpage` varchar(255) character set utf8 collate utf8_bin NOT NULL default '""',
+  `affiliation` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
+  `keywords` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
   `reviewer` tinyint(1) NOT NULL default '0' COMMENT 'true if wants to become a reviewer',
   PRIMARY KEY  (`user_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='QMRF Users; status is commenced at registration, verified after user' email is verified, confirmed upon approval by an authority';
 
 DROP TABLE IF EXISTS `qmrf_documents`.`doc_algorithms`;
 CREATE TABLE  `qmrf_documents`.`doc_algorithms` (
