@@ -224,7 +224,7 @@ E-mail </td>
 	Please point your browser to the following URL in order to confirm the registration of the "${param.username}" user:
 	
 	      <c:set var="u">
-	      		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rconfirm.jsp
+	      		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rverify.jsp
 	    	</c:set>
 	<c:url value="${u}"><c:param name="id" value="${pageContext.session.id}"/></c:url>
 	

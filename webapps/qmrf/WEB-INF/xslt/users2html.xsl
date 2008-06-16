@@ -45,6 +45,16 @@
 
 <xsl:template match="user">
 	<tr>
+	<xsl:choose>
+		<xsl:when test= "@registration_status = 'verified'">
+			<xsl:attribute name="bgcolor">
+			<xsl:text>#FF8888</xsl:text>
+		</xsl:attribute>
+		</xsl:when>
+		<xsl:otherwise>
+
+		</xsl:otherwise>	
+	</xsl:choose>
 	<td>
 	<a>
 		<xsl:attribute name="href">
@@ -116,7 +126,20 @@
 	<xsl:value-of select="@keywords"/>
 	</td>		
 	<td>
-	<xsl:value-of select="@registration_status"/>
+		<xsl:choose>
+			<xsl:when test= "@registration_status = 'verified'">
+				<xsl:element name="a">
+					<xsl:attribute name="href">
+						<xsl:text>rconfirm.jsp</xsl:text>?user_name=<xsl:value-of select="@user_name"/>
+					</xsl:attribute>
+					<xsl:attribute name="title">Confirm user registration</xsl:attribute>					
+					<xsl:text>Confirm</xsl:text>
+				</xsl:element>	
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="@registration_status"/>
+			</xsl:otherwise>	
+		</xsl:choose>
 	</td>
 	<td>
 	<xsl:value-of select="@registration_date"/>

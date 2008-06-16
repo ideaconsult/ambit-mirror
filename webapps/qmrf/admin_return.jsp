@@ -58,11 +58,59 @@ response.setHeader("Expires", "0");
 
 <!-- returned for revision' -->
 <!-- copy the document into new one, increment version and set archive status to the odler one -->
-<!-- copy the document into new one, increment version and set archive status to the odler one -->
 <c:choose>
 	<c:when test="${empty param.status}">
 			Status not defined
 </c:when>
+	<c:when test="${param.status eq 'review completed'}">
+		<c:catch var="transactionException_review">
+				<sql:transaction dataSource="jdbc/qmrf_documents">
+				<sql:update var="updateCount">
+		    		update documents set status='review completed' where idqmrf=?
+			  		<sql:param value="${param.id}"/>
+				</sql:update>
+			</sql:transaction>
+		</c:catch>	
+		<c:if test="${empty transactionException_review}">
+			<c:catch var="transactionException_review">
+				<sql:query var="rs" dataSource="jdbc/qmrf_documents">
+					SELECT idqmrf,qmrf_title,d.user_name,title,firstname,lastname,email,date_format(updated,'%Y-%c-%d') as qdate,date_format(updated,'%H:%i') as qtime FROM documents as d join users using(user_name) where idqmrf=?
+					<sql:param value="${param.id}"/>
+				</sql:query>
+
+
+				<c:forEach var="row" items="${rs.rows}">
+					<sql:query var="rseditor" dataSource="jdbc/qmrf_documents">
+						SELECT title,user_name,firstname,lastname,email FROM qmrf_documents.users join tomcat_users.user_roles u using(user_name) where role_name='qmrf_editor'
+					</sql:query>
+					<c:forEach var="editor" items="${rseditor.rows}">
+					<mt:mail server="${initParam['mail-server']}" >
+						<mt:from>${initParam['mail-from']}</mt:from>
+						<mt:setrecipient type="to">${editor.email}</mt:setrecipient>
+						<mt:subject>[QMRF Inventory] Review completed</mt:subject>
+
+						<mt:message>
+<jsp:include page="mail_reviewcompleted.jsp" flush="true">
+    <jsp:param name="title" value="${editor.title}"/>
+    <jsp:param name="firstname" value="${editor.firstname}"/>
+    <jsp:param name="lastname" value="${editor.lastname}"/>        
+    <jsp:param name="qdate" value="${row.qdate}"/>
+    <jsp:param name="qtime" value="${row.qtime}"/>    
+</jsp:include>							
+						</mt:message>
+						<mt:send>
+							<mt:error id="err">
+						         <jsp:getProperty name="err" property="error"/>
+
+						     </mt:error>
+						</mt:send>
+					</mt:mail>
+					</c:forEach>
+				</c:forEach>
+			</c:catch>
+		</c:if>
+		
+	</c:when>
 	<c:when test="${param.status eq 'returned for revision'}">
 
 				<c:catch var="transactionException_archive">

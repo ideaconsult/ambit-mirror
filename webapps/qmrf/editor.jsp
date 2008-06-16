@@ -62,7 +62,7 @@
 
 <jsp:include page="records_status.jsp" flush="true">
     <jsp:param name="status" value="${param.status}"/>
-	<jsp:param name="status_allowed" value="all,submitted,under review,published"/>
+	<jsp:param name="status_allowed" value="all,submitted,under review,review completed,published"/>
 </jsp:include>
 
 <!-- count max pages -->

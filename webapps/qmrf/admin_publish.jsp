@@ -16,7 +16,7 @@ response.setHeader("Expires", "0");
 <c:if test="${!empty param.viewmode}">
 	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
 </c:if>
-<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_editor'}" >
   <c:redirect url="index.jsp"/>
 </c:if>
 
@@ -29,15 +29,15 @@ response.setHeader("Expires", "0");
     <jsp:param name="viewmode" value="${param.viewmode}"/>
 </jsp:include>
 
-<c:set var="thispage" value='admin_review.jsp'/>
+<c:set var="thispage" value='admin_publish.jsp'/>
 
 
 <c:if test="${empty param.id}" >
-  <c:redirect url="/admin.jsp"/>
+  <c:redirect url="/editor.jsp"/>
 </c:if>
 
 <c:if test="${empty param.status}" >
-  <c:redirect url="/admin.jsp"/>
+  <c:redirect url="/editor.jsp"/>
 </c:if>
 
 
@@ -45,11 +45,11 @@ response.setHeader("Expires", "0");
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
+<c:if test="${empty sessionScope['iseditor']}" >
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin']=='false'}" >
+<c:if test="${sessionScope['iseditor']=='false'}" >
   <c:redirect url="/user.jsp"/>
 </c:if>
 
@@ -60,64 +60,8 @@ response.setHeader("Expires", "0");
 <!-- copy the document into new one, increment version and set archive status to the odler one -->
 <!-- copy the document into new one, increment version and set archive status to the odler one -->
 <c:choose>
-	<c:when test="${empty param.status}">
+<c:when test="${empty param.status}">
 			Status not defined
-</c:when>
-	<c:when test="${param.status eq 'returned for revision'}">
-
-				<c:catch var="transactionException_archive">
-				<sql:transaction dataSource="jdbc/qmrf_documents">
-				<sql:update var="updateCount">
-						insert into documents (idqmrf_origin,user_name,xml,version,status,updated)
-				    select idqmrf,user_name,xml,version+1,'returned for revision',now() from documents where idqmrf=?;
-				  <sql:param value="${param.id}"/>
-				  </sql:update>
-					<sql:update var="updateCount">
-					    update attachments set idqmrf=(SELECT LAST_INSERT_ID()) where idqmrf=?
-					  <sql:param value="${param.id}"/>
-					</sql:update>
-
-				<sql:update var="updateCount">
-		    		update documents set status='archived',qmrf_number=null where idqmrf=?
-		  		<sql:param value="${param.id}"/>
-				</sql:update>
-
-			</sql:transaction>
-			</c:catch>
-
-			<c:if test="${empty transactionException_archive}">
-				<c:catch var="transactionException_archive">
-					<sql:query var="rs" dataSource="jdbc/qmrf_documents">
-						SELECT xml,idqmrf,d.user_name,title,firstname,lastname,email FROM documents as d join users using(user_name) where idqmrf=?
-						<sql:param value="${param.id}"/>
-					</sql:query>
-					<c:forEach var="row" items="${rs.rows}">
-						<x:parse xml="${row.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
-
-						<mt:mail server="${initParam['mail-server']}" >
-							<mt:from>${initParam['mail-from']}</mt:from>
-							<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-							<mt:subject>[QMRF Inventory] Document returned for revision</mt:subject>
-
-							<mt:message type="html">
-Dear ${row.title}&nbsp;${row.firstname}&nbsp;${row.lastname},
-<p>
-Your QMRF document <x:out escapeXml="true" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/> has been returned to you for revision.
-<p>
-QMRF Inventory at 	<c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
-<c:url value="${u}"></c:url>
-						    </mt:message>
-						    <mt:send>
-						    	<mt:error id="err">
-						         <jsp:getProperty name="err" property="error"/>
-
-						       </mt:error>
-							</mt:send>
-						</mt:mail>
-					</c:forEach>
-				</c:catch>
-			</c:if>
-
 </c:when>
 	<c:when test="${param.status eq 'published'}">
 		<c:set var="sql_report" value="select idqmrf,qmrf_number,user_name,date_format(updated,'${sessionScope.dateformat}') as lastdate,status from documents where idqmrf = ${param.id}"/>
@@ -240,7 +184,7 @@ We would like to inform you that a QMRF document, which you submitted in the QMR
 		<jsp:param name="user_name" value="Author"/>
 		<jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
-		<jsp:param name="actions" value="admin"/>
+		<jsp:param name="actions" value="editor"/>
 	</jsp:include>
 	<sql:query var="rs" dataSource="jdbc/qmrf_documents">
 		select d.idqmrf,qmrf_number,name,format,description,type,a.updated,idattachment,original_name,imported,status from documents as d join attachments as a using(idqmrf) where d.idqmrf=? and type != 'document' and imported=0;

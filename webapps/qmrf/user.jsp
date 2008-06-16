@@ -79,7 +79,7 @@
 
 <jsp:include page="records_status.jsp" flush="true">
     <jsp:param name="status" value="${param.status}"/>
-    <jsp:param name="status_allowed" value="all,draft,submitted,under review,returned for revision,published,archived"/>
+    <jsp:param name="status_allowed" value="all,draft,submitted,under review,returned for revision,review completed,published,archived"/>
 
 </jsp:include>
 

@@ -229,6 +229,26 @@ The author list will be available as a lookup for relevant fields within the QMR
 				Published: The document is assigned Published status when approved by the Reviewer. A unique QMRF number is assigned to the document. Published documents are visible to everybody, not only to registered users.
 				</help>
 		</chapter>
+		
 </chapter>
+		<chapter anchor="registration_status" name="User registration status">
+				<help>
+				The registration status of a QMRF Inventory user can be one of the following: "Commenced", "Verified", "Confirmed", "Deleted". The registration status is visible only to the Administrator.
+				</help>
+				<help>
+				Commenced: The registration status is "Commenced", upon a registration attempt from an user. At this stage, an email , containing a confirmation URL is sent to the user, in order to validate the email entered. 
+				The user is expected to respond by clicking on the provided URL. 
+				</help>
+				<help>
+				Verified: This status is assigned after the User had to responded to the validation email, by clicking on the URL provided. The user is NOT yet allowed to log in into the QMRF Inventory, for this purpose, an Administrator approval is necessary (see 'Confirmed' status).
+				</help>
+				<help>
+				Confirmed: This status is set when the Administrator approves the User registration. Upon approval, an email is sent to the user, notifying his registration is confirmed and he can log in into the QMRF inventory.
+				</help>
+				<help>
+				Deleted: This status is assigned if user is removed from the system.
+				</help>
+		</chapter>
+
 </chapter>
 </qmrf_help>

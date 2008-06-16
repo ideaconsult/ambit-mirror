@@ -19,7 +19,7 @@ response.setHeader("Expires", "0");
 <c:if test="${!empty param.viewmode}">
 	<c:set var="viewmode" value="${param.viewmode}" scope="session"/>
 </c:if>
-<c:if test="${sessionScope['viewmode'] ne 'qmrf_admin'}" >
+<c:if test="${sessionScope['viewmode'] ne 'qmrf_editor'}" >
   <c:redirect url="index.jsp"/>
 </c:if>
 
@@ -27,16 +27,16 @@ response.setHeader("Expires", "0");
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${empty sessionScope['isadmin']}" >
+<c:if test="${empty sessionScope['iseditor']}" >
   <c:redirect url="/protected.jsp"/>
 </c:if>
 
-<c:if test="${sessionScope['isadmin'] eq 'false'}" >
+<c:if test="${sessionScope['iseditor'] eq 'false'}" >
   <c:redirect url="/user.jsp"/>
 </c:if>
 
 <c:if test="${empty param.id}" >
-  <c:redirect url="/admin.jsp"/>
+  <c:redirect url="/editor.jsp"/>
 </c:if>
 
 <jsp:include page="top.jsp" flush="true">
@@ -60,7 +60,7 @@ response.setHeader("Expires", "0");
     <jsp:param name="user_name" value="Author"/>
     <jsp:param name="lastdate" value="Last updated"/>
 		<jsp:param name="status" value="Status"/>
-		<jsp:param name="actions" value="admin"/>
+		<jsp:param name="actions" value="editor"/>
 
 </jsp:include>
 

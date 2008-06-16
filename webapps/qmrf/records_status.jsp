@@ -4,7 +4,7 @@
 </c:if>
 <c:set var="status_allowed" value="${param.status_allowed}"/>
 <c:if test="${empty param.status_allowed}">
-	<c:set var="status_allowed" value="all,draft,submitted,under review,returned for revision,published,archived"/>
+	<c:set var="status_allowed" value="all,draft,submitted,under review,returned for revision,review completed,published,archived"/>
 </c:if>
 	<table bgcolor="${tablecolor}" width="100%">
 	<tr bgcolor="${tablecolor}">

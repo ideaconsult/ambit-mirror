@@ -298,6 +298,9 @@
 									  <c:when test="${row.status eq 'published'}">
 
 									  </c:when>
+									  <c:when test="${row.status eq 'review completed'}">
+										<i>to be published</i>
+									  </c:when>									  
 									  <c:when test="${row.status eq 'archived'}">
 											<i>newer revisions exist</i>
 									  </c:when>
@@ -317,7 +320,7 @@
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Review</a>
+											" title="Go to the 'Review' page">Review</a>
 
 											<c:url value="admin_edit.jsp" var="url">
 											  <c:param name="status" value="under review"/>
@@ -325,15 +328,15 @@
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Edit</a>
+											" title="Edit the QMRF document (minor corrections, as typos)">Edit</a>
 
-											<c:url value="publish.jsp" var="url">
-											  <c:param name="status" value="published"/>
+											<c:url value="admin_return.jsp" var="url">
+											  <c:param name="status" value="review completed"/>
 											  <c:param name="id" value="${row.idqmrf}"/>
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Publish</a>
+											" title="Submit the review when completed">Submit</a>
 
 											<c:url value="admin_return.jsp" var="url">
 											  <c:param name="status" value="returned for revision"/>
@@ -341,7 +344,7 @@
 											</c:url>
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
-											">Return to author</a>
+											" title="Return the document to the author for a revision">Return to author</a>
 
 									  </c:when>
 									  <c:when test="${row.status eq 'returned for revision'}">
@@ -353,6 +356,14 @@
 							<!-- Admin actions end-->
 					  </c:when>
 					  <c:when test="${param.actions eq 'editor'}">
+<!-- delete document -->					  
+							<c:url value="delete_document.jsp" var="url">
+						    <c:param name="id" value="${row.idqmrf}"/>
+							</c:url>
+							<a href="
+								<c:out value="${url}" escapeXml="true" />
+							" title="Delete document"><img src="images/delete.png" alt="help" title="Remove the document from QMRF inventory" border="0"></a>
+<!-- assign a reviewer -->
 					  		<c:choose>
 					  			<c:when test="${(row.status eq 'submitted') || (row.status eq 'under review')}">
 					  				<c:set var="message" value="Assign a Reviewer"/>
@@ -369,7 +380,17 @@
 											<a href="
 											<c:out value="${url}" escapeXml="true" />
 											" title="${hint}">${message}</a>
+											
 									</c:when>
+									  <c:when test="${row.status eq 'review completed'}">
+											<c:url value="publish.jsp" var="url">
+											  <c:param name="status" value="published"/>
+											  <c:param name="id" value="${row.idqmrf}"/>
+											</c:url>
+											<a href="
+											<c:out value="${url}" escapeXml="true" />
+											" title="Assign QMRF number and publish the document">Publish</a>
+									  </c:when>									  										
 									<c:otherwise>
 									</c:otherwise>
 								</c:choose>
@@ -380,6 +401,9 @@
 								<c:when test="${row.status eq 'submitted'}">
 									<i>Waiting for a reviewer to be assigned</i>
 								</c:when>
+								<c:when test="${row.status eq 'review completed'}">
+									<i>To be published</i>
+								</c:when>								
 								<c:when test="${row.status eq 'under review'}">
 									<i>This document is being reviewed</i>
 								</c:when>								

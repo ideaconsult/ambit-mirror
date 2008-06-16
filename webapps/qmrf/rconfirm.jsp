@@ -3,14 +3,22 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+ <%@ taglib uri="http://jakarta.apache.org/taglibs/taglibs-mailer" prefix="mt" %>
+
 <fmt:requestEncoding value="UTF-8"/>
 
-<c:if test="${empty param.id}" >
-	<jsp:forward page="register.jsp">
-		<jsp:param name="registerstatus" value=""/>
-			<jsp:param name="email" value="${param.email}"/>
-  </jsp:forward>
+<c:if test="${empty param.user_name}" >
+  <c:redirect url="/myprofile.jsp"/>
 </c:if>
+
+<c:if test="${empty sessionScope['isadmin']}" >
+  <c:redirect url="/protected.jsp"/>
+</c:if>
+
+<c:if test="${sessionScope['isadmin'] eq 'false'}" >
+  <c:redirect url="/myprofile.jsp"/>
+</c:if>
+
 
 <jsp:include page="top.jsp" flush="true">
     <jsp:param name="title" value="QMRF Inventory Registration page"/>
@@ -22,8 +30,8 @@
 </jsp:include>
 
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">
-	select user_name,(now()-registration_date) as seconds_since_registered from users where registration_id=? and registration_status='commenced' limit 1
-  <sql:param value="${param.id}"/>
+	select user_name,firstname,lastname,email from users where user_name=? and registration_status='verified' limit 1
+<sql:param value="${param.user_name}"/>
 
 </sql:query>
 
@@ -33,24 +41,16 @@
 		<c:forEach var="row" items="${rs.rows}">
 
 
-				<c:if test="${row.seconds_since_registered ge 172800}">
-						<p>
-						<p>
-						Your registration has been cancelled automatically because we did not receive your confirmation within 48h. Please repeat the registration procedure.
+			<sql:setDataSource dataSource="jdbc/qmrf_documents"/>
 
-				</c:if>
-
-
-				<sql:setDataSource dataSource="jdbc/qmrf_documents"/>
-
-				<c:catch var='transactionException1'>
-					<sql:transaction>
+			<c:catch var='transactionException1'>
+				<sql:transaction>
 							<!-- if ok, update statis to confirmed and transfer the users into tomcat table , perhaps delete password from here -->
 							<sql:update var="rs">
-									update users set registration_status='confirmed',registration_date=now(),registration_id=null where registration_id=?
-									<sql:param value="${param.id}"/>
+									update users set registration_status='confirmed',registration_date=now(),registration_id=null where user_name=? and registration_status='verified'
+									<sql:param value="${param.user_name}"/>
 							</sql:update>
-					</sql:transaction>
+				</sql:transaction>
 			  </c:catch>
 
 				<c:if test='${not empty transactionException1}'>
@@ -86,35 +86,51 @@
 
 			</c:if>
 
-			<h2>
-			Welcome ${row.user_name}!
-		</h2>
-			<p>
-
-			 Your registration is now confirmed and you can log in into QMRF repository.
-
+			<c:set var="mailserver" value="${initParam['mail-server']}" />			 
+			<c:set var="mailfrom" value="${initParam['mail-from']}"  /> 			
+			<mt:mail server="${mailserver}" >
+					<mt:from>${mailfrom}</mt:from>
+					<mt:setrecipient type="to">${row.email}</mt:setrecipient>
+					<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
+			
+			    <mt:message>
+		<jsp:include page="mail.jsp" flush="true">
+			    <jsp:param name="title" value="${param.title}"/>
+			    <jsp:param name="firstname" value="${param.firstname}"/>
+			    <jsp:param name="lastname" value="${param.lastname}"/>        
+			    <jsp:param name="text" value="Your registration is now confirmed and you can log in into QMRF repository."/>
+		</jsp:include>	    
+			    </mt:message>
+			    <mt:send>
+			    	<mt:error id="err">
+			         <jsp:getProperty name="err" property="error"/>
+			       </mt:error>
+				</mt:send>
+			</mt:mail>
+			 
+			<c:choose>
+			<c:when test='${not empty err}'>
+				<div class="error">
+						Registration error ${err}
+				</div>
+			
+			</c:when>
+			<c:otherwise>
+			<dic class="success">
+				The registration of the new user <b>${row.user_name}</b> into QMRF Inventory is confirmed. Notification email is sent to <b>${row.email}</b>.
+			</div>
+			</c:otherwise>
+			</c:choose>
 		</c:forEach>
 	</c:when>
 	<c:otherwise>
 		<p><p>
-			Your confirmation was malformed. Please check whether you have followed the correct URL.
+			No user found ${param.user_name}
 
 	</c:otherwise>
 </c:choose>
 
-<!--
-Your registration has been cancelled automatically because we did not receive your confirmation within 48h. Please repeat the registration procedure. (repeat the registration procedure moje da e link kqm kqdeto triabva - miastoto za popqlvane).
-Tozi text triabva da izliza pri nadhvqrleni 48H. pri druga greshka (naprimerno nepoznato URL) - drug text.
-Your confirmation was malformed. Please check whether you have followed the correct URL.
--->
-<!-- else the id is invalid (we could check if it is outdated) and then redirect to registration page -->
-
-
 <hr>
-
-<h6>
-Please note that log in is required only for submitting new (Q)MRF documents.
-</h6>
 
 <div id="hits">
 <p>

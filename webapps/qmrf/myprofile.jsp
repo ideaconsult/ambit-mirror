@@ -165,11 +165,36 @@
 		</c:choose>
 </c:if>
 
+<c:set var="status" value="commenced,verified,confirmed,deleted"/>
 
 <c:catch var="error">
-	<c:import var="xml" url="users_xml.jsp"/>
+	<c:import var="xml" url="users_xml.jsp">
+		<c:param name="user_status" value="${param.registration_status}"/>	
+	</c:import>
 	<c:set var="admin" value="${sessionScope.ismanager && (sessionScope.viewmode eq 'qmrf_manager')}"/>	
 	<c:if test="${admin}">	
+		
+		<table width="75%" bgcolor="#FFFFFF"><tr bgcolor="#D6DFF7">
+		<td>Filter by registration status:</td>
+		<c:forTokens var="token" items="${status}" delims=",">
+			<c:set var="title" value="${token}"/>
+			<c:if test="${param.registration_status eq token}">
+				<c:set var="title" value="[${token}]"/>				
+			</c:if>
+			<td>
+			<a href="
+				<c:url value="">
+				<c:param name="registration_status" value="${token}"/>
+				</c:url>
+			">${title}</a>
+			
+			<a href="help.jsp?anchor=registration_status" target="help"><img src="images/help.png" alt="help" title="What registration status '${token}' means?" border="0"/></a>			
+			</td>			
+		</c:forTokens>		
+		</tr>
+		</table>		
+
+
 		<c:import var="xsl" url="/WEB-INF/xslt/users2html.xsl"/>
 		<x:transform xml="${fn:trim(xml)}" xslt="${fn:trim(xsl)}">
 			<x:param name="header" value="Registered users in QMRF Inventory:"/>
