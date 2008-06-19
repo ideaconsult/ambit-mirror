@@ -28,7 +28,14 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 import javax.swing.JTextPane;
@@ -46,100 +53,81 @@ public class PatchedTextPane extends JTextPane
 		/*
 		 * create a new transferable to filter the original one
 		 */
+
 		Transferable newContent = new Transferable()
 		{
 			public DataFlavor[] getTransferDataFlavors()
 			{
 				DataFlavor[] flavors = content.getTransferDataFlavors();
 				ArrayList myFlavorList = new ArrayList(flavors.length);
-				for (int i = 0; i < flavors.length; i++)
-				{
-					DataFlavor flavor = flavors[i];
-					String s = "text/plain; class=java.io.InputStream; charset=UTF-8";
-					//String s = "text/plain; class=String; charset=UTF-8";
-					try {
-					if ( flavors[i].equals(new DataFlavor(s))) 
-						myFlavorList.add(flavor);
-					} catch (Exception x) {
-						x.printStackTrace();
-					}
-				}
-				DataFlavor[] myFlavors = new DataFlavor[myFlavorList.size()];
-				for (int i = 0; i < myFlavorList.size(); i++)
-				{
-					DataFlavor flavor = (DataFlavor) myFlavorList.get(i);
-					myFlavors[i] = flavor;
-				}
-				return myFlavors;
+				try {
+					DataFlavor df_unicode = new DataFlavor("text/plain; class=java.io.InputStream; charset=unicode");
+					DataFlavor df_utf8 = new DataFlavor("text/plain; class=java.io.InputStream; charset=UTF-8");
 				
+					for (int i = 0; i < flavors.length; i++)
+					{
+						DataFlavor flavor = flavors[i];
+						
+						//String s = "text/plain; class=String; charset=UTF-8";
+
+						try {
+							if ( flavors[i].equals(df_unicode) || flavors[i].equals(df_utf8)
+									 ) {  
+								myFlavorList.add(flavor);
+								System.out.println(flavor);								
+							} 
+						} catch (Exception x) {
+							x.printStackTrace();
+						}
+					}
+					DataFlavor[] myFlavors = new DataFlavor[myFlavorList.size()];
+					for (int i = 0; i < myFlavorList.size(); i++)
+					{
+						DataFlavor flavor = (DataFlavor) myFlavorList.get(i);
+						myFlavors[i] = flavor;
+					}
+					return myFlavors;
+				} catch (Exception x) {
+					x.printStackTrace();
+					return null;
+				}
 			}
 			
-		
-			/*
-			 * only return DataFlavors which mimeTypes are String
-
-			public DataFlavor[] getTransferDataFlavors()
-			{
-				DataFlavor[] flavors = content.getTransferDataFlavors();
-				ArrayList myFlavorList = new ArrayList(flavors.length);
-				for (int i = 0; i < flavors.length; i++)
-				{
-					DataFlavor flavor = flavors[i];
-					String mimeType = flavor.getMimeType();
-					if (mimeType.indexOf("String") >= 0)
-					{
-						myFlavorList.add(flavor);
-					}
-				}
-				DataFlavor[] myFlavors = new DataFlavor[myFlavorList.size()];
-				for (int i = 0; i < myFlavorList.size(); i++)
-				{
-					DataFlavor flavor = (DataFlavor) myFlavorList.get(i);
-					myFlavors[i] = flavor;
-				}
-				return myFlavors;
-				
-			}
-			*/
-			/*
-			 * unchanged
-			 */
 			public boolean isDataFlavorSupported(DataFlavor flavor)
 			{
 				return content.isDataFlavorSupported(flavor);
 			}
-			/*
-			 * transforms Strings that are of type HTML
-			 */
+
 			public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 			{
 				String mimeType = flavor.getMimeType();
-				if (mimeType.indexOf("String") < 0 || mimeType.indexOf("html") < 0)
+				if (mimeType.indexOf("String") < 0) /*|| mimeType.indexOf("html") < 0)*/
 				{
-					return content.getTransferData(flavor);
+					Object o = content.getTransferData(flavor);
+					
+					if (o instanceof InputStream) {
+						
+						BufferedReader reader = new BufferedReader(new InputStreamReader((InputStream)o,"UTF-8"));
+	        			String line;
+	        			StringBuffer b = new StringBuffer();
+	        			while ((line = reader.readLine()) != null) {
+	        		         b.append(line);
+	        		    } 
+	        			reader.close();
+	        			return b.toString();
+					} else return o;	
 				}
 				else
 				{
 					String data = (String) content.getTransferData(flavor);
-					/*
-					 * extract body
-					 */
-					data = data.substring(data.indexOf("<body>"), data.indexOf("</body>") + 7);
-					/*
-					 * remove comments
-					 */
-					// to do: remove html comments
-					/*
-					 * remove strange tags
-					 */
-					// to do: remove  etc.
-					/*
-					 * that's it :)
-					 */
+					//data = data.substring(data.indexOf("<body>"), data.indexOf("</body>") + 7);
+
 					return data;
 				}
 			}
+			
 		};
+
 		/*
 		 * set the new transferable to the clipboard
 		 */

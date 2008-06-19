@@ -89,7 +89,6 @@ public abstract class AmbitAction extends AbstractAction {
 			((ISharedData) userData).getJobStatus().setStatus(IJobStatus.STATUS_DONE);
 			((ISharedData) userData).getJobStatus().setMessage(actionName + " completed.");
 		}		
-		//JOptionPane.showMessageDialog(mainFrame,"Done.");
 	}
 	/**
 	 * Changes {@link AbstractAction} name to {@link AbstractAction#getValue(NAME)}
@@ -132,8 +131,9 @@ public abstract class AmbitAction extends AbstractAction {
             		changeName();
             		run(null);
             	} catch (Exception x) {
-            		JOptionPane.showMessageDialog(mainFrame,x);
-                    x.printStackTrace();
+            		((ISharedData) userData).getJobStatus().setError(x);
+            		//JOptionPane.showMessageDialog(mainFrame,x);
+                    //x.printStackTrace();
             		worker = null;
             		restoreName();
             	}               	

@@ -107,4 +107,15 @@ public class DefaultBatchStatistics extends Observable implements
 	public void setResultCaption(String resultCaption) {
 		this.resultCaption = resultCaption;
 	}
+	/**
+	 * Ignores the object
+	 */
+	public void increment(int recordType, Object o) {
+		increment(recordType);
+		
+	}
+	public void incrementError(int recordType, Object o, Exception x) {
+		increment(IBatchStatistics.RECORDS_ERROR);
+		
+	}
 }

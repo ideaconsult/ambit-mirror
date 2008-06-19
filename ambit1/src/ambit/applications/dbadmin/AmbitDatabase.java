@@ -35,6 +35,7 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.util.Observable;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -82,9 +83,9 @@ import ambit.ui.actions.search.DbExperimentsSearchAction;
 import ambit.ui.actions.search.DbSaveAsDataset;
 import ambit.ui.actions.search.ExperimentsByStudyAction;
 import ambit.ui.data.AmbitObjectPanel;
+import ambit.ui.data.molecule.AmbitDetailsPanel;
 import ambit.ui.data.molecule.CompoundsPanel;
 import ambit.ui.data.molecule.SmilesEntryPanel;
-import ambit.ui.data.molecule.AmbitDetailsPanel;
 
 /**
  * A GUI application for database query, data entry and database administration.
@@ -398,7 +399,8 @@ delete from src_dataset where id_srcdataset=7;
 		statusBar = new AmbitStatusBar(new Dimension(w,24));
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		dbadminData.getJobStatus().addObserver((AmbitStatusBar)statusBar);
-		dbadminData.getBatchStatistics().addObserver((AmbitStatusBar)statusBar);
+		if (dbadminData.getBatchStatistics() instanceof Observable)
+			((Observable)dbadminData.getBatchStatistics()).addObserver((AmbitStatusBar)statusBar);
 		return statusBar;	
 
 	}	

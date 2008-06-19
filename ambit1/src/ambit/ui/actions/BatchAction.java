@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.formats.IChemFormat;
@@ -139,17 +138,19 @@ public abstract class BatchAction extends AmbitAction {
 								d.show();			
 							} else  batch.start();
 						} catch (Exception x ) {
-							JOptionPane.showMessageDialog(mainFrame,x.toString(),"Error ",JOptionPane.OK_OPTION); 
+							((ISharedData) userData).getJobStatus().setError(x);
 							x.printStackTrace();
 						} finally {
 						    completed();
+						    ((ISharedData)userData).getJobStatus().setError(batch.getStatus().getError());
 						}
 					}
 				}
 			}
 
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(mainFrame,ex.toString(),"Error ",JOptionPane.OK_OPTION); 
+			((ISharedData) userData).getJobStatus().setError(ex);
+			//JOptionPane.showMessageDialog(mainFrame,ex.toString(),"Error ",JOptionPane.OK_OPTION); 
 			ex.printStackTrace();
 		}
 	}
@@ -199,7 +200,7 @@ public abstract class BatchAction extends AmbitAction {
                         new FileOutputStream(new File(file.getAbsoluteFile()+".sdf")),".sdf");
 				if (e.toLowerCase().equals(".html")) return new HTMLTableWriter(new FileOutputStream(file));
 				if (e.toLowerCase().equals(".pdf")) {
-					JOptionPane.showMessageDialog(mainFrame,"To be done");
+					((ISharedData) userData).getJobStatus().setError(new Exception("TO DO"));
 					return null;
 				}
 				else return FileOutputState.getWriter(new FileOutputStream(file),file.getName());

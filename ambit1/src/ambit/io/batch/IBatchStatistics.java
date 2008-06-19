@@ -31,6 +31,17 @@ public interface IBatchStatistics extends Serializable {
      */
     void increment(int recordType);
     /**
+     * Increments number of records of a type and passes the record in question (for example for logging)   
+     * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
+     */    
+    void increment(int recordType, Object o);
+    
+    /**
+     * Increments number of errors , occured when processing of record type   
+     * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN
+     */    
+    void incrementError(int recordType, Object o, Exception x);        
+    /**
      * Return  time elapsed for of records of a type
      * @param recordType  RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      * @return time elapsed

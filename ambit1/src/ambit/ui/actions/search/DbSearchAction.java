@@ -13,6 +13,7 @@ import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit.data.AmbitObject;
+import ambit.data.ISharedData;
 import ambit.data.literature.ReferenceFactory;
 import ambit.data.molecule.CurrentMoleculeWriter;
 import ambit.data.molecule.DataContainer;
@@ -30,6 +31,7 @@ import ambit.io.ListOfMoleculesWriter;
 import ambit.io.MyIOUtilities;
 import ambit.io.batch.DefaultBatchStatistics;
 import ambit.io.batch.IBatchStatistics;
+import ambit.io.batch.IJobStatus;
 import ambit.ui.UITools;
 import ambit.ui.actions.BatchAction;
 
@@ -74,7 +76,8 @@ public abstract class DbSearchAction extends BatchAction {
 					return getSearchReader(conn.getConn(),dbaData.getQuery(),dbaData.getPage(),
                             dbaData.getPageSize());
 				} catch (AmbitException x) {
-					JOptionPane.showMessageDialog(mainFrame, x.toString());
+					((ISharedData) userData).getJobStatus().setError(x);
+					//JOptionPane.showMessageDialog(mainFrame, x.toString());
 				}
 
 		}

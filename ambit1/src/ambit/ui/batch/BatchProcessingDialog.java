@@ -24,6 +24,7 @@ import ambit.io.batch.DefaultBatchProcessing;
 import ambit.io.batch.IBatch;
 import ambit.io.batch.IBatchStatistics;
 import ambit.io.batch.IJobStatus;
+import ambit.ui.LabelErrorViewer;
 
 
 /**
@@ -37,6 +38,7 @@ public class BatchProcessingDialog extends AbstractJobProcessingDialog implement
 	JLabel  stateLabel, progressLabel;
 	//JProgressBar progressBar;
 	IBatch batch;
+	protected LabelErrorViewer errorViewer;
 	
 	protected TitledBorder border;
 
@@ -235,6 +237,8 @@ public class BatchProcessingDialog extends AbstractJobProcessingDialog implement
                 
         
         progressPanel.add(topPanel,BorderLayout.CENTER);
+        if (errorViewer == null)  errorViewer = new LabelErrorViewer();
+        progressPanel.add(errorViewer.getView(),BorderLayout.EAST);
         
         /*
         progressBar = new JProgressBar();
@@ -396,6 +400,8 @@ public class BatchProcessingDialog extends AbstractJobProcessingDialog implement
 			progressBar.setIndeterminate(running);
 			progressBar.setVisible(running || b.isStatus(IJobStatus.STATUS_PAUSED));
 			*/
+			if (errorViewer != null)
+				errorViewer.setError(b.getError());
 			stateLabel.setText(b.toString());
 			progressLabel.setToolTipText("");
 			pauseButton.setVisible(running || b.isStatus(IJobStatus.STATUS_PAUSED));

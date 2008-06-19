@@ -181,11 +181,16 @@ public class DefaultBatchProcessing implements IBatch {
 			long record = 0;
 			Object object = null;
 			while (reader.hasNext() && (getStatus().isRunning())) {
-
-				object = readRecord();
+				try {
+					object = readRecord();
+				} catch (Exception x) {
+					x.printStackTrace();
+					getStatus().setError(x);
+				}
 				try {
 					object = processRecord(object);
 				} catch (BatchProcessingException x) {
+					getStatus().setError(x);
 					logger.error(x);
 				}
 				inputState.setCurrentRecord(inputState.getCurrentRecord() + 1);
@@ -308,7 +313,8 @@ public class DefaultBatchProcessing implements IBatch {
 	            statistics.increment(IBatchStatistics.RECORDS_WRITTEN);
 	        } catch (CDKException x) {
 	        	logger.error(x);
-	        	statistics.increment(IBatchStatistics.RECORDS_ERROR);
+	        	status.setError(x);
+	        	statistics.incrementError(IBatchStatistics.RECORDS_WRITTEN,object,x);
 	        	statistics.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-now);
 	            //throw new BatchProcessingException(x);
 	        }

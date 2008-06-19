@@ -25,6 +25,8 @@ public class AmbitStatusBar extends JPanel implements Observer {
 	protected JLabel label;
 	protected JLabel batchlabel;
     protected JProgressBar progressBar= null;
+    protected LabelErrorViewer errorViewer;
+	protected Exception theError;    
     
 	public AmbitStatusBar(Dimension d) {
 		super();
@@ -46,6 +48,8 @@ public class AmbitStatusBar extends JPanel implements Observer {
 		addWidgets(d);
 	}
 	protected void addWidgets(Dimension d) {
+		errorViewer = new LabelErrorViewer();
+		theError = null;
 		setVisible(true);
 		setEnabled(true);
         setLayout(new BorderLayout());
@@ -72,10 +76,15 @@ public class AmbitStatusBar extends JPanel implements Observer {
 	    progressBar.setStringPainted(true);
 	    progressBar.setString("");
 	    progressBar.setIndeterminate(false);
-	    add(progressBar,BorderLayout.EAST);
+
 	    progressBar.setVisible(true);
 	    progressBar.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 	    
+
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(progressBar,BorderLayout.CENTER);
+        p.add(errorViewer.getView(),BorderLayout.EAST);
+	    add(p,BorderLayout.EAST);        
 		setPreferredSize(d);
 		
 	}
@@ -83,6 +92,7 @@ public class AmbitStatusBar extends JPanel implements Observer {
 
 		if (arg0 instanceof JobStatus) {
 			JobStatus job = (JobStatus) arg0;
+			errorViewer.setError(job.getError());
 			label.setText(job.getMessage());
 			if (job.isRunning()) {
 				if (!progressBar.isVisible()) {

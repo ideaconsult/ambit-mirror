@@ -10,6 +10,7 @@ import java.util.Observable;
 public class DefaultStatus extends Observable implements IJobStatus {
 	protected int status;
 	protected boolean modified;
+	protected Exception error = null;
 	
 	public DefaultStatus() {
 		super();
@@ -36,6 +37,8 @@ public class DefaultStatus extends Observable implements IJobStatus {
 	public void setStatus(int status) {
 		if (this.status != status) {
 			this.status = status;
+			if (status == STATUS_RUNNING)
+				error = null;
 			setChanged();
 			notifyObservers();
 		}
@@ -63,4 +66,14 @@ public class DefaultStatus extends Observable implements IJobStatus {
             notifyObservers();
         }
     }
+
+	public Exception getError() {
+		return error;
+	}
+
+	public void setError(Exception x) {
+		this.error = x;
+        setChanged();
+        notifyObservers();		
+	}
 }

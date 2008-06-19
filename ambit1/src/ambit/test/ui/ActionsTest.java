@@ -33,6 +33,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.Observable;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -198,7 +199,10 @@ public class ActionsTest extends TestCase {
 		AmbitStatusBar statusBar = new AmbitStatusBar(new Dimension(100,24));
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		dbadminData.getJobStatus().addObserver((AmbitStatusBar)statusBar);
-		dbadminData.getBatchStatistics().addObserver((AmbitStatusBar)statusBar);
+		if (dbadminData.getBatchStatistics() instanceof Observable)
+			((Observable)dbadminData.getBatchStatistics()).addObserver((AmbitStatusBar)statusBar);
+
+		
 		
      	JPanel mainPanel = new JPanel(new GridLayout(3,1));
      	//Container mainPanel = frame.getContentPane();

@@ -26,6 +26,7 @@ package ambit.data.qmrf;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.util.Observable;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -67,7 +68,9 @@ public class QMRFGUITools {
     	AmbitStatusBar statusBar = new AmbitStatusBar(new Dimension(width,height));
         statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
         qmrfData.getJobStatus().addObserver((AmbitStatusBar)statusBar);
-        qmrfData.getBatchStatistics().addObserver((AmbitStatusBar)statusBar);
+		if (qmrfData.getBatchStatistics() instanceof Observable)
+			((Observable)qmrfData.getBatchStatistics()).addObserver((AmbitStatusBar)statusBar);
+        
         return statusBar;   
 
     }  

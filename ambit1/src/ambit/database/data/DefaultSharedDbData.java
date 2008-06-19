@@ -47,6 +47,8 @@ import ambit.database.MySQLShell;
 import ambit.database.exception.DbAccessDeniedException;
 import ambit.exceptions.AmbitException;
 import ambit.io.batch.DefaultBatchStatistics;
+import ambit.io.batch.IBatchStatistics;
+import ambit.io.batch.LoggedBatchStatistics;
 import ambit.log.AmbitLogger;
 
 /**
@@ -73,7 +75,7 @@ public abstract class DefaultSharedDbData extends Observable implements ISharedD
 	protected int page = 0;
 	protected int resultDestination = ISharedDbData.MEMORY_LIST;
 	protected int source = ISharedDbData.MEMORY_CURRENT;
-	protected DefaultBatchStatistics batchStatistics;
+	protected IBatchStatistics batchStatistics;
 	protected MySQLShell mysqlShell;
     /**
      * 
@@ -83,7 +85,7 @@ public abstract class DefaultSharedDbData extends Observable implements ISharedD
         this.confFile = configFile;
         mysqlShell = null;
         init();
-		batchStatistics = new DefaultBatchStatistics();
+		batchStatistics = new LoggedBatchStatistics();
 		
     }
     public DefaultSharedDbData() {
@@ -375,7 +377,7 @@ public abstract class DefaultSharedDbData extends Observable implements ISharedD
 		setChanged();
 		notifyObservers();
 	}
-    public synchronized DefaultBatchStatistics getBatchStatistics() {
+    public synchronized IBatchStatistics getBatchStatistics() {
         return batchStatistics;
     }
     public synchronized void setBatchStatistics(

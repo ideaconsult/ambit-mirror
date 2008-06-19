@@ -29,4 +29,7 @@ public interface IJobStatus extends Serializable {
 	public String toString();
 	public boolean isModified();
 	public void setModified(boolean value);
+	
+	Exception getError();
+	void setError(Exception x);
 }
