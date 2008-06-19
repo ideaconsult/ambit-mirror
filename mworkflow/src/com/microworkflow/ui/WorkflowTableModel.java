@@ -67,7 +67,7 @@ public class WorkflowTableModel extends AbstractTableModel  {
         		return PTR; 
         	else return NA;            
         case 2:
-            return activities.get(row);
+            return activities.get(row).getName();
 
         default:
             return row;

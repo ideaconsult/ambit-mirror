@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;
 
-public abstract class WorkflowContextListener extends JPanel implements
+public abstract class WorkflowContextListenerPanel extends JPanel implements
         IWorkflowContextListenerUI {
     protected IWorkflowContextFactory wfcfactory;
     protected boolean animate = false;
@@ -48,10 +48,10 @@ public abstract class WorkflowContextListener extends JPanel implements
      * 
      */
     private static final long serialVersionUID = 2854619268267349642L;
-    public WorkflowContextListener() {
+    public WorkflowContextListenerPanel() {
         this(null);
     }    
-    public WorkflowContextListener(IWorkflowContextFactory wfcfactory) {
+    public WorkflowContextListenerPanel(IWorkflowContextFactory wfcfactory) {
         super(new BorderLayout());
         
         properties = new Vector<String>();

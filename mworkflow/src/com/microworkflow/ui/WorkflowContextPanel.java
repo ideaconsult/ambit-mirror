@@ -30,10 +30,9 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import com.microworkflow.process.ValueLatch;
 import com.microworkflow.ui.MapTableModel.Mode;
 
-public class WorkflowContextPanel extends WorkflowContextListener {
+public class WorkflowContextPanel extends WorkflowContextListenerPanel {
 	/**
 	 * 
 	 */

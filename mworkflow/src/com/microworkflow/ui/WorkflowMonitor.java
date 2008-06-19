@@ -34,6 +34,7 @@ import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -44,6 +45,7 @@ import javax.swing.JToolBar;
 
 import com.l2fprod.common.swing.JTaskPane;
 import com.l2fprod.common.swing.JTaskPaneGroup;
+import com.microworkflow.events.WorkflowContextListener;
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.actions.WFActionAnimate;
@@ -75,25 +77,9 @@ public class WorkflowMonitor extends JPanel {
         		ph,
         		new JScrollPane(new JTextArea()));
         
-        JTaskPane p = new JTaskPane();
-        JTaskPaneGroup workflowgroup = new JTaskPaneGroup();
-        workflowgroup.setName("Workflow");
-        workflowgroup.setExpanded(true);
-        workflowgroup.setTitle("Workflow");
-        workflowgroup.setSpecial(true);	 
-        workflowgroup.add(workflowListener.getUIComponent());
-        workflowgroup.add(createToolBar(wff,wfcf));
-        p.add(workflowgroup);
+        JComponent leftpane = createWorkflowPane(workflowListener,workflowControl,wff,wfcf);
         
-        if (workflowControl != null) {
-        	JTaskPaneGroup control = new JTaskPaneGroup();
-        	control.setName("Workflow control");
-        	control.setExpanded(true);
-        	control.setTitle("Details");
-        	control.setSpecial(true);	 
-        	control.add(workflowControl.getUIComponent());
-            p.add(control);
-        }
+
         
         /*
         label = new JLabel("Workflow");
@@ -109,7 +95,7 @@ public class WorkflowMonitor extends JPanel {
         	*/
         verticalPane = new JSplitPane(
         		JSplitPane.HORIZONTAL_SPLIT,
-        		p,
+        		leftpane,
         		horizontalPane
         		);
 
@@ -127,6 +113,34 @@ public class WorkflowMonitor extends JPanel {
 
         add(pb,BorderLayout.SOUTH);
         
+    }
+    
+    protected JComponent createWorkflowPane(IWorkflowListenerUI workflowListener,
+    		WorkflowContextListener workflowControl,
+            IWorkflowFactory wff, IWorkflowContextFactory wfcf) {
+        JTaskPane p = new JTaskPane();
+        JTaskPaneGroup workflowgroup = new JTaskPaneGroup();
+        workflowgroup.setName("Workflow");
+        workflowgroup.setExpanded(true);
+        workflowgroup.setTitle("Workflow");
+        workflowgroup.setSpecial(true);	 
+        workflowgroup.add(workflowListener.getUIComponent());
+        workflowgroup.add(createToolBar(wff,wfcf));
+        p.add(workflowgroup);
+        
+        if (workflowControl != null) {
+        	if (workflowControl instanceof IWorkflowContextListenerUI) {
+	        	JTaskPaneGroup control = new JTaskPaneGroup();
+	        	control.setName("Workflow control");
+	        	control.setExpanded(true);
+	        	control.setTitle("Details");
+	        	control.setSpecial(true);	 
+	        	control.add(((IWorkflowContextListenerUI)workflowControl).getUIComponent());
+	            p.add(control);
+        	}
+        }        
+        return p;
+
     }
     protected JToolBar createToolBar(IWorkflowFactory wff, IWorkflowContextFactory wfcf) {
         JToolBar tb = new JToolBar();

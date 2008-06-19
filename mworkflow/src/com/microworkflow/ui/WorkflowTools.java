@@ -50,8 +50,10 @@ public class WorkflowTools {
             traverseActivity(((IEmbeddedActivity) activity).getBody(),level+1,look);
         }        
         if (activity instanceof IConditionalActivity) {
-            traverseActivity(((IConditionalActivity) activity).getThenBranch(),level+1,look);
-            traverseActivity(((IConditionalActivity) activity).getElseBranch(),level+1,look);
+        	if (((IConditionalActivity) activity).getThenBranch() != activity)
+        		traverseActivity(((IConditionalActivity) activity).getThenBranch(),level+1,look);
+            if (((IConditionalActivity) activity).getElseBranch() != activity)
+            	traverseActivity(((IConditionalActivity) activity).getElseBranch(),level+1,look);
         }        
                 
     }    

@@ -31,6 +31,6 @@ package com.microworkflow.ui;
 
 import com.microworkflow.process.WorkflowContext;
 
-public interface IWorkflowContextFactory<V> {
-    WorkflowContext<V> getWorkflowContext();
+public interface IWorkflowContextFactory<V extends WorkflowContext> {
+    V getWorkflowContext();
 }
