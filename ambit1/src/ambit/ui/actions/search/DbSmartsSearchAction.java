@@ -32,17 +32,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.tools.StructureResonanceGenerator;
 
 import ambit.data.molecule.SourceDataset;
 import ambit.database.data.AmbitDatabaseToolsData;
 import ambit.database.data.ISharedDbData;
 import ambit.database.processors.ReadStructureProcessor;
-import ambit.database.readers.DbStructureReader;
 import ambit.database.search.DbDatasetReader;
 import ambit.exceptions.AmbitException;
 import ambit.misc.AmbitCONSTANTS;
-import ambit.processors.DefaultAmbitProcessor;
 import ambit.processors.IAmbitProcessor;
 import ambit.processors.ProcessorsChain;
 import ambit.processors.structure.SMARTSSearchProcessor;
