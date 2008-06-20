@@ -275,8 +275,8 @@ public class SmartsManager
 			int a[] = new int[components.length];
 			resetCombination(a);
 			a[0] = k;
-			setComponentInCombination(0,a);
-			comb.push(a);
+			if (setComponentInCombination(0,a) != null)
+				comb.push(a);
 		}					
 		boolean compMapResult = false;
 		
@@ -308,8 +308,8 @@ public class SmartsManager
 				continue;
 			int newC[] = a.clone();			
 			newC[n] = k;
-			setComponentInCombination(n,newC);
-			comb.push(newC);
+			if (setComponentInCombination(n,newC) != null)
+				comb.push(newC);
 		}
 		
 		return(false);
