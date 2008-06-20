@@ -71,8 +71,20 @@ public class SmartsParser
 	boolean mNeedExplicitHData;
 	boolean mNeedParentMoleculeData;
 	public boolean hasRecursiveSmarts;
-	boolean FlagAllowDisclosures = false;
 	
+	//Work variables for Component Level Grouping
+	boolean FlagCLG = false;  
+	int curComponent;
+	public int numFragments;
+	public int maxCompNumber;
+	public Vector<QueryAtomContainer> fragments = new Vector<QueryAtomContainer>();
+	public Vector<Integer> fragmentComponents = new Vector<Integer>();
+	QueryAtomContainer curFragment;
+	
+	//TreeMap<IAtom,Integer> atomComponents = new TreeMap<IAtom,Integer>();
+	//TreeMap<IBond,Integer> bondComponents = new TreeMap<IBond,Integer>();
+	
+	//Basic work variables
 	int curChar;	
 	IQueryAtom prevAtom;
 	SMARTSBond curBond;
@@ -104,6 +116,13 @@ public class SmartsParser
 		curBondType = SmartsConst.BT_UNDEFINED;		
 		curChar = 0;
 		insideRecSmarts = false;
+		//atomComponents.clear();
+		//bondComponents.clear();
+		fragments.clear();
+		fragmentComponents.clear();
+		curComponent = 0;
+		numFragments = 0;
+		maxCompNumber = 0;
 	}
 	
 	void parse()
@@ -165,9 +184,9 @@ public class SmartsParser
 		container = curContainer;
 	}
 	
-	public void allowDisclosures(boolean flag)
+	public void setComponentLevelGrouping(boolean flag)
 	{
-		FlagAllowDisclosures = flag;
+		FlagCLG = flag;
 	}
 	
 	public boolean needNeighbourData()
@@ -295,11 +314,27 @@ public class SmartsParser
 		return (sb.toString());
 	}
 	
+	void newFragment()
+	{
+		numFragments++; //A new fragments is started. It is inside "current component"
+		curFragment = new QueryAtomContainer();
+		fragments.add(curFragment);
+		fragmentComponents.add(new Integer(curComponent));
+	}
+	
 	void addAtom(IQueryAtom atom)
 	{
 		container.addAtom(atom);
 		if (prevAtom != null)
-			addBond(prevAtom, atom);			
+		{	
+			curFragment.addAtom(atom);
+			addBond(prevAtom, atom);
+		}	
+		else
+		{	
+			newFragment(); //A new fragments is started. It is inside "current component"
+			curFragment.addAtom(atom);
+		}	
 		
 		//resetting for the next atom
 		prevAtom = atom;
@@ -358,6 +393,7 @@ public class SmartsParser
 	    atoms[1] = (Atom)atom1;
 	    curBond.setAtoms(atoms);
 	    container.addBond(curBond);
+	    curFragment.addBond(curBond);
 	    //System.out.println("--> " + SmartsHelper.bondToStringExhaustive(container,curBond));
 	    //System.out.println(SmartsHelper.getBondsString(container)+"\n");
 	}
@@ -561,7 +597,24 @@ public class SmartsParser
 			break;
 		case '(':			
 			if (prevAtom == null)
-				newError("Incorrect openning brackect", curChar+1,"");
+			{	
+				if (FlagCLG)
+				{
+					if (curComponent > 0)
+					{	
+						newError("Incorrect nested componet brackets", curChar+1,"");
+					}
+					else
+					{
+						brackets.push(prevAtom);
+						maxCompNumber++;
+						curComponent = maxCompNumber;
+					}
+					
+				}
+				else
+					newError("Component Level Grouping is off: incorrect openning brackect", curChar+1,"");
+			}	
 			else			
 				brackets.push(prevAtom);
 			
@@ -582,7 +635,9 @@ public class SmartsParser
 				return;
 			};
 			
-			prevAtom = brackets.pop();			
+			prevAtom = brackets.pop();
+			if (prevAtom == null)
+				curComponent = 0;
 			curChar++;
 			break;
 		case '[':
@@ -592,7 +647,7 @@ public class SmartsParser
 			newError("Incorrect opening bracket ']' ", curChar+1,"");
 			break;	
 		case '.':
-			if (FlagAllowDisclosures)
+			if (FlagCLG)
 			{
 				curChar++;
 				prevAtom = null;

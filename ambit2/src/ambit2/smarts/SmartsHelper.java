@@ -27,6 +27,7 @@ package ambit2.smarts;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import java.util.Vector;
 import java.util.HashMap;
+//import java.util.TreeSet;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
@@ -39,6 +40,9 @@ public class SmartsHelper
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();	
 	//Work container - list with the processed atom nodes
 	HashMap<IAtom,AtomSmartsNode> nodes = new HashMap<IAtom,AtomSmartsNode>();
+	HashMap<IAtom,String> atomIndexes = new HashMap<IAtom,String>();
+	Vector<IBond> ringClosures = new Vector<IBond>();
+	
 	int nAtom;
 	int nBond;
 	
@@ -146,7 +150,7 @@ public class SmartsHelper
 		if (b instanceof SmartsBondExpression)
 			return(b.toString());		
 		if (b instanceof SingleOrAromaticBond)
-			return(":-");
+			return("");
 				
 		if (b.getOrder() == IBond.Order.SINGLE)
 			return("-");
@@ -192,12 +196,28 @@ public class SmartsHelper
 	{
 		determineFirstSheres(query);
 		nodes.clear();
+		atomIndexes.clear();
+		ringClosures.clear();
 		curIndex = 1;
 		AtomSmartsNode node = new AtomSmartsNode();
 		node.parent = null;
 		node.atom = query.getAtom(0);
 		nodes.put(node.atom, node);
 		return(nodeToString(node.atom));
+	}
+	
+	void addIndexToAtom(String ind, IAtom atom)
+	{	
+		//System.out.println("Set index "+ind);
+		
+		if (atomIndexes.containsKey(atom))
+		{
+			String old_ind = atomIndexes.get(atom);
+			atomIndexes.remove(atom);
+			atomIndexes.put(atom,old_ind+ind);
+		}
+		else 
+			atomIndexes.put(atom,ind);
 	}
 	
 	String nodeToString(IAtom atom)
@@ -219,23 +239,32 @@ public class SmartsHelper
 				AtomSmartsNode newNode = new AtomSmartsNode();
 				newNode.atom = neighborAt;
 				newNode.parent = atom;
-				nodes.put(newNode.atom, newNode);
+				nodes.put(newNode.atom, newNode); 
 				
-				//Add Bond 
-				//...
-				String newBranch = nodeToString(neighborAt);
+				String bond_str = bondToString(afs.bonds.get(i));				
+				String newBranch = bond_str + nodeToString(neighborAt);
 				branches.add(newBranch);
 			}
 			else
 			{
-				//Handle ring closure
+				//Handle ring closure: adding indexes to both atoms
+				IBond neighborBo = afs.bonds.get(i);
+				if (!ringClosures.contains(neighborBo))
+				{	
+					ringClosures.add(neighborBo);
+					String ind = (curIndex>9)?"%":"" + curIndex;
+					addIndexToAtom(bondToString(neighborBo) + ind, atom);	
+					addIndexToAtom(ind, neighborAt);
+					curIndex++;
+				}
 			}
 		}
 		//Add atom from the current node
 		sb.append(atomToString((SMARTSAtom) atom));
-		
+				
 		//Add indexes
-		//...
+		if (atomIndexes.containsKey(atom))		
+			sb.append(atomIndexes.get(atom));
 		
 		//Add branches
 		if (branches.size() == 0)
@@ -247,7 +276,7 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
-	static void printIntArray(int c[])
+	static public void printIntArray(int c[])
 	{
 		if (c == null)
 		{	

@@ -29,10 +29,12 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 //import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
@@ -43,6 +45,7 @@ import org.openscience.cdk.isomorphism.mcss.RMap;
 //import java.util.TreeMap;
 import java.util.List;
 import java.util.Vector;
+import java.util.Stack;
 
 /** 
  * Implements utilities needed for handling searching with SMARTS  
@@ -78,10 +81,17 @@ public class SmartsManager
 	Vector<Integer> bondRecAt1 = new Vector<Integer>();
 	Vector<Integer> bondRecAt2 = new Vector<Integer>();
 	Vector<IBond> bondRecBo = new Vector<IBond>(); //It contains actually a bond expression
-	
-	QueryAtomContainer baseStr;
-	
+	Vector<Integer> compFrags = new Vector<Integer>(); //The indexes of the query frags which are in a component
+	boolean fragMaps[][];
+	int components[];
+	QueryAtomContainer baseStr;	
 	public boolean mGenerateSubQueries;
+	
+	
+	public SmartsManager()
+	{
+		parser.setComponentLevelGrouping(true);
+	}
 	
 	public void setQuery(String smQuery)
 	{
@@ -113,6 +123,24 @@ public class SmartsManager
 		//System.out.println(query.toString());
 		//System.out.println(SmartsHelper.getAtomsString(query));
 		//System.out.println(SmartsHelper.getBondsString(query));
+		
+		/*
+		System.out.println("numFragments = " + parser.numFragments);
+		System.out.println("maxCompNumber = " + parser.maxCompNumber);
+		SmartsHelper sh = new SmartsHelper();
+		System.out.println("container " + sh.toSmarts(parser.container));
+		System.out.println("Fragments: ");
+		for (int i = 0; i < parser.fragments.size(); i++)
+		{
+			System.out.println(					 
+					"  Comp = " + parser.fragmentComponents.get(i).intValue() +
+					"  NA = " + parser.fragments.get(i).getAtomCount() +
+					"  NB = " + parser.fragments.get(i).getBondCount() +
+					"  " + sh.toSmarts(parser.fragments.get(i)) 
+					);	
+		}
+		*/
+		
 	}
 	
 	public String getErrors()
@@ -132,28 +160,190 @@ public class SmartsManager
 		
 		parser.setSMARTSData(target);
 		
+		if (parser.numFragments > 1)
+			return(fragmentSearchIn(target));
+		
 		if (parser.hasRecursiveSmarts)
 		{	
-			if (recursiveStrategy == 0)
-				return(recursiveSearchIn0(target));
-			else
-				return(recursiveSearchIn1(target));
+			return(recursiveSearchIn1(target));
 		}	
 		else
 		{
-			try
-			{
-				boolean res = UniversalIsomorphismTester.isSubgraph(target, query);
-				return(res);
-			}
-			catch (CDKException e)
-			{
-				System.out.println(e.getMessage());
-			}
-			return(false);
+			return(mappingIn(target));
 		}	
 	}
+	
+	boolean mappingIn(IAtomContainer target)
+	{
+		try
+		{
+			boolean res = UniversalIsomorphismTester.isSubgraph(target, query);
+			return(res);
+		}
+		catch (CDKException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return(false);
+	}
 		
+	boolean fragmentSearchIn(IAtomContainer target)
+	{
+		boolean noComponentsSpecified = true;
+		for (int i = 0; i < parser.fragmentComponents.size(); i++)
+		{	
+			if (parser.fragmentComponents.get(i).intValue() > 0)
+			{
+				noComponentsSpecified = false;
+				break;
+			}
+		}
+		
+		if (parser.hasRecursiveSmarts)
+		{
+			clearQueryRecMatches();
+			getQueryRecMatches(target);
+		}
+		
+		if (noComponentsSpecified)  //There are no zero level brackets i.e. each fragments maps anywere
+		{	
+			for (int i = 0; i < parser.fragments.size(); i++)
+			{
+				query = parser.fragments.get(i);
+				if (!mappingIn(target))
+					return(false);
+			}
+			return(true);
+		}
+		
+		//Handle Component Level Grouping (zero level brackets are used)
+		IMoleculeSet ms =  ConnectivityChecker.partitionIntoMolecules(target);			
+		//This is a simple preliminary check
+		if (ms.getAtomContainerCount() < parser.maxCompNumber)
+			return(false);
+		
+		//Each query fragment which is in a component with number > 0 is searched individually against
+		//each target component.
+		//The query fragments which are not in a zero level brackets (comp. number = 0) are searched 
+		//against the "whole target" i.e. to found it at least in on the of the target components				
+		compFrags.clear();
+		boolean res;
+		
+		for (int i = 0; i < parser.fragments.size(); i++)
+		{	
+			if (parser.fragmentComponents.get(i).intValue() == 0)
+			{	
+				query = parser.fragments.get(i);
+				res = mappingIn(target);
+				if (!res)
+					return(false); //This non-component fragment is not found in the target
+			}
+			else
+				compFrags.add(parser.fragmentComponents.get(i));
+		}
+		
+		fragMaps = new boolean[compFrags.size()][ms.getAtomContainerCount()];
+		components = new int[compFrags.size()];
+		for (int i = 0; i < compFrags.size(); i++)
+		{
+			components[i] = parser.fragmentComponents.get(compFrags.get(i).intValue()).intValue();
+			for (int j = 0; j < ms.getAtomContainerCount(); j++)
+			{	
+				query = parser.fragments.get(compFrags.get(i).intValue());
+					fragMaps[i][j] = mappingIn(ms.getAtomContainer(j));
+			}	
+		}
+		
+		return(checkComponentMapings());
+	}
+		
+	
+	boolean checkComponentMapings()
+	{
+		//Combination is defined as an array a[] where:
+		//i-th fragment is mapped onto target component a[i]
+		//In order to return 'true' there must be found a combination
+		//where all elements are different from -1 (i.e. each fragment is mapped onto a target component)
+		//First depth-search algorithm is applied to search such a combination.
+		Stack<int[]> comb = new Stack<int[]>();
+		
+		//Generation of the initial combinations
+		for (int k = 0; k < fragMaps[0].length; k++)
+		{
+			if (!fragMaps[0][k])
+				continue;
+			int a[] = new int[components.length];
+			resetCombination(a);
+			a[0] = k;
+			setComponentInCombination(0,a);
+			comb.push(a);
+		}					
+		boolean compMapResult = false;
+		
+		//Tree search of the mapping combination (depth-first search)
+		while ((!comb.empty()) && (!compMapResult))
+		{
+			int a[] = comb.pop();
+			compMapResult = addComponentToCombination(a, comb);
+		}
+		
+		return(compMapResult);
+	}
+	
+	void resetCombination(int a[])
+	{
+		for (int i = 0; i < a.length; i++)
+			a[i] = -1;
+	}
+	
+	boolean addComponentToCombination(int a[], Stack<int[]> comb)
+	{
+		int n = firstElementInCombination(-1,a);
+		if (n == -1)
+			return(true); //No elements equal to -1 were found i.e. all fragments are mapped
+		
+		for (int k = 0; k < fragMaps[n].length; k++)
+		{
+			if (!fragMaps[n][k])
+				continue;
+			int newC[] = a.clone();			
+			newC[n] = k;
+			setComponentInCombination(n,newC);
+			comb.push(newC);
+		}
+		
+		return(false);
+	}
+	
+	int[] setComponentInCombination(int n, int a[])
+	{
+		//All fragments that are in the component of n-fragment
+		//must to be mapped onto target component a[n] as well
+		//If NOT, null pointer  is returned		
+		for (int i = n+1; i < components.length; i++)
+		{	
+			if(components[i] == components[n])
+			{	
+				if (fragMaps[i][a[n]]) //i-th fragment maps target component a[n]
+					a[i] = a[n];
+				else
+					return(null);
+			}
+			else
+				break; //It is applied because the fragments for a given component are sequential 
+		}	
+		
+		return (a);
+	}
+	
+	int firstElementInCombination(int el, int a[])
+	{
+		for (int i =0; i < a.length; i++)
+			if (a[i] == el)
+				return(i);
+		return(-1);
+	}
+	
 	void getRecursiveAtoms()
 	{
 		recAtoms.clear();
@@ -168,7 +358,7 @@ public class SmartsManager
 		}
 	}
 	
-	//---------- Implementting the Strategy 0 for recursive atoms ---------------
+	//---------- Implementting the Strategy 0 for recursive atoms -----------NOT REALY USED----
 	
 	void analyseRecursiveAtoms()
 	{
@@ -452,7 +642,8 @@ public class SmartsManager
 	
 	
 	//---------- Implementting the Strategy 1 for recursive atoms ---------------
-		
+	
+	
 	
 	boolean recursiveSearchIn1(IAtomContainer target)
 	{
@@ -461,17 +652,8 @@ public class SmartsManager
 		//and all mappings are stored in the query itself.
 		//Afterwards this info is used by the main substructure search		
 		clearQueryRecMatches();
-		getQueryRecMatches(target);		
-		try
-		{
-			boolean res = UniversalIsomorphismTester.isSubgraph(target, query);
-			return(res);
-		}
-		catch (CDKException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return(false);
+		getQueryRecMatches(target);	
+		return(mappingIn(target));		
 	}
 	
 	public Vector<IAtom> getAtomMappings(IAtomContainer target)

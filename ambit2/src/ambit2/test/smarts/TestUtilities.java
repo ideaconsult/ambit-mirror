@@ -18,9 +18,11 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
 		//tu.testSmartsManagerBoolSearch("[x1;C]", "CCCC");
 		//tu.testSmartsManagerAtomMapping("N", "CCNCCNCC");
-		tu.testSmartsManagerAtomMapping("[x2]", "C1CCC12CC2");
+		//tu.testSmartsManagerAtomMapping("[x2]", "C1CCC12CC2");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1[N+]", "c1ccccc1[N+]");		
-				
+		//tu.testSmartsManagerBoolSearch("(CCC.C1CC12CC2).C=CC#C.CCN.(ClC)", "CCCCC");
+		tu.testSmartsManagerBoolSearch("(CCCC.CC.CCCN).N.C", "CCCCC.CCCN");
+		
 	}
 	
 	SmartsParser sp = new SmartsParser();
@@ -72,5 +74,25 @@ public class TestUtilities
 		System.out.println();
 	}
 	
+	void modify(int a[])
+	{
+		a[1] = 10;
+		a[2] = 20;
+	}
+	
+	public void testIntArray()
+	{
+		int a[] = new int [4];
+		a[0] = 1;
+		a[1] = 2;
+		a[2] = 3;
+		a[3] = 4;
+		int c[] = a.clone();
+		SmartsHelper.printIntArray(a);
+		SmartsHelper.printIntArray(c);
+		modify(a);
+		SmartsHelper.printIntArray(a);
+		SmartsHelper.printIntArray(c);
+	}
 	
 }
