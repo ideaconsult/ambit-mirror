@@ -14,8 +14,10 @@ import org.openscience.cdk.modeling.builder3d.TemplateHandler3D;
 import ambit.data.DefaultData;
 import ambit.data.IDataContainers;
 import ambit.data.JobStatus;
+import ambit.data.descriptors.FuncGroupsDescriptorFactory;
 import ambit.data.literature.ReferenceFactory;
 import ambit.data.molecule.DataContainer;
+import ambit.data.molecule.SmartsFragmentsList;
 import ambit.data.molecule.SourceDataset;
 import ambit.data.molecule.SourceDatasetList;
 import ambit.database.DbConnection;
@@ -149,11 +151,13 @@ import ambit.processors.ProcessorsChain;
  */
 public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runnable, IDataContainers {
 	protected SourceDataset srcDataset;
+	protected SmartsFragmentsList fragments;
 	protected DescriptorQueryList descriptors;
 	protected ExperimentQuery experiments;
 	protected ExperimentConditionsQuery studyConditions;
 	protected DataContainer query;
 	protected DataContainer molecules;
+	
 	
 	protected int similarityMethod = SearchFactory.MODE_FINGERPRINT;
     protected double similarityThreshold = 0.5;
@@ -166,6 +170,7 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 	protected ActionMap descriptorActions;
 	protected ActionMap experimentsActions;
 	protected ActionMap structureActions;
+	protected ActionMap smartsActions;
 	protected boolean loading = false;
 	protected TemplateHandler3D templateHandler;
 	
@@ -206,6 +211,11 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 				initDescriptors(dbConnection);
 				initContainer(dbConnection.getConn());
 				initExperiments(dbConnection.getConn());
+				fragments = new SmartsFragmentsList();
+				FuncGroupsDescriptorFactory.getFragments(
+						FuncGroupsDescriptorFactory.getDocument(defaultData.get(DefaultData.FRAGMENTS).toString()),
+						fragments
+						);
 	        } catch (Exception x) {
 	            x.printStackTrace();
 	        } finally {
@@ -529,10 +539,21 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 		notifyObservers(srcDataset);
 	}
 
+	
+	public ActionMap getSMARTSActions() {
+		return smartsActions;
+	}
+	
+	public void setSMARTSActions(ActionMap smartsActions) {
+		this.smartsActions = smartsActions;
+	}
+	
+	
 	public ActionMap getStructureActions() {
 		return structureActions;
 	}
 
+	
 	public void setStructureActions(ActionMap structureActions) {
 		this.structureActions = structureActions;
 	}
@@ -681,6 +702,12 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 			x.printStackTrace();
 			return null;
 		}
+	}
+	public SmartsFragmentsList getFragments() {
+		return fragments;
+	}
+	public void setFragments(SmartsFragmentsList fragments) {
+		this.fragments = fragments;
 	}
 
 }

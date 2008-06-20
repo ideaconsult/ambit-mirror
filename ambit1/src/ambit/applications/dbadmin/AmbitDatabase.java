@@ -109,6 +109,7 @@ public class AmbitDatabase extends CoreApp {
 	protected JComponent ambitMoleculePanel;
 	protected JComponent ambitQueryPanel;
 	protected ActionMap structureSearchActions;
+	protected ActionMap smartsSearchActions;
 	protected ActionMap optionsActions;
 	protected ActionMap searchActions;
 	//protected ActionMap batchSearchActions;
@@ -168,6 +169,7 @@ delete from src_dataset where id_srcdataset=7;
 	protected JMenuBar createMenuBar() {
 	    allActions = new ActionMap();
 		structureSearchActions = new ActionMap();
+		smartsSearchActions = new ActionMap();
 		//batchSearchActions = new ActionMap();
 		searchActions = new ActionMap();
 		dbadminData.setDescriptorActions(new ActionMap());
@@ -240,6 +242,11 @@ delete from src_dataset where id_srcdataset=7;
 		ActionFactory.addToMenu(structureSearchActions,submenu);
 		dbadminData.setStructureActions(structureSearchActions);
 
+		ActionFactory.createSMARTSSearchActions(smartsSearchActions,dbadminData,mainFrame);
+		ActionFactory.setParentActions(smartsSearchActions,allActions);		
+		ActionFactory.addToMenu(smartsSearchActions,submenu);
+		dbadminData.setSMARTSActions(smartsSearchActions);
+		
 		submenu = new JMenu("Descriptors");
 		menu.add(submenu);
 		String c = "Search by descriptors and distance between atoms";

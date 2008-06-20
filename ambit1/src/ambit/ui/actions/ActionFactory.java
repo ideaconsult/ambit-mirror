@@ -55,6 +55,8 @@ import ambit.ui.actions.file.FileBatchProcessingAction;
 import ambit.ui.actions.file.FileExportQueryAction;
 import ambit.ui.actions.file.FileNewAction;
 import ambit.ui.actions.file.FileOpenAction;
+import ambit.ui.actions.file.LoadFragmentsAction;
+import ambit.ui.actions.file.SaveFragmentsAction;
 import ambit.ui.actions.process.CalculateMOPACAction;
 import ambit.ui.actions.process.DBCalculateAtomDistancesAction;
 import ambit.ui.actions.process.DBCalculateDescriptorsAction;
@@ -69,6 +71,7 @@ import ambit.ui.actions.search.DbFormulaSearchAction;
 import ambit.ui.actions.search.DbNameSearchAction;
 import ambit.ui.actions.search.DbSMILESSearchAction;
 import ambit.ui.actions.search.DbSimilaritySearchAction;
+import ambit.ui.actions.search.DbSmartsSearchAction;
 import ambit.ui.actions.search.DbStructureToQuery;
 import ambit.ui.actions.search.DbSubstructureSearchAction;
 import ambit.ui.actions.search.QueryOptionsAction;
@@ -123,6 +126,14 @@ public class ActionFactory {
 		actions.put("CurrentStructure",new DbStructureToQuery(userData,mainFrame));
 		
     }
+    
+    public static void createSMARTSSearchActions(ActionMap actions, Object userData, JFrame mainFrame) {
+		actions.put("SMARTS",new DbSmartsSearchAction(userData,mainFrame,"Search"));
+		actions.put("SMARTS Open",new LoadFragmentsAction(userData,mainFrame));
+		actions.put("SMARTS Save",new SaveFragmentsAction(userData,mainFrame));
+		
+    }    
+    
     public static void createOptionsActions(ActionMap actions, Object userData, JFrame mainFrame) {
 		actions.put("Dataset",new SelectDatasetAction(userData,mainFrame,"Dataset"));
 		//actions.put("Results output",new DbResultsDestinationAction(userData,mainFrame,"Results Output"));

@@ -37,6 +37,7 @@ public class DefaultData extends Hashtable implements Serializable {
     public static transient String PORT = "Port";
     public static transient String MYSQL_START = "StartMySQL";
     public static transient String PASSWORD = "Password";
+    public static transient String FRAGMENTS = "";
     
     
     /**
@@ -51,6 +52,7 @@ public class DefaultData extends Hashtable implements Serializable {
         put(USER,"root");
         put(PORT,"33060");
         put(MYSQL_START,"True");
+        put(FRAGMENTS,"");
     }
     private void writeObject(ObjectOutputStream out) throws IOException {
         Enumeration e = keys();

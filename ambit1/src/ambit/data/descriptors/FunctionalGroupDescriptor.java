@@ -32,6 +32,7 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
 import ambit.data.molecule.SmartsQuery;
+import ambit.data.molecule.SmartsResult;
 
 public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	protected SmartsQuery query;
@@ -42,7 +43,7 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 
 	public DescriptorValue calculate(IAtomContainer arg0) throws CDKException {
 		try {
-	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	        return new SmartsResult(getSpecification(), getParameterNames(), 
 	                getParameters(), new IntegerResult(query.match(arg0)));
 		} catch (Exception x) {
 			throw new CDKException(x.getMessage());

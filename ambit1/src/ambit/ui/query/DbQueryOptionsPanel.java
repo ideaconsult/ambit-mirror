@@ -53,6 +53,9 @@ public class DbQueryOptionsPanel extends JPanel implements Observer {
 
 		StructureQueryPanel structurePanel  = new StructureQueryPanel(data.getQueries(),data.getStructureActions());
 		
+		
+		DbSmartsQueryPanel fragmentsEditor =  new DbSmartsQueryPanel(data.getFragments(),data.getSMARTSActions());
+		
 		ButtonGroup group = new ButtonGroup();
 		
 		addButton("Structure",UITools.createImageIcon("ambit/ui/images/benzene_32x32.jpg") 
@@ -61,6 +64,8 @@ public class DbQueryOptionsPanel extends JPanel implements Observer {
 	    addButton("Descriptors",new ImageIcon(ButtonBarMain.class.getResource("icons/folder32x32.png")) 
 	    		,descriptorsPanel, toolbar, group);
 	    addButton("Experiments", UITools.createImageIcon("ambit/ui/images/experiment.png"),experimentsPanel, toolbar, group);
+	    addButton("SMARTS",UITools.createImageIcon("ambit/ui/images/smarts.png"),
+	    		fragmentsEditor, toolbar, group);	    
 	    
 		
 	}

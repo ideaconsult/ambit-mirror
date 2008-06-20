@@ -17,6 +17,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -33,6 +34,8 @@ import ambit.io.FileOutputState;
 import ambit.io.HTMLTableWriter;
 import ambit.io.IteratingFileReader;
 import ambit.io.MyIOUtilities;
+import ambit.io.PDFWriter;
+import ambit.io.XLSFileWriter;
 import ambit.io.batch.DefaultBatchProcessing;
 import ambit.io.batch.DefaultBatchStatistics;
 import ambit.io.batch.EmptyBatchConfig;
@@ -199,17 +202,12 @@ public abstract class BatchAction extends AmbitAction {
                 if (e == null) return  FileOutputState.getWriter(
                         new FileOutputStream(new File(file.getAbsoluteFile()+".sdf")),".sdf");
 				if (e.toLowerCase().equals(".html")) return new HTMLTableWriter(new FileOutputStream(file));
-				if (e.toLowerCase().equals(".pdf")) {
-					((ISharedData) userData).getJobStatus().setError(new Exception("TO DO"));
-					return null;
-				}
+				if (e.toLowerCase().equals(".pdf")) return new PDFWriter(new FileOutputStream(file));
+				if (e.toLowerCase().equals(".xls")) return new XLSFileWriter(new FileOutputStream(file));
 				else return FileOutputState.getWriter(new FileOutputStream(file),file.getName());
-			} catch (FileNotFoundException x) {
-				logger.error(x);
-			} catch (AmbitIOException x) {
-				logger.error(x);
-				
-			}
+			} catch (Exception x) {
+				logger.error(x);	
+			}	
 		}
 		return null;
 	}
