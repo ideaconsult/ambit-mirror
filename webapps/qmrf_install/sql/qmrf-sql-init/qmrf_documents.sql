@@ -136,7 +136,7 @@ CREATE TABLE  `qmrf_documents`.`users` (
   `keywords` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
   `reviewer` tinyint(1) NOT NULL default '0' COMMENT 'true if wants to become a reviewer',
   PRIMARY KEY  (`user_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='QMRF Users; status is commenced at registration, verified after user' email is verified, confirmed upon approval by an authority';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='QMRF Users; status is commenced at registration, verified after user email is verified, confirmed upon approval by an authority';
 
 DROP TABLE IF EXISTS `qmrf_documents`.`doc_algorithms`;
 CREATE TABLE  `qmrf_documents`.`doc_algorithms` (
