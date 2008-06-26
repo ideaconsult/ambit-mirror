@@ -71,8 +71,7 @@ public class SmartsManager
 	int recAtomNumSubSmarts[];
 	int recAtomLastLoAnd[];
 	int curComb[];
-	Vector<QueryAtomContainer> subQueryList = new Vector<QueryAtomContainer>();
-	
+	Vector<QueryAtomContainer> subQueryList = new Vector<QueryAtomContainer>();	
 	
 	//The atoms connected to the recursive atoms and the corresponding bond orders.
 	//The bonds between two recursive atoms are not put in topLayers.
@@ -129,14 +128,16 @@ public class SmartsManager
 		System.out.println("maxCompNumber = " + parser.maxCompNumber);
 		SmartsHelper sh = new SmartsHelper();
 		System.out.println("container " + sh.toSmarts(parser.container));
-		System.out.println("Fragments: ");
+		System.out.println("Fragments: ");		
+		
 		for (int i = 0; i < parser.fragments.size(); i++)
 		{
+			String frag = sh.toSmarts(parser.fragments.get(i));			
 			System.out.println(					 
 					"  Comp = " + parser.fragmentComponents.get(i).intValue() +
 					"  NA = " + parser.fragments.get(i).getAtomCount() +
 					"  NB = " + parser.fragments.get(i).getBondCount() +
-					"  " + sh.toSmarts(parser.fragments.get(i)) 
+					"  " +  frag 
 					);	
 		}
 		*/
@@ -239,7 +240,7 @@ public class SmartsManager
 					return(false); //This non-component fragment is not found in the target
 			}
 			else
-				compFrags.add(parser.fragmentComponents.get(i));
+				compFrags.add(new Integer(i)); //parser.fragmentComponents.get(i));
 		}
 		
 		fragMaps = new boolean[compFrags.size()][ms.getAtomContainerCount()];
@@ -254,9 +255,26 @@ public class SmartsManager
 			}	
 		}
 		
+		//printComponentFrags();
 		return(checkComponentMapings());
 	}
 		
+	
+	void printComponentFrags()  //A test helper procedure
+	{
+		System.out.println("---------------------------");
+		SmartsHelper sh = new SmartsHelper();
+		for (int i = 0; i < compFrags.size(); i++)
+		{
+			for (int k = 0; k < fragMaps[i].length; k++)				
+				System.out.print(fragMaps[i][k]?"1 ":"0 ");
+			
+			String frag = sh.toSmarts(parser.fragments.get(compFrags.get(i).intValue()));
+			System.out.print(frag);
+			System.out.println("  " + components[i]);
+		}
+		System.out.println("---------------------------");
+	}
 	
 	boolean checkComponentMapings()
 	{
