@@ -1,0 +1,12 @@
+Manifest-version: 1.0
+Main-Class: nplugins.core.Manager
+Class-Path: lib/log4j.jar
+Specification-Title: nano Plugins
+Specification-Version: 1.0
+Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Package-Title: nplugins
+Package-Version: 1.0
+Package-Vendor: acad.bg
+Implementation-Title: nano plugins
+Implementation-Version: 1.0
+Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
