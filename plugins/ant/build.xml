@@ -109,10 +109,21 @@
 	<fileset dir="${build}">
 		<includesfile name="${src}/nplugins.classes" />
     </fileset>
+		<fileset dir="${src}">
+			<includesfile name="${src}/nplugins.resources" />		    		
+	    </fileset>    	
     </jar>
-
 	</target>
-	
+
+    <target id="demo" name="demo" depends="build">
+    <jar jarfile="${appdist.dir}/bin/ext/npdemo.jar" compress="true"
+    	manifest="${src}/nplugins/demo/MANIFEST.MFT" >
+	<fileset dir="${build}">
+		<includesfile name="${src}/npdemo.classes" />
+    </fileset>
+    </jar>
+	</target>
+
 
 	<target id="sign" name="sign" >
 			<input addproperty="alias" message="Enter Keystore alias"/>
@@ -175,7 +186,7 @@
 	</target>
 
 	<!-- appdist target -->
-	<target name="appdist" description="Application distribution." depends="dist,srcdist">
+	<target name="appdist" description="Application distribution." depends="dist,srcdist,demo">
 		<tstamp/>
 
 
