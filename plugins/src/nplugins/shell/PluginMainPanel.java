@@ -22,32 +22,52 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package nplugins.core;
+package nplugins.shell;
 
-import java.io.File;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.LayoutManager;
+import java.util.logging.Logger;
 
+import javax.swing.JPanel;
 
-public class Manager {
-	public static void main(String[] args) {
-		try {
-			System.out.print("Plugins classpath:\t");
-			PluginClassPath path = Introspection.getDefaultDirectories();
-			System.out.println(path);
-			
-			for (int i=0; i < path.size(); i++) {
-				File file = new File(path.get(i));
-				if (file.exists() && file.isDirectory()) {
-					File[] files = Introspection.enumerateJars(file);
-					for (int j=0; j < files.length; j++)
-						System.out.println(files[j]);
-				}
-			}
-			
-			
-		} catch (NPluginsException x) {
-			x.printStackTrace();
-		}
+/**
+ * The component that appears at right in each tab.
+ * @author Nina Jeliazkova
+ *
+ */
+public abstract class PluginMainPanel<P extends INanoPlugin> extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1891938749518929463L;
+	protected P plugin = null;
+	protected static Logger logger = Logger.getLogger("nplugins.shell.PluginMainPanel");
+	
+
+	public PluginMainPanel(P plugin, LayoutManager layout) {
+		super(layout);
+		this.plugin = plugin;
+		addWidgets();
 	}
+
+
+	public PluginMainPanel(P model) {
+		this(model,new BorderLayout());
+	}
+	protected abstract void addWidgets();
+		
+
+	public P getPlugin() {
+		return plugin;
+	}
+
+
+	public void setPlugin(P plugin) {
+		this.plugin = plugin;
+	}
+
+
 }
 
 

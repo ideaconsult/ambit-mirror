@@ -33,7 +33,7 @@ package nplugins.core;
  * @author Nina Jeliazkova
  * <b>Modified</b> 2005-10-23
  */
-public class IntrospectionException extends Exception {
+public class NPluginsException extends Exception {
 
 	/**
 	 * Comment for <code>serialVersionUID</code>
@@ -43,7 +43,7 @@ public class IntrospectionException extends Exception {
 	/**
 	 * 
 	 */
-	public IntrospectionException() {
+	public NPluginsException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -51,7 +51,7 @@ public class IntrospectionException extends Exception {
 	/**
 	 * @param message
 	 */
-	public IntrospectionException(String message) {
+	public NPluginsException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -59,7 +59,7 @@ public class IntrospectionException extends Exception {
 	/**
 	 * @param cause
 	 */
-	public IntrospectionException(Throwable cause) {
+	public NPluginsException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -68,7 +68,7 @@ public class IntrospectionException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public IntrospectionException(String message, Throwable cause) {
+	public NPluginsException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}

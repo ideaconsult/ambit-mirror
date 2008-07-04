@@ -24,8 +24,15 @@
 */
 package nplugins.core;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import javax.swing.ImageIcon;
+
+import nplugins.shell.application.Utils;
 
 /**
  * A class, containing information about className, its package and a toString() output
@@ -35,9 +42,10 @@ import java.util.jar.JarFile;
 public class PluginPackageEntry {
 	protected String className;
 	protected String packageName;
-	protected JarFile jar;
+	protected JarEntry jar;
+    protected String[] parameters;
  	
-	public PluginPackageEntry(String className, String packageName, JarFile jar) throws Exception {
+	public PluginPackageEntry(String className, String packageName, JarEntry jar) throws Exception {
 		super();
 		this.className = className;
 		this.packageName = packageName;
@@ -50,7 +58,9 @@ public class PluginPackageEntry {
 		}
 		*/
 	}
-
+	public Object createObject() throws ClassNotFoundException ,IllegalAccessException, InstantiationException {
+        return Introspection.loadCreateObject(className);
+    }
 	public String getClassName() {
 		return className;
 	}
@@ -62,11 +72,95 @@ public class PluginPackageEntry {
 
 	@Override
 	public String toString() {
+        if (jar != null) {
+            StringBuffer b = new StringBuffer();
+            try {
+                b.append(jar.getName());
+                b.append('\n');
+                b.append(jar.getComment());
+                b.append('\n');                
+                    Attributes a = jar.getAttributes();
+                    Iterator ai = a.keySet().iterator();
+                    while (ai.hasNext()) {
+                        Object ak = ai.next();
+                        b.append(ak);
+                        b.append(':');
+                        b.append(a.get(ak));
+                        b.append('\n');
+                    }
+                    b.append("----\n");
+            } catch (Exception x) {
+                
+            }
+            return b.toString();
+        } else
 		return className;
 	}
 
-	public JarFile getJar() {
+    protected String toString(JarFile jar) {
+        StringBuffer b = new StringBuffer();
+        b.append('\n');
+        try {
+            b.append(jar.getName());
+            b.append('\n');
+
+            
+            Map<String,Attributes> map = jar.getManifest().getEntries();
+            Iterator<String> i = map.keySet().iterator();
+            while (i.hasNext()) {
+                String key = i.next();
+                b.append(key);
+                b.append('\n');
+                b.append("----\n");
+                Attributes a = map.get(key);
+                Iterator ai = a.keySet().iterator();
+                while (ai.hasNext()) {
+                    Object ak = ai.next();
+                    b.append(ak);
+                    b.append(':');
+                    b.append(a.get(ak));
+                    b.append('\n');
+                }
+                b.append("----\n");
+            }
+        } catch (Exception x) {
+            
+        }
+        return b.toString();        
+    }
+	public JarEntry getJar() {
 		return jar;
 	}
 
+    public synchronized String[] getParameters() {
+        return parameters;
+    }
+
+    public synchronized void setParameters(String[] parameters) {
+        this.parameters = parameters;
+    }
+    public String getTitle() {
+        if (jar == null) return className;
+        try {
+            String title = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_TITLE).toString();
+            String version = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_VERSION).toString();
+            return title + ' ' + version;
+        } catch (Exception x) {
+            return className;
+        }
+    }
+    public ImageIcon getIcon() {
+        if (jar == null) 
+            return Utils.createImageIcon("nplugins/shell/resources/plugin.png");
+        try {
+            Object title = jar.getAttributes().getValue("Image-icon");
+            return Utils.createImageIcon(title.toString());
+        } catch (Exception x) {
+            
+            x.printStackTrace();
+            return Utils.createImageIcon("nplugins/shell/resources/plugin.png");
+        }        
+        
+        
+    }    
 }

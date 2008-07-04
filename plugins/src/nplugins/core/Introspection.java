@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -38,7 +39,7 @@ public class Introspection {
 	protected static PluginClassPath pluginsClassPath=null;
 	
 
-	protected static org.apache.log4j.Category logger;
+	protected static Logger logger = Logger.getLogger("nplugins.core.Introspection");
 
 	protected static PluginsClassLoader loader;
 
@@ -47,12 +48,12 @@ public class Introspection {
 		loader = null;
 	}
 
-    public static PluginClassPath getDefaultDirectories() throws IntrospectionException{
+    public static PluginClassPath getDefaultDirectories() throws NPluginsException{
     	if (pluginsClassPath == null) 
     		try {
     			pluginsClassPath = new PluginClassPath();
     		} catch (Exception x) {
-    			throw new IntrospectionException(x);
+    			throw new NPluginsException(x);
     		}
     	return pluginsClassPath;
     }
@@ -87,7 +88,7 @@ public class Introspection {
 	 * @return Class
 	 */
 	public static Class implementsInterface(String className,
-			String interfaceName) throws IntrospectionException {
+			String interfaceName) throws NPluginsException {
 		try {
 			Class clazz = Class.forName(className);
 			int modifier = clazz.getModifiers();
@@ -111,13 +112,13 @@ public class Introspection {
 					return implementsInterface(clazz, interfaceName);
 				} catch (ClassNotFoundException xx) {
 
-					throw new IntrospectionException(xx);
+					throw new NPluginsException(xx);
 				}
 			}
 			// x.printStackTrace();
 			return null;
 		} catch (Exception x) {
-			throw new IntrospectionException(x);
+			throw new NPluginsException(x);
 		}
 	}
 
@@ -131,6 +132,7 @@ public class Introspection {
 	 * @return Class
 	 */
 	public static Class implementsInterface(Class clazz, String interfaceName) {
+        logger.finest("Class\t" + clazz );
 		Class[] interfaces = clazz.getInterfaces();
 
 		for (int i = 0; i < interfaces.length; i++)
@@ -145,11 +147,10 @@ public class Introspection {
 			return implementsInterface(base, interfaceName);
 
 	}
-	public static File[] enumerateJars(File directory) throws IntrospectionException {
-		if (directory == null) throw new IntrospectionException("Directory not assigned");
+	public static File[] enumerateJars(File directory) throws NPluginsException {
+		if (directory == null) throw new NPluginsException("Directory not assigned");
 		try {
-			if (logger != null)
-				logger.info("Looking for .jar files in\t" + directory.getAbsolutePath());
+			logger.info("Looking for .jar files in\t" + directory.getAbsolutePath());
 			return directory.listFiles(new FileFilter() {
 				public boolean accept(File arg0) {
 					//return arg0.getName().toLowerCase().endsWith(".jar");
@@ -161,7 +162,7 @@ public class Introspection {
 			});
 		} catch (Exception x) {
 			x.printStackTrace();
-			throw new IntrospectionException(x);
+			throw new NPluginsException(x);
 		}
 	}
 	/**
@@ -169,12 +170,12 @@ public class Introspection {
 	 * Calls {@link #configureURLLoader(File directory)} for each of {@link #pluginsClassPath} directories.
 	 * @param classLoader
 	 */
-	public static void configureURLLoader(ClassLoader classLoader) throws  IntrospectionException {
+	public static void configureURLLoader(ClassLoader classLoader) throws  NPluginsException {
 		setLoader(classLoader);
 		for (int i=0;i < getDefaultDirectories().size();i++) {
 			try {
 				configureURLLoader(new File(getDefaultDirectories().get(i)));
-			} catch (IntrospectionException x) {
+			} catch (NPluginsException x) {
 				x.printStackTrace();
 			}
 		}		
@@ -183,32 +184,32 @@ public class Introspection {
 	/**
 	 * Adds URLS of jars in specified directory to the class loader.
 	 * @param directory
-	 * @throws IntrospectionException
+	 * @throws NPluginsException
 	 */
-	public static void configureURLLoader(File directory) throws IntrospectionException {
-		if (loader ==null) throw new IntrospectionException("Class loader not set!");
+	public static void configureURLLoader(File directory) throws NPluginsException {
+		if (loader ==null) throw new NPluginsException("Class loader not set!");
 		File[] jars = enumerateJars(directory);
 		if (jars == null) return;
 		for (int i = 0; i < jars.length; i++)
 			try {
 				loader.addURL(jars[i].toURL());
 			} catch (MalformedURLException x) {
-				if (logger != null)	logger.error(x);
+				if (logger != null)	logger.severe(x.getMessage());
 				else x.printStackTrace();
 			}
 	}	
 	/**
 	 * Adds URLS of jars specified in File[] to the class loader.
 	 * @param jars
-	 * @throws IntrospectionException
+	 * @throws NPluginsException
 	 */
-	public static void configureURLLoader(File[] jars) throws IntrospectionException {
-		if (loader ==null) throw new IntrospectionException("Class loader not set!");
+	public static void configureURLLoader(File[] jars) throws NPluginsException {
+		if (loader ==null) throw new NPluginsException("Class loader not set!");
 		for (int i = 0; i < jars.length; i++)
 			try {
 				loader.addURL(jars[i].toURL());
 			} catch (MalformedURLException x) {
-				if (logger != null)	logger.error(x);
+				if (logger != null)	logger.severe(x.getMessage());
 				else x.printStackTrace();
 
 			}
@@ -225,18 +226,17 @@ public class Introspection {
 	 */
 
 	public static PluginsPackageEntries implementInterface(ClassLoader classLoader,
-			File directory, String interfaceName) throws IntrospectionException {
+			File directory, String interfaceName) throws NPluginsException {
 		setLoader(loader);
 		File[] files = enumerateJars(directory);
-
+		logger.info("Looking for "+interfaceName);
 		PluginsPackageEntries module = new PluginsPackageEntries();
 		if (files == null)
 			return module;
 		for (int i = 0; i < files.length; i++)
 
 			try {
-				if (logger != null)
-					logger.info("Inspecting jar file\t" + files[i]+ "\t"+ files[i].toURL());
+				logger.finest("Inspecting jar file\t" + files[i]+ "\t"+ files[i].toURL());
 				JarFile jar = new JarFile(files[i]);
 				Enumeration entries = jar.entries();
 				if (loader != null)
@@ -255,25 +255,21 @@ public class Introspection {
 							interfaceName);
 
 					if (rule != null) {
-						logger.debug("Class\t" + name+ "\timplements\t"+interfaceName+ "\tYES");
+						logger.info("Class\t" + name+ "\timplements\t"+interfaceName+ "\tYES");
 						try {
-							module.add(new PluginPackageEntry(name,files[i].getAbsolutePath(),jar));
+							module.add(new PluginPackageEntry(name,files[i].getAbsolutePath(),entry));
 						} catch (Exception x) {
-							if (logger != null)
-								logger.error(x);
-							else x.printStackTrace();
+								logger.severe(x.getMessage());
 						}
 					} else
-						if (logger != null)
-						logger.debug("Class\t" + name + "\timplements\t"+
+
+						logger.finest("Class\t" + name + "\timplements\t"+
 								interfaceName+ "\tNO");
 
 				}
 
 			} catch (IOException x) {
-				if (logger != null)
-					logger.error(x);
-				else x.printStackTrace();
+					logger.severe(x.getMessage());
 			}
 		return module;
 
@@ -293,7 +289,7 @@ public class Introspection {
 	 * @param interfacename  the 
 	 * @return a list with available class names , implementing the interface{@link ArrayList}
 	 */
-	public static PluginsPackageEntries getAvailableTypes(ClassLoader classLoader,String interfacename) throws IntrospectionException {
+	public static PluginsPackageEntries getAvailableTypes(ClassLoader classLoader,String interfacename) throws NPluginsException {
 		setLoader(classLoader);
 		PluginsPackageEntries listAll = null;
 		for (int i=0;i < getDefaultDirectories().size();i++) {
@@ -305,10 +301,14 @@ public class Introspection {
 					if (listAll == null) listAll = new PluginsPackageEntries();
 					listAll.addAll(list);
 				}
-			} catch (IntrospectionException x) {
-				x.printStackTrace();
+			} catch (NPluginsException x) {
+                logger.severe(x.getMessage());
 			}
 		}		
+        if (listAll == null)
+            logger.info("No plugins found!");
+        else
+            logger.info("Loaded plugins "+ listAll.size());
 		return listAll;
 
 	}
@@ -337,7 +337,7 @@ public class Introspection {
 		return loader;
 	}
 
-	public static void setLoader(ClassLoader classLoader) throws IntrospectionException {
+	public static void setLoader(ClassLoader classLoader) throws NPluginsException {
 		//System.out.println("Current loader "+loader);
 		//System.out.println("new loader "+classLoader);
 		if ((loader == null) || !(loader instanceof PluginsClassLoader)) {
@@ -366,7 +366,7 @@ public class Introspection {
 	 * @param newTitle
 	 * @return a decision tree {@link IDecisionMethod}
 	 */
-    public static Object loadObject(InputStream stream, String newTitle) throws IntrospectionException{
+    public static Object loadObject(InputStream stream, String newTitle) throws NPluginsException{
 		try {
 			
 		    PluginsObjectInputStream in = new PluginsObjectInputStream(stream);
@@ -375,12 +375,12 @@ public class Introspection {
 
     		return object;
 		} catch (Exception e) {
-			throw new IntrospectionException("Error when loading "+newTitle,e);
+			throw new NPluginsException("Error when loading "+newTitle,e);
 
 		}
    }    
 
-    public static void saveObjectXML(Object method, OutputStream out) throws IntrospectionException {
+    public static void saveObjectXML(Object method, OutputStream out) throws NPluginsException {
         Thread.currentThread().setContextClassLoader(Introspection.getLoader());
         XMLEncoder encoder = new XMLEncoder(out);
         //use this for enum types
@@ -390,7 +390,7 @@ public class Introspection {
         encoder.close();     	
     	
     }
-    public static Object loadObjectXML(InputStream stream, String newTitle)  throws IntrospectionException {
+    public static Object loadObjectXML(InputStream stream, String newTitle)  throws NPluginsException {
 		try {
 			System.out.println("Classloader "+loader);
 			if (loader == null) {
@@ -411,15 +411,9 @@ public class Introspection {
 
     		return object;
 		} catch (Exception e) {
-			throw new IntrospectionException("Error when loading the decision tree "+newTitle,e);
+			throw new NPluginsException("Error when loading the decision tree "+newTitle,e);
 		}
    }
-	public static org.apache.log4j.Category getLogger() {
-		return logger;
-	}
-	public static void setLogger(org.apache.log4j.Category logger) {
-		Introspection.logger = logger;
-	}  
          
 }
 
