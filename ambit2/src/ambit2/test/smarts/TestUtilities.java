@@ -11,7 +11,57 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 
 
 public class TestUtilities 
-{
+{	
+	static SmartsParser sp = new SmartsParser();
+	static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	static SmartsManager man = new SmartsManager();
+	
+	public static  IMolecule getMoleculeFromSmiles(String smi) 
+	{	
+		IMolecule mol = null;
+		try {
+			SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(smi);
+		}
+		catch (InvalidSmilesException e) {
+			System.out.println(e.toString());
+	 	}
+		return (mol);
+	}
+	
+	public static int boolSearch(String smarts, String smiles)
+	{	
+		IMolecule mol = TestUtilities.getMoleculeFromSmiles(smiles);	
+		man.setQuery(smarts);
+		if (!man.getErrors().equals(""))
+		{
+			System.out.println(man.getErrors());
+			return -1;
+		}		
+		boolean res = man.searchIn(mol);
+		if (res)
+			return(1);
+		else
+			return(0);
+	}
+	
+	public void testSmartsManagerBoolSearch(String smarts, String smiles)
+	{	
+		IMolecule mol = getMoleculeFromSmiles(smiles);	
+		man.setQuery(smarts);
+		if (!man.getErrors().equals(""))
+		{
+			System.out.println(man.getErrors());
+			return;
+		}		
+		boolean res = man.searchIn(mol);
+		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
+	}
+	
+	
+	//-------------------------------------------------------------------------------
+	
+	
 	public static void main(String[] args)
 	{
 		TestUtilities tu = new TestUtilities();
@@ -28,35 +78,6 @@ public class TestUtilities
 		tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 	}
 	
-	SmartsParser sp = new SmartsParser();
-	SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-	SmartsManager man = new SmartsManager();
-	
-	public IMolecule getMoleculeFromSmiles(String smi) 
-	{	
-		IMolecule mol = null;
-		try {
-			SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());			
-			mol = sp.parseSmiles(smi);
-		}
-		catch (InvalidSmilesException e) {
-			System.out.println(e.toString());
-	 	}
-		return (mol);
-	}
-	
-	public void testSmartsManagerBoolSearch(String smarts, String smiles)
-	{	
-		IMolecule mol = getMoleculeFromSmiles(smiles);	
-		man.setQuery(smarts);
-		if (!man.getErrors().equals(""))
-		{
-			System.out.println(man.getErrors());
-			return;
-		}		
-		boolean res = man.searchIn(mol);
-		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
-	}
 	
 	public void testSmartsManagerAtomMapping(String smarts, String smiles)
 	{	
