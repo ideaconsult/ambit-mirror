@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QMRF PUBLIC "http://ambit.acad.bg/qmrf/qmrf.dtd" "qmrf.dtd" >
-<QMRF author="European Chemicals Bureau" contact="European Chemicals Bureau, IHCP, Joint Research Centre, European Commission"
-	date="July 2007" email="ecb.qsar@jrc.it" name="(Q)SAR Model Reporting Format" schema_version="0.9" url="http://ecb.jrc.it/QSAR/" version="1.2">
+<QMRF author="European Chemicals Bureau" contact="Joint Research Centre, European Commission"
+	date="July 2007" email="qsardb@jrc.it" name="(Q)SAR Model Reporting Format" schema_version="1.0" url="http://ecb.jrc.it/QSAR/" version="1.2">
   <QMRF_chapters>
     <QSAR_identifier chapter="1" help="" name="QSAR identifier">
       <QSAR_title chapter="1.1" help="" name="QSAR identifier (title)"></QSAR_title>
@@ -110,7 +110,7 @@
         </attachment_documents>
       </attachments>
     </QSAR_Miscelaneous>
-    <QMRF_Summary chapter="10" help="" name="Summary (ECB Inventory)">
+    <QMRF_Summary chapter="10" help="" name="Summary (JRC QSAR Model Database)">
       <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by ECB</QMRF_number>
       <date_publication chapter="10.2" help="" name="Publication date">To be entered by ECB</date_publication>
       <keywords chapter="10.3" help="" name="Keywords">To be entered by ECB</keywords>
