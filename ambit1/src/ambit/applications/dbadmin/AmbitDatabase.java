@@ -419,7 +419,7 @@ delete from src_dataset where id_srcdataset=7;
 	      javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
 	                createAndShowGUI();
-	                AmbitDatabase app = new AmbitDatabase("Ambit Database Tools 1.21.10",580,580,args);
+	                AmbitDatabase app = new AmbitDatabase("Ambit Database Tools 1.30",580,580,args);
 	                
 	                Thread t = new Thread(app.dbadminData);
 	                t.start();

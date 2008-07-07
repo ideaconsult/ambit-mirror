@@ -45,7 +45,7 @@ import ambit.processors.DefaultAmbitProcessor;
 public class SMARTSSearchProcessor extends DefaultAmbitProcessor {
 		protected List<FunctionalGroupDescriptor> fragments;
 		protected SmartsFragmentsList list;
-		public SMARTSSearchProcessor(SmartsFragmentsList list) {
+		public SMARTSSearchProcessor(SmartsFragmentsList list) throws AmbitException {
 			super();
 			fragments = new ArrayList<FunctionalGroupDescriptor>();
 
@@ -63,7 +63,8 @@ public class SMARTSSearchProcessor extends DefaultAmbitProcessor {
         				logger.error(x);
         			}
                 }
-            
+            if (fragments.size()==0)
+            	throw new AmbitException("No fragment defined!");
 		
 			
 		}

@@ -25,7 +25,7 @@ public class AboutAction extends AmbitAction {
 	String app = "Ambit Discovery";
 	String iconFile = "ambit/ui/images/ambit_logo.jpg";
     String developers = "<br><font color='#0000FF'><b>Developed (2005-2007) by Joanna Jaworska and Nina Jeliazkova</b><br>for CEFIC-LRI</font><br>contact: Nina Jeliazkova nina@acad.bg</html>";
-    String version = "1.20";
+    String version = "1.30";
     /**
      * 
      */
