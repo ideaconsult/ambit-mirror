@@ -34,12 +34,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
 import ambit.data.AmbitUser;
 import ambit.data.DefaultData;
+import ambit.data.DefaultSharedData;
 import ambit.data.JobStatus;
 import ambit.database.DbAdmin;
 import ambit.database.DbConnection;
@@ -64,28 +64,24 @@ import ambit.log.AmbitLogger;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-4-30
  */
-public abstract class DefaultSharedDbData extends Observable implements ISharedDbData {
-	protected static AmbitLogger logger = new AmbitLogger(DefaultSharedDbData.class);
+public abstract class DefaultSharedDbData extends DefaultSharedData implements ISharedDbData {
 	protected DbConnection dbConnection = null;
-	protected JobStatus jobStatus = null;
-	protected String confFile = "ambitdb.xml";
-	protected DefaultData defaultData = null;
 	private boolean stop_mysql;
 	protected int pageSize = 600;
 	protected int page = 0;
 	protected int resultDestination = ISharedDbData.MEMORY_LIST;
 	protected int source = ISharedDbData.MEMORY_CURRENT;
-	protected IBatchStatistics batchStatistics;
+
 	protected MySQLShell mysqlShell;
     /**
      * 
      */
     public DefaultSharedDbData(String configFile) {
-        super();
-        this.confFile = configFile;
+        super(configFile);
         mysqlShell = null;
         init();
 		batchStatistics = new LoggedBatchStatistics();
+
 		
     }
     public DefaultSharedDbData() {
@@ -209,71 +205,7 @@ public abstract class DefaultSharedDbData extends Observable implements ISharedD
 		jobStatus = new JobStatus();
 		jobStatus.setModified(true);
 	}
-    public void saveConfiguration() {
-        File file = new File(confFile);
-        try {
-			//ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(file,false));
-			//os.writeObject(defaultData);
-			//os.close();
-            FileOutputStream out = new FileOutputStream(file);
-            defaultData.writeXML(out);
-            out.close();
-        } catch (Exception x) {
-            logger.error(x);
-        } 
-    }
-    public void loadConfiguration() {
-    	try {
-	        File file = new File(confFile);
-	        if (file.exists()) 
-	            try {
-	                FileInputStream in = new FileInputStream(file);
-	                defaultData = new DefaultData();
-	                defaultData.readXML(in);
-	                System.out.println(defaultData);
-	                in.close();
-					return;
-		        } catch (IOException x) {
-		        	defaultData = new DefaultData();
-		            logger.error(x);
-		        }
-		   else {
-		       defaultData = new DefaultData();
-		       logger.info(confFile + " not found. Loading default "+defaultData.toString());
-		   }
-    	} catch (Exception x) {
-    		defaultData = new DefaultData();
-    	}
-	        
-    }
-	public JobStatus getJobStatus() {
-		return jobStatus;
-	}
 
-	public void setJobStatus(JobStatus jobStatus) {
-		this.jobStatus = jobStatus;
-	}
-    
-    public String getDefaultDir() {
-        if (defaultData == null) return "";
-        Object o = defaultData.get(DefaultData.DEFAULT_DIR);
-        if (o == null) return "";
-        else return o.toString();
-    }
-    public void setDefaultDir(String defaultDir) {
-        if (defaultData == null) defaultData = new DefaultData(); 
-        defaultData.put(DefaultData.DEFAULT_DIR,defaultDir);
-    }
-    public String getTemplateDir() {
-        if (defaultData == null) return "";
-        Object o = defaultData.get(DefaultData.TEMPLATES_DIR);
-        if (o == null) return "";
-        else return o.toString();
-    }
-    public void setTemplateDir(String defaultDir) {
-        if (defaultData == null) defaultData = new DefaultData(); 
-        defaultData.put(DefaultData.TEMPLATES_DIR,defaultDir);
-    }
     
 	/* (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -377,12 +309,5 @@ public abstract class DefaultSharedDbData extends Observable implements ISharedD
 		setChanged();
 		notifyObservers();
 	}
-    public synchronized IBatchStatistics getBatchStatistics() {
-        return batchStatistics;
-    }
-    public synchronized void setBatchStatistics(
-            DefaultBatchStatistics batchStatistics) {
-        this.batchStatistics = batchStatistics;
-    }
 	
 }

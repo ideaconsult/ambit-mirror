@@ -27,13 +27,13 @@ package ambit.data.qmrf;
 import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit.data.AmbitObjectChanged;
+import ambit.data.DefaultSharedData;
 import ambit.data.IAmbitObjectListener;
 import ambit.data.JobStatus;
 import ambit.data.molecule.DataContainer;
-import ambit.database.data.DefaultSharedDbData;
 import ambit.log.AmbitLogger;
 
-public class QMRFData extends DefaultSharedDbData implements IAmbitObjectListener {
+public class QMRFData extends DefaultSharedData implements IAmbitObjectListener {
 	protected QMRFObject qmrf;
 	
 	public QMRFData(String[] args, String configFile, boolean adminUser)  {

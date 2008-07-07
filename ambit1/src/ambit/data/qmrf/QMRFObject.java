@@ -256,7 +256,7 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
 		return "Welcome";
 	}
 	public static String getBackground() {
-		return "The set of information that you provide will be used to facilitate regulatory considerations of (Q)SARs. For this purpose, the structure of the QMRF is devised to reflect as much as possible the OECD principles for the validation, for regulatory purposes, of (Q)SAR models. <br>You are invited to consult the OECD <i>\"Guidance Document on the Validation of (Quantitative) Structure-Activity Relationship Models\"</i> that can aid you in filling in a number of fields of the QMRF (visit the following ECB webpage for downloading the proper documentation: <a href=\"http://ecb.jrc.it/qsar/background/background_oecd_principles.php\">http://ecb.jrc.it/qsar/background/background_oecd_principles.php</a>)</html>";
+		return "The set of information that you provide will be used to facilitate regulatory considerations of (Q)SARs. For this purpose, the structure of the QMRF is devised to reflect as much as possible the OECD principles for the validation, for regulatory purposes, of (Q)SAR models. <br>You are invited to consult the OECD <i>\"Guidance Document on the Validation of (Quantitative) Structure-Activity Relationship Models\"</i> that can aid you in filling in a number of fields of the QMRF (visit the following webpage for downloading the proper documentation: <a href=\"http://ecb.jrc.it/qsar/background/background_oecd_principles.php\">http://ecb.jrc.it/qsar/background/background_oecd_principles.php</a>)</html>";
 	}
 	protected String getProperty(String property) {
 		Object o = attributes.get(property);

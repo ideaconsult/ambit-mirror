@@ -7,8 +7,8 @@
           name CDATA #FIXED "(Q)SAR Model Reporting Format"
           author CDATA #FIXED "European Chemicals Bureau"
           date CDATA #FIXED "July 2007"
-          contact CDATA #FIXED "European Chemicals Bureau, IHCP, Joint Research Centre, European Commission"
-          email CDATA #FIXED "ecb.qsar@jrc.it"
+          contact CDATA #FIXED "Joint Research Centre, European Commission"
+          email CDATA #FIXED "qsardb@jrc.it"
           url CDATA #FIXED "http://ecb.jrc.it/QSAR/"
           >
 
@@ -277,9 +277,9 @@ preprocessing,goodness_of_fit,loo,lmo,yscrambling,bootstrap,other_statistics)>
 <!ELEMENT document EMPTY>
 <!ATTLIST document  embedded (Yes|No) #IMPLIED url CDATA #REQUIRED  filetype CDATA #IMPLIED description CDATA #IMPLIED>
 
-<!-- 10. Summary (ECB Inventory) -->
+<!-- 10. Summary (JRC QSAR Model Database) -->
 <!ELEMENT QMRF_Summary (QMRF_number,date_publication,keywords,summary_comments)>
-<!ATTLIST QMRF_Summary  chapter CDATA  #FIXED "10" name CDATA #FIXED "Summary (ECB Inventory)" help CDATA "">
+<!ATTLIST QMRF_Summary  chapter CDATA  #FIXED "10" name CDATA #FIXED "Summary (JRC QSAR Model Database)" help CDATA "">
 
 <!-- 10.1	QMRF number-->
 <!ELEMENT QMRF_number (#PCDATA)>
