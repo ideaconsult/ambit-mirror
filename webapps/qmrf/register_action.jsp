@@ -221,7 +221,7 @@ E-mail </td>
 	<c:set var="text">
 	Thank you for applying for user registration with the QMRF Inventory.
 	
-	Please point your browser to the following URL in order to confirm the registration of the "${param.username}" user:
+	Please point your browser to the following URL in order to proceed with the registration of the "${param.username}" user:
 	
 	      <c:set var="u">
 	      		${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/rverify.jsp
@@ -236,7 +236,7 @@ E-mail </td>
 			<mt:from>${mailfrom}</mt:from>
 			<mt:setrecipient type="to">${param.email}</mt:setrecipient>
 			<mt:setrecipient type="bcc">${bccadmin}</mt:setrecipient>
-			<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
+			<mt:subject>[QMRF Inventory] verification of user e-mail (${param.username})</mt:subject>
 	
 	    <mt:message>
 <jsp:include page="mail.jsp" flush="true">

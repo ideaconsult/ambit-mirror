@@ -30,7 +30,7 @@
 </jsp:include>
 
 <sql:query var="rs" dataSource="jdbc/qmrf_documents">
-	select user_name,firstname,lastname,email from users where user_name=? and registration_status='verified' limit 1
+	select user_name,firstname,lastname,email,title from users where user_name=? and registration_status='verified' limit 1
 <sql:param value="${param.user_name}"/>
 
 </sql:query>
@@ -91,13 +91,13 @@
 			<mt:mail server="${mailserver}" >
 					<mt:from>${mailfrom}</mt:from>
 					<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-					<mt:subject>[QMRF Inventory] Confirm user registration (${param.username})</mt:subject>
+					<mt:subject>[QMRF Inventory] Confirmation of user registration (${param.user_name})</mt:subject>
 			
 			    <mt:message>
 		<jsp:include page="mail.jsp" flush="true">
-			    <jsp:param name="title" value="${param.title}"/>
-			    <jsp:param name="firstname" value="${param.firstname}"/>
-			    <jsp:param name="lastname" value="${param.lastname}"/>        
+			    <jsp:param name="title" value="${row.title}"/>
+			    <jsp:param name="firstname" value="${row.firstname}"/>
+			    <jsp:param name="lastname" value="${row.lastname}"/>        
 			    <jsp:param name="text" value="Your registration is now confirmed and you can log in into QMRF repository."/>
 		</jsp:include>	    
 			    </mt:message>
