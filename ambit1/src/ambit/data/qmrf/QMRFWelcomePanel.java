@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2005-2006  
+Copyright (C) 2005-2008  
 
 Contact: nina@acad.bg
 
@@ -103,8 +103,8 @@ public class QMRFWelcomePanel extends JPanel implements IAmbitEditor {
         
         add(createLabel("<html><b>Submission Procedure</b></html>"));
         add(createText(html+
-        	"If you wish to submit the QMRF for inclusion in the <b>JRC QSAR Models Database</b>, please do the following:<ul><li>Please, try to fill in the fields of the QMRF for the model of interest. If the field is not pertinent with the model you are describing, or if you cannot provide the requested information, please answer <i>\"no information available\"</i>. <li>Save the QMRF as xml file and send it to <a href=\"mailto:qsardb@jrc.it\">qsardb@jrc.it</a>. Please, use the following subject: <b>\"QMRF Submission\"</b>.</ul>" +
-        	"We thank you in advance for your collaboration in building the JRC QSAR Model Database. For more information on the QMRF and the database, please consult the following webpage: <a href=\"http://ecb.jrc.it/qsar/qsar-tools/index.php?c=QRF\">http://ecb.jrc.it/qsar/qsar-tools/index.php?c=QRF</a></b></html>"));
+        	"If you wish to submit the QMRF for inclusion in the JRC QSAR Model Database, please save your QMRF as xml file and upload it by the on-line submission procedure"
+        	));
         /*
         add(createLabel("<html><b>Disclaimer</b></html>"));
         add(createText("The JRC accepts no liability for the use of any information obtained from the QRF and related documentation. This is not the final version of the QRF which is still under development. It is likely that newer versions will be released soon. Please, check the ECB website for the latest version available.."));
