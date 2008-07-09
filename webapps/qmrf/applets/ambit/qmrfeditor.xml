@@ -4,6 +4,7 @@
 <property name="Host" value="localhost"/>
 <property name="Templates" value="data/templates"/>
 <property name="Database" value="ambit"/>
+<property name="" value=""/>
 <property name="Port" value="33060"/>
 <property name="User" value="root"/>
 </project>

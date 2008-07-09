@@ -64,6 +64,17 @@
 
 	</context-param>
 	 <!-- Servlets -->
+	 <!-- jnlp startup servlet -->
+    <servlet>
+      <servlet-name>JnlpDownloadServlet</servlet-name>
+      <servlet-class>jnlp.sample.servlet.JnlpDownloadServlet</servlet-class>
+    </servlet>
+	 
+    <servlet-mapping>
+      <servlet-name>JnlpDownloadServlet</servlet-name>
+      <url-pattern>*.jnlp</url-pattern>
+    </servlet-mapping>
+	 
 
     <security-constraint>
 	  <web-resource-collection>

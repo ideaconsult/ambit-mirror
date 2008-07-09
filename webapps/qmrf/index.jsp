@@ -129,7 +129,7 @@ You can view and change your registration details under the <u>My profile</u> ta
 <blockquote>
 <ul>
 <li>log in into QMRF Database and use the <i>New document</i> tab;
-<li>by <a href="http://ambit.acad.bg/qmrf/jws/qmrfeditor.jnlp">QMRF editor</a>&nbsp;: once started, it will create shortcut on your desktop and can be started later even offline.
+<li>by <a href="applets/qmrfeditor.jnlp">QMRF editor</a>&nbsp;: once started, it will create shortcut on your desktop and can be started later even offline.
 </ul>
 </blockquote>
 

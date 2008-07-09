@@ -1,0 +1,57 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="$$codebase" href="$$name" >
+<information>
+	<title>QMRF Editor 0.05</title>
+	<vendor>Ideaconsult Ltd. on behalf of Joint Research Centre, European Commission</vendor>
+	<description>(Q)SAR Model Reporting Format Editor</description>
+	<description kind="short">(Q)SAR Model Reporting Format Editor</description>
+	<icon href="logo.jpg" />
+	<icon kind="splash" href="qmrf.jpg" />
+	<shortcut online="true">
+		<desktop/>
+		<menu submenu="Ideaconsult"/>
+	</shortcut>
+</information>
+<resources>
+<j2se version="1.5+" java-vm-args="-Xincgc"/>
+
+<jar href="ambit/QMRFEditor.jar" download="eager" main="true"/>
+<jar href="ambit/ambit-data.jar" download="eager"/>
+<jar href="ambit/ambit-ui.jar" download="eager" />
+<jar href="ambit/ambit-io.jar" download="eager" />
+<jar href="ambit/ambit-processors.jar" download="lazy" />
+<jar href="ambit/ambit-database.jar" download="eager" />
+<jar href="ambit/images.jar" download="eager" />
+<jar href="jars/log4j.jar" download="eager"/>
+<jar href="jars/commons-cli-1.0.jar" download="eager"/>
+<jar href="jars/fop.jar" download="lazy"/>
+<jar href="jars/xercesImpl.jar" download="eager"/>
+
+
+<jar href="jars/itext-1.4.5.jar" download="eager"/>
+<jar href="jars/jai_codec.jar" download="lazy"/>
+<jar href="jars/jai_core.jar" download="lazy"/>
+<jar href="jars/jh.jar" download="lazy"/>
+
+<jar href="jars/poi-3.0.jar" download="eager"/>
+<jar href="jars/poi-contrib.jar" download="eager"/>
+<jar href="jars/poi-scratchpad.jar" download="eager"/>
+<jar href="jars/commons-lang-2.3.jar" download="eager"/>
+
+
+<jar href="jars/l2fprod/l2fprod-common-all.jar" download="eager" />
+</resources>
+<application-desc main-class="ambit.applications.qmrf.QMRFEditor">
+<argument>-d $$context/qmrf.dtd</argument>
+
+<argument>-e $$context/catalogs_xml.jsp?all=true</argument>
+
+<argument>-t $$codebase/verdana.ttf</argument>
+
+<argument>-c</argument>
+</application-desc> 
+<!-- runs in a sandbox by default -->
+<security>
+    <all-permissions/>
+</security>
+</jnlp>
