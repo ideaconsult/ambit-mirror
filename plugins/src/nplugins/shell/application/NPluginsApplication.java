@@ -63,6 +63,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
+import nplugins.shell.INPApplicationContext;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.NanoPluginsManager;
 
@@ -80,17 +81,20 @@ public class NPluginsApplication implements PropertyChangeListener {
 	final static String LOOKANDFEEL = "System"; //"System";
 	final static String THEME = "Ocean";
 	protected static String[] cmdOpts = null;
-	private TaskMonitor taskMonitor;
+    private final INPApplicationContext applicationContext;
     private NanoPluginsManager pluginsManager;
     protected static Logger logger = Logger.getLogger("nplugins.application.NPluginsApplication");
     
     protected final SimpleInternalFrame rightPanel;
     protected final SimpleInternalFrame leftPanel;
+    protected final SimpleInternalFrame detailsPanel;
 
 	JFrame mainFrame;
 	
 	public NPluginsApplication(String title, int width, int height, String[] args) {
 		super();
+        applicationContext = createApplicationContext();
+        
 		initialize(args);
 		
       
@@ -116,9 +120,16 @@ public class NPluginsApplication implements PropertyChangeListener {
         leftPanel.setPreferredSize(new Dimension(150, 100));
         leftPanel.setContent(buildMainLeftPanel(pluginsManager));
         
-        rightPanel = new SimpleInternalFrame("Plugins");
+        rightPanel = new SimpleInternalFrame("Main");
         rightPanel.setPreferredSize(new Dimension(400,400));
-        rightPanel.setContent(buildMainRightPanel(pluginsManager));        
+        rightPanel.setContent(buildMainRightPanel(pluginsManager));
+        
+        detailsPanel = new SimpleInternalFrame("Details");
+        detailsPanel.setPreferredSize(new Dimension(400,100));
+        JComponent details = buildDetailsPanel(pluginsManager);
+        if (details != null)
+        	detailsPanel.setContent(details);
+        detailsPanel.setVisible(details != null);
         
 		mainFrame.getContentPane().setLayout(new BorderLayout());
 		mainFrame.getRootPane().setJMenuBar(createMenuBar());
@@ -133,7 +144,13 @@ public class NPluginsApplication implements PropertyChangeListener {
         mainFrame.setExtendedState(state);        
 		 
 	}
-    
+	protected INPApplicationContext createApplicationContext() {
+        try {
+            return new FileSystemXMLApplicationContext(getClass());
+        } catch (Exception x) {
+            return new DefaultAppplicationContext();
+        }
+    }
     protected void setPlugin(INanoPlugin plugin) {
         
     }
@@ -148,7 +165,7 @@ public class NPluginsApplication implements PropertyChangeListener {
 			try {
 				Action action = map.get(keys[i]);
                 if (action instanceof NPluginsAction)
-                    ((NPluginsAction)action).setTaskMonitor(taskMonitor);
+                    ((NPluginsAction)action).setTaskMonitor(applicationContext.getTaskMonitor());
 			    toolBar.add(createButton(action, group,border));
 
 			} catch (Exception x) {
@@ -169,7 +186,7 @@ public class NPluginsApplication implements PropertyChangeListener {
         return button;
     }
 	protected JComponent createStatusBar() {
-		return new StatusBar(taskMonitor);
+		return new StatusBar(applicationContext.getTaskMonitor());
 	}
 	protected JMenuBar createMenuBar() {
 		JMenuBar bar =  new JMenuBar();
@@ -178,36 +195,49 @@ public class NPluginsApplication implements PropertyChangeListener {
 		return bar;
 	}
 	protected void initialize(String[] args) {
-		taskMonitor = new TaskMonitor();
 		pluginsManager = new NanoPluginsManager();
 		pluginsManager.setParameters(args);
-        /*
-		try {
-			pluginsManager.addPackage("nplugins.demo.DemoPlugin");
-			pluginsManager.addPackage("nplugins.demo.DemoPlugin",new String[] {"1"});
-			pluginsManager.addPackage("nplugins.demo.DemoPlugin",new String[] {"2"});			
-		} catch (Exception x) {
-            x.printStackTrace();
-			logger.severe(x.getMessage());
-		}
-        */
+		pluginsManager.setApplicationContext(applicationContext);
+        
+		addPlugins(pluginsManager);
+
         pluginsManager.addPropertyChangeListener(this);        
 	}
 	
+	protected void addPlugins(NanoPluginsManager manager) {
+		try {
+			manager.addPackage("nplugins.demo.DemoPlugin");
+			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"1"});
+			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"2"});
+			manager.addPackage("nplugins.workflow.MWorkflowPlugin",new String[] {"2"});
+			
+		} catch (Exception x) {
+            x.printStackTrace();
+			logger.severe(x.getMessage());
+		}		
+	}
 	protected JComponent createMainPanel(Component parent) {
-        JSplitPane pane = UIFSplitPane.createStrippedSplitPane(
+        JSplitPane mainpane = UIFSplitPane.createStrippedSplitPane(
 
+                JSplitPane.VERTICAL_SPLIT,
+                rightPanel,
+                detailsPanel
+                );
+        mainpane.setResizeWeight(0.8f);        	        
+        mainpane.setOpaque(false);
+        
+        JSplitPane pane = UIFSplitPane.createStrippedSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
                 leftPanel,
-                rightPanel
+                mainpane
                 );
         pane.setResizeWeight(0.2f);        	        
-            pane.setOpaque(false);
-         return pane;
+        pane.setOpaque(false);
+        
+        return pane;
 	}
 	
     private JComponent buildMainLeftPanel(INanoPlugin plugin) {
-        
         JComponent c = null;
         JComponent[] options = plugin.createOptionsComponent();
         if (options!= null) 
@@ -220,14 +250,29 @@ public class NPluginsApplication implements PropertyChangeListener {
             } else c = options[0];
         else 
             c = new JLabel("No options");
-        
-
         return c;
     }
     
-    private JComponent buildMainRightPanel(INanoPlugin plugin) {
-    	 return plugin.createMainComponent();
-
+    private JComponent buildDetailsPanel(INanoPlugin plugin) {
+        JComponent c = null;
+        JComponent[] options = plugin.createDetailsComponent();
+        if (options!= null) 
+            if (options.length > 1) {
+                JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.BOTTOM);
+                tabbedPane.putClientProperty(Options.EMBEDDED_TABS_KEY, Boolean.TRUE);
+                for (int i=0; i < options.length; i++)
+                	tabbedPane.addTab(Integer.toString(i+1), options[i]);
+                c = tabbedPane;
+            } else c = options[0];
+        return c;
+    }
+    
+    
+    private Component buildMainRightPanel(INanoPlugin plugin) {
+    	 
+    	 Component c = plugin.createMainComponent().getComponent();
+    	 if (c == null) c = new JLabel("N/A");
+    	 return c;
     }
         
 	
@@ -405,10 +450,15 @@ public class NPluginsApplication implements PropertyChangeListener {
                 INanoPlugin p = (INanoPlugin)evt.getNewValue();
                 leftPanel.setContent(buildMainLeftPanel(p));
                 rightPanel.setContent(buildMainRightPanel(p));
+                JComponent detail = buildDetailsPanel(p);
+                detailsPanel.setContent(detail);
+                detailsPanel.setVisible(detail!=null);
                 String title = p.toString();
                 if (title == null) title = " ";
                 rightPanel.setTitle(title);
                 rightPanel.setFrameIcon(p.getIcon());
+                
+                
             }
         
         

@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import nplugins.core.NPluginsException;
+import nplugins.shell.INPApplicationContext;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.PluginMainPanel;
 import nplugins.shell.application.NPluginsAction;
@@ -19,6 +20,7 @@ import nplugins.shell.application.TaskMonitor;
 import nplugins.shell.application.Utils;
 
 public class DemoPlugin implements INanoPlugin {
+	protected INPApplicationContext applicationContext;
 	protected String name="demo";
     public DemoPlugin() {
         try {
@@ -32,6 +34,7 @@ public class DemoPlugin implements INanoPlugin {
 	}
 
 	public JComponent[] createDetailsComponent() {
+	    //return new JComponent[] {new JLabel("details")};
 	    return null;
 	}
 
@@ -79,6 +82,7 @@ public class DemoPlugin implements INanoPlugin {
            }
         },getName(),null);
         map.put(action,action);
+        action.setTaskMonitor(getApplicationContext().getTaskMonitor());
         return map;
         
 	}
@@ -126,4 +130,10 @@ public class DemoPlugin implements INanoPlugin {
     public synchronized void setName(String name) {
         this.name = name;
     }
+	public INPApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+	public void setApplicationContext(INPApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 }

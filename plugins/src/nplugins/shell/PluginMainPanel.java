@@ -36,7 +36,7 @@ import javax.swing.JPanel;
  * @author Nina Jeliazkova
  *
  */
-public abstract class PluginMainPanel<P extends INanoPlugin> extends JPanel {
+public abstract class PluginMainPanel<P extends INanoPlugin> extends JPanel implements INPluginUI<P> {
 	/**
 	 * 
 	 */
@@ -67,6 +67,9 @@ public abstract class PluginMainPanel<P extends INanoPlugin> extends JPanel {
 		this.plugin = plugin;
 	}
 
+	public Component getComponent() {
+		return this;
+	}
 
 }
 

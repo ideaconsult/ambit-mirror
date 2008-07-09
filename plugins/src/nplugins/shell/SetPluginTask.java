@@ -70,6 +70,7 @@ public class SetPluginTask implements Task<INanoPlugin,Void> {
                 logger.fine("Creating object from "+plugin);
                 Object thePlugin = plugin.createObject();
                 if (thePlugin instanceof INanoPlugin) {
+                	((INanoPlugin)thePlugin).setApplicationContext(manager.getApplicationContext());
                     ((INanoPlugin)thePlugin).setParameters(plugin.getParameters());
                     manager.setThePlugin((INanoPlugin)thePlugin);
                     return (INanoPlugin)thePlugin;
@@ -79,6 +80,7 @@ public class SetPluginTask implements Task<INanoPlugin,Void> {
                 return null;
             }
         } catch (Exception x) {
+        	x.printStackTrace();
             logger.severe(x.getMessage());
             throw new NPluginsException(x);
         }

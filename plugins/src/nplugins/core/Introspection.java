@@ -332,6 +332,13 @@ public class Introspection {
 		return classDefinition.newInstance();
 
 	}
+    public static Class getClassDefinition(String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        if (loader == null)
+            return Class.forName(className);
+        else
+            return loader.loadClass(className);
+
+    }
 
 	public static ClassLoader getLoader() {
 		return loader;

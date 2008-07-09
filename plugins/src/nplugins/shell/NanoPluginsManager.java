@@ -45,6 +45,7 @@ import nplugins.shell.application.Utils;
 import com.jgoodies.binding.beans.Model;
 
 public class NanoPluginsManager extends Model implements INanoPlugin {
+	INPApplicationContext applicationContext;
 	/**
      * 
      */
@@ -72,7 +73,7 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	}
 
 	public JComponent[] createDetailsComponent() {
-		return null;
+		return new JComponent[] {new JLabel("test")};
 	}
 
 	public PluginMainPanel createMainComponent() {
@@ -176,7 +177,8 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
         
         if (this.thePlugin != null)
             this.thePlugin.clear();
-        this.thePlugin = thePlugin;        
+        this.thePlugin = thePlugin;
+
         logger.info("Set plugin " + thePlugin);
     }
     public synchronized String[] getCmd_args() {
@@ -185,5 +187,11 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
     public synchronized void setCmd_args(String[] cmd_args) {
         this.cmd_args = cmd_args;
     }
+	public INPApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+	public void setApplicationContext(INPApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 	
 }

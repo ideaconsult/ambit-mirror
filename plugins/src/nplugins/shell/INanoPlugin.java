@@ -42,18 +42,23 @@ import javax.swing.JComponent;
  * <b>Modified</b> July 3, 2008
  */
 public interface INanoPlugin extends PropertyChangeListener, Comparable<INanoPlugin> {
+	
+	INPApplicationContext getApplicationContext();
+	
+	void setApplicationContext(INPApplicationContext context);
+	
 		/*
 	 * Creates the window at the right
 	 * @return
 	 */    
-    public abstract PluginMainPanel createMainComponent();
+    INPluginUI<INanoPlugin> createMainComponent();
 
 	/**
 	 * If not null will be displayed at the left pane, just below the actions.
 	 * @param parentComponent
 	 * @return
 	 */    
-    public abstract JComponent[] createDetailsComponent();
+    JComponent[] createDetailsComponent();
     
     /**
      * If not null will be displayed in a tabbed window by {@link SetOptionsAction}, each JComponent in a different tab.
@@ -61,7 +66,7 @@ public interface INanoPlugin extends PropertyChangeListener, Comparable<INanoPlu
      * @param parentComponent
      * @return
      */
-	public abstract JComponent[] createOptionsComponent();
+	JComponent[] createOptionsComponent();
     /**
      * @return
      */
