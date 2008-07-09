@@ -42,6 +42,7 @@ import com.microworkflow.process.WorkflowContext;
 public abstract class WorkflowContextListenerPanel extends JPanel implements
         IWorkflowContextListenerUI {
     protected IWorkflowContextFactory wfcfactory;
+    protected WorkflowContext context;
     protected boolean animate = false;
     protected Vector<String> properties;
     /**
@@ -74,10 +75,10 @@ public abstract class WorkflowContextListenerPanel extends JPanel implements
     protected synchronized WorkflowContext getWorkflowContext() {
     	if (wfcfactory!= null)
     		return getWfcfactory().getWorkflowContext();
-    	else return null;
+    	else return context;
     }
 
-    private synchronized void setWorkflowContext(WorkflowContext wfc) {
+    public synchronized void setWorkflowContext(WorkflowContext wfc) {
         clear();
         if (this.getWorkflowContext() != null) {
             for (String p : properties)
@@ -85,11 +86,12 @@ public abstract class WorkflowContextListenerPanel extends JPanel implements
             this.getWorkflowContext().removePropertyChangeListener(WorkflowContextEvent.WF_ANIMATE,this);            
         }
         
+        this.context = wfc;
 
-        if (wfc != null) {
+        if (context != null) {
             for (String p : properties)
-                this.getWorkflowContext().addPropertyChangeListener(p,this);
-            this.getWorkflowContext().addPropertyChangeListener(WorkflowContextEvent.WF_ANIMATE,this);   
+                this.context.addPropertyChangeListener(p,this);
+            this.context.addPropertyChangeListener(WorkflowContextEvent.WF_ANIMATE,this);   
         }
      }
     public abstract void clear() ;
