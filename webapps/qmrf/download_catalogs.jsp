@@ -14,6 +14,6 @@
 		<c:import var="xsl" url="/WEB-INF/xslt/catalogs2html.xsl"/>
 		<c:import var="xml" url="${param.source}"/>
 		<x:transform xml="${fn:trim(xml)}" xslt="${xsl}">
-			<x:param name="footer" value="QMRF Inventory [ ${u} ] Report"/>
+			<x:param name="footer" value="QMRF Database [ ${u} ] Report"/>
 			<x:param name="reportdate" value="${date}"/>
 		</x:transform>

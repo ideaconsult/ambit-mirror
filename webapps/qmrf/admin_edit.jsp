@@ -190,7 +190,7 @@ function getXML(){
       </div>
 		<br>
       <div class="help">
-      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF inventory.
+      NOTE: Using <i>File/Save</i> menu from within editor will only save the document on your local machine and will NOT update QMRF Database.
       </div>
       <br>
       <div class="help">

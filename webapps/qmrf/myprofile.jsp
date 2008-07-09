@@ -27,7 +27,7 @@
 </c:choose>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: User' profile"/>
+    <jsp:param name="title" value="QMRF Database: User' profile"/>
 </jsp:include>
 
 
@@ -197,7 +197,7 @@
 
 		<c:import var="xsl" url="/WEB-INF/xslt/users2html.xsl"/>
 		<x:transform xml="${fn:trim(xml)}" xslt="${fn:trim(xsl)}">
-			<x:param name="header" value="Registered users in QMRF Inventory:"/>
+			<x:param name="header" value="Registered users in QMRF Database:"/>
 		</x:transform>	
 	</c:if>
 	<c:import var="xsl" url="/WEB-INF/xslt/users2form.xsl"/>

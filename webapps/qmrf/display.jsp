@@ -30,7 +30,7 @@
 </c:choose>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="Substance in QMRF repository"/>
+    <jsp:param name="title" value="Substance in QMRF Database"/>
 </jsp:include>
 
 <c:if test="${!empty param.idstructure}">

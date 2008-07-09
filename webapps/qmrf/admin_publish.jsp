@@ -21,7 +21,7 @@ response.setHeader("Expires", "0");
 </c:if>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Publish a document"/>
+    <jsp:param name="title" value="QMRF Database: Publish a document"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
@@ -124,12 +124,12 @@ response.setHeader("Expires", "0");
 						</sql:query>
 						<c:forEach var="urow" items="${urs.rows}">
 						<c:set var="message">
-We would like to inform you that a QMRF document, which you submitted in the QMRF Inventory, has been published under number ${qnumber}.
+We would like to inform you that a QMRF document, which you submitted in the QMRF Database, has been published under number ${qnumber}.
 						</c:set>
 						<mt:mail server="${initParam['mail-server']}" >
 							<mt:from>${initParam['mail-from']}</mt:from>
 							<mt:setrecipient type="to">${urow.email}</mt:setrecipient>
-							<mt:subject>[QMRF Inventory] New QMRF document published</mt:subject>
+							<mt:subject>[QMRF Database] New QMRF document published</mt:subject>
 
 							<mt:message>
 <jsp:include page="mail.jsp" flush="true">

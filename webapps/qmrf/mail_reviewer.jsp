@@ -14,7 +14,7 @@
 </c:when>
 <c:when test="${mode='submit'}">
 	<c:set var="text">
-	We would like to inform you that a new QMRF document has been submitted in the QMRF Inventory.
+	We would like to inform you that a new QMRF document has been submitted in the QMRF Database.
 	Please perform your editorial duties and assign a reviewer at your earliest convenience.	
 	</c:set>
 </c:when>

@@ -40,7 +40,7 @@ response.setHeader("Expires", "0");
 </c:if>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Publish a document"/>
+    <jsp:param name="title" value="QMRF Database: Publish a document"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

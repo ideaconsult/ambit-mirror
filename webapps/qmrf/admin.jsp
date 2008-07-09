@@ -37,7 +37,7 @@
 
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Review documents"/>
+    <jsp:param name="title" value="QMRF Database: Review documents"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

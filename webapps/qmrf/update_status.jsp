@@ -66,7 +66,7 @@
 		</sql:query>
 		<c:set var="sql" value="select email,title,firstname,lastname,user_name from tomcat_users.user_roles join users using(user_name) where role_name='qmrf_editor'"/>
 		<c:set var="message">
-We would like to inform you that a new QMRF document has been submitted in the QMRF Inventory.
+We would like to inform you that a new QMRF document has been submitted in the QMRF Database.
 Please perform your editorial duties and assign a reviewer at your earliest convenience.		
 		</c:set>
 		<c:set var="subject">New QMRF document submitted</c:set>
@@ -76,7 +76,7 @@ Please perform your editorial duties and assign a reviewer at your earliest conv
 					select email,title,firstname,lastname,user_name from users where user_name='${rrow.reviewer}'
 				</c:set>
 				<c:set var="message">
-We would like to inform you that a revised QMRF document, for which you have been previously appointed as a reviewer, has been re-submitted in the QMRF Inventory.
+We would like to inform you that a revised QMRF document, for which you have been previously appointed as a reviewer, has been re-submitted in the QMRF Database.
 Please perform your reviewing duties at your earliest convenience.
 				</c:set>		
 				<c:set var="subject">Revised QMRF document submitted</c:set>		
@@ -89,7 +89,7 @@ Please perform your reviewing duties at your earliest convenience.
 			<mt:mail server="${initParam['mail-server']}" >
 				<mt:from>${initParam['mail-from']}</mt:from>
 				<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-				<mt:subject>[QMRF Inventory] ${subject}</mt:subject>
+				<mt:subject>[QMRF Database] ${subject}</mt:subject>
 				<mt:message>
 <jsp:include page="mail.jsp" flush="true">
 	    <jsp:param name="title" value="${row.title}"/>
@@ -161,7 +161,7 @@ Please perform your reviewing duties at your earliest convenience.
 	</c:catch>
 </td>
 <td valign="top">
-<div class="success">Submit the document to QMRF Inventory</div>
+<div class="success">Submit the document to QMRF Database</div>
 <br>
 <input type="hidden" name="id" value="${param.id}"/>
 <input type="hidden" name="verify" value="false"/>

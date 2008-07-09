@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Catalogues"/>
+    <jsp:param name="title" value="QMRF Database: Catalogues"/>
 </jsp:include>
 
 

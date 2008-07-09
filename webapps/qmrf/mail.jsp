@@ -8,6 +8,6 @@ Dear ${param.title}${space}${param.firstname}${space}${param.lastname},
 
 ${param.text}
 
-The QMRF Inventory team
+The QMRF Database team
 <c:set var="u">${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}</c:set>
 <c:url value="${u}"></c:url>

@@ -21,7 +21,7 @@
 
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory Registration page"/>
+    <jsp:param name="title" value="QMRF Database Registration page"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
@@ -91,14 +91,14 @@
 			<mt:mail server="${mailserver}" >
 					<mt:from>${mailfrom}</mt:from>
 					<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-					<mt:subject>[QMRF Inventory] Confirmation of user registration (${param.user_name})</mt:subject>
+					<mt:subject>[QMRF Database] Confirmation of user registration (${param.user_name})</mt:subject>
 			
 			    <mt:message>
 		<jsp:include page="mail.jsp" flush="true">
 			    <jsp:param name="title" value="${row.title}"/>
 			    <jsp:param name="firstname" value="${row.firstname}"/>
 			    <jsp:param name="lastname" value="${row.lastname}"/>        
-			    <jsp:param name="text" value="Your registration is now confirmed and you can log in into QMRF repository."/>
+			    <jsp:param name="text" value="Your registration is now confirmed and you can log in into QMRF Database."/>
 		</jsp:include>	    
 			    </mt:message>
 			    <mt:send>
@@ -117,7 +117,7 @@
 			</c:when>
 			<c:otherwise>
 			<dic class="success">
-				The registration of the new user <b>${row.user_name}</b> into QMRF Inventory is confirmed. Notification email is sent to <b>${row.email}</b>.
+				The registration of the new user <b>${row.user_name}</b> into QMRF Database is confirmed. Notification email is sent to <b>${row.email}</b>.
 			</div>
 			</c:otherwise>
 			</c:choose>

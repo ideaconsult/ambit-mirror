@@ -7,7 +7,7 @@
 <fmt:requestEncoding value="UTF-8"/> 
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory"/>
+    <jsp:param name="title" value="QMRF Database"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

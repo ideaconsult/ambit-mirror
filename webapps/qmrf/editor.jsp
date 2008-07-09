@@ -35,7 +35,7 @@
 <c:set var="startrecord" value="${sessionScope.page * sessionScope.pagesize}"/>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Chief editor"/>
+    <jsp:param name="title" value="QMRF Database: Chief editor"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

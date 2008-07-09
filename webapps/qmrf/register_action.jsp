@@ -146,7 +146,7 @@
 </c:forEach>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory Registration page"/>
+    <jsp:param name="title" value="QMRF Database Registration page"/>
 </jsp:include>
 
 
@@ -219,7 +219,7 @@ E-mail </td>
 </c:when>
 <c:otherwise>
 	<c:set var="text">
-	Thank you for applying for user registration with the QMRF Inventory.
+	Thank you for applying for user registration with the QMRF Database.
 	
 	Please point your browser to the following URL in order to proceed with the registration of the "${param.username}" user:
 	
@@ -236,7 +236,7 @@ E-mail </td>
 			<mt:from>${mailfrom}</mt:from>
 			<mt:setrecipient type="to">${param.email}</mt:setrecipient>
 			<mt:setrecipient type="bcc">${bccadmin}</mt:setrecipient>
-			<mt:subject>[QMRF Inventory] verification of user e-mail (${param.username})</mt:subject>
+			<mt:subject>[QMRF Database] verification of user e-mail (${param.username})</mt:subject>
 	
 	    <mt:message>
 <jsp:include page="mail.jsp" flush="true">

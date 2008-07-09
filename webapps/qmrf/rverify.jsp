@@ -14,7 +14,7 @@
 </c:if>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory Registration page"/>
+    <jsp:param name="title" value="QMRF Database Registration page"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
@@ -66,7 +66,7 @@
 		</h2>
 			<p>
 
-			 Your e-mail is verified and an approval from QMRF Inventory team is necessary in order to complete the registration. 
+			 Your e-mail is verified and an approval from QMRF Database team is necessary in order to complete the registration. 
 
 		</c:forEach>
 	</c:when>

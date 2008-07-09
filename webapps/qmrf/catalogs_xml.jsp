@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!--
-Catalogs available in QMRF Inventory in XML format as defined in QMRF DTD schema
+Catalogs available in QMRF Database in XML format as defined in QMRF DTD schema
 <!ELEMENT Catalogs (software_catalog*,algorithms_catalog*,descriptors_catalog*,
           endpoints_catalog*,
           publications_catalog*,authors_catalog*)>

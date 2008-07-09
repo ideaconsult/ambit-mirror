@@ -36,7 +36,7 @@
 
 	<blockquote>
   <p>
-  You are logged in as a QMRF Inventory <b>Author</b>
+  You are logged in as a QMRF Database <b>Author</b>
   <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
    and can create and edit new QMRF documents as well as submit them for reviewing.<br/>
 The submitted documents will be approved and published or returned to you for further editing if essential information is missing.
@@ -53,7 +53,7 @@ You can view and change your registration details under the <u>My profile</u> ta
 
 	<blockquote>
   <p>
-  You are logged in as an QMRF Inventory <b>Reviewer</b>
+  You are logged in as an QMRF Database <b>Reviewer</b>
   <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
    and can review and publish QMRF documents.
   <br/>
@@ -67,7 +67,7 @@ You can view and change your registration details under the <u>My profile</u> ta
 
 	<blockquote>
   <p>
-  You are logged in as an QMRF Inventory <b>Editor</b>
+  You are logged in as an QMRF Database <b>Editor</b>
   <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
    and you can assign reviewers to newly submitted documents <a href="help.jsp?anchor=status" target="help" rev="help" ><img src="images/help.png" alt="help" title="Documents life cycle" border="0"/></a>.
 	</p>
@@ -79,7 +79,7 @@ You can view and change your registration details under the <u>My profile</u> ta
 
 	<blockquote>
   <p>
-  You are logged in as an QMRF Inventory <b>Administrator</b>
+  You are logged in as an QMRF Database <b>Administrator</b>
   <a href="help.jsp?anchor=roles" target="help" rev="help" ><img src="images/help.png" alt="help" title="Author" border="0"/></a>
    which entitles you to running various system reports and statistics.
 	</p>
@@ -109,9 +109,9 @@ You can view and change your registration details under the <u>My profile</u> ta
 			</c:otherwise>
 		</c:choose>
 
-  <c:set var="title" value="No published documents available in QMRF repository."/>
+  <c:set var="title" value="No published documents available in QMRF Database."/>
   <c:if test="${no > 0}">
-  	<c:set var="title" value="All published QMRF documents <b>(${no})</b> are available for download and can be searched either through free text queries or by several predefined fields.<br>All substances, available in the QMRF repository, can be searched by exact or similar structure."/>
+  	<c:set var="title" value="All published QMRF documents <b>(${no})</b> are available for download and can be searched either through free text queries or by several predefined fields.<br>All substances, available in the QMRF Database, can be searched by exact or similar structure."/>
   </c:if>
   <p>
   ${title}
@@ -120,7 +120,7 @@ You can view and change your registration details under the <u>My profile</u> ta
 
 </blockquote>
 
-<h3>What is QMRF Inventory?</h3>
+<h3>What is QMRF Database?</h3>
 <blockquote>
 <a href="help.html" target="_blank">Help</a>
 </blockquote>
@@ -128,7 +128,7 @@ You can view and change your registration details under the <u>My profile</u> ta
 <h3>How to create an QMRF Document?</h3>
 <blockquote>
 <ul>
-<li>log in into QMRF Inventory and use the <i>New document</i> tab;
+<li>log in into QMRF Database and use the <i>New document</i> tab;
 <li>by <a href="http://ambit.acad.bg/qmrf/jws/qmrfeditor.jnlp">QMRF editor</a>&nbsp;: once started, it will create shortcut on your desktop and can be started later even offline.
 </ul>
 </blockquote>

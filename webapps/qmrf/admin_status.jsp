@@ -66,7 +66,7 @@
 </c:choose>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory statistics"/>
+    <jsp:param name="title" value="QMRF Database statistics"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

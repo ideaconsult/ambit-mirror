@@ -49,7 +49,7 @@
 <c:set var="menu">
 	<?xml version="1.0" encoding="UTF-8"?>
 	<menu>
-	<tab name="welcome" image="home" ref="index.jsp" hint="QMRF Inventory home page"/>
+	<tab name="welcome" image="home" ref="index.jsp" hint="QMRF Database home page"/>
 	<tab name="search" image="search_documents" ref="search_catalogs.jsp" hint="Search documents by QMRF No., free text, endpoints, authors, algorithms, sofware"/>
 	<tab name="structures" image="search_structures" ref="search_substances.jsp" hint="Search chemical substances by CAS No, chemical name, similarity"/>
 	</menu>
@@ -65,7 +65,7 @@
 		<c:set var="menulogin">
 		<?xml version="1.0" encoding="UTF-8"?>
 		<menu>
-			<tab name="login" image="log_in" ref="protected.jsp" hint="QMRF Inventory log in page"/>
+			<tab name="login" image="log_in" ref="protected.jsp" hint="QMRF Database log in page"/>
 		</menu>
 		</c:set>
 		<x:transform xml="${menulogin}" xslt="${xsl}">
@@ -77,7 +77,7 @@
 		<c:set var="menulogin">
 		<?xml version="1.0" encoding="UTF-8"?>
 		<menu>
-			<tab name="register" image="register" ref="register.jsp" hint="QMRF Inventory registration in page"/>
+			<tab name="register" image="register" ref="register.jsp" hint="QMRF Database registration in page"/>
 		</menu>
 		</c:set>
 		<x:transform xml="${menulogin}" xslt="${xsl}">

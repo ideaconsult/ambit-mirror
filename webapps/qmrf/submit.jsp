@@ -92,7 +92,7 @@
 		<c:redirect url="edit_attachmentsdb.jsp">
 		<c:param name="id" value="${row.id}"/>
 		<c:param name="status">
-			New document added to QMRF inventory.
+			New document added to QMRF Database.
 		</c:param>
 		</c:redirect>
 

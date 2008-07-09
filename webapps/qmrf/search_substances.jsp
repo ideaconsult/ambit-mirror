@@ -17,7 +17,7 @@
 <meta name="language" content="English">
 <meta name="revisit-after" content="7">
 <link rel="SHORTCUT ICON" href="favicon.ico">
-<title>Search substances in QMRF Inventory</title>
+<title>Search substances in QMRF Database</title>
 <SCRIPT type="text/javascript">
 function clearFields(){
    document.searchForm.cas.value = "";
@@ -194,7 +194,7 @@ function load(){
 <tr bgcolor="${headercolor}">
 <th ></th >
 <th ><input type="submit" value="Search">
-<a href="help.jsp?anchor=search_structures" target="help"><img src="images/help.png" alt="help" title="How to search structures in QMRF inventory?" border="0"></a>
+<a href="help.jsp?anchor=search_structures" target="help"><img src="images/help.png" alt="help" title="How to search structures in QMRF Database?" border="0"></a>
 	</th>
 </tr>
 

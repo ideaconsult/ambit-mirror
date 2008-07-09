@@ -25,7 +25,7 @@
 
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: User' role"/>
+    <jsp:param name="title" value="QMRF Database: User' role"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

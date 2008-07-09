@@ -59,7 +59,7 @@ response.setHeader("Expires", "0");
 
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Upload QMRF document attachments"/>
+    <jsp:param name="title" value="QMRF Database: Upload QMRF document attachments"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

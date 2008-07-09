@@ -362,7 +362,7 @@
 							</c:url>
 							<a href="
 								<c:out value="${url}" escapeXml="true" />
-							" title="Delete document"><img src="images/delete.png" alt="help" title="Remove the document from QMRF inventory" border="0"></a>
+							" title="Delete document"><img src="images/delete.png" alt="help" title="Remove the document from QMRF Database" border="0"></a>
 <!-- assign a reviewer -->
 					  		<c:choose>
 					  			<c:when test="${(row.status eq 'submitted') || (row.status eq 'under review')}">

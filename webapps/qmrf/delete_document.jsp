@@ -45,7 +45,7 @@
 <c:set var="startrecord" value="${sessionScope.page * sessionScope.pagesize}"/>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Delete document"/>
+    <jsp:param name="title" value="QMRF Database: Delete document"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
@@ -126,7 +126,7 @@
 				<mt:mail server="${initParam['mail-server']}" >
 						<mt:from>${initParam['mail-from']}</mt:from>
 						<mt:setrecipient type="to">${reviewer_email}</mt:setrecipient>
-				<mt:subject>[QMRF Inventory] ${subject}</mt:subject>
+				<mt:subject>[QMRF Database] ${subject}</mt:subject>
 	
 				<mt:message>
 					<jsp:include page="mail.jsp" flush="true">
@@ -157,7 +157,7 @@
 				<mt:mail server="${initParam['mail-server']}" >
 						<mt:from>${initParam['mail-from']}</mt:from>
 						<mt:setrecipient type="to">${user_email}</mt:setrecipient>
-				<mt:subject>[QMRF Inventory] ${subject}</mt:subject>
+				<mt:subject>[QMRF Database] ${subject}</mt:subject>
 	
 				<mt:message>
 					<jsp:include page="mail.jsp" flush="true">
@@ -235,7 +235,7 @@
 </c:when>
 <c:otherwise>
 	<div class="success">
-	The document ${qmrf_title} is removed from QMRF inventory.
+	The document ${qmrf_title} is removed from QMRF Database.
 	</div>
 </c:otherwise>
 </c:choose>

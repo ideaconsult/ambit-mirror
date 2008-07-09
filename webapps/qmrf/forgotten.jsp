@@ -20,7 +20,7 @@ response.setHeader("Expires", "0");
 
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Forgotten password page"/>
+    <jsp:param name="title" value="QMRF Database: Forgotten password page"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
@@ -48,7 +48,7 @@ response.setHeader("Expires", "0");
 		<c:catch var ="error">
 		<c:if test="${rs.rowCount eq 0}">
 			<p>
-			No accounts in QMRF Inventory with the user name <i>${param.username}</i> and e-mail address <i>${param.email}</i>.
+			No accounts in QMRF Database with the user name <i>${param.username}</i> and e-mail address <i>${param.email}</i>.
 			</p>
 		</c:if>
 		<c:forEach var="row" items="${rs.rows}">
@@ -73,7 +73,7 @@ You could change your password through the "My Profile" tab.
 						<mt:mail server="${initParam['mail-server']}" >
 								<mt:from>${initParam['mail-from']}</mt:from>
 								<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-								<mt:subject>[QMRF Inventory] New password</mt:subject>
+								<mt:subject>[QMRF Database] New password</mt:subject>
 
 						    <mt:message>
 <jsp:include page="mail.jsp" flush="true">

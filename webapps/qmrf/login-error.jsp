@@ -1,6 +1,6 @@
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Invalid username/password"/>
+    <jsp:param name="title" value="QMRF Database: Invalid username/password"/>
 </jsp:include>
 	
 

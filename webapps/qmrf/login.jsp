@@ -11,7 +11,7 @@ response.setHeader("Expires", "0");
 %>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory Log in page"/>
+    <jsp:param name="title" value="QMRF Database Log in page"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">

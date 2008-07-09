@@ -27,5 +27,5 @@
 		<c:import var="xsl" url="/WEB-INF/xslt/users2html.xsl"/>
 		<c:import var="xml" url="users_xml.jsp"/>
 		<x:transform xml="${xml}" xslt="${xsl}">
-			<x:param name="header" value="Registered users in QMRF Inventory [ ${u} ] at ${date}"/>
+			<x:param name="header" value="Registered users in QMRF Database [ ${u} ] at ${date}"/>
 		</x:transform>

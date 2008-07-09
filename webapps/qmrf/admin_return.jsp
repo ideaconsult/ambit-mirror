@@ -21,7 +21,7 @@ response.setHeader("Expires", "0");
 </c:if>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Return QMRF document for revision"/>
+    <jsp:param name="title" value="QMRF Database: Return QMRF document for revision"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
@@ -87,7 +87,7 @@ response.setHeader("Expires", "0");
 					<mt:mail server="${initParam['mail-server']}" >
 						<mt:from>${initParam['mail-from']}</mt:from>
 						<mt:setrecipient type="to">${editor.email}</mt:setrecipient>
-						<mt:subject>[QMRF Inventory] Review completed</mt:subject>
+						<mt:subject>[QMRF Database] Review completed</mt:subject>
 
 						<mt:message>
 <jsp:include page="mail_reviewcompleted.jsp" flush="true">
@@ -145,7 +145,7 @@ response.setHeader("Expires", "0");
 						<mt:mail server="${initParam['mail-server']}" >
 							<mt:from>${initParam['mail-from']}</mt:from>
 							<mt:setrecipient type="to">${row.email}</mt:setrecipient>
-							<mt:subject>[QMRF Inventory] Document returned for revision</mt:subject>
+							<mt:subject>[QMRF Database] Document returned for revision</mt:subject>
 
 							<mt:message>
 <jsp:include page="mail_return.jsp" flush="true">

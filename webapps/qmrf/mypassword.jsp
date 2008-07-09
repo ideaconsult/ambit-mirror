@@ -24,7 +24,7 @@
 </c:choose>
 
 <jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Inventory: Change password"/>
+    <jsp:param name="title" value="QMRF Database: Change password"/>
 </jsp:include>
 
 <jsp:include page="menu.jsp" flush="true">
