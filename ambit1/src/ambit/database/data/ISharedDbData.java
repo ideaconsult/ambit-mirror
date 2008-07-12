@@ -41,11 +41,13 @@ import ambit.exceptions.AmbitException;
  */
 public interface ISharedDbData extends ISharedData {
 	public static String[] SOURCE = {"Molecule Browser: Current set of structures","Molecule Browser: Current molecule only"};	
-	public static String[] RESULTS_DESTINATION = {"Molecule Browser: New List","Molecule Browser: Replace current molecule","FILE: Write to user selected file","DATABASE: Save as a new dataset"};
+	public static String[] RESULTS_DESTINATION = {"Molecule Browser: New List","Molecule Browser: Replace current molecule","FILE: Write to user selected file","DATABASE: Save as a new dataset","DATABASE: Save as a query results","FILE: Temporary file"};
 	public static int MEMORY_LIST = 0;
 	public static int MEMORY_CURRENT = 1;
 	public static int RESULTS_FILE = 2;
 	public static int RESULTS_DATASET = 3;
+	public static int RESULTS_QUERY = 4;
+	public static int RESULTS_QUERYFILE = 5;
 	
 	public DbConnection getDbConnection();
 	public void setDbConnection(DbConnection dbConnection);

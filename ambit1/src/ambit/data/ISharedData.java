@@ -100,4 +100,7 @@ public interface ISharedData {
     public void setTemplateDir(String defaultDir);	   
     DataContainer getMolecules();
     DataContainer getQueries();
+    
+    public String getTMPFile();
+    public void setTMPFile(String file);
 }

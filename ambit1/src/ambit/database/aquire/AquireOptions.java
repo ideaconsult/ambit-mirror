@@ -67,10 +67,11 @@ public class AquireOptions extends JPanel {
         Dimension d = new Dimension(Integer.MAX_VALUE,24);
         endpointBox = new JComboBox();
         endpointBox.setMaximumSize(d);
-        //endpointBox.setPreferredSize(d);
+        
+        endpointBox.setPreferredSize(d);
         speciesBox = new JComboBox();
         speciesBox.setMaximumSize(d);
-        //speciesBox.setPreferredSize(d);
+        speciesBox.setPreferredSize(d);
         retrieveEndpoints();
         endpointBox.setSelectedItem(dbaData.getAquire_endpoint_description());
         speciesBox.setSelectedItem(dbaData.getAquire_species());        

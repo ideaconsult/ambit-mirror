@@ -23,6 +23,9 @@ import ambit.database.DbConnection;
 import ambit.database.data.AmbitDatabaseToolsData;
 import ambit.database.data.DefaultSharedDbData;
 import ambit.database.data.ISharedDbData;
+import ambit.database.writers.CASFileWriter;
+import ambit.database.writers.QueryResults;
+import ambit.database.writers.QueryWriter;
 import ambit.database.writers.SourceDatasetWriter;
 import ambit.exceptions.AmbitException;
 import ambit.exceptions.AmbitIOException;
@@ -31,7 +34,6 @@ import ambit.io.ListOfMoleculesWriter;
 import ambit.io.MyIOUtilities;
 import ambit.io.batch.DefaultBatchStatistics;
 import ambit.io.batch.IBatchStatistics;
-import ambit.io.batch.IJobStatus;
 import ambit.ui.UITools;
 import ambit.ui.actions.BatchAction;
 
@@ -41,6 +43,7 @@ import ambit.ui.actions.BatchAction;
  * <b>Modified</b> Sep 1, 2006
  */
 public abstract class DbSearchAction extends BatchAction {
+
     /*
 	public static int page=0;
 	public static int pagesize= 100;
@@ -100,7 +103,13 @@ public abstract class DbSearchAction extends BatchAction {
 				}
 				case ISharedDbData.RESULTS_DATASET: {
 					return getDatasetWriter();
-				}				
+				}
+				case ISharedDbData.RESULTS_QUERY: {
+					return getQueryWriter();
+				}								
+				case ISharedDbData.RESULTS_QUERYFILE: {
+					return getTMPFileWriter();
+				}										
 				default: 
 					return getFileWriter(dbaData.getDefaultDir());
 				}
@@ -121,7 +130,46 @@ public abstract class DbSearchAction extends BatchAction {
 		
 		return dataset;
 	}
+	public IChemObjectWriter getTMPFileWriter() {
+		if (userData instanceof ISharedDbData) {
+			ISharedDbData dbaData = ((ISharedDbData) userData);
+			DbConnection conn = dbaData.getDbConnection();
+			try {
+				return new CASFileWriter(conn.getConn(),conn.getUser(),
+						new File(dbaData.getTMPFile()));
+			} catch (Exception x) {
+				logger.error(x);
+				return null;
+			}
+		} else return null;
+	}
 		
+	public IChemObjectWriter getQueryWriter() {
+		if (userData instanceof ISharedDbData) {
+			ISharedDbData dbaData = ((ISharedDbData) userData);
+			DbConnection conn = dbaData.getDbConnection();
+			if (queryResults == null) queryResults = new QueryResults(getClass().getName());
+			queryResults.setOverwrite(true);
+			//dataset.getReference().setEditable(false);
+			
+			/*
+			if (dataset == null) { //create new
+				dataset =  new SourceDataset("New dataset",
+						ReferenceFactory.createSearchReference("New dataset"));
+				try {
+					if (dataset.editor(true).view(mainFrame, true, "")) {
+						return new SourceDatasetWriter(dataset,conn);
+					} else return null;
+				} catch (Exception x) {
+					logger.error(x);
+					return null;
+				}
+			} else return new SourceDatasetWriter(dataset,conn);
+			*/
+			return new QueryWriter(queryResults,conn);
+		} else return null;
+	}
+	
 	public IChemObjectWriter getDatasetWriter() {
 		if (userData instanceof ISharedDbData) {
 			ISharedDbData dbaData = ((ISharedDbData) userData);

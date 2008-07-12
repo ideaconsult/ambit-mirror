@@ -68,8 +68,12 @@ public class DbSmartsSearchAction extends DbSearchAction {
 		if (userData instanceof AmbitDatabaseToolsData) {
 			d = ((AmbitDatabaseToolsData)userData).getSrcDataset();
 			if (d==null) { 
-				JOptionPane.showMessageDialog(mainFrame, "<html>Select dataset to retrieve by <u>Search options/Dataset</u> menu</html>");
-				return null;
+				if (JOptionPane.showConfirmDialog(
+						mainFrame, 
+						"<html>SMARTS search over the entire database can be very time consuming! Continue?</html>",
+						"Please confirm",
+						JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION)
+					return null;
 			}
 		} else {	
 			d = new SourceDataset();

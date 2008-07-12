@@ -45,6 +45,7 @@ import ambit.database.DbAdmin;
 import ambit.database.DbConnection;
 import ambit.database.MySQLShell;
 import ambit.database.exception.DbAccessDeniedException;
+import ambit.database.writers.QueryWriter;
 import ambit.exceptions.AmbitException;
 import ambit.io.batch.DefaultBatchStatistics;
 import ambit.io.batch.IBatchStatistics;
@@ -115,8 +116,14 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
 		notifyObservers();
 	}
 	public void close() throws AmbitException {
-		 if (dbConnection != null) 
+		 if (dbConnection != null) { 
 		 try {
+			 QueryWriter.deleteQueryPerUser(dbConnection);
+		 } catch (Exception x) {
+			 logger.error(x);
+		 }
+		 try {
+
 			 defaultData.put(DefaultData.DATABASE,getDatabase());
 			 defaultData.put(DefaultData.HOST,getHost());
 			 defaultData.put(DefaultData.USER,getUser().getName());
@@ -132,7 +139,8 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
 		 catch (SQLException ex) {
 			 dbConnection = null;
 			 throw new AmbitException(ex);
-		 };
+		 }
+		 }
 	}
 	public void open(String host, String port, String database, String user, String password) throws AmbitException {
 		open(host,port,database,user,password,true);

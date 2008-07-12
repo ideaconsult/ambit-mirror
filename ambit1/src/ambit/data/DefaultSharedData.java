@@ -107,7 +107,16 @@ public abstract class DefaultSharedData  extends Observable implements ISharedDa
 		this.jobStatus = jobStatus;
 	}
     
-
+    public String getTMPFile() {
+        if (defaultData == null) return "QUERY.TXT";
+        Object o = defaultData.get(DefaultData.TMPFILE);
+        if (o == null) return "QUERY.TXT";
+        else return o.toString();
+    }
+    public void setTMPFile(String tmpFilename) {
+        if (defaultData == null) defaultData = new DefaultData(); 
+        defaultData.put(DefaultData.TMPFILE,tmpFilename);
+    }
 
     public String getTemplateDir() {
         if (defaultData == null) return "";

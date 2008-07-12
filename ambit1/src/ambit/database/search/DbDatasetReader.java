@@ -21,6 +21,9 @@ public class DbDatasetReader extends DbStructureReader {
 		"select structure.idstructure,idsubstance from structure,"+
 		"\nstruc_dataset,src_dataset where src_dataset.name=? and src_dataset.id_srcdataset = struc_dataset.id_srcdataset"+
 		"\nand structure.idstructure=struc_dataset.idstructure ";
+	protected static final String sqlAll=
+		"select structure.idstructure,idsubstance from structure";
+		
 
 	public DbDatasetReader(Connection connection,SourceDataset srcDataset, int page, int pagesize)  throws AmbitException {
 		super();
@@ -34,11 +37,14 @@ public class DbDatasetReader extends DbStructureReader {
 			SourceDataset srcDataset,  int page, int pagesize) throws AmbitException {
 		boolean hasQuery = false;
 		try {
+			String theSQL = sql;
+			if (srcDataset == null) theSQL = sqlAll;
 			if (page >=0)
-				ps = conn.prepareStatement(sql+" limit "+page2Limit());
+				ps = conn.prepareStatement(theSQL+" limit "+page2Limit());
 			else 
-				ps = conn.prepareStatement(sql);
-			ps.setString(1,srcDataset.getName());
+				ps = conn.prepareStatement(theSQL);
+			if (srcDataset != null)
+				ps.setString(1,srcDataset.getName());
 			setResultset(ps.executeQuery());
 		} catch (SQLException x) {
 				throw new AmbitException(x);

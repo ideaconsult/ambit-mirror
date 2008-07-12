@@ -26,6 +26,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 
 import ambit.data.ISharedData;
 import ambit.database.data.AmbitDatabaseToolsData;
+import ambit.database.writers.QueryResults;
 import ambit.exceptions.AmbitIOException;
 import ambit.io.AmbitFileFilter;
 import ambit.io.AmbitSettingsListener;
@@ -64,6 +65,7 @@ public abstract class BatchAction extends AmbitAction {
 	private static final long serialVersionUID = -552838223008338517L;
 	protected boolean interactive = true;
 	protected IBatch batch;
+	protected QueryResults queryResults=null;
 
 	/**
 	 * 
@@ -117,6 +119,8 @@ public abstract class BatchAction extends AmbitAction {
 			IIteratingChemObjectReader reader = getReader();
 			stats.setTimeElapsed(IBatchStatistics.RECORDS_READ, System.currentTimeMillis()-now);
 			if (reader != null) {
+				if (queryResults == null) queryResults = new QueryResults();
+				queryResults.setName(getValue(AbstractAction.NAME).toString());
 				now = System.currentTimeMillis();
 				IChemObjectWriter writer = getWriter();
 				stats.setTimeElapsed(IBatchStatistics.RECORDS_WRITTEN, System.currentTimeMillis()-now);
@@ -225,4 +229,5 @@ public abstract class BatchAction extends AmbitAction {
     public synchronized void setInteractive(boolean interactive) {
         this.interactive = interactive;
     }
+
 }

@@ -2,6 +2,7 @@ package ambit.ui.query;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.Observable;
 import java.util.Observer;
@@ -11,6 +12,7 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -29,16 +31,17 @@ import com.l2fprod.common.swing.JButtonBar;
 public class DbQueryOptionsPanel extends JPanel implements Observer {
 	protected static JFrame self = null;
 	 private Component currentComponent;
-	protected IDataContainers data;
+	protected AmbitDatabaseToolsData data;
 	protected ExperimentsQueryPanel experimentsPanel;
 	protected DescriptorQueryPanel descriptorsPanel;
+	protected SimilarityOptions optionsPanel;
 	
 	public DbQueryOptionsPanel(AmbitDatabaseToolsData data) {
 		super();
 		this.data = data;
 		addWidgets(data);
 	}
-	public void addWidgets(AmbitDatabaseToolsData data) {
+	public void addWidgets(final AmbitDatabaseToolsData data) {
 		data.addObserver(this);
 		JButtonBar toolbar = new JButtonBar(JButtonBar.VERTICAL);
 		setLayout(new BorderLayout());
@@ -66,8 +69,37 @@ public class DbQueryOptionsPanel extends JPanel implements Observer {
 	    addButton("Experiments", UITools.createImageIcon("ambit/ui/images/experiment.png"),experimentsPanel, toolbar, group);
 	    addButton("SMARTS",UITools.createImageIcon("ambit/ui/images/smarts.png"),
 	    		fragmentsEditor, toolbar, group);	    
-	    
+
+	    optionsPanel = new SimilarityOptions(data);
+	    /*
+	    JPanel p = new JPanel();
+	    p.setLayout(new BorderLayout());
+	    p.add(optionsPanel,BorderLayout.CENTER);
+	    JButton b = new JButton(new AbstractAction("Apply") {
+	    	public void actionPerformed(ActionEvent e) {
+	    		
+	    	}
+	    });
+	    b.setMaximumSize(new Dimension(48,32));
+    	b.setMinimumSize(new Dimension(32,24));
+    	b.setPreferredSize(new Dimension(48,32));
+	    p.add(b,BorderLayout.SOUTH);
+	    */
+	    addButton("Options",UITools.createImageIcon("ambit/ui/images/cog.png"),
+	    		optionsPanel, toolbar, group);	   	    
 		
+	}
+	protected void updateOptions() {
+        data.setSimilarityMethod(optionsPanel.getMethod());
+        data.setSimilarityThreshold(optionsPanel.getThreshold());
+        data.setPageSize(optionsPanel.getMaxResults());
+        data.setPage(optionsPanel.getPage());
+        data.setAquire_endpoint(optionsPanel.getEndpoint());
+        data.setAquire_endpoint_description(optionsPanel.getEndpointDescription());
+        data.setAquire_species(optionsPanel.getSpecies());
+        data.setResultDestination(optionsPanel.getDestination());
+        data.setSource(optionsPanel.getSource());
+        data.setAquire_simpletemplate(optionsPanel.isUseSimpletemplate());		
 	}
     private void addButton(String title,Icon icon,
     	      final Component component, JButtonBar bar, ButtonGroup group) {
@@ -90,6 +122,8 @@ public class DbQueryOptionsPanel extends JPanel implements Observer {
     	  
 		private void show(Component component) {
 		    if (currentComponent != null) {
+		      if (currentComponent == optionsPanel)
+		    	  updateOptions();
 		      remove(currentComponent);
 		    }
 		    add("Center", currentComponent = component);
