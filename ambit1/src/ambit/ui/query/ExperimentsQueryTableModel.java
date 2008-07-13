@@ -173,7 +173,6 @@ public class ExperimentsQueryTableModel extends AbstractTableModel implements IA
     }
     public void ambitListChanged(AmbitListChanged event) {
         if (event.getList() == experiments) {
-        	System.out.println("ambitListChanged");
             fireTableStructureChanged();
         }    
     	

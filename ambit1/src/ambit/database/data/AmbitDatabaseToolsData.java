@@ -180,17 +180,11 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 		molecules = new DataContainer();
 		query = new DataContainer();
 		if (init)
-		loadData();
-
+			loadData();
 		srcDataset = null;
 	}	
 	public AmbitDatabaseToolsData(boolean init) {
-		super();
-		molecules = new DataContainer();
-		query = new DataContainer();
-		if (init)
-		    loadData();
-		srcDataset = null;
+		this(null,init);
 	}
 
 	public void setDbConnection(DbConnection dbConnection) {
@@ -205,19 +199,16 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 		return descriptors;
 	}
 	public void loadData() {
+		
 	    if (dbConnection != null) {
 	        loading = true;
 	        try {
 				initDescriptors(dbConnection);
 				initContainer(dbConnection.getConn());
 				initExperiments(dbConnection.getConn());
-				fragments = new SmartsFragmentsList();
-				FuncGroupsDescriptorFactory.getFragments(
-						FuncGroupsDescriptorFactory.getDocument(defaultData.get(DefaultData.FRAGMENTS).toString()),
-						fragments
-						);
 	        } catch (Exception x) {
-	            x.printStackTrace();
+	        	getJobStatus().setError(x);
+	            logger.error(x);
 	        } finally {
 	            loading = false;
 	        }
@@ -228,9 +219,8 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 		//test
 		try {
 			ExperimentSearchProcessor p = new ExperimentSearchProcessor(connection);
-			experiments = new ExperimentQuery();
+
 			p.loadQuery(null,experiments,true);
-			studyConditions = new ExperimentConditionsQuery();
 			p.loadQuery(null,studyConditions,false);
 			p.readStudy(experiments.getStudyList());
 			p.close();
@@ -242,8 +232,8 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 		}
 	}
 	public void initDescriptors(DbConnection dbConnection) {
-	    if (dbConnection.isClosed()) return;
-		descriptors = new DescriptorQueryList();
+
+	    if (dbConnection.isClosed()) return;		
 		//descriptors.loadDefault();
 		try {
 			
@@ -286,15 +276,28 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 
 	
 	protected void init() {
-	    loadConfiguration();
-
-		//dbConnection = new DbConnection("localhost","33060","ambit","root","");
-
-		
+        mysqlShell = null;	
+        dbConnection = null;
+		descriptors = new DescriptorQueryList();
+		experiments = new ExperimentQuery();
+		studyConditions = new ExperimentConditionsQuery();
 		AmbitLogger.configureLog4j(true);
 		jobStatus = new JobStatus();
-
 		jobStatus.setModified(true);
+		
+	    loadConfiguration();
+
+		try {
+			fragments = new SmartsFragmentsList();					
+			FuncGroupsDescriptorFactory.getFragments(
+				FuncGroupsDescriptorFactory.getDocument(defaultData.get(DefaultData.FRAGMENTS).toString()),
+				fragments
+				);
+		} catch (Exception x) {
+			jobStatus.setError(x);
+			logger.error(x);
+		}
+		
 		try {
 			tryMYSQL();
 		    dbConnection = new DbConnection(
@@ -313,8 +316,8 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 	            } else dbConnection.open(false);
 			}	
 		} catch (AmbitException x) {
-			
-			JOptionPane.showMessageDialog(null,x.toString());
+			jobStatus.setError(x);
+			//JOptionPane.showMessageDialog(null,x.toString());
 		}
 		
 	}
@@ -576,7 +579,9 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
         try {
             loadData();
         } catch (Exception x) {
-            x.printStackTrace();
+        	getJobStatus().setError(x);
+        	logger.error(x);
+
         }
         //((AmbitAction)structureActions.get(structureActions.keys()[0])).setEnabledAll(true);
         
@@ -673,11 +678,11 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
 		this.aquire_simpletemplate = aquire_simpletemplate;
 	}
 	
-	public SourceDataset selectDataset(SourceDatasetList datasets, boolean readOnly, Component parent, boolean includeAll) {
+	public SourceDataset selectDataset(SourceDatasetList datasets, boolean readOnly, Component parent, boolean includeAll) throws AmbitException {
+		if (getDbConnection() == null) throw new AmbitException("[DATABASE] Not connected.");
 		DbSrcDataset ds = new DbSrcDataset(getDbConnection());
 		//SourceDatasetList datasets = null;
 		//Object[] possibilities ;
-		try {
 			ds.initialize();
 			ds.searchDatasets(null,datasets);
 			if (datasets == null) datasets = new SourceDatasetList();
@@ -698,10 +703,6 @@ public class AmbitDatabaseToolsData extends DefaultSharedDbData implements Runna
                     break;
                 }
             return dataset;
-		} catch (Exception x) {
-			x.printStackTrace();
-			return null;
-		}
 	}
 	public SmartsFragmentsList getFragments() {
 		return fragments;

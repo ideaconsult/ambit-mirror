@@ -74,7 +74,8 @@ public class DbOpenAction extends AmbitAction {
 						JOptionPane.showMessageDialog(mainFrame, "Connected to database");
 						
 					} catch (AmbitException x) {
-						JOptionPane.showMessageDialog(getMainFrame(),x.getMessage());
+						dbaData.getJobStatus().setError(x);
+						//JOptionPane.showMessageDialog(getMainFrame(),x.getCause());
 						logger.error(x);
 						dbaData.setDbConnection(null);
 					}

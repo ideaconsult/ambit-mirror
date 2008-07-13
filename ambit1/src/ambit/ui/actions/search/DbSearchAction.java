@@ -116,7 +116,7 @@ public abstract class DbSearchAction extends BatchAction {
 		} else return getFileWriter("");
 	}
 
-	protected SourceDataset getResultsDataset(DbConnection conn) {
+	protected SourceDataset getResultsDataset(DbConnection conn) throws AmbitException {
 		SourceDataset dataset  = null;
 		if (userData instanceof AmbitDatabaseToolsData)  {
 			dataset = ((AmbitDatabaseToolsData)userData).selectDataset(new SourceDatasetList() {
@@ -174,21 +174,26 @@ public abstract class DbSearchAction extends BatchAction {
 		if (userData instanceof ISharedDbData) {
 			ISharedDbData dbaData = ((ISharedDbData) userData);
 			DbConnection conn = dbaData.getDbConnection();
-			SourceDataset dataset = getResultsDataset(conn);
-			//dataset.getReference().setEditable(false);
-			
-			if (dataset == null) { //create new
-				dataset =  new SourceDataset("New dataset",
-						ReferenceFactory.createSearchReference("New dataset"));
-				try {
-					if (dataset.editor(true).view(mainFrame, true, "")) {
-						return new SourceDatasetWriter(dataset,conn);
-					} else return null;
-				} catch (Exception x) {
-					logger.error(x);
-					return null;
-				}
-			} else return new SourceDatasetWriter(dataset,conn); 	
+			try {
+				SourceDataset dataset = getResultsDataset(conn);
+				//dataset.getReference().setEditable(false);
+				
+				if (dataset == null) { //create new
+					dataset =  new SourceDataset("New dataset",
+							ReferenceFactory.createSearchReference("New dataset"));
+					try {
+						if (dataset.editor(true).view(mainFrame, true, "")) {
+							return new SourceDatasetWriter(dataset,conn);
+						} else return null;
+					} catch (Exception x) {
+						logger.error(x);
+						return null;
+					}
+				} else return new SourceDatasetWriter(dataset,conn);
+			} catch (AmbitException x) {
+				dbaData.getJobStatus().setError(x);
+				return null;
+			}
 		} else return null;
 	}
 	public IChemObjectWriter getFileWriter(String defaultDir) {

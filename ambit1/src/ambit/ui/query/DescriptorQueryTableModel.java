@@ -56,8 +56,7 @@ public class DescriptorQueryTableModel extends AbstractTableModel implements IAm
      */
     public DescriptorQueryTableModel(DescriptorQueryList descriptors,boolean captionsOnly) {
         super();
-        this.descriptors = descriptors;
-        descriptors.addAmbitObjectListener(this);
+        setDescriptors(descriptors);
         this.captionsOnly = captionsOnly;
     }
 
@@ -181,7 +180,11 @@ public class DescriptorQueryTableModel extends AbstractTableModel implements IAm
 	}
 
 	public void setDescriptors(DescriptorQueryList descriptors) {
+		if (this.descriptors != null)
+			this.descriptors.removeAmbitObjectListener(this);
 		this.descriptors = descriptors;
+		if (this.descriptors != null)
+			this.descriptors.addAmbitObjectListener(this);
 		fireTableStructureChanged();
 	}
 }

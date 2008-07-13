@@ -36,7 +36,9 @@ public class DbCore {
 	}
 
 	public void initialize() throws DbAmbitException {
+		if (conn == null) throw new DbAmbitException(null,"[DATABASE] Not connected!");
 		try {
+
 			stmt = conn.createStatement();
 		}  catch (SQLException x) {
 			throw new DbAmbitException(null,"initialize",x);

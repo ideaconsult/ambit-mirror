@@ -141,7 +141,7 @@ delete from src_dataset where id_srcdataset=7;
 	 * @see ambit.ui.CoreApp#initSharedData()
 	 */
 	protected void initSharedData(String[] args) {
-		dbadminData = new AmbitDatabaseToolsData(true);
+		dbadminData = new AmbitDatabaseToolsData(false);
 		dbadminData.setResultDestination(ISharedDbData.RESULTS_QUERY);
 	}
 

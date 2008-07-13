@@ -29,10 +29,6 @@
 
 package ambit.database.data;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
@@ -47,8 +43,6 @@ import ambit.database.MySQLShell;
 import ambit.database.exception.DbAccessDeniedException;
 import ambit.database.writers.QueryWriter;
 import ambit.exceptions.AmbitException;
-import ambit.io.batch.DefaultBatchStatistics;
-import ambit.io.batch.IBatchStatistics;
 import ambit.io.batch.LoggedBatchStatistics;
 import ambit.log.AmbitLogger;
 
@@ -66,7 +60,7 @@ import ambit.log.AmbitLogger;
  * <b>Modified</b> 2006-4-30
  */
 public abstract class DefaultSharedDbData extends DefaultSharedData implements ISharedDbData {
-	protected DbConnection dbConnection = null;
+	protected DbConnection dbConnection;
 	private boolean stop_mysql;
 	protected int pageSize = 600;
 	protected int page = 0;
@@ -79,8 +73,8 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
      */
     public DefaultSharedDbData(String configFile) {
         super(configFile);
-        mysqlShell = null;
-        init();
+
+//        init();
 		batchStatistics = new LoggedBatchStatistics();
 
 		
@@ -201,6 +195,12 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
 	}
 
 	protected void init() {
+        mysqlShell = null;
+        dbConnection = null;
+		AmbitLogger.configureLog4j(true);
+		jobStatus = new JobStatus();
+		jobStatus.setModified(true);
+		
 	    loadConfiguration();
 
 		dbConnection = new DbConnection(defaultData.get(DefaultData.HOST).toString(),
@@ -209,9 +209,7 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
 		        defaultData.get(DefaultData.USER).toString(),
 		        "");
 		
-		AmbitLogger.configureLog4j(true);
-		jobStatus = new JobStatus();
-		jobStatus.setModified(true);
+
 	}
 
     
@@ -242,7 +240,8 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
             try {
                 dbc.close();
             } catch (SQLException x) {
-                x.printStackTrace();
+            	jobStatus.setError(x);
+                //x.printStackTrace();
             }
             logger.info("MySQL already running on " + defaultData.get(DefaultData.HOST) + " port "+defaultData.get(DefaultData.PORT));
             stop_mysql  = false;
@@ -256,9 +255,11 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
 	            stop_mysql  = false;
 	            return;
             } else {
+            	jobStatus.setError(x);
                 logger.error(x);
             }
         } catch (AmbitException x) {
+        	jobStatus.setError(x);
             logger.error(x);
         }
         try {
@@ -273,7 +274,8 @@ public abstract class DefaultSharedDbData extends DefaultSharedData implements I
             defaultData.put(DefaultData.PASSWORD,"NO");
             System.out.println("MySQL started locally on port 33060");
         } catch (AmbitException x) {
-            JOptionPane.showMessageDialog(null,x);
+            //JOptionPane.showMessageDialog(null,x);
+            jobStatus.setError(x);
             logger.error(x);
         }
 	}

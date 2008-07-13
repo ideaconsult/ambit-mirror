@@ -65,7 +65,11 @@ public class SelectDatasetAction extends AmbitAction implements Observer {
     	
 		if (userData instanceof AmbitDatabaseToolsData) {
 			AmbitDatabaseToolsData dbaData = ((AmbitDatabaseToolsData) userData);
-			dbaData.setSrcDataset(dbaData.selectDataset(new DbSourceDatasetList(dbaData.getDbConnection()),false,mainFrame,true));
+			try {
+				dbaData.setSrcDataset(dbaData.selectDataset(new DbSourceDatasetList(dbaData.getDbConnection()),false,mainFrame,true));
+			} catch (AmbitException x) {
+				dbaData.getJobStatus().setError(x);
+			}
 		}			
 		
 

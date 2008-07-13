@@ -13,6 +13,7 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import ambit.data.ISharedData;
 import ambit.database.data.ISharedDbData;
 import ambit.ui.AmbitColors;
 import ambit.ui.UITools;
@@ -50,6 +51,12 @@ public class DbStatisticsAction extends AmbitAction {
         }
     }
     protected StringBuffer getStatistics(Connection connection) {
+    	StringBuffer b = new StringBuffer();    	
+    	if (connection == null) {
+    		b.append("[DATABASE] Not connected!");
+    		return b;
+    	}
+
     	String[] sql = {
     			"Select count(*) as 'Datasets' from src_dataset",
     			"Select count(*) as 'Chemical compounds' from substance",
@@ -68,7 +75,7 @@ public class DbStatisticsAction extends AmbitAction {
     			"Select count(*) as 'Study types' from study",
     			"Select count(*) as 'Study templates' from template"
     	};
-    	StringBuffer b = new StringBuffer();
+
     	
     	try {
     		java.sql.DatabaseMetaData db = connection.getMetaData();
@@ -113,6 +120,7 @@ public class DbStatisticsAction extends AmbitAction {
     		b.append("ERROR");
     		b.append(x.getMessage());
     		logger.error(x);
+    		((ISharedData)getUserData()).getJobStatus().setError(x);
     	}
     	return b;
     }

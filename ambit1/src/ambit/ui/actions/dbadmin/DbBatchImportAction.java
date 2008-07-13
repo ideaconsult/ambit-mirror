@@ -23,6 +23,7 @@ import ambit.database.DbConnection;
 import ambit.database.core.DbSrcDataset;
 import ambit.database.data.AmbitDatabaseToolsData;
 import ambit.database.data.ISharedDbData;
+import ambit.database.exception.DbAmbitException;
 import ambit.database.processors.CASSmilesLookup;
 import ambit.database.processors.FindUniqueProcessor;
 import ambit.database.writers.DbSubstanceWriter;
@@ -105,15 +106,16 @@ public class DbBatchImportAction extends BatchAction  {
 			}
 		} else return null;
 	}
-    protected SourceDataset getDataset(final String filename) {
+    protected SourceDataset getDataset(final String filename) throws AmbitException {
         if (userData instanceof AmbitDatabaseToolsData) {
             AmbitDatabaseToolsData dbaData = ((AmbitDatabaseToolsData) userData);
-            SourceDataset dataset = dbaData.selectDataset(new SourceDatasetList() {
-            		@Override
-            		public AmbitObject createNewItem() {
-    					return new SourceDataset(filename,ReferenceFactory.createDatasetReference(filename,""));
-            		}
-            },false, mainFrame,false);
+            SourceDataset dataset = null;
+            dataset = dbaData.selectDataset(new SourceDatasetList() {
+	            		@Override
+	            		public AmbitObject createNewItem() {
+	    					return new SourceDataset(filename,ReferenceFactory.createDatasetReference(filename,""));
+	            		}
+	            },false, mainFrame,false);
             if (dataset == null)
                 return new SourceDataset(filename,ReferenceFactory.createDatasetReference(sourceFileName, ""));
             else return dataset;
@@ -136,7 +138,8 @@ public class DbBatchImportAction extends BatchAction  {
 		if (userData instanceof ISharedDbData) {
 		    ISharedDbData dbaData = ((ISharedDbData) userData);
 		    if ((dbaData.getDbConnection()==null) || dbaData.getDbConnection().isClosed()) {
-		    	JOptionPane.showMessageDialog(mainFrame,"Not connected to database!");
+		    	dbaData.getJobStatus().setError(new DbAmbitException(null,"Not connected to database!"));
+		    	//JOptionPane.showMessageDialog(mainFrame,"Not connected to database!");
 		    	return null;
 		    }
 			ArrayList<String> aliases = new ArrayList<String>();
