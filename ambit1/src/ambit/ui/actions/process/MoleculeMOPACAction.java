@@ -23,7 +23,7 @@ public class MoleculeMOPACAction extends MoleculeCalculationAction {
 	}
 
 	public MoleculeMOPACAction(Object userData, JFrame mainFrame, String name) {
-		this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/mopac.png"));
+		this(userData, mainFrame, name,UITools.createImageIcon("ambit/ui/images/molecule.png"));
 		
 	}
 

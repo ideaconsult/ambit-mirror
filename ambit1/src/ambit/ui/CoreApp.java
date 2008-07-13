@@ -280,6 +280,28 @@ abstract public class CoreApp implements ActionListener {
 		  Runtime.getRuntime().exit(0);          
      }
     protected ImageIcon getIcon() { return null; }
-	
+    
+	protected String getAboutString(String packageName) {
+		StringBuilder b = new StringBuilder();
+    	Package self = Package.getPackage(packageName);
+    	b.append("<html>");
+    	b.append("<b>");
+    	b.append(self.getImplementationTitle());
+    	b.append(" ");
+    	b.append(self.getImplementationVersion());    	
+    	b.append("</b>");
+    	b.append("<br>");
+    	b.append("Developed by ");
+    	b.append("<i>");
+    	b.append(self.getImplementationVendor());
+    	b.append("</i>");
+    	b.append("<br>");    	
+    	b.append("on behalf of ");
+    	b.append("<i>");    	
+    	b.append(self.getSpecificationVendor());
+    	b.append("</i>");
+        b.append("</html>");		
+        return b.toString();
+	}
 }
 

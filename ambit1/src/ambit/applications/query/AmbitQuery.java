@@ -1,9 +1,9 @@
-/* AmbitDatabase.java
+/* AmbitQuery.java
  * Author: Nina Jeliazkova
- * Date: 2006-7-08 
- * Revision: 1.10 
+ * Date: 2008-7-12 
+ * Revision: 1.30
  * 
- * Copyright (C) 2005-2006  
+ * Copyright (C) 2005-2008  
  * 
  * Contact: nina@acad.bg
  * 
@@ -26,13 +26,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * 
  */
-package ambit.applications.dbadmin;
+package ambit.applications.query;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.util.Observable;
@@ -40,7 +38,6 @@ import java.util.Observable;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -48,44 +45,32 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.border.BevelBorder;
-
-import org.openscience.cdk.io.IChemObjectWriter;
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import sicret.SicretRules;
 import toxTree.tree.cramer.CramerRules;
 import verhaar.VerhaarScheme;
-import ambit.data.molecule.CurrentMoleculeWriter;
-import ambit.database.DbConnection;
 import ambit.database.aquire.AquireRetrieveAction;
 import ambit.database.data.AmbitDatabaseToolsData;
-import ambit.database.data.DefaultSharedDbData;
+import ambit.database.data.ISharedDbData;
 import ambit.exceptions.AmbitException;
 import ambit.ui.AboutAction;
 import ambit.ui.AmbitStatusBar;
 import ambit.ui.CoreApp;
-import ambit.ui.DBTaskPane;
-import ambit.ui.ObjectsPane;
 import ambit.ui.UITools;
 import ambit.ui.actions.ActionFactory;
 import ambit.ui.actions.process.Builder3DAction;
 import ambit.ui.actions.process.DescriptorCalculatorAction;
 import ambit.ui.actions.process.MetaboliteAction;
-import ambit.ui.actions.process.MoleculeEditAction;
 import ambit.ui.actions.process.MoleculeMOPACAction;
 import ambit.ui.actions.process.RetrieveDataAction;
 import ambit.ui.actions.process.ToxTreeAction;
 import ambit.ui.actions.search.DbDescriptorsSearchAction;
-import ambit.ui.actions.search.DbExactSearchAction;
 import ambit.ui.actions.search.DbExperimentsSearchAction;
 import ambit.ui.actions.search.DbSaveAsDataset;
 import ambit.ui.actions.search.ExperimentsByStudyAction;
-import ambit.ui.data.AmbitObjectPanel;
 import ambit.ui.data.molecule.AmbitDetailsPanel;
-import ambit.ui.data.molecule.CompoundsPanel;
-import ambit.ui.data.molecule.SmilesEntryPanel;
+import ambit.ui.query.DbQueryOptionsPanel;
 
 /**
  * A GUI application for database query, data entry and database administration.
@@ -102,18 +87,14 @@ delete  FROM template where idtemplate=8
 
 introduce reference field into templates
  */
-public class AmbitDatabase extends CoreApp {
+public class AmbitQuery extends CoreApp {
 	protected AmbitDatabaseToolsData dbadminData;
-
-	protected AmbitObjectPanel ambitDatasetPanel;
-	protected JComponent ambitMoleculePanel;
-	protected JComponent ambitQueryPanel;
 	protected ActionMap structureSearchActions;
 	protected ActionMap smartsSearchActions;
 	protected ActionMap optionsActions;
 	protected ActionMap searchActions;
 	//protected ActionMap batchSearchActions;
-	protected ActionMap calculationActions;
+	//protected ActionMap calculationActions;
 	protected ActionMap databaseActions;
 	protected ActionMap connectActions;
 	protected ActionMap databaseAdminActions;
@@ -140,7 +121,7 @@ delete from src_dataset where id_srcdataset=7;
 	 * @param width
 	 * @param height
 	 */
-	public AmbitDatabase(String title, int width, int height,String [] args) {
+	public AmbitQuery(String title, int width, int height,String [] args) {
 		super(title, width, height,args);
         int state = mainFrame.getExtendedState();
 		    
@@ -160,7 +141,8 @@ delete from src_dataset where id_srcdataset=7;
 	 * @see ambit.ui.CoreApp#initSharedData()
 	 */
 	protected void initSharedData(String[] args) {
-		dbadminData = new AmbitDatabaseToolsData(false);
+		dbadminData = new AmbitDatabaseToolsData(true);
+		dbadminData.setResultDestination(ISharedDbData.RESULTS_QUERY);
 	}
 
 	/* (non-Javadoc)
@@ -175,7 +157,7 @@ delete from src_dataset where id_srcdataset=7;
 		dbadminData.setDescriptorActions(new ActionMap());
 		dbadminData.setExperimentsActions(new ActionMap());
 		
-		calculationActions = new ActionMap();
+		//calculationActions = new ActionMap();
 		databaseActions = new ActionMap();		
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu;
@@ -184,7 +166,7 @@ delete from src_dataset where id_srcdataset=7;
 		menu = new JMenu("File");
 		menuBar.add(menu);
 		ActionMap fileActions = new ActionMap();
-		ActionFactory.createFileActions(fileActions,dbadminData,mainFrame);
+		ActionFactory.createSaveExitActions(fileActions,dbadminData,mainFrame);
 		ActionFactory.addToMenu(fileActions,menu);
 		ActionFactory.setParentActions(fileActions,allActions);
 		
@@ -207,13 +189,15 @@ delete from src_dataset where id_srcdataset=7;
 		ActionFactory.addToMenu(databaseAdminActions,submenu);
 		ActionFactory.setParentActions(databaseAdminActions,allActions);			
 		
+		/*
 		submenu  = new JMenu("Molecule");
 		menuBar.add(submenu);
 		moleculeEditAction = new MoleculeEditAction(null,dbadminData,mainFrame,"Structure diagram editor");
 		calculationActions.put("Edit",moleculeEditAction);
 		createMoleculeCalculationActions(calculationActions,dbadminData,mainFrame);
 		ActionFactory.addToMenu(calculationActions,submenu);
-		ActionFactory.setParentActions(calculationActions,allActions);				
+		ActionFactory.setParentActions(calculationActions,allActions);
+		*/				
 		
 		menu = new JMenu("Search");
 		menuBar.add(menu);
@@ -278,11 +262,12 @@ delete from src_dataset where id_srcdataset=7;
 		
 		menu = new JMenu("Help");
 		menuBar.add(menu);
+		/*
 		ambit.ui.actions.HelpAction helpAction = new ambit.ui.actions.HelpAction("AMBIT Database Tools HELP",mainFrame);
 		menu.add(helpAction);
+		*/
 		
-		
-		AboutAction aboutAction = new AboutAction(getAboutString("ambit.applications.dbadmin"),mainFrame);
+		AboutAction aboutAction = new AboutAction(getAboutString("ambit.applications.query"),mainFrame);
 		aboutAction.setIconFile("ambit/ui/images/ambit_logo.jpg");
 		menu.add(aboutAction);
 
@@ -303,86 +288,7 @@ delete from src_dataset where id_srcdataset=7;
 	 */
 	protected void createWidgets(JFrame aFrame, JPanel aPanel) {
 		aPanel.setLayout(new BorderLayout());
-		//QueryPane queryPane = new QueryPane(new Dimension(200,200));
-		ObjectsPane objectsPane = new ObjectsPane(new Dimension(400,300));
-
-		ambitMoleculePanel = new CompoundsPanel(dbadminData.getMolecules(),
-				moleculeEditAction
-				,Color.white,Color.BLUE,JSplitPane.HORIZONTAL_SPLIT);
-		dbadminData.getMolecules().first();
-		dbadminData.getMolecules().notifyObservers();
-
-		
-		ambitMoleculePanel.setBorder(BorderFactory.createTitledBorder("Molecule browser"));
-		ambitMoleculePanel.setPreferredSize(new Dimension(400,300));
-		ambitMoleculePanel.setMinimumSize(new Dimension(200,200));
-
-		//dbadminData.fireAmbitObjectEvent();
-	
-		ambitQueryPanel = createQueryPanel();
-		
-		Dimension dd = new Dimension(100,300);
-        Object[] keys;
-        ImageIcon database = UITools.createImageIcon("/ambit/ui/images/database.png");
-        JPanel taskPanel= new DBTaskPane(new Object[][] {
-        		{calculationActions,"Molecule",UITools.createImageIcon("/ambit/ui/images/benzene_16.jpg")},
-        		{searchActions,"Search",database},
-        		{optionsActions,"Search options",null},
-        		{connectActions,"Database",database},
-        		{databaseActions,"Import to database",database},
-        		{databaseAdminActions,"Database processing",database},
-        		{mysqlActions,"MySQL server",database}
-        });
-                
-        taskPanel.setPreferredSize(new Dimension(200,Integer.MAX_VALUE));
-        taskPanel.setMinimumSize(new Dimension(100,100));
-        taskPanel.setMaximumSize(new Dimension(300,Integer.MAX_VALUE));
-      
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,ambitMoleculePanel,ambitQueryPanel);        
-        splitPane.setDividerLocation(400);
-        JSplitPane topPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,taskPanel,splitPane);
-
-        
-        
-        //((CompoundPanel) ambitMoleculePanel).addTab("More",pane);
-        
-		aPanel.add(topPanel,BorderLayout.CENTER);
-
-		JPanel top = new JPanel();
-		top.setLayout(new GridLayout(1,2));
-		top.setPreferredSize(new Dimension(Integer.MAX_VALUE,24));
-		
-		DbExactSearchAction drawSmilesAction = new DbExactSearchAction(dbadminData,mainFrame,"Exact search",UITools.createImageIcon("ambit/ui/images/draw_16.png")){
-			public IChemObjectWriter getWriter() {
-				return new CurrentMoleculeWriter(dbadminData.getMolecules());
-			};
-			public IIteratingChemObjectReader getReader() {
-
-				if (userData instanceof DefaultSharedDbData) {
-                    DefaultSharedDbData dbaData = ((DefaultSharedDbData) userData);		
-					DbConnection conn = dbaData.getDbConnection();
-					if ((conn ==null) || conn.isClosed()) JOptionPane.showMessageDialog(mainFrame, "Use Database/Open first");
-					else
-						try {
-							return getSearchReader(conn.getConn(),dbaData.getMolecule(),
-                                    dbaData.getPage(),dbaData.getPageSize());
-						} catch (AmbitException x) {
-							JOptionPane.showMessageDialog(mainFrame, x.toString());
-						}
-
-				}
-				return null;	
-			}			
-		};
-		SmilesEntryPanel entryPanel1 = new SmilesEntryPanel(drawSmilesAction);
-		entryPanel1.setDataContainer(dbadminData.getMolecules());
-		top.add(entryPanel1);
-		/*
-		CASEntryPanel entryPanel2 = new CASEntryPanel();
-		entryPanel2.setDataContainer(dbadminData.getMolecules());
-		top.add(entryPanel2);
-		*/
-		aPanel.add(top,BorderLayout.NORTH);
+		aPanel.add(new DbQueryOptionsPanel(dbadminData),BorderLayout.CENTER);
 		toolBar.setVisible(false);
 		//toolBar.add(entryPanel);
 		
@@ -419,7 +325,7 @@ delete from src_dataset where id_srcdataset=7;
 	      javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
 	                createAndShowGUI();
-	                AmbitDatabase app = new AmbitDatabase("Ambit Database Tools 1.30",580,580,args);
+	                AmbitQuery app = new AmbitQuery("Ambit Query 1.30",580,580,args);
 	                
 	                Thread t = new Thread(app.dbadminData);
 	                t.start();

@@ -87,9 +87,11 @@ public class ActionFactory {
     public static void createFileActions(ActionMap actions, Object userData, JFrame mainFrame) {
 		actions.put("New",new FileNewAction(null,userData,mainFrame,"New"));
 		actions.put("Open",new FileOpenAction(userData,mainFrame,"Open"));
-		actions.put("Save",new FileExportQueryAction(userData,mainFrame,"Save"));
-		actions.put("Exit",new ExitAction(userData,mainFrame,"Exit"));
+		createSaveExitActions(actions, userData, mainFrame);
     }
+    public static void createSaveExitActions(ActionMap actions, Object userData, JFrame mainFrame) {
+		actions.put("Exit",new ExitAction(userData,mainFrame,"Exit"));
+    }    
     public static void createEditActions(ActionMap actions, Object userData, JFrame mainFrame) {
 		actions.put("Edit",new MoleculeEditAction(null,userData,mainFrame,"Structure diagram editor"));
     }
