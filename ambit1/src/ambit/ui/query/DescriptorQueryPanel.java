@@ -38,10 +38,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -106,7 +106,8 @@ public class DescriptorQueryPanel extends JPanel  {
     }
     protected void addWidgets(DescriptorQueryList list, ActionMap actions, boolean captionsOnly) {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createTitledBorder(caption));
+        add(new JLabel(caption),BorderLayout.NORTH);
+        //setBorder(BorderFactory.createTitledBorder(caption));
         setBackground(AmbitColors.BrightClr);
         setForeground(AmbitColors.DarkClr);
         

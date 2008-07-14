@@ -40,6 +40,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -116,7 +117,7 @@ public class ExperimentsQueryPanel extends JPanel implements ChangeListener   {
     	this.experiments = list;
 
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createTitledBorder("Search by experiment results"));
+        add(new JLabel("Search by experiment results"),BorderLayout.NORTH);
         setBackground(AmbitColors.BrightClr);
         setForeground(AmbitColors.DarkClr);
 

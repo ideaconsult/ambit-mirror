@@ -2,7 +2,6 @@ package ambit.ui.query;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.Observable;
 import java.util.Observer;
@@ -12,13 +11,11 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 import ambit.applications.dbadmin.AmbitDatabase;
-import ambit.data.IDataContainers;
 import ambit.database.data.AmbitDatabaseToolsData;
 import ambit.database.query.DescriptorQueryList;
 import ambit.database.query.ExperimentConditionsQuery;
@@ -90,6 +87,7 @@ public class DbQueryOptionsPanel extends JPanel implements Observer {
 		
 	}
 	protected void updateOptions() {
+		data.setTMPFile(optionsPanel.getTMPFile());
         data.setSimilarityMethod(optionsPanel.getMethod());
         data.setSimilarityThreshold(optionsPanel.getThreshold());
         data.setPageSize(optionsPanel.getMaxResults());

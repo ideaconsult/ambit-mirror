@@ -1,13 +1,17 @@
 package ambit.ui.query;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -20,6 +24,7 @@ import ambit.database.aquire.AquireOptions;
 import ambit.database.data.AmbitDatabaseToolsData;
 import ambit.database.data.ISharedDbData;
 import ambit.database.readers.SearchFactory;
+import ambit.io.MyIOUtilities;
 import ambit.ui.SpringUtilities;
 
 public class SimilarityOptions extends JTabbedPane {
@@ -28,6 +33,7 @@ public class SimilarityOptions extends JTabbedPane {
     protected JFormattedTextField threshold;
     protected JFormattedTextField pagesize;
     protected JFormattedTextField page;
+    protected JFormattedTextField tmpFile;
     protected AquireOptions aquireOptions;
     protected JComboBox destinationBox;
     protected JComboBox sourceBox;
@@ -56,7 +62,7 @@ public class SimilarityOptions extends JTabbedPane {
     			
 endpointDescription,species,useSimpletemplate    			            
     */
-        public SimilarityOptions(AmbitDatabaseToolsData dbaData) {
+        public SimilarityOptions(final AmbitDatabaseToolsData dbaData) {
         super();
         
         nf = new DecimalFormat("0.0##");//DecimalFormat.getInstance();
@@ -91,10 +97,39 @@ endpointDescription,species,useSimpletemplate
         destinationBox.setMaximumSize(d);
         genericPanel.add(destinationBox);
         
-        Dimension d1 = new Dimension(Integer.MAX_VALUE,24*3);
+        JPanel filePanel = new JPanel(new BorderLayout());
+        tmpFile = new JFormattedTextField();
+        tmpFile.setValue(dbaData.getTMPFile());
+        tmpFile.setMaximumSize(d);
+        tmpFile.setPreferredSize(d);
+        final JButton browse = new JButton("Browse");
+        browse.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		File file = MyIOUtilities.selectFile(browse, "Select file", 
+        				dbaData.getDefaultDir(),
+        				new String[] {".txt",".csv",".xls",".sdf"},
+        				new String[]{
+        			"Tab delimited txt files (*.txt)",
+        			"Comma delimited txt files (*.csv)",
+        			"XLS files (*.xls)",
+        			"SDF files (*.sdf)"},
+        				false);
+        		if (file != null)
+        			tmpFile.setText(file.getAbsolutePath());
+        	}
+        });
+        filePanel.setPreferredSize(d);
+        filePanel.setMaximumSize(d);        
+        filePanel.add(tmpFile,BorderLayout.CENTER);
+        filePanel.add(browse,BorderLayout.EAST);
+        
+        genericPanel.add(new JLabel(ISharedDbData.RESULTS_DESTINATION[ISharedDbData.RESULTS_QUERYFILE]));
+        genericPanel.add(filePanel);        
+        
+        Dimension d1 = new Dimension(Integer.MAX_VALUE,24*4);
         genericPanel.setMaximumSize(d1);
         genericPanel.setPreferredSize(d1);        
-        SpringUtilities.makeCompactGrid(genericPanel, 3,2,5,5,2,2);
+        SpringUtilities.makeCompactGrid(genericPanel, 4,2,5,5,2,2);
         addTab("General",genericPanel);
         
         
@@ -163,6 +198,9 @@ endpointDescription,species,useSimpletemplate
     }
     public String getEndpointDescription() {
         return aquireOptions.getEndpointDescription();
+    }
+    public String getTMPFile() {
+        return tmpFile.getText();
     }    
     public String getSpecies() {
         return aquireOptions.getSpecies();

@@ -65,6 +65,7 @@ public class QueryOptionsAction extends AmbitAction implements Observer{
             SimilarityOptions options = new SimilarityOptions(dbaData);
             options.setPreferredSize(new Dimension(400,150));
             if (JOptionPane.showConfirmDialog(mainFrame,options,"Search options",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+            	dbaData.setTMPFile(options.getTMPFile());
                 dbaData.setSimilarityMethod(options.getMethod());
                 dbaData.setSimilarityThreshold(options.getThreshold());
                 dbaData.setPageSize(options.getMaxResults());

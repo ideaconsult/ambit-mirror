@@ -14,6 +14,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.vecmath.Vector2d;
 
@@ -74,7 +75,8 @@ public class StructureQueryPanel extends JPanel implements Observer {
 		toolbar.setMinimumSize(new Dimension(Integer.MAX_VALUE,64));
 		setBackground(AmbitColors.BrightClr);
 		setForeground(AmbitColors.DarkClr);
-		setBorder(BorderFactory.createTitledBorder("Search by structure"));
+		add(new JLabel("Search by structure"),BorderLayout.NORTH);
+		//setBorder(BorderFactory.createTitledBorder());
         if (actions != null) {
         	toolbar.setLayout(new GridLayout(1,actions.size()));
             Object[] keys = actions.allKeys();

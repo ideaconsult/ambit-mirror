@@ -31,6 +31,7 @@ import java.awt.GridLayout;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ambit.data.molecule.SmartsFragmentsList;
@@ -49,7 +50,8 @@ public class DbSmartsQueryPanel extends JPanel {
 		toolbar.setMinimumSize(new Dimension(Integer.MAX_VALUE,64));
 		setBackground(AmbitColors.BrightClr);
 		setForeground(AmbitColors.DarkClr);
-		setBorder(BorderFactory.createTitledBorder("Search by structure"));
+        add(new JLabel("Search by functional groups"),BorderLayout.NORTH);
+
         if (actions != null) {
         	toolbar.setLayout(new GridLayout(1,actions.size()));
             Object[] keys = actions.allKeys();
