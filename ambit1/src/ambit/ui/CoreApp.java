@@ -303,5 +303,13 @@ abstract public class CoreApp implements ActionListener {
         b.append("</html>");		
         return b.toString();
 	}
+	public static String getTitle(String packageName) {
+		StringBuilder b = new StringBuilder();
+    	Package self = Package.getPackage(packageName);
+    	b.append(self.getImplementationTitle());
+    	b.append(" ");
+    	b.append(self.getImplementationVersion());    	
+        return b.toString();
+	}	
 }
 

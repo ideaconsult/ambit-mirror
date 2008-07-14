@@ -325,7 +325,7 @@ delete from src_dataset where id_srcdataset=7;
 	      javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
 	                createAndShowGUI();
-	                AmbitQuery app = new AmbitQuery("Ambit Query 1.30",580,580,args);
+	                AmbitQuery app = new AmbitQuery(getTitle("ambit.applications.query"),580,580,args);
 	                
 	                Thread t = new Thread(app.dbadminData);
 	                t.start();

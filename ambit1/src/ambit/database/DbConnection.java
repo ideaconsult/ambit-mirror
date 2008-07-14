@@ -256,7 +256,7 @@ public class DbConnection  {
 			}
 			t.close();
 			if (ok) return true;
-			else throw new AmbitUserException("User " + user.getName() + " not allowed to logger in from host "+user.getLoggedFromHost() + " to database "+getDatabase());
+			else throw new AmbitUserException("User " + user.getName() + " not allowed to log in from host "+user.getLoggedFromHost() + " to database "+getDatabase());
 		} catch (SQLException x) {
 			throw new AmbitUserException(x);
 		}

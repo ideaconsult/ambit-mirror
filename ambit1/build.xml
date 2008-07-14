@@ -1,5 +1,5 @@
 <project name="ambit" default="apps" basedir=".">
-    <property name="version" value="1.20" />
+    <property name="version" value="1.31" />
 
         <!-- compile options -->
         <property name="build.sysclasspath" value="ignore" />
@@ -26,7 +26,7 @@
 	<property name="sourcedist.dir" value="sourcedist" />
 
 	<!-- Used when signing jars (Thawte freemail cert) -->
-    <property name="keystore" value="../certificates/keystore/keystore.ks" />
+    <property name="keystore" value="../../../certificates/keystore/keystore.ks" />
 
     <!-- CLASSPATH -->
     <path id="project.class.path">
@@ -338,6 +338,7 @@
 			<includesfile name="${src}/applications.discovery.javafiles" />
 			<includesfile name="${src}/QMRFEditor.javafiles" />
 			<includesfile name="${src}/AmbitDatabase.javafiles" />
+			<includesfile name="${src}/AmbitQuery.javafiles" />
 		<classpath refid="project.class.path" />
 	    </javac>
     </target>
@@ -419,7 +420,7 @@
        </fileset>
     </jar>
 	</target-->
-	    <target id="apps" name="apps" depends= "AmbitDiscovery, AmbitDatabase, QMRFEditor, jars"
+	    <target id="apps" name="apps" depends= "AmbitDiscovery, AmbitQuery, AmbitDatabase, QMRFEditor, jars"
 	    description="Builds	the application	jar files for the Ambit.">
        <echo message="Compiling	ambit applications." />
 			  <mkdir dir="${dist}/helper" />
@@ -499,6 +500,18 @@
 
 	</target>
 
+
+	<target	id="AmbitQuery" name="AmbitQuery" depends="compile-core, compile-data, compile-ui, compile-io, compile-database">
+		<jar jarfile="${dist}/AmbitQuery.jar"
+			manifest="${src}/ambit/applications/manifests/MANIFEST_QUERY.MFT"
+			compress="true">
+		    <fileset dir="${build}">
+			<includesfile name="${src}/AmbitQuery.classes" />
+		   </fileset>
+
+		</jar>
+
+	</target>
 	<target	id="AmbitDiscovery" name="AmbitDiscovery" depends="compile-core, compile-data, compile-ui, compile-io, compile-stats">
 		<jar jarfile="${dist}/AmbitDiscovery.jar"
 			manifest="${src}/ambit/applications/manifests/MANIFEST_AD.MFT"
