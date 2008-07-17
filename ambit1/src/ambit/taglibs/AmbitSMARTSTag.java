@@ -30,6 +30,10 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 
 import joelib.smarts.JOESmartsPattern;
+
+import org.openscience.cdk.aromaticity.HueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IMolecule;
+
 import ambit.data.molecule.SmartsQuery;
 
 public class AmbitSMARTSTag extends AmbitMolTag {
@@ -44,7 +48,12 @@ public class AmbitSMARTSTag extends AmbitMolTag {
         	
         	try {
         		SmartsQuery query = new SmartsQuery(getSmarts());
-	        	int match = query.match(getMolecule(getMol()));
+        		IMolecule mol = getMolecule(getMol());
+        		int match = 0;
+        		if (mol != null) {
+	        		HueckelAromaticityDetector.detectAromaticity(mol);
+		        	match = query.match(mol);
+        		}
 	            
 	        	JspContext pageContext = getJspContext(); 
 	        	pageContext.setAttribute(var, Integer.toString(match));
