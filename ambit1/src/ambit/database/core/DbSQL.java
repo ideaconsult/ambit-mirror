@@ -4,8 +4,6 @@
  */
 package ambit.database.core;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.BitSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,7 +14,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit.data.molecule.CompoundsList;
 import ambit.data.molecule.MoleculeTools;
-import ambit.exceptions.AmbitException;
 import ambit.misc.AmbitCONSTANTS;
 
 
