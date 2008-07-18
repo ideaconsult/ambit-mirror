@@ -34,6 +34,7 @@ import joelib.molecule.JOEMol;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 import org.openscience.cdk.interfaces.IAtom;
@@ -195,6 +196,9 @@ public class Convertor {
             convertedBond.setBegin(convert(bond.getAtomAt(0)));
             convertedBond.setEnd(convert(bond.getAtomAt(1)));
             convertedBond.setBO((int)bond.getOrder());
+            if (bond.getOrder() == CDKConstants.BONDORDER_AROMATIC)
+            	convertedBond.setAromatic();            
+
             return convertedBond;
         } else {
             return null;
@@ -274,16 +278,29 @@ public class Convertor {
             }
             
             // add bonds
+            
             double[][] matrix = ConnectionMatrix.getMatrix(mol);
             for (int i=0; i<NOatoms-1; i++) {
                 for (int j=i+1; j<NOatoms; j++) {
                     if (matrix[i][j] != 0.0) {
                         // atoms i,j are connected
-                        /* JOEMol.addBond() needs atom ids [1,...] */
-                        converted.addBond(i+1,j+1, (int)matrix[i][j]);
+                    	JOEBond jbond = new JOEBond();
+                    	
+                    	jbond.setBegin(converted.getAtom(i+1));
+                    	jbond.setEnd(converted.getAtom(j+1));
+                    	
+                        if (matrix[i][j] == CDKConstants.BONDORDER_AROMATIC) {
+                        	jbond.setBO(JOEBond.JOE_AROMATIC_BOND_ORDER);
+                        	jbond.setAromatic();  
+                        } else
+                        	jbond.setBO((int)matrix[i][j]);
+                    	converted.addBond(jbond);
+                        //converted.addBond(i+1,j+1, (int)matrix[i][j]);
+                        
                     } 
                 }
             }
+
             return converted;
         } else {
             return null;
