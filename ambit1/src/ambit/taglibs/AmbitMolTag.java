@@ -32,17 +32,20 @@ public abstract class AmbitMolTag extends SimpleTagSupport {
 	public void setMolType(String molType) {
 		this.molType = molType;
 	}
-	
 	protected IMolecule getMolecule(String mol) throws Exception {
-		if (type_cml.equals(molType)) {
+		return getMolecule(mol,molType);
+	}	
+	
+	protected IMolecule getMolecule(String mol, String type) throws Exception {
+		if (type_cml.equals(type)) {
 			return Compound.readMolecule(mol);
-		} else if (type_mol.equals(molType)) { 
+		} else if (type_mol.equals(type)) { 
 			String s = URLDecoder.decode(mol,"UTF-8");
 		    return  MoleculeTools.readMolfile(s);
-		} else if (type_smiles.equals(molType)) {
+		} else if (type_smiles.equals(type)) {
 			SmilesParserWithTimeout p = new SmilesParserWithTimeout();
 			return p.parseSmiles(mol, 30000);
     
-		} else throw new Exception("Invalid type "+molType);
+		} else throw new Exception("Invalid type "+type);
 	}	
 }

@@ -31,7 +31,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.TestCase;
 
-import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -41,7 +40,6 @@ import ambit.data.qmrf.QMRFObject;
 
 public class CatalogTest extends TestCase {
 
-	@Test
 	public void testFromXML() {
     	String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><authors_catalog><author affiliation=\"\" contact=\"\" email=\"rbenigni@iss.it\" id=\"AUTH1\" name=\"Romualdo Benigni\" number=\"1\" /></authors_catalog>";
     	

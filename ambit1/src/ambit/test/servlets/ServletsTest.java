@@ -42,8 +42,6 @@ import javax.imageio.ImageIO;
 
 import junit.framework.TestCase;
 
-import org.junit.After;
-import org.junit.Before;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.HueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -63,11 +61,9 @@ import ambit.ui.data.CompoundImageTools;
 
 public class ServletsTest extends TestCase {
 
-    @Before
     public void setUp() throws Exception {
     }
 
-    @After
     public void tearDown() throws Exception {
     }
     public void testImage() {

@@ -29,35 +29,19 @@
 
 package ambit.test.database.processors;
 
-import static org.junit.Assert.*;
-
 import java.sql.Connection;
 
 import junit.framework.TestCase;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.DefaultChemObjectWriter;
-import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit.database.ConnectionPool;
 import ambit.database.processors.DefaultDbProcessor;
-import ambit.database.processors.ReadCASProcessor;
-import ambit.database.processors.ReadSMILESProcessor;
 import ambit.database.processors.ReadStructureProcessor;
 import ambit.database.processors.ReadSubstanceProcessor;
-import ambit.database.search.DbSimilarityByFingerprintsReader;
-import ambit.io.DelimitedFileWriter;
-import ambit.io.batch.DefaultBatchConfig;
-import ambit.io.batch.DefaultBatchProcessing;
-import ambit.io.batch.DefaultBatchStatistics;
-import ambit.io.batch.IBatch;
 import ambit.misc.AmbitCONSTANTS;
-import ambit.processors.ProcessorsChain;
 import ambit.test.ITestDB;
 
 /**
@@ -70,14 +54,12 @@ public class ReadStructureProcessorTest extends TestCase  {
     /**
      * @throws java.lang.Exception
      */
-    @Before
     public void setUp() throws Exception {
     }
 
     /**
      * @throws java.lang.Exception
      */
-    @After
     public void tearDown() throws Exception {
     }
     protected void read(DefaultDbProcessor p, Object id, Object queryID) throws Exception {
@@ -91,7 +73,6 @@ public class ReadStructureProcessorTest extends TestCase  {
     /**
      * Test method for {@link ambit.database.processors.ReadStructureProcessor#process(java.lang.Object)}.
      */
-    @Test
     public void testProcess() {
         try {
             ConnectionPool pool = new ConnectionPool(

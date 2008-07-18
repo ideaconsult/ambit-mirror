@@ -31,7 +31,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.junit.Test;
+import org.junit.Assert;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
@@ -41,7 +41,7 @@ import ambit.misc.AmbitCONSTANTS;
 
 public class DbSQLTest extends TestCase {
 
-	@Test
+	
 	public void testGetExactSearchSQL() {
 		Hashtable<String, String> properties = new Hashtable<String, String>();
 		properties.put(CDKConstants.CASRN, "50-00-0");
@@ -65,20 +65,24 @@ public class DbSQLTest extends TestCase {
         		"WHERE smiles=? group by idsubstance order by type_structure limit 0,10",
         		sql);        
 	}
-
-	public void testGetSimilaritySearchSQL() {
-		try {
+	
+	public void xtestGetSimilaritySearchSQL() throws Exception  {
 		List<String> p = new ArrayList<String>();
 		IMolecule m = MoleculeFactory.makeBenzene();
-        String sql = DbSQL.getSimilaritySearchSQL(m, 0, 100, 0, -1, p);
+        String sql = DbSQL.getSimilaritySearchSQL(m, 0, 100, 0,null, p);
         System.out.println(sql);
-        assertEquals(
-	        		"select cbits,bc,? as NA,round(cbits/(bc+?-cbits),2) as similarity,smiles,formula,molweight,L.idsubstance  from (select fp1024.idsubstance,(bit_count(0& fp1) + bit_count(2147483648& fp2) + bit_count(8589934592& fp3) + bit_count(2305843009215791104& fp4) + bit_count(0& fp5) + bit_count(0& fp6) + bit_count(0& fp7) + bit_count(0& fp8) + bit_count(4611686018427387904& fp9) + bit_count(0& fp10) + bit_count(0& fp11) + bit_count(274877906944& fp12) + bit_count(0& fp13) + bit_count(0& fp14) + bit_count(0& fp15) + bit_count(0& fp16))  as cbits,bc from fp1024 ) as L, substance where bc > 0 and cbits > 0 and (cbits/(bc+?-cbits)>?) and L.idsubstance=substance.idsubstance order by similarity desc limit ?,?",
-        		sql);    
-		} catch (Exception x) {
-			x.printStackTrace();
-			fail();
-		}
+        System.out.println(p);
+        String sqlResult= "select cbits,bc,?\n as NA,round(cbits/(bc+?-cbits),2) as similarity,smiles,formula,molweight,L.idsubstance  from (\nselect fp1024.idsubstance,(\nbit_count(0& fp1) +\nbit_count(2147483648& fp2) +\nbit_count(8589934592& fp3) +\nbit_count(2305843009215791104& fp4) +\nbit_count(0& fp5) + \nbit_count(0& fp6) +\nbit_count(0& fp7) +\nbit_count(0& fp8) +\nbit_count(4611686018427387904& fp9) +\n bit_count(0& fp10) +\nbit_count(0& fp11) +\nbit_count(274877906944& fp12) +\nbit_count(0& fp13) +\nbit_count(0& fp14) +\n bit_count(0& fp15) +\nbit_count(0& fp16))\n as cbits,bc from fp1024 \n) as L, substance where bc > 0 and cbits > 0 and (cbits/(bc+?-cbits)>?) and L.idsubstance=substance.idsubstance order by similarity desc limit 0,100";
+        Assert.assertEquals(sqlResult,sql);
+	}
+	public void testGetPrescreenSearchSQL() throws Exception  {
+		List<String> p = new ArrayList<String>();
+		IMolecule m = MoleculeFactory.makeBenzene();
+        String sql = DbSQL.getPrescreenSearchSQL(m, 0, 100,null, p);
+        System.out.println(sql);
+        System.out.println(p);
+        String sqlResult= "";
+        Assert.assertEquals(sqlResult,sql);
 	}	
 }
 

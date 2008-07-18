@@ -4,6 +4,8 @@
  */
 package ambit.database.core;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.BitSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -14,6 +16,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit.data.molecule.CompoundsList;
 import ambit.data.molecule.MoleculeTools;
+import ambit.exceptions.AmbitException;
 import ambit.misc.AmbitCONSTANTS;
 
 
@@ -224,7 +227,52 @@ lpad(hex(fp16),16,0)
 		
 		}
 
-		public static  String getSimilaritySearchSQL(IAtomContainer query,int page, int pagesize, double threshold, int srcDataset, List parameters) throws Exception {
+		public static String getPrescreenSearchSQL(IAtomContainer query,int page, int pagesize, String subset, List parameters) throws Exception {
+			boolean hasQuery = (query != null) &&
+			(query.getAtomCount() > 0)	;
+			if (hasQuery) {
+					Fingerprinter fingerprinter = new Fingerprinter(1024);
+					BitSet bs = fingerprinter.getFingerprint(query);
+					long[] h16 = new long[16];
+					MoleculeTools.bitset2Long16(bs,64,h16);
+					String[] fp = new String[16];
+					for (int i = 0; i < 16; i++) {
+						fp[i] = Long.toString(h16[i]);
+					}
+					//System.out.println(bs.cardinality()); //bit count
+					
+					String bc = Integer.toString(bs.cardinality());
+					StringBuffer b = new StringBuffer();
+						b.append("select cbits,bc,formula,L.idsubstance,smiles  from (select fp1024.idsubstance,");
+						for (int i = 0; i < 16; i++) {
+							if (i > 0) b.append("+");
+							b.append("bit_count(");
+							b.append(fp[i]);
+							b.append("& fp");
+							b.append(Integer.toString(i+1).trim());
+							b.append(") ");
+						}
+						b.append(" as cbits,");
+						b.append("bc from fp1024 ");
+						if ((subset!=null) && !"".equals(subset)) {
+							b.append(" join structure using(idsubstance) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where src_dataset.name=?");
+							parameters.add(subset);
+						}
+						b.append(") as L, substance ");
+						b.append("where L.cbits=");
+						b.append(bs.cardinality());
+						b.append(" and L.idsubstance=substance.idsubstance limit ");
+						b.append(page*pagesize);
+						b.append(',');
+						b.append(pagesize);
+						b.append('\n');
+						//System.out.println(b.toString());
+						
+					return  b.toString();
+			} else return null;
+		}
+	
+		public static  String getSimilaritySearchSQL(IAtomContainer query,int page, int pagesize, double threshold, String subset, List parameters) throws Exception {
 
 		boolean hasQuery = (query != null) &&
 					(query.getAtomCount() > 0)	;
@@ -256,9 +304,12 @@ lpad(hex(fp16),16,0)
 						if (h<15) b.append(" + \n"); else b.append(") \n");
 					}
 					b.append(" as cbits,bc from fp1024 \n");
-					if (srcDataset>=0) {
-						b.append(" join structure using(idsubstance) join struc_dataset using(idstructure) where id_srcdataset=\n");
-						b.append(srcDataset);
+					
+					parameters.add(bc);
+					parameters.add(bc);					
+					if ((subset != null) && !"".equals(subset)) {
+						b.append(" join structure using(idsubstance) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where src_dataset.name=?");
+						parameters.add(subset);
 					}
 					b.append (") as L, substance \n");
 					b.append("where bc > 0 and cbits > 0 and (cbits/(bc+?-cbits)>?) and L.idsubstance=substance.idsubstance order by similarity desc limit ");
@@ -270,8 +321,7 @@ lpad(hex(fp16),16,0)
 //join structure using(idsubstance) join struc_dataset using(idstructure) where id_srcdataset=?;					
 			
 	
-				parameters.add(bc);
-				parameters.add(bc);
+				
 				parameters.add(bc);
 				parameters.add(threshold);
 				/*

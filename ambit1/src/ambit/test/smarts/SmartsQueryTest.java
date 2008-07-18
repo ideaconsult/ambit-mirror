@@ -24,29 +24,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit.test.smarts;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
-import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit.data.molecule.SmartsQuery;
 
-public class SmartsQueryTest {
+public class SmartsQueryTest extends TestCase  {
 	
-	@Test
 	public void testSmartsQuery() {
 		SmartsQuery q = new SmartsQuery();
 		assertNull(q.getSmarts());
 	}
 
-	@Test
 	public void testSmartsQueryString() throws Exception  {
 		SmartsQuery q = new SmartsQuery("CC");
 		assertNotNull(q.getSmarts());
 		assertEquals("CC",q.getSmarts());
 	}
 
-	@Test
 	public void testMatch()throws Exception {
 		SmartsQuery q = new SmartsQuery("CC");
 		assertEquals("CC",q.getSmarts());
@@ -55,7 +51,6 @@ public class SmartsQueryTest {
 
 	}
 
-	@Test
 	public void testSetSmarts() throws Exception {
 		SmartsQuery q = new SmartsQuery("CC");
 		assertNotNull(q.getSmarts());

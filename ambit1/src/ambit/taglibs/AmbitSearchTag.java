@@ -30,18 +30,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit.data.molecule.MoleculeTools;
-import ambit.database.core.DbSQL;
-import ambit.misc.AmbitCONSTANTS;
 
 public abstract class AmbitSearchTag extends SimpleTagSupport {
 	protected String  mol = null;
@@ -49,6 +43,9 @@ public abstract class AmbitSearchTag extends SimpleTagSupport {
 	protected String  params ="params";
 	protected int page=0;
 	protected int pagesize=100;
+	//subset or entire DB
+	protected String subset = null; 
+	
 	public AmbitSearchTag() {
 		super();
 	}
@@ -127,6 +124,14 @@ public abstract class AmbitSearchTag extends SimpleTagSupport {
 
 	public void setPagesize(int pagesize) {
 		this.pagesize = pagesize;
+	}
+
+	public String getSubset() {
+		return subset;
+	}
+
+	public void setSubset(String subset) {
+		this.subset = subset;
 	}
 
 

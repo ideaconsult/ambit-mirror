@@ -40,6 +40,7 @@ import ambit.database.core.DbSQL;
 public class AmbitSimilaritySearchTag extends AmbitSearchTag {
 	protected String threshold = "0";
 	protected String smiles = null;
+	protected boolean prescreen = false;
 
 	@Override
 	protected void prepareSQL(Hashtable<String, String> query,
@@ -66,7 +67,12 @@ public class AmbitSimilaritySearchTag extends AmbitSearchTag {
 				MFAnalyser mfa = new MFAnalyser(m);
 				mfa.removeHydrogensPreserveMultiplyBonded();
 			}
-	        String sql = DbSQL.getSimilaritySearchSQL(m, getPage(), getPagesize(),t , -1, parameters);
+			
+	        String sql = null;
+	        if (prescreen)
+	        	sql = DbSQL.getPrescreenSearchSQL(m, getPage(), getPagesize(),  getSubset(), parameters);
+	        else
+	        	sql = DbSQL.getSimilaritySearchSQL(m, getPage(), getPagesize(),t , getSubset(), parameters);
 	        
 	        if (sql != null) {
 	        	JspContext pageContext = getJspContext(); 
@@ -91,6 +97,12 @@ public class AmbitSimilaritySearchTag extends AmbitSearchTag {
 	}
 	public void setThreshold(String threshold) {
 		this.threshold = threshold;
+	}
+	public boolean isPrescreen() {
+		return prescreen;
+	}
+	public void setPrescreen(boolean prescreen) {
+		this.prescreen = prescreen;
 	}	
 
 }

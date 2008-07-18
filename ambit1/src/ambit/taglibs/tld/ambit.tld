@@ -9,19 +9,19 @@
    <description>
        tags for processing Ambit database
    </description>
-   
+
    <tag>
      <name>ambit</name>
      <tag-class>ambit.taglibs.AmbitTag</tag-class>
      <body-content>empty</body-content>
    </tag>
-   
+
    <tag>
      <name>ambitbody</name>
      <tag-class>ambit.taglibs.AmbitBodyTag</tag-class>
      <body-content>jsp</body-content>
-   </tag>   
-   
+   </tag>
+
    <tag>
      		<name>exactsearch</name>
      		<tag-class>ambit.taglibs.AmbitExactSearchSQLTag</tag-class>
@@ -40,7 +40,7 @@
 				<scope>AT_END</scope>
 				<description>SQL parameters</description>
 				</variable>
-							
+
         <attribute>
             <name>cas</name>
             <required>no</required>
@@ -50,20 +50,20 @@
             <name>formula</name>
             <required>no</required>
 						<fragment>true</fragment>
-            
+
         </attribute>
         <attribute>
             <name>name</name>
             <required>no</required>
 						<fragment>true</fragment>
-            
+
         </attribute>
         <attribute>
             <name>alias</name>
             <required>no</required>
             <fragment>true</fragment>
 
-        </attribute>   
+        </attribute>
         <attribute>
             <name>smiles</name>
             <required>no</required>
@@ -75,19 +75,33 @@
             <required>no</required>
             <fragment>true</fragment>
 
-        </attribute>             
+        </attribute>
         <attribute>
             <name>var</name>
             <required>yes</required>
-        </attribute>                     
+        </attribute>
+        
+        <attribute>
+            <name>prescreen</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+        
+        <attribute>
+            <name>subset</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+
+        
         <attribute>
             <name>params</name>
             <required>no</required>
 
-        </attribute>            
+        </attribute>
      <body-content>empty</body-content>
    </tag>
-   
+
    <tag>
      		<name>similarity</name>
      		<tag-class>ambit.taglibs.AmbitSimilaritySearchTag</tag-class>
@@ -106,70 +120,83 @@
 				<scope>AT_END</scope>
 				<description>SQL parameters</description>
 				</variable>
-							
+
         <attribute>
             <name>mol</name>
             <required>no</required>
             <fragment>true</fragment>
 
-        </attribute>             
+        </attribute>
         <attribute>
             <name>smiles</name>
             <required>no</required>
             <fragment>true</fragment>
 
-        </attribute>        
+        </attribute>
         <attribute>
             <name>threshold</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>      
+        </attribute>
 
         <attribute>
             <name>page</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>      
-        
+        </attribute>
+
         <attribute>
             <name>pagesize</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>              
-                        
+        </attribute>
+
+        <attribute>
+            <name>prescreen</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+        
+        <attribute>
+            <name>subset</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+        
+        
         <attribute>
             <name>var</name>
             <required>yes</required>
-        </attribute>                     
+        </attribute>
         <attribute>
             <name>params</name>
             <required>no</required>
 
-        </attribute>            
+        </attribute>
      <body-content>empty</body-content>
-   </tag>   
-   
+   </tag>
+
    <tag>
      <name>qmrfexport</name>
      <tag-class>ambit.taglibs.QMRFExportTag</tag-class>
         <attribute>
             <name>xml</name>
             <required>yes</required>
-						<fragment>true</fragment>            
+						<fragment>true</fragment>
         </attribute>
         <attribute>
             <name>type</name>
             <required>no</required>
-						<fragment>true</fragment>            
+						<fragment>true</fragment>
         </attribute>
         <attribute>
             <name>fontURL</name>
             <required>no</required>
-						<fragment>true</fragment>            
-        </attribute>        
+						<fragment>true</fragment>
+        </attribute>
      <body-content>empty</body-content>
-   </tag>   
-   
+   </tag>
+
 <tag>
    		<name>deletefile</name>
    		<tag-class>ambit.taglibs.AmbitDeleteFileTag</tag-class>
@@ -179,7 +206,7 @@
             <fragment>true</fragment>
         </attribute>
      <body-content>empty</body-content>
-</tag>	   
+</tag>
 
 <tag>
    		<name>importfile</name>
@@ -225,7 +252,7 @@
             <fragment>true</fragment>
         </attribute>                                   
      <body-content>empty</body-content>
-</tag>	   
+</tag>	  
 
 <tag>
    		<name>generator</name>
@@ -234,41 +261,74 @@
             <name>action</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>     		
+        </attribute>
         <attribute>
             <name>datasetname</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>        
+        </attribute>
         <attribute>
             <name>database</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>         
+        </attribute>
         <attribute>
             <name>host</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>    
+        </attribute>
         <attribute>
             <name>port</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>            
+        </attribute>
         <attribute>
             <name>user</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>   
+        </attribute>
         <attribute>
             <name>password</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>                                   
+        </attribute>
      <body-content>empty</body-content>
-</tag>	   
+</tag>
 
    <tag>
+   		<name>image</name>
+   		<tag-class>ambit.taglibs.AmbitImageTag</tag-class>
+        <attribute>
+            <name>mol</name>
+            <required>yes</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>molType</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>height</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>bgcolor</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>
+
+     <body-content>empty</body-content>
+
+   </tag>
+
+ <tag>
      		<name>smarts</name>
      		<tag-class>ambit.taglibs.AmbitSMARTSTag</tag-class>
 				<variable>
@@ -282,87 +342,95 @@
             <name>mol</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>        
+        </attribute>
         <attribute>
             <name>molType</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>    
+        </attribute>
         <attribute>
             <name>smarts</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>                     
+        </attribute>
         <attribute>
             <name>var</name>
             <required>yes</required>
-        </attribute>                     
-        
+        </attribute>
+
      <body-content>empty</body-content>
 
    </tag>
-   
-   <tag>
-   		<name>image</name>
-   		<tag-class>ambit.taglibs.AmbitImageTag</tag-class>
+ <tag>
+     		<name>isomorphism</name>
+     		<tag-class>ambit.taglibs.AmbitIsomorphismTag</tag-class>
+				<variable>
+				<name-from-attribute>var</name-from-attribute>
+				<variable-class>String</variable-class>
+				<declare>true</declare>
+				<scope>AT_END</scope>
+				<description>number of matches</description>
+				</variable>
         <attribute>
             <name>mol</name>
             <required>yes</required>
             <fragment>true</fragment>
-        </attribute>        
+        </attribute>
         <attribute>
             <name>molType</name>
             <required>no</required>
             <fragment>true</fragment>
-        </attribute>    
-        <attribute>
-            <name>width</name>
-            <required>no</required>
-            <fragment>true</fragment>
-        </attribute>                     
-        <attribute>
-            <name>height</name>
-            <required>no</required>
-            <fragment>true</fragment>
-        </attribute>           
-        <attribute>
-            <name>bgcolor</name>
-            <required>no</required>
-        </attribute>                     
-        
-     <body-content>empty</body-content>
-
-   </tag>
-   
-   <tag>
-     	<name>fileproperties</name>
-     		<tag-class>ambit.taglibs.AmbitFilePropertiesTag</tag-class>
-				<variable>
-				<name-from-attribute>properties</name-from-attribute>
-				<variable-class>java.util.Hashtable</variable-class>
-				<declare>true</declare>
-				<scope>AT_END</scope>
-				<description>Structure properties</description>
-				</variable>
-							
-        <attribute>
-            <name>recordsToRead</name>
-            <required>no</required>
-			<fragment>true</fragment>
-            
-        </attribute>
-            
-        <attribute>
-            <name>params</name>
-            <required>no</required>
         </attribute>
         <attribute>
-            <name>filename</name>
+            <name>query</name>
             <required>yes</required>
             <fragment>true</fragment>
         </attribute>
-        
+        <attribute>
+            <name>queryType</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>        
+        <attribute>
+            <name>subgraph</name>
+            <required>no</required>
+            <fragment>true</fragment>
+        </attribute>                
+        <attribute>
+            <name>var</name>
+            <required>yes</required>
+        </attribute>
 
      <body-content>empty</body-content>
-   </tag>      
+
+   </tag>   
+<tag>
+	<name>fileproperties</name>
+	<tag-class>ambit.taglibs.AmbitFilePropertiesTag</tag-class>
+		<variable>
+			<name-from-attribute>params</name-from-attribute>
+			<variable-class>java.util.Hashtable</variable-class>
+			<declare>true</declare>
+			<scope>AT_END</scope>
+			<description>Structure properties</description>
+		</variable>
+
+	<attribute>
+		<name>recordsToRead</name>
+		<required>no</required>
+		<fragment>true</fragment>
+	</attribute>
+
+	<attribute>
+		<name>params</name>
+		<required>no</required>
+	</attribute>
+	<attribute>
+		<name>filename</name>
+			<required>yes</required>
+			<fragment>true</fragment>
+	</attribute>
+	<body-content>empty</body-content>
+</tag>
+
 </taglib>

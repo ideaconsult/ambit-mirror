@@ -31,19 +31,13 @@ package ambit.test.database;
 
 
 import junit.framework.TestCase;
-
-import org.junit.After;
-import org.junit.Before;
-
 import ambit.database.AmbitID;
 
 public class AmbitIDTest extends TestCase  {
 
-    @Before
     public void setUp() throws Exception {
     }
 
-    @After
     public void tearDown() throws Exception {
     }
     public void test() {
