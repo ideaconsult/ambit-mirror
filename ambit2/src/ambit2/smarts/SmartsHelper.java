@@ -33,6 +33,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.io.SMILESWriter;
 
 public class SmartsHelper 
 {
@@ -275,6 +276,22 @@ public class SmartsHelper
 		sb.append(branches.lastElement().toString());
 		return(sb.toString());
 	}
+	
+	public static String moleculeToSMILES(IAtomContainer mol)
+	{	 
+		java.io.StringWriter result =  new java.io.StringWriter();
+		SMILESWriter writer = new SMILESWriter(result);
+		try
+		{
+			writer.write(mol);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		return(result.toString());
+	}
+	
 	
 	static public void printIntArray(int c[])
 	{

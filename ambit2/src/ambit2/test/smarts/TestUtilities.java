@@ -3,10 +3,15 @@ package ambit2.test.smarts;
 import java.util.Vector;
 
 import ambit2.smarts.*;
+
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 
 
@@ -15,6 +20,7 @@ public class TestUtilities
 	static SmartsParser sp = new SmartsParser();
 	static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager();
+	static IsomorphismTester isoTester = new IsomorphismTester();
 	
 	public static  IMolecule getMoleculeFromSmiles(String smi) 
 	{	
@@ -58,6 +64,73 @@ public class TestUtilities
 		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
 	}
 	
+	public void testIsomorphismTester(String smarts, String smiles)
+	{	
+		IMolecule mol = getMoleculeFromSmiles(smiles);
+		QueryAtomContainer query  = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return;
+		}
+						
+		System.out.println("IsomorphismTester: " + smarts  + "  in  " + smiles);
+		isoTester.setQuery(query);
+		boolean res = checkSequence(query,isoTester.getSequence());
+		//isoTester.printDebugInfo();
+		System.out.println("sequnce check  -- > " + res);
+		
+	}
+	
+	
+	public void testAtomSequencing(String smarts[])
+	{					
+		int nError = 0;		
+		for (int i = 0; i < smarts.length; i++)
+		{
+			QueryAtomContainer query  = sp.parse(smarts[i]);
+			sp.setNeededDataFlags();
+			String errorMsg = sp.getErrorMessages();
+			if (!errorMsg.equals(""))
+			{
+				System.out.println("Smarts Parser errors:\n" + errorMsg);			
+				continue;
+			}
+			isoTester.setQuery(query);
+			boolean res = checkSequence(query,isoTester.getSequence());			
+			System.out.println(smarts[i] + " -- > " + (res?"OK":"FAILED"));
+			if (!res)
+				nError++;			
+		}
+		
+		System.out.println("\nNumber of errors = " + nError);
+						
+		
+		
+		
+		
+	}
+	
+	
+	
+	public boolean checkSequence(QueryAtomContainer query, Vector<SequenceElement> sequence)
+	{
+		IAtomContainer skelleton = SequenceElement.getCarbonSkelleton(sequence);		
+		//System.out.println("skelleton = " + SmartsHelper.moleculeToSMILES(skelleton));
+		try
+		{
+			boolean res = UniversalIsomorphismTester.isSubgraph(skelleton, query);			
+			return(res);
+		}
+		catch (CDKException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return(false);
+	}
+	
 	
 	//-------------------------------------------------------------------------------
 	
@@ -71,11 +144,16 @@ public class TestUtilities
 		//tu.testSmartsManagerAtomMapping("[x2]", "C1CCC12CC2");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1[N+]", "c1ccccc1[N+]");		
 		//tu.testSmartsManagerBoolSearch("(CCC.C1CC12CC2).C=CC#C.CCN.(ClC)", "CCCCC");
-		tu.testSmartsManagerBoolSearch("(CCCC.CC.CCCN).N.C", "CCCCC.CCCN");
-		tu.testSmartsManagerBoolSearch("(Cl.CCCC.CC.CCCCN).N.C", "CCCCC.CCCN");
-		tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
-		tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
-		tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		//tu.testSmartsManagerBoolSearch("(CCCC.CC.CCCN).N.C", "CCCCC.CCCN");
+		//tu.testSmartsManagerBoolSearch("(Cl.CCCC.CC.CCCCN).N.C", "CCCCC.CCCN");
+		//tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
+		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		
+		String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
+		tu.testAtomSequencing(smarts);
+		//tu.testIsomorphismTester("C1C(CC)CCC1","CCCCC");
+		//tu.testIsomorphismTester("C1CCC1CC2CCC2","CCCCC");
 	}
 	
 	

@@ -24,9 +24,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
+import java.util.Vector;
+import java.util.HashMap;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+//import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
+
 
 /**
  * 
@@ -37,7 +46,7 @@ public class SequenceElement
 	//This class represents two types of objects: 
 	//(1) an atom with a part of its first topological layer or
 	//(2) a bond between two atoms which has already been sequenced  
-	//For teh second case center == null and atoms.lenght = 2 and bonds.lenght = 1
+	//For the second case center == null and atoms.lenght = 2 and bonds.lenght = 1
 	IAtom center;
 	IAtom atoms[];
 	IBond bonds[];	
@@ -48,13 +57,15 @@ public class SequenceElement
 		if (center == null)
 		{
 			sb.append("Bond " + SmartsHelper.atomToString(atoms[0]) + " " 
-					+ SmartsHelper.atomToString(atoms[1]) + "   BO = "+bonds[0].getOrder());
+					+ SmartsHelper.atomToString(atoms[1]) + 
+					"   "+SmartsHelper.bondToString(bonds[0]));
 		}
 		else
 		{
 			sb.append("Center = " + SmartsHelper.atomToString(center) + "  atoms: ");
 			for (int i = 0; i < atoms.length; i++)
-				sb.append("("+SmartsHelper.atomToString(atoms[i])+","+ bonds[i].getOrder() + ") ");
+				sb.append("("+SmartsHelper.atomToString(atoms[i])+","+ 
+						SmartsHelper.bondToString(bonds[i]) + ") ");
 		}
 		return sb.toString();
 	}
@@ -66,7 +77,7 @@ public class SequenceElement
 		{
 			sb.append("Bond " + SmartsHelper.atomToString(atoms[0]) + query.getAtomNumber(atoms[0])+" " 
 					+ SmartsHelper.atomToString(atoms[1]) + query.getAtomNumber(atoms[1])+
-					"   BO = "+bonds[0].getOrder());
+					"   "+SmartsHelper.bondToString(bonds[0]));
 		}
 		else
 		{
@@ -74,10 +85,73 @@ public class SequenceElement
 						query.getAtomNumber(center) + "  atoms: ");
 			for (int i = 0; i < atoms.length; i++)
 				sb.append("("+SmartsHelper.atomToString(atoms[i])+query.getAtomNumber(atoms[i])+
-						","+ bonds[i].getOrder() + ") ");
+						","+ SmartsHelper.bondToString(bonds[i]) + ") ");
 		}
 		return sb.toString();
 	}
+	
+	//This function generates a Carbon skelleton from an atom sequence
+	//It is used mainly for testing purposes
+	public static IAtomContainer getCarbonSkelleton(Vector<SequenceElement> sequence)
+	{
+		AtomContainer mol = new AtomContainer();
+		Vector<IAtom> v = new Vector<IAtom>();
+		HashMap<IAtom,IAtom> m = new HashMap<IAtom,IAtom>();		
+		SequenceElement el;
+		
+		//Processing first sequence element
+		el = sequence.get(0);
+		IAtom a0 = new Atom("C");		
+		mol.addAtom(a0);
+		m.put(el.center, a0);
+		
+		for (int k = 0; k < el.atoms.length; k++)
+		{
+			IAtom a = new Atom("C");
+			mol.addAtom(a);
+			//System.out.println("## --> " +  SmartsHelper.atomToString(el.atoms[k]));
+			m.put(el.atoms[k],a);			
+			addSkelletonBond(mol,m.get(el.center),a);
+		}
+		
+		//Processing all other elements
+		for (int i = 1; i < sequence.size(); i++)
+		{
+			el = sequence.get(i);
+			if (el.center == null)
+			{
+				//It describes a bond
+				addSkelletonBond(mol, m.get(el.atoms[0]), m.get(el.atoms[1]));
+			}
+			else
+			{
+				el = sequence.get(i);
+				for (int k = 0; k < el.atoms.length; k++)
+				{
+					IAtom a = new Atom("C");
+					mol.addAtom(a);
+					m.put(el.atoms[k],a);
+					addSkelletonBond(mol,m.get(el.center),a);
+				}
+			}
+		}
+		
+		return(mol);
+	}
+	
+	
+	static void addSkelletonBond(IAtomContainer mol, IAtom at1, IAtom at2)
+	{
+		IAtom[] atoms = new IAtom[2];
+		atoms[0] = at1;
+		atoms[1] = at2;		
+		Bond b = new Bond();
+		b.setAtoms(atoms);
+		b.setOrder(IBond.Order.SINGLE);
+		mol.addBond(b);
+	}
+	
+	
 	
 	
 }

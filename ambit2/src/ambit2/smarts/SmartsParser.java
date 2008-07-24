@@ -225,7 +225,7 @@ public class SmartsParser
 		hasRecursiveSmarts = false;
 	}
 	
-	void setNeededDataFlags()
+	public void setNeededDataFlags()
 	{	
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{

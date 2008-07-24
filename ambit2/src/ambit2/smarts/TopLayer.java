@@ -38,16 +38,7 @@ public class TopLayer
 	public static final String  TLProp = "TL";
 	public Vector<IAtom> atoms = new Vector<IAtom>();
 	public Vector<IBond> bonds = new Vector<IBond>();
-	
-	public String toString()
-	{
-		StringBuffer sb = new StringBuffer();		
-		for(int i = 0; i < atoms.size(); i++)
-			sb.append("("+SmartsHelper.atomToString(atoms.get(i)) + 
-					"," + (bonds.get(i)).getOrder()+") ");
-		return(sb.toString());
-	}
-	
+			
 	static public void setAtomTopLayers(IAtomContainer container, Object propObj)
 	{	
 		int nAtom =  container.getAtomCount();
@@ -67,5 +58,14 @@ public class TopLayer
 			tl1.atoms.add(at0);
 			tl1.bonds.add(bond);
 		}
+	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();		
+		for(int i = 0; i < atoms.size(); i++)
+			sb.append("("+SmartsHelper.atomToString(atoms.get(i)) + 
+					", " + SmartsHelper.bondToString(bonds.get(i))+") ");
+		return(sb.toString());
 	}
 }

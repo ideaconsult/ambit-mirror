@@ -51,6 +51,11 @@ public class IsomorphismTester
 		setQueryAtomSequence(null);
 	}
 	
+	public Vector<SequenceElement> getSequence()
+	{
+		return(sequence);
+	}
+	
 	void setQueryAtomSequence(IAtom firstAt)
 	{	
 		IAtom firstAtom;
@@ -122,6 +127,7 @@ public class IsomorphismTester
 						seqEl.atoms[j] = topLayer.atoms.get(k);
 						seqEl.bonds[j] = topLayer.bonds.get(k);
 						addSeqBond(seqEl.center,seqEl.atoms[j]);
+						sequencedAtoms.add(seqEl.atoms[j]);
 						curAddedAtoms.add(seqEl.atoms[j]);
 						j++;
 					}
@@ -149,8 +155,8 @@ public class IsomorphismTester
 				}
 			}
 			
-			for(int i = 0; i < curAddedAtoms.size(); i++)
-				sequencedAtoms.add(curAddedAtoms.get(i));
+			//for(int i = 0; i < curAddedAtoms.size(); i++)
+			//	sequencedAtoms.add(curAddedAtoms.get(i));
 		}
 	}
 		
