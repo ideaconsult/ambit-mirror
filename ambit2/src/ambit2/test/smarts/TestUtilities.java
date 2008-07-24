@@ -1,6 +1,7 @@
 package ambit2.test.smarts;
 
 import java.util.Vector;
+import java.io.RandomAccessFile;
 
 import ambit2.smarts.*;
 
@@ -18,26 +19,15 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 public class TestUtilities 
 {	
 	static SmartsParser sp = new SmartsParser();
-	static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	//static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	
-	public static  IMolecule getMoleculeFromSmiles(String smi) 
-	{	
-		IMolecule mol = null;
-		try {
-			SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());			
-			mol = sp.parseSmiles(smi);
-		}
-		catch (InvalidSmilesException e) {
-			System.out.println(e.toString());
-	 	}
-		return (mol);
-	}
+	
 	
 	public static int boolSearch(String smarts, String smiles)
 	{	
-		IMolecule mol = TestUtilities.getMoleculeFromSmiles(smiles);	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{
@@ -53,7 +43,7 @@ public class TestUtilities
 	
 	public void testSmartsManagerBoolSearch(String smarts, String smiles)
 	{	
-		IMolecule mol = getMoleculeFromSmiles(smiles);	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{
@@ -66,7 +56,7 @@ public class TestUtilities
 	
 	public void testIsomorphismTester(String smarts, String smiles)
 	{	
-		IMolecule mol = getMoleculeFromSmiles(smiles);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		QueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
@@ -84,6 +74,54 @@ public class TestUtilities
 		
 	}
 	
+	
+	public void testAtomSequencingFromFile(String fname)
+	{
+		int nError = 0;
+		int nTests = 0;
+		int nParserFails = 0;
+		try
+		{
+			RandomAccessFile f = new RandomAccessFile(fname, "r");
+			
+			long length = f.length();
+			while (f.getFilePointer() < length)
+			{	
+				String line = f.readLine();								
+				String frags[] = SmartsHelper.getCarbonSkelletonsFromString(line);
+				for (int k = 0; k < frags.length; k++)
+				{
+					//System.out.println("frag="+frags[k]);
+					
+					QueryAtomContainer query  = sp.parse(frags[k].trim());
+					sp.setNeededDataFlags();
+					String errorMsg = sp.getErrorMessages();
+					if (!errorMsg.equals(""))
+					{
+						System.out.println("line="+line);						
+						System.out.println("Smarts Parser errors: " + errorMsg);
+						
+						nParserFails++;
+						continue;
+					}
+					isoTester.setQuery(query);
+					boolean res = checkSequence(query,isoTester.getSequence());			
+					System.out.println(frags[k].trim() + " -- > " + (res?"OK":"FAILED"));
+					if (!res)
+						nError++;	
+					nTests++;
+				}
+			}
+			f.close();
+		}
+		catch (Exception e)
+		{	
+			System.out.println(e.getMessage());
+		}
+		System.out.println("\nNumber of test = " + nTests);
+		System.out.println("Number of errors = " + nError);
+		System.out.println("Number of parser fails = " + nParserFails);
+	}
 	
 	public void testAtomSequencing(String smarts[])
 	{					
@@ -105,15 +143,9 @@ public class TestUtilities
 				nError++;			
 		}
 		
-		System.out.println("\nNumber of errors = " + nError);
-						
-		
-		
-		
-		
+		System.out.println("\nNumber of errors = " + nError);		
 	}
-	
-	
+		
 	
 	public boolean checkSequence(QueryAtomContainer query, Vector<SequenceElement> sequence)
 	{
@@ -131,6 +163,7 @@ public class TestUtilities
 		return(false);
 	}
 	
+		
 	
 	//-------------------------------------------------------------------------------
 	
@@ -150,16 +183,20 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		
-		String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
-		tu.testAtomSequencing(smarts);
+		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
+		//tu.testAtomSequencing(smarts);		
+		tu.testAtomSequencingFromFile("\\NCI001000.txt");
+		
 		//tu.testIsomorphismTester("C1C(CC)CCC1","CCCCC");
 		//tu.testIsomorphismTester("C1CCC1CC2CCC2","CCCCC");
+		
+		//tu.getCarbonSkelletonsFromString();
 	}
 	
 	
 	public void testSmartsManagerAtomMapping(String smarts, String smiles)
 	{	
-		IMolecule mol = getMoleculeFromSmiles(smiles);	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{

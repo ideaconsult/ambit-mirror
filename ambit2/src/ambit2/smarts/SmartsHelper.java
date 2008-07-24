@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
+import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import java.util.Vector;
 import java.util.HashMap;
@@ -32,11 +34,16 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.io.SMILESWriter;
+import org.openscience.cdk.smiles.SmilesParser;
 
 public class SmartsHelper 
 {
+	static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 	int curIndex;
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();	
 	//Work container - list with the processed atom nodes
@@ -290,6 +297,52 @@ public class SmartsHelper
 			System.out.println(e.toString());
 		}
 		return(result.toString());
+	}
+	
+	public static void convertToCarbonSkelleton(IAtomContainer mol)
+	{
+		//All atoms are made C and all bond are made single
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{
+			IAtom at = mol.getAtom(i);
+			at.setSymbol("C");
+			at.setFormalCharge(0);
+			at.setMassNumber(0); 
+		}
+		
+		for (int i = 0; i < mol.getBondCount(); i++)
+		{
+			IBond bo = mol.getBond(i);
+			bo.setOrder(IBond.Order.SINGLE);
+		}
+	}
+	
+	public static  IMolecule getMoleculeFromSmiles(String smi) 
+	{	
+		IMolecule mol = null;
+		try {
+			SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(smi);
+		}
+		catch (InvalidSmilesException e) {
+			System.out.println(e.toString());
+	 	}
+		return (mol);
+	}
+	
+	public static String[] getCarbonSkelletonsFromString(String smiles)
+	{	
+		IMolecule mol = getMoleculeFromSmiles(smiles);
+		IMoleculeSet ms =  ConnectivityChecker.partitionIntoMolecules(mol);
+		int n = ms.getAtomContainerCount();
+		String res[] = new String[n];
+		for(int i =0; i < n; i++)
+		{	
+			IAtomContainer frag = ms.getAtomContainer(i);
+			SmartsHelper.convertToCarbonSkelleton(frag);
+			res[i] =  SmartsHelper.moleculeToSMILES(frag);
+		}
+		return(res);
 	}
 	
 	
