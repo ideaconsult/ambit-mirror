@@ -44,8 +44,27 @@ public class Node
 	IAtom center;
 	IAtom atoms[]; 
 		
-	Node(Node par)
+	public Node()
+	{	
+	}
+	
+	public Node(Node par)
 	{
 		parent = par;
+	}
+	
+	
+	public void nullifyAtoms(int n)
+	{
+		atoms = new IAtom[n];
+		for (int i=0; i < n; i++)
+			atoms[i] = null;
+	}
+	
+	public void copyAtoms(Node node)
+	{
+		atoms = new IAtom[node.atoms.length];
+		for (int i=0; i < atoms.length; i++)
+			atoms[i] = node.atoms[i];
 	}
 }

@@ -70,8 +70,7 @@ public class TestUtilities
 		isoTester.setQuery(query);
 		boolean res = checkSequence(query,isoTester.getSequence());
 		//isoTester.printDebugInfo();
-		System.out.println("sequnce check  -- > " + res);
-		
+		System.out.println("sequnce check  -- > " + res);		
 	}
 	
 	
@@ -183,8 +182,8 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		
-		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
-		//tu.testAtomSequencing(smarts);		
+		String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
+		tu.testAtomSequencing(smarts);		
 		tu.testAtomSequencingFromFile("\\NCI001000.txt");
 		
 		//tu.testIsomorphismTester("C1C(CC)CCC1","CCCCC");

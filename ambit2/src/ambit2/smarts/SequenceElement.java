@@ -31,7 +31,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-//import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -47,9 +48,9 @@ public class SequenceElement
 	//(1) an atom with a part of its first topological layer or
 	//(2) a bond between two atoms which has already been sequenced  
 	//For the second case center == null and atoms.lenght = 2 and bonds.lenght = 1
-	IAtom center;
-	IAtom atoms[];
-	IBond bonds[];	
+	IQueryAtom center;
+	IQueryAtom atoms[];
+	IQueryBond bonds[];	
 	
 	public String toString() 
 	{
@@ -58,14 +59,14 @@ public class SequenceElement
 		{
 			sb.append("Bond " + SmartsHelper.atomToString(atoms[0]) + " " 
 					+ SmartsHelper.atomToString(atoms[1]) + 
-					"   "+SmartsHelper.bondToString(bonds[0]));
+					"   "+SmartsHelper.bondToString((IBond)bonds[0]));
 		}
 		else
 		{
 			sb.append("Center = " + SmartsHelper.atomToString(center) + "  atoms: ");
 			for (int i = 0; i < atoms.length; i++)
 				sb.append("("+SmartsHelper.atomToString(atoms[i])+","+ 
-						SmartsHelper.bondToString(bonds[i]) + ") ");
+						SmartsHelper.bondToString((IBond)bonds[i]) + ") ");
 		}
 		return sb.toString();
 	}
@@ -77,7 +78,7 @@ public class SequenceElement
 		{
 			sb.append("Bond " + SmartsHelper.atomToString(atoms[0]) + query.getAtomNumber(atoms[0])+" " 
 					+ SmartsHelper.atomToString(atoms[1]) + query.getAtomNumber(atoms[1])+
-					"   "+SmartsHelper.bondToString(bonds[0]));
+					"   "+SmartsHelper.bondToString((IBond)bonds[0]));
 		}
 		else
 		{
@@ -85,7 +86,7 @@ public class SequenceElement
 						query.getAtomNumber(center) + "  atoms: ");
 			for (int i = 0; i < atoms.length; i++)
 				sb.append("("+SmartsHelper.atomToString(atoms[i])+query.getAtomNumber(atoms[i])+
-						","+ SmartsHelper.bondToString(bonds[i]) + ") ");
+						","+ SmartsHelper.bondToString((IBond)bonds[i]) + ") ");
 		}
 		return sb.toString();
 	}

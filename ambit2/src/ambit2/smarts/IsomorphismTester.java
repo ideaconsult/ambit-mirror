@@ -27,6 +27,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import java.util.Vector;
 import java.util.Stack;
 
@@ -39,10 +41,11 @@ public class IsomorphismTester
 	QueryAtomContainer query;
 	IAtomContainer target;
 	boolean isomorphimsFound;
+	Stack<Node> stack = new Stack<Node>();
 	Vector<SequenceElement> sequence = new Vector<SequenceElement>();
-	Vector<IAtom> sequencedAtoms = new Vector<IAtom>();
-	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
-	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
+	Vector<IQueryAtom> sequencedAtoms = new Vector<IQueryAtom>();
+	Vector<IQueryAtom> sequencedBondAt1 = new Vector<IQueryAtom>();
+	Vector<IQueryAtom> sequencedBondAt2 = new Vector<IQueryAtom>();
 	
 	public void setQuery(QueryAtomContainer container)
 	{
@@ -56,16 +59,16 @@ public class IsomorphismTester
 		return(sequence);
 	}
 	
-	void setQueryAtomSequence(IAtom firstAt)
+	void setQueryAtomSequence(IQueryAtom firstAt)
 	{	
-		IAtom firstAtom;
+		IQueryAtom firstAtom;
 		SequenceElement seqEl;
 		TopLayer topLayer;
-		Vector<IAtom> curAddedAtoms = new Vector<IAtom>();  
+		Vector<IQueryAtom> curAddedAtoms = new Vector<IQueryAtom>();  
 		int n;
 		
 		if (firstAt == null)
-			firstAtom = query.getFirstAtom();
+			firstAtom = (IQueryAtom)query.getFirstAtom();
 		else
 			firstAtom = firstAt;
 		sequence.clear();
@@ -79,13 +82,13 @@ public class IsomorphismTester
 		seqEl.center = firstAtom;
 		topLayer = (TopLayer)firstAtom.getProperty(TopLayer.TLProp);
 		n = topLayer.atoms.size();
-		seqEl.atoms = new IAtom[n];
-		seqEl.bonds = new IBond[n];
+		seqEl.atoms = new IQueryAtom[n];
+		seqEl.bonds = new IQueryBond[n];
 		for (int i = 0; i < n; i++)
 		{
-			sequencedAtoms.add(topLayer.atoms.get(i));
-			seqEl.atoms[i] = topLayer.atoms.get(i);
-			seqEl.bonds[i] = topLayer.bonds.get(i);
+			sequencedAtoms.add((IQueryAtom)topLayer.atoms.get(i));
+			seqEl.atoms[i] = (IQueryAtom)topLayer.atoms.get(i);
+			seqEl.bonds[i] = (IQueryBond)topLayer.bonds.get(i);
 			addSeqBond(seqEl.center,seqEl.atoms[i]);
 		}
 		sequence.add(seqEl);
@@ -113,8 +116,8 @@ public class IsomorphismTester
 				{	
 					seqEl = new SequenceElement();
 					seqEl.center = curSeqAt.atoms[i];
-					seqEl.atoms = new IAtom[n];
-					seqEl.bonds = new IBond[n];
+					seqEl.atoms = new IQueryAtom[n];
+					seqEl.bonds = new IQueryBond[n];
 					sequence.add(seqEl);
 					stack.add(seqEl);
 				}	
@@ -124,8 +127,8 @@ public class IsomorphismTester
 				{
 					if (a[k] == 0)
 					{	
-						seqEl.atoms[j] = topLayer.atoms.get(k);
-						seqEl.bonds[j] = topLayer.bonds.get(k);
+						seqEl.atoms[j] = (IQueryAtom)topLayer.atoms.get(k);
+						seqEl.bonds[j] = (IQueryBond)topLayer.bonds.get(k);
 						addSeqBond(seqEl.center,seqEl.atoms[j]);
 						sequencedAtoms.add(seqEl.atoms[j]);
 						curAddedAtoms.add(seqEl.atoms[j]);
@@ -144,12 +147,12 @@ public class IsomorphismTester
 						//newSeqEl is not added in the stack (this is not needed for this bond)
 						SequenceElement newSeqEl = new SequenceElement();						
 						newSeqEl.center = null;
-						newSeqEl.atoms = new IAtom[2];
-						newSeqEl.bonds = new IBond[1];
+						newSeqEl.atoms = new IQueryAtom[2];
+						newSeqEl.bonds = new IQueryBond[1];
 						newSeqEl.atoms[0] = curSeqAt.atoms[i];
-						newSeqEl.atoms[1] = topLayer.atoms.get(k);
+						newSeqEl.atoms[1] = (IQueryAtom)topLayer.atoms.get(k);
 						addSeqBond(newSeqEl.atoms[0],newSeqEl.atoms[1]);
-						newSeqEl.bonds[0] = topLayer.bonds.get(k);
+						newSeqEl.bonds[0] = (IQueryBond)topLayer.bonds.get(k);
 						sequence.add(newSeqEl);						
 					}
 				}
@@ -160,7 +163,7 @@ public class IsomorphismTester
 		}
 	}
 		
-	boolean containsAtom(Vector<IAtom> v, IAtom atom)
+	boolean containsAtom(Vector<IQueryAtom> v, IQueryAtom atom)
 	{
 		for(int i = 0; i < v.size(); i++)
 			if (v.get(i) == atom)
@@ -173,7 +176,7 @@ public class IsomorphismTester
 		int a[] = new int[topLayer.atoms.size()];
 		for (int i = 0; i <topLayer.atoms.size(); i++)
 		{	
-			if (containsAtom(sequencedAtoms,topLayer.atoms.get(i)))
+			if (containsAtom(sequencedAtoms,(IQueryAtom)topLayer.atoms.get(i)))
 			{	
 				a[i] = 1;
 			}	
@@ -183,7 +186,7 @@ public class IsomorphismTester
 		return(a);
 	}
 	
-	void addSeqBond(IAtom at1, IAtom at2)
+	void addSeqBond(IQueryAtom at1, IQueryAtom at2)
 	{
 		sequencedBondAt1.add(at1);
 		sequencedBondAt2.add(at2);
@@ -219,6 +222,33 @@ public class IsomorphismTester
 	void executeSequence()
 	{	
 		isomorphimsFound = false;
+		stack.clear();
+				
+		//Initial nodes
+		for(int k = 0; k < target.getAtomCount(); k++)
+		{
+			IAtom at = target.getAtom(k);
+			SequenceElement el = sequence.get(0);
+			if(el.center.matches(at))
+			{	
+				Node node = new Node();
+				node.sequenceElNum = 0;
+				node.center = target.getAtom(k);				
+			}	
+		}
+		
+		//Expanding the tree of all possible mappings 
+		while (!stack.isEmpty())
+		{
+			expandNode(stack.pop());
+			if (isomorphimsFound)
+				break;
+		}
+	}
+	
+	void expandNode(Node node)
+	{	
+		
 	}
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
