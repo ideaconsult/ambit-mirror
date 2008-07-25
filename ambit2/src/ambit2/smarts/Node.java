@@ -31,29 +31,19 @@ import org.openscience.cdk.interfaces.IAtom;
  */
 public class Node 
 {
-	//The node describes a correspondence between
-	//a sequence element and a target atom
-	//Correspondence is of the type:
-	//	sequnceEl.center    <-->  center
-	//  sequnceEl.atoms[k]  <-->  atoms[k]
-	//The isomorphism between the query and target can be obtained
-	//by a sequence of nodes. 
+	//The Node represent a partial information in the
+	//isomorphism searching tree
+	//array element atoms[k] contains the target atom which is mapped to the k-th query atom
 	
-	Node parent = null;
-	int sequenceElNum;
-	IAtom center;
+	//Node parent = null;
+	//IAtom center;
+	int sequenceElNum;	
 	IAtom atoms[]; 
 		
 	public Node()
 	{	
 	}
-	
-	public Node(Node par)
-	{
-		parent = par;
-	}
-	
-	
+		
 	public void nullifyAtoms(int n)
 	{
 		atoms = new IAtom[n];
@@ -68,3 +58,15 @@ public class Node
 			atoms[i] = node.atoms[i];
 	}
 }
+
+
+
+//This is the older description of the class Node
+//
+//The node describes a correspondence between
+//a sequence element and a target atom
+//Correspondence is of the type:
+//	sequnceEl.center    <-->  center
+//  sequnceEl.atoms[k]  <-->  atoms[k]
+//The isomorphism between the query and target can be obtained
+//by a sequence of nodes.

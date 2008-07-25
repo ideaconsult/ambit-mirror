@@ -64,7 +64,7 @@ public class IsomorphismTester
 		IQueryAtom firstAtom;
 		SequenceElement seqEl;
 		TopLayer topLayer;
-		Vector<IQueryAtom> curAddedAtoms = new Vector<IQueryAtom>();  
+		//Vector<IQueryAtom> curAddedAtoms = new Vector<IQueryAtom>();  
 		int n;
 		
 		if (firstAt == null)
@@ -98,7 +98,7 @@ public class IsomorphismTester
 		stack.push(seqEl);
 		while (!stack.empty())
 		{
-			curAddedAtoms.clear();
+			//curAddedAtoms.clear();
 			SequenceElement curSeqAt = stack.pop();
 			for (int i = 0; i < curSeqAt.atoms.length; i++)
 			{
@@ -131,7 +131,7 @@ public class IsomorphismTester
 						seqEl.bonds[j] = (IQueryBond)topLayer.bonds.get(k);
 						addSeqBond(seqEl.center,seqEl.atoms[j]);
 						sequencedAtoms.add(seqEl.atoms[j]);
-						curAddedAtoms.add(seqEl.atoms[j]);
+						//curAddedAtoms.add(seqEl.atoms[j]);
 						j++;
 					}
 					else
@@ -156,10 +156,7 @@ public class IsomorphismTester
 						sequence.add(newSeqEl);						
 					}
 				}
-			}
-			
-			//for(int i = 0; i < curAddedAtoms.size(); i++)
-			//	sequencedAtoms.add(curAddedAtoms.get(i));
+			}			
 		}
 	}
 		
@@ -225,15 +222,17 @@ public class IsomorphismTester
 		stack.clear();
 				
 		//Initial nodes
+		SequenceElement el = sequence.get(0);
+		int qAtNum = query.getAtomNumber(el.center);
 		for(int k = 0; k < target.getAtomCount(); k++)
 		{
-			IAtom at = target.getAtom(k);
-			SequenceElement el = sequence.get(0);
+			IAtom at = target.getAtom(k);			
 			if(el.center.matches(at))
 			{	
 				Node node = new Node();
-				node.sequenceElNum = 0;
-				node.center = target.getAtom(k);				
+				node.sequenceElNum = 0; 
+				node.nullifyAtoms(query.getAtomCount());
+				node.atoms[qAtNum] = at;
 			}	
 		}
 		
@@ -248,6 +247,26 @@ public class IsomorphismTester
 	
 	void expandNode(Node node)
 	{	
+		int secElNum = node.sequenceElNum+1;
+		SequenceElement el = sequence.get(secElNum);
+		
+		if (el.center == null) //This is bond that closes a ring
+		{
+			//Cheking whether this bond is present in the target
+			IAtom tAt0 = node.atoms[query.getAtomNumber(el.atoms[0])]; 
+			IAtom tAt1 = node.atoms[query.getAtomNumber(el.atoms[1])];
+			IBond tBo = target.getBond(tAt0,tAt1);
+			if (el.bonds[0].matches(tBo))
+			{
+				node.sequenceElNum++;
+				stack.push(node);
+			}	
+		}
+		else
+		{
+			
+		}
+		
 		
 	}
 	
