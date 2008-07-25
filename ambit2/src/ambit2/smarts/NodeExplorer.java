@@ -48,6 +48,7 @@ public class NodeExplorer
 		curAtIndex = -1;
 	}
 	
+	/*
 	public IAtom getNextAtom()
 	{
 		curAtIndex++;
@@ -57,8 +58,10 @@ public class NodeExplorer
 			return(getFirstAtomFromParentNode());
 	}
 	
+	
 	IAtom getFirstAtomFromParentNode()
 	{
+		
 		if (curNode.parent == null)
 		{
 			if (curAtIndex == curNode.atoms.length)
@@ -79,7 +82,9 @@ public class NodeExplorer
 			else				
 				return(getFirstAtomFromParentNode());
 		}
+		
 	}
+	*/
 	
 	//This function must be used only imediately after getNextAtom() invocation	
 	public IAtom getPartnerAtom()

@@ -57,6 +57,13 @@ public class Node
 		for (int i=0; i < atoms.length; i++)
 			atoms[i] = node.atoms[i];
 	}
+	
+	public Node cloneNode()
+	{
+		Node node = new Node();
+		node.copyAtoms(this);
+		return(node);
+	}
 }
 
 

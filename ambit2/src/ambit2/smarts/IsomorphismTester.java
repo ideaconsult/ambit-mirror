@@ -31,6 +31,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import java.util.Vector;
 import java.util.Stack;
+import java.util.List;
 
 /**
  * 
@@ -42,6 +43,7 @@ public class IsomorphismTester
 	IAtomContainer target;
 	boolean isomorphimsFound;
 	Stack<Node> stack = new Stack<Node>();
+	Vector<IAtom> targetAt = new Vector<IAtom>(); //a work container
 	Vector<SequenceElement> sequence = new Vector<SequenceElement>();
 	Vector<IQueryAtom> sequencedAtoms = new Vector<IQueryAtom>();
 	Vector<IQueryAtom> sequencedBondAt1 = new Vector<IQueryAtom>();
@@ -158,12 +160,23 @@ public class IsomorphismTester
 				}
 			}			
 		}
+		
+		for(int i = 0; i < sequence.size(); i++)
+			sequence.get(i).setAtomNums(query);
 	}
 		
 	boolean containsAtom(Vector<IQueryAtom> v, IQueryAtom atom)
 	{
 		for(int i = 0; i < v.size(); i++)
 			if (v.get(i) == atom)
+				return(true);
+		return(false);
+	}
+	
+	boolean containsAtom(IAtom[] a, IAtom atom)
+	{
+		for(int i = 0; i < a.length; i++)
+			if (a[i] == atom)
 				return(true);
 		return(false);
 	}
@@ -222,8 +235,7 @@ public class IsomorphismTester
 		stack.clear();
 				
 		//Initial nodes
-		SequenceElement el = sequence.get(0);
-		int qAtNum = query.getAtomNumber(el.center);
+		SequenceElement el = sequence.get(0);		
 		for(int k = 0; k < target.getAtomCount(); k++)
 		{
 			IAtom at = target.getAtom(k);			
@@ -232,7 +244,7 @@ public class IsomorphismTester
 				Node node = new Node();
 				node.sequenceElNum = 0; 
 				node.nullifyAtoms(query.getAtomCount());
-				node.atoms[qAtNum] = at;
+				node.atoms[el.centerNum] = at;
 			}	
 		}
 		
@@ -247,10 +259,9 @@ public class IsomorphismTester
 	
 	void expandNode(Node node)
 	{	
-		int secElNum = node.sequenceElNum+1;
-		SequenceElement el = sequence.get(secElNum);
+		SequenceElement el = sequence.get(node.sequenceElNum);
 		
-		if (el.center == null) //This is bond that closes a ring
+		if (el.center == null) //This node describers a bond that closes a ring
 		{
 			//Cheking whether this bond is present in the target
 			IAtom tAt0 = node.atoms[query.getAtomNumber(el.atoms[0])]; 
@@ -264,11 +275,135 @@ public class IsomorphismTester
 		}
 		else
 		{
+			targetAt.clear();
+			IAtom tAt = node.atoms[el.centerNum];
+			List<IAtom> conAt = target.getConnectedAtomsList(tAt);
+			for (int i = 0; i < conAt.size(); i++)
+			{
+				if (!containsAtom(node.atoms,conAt.get(i)))
+					targetAt.add(conAt.get(i));
+			}
+			
+			if (el.atoms.length <= targetAt.size())			
+				generateNodes(node);
+		}
+	}
+	
+	
+	void generateNodes(Node node)
+	{
+		SequenceElement el = sequence.get(node.sequenceElNum);
+		
+		if (el.atoms.length == 1)
+		{
+			for(int i = 0; i < targetAt.size(); i++)
+			{
+				if (el.atoms[0].matches(targetAt.get(i)))
+				{
+					Node newNode = node.cloneNode();
+					newNode.atoms[el.atomNums[0]] = targetAt.get(i);
+					newNode.sequenceElNum = node.sequenceElNum+1;
+					stack.push(newNode);
+				}
+			}
+			return;
+		}
+		
+		if (el.atoms.length == 2)
+		{
+			for(int i = 0; i < targetAt.size(); i++)			
+				if (el.atoms[0].matches(targetAt.get(i)))					
+					for(int j = 0; j < targetAt.size(); j++)						
+						if (i != j)
+							if (el.atoms[1].matches(targetAt.get(j)))
+							{
+								Node newNode = node.cloneNode();
+								newNode.atoms[el.atomNums[0]] = targetAt.get(i);
+								newNode.atoms[el.atomNums[1]] = targetAt.get(j);
+								newNode.sequenceElNum = node.sequenceElNum+1;
+								stack.push(newNode);
+							}
+					
+			return;
+		}
+		
+		if (el.atoms.length == 3)
+		{
+			for(int i = 0; i < targetAt.size(); i++)			
+				if (el.atoms[0].matches(targetAt.get(i)))					
+					for(int j = 0; j < targetAt.size(); j++)						
+						if (i != j)
+							if (el.atoms[1].matches(targetAt.get(j)))
+								for(int k = 0; k < targetAt.size(); k++)
+									if ((k != i) && (k != j))
+										if (el.atoms[2].matches(targetAt.get(k)))
+										{
+											Node newNode = node.cloneNode();
+											newNode.atoms[el.atomNums[0]] = targetAt.get(i);
+											newNode.atoms[el.atomNums[1]] = targetAt.get(j);
+											newNode.atoms[el.atomNums[2]] = targetAt.get(k);
+											newNode.sequenceElNum = node.sequenceElNum+1;
+											stack.push(newNode);
+										}
+					
+			return;
+		}
+		
+		//This case should be very rare (el.atoms.length >= 4)
+				
+		//a stack which is used for obtaining all
+		//posible mappings between el.atoms and targetAt
+		//The stack element is an array t[], where t[k] means that 
+		//el.atoms[k] is mapped against atom targetAt(t[k])
+		//t[t.lenght-1] is used as a work variable which describes how mamy 
+		//element of the t array are mapped
+		Stack<int[]> st = new Stack<int[]>();
+		
+		//Stack initialization
+		for(int i = 0; i < targetAt.size(); i++)
+		{
+			if (el.atoms[0].matches(targetAt.get(i)))
+			{
+				int t[] = new int[el.atoms.length+1];
+				t[t.length-1] = 1;
+				t[0] = i;				
+				st.push(t);
+			}
+		}
+		
+		while (!st.isEmpty())
+		{
+			int t[] = st.pop();
+			int n = t[t.length-1];			
+			for(int i = 0; i < targetAt.size(); i++)
+			{
+				//Check whether i is among first elements of t
+				boolean Flag = true;
+				for (int k = 0; k < n; k++)
+					if ( i == t[k]) 
+					{
+						Flag = false;
+						break;
+					}
+				
+				if (Flag)
+					if (el.atoms[n].matches(targetAt.get(i)))
+					{
+						if (n == t.length-2)
+						{
+							//new node
+						}
+						else
+						{
+							//new stack element
+						}
+					}
+			}
 			
 		}
 		
-		
 	}
+	
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
 	//{
