@@ -374,7 +374,19 @@ public class IsomorphismTester
 		while (!st.isEmpty())
 		{
 			int t[] = st.pop();
-			int n = t[t.length-1];			
+			int n = t[t.length-1];
+			if (n == t.length-1)
+			{
+				//new node
+				Node newNode = node.cloneNode();
+				for(int k = 0; k < t.length-1; k++)
+					newNode.atoms[el.atomNums[k]] = targetAt.get(k);				
+				newNode.sequenceElNum = node.sequenceElNum+1;
+				stack.push(newNode);
+				
+				continue;
+			}
+			
 			for(int i = 0; i < targetAt.size(); i++)
 			{
 				//Check whether i is among first elements of t
@@ -388,18 +400,17 @@ public class IsomorphismTester
 				
 				if (Flag)
 					if (el.atoms[n].matches(targetAt.get(i)))
-					{
-						if (n == t.length-2)
-						{
-							//new node
-						}
-						else
-						{
-							//new stack element
-						}
+					{	
+						//new stack element
+						int tnew[] = new int[el.atoms.length+1];
+						for(int k = 0; k < n; k++)
+							tnew[k] = t[k];
+						tnew[n] = i;
+						tnew[t.length-1] = n+1;
+						st.push(tnew);
+						
 					}
 			}
-			
 		}
 		
 	}

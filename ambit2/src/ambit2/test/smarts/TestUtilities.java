@@ -1,5 +1,6 @@
 package ambit2.test.smarts;
 
+import java.util.Stack;
 import java.util.Vector;
 import java.io.RandomAccessFile;
 
@@ -182,14 +183,16 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		
-		String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
-		tu.testAtomSequencing(smarts);		
-		tu.testAtomSequencingFromFile("\\NCI001000.txt");
+		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
+		//tu.testAtomSequencing(smarts);		
+		//tu.testAtomSequencingFromFile("\\NCI001000.txt");
 		
 		//tu.testIsomorphismTester("C1C(CC)CCC1","CCCCC");
 		//tu.testIsomorphismTester("C1CCC1CC2CCC2","CCCCC");
 		
 		//tu.getCarbonSkelletonsFromString();
+		
+		tu.testAtomIndexesForMapping(4, 5);
 	}
 	
 	
@@ -233,4 +236,117 @@ public class TestUtilities
 		SmartsHelper.printIntArray(c);
 	}
 	
+	public void testAtomIndexesForMapping(int nGA, int nTA)
+	{
+		if (nGA == 2)
+		{
+			for(int i = 0; i < nTA; i++)			
+				//if (el.atoms[0].matches(targetAt.get(i)))					
+					for(int j = 0; j < nTA; j++)						
+						if (i != j)
+							//if (el.atoms[1].matches(targetAt.get(j)))
+							{
+								System.out.println(i+" "+j);
+							}
+					
+			return;
+		}
+		
+		if (nGA == 3)
+		{
+			for(int i = 0; i < nTA; i++)			
+				//if (el.atoms[0].matches(targetAt.get(i)))					
+					for(int j = 0; j < nTA; j++)						
+						if (i != j)
+							//if (el.atoms[1].matches(targetAt.get(j)))
+								for(int k = 0; k < nTA; k++)
+									if ((k != i) && (k != j))
+										//if (el.atoms[2].matches(targetAt.get(k)))
+										{
+										System.out.println(i+" "+j+ " "+k);
+										}
+					
+			return;
+		}
+		
+		//This case should be very rare (el.atoms.length >= 4)
+				
+		//a stack which is used for obtaining all
+		//posible mappings between el.atoms and targetAt
+		//The stack element is an array t[], where t[k] means that 
+		//el.atoms[k] is mapped against atom targetAt(t[k])
+		//t[t.lenght-1] is used as a work variable which describes how mamy 
+		//element of the t array are mapped
+		Stack<int[]> st = new Stack<int[]>();
+		
+		int num = 0;
+		
+		//Stack initialization
+		for(int i = 0; i < nTA; i++)
+		{
+			//if (el.atoms[0].matches(targetAt.get(i)))
+			{
+				int t[] = new int[nGA+1];
+				t[t.length-1] = 1;
+				t[0] = i;				
+				st.push(t);
+				
+				/*
+				System.out.print("push in ");
+				for(int k = 0; k < t.length-1; k++)
+					System.out.print(t[k]+" ");
+				System.out.println();
+				*/
+			}
+		}
+		
+		while (!st.isEmpty())
+		{
+			int t[] = st.pop();
+			int n = t[t.length-1];
+			
+			if (n == t.length-1)
+			{
+				/*
+				for(int k = 0; k < t.length-1; k++)
+					System.out.print(t[k]+" ");
+				System.out.println();
+				*/
+				num++;
+				continue;
+			}
+			
+			for(int i = 0; i < nTA; i++)
+			{	
+				//Check whether i is among first elements of t
+				boolean Flag = true;
+				for (int k = 0; k < n; k++)
+					if ( i == t[k]) 
+					{
+						Flag = false;
+						break;
+					}
+				
+				if (Flag)
+				//if (el.atoms[n].matches(targetAt.get(i)))
+				{	
+					//new stack element
+					int tnew[] = new int[nGA+1];
+					for(int k = 0; k < n; k++)
+						tnew[k] = t[k];
+					tnew[n] = i;
+					tnew[t.length-1] = n+1;
+					st.push(tnew);
+					
+					/*
+					System.out.print("push in ");
+					for(int k = 0; k < t.length-1; k++)
+						System.out.print(tnew[k]+" ");
+					System.out.println();
+					*/
+				}
+			}
+		}
+		System.out.println("num = "+num);
+	}
 }
