@@ -17,7 +17,16 @@ import com.microworkflow.events.WorkflowContextEvent;
 
 public class WorkflowContext<V> extends ObjectWithPropertyChangeSupport implements Map<String, V> {
 	protected HashMap<String,V> context=new HashMap<String,V>();
+	protected String name;
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Object get(String key) {
 		return context.get(key);
 	}
@@ -69,5 +78,9 @@ public class WorkflowContext<V> extends ObjectWithPropertyChangeSupport implemen
     }
     public void fireAnimateEvent(boolean enable) {
         firePropertyChange(new WorkflowContextEvent(this,WorkflowContextEvent.WF_ANIMATE,null,new Boolean(enable)));
-    }       
+    }
+    @Override
+    public String toString() {
+    	return getName();
+    }
 }
