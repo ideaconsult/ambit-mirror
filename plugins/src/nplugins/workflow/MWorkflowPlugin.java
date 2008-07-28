@@ -108,6 +108,7 @@ public abstract class MWorkflowPlugin implements INanoPlugin {
 
 	public void setWorkflowContext(WorkflowContext workflowContext) {
 		this.workflowContext = workflowContext;
+		this.workflowContext.setName(toString());
 	}
 
 }
