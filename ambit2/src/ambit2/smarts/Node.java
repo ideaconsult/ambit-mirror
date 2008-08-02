@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * 
@@ -63,6 +64,17 @@ public class Node
 		Node node = new Node();
 		node.copyAtoms(this);
 		return(node);
+	}
+	
+	public String toString(IAtomContainer container)
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("Node: el_num=" + sequenceElNum + " at:");
+		for (int i = 0; i<atoms.length; i++)
+			if (atoms[i] != null)			
+				sb.append(" "+i+"->"+container.getAtomNumber(atoms[i]));
+				
+		return(sb.toString());
 	}
 }
 

@@ -67,11 +67,13 @@ public class TestUtilities
 			return;
 		}
 						
-		System.out.println("IsomorphismTester: " + smarts  + "  in  " + smiles);
+		
 		isoTester.setQuery(query);
-		boolean res = checkSequence(query,isoTester.getSequence());
+		System.out.println("IsomorphismTester: " + smarts  + "  in  " + smiles + 
+				"   " + isoTester.hasIsomorphism(mol));
+		//boolean res = checkSequence(query,isoTester.getSequence());
 		//isoTester.printDebugInfo();
-		System.out.println("sequnce check  -- > " + res);		
+		//System.out.println("sequnce check  -- > " + res);		
 	}
 	
 	
@@ -163,7 +165,6 @@ public class TestUtilities
 		return(false);
 	}
 	
-		
 	
 	//-------------------------------------------------------------------------------
 	
@@ -187,8 +188,15 @@ public class TestUtilities
 		//tu.testAtomSequencing(smarts);		
 		//tu.testAtomSequencingFromFile("\\NCI001000.txt");
 		
-		//tu.testIsomorphismTester("C1C(CC)CCC1","CCCCC");
-		//tu.testIsomorphismTester("C1CCC1CC2CCC2","CCCCC");
+		tu.testIsomorphismTester("C1CCC1","CCCCC");
+		tu.testIsomorphismTester("CC","CCCCC");
+		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
+		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
+		tu.testIsomorphismTester("CC[C,O]C","CCCC");
+		tu.testIsomorphismTester("CC[C,O]C","COCC");
+		tu.testIsomorphismTester("CC[C,O]C","COC=C");
+		tu.testIsomorphismTester("C(C)(C)(C)C","CC(C)(C)CC");
+		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");
 		
 		//tu.getCarbonSkelletonsFromString();
 		

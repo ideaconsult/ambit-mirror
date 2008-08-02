@@ -41,7 +41,7 @@ public class IsomorphismTester
 {
 	QueryAtomContainer query;
 	IAtomContainer target;
-	boolean isomorphimsFound;
+	boolean isomorphismFound;
 	Stack<Node> stack = new Stack<Node>();
 	Vector<IAtom> targetAt = new Vector<IAtom>(); //a work container
 	Vector<SequenceElement> sequence = new Vector<SequenceElement>();
@@ -226,12 +226,12 @@ public class IsomorphismTester
 		target = container;
 		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
 		executeSequence();
-		return(isomorphimsFound);
+		return(isomorphismFound);
 	}
 	
 	void executeSequence()
 	{	
-		isomorphimsFound = false;
+		isomorphismFound = false;
 		stack.clear();
 				
 		//Initial nodes
@@ -245,6 +245,7 @@ public class IsomorphismTester
 				node.sequenceElNum = 0; 
 				node.nullifyAtoms(query.getAtomCount());
 				node.atoms[el.centerNum] = at;
+				stack.push(node);
 			}	
 		}
 		
@@ -252,13 +253,14 @@ public class IsomorphismTester
 		while (!stack.isEmpty())
 		{
 			expandNode(stack.pop());
-			if (isomorphimsFound)
+			if (isomorphismFound)
 				break;
 		}
 	}
 	
 	void expandNode(Node node)
 	{	
+		//System.out.println(node.toString(target));		
 		SequenceElement el = sequence.get(node.sequenceElNum);
 		
 		if (el.center == null) //This node describers a bond that closes a ring
@@ -267,11 +269,14 @@ public class IsomorphismTester
 			IAtom tAt0 = node.atoms[query.getAtomNumber(el.atoms[0])]; 
 			IAtom tAt1 = node.atoms[query.getAtomNumber(el.atoms[1])];
 			IBond tBo = target.getBond(tAt0,tAt1);
-			if (el.bonds[0].matches(tBo))
-			{
-				node.sequenceElNum++;
-				stack.push(node);
-			}	
+			if (tBo != null)
+				if (el.bonds[0].matches(tBo))
+				{
+					node.sequenceElNum++;
+					stack.push(node);
+					if (node.sequenceElNum == sequence.size())
+						isomorphismFound = true;
+				}	
 		}
 		else
 		{
@@ -299,11 +304,14 @@ public class IsomorphismTester
 			for(int i = 0; i < targetAt.size(); i++)
 			{
 				if (el.atoms[0].matches(targetAt.get(i)))
+				if(	matchBond(node, el, 0, targetAt.get(i)))
 				{
 					Node newNode = node.cloneNode();
 					newNode.atoms[el.atomNums[0]] = targetAt.get(i);
 					newNode.sequenceElNum = node.sequenceElNum+1;
 					stack.push(newNode);
+					if (newNode.sequenceElNum == sequence.size())
+						isomorphismFound = true;
 				}
 			}
 			return;
@@ -312,31 +320,37 @@ public class IsomorphismTester
 		if (el.atoms.length == 2)
 		{
 			for(int i = 0; i < targetAt.size(); i++)			
-				if (el.atoms[0].matches(targetAt.get(i)))					
+				if (el.atoms[0].matches(targetAt.get(i)))	
+				if(	matchBond(node, el, 0, targetAt.get(i)))
 					for(int j = 0; j < targetAt.size(); j++)						
 						if (i != j)
 							if (el.atoms[1].matches(targetAt.get(j)))
+							if(	matchBond(node, el, 1, targetAt.get(j)))	
 							{
 								Node newNode = node.cloneNode();
 								newNode.atoms[el.atomNums[0]] = targetAt.get(i);
 								newNode.atoms[el.atomNums[1]] = targetAt.get(j);
 								newNode.sequenceElNum = node.sequenceElNum+1;
 								stack.push(newNode);
-							}
-					
+								if (newNode.sequenceElNum == sequence.size())
+									isomorphismFound = true;
+							}					
 			return;
 		}
 		
 		if (el.atoms.length == 3)
 		{
 			for(int i = 0; i < targetAt.size(); i++)			
-				if (el.atoms[0].matches(targetAt.get(i)))					
+				if (el.atoms[0].matches(targetAt.get(i)))
+				if(	matchBond(node, el, 0, targetAt.get(i)))	
 					for(int j = 0; j < targetAt.size(); j++)						
 						if (i != j)
 							if (el.atoms[1].matches(targetAt.get(j)))
+								if(	matchBond(node, el, 1, targetAt.get(j)))	
 								for(int k = 0; k < targetAt.size(); k++)
 									if ((k != i) && (k != j))
 										if (el.atoms[2].matches(targetAt.get(k)))
+										if(	matchBond(node, el, 2, targetAt.get(k)))	
 										{
 											Node newNode = node.cloneNode();
 											newNode.atoms[el.atomNums[0]] = targetAt.get(i);
@@ -344,8 +358,9 @@ public class IsomorphismTester
 											newNode.atoms[el.atomNums[2]] = targetAt.get(k);
 											newNode.sequenceElNum = node.sequenceElNum+1;
 											stack.push(newNode);
+											if (newNode.sequenceElNum == sequence.size())
+												isomorphismFound = true;
 										}
-					
 			return;
 		}
 		
@@ -358,11 +373,14 @@ public class IsomorphismTester
 		//t[t.lenght-1] is used as a work variable which describes how mamy 
 		//element of the t array are mapped
 		Stack<int[]> st = new Stack<int[]>();
+				
+		//System.out.println("el.atoms.length = " + el.atoms.length );
 		
 		//Stack initialization
 		for(int i = 0; i < targetAt.size(); i++)
 		{
 			if (el.atoms[0].matches(targetAt.get(i)))
+			if(	matchBond(node, el, 0, targetAt.get(i)))	
 			{
 				int t[] = new int[el.atoms.length+1];
 				t[t.length-1] = 1;
@@ -383,7 +401,8 @@ public class IsomorphismTester
 					newNode.atoms[el.atomNums[k]] = targetAt.get(k);				
 				newNode.sequenceElNum = node.sequenceElNum+1;
 				stack.push(newNode);
-				
+				if (newNode.sequenceElNum == sequence.size())
+					isomorphismFound = true;
 				continue;
 			}
 			
@@ -400,6 +419,7 @@ public class IsomorphismTester
 				
 				if (Flag)
 					if (el.atoms[n].matches(targetAt.get(i)))
+					if(	matchBond(node, el, n, targetAt.get(i)))	
 					{	
 						//new stack element
 						int tnew[] = new int[el.atoms.length+1];
@@ -415,6 +435,11 @@ public class IsomorphismTester
 		
 	}
 	
+	boolean matchBond(Node node, SequenceElement el, int qAtNum, IAtom taAt)
+	{
+		IBond taBo = target.getBond(taAt, node.atoms[el.centerNum]);
+		return(el.bonds[qAtNum].matches(taBo));
+	}
 	
 	//public Vector getAllIsomorphisms(IAtomContainer container)
 	//{
