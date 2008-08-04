@@ -3,11 +3,19 @@ package ambit2.test.smarts;
 import java.util.Stack;
 import java.util.Vector;
 import java.io.RandomAccessFile;
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.io.StringReader;
+import java.io.ByteArrayInputStream;
 
 import ambit2.smarts.*;
 
+import org.openscience.cdk.interfaces.IChemFile;
+import org.openscience.cdk.io.CMLWriter;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -188,6 +196,7 @@ public class TestUtilities
 		//tu.testAtomSequencing(smarts);		
 		//tu.testAtomSequencingFromFile("\\NCI001000.txt");
 		
+		/*
 		tu.testIsomorphismTester("C1CCC1","CCCCC");
 		tu.testIsomorphismTester("CC","CCCCC");
 		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
@@ -197,10 +206,11 @@ public class TestUtilities
 		tu.testIsomorphismTester("CC[C,O]C","COC=C");
 		tu.testIsomorphismTester("C(C)(C)(C)C","CC(C)(C)CC");
 		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");
+		*/
 		
-		//tu.getCarbonSkelletonsFromString();
-		
-		tu.testAtomIndexesForMapping(4, 5);
+		//tu.getCarbonSkelletonsFromString();		
+		//tu.testAtomIndexesForMapping(4, 5);
+		tu.testCML("BrC=CC[N-]");
 	}
 	
 	
@@ -357,4 +367,58 @@ public class TestUtilities
 		}
 		System.out.println("num = "+num);
 	}
+	
+	public void testCML(String smiles)
+	{
+		System.out.println("Writing " + smiles + " to CML file");
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		mol.getAtom(0).setProperty("MyProperty","Test");
+		System.out.println("MyProperty = " 
+				+ mol.getAtom(0).getProperty("MyProperty").toString());
+		try
+		{			
+			
+			StringWriter output = new StringWriter();			
+			CMLWriter cmlwriter = new CMLWriter(output);
+			cmlwriter.write(mol);
+			cmlwriter.close();
+			String cmlcode = output.toString();
+			System.out.println(cmlcode);
+			IChemFile chemFile = parseCMLString(cmlcode);			
+			IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
+			
+			System.out.println("-------------------------");
+			String smiles2 = SmartsHelper.moleculeToSMILES(mol2);
+			System.out.println(smiles2);
+			System.out.println("nAtom = " + mol2.getAtomCount());
+			System.out.println("AtType0 = " + mol2.getAtom(0).getSymbol());
+			System.out.println("MyProperty = " 
+								+ mol2.getAtom(0).getProperty("MyProperty").toString());
+			
+			
+			//CMLReader reader = new CMLReader("\\test.cml");
+			//CMLReader reader = new CMLReader();
+            //IChemFile chemFile = DefaultChemObjectBuilder.getInstance().newChemFile();            
+            //reader.read(chemFile);
+			//Molecule m = (Molecule)reader.read(new Molecule());
+			
+			/*
+			FileWriter output = new FileWriter("\\molecule.cml");
+			CMLWriter cmlwriter = new CMLWriter(output);
+			cmlwriter.write(mol);
+			cmlwriter.close();
+			*/
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	private IChemFile parseCMLString(String cmlString) throws Exception {
+        IChemFile chemFile = null;
+        CMLReader reader = new CMLReader(new ByteArrayInputStream(cmlString.getBytes()));
+        chemFile = (IChemFile)reader.read(new org.openscience.cdk.ChemFile());
+        return chemFile;
+    }
 }
