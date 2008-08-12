@@ -358,4 +358,18 @@ public class SmartsHelper
 		System.out.println();
 	}
 	
+	static public String atomPropertiesToString(IAtom atom)
+	{
+		StringBuffer sb = new StringBuffer();
+		if (atom.getProperties() == null)
+			return("");
+		
+		Object keys[] = atom.getProperties().keySet().toArray();
+		for (int i = 0; i < keys.length; i++)
+		{				
+			sb.append(keys[i].toString()+" = "+ atom.getProperties().get(keys[i])+"\n");
+		}	
+		return(sb.toString());
+	}
+	
 }

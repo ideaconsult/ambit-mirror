@@ -25,6 +25,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 
 
+
 public class TestUtilities 
 {	
 	static SmartsParser sp = new SmartsParser();
@@ -210,7 +211,9 @@ public class TestUtilities
 		
 		//tu.getCarbonSkelletonsFromString();		
 		//tu.testAtomIndexesForMapping(4, 5);
-		tu.testCML("BrC=CC[N-]");
+		tu.testCML("C1C=CCN1");
+		//tu.testIntParsing("05");
+		
 	}
 	
 	
@@ -252,6 +255,13 @@ public class TestUtilities
 		modify(a);
 		SmartsHelper.printIntArray(a);
 		SmartsHelper.printIntArray(c);
+	}
+	
+	public void testIntParsing(String s)
+	{	
+		Integer intObj = Integer.parseInt(s);
+		int n = intObj.intValue();
+		System.out.println(n);
 	}
 	
 	public void testAtomIndexesForMapping(int nGA, int nTA)
@@ -372,9 +382,24 @@ public class TestUtilities
 	{
 		System.out.println("Writing " + smiles + " to CML file");
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		mol.getAtom(0).setProperty("MyProperty","Test");
-		System.out.println("MyProperty = " 
-				+ mol.getAtom(0).getProperty("MyProperty").toString());
+		CMLUtilities cmlut = new CMLUtilities();
+		cmlut.setCMLSMARTSProperties(mol);
+		//sp.prepareTargetForSMARTSSearch(true,true,true,true,true,false, mol);
+		//int t[] = new int[3];		
+		
+		//mol.getAtom(0).setProperty("xy", new Integer(505));
+		//mol.getAtom(0).setProperty("XXMyProperty2", "TT");		
+		//System.out.println(SmartsHelper.atomPropertiesToString(mol.getAtom(0)));		
+		//System.out.println("MyProperty = " + mol.getAtom(0).getProperty("xy").toString());		
+		//System.out.println("XXMyProperty2 = " + mol.getAtom(0).getProperty("XXMyProperty2").toString());
+		
+		//String s = "MyProperty";
+		//System.out.println(s+ "  hashcode = " +s.hashCode());
+		//String s1 = "MyProperty";
+		//System.out.println(s1+ "  hashcode = " +s1.hashCode());
+		
+		//if (true) return;
+		
 		try
 		{			
 			
@@ -392,8 +417,17 @@ public class TestUtilities
 			System.out.println(smiles2);
 			System.out.println("nAtom = " + mol2.getAtomCount());
 			System.out.println("AtType0 = " + mol2.getAtom(0).getSymbol());
-			System.out.println("MyProperty = " 
-								+ mol2.getAtom(0).getProperty("MyProperty").toString());
+			
+			System.out.println(SmartsHelper.atomPropertiesToString(mol.getAtom(0)));
+			
+			//System.out.println("Properties Map Size = " + mol2.getAtom(0).getProperties().size());
+			//System.out.println("MyProperty Type = " + mol2.getAtom(0).
+			//								getProperty("MyProperty").getClass().getName());
+			//
+			//System.out.println("get - XXProperty2 = " + mol2.getAtom(0).getProperty("XXMyProperty2").toString());
+			//System.out.println("get - MyProperty = " + mol2.getAtom(0).getProperty("xy").toString());
+			//System.out.println("RingData2 = " + mol2.getAtom(0).getProperty("RingData2").toString());
+			
 			
 			
 			//CMLReader reader = new CMLReader("\\test.cml");

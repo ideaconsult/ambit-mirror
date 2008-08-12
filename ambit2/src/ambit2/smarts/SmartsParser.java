@@ -1896,6 +1896,30 @@ public class SmartsParser
 		}
 	}
 	
+	static public int[] getExplicitHAtomData(IAtomContainer container)
+	{
+		int numH[] = new int[container.getAtomCount()];
+		for (int i = 0; i < numH.length; i++)
+			numH[0] = 0; 
+			
+		for (int i = 0; i < container.getBondCount(); i++)
+		{
+			IBond bo = container.getBond(i);
+			if (bo.getAtom(0).getSymbol().equals("H"))
+			{
+				IAtom at = bo.getAtom(1);
+				numH[container.getAtomNumber(at)]++;
+			}
+			if (bo.getAtom(1).getSymbol().equals("H"))
+			{
+				IAtom at = bo.getAtom(0);
+				numH[container.getAtomNumber(at)]++;
+			}
+		}
+		return(numH);
+	}
+	
+	
 	static public void setRingData(IAtomContainer container, boolean rData, boolean rData2)
 	{	
 		SSSRFinder sssrf = new SSSRFinder(container);
@@ -1940,6 +1964,50 @@ public class SmartsParser
 			}
 		} //end of ringData2
 		
+	}
+	
+	static public Vector<int[]> getRindData(IAtomContainer container, IRingSet ringSet)
+	{
+		Vector<int[]> v = new Vector<int[]>();
+		IRingSet atomRings;
+		for (int i = 0; i < container.getAtomCount(); i++)
+		{	
+			IAtom atom = container.getAtom(i);
+			atomRings = ringSet.getRings(atom);			
+			int n = atomRings.getAtomContainerCount();
+			if (n > 0)
+			{	
+				int ringData[] = new int [n];
+				for (int k = 0; k < n; k++ )					
+					ringData[k] = atomRings.getAtomContainer(k).getAtomCount();					
+				v.add(ringData);				
+			}
+			else
+				v.add(null);
+		}
+		return(v);
+	}
+	
+	static public Vector<int[]> getRindData2(IAtomContainer container, IRingSet ringSet)
+	{
+		Vector<int[]> v = new Vector<int[]>();
+		IRingSet atomRings;
+		for (int i = 0; i < container.getAtomCount(); i++)
+		{	
+			IAtom atom = container.getAtom(i);
+			atomRings = ringSet.getRings(atom);			
+			int n = atomRings.getAtomContainerCount();
+			if (n > 0)
+			{	
+				int ringData2[] = new int [n];
+				for (int k = 0; k < n; k++ )					
+					ringData2[k] = getRingNumberInRingSet(atomRings.getAtomContainer(k), ringSet);
+				v.add(ringData2);
+			}
+			else
+				v.add(null);
+		}
+		return(v);
 	}
 	
 	static public int getRingNumberInRingSet(IAtomContainer ring, IRingSet rs)
