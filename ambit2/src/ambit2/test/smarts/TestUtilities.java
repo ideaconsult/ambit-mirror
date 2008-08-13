@@ -211,8 +211,8 @@ public class TestUtilities
 		
 		//tu.getCarbonSkelletonsFromString();		
 		//tu.testAtomIndexesForMapping(4, 5);
-		tu.testCML("C1C=CCN1");
-		//tu.testIntParsing("05");
+		tu.testCML("[H]C1CCC12CCNCC2");
+		//tu.testIntParsing("1234");
 		
 	}
 	
@@ -261,7 +261,8 @@ public class TestUtilities
 	{	
 		Integer intObj = Integer.parseInt(s);
 		int n = intObj.intValue();
-		System.out.println(n);
+		System.out.println(n);		
+		System.out.println(s.substring(7,2));
 	}
 	
 	public void testAtomIndexesForMapping(int nGA, int nTA)
@@ -401,8 +402,7 @@ public class TestUtilities
 		//if (true) return;
 		
 		try
-		{			
-			
+		{	
 			StringWriter output = new StringWriter();			
 			CMLWriter cmlwriter = new CMLWriter(output);
 			cmlwriter.write(mol);
@@ -414,11 +414,16 @@ public class TestUtilities
 			
 			System.out.println("-------------------------");
 			String smiles2 = SmartsHelper.moleculeToSMILES(mol2);
-			System.out.println(smiles2);
-			System.out.println("nAtom = " + mol2.getAtomCount());
-			System.out.println("AtType0 = " + mol2.getAtom(0).getSymbol());
+			cmlut.extractSMARTSProperties(mol2);
 			
-			System.out.println(SmartsHelper.atomPropertiesToString(mol.getAtom(0)));
+			System.out.println(smiles2);
+			for (int i = 0; i < mol2.getAtomCount(); i++)
+			{	
+				System.out.println("AtType" + i+ " = " + mol2.getAtom(i).getSymbol());
+				System.out.println(SmartsHelper.atomPropertiesToString(mol2.getAtom(i)));
+			}	
+			
+			
 			
 			//System.out.println("Properties Map Size = " + mol2.getAtom(0).getProperties().size());
 			//System.out.println("MyProperty Type = " + mol2.getAtom(0).
