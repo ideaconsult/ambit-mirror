@@ -382,14 +382,14 @@ public class TestUtilities
 	public void testCML(String smiles)
 	{
 		System.out.println("Writing " + smiles + " to CML file");
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);		
 		CMLUtilities cmlut = new CMLUtilities();
 		cmlut.setCMLSMARTSProperties(mol);
-		//sp.prepareTargetForSMARTSSearch(true,true,true,true,true,false, mol);
-		//int t[] = new int[3];		
 		
-		//mol.getAtom(0).setProperty("xy", new Integer(505));
-		//mol.getAtom(0).setProperty("XXMyProperty2", "TT");		
+		//sp.prepareTargetForSMARTSSearch(true,true,true,true,true,false, mol);
+		//int t[] = new int[3];
+		//mol.getAtom(0).setProperty("x", new Integer(505));
+		//mol.getAtom(0).setProperty("y", "TT");		
 		//System.out.println(SmartsHelper.atomPropertiesToString(mol.getAtom(0)));		
 		//System.out.println("MyProperty = " + mol.getAtom(0).getProperty("xy").toString());		
 		//System.out.println("XXMyProperty2 = " + mol.getAtom(0).getProperty("XXMyProperty2").toString());
@@ -414,8 +414,8 @@ public class TestUtilities
 			
 			System.out.println("-------------------------");
 			String smiles2 = SmartsHelper.moleculeToSMILES(mol2);
-			cmlut.extractSMARTSProperties(mol2);
 			
+			cmlut.extractSMARTSProperties(mol2);
 			System.out.println(smiles2);
 			for (int i = 0; i < mol2.getAtomCount(); i++)
 			{	
@@ -424,13 +424,15 @@ public class TestUtilities
 			}	
 			
 			
+			//System.out.println(SmartsHelper.atomPropertiesToString(mol2.getAtom(0)));
+			//System.out.println("get - x = " + mol2.getAtom(0).getProperty("x").toString());
+			//System.out.println("get - y = " + mol2.getAtom(0).getProperty("y").toString());
 			
 			//System.out.println("Properties Map Size = " + mol2.getAtom(0).getProperties().size());
 			//System.out.println("MyProperty Type = " + mol2.getAtom(0).
 			//								getProperty("MyProperty").getClass().getName());
 			//
-			//System.out.println("get - XXProperty2 = " + mol2.getAtom(0).getProperty("XXMyProperty2").toString());
-			//System.out.println("get - MyProperty = " + mol2.getAtom(0).getProperty("xy").toString());
+			
 			//System.out.println("RingData2 = " + mol2.getAtom(0).getProperty("RingData2").toString());
 			
 			
@@ -460,4 +462,9 @@ public class TestUtilities
         chemFile = (IChemFile)reader.read(new org.openscience.cdk.ChemFile());
         return chemFile;
     }
+	
+	void testRandom()
+	{
+		//java.util.Random r = new 
+	}
 }
