@@ -2,6 +2,7 @@ package ambit2.test.smarts;
 
 import java.util.Stack;
 import java.util.Vector;
+import java.util.BitSet;
 import java.io.RandomAccessFile;
 import java.io.FileWriter;
 import java.io.StringWriter;
@@ -23,7 +24,7 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-
+import org.openscience.cdk.fingerprint.Fingerprinter;
 
 
 public class TestUtilities 
@@ -211,9 +212,10 @@ public class TestUtilities
 		
 		//tu.getCarbonSkelletonsFromString();		
 		//tu.testAtomIndexesForMapping(4, 5);
-		tu.testCML("[H]C1CCC12CCNCC2");
+		//tu.testCML("[H]C1CCC12CCNCC2");
 		//tu.testIntParsing("1234");
 		
+		tu.testFingerprint();
 	}
 	
 	
@@ -463,8 +465,44 @@ public class TestUtilities
         return chemFile;
     }
 	
-	void testRandom()
+	
+	String getFingerprint(String smiles)
 	{
-		//java.util.Random r = new 
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		Fingerprinter fp = new Fingerprinter();
+		try
+		{
+			BitSet bs = fp.getFingerprint(mol);			
+			return(bs.toString());			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		return("");
+	}
+	
+	void testFingerprint()
+	{
+		String smiles[] = {"c1ccccc1", "C1CCCCC1","C1CCCCC1" };
+		for (int i = 0; i < smiles.length; i++)
+		{	
+			System.out.println(smiles[i]);
+			System.out.println(getFingerprint(smiles[i]));
+		}	
+	}
+	
+	String toBitString(BitSet bs)
+	{
+		StringBuffer strBuff = new StringBuffer();
+		for (int i = 0; i < bs.size(); i++)
+		{	
+			if (bs.get(i))
+				strBuff.append("1");
+			else
+				strBuff.append("0");
+		}
+		return(strBuff.toString());
+		
 	}
 }
