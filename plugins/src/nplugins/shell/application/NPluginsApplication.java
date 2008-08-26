@@ -207,9 +207,9 @@ public class NPluginsApplication implements PropertyChangeListener {
 	protected void addPlugins(NanoPluginsManager manager) {
 		try {
 			manager.addPackage("nplugins.demo.DemoPlugin");
-			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"1"});
-			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"2"});
-			manager.addPackage("nplugins.workflow.MWorkflowPlugin",new String[] {"2"});
+			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"1"},"Demo",null);
+			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"2"},"Demo",null);
+			manager.addPackage("nplugins.workflow.MWorkflowPlugin",new String[] {"2"},"MWorkflow",null);
 			
 		} catch (Exception x) {
             x.printStackTrace();
@@ -448,7 +448,9 @@ public class NPluginsApplication implements PropertyChangeListener {
         if (NanoPluginsManager.property_plugin.equals(evt.getPropertyName())) 
             if (evt.getNewValue() instanceof INanoPlugin) {
                 INanoPlugin p = (INanoPlugin)evt.getNewValue();
-                leftPanel.setContent(buildMainLeftPanel(p));
+                JComponent c = buildMainLeftPanel(p);
+                leftPanel.setContent(c);
+                leftPanel.setTitle(c.toString());
                 rightPanel.setContent(buildMainRightPanel(p));
                 JComponent detail = buildDetailsPanel(p);
                 detailsPanel.setContent(detail);

@@ -151,12 +151,17 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	public PluginPackageEntry getPackage(int index) throws Exception {
 		return packageEntries.get(index);
 	}
+    public PluginPackageEntry addPackage(String className,String defaultTitle, ImageIcon defaultIcon) throws Exception {
+        return addPackage(className,new String[] {},defaultTitle,defaultIcon);
+    }	
     public PluginPackageEntry addPackage(String className) throws Exception {
-        return addPackage(className,new String[] {});
+        return addPackage(className,new String[] {},null,null);
     }
-	public PluginPackageEntry addPackage(String className,String[] args) throws Exception {
+	public PluginPackageEntry addPackage(String className,String[] args,String defaultTitle, ImageIcon defaultIcon) throws Exception {
 		PluginPackageEntry p =  new PluginPackageEntry(className,"",null);
 		p.setParameters(args);
+		p.setDefaultIcon(defaultIcon);
+		p.setDefaultTitle(defaultTitle);
 		if (packageEntries == null) packageEntries = new PluginsPackageEntries();
 		packageEntries.add(p);
 		return p;

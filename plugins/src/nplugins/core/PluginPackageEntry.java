@@ -44,8 +44,22 @@ public class PluginPackageEntry {
 	protected String packageName;
 	protected JarEntry jar;
     protected String[] parameters;
+    protected String defaultTitle = null;
+    protected ImageIcon defaultIcon = null;
  	
-	public PluginPackageEntry(String className, String packageName, JarEntry jar) throws Exception {
+	public synchronized String getDefaultTitle() {
+        return defaultTitle;
+    }
+    public synchronized void setDefaultTitle(String defaultTitle) {
+        this.defaultTitle = defaultTitle;
+    }
+    public synchronized ImageIcon getDefaultIcon() {
+        return defaultIcon;
+    }
+    public synchronized void setDefaultIcon(ImageIcon defaultIcon) {
+        this.defaultIcon = defaultIcon;
+    }
+    public PluginPackageEntry(String className, String packageName, JarEntry jar) throws Exception {
 		super();
 		this.className = className;
 		this.packageName = packageName;
@@ -140,7 +154,10 @@ public class PluginPackageEntry {
         this.parameters = parameters;
     }
     public String getTitle() {
-        if (jar == null) return className;
+        if (jar == null) {
+            if (defaultTitle == null) return className;
+            else return defaultTitle;
+        }
         try {
             String title = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_TITLE).toString();
             String version = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_VERSION).toString();
@@ -150,8 +167,11 @@ public class PluginPackageEntry {
         }
     }
     public ImageIcon getIcon() {
-        if (jar == null) 
-            return Utils.createImageIcon("nplugins/shell/resources/plugin.png");
+        if (jar == null) {
+            if (defaultIcon == null)
+                return Utils.createImageIcon("nplugins/shell/resources/plugin.png");
+            else return defaultIcon;
+        }
         try {
             Object title = jar.getAttributes().getValue("Image-icon");
             return Utils.createImageIcon(title.toString());

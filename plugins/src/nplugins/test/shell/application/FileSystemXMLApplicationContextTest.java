@@ -33,10 +33,7 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 import nplugins.demo.DemoPlugin;
-import nplugins.shell.application.DefaultAppplicationContext;
 import nplugins.shell.application.FileSystemXMLApplicationContext;
-import nplugins.workflow.DemoWorkflow;
-import nplugins.workflow.MWorkflowPlugin;
 
 import org.xml.sax.InputSource;
 
@@ -62,39 +59,18 @@ public class FileSystemXMLApplicationContextTest extends TestCase {
         
         "<bean id=\"WorkflowPlugin\" class=\"nplugins.workflow.MWorkflowPlugin\">\n"+
         "    <property name=\"Workflow\">\n"+
-        "        <ref local=\"DemoWorkflow\"/>\n"+
+        "        <ref local=\"Workflow\"/>\n"+
         "    </property>\n"+
-        "    <property name=\"ApplicationContext\">\n"+
-        "        <ref local=\"DefaultContext\"/>\n"+
-        "    </property>\n"+        
-        "    <property name=\"WorkflowContext\">\n"+
-        "        <ref local=\"WorkflowContext\"/>\n"+
-        "    </property>\n"+          
         "</bean>\n"+        
         
-        "<bean id=\"DemoWorkflow\" class=\"nplugins.workflow.DemoWorkflow\">\n"+
-        "</bean>\n"+
-        
-        "<bean id=\"DefaultContext\" class=\"nplugins.shell.application.DefaultAppplicationContext\">\n"+
-        "</bean>\n"+      
-        
-        "<bean id=\"WorkflowContext\" class=\"com.microworkflow.process.WorkflowContext\">\n"+
-        /*
-        "    <property name=\"Context\">\n"+
-        " 	 	<map>\n"+
-        "	 	 	<entry key=\"1\">\n"+
-        "		        <value>First</value>\n"+        
-        "	 	 	</entry>\n"+
-        "	 	 	<entry key=\"2\">\n"+
-        "		        <value>Second</value>\n"+        
-        "	 	 	</entry>\n"+        
-        " 	 	</map>\n"+
+        "<bean id=\"Workflow\" class=\"com.microworkflow.process.Workflow\">\n"+
+        "    <property name=\"name\">\n"+
+        "        <value>TestWorkflow</value>\n"+
         "    </property>\n"+
-        */
-        "</bean>\n"+          
+        "</bean>\n"+
         "</beans>\n";
     }
-    public void testDemoPlugin() throws Exception {      
+    public void test() throws Exception {        
         FileSystemXMLApplicationContext ctx = new FileSystemXMLApplicationContext(
                 new InputSource(new StringReader(getConfig())));
         Object o = ctx.getBean("DemoPlugin");
@@ -102,25 +78,4 @@ public class FileSystemXMLApplicationContextTest extends TestCase {
         assertTrue(o instanceof DemoPlugin);
         assertEquals("My Demo Plugin",((DemoPlugin)o).getName());
     }
-    
-    public void testWorkflowPlugin() throws Exception {        
-        FileSystemXMLApplicationContext ctx = new FileSystemXMLApplicationContext(
-                new InputSource(new StringReader(getConfig())));
-        Object o = ctx.getBean("WorkflowPlugin");
-        assertNotNull(o);
-        assertTrue(o instanceof MWorkflowPlugin);
-        MWorkflowPlugin wp = (MWorkflowPlugin)o;
-        assertNotNull(wp.getWorkflow());
-        assertTrue(wp.getWorkflow() instanceof DemoWorkflow);
-        assertNotNull(wp.getApplicationContext());
-        assertNotNull(wp.getWorkflowContext());
-    }    
-    
-    public void testAppContext() throws Exception {        
-        FileSystemXMLApplicationContext ctx = new FileSystemXMLApplicationContext(
-                new InputSource(new StringReader(getConfig())));
-        Object o = ctx.getBean("DefaultContext");
-        assertNotNull(o);
-        assertTrue(o instanceof DefaultAppplicationContext);
-    }        
 }
