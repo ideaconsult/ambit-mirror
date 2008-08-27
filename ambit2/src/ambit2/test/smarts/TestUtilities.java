@@ -15,16 +15,22 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.graph.ConnectivityChecker;
+
+
 
 
 public class TestUtilities 
@@ -33,7 +39,7 @@ public class TestUtilities
 	//static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
-	
+	static SmartsFingerprinter sfp = new SmartsFingerprinter();
 	
 	
 	public static int boolSearch(String smarts, String smiles)
@@ -135,6 +141,7 @@ public class TestUtilities
 		System.out.println("Number of parser fails = " + nParserFails);
 	}
 	
+	
 	public void testAtomSequencing(String smarts[])
 	{					
 		int nError = 0;		
@@ -176,6 +183,98 @@ public class TestUtilities
 	}
 	
 	
+	
+	int testExtractAtomContainer(String smarts)
+	{	
+		QueryAtomContainer query  = sp.parse(smarts);		
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))		
+			return(-1);
+		
+		sfp.forceAromaticBonds = true;
+		IMolecule mol =  sfp.extractAtomContainer(query);
+		
+		System.out.println(smarts);
+		printAromaticity(mol);
+		System.out.println(SmartsHelper.moleculeToSMILES(mol));
+		
+		IMolecule mol2 =  SmartsHelper.getMoleculeFromSmiles(smarts);
+		printAromaticity(mol2);
+		System.out.println(SmartsHelper.moleculeToSMILES(mol2));
+		
+		
+		if (mol.getAtomCount() != query.getAtomCount())
+			return(1);
+		if (mol.getBondCount() != query.getBondCount())
+			return(2);
+		
+		try
+		{
+			boolean res = UniversalIsomorphismTester.isSubgraph(mol, query);			
+			if (!res)
+				return(3);			
+		}
+		catch (CDKException e)
+		{
+			System.out.println(e.getMessage());
+			return(100);
+		}		
+		
+		return(0);
+	}
+	
+	public void testWithFile(String fname, String testType)
+	{
+		Vector<String> failSmiles = new Vector<String>(); 
+		if ((!testType.equals("ExtractAtomContainer")))
+		{	
+			System.out.println("Incorrect test type: " + testType);
+			System.out.println("Following ones are allowed: ExtractAtomContainer");
+			return;
+		}
+		int nError = 0;
+		int nTests = 0;
+		int nParserFails = 0;
+		try
+		{
+			RandomAccessFile f = new RandomAccessFile(fname, "r");
+			
+			long length = f.length();
+			while (f.getFilePointer() < length)
+			{	
+				String line = f.readLine();	
+				int res = 0;
+				if (testType.equals("ExtractAtomContainer"))
+					res = testExtractAtomContainer(line);
+				
+				//Statistics
+				if (res < 0)
+					nParserFails++;
+				if (res > 0)
+				{	
+					//System.out.println(line);
+					//System.out.println(res);
+					failSmiles.add(line);
+					nError++;
+				}	
+				nTests++;
+				//System.out.println("Test # " + nTests);
+			}
+			f.close();
+		}
+		catch (Exception e)
+		{	
+			System.out.println(e.getMessage());
+		}
+		System.out.println("\nNumber of test = " + nTests);		
+		System.out.println("Number of parser fails = " + nParserFails);
+		System.out.println("Number of errors = " + nError);
+		for (int i = 0; i < failSmiles.size(); i++)
+			System.out.println(failSmiles.get(i));
+	}
+	
+	
+	
 	//-------------------------------------------------------------------------------
 	
 	
@@ -215,9 +314,27 @@ public class TestUtilities
 		//tu.testCML("[H]C1CCC12CCNCC2");
 		//tu.testIntParsing("1234");
 		
-		tu.testFingerprint();
+		//tu.testFingerprint();
+		//tu.testWithFile("\\NCI001000.txt","ExtractAtomContainer");
+		int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
+		System.out.println("res = " + res);
+		
 	}
 	
+	public void printAromaticity(IMolecule mol)
+	{	
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{
+			IAtom atom = mol.getAtom(i);
+			System.out.println("Atom " + i + "  aromatic = " +atom.getFlag(CDKConstants.ISAROMATIC));
+		}
+		
+		for (int i = 0; i < mol.getBondCount(); i++)
+		{
+			IBond bond = mol.getBond(i);
+			System.out.println("Bond " + i + "  aromatic = " +bond.getFlag(CDKConstants.ISAROMATIC));
+		}
+	}
 	
 	public void testSmartsManagerAtomMapping(String smarts, String smiles)
 	{	
@@ -295,8 +412,7 @@ public class TestUtilities
 										//if (el.atoms[2].matches(targetAt.get(k)))
 										{
 										System.out.println(i+" "+j+ " "+k);
-										}
-					
+										}					
 			return;
 		}
 		

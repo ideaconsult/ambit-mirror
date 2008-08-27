@@ -3,10 +3,12 @@ package ambit2.smarts;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
@@ -40,7 +42,7 @@ public class SmartsFingerprinter
 	 * @param query
 	 * @return
 	 */
-	public IAtomContainer extractAtomContainer(QueryAtomContainer query)
+	public IMolecule extractAtomContainer(QueryAtomContainer query)
 	{
 		//Converting the atoms
 		Vector<IAtom> atoms = new Vector<IAtom>();
@@ -48,7 +50,7 @@ public class SmartsFingerprinter
 			atoms.add(toAtom(query.getAtom(i)));
 		
 		//Adding the atoms
-		AtomContainer container = new AtomContainer();
+		Molecule container = new Molecule();
 		for (int i = 0; i < atoms.size(); i++)
 		{	
 			IAtom a = atoms.get(i); 
@@ -78,12 +80,12 @@ public class SmartsFingerprinter
 				if (mFlagConfirmAromaticBond)
 				{
 					if (forceAromaticBonds)
-					{
-						//TODO
+					{	
+						b.setFlag(CDKConstants.ISAROMATIC,true);
 					}
 					else
 					{	
-						//Ring info should be used as well
+						//Ring info should be used
 						//TODO
 					}	
 				}
@@ -102,9 +104,7 @@ public class SmartsFingerprinter
 	 * @return
 	 */
 	public  IAtom toAtom(IAtom a)
-	{
-				
-						
+	{					
 		if (a instanceof AliphaticSymbolQueryAtom)
 		{	
 			Atom atom = new Atom();
