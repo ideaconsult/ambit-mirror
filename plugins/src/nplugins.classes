@@ -1,0 +1,4 @@
+nplugins/core/*.class
+nplugins/shell/*.class
+nplugins/shell/application/*.class
+nplugins/workflow/*.class

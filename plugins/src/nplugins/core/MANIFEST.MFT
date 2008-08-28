@@ -1,0 +1,26 @@
+Manifest-version: 1.0
+Main-Class: nplugins.shell.application.NPluginsApplication
+Class-Path: lib/validation-2.0.1.jar lib/forms-1.2.0.jar lib/binding-2.0.4.jar lib/looks-2.1.4.jar
+Specification-Title: nano Plugins
+Specification-Version: 1.0
+Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Package-Title: nplugins
+Package-Version: 1.0
+Package-Vendor: acad.bg
+Implementation-Title: nano plugins
+Implementation-Version: 1.0
+Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+
+Name: nplugins/shell/NanoPluginsManager.class
+Comment: description
+Specification-Title: Manager
+Specification-Version: 1.0
+Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Package-Title: nplugins.shell
+Package-Version: 1.0
+Package-Vendor: ambit.acad.bg
+Implementation-Title: Manager
+Implementation-Version: 1.0
+Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Implementation-Vendor-Id: Ideaconsult
+Image-icon: nplugins/shell/resources/plugin_edit.png
