@@ -33,9 +33,18 @@ import java.util.logging.Logger;
  * @author Nina Jeliazkova nina@acad.bg <b>Modified</b> 2005-10-18
  */
 public class Introspection {
-	protected final static String pref_key = "/nplugins";
-	protected final static String pref_path = "/classpath";
-	protected static String defaultClassPath = ".,dist,ext";
+	protected static String pref_key = "/nplugins";
+	public static synchronized String getPref_key() {
+        return pref_key;
+    }
+	/**
+	 * TODO reconfigure classpath/loader on hange
+	 * @param pref_key
+	 */
+    public static synchronized void setPref_key(String pref_key) {
+        Introspection.pref_key = pref_key;
+    }
+    protected static String defaultClassPath = "dist,ext";
 	protected static PluginClassPath pluginsClassPath=null;
 	
 
@@ -52,6 +61,7 @@ public class Introspection {
     	if (pluginsClassPath == null) 
     		try {
     			pluginsClassPath = new PluginClassPath();
+    			pluginsClassPath.setPref_key(pref_key);
     		} catch (Exception x) {
     			throw new NPluginsException(x);
     		}
@@ -90,6 +100,7 @@ public class Introspection {
 	public static Class implementsInterface(String className,
 			String interfaceName) throws NPluginsException {
 		try {
+		    logger.info(className);
 			Class clazz = Class.forName(className);
 			int modifier = clazz.getModifiers();
 			if (Modifier.isAbstract(modifier))

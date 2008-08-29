@@ -34,9 +34,10 @@ public class PluginClassPath  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1813037553139995737L;
-	protected final static String pref_key = "/nplugins";
-	protected final static String pref_path = "/classpath";
-	protected static String defaultClassPath = ".,dist,ext";
+	protected String pref_key = "/nplugins";
+
+    protected final static String pref_path = "classpath";
+	protected static String defaultClassPath = "dist,ext";
 	protected ArrayList<String> storage; 
 	public PluginClassPath(String classPath) throws BackingStoreException  {
 		storage = new ArrayList<String>();
@@ -45,9 +46,18 @@ public class PluginClassPath  {
 	
 	public PluginClassPath() throws BackingStoreException  {
 		storage = new ArrayList<String>();
-		Preferences prefs = Preferences.userRoot().node(pref_key);
-		init(prefs.get(pref_path, defaultClassPath));
+		setPref_key(pref_key);
 	}
+	
+    public synchronized void setPref_key(String pref_key) throws BackingStoreException  {
+        this.pref_key = pref_key;
+        Preferences prefs = Preferences.userRoot().node(pref_key);
+        init(prefs.get(pref_path, defaultClassPath));        
+    }
+
+    public synchronized String getPref_key() {
+        return pref_key;
+    }	
 	protected void init(String cp) throws BackingStoreException {
     	Preferences prefs = Preferences.userRoot().node(pref_key);
     	StringTokenizer tok = new StringTokenizer(cp, ",");
@@ -74,12 +84,15 @@ public class PluginClassPath  {
 	
 
 	public boolean add(String o) throws BackingStoreException  {
-		if (storage.add(o)) {
+		if (!contains(o) && storage.add(o)) {
 	    	Preferences prefs = Preferences.userRoot().node(pref_key);
 	    	prefs.put(pref_path, toPath());			
 	    	prefs.flush();
 			return true;
 		} else return false;
+	}
+	public boolean contains(String path) {
+	    return storage.indexOf(path)>=0;
 	}
 	public void clear() throws BackingStoreException  {
 		storage.clear();

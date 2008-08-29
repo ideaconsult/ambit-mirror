@@ -195,7 +195,7 @@ public class NPluginsApplication implements PropertyChangeListener {
 		return bar;
 	}
 	protected void initialize(String[] args) {
-		pluginsManager = new NanoPluginsManager();
+		pluginsManager = createManager();
 		pluginsManager.setParameters(args);
 		pluginsManager.setApplicationContext(applicationContext);
         
@@ -203,7 +203,9 @@ public class NPluginsApplication implements PropertyChangeListener {
 
         pluginsManager.addPropertyChangeListener(this);        
 	}
-	
+	protected NanoPluginsManager createManager() {
+	    return new NanoPluginsManager();
+	}
 	protected void addPlugins(NanoPluginsManager manager) {
 		try {
 			manager.addPackage("nplugins.demo.DemoPlugin");

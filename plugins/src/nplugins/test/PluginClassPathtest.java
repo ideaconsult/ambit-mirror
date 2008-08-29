@@ -32,11 +32,11 @@ import junit.framework.TestCase;
 
 public class PluginClassPathtest extends TestCase {
 	public void test() throws Exception {
-		PluginClassPath path = new PluginClassPath(".,dist,ext");
-		assertEquals(3,path.size());
-		assertEquals(".",path.get(0));
-		assertEquals("dist",path.get(1));
-		assertEquals("ext",path.get(2));
+		PluginClassPath path = new PluginClassPath("dist,ext");
+		assertEquals(2,path.size());
+		//assertEquals(".",path.get(0));
+		assertEquals("dist",path.get(0));
+		assertEquals("ext",path.get(1));
 	}
 	
 	public void testAdd() throws Exception {
@@ -47,13 +47,17 @@ public class PluginClassPathtest extends TestCase {
 		
 		PluginClassPath path1 = new PluginClassPath(".,dist,ext");
 		System.out.println(path1);
-		assertEquals(4,path1.size());
+		assertEquals(3,path1.size());
 	}
 	
 	public void testEnumerateJars() throws Exception {
 		System.out.print("Plugins classpath:\t");
+		Introspection.setPref_key("test/nplugins");
 		PluginClassPath path = Introspection.getDefaultDirectories();
 		System.out.println(path);
+		
+		Introspection.setLoader(this.getClass().getClassLoader());
+		System.out.println(Introspection.getLoader());
 		
 		for (int i=0; i < path.size(); i++) {
 			File file = new File(path.get(i));
@@ -64,6 +68,18 @@ public class PluginClassPathtest extends TestCase {
 					System.out.println(files[j]);
 			}
 		}
+	}
+	public void testStorage() throws Exception {
+	    PluginClassPath path = new PluginClassPath();
+	    path.setPref_key("test/nplugins");
+	    path.add("test");
+	    
+	    PluginClassPath path1 = new PluginClassPath();
+        path1.setPref_key("test/nplugins");
+        assertEquals(path.size(),path1.size());
+        for (int i=0; i < path.size();i++)
+            assertTrue(path1.contains(path.get(i)));
+	    
 	}
 }
 

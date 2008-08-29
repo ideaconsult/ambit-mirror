@@ -56,15 +56,27 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
     protected INanoPlugin thePlugin = null;
     public static final String property_plugin = "plugin";
     
-	public NanoPluginsManager() {
+    
+    public NanoPluginsManager() {
+       this(true,null);
+    }    
+    /**
+     * 
+     * @param load if true, then examines and loads all available plugins
+     * @param pref_key  sets {@link Introspection#setPref_key(pref_key)}. 
+     */
+	public NanoPluginsManager(boolean load,String pref_key) {
 		try {
-			init();
+			init(load,pref_key);
 		} catch (NPluginsException x) {
          
 			logger.severe(x.getMessage());
 		}
 	}
-	public void init() throws NPluginsException {
+	public void init(boolean load,String pref_key) throws NPluginsException {
+	    if (pref_key != null)
+	        Introspection.setPref_key(pref_key);
+	    if (load)
 		packageEntries = Introspection.getAvailableTypes(getClass().getClassLoader(), "nplugins.shell.INanoPlugin");
 	}
 	public void clear() {
