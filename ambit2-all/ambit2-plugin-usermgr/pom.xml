@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-plugin-usermgr</artifactId>
+	<packaging>jar</packaging>        
+  <name>ambit2-plugin-usermgr</name>
+  <version>2.0.0-SNAPSHOT</version>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-workflow</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>

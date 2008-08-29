@@ -1,0 +1,106 @@
+/*
+ * Created on 2006-2-18
+ *
+ */
+package ambit2.ui;
+
+//TODO derive from SimpleIOListener
+import java.util.Hashtable;
+
+import javax.swing.JOptionPane;
+
+import org.openscience.cdk.io.ReaderEvent;
+import org.openscience.cdk.io.listener.IReaderListener;
+import org.openscience.cdk.io.listener.IWriterListener;
+import org.openscience.cdk.io.setting.IOSetting;
+
+import ambit2.core.io.Property;
+
+/**
+ * An implementation of {@link org.openscience.cdk.io.listener.IReaderListener} and {@link org.openscience.cdk.io.listener.IWriterListener}.
+ * On each {@link #processIOSettingQuestion(IOSetting)} call launches an {@link ambit2.test.ui.data.MolPropertiesPanel} visualizing current properties {@link ambit2.data.molecule.MolProperties}.. 
+ * The user may change the assignment of the properties.<br> 
+ * To be used as {@link org.openscience.cdk.io.listener.IChemObjectIOListener}
+ * in order to process {@link ambit2.core.io.MolPropertiesIOSetting}, a descendant of {@link org.openscience.cdk.io.setting.IOSetting}.
+ * See exapmle at {@link ambit2.database.writers.DbSubstanceWriter}.
+ * @author Nina Jeliazkova nina@acad.bg
+ * <b>Modified</b> 2006-2-18
+ */
+public class AmbitSettingsListener implements IReaderListener, IWriterListener{
+    protected int level;
+    protected Hashtable<String,Property> properties;
+    protected int counter= 0;
+    /**
+     * @param frame
+     * @param level
+     */
+    public AmbitSettingsListener(int level) {
+        super();
+        this.level = level;
+        properties =  new Hashtable<String, Property>();
+
+    }
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.io.listener.SwingGUIListener#processIOSettingQuestion(org.openscience.cdk.io.setting.IOSetting)
+     */
+    public void processIOSettingQuestion(IOSetting setting) {
+        if (setting.getLevel() <= this.level) { 
+        	try {
+        		Property.IO_QUESTION question = Property.IO_QUESTION.valueOf(setting.getQuestion());
+        		switch (question) {
+        		case IO_START: { counter = 0;}
+        		case IO_STOP: { if (counter > 0) launchUI(); }
+        		case IO_TRANSLATE_NAME: { 
+        			if (!"".equals(setting.getName().trim())) {
+        				if (properties.get(setting.getName())==null) {
+        					properties.put(setting.getName(),
+        							new Property(setting.getName(),setting.getDefaultSetting(),counter));
+        					counter++;
+        				}	
+        			}
+        			}
+        		default: {}
+        		}
+        	} catch (Exception x) {
+        		x.printStackTrace();
+        	}
+        } else {
+        	try {
+        		Property.IO_QUESTION question = Property.IO_QUESTION.valueOf(setting.getQuestion());
+        		switch (question) {
+        		case IO_START: { counter = 0;}
+        		case IO_STOP: {  }
+        		case IO_TRANSLATE_NAME: { 
+        			if (!"".equals(setting.getName().trim())) {
+        				if (properties.get(setting.getName())==null) {
+        					Property p = new Property(setting.getName(),setting.getDefaultSetting(),counter);
+        					p.setEnabled(true);
+        					properties.put(setting.getName(),p);
+        					counter++;
+        				}	
+        			}
+        			}
+        		default: {}
+        		}
+        	} catch (Exception x) {
+        		x.printStackTrace();
+        	}        	
+        }
+    }
+    
+    protected void launchUI() {
+    	SelectFieldsPanel sp = new SelectFieldsPanel(properties,"All available fields that can be exported are listed in the left pane. Select those fields you want to be exported and click \">\" button to move them to right pane.");
+    	JOptionPane.showMessageDialog(null,sp,"",JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void frameRead(ReaderEvent event) {
+    	
+    	
+    }
+	public Hashtable<String, Property> getProperties() {
+		return properties;
+	}
+	public void setProperties(Hashtable<String, Property> properties) {
+		this.properties = properties;
+	}
+}

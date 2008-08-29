@@ -1,0 +1,97 @@
+/* SimpleIOListener.java
+ * Author: Nina Jeliazkova
+ * Date: Aug 28, 2008 
+ * Revision: 0.1 
+ * 
+ * Copyright (C) 2005-2008  Nina Jeliazkova
+ * 
+ * Contact: nina@acad.bg
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+
+package ambit2.core.io;
+
+import java.util.Hashtable;
+
+import org.openscience.cdk.io.ReaderEvent;
+import org.openscience.cdk.io.listener.IReaderListener;
+import org.openscience.cdk.io.listener.IWriterListener;
+import org.openscience.cdk.io.setting.IOSetting;
+
+public class SimpleIOListener implements IReaderListener, IWriterListener {
+
+    protected int level;
+    protected Hashtable<String,Property> properties;
+    protected int counter= 0;
+    /**
+     * @param frame
+     * @param level
+     */
+    public SimpleIOListener(int level) {
+        super();
+        this.level = level;
+        properties =  new Hashtable<String, Property>();
+
+    }
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.io.listener.SwingGUIListener#processIOSettingQuestion(org.openscience.cdk.io.setting.IOSetting)
+     */
+    public void processIOSettingQuestion(IOSetting setting) {
+        selectProperties(setting);
+    }
+    
+    protected void selectProperties(IOSetting setting) {
+        Property.IO_QUESTION question = Property.IO_QUESTION.valueOf(setting.getQuestion());
+        switch (question) {
+        case IO_START: { counter = 0;}
+        case IO_STOP: { if (counter > 0)
+            if (setting.getLevel() <= this.level)
+                onStopEvent();
+            else; //silent
+        }
+        case IO_TRANSLATE_NAME: { 
+            if (!"".equals(setting.getName().trim())) {
+                if (properties.get(setting.getName())==null) {
+                    Property p = new Property(setting.getName(),setting.getDefaultSetting(),counter);
+                    if (setting.getLevel() > this.level)
+                        p.setEnabled(true);
+                    properties.put(setting.getName(),p);
+                    counter++;
+                }   
+            }
+            }
+        default: {}
+        }        
+    }
+    protected void onStopEvent() {
+        
+    }
+    public void frameRead(ReaderEvent event) {
+        
+        
+    }
+    public Hashtable<String, Property> getProperties() {
+        return properties;
+    }
+    public void setProperties(Hashtable<String, Property> properties) {
+        this.properties = properties;
+    }
+}
