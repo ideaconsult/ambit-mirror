@@ -1,0 +1,90 @@
+package ambit2.plugin.search;
+
+
+import java.beans.PropertyChangeEvent;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+
+import nplugins.shell.INPluginUI;
+import nplugins.shell.INanoPlugin;
+import nplugins.shell.application.Utils;
+import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.DBWorkflowPlugin;
+import ambit2.workflow.ui.AmbitWorkflowContextPanel;
+import ambit2.workflow.ui.UserInteractionEvent;
+import ambit2.workflow.ui.WorkflowOptionsLauncher;
+
+import com.microworkflow.process.Workflow;
+import com.microworkflow.process.WorkflowContext;
+
+public class SearchPlugin extends DBWorkflowPlugin {
+	protected WorkflowOptionsLauncher contextListener;
+	public SearchPlugin() {
+		super();
+		contextListener = new WorkflowOptionsLauncher(null);
+		Vector<String> props = new Vector<String>();		
+		props.add(UserInteractionEvent.PROPERTYNAME);
+		props.add(DBWorkflowContext.ERROR);
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DBCONNECTION_URI);
+		props.add(DBWorkflowContext.DATASOURCE);
+        props.add(DBWorkflowContext.DATASET);		
+		contextListener.setProperties(props);
+		contextListener.setWorkflowContext(getWorkflowContext());
+		
+	}
+	@Override
+	public void setWorkflowContext(WorkflowContext workflowContext) {
+		super.setWorkflowContext(workflowContext);
+		if (contextListener!= null)
+		contextListener.setWorkflowContext(workflowContext);
+
+	}
+	@Override
+	protected Workflow createWorkflow() {
+		return new SearchWorkflow();
+	}
+	
+	public INPluginUI<INanoPlugin> createMainComponent() {
+		AmbitWorkflowContextPanel results = new AmbitWorkflowContextPanel(getWorkflowContext());
+		Vector<String> p = new Vector<String>();
+		p.add(DBWorkflowContext.STOREDQUERY);
+		p.add(DBWorkflowContext.ERROR);
+		results.setProperties(p);
+		results.setAnimate(true);
+		return results;
+	}
+
+	public ImageIcon getIcon() {
+	    return Utils.createImageIcon("images/search_16.png");
+	}
+	
+
+	public int getOrder() {
+		return 1;
+	}
+
+	public ResourceBundle getResourceBundle() {
+		return null;
+	}
+
+	public void setParameters(String[] args) {
+	}
+
+	public void propertyChange(PropertyChangeEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int compareTo(INanoPlugin arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public String toString() {
+		return "Simple Search";
+	}
+
+}

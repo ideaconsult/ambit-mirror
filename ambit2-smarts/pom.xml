@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-smarts</artifactId>
+  <packaging>jar</packaging>  
+  <name>ambit2-smarts</name>
+  <version>2.0.0-SNAPSHOT</version>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <developers>
+  	<developer>
+  		<id>nkochev</id>
+  		<name>Nikolay Kochev</name>
+  	</developer>
+  </developers>
+	<build>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-compiler-plugin</artifactId>
+  				<version>2.0.2</version>
+		        <configuration>
+		          <source>1.5</source>
+		          <target>1.5</target>
+		       </configuration>  				
+  			</plugin>
+		</plugins>
+	</build>  			  
+</project>

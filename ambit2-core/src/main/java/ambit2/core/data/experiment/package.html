@@ -1,0 +1,26 @@
+<HTML><HEAD><TITLE>Ambit project</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+
+</SCRIPT>
+
+<META NAME="Description" CONTENT="Ambit package">
+<META NAME="Keywords" CONTENT="source,qsar,applicability domain,cheminformatics,database,mysql,java">
+<!--  -->
+
+<body bgColor="#FFFFFF" link="#428EFF">
+
+<h4 align=center>
+Classes to handle experimental data. <br>
+The repository of experimental data is designed to be generic data and does not have predefined fields as species, duration, LC50, etc. 
+Instead, it consists of templates {@link ambit.data.experiment.StudyTemplate}, 
+studies {@link ambit.data.experiment.Study} and experiments {@link ambit.data.experiment.Experiment}. <br>
+Study templates are introduced in order to provide generic framework for storing experimental data results, without predefined fieldnames, which may not be relevant to all endpoints (e.g. species strain or vehicle is not relevant to all species or endpoints). On other hand, fields with the same meaning have to have the same name to make queries feasible (e.g. “species” field should be the same across all endpoints in order to be able to search for species). <br>
+A template consists of a name, fields {@link ambit.data.experiment.TemplateField} defining study conditions and fields defining study results. Each field has a name, units and a flag specifying whether it is a condition or a result. See {@link ambit.data.experiment.DefaultTemplate} , 
+{@link ambit.data.experiment.DSSToxCarcinogenicityTemplate}, {@link ambit.data.experiment.DSSToxERBindingTemplate},
+{@link ambit.data.experiment.DSSToxLC50Template} for specific examples. 
+
+</h4>
+
+
+
+</body></HTML>
