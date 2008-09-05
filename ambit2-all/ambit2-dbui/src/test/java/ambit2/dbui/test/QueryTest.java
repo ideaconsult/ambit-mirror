@@ -7,7 +7,7 @@ import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 
-public abstract class QueryTest<T extends IQueryObject> extends ambit2.db.test.RepositoryTest {
+public abstract class QueryTest<T extends IQueryObject> extends RepositoryTest {
 	protected T query;
 	protected QueryExecutor<T> executor;
 	@Override
