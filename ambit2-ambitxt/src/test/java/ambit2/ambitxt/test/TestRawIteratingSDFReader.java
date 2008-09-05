@@ -20,7 +20,6 @@ import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.PropertyWriter;
 import ambit2.db.processors.RepositoryWriter;
-import ambit2.db.test.RepositoryTest;
 import ambit2.workflow.ui.AmbitWorkflowContextPanel;
 
 import com.microworkflow.events.WorkflowContextEvent;
