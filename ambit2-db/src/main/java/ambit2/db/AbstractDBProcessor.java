@@ -50,7 +50,7 @@ public abstract class AbstractDBProcessor<Target,Result> implements IDBProcessor
 	}
 
 	public void setConnection(Connection connection) throws DbAmbitException {
-		if (this.connection != connection) try {
+		if ((this.connection != null) && (this.connection != connection)) try {
 			close();
 		} catch (SQLException x) {
 		    logger.error(x);      
