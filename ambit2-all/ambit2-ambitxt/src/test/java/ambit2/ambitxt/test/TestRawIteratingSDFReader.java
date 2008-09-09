@@ -5,11 +5,13 @@ import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Vector;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.spi.SyncProviderException;
 import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -17,22 +19,28 @@ import org.openscience.cdk.io.iterator.IteratingMDLReader;
 
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.db.CachedRowSetFactory;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.PropertyWriter;
 import ambit2.db.processors.RepositoryWriter;
+import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ui.AmbitWorkflowContextPanel;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
-import com.sun.rowset.CachedRowSetImpl;
+
 
 public class TestRawIteratingSDFReader extends RepositoryTest {
+    /**
+     * Records 100204 5182341 ms.
+     * @throws Exception
+     */
 	public void xtest() throws Exception  {
 		
         Connection connection = datasource.getConnection();
         
-		String filename = "D:/nina/IdeaConsult/Ambit2/EINECS/einecs_structures_V13Apr07.sdf";
+		String filename = "D:/nina/IdeaConsult/Projects/Ambit2/EINECS/einecs_structures_V13Apr07.sdf";
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new FileReader(filename));
 		RepositoryWriter writer = new RepositoryWriter();
 		writer.setConnection(connection);
@@ -55,12 +63,12 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
 
 	public void xtestPropertyWriter() throws Exception {
 		
-//		DataSource dataSource = DatasourceFactory.getDataSource("jdbc:mysql://localhost:3306/ambit2?user=root&password=");
         Connection connection = datasource.getConnection();
         RepositoryReader reader = new RepositoryReader();
         reader.setConnection(connection);
         PropertyWriter propertyWriter = new PropertyWriter();
         propertyWriter.setConnection(connection);
+        propertyWriter.open();
         reader.open();
         int records = 0;
 		long now = System.currentTimeMillis();
@@ -117,7 +125,7 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
         ps.setMaxRows(100);
         ResultSet rs = ps.executeQuery();
         
-        CachedRowSet join = new CachedRowSetImpl();
+        CachedRowSet join = CachedRowSetFactory.getCachedRowSet();
         //join.setFetchSize(10);
         join.setPageSize(10);
         //join.setMaxRows(30);
@@ -133,6 +141,7 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
         int records = 0;
         int pages = 0;
 
+        assertTrue(join.size() > 0);
         join.nextPage();
         join.first();
         final WorkflowContext wc = new WorkflowContext();
@@ -141,11 +150,15 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
                 return wc;
             }
         };
-        AmbitWorkflowContextPanel p = new AmbitWorkflowContextPanel(f);
+        AmbitWorkflowContextPanel panel = new AmbitWorkflowContextPanel(wc);
+        Vector<String> p = new Vector<String>();
+        p.add(DBWorkflowContext.STOREDQUERY);
+        p.add(DBWorkflowContext.ERROR);
+        panel.setProperties(p);        
         wc.put(WorkflowContextEvent.WF_ANIMATE, new Boolean(true));
-        wc.put("Result", join);
-        //System.out.println(join.size());
-        JOptionPane.showMessageDialog(null,p);
+        wc.put(DBWorkflowContext.STOREDQUERY, join);
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JOptionPane.showMessageDialog(null,panel);
 
 
         try {
