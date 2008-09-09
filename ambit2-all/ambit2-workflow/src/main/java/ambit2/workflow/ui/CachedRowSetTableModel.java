@@ -196,3 +196,7 @@ public class CachedRowSetTableModel extends AbstractTableModel {
 }
 
 
+
+/*
+http://www.jguru.com/faq/view.jsp?EID=776543
+ */

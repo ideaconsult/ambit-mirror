@@ -44,6 +44,7 @@ import nplugins.shell.INanoPlugin;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.db.CachedRowSetFactory;
 import ambit2.db.search.StoredQuery;
 import ambit2.ui.ImageCellRenderer;
 import ambit2.workflow.DBWorkflowContext;
@@ -51,7 +52,6 @@ import ambit2.workflow.DBWorkflowContext;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
 import com.microworkflow.ui.WorkflowContextListenerPanel;
-import com.sun.rowset.CachedRowSetImpl;
 
 public class AmbitWorkflowContextPanel extends WorkflowContextListenerPanel implements INPluginUI<INanoPlugin> {
     protected CachedRowSetTableModel srtm;
@@ -114,7 +114,7 @@ public class AmbitWorkflowContextPanel extends WorkflowContextListenerPanel impl
     }
     
     protected CachedRowSet getQuery(StoredQuery query) throws SQLException {
-        CachedRowSet q = new CachedRowSetImpl();
+        CachedRowSet q = CachedRowSetFactory.getCachedRowSet();
         q.setPageSize(5);
         q.setCommand("SELECT s.idstructure,selected,uncompress(structure),format FROM query_results as q join structure as s using (idstructure) where idquery="+query.getId());
         
