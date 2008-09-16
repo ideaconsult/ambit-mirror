@@ -435,651 +435,569 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
     }
     public void setTime(int parameterIndex, Time x, Calendar cal)
             throws SQLException {
-        rowset.setTimestamp(parameterIndex, x, cal);
+        rowset.setTime(parameterIndex, x, cal);
         
     }
     public void setTimestamp(int parameterIndex, Timestamp x)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setTimestamp(parameterIndex, x);
         
     }
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal)
             throws SQLException {
-        // TODO Auto-generated method stub
+       rowset.setTimestamp(parameterIndex, x, cal);
         
     }
     public void setTransactionIsolation(int level) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setTransactionIsolation(level);
         
     }
     public void setType(int type) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setType(type);   
         
     }
     public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setTypeMap(map);
         
     }
     public void setUrl(String url) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setUrl(url);
         
     }
     public void setUsername(String name) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setUsername(name);
         
     }
     public boolean absolute(int row) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.absolute(row);
     }
     public void afterLast() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.afterLast();
         
     }
     public void beforeFirst() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.beforeFirst();
         
     }
     public void cancelRowUpdates() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.cancelRowUpdates();
         
     }
     public void clearWarnings() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.clearWarnings();
         
     }
     public void close() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.close();
         
     }
     public void deleteRow() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.deleteRow();
         
     }
     public int findColumn(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.findColumn(columnName);
     }
     public boolean first() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.first()  ;
     }
     public Array getArray(int i) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getArray(i);
     }
     public Array getArray(String colName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getArray(colName);
     }
     public InputStream getAsciiStream(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getAsciiStream(columnIndex);
     }
     public InputStream getAsciiStream(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getAsciiStream(columnName);
     }
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBigDecimal(columnIndex);
     }
     public BigDecimal getBigDecimal(String columnName) throws SQLException {
         // TODO Auto-generated method stub
         return null;
     }
+    @SuppressWarnings("deprecation")
     public BigDecimal getBigDecimal(int columnIndex, int scale)
             throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBigDecimal(columnIndex, scale);
     }
     public BigDecimal getBigDecimal(String columnName, int scale)
             throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return getBigDecimal(columnName, scale);
     }
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBinaryStream(columnIndex);
     }
     public InputStream getBinaryStream(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBinaryStream(columnName);
     }
     public Blob getBlob(int i) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBlob(i);
     }
     public Blob getBlob(String colName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+
+        return rowset.getBlob(colName);
     }
     public boolean getBoolean(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.getBoolean(columnIndex);
     }
     public boolean getBoolean(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.getBoolean(columnName);
     }
     public byte getByte(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getByte(columnIndex);
     }
     public byte getByte(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getByte(columnName);
     }
     public byte[] getBytes(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBytes(columnIndex);
     }
     public byte[] getBytes(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getBytes(columnName);
     }
     public Reader getCharacterStream(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getCharacterStream(columnIndex);
     }
     public Reader getCharacterStream(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getCharacterStream(columnName);
     }
     public Clob getClob(int i) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getClob(i);
     }
     public Clob getClob(String colName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getClob(colName);
     }
     public int getConcurrency() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getConcurrency();
     }
     public String getCursorName() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getCursorName();
     }
     public Date getDate(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getDate(columnIndex);
     }
     public Date getDate(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getDate(columnName);
     }
     public Date getDate(int columnIndex, Calendar cal) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getDate(columnIndex, cal);
     }
     public Date getDate(String columnName, Calendar cal) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getDate(columnName, cal);
     }
     public double getDouble(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getDouble(columnIndex);
     }
     public double getDouble(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getDouble(columnName);
     }
     public int getFetchDirection() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getFetchDirection();
     }
     public int getFetchSize() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getFetchSize();
     }
     public float getFloat(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getFloat(columnIndex);
     }
     public float getFloat(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getFloat(columnName);
     }
     public int getInt(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getInt(columnIndex);
     }
     public int getInt(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getInt(columnName);
     }
     public long getLong(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getLong(columnIndex);
+        
     }
     public long getLong(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getLong(columnName);
     }
     public ResultSetMetaData getMetaData() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getMetaData();
     }
     public Object getObject(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getObject(columnIndex);
     }
     public Object getObject(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getObject(columnName);
     }
     public Object getObject(int i, Map<String, Class<?>> map)
             throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getObject(i, map);
     }
     public Object getObject(String colName, Map<String, Class<?>> map)
             throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getObject(colName, map);
     }
     public Ref getRef(int i) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getRef(i);
     }
     public Ref getRef(String colName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getRef(colName);
     }
     public int getRow() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getRow();
     }
     public short getShort(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getShort(columnIndex);
     }
     public short getShort(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getShort(columnName);
     }
     public Statement getStatement() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getStatement();
     }
     public String getString(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getString(columnIndex);
     }
     public String getString(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getString(columnName);
     }
     public Time getTime(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTime(columnIndex);
     }
     public Time getTime(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTime(columnName);
     }
     public Time getTime(int columnIndex, Calendar cal) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTime(columnIndex, cal);
     }
     public Time getTime(String columnName, Calendar cal) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTime(columnName, cal);
     }
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTimestamp(columnIndex);
     }
     public Timestamp getTimestamp(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTimestamp(columnName);
     }
     public Timestamp getTimestamp(int columnIndex, Calendar cal)
             throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTimestamp(columnIndex, cal);
     }
     public Timestamp getTimestamp(String columnName, Calendar cal)
             throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getTimestamp(columnName, cal);
     }
     public int getType() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return rowset.getType();
     }
     public URL getURL(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getURL(columnIndex);
     }
     public URL getURL(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getURL(columnName);
     }
+    @SuppressWarnings("deprecation")
     public InputStream getUnicodeStream(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getUnicodeStream(columnIndex);
     }
     public InputStream getUnicodeStream(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getUnicodeStream(columnName);
     }
     public SQLWarning getWarnings() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getWarnings();
     }
     public void insertRow() throws SQLException {
-        // TODO Auto-generated method stub
-        
+        rowset.insertRow();
     }
     public boolean isAfterLast() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.isAfterLast();
     }
     public boolean isBeforeFirst() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.isBeforeFirst();
     }
     public boolean isFirst() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.isFirst();
     }
     public boolean isLast() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.isLast();
     }
     public boolean last() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.last();
     }
     public void moveToCurrentRow() throws SQLException {
-        // TODO Auto-generated method stub
-        
+        rowset.moveToCurrentRow();
     }
     public void moveToInsertRow() throws SQLException {
-        // TODO Auto-generated method stub
-        
+        rowset.moveToInsertRow();
     }
     public boolean next() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.next();
     }
     public boolean previous() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.previous();
     }
     public void refreshRow() throws SQLException {
-        // TODO Auto-generated method stub
-        
+        rowset.refreshRow();
     }
     public boolean relative(int rows) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.relative(rows);
     }
     public boolean rowDeleted() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.rowDeleted();
     }
     public boolean rowInserted() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.rowInserted();
     }
     public boolean rowUpdated() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.rowUpdated();
     }
     public void setFetchDirection(int direction) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setFetchDirection(direction);
         
     }
     public void setFetchSize(int rows) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setFetchSize(rows);
         
     }
     public void updateArray(int columnIndex, Array x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateArray(columnIndex, x);
         
     }
     public void updateArray(String columnName, Array x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateArray(columnName, x);
         
     }
     public void updateAsciiStream(int columnIndex, InputStream x, int length)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateAsciiStream(columnIndex, x, length);
         
     }
     public void updateAsciiStream(String columnName, InputStream x, int length)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateAsciiStream(columnName, x, length);
         
     }
     public void updateBigDecimal(int columnIndex, BigDecimal x)
             throws SQLException {
-        // TODO Auto-generated method stub
-        
+        rowset.updateBigDecimal(columnIndex, x);
     }
     public void updateBigDecimal(String columnName, BigDecimal x)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBigDecimal(columnName, x);
         
     }
     public void updateBinaryStream(int columnIndex, InputStream x, int length)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBinaryStream(columnIndex, x, length);
         
     }
     public void updateBinaryStream(String columnName, InputStream x, int length)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBinaryStream(columnName, x, length);
         
     }
     public void updateBlob(int columnIndex, Blob x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBlob(columnIndex, x);
         
     }
     public void updateBlob(String columnName, Blob x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBlob(columnName, x);
         
     }
     public void updateBoolean(int columnIndex, boolean x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBoolean(columnIndex, x);
         
     }
     public void updateBoolean(String columnName, boolean x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBoolean(columnName, x);
         
     }
     public void updateByte(int columnIndex, byte x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateByte(columnIndex, x);
         
     }
     public void updateByte(String columnName, byte x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateByte(columnName, x);
         
     }
     public void updateBytes(int columnIndex, byte[] x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBytes(columnIndex, x);
         
     }
     public void updateBytes(String columnName, byte[] x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateBytes(columnName, x);
         
     }
     public void updateCharacterStream(int columnIndex, Reader x, int length)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateCharacterStream(columnIndex, x, length);
         
     }
     public void updateCharacterStream(String columnName, Reader reader,
             int length) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateCharacterStream(columnName, reader, length);
         
     }
     public void updateClob(int columnIndex, Clob x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateClob(columnIndex, x);
         
     }
     public void updateClob(String columnName, Clob x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateClob(columnName, x);
         
     }
     public void updateDate(int columnIndex, Date x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateDate(columnIndex, x);
         
     }
     public void updateDate(String columnName, Date x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateDate(columnName, x);
         
     }
     public void updateDouble(int columnIndex, double x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateDouble(columnIndex, x);
         
     }
     public void updateDouble(String columnName, double x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateDouble(columnName, x);
         
     }
     public void updateFloat(int columnIndex, float x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateFloat(columnIndex, x);
         
     }
     public void updateFloat(String columnName, float x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateFloat(columnName, x);
         
     }
     public void updateInt(int columnIndex, int x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateInt(columnIndex, x);
         
     }
     public void updateInt(String columnName, int x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateInt(columnName, x);
         
     }
     public void updateLong(int columnIndex, long x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateLong(columnIndex, x);
         
     }
     public void updateLong(String columnName, long x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateLong(columnName, x);
         
     }
     public void updateNull(int columnIndex) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateNull(columnIndex);
         
     }
     public void updateNull(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateNull(columnName);
         
     }
     public void updateObject(int columnIndex, Object x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateObject(columnIndex, x);
         
     }
     public void updateObject(String columnName, Object x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateObject(columnName, x);
         
     }
     public void updateObject(int columnIndex, Object x, int scale)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateObject(columnIndex, x,scale);
         
     }
     public void updateObject(String columnName, Object x, int scale)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateObject(columnName, x, scale);
         
     }
     public void updateRef(int columnIndex, Ref x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateRef(columnIndex, x);
         
     }
     public void updateRef(String columnName, Ref x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateRef(columnName, x);
         
     }
     public void updateRow() throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateRow();
         
     }
     public void updateShort(int columnIndex, short x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateShort(columnIndex, x);
         
     }
     public void updateShort(String columnName, short x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateShort(columnName, x);
         
     }
     public void updateString(int columnIndex, String x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateString(columnIndex, x);
         
     }
     public void updateString(String columnName, String x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateString(columnName, x);
         
     }
     public void updateTime(int columnIndex, Time x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateTime(columnIndex, x);
         
     }
     public void updateTime(String columnName, Time x) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateTime(columnName, x);
         
     }
     public void updateTimestamp(int columnIndex, Timestamp x)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateTimestamp(columnIndex, x);
         
     }
     public void updateTimestamp(String columnName, Timestamp x)
             throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.updateTimestamp(columnName, x);
         
     }
     public boolean wasNull() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return rowset.wasNull();
     }
     public int[] getMatchColumnIndexes() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getMatchColumnIndexes();
     }
     public String[] getMatchColumnNames() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return rowset.getMatchColumnNames();
     }
     public void setMatchColumn(int columnIdx) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setMatchColumn(columnIdx);
         
     }
     public void setMatchColumn(int[] columnIdxes) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setMatchColumn(columnIdxes);
         
     }
     public void setMatchColumn(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setMatchColumn(columnName);
         
     }
     public void setMatchColumn(String[] columnNames) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.setMatchColumn(columnNames);
         
     }
     public void unsetMatchColumn(int columnIdx) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.unsetMatchColumn(columnIdx);
         
     }
     public void unsetMatchColumn(int[] columnIdxes) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.unsetMatchColumn(columnIdxes);
         
     }
     public void unsetMatchColumn(String columnName) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.unsetMatchColumn(columnName);
         
     }
     public void unsetMatchColumn(String[] columnName) throws SQLException {
-        // TODO Auto-generated method stub
+        rowset.unsetMatchColumn(columnName);
         
     }
 	
