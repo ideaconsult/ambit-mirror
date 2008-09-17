@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<inceptionYear>2008</inceptionYear>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -10,7 +11,20 @@
   <packaging>jar</packaging>  
   <name>ambit2-ambitxt</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
+  <description>A GUI application composed of several plugins</description>
+  <developers>
+  	<developer>
+  		<id>vedina</id>
+  		<name>Nina Jeliazkova</name>
+  		<email>nina@acad.bg</email>
+  		<roles>
+  			<role>developer</role>
+  		</roles>
+  	</developer>
+  </developers>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  </organization>
   <build>
   	<plugins>
 			<plugin>

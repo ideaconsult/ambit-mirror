@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs title="Frequently Asked Questions">
+  <part id="General">
+    <faq id="A1">
+      <question>Q1?</question>
+      <answer>
+        <p>
+          A1
+        </p>
+        <p>
+          S1
+        </p>
+        <source>
+          <reincarnation>
+            <id>1</id>
+            <password>ThisShouldBeEncrypted</password>
+          </reincarnation>
+        </source>
+      </answer>
+    </faq>
+    <faq id="Q2">
+      <question>Q2</question>
+      <answer>
+        <p>
+          A2
+        </p>
+      </answer>
+    </faq>
+  </part>
+</faqs>
