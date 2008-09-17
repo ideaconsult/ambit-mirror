@@ -6,6 +6,13 @@
   <packaging>pom</packaging>
   <version>2.0.0-SNAPSHOT</version>
   <name>ambit2-all</name>
+  <description>AMBIT, a software for chemoinformatic data management, is an outcome of the LRI project: Building blocks for a future (Q)SAR ((Quantitative) Structure Activity Relationship) decision support system. Since the software goal is to support decisions, including chemical grouping and QSAR applicability domain appraisal, the name AMBIT was chosen meaning 'an area in which something acts or operates or has power or control'. The AMBIT software is available online and as a stand-alone application for beta testing. 
+
+AMBIT was produced in response to the clear need for publicly accessible, methodical and transparent software to broaden the use of in-silico methods in chemicals safety assessments. Its approach is based on the realization that making use of existing chemical information requires better methods to store that information, such as standardized formats and automated verification of chemical structure, together with appropriate use of rapidly evolving techniques in data-mining and extraction of relevant information. 
+
+The AMBIT system consists of a database and functional modules allowing a variety of flexible searches and mining of the data stored in the database. The AMBIT database stores chemical structures, their identifiers such as CAS, Inchi numbers; attributes such as molecular descriptors, experimental data together with test descriptions, literature references. The database can also store QSAR models. In addition the software can generate a suite of 2D and 3D molecular descriptors, thanks to CDK library. 
+
+The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on ‘descriptor space’; approaches based on mechanistic understanding; and approaches based on structural similarity. Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.</description>
   <url>http://ambit.sourceforge.net</url>
   <repositories>
   	<repository>
@@ -33,13 +40,30 @@
     	<scope>test</scope>
     </dependency>
   </dependencies>
+  <inceptionYear>2004</inceptionYear>
+  <issueManagement>
+  	<url>http://sourceforge.net/tracker/?group_id=191756</url>
+  </issueManagement>
   <developers>
   	<developer>
   		<id>vedina</id>
   		<name>Nina Jeliazkova</name>
   		<email>nina@acad.bg</email>
+  		<roles>
+  			<role>?</role>
+  		</roles>
+  	</developer>
+  	<developer>
+  		<id>JJ</id>
+  		<name>Joanna Jaworska</name>
   	</developer>
   </developers>
+  <scm>
+  	<url>https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all</url>
+  </scm>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  </organization>
   <build>
   	<pluginManagement>
   		<plugins>
@@ -91,7 +115,17 @@
 		            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 		          </archive>
 		        </configuration>
-			</plugin>       			
+			</plugin>
+			<!-- 
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-site-plugin</artifactId>
+        		<version>2.0-beta-6</version>
+        		<configuration>
+          			<locales>en</locales>
+        		</configuration>
+      		</plugin>
+      		 -->
   		</plugins>
   	</pluginManagement>
   </build>
@@ -109,4 +143,69 @@
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
   </modules>
+  <distributionManagement>
+  	<snapshotRepository>
+  		<id>ambit_acad</id>
+  		<name>ambit at acad</name>
+  		<url>scp://ambit.acad.bg/var/www/html/ambit/maven</url>
+  	</snapshotRepository>
+    <site>
+      <id>website_acad</id>
+      <url>scp://ambit.acad.bg/var/www/html/ambit/ambit2</url>
+    </site>
+ 	
+  </distributionManagement>
+    <mailingLists>
+    <mailingList>
+      <name>Developers list</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/ambit-developers</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/ambit-developers</unsubscribe>
+      <post>mailto:ambit-developers@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=ambit-developers</archive>
+    </mailingList>
+    <mailingList>
+      <name>Users list</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/ambit-users</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/ambit-users</unsubscribe>
+      <post>mailto:ambit-users@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=ambit-users</archive>
+    </mailingList>
+    <mailingList>
+      <name>QMRF users list</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/ambit-qmrf</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/ambit-qmrf</unsubscribe>
+      <post>mailto:ambit-qmrf@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=ambit-qmrf</archive>
+    </mailingList>            
+  </mailingLists>
+  <licenses>
+  <license>
+    <name>LGPL</name>
+    <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+    <distribution>repo</distribution>
+    <comments>LGPL 2</comments>
+  </license>
+</licenses>
+ <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+      <!-- 
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+     <plugin>
+        <artifactId>maven-clover-plugin</artifactId>
+      </plugin>      
+	-->             
+    </plugins>
+
+    
+  </reporting>
+
 </project>

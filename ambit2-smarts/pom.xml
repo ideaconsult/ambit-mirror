@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<inceptionYear>2008</inceptionYear>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -10,7 +11,7 @@
   <packaging>jar</packaging>  
   <name>ambit2-smarts</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
+  <description>Implementation of a SMARTS parser.</description>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -21,10 +22,13 @@
   </dependencies>
   <developers>
   	<developer>
-  		<id>nkochev</id>
+  		<id>ntk73</id>
   		<name>Nikolay Kochev</name>
   	</developer>
   </developers>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  </organization>
 	<build>
   		<plugins>
   			<plugin>
@@ -38,4 +42,5 @@
   			</plugin>
 		</plugins>
 	</build>  			  
+	
 </project>

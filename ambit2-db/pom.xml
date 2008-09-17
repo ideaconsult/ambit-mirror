@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<description>AMBIT, a software for chemoinformatic data management, is an outcome of the LRI project: Building blocks for a future (Q)SAR ((Quantitative) Structure Activity Relationship) decision support system. Since the software goal is to support decisions, including chemical grouping and QSAR applicability domain appraisal, the name AMBIT was chosen meaning 'an area in which something acts or operates or has power or control'. The AMBIT software is available online and as a stand-alone application for beta testing. 
+
+AMBIT was produced in response to the clear need for publicly accessible, methodical and transparent software to broaden the use of in-silico methods in chemicals safety assessments. Its approach is based on the realization that making use of existing chemical information requires better methods to store that information, such as standardized formats and automated verification of chemical structure, together with appropriate use of rapidly evolving techniques in data-mining and extraction of relevant information. 
+
+The AMBIT system consists of a database and functional modules allowing a variety of flexible searches and mining of the data stored in the database. The AMBIT database stores chemical structures, their identifiers such as CAS, Inchi numbers; attributes such as molecular descriptors, experimental data together with test descriptions, literature references. The database can also store QSAR models. In addition the software can generate a suite of 2D and 3D molecular descriptors, thanks to CDK library. 
+
+The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on ‘descriptor space’; approaches based on mechanistic understanding; and approaches based on structural similarity. Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -10,7 +17,6 @@
   <packaging>jar</packaging>
   <name>ambit2-db</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -40,4 +46,12 @@
     	<version>4.0</version>
     </dependency>
   </dependencies>
+<licenses>
+  <license>
+    <name>LGPL</name>
+    <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+    <distribution>repo</distribution>
+    <comments>LGPL 2</comments>
+  </license>
+</licenses>  
 </project>

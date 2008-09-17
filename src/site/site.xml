@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="AMBIT2">
+  <bannerLeft>
+    <name>Maven</name>
+    <src>images/ambit-logo.png</src>
+    <href>index.html</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>images/ambit-small.gif</src>
+  </bannerRight>
+  
+  <body>
+    <links>
+      <item name="AMBIT" href="http://ambit.acad.bg"/>
+      <item name="AMBIT 2.0" href="index.html"/>
+      
+    </links>
+
+    <menu name="AMBIT 2.0">
+      <item name="Introduction" href="/intro.html"/>
+      <item name="Download" href="/download.html"/>
+      <item name="Release Notes" href="release-notes.html" />
+	  <item name="FAQs" href="/faq.html"/>
+    </menu>
+
+	
+    <menu ref="reports"/>
+    <menu ref="modules" />
+    <menu ref="parent"/>
+
+    
+
+  </body>
+  <publishDate position="navigation-bottom" format="MM-dd-yy"/>
+  <poweredBy>
+    <logo name="Maven" href="http://maven.apache.org/"
+          img="http://maven.apache.org/images/logos/maven-feather.png"/>
+  </poweredBy>
+  
+</project>
