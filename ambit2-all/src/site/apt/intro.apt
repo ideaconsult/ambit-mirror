@@ -4,16 +4,17 @@
  Background
  -----
  Sep 2008
- 
+
 Introduction
-  smth
-* Sub-section title
- xxx
- 
- * Item 1
- 
- * Item 2
- 
-   * Item 2.1
-   
-   * Item 2.2
+
+  AMBIT2 is a complete redesign of {{{http://ambit.acad.bg}AMBIT}} software, featuring improved user interface, support for workflows, plugins and reporting for user actions.
+
+* Timeline
+
+   * Initial release
+
+ Dec 2008
+
+   * Final release
+
+ June 2009
