@@ -1,4 +1,4 @@
-package ambit2.test.smarts;
+package ambit2.smarts.test;
 
 import junit.framework.*;
 //import org.openscience.cdk.CDKConstants;
