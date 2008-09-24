@@ -2,27 +2,18 @@
 <faqs title="Frequently Asked Questions">
   <part id="General">
     <faq id="A1">
-      <question>Q1?</question>
+      <question>Q1. When AMBIT2 will be available?</question>
       <answer>
         <p>
-          A1
+          See Introduction.
         </p>
-        <p>
-          S1
-        </p>
-        <source>
-          <reincarnation>
-            <id>1</id>
-            <password>ThisShouldBeEncrypted</password>
-          </reincarnation>
-        </source>
       </answer>
     </faq>
-    <faq id="Q2">
-      <question>Q2</question>
+    <faq id="A2">
+      <question>Q2. Can I have access to AMBIT2 code before release time?</question>
       <answer>
         <p>
-          A2
+          Yes, the code is available in the source repository.
         </p>
       </answer>
     </faq>
