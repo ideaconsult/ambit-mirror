@@ -1,4 +1,4 @@
-package ambit2.test.smarts;
+package ambit2.smarts.test;
 
 import java.util.Stack;
 import java.util.Vector;
