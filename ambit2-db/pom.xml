@@ -54,4 +54,16 @@ The database can be searched by identifiers, attribute value or range, experimen
     <comments>LGPL 2</comments>
   </license>
 </licenses>  
+<build>
+<filters>
+	<filter>src/main/filters/default.properties</filter>
+</filters>
+
+<resources>
+	<resource>
+		<directory>src/main/resources</directory>
+		<filtering>true</filtering>
+	</resource>
+</resources>
+</build>
 </project>
