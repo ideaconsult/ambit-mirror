@@ -142,6 +142,7 @@ The database can be searched by identifiers, attribute value or range, experimen
     <module>ambit2-plugin-pbt</module>
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
+    <module>ambit2-hashcode</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
