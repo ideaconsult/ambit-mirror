@@ -18,17 +18,20 @@ public class EditableHeader extends JTableHeader
      */
     private static final long serialVersionUID = 8173999492561440990L;
 public final int HEADER_ROW = -10;
-  transient protected int editingColumn;
+  transient protected int editingColumn=-1;
   transient protected TableCellEditor cellEditor;
   transient protected Component       editorComp;
 
-  public EditableHeader(TableColumnModel columnModel) {
+  public EditableHeader(TableColumnModel columnModel, boolean recreate) {
     super(columnModel);
     setReorderingAllowed(false);
     cellEditor = null;
-    recreateTableColumn(columnModel);
+    if (recreate)
+    	recreateTableColumn(columnModel);
   }
+
   
+	  
   public void updateUI(){
     setUI(new EditableHeaderUI());
     resizeAndRepaint();
@@ -184,5 +187,10 @@ public final int HEADER_ROW = -10;
   // public void setReorderingAllowed(boolean b) {
   //   reorderingAllowed = false;
   // }
-
+  @Override
+	public void setColumnModel(TableColumnModel columnModel) {
+	  	removeEditor();
+		super.setColumnModel(columnModel);
+		editingColumn=-1;
+	}
 }

@@ -26,7 +26,6 @@ package ambit2.ui.table;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -41,64 +40,47 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class PageNavigator extends AbstractPanel<IPageNavigator> {
-	/**
-	 * 
-	 */
+public class FindNavigator extends AbstractPanel<IFindNavigator> {
 	private static final long serialVersionUID = -4228397553276899404L;
 	protected JLabel label;
 	protected JButton prevPage;
 	protected JButton nextPage;
-	protected JTextField currentPage;
-	protected JTextField allPages;
-	protected JTextField pageSize;
+	protected JTextField findValue;
 
-	public PageNavigator(IPageNavigator object) {
+
+	public FindNavigator(IFindNavigator object) {
 		super(object);
 	}
-	public JComponent buildPanel(final IPageNavigator pageable) {
+	public JComponent buildPanel(final IFindNavigator pageable) {
 		FormLayout layout = new FormLayout(
-	            "pref, 1dlu,pref,1dlu, fill:25dlu:grow,1dlu,pref, 1dlu,fill:25dlu:grow,1dlu,pref, 1dlu,pref, 1dlu,fill:25dlu:grow",
+	            "pref, 1dlu, fill:50dlu:grow,1dlu,pref, 1dlu,pref",
 			"pref");
 		
-		PresentationModel<IPageNavigator> presentationModel = new PresentationModel<IPageNavigator>(pageable);
+		PresentationModel<IFindNavigator> presentationModel = new PresentationModel<IFindNavigator>(pageable);
 	        
-		label = new JLabel("Page");
-        currentPage = BasicComponentFactory.createIntegerField(
-                presentationModel.getModel(IPageNavigator.PROPERTY_PAGE));
-        currentPage.setToolTipText("Current page");
+		label = new JLabel("Find");
+        findValue = BasicComponentFactory.createTextField(
+                presentationModel.getModel(IFindNavigator.PROPERTY_VALUE));
+        findValue.setToolTipText("Enter value to search");
         
-        allPages = BasicComponentFactory.createIntegerField(
-                presentationModel.getModel(IPageNavigator.PROPERTY_MAXPAGES));
-        allPages.setToolTipText("All pages");
-        allPages.setEditable(false);
 
-        pageSize = BasicComponentFactory.createIntegerField(
-                presentationModel.getModel(IPageNavigator.PROPERTY_PAGESIZE));
-        pageSize.setToolTipText("Records per page");
-
-        prevPage = new JButton(new AbstractAmbitAction("<","images/resultset_previous.png","Previous page") {
+        prevPage = new JButton(new AbstractAmbitAction("<","images/control_rewind.png","Find previous") {
 			public void actionPerformed(ActionEvent e) {
-				pageable.previousPage();
+				pageable.findPrevious();
 			}
 		});
-		nextPage = new JButton(new AbstractAmbitAction("<","images/resultset_next.png","Next page") {
+		nextPage = new JButton(new AbstractAmbitAction(">","images/control_fastforward.png","Find next") {
 			public void actionPerformed(ActionEvent e) {
-				pageable.nextPage();
+				pageable.findNext();
 			}
 		});		
         PanelBuilder panel = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
         //"pref, 1dlu,pref,1dlu,fill:25dlu:grow,1dlu,pref, 1dlu,fill:25dlu:grow, 1dlu,pref, 1dlu,fill:25dlu:grow",        
         panel.add(label, cc.xy(1,1));
-        panel.add(prevPage, cc.xy(3,1));
-        panel.add(currentPage, cc.xy(5,1));
-        panel.add(new JLabel("/"), cc.xy(7,1));
-        panel.add(allPages, cc.xy(9,1));
-        panel.add(nextPage, cc.xy(11,1));
-        panel.add(pageSize, cc.xy(13,1));
-        
+        panel.add(findValue, cc.xy(3,1));
+        panel.add(prevPage, cc.xy(5,1));
+        panel.add(nextPage, cc.xy(7,1));
         return panel.getPanel();
 	}	
 }
-

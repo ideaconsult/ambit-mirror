@@ -37,6 +37,8 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
+import ambit2.ui.table.IHeaderAction;
+
 /**
  * JTable header as a combobox, allowing sorting and filtering
  * @author Nina Jeliazkova nina@acad.bg
@@ -101,7 +103,7 @@ public class HeaderComboBoxModel extends AbstractListModel implements
                 selectedObject == null && anObject != null) {
             
                 if (anObject instanceof IHeaderAction)
-                    ((IHeaderAction)anObject).action(anObject);
+                    ((IHeaderAction)anObject).action(table,column,anObject);
                 selectedObject = getElementAt(0);
                 fireContentsChanged(this, -1, -1);
         }

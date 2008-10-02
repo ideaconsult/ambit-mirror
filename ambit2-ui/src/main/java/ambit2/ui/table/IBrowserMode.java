@@ -29,11 +29,87 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.ImageIcon;
 
+import ambit2.ui.Utils;
+
 public interface IBrowserMode {
 	public static String PROPERTY_MODE="browserMode";
 	public static String PROPERTY_ZOOM="zoom";
 	
 	public enum BrowserMode {
+	    Spreadsheet {
+	    	protected int idcolumn = 1;
+	    	protected int contentcolumn = 1;
+	    	
+	    	@Override
+	    	public String getTitle() {
+	    		return "T";
+	    	}
+	    	public ImageIcon getIcon(boolean selected) {
+	    		try {
+	    		return Utils.createImageIcon("images/application_view_table.png");
+	    		} catch (Exception x) {
+	    			x.printStackTrace();
+	    			return null;
+	    		}
+	    	};
+	    	@Override
+	    	public String getTooltip() {
+	    		return "Table";
+	    	}
+	    	@Override
+	    	public Dimension getCellSize(int row,int col) {
+	    		/*
+	    		if (row==0)
+	    			return new Dimension(100,100);
+	    		else	
+	    		*/
+	    			return new Dimension(100,18);
+	    	}
+	    	@Override
+	    	public int getColumns() {
+	    		return 0;
+	    	}
+	    	@Override
+	    	public int getIDColumn() {
+	    		return idcolumn;
+	    	}
+	    	@Override
+	    	public void setIDColumn(int arg0) {
+	    		idcolumn = arg0;
+	    		
+	    	}
+	    	@Override
+	    	public int getContentColumn() {
+	    		return contentcolumn;
+	    	}
+	    	@Override
+	    	public void setContentColumn(int arg0) {
+	    		contentcolumn = arg0;
+	    		
+	    	}
+	    	@Override
+	    	public boolean isColumnSelectionAllowed() {
+	    		return false;
+	    	}
+	    	@Override
+	    	public boolean isRowSelectionAllowed() {
+	    		return true;
+	    	}
+	    	@Override
+	    	public void setCellSize(Dimension arg0,int row,int col) {
+	    		// TODO Auto-generated method stub
+	    		
+	    	}
+	    	@Override
+	    	public int cellToRecord(int row,int col) {
+	    		return row;
+	    	}
+	    	@Override
+	    	public int[] recordToCell(int record) {
+	    		return new int[] {record,-1};
+	    		
+	    	}
+	    },		
 	    Matrix {
 	    	protected int columns =3;
 	    	protected int idcolumn = 1;
@@ -45,7 +121,11 @@ public interface IBrowserMode {
 	    		return "M";
 	    	} 
 	    	public ImageIcon getIcon(boolean selected) {
-	    		return null;
+	    		try {
+	    		return Utils.createImageIcon("images/application_view_matrix.png");
+	    		} catch (Exception x) {
+	    			return null;
+	    		}
 	    	};
 
 	    	@Override
@@ -53,11 +133,11 @@ public interface IBrowserMode {
 	    		return  "Matrix";
 	    	}
 	    	@Override
-	    	public Dimension getCellSize() {
+	    	public Dimension getCellSize(int row,int col) {
 	    		return cellSize;
 	    	}
 	    	@Override
-	    	public void setCellSize(Dimension arg0) {
+	    	public void setCellSize(Dimension arg0,int row,int col) {
 	    		cellSize = arg0;
 	    		
 	    	}
@@ -91,68 +171,106 @@ public interface IBrowserMode {
 	    	public boolean isRowSelectionAllowed() {
 	    		return true;
 	    	}
+	    	@Override
+	    	public int cellToRecord(int row, int col) {
+	    		if (col<0) return -1;
+	    		return  row*getColumns()+col;
+	    	}
+	    	@Override
+	    	public int[] recordToCell(int record) {
+	    		return new int[] {record / getColumns(),record % getColumns()};
+	    		
+	    	}	    	
 	    } ,
-	    Spreadsheet {
-	    	protected int idcolumn = 1;
-	    	protected int contentcolumn = 1;
+
+	    Columns {
+
+			@Override
+			public int cellToRecord(int row, int col) {
+				return col;
+			}
+
+			@Override
+			public Dimension getCellSize(int row, int col) {
+				return new Dimension(100,18);
+			}
+
+			@Override
+			public int getColumns() {
+				return 1;
+			}
+
+			@Override
+			public int getContentColumn() {
+				return 1;
+			}
+
+			@Override
+			public int getIDColumn() {
+				return 1;
+			}
+
+			@Override
+			public ImageIcon getIcon(boolean selected) {
+				try {
+				return Utils.createImageIcon("images/application_view_columns.png");
+				} catch (Exception x) {
+					return null;
+				}
+			}
+
+			@Override
+			public String getTitle() {
+				return "Columns";
+			}
+
+			@Override
+			public String getTooltip() {
+				return "Columns";
+			}
+
+			@Override
+			public boolean isColumnSelectionAllowed() {
+				return true;
+			}
+
+			@Override
+			public boolean isRowSelectionAllowed() {
+				return false;
+			}
+
+			@Override
+			public int[] recordToCell(int record) {
+				return new int[] {-1,record};
+			}
+
+			@Override
+			public void setCellSize(Dimension dim, int row, int col) {
+				
+				
+			}
+
+			@Override
+			public void setContentColumn(int id) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void setIDColumn(int id) {
+				// TODO Auto-generated method stub
+				
+			}
 	    	
-	    	@Override
-	    	public String getTitle() {
-	    		return "T";
-	    	}
-	    	public ImageIcon getIcon(boolean selected) {
-	    		return null;
-	    	};
-	    	@Override
-	    	public String getTooltip() {
-	    		return "Table";
-	    	}
-	    	@Override
-	    	public Dimension getCellSize() {
-	    		return new Dimension(100,18);
-	    	}
-	    	@Override
-	    	public int getColumns() {
-	    		return 0;
-	    	}
-	    	@Override
-	    	public int getIDColumn() {
-	    		return idcolumn;
-	    	}
-	    	@Override
-	    	public void setIDColumn(int arg0) {
-	    		idcolumn = arg0;
-	    		
-	    	}
-	    	@Override
-	    	public int getContentColumn() {
-	    		return contentcolumn;
-	    	}
-	    	@Override
-	    	public void setContentColumn(int arg0) {
-	    		contentcolumn = arg0;
-	    		
-	    	}
-	    	@Override
-	    	public boolean isColumnSelectionAllowed() {
-	    		return false;
-	    	}
-	    	@Override
-	    	public boolean isRowSelectionAllowed() {
-	    		return true;
-	    	}
-	    	@Override
-	    	public void setCellSize(Dimension arg0) {
-	    		// TODO Auto-generated method stub
-	    		
-	    	}
 	    };
 	    public abstract String getTitle();
 	    public abstract ImageIcon getIcon(boolean selected);
 	    public abstract String getTooltip();
-	    public abstract Dimension getCellSize();
-	    public abstract void setCellSize(Dimension dim);
+	    public abstract Dimension getCellSize(int row,int col);
+	    public abstract void setCellSize(Dimension dim,int row,int col);
 	    public abstract int getColumns();
+	    public abstract int cellToRecord(int row,int col);
+	    public abstract int[] recordToCell(int record);
 		/**
 		 * 
 		 * @return # of the column to be used as ID from a TableModel
@@ -177,3 +295,4 @@ public interface IBrowserMode {
 	void addPropertyChangeListener(PropertyChangeListener x);
 	void removePropertyChangeListener(PropertyChangeListener x);
 }
+

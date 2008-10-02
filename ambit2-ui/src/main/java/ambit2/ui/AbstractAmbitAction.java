@@ -24,36 +24,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui;
 
-import javax.swing.JComponent;
-import javax.swing.JToolBar;
+import java.io.FileNotFoundException;
 
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.windows.WindowsLookAndFeel;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
-public abstract class AbstractPanel<T> extends JToolBar {
+public abstract class AbstractAmbitAction extends AbstractAction {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3963305539191739942L;
-	protected AbstractPanel() {
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = -6078241510121388340L;
+
+	public AbstractAmbitAction(String name) {
+		this(name,null);
 	}
-	public AbstractPanel(T object) {
-		super();
-		setFloatable(false);
-		setRollover(false);
-        putClientProperty("JToolBar.isRollover", Boolean.FALSE);
-        putClientProperty(
-                PlasticLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                WindowsLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                PlasticLookAndFeel.IS_3D_KEY,
-                null);
-		addSeparator();
-		add(buildPanel(object));
+	public AbstractAmbitAction(String name, Icon icon) {
+		this(name,icon,name);
 	}
-	public abstract JComponent buildPanel(final T object);
+	public AbstractAmbitAction(String name, String icon, String tooltip) {
+		super("",null);
+		putValue(SHORT_DESCRIPTION, tooltip);
+		try {
+			java.net.URL imgURL = getClass().getClassLoader().getSystemResource(icon);
+			if (imgURL == null) throw new FileNotFoundException(icon);
+			putValue(AbstractAction.SMALL_ICON,  new ImageIcon(imgURL));
+			
+		} catch (Exception x) {
+			x.printStackTrace();
+			putValue(NAME,name);
+		}
+	}	
+	public AbstractAmbitAction(String name, Icon icon, String tooltip) {
+		super(name,icon);
+		if (icon != null) putValue(NAME,"");
+		putValue(SHORT_DESCRIPTION, tooltip);
+	}	
+
 }

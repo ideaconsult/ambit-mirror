@@ -24,36 +24,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui;
 
-import javax.swing.JComponent;
-import javax.swing.JToolBar;
+import java.awt.Component;
 
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.windows.WindowsLookAndFeel;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
-public abstract class AbstractPanel<T> extends JToolBar {
+import ambit2.ui.table.IBrowserMode.BrowserMode;
+
+public class BrowserModeCellRenderer implements TableCellRenderer {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3963305539191739942L;
-	protected AbstractPanel() {
-		// TODO Auto-generated constructor stub
-	}
-	public AbstractPanel(T object) {
+	private static final long serialVersionUID = 4027149275232536325L;
+	protected BrowserMode mode;
+	protected TableCellRenderer renderer;
+	
+	public BrowserModeCellRenderer(BrowserMode mode,TableCellRenderer renderer) {
 		super();
-		setFloatable(false);
-		setRollover(false);
-        putClientProperty("JToolBar.isRollover", Boolean.FALSE);
-        putClientProperty(
-                PlasticLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                WindowsLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                PlasticLookAndFeel.IS_3D_KEY,
-                null);
-		addSeparator();
-		add(buildPanel(object));
+		this.mode = mode;
+		this.renderer = renderer;
 	}
-	public abstract JComponent buildPanel(final T object);
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		table.setRowHeight(row,mode.getCellSize(row, column).height);
+		return renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+				row, column);
+	}	
 }
