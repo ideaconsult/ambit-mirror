@@ -47,7 +47,8 @@ import org.junit.Test;
 import ambit2.ui.EditableHeader;
 import ambit2.ui.EditableHeaderTableColumn;
 import ambit2.ui.HeaderComboBoxModel;
-import ambit2.ui.IHeaderAction;
+import ambit2.ui.QueryBrowser;
+import ambit2.ui.table.IHeaderAction;
 /**
  * http://crionics.com/products/opensource/faq/swing_ex/SwingExamples.html
  * TODO add description
@@ -68,7 +69,7 @@ public class TableHeaderTest {
         final JTable table = new JTable(new Object[][] {{"a1","b1","c1"},{"a2","b1","c3"},{"a3","b3","c3"}}
             , new Object[] {"1","2","3"});
         TableColumnModel columnModel = table.getColumnModel();
-        table.setTableHeader(new EditableHeader(columnModel));
+        table.setTableHeader(new EditableHeader(columnModel,true));
         
         
         //String[] items = {"Header","Sort ascending","Sort descending","All","Custom"};
@@ -80,53 +81,14 @@ public class TableHeaderTest {
         */
         //ComboRenderer renderer = new ComboRenderer(items);
         
+        
+        IHeaderAction[] actions = QueryBrowser.getHeaderActions();
         EditableHeaderTableColumn col;
         // column 1
         col = (EditableHeaderTableColumn)table.getColumnModel().getColumn(0);    
         //col.setHeaderValue(combo.getItemAt(0));    
         //col.setHeaderRenderer(renderer);   
         
-        IHeaderAction[] actions = new IHeaderAction[4];
-        actions[0] = new IHeaderAction() {
-            @Override
-            public String toString() {
-                return "Sort ascending";
-            }
-            public void action(Object value) {
-                JOptionPane.showMessageDialog(table, value);
-                
-            }
-        };
-        actions[1] = new IHeaderAction() {
-            @Override
-            public String toString() {
-                return "Sort descending";
-            }
-            public void action(Object value) {
-                JOptionPane.showMessageDialog(table, value);
-                
-            }
-        };      
-        actions[2] = new IHeaderAction() {
-            @Override
-            public String toString() {
-                return "(All)";
-            }
-            public void action(Object value) {
-                JOptionPane.showMessageDialog(table, value);
-                
-            }
-        };            
-        actions[3] = new IHeaderAction() {
-            @Override
-            public String toString() {
-                return "(Custom filter)";
-            }
-            public void action(Object value) {
-                JOptionPane.showMessageDialog(table, value);
-                
-            }
-        };            
         col.setHeaderEditor(new DefaultCellEditor(new JComboBox(new HeaderComboBoxModel(table,0,actions))));
         
         // column 3

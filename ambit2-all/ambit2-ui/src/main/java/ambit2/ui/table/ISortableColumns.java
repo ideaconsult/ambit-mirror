@@ -22,38 +22,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.ui;
+package ambit2.ui.table;
 
-import javax.swing.JComponent;
-import javax.swing.JToolBar;
+import javax.swing.table.TableColumn;
 
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.windows.WindowsLookAndFeel;
-
-public abstract class AbstractPanel<T> extends JToolBar {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3963305539191739942L;
-	protected AbstractPanel() {
-		// TODO Auto-generated constructor stub
-	}
-	public AbstractPanel(T object) {
-		super();
-		setFloatable(false);
-		setRollover(false);
-        putClientProperty("JToolBar.isRollover", Boolean.FALSE);
-        putClientProperty(
-                PlasticLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                WindowsLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                PlasticLookAndFeel.IS_3D_KEY,
-                null);
-		addSeparator();
-		add(buildPanel(object));
-	}
-	public abstract JComponent buildPanel(final T object);
+public interface ISortableColumns {
+	void sort(int column, boolean ascending) throws UnsupportedOperationException;
 }

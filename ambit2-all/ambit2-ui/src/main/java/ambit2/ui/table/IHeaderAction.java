@@ -27,8 +27,10 @@
  * 
  */
 
-package ambit2.ui;
+package ambit2.ui.table;
+
+import javax.swing.JTable;
 
 public interface IHeaderAction {
-    void action(Object value);
+    void action(JTable table,int column,Object value);
 }

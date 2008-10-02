@@ -27,13 +27,14 @@ package ambit2.ui.table;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 
-
+import ambit2.ui.AbstractAmbitAction;
 import ambit2.ui.AbstractPanel;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 
@@ -70,12 +71,17 @@ public class BrowserModeNavigator extends AbstractPanel<IBrowserMode> {
 		};
 		for (int i=0; i < values.length;i++) {
 			BrowserMode mode = values[i];
-			button[i] = new JToggleButton(mode.getTitle(),mode.getIcon(false));
+			ImageIcon icon = mode.getIcon(false);
+			String title = mode.getTitle();
+			if (icon != null) title = "";
+			button[i] = new JToggleButton(title,icon);
+			//button[i].setBorder();
 			button[i].addActionListener(listener);
 			button[i].setActionCommand(mode.toString());
 	        button[i].setToolTipText(mode.getTooltip());
 	        button[i].setFocusable(false);
 	        button[i].setSelectedIcon(mode.getIcon(true));
+	        button[i].setFocusable(false);
 	        group.add(button[i]);
 	        button[i].setSelected(mode.equals(browserMode.getBrowserMode()));
 	        if (!first) 
@@ -85,18 +91,20 @@ public class BrowserModeNavigator extends AbstractPanel<IBrowserMode> {
 	        first = false;
 	        
 		}
-		blayout.append(",1dlu,pref,1dlu,pref");
-		zoomIn = new JButton(new AbstractAction("Zoom in") {
+		blayout.append(",8dlu,pref,1dlu,pref");
+		zoomIn = new JButton(new AbstractAmbitAction("Zoom in","images/zoom_in.png","Increase cell size") {
 			public void actionPerformed(ActionEvent e) {
-				browserMode.zoom(browserMode.getBrowserMode().getCellSize().getHeight()*1.1);
+				browserMode.zoom(browserMode.getBrowserMode().getCellSize(0,0).getHeight()*1.1);
 			}
 		});
-		zoomOut = new JButton(new AbstractAction("Zoom out") {
+		zoomIn.setFocusable(false);
+		zoomOut = new JButton(new AbstractAmbitAction("Zoom out","images/zoom_out.png","Decrease cell size") {
+			
 			public void actionPerformed(ActionEvent e) {
-				browserMode.zoom(browserMode.getBrowserMode().getCellSize().getHeight()*0.9);
+				browserMode.zoom(browserMode.getBrowserMode().getCellSize(0,0).getHeight()*0.9);
 			}
 		});
-		
+		zoomOut.setFocusable(false);
 		FormLayout layout = new FormLayout(
 	            blayout.toString(),
 				"pref");		
@@ -106,7 +114,8 @@ public class BrowserModeNavigator extends AbstractPanel<IBrowserMode> {
         for (int i=0; i < values.length;i++) {
         	panel.add(button[i], cc.xy(i*2+1,1));
 
-        }	
+        }
+        //panel.add(new JToolBar.Separator(),cc.xy((values.length)*2+1,1));
         panel.add(zoomIn,cc.xy((values.length)*2+1,1));
         panel.add(zoomOut,cc.xy((values.length)*2+3,1));
         return panel.getPanel();

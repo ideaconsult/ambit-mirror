@@ -24,36 +24,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui;
 
-import javax.swing.JComponent;
-import javax.swing.JToolBar;
+import java.io.FileNotFoundException;
 
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.windows.WindowsLookAndFeel;
+import javax.swing.ImageIcon;
 
-public abstract class AbstractPanel<T> extends JToolBar {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3963305539191739942L;
-	protected AbstractPanel() {
-		// TODO Auto-generated constructor stub
-	}
-	public AbstractPanel(T object) {
-		super();
-		setFloatable(false);
-		setRollover(false);
-        putClientProperty("JToolBar.isRollover", Boolean.FALSE);
-        putClientProperty(
-                PlasticLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                WindowsLookAndFeel.BORDER_STYLE_KEY,
-                null);
-        putClientProperty(
-                PlasticLookAndFeel.IS_3D_KEY,
-                null);
-		addSeparator();
-		add(buildPanel(object));
-	}
-	public abstract JComponent buildPanel(final T object);
+public class Utils {
+	
+    public static ImageIcon createImageIcon(String path) throws Exception {
+            java.net.URL imgURL = ClassLoader.getSystemResource(path);
+    
+            if (imgURL != null) 
+                return new ImageIcon(imgURL);
+            else 
+                throw new FileNotFoundException(path);
+
+    }	
 }

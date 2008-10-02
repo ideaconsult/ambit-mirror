@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ambit2.ui.AbstractAmbitAction;
 import ambit2.ui.AbstractPanel;
 
 import com.jgoodies.binding.PresentationModel;
@@ -71,12 +72,12 @@ public class RecordNavigator extends AbstractPanel<IRecordNavigator> {
                 presentationModel.getModel(IRecordNavigator.PROPERTY_MAXRECORDS));
         allPages.setToolTipText("All pages");
         allPages.setEditable(false);
-		prevPage = new JButton(new AbstractAction("<") {
+		prevPage = new JButton(new AbstractAmbitAction("<","images/resultset_previous.png","Previous record") {			
 			public void actionPerformed(ActionEvent e) {
 				navigator.prev();
 			}
 		});
-		nextPage = new JButton(new AbstractAction(">") {
+		nextPage = new JButton(new AbstractAmbitAction(">","images/resultset_next.png","Next record") {			
 			public void actionPerformed(ActionEvent e) {
 				navigator.next();
 			}

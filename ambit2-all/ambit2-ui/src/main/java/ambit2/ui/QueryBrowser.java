@@ -30,32 +30,45 @@ import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.ui.table.BrowserModeNavigator;
+import ambit2.ui.table.FindNavigator;
 import ambit2.ui.table.IBrowserMode;
+import ambit2.ui.table.IFilteredColumns;
+import ambit2.ui.table.IFindNavigator;
+import ambit2.ui.table.IHeaderAction;
 import ambit2.ui.table.IPageNavigator;
 import ambit2.ui.table.IRecordNavigator;
+import ambit2.ui.table.ISortableColumns;
 import ambit2.ui.table.PageNavigator;
 import ambit2.ui.table.RecordNavigator;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+
+
 
 public class QueryBrowser<T extends AbstractTableModel> extends JPanel implements PropertyChangeListener {
 	protected final JTable browser_table;
-
-
+	protected IHeaderAction[] headerActions = getHeaderActions();
 	protected Dimension cellSize = new Dimension(200,200);	
 	/**
 	 * 
@@ -79,79 +92,108 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		setMinimumSize(new Dimension(200, 200));
 	}
 	
+	
 	protected JComponent addControls() {
-		JToolBar p = new JToolBar();
-		p.setFloatable(true);
-        p.putClientProperty("JToolBar.isRollover", Boolean.TRUE);
-		if (createPageControls(p)) p.addSeparator();
-		if (createRecordControls(p)) p.addSeparator();
-		if (createBrowseModeControls(p)) p.addSeparator();
-		return p;
+		/**
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		toolBar.putClientProperty("JToolBar.isRollover", Boolean.FALSE);
+		*/
+		
+		FormLayout layout = new FormLayout(
+	            "pref, pref",
+			"pref,pref");
+		PanelBuilder pb = new PanelBuilder(layout);
+		JPanel toolBar = pb.getPanel();
+		JComponent c = createPageControls(toolBar);
+		CellConstraints cc = new CellConstraints();
+		if (c != null) pb.add(c,cc.xy(1,1));
+		c = createBrowseModeControls(toolBar);
+		if (c != null) pb.add(c,cc.xy(2,1));
+		c= createRecordControls(toolBar);
+		if (c != null) pb.add(c,cc.xy(1,2));
+		c = createFindControls(toolBar);
+		if (c != null) pb.add(c,cc.xy(2,2));
+		return toolBar;
 	}
 	
-	protected boolean createPageControls(JToolBar toolbar) {
+	protected JComponent createPageControls(JComponent toolbar) {
 		if (browser_table.getModel() instanceof IPageNavigator) {
-			toolbar.add(new PageNavigator(((IPageNavigator)browser_table.getModel())));
-			toolbar.addSeparator();
-			return true;
+			return new PageNavigator(((IPageNavigator)browser_table.getModel()));
 		} else
-			return false;
+			return null;
 	}
-	protected boolean createRecordControls(JToolBar toolbar) {
+	protected JComponent createRecordControls(JComponent toolbar) {
 		if (browser_table.getModel() instanceof IRecordNavigator) {
-			toolbar.add(new RecordNavigator(((IRecordNavigator)browser_table.getModel())));
-			toolbar.addSeparator();
-			return true;
-		} else
-			return false;
-	}	
-	protected boolean createBrowseModeControls(JToolBar toolbar) {
-		if (browser_table.getModel() instanceof IBrowserMode) {
-			toolbar.add(new BrowserModeNavigator(((IBrowserMode)browser_table.getModel())));
-			toolbar.addSeparator();
-			return true;
-		} else
-			return false;
-	}		
-	protected JTable addWidgets(T model) {
+			return new RecordNavigator(((IRecordNavigator)browser_table.getModel()));
 
+		} else
+			return null;
+	}	
+	protected JComponent createBrowseModeControls(JComponent toolbar) {
+		if (browser_table.getModel() instanceof IBrowserMode) {
+			return new BrowserModeNavigator(((IBrowserMode)browser_table.getModel()));
+		} else
+			return null;
+	}
+	protected JComponent createFindControls(JComponent toolbar) {
+		if (browser_table.getModel() instanceof IFindNavigator) {
+			return new FindNavigator(((IFindNavigator)browser_table.getModel()));
+		} else
+			return null;
+
+	}			
+	protected JTable addWidgets(T model) {
+		
+			
 		JTable table = new JTable(model) {
+			
 			public void createDefaultColumnsFromModel() {
 				TableModel m = getModel();
+				BrowserMode mode= BrowserMode.Spreadsheet;
+				if (m instanceof IBrowserMode) 
+					mode = ((IBrowserMode)m).getBrowserMode();
+				else mode = BrowserMode.Spreadsheet;
+					
 				if (m != null) {
 					// Remove any current columns
+					
 					TableColumnModel cm = getColumnModel();
+					
 					while (cm.getColumnCount() > 0) {
 						cm.removeColumn(cm.getColumn(0));
 					}
+					
+					
 					// Create new columns from the data model info
 					final int columnSize[] = { 32, 64, 100, 48, 48 };
 					for (int i = 0; i < m.getColumnCount(); i++) {
-						TableColumn newColumn = new TableColumn(i);
-						if (!isMatrix())
-							if (i < 2) {
-								newColumn.setPreferredWidth(columnSize[i]);
-								/*
-								newColumn
-										.setCellRenderer(new ColorTableCellRenderer());
-										*/
-							} else {
-								newColumn.setPreferredWidth(64);
-								/*
-								newColumn
-										.setCellRenderer(new NumberCellRenderer());
-										*/
-							}
-						else {
+						EditableHeaderTableColumn newColumn = new EditableHeaderTableColumn();
+						//TableColumn newColumn = new TableColumn(i);
+						newColumn.setModelIndex(i);
+						if (isMatrix())
 							newColumn.setPreferredWidth(cellSize.width);
-							
+						else {
+							//newColumn.setCellRenderer(new ColorTableCellRenderer());
 						}
 						addColumn(newColumn);
+				        //col.setHeaderValue(combo.getItemAt(0));    
+				        //col.setHeaderRenderer(renderer);   
+						
+						((EditableHeaderTableColumn)newColumn).setHeaderEditor(
+				        		new DefaultCellEditor(
+				        				new JComboBox(new HeaderComboBoxModel(this,i,headerActions))));
+				        				    
 					}
+					if (getTableHeader()!=null)
+						getTableHeader().setColumnModel(cm);
+					
+			        					
 				}
-
+				
 			};
 		};
+		table.setTableHeader(new EditableHeader(table.getColumnModel(),false));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
@@ -162,38 +204,31 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 				cellSize));
 				*/
 		table.setDefaultRenderer(Image.class, new ImageCellRenderer());
+		table.setDefaultRenderer(IAtomContainer.class, new ImageCellRenderer());
+
+		
 
 		table.setPreferredScrollableViewportSize(new Dimension(
 				cellSize.width * 3, (cellSize.height + 30) * 2));
 		
+//		table.setRowHeight(1,100);
+
 		ListSelectionListener listener = new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) return;
+				int row = browser_table.getSelectedRow();
+				int col = browser_table.getSelectedColumn();
 		        // If cell selection is enabled, both row and column change events are fired
 		        if (e.getSource() == browser_table.getSelectionModel()
 		              && browser_table.getRowSelectionAllowed()) {
-		            // Column selection changed
-		        	
-		        	
-		        	
-		        	System.out.println(e.getSource() + " " + browser_table.getSelectedRow());
-
-		        	if (browser_table.getSelectedRow()>0)      		
-		        		setRecord(browser_table.getSelectedRow());
-/*		        	
-		        	else if (e.getLastIndex() > 0)
-		        		setRecord(e.getLastIndex());
-*/
-		        } else if (e.getSource() == browser_table.getColumnModel().getSelectionModel()
+		        	row = browser_table.getSelectedRow();
+		        } 
+		        if (e.getSource() == browser_table.getColumnModel().getSelectionModel()
 		               && browser_table.getColumnSelectionAllowed() ){
-		            // Row selection changed
-		            int first = e.getFirstIndex();
-		            int last = e.getLastIndex();
-		            
-		            //System.out.println(e.getSource() + " " + e.getFirstIndex() + " " + e.getLastIndex());
+		        	col = browser_table.getSelectedColumn();
 		        }
-
-		        			
+	        	if (browser_table.getSelectedRow()>0)      		
+	        		setRecord(row,col);		        
 		      }
 		};
 	    table.getSelectionModel().addListSelectionListener(listener);
@@ -202,14 +237,23 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 
 		return table;
 	}	
-	protected void setRecord(int record) {
+	protected void setRecord(int row, int col) {
+		if ((row < 0) || (col < 0)) return ;
 		if (browser_table.getModel() instanceof IRecordNavigator) {
 			
+			int record = row;
+			if (browser_table.getModel() instanceof IBrowserMode) {
+				IBrowserMode bm = ((IBrowserMode)browser_table.getModel());
+				record = bm.getBrowserMode().cellToRecord(row, col);
+				if (record < 0) return ;
+			}
 			if (browser_table.getModel() instanceof IPageNavigator) {
 				IPageNavigator pn = ((IPageNavigator)browser_table.getModel());
-				record = record + pn.getPage()*pn.getPageSize();
+				if (record >= pn.getPageSize()) {
+					record = (pn.getPageSize()-1) + pn.getPage()*pn.getPageSize();
+				} else
+					record = record + pn.getPage()*pn.getPageSize();
 			}
-			System.out.println("set table record "+record);
 			((IRecordNavigator) browser_table.getModel()).setRecord(record);
 		}
 	}
@@ -223,11 +267,16 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		//System.out.println(evt.getPropertyName());
 		if (IPageNavigator.PROPERTY_PAGERECORD.equals(evt.getPropertyName())) {
 			Integer record = (Integer) evt.getNewValue();
-
-			//System.out.println(record);
-			
 			try {
-				browser_table.setRowSelectionInterval(record,record);
+				if (browser_table.getModel() instanceof IBrowserMode) {
+					
+					IBrowserMode bm = ((IBrowserMode)browser_table.getModel());
+					int[] cell = bm.getBrowserMode().recordToCell(record);
+					browser_table.setRowSelectionInterval(cell[0],cell[0]);
+					if (cell[1] >= 0)
+						browser_table.setColumnSelectionInterval(cell[1],cell[1]);
+						
+				}				
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
@@ -236,17 +285,81 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		if (IBrowserMode.PROPERTY_MODE.equals(evt.getPropertyName())) {
 			BrowserMode mode = ((BrowserMode)evt.getNewValue());
 			browser_table.setRowHeight(
-					mode.getCellSize().height
+					mode.getCellSize(0,0).height
 					);
 			browser_table.setRowSelectionAllowed(mode.isRowSelectionAllowed());
 			browser_table.setColumnSelectionAllowed(mode.isColumnSelectionAllowed());	
+				
+
 		}
 		if (IBrowserMode.PROPERTY_ZOOM.equals(evt.getPropertyName())) {
 			Double size = ((Double)evt.getNewValue());
-			System.out.println(size + " " + browser_table.getRowHeight());
+			//System.out.println(size + " " + browser_table.getRowHeight());
 			browser_table.setRowHeight((int)Math.round(size));
 		}
 		
 		
 	}
+	public static IHeaderAction[] getHeaderActions() {
+        IHeaderAction[] actions = new IHeaderAction[4];
+        actions[0] = new IHeaderAction() {
+            @Override
+            public String toString() {
+                return "Sort ascending";
+            }
+            public void action(JTable table, int column, Object value) {
+            	if (table.getModel() instanceof ISortableColumns)
+            		((ISortableColumns)table.getModel()).sort(column, true);
+            	else
+            		JOptionPane.showMessageDialog(table, "Unsupported","Error",JOptionPane.OK_OPTION);
+                
+            }
+
+        };
+        actions[1] = new IHeaderAction() {
+            @Override
+            public String toString() {
+                return "Sort descending";
+            }
+            public void action(JTable table, int column, Object value) {
+            	if (table.getModel() instanceof ISortableColumns)
+            		((ISortableColumns)table.getModel()).sort(column, false);
+            	else
+            		JOptionPane.showMessageDialog(table, "Unsupported");
+                
+            }
+
+        };      
+        actions[2] = new IHeaderAction() {
+            @Override
+            public String toString() {
+                return "(All)";
+            }
+            public void action(JTable table, int column, Object value) {
+            	if (table.getModel() instanceof IFilteredColumns)
+            		((IFilteredColumns)table.getModel()).dropFilter(column);
+            	else
+            		JOptionPane.showMessageDialog(table, "Unsupported");
+                
+            }
+
+        };            
+        actions[3] = new IHeaderAction() {
+            @Override
+            public String toString() {
+                return "(Custom filter)";
+            }
+            public void action(JTable table, int column, Object value) {
+            	if (table.getModel() instanceof IFilteredColumns)
+            		((IFilteredColumns)table.getModel()).setFilter(column,value);
+            	else
+            		JOptionPane.showMessageDialog(table, "Unsupported");
+                
+                
+            }
+
+        };            
+        return actions;
+	}
 }
+

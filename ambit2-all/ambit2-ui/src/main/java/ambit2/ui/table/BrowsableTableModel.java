@@ -25,12 +25,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.ui.table;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 
-public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode {
+import ambit2.ui.Utils;
+
+public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator {
 	protected PropertyChangeSupport  ps;
 	protected AbstractTableModel dataModel;
 	protected int pageSize = 10;
@@ -38,6 +43,9 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	protected int record = 0;	
 	protected int idColumn = 1;
 	protected double zoomFactor =1;
+	protected ImageIcon selectedIcon ;
+	protected ImageIcon currentIcon ;
+	protected ImageIcon selectedAndCurrentIcon ;
 	
 	protected BrowserMode browserMode = BrowserMode.Spreadsheet;
 	/**
@@ -53,31 +61,85 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		super();
 		ps = new PropertyChangeSupport(this);
 		setDataModel(dataModel);
+		try {
+			selectedIcon = Utils.createImageIcon("images/bullet_blue.png");
+		} catch (Exception x) {
+			selectedIcon = null;
+		}
+		try {
+			currentIcon = Utils.createImageIcon("images/bullet_red.png");
+		} catch (Exception x) {
+			currentIcon = null;
+		}
+		try {
+			selectedAndCurrentIcon = Utils.createImageIcon("images/bullet_purple.png");
+		} catch (Exception x) {
+			selectedAndCurrentIcon = null;
+		}				
 	}
 	public int getColumnCount() {
-		if (BrowserMode.Matrix.equals(browserMode))
+		switch (browserMode) {
+		case Matrix:
 			return browserMode.getColumns();
-		else	
+		case Columns: {
+			int rowCount;
+	    	if (page < getMaxPages()) rowCount = pageSize;
+	    	else rowCount = getMaxRecords()-getPage()*getPageSize();			
+			return rowCount+2;
+		}	
+		default:	
 			return getDataModel().getColumnCount()+2;
+		}
 	}
 
 	public int getRowCount() {
 		int rowCount;
     	if (page < getMaxPages()) rowCount = pageSize;
     	else rowCount = getMaxRecords()-getPage()*getPageSize();
-    	
-    	if (BrowserMode.Matrix.equals(browserMode)) {
-    		return (int)Math.ceil((double)rowCount / getColumnCount());
-    	}
-    	else	
-    		return rowCount;
-	}
 
+		switch (browserMode) {
+		case Matrix:
+			return (int)Math.ceil((double)rowCount / getColumnCount());
+		case Columns:
+			return getDataModel().getColumnCount()+1;			
+		default:	
+			return rowCount;
+		}
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int column) {
+		switch (browserMode) {
+		case Matrix:
+			return getDataModel().getColumnClass(browserMode.getContentColumn());
+		case Columns:
+			return super.getColumnClass(column);			
+		default:	
+			switch (column) {
+			case 0: return ImageIcon.class;
+			case 1: return Integer.class;
+			default: return getDataModel().getColumnClass(column-2);
+			}
+		}
+	}
 	@Override
 	public String getColumnName(int column) {
-		if (BrowserMode.Matrix.equals(browserMode)) {
+		switch (browserMode) {
+		case Matrix:
 			return getDataModel().getColumnName(browserMode.getContentColumn());
-		} else
+		case Columns: {
+	    	switch (column) {
+	    	case 0: 
+	   			return "Properties";
+			default:
+			/*
+			int record = browserMode.cellToRecord(0,column);
+			int realRow = record+getPage()*getPageSize();
+			*/
+				return getDataModel().getColumnName(browserMode.getContentColumn());
+	    	}
+		}	
+		default:	
 	    	switch (column) {
 	    	case 0: 
 	   			return ">";
@@ -86,29 +148,63 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	    	default:
 	    		return getDataModel().getColumnName(column-2);
 	    	}
+		}		
 		
 	}
+	protected int getDataModelColumn(int column) {
+		switch (browserMode) {
+		case Matrix:
+			return browserMode.getContentColumn();
+		case Columns:
+			return column-1;
+		default: 
+			return column-2;
+		}
+	}
+
 	public Object getValueAt(int row, int col) {
+		int record = browserMode.cellToRecord(row, col);
+		int realRow = record+getPage()*getPageSize();
 		
-		if (BrowserMode.Matrix.equals(browserMode)) {
-			int thisRow = row*getColumnCount()+col;
-			int realRow = thisRow+getPage()*getPageSize();
-			//return new Integer(realRow);
-			return getDataModel().getValueAt(realRow, browserMode.getIDColumn());
-		} else {
-			int realRow = row+getPage()*getPageSize();
+		switch (browserMode) {
+		case Matrix: {
+			if (record >= getPageSize()) return "";
+			else
+				return getDataModel().getValueAt(realRow, browserMode.getIDColumn());
+		}
+		case Columns: {
+			switch (col) {
+			case 0: return getDataModel().getColumnName(row);
+			default: {
+				record = browserMode.cellToRecord(row, col-1);
+				realRow = record+getPage()*getPageSize();
+				return getDataModel().getValueAt(realRow,row);			
+			}
+			}
+
+		}	
+		default: 
 	    	switch (col) {
-	    	case 0: 
-	    		if (getRecord() == (realRow))
-	    			return ">";
-	    		else 
-	    			return "";
+	    	case 0:  {
+	    		ImageIcon icon = null;
+	    		if (isFound(realRow))
+	    			
+	    			if (getRecord() == (realRow)) {
+	    				icon = selectedAndCurrentIcon;
+	    			} else {
+	    				icon = selectedIcon;
+	    			}
+	    		else if (getRecord() == (realRow))
+	    			icon = currentIcon;
+	    		return icon;
+	    	}	
 	    	case 1:
 	    		return new Integer(realRow);
 	    	default:
 	    		return getDataModel().getValueAt(realRow, col-2);
 	    	}
-		}	
+		}
+
 	}
 	
 	public AbstractTableModel getDataModel() {
@@ -239,8 +335,91 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		browserMode.setCellSize(new Dimension(
 				(int) Math.round(zoomFactor),
 				(int) Math.round(zoomFactor)
-				));
+				),
+				0,0);
 		ps.firePropertyChange(IBrowserMode.PROPERTY_ZOOM,oldZoom,zoomFactor);
 	}
 
+	public void setFilter(int column, Object value)
+			throws UnsupportedOperationException {
+		if (dataModel instanceof IFilteredColumns)
+			((IFilteredColumns) getDataModel()).setFilter(
+					getDataModelColumn(column)
+					, value);
+		else
+			throw new UnsupportedOperationException();
+		
+	}
+	public void dropFilter(int column) throws UnsupportedOperationException {
+		if (dataModel instanceof IFilteredColumns)
+			((IFilteredColumns) getDataModel()).dropFilter(
+					getDataModelColumn(column)
+					);
+		else
+			throw new UnsupportedOperationException();
+		
+	}
+	public void sort(int column, boolean ascending)
+			throws UnsupportedOperationException {
+		if (dataModel instanceof ISortableColumns)
+			((ISortableColumns) getDataModel()).sort(
+					getDataModelColumn(column),ascending
+					);
+		else
+			throw new UnsupportedOperationException();
+	}
+
+	public boolean isCompleted() {
+		if (dataModel instanceof IFindNavigator)
+			return ((IFindNavigator)dataModel).isCompleted();
+		else 
+			return false;
+	}
+	public int findNext()throws UnsupportedOperationException {
+		if (dataModel instanceof IFindNavigator) {
+			int record = ((IFindNavigator)dataModel).findNext();
+			setRecord(record);
+			return record;
+		}	
+		else throw new UnsupportedOperationException();
+		
+	}
+
+	
+	public int findPrevious() throws UnsupportedOperationException {
+		if (dataModel instanceof IFindNavigator) {
+			int record = ((IFindNavigator)dataModel).findPrevious();
+			setRecord(record);
+			return record;			
+		} else throw new UnsupportedOperationException();
+	}
+	public Object getValue() {
+		//return findValue;
+		if (dataModel instanceof IFindNavigator)
+			return ((IFindNavigator)dataModel).getValue();
+		else return "";
+	}
+
+	public void setValue(Object value) {
+		//findValue = value.toString();
+		if (dataModel instanceof IFindNavigator)
+			((IFindNavigator)dataModel).setValue(value);
+		
+	}
+
+	public void setCompleted(boolean value) {
+		if (dataModel instanceof IFindNavigator)
+			((IFindNavigator)dataModel).setCompleted(value);
+		
+	}
+	public int find() throws UnsupportedOperationException {
+		if (dataModel instanceof IFindNavigator) 
+			return ((IFindNavigator)dataModel).find();
+		else throw new UnsupportedOperationException();
+	}
+	public boolean isFound(int record) {
+		if (dataModel instanceof IFindNavigator) 
+			return ((IFindNavigator)dataModel).isFound(record);
+		else throw new UnsupportedOperationException();		
+	}
 }

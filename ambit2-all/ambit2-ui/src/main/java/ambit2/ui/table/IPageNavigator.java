@@ -39,7 +39,7 @@ public interface IPageNavigator {
 	int getPage();
 	void setPage(int page);
 	int getMaxPages();
-	
+		
 	void addPropertyChangeListener(PropertyChangeListener x);
 	void removePropertyChangeListener(PropertyChangeListener x);
 		
