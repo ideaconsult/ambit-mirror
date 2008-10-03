@@ -45,7 +45,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<String,String> {
 	 * 
 	 */
 	private static final long serialVersionUID = -335737998721944578L;
-	protected String SQLFile = "ambit2/repository/create_tables.sql";
+	protected String SQLFile = "ambit2/db/sql/create_tables.sql";
 
     @Override
     protected void prepareStatement(Connection connection) throws SQLException {
