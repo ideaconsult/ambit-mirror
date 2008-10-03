@@ -187,8 +187,13 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	    	switch (col) {
 	    	case 0:  {
 	    		ImageIcon icon = null;
-	    		if (isFound(realRow))
-	    			
+	    		boolean found = false;
+	    		try {
+	    			found = isFound(realRow);
+	    		} catch (Exception x) {
+	    			found = false;
+	    		}
+	    		if (found)
 	    			if (getRecord() == (realRow)) {
 	    				icon = selectedAndCurrentIcon;
 	    			} else {
