@@ -58,7 +58,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	}
 
 	public ImageIcon getIcon() {
-	    return Utils.createImageIcon("images/search_16.png");
+	    return Utils.createImageIcon("ambit2/plugin/search/images/search_16.png");
 	}
 	
 
