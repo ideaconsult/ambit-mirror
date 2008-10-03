@@ -89,7 +89,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 				QueryExecutor.setParameters(sresults, params);
 				System.out.println(sresults);								
 				int rows = sresults.executeUpdate();
-				//target.setRows(rows);
+				result.setRows(rows);
 				sresults.close();
 				if (rows > 0)
 					connection.commit();
