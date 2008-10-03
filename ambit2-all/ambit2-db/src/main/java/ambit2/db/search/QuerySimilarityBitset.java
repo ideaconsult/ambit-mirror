@@ -41,12 +41,7 @@ public class QuerySimilarityBitset extends QuerySimilarity<BitSet,NumberConditio
 				if (h<15) b.append(" + "); else b.append(") ");
 			}
 			b.append(" as cbits,bc from fp1024 ");
-			/*
-			if ((srcDataset != null) && (srcDataset.getId()>=0)) {
-				b.append(" join structure using(idsubstance) join struc_dataset using(idstructure) where id_srcdataset=");
-				b.append(srcDataset.getId());
-			}
-			*/
+
 			b.append (") as L, chemicals ");
 			b.append("where bc > 0 and cbits > 0 and (cbits/(bc+?-cbits)>?) and L.idchemical=chemicals.idchemical order by metric desc");
 					
