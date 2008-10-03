@@ -44,18 +44,18 @@ public class EditorPreferences {
 	public static Object[][] default_values = {
 		
 		{"com.microworkflow.process.ValueLatchPair","ambit2.workflow.ui.ValueLatchPairEditor"},
-		{"ambit2.db.LoginInfo","ambit2.ui.editors.LoginPanel"},
-		{"ambit2.core.data.literature.LiteratureEntry","ambit2.ui.editors.ReferenceEditor"},
-		{"ambit2.core.data.molecule.SourceDataset","ambit2.ui.editors.SourceDatasetEditor"},
+		{"ambit2.db.LoginInfo","ambit2.dbui.LoginPanel"},
+		//{"ambit2.core.data.LiteratureEntry","ambit2.ui.editors.ReferenceEditor"},
+		{"ambit2.db.SourceDataset","ambit2.ui.editors.SourceDatasetEditor"},
 		{"ambit2.core.data.AmbitUser","ambit2.ui.editors.AmbitUserEditor"},
-		{"java.lang.StringBuffer","ambit2.ui.query.DbStatusPanel"},
+		//{"java.lang.StringBuffer","ambit2.ui.query.DbStatusPanel"},
 		{"ambit2.core.data.experiment.StudyTemplate","ambit2.ui.editors.StudyTemplateEditor"},
 		{"ambit2.core.data.experiment.Study","ambit2.ui.editors.StudyEditor"},
 		{"ambit2.core.data.experiment.Experiment","ambit2.ui.editors.ExperimentEditor"},
-		{"toxTree.core.IDecisionMethod","ambit2.ui.editors.ToxTreeEditor"},
-		{"ambit2.db.search.QueryField","ambit2.db.ui.QueryFieldEditor"},
-		{"ambit2.db.search.QueryCombined","ambit2.db.ui.QueryCombinedEditor"},
-		{"ambit2.db.search.QueryInfo","ambit2.db.ui.QueryInfoEditor"},
+		//{"toxTree.core.IDecisionMethod","ambit2.ui.editors.ToxTreeEditor"},
+		{"ambit2.db.search.QueryField","ambit2.dbui.QueryFieldEditor"},
+		{"ambit2.db.search.QueryCombined","ambit2.dbui.QueryCombinedEditor"},
+		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},
 		
 		
 		
