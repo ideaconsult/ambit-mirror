@@ -46,6 +46,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.db.CachedRowSetFactory;
 import ambit2.db.search.StoredQuery;
+import ambit2.dbui.CachedRowSetTableModel;
 import ambit2.ui.ImageCellRenderer;
 import ambit2.workflow.DBWorkflowContext;
 

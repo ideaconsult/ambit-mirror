@@ -29,12 +29,15 @@
 
 package ambit2.db.readers;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.core.data.IStructureRecord;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.exceptions.AmbitException;
 
 public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomContainer> {
@@ -50,12 +53,27 @@ public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomConta
     public IAtomContainer getObject(ResultSet rs) throws AmbitException {
         try {
             IStructureRecord r = getValue();
-            r.setIdchemical(rs.getInt("idchemical"));
-            r.setIdstructure(rs.getInt("idstructure"));
-            r.setContent(rs.getString("ustructure"));
-            r.setFormat(rs.getString("format"));
-            return transform.process(r);
-        } catch (SQLException x){
+            r.setIdchemical(rs.getInt(ID_idchemical));
+            r.setIdstructure(rs.getInt(ID_idstructure));
+            r.setFormat(rs.getString(ID_format));
+            /**
+             * Structure
+             */
+            int type = rs.getMetaData().getColumnType(ID_structure);
+            if (type == java.sql.Types.VARBINARY) {
+	              InputStream s = rs.getBinaryStream(ID_structure);
+	              IMolecule m = null;
+	              if ("SDF".equals(r.getFormat()))
+	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
+	              else
+	            	    m = MoleculeTools.readCMLMolecule(new InputStreamReader(s));
+	                s = null;
+	                return m;
+            } else {
+            		return MoleculeTools.readCMLMolecule(rs.getString(ID_structure));
+            }        	
+            //return transform.process(r);
+        } catch (Exception x){
             throw new AmbitException(x);
         }
     }
