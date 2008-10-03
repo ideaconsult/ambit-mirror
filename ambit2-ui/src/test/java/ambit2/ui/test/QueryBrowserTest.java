@@ -29,15 +29,19 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
+import javax.vecmath.Vector2d;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.ui.QueryBrowser;
@@ -84,10 +88,57 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 	String findValue = "Find";
 	ArrayList<Integer> hits=new ArrayList<Integer>();
 	int pointer;
-	Hashtable<Integer, IAtomContainer> molecules;
+	Hashtable<Integer, IMolecule> molecules;
+
 	
 	public TestTableModel() {
-		molecules = new Hashtable<Integer, IAtomContainer>();
+		molecules = new Hashtable<Integer, IMolecule>();
+		molecules.put(0,MoleculeFactory.make4x3CondensedRings());
+		molecules.put(1,MoleculeFactory.makeAdenine());
+		molecules.put(2,MoleculeFactory.makeAlkane(6));
+		molecules.put(3,MoleculeFactory.makeAlphaPinene());
+		molecules.put(4,MoleculeFactory.makeAzulene());
+		molecules.put(5,MoleculeFactory.makeBenzene());
+		molecules.put(6,MoleculeFactory.makeBicycloRings());
+		molecules.put(7,MoleculeFactory.makeBiphenyl());
+		molecules.put(8,MoleculeFactory.makeBranchedAliphatic());
+		molecules.put(9,MoleculeFactory.makeCyclobutadiene());
+		molecules.put(10,MoleculeFactory.makeCyclobutane());
+		molecules.put(11,MoleculeFactory.makeCyclohexane());
+		molecules.put(12,MoleculeFactory.makeCyclohexene());
+		molecules.put(13,MoleculeFactory.makeDiamantane());
+		molecules.put(14,MoleculeFactory.makeEthylCyclohexane());
+		molecules.put(15,MoleculeFactory.makeEthylPropylPhenantren());
+		molecules.put(16,MoleculeFactory.makeFusedRings());
+		molecules.put(17,MoleculeFactory.makeIndole());
+		molecules.put(18,MoleculeFactory.makeMethylDecaline());
+		molecules.put(19,MoleculeFactory.makePhenylAmine());
+		molecules.put(20,MoleculeFactory.makePhenylEthylBenzene());
+		molecules.put(21,MoleculeFactory.makePiperidine());
+		molecules.put(22,MoleculeFactory.makePropylCycloPropane());
+		molecules.put(23,MoleculeFactory.makePyridine());
+		molecules.put(25,MoleculeFactory.makePyridineOxide());	
+		molecules.put(26,MoleculeFactory.makePyrrole());
+		molecules.put(27,MoleculeFactory.makeQuinone());
+		molecules.put(28,MoleculeFactory.makeSingleRing());
+		molecules.put(29,MoleculeFactory.makeSpiroRings());
+		molecules.put(30,MoleculeFactory.makeSteran());
+		molecules.put(31,MoleculeFactory.makeTetrahydropyran());
+		molecules.put(32,MoleculeFactory.makeThiazole());
+		
+		Enumeration<Integer> e = molecules.keys();
+		StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+		while (e.hasMoreElements()) {
+			Integer key = e.nextElement();
+			try {
+            sdg.setMolecule(molecules.get(key));
+            sdg.generateCoordinates(new Vector2d(0,1));
+            molecules.put(key,sdg.getMolecule());
+			} catch (Exception x) {
+				
+			}
+		}
+		
 	}
 	public int getColumnCount() {
 		return 10;
@@ -98,11 +149,7 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 	public Object getValueAt(int row, int col) {
 		try {
 		if (col==1) {
-			IAtomContainer a = molecules.get(row);
-			if (a==null) {
-				a = MoleculeFactory.makeAlkane(row+1);
-				molecules.put(row,a);
-			}	
+			IMolecule a = molecules.get(row);
 			return a;
 		}
 		} catch (Exception x) {}
