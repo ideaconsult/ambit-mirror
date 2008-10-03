@@ -20,6 +20,12 @@ The database can be searched by identifiers, attribute value or range, experimen
   		<name>ambit at sf.net</name>
   		<url>http://ambit.sourceforge.net/jars/</url>
   	</repository>
+  	<repository>
+  		<id>mvnrepository</id>
+  		<name>mvnrepository</name>
+  		<url>http://mvnrepository.com/</url>
+  	</repository>  	
+  	
   </repositories>
   <dependencies>
     <dependency>
@@ -39,6 +45,11 @@ The database can be searched by identifiers, attribute value or range, experimen
     	<version>4.0</version>
     	<scope>test</scope>
     </dependency>
+	<dependency>
+	    <groupId>maven-plugins</groupId>
+	    <artifactId>maven-doxygen-plugin</artifactId>
+	    <version>1.0</version>
+	</dependency>    
   </dependencies>
   <inceptionYear>2004</inceptionYear>
   <issueManagement>
@@ -143,6 +154,7 @@ The database can be searched by identifiers, attribute value or range, experimen
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
     <module>ambit2-hashcode</module>
+    <module>ambit2-descriptors</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
