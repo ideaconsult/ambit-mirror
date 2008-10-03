@@ -14,8 +14,12 @@ public abstract class AbstractStructureRetrieval<R> extends AbstractQuery<IStruc
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public final static String sql = "select structure.idstructure,idsubstance,uncompress(structure) as ustructure,format,type_structure from structure where structure.idstructure =?";
-
+	public final static String sql = "select structure.idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure from structure where structure.idstructure =?";
+	protected final static int ID_idstructure=1;
+	protected final static int ID_idchemical=2;
+	protected final static int ID_structure=3;
+	protected final static int ID_format=4;
+	protected final static int ID_type=5;
 
 	public String getSQL() throws AmbitException {
 		return sql;

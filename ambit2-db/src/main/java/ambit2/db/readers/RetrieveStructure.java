@@ -32,9 +32,6 @@ package ambit2.db.readers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
-
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
@@ -46,12 +43,11 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
 
     public IStructureRecord getObject(ResultSet rs) throws AmbitException {
         try {
-            IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
             IStructureRecord r = getValue();
             r.setIdchemical(rs.getInt("idchemical"));
             r.setIdstructure(rs.getInt("idstructure"));
             r.setContent(rs.getString("ustructure"));
-            String format = rs.getString("format");
+            r.setFormat(rs.getString("format"));
             return r;
         } catch (SQLException x){
             throw new AmbitException(x);

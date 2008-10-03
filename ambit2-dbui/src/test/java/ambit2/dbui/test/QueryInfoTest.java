@@ -40,7 +40,8 @@ public class QueryInfoTest extends QueryTest<IQueryObject> {
 		info.setDataset(new SourceDataset("EINECS"));
 		
 		IAmbitEditor e = EditorPreferences.getEditor(info);
-		JOptionPane.showMessageDialog(null,e.getJComponent());		
+		assertNotNull(e);
+		//JOptionPane.showMessageDialog(null,e.getJComponent());		
 		
 		QueryInfo2Query processor = new QueryInfo2Query();
 		IQueryObject query = processor.process(info);
@@ -84,6 +85,7 @@ public class QueryInfoTest extends QueryTest<IQueryObject> {
 	protected void verify(IQueryObject query, ResultSet rs) throws Exception {
 		System.out.println(query.getSQL());
 
+		
 		while (rs.next()) {
 			System.out.println(rs.getString(2));
 		}		
