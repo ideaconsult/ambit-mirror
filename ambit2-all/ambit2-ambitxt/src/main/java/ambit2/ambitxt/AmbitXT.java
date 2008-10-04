@@ -33,17 +33,19 @@ public class AmbitXT extends NPluginsApplication {
 
 	@Override
 	protected void addPlugins(NanoPluginsManager manager) {
+	    if (manager.size()==0)
 		try {
 			manager.addPackage("ambit2.plugin.search.SearchPlugin","Simple search",
 			        createImageIcon("images/search_16.png"));
 			manager.addPackage("ambit2.plugin.analogs.AnalogsFinderPlugin","Find analogs",
 			        createImageIcon("images/molecule_16.png"));
-			manager.addPackage("ambit2.plugin.pbtchecker.PBTCheckerPlugin","PBT Assessment",
+			manager.addPackage("ambit2.plugin.pbt.PBTCheckerPlugin","PBT Assessment",
 			        createImageIcon("images/pill_16.png"));
-			manager.addPackage("ambit2.plugin.dbutility.DBUtilityPlugin","Database utilities",
+			manager.addPackage("ambit2.plugin.dbtools.DBUtilityPlugin","Database utilities",
 			        createImageIcon("images/database_16.png"));
-			manager.addPackage("ambit2.plugin.usermanager.UserManagerPlugin","Users",
-			        createImageIcon("images/user_16.png"));			
+			manager.addPackage("ambit2.plugin.usermgr.UserManagerPlugin","Users",
+			        createImageIcon("images/user_16.png"));
+			
 		} catch (Exception x) {
             x.printStackTrace();
 			logger.severe(x.getMessage());

@@ -1,2 +1,16 @@
 Package: ambit2.ambitxt
 Main-Class: ambit2.ambitxt.Splasher
+
+Name: ambit2/ambitxt/Splasher.class
+Specification-Title: Ambit XT
+Specification-Version: 2.0
+Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Package-Title: ambit2.ambitxt
+Package-Version: 2.0
+Package-Vendor: http://ambit.sourceforge.net
+Implementation-Title: Ambit XT
+Implementation-Version: 2.0
+Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Implementation-Vendor-Id: Ideaconsult
+Implementation-URL:  http://ambit.sourceforge.net
+Image-icon: images/molecule_16.png
