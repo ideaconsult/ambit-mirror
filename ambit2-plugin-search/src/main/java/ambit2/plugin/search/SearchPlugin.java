@@ -2,6 +2,7 @@ package ambit2.plugin.search;
 
 
 import java.beans.PropertyChangeEvent;
+import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -9,7 +10,6 @@ import javax.swing.ImageIcon;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import nplugins.shell.application.Utils;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.AmbitWorkflowContextPanel;
@@ -58,7 +58,15 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	}
 
 	public ImageIcon getIcon() {
-	    return Utils.createImageIcon("ambit2/plugin/search/images/search_16.png");
+	    String path = "ambit2/plugin/search/images/search_16.png";
+	    URL url = SearchPlugin.class.getClassLoader().getResource(path);
+	    //return Utils.createImageIcon("ambit2/plugin/search/images/search_16.png");
+        if (url != null) {
+            return new ImageIcon(url);
+        } else {
+            System.out.println("Couldn't find file: " + path);
+            return null;
+        }	    
 	}
 	
 

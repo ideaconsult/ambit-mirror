@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import nplugins.shell.application.Utils;
 import nplugins.workflow.MWorkflowPlugin;
 
 import com.microworkflow.process.Workflow;
@@ -52,13 +53,11 @@ public class PBTCheckerPlugin extends MWorkflowPlugin {
 	}
 
 	public ImageIcon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+	    return Utils.createImageIcon("ambit2/plugin/pbt/images/pill_16.png");
 	}
 
 	public int getOrder() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 3;
 	}
 
 	public ResourceBundle getResourceBundle() {

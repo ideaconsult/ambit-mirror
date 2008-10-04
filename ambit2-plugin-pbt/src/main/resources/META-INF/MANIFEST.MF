@@ -1,1 +1,15 @@
 Package: ambit2.plugin.pbt
+
+Name: ambit2/plugin/pbt/PBTCheckerPlugin.class
+Specification-Title: PBT assessment plugin for Ambit XT
+Specification-Version: 2.0
+Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Package-Title: ambit2.plugin.pbt
+Package-Version: 2.0
+Package-Vendor: http://ambit.sourceforge.net
+Implementation-Title: PBT Assessment
+Implementation-Version: 2.0
+Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Implementation-Vendor-Id: Ideaconsult
+Implementation-URL:  http://ambit.sourceforge.net
+Image-icon: ambit2/plugin/pbt/images/pill_16.png

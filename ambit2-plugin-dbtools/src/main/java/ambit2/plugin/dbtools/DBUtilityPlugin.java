@@ -34,6 +34,7 @@ import com.microworkflow.process.Workflow;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.PluginMainPanel;
+import nplugins.shell.application.Utils;
 import ambit2.workflow.DBWorkflowPlugin;
 
 public class DBUtilityPlugin extends DBWorkflowPlugin {
@@ -47,13 +48,11 @@ public class DBUtilityPlugin extends DBWorkflowPlugin {
 		return null;
 	}
 	public ImageIcon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+	    return Utils.createImageIcon("ambit2/plugin/dbtools/images/database_16.png");
 	}
 
 	public int getOrder() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 5;
 	}
 
 	public ResourceBundle getResourceBundle() {
