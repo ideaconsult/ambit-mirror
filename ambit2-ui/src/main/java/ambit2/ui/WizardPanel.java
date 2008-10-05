@@ -2,6 +2,7 @@ package ambit2.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,18 +12,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
 
+import nplugins.shell.application.SimpleInternalFrame;
 
-
-import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class WizardPanel extends FormDebugPanel {
+public class WizardPanel extends JPanel {
 	public enum ANSWER_MODE {
 	    back,next,finish,help,cancel,none 
 	}
@@ -36,6 +36,7 @@ public class WizardPanel extends FormDebugPanel {
 		super();
 		buildPanel(buildLeft(help),buildCenter(subtitle,component),buildNavigation(true));
 	}
+
 	protected Component buildLeft(String help) {
 		if (help == null) return buildGraphicsPanel();
 		return buildHelpPanel(help);
@@ -118,9 +119,20 @@ public class WizardPanel extends FormDebugPanel {
 		return p;
 	}	
 	protected Component buildHelpPanel(String help) {
+        JTextPane ta =  new JTextPane();
+        ta.setAutoscrolls(true);
+        //ta.setContentType("text/html");
+        ta.setText(help);
+        ta.setBorder(null);
+        ta.setPreferredSize(new Dimension(78,Integer.MAX_VALUE));
+        ta.setForeground(new Color(0,128,250));
+        ta.setEditable(false);
+	    
+	    /*
         FormLayout layout = new FormLayout(
         		//"right:[40dlu,pref]",
-        		"153dlu",
+        		//"153dlu",
+                "78dlu",
                 //"12dlu, 12dlu, fill:[pref,264dlu]"
         		"12dlu, top:276px"
                 );
@@ -128,10 +140,16 @@ public class WizardPanel extends FormDebugPanel {
         JPanel p = buildPanel(layout);
         
        	p.add(createSeparator("&Help"),cc.xyw(1,1,1));
-        JTextArea ta = new JTextArea(help);
-        ta.setForeground(new Color(0,128,250));
-        ta.setEditable(false);
         p.add(ta,cc.xywh(1,2,1,1));
+        */
+        /**
+         * This is the only class that depends on nplugins
+         */
+        SimpleInternalFrame p = new SimpleInternalFrame("Help");
+        
+        p.setPreferredSize(new Dimension(78, 100));
+        p.setContent(new JScrollPane(ta));
+        ta.setBackground(p.getBackground());
 		return p;
 	}
 	protected Component buildMainPanel(String subtitle,Component main) {
@@ -150,8 +168,8 @@ public class WizardPanel extends FormDebugPanel {
 	
 	protected void buildPanel(Component left, Component center, Component navigation) {
 		FormLayout layout = new FormLayout(
-	            "12dlu,left:[pref,153px]:grow,12dlu, left:[pref,471dlu]:grow,12dlu",  //columns
-				"12dlu,top:[pref,328dlu]:grow, 12dlu,fill:48dlu:grow");  //rows
+	            "6dlu,left:[pref,153px]:grow,12dlu, left:[pref,471dlu]:grow,12dlu",  //columns
+				"6dlu,top:[pref,328dlu]:grow, 12dlu,fill:48dlu:grow");  //rows
 		setLayout(layout);
         CellConstraints cc = new CellConstraints();
 	     

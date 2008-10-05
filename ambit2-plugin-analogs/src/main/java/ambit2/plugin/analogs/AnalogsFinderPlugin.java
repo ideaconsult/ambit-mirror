@@ -30,17 +30,16 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
-import com.microworkflow.process.Workflow;
-
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import nplugins.shell.PluginMainPanel;
 import nplugins.shell.application.Utils;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
-import ambit2.workflow.ui.AmbitWorkflowContextPanel;
+import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
+
+import com.microworkflow.process.Workflow;
 
 public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	protected WorkflowOptionsLauncher contextListener;
@@ -63,7 +62,7 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		return new AnalogsFinderWorkflow();
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		AmbitWorkflowContextPanel results = new AmbitWorkflowContextPanel(getWorkflowContext());
+	    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
 		Vector<String> p = new Vector<String>();
 		p.add(DBWorkflowContext.STOREDQUERY);
 		p.add(DBWorkflowContext.ERROR);

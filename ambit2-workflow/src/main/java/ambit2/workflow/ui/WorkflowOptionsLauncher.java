@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import ambit2.ui.EditorPreferences;
+import ambit2.ui.Utils;
 import ambit2.ui.WizardPanel;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.workflow.DBWorkflowContext;
@@ -52,8 +53,10 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 				else {
 					p = new JLabel(latch.getValue().toString());
 				}
-				
-				WizardPanel wizard = new WizardPanel(latch.getValue().getClass().getName(),p,null);
+
+				String help = Utils.getHelp(latch.getValue().getClass());
+				String title = Utils.getTitle(latch.getValue().getClass());
+				WizardPanel wizard = new WizardPanel(title,p,help);
 				if (wizard.display(JOptionPane.getFrameForComponent(getFrame()),context.getName() + " Wizard",true)
 						== WizardPanel.ANSWER_MODE.next) {
 					latch.getLatch().setValue(latch.getValue());
