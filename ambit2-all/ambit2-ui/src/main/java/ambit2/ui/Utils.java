@@ -24,7 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.ImageIcon;
 
@@ -38,5 +42,31 @@ public class Utils {
             else 
                 throw new FileNotFoundException(path);
 
-    }	
+    }
+    public static String getHelp(Class clazz) {
+        try {
+            InputStream stream = clazz.getClassLoader().getResourceAsStream("ambit2/help/"+clazz.getName()+".help");
+            return getText(stream,"Help TODO "+ clazz.getName());
+        } catch (Exception x) {
+            return x.getMessage();
+        }       
+    }    
+    public static String getTitle(Class clazz) {
+        try {
+            InputStream stream = clazz.getClassLoader().getResourceAsStream("ambit2/help/"+clazz.getName()+".title");
+            return getText(stream,clazz.getName());
+        } catch (Exception x) {
+            return x.getMessage();
+        }       
+    }
+    public static String getText(InputStream stream, String defaultText) throws IOException {
+            BufferedReader in = new BufferedReader(new InputStreamReader(stream));        
+            StringBuffer buffer = new StringBuffer();
+            String line = defaultText;
+            while ((line = in.readLine()) != null) {
+                buffer.append(line);
+            }
+            in.close();
+            return buffer.toString();
+    }    
 }

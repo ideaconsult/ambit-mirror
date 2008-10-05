@@ -24,6 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow.test;
 
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -37,11 +40,13 @@ import ambit2.ui.WizardPanel;
 public class LoginInfoPanelTest {
 
 	@Test public void testPanel() throws Exception {
+	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
 		LoginInfo info = new LoginInfo();
 		LoginPanel panel = new LoginPanel();
 		panel.setObject(info);
 		WizardPanel p = new WizardPanel("x",panel,"help");
-		JOptionPane.showConfirmDialog(null,p);
+		p.setBorder(BorderFactory.createLineBorder(Color.red));
+		JOptionPane.showConfirmDialog(null,p,"",JOptionPane.OK_OPTION,JOptionPane.PLAIN_MESSAGE);
 		System.out.println(info.getPassword());
 	}
     public static void main(String[] args) {
