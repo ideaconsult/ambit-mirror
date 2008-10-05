@@ -25,17 +25,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.ui.table;
 
 import java.awt.Dimension;
-import java.awt.Image;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import javax.swing.ImageIcon;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
 
 import ambit2.ui.Utils;
 
-public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator {
+public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator, TableModelListener {
 	protected PropertyChangeSupport  ps;
 	protected AbstractTableModel dataModel;
 	protected int pageSize = 10;
@@ -217,7 +217,10 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	}
 
 	public void setDataModel(AbstractTableModel dataModel) {
+	    if (this.dataModel != null)
+	        this.dataModel.removeTableModelListener(this);
 		this.dataModel = dataModel;
+		this.dataModel.addTableModelListener(this);
 		fireTableStructureChanged();
 		setRecord(0);
 	}
@@ -426,5 +429,15 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		if (dataModel instanceof IFindNavigator) 
 			return ((IFindNavigator)dataModel).isFound(record);
 		else throw new UnsupportedOperationException();		
+	}
+	
+	public void tableChanged(TableModelEvent e) {
+	    if (TableModelEvent.HEADER_ROW == e.getFirstRow()) {
+	        ps.firePropertyChange(IPageNavigator.PROPERTY_MAXPAGES, -1,getMaxPages());
+	        ps.firePropertyChange(IRecordNavigator.PROPERTY_MAXRECORDS, -1,getMaxRecords());
+	    }
+	        
+	    fireTableChanged(e);
+	    
 	}
 }

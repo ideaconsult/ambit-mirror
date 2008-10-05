@@ -66,7 +66,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 
 
-public class QueryBrowser<T extends AbstractTableModel> extends JPanel implements PropertyChangeListener {
+public class QueryBrowser<T extends AbstractTableModel> extends JPanel implements PropertyChangeListener  {
 	protected final JTable browser_table;
 	protected IHeaderAction[] headerActions = getHeaderActions();
 	protected Dimension cellSize = new Dimension(200,200);	
@@ -166,16 +166,35 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					
 					
 					// Create new columns from the data model info
-					final int columnSize[] = { 32, 64, 100, 48, 48 };
+					final int columnSize[] = { 32, 32, 32, 200, 80 };
 					for (int i = 0; i < m.getColumnCount(); i++) {
 						EditableHeaderTableColumn newColumn = new EditableHeaderTableColumn();
 						//TableColumn newColumn = new TableColumn(i);
 						newColumn.setModelIndex(i);
-						if (isMatrix())
-							newColumn.setPreferredWidth(cellSize.width);
-						else {
-							//newColumn.setCellRenderer(new ColorTableCellRenderer());
+
+						if ((browser_table != null) && (browser_table.getModel()!= null)) {
+						    switch (((IBrowserMode) browser_table.getModel()).getBrowserMode()) {
+						    case Spreadsheet: {
+	                            if (i<columnSize.length) {
+	                                newColumn.setPreferredWidth(columnSize[i]);
+	                            } else
+	                                newColumn.setPreferredWidth(columnSize[columnSize.length-1]);
+	                            //newColumn.setCellRenderer(new ColorTableCellRenderer());
+	                            break;
+						    }
+						    case Matrix: {
+						        newColumn.setPreferredWidth(cellSize.width);
+						        break;
+						    }
+						    case Columns: {
+						        newColumn.setPreferredWidth(cellSize.width);
+						        break;
+						    }
+						    default: {}
+						    }
 						}
+						
+							
 						addColumn(newColumn);
 				        //col.setHeaderValue(combo.getItemAt(0));    
 				        //col.setHeaderRenderer(renderer);   
@@ -193,6 +212,7 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 				
 			};
 		};
+		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setTableHeader(new EditableHeader(table.getColumnModel(),false));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(true);

@@ -85,6 +85,7 @@ public class StoredQueryTableModel extends AbstractTableModel {
 			}
 			count.close();		
 		}
+		fireTableStructureChanged();
 		
 	}
 
@@ -137,10 +138,16 @@ public class StoredQueryTableModel extends AbstractTableModel {
 	protected IAtomContainer getAtomContainer(int idstructure) throws SQLException, AmbitException {
 		if (structureRecords == null) structureRecords = 
 			getConnection().prepareStatement(AbstractStructureRetrieval.sql);
+		structureRecords.clearParameters();
 		structureRecords.setInt(1,idstructure);
 		try {
 			ResultSet rs = structureRecords.executeQuery();
-			IAtomContainer ac = retrieveMolecule.getObject(rs);
+			IAtomContainer ac = null;
+			while (rs.next()) {
+    			ac = retrieveMolecule.getObject(rs);
+    			if (ac != null)
+    			    break;
+		    }
 			rs.close();
 			return ac;
 		} catch (Exception x) {

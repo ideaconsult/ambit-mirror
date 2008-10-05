@@ -24,10 +24,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.dbui.test;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -40,19 +47,35 @@ import ambit2.ui.table.BrowsableTableModel;
 public class StoredQueryTableModelTest extends RepositoryTest {
 	@Test
 	public void test() throws Exception {
-		;
-		IStoredQuery query = new StoredQuery();
+		final IStoredQuery query = new StoredQuery();
 		query.setId(2);
-		StoredQueryTableModel model = new StoredQueryTableModel();
-		model.setConnection(datasource.getConnection());
-		model.setQuery(query);
-		assertTrue(model.getRowCount()>0);
+		final StoredQueryTableModel queryModel = new StoredQueryTableModel();
+
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(
-				new BrowsableTableModel(model));
+				new BrowsableTableModel(queryModel));
+		/*		
+        QueryBrowser<StoredQueryTableModel> browser = new QueryBrowser<StoredQueryTableModel>(
+                queryModel);
+                */		
 		browser.setPreferredSize(new Dimension(600,600));
-		JOptionPane.showMessageDialog(null,browser);
+		
+		JButton button = new JButton(new AbstractAction("Connect") {
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+                    queryModel.setConnection(datasource.getConnection());
+                    queryModel.setQuery(query);
+                    assertTrue(queryModel.getRowCount()>0);		    
+		        } catch (Exception x) {
+		            Assert.fail(x.getMessage());
+		        }
+		}});
+		
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(browser,BorderLayout.CENTER);
+		p.add(button,BorderLayout.NORTH);
+		JOptionPane.showMessageDialog(null,p);
 	}
 }
