@@ -43,6 +43,7 @@ public class Node
 		
 	public Node()
 	{	
+		//...
 	}
 		
 	public void nullifyAtoms(int n)
