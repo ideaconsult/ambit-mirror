@@ -13,6 +13,7 @@ import nplugins.shell.INanoPlugin;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.AmbitWorkflowContextPanel;
+import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
@@ -48,7 +49,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		AmbitWorkflowContextPanel results = new AmbitWorkflowContextPanel(getWorkflowContext());
+		QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
 		Vector<String> p = new Vector<String>();
 		p.add(DBWorkflowContext.STOREDQUERY);
 		p.add(DBWorkflowContext.ERROR);
