@@ -42,6 +42,19 @@ public class TestUtilities
 	static SmartsFingerprinter sfp = new SmartsFingerprinter();
 	
 	
+	public static void printSmartsTokens(String smarts)
+	{
+		
+		QueryAtomContainer qac = sp.parse(smarts);
+		System.out.println(SmartsHelper.getAtomsString(qac));
+		/*
+		for (int i = 0; i < qac.getAtomCount(); i++)
+			if (qac.getAtom(i) instanceof SmartsAtomExpression)
+				System.out.println(
+						SmartsHelper.getAtomExpressionTokens((SmartsAtomExpression)qac.getAtom(i)));
+		*/				
+	}
+	
 	public static int boolSearch(String smarts, String smiles)
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
@@ -292,7 +305,9 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		printSmartsTokens("[#6,i]");
 		tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
+		
 		
 		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
 		//tu.testAtomSequencing(smarts);		

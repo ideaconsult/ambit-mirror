@@ -248,6 +248,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     				return(SmartsConst.elSymbols[tok.param]);
     			else
     				return("A");
+    		
     		case SmartsConst.AP_D:
     		case SmartsConst.AP_H:
     		case SmartsConst.AP_h:
@@ -255,13 +256,15 @@ public class SmartsAtomExpression extends SMARTSAtom
     		case SmartsConst.AP_r:
     		case SmartsConst.AP_v:
     		case SmartsConst.AP_X:
-    		case SmartsConst.AP_x:
-    		case SmartsConst.AP_i:	
+    		case SmartsConst.AP_x:    			
     			String s = Character.toString(SmartsConst.AtomPrimChars[tok.type]);
     			if (tok.param != 1)
     				s+= tok.param;
     			return(s);
     		
+    		case SmartsConst.AP_i:
+    			return("i");
+    			
     		case SmartsConst.AP_Charge:
     			String s1;
     			if (tok.param > 0)
