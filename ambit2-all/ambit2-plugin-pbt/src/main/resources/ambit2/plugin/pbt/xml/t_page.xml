@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page columns="6" rows="21" name="Toxicity check">
+<title row="1" col="1" colspan="6">
+PBT SCREENING TOOL FOR REACH
+</title>
+<title row="2" col="1" colspan="6">
+TOXICITY CHECK								
+</title>
+
+<section row="3" col="1" colspan="6" rowspan="1" value="SECTION ECOTOXICITY BASED ON MEASURED DATA AND / OR QSAR ESTIMATES">
+	
+<!-- 2nd row -->
+<title row="4" col="1" colspan="1">
+ACUTE ECOTOXICITY	
+</title>
+<title row="4" col="2" colspan="1">
+TEST \nDURATION
+</title>
+<title row="4" col="3" colspan="1">
+TEST RESULT \nL(E)C50 (mg/L)
+</title>
+<title row="4" col="4" colspan="1">
+T' CRITERIA \nASSOCIATED
+</title>
+<title row="4" col="5" colspan="1">
+T' RESULT \nBASED ON TEST
+</title>
+<title row="4" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+<!-- 5 row (input)-->
+<list id="A5" row="5" col="1" colspan="1">
+	<item>	
+	OECD 203 'Acute Fish'
+	</item>
+	<item>	
+	OECD 212 'Fish Embryo'
+	</item>	
+	<item>	
+	OECD 204 '14d Fish'
+	</item>	
+	<item>	
+	OECD 202 'Acute Daphnia'
+	</item>	
+	<item>	
+	OECD 201 'Algal Growth'
+	</item>
+	<item>	
+	OECD 207 'Acute Earthworm'
+	</item>	
+	<item>	
+	OECD 208 'Acute Plants'
+	</item>	
+	<item>	
+	OECD 221 'Lemna Growth'
+	</item>	
+
+</list>
+<input id="B5" row="5" col="2" colspan="1">
+</input>
+<input id="B6" row="5" col="3" colspan="1">
+</input>
+<formula id="D5" row="5" col="4" colspan="1">
+</formula>
+<formula id="E5" row="5" col="5" colspan="1">
+</formula>
+<input id="F5" row="5" col="6" colspan="1">
+</input>
+
+<!-- 6 row -->
+<title row="6" col="1" colspan="1">
+CHRONIC ECOTOXICITY
+</title>
+<title row="6" col="2" colspan="1">
+TEST \nDURATION
+</title>
+<title row="6" col="3" colspan="1">
+TEST RESULT \nNOEC (mg/L)
+</title>
+<title row="6" col="4" colspan="1">
+T' CRITERIA \nASSOCIATED
+</title>
+<title row="6" col="5" colspan="1">
+T' RESULT \nBASED ON TEST
+</title>
+<title row="6" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+<!-- 7 row (input)-->
+<list id="A7" row="7" col="1" colspan="1">
+	<item>	
+		OECD 210 'Fish ELS'
+	</item>
+	<item>	
+	OECD 211 'Daphnia Repro'
+	</item>	
+	<item>	
+	OECD 215 'Fish Juvenile Growth'
+	</item>	
+	<item>	
+	OECD 201 'Algal Growth'
+	</item>	
+	<item>	
+	OECD 222 'Earthworm Repro'
+	</item>
+	<item>	
+	OECD 220 'Enchytraed. Repro'
+	</item>	
+	<item>	
+	OECD 227 'Plant Veg. Vigour'
+	</item>	
+	<item>	
+	OECD 218 'Chiron. Sediment'
+	</item>	
+	<item>	
+	OECD 219 'Chiron. Water'
+	</item>	
+</list>
+<input id="B7" row="7" col="2" colspan="1">
+</input>
+<input id="B7" row="7" col="3" colspan="1">
+</input>
+<formula id="D7" row="7" col="4" colspan="1">
+</formula>
+<formula id="E7" row="7" col="5" colspan="1">
+</formula>
+<input id="F7" row="7" col="6" colspan="1">
+</input>
+
+<!-- 8 row -->
+<title row="8" col="1" colspan="1">
+ACUTE ECOTOXICITY QSAR \nor READ ACROSS
+</title>
+<title row="8" col="2" colspan="1">
+Data type
+</title>
+<title row="8" col="3" colspan="1">
+Estimate \nL(E)C50 (mg/L)
+</title>
+<title row="8" col="4" colspan="1">
+T' CRITERIA \nASSOCIATED
+</title>
+<title row="8" col="5" colspan="1">
+T' RESULT \nBASED ON TEST
+</title>
+<title row="8" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+<!-- 9 row (input)-->
+<input id="B9" row="9" col="1" colspan="1">
+</input>
+<list id="A9" row="9" col="2" colspan="1">
+	<item>	
+US EPA ECOSAR QSAR
+	</item>
+	<item>	
+OECD Toolbox QSAR
+	</item>	
+	<item>	
+OECD Toolbox Read across
+	</item>	
+	<item>	
+Other tool (Reference !)
+	</item>	
+</list>
+<input id="B9" row="9" col="3" colspan="1">
+</input>
+<formula id="D9" row="9" col="4" colspan="1">
+</formula>
+<formula id="E9" row="9" col="5" colspan="1">
+</formula>
+<input id="F9" row="9" col="6" colspan="1">
+</input>
+
+<!-- 10 row -->
+<title row="10" col="1" colspan="1">
+CHRONIC ECOTOXICITY QSAR \nor READ ACROSS
+</title>
+<title row="10" col="2" colspan="1">
+Data type
+</title>
+<title row="10" col="3" colspan="1">
+Estimate \nNOEC (mg/L)
+</title>
+<title row="10" col="4" colspan="1">
+T' CRITERIA \nASSOCIATED
+</title>
+<title row="10" col="5" colspan="1">
+T' RESULT \nBASED ON TEST
+</title>
+<title row="10" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+<!-- 11 row (input)-->
+<input id="A11" row="11" col="1" colspan="1">
+</input>
+<list id="B11" row="11" col="2" colspan="1">
+	<item>	
+US EPA ECOSAR QSAR
+	</item>
+	<item>	
+OECD Toolbox QSAR
+	</item>	
+	<item>	
+OECD Toolbox Read across
+	</item>	
+	<item>	
+Other tool (Reference !)
+	</item>	
+</list>
+<input id="B11" row="11" col="3" colspan="1">
+</input>
+<formula id="D11" row="11" col="4" colspan="1">
+</formula>
+<formula id="E11" row="11" col="5" colspan="1">
+</formula>
+<input id="F11" row="11" col="6" colspan="1">
+</input>
+</section>
+
+<section row="12" col="1" colspan="6" rowspan="1" value="SECTION HUMAN HEALTH TOXICITY">
+<!-- 13 row -->
+<title row="13" col="1" colspan="2">
+HUMAN TOXICITY CRITERIA \n(R PHRASES)
+</title>
+<title row="13" col="3" colspan="1">
+R PHRASES \nMEETING CRITERIA
+</title>
+<title row="13" col="4" colspan="1">
+CRITERIA FULFILLED
+</title>
+<title row="13" col="5" colspan="1">
+T' RESULT \nBASED ON R PHRASE(S)
+</title>
+<title row="13" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+
+<!-- 14 row (input)-->
+<formula id="A14" row="14" col="1" colspan="2">
+R 40 (C o. M cat. 3), R 45, 46, 48, 60,61, 62, 63, 64
+</formula>
+<list id="C14" row="14" col="3" colspan="1" name="R phrases">
+	<item>	
+no such classification
+	</item>
+	<item>	
+R40 (cat.3 carc./mut.)
+	</item>	
+	<item>	
+R 45
+	</item>
+	<item>	
+R 46
+	</item>
+	<item>	
+R 48
+	</item>
+	<item>	
+R 60
+	</item>
+	<item>	
+R 61
+	</item>	
+	<item>	
+R 62
+	</item>
+	<item>	
+R 63
+	</item>
+	<item>	
+R 64
+	</item>	
+</list>
+<formula id="D14" row="14" col="4" colspan="1">
+</formula>
+<formula id="E14" row="14" col="5" colspan="1">
+</formula>
+<input id="F14" row="14" col="6" colspan="1">
+</input>
+</section>
+
+<section row="15" col="1" colspan="6" rowspan="1" value="SECTION QUALITATIVE INDICATORS FOR TOXICITY">
+<!-- 16 row -->
+<title row="16" col="1" colspan="1">
+ENDOCRINE DISRUPTER \n(proven or suspected,\n similarity)
+</title>
+<title row="16" col="2" colspan="2">
+LIST NO. OR CAS NO./NAME OF \nSIMILAR SUBSTANCE
+</title>
+<title row="16" col="4" colspan="1">
+CRITERIA FULFILLED
+</title>
+<title row="16" col="5" colspan="1">
+T' RESULT BASED \nON READ ACROSS
+</title>
+<title row="16" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+<!-- 17 row (input)-->
+<formula id="A17" row="17" col="1" colspan="1">
+EU Strategy COM(2001)262 final
+</formula>
+<input id="B17" row="17" col="2" colspan="2">
+</input>
+<list id="D17" row="17" col="4" colspan="1">
+	<item>	
+Yes
+	</item>
+	<item>	
+No
+	</item>	
+</list>
+
+<formula id="E17" row="17" col="5" colspan="1">
+</formula>
+<input id="F17" row="17" col="6" colspan="1">
+</input>
+
+<!-- 18 row -->
+<title row="18" col="1" colspan="1">
+Critical Body Burden (CBB)\n (mg/L)
+</title>
+<title row="18" col="2" colspan="1">
+Octanol \nsolub. (mg/L)
+</title>
+<title row="18" col="3" colspan="1">
+Coctanol &lt; CBB
+</title>
+<title row="18" col="4" colspan="1">
+LIMITED \nTOXICITY
+</title>
+<title row="18" col="5" colspan="1">
+T' RESULT \nBASED ON CBB
+</title>
+<title row="18" col="6" colspan="1">
+REPORT REFERENCE
+</title>
+
+<!-- 19 row (input)-->
+<formula id="A19" row="19" col="1" colspan="1">
+</formula>
+<formula id="B19" row="19" col="2" colspan="1">
+</formula>
+<formula id="C19" row="19" col="3" colspan="1">
+</formula>
+<formula id="D19" row="19" col="4" colspan="1">
+</formula>
+<formula id="E19" row="19" col="5" colspan="1">
+</formula>
+<input id="F19" row="19" col="6" colspan="1">
+</input>
+</section>
+
+<section row="20" col="1" colspan="6" rowspan="1" value="OVERALL T Assessment Result">
+	<!-- 20 row -->
+	
+<formula id="C20" row="21" col="3" colspan="1">
+=I45
+</formula>
+<formula id="D20" row="21" col="4" colspan="3">
+=J45
+</formula>
+</section>
+</page>
