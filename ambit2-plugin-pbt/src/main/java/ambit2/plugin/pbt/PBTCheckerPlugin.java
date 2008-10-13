@@ -48,8 +48,7 @@ public class PBTCheckerPlugin extends MWorkflowPlugin {
 		return new PBTWorkflow();
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		// TODO Auto-generated method stub
-		return null;
+		return new PBTMainPanel();
 	}
 
 	public ImageIcon getIcon() {
@@ -79,5 +78,8 @@ public class PBTCheckerPlugin extends MWorkflowPlugin {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	@Override
+	public String toString() {
+		return "PBT";
+	}
 }

@@ -32,6 +32,8 @@ package ambit2.plugin.pbt;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import nplugins.shell.INPluginUI;
@@ -41,13 +43,29 @@ import com.microworkflow.ui.WorkflowContextListenerPanel;
 
 public class PBTMainPanel extends WorkflowContextListenerPanel implements INPluginUI<INanoPlugin>  {
     protected JTabbedPane tabbedPane;
-    
+    protected PBTTableModel[] models;
+    protected static String[] defs = {
+    	"ambit2/plugin/pbt/xml/p_page.xml",
+    	"ambit2/plugin/pbt/xml/b_page.xml",
+    	"ambit2/plugin/pbt/xml/t_page.xml",
+    	"ambit2/plugin/pbt/xml/result_page.xml"
+    };
     public PBTMainPanel() {
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
-        tabbedPane.add(new PBTPage("ambit2/plugin/pbt/p_page.xml"));
-        tabbedPane.add(new PBTPage("ambit2/plugin/pbt/b_page.xml"));
-        tabbedPane.add(new PBTPage("ambit2/plugin/pbt/t_page.xml"));
+        models = new PBTTableModel[defs.length];
+        for (int i=0; i < defs.length;i++) {
+	        try {
+	        	models[i] = new PBTTableModel();
+	        	models[i].setDefinition(defs[i]);
+		        tabbedPane.add(models[i].getValueAt(2,1).toString(),
+		        		new JScrollPane(PBTPageBuilder.buildPanel(models[i],-2,0)));	        	
+	        } catch (Exception x) {
+	        	x.printStackTrace();
+	        	tabbedPane.add("Error",new JLabel(x.getMessage()));
+	        }
+
+        }
     }
     @Override
     protected void animate(PropertyChangeEvent arg0) {
@@ -74,5 +92,8 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         // TODO Auto-generated method stub
         
     }
-
+    @Override
+    public String toString() {
+    	return "PBT SCREENING TOOL FOR REACH";
+    }
 }
