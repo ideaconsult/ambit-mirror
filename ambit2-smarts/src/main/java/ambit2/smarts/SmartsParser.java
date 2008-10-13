@@ -71,6 +71,7 @@ public class SmartsParser
 	boolean mNeedExplicitHData;
 	boolean mNeedParentMoleculeData;
 	public boolean hasRecursiveSmarts;
+	public boolean mSupportMOEExtension = true;
 	
 	//Work variables for Component Level Grouping
 	boolean FlagCLG = false;  
@@ -148,7 +149,7 @@ public class SmartsParser
 		if (!brackets.empty())		
 			newError("There are unclosed brackets",-1, "");
 		
-		//Treat incorectly used indexes
+		//Treat incorrectly used indexes
 		if (indexes.size() != 0)
 		{	
 			newError("There are unused atom indexes",-1, "");
@@ -245,20 +246,23 @@ public class SmartsParser
 						mNeedNeighbourData = true;
 					else
 					{						
-						if (tok.type == SmartsConst.AP_x)
-						{	
+						if (tok.type == SmartsConst.AP_i)							
 							mNeedParentMoleculeData = true;
-							mNeedRingData2 = true;
-						}		
 						else
-						{						
-							if (tok.type == SmartsConst.AP_v) 
-								mNeedValencyData = true;
-							else							
-								if ((tok.type == SmartsConst.AP_R) ||
-										(tok.type == SmartsConst.AP_r))
-									mNeedRingData = true;
-						}
+							if (tok.type == SmartsConst.AP_x)
+							{	
+								mNeedParentMoleculeData = true;
+								mNeedRingData2 = true;
+							}		
+							else
+							{						
+								if (tok.type == SmartsConst.AP_v) 
+									mNeedValencyData = true;
+								else							
+									if ((tok.type == SmartsConst.AP_R) ||
+											(tok.type == SmartsConst.AP_r))
+										mNeedRingData = true;
+							}
 					}	
 				}	
 			}
@@ -911,7 +915,13 @@ public class SmartsParser
 				break;
 			case 'x':				
 				parseAP_xPrimitive(false);
-				break;	
+				break;
+			case 'i':
+				if (mSupportMOEExtension)
+					parseAP_iPrimitive(false);
+				else
+					parseAP_AtomSymbol();	
+				break;
 			default:
 				parseAP_AtomSymbol();	
 			}
@@ -1133,6 +1143,14 @@ public class SmartsParser
 			par = -1; //The default value 
 		}		
 		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_x,par));
+	}
+	
+	void parseAP_iPrimitive(boolean elTest)
+	{
+		testForDefaultAND();
+		curChar++;
+		int par = 0;
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_i,par));
 	}
 	
 	void parseAP_AtomNumber()

@@ -31,7 +31,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 //import org.openscience.cdk.interfaces.IRingSet;
-//import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
@@ -218,6 +218,10 @@ public class SmartsAtomExpression extends SMARTSAtom
 			}
     	case SmartsConst.AP_x: 
     		return(match_x(tok.param, atom));
+    	
+    	case SmartsConst.AP_i: 
+    		return(match_i(tok.param, atom));
+    		
     		    		
     	default:
     		return(true);
@@ -252,6 +256,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     		case SmartsConst.AP_v:
     		case SmartsConst.AP_X:
     		case SmartsConst.AP_x:
+    		case SmartsConst.AP_i:	
     			String s = Character.toString(SmartsConst.AtomPrimChars[tok.type]);
     			if (tok.param != 1)
     				s+= tok.param;
@@ -379,6 +384,24 @@ public class SmartsAtomExpression extends SMARTSAtom
     	}	
     	
     	return(param == rbonds);
+    }
+    
+    public boolean match_i(int param, IAtom atom)
+    {	
+    	if (atom.getFlag(CDKConstants.ISAROMATIC))
+    		return(true);
+    	
+    	//Searching for a double or triple bond (participation in a Pi system)
+    	IAtomContainer mol = (IAtomContainer)atom.getProperty("ParentMoleculeData");
+    	List ca = mol.getConnectedAtomsList(atom);    	
+    	for (int i = 0; i < ca.size(); i++)
+    	{
+    		IBond b = mol.getBond(atom, (IAtom) ca.get(i));
+    		if ((b.getOrder() == IBond.Order.DOUBLE) || (b.getOrder() == IBond.Order.TRIPLE))
+    			return(true);
+    	}
+    	
+    	return(false);
     }
     
     boolean commonRingBond(int atomRingData1[], int atomRingData2[])

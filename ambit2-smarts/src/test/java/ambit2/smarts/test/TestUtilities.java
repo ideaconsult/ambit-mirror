@@ -292,6 +292,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
 		
 		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
 		//tu.testAtomSequencing(smarts);		
@@ -316,8 +317,9 @@ public class TestUtilities
 		
 		//tu.testFingerprint();
 		//tu.testWithFile("\\NCI001000.txt","ExtractAtomContainer");
-		int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
-		System.out.println("res = " + res);
+		
+		//int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
+		//System.out.println("res = " + res);
 		
 	}
 	
