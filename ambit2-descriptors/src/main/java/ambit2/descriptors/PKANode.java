@@ -29,12 +29,15 @@
 
 package ambit2.descriptors;
 
+import java.util.Hashtable;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.query.smarts.SMARTSException;
 import ambit2.core.query.smarts.SmartsPatternAmbit;
 
 public class PKANode {
+	protected static Hashtable<String,SmartsPatternAmbit> smartsPattern = new Hashtable<String,SmartsPatternAmbit>();
     protected int id;
     protected int parent;
     protected double pka;
@@ -43,7 +46,6 @@ public class PKANode {
     protected boolean terminal;
     protected PKANode nodeYes;
     protected PKANode nodeNo;
-    protected SmartsPatternAmbit smartsPattern = null;
     protected String smarts;
     
 
@@ -134,9 +136,12 @@ public class PKANode {
     }
     
     public boolean find(IAtomContainer ac) throws SMARTSException {
-        if (smartsPattern == null) 
-            smartsPattern.setSmarts(getSmarts());
-        return smartsPattern.hasSMARTSPattern(ac)>0;
+    	SmartsPatternAmbit pattern = smartsPattern.get(getSmarts());
+    	if (pattern == null) {
+    		pattern = new SmartsPatternAmbit(getSmarts());
+    		smartsPattern.put(getSmarts(), pattern);
+    	}
+        return pattern.hasSMARTSPattern(ac)>0;
     }
     
 }

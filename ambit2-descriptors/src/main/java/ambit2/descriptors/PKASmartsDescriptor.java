@@ -33,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -51,6 +52,7 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
     public static String title="pKa-SMARTS";
     protected Hashtable<Integer, PKANode> tree;
     protected PKANode root;
+    
     
     public PKASmartsDescriptor() {
         try {
