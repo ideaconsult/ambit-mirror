@@ -155,6 +155,7 @@ The database can be searched by identifiers, attribute value or range, experimen
     <module>ambit2-plugin-usermgr</module>
     <module>ambit2-hashcode</module>
     <module>ambit2-descriptors</module>
+    <module>ambit2-taglibs</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
