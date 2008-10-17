@@ -314,7 +314,6 @@ public class TestUtilities
 		//sp.mSupportMOEExtension = true;
 		sp.mUseMOEvPrimitive = true;
 		printSmartsTokens("[#6,i,#G3,#X,#N,q3,v2]");
-		sp.mUseMOEvPrimitive = false;
 		
 		tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
 		tu.testSmartsManagerBoolSearch("[#G6]", "CCC");
@@ -329,7 +328,8 @@ public class TestUtilities
 		tu.testSmartsManagerBoolSearch("[#N]", "CCC");
 		tu.testSmartsManagerBoolSearch("[#N]", "CCF");
 		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
-		sp.mUseMOEvPrimitive = true;
+		tu.testSmartsManagerBoolSearch("[v4]", "CCC");
+		man.useMOEvPrimitive(true);
 		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
 		
 		
