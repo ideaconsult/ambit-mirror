@@ -44,7 +44,8 @@ public class SmartsConst
 		
 	//Atom Primitives
 	public static char AtomPrimChars[] = {'*','a','A','D','H','h','R','r','v','X',
-										  '-','#','@','m','_','x', 'i'};
+										  '-','#','@','m','_','x','i','G','X','N', 
+										  'b' };
 	public static final int AP_ANY = 0;
 	public static final int AP_a =  1;
 	public static final int AP_A = 2;
@@ -60,8 +61,13 @@ public class SmartsConst
 	public static final int AP_Chiral = 12;
 	public static final int AP_Mass = 13;
 	public static final int AP_Recursive = 14;
-	public static final int AP_x = 15;
-	public static final int AP_i = 16;    //MOE Extension
+	public static final int AP_x = 15;     //is also equivalent to MOE extension q
+	public static final int AP_iMOE = 16;    //MOE Extension
+	public static final int AP_GMOE = 17;    //MOE Extension
+	public static final int AP_XMOE = 18;    //MOE Extension
+	public static final int AP_NMOE = 19;    //MOE Extension
+	public static final int AP_vMOE = 20;    //MOE Extension v may replace the original Daylight v
+		
 	
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':','@','/','\\'};

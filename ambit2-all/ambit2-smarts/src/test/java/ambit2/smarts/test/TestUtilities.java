@@ -46,6 +46,11 @@ public class TestUtilities
 	{
 		
 		QueryAtomContainer qac = sp.parse(smarts);
+		if (!sp.getErrorMessages().equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());			
+			return;
+		}
 		System.out.println(SmartsHelper.getAtomsString(qac));
 		/*
 		for (int i = 0; i < qac.getAtomCount(); i++)
@@ -305,8 +310,31 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
-		printSmartsTokens("[#6,i]");
+		
+		//sp.mSupportMOEExtension = true;
+		sp.mUseMOEvPrimitive = true;
+		printSmartsTokens("[#6,i,#G3,#X,#N,q3,v2]");
+		sp.mUseMOEvPrimitive = false;
+		
 		tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
+		tu.testSmartsManagerBoolSearch("[#G6]", "CCC");
+		tu.testSmartsManagerBoolSearch("[#G6]", "CCS");
+		tu.testSmartsManagerBoolSearch("[#G4]", "CCS");
+		tu.testSmartsManagerBoolSearch("[#G4]", "O-O");
+		tu.testSmartsManagerBoolSearch("[#X]", "CCC");
+		tu.testSmartsManagerBoolSearch("[#X]", "CCS");
+		tu.testSmartsManagerBoolSearch("[q2]", "C1CCC1");
+		tu.testSmartsManagerBoolSearch("[q3]", "C1CCC1");
+		tu.testSmartsManagerBoolSearch("[q0]", "CCCC");  //!!!!!
+		tu.testSmartsManagerBoolSearch("[#N]", "CCC");
+		tu.testSmartsManagerBoolSearch("[#N]", "CCF");
+		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
+		sp.mUseMOEvPrimitive = true;
+		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
+		
+		
+		
+		
 		
 		
 		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};

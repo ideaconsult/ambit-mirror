@@ -154,6 +154,37 @@ public class SmartsManager
 		return(query);
 	}
 	
+	public void supportMOEExtension(boolean support)
+	{
+		parser.mSupportMOEExtension = support;
+	}
+	
+	public void supportOpenEyeExtension(boolean support)
+	{
+		parser.mSupportOpenEyeExtension = support;
+	}
+	
+	public void useMOEvPrimitive(boolean support)
+	{
+		parser.mUseMOEvPrimitive = support;
+	}
+	
+	public boolean getSupportMOEExtension()
+	{
+		return(parser.mSupportMOEExtension);
+	}
+	
+	public boolean getSupportOpenEyeExtension(boolean support)
+	{
+		return(parser.mSupportOpenEyeExtension);
+	}
+	
+	public boolean getUseMOEvPrimitive()
+	{
+		return(parser.mUseMOEvPrimitive);
+	}
+	
+	
 	public boolean searchIn(IAtomContainer target)
 	{
 		if (query == null)
