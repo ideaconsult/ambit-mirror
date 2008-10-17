@@ -72,6 +72,9 @@ public class SmartsParser
 	boolean mNeedParentMoleculeData;
 	public boolean hasRecursiveSmarts;
 	public boolean mSupportMOEExtension = true;
+	public boolean mUseMOEvPrimitive = false;
+	public boolean mSupportOpenEyeExtension = true;
+	
 	
 	//Work variables for Component Level Grouping
 	boolean FlagCLG = false;  
@@ -246,7 +249,8 @@ public class SmartsParser
 						mNeedNeighbourData = true;
 					else
 					{						
-						if (tok.type == SmartsConst.AP_i)							
+						if ((tok.type == SmartsConst.AP_iMOE) ||
+							(tok.type == SmartsConst.AP_vMOE))	
 							mNeedParentMoleculeData = true;
 						else
 							if (tok.type == SmartsConst.AP_x)
@@ -907,8 +911,11 @@ public class SmartsParser
 			case 'r':				
 				parseAP_rPrimitive(false);
 				break;	
-			case 'v':				
-				parseAP_AtomPrimitive(SmartsConst.AP_v,false);
+			case 'v':
+				if ((mSupportMOEExtension) && (mUseMOEvPrimitive) )
+					parseAP_AtomPrimitive(SmartsConst.AP_vMOE,false);	
+				else	
+					parseAP_AtomPrimitive(SmartsConst.AP_v,false);
 				break;
 			case 'X':				
 				parseAP_AtomPrimitive(SmartsConst.AP_X,true);
@@ -921,6 +928,12 @@ public class SmartsParser
 					parseAP_iPrimitive(false);
 				else
 					parseAP_AtomSymbol();	
+				break;
+			case 'q':  //q_MOE is equivalent to Daylight x  
+				if (mSupportMOEExtension)
+					parseAP_xPrimitive(false);
+				else
+					parseAP_AtomSymbol();
 				break;
 			default:
 				parseAP_AtomSymbol();	
@@ -1048,7 +1061,7 @@ public class SmartsParser
 	
 	void parseAP_AtomPrimitive(int logOpType, boolean elTest)
 	{
-		//This function is applied for primitives D,H,h,v,X,r
+		//This function is applied for primitives D,H,h,v,X,r, vMOE
 		testForDefaultAND();
 		if (elTest)
 			if (testFor2CharElement() == 1)
@@ -1067,8 +1080,7 @@ public class SmartsParser
 					return;
 				}				
 			par = 1;
-		}	
-		
+		}		
 		curAtExpr.tokens.add(new SmartsExpressionToken(logOpType,par));
 	}
 	
@@ -1150,13 +1162,23 @@ public class SmartsParser
 		testForDefaultAND();
 		curChar++;
 		int par = 0;
-		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_i,par));
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_iMOE,par));
 	}
 	
 	void parseAP_AtomNumber()
 	{
 		testForDefaultAND();
 		curChar++;
+		
+		if (mSupportMOEExtension)  //#G<n>  #N  #X
+		{
+			if (curChar < nChars)
+			{
+				if (parseMOEExpression())
+					return;
+			}	
+		}	
+		
 		int par = getInteger();
 		if (par == -1)
 			newError("Incorrect atomic number after #", curChar,"");
@@ -1167,6 +1189,43 @@ public class SmartsParser
 			else
 				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_AtNum,par));
 		}	
+	}
+	
+	boolean parseMOEExpression()
+	{
+		//Support for the following primitives: #G<n>  #N  #X
+		if (smarts.charAt(curChar) == 'G')
+		{
+			curChar++;
+			int par = getInteger();
+			if (par == -1)
+				newError("Incorrect atomic number after #G", curChar,"");
+			else
+			{	
+				if ((par < 1) || (par > 8))
+					newError("Incorrect atomic number after #G", curChar,"");
+				else
+					curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_GMOE,par));
+				
+			}
+			return(true);
+		}
+		else
+			if (smarts.charAt(curChar) == 'N')
+			{
+				curChar++;
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_NMOE,0));
+				return(true);
+			}
+			else
+				if (smarts.charAt(curChar) == 'X')
+				{
+					curChar++;
+					curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_XMOE,0));
+					return(true);
+				}
+		
+		return(false);
 	}
 	
 	void parseAP_Chirality()

@@ -219,9 +219,21 @@ public class SmartsAtomExpression extends SMARTSAtom
     	case SmartsConst.AP_x: 
     		return(match_x(tok.param, atom));
     	
-    	case SmartsConst.AP_i: 
-    		return(match_i(tok.param, atom));
+    	case SmartsConst.AP_iMOE: 
+    		return(match_iMOE(tok.param, atom));
+    	
+    	case SmartsConst.AP_GMOE: 
+    		return(match_GMOE(tok.param, atom));
     		
+    	case SmartsConst.AP_XMOE: 
+    		return(match_XMOE(atom));
+    		
+    	case SmartsConst.AP_NMOE: 
+    		return(match_NMOE(atom));
+    	
+    	case SmartsConst.AP_vMOE: 
+    		//System.out.println("vMOE");
+    		return(match_vMOE(tok.param, atom));	
     		    		
     	default:
     		return(true);
@@ -256,14 +268,26 @@ public class SmartsAtomExpression extends SMARTSAtom
     		case SmartsConst.AP_r:
     		case SmartsConst.AP_v:
     		case SmartsConst.AP_X:
-    		case SmartsConst.AP_x:    			
+    		case SmartsConst.AP_x:
+    		case SmartsConst.AP_vMOE:	
     			String s = Character.toString(SmartsConst.AtomPrimChars[tok.type]);
     			if (tok.param != 1)
     				s+= tok.param;
     			return(s);
     		
-    		case SmartsConst.AP_i:
+    		case SmartsConst.AP_iMOE:
     			return("i");
+    			
+    		case SmartsConst.AP_GMOE:
+    			String sG = "G";
+    			sG+= tok.param;
+    			return(sG);	
+    		
+    		case SmartsConst.AP_XMOE:
+    			return("#X");
+    			
+    		case SmartsConst.AP_NMOE:
+    			return("#N");	
     			
     		case SmartsConst.AP_Charge:
     			String s1;
@@ -389,7 +413,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     	return(param == rbonds);
     }
     
-    public boolean match_i(int param, IAtom atom)
+    public boolean match_iMOE(int param, IAtom atom)
     {	
     	if (atom.getFlag(CDKConstants.ISAROMATIC))
     		return(true);
@@ -406,6 +430,79 @@ public class SmartsAtomExpression extends SMARTSAtom
     	
     	return(false);
     }
+    
+    public boolean match_GMOE(int param, IAtom atom)
+    {	
+    	if (param == 4)
+    	{
+    		//any Group IV element    [C,Si,Ge,Sn,Pb]
+    		if (	(atom.getSymbol().equals("C")) ||
+        			(atom.getSymbol().equals("Si")) ||
+        			(atom.getSymbol().equals("Ge")) ||
+        			(atom.getSymbol().equals("Sn")) ||
+        			(atom.getSymbol().equals("Pb")) )
+        		return(true);
+    		else
+    			return(false);
+    	}
+    	
+    	if (param == 6)
+    	{
+    		//any Group VI element   [O,S,Se,Te,Po]
+    		if (	(atom.getSymbol().equals("O")) ||
+        			(atom.getSymbol().equals("S")) ||
+        			(atom.getSymbol().equals("Ge")) ||
+        			(atom.getSymbol().equals("Te")) ||
+        			(atom.getSymbol().equals("Po")) )
+        		return(true);
+    		else
+    			return(false);
+    	}
+    	
+    	//Other groups so far are nor defined
+    	return(false);
+    }
+    
+    public boolean match_XMOE(IAtom atom)
+    {	
+    	//heavy non carbon atom 
+    	if ((atom.getSymbol().equals("H"))||(atom.getSymbol().equals("C")))
+    		return(false);
+    	else
+    		return(true);
+    }
+    
+    public boolean match_NMOE(IAtom atom)
+    {	
+    	//electronegative element (O, N, F, Cl, Br)
+    	if (	(atom.getSymbol().equals("O")) ||
+    			(atom.getSymbol().equals("N")) ||
+    			(atom.getSymbol().equals("F")) ||
+    			(atom.getSymbol().equals("Cl")) ||
+    			(atom.getSymbol().equals("Br")) )
+    		return(true);
+    	
+    	return(false);
+    }
+    
+    public boolean match_vMOE(int param, IAtom atom)
+    {	
+    	//Counting the number of to heavy atoms
+    	int nB = 0;
+    	IAtomContainer mol = (IAtomContainer)atom.getProperty("ParentMoleculeData");
+    	List ca = mol.getConnectedAtomsList(atom);    	
+    	for (int i = 0; i < ca.size(); i++)
+    	{
+    		IAtom a = (IAtom)ca.get(i);
+    		if (a.getSymbol().equals("H"))
+    			continue;
+    		else
+    			nB++;
+    	}
+    	//System.out.println("nB = " + nB);
+    	return(nB == param);
+    }
+    
     
     boolean commonRingBond(int atomRingData1[], int atomRingData2[])
     {    	
