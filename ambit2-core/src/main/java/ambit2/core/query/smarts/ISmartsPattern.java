@@ -47,6 +47,7 @@ public interface ISmartsPattern<T> {
 	void setName(String name);
 	String getHint();
 	void setHint(String hint);	
+	void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException;
 }
 
 
