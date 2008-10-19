@@ -122,6 +122,9 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
     	}
     	return sqt.getUniqueMatchingAtoms(); 
 	}
+	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("useMOEvPrimitive");
+	}
 }
 
 

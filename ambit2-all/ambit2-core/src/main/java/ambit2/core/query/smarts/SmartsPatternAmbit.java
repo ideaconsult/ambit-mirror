@@ -99,6 +99,11 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 			throw new SMARTSException(sman.getErrors());
 		} 	
 	}
+	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
+		if (sman ==null) 
+			sman = new SmartsManager();
+		sman.useMOEvPrimitive(flag);
+	}
 }
 
 
