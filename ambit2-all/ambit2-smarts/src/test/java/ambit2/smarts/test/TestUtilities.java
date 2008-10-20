@@ -331,7 +331,9 @@ public class TestUtilities
 		tu.testSmartsManagerBoolSearch("[v4]", "CCC");
 		man.useMOEvPrimitive(true);
 		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
-		
+		tu.testSmartsManagerBoolSearch("[#G7]", "CCC");
+		tu.testSmartsManagerBoolSearch("[#G7]", "CCCF");
+		tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
 		
 		
 		

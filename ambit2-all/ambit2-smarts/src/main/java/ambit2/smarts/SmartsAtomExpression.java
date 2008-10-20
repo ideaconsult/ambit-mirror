@@ -459,6 +459,19 @@ public class SmartsAtomExpression extends SMARTSAtom
     			return(false);
     	}
     	
+    	if (param == 7)
+    	{
+    		//any Group VII element   [F,Cl,Br,I,At]
+    		if (	(atom.getSymbol().equals("F")) ||
+        			(atom.getSymbol().equals("Cl")) ||
+        			(atom.getSymbol().equals("Br")) ||
+        			(atom.getSymbol().equals("I")) ||
+        			(atom.getSymbol().equals("At")) )
+        		return(true);
+    		else
+    			return(false);
+    	}
+    	
     	//Other groups so far are nor defined
     	return(false);
     }
