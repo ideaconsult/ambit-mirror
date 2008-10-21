@@ -311,32 +311,40 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
 		
-		//sp.mSupportMOEExtension = true;
+		
+		
 		sp.mUseMOEvPrimitive = true;
-		printSmartsTokens("[#6,i,#G3,#X,#N,q3,v2]");
+		//sp.mSupportMOEExtension = true;
+		//printSmartsTokens("[#6,i,#G3,#X,#N,q3,v2]");
+		//tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("[#G6]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#G6]", "CCS");
+		//tu.testSmartsManagerBoolSearch("[#G4]", "CCS");
+		//tu.testSmartsManagerBoolSearch("[#G4]", "O-O");
+		//tu.testSmartsManagerBoolSearch("[#X]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#X]", "CCS");
+		//tu.testSmartsManagerBoolSearch("[q2]", "C1CCC1");
+		//tu.testSmartsManagerBoolSearch("[q3]", "C1CCC1");
+		//tu.testSmartsManagerBoolSearch("[q0]", "CCCC");  //!!!!!
+		//tu.testSmartsManagerBoolSearch("[#N]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#N]", "CCF");
+		//tu.testSmartsManagerBoolSearch("[v2]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[v4]", "CCC");
+		//man.useMOEvPrimitive(true);
+		//tu.testSmartsManagerBoolSearch("[v2]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#G7]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#G7]", "CCCF");
+		//tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
 		
-		tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
-		tu.testSmartsManagerBoolSearch("[#G6]", "CCC");
-		tu.testSmartsManagerBoolSearch("[#G6]", "CCS");
-		tu.testSmartsManagerBoolSearch("[#G4]", "CCS");
-		tu.testSmartsManagerBoolSearch("[#G4]", "O-O");
-		tu.testSmartsManagerBoolSearch("[#X]", "CCC");
-		tu.testSmartsManagerBoolSearch("[#X]", "CCS");
-		tu.testSmartsManagerBoolSearch("[q2]", "C1CCC1");
-		tu.testSmartsManagerBoolSearch("[q3]", "C1CCC1");
-		tu.testSmartsManagerBoolSearch("[q0]", "CCCC");  //!!!!!
-		tu.testSmartsManagerBoolSearch("[#N]", "CCC");
-		tu.testSmartsManagerBoolSearch("[#N]", "CCF");
-		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
-		tu.testSmartsManagerBoolSearch("[v4]", "CCC");
-		man.useMOEvPrimitive(true);
-		tu.testSmartsManagerBoolSearch("[v2]", "CCC");
-		tu.testSmartsManagerBoolSearch("[#G7]", "CCC");
-		tu.testSmartsManagerBoolSearch("[#G7]", "CCCF");
-		tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
+		//Cheking [OH]AA!-*
+		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "COCC=N");
+		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC=N");
+		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC-N");
+		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[H][O]CC=N");
+		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[O+]CC=N");
+		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OSC=N");
 		
-		
-		
+		tu.testSmartsManagerBoolSearch("C~/[i]=[i]~/C", "CC=CC");
 		
 		
 		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
