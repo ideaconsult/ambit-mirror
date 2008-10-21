@@ -97,7 +97,7 @@ public class PKASmartsDescriptorTest {
             System.out.println("Failed nodes "+failedNodes);
             System.out.println("Failed smarts "+failedSmarts);        	
 	        for (int i=0; i < smarts.size();i++)
-	            System.err.println('\''+smarts.get(i)+'\'');
+	            System.out.println('\''+smarts.get(i)+'\'');
         }
         
         Assert.assertEquals(1,nullSmarts); //root smarts

@@ -120,7 +120,6 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
     protected PKANode traverse(IAtomContainer ac, PKANode node, ArrayList<String> trace) throws SMARTSException {
     	
     	if (node.isTerminal()) {
-    		System.out.println();
     		return node;
     	} else {
 	    	boolean results[] = new boolean[] {Boolean.TRUE,Boolean.FALSE};
@@ -157,7 +156,7 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
                 
                  while(st.hasMoreTokens()){
                      String s = st.nextToken();
-                   //  System.out.print(s);
+                     //System.out.print(s);
                      //System.out.print(':');
 
                      //#node,#parent,children,FP,SMARTS,Y/N,pKa_cal,pKa_range
@@ -169,7 +168,12 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
                      case 1: {node.setParent(Integer.parseInt(s)); break;}
                      case 2: {node.setTerminal(Integer.parseInt(s)==0); break;}
                      case 3: break;
-                     case 4: {node.setSmarts(s); break;}
+                     case 4: {
+                    	 //quick fix for MOE incompatibilities
+                    	 s = s.replace("[Ov2]","[O;v2]");
+                    	 s = s.replace("[Av1]","[A;v1]");
+                    	 node.setSmarts(s); break;
+                    	 }
                      case 5: {
                          int r = Integer.parseInt(s);
                          if (r == 100) root = node;
@@ -185,7 +189,6 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
                  tree.put(node.getId(),node);
             }
             record++;
-            //System.out.println();
         }
         stream.close();
         
