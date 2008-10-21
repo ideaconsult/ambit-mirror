@@ -30,6 +30,9 @@
 package ambit2.descriptors;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -39,37 +42,49 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.io.DelimitedFileWriter;
+import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.query.smarts.SmartsPatternAmbit;
 
 public class PKASmartsDescriptorTest {
-
+	protected PKASmartsDescriptor pka;
     @Before
     public void setUp() throws Exception {
+    	 pka = new PKASmartsDescriptor();
     }
 
     @After
     public void tearDown() throws Exception {
-    }
+    	pka = null;
+    }	
 
     @Test
     public void test() throws Exception {
-        PKASmartsDescriptor d = new PKASmartsDescriptor();
-        Hashtable<Integer,PKANode> tree = d.getTree();
+        Hashtable<Integer,PKANode> tree = pka.getTree();
         Enumeration<Integer> k = tree.keys();
         SmartsPatternAmbit pattern = new SmartsPatternAmbit();
         ArrayList<String> smarts = new ArrayList<String>();
         int failedNodes = 0;
         int failedSmarts = 0;
         int nullSmarts = 0;
+        int allnodes =0;
         while (k.hasMoreElements()) {
             PKANode node = tree.get(k.nextElement());
+            allnodes++;
             try {
                 if (node.getSmarts() == null) {
                     nullSmarts++;
-                } 
-                pattern.setSmarts(node.getSmarts());
+                } else
+                	pattern.setSmarts(node.getSmarts());
             } catch (Exception x) {
+            	
+            	
                 failedNodes ++;
                 if (smarts.indexOf(node.getSmarts())<0) {
                     smarts.add(node.getSmarts());
@@ -77,14 +92,55 @@ public class PKASmartsDescriptorTest {
                 }
             }
         }
-        System.out.println("Failed nodes "+failedNodes);
-        System.out.println("Failed smarts "+failedSmarts);
 
-        for (int i=0; i < smarts.size();i++)
-            System.out.println(smarts.get(i));
+        if (smarts.size()>0) {
+            System.out.println("Failed nodes "+failedNodes);
+            System.out.println("Failed smarts "+failedSmarts);        	
+	        for (int i=0; i < smarts.size();i++)
+	            System.err.println('\''+smarts.get(i)+'\'');
+        }
         
         Assert.assertEquals(1,nullSmarts); //root smarts
-        Assert.assertTrue(failedNodes==0);        
+        Assert.assertTrue(failedNodes==0);
+        Assert.assertEquals(1527,allnodes);
+        
     }
-    
+
+    @Test
+    public void testPredictions() throws Exception {
+    	File file = new File("src/test/resources/ambit2/descriptors/pka/ambit_results.csv");
+    	System.out.println(file.getAbsolutePath());
+    	DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
+    	
+    	InputStream in = PKASmartsDescriptor.class.getClassLoader().getResourceAsStream("ambit2/descriptors/pka/benchmark_new.csv");
+    	IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
+    	while (reader.hasNext()) {
+    		Object o = reader.next();
+    		Assert.assertTrue(o instanceof IAtomContainer);
+
+    		
+    		IAtomContainer a = (IAtomContainer)o;
+        	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
+            CDKHueckelAromaticityDetector.detectAromaticity(a);    		
+    		DescriptorValue value = pka.calculate(a);
+    		PKADescriptorResult<String> result = (PKADescriptorResult<String>)value.getValue(); 
+    		a.setProperty(value.getNames()[0], result.doubleValue());
+    		a.setProperty(value.getNames()[0]+"-trace", result.getTrace());
+    		
+    		Double d = Double.valueOf(a.getProperty("SMARTS pKa").toString());
+    		if (!d.equals(result.doubleValue())) {
+        		System.out.print(result.doubleValue());
+        		System.out.print('\t');
+        		System.out.print(a.getProperty("SMARTS pKa"));
+        		System.out.print('\t');
+        		System.out.println(a.getProperty("SMILES"));
+    			
+    		}
+
+    		writer.write(a);
+    	}
+    	in.close();
+    	writer.close();
+    	
+    }
 }
