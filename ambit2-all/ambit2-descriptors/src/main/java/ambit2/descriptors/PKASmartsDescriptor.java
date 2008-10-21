@@ -48,6 +48,15 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.core.query.smarts.SMARTSException;
 
+/**
+ * pKa calculation 
+ * <p>
+ * Adam C. Lee, Jing-yu Yu, and Gordon M. Crippen, pKa Prediction of Monoprotic Small Molecules the SMARTS Way
+ * <p> 
+ * http://pubs.acs.org/cgi-bin/abstract.cgi/jcisd8/asap/abs/ci8001815.html
+ * @author nina
+ *
+ */
 public class PKASmartsDescriptor implements IMolecularDescriptor {
     public static String title="pKa-SMARTS";
     protected Hashtable<Integer, PKANode> tree;
@@ -64,10 +73,12 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
     }
     public DescriptorValue calculate(IAtomContainer arg0) throws CDKException {
         try {
-            PKANode node = traverse(arg0, root);
+        	ArrayList<String> trace = new ArrayList<String>();
+            PKANode node = traverse(arg0, root,trace);
+
             return new DescriptorValue(getSpecification(), getParameterNames(), 
                     getParameters(),
-                    new DoubleResult(node.getPka()),
+                    new PKADescriptorResult<String>(node.getPka(),trace.toString()),
                     new String[]{title});        
             
         } catch (SMARTSException x) {
@@ -106,11 +117,26 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
 
     }
 
-    protected PKANode traverse(IAtomContainer ac, PKANode node) throws SMARTSException {
-         PKANode next = node.getNodeNo(node.find(ac) == node.isPresent());
-         if (next.isTerminal()) return next;
-         else return traverse(ac, next);
-         
+    protected PKANode traverse(IAtomContainer ac, PKANode node, ArrayList<String> trace) throws SMARTSException {
+    	
+    	if (node.isTerminal()) {
+    		System.out.println();
+    		return node;
+    	} else {
+	    	boolean results[] = new boolean[] {Boolean.TRUE,Boolean.FALSE};
+	    	for (boolean result : results) {
+	    		PKANode next = node.getNodeNo(result);
+	    		if (next.find(ac) == next.isPresent())  {
+	    			trace.add(Integer.toString(next.getId())+((next.isPresent()) ? 'Y' : 'N'));
+	    			if (next.isTerminal()) {
+	    				return next;
+	    			} else {
+	    				return traverse(ac, next,trace);
+	    			}	
+	    		}	
+	    	}
+    	}
+    	return null;
     }
     protected PKANode initialize() throws IOException {
         InputStream stream = PKASmartsDescriptor.class.getClassLoader().getResourceAsStream("ambit2/descriptors/pkatree.txt");
@@ -121,15 +147,18 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
         PKANode root = null;
         
         while ((line = reader.readLine()) != null) {
+        	line = line.trim();
+        	if ("".equals(line)) continue;
             if (record>=9) {
+            	
                 StringTokenizer st = new StringTokenizer(line, ",");
                 int column =0;
                 PKANode node = new PKANode();
                 
                  while(st.hasMoreTokens()){
                      String s = st.nextToken();
-                     System.out.print(s);
-                     System.out.print(':');
+                   //  System.out.print(s);
+                     //System.out.print(':');
 
                      //#node,#parent,children,FP,SMARTS,Y/N,pKa_cal,pKa_range
                      //1,0,1,0,,100,5.9131093,17.32
@@ -152,9 +181,11 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
                      }
                      column++;
                  }
+
                  tree.put(node.getId(),node);
             }
             record++;
+            //System.out.println();
         }
         stream.close();
         
@@ -164,9 +195,9 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
             PKANode node = tree.get(id);
             
             PKANode parent = tree.get(node.getParent());
-            if (parent == null)
-                System.out.println(parent);
-            parent.setNode(node.isPresent(), node);
+            
+            if (parent != null)
+            	parent.setNode(node.isPresent(), node);
             
         }
         return root;

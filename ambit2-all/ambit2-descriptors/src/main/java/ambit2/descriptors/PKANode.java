@@ -110,8 +110,11 @@ public class PKANode {
         return smarts;
     }
     public synchronized void setSmarts(String smarts) {
-        this.smarts = smarts;
-        smartsPattern = null;
+    	if ("".equals(smarts.trim()))
+    		this.smarts = null;
+    	else
+    		this.smarts = smarts;
+
     }
     @Override
     public String toString() {
@@ -136,13 +139,16 @@ public class PKANode {
     }
     
     public boolean find(IAtomContainer ac) throws SMARTSException {
-    	SmartsPatternAmbit pattern = smartsPattern.get(getSmarts());
-    	if (pattern == null) {
-    		pattern = new SmartsPatternAmbit(getSmarts());
-    		pattern.useMOEvPrimitive(true);
-    		smartsPattern.put(getSmarts(), pattern);
-    	}
-        return pattern.hasSMARTSPattern(ac)>0;
+    	if (getSmarts() !=null) { 
+	    	SmartsPatternAmbit pattern = smartsPattern.get(getSmarts());
+	    	if (pattern == null) {
+	    		pattern = new SmartsPatternAmbit(getSmarts());
+	    		pattern.useMOEvPrimitive(true);
+	    		smartsPattern.put(getSmarts(), pattern);
+	    	}
+	        return pattern.hasSMARTSPattern(ac)>0;
+    	} else 
+    		return true;
     }
     
 }
