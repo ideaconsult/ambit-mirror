@@ -282,7 +282,7 @@ public class SmartsParser
 					SmartsBondExpression sb = (SmartsBondExpression)container.getBond(i);
 					for (int j = 0; j < sb.tokens.size(); j++)
 					{
-						if (sb.tokens.get(i).intValue() == SmartsConst.BT_RING)
+						if (sb.tokens.get(j).intValue() == SmartsConst.BT_RING)
 						{	
 							mNeedRingData = true;
 							break;
