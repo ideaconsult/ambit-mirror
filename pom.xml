@@ -12,7 +12,7 @@ AMBIT was produced in response to the clear need for publicly accessible, method
 
 The AMBIT system consists of a database and functional modules allowing a variety of flexible searches and mining of the data stored in the database. The AMBIT database stores chemical structures, their identifiers such as CAS, Inchi numbers; attributes such as molecular descriptors, experimental data together with test descriptions, literature references. The database can also store QSAR models. In addition the software can generate a suite of 2D and 3D molecular descriptors, thanks to CDK library. 
 
-The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on ‘descriptor space’; approaches based on mechanistic understanding; and approaches based on structural similarity. Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.</description>
+The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on �?descriptor space’; approaches based on mechanistic understanding; and approaches based on structural similarity. Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.</description>
   <url>http://ambit.sourceforge.net</url>
   <repositories>
   	<repository>
@@ -156,6 +156,7 @@ The database can be searched by identifiers, attribute value or range, experimen
     <module>ambit2-hashcode</module>
     <module>ambit2-descriptors</module>
     <module>ambit2-taglibs</module>
+    <module>ambit2-www</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
