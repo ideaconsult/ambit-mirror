@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ambit2-www</groupId>
+  <artifactId>ambit2-www</artifactId>
+  <packaging>war</packaging>
+  <name>Ambit2 Webapp</name>
+  <version>2.0.0-SNAPSHOT</version>
+  <build>
+    <finalName>ambit2</finalName>
+    <plugins>
+   
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>tomcat-maven-plugin</artifactId>
+			<configuration>
+                <!-- /user_home/.m2/settings.xml -->
+                <server>local-tomcat</server>
+                <update>true</update>
+                <!--  if not http://localhost:8080/manager -->
+                <url>http://127.0.0.1:8080/manager</url>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.codehaus.cargo</groupId>
+			<artifactId>cargo-maven2-plugin</artifactId>
+		</plugin>    
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+	<repositories>
+		<repository>
+			<id>codehaus</id>
+			<name>Codehaus maven repository</name>
+			<url>http://dist.codehaus.org/</url>
+			<layout>legacy</layout>
+		</repository>
+	</repositories>  
+</project>
