@@ -42,9 +42,14 @@ import nplugins.shell.INanoPlugin;
 import com.microworkflow.ui.WorkflowContextListenerPanel;
 
 public class PBTMainPanel extends WorkflowContextListenerPanel implements INPluginUI<INanoPlugin>  {
-    protected JTabbedPane tabbedPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2943141896545107613L;
+	protected JTabbedPane tabbedPane;
     protected PBTTableModel[] models;
     protected static String[] defs = {
+    	"ambit2/plugin/pbt/xml/substance_page.xml",
     	"ambit2/plugin/pbt/xml/p_page.xml",
     	"ambit2/plugin/pbt/xml/b_page.xml",
     	"ambit2/plugin/pbt/xml/t_page.xml",

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page columns="9" rows="28" name="Result">
+<title row="1" col="1" colspan="4">
+SCREENING TOOL FOR REACH
+</title>
+<title row="2" col="1" colspan="8">
+SUBSTANCE IDENTIFICATION
+</title>
+
+<section row="9" col="1" colspan="8" rowspan="1" value="SUBSTANCE IDENTIFICATION">
+<title row="9" col="1" colspan="1">
+Substance data					
+</title>
+<title row="9" col="5" colspan="4">
+Structure
+</title>
+
+<title row="10" col="1" colspan="1">
+Name					
+</title>
+<input id="B10" row="10" col="2" colspan="3">
+
+</input>
+<input id="E10" row="10" col="5" colspan="4" rowspan="10">
+aaaaaaaaaaaaaaaaaaaaaaaa
+</input>
+
+<title row="11" col="1" colspan="1">
+CAS	No.					
+</title>
+<input id="B11" row="11" col="2" colspan="1">
+</input>
+<error row="11" col="3" colspan="2">
+</error>
+
+<title row="12" col="1" colspan="1">
+Mol. weight (g/mol)			
+</title>
+<input id="B12" row="12" col="2" colspan="1">
+?
+</input>
+<error row="12" col="3" colspan="2">
+</error>
+
+<title row="13" col="1" colspan="1">
+Molecular size Dmax (Angstrom)			
+</title>
+<input id="B13" row="13" col="2" colspan="1">
+?
+</input>
+<error row="13" col="3" colspan="2">
+</error>
+
+<title row="14" col="1" colspan="1">
+Water solubility (mg L)		
+</title>
+<input id="B14" row="14" col="2" colspan="1">
+?
+</input>
+<error row="14" col="3" colspan="2">
+</error>
+
+<title row="15" col="1" colspan="1">
+Octanol solubility (mg L)		
+</title>
+<input id="B15" row="15" col="2" colspan="1">
+?
+</input>
+<error row="15" col="3" colspan="2">
+</error>
+
+
+<title row="16" col="1" colspan="1">
+Mode of action	
+</title>
+<input id="B16" row="16" col="2" colspan="1">
+?
+</input>
+
+
+<title row="18" col="1" colspan="1">
+Substance remark					
+</title>
+<input id="B18" row="18" col="2" colspan="7" rowspn="6">
+?
+</input>
+
+</section>
+</page>

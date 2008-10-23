@@ -10,19 +10,19 @@ SCREENING RESULTS, ALERTS &amp; RECOMMENDATIONS
 <title row="5" col="1" colspan="1">
 P Assessment result						
 </title>
-<formula row="5" col="3" colspan="3">
+<formula row="5" col="3" colspan="2">
 </formula>
 
 <title row="6" col="1" colspan="1">
 B Assessment result						
 </title>
-<formula row="6" col="3" colspan="3">
+<formula row="6" col="3" colspan="2">
 </formula>
 
 
 <title row="7" col="1" colspan="1">
 T Assessment result						
 </title>
-<formula row="7" col="3" colspan="3">
+<formula row="7" col="3" colspan="2">
 </formula>
 </page>

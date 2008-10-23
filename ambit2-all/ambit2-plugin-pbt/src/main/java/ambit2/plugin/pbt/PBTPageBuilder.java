@@ -38,6 +38,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.border.Border;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -88,13 +89,22 @@ public class PBTPageBuilder {
         		break;
         	}
         	case TITLE: {
-        		
         		c = new JLabel("<html>"+o.toString().replace("\\n", "<br>")+"</html>");
         		c.setOpaque(true);
         		//c.setBackground(labelColor);
         		c.setBorder(risedBorder);
         		break;
         	}
+        	case ERROR: {
+        		/*wrappable labels*/
+        		JTextPane txtMyTextPane= new JTextPane();
+        		txtMyTextPane.setText("<html>"+o.toString().replace("\\n", "<br>")+"</html>");
+        		txtMyTextPane.setBackground(null);
+        		txtMyTextPane.setEditable(false);
+        		txtMyTextPane.setBorder(null);
+        		c = txtMyTextPane;
+        		break; 
+        		        	}        	
         	case LIST: {
         		c = BasicComponentFactory.createComboBox(new SelectionInList());
         		c.setBackground(inputColor);
@@ -118,7 +128,7 @@ public class PBTPageBuilder {
         	}        	
         	}
         	if (c != null)
-        		builder.add(c,cc.xyw(cell.column+colOffset,cell.row+rowOffset,cell.colspan));
+        		builder.add(c,cc.xywh(cell.column+colOffset,cell.row+rowOffset,cell.colspan,cell.rowspan));
         }
         builder.setBorder(BorderFactory.createEtchedBorder());
         return builder.getPanel();
