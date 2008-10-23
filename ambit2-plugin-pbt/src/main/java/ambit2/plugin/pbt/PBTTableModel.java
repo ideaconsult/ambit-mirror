@@ -33,6 +33,7 @@ public class PBTTableModel extends AbstractTableModel {
 	public static final String NODE_LIST="list";
 	public static final String NODE_FORMULA="formula";
 	public static final String NODE_INPUT="input";
+	public static final String NODE_ERROR="error";
 	
 	protected Hashtable<Cell, Object> table;
 	public Hashtable<Cell, Object> getTable() {
@@ -102,6 +103,15 @@ public class PBTTableModel extends AbstractTableModel {
 					x.printStackTrace();
 				}
 			} else
+			if (NODE_ERROR.equals(node.getNodeName())) {
+				try {
+					Cell cell = new Cell(row,col,colspan);
+					table.put(cell,node.getTextContent().trim());
+					cell.setMode(Cell.CELL_MODE.ERROR);
+				} catch (NumberFormatException x) {
+					x.printStackTrace();
+				}
+			} else				
 			if (NODE_LIST.equals(node.getNodeName())) {
 					try {
 						Cell cell = new Cell(row,col,colspan);
@@ -154,12 +164,20 @@ public class PBTTableModel extends AbstractTableModel {
 
 class Cell implements Comparable<Cell> {
 	public enum CELL_MODE {
-		SECTION,TITLE,FORMULA,LIST,INPUT
+		SECTION,TITLE,FORMULA,LIST,INPUT,ERROR
 	};
 	protected CELL_MODE mode;
 	int row;
 	int column;
 	int colspan = 0;
+	int rowspan=1;
+	
+	public int getRowspan() {
+		return rowspan;
+	}
+	public void setRowspan(int rowspan) {
+		this.rowspan = rowspan;
+	}
 	public int getColspan() {
 		return colspan;
 	}
