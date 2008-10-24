@@ -116,7 +116,12 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 			sqt = null;
 		}
 	}
-	public List<List<Integer>> getUniqueMatchingAtoms() throws SMARTSException {
+	public IAtomContainer getMatchingStructure(IAtomContainer mol)
+			throws SMARTSException {
+		throw new SMARTSException("Not supported");
+	}
+	public List<List<Integer>> getUniqueMatchingAtoms(IAtomContainer mol)
+			throws SMARTSException {
     	if (sqt == null) {
     		throw new SMARTSException(Resources.getString(Resources.SMARTS_UNDEFINED));
     	}

@@ -26,7 +26,10 @@ package ambit2.core.query.smarts;
 
 import java.util.List;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.mcss.RMap;
 
 import ambit2.smarts.SmartsManager;
 
@@ -58,14 +61,28 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	public IAtomContainer getObjectToVerify(IAtomContainer mol) {
 		return mol;
 	}
-
-	public List getUniqueMatchingAtoms() throws SMARTSException {
+	public IAtomContainer getMatchingStructure(IAtomContainer mol)
+			throws SMARTSException {
 /*
 		List bondMaps = sman.getBondMappings(object);
 		boolean searchResult = man.searchIn(mol);
  
  */
-		throw new SMARTSException("Not supported!");	
+
+		//List<IAtom> atoms =sman.getAtomMappings(mol);
+		IAtomContainer c = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+		
+		List<List<RMap>> bonds =sman.getBondMappings(mol);
+		
+		for (List<RMap> maps : bonds)
+			for (RMap map : maps)
+			c.addBond(mol.getBond(map.getId1()));
+		
+		List<IAtom> atoms =sman.getAtomMappings(mol,sman.getQueryContaner());
+		for (IAtom atom: atoms)
+			c.addAtom(atom);
+			
+		return c;
 	}
 
 	public int hasSMARTSPattern(IAtomContainer object) throws SMARTSException {
