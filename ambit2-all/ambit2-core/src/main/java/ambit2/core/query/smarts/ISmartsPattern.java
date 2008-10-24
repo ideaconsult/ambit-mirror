@@ -26,6 +26,7 @@ package ambit2.core.query.smarts;
 
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
@@ -42,7 +43,7 @@ public interface ISmartsPattern<T> {
 	int hasSMARTSPattern(T object) throws SMARTSException;
 	T getObjectToVerify(IAtomContainer mol);
 	int match(IAtomContainer mol) throws SMARTSException;
-	List<List<Integer>> getUniqueMatchingAtoms() throws SMARTSException;
+	IAtomContainer getMatchingStructure(IAtomContainer mol) throws SMARTSException;
 	String getName();
 	void setName(String name);
 	String getHint();
