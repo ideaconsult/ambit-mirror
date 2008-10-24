@@ -123,13 +123,13 @@ public class PKASmartsDescriptorTest {
         	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
             CDKHueckelAromaticityDetector.detectAromaticity(a);    		
     		DescriptorValue value = pka.calculate(a);
-    		PKADescriptorResult<String> result = (PKADescriptorResult<String>)value.getValue(); 
-    		a.setProperty(value.getNames()[0], result.doubleValue());
-    		a.setProperty(value.getNames()[0]+"-trace", result.getTrace());
+    		VerboseDescriptorResult<String,DoubleResult> result = (VerboseDescriptorResult<String,DoubleResult>)value.getValue(); 
+    		a.setProperty(value.getNames()[0], result.getResult().doubleValue());
+    		a.setProperty(value.getNames()[0]+"-trace", result.getExplanation());
     		
     		Double d = Double.valueOf(a.getProperty("SMARTS pKa").toString());
-    		if (!d.equals(result.doubleValue())) {
-        		System.out.print(result.doubleValue());
+    		if (!d.equals(result.getResult().doubleValue())) {
+        		System.out.print(result.getResult().doubleValue());
         		System.out.print('\t');
         		System.out.print(a.getProperty("SMARTS pKa"));
         		System.out.print('\t');
