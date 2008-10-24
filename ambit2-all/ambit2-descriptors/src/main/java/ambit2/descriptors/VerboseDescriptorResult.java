@@ -24,23 +24,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.descriptors;
 
-import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.qsar.result.IDescriptorResult;
 
-public class PKADescriptorResult<T> extends DoubleResult {
+/**
+ * 
+ * @author nina
+ *
+ * @param <T>
+ */
+public class VerboseDescriptorResult<T,Result extends IDescriptorResult> implements IDescriptorResult{
 	protected T trace;
+	protected Result result;
 	
 
-	public PKADescriptorResult(double value, T trace) {
-		super(value);
-		this.trace = trace;
+	public Result getResult() {
+		return result;
 	}
 
-	public T getTrace() {
+	public VerboseDescriptorResult(Result value, T explanation) {
+		this.result = value;
+		this.trace = explanation;
+	}
+
+	public T getExplanation() {
 		return trace;
 	}
 
 	@Override
 	public String toString() {
-		return Double.toString(doubleValue());
+		return result.toString();
 	}
+
+	public int length() {
+		return result.length();
+	}
+
 }
