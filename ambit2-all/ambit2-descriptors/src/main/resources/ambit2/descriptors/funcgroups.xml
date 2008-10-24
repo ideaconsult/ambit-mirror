@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<funcgroups>
+<group family="alkane" name="Alkyl Carbon" smarts="[CX4]"/>
+<group family="alkene (-ene)" name="Allenic Carbon" smarts="[$([CX2](=C)=C)]"/>
+<group family="alkene (-ene)" name="Vinylic Carbon" smarts="[$([CX3]=[CX3])]"/>
+<group family="alkyne (-yne)" name="Acetylenic Carbon" smarts="[$([CX2]#C)]"/>
+<group family="arene (Ar , aryl-, aromatic hydrocarbons)" name="Arene (aromatic atoms)" smarts="c"/>
+<group family="carbonyl" name="Carbonyl group. Low specificity" smarts="[CX3]=[OX1]" hint="Hits carboxylic acid, ester, ketone, aldehyde, carbonic acid/ester,anhydride, carbamic acid/ester, acyl halide, amide."/>
+
+<group family="carbonyl" name="Carbonyl group" smarts="[$([CX3]=[OX1]),$([CX3+]-[OX1-])]" hint="Hits either resonance structure"/>
+<group family="carbonyl" name="Carbonyl with Carbon" smarts="[CX3](=[OX1])C" hint="Hits aldehyde, ketone, carboxylic acid (except formic), anhydride (except formic), acyl halides (acid halides). Won't hit carbamic acid/ester, carbonic acid/ester."/>
+<group family="carbonyl" name="Carbonyl with Nitrogen." smarts="[OX1]=CN" hint="Hits amide, carbamic acid/ester, poly peptide"/>
+<group family="carbonyl" name="Carbonyl with Oxygen." smarts="[CX3](=[OX1])O" hint="Hits ester, carboxylic acid, carbonic acid or ester, carbamic acid or ester, anhydride Won't hit aldehyde or ketone."/>
+<group family="carbonyl" name="Acyl Halide" smarts="[CX3](=[OX1])[F,Cl,Br,I]" hint="acid halide, -oyl halide"/>
+<group family="carbonyl" name="Aldehyde" smarts="[CX3H1](=O)[#6]" hint="-al"/>
+<group family="carbonyl" name="Anhydride" smarts="[CX3](=[OX1])[OX2][CX3](=[OX1])"/>
+<group family="carbonyl" name="Amide" smarts="[NX3][CX3](=[OX1])[#6]" hinnt="-amide"/>
+<group family="carbonyl" name="Amidinium" smarts="[NX3][CX3]=[NX3+]"/>
+<group family="carbonyl" name="Carbamate." smarts="[NX3,NX4+][CX3](=[OX1])[OX2,OX1-]" hint="Hits carbamic esters, acids, and zwitterions"/>
+<group family="carbonyl" name="Carbamic ester" smarts="[NX3][CX3](=[OX1])[OX2H0]"/>
+<group family="carbonyl" name="Carbamic acid." smarts="[NX3,NX4+][CX3](=[OX1])[OX2H,OX1-]" hint="Hits carbamic acids and zwitterions."/>
+<group family="carbonyl" name="Carboxylate Ion." smarts="[CX3](=O)[O-]" hint="Hits conjugate bases of carboxylic, carbamic, and carbonic acids."/>
+<group family="carbonyl" name="Carbonic Acid or Carbonic Ester" smarts="[CX3](=[OX1])(O)O" hint="Carbonic Acid, Carbonic Ester, or combination"/>
+<group family="carbonyl" name="Carbonic Acid or Carbonic Acid-Ester" smarts="[CX3](=[OX1])([OX2])[OX2H,OX1H0-1]" hint="Hits acid and conjugate base. Won't hit carbonic acid diester"/>
+<group family="carbonyl" name="Carbonic Ester (carbonic acid diester)" smarts="C[OX2][CX3](=[OX1])[OX2]C" hint="Won't hit carbonic acid or combination carbonic acid/ester"/>
+<group family="carbonyl" name="Carboxylic acid" smarts="[CX3](=O)[OX2H1]" hint="-oic acid, COOH"/>
+<group family="carbonyl" name="Carboxylic acid or conjugate base." smarts="[CX3](=O)[OX1H0-,OX2H1]"/>
+<group family="carbonyl" name="Cyanamide" smarts="[NX3][CX2]#[NX1]"/>
+<group family="carbonyl" name="Ester Also hits anhydrides" smarts="[#6][CX3](=O)[OX2H0][#6]" hint="won't hit formic anhydride."/>
+<group family="carbonyl" name="Ketone" smarts="[#6][CX3](=O)[#6]" hint="-one"/>
+<group family="ether" name="Ether" smarts="[OD2]([#6])[#6]" hint=""/>
+
+<group family="amine (-amino)" name="Primary or secondary amine, not amide." smarts="[NX3;H2,H1;!$(NC=O)]" hint="Not ammonium ion (N must be 3-connected), not ammonia (H count can't be 3). Primary or secondary is specified by N's H-count (H2 and H1 respectively). Will hit cyanamides and thioamides"/>
+
+<group family="amine (-amino)" name="Enamine" smarts="[NX3][CX3]=[CX3]" hint=""/>
+<group family="amine (-amino)" name="Primary amine, not amide" smarts="[NX3;H2;!$(NC=[!#6]);!$(NC#[!#6])][#6]" hint="Not amide (C not double bonded to a hetero-atom), not ammonium ion (N must be 3-connected), not ammonia (N's H-count can't be 3), not cyanamide (C not triple bonded to a hetero-atom)"/>
+<group family="amine (-amino)" name="Two primary or secondary amines" smarts="[NX3;H2,H1;!$(NC=O)].[NX3;H2,H1;!$(NC=O)]" hint="Here we use the disconnection symbol ('.') to match two separate unbonded identical patterns."/>
+<group family="amine (-amino)" name="Enamine or Aniline Nitrogen" smarts="[NX3][$(C=C),$(cc)]" hint=""/>
+<group family="amino acids" name="Generic amino acid: low specificity" smarts="[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]" hint="For use w/ non-standard a.a. search. hits pro but not gly. Hits acids and conjugate bases. Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal)"/>
+<group family="amino acids" name="Dipeptide group. generic amino acid: low specificity. " smarts="[NX3H2,NH3X4+][CX4H]([*])[CX3](=[OX1])[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-]" hint="Won't hit pro or gly. Hits acids and conjugate bases."/>
+<group family="amino acids" name="Amino Acid " smarts="[$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N]" hint="Replace * w/ a specific a.a. side chain from the 18_standard_side_chains list to hit a specific standard a.a. Won't work with Proline or Glycine, they have their own SMARTS (see side chain list). Hits acids and conjugate bases. Hits single a.a.s and specific residues w/i n polypeptides (internal, or terminal). {e.g. usage: Alanine side chain is [CH3X4] . Search is [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([ CH3X4])[CX3](=[OX1])[OX2H,OX1-,N]}"/>
+<group family="amino acid side chains" name="Alanine side chain" smarts="[CH3X4]" hint=""/>
+<group family="amino acid side chains" name="Arginine side chain." smarts="[CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]" hint="Hits acid and conjugate base."/>
+<group family="amino acid side chains" name="Aspargine side chain." smarts="[CH2X4][CX3](=[OX1])[NX3H2]" hint="Also hits Gln side chain when used alone."/>
+<group family="amino acid side chains" name="Aspartate (or Aspartic acid) side chain." smarts="[CH2X4][CX3](=[OX1])[OH0-,OH]" hint="Hits acid and conjugate base. Also hits Glu side chain when used alone. "/>
+<group family="amino acid side chains" name="Cysteine side chain." smarts="[CH2X4][SX2H,SX1H0-]" hint="Hits acid and conjugate base"/>
+<group family="amino acid side chains" name="Glutamate (or Glutamic acid) side chain." smarts="[CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]" hint="Hits acid and conjugate base."/>
+
+<group family="azide (-azido)" name="Azide group." hint="Hits any atom with an attached azide." smarts="[$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]"/>
+<group family="azide (-azido)" name="Azide ion." smarts="[$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])]" hint="Hits N in azide ion"/>
+
+<group family="azo" name="ANitrogen." smarts="[#7]" hint="Nitrogen in N-containing compound. aromatic or aliphatic. Most general interpretation of 'azo'"/>
+<group family="azo" name="Azo Nitrogen. Low specificity." smarts="[NX2]=N" hint="Hits diazene, azoxy and some diazo structures"/>
+<group family="azo" name="Azo Nitrogen.diazene" smarts="[NX2]=[NX2]" hint="(diaza alkene)"/>
+<!--
+<group family="azo" name="Azoxy Nitrogen" smarts="[$([NX2]=[NX3+]([O-])[#6]),$([NX2]=[NX3+0](=[O])[#6])]]" hint=""/>
+-->
+<group family="azo" name="Diazo Nitrogen" smarts="[$([#6]=[N+]=[N-]),$([#6-]-[N+]#[N])]"/>
+<group family="azo" name="Azole." smarts="[$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])]" hint="5 member aromatic heterocycle w/ 2double bonds. contains N and another non C (N,O,S) subclasses are furo-, thio-, pyrro- (replace CH o' furfuran, thiophene, pyrrol w/ N) "/>
+
+<group family="hydrazine" name="Hydrazine H2NNH2" smarts="[NX3][NX3]" hint=""/>
+<group family="hydrazone" name="Hydrazone C=NNH2" smarts="[NX3][NX2]=[*]" hint=""/>
+<group family="imine" name="Substituted imine" smarts="[CX3;$([C]([#6])[#6]),$([CH][#6])]=[NX2][#6]" hint="Schiff base"/>
+<group family="imine" name="Substituted or un-substituted imine " smarts="[$([CX3]([#6])[#6]),$([CX3H][#6])]=[$([NX2][#6]),$([NX2H])]" hint=""/>
+<group family="imine" name="Iminium" smarts="[NX3+]=[CX3]" hint=""/>
+<group family="imide" name="Unsubstituted dicarboximide" smarts="[CX3](=[OX1])[NX3H][CX3](=[OX1])" hint=""/>
+<group family="imide" name="Substituted dicarboximide" smarts="[CX3](=[OX1])[NX3H0]([#6])[CX3](=[OX1])" hint=""/>
+<group family="imide" name="Dicarboxdiimide " smarts="[CX3](=[OX1])[NX3H0]([NX3H0]([CX3](=[OX1]))[CX3](=[OX1]))[CX3](=[OX1])" hint=""/>
+
+<group family="nitrate" name="Nitrate group" smarts="[$([NX3](=[OX1])(=[OX1])O),$([NX3+]([OX1-])(=[OX1])O)]" hint="Also hits nitrate anion"/>
+<group family="nitrate" name="Nitrate Anion " smarts="[$([OX1]=[NX3](=[OX1])[OX1-]),$([OX1]=[NX3+]([OX1-])[OX1-])]" hint=""/>
+<group family="nitrile" name="Nitrile" smarts="[NX1]#[CX2]" hint=""/>
+<group family="nitrile" name="Isonitrile " smarts="[CX1-]#[NX2+]" hint=""/>
+<group family="nitro" name="Nitro group" smarts="[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8]" hint="Hits both forms."/>
+<group family="nitro" name="Two Nitro groups" smarts="[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8].[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8]" hint=""/>
+
+<group family="nitroso" name="Nitroso-group" smarts="[NX2]=[OX1]" hint=""/>
+<group family="n-oxide" smarts="[$([#7+][OX1-]),$([#7v5]=[OX1]);!$([#7](~[O])~[O]);!$([#7]=[#7])]" name="N-Oxide" hint="Hits both forms. Won't hit azoxy, nitro, nitroso,or nitrate."/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Hydroxyl" smarts="[OX2H]" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Hydroxyl in Alcohol" smarts="[#6][OX2H]" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Hydroxyl in Carboxylic Acid" smarts="[OX2H][CX3]=[OX1]" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Hydroxyl in H-O-P-" smarts="[OX2H]P" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Enol" smarts="[OX2H][#6X3]=[#6]" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Phenol" smarts="[OX2H][cX3]:[c]" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Enol or Phenol" smarts="[OX2H][$(C=C),$(cc)]" hint=""/>
+<group family="hydroxyl (includes alcohol, phenol)" name="Hydroxyl_acidic" smarts="[$([OH]-*=[!#6])]" hint="An acidic hydroxyl is a hydroxyl bonded to an atom which is multiply bonded to a hetero atom, this includes carboxylic, sulphur, phosphorous, halogen and nitrogen oxyacids."/>
+
+<group family="peroxide" name="Peroxide groups." smarts="[OX2,OX1-][OX2,OX1-]" hint="Also hits anions."/>
+<group family="phosphoric compounds" name="Phosphoric_acid groups." smarts="[$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])]" hint="Hits both depiction forms. Hits orthophosphoric acid and polyphosphoric acid anhydrides. Doesn't hit monophosphoric acid anhydride esters (including acidic mono- and di- esters) but will hit some polyphosphoric acid anhydride esters (mono- esters on pyrophosphoric acid and longer, di- esters on linear triphosphoric acid and longer)."/>
+<group family="phosphoric compounds" name="Phosphoric_ester groups." smarts="[$(P(=[OX1])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)]),$([P+]([OX1-])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)])]" hint="Hits both depiction forms. Doesn't hit non-ester phosphoric_acid groups."/>
+
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Carbo-Thiocarboxylate " smarts="[S-][CX3](=S)[#6]" hint=""/>
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Carbo-Thioester" smarts="S([#6])[CX3](=O)[#6]" hint=""/>
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Thio analog of carbonyl" smarts="[#6X3](=[SX1])([!N])[!N]" hint="Where S replaces O. Not a thioamide."/>
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Thiol, Sulfide or Disulfide Sulfur" smarts="[SX2]" hint=""/>
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Thiol" smarts="[#16X2H]" hint=""/>
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Sulfur with at-least one hydrogen." smarts="[#16!H0]" hint=""/>
+<group family="thio groups ( thio-, thi-, sulpho-, mercapto- )" name="Thioamide" smarts="[NX3][CX3]=[SX1]" hint=""/>
+
+<group family="sulfide" name="Sulfide" smarts="[#16X2H0]" hint="-alkylthio Won't hit thiols. Hits disulfides."/>
+<group family="sulfide" name="Mono-sulfide" smarts="[#16X2H0][!#16]" hint="alkylthio- or alkoxy- Won't hit thiols. Won't hit disulfides."/>
+<group family="sulfide" name="Di-sulfide" smarts="[#16X2H0][#16X2H0]" hint="Won't hit thiols. Won't hit mono-sulfides."/>
+<group family="sulfide" name="Two Sulfides" smarts="[#16X2H0][!#16].[#16X2H0][!#16]" hint="Won't hit thiols. Won't hit mono-sulfides. Won't hit disulfides."/>
+
+<group family="sulfinate" name="Sulfinate" smarts="[$([#16X3](=[OX1])[OX2H0]),$([#16X3+]([OX1-])[OX2H0])]" hint="Won't hit Sulfinic Acid. Hits Both Depiction Forms."/>
+<group family="sulfinate" name="Sulfinic Acid" smarts="[$([#16X3](=[OX1])[OX2H,OX1H0-]),$([#16X3+]([OX1-])[OX2H,OX1H0-])]" hint="Won't hit substituted Sulfinates. Hits Both Depiction Forms. Hits acid and conjugate base (sulfinate)."/>
+
+
+<group family="sulfone" name="Sulfone. Low specificity." smarts="[$([#16X4](=[OX1])=[OX1]),$([#16X4+2]([OX1-])[OX1-])]" hint="Hits all sulfones, including heteroatom-substituted sulfones: sulfonic acid, sulfonate, sulfuric acid mono- and di- esters, sulfamic acid, sulfamate, sulfonamide... Hits Both Depiction Forms."/>
+<group family="sulfone" name="Sulfone. High specificity." smarts="[$([#16X4](=[OX1])(=[OX1])([#6])[#6]),$([#16X4+2]([OX1-])([OX1-])([#6])[#6])]" hint="Only hits carbo- sulfones (Won't hit herteroatom-substituted molecules). Hits Both Depiction Forms."/>
+<group family="sulfone" name="Sulfonic acid. High specificity." smarts="[$([#16X4](=[OX1])(=[OX1])([#6])[OX2H,OX1H0-]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H,OX1H0-])]" hint="Only hits carbo- sulfonic acids (Won't hit herteroatom-substituted molecules). Hits acid and conjugate base. Hits Both Depiction Forms. Hits Arene sulfonic acids."/>
+<group family="sulfone" name="Sulfonate" smarts="[$([#16X4](=[OX1])(=[OX1])([#6])[OX2H0]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H0])]" hint="(sulfonic ester) Only hits carbon-substituted sulfur (Oxygen may be herteroatom-substituted). Hits Both Depiction Forms."/>
+<group family="sulfone" name="Sulfonamide." smarts="[$([#16X4]([NX3])(=[OX1])(=[OX1])[#6]),$([#16X4+2]([NX3])([OX1-])([OX1-])[#6])]" hint="Only hits carbo- sulfonamide. Hits Both Depiction Forms."/>
+<group family="sulfone" name="Carbo-azosulfone" smarts="[SX4](C)(C)(=O)=N" hint="Partial N-Analog of Sulfone"/>
+<group family="sulfone" name="Sulfonamide" smarts="[$([SX4](=[OX1])(=[OX1])([!O])[NX3]),$([SX4+2]([OX1-])([OX1-])([!O])[NX3])]" hint="(sulf drugs) Won't hit sulfamic acid or sulfamate. Hits Both Depiction Forms."/>
+<group family="sulfoxide" name="Sulfoxide Low specificity." smarts="[$([#16X3]=[OX1]),$([#16X3+][OX1-])]" hint="( sulfinyl, thionyl ) Analog of carbonyl where S replaces C. Hits all sulfoxides, including heteroatom-substituted sulfoxides, dialkylsulfoxides carbo-sulfoxides, sulfinate, sulfinic acids... Hits Both Depiction Forms. Won't hit sulfones."/>
+<group family="sulfoxide" name="Sulfoxide High specificity" smarts="[$([#16X3](=[OX1])([#6])[#6]),$([#16X3+]([OX1-])([#6])[#6])]" hint="(sulfinyl , thionyl) Analog of carbonyl where S replaces C. Only hits carbo-sulfoxides (Won't hit herteroatom-substituted molecules). Hits Both Depiction Forms. Won't hit sulfones."/>
+
+<group family="sulfate" name="Sulfate" smarts="[$([#16X4](=[OX1])(=[OX1])([OX2H,OX1H0-])[OX2][#6]),$([#16X4+2]([OX1-])([OX1-])([OX2H,OX1H0-])[OX2][#6])]" hint="(sulfuric acid monoester) Only hits when oxygen is carbon-substituted. Hits acid and conjugate base. Hits Both Depiction Forms."/>
+<group family="sulfate" name="Sulfuric acid ester (sulfate ester) Low specificity." smarts="[$([SX4](=O)(=O)(O)O),$([SX4+2]([O-])([O-])(O)O)]" hint="Hits sulfuric acid, sulfuric acid monoesters (sulfuric acids) and diesters (sulfates). Hits acid and conjugate base. Hits Both Depiction Forms."/>
+<group family="sulfate" name="Sulfuric Acid Diester." smarts="[$([#16X4](=[OX1])(=[OX1])([OX2][#6])[OX2][#6]),$([#16X4](=[OX1])(=[OX1])([OX2][#6])[OX2][#6])]" hint="Only hits when oxygen is carbon-substituted. Hits Both Depiction Forms"/>
+
+<group family="sulfamate" name="Sulfamate." smarts="[$([#16X4]([NX3])(=[OX1])(=[OX1])[OX2][#6]),$([#16X4+2]([NX3])([OX1-])([OX1-])[OX2][#6])]" hint="Only hits when oxygen is carbon-substituted. Hits Both Depiction Forms."/>
+<group family="sulfamate" name="Sulfamic Acid." smarts="[$([#16X4]([NX3])(=[OX1])(=[OX1])[OX2H,OX1H0-]),$([#16X4+2]([NX3])([OX1-])([OX1-])[OX2H,OX1H0-])]" hint="Hits acid and conjugate base. Hits Both Depiction Forms."/>
+<group family="sulfene" name="Sulfenic acid." smarts="[#16X2][OX2H,OX1H0-]" hint="Hits acid and conjugate base."/>
+<group family="sulfene" name="Sulfenate." smarts="[#16X2][OX2H0]" hint=""/>
+
+<group family="halide (-halo -fluoro -chloro -bromo -iodo)" name="Any carbon attached to any halogen" smarts="[#6][F,Cl,Br,I]" hint=""/>
+<group family="halide (-halo -fluoro -chloro -bromo -iodo)" name="Halogen" smarts="[F,Cl,Br,I]" hint=""/>
+<group family="halide (-halo -fluoro -chloro -bromo -iodo)" name="Three_halides groups" smarts="[F,Cl,Br,I].[F,Cl,Br,I].[F,Cl,Br,I]" hint="Hits SMILES that have three halides."/>
+
+<group family="Acids and Bases" name="Acid" smarts="[!H0;F,Cl,Br,I,N+,$([OH]-*=[!#6]),+]" hint="Proton donor"/>
+<group family="Acids and Bases" name="Carboxylic acid" smarts="[CX3](=O)[OX2H1]" hint="(-oic acid, COOH)"/>
+<group family="Acids and Bases" name="Carboxylic acid or conjugate base." smarts="[CX3](=O)[OX1H0-,OX2H1]" hint=""/>
+<group family="Acids and Bases" name="Hydroxyl_acidic" smarts="[$([OH]-*=[!#6])]" hint="An acidic hydroxyl is a hydroxyl bonded to an atom which is multiply bonded to a hetero atom, this includes carboxylic, sulphur, pho sphorous, halogen and nitrogen oxyacids "/>
+<group family="Acids and Bases" name="Phosphoric_Acid" smarts="[$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])]" hint="Hits both forms. Hits orthophosphoric acid and polyphosphoric acid anhydrides. Doesn't hit monophosphoric acid anhydride esters (in cluding acidic mono- and di- esters) but will hit some polyphosphoric acid anhydride esters (mono- esters on pyrophosphoric acid and longe r, di- esters on linear triphosphoric acid and longer). Hits acid and conjugate base."/>
+<group family="Acids and Bases" name="Sulfonic Acid. High specificity." smarts="[$([#16X4](=[OX1])(=[OX1])([#6])[OX2H,OX1H0-]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H,OX1H0-])]" hint="Only hits carbo- sulfonic acids (Won't hit herteroatom-substituted molecules). Hits acid and conjugate base. Hits Both Depiction Fo rms. Hits Arene sulfonic acids."/>
+
+</funcgroups>
