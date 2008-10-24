@@ -46,15 +46,44 @@ import ambit2.core.query.smarts.SmartsPatternFactory;
  */
 public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	protected ISmartsPattern<IAtomContainer> query;
+	protected boolean verbose = false;
+	public boolean isVerbose() {
+		return verbose;
+	}
+
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
+
 	public FunctionalGroupDescriptor() throws SMARTSException {
 		query = SmartsPatternFactory.createSmartsPattern(
-				SmartsPatternFactory.SmartsParser.smarts_cdk, "", false);
+				SmartsPatternFactory.SmartsParser.smarts_nk, "", false);
 	}
 
 	public DescriptorValue calculate(IAtomContainer arg0) throws CDKException {
 		try {
+			
+			int hits = 0;
+			IAtomContainer match = null;
+			IDescriptorResult result;
+			if (isVerbose()) 
+				try {
+					match = query.getMatchingStructure(arg0);
+					hits = (match.getAtomCount()>0) ?1:0;
+					result = new VerboseDescriptorResult<IAtomContainer,IntegerResult>(new IntegerResult(hits),match);
+				} catch (SMARTSException x) {
+					match = null;
+					hits = 0;
+					result = new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),x.getMessage());
+				}
+			else {
+				hits = query.match(arg0);
+				result = new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),null);
+			}	
+			
 	        return new DescriptorValue(getSpecification(), getParameterNames(), 
-	                getParameters(), new IntegerResult(query.match(arg0)),
+	                getParameters(), 
+	                result,
 	                new String[] {AmbitCONSTANTS.SMARTSQuery});
 		} catch (Exception x) {
 			throw new CDKException(x.getMessage());
@@ -62,10 +91,11 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	}
 
     public String[] getParameterNames() {
-        String[] params = new String[3];
+        String[] params = new String[4];
         params[0] = "smarts";
         params[1] = "name";
         params[2] = "comment";
+        params[3] = "verbose";
         return params;
     }
 
@@ -75,10 +105,10 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://ambit2.acad.bg/downloads/AmbitDb/html/funcgroups.xml",
+            "http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml",
 		    this.getClass().getName(),
 		    "$Id: FunctionalGroupDescriptor.java,v 0.1 2007/12/13 14:59:00 Nina Jeliazkova Exp $",
-            "ambit2.acad.bg");
+            "ambit.acad.bg");
     };
     /**
      * 3 parameters : Smarts,name,hint; first two are mandatory.
@@ -97,17 +127,25 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
         	query.setName(params[1].toString());
             if ((params.length > 2))
             	query.setHint(params[2].toString());
-            
+            if ((params.length > 3))
+            	setVerbose(Boolean.valueOf(params[3].toString()));
+            else
+            	setVerbose(false);
         		
         } catch (Exception x) {
+        	setVerbose(false);
         	throw new CDKException(x.getMessage());
         }
 	}
     public Object[] getParameters() {
-        Object[] params = new Object[3];
+        Object[] params = new Object[4];
         params[0] = new String(query.getSmarts());
         params[1] = new String(query.getName());
-        params[2] = new String(query.getHint());
+        if (query.getHint() == null)
+        	params[2] = null;
+        else
+        	params[2] = new String(query.getHint());
+        params[3] = new Boolean(isVerbose());
         return params;
     }	
     @Override
