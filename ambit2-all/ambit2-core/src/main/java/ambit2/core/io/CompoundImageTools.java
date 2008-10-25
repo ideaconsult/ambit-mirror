@@ -4,11 +4,14 @@
  */
 package ambit2.core.io;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -41,7 +44,25 @@ public class CompoundImageTools {
     protected Color background = Color.white;
     protected BufferedImage defaultImage = null;
     BufferedImage buffer = null;
-    protected SmilesParser parser = null;
+    protected Color borderColor = Color.GRAY;
+    protected int borderWidth = 5;
+    public int getBorderWidth() {
+		return borderWidth;
+	}
+	public void setBorderWidth(int borderWidth) {
+		this.borderWidth = borderWidth;
+	}
+	public Color getBorderColor() {
+		return borderColor;
+	}
+    /**
+     * Creates gradient border of this color. Set the same as background color if you don't want shadowing effect.
+     * @param borderColor
+     */
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
+	}
+	protected SmilesParser parser = null;
     /**
      * 
      */
@@ -96,15 +117,37 @@ public class CompoundImageTools {
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
-
 		//g.setColor(Color.black);
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
         paint(renderer,molecules, false, g, highlighted,imageSize);
+        if (borderColor != background)
+        	paintBorderShadow(g,getBorderWidth(),new Rectangle(imageSize));
         g.dispose();
 		return buffer;
     }
+    private void paintBorderShadow(Graphics2D g2, int shadowWidth, Shape shape) {
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
+        int sw = shadowWidth*2;
+        for (int i=sw; i >= 2; i-=2) {
+            float pct = (float)(sw - i) / (sw - 1);
+            g2.setColor(getMixedColor(borderColor, pct,
+                                      background, 1.0f-pct));
+            g2.setStroke(new BasicStroke(i));
+            g2.draw(shape);
+        }
+    }
+    private static Color getMixedColor(Color c1, float pct1, Color c2, float pct2) {
+        float[] clr1 = c1.getComponents(null);
+        float[] clr2 = c2.getComponents(null);
+        for (int i = 0; i < clr1.length; i++) {
+            clr1[i] = (clr1[i] * pct1) + (clr2[i] * pct2);
+        }
+        return new Color(clr1[0], clr1[1], clr1[2], clr1[3]);
+    }
+    
     public synchronized static void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
     {
         if (molecule != null) {
