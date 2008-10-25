@@ -41,7 +41,7 @@ import org.junit.Before;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.io.MDLV2000Reader;
+import ambit2.core.io.MDLV2000ReaderExtended;
 
 public class EinecsTest extends TestCase {
     protected String maindir;
@@ -64,7 +64,7 @@ public class EinecsTest extends TestCase {
         if (files == null) throw new Exception("Files not found");
         for (File file: files) {
             
-            MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
+            MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
             IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
             try {
                 reader.read(mol);

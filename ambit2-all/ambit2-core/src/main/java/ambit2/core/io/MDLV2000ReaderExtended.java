@@ -63,6 +63,7 @@ import ambit2.core.groups.ISGroup;
 import ambit2.core.groups.SuppleAtomContainer;
 
 /**
+ * Supports SGroups.
  * Reads a molecule from an MDL MOL or SDF file {@cdk.cite DAL92}. An SD files
  * is read into a ChemSequence of ChemModel's. Each ChemModel will contain one
  * Molecule.
@@ -94,14 +95,14 @@ import ambit2.core.groups.SuppleAtomContainer;
  * @cdk.keyword    file format, SDF
  * @cdk.bug        1587283
  */
-public class MDLV2000Reader extends DefaultChemObjectReader {
+public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
 	
     BufferedReader input = null;
     private LoggingTool logger = null;
 
     private BooleanIOSetting forceReadAs3DCoords;
     
-    public MDLV2000Reader() {
+    public MDLV2000ReaderExtended() {
         this(new StringReader(""));
     }
     
@@ -110,10 +111,10 @@ public class MDLV2000Reader extends DefaultChemObjectReader {
 	 *
 	 *@param  in  The InputStream to read from
 	 */
-	public MDLV2000Reader(InputStream in) {
+	public MDLV2000ReaderExtended(InputStream in) {
 		this(new InputStreamReader(in));
 	}
-	public MDLV2000Reader(InputStream in, Mode mode) {
+	public MDLV2000ReaderExtended(InputStream in, Mode mode) {
 		this(new InputStreamReader(in), mode);
 	}
 
@@ -122,10 +123,10 @@ public class MDLV2000Reader extends DefaultChemObjectReader {
 	 *
 	 *@param  in  The Reader to read from
 	 */
-	public MDLV2000Reader(Reader in) {
+	public MDLV2000ReaderExtended(Reader in) {
         this(in, Mode.RELAXED);
 	}
-	public MDLV2000Reader(Reader in, Mode mode) {
+	public MDLV2000ReaderExtended(Reader in, Mode mode) {
         logger = new LoggingTool(this);
         input = new BufferedReader(in);
         initIOSettings();

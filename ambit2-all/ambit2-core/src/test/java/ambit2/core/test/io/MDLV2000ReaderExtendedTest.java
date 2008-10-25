@@ -47,16 +47,19 @@ import ambit2.core.groups.MonomerGroup;
 import ambit2.core.groups.MultipleGroup;
 import ambit2.core.groups.StructureRepeatingUnit;
 import ambit2.core.groups.SuppleAtomContainer;
-import ambit2.core.io.MDLV2000Reader;
+import ambit2.core.io.MDLV2000ReaderExtended;
 import ambit2.core.io.SGroupMDL2000Helper.SGROUP_CONNECTIVITY;
 
-public class MDLV2000ReaderTest extends TestCase {
+public class MDLV2000ReaderExtendedTest extends TestCase {
 
 	protected IChemObject readSGroup(String file) throws Exception {
-		return readSGroup("data/mdl/", file);
+		return readSGroup("ambit2/core/data/mdl/", file);
 	}	
 	protected IChemObject readSGroup(String dir,String file) throws Exception {
-		MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir+file),IChemObjectReader.Mode.RELAXED);
+		
+		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(
+				MDLV2000ReaderExtended.class.getClassLoader().getResourceAsStream(dir+file),
+				IChemObjectReader.Mode.RELAXED);
 		IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
 		IChemObject newMol = reader.read(mol);
 		reader.close();
@@ -418,10 +421,10 @@ public class MDLV2000ReaderTest extends TestCase {
                      
 	}	
 	public void testSTY() throws Exception {
-		File[] files = new File("data/M__STY").listFiles();
+		File[] files = new File("src/test/resources/ambit2/core/data/M__STY").listFiles();
 		if (files == null) throw new Exception("Files not found");
 		for (File file: files) {
-			MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
+			MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
 			IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
             try {
                 reader.read(mol);
@@ -433,11 +436,11 @@ public class MDLV2000ReaderTest extends TestCase {
 		}
 	}
 	public void testRGP() throws Exception {
-		File[] files = new File("data/M__RGP").listFiles();
+		File[] files = new File("src/test/resources/ambit2/core/data/M__RGP").listFiles();
 		if (files == null) throw new Exception("Files not found");
 		for (File file: files) 
 			try {
-				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
+				MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
 				IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
 				reader.read(mol);
 				reader.close();
@@ -448,6 +451,6 @@ public class MDLV2000ReaderTest extends TestCase {
 			}
 	}	
 	public void testRGFile() throws Exception {
-        IChemObject mol = readSGroup("data/M__RGP/","marvin_sketch.mol");
+        IChemObject mol = readSGroup("ambit2/core/data/M__RGP/","marvin_sketch.mol");
 	}		
 }
