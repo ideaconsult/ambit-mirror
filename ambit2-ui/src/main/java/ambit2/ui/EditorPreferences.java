@@ -46,7 +46,7 @@ public class EditorPreferences {
 		{"com.microworkflow.process.ValueLatchPair","ambit2.workflow.ui.ValueLatchPairEditor"},
 		{"ambit2.db.LoginInfo","ambit2.dbui.LoginPanel"},
 		//{"ambit2.core.data.LiteratureEntry","ambit2.ui.editors.ReferenceEditor"},
-		{"ambit2.db.SourceDataset","ambit2.ui.editors.SourceDatasetEditor"},
+		{"ambit2.db.SourceDataset","ambit2.dbui.SourceDatasetEditor"},
 		{"ambit2.core.data.AmbitUser","ambit2.ui.editors.AmbitUserEditor"},
 		//{"java.lang.StringBuffer","ambit2.ui.query.DbStatusPanel"},
 		{"ambit2.core.data.experiment.StudyTemplate","ambit2.ui.editors.StudyTemplateEditor"},
