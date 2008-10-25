@@ -223,10 +223,12 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		table.setDefaultRenderer(IMolecule.class, new MoleculeGridCellRenderer(
 				cellSize));
 				*/
-		table.setDefaultRenderer(Image.class, new ImageCellRenderer());
-		table.setDefaultRenderer(IAtomContainer.class, new ImageCellRenderer());
-
 		
+		ImageCellRenderer renderer = new ImageCellRenderer();
+		if (model instanceof IBrowserMode) 
+			((IBrowserMode)model).addPropertyChangeListener(renderer);		
+		table.setDefaultRenderer(Image.class, renderer);
+		table.setDefaultRenderer(IAtomContainer.class, renderer);
 
 		table.setPreferredScrollableViewportSize(new Dimension(
 				cellSize.width * 3, (cellSize.height + 30) * 2));
@@ -254,7 +256,8 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	    table.getSelectionModel().addListSelectionListener(listener);
 	    table.getColumnModel().getSelectionModel()
 	        .addListSelectionListener(listener);
-
+	    table.setShowHorizontalLines(false);
+	    table.setShowVerticalLines(false);
 		return table;
 	}	
 	protected void setRecord(int row, int col) {
@@ -314,8 +317,9 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		}
 		if (IBrowserMode.PROPERTY_ZOOM.equals(evt.getPropertyName())) {
 			Double size = ((Double)evt.getNewValue());
-			//System.out.println(size + " " + browser_table.getRowHeight());
+			System.out.println(evt);
 			browser_table.setRowHeight((int)Math.round(size));
+			
 		}
 		
 		
