@@ -1,0 +1,1 @@
+mysqladmin.exe --port 33060 -u root shutdown
