@@ -37,9 +37,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import ambit2.core.data.StringBean;
 
 
-public class DbCreateDatabase extends AbstractRepositoryWriter<String,String> {
+
+public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String> {
 	
     /**
 	 * 
@@ -53,9 +55,9 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<String,String> {
 
     }
     @Override
-    public String write(String database) throws SQLException {
-        createDatabase(database);
-        createTables(database);
+    public String write(StringBean database) throws SQLException {
+        createDatabase(database.toString());
+        createTables(database.toString());
         
         try {
         	String[] users = {
@@ -65,12 +67,12 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<String,String> {
         	"insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"admin\",\"21232f297a57a5a743894a0e4a801fc3\",\"admin\",\"Default admin user\",now(),\"confirmed\",\"admin\",\"http://ambit.acad.bg\");",
         	"insert into user_roles (user_name,role_name) values (\"guest\",\"ambit_guest\");",
         	"insert into user_roles (user_name,role_name) values (\"admin\",\"ambit_admin\");",
-        	"REVOKE ALL PRIVILEGES ON "+database+".* FROM 'admin'@'localhost';",
-        	"REVOKE ALL PRIVILEGES ON "+database+".* FROM 'guest'@'localhost';",
+        	"REVOKE ALL PRIVILEGES ON `"+database+"`.* FROM 'admin'@'localhost';",
+        	"REVOKE ALL PRIVILEGES ON `"+database+"`.* FROM 'guest'@'localhost';",
 
-        	"GRANT USAGE ON "+database+".* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';",
-        	"GRANT ALL PRIVILEGES ON "+database+".* TO 'admin'@'localhost' WITH GRANT OPTION;",
-        	"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON "+database+".* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';"
+        	"GRANT USAGE ON `"+database+"`.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';",
+        	"GRANT ALL PRIVILEGES ON `"+database+"`.* TO 'admin'@'localhost' WITH GRANT OPTION;",
+        	"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `"+database+"`.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';"
 
         	};
 	        Statement st = connection.createStatement();
@@ -80,13 +82,13 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<String,String> {
         } catch (SQLException x) {
         	logger.warn(x);
         }
-        return database;
+        return database.toString();
     }
     public void createDatabase(String newDb) throws SQLException {
             Statement t = connection.createStatement();
-            t.addBatch("DROP DATABASE IF EXISTS "+newDb);
-            t.addBatch("CREATE SCHEMA IF NOT EXISTS " +newDb + " DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ");
-            t.addBatch("USE "+newDb);
+            t.addBatch("DROP DATABASE IF EXISTS `"+newDb+"`");
+            t.addBatch("CREATE SCHEMA IF NOT EXISTS `" +newDb + "` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ");
+            t.addBatch("USE `"+newDb+"`");
             t.executeBatch();
             t.close();
     }
@@ -99,7 +101,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<String,String> {
             if (in == null) throw new SQLException("Can't find " + getSQLFile());
             
                 Statement t = connection.createStatement();
-                t.execute("USE "+newDB + ";");
+                t.execute("USE `"+newDB + "`;");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 String line = null;                         
                 StringBuffer table = new StringBuffer();

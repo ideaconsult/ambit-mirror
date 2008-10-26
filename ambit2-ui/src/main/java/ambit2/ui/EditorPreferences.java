@@ -56,6 +56,7 @@ public class EditorPreferences {
 		{"ambit2.db.search.QueryField","ambit2.dbui.QueryFieldEditor"},
 		{"ambit2.db.search.QueryCombined","ambit2.dbui.QueryCombinedEditor"},
 		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},
+		{"ambit2.core.data.StringBean","ambit2.ui.editors.StringBeanEditor"},
 		
 		
 		

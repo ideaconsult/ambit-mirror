@@ -35,6 +35,7 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
+import ambit2.core.data.StringBean;
 import ambit2.db.DBVersion;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
@@ -68,11 +69,11 @@ public class DbCreateDatabaseTest extends RepositoryTest {
         Connection c = datasource.getConnection();
         r.setConnection(c);
         
-        String newdb = "ambitTest";
+        StringBean newdb = new StringBean("ambit-Test");
         r.write(newdb);
         c.close();
         datasource = DatasourceFactory.getDataSource(
-                DatasourceFactory.getConnectionURI("jdbc:mysql", info.getHostname(),info.getPort(),newdb, "guest","guest"));        
+                DatasourceFactory.getConnectionURI("jdbc:mysql", info.getHostname(),info.getPort(),newdb.toString(), "guest","guest"));        
         c = datasource.getConnection();
         Statement st = c.createStatement();
         ResultSet rs = st.executeQuery("select idmajor,idminor from version");
