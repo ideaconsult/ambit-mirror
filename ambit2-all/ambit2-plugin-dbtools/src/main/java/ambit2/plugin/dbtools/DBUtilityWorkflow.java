@@ -24,8 +24,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.dbtools;
 
+import ambit2.db.SourceDataset;
+import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.UserInteraction;
+import ambit2.workflow.library.LoginSequence;
+
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class DBUtilityWorkflow extends Workflow {
-
+	public DBUtilityWorkflow() {
+        Sequence seq=new Sequence();
+        seq.setName("[Database utilities]");    	
+        /*
+        DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor> chain = new DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor>();
+        chain.add(new QueryInfo2Query());
+        chain.add(new ProcessorCreateQuery());
+    	//ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
+    	ActivityPrimitive<IQueryObject,IStoredQuery> p1 = new ActivityPrimitive<IQueryObject,IStoredQuery>( 
+    			DBWorkflowContext.QUERY,
+    			 DBWorkflowContext.STOREDQUERY,
+    				  (IDBProcessor)chain);
+    	
+    		
+	
+        p1.setName("Search");    
+        */
+        seq.addStep(new UserInteraction<SourceDataset>(
+        		new SourceDataset(),DBWorkflowContext.DATASET,"Define dataset"));
+        //seq.addStep(p1);
+        setDefinition(new LoginSequence(seq));
+	}
 }
