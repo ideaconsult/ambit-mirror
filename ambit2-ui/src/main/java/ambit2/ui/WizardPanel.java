@@ -55,8 +55,10 @@ public class WizardPanel extends JPanel {
         CellConstraints cc = new CellConstraints();
 
         JButton backButton = new JButton("< Back");
+        backButton.setEnabled(false);
         JButton nextButton = new JButton("Next >");
         JButton finishButton = new JButton("Finish");
+        finishButton.setEnabled(false);
         JButton helpButton = new JButton("Help");
         JButton cancelButton = new JButton("Cancel");
         
