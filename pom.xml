@@ -12,7 +12,7 @@ AMBIT was produced in response to the clear need for publicly accessible, method
 
 The AMBIT system consists of a database and functional modules allowing a variety of flexible searches and mining of the data stored in the database. The AMBIT database stores chemical structures, their identifiers such as CAS, Inchi numbers; attributes such as molecular descriptors, experimental data together with test descriptions, literature references. The database can also store QSAR models. In addition the software can generate a suite of 2D and 3D molecular descriptors, thanks to CDK library. 
 
-The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on �?descriptor space’; approaches based on mechanistic understanding; and approaches based on structural similarity. Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.</description>
+The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on �?descriptor space’; approaches based on mechanistic understanding; and approaches based on structural similarity. Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.</description>
   <url>http://ambit.sourceforge.net</url>
   <repositories>
   	<repository>
@@ -61,16 +61,50 @@ The database can be searched by identifiers, attribute value or range, experimen
   		<name>Nina Jeliazkova</name>
   		<email>nina@acad.bg</email>
   		<roles>
-  			<role>?</role>
+  			<role>System Architecture</role>
+  			<role>Java Developer</role>  		
+  			<role>Cheminformatics algorithms</role>  	
+  			<role>Database developer</role>  	  			
   		</roles>
   	</developer>
   	<developer>
+  		<id>ntk73</id>
+  		<name>Nikolay Kochev</name>
+  		<roles>
+  			<role>Cheminformatics algorithms</role>  		
+  			<role>Java Developer</role>
+  		</roles>    		
+  	</developer>  	  	
+  	<developer>
   		<id>JJ</id>
   		<name>Joanna Jaworska</name>
+  		<roles>
+  			<role>Specification</role>
+  		</roles>    		  		
   	</developer>
+  	<developer>
+  		<id>martin.martinov</id>
+  		<name>Martin Martinov</name>
+  		<roles>
+  			<role>Java Developer</role>
+  		</roles>    		  		
+  	</developer>
+  	<developer>
+  		<id>vj</id>
+  		<name>Vedrin Jeliazkov</name>
+  		<roles>
+  			<role>Quality assurance</role>  		
+  			<role>Installer development</role>
+  		</roles>    	  		
+  	</developer> 
   </developers>
   <scm>
   	<url>https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all</url>
+  	<!-- 
+    <connection>scm:svn:http://server/path/to/project/trunk</connection>
+    <developerConnection>scm:svn:https://server/path/to/project/trunk</developerConnection>
+    <url>scm:svn:http://server/path/to/view/trunk</url>
+     -->
   </scm>
   <organization>
   	<name>Ideaconsult Ltd.</name>
@@ -218,6 +252,27 @@ The database can be searched by identifiers, attribute value or range, experimen
         <artifactId>maven-clover-plugin</artifactId>
       </plugin>      
 	-->             
+          <plugin>
+          <!-- UML class diagrams  -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <doclet>gr.spinellis.umlgraph.doclet.UmlGraph</doclet>
+
+              <!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
+              <docletArtifact>
+                <groupId>gr.spinellis</groupId>
+                <artifactId>UmlGraph</artifactId>
+                <version>4.4</version>
+              </docletArtifact>
+              <additionalparam>-views</additionalparam>
+            </configuration>
+         </plugin>
+ 	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+      </plugin>
+ 	
     </plugins>
 
     
