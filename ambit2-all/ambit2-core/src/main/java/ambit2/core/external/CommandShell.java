@@ -27,6 +27,7 @@ package ambit2.core.external;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -45,12 +46,14 @@ import ambit2.core.log.AmbitLogger;
 public abstract class CommandShell<INPUT,OUTPUT> {
 	public static final String os_MAC = "Mac OS";
 	public static final String os_WINDOWS = "Windows";
+	public static final String os_WINDOWSVISTA = "Windows Vista";
 	public static final String os_LINUX = "Linux";
 	
     protected static AmbitLogger logger = new  AmbitLogger(CommandShell.class);	
 	protected Hashtable<String, String> executables; //<os.name, executable>
 	protected String inputFile = null;
 	protected String outputFile = null;
+	protected boolean runAsync = false;
 	
 	protected CommandShell() throws ShellException {
 		executables = new Hashtable<String, String>();
@@ -69,6 +72,7 @@ public abstract class CommandShell<INPUT,OUTPUT> {
 		return addExecutable(os_MAC,executable);
 	}
 	public String addExecutableWin(String executable) throws ShellException  {
+		addExecutable(os_WINDOWSVISTA,executable);
 		return addExecutable(os_WINDOWS,executable);
 	}
 	public String addExecutableLinux(String executable) throws ShellException  {
@@ -119,6 +123,7 @@ public abstract class CommandShell<INPUT,OUTPUT> {
         else path="";    	
         return path;
     }
+
     protected OUTPUT runShell(INPUT mol,String execString) throws ShellException {
     	try {
     			File file = new File(execString);
@@ -134,7 +139,73 @@ public abstract class CommandShell<INPUT,OUTPUT> {
 
                 ProcessBuilder builder = new ProcessBuilder(command);
                 //If the value is set to true, the standard error is merged with the standard output
-                builder.redirectErrorStream(true);
+                
+                Map<String, String> environ = builder.environment();
+                builder.directory(new File(path));
+                
+                
+                if (!runAsync) {
+                    builder.redirectErrorStream(true);
+                    logger.info("<" + toString() + " filename=\""+execString+"\">");
+                    long now=System.currentTimeMillis();    
+                    final Process process = builder.start();
+                    InputStream is = process.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+                    BufferedReader br = new BufferedReader(isr);
+                    String line;
+                    logger.info("<stdout>");
+                    while ((line = br.readLine()) != null) {
+                    	logger.info(line);
+                    }
+                    logger.info("</stdout>");
+                	
+	                logger.info("<wait process=\""+execString+"\">");
+	
+	                int exitVal = process.waitFor();
+	                logger.info("</wait>");
+	                logger.info("<exitcode value=\""+Integer.toString(exitVal)+"\">");
+	                logger.info("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
+	                logger.info("</" + toString() + ">");
+	                
+	                OUTPUT newmol = null;
+	                if (exitCodeOK(exitVal)) {
+	                	logger.info("<parse>");
+	                	newmol = parseOutput(path, mol);
+	                	logger.info("</parse>");
+	                	
+	                }
+	                return newmol;	                
+                } else {
+                	final Process process = builder.start();
+                	return transform(process,mol);
+                }
+
+                
+            } catch (Throwable x) {
+            	logger.debug(x.getMessage());
+                throw new ShellException(this,x);
+            }
+    }
+    protected OUTPUT transform(Process process,INPUT cmd) {
+    	return transform(cmd);
+    }
+    /*
+    protected Process runAsync(INPUT mol,String execString) throws ShellException {
+    	try {
+    			File file = new File(execString);
+    			String path = getPath(file);
+    			
+                List<String> inFile = prepareInput(path,mol);
+
+                List<String> command = new ArrayList<String>();
+                command.add(execString);
+                if (inFile != null)
+	                for (int j=0; j < inFile.size();j++)
+	                	command.add(inFile.get(j));
+
+                ProcessBuilder builder = new ProcessBuilder(command);
+                //If the value is set to true, the standard error is merged with the standard output
+                //builder.redirectErrorStream(true);
                 Map<String, String> environ = builder.environment();
                 builder.directory(new File(path));
                 
@@ -172,7 +243,8 @@ public abstract class CommandShell<INPUT,OUTPUT> {
             	logger.debug(x.getMessage());
                 throw new ShellException(this,x);
             }
-    }
+    }    
+    */
     protected boolean exitCodeOK(int exitVal) {
     	return exitVal == 0;
     }
@@ -222,3 +294,4 @@ public class CmdProcessBuilder {
 }
 
 */
+
