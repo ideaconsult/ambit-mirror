@@ -10,11 +10,17 @@ Introduction
   AMBIT2 is a complete redesign of {{{http://ambit.acad.bg}AMBIT}} software, featuring improved user interface, support for workflows, plugins and reporting for user actions.
 
 * Timeline
+	
+   * Prototype 
+
+		* Oct 2008
+
+		* Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.00-setup.exe} AmbitXT Prototype}} Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed will contain the original EINECS list.
 
    * Initial release
 
- Dec 2008
+ 		* Dec 2008
 
    * Final release
 
- June 2009
+ 		* June 2009
