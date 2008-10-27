@@ -28,9 +28,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.StringTokenizer;
 
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.exceptions.AmbitIOException;
+import ambit2.db.LoginInfo;
 
 /**
  * Used in {@link MySQLShell}
@@ -47,6 +49,51 @@ public class MySQLCommand implements ICommand, Serializable {
     protected String stopFile = "ambit2/db/windows/mysql-stop.txt";
     protected String mysqlPath = "../mysql";
     protected String errFile = "/data/ambit.err";
+    protected LoginInfo info;
+    
+    protected static final String OPTION_PORT="--port=";
+    protected static final String OPTION_USER="--user=";
+    protected static final String OPTION_LOGERROR="--log-error=";
+    
+    public MySQLCommand() {
+    	info = new LoginInfo();
+
+    	try {
+        	String run = getCommandFromFile(COMMAND.START);
+        	StringTokenizer st = new StringTokenizer(run," ");
+        	while (st.hasMoreElements()) {
+        		String option = st.nextToken().trim();
+        		if (option.startsWith(OPTION_PORT)) 
+        			info.setPort(option.substring(7));
+        		else if (option.startsWith(OPTION_LOGERROR)) 
+        			setErrFile("/data/"+option.substring(12));
+        		
+        	}
+        	
+        	run = getCommandFromFile(COMMAND.STOP);
+        	st = new StringTokenizer(run," ");
+        	while (st.hasMoreElements()) {
+        		String option = st.nextToken().trim();
+        		if (option.startsWith(OPTION_USER)) 
+        			info.setUser(option.substring(7));        		
+
+        	}        	
+    	} catch (Exception x) {
+        	info.setHostname("localhost");
+        	info.setPort("33060");
+        	info.setUser("root");
+        	info.setPassword("");    		
+    	}
+    }
+    
+	public LoginInfo getInfo() {
+		return info;
+	}
+
+	public void setInfo(LoginInfo info) {
+		this.info = info;
+	}
+
 	public String getErrFile() {
 		return errFile;
 	}

@@ -172,6 +172,8 @@ public class MySQLShell  implements IProcessor<MySQLCommand,MySQLCommand> {
 			target.setException(new Exception("Unknown command "+ target));
 			
 		}
+		if (target.getException()!= null)
+			throw new AmbitException(target.getException());
 		return target;
 	}
 	public void setEnabled(boolean value) {
