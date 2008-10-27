@@ -24,6 +24,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow.library;
 
+import java.sql.Connection;
+
+import javax.sql.DataSource;
+
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.workflow.DBWorkflowContext;
@@ -43,6 +47,7 @@ public class LoginSequence extends Sequence {
                 DBWorkflowContext.DBCONNECTION_URI,new Performer() {
             @Override
             public Object execute() {
+            	System.out.println(this);
                 Object o = getTarget();
                 if (o == null) {
                     ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>(new LoginInfo());
@@ -68,11 +73,23 @@ public class LoginSequence extends Sequence {
         Conditional connect = new Conditional(
                 new TestCondition() {
                     public boolean evaluate() {
+                    	System.out.println(this);
                         try {
                             Object o = context.get(DBWorkflowContext.DBCONNECTION_URI);
                             if (o != null) {
-                                context.put(DBWorkflowContext.DATASOURCE,DatasourceFactory.getDataSource(o.toString()));
-                                return  true;
+                            	DataSource datasource = DatasourceFactory.getDataSource(o.toString());
+                                
+                                try {
+                                	Connection conn = datasource.getConnection();
+                                	context.put(DBWorkflowContext.DATASOURCE,datasource);
+                                	conn.close();
+                                    return  true;
+                                } catch (Exception x) {
+                                	context.put(DBWorkflowContext.ERROR, x);
+                                    context.remove(DBWorkflowContext.DBCONNECTION_URI);
+                                    return false;                                	
+                                }
+
                             } else {
                                 context.remove(DBWorkflowContext.DBCONNECTION_URI);
                                 return false;
@@ -85,11 +102,13 @@ public class LoginSequence extends Sequence {
                     }
                 }, 
                 onSuccess,
-                login);
-        connect.setName("connect");
+                null);
+        connect.setName("Connect");
+        setName("[Log into database]");
         
         addStep(login);
         addStep(connect);
+        
 	}
 	@Override
 	public String toString() {
