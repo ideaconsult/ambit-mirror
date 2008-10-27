@@ -25,30 +25,74 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.plugin.usermgr;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
-
-import com.microworkflow.process.Workflow;
+import javax.swing.JComponent;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import nplugins.shell.PluginMainPanel;
 import nplugins.shell.application.Utils;
+import ambit2.core.data.ClassHolder;
+import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
+import ambit2.workflow.IMultiWorkflowsPlugin;
+import ambit2.workflow.ui.MultiWorkflowsPanel;
+import ambit2.workflow.ui.UserInteractionEvent;
+import ambit2.workflow.ui.WorkflowConsolePanel;
+import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
-public class UserManagerPlugin extends DBWorkflowPlugin {
-	
+import com.microworkflow.process.Workflow;
+
+public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflowsPlugin {
+	protected List<ClassHolder> workflows;	
+	protected WorkflowOptionsLauncher contextListener;
+	public UserManagerPlugin() {
+		workflows = new ArrayList<ClassHolder>();
+		workflows.add(new ClassHolder("ambit2.plugin.usemgr.UserManagerWorkflow","Add user","Add new user in AMBIT database","images/users.png"));
+		contextListener = new WorkflowOptionsLauncher(null);
+		Vector<String> props = new Vector<String>();		
+		props.add(UserInteractionEvent.PROPERTYNAME);
+		props.add(DBWorkflowContext.ERROR);
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DBCONNECTION_URI);
+
+		contextListener.setProperties(props);
+		contextListener.setWorkflowContext(getWorkflowContext());
+		
+	}
+	public List<ClassHolder> getWorkflows() {
+		return workflows;
+	}
 	@Override
 	protected Workflow createWorkflow() {
-		return new UserManagerWorkflow();
+		return new Workflow();
 	}
-
-
+	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MultiWorkflowsPanel<UserManagerPlugin>(this);
 	}
+	@Override
+	public JComponent[] createDetailsComponent() {
+		JComponent[] c = super.createDetailsComponent();
+		/*
+		 * smt weird happen if passing workflow at constructor - workflows can't be run!
+		 */
+		WorkflowConsolePanel reports = new WorkflowConsolePanel();
+		//WorkflowConsolePanel reports = new WorkflowConsolePanel(getWorkflow());
+		reports.setWorkflowContext(getWorkflowContext());
+
+		Vector<String> props = new Vector<String>();	
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DATASET);
+		props.add(DBWorkflowContext.ERROR);
+		reports.setProperties(props);
+		return new JComponent[] {reports,c[0]};
+	}	
+	
 	public ImageIcon getIcon() {
 	    return Utils.createImageIcon("ambit2/plugin/usermgr/images/user_16.png");
 	}
