@@ -24,6 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,6 +37,11 @@ import java.io.InputStreamReader;
 
 import javax.swing.ImageIcon;
 
+/**
+ * Useful functions. TODO - move to core package?
+ * @author nina
+ *
+ */
 public class Utils {
 	
     public static ImageIcon createImageIcon(String path) throws Exception {
@@ -68,5 +78,41 @@ public class Utils {
             }
             in.close();
             return buffer.toString();
+    }    
+    /**
+     * TODO resolve Duplicate with CompoundImageTools method
+     * @param g2
+     * @param background
+     * @param borderColor
+     * @param shadowWidth
+     * @param shape
+     */
+    public static void paintBorderShadow(Graphics2D g2, Color background, Color borderColor, int shadowWidth, Shape shape) {
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
+        int sw = shadowWidth*2;
+        for (int i=sw; i >= 2; i-=2) {
+            float pct = (float)(sw - i) / (sw - 1);
+            g2.setColor(getMixedColor(borderColor, pct,
+                                      background, 1.0f-pct));
+            g2.setStroke(new BasicStroke(i));
+            g2.draw(shape);
+        }
+    }
+    /**
+     * TODO resolve Duplicate with CompoundImageTools method 
+     * @param c1
+     * @param pct1
+     * @param c2
+     * @param pct2
+     * @return
+     */
+    public static Color getMixedColor(Color c1, float pct1, Color c2, float pct2) {
+        float[] clr1 = c1.getComponents(null);
+        float[] clr2 = c2.getComponents(null);
+        for (int i = 0; i < clr1.length; i++) {
+            clr1[i] = (clr1[i] * pct1) + (clr2[i] * pct2);
+        }
+        return new Color(clr1[0], clr1[1], clr1[2], clr1[3]);
     }    
 }
