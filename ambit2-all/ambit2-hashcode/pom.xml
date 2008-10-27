@@ -9,7 +9,6 @@
   <artifactId>ambit2-hashcode</artifactId>
   <name>ambit2-hashcode</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -18,4 +17,10 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <developers>
+  	<developer>
+  		<id>martin.martinov</id>
+  		<name>Martin Martinov</name>
+  	</developer>
+  </developers>  
 </project>
