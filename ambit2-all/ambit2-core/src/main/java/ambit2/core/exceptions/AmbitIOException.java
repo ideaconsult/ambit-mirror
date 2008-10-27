@@ -16,7 +16,7 @@ public class AmbitIOException extends AmbitException {
     public static String MSG_ERRORONOPEN = "Error while opening file\t";
     public static String MSG_ERRORONSAVE = "Error while saving file\t";
     public static String MSG_UNSUPPORTEDFORMAT = "File format not supported\t";
-    
+    public static String MSG_NOTFOUND = "File not found\t";
     
     
     /**
@@ -35,7 +35,7 @@ public class AmbitIOException extends AmbitException {
         // TODO Auto-generated constructor stub
     }
     public AmbitIOException(String arg0,String filename) {
-        super(arg0);
+        super(arg0+filename);
         // TODO Auto-generated constructor stub
     }
     /**
