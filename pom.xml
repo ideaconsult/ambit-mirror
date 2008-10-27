@@ -99,12 +99,9 @@ The database can be searched by identifiers, attribute value or range, experimen
   	</developer> 
   </developers>
   <scm>
-  	<url>https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all</url>
-  	<!-- 
-    <connection>scm:svn:http://server/path/to/project/trunk</connection>
-    <developerConnection>scm:svn:https://server/path/to/project/trunk</developerConnection>
-    <url>scm:svn:http://server/path/to/view/trunk</url>
-     -->
+    <connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all</connection>
+    <developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all</developerConnection>
+    <url>http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/</url>
   </scm>
   <organization>
   	<name>Ideaconsult Ltd.</name>
@@ -237,9 +234,12 @@ The database can be searched by identifiers, attribute value or range, experimen
 </licenses>
  <reporting>
     <plugins>
+    <!-- 
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
+        
       </plugin>
+ -->      
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jxr-maven-plugin</artifactId>
@@ -256,6 +256,7 @@ The database can be searched by identifiers, attribute value or range, experimen
           <!-- UML class diagrams  -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
+			<version>2.0</version>            
             <configuration>
               <doclet>gr.spinellis.umlgraph.doclet.UmlGraph</doclet>
 
@@ -268,11 +269,12 @@ The database can be searched by identifiers, attribute value or range, experimen
               <additionalparam>-views</additionalparam>
             </configuration>
          </plugin>
+         <!-- needs svn executable  
  	  <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
       </plugin>
- 	
+ 	 -->
     </plugins>
 
     
