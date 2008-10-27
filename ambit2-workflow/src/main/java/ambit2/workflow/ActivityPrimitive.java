@@ -47,6 +47,9 @@ public class ActivityPrimitive<Target,Result> extends Primitive {
     public ActivityPrimitive(String targetKey, String resultKey, IDBProcessor<Target, Result> processor) {
         super(targetKey,resultKey,new DBProcessorPerformer<Target, Result>(processor));
     }
+    public ActivityPrimitive(String targetKey, String resultKey, IDBProcessor<Target, Result> processor, boolean skipSessions) {
+        super(targetKey,resultKey,new DBProcessorPerformer<Target, Result>(processor,skipSessions));
+    }    
     public ActivityPrimitive(String targetKey, String resultKey, IProcessor<Target, Result> processor) {
         super(targetKey,resultKey,new ProcessorPerformer<IProcessor<Target, Result>,Target, Result>(processor));
     }

@@ -40,9 +40,13 @@ import ambit2.db.processors.ProcessorCreateSession;
  * @param <Result>
  */
 public class DBProcessorPerformer<Target,Result> extends ProcessorPerformer<IDBProcessor<Target,Result>,Target,Result> {
-
-    public DBProcessorPerformer(IDBProcessor<Target, Result> processor) {
+	protected boolean skipSession = false;
+	public DBProcessorPerformer(IDBProcessor<Target, Result> processor,boolean skipSession) {
 		super(processor);
+		this.skipSession = skipSession;
+	}
+    public DBProcessorPerformer(IDBProcessor<Target, Result> processor) {
+		this(processor,false);
 	}
 
     @Override
@@ -50,21 +54,22 @@ public class DBProcessorPerformer<Target,Result> extends ProcessorPerformer<IDBP
         if (processor == null) return null;
         try {
         	DataSource datasource = (DataSource)get(DBWorkflowContext.DATASOURCE);
-            //System.out.println(datasource);
-            
+            if (!skipSession) {
 
-            SessionID session  = (SessionID)get(DBWorkflowContext.SESSION);
-            if ((session == null) || (session.getId()<=0)) {
-            	ProcessorCreateSession createsession = new ProcessorCreateSession();
-            	Connection c = datasource.getConnection();
-            	createsession.setConnection(c);
-            	session = createsession.process(new SessionID());
-            	context.put(DBWorkflowContext.SESSION,session);
-            	createsession.close();
+	            SessionID session  = (SessionID)get(DBWorkflowContext.SESSION);
+	            if ((session == null) || (session.getId()<=0)) {
+	            	ProcessorCreateSession createsession = new ProcessorCreateSession();
+	            	Connection c = datasource.getConnection();
+	            	createsession.setConnection(c);
+	            	session = createsession.process(new SessionID());
+	            	context.put(DBWorkflowContext.SESSION,session);
+	            	createsession.close();
+	            }
+	            processor.setSession(session);
             }
         	Connection c = datasource.getConnection();
             processor.setConnection(c);            
-            processor.setSession(session);
+            
             Target t = getTarget();
             System.out.println(t);
             Result result = processor.process(t);
