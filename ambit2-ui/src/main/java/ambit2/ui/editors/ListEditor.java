@@ -11,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -34,7 +35,6 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
     /**
      * Holds the edited Album and vends ValueModels that adapt Album properties.
      */
-	
     protected JComponent[] fields;
     protected String[] columns = {"Name"};
     protected String detailsCaption = "Details";	
@@ -56,10 +56,10 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
 	}
 	public ListEditor(L list,final String[] columns, final String[] captions, String listCaption, String detailsCaption) {
 		super();
-
+		//setLayout(new BorderLayout());
+		setListCaption(listCaption);
+		setDetailsCaption(detailsCaption);
 		add(buildPanel(list, columns,captions));
-
-		
 	}
 	protected PresentationModel createPresentationModel() {
 		return new PresentationModel<V>(new ValueHolder(null, true));
@@ -124,6 +124,7 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
 		}
 		if (objectList == null) {
 			objectList = new JList(listModel);
+			setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			objectList.setCellRenderer(getListCellRenderer(columns));
 			initEventHandling();
@@ -132,8 +133,8 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
 
 	}
 
-	protected ListCellRenderer<V> getListCellRenderer(String[] columns) {
-		return new ListCellRenderer(columns);
+	protected ListCellRenderer getListCellRenderer(String[] columns) {
+		return new CustomListCellRenderer(columns);
 	}
 	public L getObject() {
 		return (L)listModel.getList();
@@ -171,13 +172,19 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
 			if (field instanceof JTextField) ((JTextField) field).setEditable(editable);
 			else if (field instanceof JFormattedTextField) ((JFormattedTextField) field).setEditable(editable);
 	}
-
-
+    public void setLayoutOrientation(int layoutOrientation) {
+    	if (objectList != null)
+    		objectList.setLayoutOrientation(layoutOrientation);
+    }
+    public void setCellRenderer(ListCellRenderer cellRenderer) {
+    	if (objectList != null)
+    		objectList.setCellRenderer(cellRenderer);
+    }
 }
 
-class ListCellRenderer<V> extends DefaultListCellRenderer {
+class CustomListCellRenderer<V> extends DefaultListCellRenderer {
 	protected String[] columns;
-	public ListCellRenderer(String[] columns) {
+	public CustomListCellRenderer(String[] columns) {
 		this.columns = columns;
 	}
     @Override
