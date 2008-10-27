@@ -28,6 +28,7 @@ import javax.swing.JComponent;
 
 import ambit2.ui.editors.IAmbitEditor;
 
+import com.microworkflow.ui.IWorkflowContextFactory;
 import com.microworkflow.ui.WorkflowContextListenerPanel;
 
 public abstract class AbstractEditor<T> extends WorkflowContextListenerPanel implements IAmbitEditor<T>{
@@ -36,6 +37,12 @@ public abstract class AbstractEditor<T> extends WorkflowContextListenerPanel imp
 	 */
 	private static final long serialVersionUID = -642999519451477721L;
 	protected T object;
+	public AbstractEditor() {
+		super(null);
+	}	
+	public AbstractEditor(IWorkflowContextFactory wfcfactory) {
+		super(wfcfactory);
+	}
 	public JComponent getJComponent() {
 		return this;
 	}
