@@ -47,7 +47,6 @@ public class LoginSequence extends Sequence {
                 DBWorkflowContext.DBCONNECTION_URI,new Performer() {
             @Override
             public Object execute() {
-            	System.out.println(this);
                 Object o = getTarget();
                 if (o == null) {
                 	Object ol = context.get(DBWorkflowContext.LOGININFO);
@@ -79,7 +78,6 @@ public class LoginSequence extends Sequence {
         Conditional connect = new Conditional(
                 new TestCondition() {
                     public boolean evaluate() {
-                    	System.out.println(this);
                         try {
                             Object o = context.get(DBWorkflowContext.DBCONNECTION_URI);
                             if (o != null) {

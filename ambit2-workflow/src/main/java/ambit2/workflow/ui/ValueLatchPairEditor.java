@@ -121,7 +121,6 @@ public class ValueLatchPairEditor<T> extends AbstractEditor<ValueLatchPair<T>>{
     }	
 	@Override
 	protected void animate(PropertyChangeEvent arg0) {
-		System.out.println(arg0);
 		if (arg0.getNewValue() instanceof ValueLatchPair) 
 			setObject(((ValueLatchPair)arg0.getNewValue()));
 		
