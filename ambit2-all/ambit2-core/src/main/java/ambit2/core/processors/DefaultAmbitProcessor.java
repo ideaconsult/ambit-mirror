@@ -40,6 +40,10 @@ import ambit2.core.log.AmbitLogger;
  * <b>Modified</b> 2006-4-15
  */
 public abstract  class DefaultAmbitProcessor<Target,Result> implements IProcessor<Target,Result> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4959472085664049891L;
 	protected PropertyChangeSupport propertyChangeSupport = null;
 	protected static AmbitLogger logger = new AmbitLogger(DefaultAmbitProcessor.class);
     protected boolean enabled=true;
