@@ -39,6 +39,7 @@ import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
 import nplugins.workflow.ExecuteWorkflowTask;
 import ambit2.core.data.ClassHolder;
+import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -77,7 +78,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		props.add(DBWorkflowContext.DATASOURCE);
         props.add(DBWorkflowContext.DATASET);
         props.add(DBWorkflowContext.BATCHSTATS);
-        
+        props.add(BatchProcessor.PROPERTY_BATCHSTATS);
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
