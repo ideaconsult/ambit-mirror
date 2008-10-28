@@ -13,6 +13,8 @@ import org.openscience.cdk.io.formats.IChemFormat;
 
 import ambit2.core.exceptions.AmbitIOException;
 
+import com.jgoodies.binding.beans.Model;
+
 
 
 /**
@@ -20,7 +22,7 @@ import ambit2.core.exceptions.AmbitIOException;
  * @author Nina Jeliazkova
  * <b>Modified</b> 2005-9-4
  */
-public class FileState implements IInputOutputState {
+public class FileState extends Model implements IInputOutputState {
 
 	protected static transient String MSG_FILEDONOTEXISTS = "File do not exists!\t";
 	protected static transient String MSG_CANTCREATEFILE = "Can't create file!\t";
@@ -139,7 +141,7 @@ public class FileState implements IInputOutputState {
 	 */
 	public synchronized void setFile(File file) {
 		this.file = file;
-		filename = file.getAbsolutePath();
+		setFilename(file.getAbsolutePath());
 		length = file.length();
 		lastModified = file.lastModified();
 		hashCode = file.hashCode();
