@@ -202,6 +202,7 @@ public class MySQLCommand implements ICommand, Serializable {
     @Override
     public String toString() {
     	if (process != null) return process.toString();
+    	if (getCommand() == null) return getClass().getName();
     	else return getCommand().toString();
     }
 }
