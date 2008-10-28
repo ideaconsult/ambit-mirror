@@ -29,6 +29,7 @@ import java.util.Vector;
 import javax.swing.JComponent;
 
 import nplugins.shell.application.NPluginsAction;
+import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
