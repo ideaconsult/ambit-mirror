@@ -20,8 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
-
+ */
 package ambit2.workflow;
 
 import java.util.List;
@@ -31,7 +30,17 @@ import ambit2.core.data.ClassHolder;
 
 import com.microworkflow.process.Workflow;
 
+/**
+ * Plugins, supporting multiple workflows should implement this interface;
+ * @author nina
+ *
+ */
 public interface IMultiWorkflowsPlugin extends INanoPlugin {
-	List<ClassHolder> getWorkflows();
 	Workflow getWorkflow();
+	void setWorkflow(Workflow workflow);
+	/**
+	 * 
+	 * @return Class description only, workflow objects are instantiated on demand 
+	 */
+	List<ClassHolder> getWorkflows();	
 }
