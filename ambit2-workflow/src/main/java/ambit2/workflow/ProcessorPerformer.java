@@ -29,12 +29,17 @@
 
 package ambit2.workflow;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.IProcessor;
 
 import com.microworkflow.execution.Performer;
 
-public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Result> extends Performer<Target,Result> {
+public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Result> 
+				extends Performer<Target,Result> implements PropertyChangeListener {
     public static String errorTag=DBWorkflowContext.ERROR;
     protected P processor;
     public ProcessorPerformer(P processor) {
@@ -44,7 +49,11 @@ public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Resul
         return processor;
     }
     public synchronized void setProcessor(P processor) {
+        if (this.processor instanceof DefaultAmbitProcessor) 
+        	((DefaultAmbitProcessor)this.processor).removePropertyChangeListener(this); 
         this.processor = processor;
+        if (processor instanceof DefaultAmbitProcessor) 
+        	((DefaultAmbitProcessor)processor).addPropertyChangeListener(this);
     }
     @Override
     public Result execute() {
@@ -57,5 +66,9 @@ public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Resul
             return null;
         }
     }
+	public void propertyChange(PropertyChangeEvent evt) {
+		context.put(evt.getPropertyName(),null);
+		context.put(evt.getPropertyName(),evt.getNewValue());
+	}
 
 }

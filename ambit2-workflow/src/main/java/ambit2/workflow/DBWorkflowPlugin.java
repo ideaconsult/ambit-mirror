@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 import nplugins.shell.application.NPluginsAction;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
+import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
@@ -64,6 +65,7 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 		props.add(DBWorkflowContext.DATASET);
 		props.add(DBWorkflowContext.ERROR);
 		props.add(DBWorkflowContext.BATCHSTATS);
+        props.add(BatchProcessor.PROPERTY_BATCHSTATS);		
 		reports.setProperties(props);
 		return new JComponent[] {reports};
 	}	
