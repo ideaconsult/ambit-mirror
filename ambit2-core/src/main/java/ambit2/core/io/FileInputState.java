@@ -106,4 +106,5 @@ public class FileInputState extends FileState implements IInputState {
 			return new IteratingXLSReader(stream,0);
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
+
 }
