@@ -15,7 +15,6 @@ public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStat
 	 * 
 	 */
 	private static final long serialVersionUID = -5659435501205598414L;
-	protected boolean enabled;
 	public BatchProcessor() {
 		this(null);
 	}
@@ -29,36 +28,43 @@ public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStat
 	public void setProcessor(IProcessor<IChemObject, IChemObject> processor) {
 		this.processor = processor;
 	}
-	public boolean isEnabled() {
-		return enabled;
-	}
 
 	public IBatchStatistics process(IInputState target) throws AmbitException {
 		try {
 			DefaultBatchStatistics stats = new DefaultBatchStatistics();
+			stats.setResultCaption("Read");
+			stats.frequency = 1;
 			IIteratingChemObjectReader reader = target.getReader();
 			IProcessor<IChemObject, IChemObject> processor = getProcessor();
 			if (processor == null)
 				throw new AmbitException("Processor not defined");
 			while (reader.hasNext()) {
+				if ((stats.getRecords(IBatchStatistics.RECORDS_READ) % stats.frequency)==0)
+					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);				
 				Object object= null;
+				long ms = System.currentTimeMillis();
 				try {
 					object = reader.next();
 					stats.increment(IBatchStatistics.RECORDS_READ);
-					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_READ, System.currentTimeMillis()-ms);
 				} catch (Exception x) {
 					stats.increment(IBatchStatistics.RECORDS_ERROR);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-ms);					
 					continue;					
 				}
+				ms = System.currentTimeMillis();
 				try {
 					processor.process((IChemObject)object);
 					stats.increment(IBatchStatistics.RECORDS_PROCESSED);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_PROCESSED, System.currentTimeMillis()-ms);
 				} catch (Exception x) {
-					stats.increment(IBatchStatistics.RECORDS_ERROR);	
+					stats.increment(IBatchStatistics.RECORDS_ERROR);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-ms);					
 					continue;
 				}				
 								
 			}
+			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);			
 			reader.close();
 			return stats;
 		} catch (Exception x) {
@@ -66,9 +72,5 @@ public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStat
 		}
 	}
 
-	public void setEnabled(boolean value) {
-		this.enabled = value;
-		
-	}
 
 }

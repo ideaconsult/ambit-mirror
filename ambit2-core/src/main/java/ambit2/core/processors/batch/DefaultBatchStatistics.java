@@ -74,29 +74,27 @@ public class DefaultBatchStatistics extends Observable implements
     
     public String toString() {
         if (!inProgress ||
-                (records[IBatchStatistics.RECORDS_PROCESSED] % frequency) == 0) {
+                (records[IBatchStatistics.RECORDS_READ] % frequency) == 0) {
             long t = getTimeElapsed();
             
             StringBuffer b = new StringBuffer();
-            //b.append("<html> ");
             b.append(resultCaption);
             b.append(" ");
-            b.append(Long.toString(records[IBatchStatistics.RECORDS_WRITTEN]));
+            b.append(Long.toString(records[IBatchStatistics.RECORDS_READ]));
             b.append(" records in ");
-            b.append(Long.toString(t/1000));
-            b.append(" seconds ");
-            if (records[IBatchStatistics.RECORDS_WRITTEN] > 0) {
-                b.append("<b>(");
-                long s = t/records[IBatchStatistics.RECORDS_WRITTEN];
+            b.append(Long.toString(t));
+            b.append(" ms");
+            if (records[IBatchStatistics.RECORDS_READ] > 0) {
+                b.append("(");
+                long s = t/records[IBatchStatistics.RECORDS_READ];
                 if (s > 1000) {
 		            b.append(s/1000);
-		            b.append(" s per record)</b>");                	
+		            b.append(" s per record)");                	
                 } else {	
 		            b.append(s);
-		            b.append(" ms per record)</b>");
+		            b.append(" ms per record)");
                 }
             }
-            //b.append("</html>");
             return b.toString();
         }	
         else return blank;
