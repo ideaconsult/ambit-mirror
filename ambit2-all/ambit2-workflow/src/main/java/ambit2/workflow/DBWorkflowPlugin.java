@@ -24,7 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
+import java.util.Vector;
+
+import javax.swing.JComponent;
+
+import nplugins.shell.application.NPluginsAction;
 import nplugins.workflow.MWorkflowPlugin;
+import ambit2.workflow.ui.WorkflowConsolePanel;
+import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.process.WorkflowContext;
 
@@ -36,6 +43,28 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	protected WorkflowContext createWorkflowContext() {
 		return new DBWorkflowContext();
 	}
-
+	public JComponent[] createOptionsComponent() {
+		ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+	    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+	             task,"Run",null);
+	    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
+		return new JComponent[] {new WorkflowViewPanel(workflow,action)};
+	}	
+	@Override
+	public JComponent[] createDetailsComponent() {
+		JComponent[] c = super.createDetailsComponent();
+		/*
+		 * smt weird happen if passing workflow at constructor - workflows can't be run!
+		 */
+		WorkflowConsolePanel reports = new WorkflowConsolePanel();
+		reports.setWorkflowContext(getWorkflowContext());
+		Vector<String> props = new Vector<String>();	
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DATASET);
+		props.add(DBWorkflowContext.ERROR);
+		props.add(DBWorkflowContext.BATCHSTATS);
+		reports.setProperties(props);
+		return new JComponent[] {reports};
+	}	
 
 }
