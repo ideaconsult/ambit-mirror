@@ -35,7 +35,9 @@ import javax.swing.JComponent;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
+import nplugins.workflow.ExecuteWorkflowTask;
 import ambit2.core.data.ClassHolder;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.workflow.DBWorkflowContext;
@@ -43,10 +45,11 @@ import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
-import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
+import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.process.Workflow;
+import com.microworkflow.process.WorkflowContext;
 
 /**
  * Provides workflows for several database related tasks
@@ -58,9 +61,10 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	protected List<ClassHolder> workflows;	
 	protected WorkflowOptionsLauncher contextListener;
 	public DBUtilityPlugin() {
+		super();
 		workflows = new ArrayList<ClassHolder>();
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Import","Import chemical structures into database","images/import.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate descriptors for structures in database","images/calculate.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start/Stop local MySQL database server","images/mysql.png"));
 		
@@ -71,7 +75,9 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		props.add(DBWorkflowContext.LOGININFO);
 		props.add(DBWorkflowContext.DBCONNECTION_URI);
 		props.add(DBWorkflowContext.DATASOURCE);
-        props.add(DBWorkflowContext.DATASET);		
+        props.add(DBWorkflowContext.DATASET);
+        props.add(DBWorkflowContext.BATCHSTATS);
+        
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
@@ -82,29 +88,18 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	}
 	@Override
 	protected Workflow createWorkflow() {
-		return new Workflow();
+		return new Workflow() {
+			@Override
+			public String toString() {
+				return "Database tools";
+			}
+		};
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		return new MultiWorkflowsPanel<DBUtilityPlugin>(this);
 	}
-	@Override
-	public JComponent[] createDetailsComponent() {
-		JComponent[] c = super.createDetailsComponent();
-		/*
-		 * smt weird happen if passing workflow at constructor - workflows can't be run!
-		 */
-		WorkflowConsolePanel reports = new WorkflowConsolePanel();
-		//WorkflowConsolePanel reports = new WorkflowConsolePanel(getWorkflow());
-		reports.setWorkflowContext(getWorkflowContext());
 
-		Vector<String> props = new Vector<String>();	
-		props.add(DBWorkflowContext.LOGININFO);
-		props.add(DBWorkflowContext.DATASET);
-		props.add(DBWorkflowContext.ERROR);
-		reports.setProperties(props);
-		return new JComponent[] {reports,c[0]};
-	}
 	public ImageIcon getIcon() {
 	    return Utils.createImageIcon("ambit2/plugin/dbtools/images/database_16.png");
 	}
@@ -136,4 +131,13 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	public String toString() {
 		return "Database tools";
 	}
+	
+	public JComponent[] createOptionsComponent() {
+		ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+	    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+	             task,"Run",null);
+	    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
+		return new JComponent[] {new WorkflowViewPanel(workflow,action)};
+	}	
+	
 }
