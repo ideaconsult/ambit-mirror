@@ -50,11 +50,17 @@ public class LoginSequence extends Sequence {
             	System.out.println(this);
                 Object o = getTarget();
                 if (o == null) {
-                    ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>(new LoginInfo());
+                	Object ol = context.get(DBWorkflowContext.LOGININFO);
+                	if ((ol == null) || !(ol instanceof LoginInfo)) {
+                		ol = new LoginInfo();
+                	}
+                		
+                    ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>((LoginInfo)ol);
                     context.put(DBWorkflowContext.USERINTERACTION,latch);
                     //This is a blocking operation!
                     try {
                         LoginInfo li = latch.getLatch().getValue();
+                        context.put(DBWorkflowContext.LOGININFO,li);
                         context.remove(DBWorkflowContext.USERINTERACTION);
                         return DatasourceFactory.getConnectionURI(
                                 li.getScheme(), li.getHostname(), li.getPort(), 
