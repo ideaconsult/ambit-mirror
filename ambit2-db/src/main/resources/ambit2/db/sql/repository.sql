@@ -162,7 +162,7 @@ CREATE TABLE  `structure_fields` (
   PRIMARY KEY  (`idfieldname`,`idstructure`),
   KEY `idstructure` (`idstructure`),
   KEY `fk_structure` (`idstructure`),
-  KEY `fk_field` (`idfieldname`),
+  KEY `fk_field` (`value`),
   CONSTRAINT `fk_field3` FOREIGN KEY (`idfieldname`) REFERENCES `field_names` (`idfieldname`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_structure3` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
 );
