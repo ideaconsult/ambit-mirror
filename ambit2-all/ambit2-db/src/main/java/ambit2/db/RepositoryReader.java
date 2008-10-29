@@ -69,7 +69,7 @@ public class RepositoryReader<Target > extends AbstractDBProcessor<Target, Struc
 		return rs.next();
 	}
 	public StructureRecord next() throws SQLException {
-		return new StructureRecord(rs.getInt(1),rs.getInt(2),null,rs.getString(3));
+		return new StructureRecord(rs.getInt(2),rs.getInt(1),null,rs.getString(3));
 	}	
 	public String getStructure(int idstructure)  throws SQLException {
 		ps_structurebyid.clearParameters();
