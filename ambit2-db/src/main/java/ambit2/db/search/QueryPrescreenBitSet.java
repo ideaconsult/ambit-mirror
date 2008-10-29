@@ -19,15 +19,15 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 		//int bc = bitset.cardinality();
 		StringBuffer b = new StringBuffer();
 			//b.append("select cbits,bc,? as NA,round(cbits/(bc+?-cbits),2) as ");
-			b.append("select ? as idquery,L.idchemical,-1 as idstructure,1 as selected,cbits as metric from");
-			b.append("\n(select fp1024.idchemical,(");
+			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,cbits as metric from");
+			b.append("\n(select fp1024.idchemical,structure.idstructure,(");
 			for (int h=0; h < 16; h++) {
 				b.append("bit_count(? & fp");
 				b.append(Integer.toString(h+1));
 				b.append(")");
 				if (h<15) b.append(" + "); else b.append(") ");
 			}
-			b.append(" as cbits,bc from fp1024 ");
+			b.append(" as cbits,bc from fp1024 join structure using(idchemical) ");
 
 			b.append (") as L, chemicals ");
 			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical");
