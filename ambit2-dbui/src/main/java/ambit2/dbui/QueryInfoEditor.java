@@ -208,6 +208,7 @@ public class QueryInfoEditor extends JPanel implements IAmbitEditor<QueryInfo> {
         			editAction.setMolecule(getObject().getMolecule());
         			editAction.actionPerformed(null);
         			panel2d.setAtomContainer(editAction.getMolecule(), true);
+        			object.setMolecule(editAction.getMolecule());
         		}	
         	}
         });
