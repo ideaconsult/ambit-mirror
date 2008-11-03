@@ -26,35 +26,52 @@ package ambit2.workflow.library;
 
 import ambit2.db.SourceDataset;
 import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.UserInteraction;
 
-import com.microworkflow.execution.Performer;
-import com.microworkflow.process.Primitive;
-import com.microworkflow.process.ValueLatchPair;
+import com.microworkflow.process.Activity;
+import com.microworkflow.process.Conditional;
+import com.microworkflow.process.Sequence;
+import com.microworkflow.process.TestCondition;
+import com.microworkflow.process.WorkflowContext;
 
-public class DatasetSelection extends Primitive {
-	public DatasetSelection() {
-		super(DBWorkflowContext.DATASET,DBWorkflowContext.DATASET,new Performer() {
-	            @Override
-	            public Object execute() {
-	                Object o = getTarget();
-	                if (o == null) {
-	                    ValueLatchPair<SourceDataset> latch = new ValueLatchPair<SourceDataset>(new SourceDataset());
-	                    context.put(DBWorkflowContext.USERINTERACTION,latch);
-	                    //This is a blocking operation!
-	                    try {
-	                        SourceDataset li = latch.getLatch().getValue();
-	                        context.put(DBWorkflowContext.USERINTERACTION,null);
-	                        return li;
-	                    } catch (InterruptedException x) {
-	                        context.put(DBWorkflowContext.ERROR, x);
-	                        context.put(DBWorkflowContext.USERINTERACTION,null);
-	                        return null;
-	                    }
-	                    
-	                } else return o;    
-	            }
-	        }); 
-	    setName("datasource");   
-	}
+public class DatasetSelection extends Sequence {
 	
+	public DatasetSelection(Activity onSuccess, WorkflowContext context) {
+        this(onSuccess,getInitialDataset(context));
+	}
+	protected static SourceDataset getInitialDataset(WorkflowContext context) {
+    	Object ol = context.get(DBWorkflowContext.DATASET);
+    	if ((ol == null) || !(ol instanceof SourceDataset)) {
+    		ol = new SourceDataset();
+    	}        
+    	return (SourceDataset)ol;
+	}
+	public DatasetSelection(Activity onSuccess) {
+		this(onSuccess,new SourceDataset());
+	}
+	public DatasetSelection(Activity onSuccess, SourceDataset dataset) {
+        
+        UserInteraction<SourceDataset> input = new UserInteraction<SourceDataset>(
+        		dataset,DBWorkflowContext.DATASET,"Select dataset");
+        input.setName("Select dataset");
+
+        Conditional verify = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+                    	Object object = context.get(DBWorkflowContext.DATASET);
+                    	if ((object != null) && (object instanceof SourceDataset)) {
+                    		return true; 
+                    	} 
+                    	return false;
+                    }
+                }, 
+                onSuccess,
+                null);
+        verify.setName("Verify dataset");
+        setName("[Select dataset]");
+        
+        addStep(input);
+        addStep(verify);
+        
+	}	
 }
