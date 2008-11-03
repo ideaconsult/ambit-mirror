@@ -13,6 +13,12 @@ public class DefaultBatchStatistics extends Observable implements
 	protected long[] records = {0,0,0,0};
 	protected long[] time_elapsed = {0,0,0,0};
 	protected long frequency = 50;
+	public long getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(long frequency) {
+		this.frequency = frequency;
+	}
 	protected static final String blank = "";
 	protected boolean inProgress = true;
 	protected String resultCaption = "Found";
