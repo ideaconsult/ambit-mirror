@@ -29,6 +29,8 @@ public class QueryCombined<Q extends IQueryObject> extends ArrayList<Q> implemen
 	}
 
 	public String getSQL() throws AmbitException {
+		if (size() == 0)
+			throw new AmbitException("Undefined query");
 		if (combine_as_and)
 			return getSQL_and();
 		else
