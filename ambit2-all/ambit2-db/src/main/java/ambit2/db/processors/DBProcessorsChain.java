@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import ambit2.core.processors.ProcessorsChain;
 import ambit2.db.IDBProcessor;
@@ -73,10 +74,20 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 	}
 
 	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
+		for (int i=0; i < size();i++)
+			get(i).open();
 
 	}
-
+	@Override
+	public void close() {
+		for (int i=0; i < size();i++)
+			try {
+			get(i).close();
+			} catch (SQLException x) {
+				x.printStackTrace();
+			}
+		super.close();
+	}
 	public void setSession(SessionID session) {
 		sessionID = session;
 		for (int i=0; i < size();i++)
