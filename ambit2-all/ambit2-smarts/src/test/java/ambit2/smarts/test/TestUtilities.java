@@ -39,7 +39,7 @@ public class TestUtilities
 	//static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
-	static SmartsFingerprinter sfp = new SmartsFingerprinter();
+	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
 	
 	
 	public static void printSmartsTokens(String smarts)
@@ -209,8 +209,8 @@ public class TestUtilities
 		if (!errorMsg.equals(""))		
 			return(-1);
 		
-		sfp.forceAromaticBonds = true;
-		IMolecule mol =  sfp.extractAtomContainer(query);
+		smToChemObj.forceAromaticBonds = true;
+		IMolecule mol =  smToChemObj.extractAtomContainer(query);
 		
 		System.out.println(smarts);
 		printAromaticity(mol);
@@ -337,14 +337,14 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
 		
 		//Cheking [OH]AA!-*
-		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "COCC=N");
-		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC=N");
-		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC-N");
-		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[H][O]CC=N");
-		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[O+]CC=N");
-		tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OSC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "COCC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC-N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[H][O]CC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[O+]CC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OSC=N");
 		
-		tu.testSmartsManagerBoolSearch("C~/[i]=[i]~/C", "CC=CC");
+		//tu.testSmartsManagerBoolSearch("C~/[i]=[i]~/C", "CC=CC");
 		
 		
 		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
@@ -371,8 +371,8 @@ public class TestUtilities
 		//tu.testFingerprint();
 		//tu.testWithFile("\\NCI001000.txt","ExtractAtomContainer");
 		
-		//int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
-		//System.out.println("res = " + res);
+		int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
+		System.out.println("res = " + res);
 		
 	}
 	
