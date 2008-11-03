@@ -81,7 +81,7 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
     private LoggingTool logger;
     private String currentLine;
     private IChemFormat currentFormat;
-    private final ReaderFactory factory = new ReaderFactory();
+    private final ReaderFactory factory = new ReaderFactoryExtended();
     
     private boolean nextAvailableIsKnown;
     private boolean hasNext;
