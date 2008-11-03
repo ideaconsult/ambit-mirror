@@ -52,10 +52,17 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 				Class clazz = params.get(i).getType();
 				if (Integer.class.equals(clazz))
 					ps.setInt(i+1, ((Integer)params.get(i).getValue()).intValue());
+				else
+				if (Long.class.equals(clazz))
+					ps.setLong(i+1, ((Long)params.get(i).getValue()).longValue());
+				else
 				if (Double.class.equals(clazz))
-					ps.setDouble(i+1, ((Double)params.get(i).getValue()).doubleValue());				
+					ps.setDouble(i+1, ((Double)params.get(i).getValue()).doubleValue());
+				else
 				if (String.class.equals(clazz))
-					ps.setString(i+1, params.get(i).getValue().toString());					
+					ps.setString(i+1, params.get(i).getValue().toString());
+				else
+					throw new SQLException("Unsupported type "+clazz);
 			}		
 	}
 }
