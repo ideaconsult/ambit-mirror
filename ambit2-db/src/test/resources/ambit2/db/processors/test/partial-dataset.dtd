@@ -1,0 +1,87 @@
+<!ELEMENT dataset (
+    chemicals*,
+    structure*,
+    fp1024*,
+    users*,
+    user_roles*,
+    roles*)>
+
+<!ELEMENT chemicals EMPTY>
+<!ATTLIST chemicals
+    idchemical CDATA #REQUIRED
+    inchi CDATA #IMPLIED
+    smiles CDATA #IMPLIED
+    formula CDATA #IMPLIED
+>
+
+<!ELEMENT structure EMPTY>
+<!ATTLIST structure
+    idchemical CDATA #REQUIRED
+    idstructure CDATA #REQUIRED
+    structure CDATA #REQUIRED
+    format CDATA #REQUIRED
+    updated CDATA #REQUIRED
+    user_name CDATA #IMPLIED
+    type_structure CDATA #REQUIRED
+    inchi CDATA #IMPLIED
+    smiles CDATA #IMPLIED
+    formula CDATA #IMPLIED
+>
+
+<!ELEMENT fp1024 EMPTY>
+<!ATTLIST fp1024
+    idchemical CDATA #REQUIRED
+    fp1 CDATA #REQUIRED
+    fp2 CDATA #REQUIRED
+    fp3 CDATA #REQUIRED
+    fp4 CDATA #REQUIRED
+    fp5 CDATA #REQUIRED
+    fp6 CDATA #REQUIRED
+    fp7 CDATA #REQUIRED
+    fp8 CDATA #REQUIRED
+    fp9 CDATA #REQUIRED
+    fp10 CDATA #REQUIRED
+    fp11 CDATA #REQUIRED
+    fp12 CDATA #REQUIRED
+    fp13 CDATA #REQUIRED
+    fp14 CDATA #REQUIRED
+    fp15 CDATA #REQUIRED
+    fp16 CDATA #REQUIRED
+    time CDATA #IMPLIED
+    bc CDATA #REQUIRED
+    status CDATA #REQUIRED
+    inchi CDATA #IMPLIED
+    smiles CDATA #IMPLIED
+    formula CDATA #IMPLIED
+>
+
+<!ELEMENT users EMPTY>
+<!ATTLIST users
+    user_name CDATA #REQUIRED
+    password CDATA #REQUIRED
+    email CDATA #REQUIRED
+    registration_status CDATA #REQUIRED
+    registration_date CDATA #REQUIRED
+    registration_id CDATA #IMPLIED
+    title CDATA #REQUIRED
+    firstname CDATA #REQUIRED
+    lastname CDATA #REQUIRED
+    address CDATA #REQUIRED
+    country CDATA #REQUIRED
+    webpage CDATA #REQUIRED
+    affiliation CDATA #REQUIRED
+    keywords CDATA #IMPLIED
+    reviewer CDATA #REQUIRED
+>
+
+<!ELEMENT user_roles EMPTY>
+<!ATTLIST user_roles
+    user_name CDATA #REQUIRED
+    role_name CDATA #REQUIRED
+>
+
+<!ELEMENT roles EMPTY>
+<!ATTLIST roles
+    role_name CDATA #REQUIRED
+>
+

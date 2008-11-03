@@ -45,6 +45,12 @@ The database can be searched by identifiers, attribute value or range, experimen
     	<artifactId>junit</artifactId>
     	<version>4.0</version>
     </dependency>
+    <dependency>
+    	<groupId>dbunit</groupId>
+    	<artifactId>dbunit</artifactId>
+    	<version>2.1</version>
+    	<scope>test</scope>
+    </dependency>
   </dependencies>
 <licenses>
   <license>
