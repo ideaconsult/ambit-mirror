@@ -29,21 +29,24 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import ambit2.core.log.AmbitLogger;
+import ambit2.core.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.IRepositoryAccess;
 
-public abstract class AbstractDBProcessor<Target,Result> implements IDBProcessor<Target,Result>, IRepositoryAccess {
-    protected static final AmbitLogger logger = new AmbitLogger(AbstractDBProcessor.class);
+public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitProcessor<Target, Result> implements IDBProcessor<Target,Result>, IRepositoryAccess {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 735962863075840837L;
+	protected static final AmbitLogger logger = new AmbitLogger(AbstractDBProcessor.class);
 	protected SessionID sessionID = null;
 	protected Connection connection; 
-	protected boolean enabled = true;
 	public boolean isEnabled() {
 		return enabled;
 	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public AbstractDBProcessor() {
+        super();
+    }
 
 	public Connection getConnection() {
 		return connection;
