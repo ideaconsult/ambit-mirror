@@ -15,6 +15,7 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -24,6 +25,7 @@ import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -194,6 +196,15 @@ public class CompoundImageTools {
 			IAtomContainer highlighted) {
 		paint(renderer, molecules, explicitH, g, highlighted,getImageSize());
 	}
+	/**
+	 * TODO sort molecules, in order to display the largest part first
+	 * @param renderer
+	 * @param molecules
+	 * @param explicitH
+	 * @param g
+	 * @param highlighted
+	 * @param imageSize
+	 */
 	public synchronized static void paint(Renderer2D renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
@@ -223,6 +234,7 @@ public class CompoundImageTools {
 			int row = 0;
 			int col = 0;
 			Point2d center = new Point2d();
+			
 			for (int i=0;i<molecules.getAtomContainerCount();i++) {
 				
 				Rectangle2D r = new Rectangle((int)Math.round(col*w),(int)Math.round((rows-row-1)*h),w,h);
