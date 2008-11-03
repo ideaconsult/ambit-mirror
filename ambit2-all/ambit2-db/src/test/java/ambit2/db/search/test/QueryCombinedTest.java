@@ -1,15 +1,37 @@
 package ambit2.db.search.test;
 
+import java.util.BitSet;
 import java.util.List;
 
+import org.openscience.cdk.templates.MoleculeFactory;
+
+import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryParam;
+import ambit2.db.search.QuerySimilarityBitset;
 import ambit2.db.search.QueryStored;
 import ambit2.db.search.QueryStructureByID;
 import ambit2.db.test.RepositoryTest;
 
 public class QueryCombinedTest extends RepositoryTest {
+	public void testStructure() throws Exception {
+		QueryStored qs = new QueryStored();
+		qs.setName("test");
+		
+		QueryCombined qc = new QueryCombined();
+		qc.setId(55);
+		QuerySimilarityBitset q = new QuerySimilarityBitset();
+		FingerprintGenerator gen = new FingerprintGenerator();
+		BitSet bitset = gen.process(MoleculeFactory.makeAlkane(10));
+		q.setBitset(bitset);
+		
+		assertNotNull(q.getParameters().get(1).getValue());
+		qc.add(q);
+		System.out.println(qc.getSQL());
+		System.out.println(q.getSQL());
+		
+	}
 	public void test() throws Exception {
 		/*
 		QueryDataset qs = new QueryDataset();
