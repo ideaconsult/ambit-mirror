@@ -69,10 +69,12 @@ public class DBProcessorPerformer<Target,Result> extends ProcessorPerformer<IDBP
             }
         	Connection c = datasource.getConnection();
             processor.setConnection(c);            
-            
+            processor.open();
             Target t = getTarget();
             Result result = processor.process(t);
+            processor.close();            
             if (!c.isClosed()) c.close();
+
             return result;
         } catch (Exception e) {
         	e.printStackTrace();
