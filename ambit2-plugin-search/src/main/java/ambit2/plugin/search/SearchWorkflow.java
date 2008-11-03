@@ -23,4 +23,8 @@ public class SearchWorkflow extends Workflow {
 		setDefinition(new LoginSequence(seq));
 				
 	}
+	@Override
+	public String toString() {
+		return "Simple search";
+	}
 }
