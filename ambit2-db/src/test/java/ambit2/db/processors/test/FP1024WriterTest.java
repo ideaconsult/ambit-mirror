@@ -48,7 +48,14 @@ public class FP1024WriterTest {
 			@Override
 			protected Iterator getIterator(IInputState target)
 					throws AmbitException {
-				return new RepositoryReader<IInputState>();
+				return null;//new RepositoryReader<IInputState>();
+			}
+
+			@Override
+			protected void closeIterator(Iterator iterator)
+					throws AmbitException {
+				// TODO Auto-generated method stub
+				
 			}
 		};
 		dbConnection.close();
