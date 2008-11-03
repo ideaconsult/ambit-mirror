@@ -1,16 +1,38 @@
+/*
+Copyright (C) 2007-2008  
+
+Contact: nina@acad.bg
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
+All we ask is that proper credit is given for our work, which includes
+- but is not limited to - adding the above copyright notice to the beginning
+of your source code files, and to any copyright notice that you may distribute
+with programs based on this work.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+*/
 package ambit2.core.processors.batch;
 
-import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import java.util.Iterator;
 
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.IInputState;
 import ambit2.core.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.IProcessor;
 
-public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStatistics> implements IBatchProcessor {
+public abstract class BatchProcessor<Target,Result> extends DefaultAmbitProcessor<IInputState,IBatchStatistics> implements IBatchProcessor<Target,Result> {
 	public static String PROPERTY_BATCHSTATS="ambit2.core.processors.batch.IBatchStatistics";
-	protected IProcessor<IChemObject, IChemObject> processor;
+	protected IProcessor<Target,Result> processor;
 	/**
 	 * 
 	 */
@@ -18,24 +40,35 @@ public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStat
 	public BatchProcessor() {
 		this(null);
 	}
-	public BatchProcessor(IProcessor<IChemObject, IChemObject> processor) {
+	public BatchProcessor(IProcessor<Target,Result> processor) {
 		super();
 		setProcessor(processor);
 	}	
-	public IProcessor<IChemObject, IChemObject> getProcessor() {
+	public IProcessor<Target,Result> getProcessor() {
 		return processor;
 	}
-	public void setProcessor(IProcessor<IChemObject, IChemObject> processor) {
+	public void setProcessor(IProcessor<Target,Result> processor) {
 		this.processor = processor;
 	}
-
+	protected abstract Iterator getIterator(IInputState target) throws AmbitException ;	
+	protected abstract void closeIterator(Iterator iterator) throws AmbitException;
+/*
+	protected Iterator getIterator(IInputState target) throws AmbitException {
+		return target.getReader(); 
+	}
+	
+	protected void closeIterator(Iterator iterator) throws AmbitException {
+		iterator.close();
+	}
+	*/	
 	public IBatchStatistics process(IInputState target) throws AmbitException {
 		try {
 			DefaultBatchStatistics stats = new DefaultBatchStatistics();
 			stats.setResultCaption("Read");
 			stats.frequency = 1;
-			IIteratingChemObjectReader reader = target.getReader();
-			IProcessor<IChemObject, IChemObject> processor = getProcessor();
+
+			Iterator reader = getIterator(target);
+			IProcessor<Target,Result> processor = getProcessor();
 			if (processor == null)
 				throw new AmbitException("Processor not defined");
 			while (reader.hasNext()) {
@@ -54,7 +87,7 @@ public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStat
 				}
 				ms = System.currentTimeMillis();
 				try {
-					processor.process((IChemObject)object);
+					processor.process((Target)object);
 					stats.increment(IBatchStatistics.RECORDS_PROCESSED);
 					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_PROCESSED, System.currentTimeMillis()-ms);
 				} catch (Exception x) {
@@ -64,8 +97,9 @@ public class BatchProcessor extends DefaultAmbitProcessor<IInputState,IBatchStat
 				}				
 								
 			}
-			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);			
-			reader.close();
+			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
+			closeIterator(reader);
+			
 			return stats;
 		} catch (Exception x) {
 			throw new AmbitException(x);
