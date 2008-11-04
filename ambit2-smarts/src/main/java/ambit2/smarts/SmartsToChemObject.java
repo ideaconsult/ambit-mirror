@@ -15,7 +15,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
 public class SmartsToChemObject 
 {
-	//When this flag is true atomatic bonds are forced between two aromatic atoms
+	//When this flag is true aromatic bonds are forced between two aromatic atoms
 	public boolean forceAromaticBonds = false; 
 	
 	//Internal work variable
@@ -29,7 +29,7 @@ public class SmartsToChemObject
 	 * Following rule is applied: each query atom/bond which is a simple expressaion is  
 	 * converted to a normal IAtom/IBond object
 	 * Also some heuristics are applied in order to get information from more 
-	 * comlicated atoms expressions.  
+	 * complicated atoms expressions.  
 	 * 
 	 * @param query
 	 * @return
@@ -91,7 +91,7 @@ public class SmartsToChemObject
 	
 	/**
 	 * This function tries to convert this object to a classic CDK Atom
-	 * If it is imposible to determine the atom type null is returned
+	 * If it is impossible to determine the atom type null is returned
 	 * @param a
 	 * @return
 	 */
@@ -123,9 +123,68 @@ public class SmartsToChemObject
 		return(null);
 	}
 	
+	/** This function tries to convert the SmartsAtomExpression to
+	 * a IAtom with defined atom type. When this is impossible null object is returned
+	 *  
+	 **/
 	public  IAtom smartsExpressionToAtom(SmartsAtomExpression a)
 	{			
+		//In order to extract the atom type from a SmartsAtomExpresion 
+		//following rules are applied:
+		// 1. The expression is represented as a sequence of sub expressions 
+		//    separated by "LOW_AND" operation:   sub1; sub2; sub3; ...
+		// 2. Each expression is checked whether it defines clearly an atom type
+		// 3. If only one expression defines an atom type then this is assigned as the 
+		//    result atom type
+		
+		
+		//Aromaticity should be taken into account ...
+		
+		Vector<SmartsAtomExpression> subs = getSubExpressionsLowAnd(a);
+		int atType = -1;
+		int isArom = -1;
+		Integer atomType = new Integer(-1);
+		Integer isAromatic = new Integer(-1);
+		int n = 0;
+		for (int  i = 0; i < subs.size(); i++)
+		{
+			analyzeSubExpressionsLowAnd(subs.get(i),atomType, isAromatic);
+			if (atomType.intValue() != -1)
+			{
+				if (atType == -1)
+				{
+					n++;
+					atType = atomType.intValue();
+				}
+				else
+				{
+					
+				}
+			}
+			
+		}
+		
+		if (atType != -1)
+		{
+			Atom atom = new Atom();
+			//TODO
+			//atom.setSymbol(a.getSymbol());			
+			//atom.setFlag(CDKConstants.ISAROMATIC,true);
+			return(atom);
+		}
 		return(null);
+	}
+	
+	public Vector<SmartsAtomExpression> getSubExpressionsLowAnd(SmartsAtomExpression a)
+	{
+		Vector<SmartsAtomExpression> v = new Vector<SmartsAtomExpression>();
+		
+		return v;
+	}
+	
+	public void analyzeSubExpressionsLowAnd(SmartsAtomExpression a, Integer atomType, Integer isAromatic)
+	{
+		
 	}
 	
 	
