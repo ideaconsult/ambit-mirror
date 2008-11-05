@@ -24,6 +24,11 @@ The database can be searched by identifiers, attribute value or range, experimen
   		<id>mvnrepository</id>
   		<name>mvnrepository</name>
   		<url>http://mvnrepository.com/</url>
+  	</repository>
+  	<repository>
+  		<id>CDK repository</id>
+  		<name>CDK repository</name>
+  		<url>http://pele.farmbio.uu.se/maven2/</url>
   	</repository>  	
   	
   </repositories>
