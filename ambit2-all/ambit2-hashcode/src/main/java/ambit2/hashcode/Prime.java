@@ -3,26 +3,7 @@ package ambit2.hashcode ;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.*;
-public class Prime {
-	public static void main(String[] args) {
-	    if(args.length==0)
-	    {
-	        System.out.print("Please ennter a Number.");
-	        System.exit(0);
-	    }	    
-	    int number= Integer.parseInt(args[0]);
-	    //createArrayWithPrimes(10);
-	    //createArrayWithSpecificNumberOfPrimes(17);
-	    createPrimeNumberHashtable();
-	    
-
-	}
-	
-	/**
-	 * generate all primes (0 - number)
-	 * @param number
-	 * @return
-	 */
+public class Prime {	
 public static int [] createArrayWithPrimes (int number) {
 	    
 	    int count=0;
@@ -70,11 +51,6 @@ public static int [] createArrayWithPrimes (int number) {
 	    return numColl;
 
 	}
-/**
- * generates given number of primes
- * @param number
- * @return
- */
 public static int [] createArrayWithSpecificNumberOfPrimes (int number) {
 
  	int count=0;
@@ -134,10 +110,6 @@ public static int [] createArrayWithSpecificNumberOfPrimes (int number) {
     return numColl_primes;
 	}
 
-/**
- * 1 step of the algorithm
- * @return
- */
 public static Hashtable createPrimeNumberHashtable()  {
     
 	Hashtable PrimeNumberHashtable = new Hashtable();
@@ -181,11 +153,9 @@ public static Hashtable createPrimeNumberHashtable()  {
 
 	}
 	N = N + number;
-	number = 3;
-	//Acyclic,Monocyclic,More than one ring
-	
-	int index_cycle=0;
-	int[] indexes_cycle= {-1,0,1};
+	//System number of element
+	number = 113;	
+	sht=0;
 	for(int k=N;k<N+number;k++)
 	{
 		     
@@ -193,10 +163,28 @@ public static Hashtable createPrimeNumberHashtable()  {
 	            continue;
 	        else
 	        {
-	        	//Number of bonded hydrogen neighbor atoms
-	            PrimeNumberHashtable.put("RingIndex"+indexes_cycle[index_cycle], new Integer(numColl[k]));
+	        	//System number of element
+	            PrimeNumberHashtable.put("SysNum"+sht, new Integer(numColl[k]));
 	            numColl[k] = 0;	          
-	            index_cycle++;
+	            sht++;
+	        }
+
+	}
+	N = N + number;
+	//Molecyle size
+	number = 257;	
+	sht=1;
+	for(int k=N;k<N+number;k++)
+	{
+		     
+	        if(numColl[k]==0)
+	            continue;
+	        else
+	        {
+	        	//Molecyle size
+	            PrimeNumberHashtable.put("MolSize"+sht, new Integer(numColl[k]));
+	            numColl[k] = 0;	          
+	            sht++;
 	        }
 
 	}
