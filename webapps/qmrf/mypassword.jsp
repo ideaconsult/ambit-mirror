@@ -47,30 +47,45 @@
 <c:when test="${!empty param.password && !empty param.newpassword && !empty param.confirm && (param.newpassword eq param.confirm)}">
 
 
-				<sql:setDataSource dataSource="jdbc/tomcat_users"/>
+		<sql:setDataSource dataSource="jdbc/tomcat_users"/>
 
-				<c:catch var='transactionException2'>
-						<sql:transaction>
+		<c:catch var='transactionException2'>
+			<sql:transaction>
+				<sql:query var="keepalive">
+					select user_name from users where user_name=?
+					<sql:param value="${param.user_name}"/>
+				</sql:query>
+				<c:if test="${keepalive.rowCount eq 0}">
+					<div class="error">
+						Change password error - ${param.user_name} does not exist.
+						<p>
+					</div>
+				</c:if>
 
-								<sql:update var="rs1" >
-										update users set user_pass=md5(?) where user_name=? and user_pass=md5(?)
-										<sql:param value="${param.newpassword}"/>
-										<sql:param value="${param.user_name}"/>
-										<sql:param value="${param.password}"/>
-								</sql:update>
+				<sql:update var="updateCount" >
+					update users set user_pass=md5(?) where user_name=? and user_pass=md5(?)
+					<sql:param value="${param.newpassword}"/>
+					<sql:param value="${param.user_name}"/>
+					<sql:param value="${param.password}"/>
+				</sql:update>
 
-					</sql:transaction>
-			</c:catch>
+			</sql:transaction>
+		</c:catch>
 
 		<c:choose>
 		<c:when test='${not empty transactionException2}'>
 						<div class="error">
-									error ${exception}
+									error ${transactionException2}
 						</div>
 		</c:when>
+		<c:when test="${updateCount eq 0}">
+			<div class="error">
+			The old password doesn't match.
+			</div>
+		</c:when>
 		<c:otherwise>
-					<div class="success">
-						<c:set var="success" value="true"/>
+			<div class="success">
+				<c:set var="success" value="true"/>
 				Password for user <b>${param.user_name}</b> changed successfully.<br/> Back to <a href="myprofile.jsp">My profile</a>
 
 			</div>
@@ -82,7 +97,7 @@
 <c:otherwise>
 		<div class="error">
 				Invalid passwords or passwords doesn't match.
-	</div>
+		</div>
 </c:otherwise>
 </c:choose>
 
