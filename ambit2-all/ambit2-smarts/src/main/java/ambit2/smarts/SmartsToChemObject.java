@@ -6,6 +6,7 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.config.Symbols;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -20,6 +21,9 @@ public class SmartsToChemObject
 	
 	//Internal work variable
 	boolean mFlagConfirmAromaticBond;
+	
+	//Work variables which are set by functions analyzeSubExpressionsFromLowAnd and getExpressionAtomType
+	int mSubAtomType, mSubAromaticity, mCurSubArom;
 		
 	
 	/** 
@@ -135,56 +139,122 @@ public class SmartsToChemObject
 		//    separated by "LOW_AND" operation:   sub1; sub2; sub3; ...
 		// 2. Each expression is checked whether it defines clearly an atom type
 		// 3. If only one expression defines an atom type then this is assigned as the 
-		//    result atom type
+		//    result atom type 
+		//    or if two or more expressions define atom type these atom types
+		//    must be the same
 		
 		
-		//Aromaticity should be taken into account ...
 		
-		Vector<SmartsAtomExpression> subs = getSubExpressionsLowAnd(a);
+		
+		Vector<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO_ANDLO);
 		int atType = -1;
-		int isArom = -1;
-		Integer atomType = new Integer(-1);
-		Integer isAromatic = new Integer(-1);
-		int n = 0;
+		int isArom = -1;			
 		for (int  i = 0; i < subs.size(); i++)
 		{
-			analyzeSubExpressionsLowAnd(subs.get(i),atomType, isAromatic);
-			if (atomType.intValue() != -1)
+			analyzeSubExpressionsFromLowAnd(a, subs.get(i));
+			if (mSubAtomType != -1)
 			{
-				if (atType == -1)
-				{
-					n++;
-					atType = atomType.intValue();
-				}
+				if (atType == -1)					
+					atType = mSubAtomType;				
 				else
 				{
-					
+					if (atType != mSubAtomType)
+					{
+						atType = -1; //Atom Type is not defined correctly 
+						break;
+					}
 				}
 			}
 			
+			//Handling aromaticity 
+			if (mSubAromaticity != -1)
+			{
+				if (isArom == -1)
+					isArom = mSubAromaticity;
+				else
+				{
+					if (isArom != mSubAromaticity)
+					{	
+						isArom = -1;  //Aromaticity is not defined correctly 
+						break;
+					}
+				}
+			}
 		}
 		
 		if (atType != -1)
 		{
-			Atom atom = new Atom();
-			//TODO
-			//atom.setSymbol(a.getSymbol());			
+			Atom atom = new Atom();			
+			atom.setSymbol(Symbols.byAtomicNumber[atType]);			
 			//atom.setFlag(CDKConstants.ISAROMATIC,true);
 			return(atom);
 		}
 		return(null);
 	}
 	
-	public Vector<SmartsAtomExpression> getSubExpressionsLowAnd(SmartsAtomExpression a)
+	public Vector<SmartsAtomExpression> getSubExpressions(SmartsAtomExpression a, int separator)
 	{
 		Vector<SmartsAtomExpression> v = new Vector<SmartsAtomExpression>();
-		
+		SmartsAtomExpression sub = new SmartsAtomExpression();
+		for (int i = 0; i < a.tokens.size(); i++)
+		{
+			if (a.tokens.get(i).type == separator)
+			{
+				v.add(sub);
+				sub = new SmartsAtomExpression();
+			}
+			else
+				sub.tokens.add(a.tokens.get(i));
+		}
+		v.add(sub);		
 		return v;
 	}
 	
-	public void analyzeSubExpressionsLowAnd(SmartsAtomExpression a, Integer atomType, Integer isAromatic)
+	public void analyzeSubExpressionsFromLowAnd(SmartsAtomExpression atExp, SmartsAtomExpression sub)
 	{
+		//The sub expression sub is represented as a sequence of sub-sub expressions
+		//separated by logical 'OR' 
+		//Following rule is applied
+		//	If at least one sub-sub expression has a atom type 
+		//  then all other sub-subs must have the same type
+		//Analogously the aromaticity is treated
 		
+		Vector<SmartsAtomExpression> sub_subs = getSubExpressions(sub, SmartsConst.LO_OR);
+		int subAtType[] = new int[sub_subs.size()];
+		int subArom[] = new int[sub_subs.size()];
+		for (int i = 0; i <sub_subs.size(); i++)
+		{	
+			subAtType[i] = getExpressionAtomType(atExp,sub_subs.get(i));
+			subArom[i] = mCurSubArom;
+		}
+		
+		mSubAtomType = subAtType[0];
+		for (int i = 1; i < subAtType.length; i++)
+		{
+			if (mSubAtomType != subAtType[i])
+			{
+				mSubAtomType = -1;
+				break;
+			}
+		}
+		
+		mSubAromaticity = subArom[0];
+		for (int i = 1; i < subAtType.length; i++)
+		{
+			if (mSubAromaticity != subArom[i])
+			{
+				mSubAromaticity = -1;
+				break;
+			}
+		}
+	}
+	
+	public int getExpressionAtomType(SmartsAtomExpression atExp, SmartsAtomExpression sub)
+	{
+		//'sub' expression is represented only by HI_AND and NOT operations
+		
+		mCurSubArom = -1;
+		return(-1);
 	}
 	
 	
