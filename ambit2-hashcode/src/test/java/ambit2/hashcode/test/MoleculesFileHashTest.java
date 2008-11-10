@@ -1,26 +1,45 @@
+/*
+Copyright (C) 2005-2008  
+
+Contact: 
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
+All we ask is that proper credit is given for our work, which includes
+- but is not limited to - adding the above copyright notice to the beginning
+of your source code files, and to any copyright notice that you may distribute
+with programs based on this work.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+*/
+
 package ambit2.hashcode.test;
 
-import java.io.File;
 import java.io.FileReader;
-import java.util.Iterator;
 
 import junit.framework.TestCase;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import toxTree.data.MoleculesFile;
-import toxTree.io.MyIteratingMDLReader;
+import ambit2.core.io.MyIteratingMDLReader;
+
 
 public class MoleculesFileHashTest extends TestCase {
 	public void test() {
 		try {
 			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-			MoleculesFile mf = new MoleculesFile(new File("C:/ambit/ambit2-hashcode/src/main/resources/einecs_structures_V13Apr07.sdf"),b);
+			//MoleculesFile mf = new MoleculesFile(new File("C:/ambit/ambit2-hashcode/src/main/resources/einecs_structures_V13Apr07.sdf"),b);
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("C:/ambit/ambit2-hashcode/src/main/resources/einecs_structures_V13Apr07.sdf"),b);
 			ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
 			int record=0;
