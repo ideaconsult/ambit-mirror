@@ -251,10 +251,44 @@ public class SmartsToChemObject
 	
 	public int getExpressionAtomType(SmartsAtomExpression atExp, SmartsAtomExpression sub)
 	{
-		//'sub' expression is represented only by HI_AND and NOT operations
-		
+		//'sub' expression is represented only by HI_AND and NOT operations		
 		mCurSubArom = -1;
-		return(-1);
+		
+		//Getting the positions of HI_AND tokens
+		int pos[] = new int[sub.tokens.size()+2];
+		pos[0] = -1;
+		int n = 0; 
+		for (int i = 0; i < sub.tokens.size(); i++)
+		{
+			if (sub.tokens.get(i).type == SmartsConst.LO_AND)
+			{
+				n++;   
+				pos[n] = i;
+			}
+		}
+		
+		n++;   
+		pos[n] = sub.tokens.size();
+		
+		int expAtType = -1;
+		boolean FlagNot;
+		SmartsExpressionToken seTok;
+		
+		//using 1-based indexing for 'pos' array.
+		//pos[0] = -1 and  pos[n] = sub.tokens.size() have special use for both ends of the token sequence
+		for (int i = 1; i <= n; i++)
+		{			
+			//Handling the tokens between pos[i-1] and pos[i]
+			FlagNot = false;
+			for (int k = pos[i-1]+1; k < pos[i]; k++)
+			{
+				seTok = sub.tokens.get(k);
+				//...
+				
+			}
+		}		
+		
+		return(expAtType);
 	}
 	
 	
