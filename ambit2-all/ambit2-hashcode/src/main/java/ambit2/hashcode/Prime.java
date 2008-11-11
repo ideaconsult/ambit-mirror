@@ -2,7 +2,6 @@ package ambit2.hashcode ;
 
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.*;
 public class Prime {	
 public static int [] createArrayWithPrimes (int number) {
 	    
@@ -110,9 +109,9 @@ public static int [] createArrayWithSpecificNumberOfPrimes (int number) {
     return numColl_primes;
 	}
 
-public static Hashtable createPrimeNumberHashtable()  {
+public static Hashtable<String,Integer> createPrimeNumberHashtable()  {
     
-	Hashtable PrimeNumberHashtable = new Hashtable();
+	Hashtable<String,Integer> PrimeNumberHashtable = new Hashtable<String,Integer>();
 	//number of bonded neighbor atoms
 	int number = 17;
 	int[] numColl= new int[1000];
@@ -171,7 +170,7 @@ public static Hashtable createPrimeNumberHashtable()  {
 
 	}
 	N = N + number;
-	//Molecyle size
+	//Molecule size
 	number = 257;	
 	sht=1;
 	for(int k=N;k<N+number;k++)
@@ -181,18 +180,20 @@ public static Hashtable createPrimeNumberHashtable()  {
 	            continue;
 	        else
 	        {
-	        	//Molecyle size
+	        	//Molecule size
 	            PrimeNumberHashtable.put("MolSize"+sht, new Integer(numColl[k]));
 	            numColl[k] = 0;	          
 	            sht++;
 	        }
 
 	}
-	Enumeration e = PrimeNumberHashtable.keys();
+	/*
+	Enumeration<String> e = PrimeNumberHashtable.keys();
     while (e.hasMoreElements()) {
-    	Object obj = e.nextElement();
+    	String obj = e.nextElement();
         //System.out.println("Key "+ obj +" : "+PrimeNumberHashtable.get(obj));
     }
+    */
 	
     return PrimeNumberHashtable;
 

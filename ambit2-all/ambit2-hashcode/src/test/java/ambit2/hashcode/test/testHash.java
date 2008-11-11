@@ -41,7 +41,7 @@ public class testHash extends TestCase {
 	}
 	public void calcHash(int NAtomsNumber, int NHAtomsNumber) throws Exception {
 
-	    Hashtable seedHashtable = Prime.createPrimeNumberHashtable();
+	    Hashtable<String,Integer> seedHashtable = Prime.createPrimeNumberHashtable();
 	    int NAtomsNumberPrime = (Integer)seedHashtable.get("NAtoms"+NAtomsNumber);
 	    int NHAtomsNumberPrime = (Integer)seedHashtable.get("NHAtoms"+NHAtomsNumber);
 	    

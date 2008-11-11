@@ -25,10 +25,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.hashcode.test;
 
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
 
 import junit.framework.TestCase;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -36,32 +41,52 @@ import ambit2.core.io.MyIteratingMDLReader;
 
 
 public class MoleculesFileHashTest extends TestCase {
-	public void test() {
-		try {
+	public void test() throws Exception {
 			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-			//MoleculesFile mf = new MoleculesFile(new File("C:/ambit/ambit2-hashcode/src/main/resources/einecs_structures_V13Apr07.sdf"),b);
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("C:/ambit/ambit2-hashcode/src/main/resources/einecs_structures_V13Apr07.sdf"),b);
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("src/test/resources/einecs_structures_V13Apr07.sdf"),b);
 			ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
 			int record=0;
-            int found = 0;
+            int errors = 0;
             long now = System.currentTimeMillis();
+            Hashtable<Long, List<String>> histogram = new Hashtable<Long, List<String>>();
 			//System.out.print(System.currentTimeMillis());
 			while (reader.hasNext()) {
 				Object o = reader.next();
-				if (o instanceof IAtomContainer && !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals(".") && !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals("C")&& !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals("[C]")) {
+				if (o instanceof IAtomContainer) { 
+					if (((IAtomContainer)o).getAtomCount()==0) continue;
+					//&& !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals(".") && !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals("C")&& !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals("[C]")) {
                     AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms((IAtomContainer)o);
-					//boolean aromatic = CDKHueckelAromaticityDetector.detectAromaticity((IAtomContainer)o);
-					
+					CDKHueckelAromaticityDetector.detectAromaticity((IAtomContainer)o);
+					/*
 					System.out.print(record);
                     System.out.print('\t');                    
                     System.out.print(((IAtomContainer)o).getProperty("MF"));                    
 					System.out.print('\t');
 					System.out.print(((IAtomContainer)o).getProperty("GENERATED_SMILES"));
 					System.out.print('\t');
+					*/
 					try{
-					System.out.println(molHash.getMoleculeHash((IAtomContainer)o));
+						Long hash = molHash.getMoleculeHash((IAtomContainer)o);
+						List<String> count = histogram.get(hash);
+						
+						if (count == null) {
+							count = new ArrayList<String>();
+							histogram.put(hash, count);
+						} 
+						count.add(((IAtomContainer)o).getProperty("GENERATED_SMILES").toString());
+						
+					} catch (Exception e) {
+						errors++;
+						System.out.print(record);
+	                    System.out.print('\t');                    
+	                    System.out.print(((IAtomContainer)o).getProperty("MF"));                    
+						System.out.print('\t');
+						System.out.print(((IAtomContainer)o).getProperty("GENERATED_SMILES"));
+						System.out.println('\t');
+						
+						//e.printStackTrace();
 					}
-					catch(Exception e){}
+					
 					//int index = mf.indexOf("GENERATED_SMILES",((IAtomContainer)o).getProperty("GENERATED_SMILES"));
 					/*System.out.print("\tAromatic ");
 					System.out.print(aromatic);
@@ -76,17 +101,37 @@ public class MoleculesFileHashTest extends TestCase {
                         System.out.println(mf.getAtomContainer(index).getProperty("B5STM"));                        
                         found++;
 					} else System.out.println("not found"); */
-					System.out.print('\n');
+					//System.out.print('.');
 					record++;
 
 				}
 				
 			}
 			System.out.print(Long.toString(System.currentTimeMillis()-now));
-			//assertEquals(record,found);
-		} catch (Exception x) {
-            x.printStackTrace();
-			fail(x.getMessage());
-		}
+			System.out.println("ms");
+
+			
+			Enumeration<Long> hash = histogram.keys();
+			while (hash.hasMoreElements()) {
+				Long key = hash.nextElement();
+				List<String> values = histogram.get(key);
+				if (values.size()>1) {
+					System.out.print(key.toHexString(key));
+					System.out.print('\t');
+					System.out.print(values.size());
+					System.out.print('\t');
+					for (String value: values) {
+						System.out.print(value);
+						System.out.print('\t');
+					}	
+					System.out.println();
+				}
+			}
+			System.out.print("Records\t");
+			System.out.print(record);
+			System.out.print("Hashes\t");
+			System.out.println(histogram.size());
+			System.out.print("Errors\t");
+			System.out.println(errors);	
 	}
 }
