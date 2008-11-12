@@ -187,6 +187,46 @@ public static Hashtable<String,Integer> createPrimeNumberHashtable()  {
 	        }
 
 	}
+	
+	N = N + number;
+	//stereo center
+	number = 3;	
+	sht=0;
+	int[] stereo_bonds={-1,0,1};
+	for(int k=N;k<N+number;k++)
+	{
+		     
+	        if(numColl[k]==0)
+	            continue;
+	        else
+	        {
+	        	///stereo center
+	            PrimeNumberHashtable.put("StereoCenter"+stereo_bonds[sht], new Integer(numColl[k]));
+	            numColl[k] = 0;	          
+	            sht++;
+	        }
+
+	}
+	N = N + number;
+	//type of bond
+	number = 4;	
+	sht=1;
+	
+	for(int k=N;k<N+number;k++)
+	{
+		     
+	        if(numColl[k]==0)
+	            continue;
+	        else
+	        {
+	        	//type of bond
+	            PrimeNumberHashtable.put("TypeOfBond"+sht, new Integer(numColl[k]));
+	            numColl[k] = 0;	          
+	            sht++;
+	        }
+
+	}
+	
 	/*
 	Enumeration<String> e = PrimeNumberHashtable.keys();
     while (e.hasMoreElements()) {

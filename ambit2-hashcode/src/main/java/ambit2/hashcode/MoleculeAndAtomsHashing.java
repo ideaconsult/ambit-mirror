@@ -29,6 +29,9 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.CDKConstants;
 
 public class MoleculeAndAtomsHashing {
 	private int bonded_neighbor_atomsPrime  ;
@@ -41,9 +44,13 @@ public class MoleculeAndAtomsHashing {
 	private int atomic_number;
 	private int bonded_neighbor_atoms;
 	private int bonded_hydrogen_neighbor_atoms;
+	private int stereo_center;
+    private int type_of_bond;
+	private int stereo_centerPrime;
+	private int type_of_bondPrime;
 	private List<IAtom> neighbors;
 	private Hashtable<String,Integer> seedHashtable;    
-	private Hash atomsHash,atomHash,moleculeSizeHash,moleculeHash;
+	private Hash atomsHash,atomHash,moleculeSizeHash,moleculeHash,bondHash,bondsHash;
     
 	public  MoleculeAndAtomsHashing(){
 	 this.seedHashtable= Prime.createPrimeNumberHashtable();
@@ -85,6 +92,48 @@ public class MoleculeAndAtomsHashing {
         moleculeSizeHash = new Hash(number_of_atomsPrime);
         moleculeHash = atomsHash; 
         moleculeHash = moleculeHash.sag(moleculeSizeHash);
+        Iterator bonds = mol.bonds();
+        
+        bondsHash = new Hash();
+        while (bonds.hasNext()) {
+            IBond bond = (IBond) bonds.next();
+            
+        	if (bond.getAtomCount() != 2) {
+        		
+        	} else {
+        	switch(bond.getStereo()){
+			case CDKConstants.STEREO_BOND_UP:
+				stereo_center = 1;
+				break;
+			case CDKConstants.STEREO_BOND_UP_INV:
+				stereo_center = 1;
+				break;
+			case CDKConstants.STEREO_BOND_DOWN:
+				stereo_center = -1;
+				break;
+			case CDKConstants.STEREO_BOND_DOWN_INV:
+				stereo_center = -1;
+				break;
+			default:
+				stereo_center = 0;
+        		}
+        	Order o = bond.getOrder();        	 
+        	if (o.equals(Order.DOUBLE)) type_of_bond = 2;             
+        	if (o.equals(Order.SINGLE)) type_of_bond = 1;             
+        	if (o.equals(Order.TRIPLE)){
+        		type_of_bond = 3;
+        	}
+        	if (o.equals(Order.QUADRUPLE)){
+        		type_of_bond = 4;        	
+        	}
+         }
+        	stereo_centerPrime = this.seedHashtable.get("StereoCenter"+stereo_center);
+    		type_of_bondPrime = this.seedHashtable.get("TypeOfBond"+type_of_bond);
+    		bondHash = new Hash(stereo_centerPrime+type_of_bondPrime);
+    		bondsHash = bondsHash.sag(bondHash);
+        	
+        }
+        moleculeHash = moleculeHash.sag(bondsHash);
         return moleculeHash.hash_value();
     	
     }
