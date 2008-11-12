@@ -283,8 +283,52 @@ public class SmartsToChemObject
 			for (int k = pos[i-1]+1; k < pos[i]; k++)
 			{
 				seTok = sub.tokens.get(k);
-				//...
+				if (seTok.isLogicalOperation())
+				{
+					if (seTok.getLogOperation() == SmartsConst.LO_NOT)					
+						FlagNot = !FlagNot;
+					
+					if (seTok.getLogOperation() == SmartsConst.LO_AND)					
+						FlagNot = false;  //'Not' flag is reseted 
+					
+					continue;
+				}
 				
+				//Handling atom primitives. 
+				//When given primitive defines an atom type it must not be negated 				
+				switch (seTok.type)
+				{	
+				case SmartsConst.AP_a:					
+					if (seTok.param > 0)
+						if (!FlagNot)
+						{
+							expAtType = seTok.param; 
+							mCurSubArom = 1;
+						}
+					break;
+					
+				case SmartsConst.AP_A:
+					if (seTok.param > 0)
+						if (!FlagNot)
+						{
+							expAtType = seTok.param; 
+							mCurSubArom = 0;
+						}
+					break;	
+					
+				case SmartsConst.AP_AtNum:
+					if (seTok.param > 0)
+						if (!FlagNot)
+							expAtType = seTok.param;
+					break;	
+					
+				case SmartsConst.AP_Recursive:
+					//TODO
+					break;		
+					
+					
+				//All other token types do not effect function result
+				}
 			}
 		}		
 		
