@@ -43,7 +43,7 @@ import ambit2.core.io.MyIteratingMDLReader;
 public class MoleculesFileHashTest extends TestCase {
 	public void test() throws Exception {
 			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("src/main/resources/einecs_structures_V13Apr07.sdf"),b);
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("src/test/resources/einecs_structures_V13Apr07.sdf"),b);
 			ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
 			int record=0;
             int errors = 0;
@@ -116,7 +116,7 @@ public class MoleculesFileHashTest extends TestCase {
 				Long key = hash.nextElement();
 				List<String> values = histogram.get(key);
 				if (values.size()>1) {
-					System.out.print(key.toHexString(key));
+					System.out.print(Long.toString(key));
 					System.out.print('\t');
 					System.out.print(values.size());
 					System.out.print('\t');
