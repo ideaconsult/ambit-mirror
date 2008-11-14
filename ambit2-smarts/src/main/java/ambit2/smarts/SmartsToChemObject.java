@@ -186,6 +186,7 @@ public class SmartsToChemObject
 		{
 			Atom atom = new Atom();			
 			atom.setSymbol(Symbols.byAtomicNumber[atType]);			
+			//TODO
 			//atom.setFlag(CDKConstants.ISAROMATIC,true);
 			return(atom);
 		}
@@ -323,9 +324,11 @@ public class SmartsToChemObject
 					break;	
 					
 				case SmartsConst.AP_Recursive:
-					//TODO
-					break;		
-					
+					int atType = getRecursiveExpressionAtomType(atExp,seTok.param);
+					if (atType > 0)
+						if (!FlagNot)
+							expAtType = atType;
+					break;
 					
 				//All other token types do not effect function result
 				}
@@ -333,6 +336,30 @@ public class SmartsToChemObject
 		}		
 		
 		return(expAtType);
+	}
+	
+	public int getRecursiveExpressionAtomType(SmartsAtomExpression atExp, int n)
+	{
+		//Recursive call is performed. That is way the values of the global variables are stored
+		//and afterwards restored
+		int mSubAtomType_old, mSubAromaticity_old, mCurSubArom_old;
+		mSubAtomType_old = mSubAtomType;
+		mSubAromaticity_old = mSubAromaticity;
+		mCurSubArom_old = mCurSubArom;
+		
+		//Potential recursion here
+		IAtom a0 = atExp.recSmartsContainers.get(n).getAtom(0);
+		IAtom anew =  toAtom(a0);
+		
+		//Restoring the global work variables
+		mSubAtomType = mSubAtomType_old;
+		mSubAromaticity = mSubAromaticity_old;
+		mCurSubArom = mCurSubArom_old;
+		
+		if (anew == null)
+			return -1;
+		else
+			return(anew.getAtomicNumber());
 	}
 	
 	
