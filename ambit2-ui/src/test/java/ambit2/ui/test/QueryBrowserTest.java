@@ -131,9 +131,11 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 		while (e.hasMoreElements()) {
 			Integer key = e.nextElement();
 			try {
-            sdg.setMolecule(molecules.get(key));
-            sdg.generateCoordinates(new Vector2d(0,1));
-            molecules.put(key,sdg.getMolecule());
+				molecules.get(key).setProperty("FLAG",new Boolean(true));
+				molecules.get(key).setProperty("NAME",Integer.toString((int) (100*Math.random())));
+				sdg.setMolecule(molecules.get(key));
+				sdg.generateCoordinates(new Vector2d(0,1));
+				molecules.put(key,sdg.getMolecule());
 			} catch (Exception x) {
 				
 			}
@@ -147,17 +149,44 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 		return 33;
 	}
 	public Object getValueAt(int row, int col) {
-		try {
-		if (col==1) {
+		
+		switch (col) {
+		case 0: {
+			return molecules.get(row).getProperty("FLAG");
+		}
+		case 2: {
+			return molecules.get(row).getProperty("NAME");
+		}		
+		case 1: {
+			try {
 			IMolecule a = molecules.get(row);
 			return a;
+			
+			} catch (Exception x) {}
+		} 
+		
+		default: {
+			return new Integer((row+1)*(col+1));	
 		}
-		} catch (Exception x) {}
-		return new Integer((row+1)*(col));
+		}
+		
+		
+	}
+	@Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		if (columnIndex == 0)
+			molecules.get(rowIndex).setProperty("FLAG",Boolean.parseBoolean(value.toString()));
+		else
+			super.setValueAt(value, rowIndex, columnIndex);
+	}
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return columnIndex == 0;
 	}
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		if (columnIndex==1) return IAtomContainer.class;
+		if (columnIndex==0) return Boolean.class;
 		else return super.getColumnClass(columnIndex);
 	}
 	public int findNext() throws UnsupportedOperationException {
