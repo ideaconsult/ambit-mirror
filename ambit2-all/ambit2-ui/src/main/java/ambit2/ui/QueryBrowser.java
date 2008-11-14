@@ -25,10 +25,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Type;
+import java.util.Hashtable;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -41,6 +45,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -69,7 +76,8 @@ import com.jgoodies.forms.layout.FormLayout;
 public class QueryBrowser<T extends AbstractTableModel> extends JPanel implements PropertyChangeListener  {
 	protected final JTable browser_table;
 	protected IHeaderAction[] headerActions = getHeaderActions();
-	protected Dimension cellSize = new Dimension(200,200);	
+	//protected Dimension cellSize = new Dimension(200,200);	
+	protected Hashtable<BrowserMode, ImageCellRenderer> imageRenderers = new Hashtable<BrowserMode, ImageCellRenderer>();
 	/**
 	 * 
 	 */
@@ -80,10 +88,12 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	}
 	public QueryBrowser(T model,Dimension cellSize) {
 		super(new BorderLayout());
-		this.cellSize = cellSize;
-		browser_table = addWidgets(model);
+		//this.cellSize = cellSize;
+		
 		if (model instanceof IBrowserMode) 
 			((IBrowserMode)model).addPropertyChangeListener(this);
+		browser_table = addWidgets(model);
+		
 		JScrollPane p = new JScrollPane(browser_table);
 		p.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		browser_table.setPreferredScrollableViewportSize(new Dimension(600, 200));
@@ -142,10 +152,17 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		} else
 			return null;
 
-	}			
+	}		
+	protected ImageCellRenderer getImageRenderer(BrowserMode mode) {
+		ImageCellRenderer imageRenderer = imageRenderers.get(mode);
+		if (imageRenderer == null) {
+			imageRenderer = new ImageCellRenderer();
+			imageRenderers.put(mode,imageRenderer);
+		}			
+		return imageRenderer;
+	}
 	protected JTable addWidgets(T model) {
 		
-			
 		JTable table = new JTable(model) {
 			
 			public void createDefaultColumnsFromModel() {
@@ -155,6 +172,15 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					mode = ((IBrowserMode)m).getBrowserMode();
 				else mode = BrowserMode.Spreadsheet;
 					
+				TableCellRenderer renderer = null;
+			
+				if (mode == BrowserMode.Columns) {
+					renderer = new RowRenderer();
+					((RowRenderer)renderer).add(mode.getContentColumn(), getImageRenderer(mode));
+					
+				
+				}
+					
 				if (m != null) {
 					// Remove any current columns
 					
@@ -163,35 +189,20 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					while (cm.getColumnCount() > 0) {
 						cm.removeColumn(cm.getColumn(0));
 					}
-					
-					
-					// Create new columns from the data model info
-					final int columnSize[] = { 32, 32, 32, 200, 80 };
 					for (int i = 0; i < m.getColumnCount(); i++) {
 						EditableHeaderTableColumn newColumn = new EditableHeaderTableColumn();
 						//TableColumn newColumn = new TableColumn(i);
 						newColumn.setModelIndex(i);
 
 						if ((browser_table != null) && (browser_table.getModel()!= null)) {
-						    switch (((IBrowserMode) browser_table.getModel()).getBrowserMode()) {
-						    case Spreadsheet: {
-	                            if (i<columnSize.length) {
-	                                newColumn.setPreferredWidth(columnSize[i]);
-	                            } else
-	                                newColumn.setPreferredWidth(columnSize[columnSize.length-1]);
-	                            //newColumn.setCellRenderer(new ColorTableCellRenderer());
-	                            break;
-						    }
-						    case Matrix: {
-						        newColumn.setPreferredWidth(cellSize.width);
-						        break;
-						    }
+						    switch (mode) {
 						    case Columns: {
-						        newColumn.setPreferredWidth(cellSize.width);
+						        newColumn.setCellRenderer(renderer);
 						        break;
 						    }
 						    default: {}
 						    }
+
 						}
 						
 							
@@ -207,16 +218,18 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					if (getTableHeader()!=null)
 						getTableHeader().setColumnModel(cm);
 					
+					setCellSize(this);
 			        					
 				}
 				
 			};
 		};
-		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setTableHeader(new EditableHeader(table.getColumnModel(),false));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
+		table.setIntercellSpacing(new Dimension(3,3));
 		/*
 		table.setDefaultRenderer(IAtomContainer.class,
 				new MoleculeGridCellRenderer(cellSize));
@@ -224,16 +237,17 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 				cellSize));
 				*/
 		
-		ImageCellRenderer renderer = new ImageCellRenderer();
 		if (model instanceof IBrowserMode) 
-			((IBrowserMode)model).addPropertyChangeListener(renderer);		
-		table.setDefaultRenderer(Image.class, renderer);
-		table.setDefaultRenderer(IAtomContainer.class, renderer);
+			((IBrowserMode)model).addPropertyChangeListener(getImageRenderer(BrowserMode.Spreadsheet));		
+		table.setDefaultRenderer(Image.class, getImageRenderer(BrowserMode.Spreadsheet));
+		table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
+		
 
+		/*
 		table.setPreferredScrollableViewportSize(new Dimension(
 				cellSize.width * 3, (cellSize.height + 30) * 2));
-		
-//		table.setRowHeight(1,100);
+		*/
+
 
 		ListSelectionListener listener = new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -256,8 +270,10 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	    table.getSelectionModel().addListSelectionListener(listener);
 	    table.getColumnModel().getSelectionModel()
 	        .addListSelectionListener(listener);
-	    table.setShowHorizontalLines(false);
-	    table.setShowVerticalLines(false);
+	    table.setShowHorizontalLines(true);
+	    table.setShowVerticalLines(true);
+	    table.setGridColor(Color.gray);
+	    setCellSize( table);
 		return table;
 	}	
 	protected void setRecord(int row, int col) {
@@ -280,14 +296,15 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 			((IRecordNavigator) browser_table.getModel()).setRecord(record);
 		}
 	}
+	/*
 	public boolean isMatrix() {
 		if ((browser_table != null) && (browser_table.getModel() != null) && (browser_table.getModel() instanceof IBrowserMode)) {
 			return BrowserMode.Matrix.equals(((IBrowserMode) browser_table.getModel()).getBrowserMode());
 		} else return false;
 	}
+	*/
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		//System.out.println(evt.getPropertyName());
 		if (IPageNavigator.PROPERTY_PAGERECORD.equals(evt.getPropertyName())) {
 			Integer record = (Integer) evt.getNewValue();
 			try {
@@ -295,6 +312,7 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					
 					IBrowserMode bm = ((IBrowserMode)browser_table.getModel());
 					int[] cell = bm.getBrowserMode().recordToCell(record);
+					if (cell[0] >= 0)
 					browser_table.setRowSelectionInterval(cell[0],cell[0]);
 					if (cell[1] >= 0)
 						browser_table.setColumnSelectionInterval(cell[1],cell[1]);
@@ -304,25 +322,55 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 				x.printStackTrace();
 			}
 			//browser_table.scrollRectToVisible(browser_table.getCellRect(record, 0, true));
-		} else
-		if (IBrowserMode.PROPERTY_MODE.equals(evt.getPropertyName())) {
+		} else if (IBrowserMode.PROPERTY_MODE.equals(evt.getPropertyName())) {
+		
+			
 			BrowserMode mode = ((BrowserMode)evt.getNewValue());
-			browser_table.setRowHeight(
-					mode.getCellSize(0,0).height
-					);
+			browser_table.setDefaultRenderer(Image.class, getImageRenderer(mode));
+			browser_table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(mode));				
 			browser_table.setRowSelectionAllowed(mode.isRowSelectionAllowed());
 			browser_table.setColumnSelectionAllowed(mode.isColumnSelectionAllowed());	
-				
-
-		}
-		if (IBrowserMode.PROPERTY_ZOOM.equals(evt.getPropertyName())) {
-			Double size = ((Double)evt.getNewValue());
-			System.out.println(evt);
-			browser_table.setRowHeight((int)Math.round(size));
 			
+			if (browser_table.getModel() instanceof IBrowserMode)  {
+				BrowserMode oldmode = ((BrowserMode)evt.getOldValue());
+				((IBrowserMode)browser_table.getModel()).removePropertyChangeListener(getImageRenderer(oldmode));				
+				((IBrowserMode)browser_table.getModel()).addPropertyChangeListener(getImageRenderer(mode));
+				setCellSize(browser_table);
+				
+			}		
+			else {
+				browser_table.setRowHeight(
+						mode.getCellSize(0,0).height
+						);
+				browser_table.setRowHeight(1,
+						mode.getCellSize(1,0).height
+						);
+			}
+
+		} else if (IBrowserMode.PROPERTY_ZOOM.equals(evt.getPropertyName())) {
+		
+			setCellSize(browser_table);
+	
+		} else if (IPageNavigator.PROPERTY_PAGESIZE.equals(evt.getPropertyName())) {	
+			setCellSize(browser_table);
+		} else if (IPageNavigator.PROPERTY_PAGE.equals(evt.getPropertyName())) {		
+	
+			setCellSize(browser_table);
 		}
 		
 		
+	}
+	protected void setCellSize(JTable browser_table) {
+		BrowserMode mode = ((IBrowserMode) browser_table.getModel()).getBrowserMode();
+		for (int row = 0; row < browser_table.getRowCount();row++) 
+			for (int col=0; col < browser_table.getColumnCount(); col++) {
+				TableColumn c = browser_table.getColumnModel().getColumn(col);
+				Dimension d = mode.getCellSize(row, col);
+				c.setPreferredWidth((int)d.getWidth());
+				browser_table.setRowHeight(row,(int)d.getHeight());
+
+			}			
+
 	}
 	public static IHeaderAction[] getHeaderActions() {
         IHeaderAction[] actions = new IHeaderAction[4];
@@ -387,3 +435,88 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	}
 }
 
+abstract class MultiCells<Key,T> {
+	  protected Hashtable<Key,T> editors;
+	  protected T editor, defaultEditor;
+
+	  /**
+	   * 
+	   */
+	  public MultiCells() {
+	    editors = new Hashtable<Key,T>();
+	    defaultEditor = createDefaultCell();
+	  }
+	  
+	  /**
+	   * @param row    table row
+	   * @param editor table cell editor
+	   */
+	  public void add(Key key, T editor) {
+	    editors.put(key,editor);
+	  }	  
+	  protected abstract T createDefaultCell();
+		  
+
+}	  
+class RowRenderer extends MultiCells<Integer,TableCellRenderer> implements TableCellRenderer {
+
+	  /**
+	   * 
+	   */
+	  public RowRenderer() {
+		  super();
+	  }
+
+	  @Override
+		protected TableCellRenderer createDefaultCell() {
+			  return new DefaultTableCellRenderer();
+		}
+
+	  
+	  public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		  
+		    editor = editors.get(new Integer(row));
+		    if (editor == null)
+		    	editor = table.getDefaultRenderer(value.getClass());
+
+		    if (editor == null) {
+		    	  editor = defaultEditor;
+		    }
+		    return editor.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	}
+	  
+	  /*
+	  public Component getTableCellEditorComponent(JTable table,
+	      Object value, boolean isSelected, int row, int column) {
+	    editor = (TableCellEditor)editors.get(new Integer(row));
+	    if (editor == null) {
+	      editor = defaultEditor;
+	    }
+	    return editor.getTableCellEditorComponent(table,
+	             value, isSelected, row, column);
+	  }
+
+	  public Object getCellEditorValue() {
+	    return editor.getCellEditorValue();
+	  }
+	  public boolean stopCellEditing() {
+	    return editor.stopCellEditing();
+	  }
+	  public void cancelCellEditing() {
+	    editor.cancelCellEditing();
+	  }
+	  public boolean isCellEditable(EventObject anEvent) {
+	    return editor.isCellEditable(anEvent);
+	  }
+	  public void addCellEditorListener(CellEditorListener l) {
+	    editor.addCellEditorListener(l);
+	  }
+	  public void removeCellEditorListener(CellEditorListener l) {
+	    editor.removeCellEditorListener(l);
+	  }
+	  public boolean shouldSelectCell(EventObject anEvent) {
+	    return editor.shouldSelectCell(anEvent);
+	  }
+	  */
+	}

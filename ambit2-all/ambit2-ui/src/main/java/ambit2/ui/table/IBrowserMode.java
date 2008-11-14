@@ -38,7 +38,10 @@ public interface IBrowserMode {
 	public enum BrowserMode {
 	    Spreadsheet {
 	    	protected int idcolumn = 1;
-	    	protected int contentcolumn = 1;
+	    	protected int contentcolumn = 3;
+	    	protected Dimension[] cellSize = new Dimension[] {
+	    			new Dimension(32,18),new Dimension(32,18),new Dimension(64,18),new Dimension(100,18),new Dimension(100,100)
+	    	};
 	    	
 	    	@Override
 	    	public String getTitle() {
@@ -58,12 +61,10 @@ public interface IBrowserMode {
 	    	}
 	    	@Override
 	    	public Dimension getCellSize(int row,int col) {
-	    		/*
-	    		if (row==0)
-	    			return new Dimension(100,100);
-	    		else	
-	    		*/
-	    			return new Dimension(100,18);
+	    		if (col >= cellSize.length)
+	    			return cellSize[cellSize.length-1];
+	    		else
+	    			return cellSize[col];
 	    	}
 	    	@Override
 	    	public int getColumns() {
@@ -95,11 +96,7 @@ public interface IBrowserMode {
 	    	public boolean isRowSelectionAllowed() {
 	    		return true;
 	    	}
-	    	@Override
-	    	public void setCellSize(Dimension arg0,int row,int col) {
-	    		// TODO Auto-generated method stub
-	    		
-	    	}
+
 	    	@Override
 	    	public int cellToRecord(int row,int col) {
 	    		return row;
@@ -109,6 +106,36 @@ public interface IBrowserMode {
 	    		return new int[] {record,-1};
 	    		
 	    	}
+
+			@Override
+			public void setCellSize(Dimension dim, int row, int col) {
+				int c = col;
+				if (col >= cellSize.length)
+					c = cellSize.length-1;
+				cellSize[c].setSize(dim.width,dim.height);
+			}
+	    	
+			public Dimension zoom(double x, double y) {
+				Dimension column1 = null;
+				for (int i=0; i < cellSize.length;i++) {
+					Dimension d = getCellSize(0,i);
+					Dimension newd;
+					if (i == getContentColumn()){
+						newd =  new Dimension(
+								(int) Math.round(x*d.getWidth()),
+								(int) Math.round(x*d.getWidth())
+								);
+						column1 = newd;
+					} else 
+						newd =  new Dimension(
+								d.width,
+								(int) Math.round(x*d.getHeight())
+								);
+					setCellSize(newd, 0,i);
+				}
+				return column1;
+				
+			}				    	
 	    },		
 	    Matrix {
 	    	protected int columns =3;
@@ -180,20 +207,28 @@ public interface IBrowserMode {
 	    	public int[] recordToCell(int record) {
 	    		return new int[] {record / getColumns(),record % getColumns()};
 	    		
-	    	}	    	
+	    	}	    
+			public Dimension zoom(double x, double y) {
+				Dimension d = getCellSize(0,0);
+				Dimension newd =  new Dimension(
+						(int) Math.round(x*d.width),
+						(int) Math.round(x*d.width)
+						);
+				setCellSize(newd, 0,0);
+			
+				return newd;
+				
+			}	    	
 	    } ,
 
 	    Columns {
-
+	    	protected Dimension cellSize = new Dimension(100,18);
+	    	protected Dimension cellSize1 = new Dimension(100,100);
 			@Override
 			public int cellToRecord(int row, int col) {
 				return col;
 			}
 
-			@Override
-			public Dimension getCellSize(int row, int col) {
-				return new Dimension(100,18);
-			}
 
 			@Override
 			public int getColumns() {
@@ -246,8 +281,17 @@ public interface IBrowserMode {
 
 			@Override
 			public void setCellSize(Dimension dim, int row, int col) {
-				
-				
+				if (row == 1)
+					cellSize1.setSize(dim.width,dim.height);
+				else
+					cellSize.setSize(dim.width,dim.height);
+			}
+			@Override
+			public Dimension getCellSize(int row, int col) {
+				if (row==1)
+					return cellSize1;
+				else
+					return cellSize;
 			}
 
 			@Override
@@ -261,6 +305,23 @@ public interface IBrowserMode {
 				// TODO Auto-generated method stub
 				
 			}
+			public Dimension zoom(double x, double y) {
+				Dimension d = getCellSize(0,0);
+				Dimension newd =  new Dimension(
+						(int) Math.round(x*d.width),
+						(int) Math.round(d.height)
+						);
+				setCellSize(newd, 0,0);
+				
+				d = getCellSize(1,0);
+				newd =  new Dimension(
+						(int) Math.round(x*d.width),
+						(int) Math.round(x*d.width)
+						);
+				setCellSize(newd, 1,0);			
+				return newd;
+				
+			}			
 	    	
 	    };
 	    public abstract String getTitle();
@@ -268,6 +329,8 @@ public interface IBrowserMode {
 	    public abstract String getTooltip();
 	    public abstract Dimension getCellSize(int row,int col);
 	    public abstract void setCellSize(Dimension dim,int row,int col);
+	    public abstract Dimension zoom(double x, double y) ;
+
 	    public abstract int getColumns();
 	    public abstract int cellToRecord(int row,int col);
 	    public abstract int[] recordToCell(int record);
@@ -291,7 +354,7 @@ public interface IBrowserMode {
 	BrowserMode getBrowserMode();
 
 	
-	public void zoom(double arg0);
+	public void zoom(double x,double y);
 	void addPropertyChangeListener(PropertyChangeListener x);
 	void removePropertyChangeListener(PropertyChangeListener x);
 }

@@ -42,7 +42,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	protected int page = 0;
 	protected int record = 0;	
 	protected int idColumn = 1;
-	protected double zoomFactor =1;
+	protected double[] zoomFactor = new double[] {1.0,1.0};
 	protected ImageIcon selectedIcon ;
 	protected ImageIcon currentIcon ;
 	protected ImageIcon selectedAndCurrentIcon ;
@@ -99,7 +99,9 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 
 		switch (browserMode) {
 		case Matrix:
-			return (int)Math.ceil((double)rowCount / getColumnCount());
+			if (getColumnCount()==0) return 1;
+			else
+				return (int)Math.ceil((double)rowCount / getColumnCount());
 		case Columns:
 			return getDataModel().getColumnCount()+1;			
 		default:	
@@ -151,6 +153,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		}		
 		
 	}
+
 	protected int getDataModelColumn(int column) {
 		switch (browserMode) {
 		case Matrix:
@@ -162,6 +165,19 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		}
 	}
 
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		int record = browserMode.cellToRecord(rowIndex, columnIndex);
+		int realRow = record+getPage()*getPageSize();
+		return getDataModel().isCellEditable(realRow, getDataModelColumn(columnIndex));
+	}	
+	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
+		int record = browserMode.cellToRecord(row, col);
+		int realRow = record+getPage()*getPageSize();
+		getDataModel().setValueAt(value, realRow, getDataModelColumn(col));
+	}
 	public Object getValueAt(int row, int col) {
 		int record = browserMode.cellToRecord(row, col);
 		int realRow = record+getPage()*getPageSize();
@@ -265,11 +281,10 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		this.page = page;
 		
 		ps.firePropertyChange(IPageNavigator.PROPERTY_PAGE, oldpage,page);
-		fireTableDataChanged();
+		fireTableStructureChanged();
 		
 		if ((getRecord() < getPage()*getPageSize()) || (getRecord() >= (getPage()+1)*getPageSize()))
 			setRecord(getPage()*getPageSize());
-		System.out.println("setPage "+page);
 	}
 
 	public void setPageSize(int size) {
@@ -279,7 +294,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		this.pageSize = size;
 		ps.firePropertyChange(IPageNavigator.PROPERTY_PAGESIZE, oldsize,page);
 		ps.firePropertyChange(IPageNavigator.PROPERTY_MAXPAGES, oldMax,getMaxPages());
-		fireTableDataChanged();
+		fireTableStructureChanged();
 	}
 
 	public int getMaxRecords() {
@@ -312,7 +327,6 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			fireTableCellUpdated(oldrecord-oldPage*getPageSize(), 0);
 			fireTableCellUpdated(record-getPage()*getPageSize(), 0);
 		}		
-		System.out.println("setRecord "+record);
 	}
 
 	public BrowserMode getBrowserMode() {
@@ -337,15 +351,8 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		
 	}
 
-	public void zoom(double arg0) {
-		double oldZoom = zoomFactor;
-		zoomFactor = arg0;
-		browserMode.setCellSize(new Dimension(
-				(int) Math.round(zoomFactor),
-				(int) Math.round(zoomFactor)
-				),
-				0,0);
-		ps.firePropertyChange(IBrowserMode.PROPERTY_ZOOM,oldZoom,zoomFactor);
+	public void zoom(double x,double y) {
+		ps.firePropertyChange(IBrowserMode.PROPERTY_ZOOM,browserMode.getCellSize(0,0),browserMode.zoom(x,y));
 	}
 
 	public void setFilter(int column, Object value)
