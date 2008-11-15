@@ -26,12 +26,10 @@ package ambit2.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Type;
 import java.util.Hashtable;
 
 import javax.swing.DefaultCellEditor;
@@ -45,13 +43,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.apache.poi.hssf.util.CellReference;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.ui.table.BrowserModeNavigator;
 import ambit2.ui.table.FindNavigator;
@@ -78,6 +80,7 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	protected IHeaderAction[] headerActions = getHeaderActions();
 	//protected Dimension cellSize = new Dimension(200,200);	
 	protected Hashtable<BrowserMode, ImageCellRenderer> imageRenderers = new Hashtable<BrowserMode, ImageCellRenderer>();
+	protected BrowserModeCellRenderer cellRenderer = new BrowserModeCellRenderer(BrowserMode.Spreadsheet);
 	/**
 	 * 
 	 */
@@ -164,6 +167,40 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	protected JTable addWidgets(T model) {
 		
 		JTable table = new JTable(model) {
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				  Object value = getValueAt(row,column);
+				  Object renderer = null;
+				  if (value !=null) { 
+					  renderer = defaultRenderersByColumnClass.get(value.getClass());
+		            if (renderer != null) {
+		                return (TableCellRenderer)renderer;
+		            }
+		            else {
+		                return getDefaultRenderer(value.getClass().getSuperclass());
+		            }
+				  } else  
+				  return super.getCellRenderer(row,column);
+
+			}
+			
+			@Override
+			public TableCellEditor getCellEditor(int row, int column) {
+
+				  Object value = getValueAt(row,column);
+				  Object editor = null;
+				  if (value !=null) { 
+					  editor = defaultEditorsByColumnClass.get(value.getClass());
+				  
+		            if (editor != null) {
+		                return (TableCellEditor)editor;
+		            }
+		            else {
+		                return getDefaultEditor(value.getClass().getSuperclass());
+		            }
+				  } else  
+					  return super.getCellEditor(row,column);
+			}
 			
 			public void createDefaultColumnsFromModel() {
 				TableModel m = getModel();
@@ -171,16 +208,6 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 				if (m instanceof IBrowserMode) 
 					mode = ((IBrowserMode)m).getBrowserMode();
 				else mode = BrowserMode.Spreadsheet;
-					
-				TableCellRenderer renderer = null;
-			
-				if (mode == BrowserMode.Columns) {
-					renderer = new RowRenderer();
-					((RowRenderer)renderer).add(mode.getContentColumn(), getImageRenderer(mode));
-					
-				
-				}
-					
 				if (m != null) {
 					// Remove any current columns
 					
@@ -191,24 +218,10 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					}
 					for (int i = 0; i < m.getColumnCount(); i++) {
 						EditableHeaderTableColumn newColumn = new EditableHeaderTableColumn();
-						//TableColumn newColumn = new TableColumn(i);
 						newColumn.setModelIndex(i);
+						//newColumn.setCellRenderer(cellRenderer);
 
-						if ((browser_table != null) && (browser_table.getModel()!= null)) {
-						    switch (mode) {
-						    case Columns: {
-						        newColumn.setCellRenderer(renderer);
-						        break;
-						    }
-						    default: {}
-						    }
-
-						}
-						
-							
 						addColumn(newColumn);
-				        //col.setHeaderValue(combo.getItemAt(0));    
-				        //col.setHeaderRenderer(renderer);   
 						
 						((EditableHeaderTableColumn)newColumn).setHeaderEditor(
 				        		new DefaultCellEditor(
@@ -230,18 +243,13 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
 		table.setIntercellSpacing(new Dimension(3,3));
-		/*
-		table.setDefaultRenderer(IAtomContainer.class,
-				new MoleculeGridCellRenderer(cellSize));
-		table.setDefaultRenderer(IMolecule.class, new MoleculeGridCellRenderer(
-				cellSize));
-				*/
-		
 		if (model instanceof IBrowserMode) 
 			((IBrowserMode)model).addPropertyChangeListener(getImageRenderer(BrowserMode.Spreadsheet));		
 		table.setDefaultRenderer(Image.class, getImageRenderer(BrowserMode.Spreadsheet));
+		table.setDefaultRenderer(IMolecule.class, getImageRenderer(BrowserMode.Spreadsheet));
+		table.setDefaultRenderer(Molecule.class, getImageRenderer(BrowserMode.Spreadsheet));
+		table.setDefaultRenderer(AtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));		
 		table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
-		
 
 		/*
 		table.setPreferredScrollableViewportSize(new Dimension(
@@ -270,8 +278,8 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	    table.getSelectionModel().addListSelectionListener(listener);
 	    table.getColumnModel().getSelectionModel()
 	        .addListSelectionListener(listener);
-	    table.setShowHorizontalLines(true);
-	    table.setShowVerticalLines(true);
+	    table.setShowHorizontalLines(BrowserMode.Spreadsheet.showGridHorizontal());
+	    table.setShowVerticalLines(BrowserMode.Spreadsheet.showGridVertical());
 	    table.setGridColor(Color.gray);
 	    setCellSize( table);
 		return table;
@@ -312,9 +320,11 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 					
 					IBrowserMode bm = ((IBrowserMode)browser_table.getModel());
 					int[] cell = bm.getBrowserMode().recordToCell(record);
-					if (cell[0] >= 0)
-					browser_table.setRowSelectionInterval(cell[0],cell[0]);
-					if (cell[1] >= 0)
+					if ((cell[0] >= 0) && (cell[0] < browser_table.getRowCount())) {
+						browser_table.setRowSelectionInterval(cell[0],cell[0]);
+//						browser_table.scrollRectToVisible(aRect)
+					}
+					if ((cell[1] >= 0) && (cell[1] < browser_table.getColumnCount()))
 						browser_table.setColumnSelectionInterval(cell[1],cell[1]);
 						
 				}				
@@ -326,10 +336,16 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		
 			
 			BrowserMode mode = ((BrowserMode)evt.getNewValue());
+			cellRenderer.mode = mode;
 			browser_table.setDefaultRenderer(Image.class, getImageRenderer(mode));
-			browser_table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(mode));				
+			browser_table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(mode));
+			browser_table.setDefaultRenderer(IMolecule.class, getImageRenderer(mode));
+			browser_table.setDefaultRenderer(Molecule.class, getImageRenderer(mode));
+			browser_table.setDefaultRenderer(AtomContainer.class, getImageRenderer(mode));			
 			browser_table.setRowSelectionAllowed(mode.isRowSelectionAllowed());
 			browser_table.setColumnSelectionAllowed(mode.isColumnSelectionAllowed());	
+			browser_table.setShowHorizontalLines(mode.showGridHorizontal());
+			browser_table.setShowVerticalLines(mode.showGridVertical());
 			
 			if (browser_table.getModel() instanceof IBrowserMode)  {
 				BrowserMode oldmode = ((BrowserMode)evt.getOldValue());
@@ -458,11 +474,10 @@ abstract class MultiCells<Key,T> {
 		  
 
 }	  
+/*
 class RowRenderer extends MultiCells<Integer,TableCellRenderer> implements TableCellRenderer {
 
-	  /**
-	   * 
-	   */
+
 	  public RowRenderer() {
 		  super();
 	  }
@@ -478,7 +493,9 @@ class RowRenderer extends MultiCells<Integer,TableCellRenderer> implements Table
 		  
 		    editor = editors.get(new Integer(row));
 		    if (editor == null)
-		    	editor = table.getDefaultRenderer(value.getClass());
+		    	if (value != null) {
+		    		editor = table.getDefaultRenderer(value.getClass());
+		    	}	
 
 		    if (editor == null) {
 		    	  editor = defaultEditor;
@@ -518,5 +535,6 @@ class RowRenderer extends MultiCells<Integer,TableCellRenderer> implements Table
 	  public boolean shouldSelectCell(EventObject anEvent) {
 	    return editor.shouldSelectCell(anEvent);
 	  }
-	  */
+	  
 	}
+	*/

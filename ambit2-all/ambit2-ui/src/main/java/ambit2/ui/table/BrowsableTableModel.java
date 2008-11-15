@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui.table;
 
-import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -85,7 +84,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			int rowCount;
 	    	if (page < getMaxPages()) rowCount = pageSize;
 	    	else rowCount = getMaxRecords()-getPage()*getPageSize();			
-			return rowCount+2;
+			return rowCount+1;
 		}	
 		default:	
 			return getDataModel().getColumnCount()+2;
@@ -100,8 +99,10 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		switch (browserMode) {
 		case Matrix:
 			if (getColumnCount()==0) return 1;
-			else
-				return (int)Math.ceil((double)rowCount / getColumnCount());
+			else {
+				double rows = (double)(rowCount*2.0) / getColumnCount();
+				return 2*(int)Math.ceil(rows);
+			}
 		case Columns:
 			return getDataModel().getColumnCount()+1;			
 		default:	
@@ -113,7 +114,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	public Class<?> getColumnClass(int column) {
 		switch (browserMode) {
 		case Matrix:
-			return getDataModel().getColumnClass(browserMode.getContentColumn());
+			return super.getColumnClass(column);	
 		case Columns:
 			return super.getColumnClass(column);			
 		default:	
@@ -128,7 +129,10 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	public String getColumnName(int column) {
 		switch (browserMode) {
 		case Matrix:
-			return getDataModel().getColumnName(browserMode.getContentColumn());
+			if ((column %2)==1)
+				return getDataModel().getColumnName(browserMode.getContentColumn());
+			else
+				return "#";
 		case Columns: {
 	    	switch (column) {
 	    	case 0: 
@@ -154,12 +158,21 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		
 	}
 
-	protected int getDataModelColumn(int column) {
+	protected int getDataModelColumn(int row, int column) {
 		switch (browserMode) {
 		case Matrix:
-			return browserMode.getContentColumn();
+			if ((row %2) == 0)
+				if ((column % 2)==1)
+					return browserMode.getContentColumn();
+				else
+					return 0;
+			else
+				if ((column % 2)==0)
+					return -1;
+				else
+					return browserMode.getIDColumn();				
 		case Columns:
-			return column-1;
+			return row;
 		default: 
 			return column-2;
 		}
@@ -169,14 +182,14 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		int record = browserMode.cellToRecord(rowIndex, columnIndex);
 		int realRow = record+getPage()*getPageSize();
-		return getDataModel().isCellEditable(realRow, getDataModelColumn(columnIndex));
+		return getDataModel().isCellEditable(realRow, getDataModelColumn(rowIndex,columnIndex));
 	}	
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		int record = browserMode.cellToRecord(row, col);
 		int realRow = record+getPage()*getPageSize();
-		getDataModel().setValueAt(value, realRow, getDataModelColumn(col));
+		getDataModel().setValueAt(value, realRow, getDataModelColumn(row,col));
 	}
 	public Object getValueAt(int row, int col) {
 		int record = browserMode.cellToRecord(row, col);
@@ -185,15 +198,17 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		switch (browserMode) {
 		case Matrix: {
 			if (record >= getPageSize()) return "";
-			else
-				return getDataModel().getValueAt(realRow, browserMode.getIDColumn());
+			else { 
+				int realCol = getDataModelColumn(row,col);
+				if (realCol != -1)
+					return getDataModel().getValueAt(realRow, realCol);
+				else return "";
+			}
 		}
 		case Columns: {
 			switch (col) {
 			case 0: return getDataModel().getColumnName(row);
 			default: {
-				record = browserMode.cellToRecord(row, col-1);
-				realRow = record+getPage()*getPageSize();
 				return getDataModel().getValueAt(realRow,row);			
 			}
 			}
@@ -202,22 +217,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		default: 
 	    	switch (col) {
 	    	case 0:  {
-	    		ImageIcon icon = null;
-	    		boolean found = false;
-	    		try {
-	    			found = isFound(realRow);
-	    		} catch (Exception x) {
-	    			found = false;
-	    		}
-	    		if (found)
-	    			if (getRecord() == (realRow)) {
-	    				icon = selectedAndCurrentIcon;
-	    			} else {
-	    				icon = selectedIcon;
-	    			}
-	    		else if (getRecord() == (realRow))
-	    			icon = currentIcon;
-	    		return icon;
+	    		return getRecordMarker(realRow);
 	    	}	
 	    	case 1:
 	    		return new Integer(realRow);
@@ -228,6 +228,24 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 
 	}
 	
+	protected ImageIcon getRecordMarker(int realRow) {
+		ImageIcon icon = null;
+		boolean found = false;
+		try {
+			found = isFound(realRow);
+		} catch (Exception x) {
+			found = false;
+		}
+		if (found)
+			if (getRecord() == (realRow)) {
+				icon = selectedAndCurrentIcon;
+			} else {
+				icon = selectedIcon;
+			}
+		else if (getRecord() == (realRow))
+			icon = currentIcon;
+		return icon;		
+	}
 	public AbstractTableModel getDataModel() {
 		return dataModel;
 	}
@@ -359,7 +377,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			throws UnsupportedOperationException {
 		if (dataModel instanceof IFilteredColumns)
 			((IFilteredColumns) getDataModel()).setFilter(
-					getDataModelColumn(column)
+					getDataModelColumn(0,column)
 					, value);
 		else
 			throw new UnsupportedOperationException();
@@ -368,7 +386,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	public void dropFilter(int column) throws UnsupportedOperationException {
 		if (dataModel instanceof IFilteredColumns)
 			((IFilteredColumns) getDataModel()).dropFilter(
-					getDataModelColumn(column)
+					getDataModelColumn(0,column)
 					);
 		else
 			throw new UnsupportedOperationException();
@@ -378,7 +396,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			throws UnsupportedOperationException {
 		if (dataModel instanceof ISortableColumns)
 			((ISortableColumns) getDataModel()).sort(
-					getDataModelColumn(column),ascending
+					getDataModelColumn(0,column),ascending
 					);
 		else
 			throw new UnsupportedOperationException();

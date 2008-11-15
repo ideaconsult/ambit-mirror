@@ -80,9 +80,7 @@ public class ImageCellRenderer extends DefaultTableCellRenderer implements
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (IBrowserMode.PROPERTY_ZOOM.equals(evt.getPropertyName())) {
-			
 			Dimension size = ((Dimension)evt.getNewValue());
-			System.out.println(getClass().getName()+ size);
 			imageTools.setImageSize(size);
 			
 		}
