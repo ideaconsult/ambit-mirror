@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui.table;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 
@@ -36,6 +37,7 @@ public interface IBrowserMode {
 	public static String PROPERTY_ZOOM="zoom";
 	
 	public enum BrowserMode {
+		
 	    Spreadsheet {
 	    	protected int idcolumn = 1;
 	    	protected int contentcolumn = 3;
@@ -135,13 +137,24 @@ public interface IBrowserMode {
 				}
 				return column1;
 				
-			}				    	
+			}				    
+		    public boolean showGridHorizontal() {
+		    	return true;
+		    }
+		    public boolean showGridVertical() {
+		    	return false;
+		    }	 		
+	    
 	    },		
 	    Matrix {
-	    	protected int columns =3;
-	    	protected int idcolumn = 1;
-	    	protected int contentcolumn = 1;	    	
-	    	protected Dimension cellSize = new Dimension(100,100);
+	    	protected int columns = 3;
+	    	protected int idcolumn = 2;
+	    	protected int contentcolumn = 1;
+	    	protected int cpr = 2;
+	    	protected Dimension[][] cellSize = {
+	    			{new Dimension(32,100),new Dimension(100,100)},
+	    			{new Dimension(32,18),new Dimension(100,18)},
+	    	};
 	    	
 	    	@Override
 	    	public String getTitle() {
@@ -161,16 +174,22 @@ public interface IBrowserMode {
 	    	}
 	    	@Override
 	    	public Dimension getCellSize(int row,int col) {
-	    		return cellSize;
+	    		return cellSize[row % 2][col % 2];
 	    	}
 	    	@Override
-	    	public void setCellSize(Dimension arg0,int row,int col) {
-	    		cellSize = arg0;
+	    	public void setCellSize(Dimension d,int row,int col) {
+	    		setCellSize(d.width,d.height);
+	    		//cellSize[row % 2][col % 2].setSize(d.width,d.height);
 	    		
 	    	}
+	    	protected void setCellSize(int w, int h) {
+	    		cellSize[0][0].setSize(cellSize[0][0].width,h);
+	    		cellSize[0][1].setSize(w,h);
+	    		cellSize[1][1].setSize(w,cellSize[1][1].height);
+	    	}	    	
 	    	@Override
 	    	public int getColumns() {
-	    		return columns;
+	    		return columns * cpr;
 	    	}
 	    	@Override
 	    	public int getIDColumn() {
@@ -201,24 +220,28 @@ public interface IBrowserMode {
 	    	@Override
 	    	public int cellToRecord(int row, int col) {
 	    		if (col<0) return -1;
-	    		return  row*getColumns()+col;
+	    		return  (row/cpr)*columns+col/cpr;
 	    	}
 	    	@Override
 	    	public int[] recordToCell(int record) {
-	    		return new int[] {record / getColumns(),record % getColumns()};
+	    		int[] c = new int[] {cpr * (record / columns),cpr* (record % columns)+1};
+	    		return c;
 	    		
 	    	}	    
 			public Dimension zoom(double x, double y) {
-				Dimension d = getCellSize(0,0);
+				Dimension d = getCellSize(0,1);
 				Dimension newd =  new Dimension(
 						(int) Math.round(x*d.width),
 						(int) Math.round(x*d.width)
 						);
-				setCellSize(newd, 0,0);
+				setCellSize(newd, 0,1);
 			
 				return newd;
 				
-			}	    	
+			}
+		    public Color getCellColor(int row, int col) {
+		    	return Color.white;
+		    }			
 	    } ,
 
 	    Columns {
@@ -226,7 +249,7 @@ public interface IBrowserMode {
 	    	protected Dimension cellSize1 = new Dimension(100,100);
 			@Override
 			public int cellToRecord(int row, int col) {
-				return col;
+				return col-1;
 			}
 
 
@@ -321,7 +344,14 @@ public interface IBrowserMode {
 				setCellSize(newd, 1,0);			
 				return newd;
 				
-			}			
+			}		
+		    public boolean showGridHorizontal() {
+		    	return false;
+		    }
+		    public boolean showGridVertical() {
+		    	return true;
+		    }	 			
+
 	    	
 	    };
 	    public abstract String getTitle();
@@ -349,6 +379,16 @@ public interface IBrowserMode {
 	    public abstract void setContentColumn(int id);
 	    public abstract boolean isRowSelectionAllowed();
 	    public abstract boolean isColumnSelectionAllowed();
+	    public boolean showGridHorizontal() {
+	    	return false;
+	    }
+	    public boolean showGridVertical() {
+	    	return false;
+	    }
+	    public Color getCellColor(int row, int col) {
+	    	return ((row % 2)==0) ? Color.white : Color.lightGray;
+	    }		    
+
 	}
 	void setBrowserMode(BrowserMode mode);
 	BrowserMode getBrowserMode();

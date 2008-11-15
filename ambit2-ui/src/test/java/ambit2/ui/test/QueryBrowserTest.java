@@ -128,11 +128,12 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 		
 		Enumeration<Integer> e = molecules.keys();
 		StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+		 
 		while (e.hasMoreElements()) {
 			Integer key = e.nextElement();
 			try {
 				molecules.get(key).setProperty("FLAG",new Boolean(true));
-				molecules.get(key).setProperty("NAME",Integer.toString((int) (100*Math.random())));
+				molecules.get(key).setProperty("NAME","Long Long Name "+key);
 				sdg.setMolecule(molecules.get(key));
 				sdg.generateCoordinates(new Vector2d(0,1));
 				molecules.put(key,sdg.getMolecule());
@@ -152,10 +153,16 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 		
 		switch (col) {
 		case 0: {
-			return molecules.get(row).getProperty("FLAG");
+			if (molecules.get(row) ==null) return false;
+			else return molecules.get(row).getProperty("FLAG");
 		}
 		case 2: {
+			if (molecules.get(row) ==null) return "";
 			return molecules.get(row).getProperty("NAME");
+		}		
+		case 4: {
+			if (molecules.get(row) ==null) return false;
+			else return molecules.get(row).getProperty("FLAG");
 		}		
 		case 1: {
 			try {
@@ -164,7 +171,9 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 			
 			} catch (Exception x) {}
 		} 
-		
+		case 3: {
+			return new Double(row/10.0);
+		}			
 		default: {
 			return new Integer((row+1)*(col+1));	
 		}
@@ -174,10 +183,17 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 	}
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		if (columnIndex == 0)
-			molecules.get(rowIndex).setProperty("FLAG",Boolean.parseBoolean(value.toString()));
-		else
-			super.setValueAt(value, rowIndex, columnIndex);
+		try {
+		
+			if (columnIndex == 0)
+				molecules.get(rowIndex).setProperty("FLAG",Boolean.parseBoolean(value.toString()));
+			else {
+
+				super.setValueAt(value, rowIndex, columnIndex);
+			}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	}
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -226,7 +242,6 @@ class TestTableModel extends AbstractTableModel implements IFindNavigator {
 		}	
 		
 		Collections.sort(hits);
-		System.out.println(hits);
 		pointer = 0;
 		return hits.size();
 	}

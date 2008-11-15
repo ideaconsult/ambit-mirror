@@ -26,7 +26,6 @@ package ambit2.ui.table;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -76,6 +75,7 @@ public class PageNavigator extends AbstractPanel<IPageNavigator> {
         pageSize = BasicComponentFactory.createIntegerField(
                 presentationModel.getModel(IPageNavigator.PROPERTY_PAGESIZE));
         pageSize.setToolTipText("Records per page");
+                
 
         prevPage = new JButton(new AbstractAmbitAction("<","images/resultset_previous.png","Previous page") {
 			public void actionPerformed(ActionEvent e) {

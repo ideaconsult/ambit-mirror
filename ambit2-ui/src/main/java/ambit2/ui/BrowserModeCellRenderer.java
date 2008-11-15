@@ -24,30 +24,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 
-public class BrowserModeCellRenderer implements TableCellRenderer {
+public class BrowserModeCellRenderer extends DefaultTableCellRenderer {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4027149275232536325L;
 	protected BrowserMode mode;
-	protected TableCellRenderer renderer;
 	
-	public BrowserModeCellRenderer(BrowserMode mode,TableCellRenderer renderer) {
+	public BrowserModeCellRenderer(BrowserMode mode) {
 		super();
 		this.mode = mode;
-		this.renderer = renderer;
 	}
+
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		table.setRowHeight(row,mode.getCellSize(row, column).height);
-		return renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-				row, column);
+		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		//c.setBackground(mode.getCellColor(row, column));
+		System.out.print(row);
+		System.out.print(c.getClass().getName());
+		System.out.println();
+		c.setBackground(Color.orange);
+		return c;
 	}	
 }
