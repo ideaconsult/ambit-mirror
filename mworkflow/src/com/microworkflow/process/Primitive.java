@@ -55,5 +55,9 @@ public class Primitive extends Activity {
 	public void computeStateFor(Continuation k) {
 		// stateless
 	}
+	public boolean hasExecuted() {
+		if (performer != null) return performer.hasExecuted();
+		else return false;
+	}
 
 }
