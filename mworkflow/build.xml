@@ -1,5 +1,5 @@
 <project name="Micro-workflow" default="mworkflow" basedir=".">
-  <property name="version" value="1.0" />	
+  <property name="version" value="1.0.1" />	
   <description>
        Micro-workflow package by Dragos Manolescu (dam@micro-workflow.com)
    </description>

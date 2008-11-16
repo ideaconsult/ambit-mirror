@@ -5,7 +5,7 @@
   <groupId>ambit</groupId>
   <artifactId>mworkflow</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <name>Micro-workflow</name>
     
    <distributionManagement>
@@ -14,8 +14,8 @@
       <url>scp://nina@unicom.acad.bg/var/www/html/ambit/maven</url>
 	 </snapshotRepository>
     <repository>
-      <id>ambit_sf</id>
-      <url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
+      <id>website_ambit</id>
+      <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
     </repository>    
 
     
@@ -36,10 +36,10 @@
             </goals>
             <configuration>
               <tasks>
-                <attachArtifact file="dist/mworkflow-1.0.jar" />
+                <attachArtifact file="dist/mworkflow-1.0.1.jar" />
 <!--
                 <ant dir="." target="" />
-                <attachArtifact file="dist/mworkflow-1.0.jar" classifier="exec" type="jar"/>
+                <attachArtifact file="dist/mworkflow-1.0.1.jar" classifier="exec" type="jar"/>
                 -->
 
               </tasks>
