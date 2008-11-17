@@ -8,16 +8,25 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.config.Symbols;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
+import org.openscience.cdk.ringsearch.SSSRFinder;
 
 public class SmartsToChemObject 
 {
-	//When this flag is true aromatic bonds are forced between two aromatic atoms
-	public boolean forceAromaticBonds = false; 
+	//When this flag is true aromatic bonds are forced between any two aromatic atoms 
+	public boolean forceAromaticBondsAlways = false; 
+		
+	//When this flag is true aromatic bonds are forced between atoms which are not part of a ring
+	//e.g. the SMARTS Query describes a part of aromatic cycle "cccc"
+	//But this flag will not force the bond aromaticity for the single bond in the biphenyl.
+	//c1ccccc1c2ccccc2 will be interpreted as c1ccccc1-c2ccccc2
+	public boolean forceAromaticBondsForNonRingAtoms = true;
 	
 	//Internal work variable
 	boolean mFlagConfirmAromaticBond;
@@ -38,7 +47,7 @@ public class SmartsToChemObject
 	 * @param query
 	 * @return
 	 */
-	public IMolecule extractAtomContainer(QueryAtomContainer query)
+	public IMolecule extractAtomContainer(QueryAtomContainer query, IRingSet ringSet)
 	{
 		//Converting the atoms
 		Vector<IAtom> atoms = new Vector<IAtom>();
@@ -73,16 +82,27 @@ public class SmartsToChemObject
 					continue;
 				b.setAtoms(ats);
 				
-				if (mFlagConfirmAromaticBond)
+				if ((mFlagConfirmAromaticBond) && 
+					(ats[0].getFlag(CDKConstants.ISAROMATIC))  &&  (ats[1].getFlag(CDKConstants.ISAROMATIC)))
 				{
-					if (forceAromaticBonds)
+					if (forceAromaticBondsAlways)
 					{	
 						b.setFlag(CDKConstants.ISAROMATIC,true);
 					}
 					else
 					{	
-						//Ring info should be used
-						//TODO
+						//Ring info is used to determine whether this bond must have aromatic flag
+						if (ringSet == null)
+						{
+							if (forceAromaticBondsForNonRingAtoms)
+								b.setFlag(CDKConstants.ISAROMATIC,true);
+						}
+						else
+						{	
+							if (isRingBond(query.getBond(i), ringSet))
+								b.setFlag(CDKConstants.ISAROMATIC,true);
+						}
+						
 					}	
 				}
 				container.addBond(b);
@@ -90,6 +110,15 @@ public class SmartsToChemObject
 		}	
 		
 		return(container);
+	}
+	
+	/** Version of the function when the Ring data is not supplied outside*/
+	public IMolecule extractAtomContainer(QueryAtomContainer query)
+	{
+		SSSRFinder sssrf = new SSSRFinder(query);
+		IRingSet ringSet = sssrf.findSSSR();
+		
+		return(extractAtomContainer(query,ringSet));
 	}
 	
 	
@@ -142,8 +171,6 @@ public class SmartsToChemObject
 		//    result atom type 
 		//    or if two or more expressions define atom type these atom types
 		//    must be the same
-		
-		
 		
 		
 		Vector<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO_ANDLO);
@@ -401,5 +428,20 @@ public class SmartsToChemObject
 	public  IBond smartsExpressionToBond(SmartsBondExpression b)
 	{	
 		return(null);
+	}
+	
+	boolean isRingBond(IBond b, IRingSet ringSet)
+	{
+		IRingSet atom0Rings = ringSet.getRings(b.getAtom(0));
+		IRingSet atom1Rings = ringSet.getRings(b.getAtom(1));
+		
+		for (int i  = 0; i < atom0Rings.getAtomContainerCount(); i++)
+		{	
+			IAtomContainer c = atom0Rings.getAtomContainer(i);
+			for (int k  = 0; k < atom1Rings.getAtomContainerCount(); k++)
+				if (atom1Rings.getAtomContainer(k) == c)
+					return(true);
+		}
+		return(false);
 	}
 }
