@@ -209,7 +209,7 @@ public class TestUtilities
 		if (!errorMsg.equals(""))		
 			return(-1);
 		
-		smToChemObj.forceAromaticBonds = true;
+		smToChemObj.forceAromaticBondsAlways = true;
 		IMolecule mol =  smToChemObj.extractAtomContainer(query);
 		
 		System.out.println(smarts);
