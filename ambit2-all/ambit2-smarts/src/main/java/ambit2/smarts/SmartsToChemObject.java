@@ -48,7 +48,7 @@ public class SmartsToChemObject
 	 * @param query
 	 * @return
 	 */
-	public IMolecule extractAtomContainer(QueryAtomContainer query, IRingSet ringSet)
+	public IAtomContainer extractAtomContainer(QueryAtomContainer query, IRingSet ringSet)
 	{
 		//Converting the atoms
 		Vector<IAtom> atoms = new Vector<IAtom>();
@@ -114,7 +114,7 @@ public class SmartsToChemObject
 	}
 	
 	/** Version of the function when the Ring data is not supplied outside*/
-	public IMolecule extractAtomContainer(QueryAtomContainer query)
+	public IAtomContainer extractAtomContainer(QueryAtomContainer query)
 	{
 		SSSRFinder sssrf = new SSSRFinder(query);
 		IRingSet ringSet = sssrf.findSSSR();
