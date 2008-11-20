@@ -16,6 +16,7 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.ringsearch.SSSRFinder;
+import org.xmlcml.cml.element.CMLBasisSet.Basis;
 
 public class SmartsToChemObject 
 {
@@ -32,17 +33,17 @@ public class SmartsToChemObject
 	boolean mFlagConfirmAromaticBond;
 	
 	//Work variables which are set by functions analyzeSubExpressionsFromLowAnd and getExpressionAtomType
-	int mSubAtomType, mSubAromaticity, mCurSubArom;
+	int mSubAtomType, mSubAromaticity, mCurSubArom, mRecCurSubArom;
 		
 	
 	/** 
 	 * Maximal possible atom container from this query is generated.
-	 * This container may be fragmented since some original atoms or bonds could be missing.
+	 * This container may be fragmented since some original atoms or bonds could be removed.
 	 *  
 	 * Following rule is applied: each query atom/bond which is a simple expressaion is  
 	 * converted to a normal IAtom/IBond object
 	 * Also some heuristics are applied in order to get information from more 
-	 * complicated atoms expressions.  
+	 * complicated atoms expressions (when possible).  
 	 * 
 	 * @param query
 	 * @return
@@ -82,6 +83,7 @@ public class SmartsToChemObject
 					continue;
 				b.setAtoms(ats);
 				
+				
 				if ((mFlagConfirmAromaticBond) && 
 					(ats[0].getFlag(CDKConstants.ISAROMATIC))  &&  (ats[1].getFlag(CDKConstants.ISAROMATIC)))
 				{
@@ -101,8 +103,7 @@ public class SmartsToChemObject
 						{	
 							if (isRingBond(query.getBond(i), ringSet))
 								b.setFlag(CDKConstants.ISAROMATIC,true);
-						}
-						
+						}						
 					}	
 				}
 				container.addBond(b);
@@ -172,13 +173,16 @@ public class SmartsToChemObject
 		//    or if two or more expressions define atom type these atom types
 		//    must be the same
 		
+		//System.out.println("\nConverting expression: " +  a.toString());
 		
-		Vector<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO_ANDLO);
+		Vector<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO+ SmartsConst.LO_ANDLO);
 		int atType = -1;
 		int isArom = -1;			
 		for (int  i = 0; i < subs.size(); i++)
-		{
+		{	
 			analyzeSubExpressionsFromLowAnd(a, subs.get(i));
+			//System.out.print("  sub-expression " +  subs.get(i).toString());
+			//System.out.println("    mSubAtomType = " + mSubAtomType + "  mSubAromaticity = " + mSubAromaticity);
 			if (mSubAtomType != -1)
 			{
 				if (atType == -1)					
@@ -209,12 +213,17 @@ public class SmartsToChemObject
 			}
 		}
 		
-		if (atType != -1)
+		if ((atType != -1)&&(isArom != -1))
 		{
 			Atom atom = new Atom();			
 			atom.setSymbol(Symbols.byAtomicNumber[atType]);			
-			//TODO
-			//atom.setFlag(CDKConstants.ISAROMATIC,true);
+						
+			//Setting the aromaticity
+			if (isArom == 1)				
+				atom.setFlag(CDKConstants.ISAROMATIC,true);
+			else
+				atom.setFlag(CDKConstants.ISAROMATIC,false);
+							
 			return(atom);
 		}
 		return(null);
@@ -247,7 +256,7 @@ public class SmartsToChemObject
 		//  then all other sub-subs must have the same type
 		//Analogously the aromaticity is treated
 		
-		Vector<SmartsAtomExpression> sub_subs = getSubExpressions(sub, SmartsConst.LO_OR);
+		Vector<SmartsAtomExpression> sub_subs = getSubExpressions(sub, SmartsConst.LO+SmartsConst.LO_OR);
 		int subAtType[] = new int[sub_subs.size()];
 		int subArom[] = new int[sub_subs.size()];
 		for (int i = 0; i <sub_subs.size(); i++)
@@ -288,7 +297,7 @@ public class SmartsToChemObject
 		int n = 0; 
 		for (int i = 0; i < sub.tokens.size(); i++)
 		{
-			if (sub.tokens.get(i).type == SmartsConst.LO_AND)
+			if (sub.tokens.get(i).type == SmartsConst.LO+SmartsConst.LO_AND)
 			{
 				n++;   
 				pos[n] = i;
@@ -313,7 +322,7 @@ public class SmartsToChemObject
 				seTok = sub.tokens.get(k);
 				if (seTok.isLogicalOperation())
 				{
-					if (seTok.getLogOperation() == SmartsConst.LO_NOT)					
+					if (seTok.getLogOperation() == SmartsConst.LO + SmartsConst.LO_NOT)					
 						FlagNot = !FlagNot;
 					
 					if (seTok.getLogOperation() == SmartsConst.LO_AND)					
@@ -351,10 +360,13 @@ public class SmartsToChemObject
 					break;	
 					
 				case SmartsConst.AP_Recursive:
-					int atType = getRecursiveExpressionAtomType(atExp,seTok.param);
-					if (atType > 0)
+					int recExpAtType = getRecursiveExpressionAtomType(atExp,seTok.param);
+					if (recExpAtType > 0)
 						if (!FlagNot)
-							expAtType = atType;
+						{	
+							expAtType = recExpAtType;
+							mCurSubArom = mRecCurSubArom;
+						}	
 					break;
 					
 				//All other token types do not effect function result
@@ -374,19 +386,23 @@ public class SmartsToChemObject
 		mSubAromaticity_old = mSubAromaticity;
 		mCurSubArom_old = mCurSubArom;
 		
-		//Potential recursion here
+		//Potential recursion here		
 		IAtom a0 = atExp.recSmartsContainers.get(n).getAtom(0);
 		IAtom anew =  toAtom(a0);
+		if (a0.getFlag(CDKConstants.ISAROMATIC))
+			mRecCurSubArom = 1;
+		else
+			mRecCurSubArom = 0;
 		
 		//Restoring the global work variables
 		mSubAtomType = mSubAtomType_old;
 		mSubAromaticity = mSubAromaticity_old;
 		mCurSubArom = mCurSubArom_old;
 		
-		if (anew == null)
+		if (anew == null)			
 			return -1;
 		else
-			return(anew.getAtomicNumber());
+			return(SmartsConst.getElementNumber(anew.getSymbol()));
 	}
 	
 	
@@ -413,8 +429,8 @@ public class SmartsToChemObject
 		
 		if (b instanceof OrderQueryBond)
 		{	
-			Bond bond = new Bond();
-			bond.setOrder(IBond.Order.SINGLE);			
+			Bond bond = new Bond();			
+			bond.setOrder(b.getOrder());
 			return(bond);
 		}	
 		

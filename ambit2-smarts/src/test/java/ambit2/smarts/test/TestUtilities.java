@@ -200,7 +200,21 @@ public class TestUtilities
 		return(false);
 	}
 	
-	
+	int testSMARTStoChemObj(String smarts)
+	{	
+		QueryAtomContainer query  = sp.parse(smarts);		
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))	
+		{	
+			System.out.println("Smarts Error: " + errorMsg);
+			return(-1);
+		}	
+		
+		//smToChemObj.forceAromaticBondsAlways = true;
+		IMolecule mol =  smToChemObj.extractAtomContainer(query);
+		System.out.println(smarts + "  --> " + SmartsHelper.moleculeToSMILES(mol));
+		return(0);
+	}
 	
 	int testExtractAtomContainer(String smarts)
 	{	
@@ -212,12 +226,17 @@ public class TestUtilities
 		smToChemObj.forceAromaticBondsAlways = true;
 		IMolecule mol =  smToChemObj.extractAtomContainer(query);
 		
-		System.out.println(smarts);
+		System.out.println("Creating a Chem object with extractAtomContainer ");
+		System.out.println(smarts);		
 		printAromaticity(mol);
+		System.out.println("Object to SMILES");
 		System.out.println(SmartsHelper.moleculeToSMILES(mol));
 		
+		System.out.println("Creating a Chem object with teh SMILES parser ");
+		System.out.println(smarts);	
 		IMolecule mol2 =  SmartsHelper.getMoleculeFromSmiles(smarts);
 		printAromaticity(mol2);
+		System.out.println("Object to SMILES");
 		System.out.println(SmartsHelper.moleculeToSMILES(mol2));
 		
 		
@@ -371,9 +390,12 @@ public class TestUtilities
 		//tu.testFingerprint();
 		//tu.testWithFile("\\NCI001000.txt","ExtractAtomContainer");
 		
-		int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
-		System.out.println("res = " + res);
-		
+		//int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
+		//int res = tu.testExtractAtomContainer("CC=CC#CCN");
+		//int res = tu.testExtractAtomContainer("c1ccccc1");
+		//System.out.println("res = " + res);
+		tu.testSMARTStoChemObj("*CCCC*CC~CN");
+		tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
 	}
 	
 	public void printAromaticity(IMolecule mol)
