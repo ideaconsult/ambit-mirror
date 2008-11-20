@@ -211,7 +211,7 @@ public class TestUtilities
 		}	
 		
 		//smToChemObj.forceAromaticBondsAlways = true;
-		IMolecule mol =  smToChemObj.extractAtomContainer(query);
+		IAtomContainer mol =  smToChemObj.extractAtomContainer(query);
 		System.out.println(smarts + "  --> " + SmartsHelper.moleculeToSMILES(mol));
 		return(0);
 	}
@@ -224,7 +224,7 @@ public class TestUtilities
 			return(-1);
 		
 		smToChemObj.forceAromaticBondsAlways = true;
-		IMolecule mol =  smToChemObj.extractAtomContainer(query);
+		IAtomContainer mol =  smToChemObj.extractAtomContainer(query);
 		
 		System.out.println("Creating a Chem object with extractAtomContainer ");
 		System.out.println(smarts);		
@@ -398,7 +398,7 @@ public class TestUtilities
 		tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
 	}
 	
-	public void printAromaticity(IMolecule mol)
+	public void printAromaticity(IAtomContainer mol)
 	{	
 		for (int i = 0; i < mol.getAtomCount(); i++)
 		{
