@@ -312,7 +312,9 @@ public class SmartsAtomExpression extends SMARTSAtom
     			return(""+tok.param);
     		
     		case SmartsConst.AP_Recursive:
-    			//return("$("+(String)recSmartsStrings.get(tok.param)+")");
+    			if (recSmartsContainers.isEmpty())
+    				return("$()");
+    			//return("$("+(String)recSmartsStrings.get(tok.param)+")");    			
     			SmartsHelper sw = new SmartsHelper();    			
     			return("$("+sw.toSmarts((QueryAtomContainer)recSmartsContainers.get(tok.param))+")");
     		}
