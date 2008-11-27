@@ -394,8 +394,12 @@ public class TestUtilities
 		//int res = tu.testExtractAtomContainer("CC=CC#CCN");
 		//int res = tu.testExtractAtomContainer("c1ccccc1");
 		//System.out.println("res = " + res);
-		tu.testSMARTStoChemObj("*CCCC*CC~CN");
-		tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
+		
+		//tu.testSMARTStoChemObj("*CCCC*CC~CN");
+		//tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
+		
+		man.useMOEvPrimitive(true);
+		tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 	}
 	
 	public void printAromaticity(IAtomContainer mol)
