@@ -64,7 +64,9 @@ public class SmartsBondExpression extends SMARTSBond
     	switch (boType)
     	{
     	case SmartsConst.BT_SINGLE:
-    		if (bond.getOrder() == IBond.Order.SINGLE)
+    		//System.out.println(" ***** BT_SINGLE");
+    		if ((bond.getOrder() == IBond.Order.SINGLE) && 
+    			(!bond.getFlag(CDKConstants.ISAROMATIC))   )
     			return(true);    		
     		break;	    		
     	case SmartsConst.BT_DOUBLE:

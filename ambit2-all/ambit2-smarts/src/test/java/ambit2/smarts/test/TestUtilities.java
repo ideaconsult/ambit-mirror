@@ -1,5 +1,6 @@
 package ambit2.smarts.test;
 
+import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.BitSet;
@@ -87,6 +88,23 @@ public class TestUtilities
 		}		
 		boolean res = man.searchIn(mol);
 		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
+	}
+	
+	public void showAtomMappings(String smarts, String smiles)
+	{	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		man.setQuery(smarts);
+		if (!man.getErrors().equals(""))
+		{
+			System.out.println(man.getErrors());
+			return;
+		}
+		System.out.println("Man_search " + smarts + " in " + smiles);
+		List l = man.getBondMappings(mol);
+		
+		
+		//boolean res = man.searchIn(mol);
+		
 	}
 	
 	public void testIsomorphismTester(String smarts, String smiles)
@@ -399,7 +417,8 @@ public class TestUtilities
 		//tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
 		
 		man.useMOEvPrimitive(true);
-		tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 	}
 	
 	public void printAromaticity(IAtomContainer mol)
