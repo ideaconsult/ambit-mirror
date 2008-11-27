@@ -768,7 +768,7 @@ public class SmartsManager
 		}		
 	}
 	
-	String matchesToString(IAtomContainer target, Vector<IAtom> atomMaps)
+	public String matchesToString(IAtomContainer target, Vector<IAtom> atomMaps)
 	{
 		StringBuffer sb = new StringBuffer(); 
 		for (IAtom at : atomMaps)		
@@ -843,6 +843,9 @@ public class SmartsManager
 		return(atomMaps);
 	}
 	
+	/** This function returns a vector of all positions (IAtoms) at which
+	 * The Query is matched (i.e. it first atom is matched)
+	 * The full atom mapping is not obtained from this function  */
 	
 	public Vector<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
 	{
@@ -871,16 +874,16 @@ public class SmartsManager
 		IBond tBond1 = null;		
 		IAtom commonTAt;
 		RMap map;
-		List list;		
-		for (Object aBondMapping : bondMapping) 
+		List mapList;		
+		for (Object aList : bondMapping) 
 		{
-			list = (List) aBondMapping;
+			mapList = (List) aList;
 			//Search RMaps to find the corresponding target bonds (qBond0<-->tBond0, qBond1<-->tBond1)
 			//Note: map.getId2 corresponds to the query; map.getId1 corresponds to the target 
 			int found = 0;
-			for (Object aList : list) 
+			for (Object aMap : mapList) 
 			{
-				map = (RMap) aList;
+				map = (RMap) aMap;
 				if (map.getId2() == qID0 )
 				{
 					found++;
@@ -913,6 +916,74 @@ public class SmartsManager
 		return(atomMaps);
 	}
 	
+	/** This function generates full Atom Mapping from a Bond mapping
+	 * */
+	public Vector<IAtom> extractFullAtomMapping(List mapList, IAtomContainer target, IAtomContainer queryStr)
+	{
+		//The query must contain  at least 3 atoms and 2 bonds.
+		//Otherwise this function will not work
+		Vector<IAtom> atomMaps  = new Vector<IAtom>();
+		if ((queryStr.getAtomCount()<3) || (queryStr.getBondCount() < 2))
+			return(atomMaps);
+		
+		IAtom atMaps[] = new IAtom[queryStr.getAtomCount()];
+		for (int i = 0; i < atMaps.length; i++)
+			atMaps[i] = null;
+		
+		int qBoNum0, qBoNum1, tBoNum0, tBoNum1; 
+		
+		//Handling all atoms that have more than one neighbor
+		for (int i = 0; i < queryStr.getAtomCount(); i++)
+		{
+			//To obtain the partner target atom, two bonds of the query atom are used
+			//and their partners from the target structure are intersected
+			IAtom qAt = queryStr.getAtom(i);
+			List<IAtom> conAtList =  queryStr.getConnectedAtomsList(qAt);
+			if (conAtList.size() > 1)
+			{
+				qBoNum0 = queryStr.getBondNumber(qAt, conAtList.get(0));
+				tBoNum0 = getTargetPartnerBondID(qBoNum0, mapList);
+				qBoNum1 = queryStr.getBondNumber(qAt, conAtList.get(1));
+				tBoNum1 = getTargetPartnerBondID(qBoNum1, mapList);
+				atMaps[i] = getBondsCommonAtom(target.getBond(tBoNum0),target.getBond(tBoNum1));
+			}
+				
+		}
+		
+		//Handling all atoms that have exactly one neighbor
+		for (int i = 0; i < queryStr.getAtomCount(); i++)
+		{
+			IAtom qAt = queryStr.getAtom(i);
+			List<IAtom> conAtList =  queryStr.getConnectedAtomsList(qAt);
+			if (conAtList.size() == 1)
+			{
+				int neighborNum = queryStr.getAtomNumber(conAtList.get(0));
+				qBoNum0 = queryStr.getBondNumber(qAt, conAtList.get(0));
+				tBoNum0 = getTargetPartnerBondID(qBoNum0, mapList);
+				IBond b = target.getBond(tBoNum0);
+				if (atMaps[neighborNum] == b.getAtom(0))
+					atMaps[i] = b.getAtom(1);
+				else
+					atMaps[i] = b.getAtom(0);
+			}	
+		}
+		
+		return(atomMaps);
+	}	
+	
+	
+	public int getTargetPartnerBondID(int queryBondID, List mapList)
+	{	
+		RMap map;
+		for (Object aMap : mapList) 
+		{
+			//Note: map.getId2 corresponds to the query; map.getId1 corresponds to the target
+			map = (RMap) aMap;
+			if (map.getId2() == queryBondID)
+				return(map.getId1());
+		}
+		return(0);
+	}
 	
 	public IAtom getBondsCommonAtom(IBond b1, IBond b2)
 	{
