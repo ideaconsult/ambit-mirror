@@ -915,7 +915,7 @@ public class SmartsManager
 	
 	/** This function generates full Atom Mapping from a Bond mapping
 	 * */
-	public Vector<IAtom> extractFullAtomMapping(List mapList, IAtomContainer target, IAtomContainer queryStr)
+	public Vector<IAtom> generateFullAtomMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
 	{
 		//The query must contain  at least 3 atoms and 2 bonds.
 		//Otherwise this function will not work
@@ -939,37 +939,42 @@ public class SmartsManager
 			if (conAtList.size() > 1)
 			{
 				qBoNum0 = queryStr.getBondNumber(qAt, conAtList.get(0));
-				tBoNum0 = getTargetPartnerBondID(qBoNum0, mapList);
+				tBoNum0 = getTargetPartnerBondID(qBoNum0, bondMapList);
 				qBoNum1 = queryStr.getBondNumber(qAt, conAtList.get(1));
-				tBoNum1 = getTargetPartnerBondID(qBoNum1, mapList);
+				tBoNum1 = getTargetPartnerBondID(qBoNum1, bondMapList);
 				atMaps[i] = getBondsCommonAtom(target.getBond(tBoNum0),target.getBond(tBoNum1));
-			}
-				
+			}	
 		}
 		
 		//Handling all atoms that have exactly one neighbor
 		for (int i = 0; i < queryStr.getAtomCount(); i++)
-		{
+		{			
+			if (atMaps[i] != null) //The atom was processed
+				continue;
 			IAtom qAt = queryStr.getAtom(i);
 			List<IAtom> conAtList =  queryStr.getConnectedAtomsList(qAt);
 			if (conAtList.size() == 1)
 			{
+				//The neighbor atoms was processed (mapped) in the previous cycle
 				int neighborNum = queryStr.getAtomNumber(conAtList.get(0));
 				qBoNum0 = queryStr.getBondNumber(qAt, conAtList.get(0));
-				tBoNum0 = getTargetPartnerBondID(qBoNum0, mapList);
+				tBoNum0 = getTargetPartnerBondID(qBoNum0, bondMapList);
 				IBond b = target.getBond(tBoNum0);
 				if (atMaps[neighborNum] == b.getAtom(0))
 					atMaps[i] = b.getAtom(1);
 				else
 					atMaps[i] = b.getAtom(0);
 			}	
-		}
+		}	
+		
+		for (int i = 0; i < atMaps.length; i++)
+			atomMaps.add(atMaps[i]); 
 		
 		return(atomMaps);
 	}	
 	
 	
-	public int getTargetPartnerBondID(int queryBondID, List mapList)
+	int getTargetPartnerBondID(int queryBondID, List mapList)
 	{	
 		RMap map;
 		for (Object aMap : mapList) 
@@ -982,7 +987,7 @@ public class SmartsManager
 		return(0);
 	}
 	
-	public IAtom getBondsCommonAtom(IBond b1, IBond b2)
+	IAtom getBondsCommonAtom(IBond b1, IBond b2)
 	{
 		if (b1.contains(b2.getAtom(0)))
 			return(b2.getAtom(0));
