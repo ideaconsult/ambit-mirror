@@ -78,7 +78,8 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 			for (RMap map : maps)
 			c.addBond(mol.getBond(map.getId1()));
 		
-		List<IAtom> atoms =sman.getAtomMappings(mol,sman.getQueryContaner());
+		//List<IAtom> atoms =sman.getAtomMappings(mol,sman.getQueryContaner()); -- replaced by Nick :-)
+		List<IAtom> atoms =sman.getFirstPosAtomMappings(mol);
 		for (IAtom atom: atoms)
 			c.addAtom(atom);
 			

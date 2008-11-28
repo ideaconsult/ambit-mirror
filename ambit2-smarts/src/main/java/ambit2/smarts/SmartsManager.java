@@ -705,7 +705,7 @@ public class SmartsManager
 		return(mappingIn(target));		
 	}
 	
-	public Vector<IAtom> getAtomMappings(IAtomContainer target)
+	public Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target)
 	{				
 		if (query == null)
 			return(null);		
@@ -715,9 +715,8 @@ public class SmartsManager
 		{	
 			clearQueryRecMatches();
 			getQueryRecMatches(target);
-		}			
-		
-		return(getAtomMappings(target,query));
+		}	
+		return(getFirstPosAtomMappings(target,query));
 	}
 	
 	public List getBondMappings(IAtomContainer target)
@@ -743,9 +742,7 @@ public class SmartsManager
 		}
 		return(bondList);
 	}
-	
-	
-	
+		
 	
 	void clearQueryRecMatches()
 	{
@@ -760,7 +757,7 @@ public class SmartsManager
 		{	
 			vRecCon = recAtoms.get(i).recSmartsContainers;
 			for (int j = 0; j < vRecCon.size(); j++)			
-				recAtoms.get(i).recSmartsMatches.add(getAtomMappings(target,vRecCon.get(j)));
+				recAtoms.get(i).recSmartsMatches.add(getFirstPosAtomMappings(target,vRecCon.get(j)));
 			
 			//for (int j = 0; j < vRecCon.size(); j++)
 			//	System.out.println(recAtoms.get(i).recSmartsStrings.get(j) + "  "+
@@ -776,7 +773,7 @@ public class SmartsManager
 		return(sb.toString());
 	}
 	
-	public Vector<IAtom> getAtomMappings(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target, IAtomContainer recQuery)
 	{
 		List bondMaps;		  
 		try
@@ -799,7 +796,7 @@ public class SmartsManager
 		return(new Vector<IAtom>());
 	}
 	
-	public Vector<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target, IAtomContainer recQuery)
 	{
 		SMARTSAtom qAtom = (SMARTSAtom)recQuery.getAtom(0);
 		Vector<IAtom> atomMaps  = new Vector<IAtom>();
@@ -809,7 +806,7 @@ public class SmartsManager
 		return(atomMaps);
 	}
 	
-	public Vector<IAtom> getAtomMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getAtomMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
 	{
 		Vector<IAtom> atomMaps  = new Vector<IAtom>();
 		if (recQuery.getBondCount() == 0)
@@ -847,7 +844,7 @@ public class SmartsManager
 	 * The Query is matched (i.e. it first atom is matched)
 	 * The full atom mapping is not obtained from this function  */
 	
-	public Vector<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
 	{
 		//The query must contain  at least 3 atoms and 2 bonds.
 		//The first bonds is alway 0-1
