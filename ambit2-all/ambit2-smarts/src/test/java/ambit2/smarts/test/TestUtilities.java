@@ -92,7 +92,7 @@ public class TestUtilities
 	
 	public void showFullAtomMappings(String smarts, String smiles)
 	{	
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{
@@ -100,10 +100,21 @@ public class TestUtilities
 			return;
 		}
 		System.out.println("Man_search " + smarts + " in " + smiles);
-		List l = man.getBondMappings(mol);
-				
-		//boolean res = man.searchIn(mol);
-		
+		List bondMapList = man.getBondMappings(mol);
+		for (Object aBondMapping: bondMapList)
+		{
+			Vector<IAtom> atomMapping = man.generateFullAtomMapping((List)aBondMapping, mol, man.getQueryContaner());
+			System.out.print("Mapping: ");
+			for (int i = 0; i < atomMapping.size(); i++)
+			{
+				IAtom a = atomMapping.get(i);
+				if (a == null)
+					System.out.print(" null");
+				else
+					System.out.print(" "+a.getSymbol()+"<"+mol.getAtomNumber(a)+">");
+			}
+			System.out.println();
+		}
 	}
 	
 	public void testIsomorphismTester(String smarts, String smiles)
@@ -417,7 +428,8 @@ public class TestUtilities
 		
 		man.useMOEvPrimitive(true);
 		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		tu.showFullAtomMappings("CCN", "CCCNCCC");
 	}
 	
 	public void printAromaticity(IAtomContainer mol)
