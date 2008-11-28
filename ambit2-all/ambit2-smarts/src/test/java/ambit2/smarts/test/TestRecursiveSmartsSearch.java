@@ -70,7 +70,7 @@ public class TestRecursiveSmartsSearch extends TestCase
 		mQuery = man.getQueryContaner();
 		//boolean res = man.searchIn(mTarget);
 		//System.out.println("ss_res = " + res);
-		nmatch = man.getAtomMappings(mTarget).size();
+		nmatch = man.getFirstPosAtomMappings(mTarget).size();
 		nqmatch = nmatch;
 	}
 	

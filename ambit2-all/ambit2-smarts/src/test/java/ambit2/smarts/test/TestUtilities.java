@@ -90,7 +90,7 @@ public class TestUtilities
 		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
 	}
 	
-	public void showAtomMappings(String smarts, String smiles)
+	public void showFullAtomMappings(String smarts, String smiles)
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
@@ -101,8 +101,7 @@ public class TestUtilities
 		}
 		System.out.println("Man_search " + smarts + " in " + smiles);
 		List l = man.getBondMappings(mol);
-		
-		
+				
 		//boolean res = man.searchIn(mol);
 		
 	}
@@ -438,14 +437,14 @@ public class TestUtilities
 	
 	public void testSmartsManagerAtomMapping(String smarts, String smiles)
 	{	
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{
 			System.out.println(man.getErrors());
 			return;
 		}
-		Vector<IAtom> atoms = man.getAtomMappings(mol);
+		Vector<IAtom> atoms = man.getFirstPosAtomMappings(mol);
 		System.out.println(smarts + " mapped against " + smiles + 
 						" gave " + atoms.size()+" atoms:");
 		for (int i = 0; i < atoms.size(); i++)
