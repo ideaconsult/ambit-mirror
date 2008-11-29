@@ -59,12 +59,10 @@ public class SmartsBondExpression extends SMARTSBond
     };
     
     boolean getArgument(int boType, IBond bond)
-    {
-    	//System.out.println("arg " + boType);
+    {	
     	switch (boType)
     	{
     	case SmartsConst.BT_SINGLE:
-    		//System.out.println(" ***** BT_SINGLE");
     		if ((bond.getOrder() == IBond.Order.SINGLE) && 
     			(!bond.getFlag(CDKConstants.ISAROMATIC))   )
     			return(true);    		

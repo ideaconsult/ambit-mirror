@@ -429,7 +429,9 @@ public class TestUtilities
 		man.useMOEvPrimitive(true);
 		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		tu.showFullAtomMappings("CCN", "CCCNCCC");
+		//tu.showFullAtomMappings("CCN", "CCCNCCC");
+		//tu.showFullAtomMappings("C1CC=C1", "C1CC=C1CCC");
+		tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 	}
 	
 	public void printAromaticity(IAtomContainer mol)

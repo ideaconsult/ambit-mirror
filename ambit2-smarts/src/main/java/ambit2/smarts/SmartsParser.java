@@ -359,8 +359,8 @@ public class SmartsParser
 			case SmartsConst.BT_ANY:
 				curBond = new AnyOrderQueryBond();				
 				break;				
-			case SmartsConst.BT_SINGLE:
-				curBond = new OrderQueryBond(IBond.Order.SINGLE);									
+			case SmartsConst.BT_SINGLE:				
+				curBond = new SingleNonAromaticBond();
 				break;
 			case SmartsConst.BT_DOUBLE:
 				curBond = new OrderQueryBond(IBond.Order.DOUBLE);									
