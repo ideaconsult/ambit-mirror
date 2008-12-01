@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qmrf_help name="QMRF Repository user guide">
+
+<chapter anchor="background" name="Background" level="1">
+<help>TODO</help>
+</chapter>
+
+
+
+		<chapter anchor="search_structures" name="How to search for chemical structures">
+		<help>
+			Select "Exact structure" or "Similarity". In case of "Similarity", please specify a threshold for the Tanimoto distance.
+		</help>
+		<help>
+			Draw a compound in the Structure Diagram Editor on the right, or specify CAS RN., Formula, Chemical name or SMILES.
+		</help>
+			<help>
+			All fields are combined by "AND".
+		</help>
+			<help>
+			The structures in the QMRF Inventory are imported from attachments of type "training set" or "validation set", uploaded by the Authors.
+			When a document is published, the chemical structures are imported in the QMRF Inventory and are linked to the corresponding document.
+		</help>
+			<help>
+			The search returns a list of structures along with links to the corresponding QMRF documents.
+			</help>
+		</chapter>
+</qmrf_help>

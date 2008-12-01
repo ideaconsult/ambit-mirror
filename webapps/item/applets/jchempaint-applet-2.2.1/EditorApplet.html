@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>The JChemPaint Applet Demo</title>
+</head>
+<body BGCOLOR="#ffffff" LINK="#000099">
+
+<h2>
+The JChemPaint Applet
+</h2>
+
+<applet code="org.openscience.cdk.applications.jchempaint.applet.JChemPaintEditorApplet" archive="jchempaint-applet-core.jar"
+		name="Editor"
+        width="600" height="500">
+<param name="load" value="a-pinene.mol">
+</applet>
+<a href="javascript:alert(document.Editor.getMolFile())">show mol file</a>
+<a href="javascript:document.Editor.clear()">clear</a>
+<blockquote>
+<hr>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,130 @@
+	body,
+	html {
+		margin:0;
+		padding:0em;
+		background:#FFFFFF;
+		color:#000;
+	}
+	body {
+		min-width:750px;
+	}
+	#wrap {
+		background:#FFFFFF;
+		margin:0 auto;
+		width:800px;
+	}
+	#header {
+		background:#FFFFFF;
+	}
+	#header h1 {
+    	padding:5px;
+	    margin:0;
+    }
+	#nav {
+		background:#D6DFF7;
+		padding:5px;
+	}
+	#nav ul{
+		margin:0;
+		padding:0em;
+		list-style:none;
+	}
+	#nav li{
+		display:inline;
+		margin:0;
+		padding:0em;
+	}
+	#main {
+		background:#FFFFFF;
+		float:left;
+		width:500px;
+	}
+	#main h2,#main h3, #main h4, #main p {
+		padding:0em 10px;
+    }
+	#options {
+		background:#FFFFFF;
+		float:right;
+		width:280px;
+	}
+	#options ul {
+		margin-bottom:0;
+  }
+  #options h3, #options p {
+		padding:0em 10px 0em 0em;
+  }
+  #suboptions {
+  	border-width:1px;
+  	border-color: #D6DFF7;
+  	border-style: solid;
+  	align:left;
+		
+	}
+	#footer {
+		background:#D6DFF7;
+		clear:both;
+	}
+	#footer p {
+		padding:5px;
+		margin:0;
+    }
+table
+{
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+}
+
+p
+{
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+    COLOR: #36393D;
+}
+A:link
+{
+    FONT-SIZE: 10pt;
+    COLOR: #6c86dc;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:visited
+{
+    FONT-SIZE: 10pt;
+    COLOR: #6c86dc;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:active
+{
+    FONT-SIZE: 10pt;
+    COLOR: #265BCC;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:hover
+{
+    FONT-SIZE: 10pt;
+    COLOR: #ECB42C;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}    
+  #search {
+  	background:#36393D;
+  	color:#FFFFFF;
+  	text-align:center;
+  	border-width:2px;
+  	border-color: #36393D;
+  	border-style: solid;
+  }  
