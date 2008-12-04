@@ -22,7 +22,7 @@ response.setHeader("Expires", "0");
 </c:if>
 
 
-<c:if test="${(!empty param.user_name) && (pageContext.request.userPrincipal.name ne param.user_name) && (!sessionScope['ismanager']) && (!sessionScope['iseditor']) && (!sessionScope['isadmin'])}">	
+<c:if test="${(!empty param.user_name) && (pageContext.request.userPrincipal.name ne param.user_name) && (!sessionScope['ismanager']) && (!sessionScope['iseditor']) && (!sessionScope['isadmin'])}">
 	<c:set var="stop" value="true"/>
 	<users user_name="You are not authorized to retrieve user information"/>
 </c:if>
@@ -52,19 +52,20 @@ response.setHeader("Expires", "0");
 			</sql:query>
 
 			<c:forEach var="row" items="${rs.rows}">
-					<user user_name='${row.user_name}'
-						email='${row.email}'
-						registration_status='${row.registration_status}'
-						registration_date='${row.registration_date}'
-						title='${row.title}'
-						firstname='${row.firstname}'
-						lastname='${row.lastname}'
-						address='${row.address}'
-						country='${row.country}'
-						affiliation='${row.affiliation}'
-						webpage='${row.webpage}'
-						reviewer='${row.reviewer}'
-						keywords='${row.keywords}'
+					<user
+						user_name="<c:out value='${row.user_name}' />"
+						email="<c:out value='${row.email}' />"
+						registration_status="<c:out value='${row.registration_status}' />"
+						registration_date="<c:out value='${row.registration_date}' />"
+						title="<c:out value='${row.title}' />"
+						firstname="<c:out value='${row.firstname}' />"
+						lastname="<c:out value='${row.lastname}' />"
+						address="<c:out value='${row.address}' />"
+						country="<c:out value='${row.country}' />"
+						affiliation="<c:out value='${row.affiliation}' />"
+						reviewer="<c:out value='${row.reviewer}' />"
+						webpage="<c:out value='${row.webpage}' />"
+						keywords="<c:out value='${row.keywords}' />"
 					>
 						<c:set var="roles">qmrf_user,qmrf_admin,qmrf_manager,qmrf_editor</c:set>
 						<c:forTokens var="t" items="${roles}" delims=",">
