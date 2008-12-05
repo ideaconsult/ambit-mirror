@@ -27,16 +27,21 @@ package ambit2.ui.test;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 import javax.vecmath.Vector2d;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,13 +50,10 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.ui.QueryBrowser;
-import ambit2.ui.Utils;
 import ambit2.ui.table.BrowsableTableModel;
 import ambit2.ui.table.IFindNavigator;
 
 import com.jgoodies.looks.Options;
-import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.lowagie.text.Image;
 
 
 public class QueryBrowserTest {
@@ -81,6 +83,15 @@ public class QueryBrowserTest {
 		QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(new BrowsableTableModel(dataModel));
 		browser.setPreferredSize(new Dimension(800,600));
 		JOptionPane.showMessageDialog(null,browser,"",JOptionPane.PLAIN_MESSAGE,null);
+	}
+	
+	public static void main(String[] args) throws Exception {
+		String file = JasperCompileManager.compileReportToFile("src/test/resources/query.jrxml");
+		JasperPrint jasperPrint = JasperFillManager.fillReport(file, 
+				new HashMap(),
+				new JRTableModelDataSource(new TestTableModel()));
+		JasperViewer jasperViewer = new JasperViewer(jasperPrint);
+		jasperViewer.setVisible(true);		
 	}
 }
 

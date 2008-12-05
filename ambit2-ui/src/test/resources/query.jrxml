@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN"
+"http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport name="Query report">
+	<field name="B" class="org.openscience.cdk.interfaces.IMolecule"/>
+	<field name="C" class="java.lang.String"/>
+	<field name="D" class="java.lang.Number"/>
+	<field name="F" class="java.lang.Number"/>
+	<pageHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="0" width="69" height="24"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text>
+				<![CDATA[B: ]]>
+				</text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="69" height="24"/>
+				<text>
+				<![CDATA[C: ]]>
+				</text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="69" height="24"/>
+				<text>
+				<![CDATA[D: ]]>
+				</text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="69" height="24"/>
+				<text>
+				<![CDATA[F: ]]>
+				</text>
+			</staticText>																			
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="30">
+			<textField>
+				<reportElement x="0" y="0" width="69" height="24"/>
+				<textFieldExpression class="org.openscience.cdk.interfaces.IMolecule">
+				<![CDATA[$F{B}]]>
+				</textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="69" height="24"/>
+				<textFieldExpression class="java.lang.String">
+				<![CDATA[$F{C}]]>
+				</textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="69" height="24"/>
+				<textFieldExpression class="java.lang.Number">
+				<![CDATA[$F{D}]]>
+				</textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="69" height="24"/>
+				<textFieldExpression class="java.lang.Number">
+				<![CDATA[$F{F}]]>
+				</textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
