@@ -60,8 +60,9 @@ sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S
 Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW
 QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" type_structure="NA"/>
-  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-31 09:42:56.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
-  <user_roles user_name="guest" role_name="ambit_guest"/>
   <roles role_name="ambit_admin"/>
   <roles role_name="ambit_guest"/>
+  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-31 09:42:56.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <user_roles user_name="guest" role_name="ambit_guest"/>
+
 </dataset>
