@@ -2,12 +2,16 @@ package ambit2.workflow.ui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,7 +22,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import ambit2.ui.ColorTableCellRenderer;
-import ambit2.ui.ImageCellRenderer;
 import ambit2.ui.Utils;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
@@ -30,13 +33,15 @@ import com.microworkflow.process.Activity;
 import com.microworkflow.process.CompositeActivity;
 import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.IWorkflowListenerUI;
-import com.microworkflow.ui.WorkflowTableModel;
+
 
 public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     protected Workflow workflow;
     protected WorkflowTableModel wftm;
+    protected WorkflowPrefuse display;
     protected JTable table;
     protected boolean animate = true;
     protected JTextArea status;
@@ -76,15 +81,11 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     		}  
 
             
-		FormLayout layout = new FormLayout(
-            "pref:grow",
-			"top:pref,top:pref:grow,pref,pref,bottom:pref");
-		setLayout(layout);
+
         wftm = new WorkflowTableModel(null) {
         	@Override
         	public int getColumnCount() {
-
-        		return super.getColumnCount()+1;
+        		return 4;
         	}
         	@Override
         	public String getColumnName(int col) {
@@ -96,34 +97,33 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
                 switch (col) {
                 case 0:
                     return row+1;
+                case 3:
+	             		Activity a = getActivity(row);
+	              		if (a instanceof Primitive)
+               				return (((Primitive)a).hasExecuted()) ? executed : notyet;
+	               		else if (a instanceof CompositeActivity)
+	               			return composite;
+	               		else if (a instanceof Conditional)	    
+	               			return conditional;
+	               		else
+	               			return null;
+	
                 case 1:
-	                	if (selected == row)
-	            				return ptr;
-	                	else {
-	                		Activity a = getActivity(row);
-	                		if (a instanceof Primitive)
-                				return (((Primitive)a).hasExecuted()) ? executed : notyet;
-	                		else if (a instanceof CompositeActivity)
-	                			return composite;
-	                		else if (a instanceof Conditional)	    
-	                			return conditional;
-	                		else
-	                			return null;
-	                	}
+                	if (selected == row)
+            				return ptr;
+                	else 
+                			return null;
                	
                 case 2: {
-                    return super.getValueAt(row, col);
+                    return super.getValueAt(row, 1);
                 }    
-                case 3: {
-                	return getLevel(row);
-                }
                 default:
                     return row;
                 }
         	}
         	@Override
         	public Class<?> getColumnClass(int columnIndex) {
-        		if (columnIndex == 1)
+        		if ((columnIndex % 2) ==1)
         			return ImageIcon.class;
         		else
         			return super.getColumnClass(columnIndex);
@@ -142,15 +142,15 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 						cm.removeColumn(cm.getColumn(0));
 					}
 					// Create new columns from the data model info
-					final int columnSize[] = { 32, 32, 0,0};
+					final int columnSize[] = { 32, 32,0,32,0};
 					for (int i = 0; i < m.getColumnCount(); i++) {
 						TableColumn newColumn = new TableColumn(i);
-						if (columnSize[i]>0) {
+						if (columnSize[i] >0) {
 							newColumn.setMaxWidth(columnSize[i]);
 						}
 						addColumn(newColumn);
-						if (i==1)
-						newColumn.setCellRenderer(renderer);
+						if ((i % 2) == 1)
+							newColumn.setCellRenderer(renderer);
 						else
 							newColumn.setCellRenderer(new ColorTableCellRenderer());
 					}
@@ -165,6 +165,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 		table.setRowHeight(32);
         table.getColumnModel().getColumn(0).setMaxWidth(32);
         table.getColumnModel().getColumn(1).setMaxWidth(32);
+        table.getColumnModel().getColumn(3).setMaxWidth(32);        
         table.setShowVerticalLines(false);
         JScrollPane pane = new JScrollPane(table);
         pane.setPreferredSize(new Dimension(200,400));
@@ -179,12 +180,27 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         JButton cancel = new JButton("Stop");
         cancel.setEnabled(false);
         
+		FormLayout layout = new FormLayout(
+	            "pref:grow",
+				"top:pref,top:pref:grow,pref,pref,bottom:pref");
+			setLayout(layout);
+			
         CellConstraints cc = new CellConstraints();        
         
         add(DefaultComponentFactory.getInstance ().createSeparator( "Workflow steps" ),cc.xy(1,1)) ;
         add(pane, cc.xy(1,2));        
-        add(ButtonBarFactory.buildRightAlignedBar(
-        		new JButton[] {new JButton(action),cancel}),
+        
+        JButton prefuse = new JButton(new AbstractAction("View") {
+        	public void actionPerformed(ActionEvent e) {
+        		WorkflowPrefuse prefuse = new WorkflowPrefuse(workflow);
+        		JOptionPane.showMessageDialog(table,new JScrollPane(prefuse));
+        		
+        	}
+        });
+        add(ButtonBarFactory.buildWizardBar(
+        		new JButton[] {prefuse}
+        		, new JButton(action),cancel,
+        		new JButton[] {}),
         		cc.xy(1,3)
         		);
         add(DefaultComponentFactory.getInstance ().createSeparator( "Messages" ),cc.xy(1,4)) ;
@@ -195,13 +211,36 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     public void setWorkflow(Workflow wf) {
        if (this.workflow != null)
            this.workflow.removePropertyChangeListener(this);
-       wftm.setActivity(null);
+
+       
+       wftm.setActivities(null);
        this.workflow = wf;
        if (wf != null) {
-           wftm.setActivity(wf.getDefinition());
-           workflow.addPropertyChangeListener(this);
-      	   title = wf.toString();
-       } else title="No workflow defined!";
+    	   final ArrayList<Activity> activities = getActivityList(wf.getDefinition());
+           workflow.addPropertyChangeListener(this);    	   
+    	   if (activities.size()>0 ) {
+	           wftm.setActivities(activities);
+
+	      	   title = wf.toString();
+	      	   return;
+    	   }
+       } 
+       title="No workflow defined!";
+    }
+    public ArrayList<Activity> getActivityList(Activity activity) {
+        final ArrayList<Activity> activities = new ArrayList<Activity>();
+        WorkflowTools tools = new WorkflowTools() {
+     	   @Override
+     	public Object process(Activity[] parentActivity, Activity activity) {
+     		if (activity instanceof Sequence) ;
+     		else
+     			activities.add(activity);
+     		return activity;
+     	}
+        };
+        if (activity != null) 
+     	   tools.traverseActivity(null,activity,0,true);
+        return activities;
     }
     public JComponent getUIComponent() {
         return this;
@@ -210,7 +249,8 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         if (WorkflowEvent.WF_DEFINITION.equals(arg0.getPropertyName()))
             if (arg0.getNewValue() instanceof Activity) {
             	title = arg0.toString();
-                wftm.setActivity((Activity )arg0.getNewValue());
+            	wftm.setActivities(null);
+            	wftm.setActivities(getActivityList((Activity )arg0.getNewValue()));
             } else ;
         else if (WorkflowEvent.WF_EXECUTE.equals(arg0.getPropertyName())) {
             if (animate) {
