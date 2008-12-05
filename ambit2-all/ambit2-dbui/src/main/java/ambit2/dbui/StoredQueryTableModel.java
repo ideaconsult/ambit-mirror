@@ -144,9 +144,13 @@ public class StoredQueryTableModel extends AbstractTableModel {
 			ResultSet rs = structureRecords.executeQuery();
 			IAtomContainer ac = null;
 			while (rs.next()) {
-    			ac = retrieveMolecule.getObject(rs);
-    			if (ac != null)
-    			    break;
+				try {
+	    			ac = retrieveMolecule.getObject(rs);
+	    			if (ac != null)
+	    			    break;
+				} catch (Exception x) {
+					ac = null;
+				}
 		    }
 			rs.close();
 			return ac;
