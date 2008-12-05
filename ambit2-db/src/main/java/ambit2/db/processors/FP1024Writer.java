@@ -58,6 +58,7 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 	public IStructureRecord write(IStructureRecord record) throws SQLException {
 		if (record.getIdchemical() < 0) throw new SQLException("Undefined ID");
 		Map properties = record.getProperties();
+		if (properties ==null) throw new SQLException("Missing properties");
 		Object time = properties.get(AmbitCONSTANTS.FingerprintTIME);
 		if (time == null)
 			time = new Long(-1);
