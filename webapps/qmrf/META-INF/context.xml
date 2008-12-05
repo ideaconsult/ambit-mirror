@@ -1,0 +1,76 @@
+				 <Context debug="5" reloadable="true" crossContext="true">
+					<Realm className="org.apache.catalina.realm.DataSourceRealm"
+								debug="99"
+								dataSourceName="jdbc/tomcat_users"
+								localDataSource="true"
+								userTable="users" userNameCol="user_name" userCredCol="user_pass" digest="MD5"
+								userRoleTable="user_roles" roleNameCol="role_name"/>
+
+					<Resource name="jdbc/qmrf_documents" auth="Container" type="javax.sql.DataSource"
+								maxActive="100" maxIdle="3" maxWait="15000"
+								validationQuery="SELECT 1"
+								testOnBorrow="true"
+								testWhileIdle="true"
+								timeBetweenEvictionRunsMillis="60000"
+								minEvictableIdleTimeMillis="1800000"
+								numTestsPerEvictionRun="3"
+								username="XXX" password="XXX" driverClassName="com.mysql.jdbc.Driver"
+								useUnicode="true" characterEncoding="UTF-8"
+								url="jdbc:mysql://localhost:3306/qmrf_documents?autoReconnect=true"/>
+
+					<ResourceParams name="jdbc/qmrf_documents">
+							<parameter>
+								<name>removeAbandoned</name>
+								<value>true</value>
+							</parameter>
+							<parameter>
+								<name>removeAbandonedTimeout</name>
+								<value>60</value>
+							</parameter>
+				</ResourceParams>
+
+				<Resource name="jdbc/ambit_qmrf" auth="Container" type="javax.sql.DataSource"
+								maxActive="100" maxIdle="3" maxWait="15000"
+								validationQuery="SELECT 1"
+								testOnBorrow="true"
+								testWhileIdle="true"
+								timeBetweenEvictionRunsMillis="60000"
+								minEvictableIdleTimeMillis="1800000"
+								numTestsPerEvictionRun="3"
+								username="XXX" password="XXX" driverClassName="com.mysql.jdbc.Driver"
+								url="jdbc:mysql://localhost:3306/ambit_qmrf?autoReconnect=true"/>
+
+				<ResourceParams name="jdbc/ambit_qmrf">
+						<parameter>
+								<name>removeAbandoned</name>
+								<value>true</value>
+						</parameter>
+					<parameter>
+								<name>removeAbandonedTimeout</name>
+								<value>60</value>
+					</parameter>
+				</ResourceParams>
+
+				<Resource name="jdbc/tomcat_users" auth="Container" type="javax.sql.DataSource"
+									maxActive="100" maxIdle="3" maxWait="15000"
+									validationQuery="SELECT 1"
+									testOnBorrow="true"
+									testWhileIdle="true"
+									timeBetweenEvictionRunsMillis="60000"
+									minEvictableIdleTimeMillis="1800000"
+									numTestsPerEvictionRun="3"
+									username="XXX" password="XXX" driverClassName="com.mysql.jdbc.Driver"
+									url="jdbc:mysql://localhost:3306/tomcat_users?autoReconnect=true"/>
+
+
+			<ResourceParams name="jdbc/tomcat_users">
+				<parameter>
+					<name>removeAbandoned</name>
+					<value>true</value>
+				</parameter>
+				<parameter>
+					<name>removeAbandonedTimeout</name>
+					<value>60</value>
+				</parameter>
+			</ResourceParams>
+</Context>
