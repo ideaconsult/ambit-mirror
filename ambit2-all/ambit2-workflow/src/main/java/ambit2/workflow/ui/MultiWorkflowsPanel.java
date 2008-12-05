@@ -99,7 +99,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 					     try {
 					    	 runWorkflow((ClassHolder)item);
 					     } catch (Exception x) {
-					    	 
+					    	 x.printStackTrace();
 					     }
 					     }
 
