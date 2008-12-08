@@ -55,6 +55,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -148,22 +149,23 @@ public class PBTPageBuilder {
         return builder.getPanel();
     }    
 
-    public static JPanel buildPanel(HSSFWorkbook workbook, String sheetName, int rowOffset, int colOffset) {
+    public static JPanel buildPanel(PBTWorksheet worksheet, int rowOffset, int colOffset) {
     	int maxRow = 19;
     	int maxCol = 6;
         FormLayout layout = new FormLayout(
                 getLayoutString(maxCol+colOffset),
                 getLayoutString(maxRow+rowOffset));
-        HSSFFormulaEvaluator formulaEvaluator = new HSSFFormulaEvaluator(workbook);
-        HSSFSheet sheet = workbook.getSheet(sheetName);
+        
+        PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet);
+        
+        
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();  
         cc.insets = new Insets(3,3,3,3);
         cc.hAlign = CellConstraints.DEFAULT;
 
-
  
-        Iterator<HSSFRow> rows = sheet.rowIterator();
+        Iterator<HSSFRow> rows = worksheet.getSheet().rowIterator();
 		while (rows.hasNext()) {
 			HSSFRow row = rows.next();
 			
@@ -181,8 +183,8 @@ public class PBTPageBuilder {
 				boolean hidden = false;
 				int colspan = 1;
 				int rowspan = 1;
-		        for (int i=0; i < sheet.getNumMergedRegions();i++) {
-					CellRangeAddress merged = sheet.getMergedRegion(i);
+		        for (int i=0; i < worksheet.getSheet().getNumMergedRegions();i++) {
+					CellRangeAddress merged = worksheet.getSheet().getMergedRegion(i);
   
 					if ((cell.getRowIndex() >= merged.getFirstRow()) && (cell.getRowIndex() <= merged.getLastRow())) {
 						if (cell.getRowIndex() == merged.getFirstRow()) {
@@ -198,7 +200,7 @@ public class PBTPageBuilder {
 				}				
 		        if (hidden) continue;
 		        
-				HSSFPalette palette = workbook.getCustomPalette();
+				HSSFPalette palette = worksheet.getWorkbook().getCustomPalette();
 				HSSFColor color = palette.getColor(cell.getCellStyle().getFillForegroundColor());
 				Color background = Color.white;
 				if (HSSFPatternFormatting.NO_FILL != cell.getCellStyle().getFillPattern())
@@ -211,6 +213,10 @@ public class PBTPageBuilder {
 				default: 
 					component_alignment = JComponent.LEFT_ALIGNMENT;
 				}
+				
+				String propertyName = Integer.toString(cell.getColumnIndex()+1)+"_" + Integer.toString(cell.getRowIndex()+1);
+				if (cell.getRowIndex()!=5) propertyName = "dummy";
+				
 				if ((colspan >= maxCol) && (cell.getRowIndex()>1)) { 
 	        		JComponent separator = builder.addSeparator(cell.toString().trim(), 
 	        				cc.xywh(cell.getColumnIndex()+colOffset,cell.getRowIndex()+rowOffset,
@@ -220,7 +226,8 @@ public class PBTPageBuilder {
 				} else
 				switch (cell.getCellType()) {
 				case  HSSFCell.CELL_TYPE_BLANK: {
-	        		c = new JTextField(cell.toString());
+					
+	        		c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
 	        		c.setBackground(background);
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
@@ -253,6 +260,7 @@ public class PBTPageBuilder {
 	        		c.setBackground(background);
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
+	        		System.out.println(cell.getColumnIndex());
 	        		break;
 				}				
 				case  HSSFCell.CELL_TYPE_ERROR: {
@@ -261,20 +269,11 @@ public class PBTPageBuilder {
 				}				
 				case  HSSFCell.CELL_TYPE_FORMULA: {
 					
-
-					
-	        		c = new JTextField(cell.getCellFormula());
+					c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
 	        		c.setEnabled(false);
 	        		c.setBackground(background);
 	        		c.setBorder(BorderFactory.createEtchedBorder());
 	        		c.setToolTipText("This is an automatically calculated value");
-	        		
-					try {
-						CellValue value = formulaEvaluator.evaluate(cell);
-						((JTextField)c).setText(value.getStringValue());
-					} catch (Exception x) {
-						System.out.print(x.getMessage());
-					}	        		
 	        		break;					
 				}
 				default:

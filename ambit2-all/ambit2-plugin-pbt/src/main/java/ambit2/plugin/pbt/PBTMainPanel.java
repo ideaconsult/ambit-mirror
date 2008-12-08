@@ -83,8 +83,9 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 			POIFSFileSystem poifsFileSystem = new POIFSFileSystem(in);
 			
 			HSSFWorkbook workbook = new HSSFWorkbook(poifsFileSystem);
+			PBTWorksheet tsheet = new PBTWorksheet(workbook,"T-Sheet");
 	        tabbedPane.add("T-Sheet",
-	        		new JScrollPane(PBTPageBuilder.buildPanel(workbook,"T-Sheet",1,1)));			
+	        		new JScrollPane(PBTPageBuilder.buildPanel(tsheet,1,1)));			
         } catch (Exception x) {
         	x.printStackTrace();
         }
