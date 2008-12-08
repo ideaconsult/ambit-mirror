@@ -212,9 +212,9 @@ public class TestUtilities
 	}
 		
 	
-	public boolean checkSequence(QueryAtomContainer query, Vector<SequenceElement> sequence)
+	public boolean checkSequence(QueryAtomContainer query, Vector<QuerySequenceElement> sequence)
 	{
-		IAtomContainer skelleton = SequenceElement.getCarbonSkelleton(sequence);		
+		IAtomContainer skelleton = ChemObjectFactory.getCarbonSkelleton(sequence);		
 		//System.out.println("skelleton = " + SmartsHelper.moleculeToSMILES(skelleton));
 		try
 		{

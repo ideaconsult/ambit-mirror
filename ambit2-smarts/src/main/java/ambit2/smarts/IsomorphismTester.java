@@ -44,7 +44,7 @@ public class IsomorphismTester
 	boolean isomorphismFound;
 	Stack<Node> stack = new Stack<Node>();
 	Vector<IAtom> targetAt = new Vector<IAtom>(); //a work container
-	Vector<SequenceElement> sequence = new Vector<SequenceElement>();
+	Vector<QuerySequenceElement> sequence = new Vector<QuerySequenceElement>();
 	Vector<IQueryAtom> sequencedAtoms = new Vector<IQueryAtom>();
 	Vector<IQueryAtom> sequencedBondAt1 = new Vector<IQueryAtom>();
 	Vector<IQueryAtom> sequencedBondAt2 = new Vector<IQueryAtom>();
@@ -56,7 +56,7 @@ public class IsomorphismTester
 		setQueryAtomSequence(null);
 	}
 	
-	public Vector<SequenceElement> getSequence()
+	public Vector<QuerySequenceElement> getSequence()
 	{
 		return(sequence);
 	}
@@ -64,7 +64,7 @@ public class IsomorphismTester
 	void setQueryAtomSequence(IQueryAtom firstAt)
 	{	
 		IQueryAtom firstAtom;
-		SequenceElement seqEl;
+		QuerySequenceElement seqEl;
 		TopLayer topLayer;
 		//Vector<IQueryAtom> curAddedAtoms = new Vector<IQueryAtom>();  
 		int n;
@@ -80,7 +80,7 @@ public class IsomorphismTester
 		
 		//Set first sequence atom
 		sequencedAtoms.add(firstAtom);		
-		seqEl = new SequenceElement();
+		seqEl = new QuerySequenceElement();
 		seqEl.center = firstAtom;
 		topLayer = (TopLayer)firstAtom.getProperty(TopLayer.TLProp);
 		n = topLayer.atoms.size();
@@ -96,12 +96,12 @@ public class IsomorphismTester
 		sequence.add(seqEl);
 		
 		//Sequencing the entire query structure
-		Stack<SequenceElement> stack = new Stack<SequenceElement>();
+		Stack<QuerySequenceElement> stack = new Stack<QuerySequenceElement>();
 		stack.push(seqEl);
 		while (!stack.empty())
 		{
 			//curAddedAtoms.clear();
-			SequenceElement curSeqAt = stack.pop();
+			QuerySequenceElement curSeqAt = stack.pop();
 			for (int i = 0; i < curSeqAt.atoms.length; i++)
 			{
 				topLayer = (TopLayer)curSeqAt.atoms[i].getProperty(TopLayer.TLProp);
@@ -116,7 +116,7 @@ public class IsomorphismTester
 				
 				if (n > 0)
 				{	
-					seqEl = new SequenceElement();
+					seqEl = new QuerySequenceElement();
 					seqEl.center = curSeqAt.atoms[i];
 					seqEl.atoms = new IQueryAtom[n];
 					seqEl.bonds = new IQueryBond[n];
@@ -147,7 +147,7 @@ public class IsomorphismTester
 						//topLayer.atoms.get(k) atom is already sequenced.
 						//Therefore sequnce element of 'bond' type is registered.						
 						//newSeqEl is not added in the stack (this is not needed for this bond)
-						SequenceElement newSeqEl = new SequenceElement();						
+						QuerySequenceElement newSeqEl = new QuerySequenceElement();						
 						newSeqEl.center = null;
 						newSeqEl.atoms = new IQueryAtom[2];
 						newSeqEl.bonds = new IQueryBond[1];
@@ -235,7 +235,7 @@ public class IsomorphismTester
 		stack.clear();
 				
 		//Initial nodes
-		SequenceElement el = sequence.get(0);		
+		QuerySequenceElement el = sequence.get(0);		
 		for(int k = 0; k < target.getAtomCount(); k++)
 		{
 			IAtom at = target.getAtom(k);			
@@ -261,7 +261,7 @@ public class IsomorphismTester
 	void expandNode(Node node)
 	{	
 		//System.out.println(node.toString(target));		
-		SequenceElement el = sequence.get(node.sequenceElNum);
+		QuerySequenceElement el = sequence.get(node.sequenceElNum);
 		
 		if (el.center == null) //This node describers a bond that closes a ring
 		{
@@ -297,7 +297,7 @@ public class IsomorphismTester
 	
 	void generateNodes(Node node)
 	{
-		SequenceElement el = sequence.get(node.sequenceElNum);
+		QuerySequenceElement el = sequence.get(node.sequenceElNum);
 		
 		if (el.atoms.length == 1)
 		{
@@ -435,7 +435,7 @@ public class IsomorphismTester
 		
 	}
 	
-	boolean matchBond(Node node, SequenceElement el, int qAtNum, IAtom taAt)
+	boolean matchBond(Node node, QuerySequenceElement el, int qAtNum, IAtom taAt)
 	{
 		IBond taBo = target.getBond(taAt, node.atoms[el.centerNum]);
 		return(el.bonds[qAtNum].matches(taBo));
