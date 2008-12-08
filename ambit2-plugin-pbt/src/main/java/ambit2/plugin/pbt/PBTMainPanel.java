@@ -31,6 +31,7 @@ package ambit2.plugin.pbt;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
+import java.io.InputStream;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -38,6 +39,9 @@ import javax.swing.JTabbedPane;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 import com.microworkflow.ui.WorkflowContextListenerPanel;
 
@@ -58,6 +62,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     public PBTMainPanel() {
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
+
         models = new PBTTableModel[defs.length];
         for (int i=0; i < defs.length;i++) {
 	        try {
@@ -70,6 +75,18 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	        	tabbedPane.add("Error",new JLabel(x.getMessage()));
 	        }
 
+        }
+
+        try {
+			String file = "2008-12-03_REACH PBT Screening Tool_V0.99b_U N P R O T E C T E D.xls";
+			InputStream in = PBTPage.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
+			POIFSFileSystem poifsFileSystem = new POIFSFileSystem(in);
+			
+			HSSFWorkbook workbook = new HSSFWorkbook(poifsFileSystem);
+	        tabbedPane.add("T-Sheet",
+	        		new JScrollPane(PBTPageBuilder.buildPanel(workbook,"T-Sheet",1,1)));			
+        } catch (Exception x) {
+        	x.printStackTrace();
         }
     }
     @Override
