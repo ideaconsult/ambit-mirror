@@ -29,6 +29,11 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomParity;
+import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.geometry.GeometryTools;
+
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.CDKConstants;
@@ -38,18 +43,25 @@ public class MoleculeAndAtomsHashing {
 	private int bonded_hydrogen_neighbor_atomsPrime ;
 	private int atomic_numberPrime ;
 	private int number_of_atomsPrime ;   
-	private int number_rings;
+	
     //number of atoms in molecule
 	private int number_of_atoms;
 	private int atomic_number;
 	private int bonded_neighbor_atoms;
 	private int bonded_hydrogen_neighbor_atoms;
 	private int stereo_center;
+	private int stereo_parity;
+	private int cis_trans;
     private int type_of_bond;
+    private int formal_charge;
+    private int formal_chargePrime;
 	private int stereo_centerPrime;
+	private int stereo_parityPrime;
+	private int cis_transPrime;
 	private int type_of_bondPrime;
 	private List<IAtom> neighbors;
-	private Hashtable<String,Integer> seedHashtable;    
+	private Hashtable<String,Integer> seedHashtable; 
+	private Hashtable<IAtom,IAtomParity> atomParities;
 	private Hash atomsHash,atomHash,moleculeSizeHash,moleculeHash,bondHash,bondsHash;
     
 	public  MoleculeAndAtomsHashing(){
@@ -65,16 +77,24 @@ public class MoleculeAndAtomsHashing {
         number_of_atoms = ch_graph.getNumAtoms();
         */
     	number_of_atoms = mol.getAtomCount();
-        
+    	
+    	
         Iterator<IAtom> atoms = mol.atoms();
         IAtom atom, neighbor;
         atomsHash = new Hash();
+        
+        
+        int k = 0;
         while (atoms.hasNext()) {
-        	atom = atoms.next();
+        	atom = atoms.next(); 
+        	int atom_double_bonds = 0;
         	atomic_number = atom.getAtomicNumber();
         	neighbors = mol.getConnectedAtomsList(atom);
         	bonded_neighbor_atoms = neighbors.size();
         	bonded_hydrogen_neighbor_atoms = 0;
+        	formal_charge = getFormalCharge(atom);        	
+        	//stereo_parity = getStereoParity(atom);
+        	
     		for (int f = 0; f < neighbors.size(); f++){    			
     			neighbor = neighbors.get(f);
     			if (neighbor.getSymbol().equals("H")){
@@ -84,9 +104,23 @@ public class MoleculeAndAtomsHashing {
     		}
     		atomic_numberPrime = this.seedHashtable.get("SysNum"+atomic_number);
     		bonded_neighbor_atomsPrime = this.seedHashtable.get("NAtoms"+bonded_neighbor_atoms);
-    		bonded_hydrogen_neighbor_atomsPrime = seedHashtable.get("NHAtoms"+bonded_hydrogen_neighbor_atoms);
-    		atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime);
+    		bonded_hydrogen_neighbor_atomsPrime = this.seedHashtable.get("NHAtoms"+bonded_hydrogen_neighbor_atoms);
+    		formal_chargePrime = this.seedHashtable.get("FormalCharge"+formal_charge);
+    		//stereo_parityPrime = this.seedHashtable.get("StereoParity"+stereo_parity);
+    		//atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime+formal_chargePrime+stereo_parityPrime);
+    		cis_trans = getCisTrans(k,mol);
+    		if(cis_trans != -1){
+    			atom_double_bonds++;
+    			cis_transPrime = this.seedHashtable.get("CisTrans"+cis_trans);
+    		}
+    		if(atom_double_bonds >0){
+    			atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime+formal_chargePrime+cis_transPrime);
+            }
+    		else{
+    			atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime+formal_chargePrime);
+    		}
     		atomsHash = atomsHash.sag(atomHash);
+    		k++;
         }
         number_of_atomsPrime =  seedHashtable.get("MolSize"+number_of_atoms);
         moleculeSizeHash = new Hash(number_of_atomsPrime);
@@ -133,9 +167,79 @@ public class MoleculeAndAtomsHashing {
     		bondsHash = bondsHash.sag(bondHash);
         	
         }
-        moleculeHash = moleculeHash.sag(bondsHash);
+        moleculeHash = moleculeHash.sag(bondsHash);        
         return moleculeHash.hash_value();
     	
     }
+    public static int getFormalCharge(IAtom atom){
+    	Integer charge = atom.getFormalCharge();
+    	int formal_charge = 4;
+        if (charge != CDKConstants.UNSET && charge != 0) {
+        	 if (charge == 3) {
+        		 formal_charge = 1;
+             } else if (charge == 2) {
+            	 formal_charge = 2;
+             } else if (charge == 1) {
+            	 formal_charge = 3;
+             } else if (charge == 0) {
+             } else if (charge == -1) {
+            	 formal_charge = 5;
+             } else if (charge == -2) {
+            	 formal_charge = 6;
+             } else if (charge == -3) {
+            	 formal_charge = 7;             }
+        
+        	 return formal_charge;
+        }
+        else{
+        	 return formal_charge;
+        }
+    }
+    
+    public static int getStereoParity(IAtom atom ){
+    	int stereo_parity = 0;
+    	
+    	try{
+    	if (atom.getStereoParity() == CDKConstants.STEREO_ATOM_PARITY_MINUS)
+    		stereo_parity= -1;
+		else if (atom.getStereoParity() == CDKConstants.STEREO_ATOM_PARITY_PLUS)
+			stereo_parity= 1;
+    	System.out.println(stereo_parity);
+    	}
+    	catch(Exception e){}
+    	return stereo_parity;
+    }
+    public static int getCisTrans(int k,IAtomContainer mol){
+	    boolean trans=false;
+	    IMolecule withh = mol.getBuilder().newMolecule(mol);
+   		if(GeometryTools.has2DCoordinatesNew(mol)==2){
+   		try{
+   			if(k>2 && BondTools.isValidDoubleBondConfiguration(withh,withh.getBond(withh.getAtom(k-2),withh.getAtom(k-1)))){
+   				trans=BondTools.isCisTrans(withh.getAtom(k-3),withh.getAtom(k-2),withh.getAtom(k-1),withh.getAtom(k-0),withh);
+   				
+   				if(trans){
+   					//cis
+   					return 0;
+   					
+   				}
+   				
+   				else{
+   					//trans
+   					return 1;
+   					
+   				}
+   				
+   					
+   			}
+   			
+   			}
+   			catch(Exception ex){
+				
+			}
+   			
+   		}
+		return -1;
+   }
+    
 
 }
