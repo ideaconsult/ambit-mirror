@@ -2,6 +2,7 @@ package ambit2.hashcode ;
 
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Enumeration;
 public class Prime {	
 public static int [] createArrayWithPrimes (int number) {
 	    
@@ -226,14 +227,73 @@ public static Hashtable<String,Integer> createPrimeNumberHashtable()  {
 	        }
 
 	}
+	N = N + number;
+	//formal charge
+	number = 7;	
+	sht=1;
 	
-	/*
-	Enumeration<String> e = PrimeNumberHashtable.keys();
+	for(int k=N;k<N+number;k++)
+	{
+		     
+	        if(numColl[k]==0)
+	            continue;
+	        else
+	        {
+	        	//formal charge
+	            PrimeNumberHashtable.put("FormalCharge"+sht, new Integer(numColl[k]));
+	            numColl[k] = 0;	          
+	            sht++;
+	        }
+
+	}
+	
+	N = N + number;
+	//stereo parity
+	number = 3;	
+	sht=0;
+	int[] stereo_parity={-1,0,1};
+	for(int k=N;k<N+number;k++)
+	{
+		     
+	        if(numColl[k]==0)
+	            continue;
+	        else
+	        {
+	        	///stereo parity
+	            PrimeNumberHashtable.put("StereoParity"+stereo_parity[sht], new Integer(numColl[k]));	            
+	            numColl[k] = 0;	          
+	            sht++;
+	        }
+
+	}
+	
+	N = N + number;
+	//cis/trans isomers
+	number = 2;	
+	sht=0;
+	
+	for(int k=N;k<N+number;k++)
+	{
+		     
+	        if(numColl[k]==0)
+	            continue;
+	        else
+	        {
+	        	//cis/trans isomers
+	            PrimeNumberHashtable.put("CisTrans"+sht, new Integer(numColl[k]));
+	            numColl[k] = 0;	          
+	            sht++;
+	        }
+
+	}
+	
+	
+	/*Enumeration<String> e = PrimeNumberHashtable.keys();
     while (e.hasMoreElements()) {
     	String obj = e.nextElement();
-        //System.out.println("Key "+ obj +" : "+PrimeNumberHashtable.get(obj));
-    }
-    */
+        System.out.println("Key "+ obj +" : "+PrimeNumberHashtable.get(obj));
+    }*/
+    
 	
     return PrimeNumberHashtable;
 

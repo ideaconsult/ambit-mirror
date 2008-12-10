@@ -24,12 +24,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.hashcode.test;
 
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.HashSet;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.hashcode.Hash;
 import ambit2.hashcode.Prime;
 import junit.framework.TestCase;
@@ -37,7 +45,8 @@ import junit.framework.TestCase;
 public class testHash extends TestCase {
 	
 	public void  test() throws Exception {
-		calcHash(5,10);
+		//calcHash(5,10);
+		//testHashWithMol();
 	}
 	public void calcHash(int NAtomsNumber, int NHAtomsNumber) throws Exception {
 
@@ -74,4 +83,136 @@ public class testHash extends TestCase {
 	    Hash testHashFinal = new Hash(NAtomsNumberPrime+NHAtomsNumberPrime);
 	    //System.out.println(RingIndexNumberPrime);
 	}
+	/*public void testHashWithMol() throws Exception {
+		ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
+		String smiles ="OCCOCCOCCCl";	    	    
+	    SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	    IAtomContainer mol = p.parseSmiles(smiles);
+		Long hash = molHash.getMoleculeHash(mol);
+		System.out.print(hash);
+		///////////////////
+		System.out.println('\t');
+		smiles ="CCN(CC)CCCNC";
+		mol = p.parseSmiles(smiles);
+		hash = molHash.getMoleculeHash(mol);
+		System.out.print(hash);
+		
+	}*/
+	public void testFile() throws Exception {
+		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("src/main/resources/einecs_structures_V13Apr07.sdf"),b);
+		ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
+		int record=0;
+        int errors = 0;
+        int doubles = 0;
+        long now = System.currentTimeMillis();
+        Hashtable<Long, List<String>> histogram = new Hashtable<Long, List<String>>();
+        SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	    
+		//System.out.print(System.currentTimeMillis());
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			if (o instanceof IAtomContainer) { 
+				if (((IAtomContainer)o).getAtomCount()==0) continue;
+				//&& !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals(".") && !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals("C")&& !((IAtomContainer)o).getProperty("GENERATED_SMILES").toString().equals("[C]")) {
+                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms((IAtomContainer)o);
+				CDKHueckelAromaticityDetector.detectAromaticity((IAtomContainer)o);
+				/*
+				System.out.print(record);
+                System.out.print('\t');                    
+                System.out.print(((IAtomContainer)o).getProperty("MF"));                    
+				System.out.print('\t');
+				System.out.print(((IAtomContainer)o).getProperty("GENERATED_SMILES"));
+				System.out.print('\t');
+				*/
+				try{
+					Long hash = molHash.getMoleculeHash((IAtomContainer)o);
+					//IAtomContainer mol = p.parseSmiles(((IAtomContainer)o).getProperty("GENERATED_SMILES").toString());
+					// hash = molHash.getMoleculeHash(mol);
+					List<String> count = histogram.get(hash);
+					
+					if (count == null) {
+						count = new ArrayList<String>();
+						histogram.put(hash, count);
+					} 
+					count.add(((IAtomContainer)o).getProperty("GENERATED_SMILES").toString());
+					//count.add(((IAtomContainer)o).getProperty("CAS").toString());
+					
+				} catch (Exception e) {
+					errors++;
+					System.out.print(record);
+                    System.out.print('\t');                    
+                    System.out.print(((IAtomContainer)o).getProperty("MF"));                    
+					System.out.print('\t');
+					System.out.print(((IAtomContainer)o).getProperty("GENERATED_SMILES"));
+					System.out.println('\t');
+					
+					//e.printStackTrace();
+				}
+				
+				//int index = mf.indexOf("GENERATED_SMILES",((IAtomContainer)o).getProperty("GENERATED_SMILES"));
+				/*System.out.print("\tAromatic ");
+				System.out.print(aromatic);
+				System.out.print('\t');
+				int index = mf.indexOf("SMILES",((IAtomContainer)o).getProperty("SMILES"));
+				if (index >-1) {
+					System.out.print("found ");
+					System.out.print(System.currentTimeMillis()-now);
+					System.out.print(" ms\tMR\t");
+					System.out.print(mf.getAtomContainer(index).getProperty("MR"));
+                    System.out.print(" ms\tB5STM\t");
+                    System.out.println(mf.getAtomContainer(index).getProperty("B5STM"));                        
+                    found++;
+				} else System.out.println("not found"); */
+				//System.out.print('.');
+				record++;
+
+			}
+			
+		}
+		System.out.print(Long.toString(System.currentTimeMillis()-now));
+		System.out.println("ms");
+       
+		
+		Enumeration<Long> hash = histogram.keys();
+		IAtomContainer mol;
+		Long hash_test;
+		
+		while (hash.hasMoreElements()) {
+			Long key = hash.nextElement();
+			List<String> values = histogram.get(key);
+			HashSet set = new HashSet(values);
+			String[] array2 = (String[])(set.toArray(new String[set.size()]));
+			
+			if (values.size()>1 && array2.length > 1) {
+				System.out.print(key.toHexString(key));
+				System.out.print('\t');
+				System.out.print(values.size());
+				System.out.print('\t');
+				
+				System.out.print(array2.length);
+				System.out.print('\t');
+				//
+				for (String value: values) {
+					System.out.print(value);
+					System.out.print('\t');	
+					
+					
+					
+				}
+				
+				System.out.println();
+				doubles++;
+			}
+		}
+		System.out.print("Records\t");
+		System.out.print(record);
+		System.out.print("Hashes\t");
+		System.out.println(histogram.size());
+		System.out.print("Errors\t");
+		System.out.println(errors);	
+		System.out.print("Doubles\t");
+		System.out.println(doubles);	
+}
+	
 }
