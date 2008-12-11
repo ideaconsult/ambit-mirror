@@ -36,7 +36,6 @@ import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -45,14 +44,10 @@ import javax.swing.border.Border;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
 import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.jgoodies.binding.PresentationModel;
@@ -150,13 +145,10 @@ public class PBTPageBuilder {
     }    
 
     public static JPanel buildPanel(PBTWorksheet worksheet, int rowOffset, int colOffset) {
-    	int maxRow = 19;
-    	int maxCol = 6;
+
         FormLayout layout = new FormLayout(
-                getLayoutString(maxCol+colOffset),
-                getLayoutString(maxRow+rowOffset));
-        
-        PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet);
+                getLayoutString(worksheet.getMaxCol()+colOffset),
+                getLayoutString(worksheet.getMaxRow()+rowOffset));
         
         
         PanelBuilder builder = new PanelBuilder(layout);
@@ -164,6 +156,7 @@ public class PBTPageBuilder {
         cc.insets = new Insets(3,3,3,3);
         cc.hAlign = CellConstraints.DEFAULT;
 
+        PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet);
  
         Iterator<HSSFRow> rows = worksheet.getSheet().rowIterator();
 		while (rows.hasNext()) {
@@ -177,8 +170,8 @@ public class PBTPageBuilder {
 				
 				if ((cell.getRowIndex()+ rowOffset) < 0) continue;
 				if ((cell.getColumnIndex()+ colOffset) < 0) continue;				
-				if (cell.getRowIndex()>=maxRow) continue;
-				if (cell.getColumnIndex()>=maxCol) continue;
+				if (cell.getRowIndex()>= worksheet.getMaxRow()) continue;
+				if (cell.getColumnIndex()>= worksheet.getMaxCol()) continue;
 				
 				boolean hidden = false;
 				int colspan = 1;
@@ -189,12 +182,16 @@ public class PBTPageBuilder {
 					if ((cell.getRowIndex() >= merged.getFirstRow()) && (cell.getRowIndex() <= merged.getLastRow())) {
 						if (cell.getRowIndex() == merged.getFirstRow()) {
 							rowspan = merged.getLastRow() - merged.getFirstRow() +1;
+							if (rowspan > worksheet.getMaxRow())
+								rowspan = worksheet.getMaxRow();
 						} else hidden = true;						
 					} else continue;
 					
 					if ((cell.getColumnIndex() >= merged.getFirstColumn()) && (cell.getColumnIndex() <= merged.getLastColumn())) {
 						if (cell.getColumnIndex() == merged.getFirstColumn()) {
 							colspan = merged.getLastColumn() - merged.getFirstColumn() +1;
+							if (colspan > worksheet.getMaxCol())
+								colspan = worksheet.getMaxCol()  - merged.getFirstColumn() +1;
 						} else hidden = true;						
 					} else continue;					
 				}				
@@ -214,10 +211,10 @@ public class PBTPageBuilder {
 					component_alignment = JComponent.LEFT_ALIGNMENT;
 				}
 				
-				String propertyName = Integer.toString(cell.getColumnIndex()+1)+"_" + Integer.toString(cell.getRowIndex()+1);
-				if (cell.getRowIndex()!=5) propertyName = "dummy";
+				String propertyName = PBTWorksheet.getCellName(cell.getRowIndex(),cell.getColumnIndex()).toLowerCase();
+				//if (cell.getRowIndex()!=5) propertyName = "dummy";
 				
-				if ((colspan >= maxCol) && (cell.getRowIndex()>1)) { 
+				if ((colspan >= worksheet.getMaxCol()) && (cell.getRowIndex()>1)) { 
 	        		JComponent separator = builder.addSeparator(cell.toString().trim(), 
 	        				cc.xywh(cell.getColumnIndex()+colOffset,cell.getRowIndex()+rowOffset,
 	    	        				colspan,rowspan));
@@ -235,7 +232,7 @@ public class PBTPageBuilder {
 	        		break;
 				}
 				case  HSSFCell.CELL_TYPE_BOOLEAN: {
-	        		c = new JFormattedTextField(cell.getNumericCellValue());
+					c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
 	        		c.setBackground(inputColor);
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
@@ -256,11 +253,11 @@ public class PBTPageBuilder {
 	        		break;	        		
 				}			
 				case  HSSFCell.CELL_TYPE_NUMERIC: {
-	        		c = new JFormattedTextField(cell.getNumericCellValue());
+	        		//c = new JFormattedTextField(cell.getNumericCellValue());
+	        		c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
 	        		c.setBackground(background);
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
-	        		System.out.println(cell.getColumnIndex());
 	        		break;
 				}				
 				case  HSSFCell.CELL_TYPE_ERROR: {
