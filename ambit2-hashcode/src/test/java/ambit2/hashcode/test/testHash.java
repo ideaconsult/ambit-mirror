@@ -100,7 +100,8 @@ public class testHash extends TestCase {
 	}*/
 	public void testFile() throws Exception {
 		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-		MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("src/main/resources/einecs_structures_V13Apr07.sdf"),b);
+		MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf"),b);		
+		//MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("../src/test/resources/einecs_structures_V13Apr07.sdf"),b);
 		ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
 		int record=0;
         int errors = 0;
