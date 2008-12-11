@@ -33,9 +33,10 @@ import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.io.InputStream;
 
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -62,7 +63,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     public PBTMainPanel() {
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
-
+        /*
         models = new PBTTableModel[defs.length];
         for (int i=0; i < defs.length;i++) {
 	        try {
@@ -76,16 +77,37 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	        }
 
         }
+        */
 
         try {
 			String file = "2008-12-03_REACH PBT Screening Tool_V0.99b_U N P R O T E C T E D.xls";
-			InputStream in = PBTPage.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
+			InputStream in = PBTMainPanel.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
 			POIFSFileSystem poifsFileSystem = new POIFSFileSystem(in);
 			
 			HSSFWorkbook workbook = new HSSFWorkbook(poifsFileSystem);
-			PBTWorksheet tsheet = new PBTWorksheet(workbook,"T-Sheet");
-	        tabbedPane.add("T-Sheet",
-	        		new JScrollPane(PBTPageBuilder.buildPanel(tsheet,1,1)));			
+			PBTWorksheet terms = new PBTWorksheet(workbook,"TERMS & CONDITIONS",27,6);
+			PBTWorksheet substance = new PBTWorksheet(workbook,"SUBSTANCE",28,8);
+			PBTWorksheet tsheet = new PBTWorksheet(workbook,"T-Sheet",19,6);
+			PBTWorksheet psheet = new PBTWorksheet(workbook,"P-Sheet",20,6);
+			PBTWorksheet bsheet = new PBTWorksheet(workbook,"B-Sheet",22,6);
+			PBTWorksheet result = new PBTWorksheet(workbook,"Result",15,5);
+			
+			tabbedPane.add("Welcome",new JScrollPane(PBTPageBuilder.buildPanel(terms,1,1)));
+			tabbedPane.add("Substance",new JScrollPane(PBTPageBuilder.buildPanel(substance,1,1)));
+	        tabbedPane.add("P-Sheet",new JScrollPane(PBTPageBuilder.buildPanel(psheet,1,1)));
+	        tabbedPane.add("B-Sheet",new JScrollPane(PBTPageBuilder.buildPanel(bsheet,1,1)));
+	        tabbedPane.add("T-Sheet",new JScrollPane(PBTPageBuilder.buildPanel(tsheet,1,1)));
+	        
+	        tabbedPane.add("Result",new JScrollPane(PBTPageBuilder.buildPanel(result,1,1)));
+	        tabbedPane.addChangeListener(new ChangeListener() {
+	        	public void stateChanged(ChangeEvent e) {
+	        		JScrollPane sp = (JScrollPane)((JTabbedPane)e.getSource()).getSelectedComponent();
+	        		
+	        		PBTWorksheet.formulaEvaluator.evaluateAllFormulaCells(PBTWorksheet.workbook);	
+	        		
+	        	}
+	        	
+	        });
         } catch (Exception x) {
         	x.printStackTrace();
         }
