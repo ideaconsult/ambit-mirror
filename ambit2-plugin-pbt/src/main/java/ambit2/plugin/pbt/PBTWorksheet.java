@@ -26,6 +26,7 @@ package ambit2.plugin.pbt;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
@@ -83,11 +84,15 @@ public class PBTWorksheet  extends AmbitBean {
 	}
 
 	public HSSFCell getCell(int row, int col) {
-		return sheet.getRow(row).getCell(col);
+		HSSFRow arow = sheet.getRow(row);
+		if (arow != null) return arow.getCell(col);
+		else return null;
 	}
 	
     public Object get(int row,int col) {
     	HSSFCell cell = getCell(row, col);
+    	if (cell == null) return "";
+    	
     	switch (cell.getCellType()) {
     	case HSSFCell.CELL_TYPE_FORMULA: {
     		switch (cell.getCachedFormulaResultType()) {
@@ -116,11 +121,14 @@ public class PBTWorksheet  extends AmbitBean {
 	public void set(int row,int col, Object value) {
 		for (int r=0; r < maxRow; r++)
 			for (int c=0; c < maxCol; c++) {
-				Object o = get(r,c);
-				if (o != null)
-					oldValue[r][c] = o.toString();
-				else 
-					oldValue[r][c] = "";
+				HSSFCell cell = getCell(row, col);
+				if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
+					Object o = get(r,c);
+					if (o != null)
+						oldValue[r][c] = o.toString();
+					else 
+						oldValue[r][c] = "";
+				}
 			}
 		
     	HSSFCell cell = getCell(row, col);
@@ -151,7 +159,7 @@ public class PBTWorksheet  extends AmbitBean {
     		    		
     	}
     	}
-    	firePropertyChange(getCellName(row, col).toLowerCase(), oldValue, get(row,col).toString());
+    	firePropertyChange(getCellName(row, col).toLowerCase(), oldValue[row][col], get(row,col).toString());
     	notifyCells(row, col);
 
     	
@@ -162,10 +170,12 @@ public class PBTWorksheet  extends AmbitBean {
 			for (int c=0; c < maxCol; c++) 
 				if ((r == row) && (c == col)) ;
 				else {
-					if (getCell(r,c).getCellType() == HSSFCell.CELL_TYPE_FORMULA)
+					HSSFCell cell = getCell(r,c);
+					
+					if ((cell !=null) && (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA))
 						firePropertyChange(getCellName(r, c).toLowerCase(), oldValue[r][c] , get(r,c).toString());
 				}
-		System.out.println(getC7());
+		
 						
 	}
 	public static String getCellName(int row, int col) {

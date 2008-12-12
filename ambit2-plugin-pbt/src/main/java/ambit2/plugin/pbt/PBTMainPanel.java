@@ -85,26 +85,21 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 			POIFSFileSystem poifsFileSystem = new POIFSFileSystem(in);
 			
 			HSSFWorkbook workbook = new HSSFWorkbook(poifsFileSystem);
-			PBTWorksheet terms = new PBTWorksheet(workbook,"TERMS & CONDITIONS",27,6);
-			PBTWorksheet substance = new PBTWorksheet(workbook,"SUBSTANCE",28,8);
-			PBTWorksheet tsheet = new PBTWorksheet(workbook,"T-Sheet",19,6);
-			PBTWorksheet psheet = new PBTWorksheet(workbook,"P-Sheet",20,6);
-			PBTWorksheet bsheet = new PBTWorksheet(workbook,"B-Sheet",22,6);
-			PBTWorksheet result = new PBTWorksheet(workbook,"Result",15,5);
 			
-			tabbedPane.add("Welcome",new JScrollPane(PBTPageBuilder.buildPanel(terms,1,1)));
-			tabbedPane.add("Substance",new JScrollPane(PBTPageBuilder.buildPanel(substance,1,1)));
-	        tabbedPane.add("P-Sheet",new JScrollPane(PBTPageBuilder.buildPanel(psheet,1,1)));
-	        tabbedPane.add("B-Sheet",new JScrollPane(PBTPageBuilder.buildPanel(bsheet,1,1)));
-	        tabbedPane.add("T-Sheet",new JScrollPane(PBTPageBuilder.buildPanel(tsheet,1,1)));
-	        
-	        tabbedPane.add("Result",new JScrollPane(PBTPageBuilder.buildPanel(result,1,1)));
+			final PBTWorksheet[] pbt_worksheets = new PBTWorksheet[6];
+			pbt_worksheets[0] = new PBTWorksheet(workbook,"TERMS & CONDITIONS",27,6);
+			pbt_worksheets[1]  = new PBTWorksheet(workbook,"SUBSTANCE",28,8);
+			pbt_worksheets[2]  = new PBTWorksheet(workbook,"P-Sheet",20,6);
+			pbt_worksheets[3] = new PBTWorksheet(workbook,"B-Sheet",22,6);
+			pbt_worksheets[4]  = new PBTWorksheet(workbook,"T-Sheet",19,6);
+			pbt_worksheets[5] = new PBTWorksheet(workbook,"Result",15,5);
+			
+			for (int i=0; i < pbt_worksheets.length;i++) 
+				tabbedPane.add(pbt_worksheets[i].getWorkbook().getSheetName(i),
+						new JScrollPane(PBTPageBuilder.buildPanel(pbt_worksheets[i],1,1)));	
 	        tabbedPane.addChangeListener(new ChangeListener() {
 	        	public void stateChanged(ChangeEvent e) {
-	        		JScrollPane sp = (JScrollPane)((JTabbedPane)e.getSource()).getSelectedComponent();
-	        		
-	        		PBTWorksheet.formulaEvaluator.evaluateAllFormulaCells(PBTWorksheet.workbook);	
-	        		
+	           		pbt_worksheets[((JTabbedPane)e.getSource()).getSelectedIndex()].notifyCells(-1,-1);
 	        	}
 	        	
 	        });
