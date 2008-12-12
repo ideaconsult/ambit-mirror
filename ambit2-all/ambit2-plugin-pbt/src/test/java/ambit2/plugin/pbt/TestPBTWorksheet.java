@@ -45,13 +45,17 @@ public class TestPBTWorksheet {
 	@Test
 	public void testEvaluate() throws Exception {
 		PBTWorksheet ws = new PBTWorksheet(workbook,"T-Sheet");
+		PBTWorksheet result = new PBTWorksheet(workbook,"Result");
+		
 		//ws.set(5,2,0.1);
 		ws.setC6("0.1");
 		Assert.assertEquals(0.1,ws.get(5,2));
 		Assert.assertEquals("< =0.1 mg/L",ws.get(5,3));
+		Assert.assertEquals("Toxic (T)", result.getC7());
 		ws.set(5,2,10.0);
 		Assert.assertEquals(10.0,ws.get(5,2));		
 		Assert.assertEquals("> 0.1 mg/L",ws.get(5,3));
+		Assert.assertEquals("Not toxic (not T)", result.getC7());
 	}	
 	@Test
 	public void test() throws Exception {
