@@ -36,6 +36,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import ambit2.core.io.Command;
+import ambit2.core.io.DownloadTool;
 import ambit2.core.log.AmbitLogger;
 
 /**
@@ -44,62 +46,104 @@ import ambit2.core.log.AmbitLogger;
  *
  */
 public abstract class CommandShell<INPUT,OUTPUT> {
+	protected String prefix = "ambit2/";
 	public static final String os_MAC = "Mac OS";
 	public static final String os_WINDOWS = "Windows";
 	public static final String os_WINDOWSVISTA = "Windows Vista";
 	public static final String os_LINUX = "Linux";
 	
     protected static AmbitLogger logger = new  AmbitLogger(CommandShell.class);	
-	protected Hashtable<String, String> executables; //<os.name, executable>
+	protected Hashtable<String, Command> executables; //<os.name, executable>
 	protected String inputFile = null;
 	protected String outputFile = null;
 	protected boolean runAsync = false;
 	
 	protected CommandShell() throws ShellException {
-		executables = new Hashtable<String, String>();
+		executables = new Hashtable<String, Command>();
 		initialize();
 	}
 	protected void initialize() throws ShellException  {
 		
 	}
-	
-	public String addExecutable(String osname,String executable) throws ShellException {
+	public String addExecutable(String executable, String[] morefiles) throws ShellException {
+		return addExecutable( System.getProperty("os.name"),executable, morefiles);
+	}	
+	public String addExecutable(String osname,String executable, String[] morefiles) throws ShellException {
 		//File file = new File(executable);
 		//if (!file.exists()) throw new ShellException(this,file.getAbsoluteFile() + " not found!");
-		return executables.put(osname,executable);
+		executables.put(osname,new Command(executable,morefiles));
+		return executable;
 	}
-	public String addExecutableMac(String executable) throws ShellException {
-		return addExecutable(os_MAC,executable);
+	public String addExecutableMac(String executable, String[] morefiles) throws ShellException {
+		return addExecutable(os_MAC,executable,morefiles);
 	}
-	public String addExecutableWin(String executable) throws ShellException  {
-		addExecutable(os_WINDOWSVISTA,executable);
-		return addExecutable(os_WINDOWS,executable);
+	public String addExecutableWin(String executable, String[] morefiles) throws ShellException  {
+		addExecutable(os_WINDOWSVISTA,executable,morefiles);
+		return addExecutable(os_WINDOWS,executable,morefiles);
 	}
-	public String addExecutableLinux(String executable) throws ShellException  {
-		return addExecutable(os_LINUX,executable);
+	public String addExecutableLinux(String executable, String[] morefiles) throws ShellException  {
+		return addExecutable(os_LINUX,executable,morefiles);
 	}			
 	public String getExecutable(String osname) {
-		return executables.get(osname);
-	}
-    public OUTPUT runShell(INPUT mol) throws ShellException {
+		
+		//ambit2/
+		Command command = executables.get(osname);
+		String exe = command.getExe();
+		File file = new File(exe);
+		
+		if (!file.exists()) {
+			String homeDir = System.getProperty("user.home") +"/.ambit2";
+			file = new File(homeDir,exe);
+			if (!file.exists()) {
+				logger.info("Writing "+exe + " to "+ file);
+				try {
+					DownloadTool.download(prefix+exe, file);
+					System.out.println(file.getAbsolutePath());
+					command.setExe(file.getAbsolutePath());
+				} catch (IOException x) {
+					x.printStackTrace();
+					return null;
+				}
+			}
+			if (command.getAdditionalFiles()!=null)
+				try {
+				for (String lib: command.getAdditionalFiles()) {
+					File newfile = new File(homeDir,lib);
+					if (!newfile.exists())
+					DownloadTool.download(prefix+lib, newfile);
+				}			
+				} catch (Exception x) {
+					x.printStackTrace();
+					return null;					
+				}
+			command.setExe(file.getAbsolutePath());
+			
 
-            
+		}
+		return executables.get(osname).getExe();
+	}
+	/**
+	 * invokes {@link #getExecutable(String)} with System.getProperty("os.name") as argument
+	 * @return
+	 * @throws ShellException
+	 */
+	public String getExecutable() throws ShellException {
         String osName = System.getProperty("os.name");
         Enumeration<String> oss = executables.keys();
         while (oss.hasMoreElements()) {
         	String os = oss.nextElement();
         	if (osName.startsWith(os)) {
-        		String exeString = executables.get(os);
-        		if (exeString == null) throw new ShellException(this,"Not supported for "+osName);
-        		else 
-        			try {
-        				return runShell(mol, exeString);
-        			} catch (Exception x) {
-        				throw new ShellException(this,x);
-        			}
+        		String exeString = getExecutable(os);
+        		if (exeString != null) 
+        			return exeString;
         	}
         }
-        return null;
+        throw new ShellException(this,"Not supported for "+osName);		
+	}
+    public OUTPUT runShell(INPUT mol) throws ShellException {
+
+        return runShell(mol,getExecutable());
+ 
     }
     /**
      * Returns empty string, override with smth meaningfull
@@ -123,12 +167,17 @@ public abstract class CommandShell<INPUT,OUTPUT> {
         else path="";    	
         return path;
     }
+    
+    protected INPUT transform_input(INPUT input) throws ShellException {
+    	return input;
+    }
 
-    protected OUTPUT runShell(INPUT mol,String execString) throws ShellException {
+    protected OUTPUT runShell(INPUT input,String execString) throws ShellException {
     	try {
     			File file = new File(execString);
     			String path = getPath(file);
     			
+    			INPUT mol = transform_input(input);
                 List<String> inFile = prepareInput(path,mol);
 
                 List<String> command = new ArrayList<String>();
@@ -157,11 +206,13 @@ public abstract class CommandShell<INPUT,OUTPUT> {
                     while ((line = br.readLine()) != null) {
                     	logger.info(line);
                     }
+	                br.close();                    
                     logger.info("</stdout>");
                 	
 	                logger.info("<wait process=\""+execString+"\">");
 	
 	                int exitVal = process.waitFor();
+
 	                logger.info("</wait>");
 	                logger.info("<exitcode value=\""+Integer.toString(exitVal)+"\">");
 	                logger.info("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
@@ -261,6 +312,8 @@ public abstract class CommandShell<INPUT,OUTPUT> {
 		this.outputFile = outputFile;
 	}       
 	protected abstract OUTPUT transform(INPUT mol) ;
+	
+
 }
 
 
