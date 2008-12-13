@@ -12,12 +12,18 @@ import ambit2.core.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
 public class OpenBabelShell extends ShellSDFoutput<String> {
+	protected static String[] libFiles = {
+			"bin/openbabel/win/iconv.dll",
+				"bin/openbabel/win/libinchi.dll",
+				"bin/openbabel/win/libxml2.dll",
+				"bin/openbabel/win/OpenBabelDLL.dll",
+				"bin/openbabel/win/zlib1.dll"};
 	public OpenBabelShell() throws ShellException {
 		super();
 	}
 	protected void initialize() throws ShellException {
 		super.initialize();
-		addExecutable(CommandShell.os_WINDOWS, "helper/openbabel/win/babel.exe");
+		addExecutable(CommandShell.os_WINDOWS, "bin/openbabel/win/babel.exe",libFiles);
 		setInputFile("obabel.smi");
 		setOutputFile("obabel.sdf");		
 		setReadOutput(true);
@@ -53,4 +59,6 @@ public class OpenBabelShell extends ShellSDFoutput<String> {
 	public String toString() {
 		return "OpenBabel";
 	}
+
+	
 }
