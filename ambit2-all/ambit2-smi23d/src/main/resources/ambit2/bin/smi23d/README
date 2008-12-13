@@ -1,0 +1,28 @@
+Sources
+------
+
+The sources can be obtained from the CICC Subversion repository. To
+checkout the sources do
+
+$ svn co https://cicc-grid.svn.sourceforge.net/svnroot/cicc-grid/ciccgrid/smi23d
+
+This will create a directory called 'smi23d', under which you'll find
+the source and testing directories
+
+Building
+-------
+
+You'll need to install the SCons package (http://www.scons.org/) to
+build the programs. After having installed SCons, navigate to 'trunk'
+and do
+
+$ scons
+
+The build process will put two executables in 'build' along with their
+associated parameter files. Copy these to your preferred locations
+
+Platforms
+--------
+
+The codes have been built and tested on Linux (Redhat 64 bit and Ubuntu)
+using gcc 4.1.1, Mac OS X 10.4 using gcc 4.0.1 

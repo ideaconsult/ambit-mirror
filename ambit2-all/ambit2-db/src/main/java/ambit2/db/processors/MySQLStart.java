@@ -32,7 +32,11 @@ public class MySQLStart extends CommandShell<MySQLCommand, MySQLCommand> {
 	@Override
 	protected void initialize() throws ShellException {
 	}
-	
+	@Override
+	public String getExecutable(String osname) {
+		return executables.get(osname).getExe();
+	}
+
 	@Override
 	protected List<String> prepareInput(String path, MySQLCommand cmd)
 			throws ShellException {
@@ -126,7 +130,7 @@ public class MySQLStart extends CommandShell<MySQLCommand, MySQLCommand> {
 	        		cmd.setException(x);
 	        		throw x;
 	        	} else 
-	        		addExecutable(os_WINDOWS, file);
+	        		addExecutable(os_WINDOWS, file,null);
 	        }			
 	        /**
 	         * this is the log file. If existing, then this was already launched
