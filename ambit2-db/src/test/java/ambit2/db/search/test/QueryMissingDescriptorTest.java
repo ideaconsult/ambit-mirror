@@ -2,8 +2,9 @@ package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
+import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
+
 import ambit2.core.data.LiteratureEntry;
-import ambit2.core.external.DescriptorMopacShell;
 import ambit2.db.search.QueryMissingDescriptor;
 
 public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor> {
@@ -14,10 +15,10 @@ public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor
 	}
 	@Override
 	protected QueryMissingDescriptor createQuery() throws Exception {
-		DescriptorMopacShell mopac = new DescriptorMopacShell();
+		XLogPDescriptor d = new XLogPDescriptor();
 		QueryMissingDescriptor q = new QueryMissingDescriptor();
-		q.setValue(DescriptorMopacShell.EHOMO);
-		q.setFieldname(new LiteratureEntry(mopac.getSpecification().getImplementationIdentifier()));
+		q.setValue("XLogP");
+		q.setFieldname(new LiteratureEntry(d.getSpecification().getImplementationIdentifier()));
 		return q;
 	}
 

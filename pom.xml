@@ -193,6 +193,8 @@ The database can be searched by identifiers, attribute value or range, experimen
     <module>ambit2-descriptors</module>
     <module>ambit2-taglibs</module>
     <module>ambit2-www</module>
+    <module>ambit2-smi23d</module>
+    <module>ambit2-mopac</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
