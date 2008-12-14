@@ -281,6 +281,51 @@ The database can be searched by identifiers, attribute value or range, experimen
 	        </configuration>
           
          </plugin>
+          <plugin>
+          	<groupId>org.apache.maven.plugins</groupId>
+          	<artifactId>maven-pmd-plugin</artifactId>
+          	<version>2.4</version>
+			<configuration>
+				<linkXref>failse</linkXref>
+				<sourceEncoding>utf-8</sourceEncoding>
+				<minimumTokens>100</minimumTokens>
+				<targetJdk>
+					1.5
+				</targetJdk>
+				<excludes>
+					<exclude>*/generated/.java</exclude>
+				</excludes>
+			</configuration>          	
+          </plugin>
+          <plugin>
+          	<groupId>org.codehaus.mojo</groupId>
+          	<artifactId>taglist-maven-plugin</artifactId>
+			<configuration>
+				<tags>
+					<tag>TODO</tag>
+					<tag>@todo</tag>
+					<tag>FIXME</tag>
+					<tag>XXX</tag>
+				</tags>
+			</configuration>          	
+          </plugin>
+          <plugin>
+          	<groupId>org.codehaus.mojo</groupId>
+          	<artifactId>jdepend-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+          	<groupId>org.codehaus.mojo</groupId>
+          	<artifactId>cobertura-maven-plugin</artifactId>
+          </plugin>
+          <!-- Develop our own rules or follow foreign ones ...
+          <plugin>
+          	<groupId>org.apache.maven.plugins</groupId>
+          	<artifactId>maven-checkstyle-plugin</artifactId>
+          	<configuration>
+				<configLocation>config/maven_checks.xml</configLocation>
+			</configuration>
+          </plugin>
+           -->
          <!-- needs svn executable  
  	  <plugin>
         <groupId>org.apache.maven.plugins</groupId>
