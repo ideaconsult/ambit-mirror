@@ -4,7 +4,7 @@ package ambit2.ambitxt;
 import nplugins.shell.application.SplashWindow;
 
 /**
- * Splash window starting the application {@link ambit2.applications.dbadmin.AmbitDatabase}.
+ * Splash window starting the application {@link AmbitXT}.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Jul 9, 2006
  */

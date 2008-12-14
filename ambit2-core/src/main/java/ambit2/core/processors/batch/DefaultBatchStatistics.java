@@ -4,7 +4,7 @@ import java.util.Observable;
 
 /**
  * 
- * Default implementation of {@link ambit2.io.batch.IBatchStatistics}
+ * Default implementation of {@link IBatchStatistics}
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 29, 2006
  */
@@ -35,9 +35,6 @@ public class DefaultBatchStatistics extends Observable implements
         notifyObservers();        
 	    
 	}
-	/* (non-Javadoc)
-     * @see ambit2.io.batch.IBatchStatistics#completed()
-     */
     public void completed() {
         inProgress = false;
         setChanged();

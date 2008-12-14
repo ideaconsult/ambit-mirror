@@ -22,7 +22,6 @@ import ambit2.core.exceptions.AmbitIOException;
  * 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
- * @deprecated use {@link ProcessorFile2FileReader}
  */
 public class FileInputState extends FileState implements IInputState {
 	public transient static final int SDF_INDEX = 0;

@@ -3,11 +3,10 @@ package ambit2.db.search;
 import ambit2.core.data.experiment.TemplateField;
 
 /**
- * A query for {@link ambit2.data.experiment.TemplateField}. <br>
- * Used in {@link ambit2.database.query.ExperimentQuery},{@link ambit2.database.query.ExperimentConditionsQuery},{@link ambit2.database.processors.ExperimentSearchProcessor}, {@link ambit2.database.search.DbSearchExperiments}
+ * A query for {@link TemplateField}. <br>
  * TODO add description
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Aug 31, 2006
+ * <b>Modified</b> Aug 31, 2008
  */
 public class TemplateFieldQuery<T> extends TemplateField {
 	/**

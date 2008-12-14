@@ -6,11 +6,12 @@ package ambit2.db;
 
 import ambit2.core.data.AmbitBean;
 import ambit2.core.data.LiteratureEntry;
+import ambit2.db.processors.DbSrcDatasetWriter;
 
 
 
 /**
- * An origin dataset . See exapmle at {@link ambit2.database.writers.DbSubstanceWriter}.
+ * An origin dataset . Used in {@link DbSrcDatasetWriter}.
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2008-4-20
  */

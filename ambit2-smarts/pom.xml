@@ -41,6 +41,17 @@
 		       </configuration>  				
   			</plugin>
 		</plugins>
-	</build>  			  
-	
+	</build>  		
+  <!-- No UML diagrams! -->
+<reporting>
+<plugins>
+         <plugin>
+
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+			<version>2.1</version>            
+         </plugin>
+</plugins>         
+</reporting>	
+
 </project>

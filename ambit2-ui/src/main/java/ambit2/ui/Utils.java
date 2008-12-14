@@ -105,7 +105,7 @@ public class Utils {
      * @param pct1
      * @param c2
      * @param pct2
-     * @return
+     * @return color
      */
     public static Color getMixedColor(Color c1, float pct1, Color c2, float pct2) {
         float[] clr1 = c1.getComponents(null);

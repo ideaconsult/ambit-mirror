@@ -56,7 +56,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.tools.LoggingTool;
 
 /**
- * Reads a molecule from the original MDL MOL or SDF file {@cdk.cite DAL92}. An SD files
+ * Reads a molecule from the original MDL MOL or SDF file {cdk.cite DAL92}. An SD files
  * is read into a ChemSequence of ChemModel's. Each ChemModel will contain one
  * Molecule. If the MDL molfile contains a property block, the MDLV2000Reader should be
  * used.
@@ -69,14 +69,14 @@ import org.openscience.cdk.tools.LoggingTool;
  *   molecule.getProperty(CDKConstants.TITLE);
  * </pre>
  *
- * @cdk.module io
- * @cdk.svnrev  $Revision: 9817 $
+ * cdk.module io
+ * cdk.svnrev  $Revision: 9817 $
  *
  * @author     steinbeck
  * @author     Egon Willighagen
- * @cdk.created    2000-10-02
- * @cdk.keyword    file format, MDL molfile
- * @cdk.keyword    file format, SDF
+ * cdk.created    2000-10-02
+ * cdk.keyword    file format, MDL molfile
+ * cdk.keyword    file format, SDF
  *
  * @see        org.openscience.cdk.io.MDLV2000Reader 
  */

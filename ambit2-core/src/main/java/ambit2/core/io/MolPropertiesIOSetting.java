@@ -13,7 +13,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 
 /**
  * An {@link org.openscience.cdk.io.setting.IOSetting} descendant to provide means for transforming property names. See
- * {@link ambit2.core.io.Property} and {@link ambit2.ui.AmbitSettingsListener}. See exapmle at {@link ambit2.database.writers.DbSubstanceWriter}.
+ * {@link ambit2.core.io.Property} and {@link ambit2.ui.AmbitSettingsListener}. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-2-18
  */

@@ -14,24 +14,27 @@ import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
+import ambit2.core.io.MolPropertiesIOSetting;
 import ambit2.core.io.Property;
 
 /**
  * An implementation of {@link org.openscience.cdk.io.listener.IReaderListener} and {@link org.openscience.cdk.io.listener.IWriterListener}.
- * On each {@link #processIOSettingQuestion(IOSetting)} call launches an {@link ambit2.test.ui.data.MolPropertiesPanel} visualizing current properties {@link ambit2.data.molecule.MolProperties}.. 
+ * On each {@link #processIOSettingQuestion(IOSetting)} call launches a 
+ * {@link SelectFieldsPanel} visualizing current list of properties 
+ * {@link Property}. 
  * The user may change the assignment of the properties.<br> 
  * To be used as {@link org.openscience.cdk.io.listener.IChemObjectIOListener}
- * in order to process {@link ambit2.core.io.MolPropertiesIOSetting}, a descendant of {@link org.openscience.cdk.io.setting.IOSetting}.
- * See exapmle at {@link ambit2.database.writers.DbSubstanceWriter}.
+ * in order to process properties {@link Property}. 
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> 2006-2-18
+ * <b>Modified</b> 2008-12-13
  */
 public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     protected int level;
     protected Hashtable<String,Property> properties;
     protected int counter= 0;
+
     /**
-     * @param frame
+     * 
      * @param level
      */
     public AmbitSettingsListener(int level) {

@@ -7,7 +7,7 @@ package ambit2.core.io;
 import java.io.Serializable;
 
 /**
- * Status of the input reader/ output writer. Used in {@link ambit2.test.io.batch.DefaultBatchProcessing}.
+ * Status of the input reader/ output writer. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-2-16
  */

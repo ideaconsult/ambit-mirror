@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<inceptionYear>2008</inceptionYear>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -12,6 +13,9 @@
   <version>2.0.0-SNAPSHOT</version>
   <description>Workflow module</description>
   <url></url>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  </organization>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

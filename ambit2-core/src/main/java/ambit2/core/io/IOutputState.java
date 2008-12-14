@@ -5,7 +5,7 @@ import org.openscience.cdk.io.IChemObjectWriter;
 import ambit2.core.exceptions.AmbitIOException;
 
 /**
- * Status of the output writer. Used in {@link ambit2.test.io.batch.DefaultBatchProcessing}.
+ * Status of the output writer. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
  */

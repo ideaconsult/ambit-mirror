@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<description>JSP tags</description>
+	<inceptionYear>2008</inceptionYear>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -10,7 +12,6 @@
 	<packaging>jar</packaging>  
   <name>ambit2-taglibs</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://ambit.sourceforge.net</url>
   <build>
   	<plugins>
 			<plugin>

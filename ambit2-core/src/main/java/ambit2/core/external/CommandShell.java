@@ -41,7 +41,13 @@ import ambit2.core.io.DownloadTool;
 import ambit2.core.log.AmbitLogger;
 
 /**
- * "Mac OS","Windows","AIX","Linux","HP-UX","Solaris" 
+ * A wrapper for an external executable (OS dependent). 
+ * The executable and supporting files should be available as a resource in a jar file. 
+ * When requested, the files are copied under user home directory and executed from there.
+ * <br>
+ * To change this behaviour, override {@link #getExecutable(String)}.
+ * <br>
+ * OS names expected: "Mac OS","Windows","AIX","Linux","HP-UX","Solaris" 
  * @author nina
  *
  */
@@ -124,7 +130,7 @@ public abstract class CommandShell<INPUT,OUTPUT> {
 	}
 	/**
 	 * invokes {@link #getExecutable(String)} with System.getProperty("os.name") as argument
-	 * @return
+	 * @return absolute path to the executable
 	 * @throws ShellException
 	 */
 	public String getExecutable() throws ShellException {
@@ -148,7 +154,7 @@ public abstract class CommandShell<INPUT,OUTPUT> {
     /**
      * Returns empty string, override with smth meaningfull
      * @param mol
-     * @return
+     * @return list of command line parameters (exe name excluded) to be passed to the executable
      * @throws ShellException
      */
     protected List<String> prepareInput(String path, INPUT mol) throws ShellException {

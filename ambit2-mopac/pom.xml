@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<inceptionYear>Dec 2008</inceptionYear>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -9,7 +10,21 @@
   <artifactId>ambit2-mopac</artifactId>
   <name>ambit2-mopac</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
+  <description>wrapper for OpenMopac</description>
+  <url></url>
+ <build>
+  	<pluginManagement>
+  		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+				<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>  
+  	</pluginManagement>
+</build>  				
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
