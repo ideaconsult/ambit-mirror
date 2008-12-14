@@ -10,13 +10,11 @@ import org.openscience.cdk.config.Symbols;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.xmlcml.cml.element.CMLBasisSet.Basis;
 
 public class SmartsToChemObject 
 {
@@ -40,13 +38,13 @@ public class SmartsToChemObject
 	 * Maximal possible atom container from this query is generated.
 	 * This container may be fragmented since some original atoms or bonds could be removed.
 	 *  
-	 * Following rule is applied: each query atom/bond which is a simple expressaion is  
+	 * Following rule is applied: each query atom/bond which is a simple expression is  
 	 * converted to a normal IAtom/IBond object
 	 * Also some heuristics are applied in order to get information from more 
 	 * complicated atoms expressions (when possible).  
 	 * 
 	 * @param query
-	 * @return
+	 * @return atomcontainer
 	 */
 	public IAtomContainer extractAtomContainer(QueryAtomContainer query, IRingSet ringSet)
 	{
@@ -127,7 +125,7 @@ public class SmartsToChemObject
 	 * This function tries to convert this object to a classic CDK Atom
 	 * If it is impossible to determine the atom type null is returned
 	 * @param a
-	 * @return
+	 * @return atom
 	 */
 	public  IAtom toAtom(IAtom a)
 	{					

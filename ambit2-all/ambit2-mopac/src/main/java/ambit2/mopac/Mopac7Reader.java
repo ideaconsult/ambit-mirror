@@ -55,7 +55,7 @@ import org.openscience.cdk.tools.LoggingTool;
  * Reads MOPAC output, extracts several electronic parameters and assigns them as a molecule properties.<br>
  * parameters "NO. OF FILLED LEVELS",	"TOTAL ENERGY","FINAL HEAT OF FORMATION","IONIZATION POTENTIAL","ELECTRONIC ENERGY","CORE-CORE REPULSION","MOLECULAR WEIGHT"
  * Doesn't update structure coordinates ! (TODO fix) <br>
- * Used by {@link ambit2.mopac.processors.descriptors.DescriptorMopacShell} 
+ * Used in {@link MopacShell} 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-4-8
  */

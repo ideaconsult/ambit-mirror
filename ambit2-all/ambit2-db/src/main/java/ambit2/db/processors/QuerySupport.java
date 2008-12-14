@@ -32,7 +32,7 @@ import java.util.concurrent.Future;
 import ambit2.core.processors.IProcessor;
 
 /**
- 
+ * Executes a query.
  * Support for async calls.
  * 
  */
@@ -40,9 +40,10 @@ public class QuerySupport<Target,Result> {
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	
 	/**
-	 * @param ls to retrieve information from
-	 * @param listener the listener that is notified upon result 
-	 * 		  (for async call)
+	 * Executes a query.
+	 * @param target
+	 * @param processor
+	 * @param listener listener the listener that is notified upon result  (for async call)
 	 * @return a future for tracking, canceling.
 	 */
 	public Future<Result> lookup(final Target target, final IProcessor<Target, Result> processor, final ResultListener<Result> listener) {

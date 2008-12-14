@@ -49,12 +49,7 @@ The database can be searched by identifiers, attribute value or range, experimen
     	<artifactId>junit</artifactId>
     	<version>4.0</version>
     	<scope>test</scope>
-    </dependency>
-	<dependency>
-	    <groupId>maven-plugins</groupId>
-	    <artifactId>maven-doxygen-plugin</artifactId>
-	    <version>1.0</version>
-	</dependency>    
+    </dependency>    
   </dependencies>
   <inceptionYear>2004</inceptionYear>
   <issueManagement>
@@ -128,6 +123,8 @@ The database can be searched by identifiers, attribute value or range, experimen
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 				<skip>true</skip>
+				<disableXmlReport>true</disableXmlReport>
+        		<argLine>-Xmx1024m</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -241,16 +238,12 @@ The database can be searched by identifiers, attribute value or range, experimen
 </licenses>
  <reporting>
     <plugins>
-    <!-- 
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        
-      </plugin>
- -->      
+<!-- 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jxr-maven-plugin</artifactId>
       </plugin>
+-->      
       <!-- 
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -263,18 +256,30 @@ The database can be searched by identifiers, attribute value or range, experimen
           <!-- UML class diagrams  -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-			<version>2.0</version>            
-            <configuration>
-              <doclet>gr.spinellis.umlgraph.doclet.UmlGraph</doclet>
-
-              <!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
-              <docletArtifact>
-                <groupId>gr.spinellis</groupId>
-                <artifactId>UmlGraph</artifactId>
-                <version>4.4</version>
-              </docletArtifact>
-              <additionalparam>-views</additionalparam>
-            </configuration>
+			<version>2.1</version>            
+             <!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
+	        <configuration>
+	          <source>1.5</source>
+	          <aggregate>false</aggregate>
+	          <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+	          <docletArtifact>
+	            <groupId>gr.spinellis</groupId>
+	            <artifactId>UmlGraph</artifactId>
+	            <version>4.6</version>
+	          </docletArtifact>
+	          <additionalparam>
+	          <!--  http://www.umlgraph.org/doc/cd-opt.html --> 
+	          	-attributes
+	          	-views
+	          	-types 
+	            -inferrel -inferdep -quiet -hide java.*
+	            -collpackages java.util.* -qualify
+	            -postfixpackage -nodefontsize 9
+	            -nodefontpackagesize 7
+	          </additionalparam>
+	    
+	        </configuration>
+          
          </plugin>
          <!-- needs svn executable  
  	  <plugin>

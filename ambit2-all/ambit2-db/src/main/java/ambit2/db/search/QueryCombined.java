@@ -5,6 +5,12 @@ import java.util.List;
 
 import ambit2.core.exceptions.AmbitException;
 
+/**
+ * Set of {@link IQueryObject}, combined with logical "and or logical "or".
+ * @author nina
+ *
+ * @param <Q>
+ */
 public class QueryCombined<Q extends IQueryObject> extends ArrayList<Q> implements IQueryObject {
 	protected boolean combine_as_and;
 	protected Integer id = null;
@@ -44,7 +50,7 @@ select ?,idstructure,1 from structure where idstructure <= ?
 union
 select ?,idstructure,1 from structure where idstructure between ? and ?
 </pre> 
-	 * @return
+	 * @return sql string
 	 * @throws AmbitException
 	 */
 	protected String getSQL_or() throws AmbitException {
@@ -74,7 +80,7 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 	
 	/**
 	 * SQLs of simple queries, join-ed
-	 * @return
+	 * @return sql string
 	 * @throws AmbitException
 	 */
 	protected String getSQL_and() throws AmbitException {
@@ -109,6 +115,9 @@ using(idstructure)
 		b.append(qname);
 		b.append("\nusing (idstructure)");
 	}
+	/**
+	 * SQL Parameters
+	 */
 	public List<QueryParam> getParameters() throws AmbitException {
 		setId(getId());
 		ArrayList<QueryParam> param = new ArrayList<QueryParam>();

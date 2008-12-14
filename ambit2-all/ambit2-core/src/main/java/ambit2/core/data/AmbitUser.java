@@ -28,7 +28,7 @@ package ambit2.core.data;
 import com.jgoodies.binding.beans.Model;
 
 /**
- * Contains all information about an AMBIT database user. Used in {@link ambit2.database.DbConnection}.
+ * Contains all information about an AMBIT database user. 
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-4-7
  */

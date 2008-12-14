@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 
- * Statistics of an {@link ambit2.io.batch.IBatch} process
+ * Statistics of an {@link IBatchProcessor} process
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 29, 2006
  */

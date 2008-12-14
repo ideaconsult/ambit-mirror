@@ -28,7 +28,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 /**
  * 
- * @author @author Nikolay Kochev nick@uni-plovdiv.bg
+ * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
 public class DoubleStereoBond extends SMARTSBond
 {

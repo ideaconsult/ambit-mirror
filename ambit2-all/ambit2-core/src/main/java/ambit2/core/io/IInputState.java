@@ -4,7 +4,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.core.exceptions.AmbitIOException;
 /**
- * Status of the input reader. Used in {@link ambit2.test.io.batch.DefaultBatchProcessing}. 
+ * Status of the input reader.  
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
  */

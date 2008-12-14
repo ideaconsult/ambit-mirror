@@ -48,11 +48,10 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.tools.LoggingTool;
 
 /**
- * TODO index to be stored and loaded
  * Random access to text files of compounds. First reads the file and builds an index in memory.
  * The index stores offset, length and number of atoms of the molecule in that record.
  * Subsequent access for a record N uses this index to seek the record and return the molecule.
- * Useful for very big file. Used in {@link ambit2.test.io.FastTemplateHandler3D} to speed up {@link org.openscience.cdk.modeling.builder3d.ModelBuilder3D}. 
+ * Useful for very big files. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Jul 12, 2006
  */

@@ -64,7 +64,7 @@ import ambit2.core.groups.SuppleAtomContainer;
 
 /**
  * Supports SGroups.
- * Reads a molecule from an MDL MOL or SDF file {@cdk.cite DAL92}. An SD files
+ * Reads a molecule from an MDL MOL or SDF file {cdk.cite DAL92}. An SD files
  * is read into a ChemSequence of ChemModel's. Each ChemModel will contain one
  * Molecule.
  *
@@ -85,15 +85,15 @@ import ambit2.core.groups.SuppleAtomContainer;
  * e.g. the first R# is named R1. With PseudAtom.getLabel() "R1" is returned (instead of R#).
  * This is introduced due to the SAR table generation procedure of Scitegics PipelinePilot.  
  *
- * @cdk.module io
- * @cdk.svnrev  $Revision: 9684 $
+ * cdk.module io
+ * cdk.svnrev  $Revision: 9684 $
  *
  * @author     steinbeck
  * @author     Egon Willighagen
- * @cdk.created    2000-10-02
- * @cdk.keyword    file format, MDL molfile
- * @cdk.keyword    file format, SDF
- * @cdk.bug        1587283
+ * cdk.created    2000-10-02
+ * cdk.keyword    file format, MDL molfile
+ * cdk.keyword    file format, SDF
+ * cdk.bug        1587283
  */
 public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
 	

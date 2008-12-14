@@ -49,9 +49,8 @@ import ambit2.core.groups.ISGroup;
 import ambit2.core.groups.SuppleAtomContainer;
 
 /**
- * Checks the functionality of the AtomContainer.
- *
- * @cdk.module test-data
+ * @author nina
+ * {@link SuppleAtomContainer} test
  */
 public class SuppleAtomContainerTest  {
 

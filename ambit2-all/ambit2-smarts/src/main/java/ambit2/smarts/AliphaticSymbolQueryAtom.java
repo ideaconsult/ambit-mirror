@@ -31,7 +31,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 /**
  * 
- * @author @author Nikolay Kochev nick@uni-plovdiv.bg
+ * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
 public class AliphaticSymbolQueryAtom extends SMARTSAtom {
 	

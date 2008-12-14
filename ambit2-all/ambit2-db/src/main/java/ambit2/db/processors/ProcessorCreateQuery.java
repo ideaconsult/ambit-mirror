@@ -46,8 +46,7 @@ import ambit2.db.search.StoredQuery;
  * insert ignore into query_results (idquery,idstructure,selected) select 1,idstructure,1 from structure limit 100,200
  * </pre>
  * @author nina
- *
- * @param <Target>
+
  */
 public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,IStoredQuery> {
 

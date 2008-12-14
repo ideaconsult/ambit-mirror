@@ -64,16 +64,16 @@ import org.openscience.cdk.tools.LoggingTool;
  * }
  * </pre>
  *
- * @cdk.module io
+ * cdk.module io
  *
  * @see org.openscience.cdk.io.MDLV2000Reader
  * @see org.openscience.cdk.io.MDLV3000Reader
  * 
  * @author     Egon Willighagen <egonw@sci.kun.nl>
- * @cdk.created    2003-10-19
+ * cdk.created    2003-10-19
  *
- * @cdk.keyword    file format, MDL molfile
- * @cdk.keyword    file format, SDF
+ * cdk.keyword    file format, MDL molfile
+ * cdk.keyword    file format, SDF
  */
 public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
 

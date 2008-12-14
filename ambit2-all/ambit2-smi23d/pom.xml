@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<inceptionYear>Dec 2008</inceptionYear>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -9,7 +10,8 @@
   <artifactId>ambit2-smi23d</artifactId>
   <name>ambit2-smi23d</name>
   <version>2.0.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
+  <description>wrapper for  Smi23d executables http://www.chembiogrid.org/cheminfo/smi23d/ </description>
+  <url></url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import ambit2.core.exceptions.AmbitException;
 
 /**
- * A list or {@link ambit2.processors.IAmbitProcessor} to be executed sequentially.
+ * A list or {@link IProcessor} to be executed sequentially.
  * A processor is executed only if it is enabled. <br>
  * The result from one processor is passes as a parameter to the next.<b>
- * See exapmle at {@link ambit2.database.writers.DbSubstanceWriter}.
  
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Aug 29, 2006
+ * <b>Modified</b> Dec 13, 2008
  */
 public class ProcessorsChain<Target, Result, P extends IProcessor> extends ArrayList<P> implements IProcessor<Target,Result> {
 	/**
@@ -43,9 +42,6 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 		
 	}
 
-	/* (non-Javadoc)
-     * @see ambit2.processors.IAmbitProcessor#close()
-     */
     public void close() {
     	/**
     	for (int i=0; i < size(); i++) {

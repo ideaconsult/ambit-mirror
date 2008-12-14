@@ -41,8 +41,9 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
     protected int level;
     protected Hashtable<String,Property> properties;
     protected int counter= 0;
+
     /**
-     * @param frame
+     * 
      * @param level
      */
     public SimpleIOListener(int level) {

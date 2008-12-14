@@ -54,9 +54,9 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
  * for a number of common ring systems.
  *
  * @author Todd Martin
- * @cdk.module smiles
- * @cdk.svnrev  $Revision: 9162 $
- * @cdk.keyword bond order
+ * cdk.module smiles
+ * cdk.svnrev  $Revision: 9162 $
+ * cdk.keyword bond order
  */
 public class DeduceBondSystemTool {
 

@@ -19,7 +19,6 @@ import ambit2.core.processors.DefaultAmbitProcessor;
  * Fingerprint generator processor. 
  * Fingerprints are calculated by {@link org.openscience.cdk.fingerprint.Fingerprinter} 
  * and assigned as a molecule property with a name {@link AmbitCONSTANTS#Fingerprint}<br>
- * Used by {@link ambit2.database.writers.FingerprintWriter} to write fingerprints to database
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 30, 2006
  */

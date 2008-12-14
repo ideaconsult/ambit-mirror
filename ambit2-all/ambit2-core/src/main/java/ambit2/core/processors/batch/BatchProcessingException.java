@@ -7,7 +7,7 @@ package ambit2.core.processors.batch;
 import ambit2.core.exceptions.AmbitIOException;
 
 /**
- * An {@link java.lang.Exception} to be used in {@link ambit2.io.batch.IBatch}
+ * An {@link java.lang.Exception} to be used in {@link IBatchProcessor}
  * @author Nina Jeliazkova
  * <b>Modified</b> 2005-9-4
  */

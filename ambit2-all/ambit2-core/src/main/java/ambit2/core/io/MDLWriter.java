@@ -89,12 +89,12 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
  * writer.close();
  * </pre>
  *
- * See {@cdk.cite DAL92}.
+ * See {cdk.cite DAL92}.
  *
- * @cdk.module  io
- * @cdk.svnrev  $Revision: 9587 $
- * @cdk.keyword file format, MDL molfile
- * @cdk.bug     1524466
+ * cdk.module  io
+ * cdk.svnrev  $Revision: 9587 $
+ * cdk.keyword file format, MDL molfile
+ * cdk.bug     1524466
  */
 public class MDLWriter extends DefaultChemObjectWriter {
 

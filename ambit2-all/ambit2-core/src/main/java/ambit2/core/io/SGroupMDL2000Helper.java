@@ -711,7 +711,7 @@ public class SGroupMDL2000Helper {
     }
         
 	/**
-	 * Extracts first 6 chars, replaces spaces with underscore '_' and calls {@link SGROUP_LINE.valueof} method.
+	 * Extracts first 6 chars, replaces spaces with underscore '_' and calls SGROUP_LINE.valueof method.
 	 * @param line
 	 * @return {@link SGROUP_LINE}
 	 * @throws IllegalArgumentException if the resulting string is not defined as enum constant
