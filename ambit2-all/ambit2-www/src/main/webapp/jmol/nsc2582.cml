@@ -1,0 +1,50 @@
+<?xml version='1.0'?>
+<molecule title="NSC2582">
+ <identifier version="0.932Beta" tautomeric="0">
+  <basic>C7H3I3O2,8-3-1H-4(7(11)12H)6(10)5(9)2H-3</basic>
+  <charge/>
+ </identifier>
+ <identifier version="0.932Beta" tautomeric="1">
+  <basic>C7H3I3O2,8-3-1H-4(7(11)12)6(10)5(9)2H-3,(H,11,12)</basic>
+  <charge/>
+ </identifier>
+ <atomArray>
+  <atom id="a1" elementType="I" x3="1.1439" y3="4.1903" z3="0.0129"/>
+  <atom id="a2" elementType="I" x3="4.2406" y3="-0.9733" z3="-0.0437"/>
+  <atom id="a3" elementType="I" x3="1.2668" y3="-2.7741" z3="-0.0242"/>
+  <atom id="a4" elementType="C" x3="-0.0169" y3="1.3924" z3="0.0097"/>
+  <atom id="a5" elementType="C" x3="1.1702" y3="2.0955" z3="0.0021"/>
+  <atom id="a6" elementType="C" x3="0.0021" y3="-0.0041" z3="0.0020"/>
+  <atom id="a7" elementType="C" x3="1.2245" y3="-0.6795" z3="-0.0133"/>
+  <atom id="a8" elementType="C" x3="2.3787" y3="1.4201" z3="-0.013"/>
+  <atom id="a9" elementType="C" x3="2.4054" y3="0.0368" z3="-0.0207"/>
+  <atom id="a10" elementType="C" x3="-1.2648" y3="-0.7631" z3="0.0105"/>
+  <atom id="a11" elementType="O" x3="-1.2451" y3="-1.9777" z3="0.0042"/>
+  <atom id="a12" elementType="O" x3="-2.4421" y3="-0.1086" z3="0.0253"/>
+  <atom id="a13" elementType="H" x3="-0.9587" y3="1.9207" z3="0.026"/>
+  <atom id="a14" elementType="H" x3="3.3049" y3="1.9756" z3="-0.0189"/>
+  <atom id="a15" elementType="H" x3="-3.2716" y3="-0.6056" z3="0.0309"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a1 a5" id="b1" order="1"/>
+  <bond atomRefs2="a2 a9" id="b2" order="1"/>
+  <bond atomRefs2="a3 a7" id="b3" order="1"/>
+  <bond atomRefs2="a4 a6" id="b4" order="1"/>
+  <bond atomRefs2="a4 a5" id="b5" order="2"/>
+  <bond atomRefs2="a4 a13" id="b6" order="1"/>
+  <bond atomRefs2="a5 a8" id="b7" order="1"/>
+  <bond atomRefs2="a6 a7" id="b8" order="2"/>
+  <bond atomRefs2="a6 a10" id="b9" order="1"/>
+  <bond atomRefs2="a7 a9" id="b10" order="1"/>
+  <bond atomRefs2="a8 a9" id="b11" order="2"/>
+  <bond atomRefs2="a8 a14" id="b12" order="1"/>
+  <bond atomRefs2="a10 a12" id="b13" order="1"/>
+  <bond atomRefs2="a10 a11" id="b14" order="2"/>
+  <bond atomRefs2="a12 a15" id="b15" order="1"/>
+ </bondArray>
+ <list>
+  <list title="NSC">
+   <scalar>2582</scalar>
+  </list>
+ </list>
+</molecule>
