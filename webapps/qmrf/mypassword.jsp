@@ -38,12 +38,26 @@
 <c:if test="${!empty param.user_name}">
 
 
+		<c:catch var="exception">
+		<sql:setDataSource dataSource="jdbc/qmrf_documents"/>
+			<sql:query var="rs">
+				select firstname, lastname, user_name from users where user_name=?
+				<sql:param value="${param.user_name}"/>
+			</sql:query>
+			<c:forEach var="row" items="${rs.rows}">
+				<h3>Change password for user name: <font color="red">${row.user_name}</font></h3>
+			</c:forEach>
+		</c:catch>
+		${exception}
 <c:choose>
 <c:when test="${fn:length(param.newpassword)<6}">
 				<div class="error">
 				The password should consist of at least 6 characters
 			</div>
 </c:when>
+
+
+		
 <c:when test="${!empty param.password && !empty param.newpassword && !empty param.confirm && (param.newpassword eq param.confirm)}">
 
 
@@ -104,7 +118,7 @@
 <c:if test="${empty success}">
 
 	<form method="POST" name="password_form" action="mypassword.jsp">
-		<h3>Change password for user name: <font color="red">${param.user_name}</font></h3>
+
 	<table>
 	<tr>
 	<th>
