@@ -9,6 +9,8 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 
 
 /** Utilities for generation of different types of 
@@ -16,10 +18,57 @@ import org.openscience.cdk.interfaces.IBond;
 public class ChemObjectFactory 
 {
 	
-	public void getAtomSequence(IAtomContainer target, int startAtom)
+	Vector<SequenceElement> sequence = new Vector<SequenceElement>();
+	Vector<IAtom> sequencedAtoms = new Vector<IAtom>();
+	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
+	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
+	
+	public void setAtomSequence(IAtomContainer target, IAtom startAtom)
 	{	
+		//This function is implemented analogously to IsomorphismTester.setQueryAtomSequence
+		
+		IAtom firstAtom;
+		SequenceElement seqEl;
+		TopLayer topLayer;
+		int n;
+		
+		if (startAtom == null)
+			firstAtom = target.getFirstAtom();
+		else
+			firstAtom = startAtom;
+		
+		sequence.clear();
+		sequencedAtoms.clear();
+		sequencedBondAt1.clear();
+		sequencedBondAt2.clear();
+		
+		//Setting the first sequence atom
+		sequencedAtoms.add(firstAtom);		
+		seqEl = new SequenceElement();
+		seqEl.center = firstAtom;
+		topLayer = (TopLayer)firstAtom.getProperty(TopLayer.TLProp);
+		n = topLayer.atoms.size();
+		seqEl.atoms = new IAtom[n];
+		seqEl.bonds = new IBond[n];
+		for (int i = 0; i < n; i++)
+		{
+			sequencedAtoms.add(topLayer.atoms.get(i));
+			seqEl.atoms[i] = topLayer.atoms.get(i);
+			seqEl.bonds[i] = topLayer.bonds.get(i);
+			addSeqBond(seqEl.center,seqEl.atoms[i]);
+		}
+		sequence.add(seqEl);
+		
+		
+		//Sequencing the entire query structure
+		//TODO
 	}
 	
+	void addSeqBond(IAtom at1, IAtom at2)
+	{
+		sequencedBondAt1.add(at1);
+		sequencedBondAt2.add(at2);
+	}
 	
 	
 	//This function generates a Carbon skeleton from a query atom sequence
