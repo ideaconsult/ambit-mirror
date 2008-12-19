@@ -1,11 +1,13 @@
 package ambit2.smarts;
 
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.Vector;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -42,6 +44,10 @@ public class ChemObjectFactory
 		sequencedBondAt1.clear();
 		sequencedBondAt2.clear();
 		
+		//Calculating the first topological layer of each atom
+		if (target.getAtom(0).getProperty(TopLayer.TLProp) == null)
+			TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		
 		//Setting the first sequence atom
 		sequencedAtoms.add(firstAtom);		
 		seqEl = new SequenceElement();
@@ -61,7 +67,73 @@ public class ChemObjectFactory
 		
 		
 		//Sequencing the entire query structure
-		//TODO
+		Stack<SequenceElement> stack = new Stack<SequenceElement>();
+		stack.push(seqEl);
+		while (!stack.empty())
+		{
+			//curAddedAtoms.clear();
+			SequenceElement curSeqAt = stack.pop();
+			for (int i = 0; i < curSeqAt.atoms.length; i++)
+			{
+				topLayer = (TopLayer)curSeqAt.atoms[i].getProperty(TopLayer.TLProp);
+				if (topLayer.atoms.size() == 1)
+					continue; // it is terminal atom and no further sequencing should be done
+				int a[] = getSeqAtomsInLayer(topLayer);
+				
+				n = 0;
+				for (int k = 0; k<a.length; k++)
+					if (a[k] == 0)
+						n++;
+				
+				if (n > 0)
+				{	
+					seqEl = new SequenceElement();
+					seqEl.center = curSeqAt.atoms[i];
+					seqEl.atoms = new IAtom[n];
+					seqEl.bonds = new IBond[n];
+					sequence.add(seqEl);
+					stack.add(seqEl);
+				}	
+				
+				int j = 0;				
+				for (int k = 0; k < a.length; k++)
+				{
+					if (a[k] == 0)
+					{	
+						seqEl.atoms[j] = topLayer.atoms.get(k);
+						seqEl.bonds[j] = topLayer.bonds.get(k);
+						addSeqBond(seqEl.center,seqEl.atoms[j]);
+						sequencedAtoms.add(seqEl.atoms[j]);
+						//curAddedAtoms.add(seqEl.atoms[j]);
+						j++;
+					}
+					else
+					{	
+						if (curSeqAt.center == topLayer.atoms.get(k))
+							continue;
+						//Check whether  bond(curSeqAt.atoms[i]-topLayer.atoms.get(k))
+						//is already sequenced
+						if (getSeqBond(curSeqAt.atoms[i],topLayer.atoms.get(k)) != -1)
+							continue;						
+						//topLayer.atoms.get(k) atom is already sequenced.
+						//Therefore sequnce element of 'bond' type is registered.						
+						//newSeqEl is not added in the stack (this is not needed for this bond)
+						SequenceElement newSeqEl = new SequenceElement();						
+						newSeqEl.center = null;
+						newSeqEl.atoms = new IAtom[2];
+						newSeqEl.bonds = new IBond[1];
+						newSeqEl.atoms[0] = curSeqAt.atoms[i];
+						newSeqEl.atoms[1] = (IQueryAtom)topLayer.atoms.get(k);
+						addSeqBond(newSeqEl.atoms[0],newSeqEl.atoms[1]);
+						newSeqEl.bonds[0] = topLayer.bonds.get(k);
+						sequence.add(newSeqEl);						
+					}
+				}
+			}			
+		}
+		
+		for(int i = 0; i < sequence.size(); i++)
+			sequence.get(i).setAtomNums(target);
 	}
 	
 	void addSeqBond(IAtom at1, IAtom at2)
@@ -70,13 +142,109 @@ public class ChemObjectFactory
 		sequencedBondAt2.add(at2);
 	}
 	
+	int[] getSeqAtomsInLayer(TopLayer topLayer)
+	{
+		int a[] = new int[topLayer.atoms.size()];
+		for (int i = 0; i <topLayer.atoms.size(); i++)
+		{	
+			if (containsAtom(sequencedAtoms,(IQueryAtom)topLayer.atoms.get(i)))
+			{	
+				a[i] = 1;
+			}	
+			else
+				a[i] = 0;
+		}	
+		return(a);
+	}
+	
+	
+	boolean containsAtom(Vector<IAtom> v, IAtom atom)
+	{
+		for(int i = 0; i < v.size(); i++)
+			if (v.get(i) == atom)
+				return(true);
+		return(false);
+	}
+	
+	int getSeqBond(IAtom at1, IAtom at2)
+	{
+		for (int i = 0; i < sequencedBondAt1.size(); i++)
+		{
+			if (sequencedBondAt1.get(i)==at1)
+			{
+				if (sequencedBondAt2.get(i)==at2)
+					return(i);
+			}
+			else
+				if (sequencedBondAt1.get(i)==at2)
+				{
+					if (sequencedBondAt2.get(i)==at1)
+						return(i);
+				}
+		}
+		return(-1);		
+	}
+	
+	public IAtomContainer getFragmentFromSequence(int numSteps)
+	{
+		AtomContainer mol = new AtomContainer();		
+		HashMap<IAtom,IAtom> m = new HashMap<IAtom,IAtom>();	//Mapping original --> copy	
+		SequenceElement el;
+		
+		//Processing first sequence element (The first center is always different from null
+		el = sequence.get(0);
+		IAtom a0 = getAtomCopy(el.center);		
+		mol.addAtom(a0);
+		m.put(el.center, a0);
+				
+		for (int k = 0; k < el.atoms.length; k++)
+		{
+			IAtom a = getAtomCopy(el.atoms[k]);
+			mol.addAtom(a);
+			m.put(el.atoms[k],a);
+			addBond(mol, m.get(el.center), a, el.bonds[k].getOrder(), el.bonds[k].getFlag(CDKConstants.ISAROMATIC) );
+		}
+		
+		for (int i = 1; i < numSteps; i++)
+		{
+			//TODO
+		}
+		return(mol);
+	}
+	
+	IAtom getAtomCopy(IAtom atom)
+	{
+		IAtom copyAtom = new Atom(atom.getSymbol());
+		
+		if (atom.getFlag(CDKConstants.ISAROMATIC))
+			copyAtom.setFlag(CDKConstants.ISAROMATIC,true);
+		
+		int charge = atom.getFormalCharge().intValue(); 
+		if (charge != 0)
+			copyAtom.setFormalCharge(charge);
+		
+		return(copyAtom);
+	}
+	
+	void addBond(IAtomContainer mol, IAtom at1, IAtom at2, IBond.Order order, boolean isAromatic)
+	{
+		IAtom[] atoms = new IAtom[2];
+		atoms[0] = at1;
+		atoms[1] = at2;		
+		Bond b = new Bond();
+		b.setAtoms(atoms);
+		b.setOrder(order);
+		if (isAromatic)
+			b.setFlag(CDKConstants.ISAROMATIC, true);
+		mol.addBond(b);
+	}
+	
 	
 	//This function generates a Carbon skeleton from a query atom sequence
 	//It is used mainly for testing purposes
 	public static IAtomContainer getCarbonSkelleton(Vector<QuerySequenceElement> sequence)
 	{
-		AtomContainer mol = new AtomContainer();
-		Vector<IAtom> v = new Vector<IAtom>();
+		AtomContainer mol = new AtomContainer();		
 		HashMap<IAtom,IAtom> m = new HashMap<IAtom,IAtom>();		
 		QuerySequenceElement el;
 		
@@ -136,15 +304,19 @@ public class ChemObjectFactory
 	void connectFragmentToMolecule(IAtomContainer base, IAtomContainer fragment, 
 							int bondType, int basePos, int fragPos) 
 	{
-		
+		//TODO
+	}
+	
+	void connectFragmentToMoleculeSpiro(IAtomContainer base, IAtomContainer fragment, 
+							int basePos, int fragPos) 
+	{
+		//TODO	
 	}
 	
 	void condenseFragmentToMolecule(IAtomContainer base, IAtomContainer fragment, 
 			int bondType, int basePos, int fragPos) 
 	{
-
+		//TODO
 	}
-	
-	
 	
 }
