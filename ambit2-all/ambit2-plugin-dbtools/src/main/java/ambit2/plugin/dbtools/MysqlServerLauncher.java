@@ -25,7 +25,7 @@ public class MysqlServerLauncher extends Workflow {
     			MYSQLCOMMAND,
     			new Performer<MySQLCommand,MySQLCommand>() {
     				@Override
-    				public MySQLCommand execute() {
+    				public MySQLCommand execute() throws Exception {
     					MySQLCommand target = getTarget();
     					if (target == null) 
     						target = new MySQLCommand();

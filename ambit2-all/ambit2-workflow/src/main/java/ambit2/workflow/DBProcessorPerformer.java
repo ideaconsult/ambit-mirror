@@ -50,7 +50,7 @@ public class DBProcessorPerformer<Target,Result> extends ProcessorPerformer<IDBP
 	}
 
     @Override
-    public Result execute() {
+    public Result execute() throws Exception {
         if (processor == null) return null;
         try {
         	DataSource datasource = (DataSource)get(DBWorkflowContext.DATASOURCE);
