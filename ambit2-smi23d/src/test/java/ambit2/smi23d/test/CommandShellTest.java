@@ -48,7 +48,7 @@ public class CommandShellTest {
 		Assert.assertTrue(shell.getExecutable("nt").endsWith("smi2sdf.exe"));
 	}
 
-	@Test
+	
 	public void testAddExecutableMac() throws Exception {
 		String name= "bin/smi23d/mac/smi2sdf";
 		shell.addExecutableMac(name,null);
@@ -66,7 +66,7 @@ public class CommandShellTest {
 		Assert.assertTrue(file.exists());
 	}
 
-	@Test
+	
 	public void testAddExecutableLinux() throws Exception {
 		String name= "bin/smi23d/linux/smi2sdf";
 		shell.addExecutableLinux(name,null);
