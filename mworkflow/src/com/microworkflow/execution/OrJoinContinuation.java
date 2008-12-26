@@ -22,7 +22,7 @@ public class OrJoinContinuation extends JoinContinuation {
 		super(continuation, continuation.getWorkflow());
 	}
 
-	public Continuation applyContinuationIn(WorkflowContext context) {
+	public Continuation applyContinuationIn(WorkflowContext context) throws Exception {
         fireUnderExecution();
 		counter=counter+1;
 		if (counter==1) {

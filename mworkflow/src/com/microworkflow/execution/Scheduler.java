@@ -30,8 +30,9 @@ public class Scheduler {
 	}
 	public void scheduleCommand(Closure command) {
 		try {
-			threadPool.execute(new CommandWrapper(command));			
+			threadPool.execute(new CommandWrapper(command));
 		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 	public void waitForCompletion() {

@@ -25,7 +25,7 @@ public class IterativeContinuation extends Continuation {
 		super(continuation);
 	}
 
-	public Continuation applyContinuationIn(WorkflowContext context) {
+	public Continuation applyContinuationIn(WorkflowContext context) throws Exception {
         fireUnderExecution();
 		if (!iterating) {
 			iterating=true;

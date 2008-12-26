@@ -5,7 +5,7 @@
   <groupId>ambit</groupId>
   <artifactId>mworkflow</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>Micro-workflow</name>
     
    <distributionManagement>
@@ -36,7 +36,7 @@
             </goals>
             <configuration>
               <tasks>
-                <attachArtifact file="dist/mworkflow-1.0.1.jar" />
+                <attachArtifact file="dist/mworkflow-${project.version}.jar" />
 <!--
                 <ant dir="." target="" />
                 <attachArtifact file="dist/mworkflow-1.0.1.jar" classifier="exec" type="jar"/>

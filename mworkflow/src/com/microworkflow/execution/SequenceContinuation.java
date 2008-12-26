@@ -18,7 +18,7 @@ public class SequenceContinuation extends Continuation {
 		super(c, c.getWorkflow());
 	}
 
-	public Continuation applyContinuationIn(WorkflowContext context) {
+	public Continuation applyContinuationIn(WorkflowContext context) throws Exception {
         fireUnderExecution();
 		if (continuations.hasNext()) {
 			Continuation step = (Continuation) continuations.next();

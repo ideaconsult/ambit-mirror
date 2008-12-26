@@ -19,6 +19,7 @@ import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.execution.Continuation;
 import com.microworkflow.execution.NullContinuation;
 import com.microworkflow.execution.Scheduler;
+import com.microworkflow.process.IWorkflowExceptionHandler.RETURN_MODE;
 
 /**
  * @author dam
@@ -35,6 +36,7 @@ public class Workflow extends ObjectWithPropertyChangeSupport {
 	protected ArrayList<Continuation> additionalContinuations;
 	protected Scheduler scheduler;
 	protected Logger logger;
+	protected IWorkflowExceptionHandler exceptionHandler = null;
 	
 	public Workflow () {
 		initialize();
@@ -53,14 +55,27 @@ public class Workflow extends ObjectWithPropertyChangeSupport {
 		WorkflowContext currentContext = context;
 		Continuation continuation = firstContinuation();
 		while (continuation.getClass() != NullContinuation.class) {
-			continuation = bounce(continuation, currentContext);
+			try {
+				continuation = bounce(continuation, currentContext);
+			} catch (Exception x) {
+				if (exceptionHandler == null)
+					exceptionHandler = new WorkflowExceptionHandler();
+				RETURN_MODE returnmode = exceptionHandler.processException(x,continuation,context);
+				if (RETURN_MODE.RESUME ==returnmode) {
+					firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_RESUMED,null,x));					
+					continue;
+				} else {
+			        firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_ABORTED,null,x));					
+					break;
+				}
+			}
 		}
 		scheduler.shutdown();
         firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_COMPLETE,null,currentContext));
 		return currentContext;
 	}
 
-	protected Continuation bounce(Continuation continuation, WorkflowContext context) {
+	protected Continuation bounce(Continuation continuation, WorkflowContext context) throws Exception {
 		Continuation ret = null;
 		
 		logger.finer("trampoline bouncing "+continuation);

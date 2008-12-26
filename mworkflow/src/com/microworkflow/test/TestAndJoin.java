@@ -34,7 +34,7 @@ public class TestAndJoin extends TestActivity {
 	public void testAndJoin() {
 		// branch 1
 		Activity branch1 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotA("a");
@@ -44,7 +44,7 @@ public class TestAndJoin extends TestActivity {
 		});
 		// branch 2
 		Primitive p21 = new Primitive(O2_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotA("aa");
@@ -53,7 +53,7 @@ public class TestAndJoin extends TestActivity {
 			}
 		});
 		Primitive p22 = new Primitive(O2_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotB("bb");
@@ -65,7 +65,7 @@ public class TestAndJoin extends TestActivity {
 		branch2.addStep(p21).addStep(p22);
 		// branch 3
 		Primitive p31 = new Primitive(O3_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotA("aaa");
@@ -74,7 +74,7 @@ public class TestAndJoin extends TestActivity {
 			}
 		});
 		Primitive p32 = new Primitive(O3_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotB("bbb");
@@ -83,7 +83,7 @@ public class TestAndJoin extends TestActivity {
 			}
 		});
 		Primitive p33 = new Primitive(O3_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotC("ccc");
@@ -96,7 +96,7 @@ public class TestAndJoin extends TestActivity {
 		//
 		AndJoin join = new AndJoin();
 		join.setBody(new Primitive(O1_KEY, "result", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject do1=(DomainObject) getTarget();
 					DomainObject do2=(DomainObject) get(O2_KEY);

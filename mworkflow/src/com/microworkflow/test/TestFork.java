@@ -26,7 +26,7 @@ public class TestFork extends TestActivity {
 	}
 	public void testFork() {
 		Primitive p1 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotA("AA");
@@ -35,7 +35,7 @@ public class TestFork extends TestActivity {
 			}
 		});
 		Primitive p2 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotB("BB");
@@ -44,7 +44,7 @@ public class TestFork extends TestActivity {
 			}
 		});
 		Primitive p3 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotC("CC");

@@ -26,7 +26,7 @@ public class TestAsyncPrimitive extends TestActivity {
 	}
 	public void testAsyncPrimitive() {
 		AsyncPrimitive p = new AsyncPrimitive(O1_KEY,"result1", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				synchronized(this) {
 					try {
 						wait(2000);

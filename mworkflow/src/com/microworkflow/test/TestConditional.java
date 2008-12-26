@@ -63,7 +63,7 @@ public class TestConditional extends TestActivity {
 	}
 	public Primitive getElseBranch() {
 		Primitive elseP = new Primitive(O1_KEY, "result", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					return domainObject.concat((String) get("argument2"));
@@ -75,7 +75,7 @@ public class TestConditional extends TestActivity {
 	}
 	public Primitive getThenBranch() {
 		Primitive thenP = new Primitive(O1_KEY, "result", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					return domainObject.concat((String) get("argument1"));

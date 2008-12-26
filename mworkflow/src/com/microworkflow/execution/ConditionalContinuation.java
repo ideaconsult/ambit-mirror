@@ -37,7 +37,7 @@ public class ConditionalContinuation extends Continuation {
 		test = aBlock;
 	}
 
-	public Continuation applyContinuationIn(WorkflowContext context) {
+	public Continuation applyContinuationIn(WorkflowContext context) throws Exception {
         fireUnderExecution();        
 		Continuation ret =
 			test.evaluateInContext(context) ? thenContinuation : elseContinuation;

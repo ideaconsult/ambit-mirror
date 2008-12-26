@@ -38,6 +38,8 @@ public class WorkflowEvent extends PropertyChangeEvent {
     public final static String WF_DEFINITION = "com.microworkflow.process.Workflow.DEFINITION";
     public final static String WF_EXECUTE = "com.microworkflow.process.Workflow.EXECUTION";
     public final static String WF_COMPLETE = "com.microworkflow.process.Workflow.COMPLETE";
+    public final static String WF_ABORTED = "com.microworkflow.process.Workflow.ABORTED";    
+    public final static String WF_RESUMED = "com.microworkflow.process.Workflow.RESUMED";    
     public final static String WF_ANIMATE = "com.microworkflow.process.Workflow.ANIMATE";
 
     /**

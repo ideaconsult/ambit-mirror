@@ -26,7 +26,7 @@ public class TestSequence extends TestActivity {
 	}
 	public void testSequence() {
 		Primitive step1 = new Primitive(O1_KEY, "result1", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					return domainObject.concat((String) get("argument1"));
@@ -35,7 +35,7 @@ public class TestSequence extends TestActivity {
 			}
 		});
 		Primitive step2 = new Primitive("result1", "result2", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					String str = (String) getTarget();
 					return str.replaceAll("stringfirst","string; first");
@@ -44,7 +44,7 @@ public class TestSequence extends TestActivity {
 			}
 		});
 		Primitive step3 = new Primitive("result2", "result3", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					String str = (String) getTarget();
 					return new Integer(str.length());

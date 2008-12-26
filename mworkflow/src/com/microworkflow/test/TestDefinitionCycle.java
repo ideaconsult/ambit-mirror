@@ -40,13 +40,13 @@ public class TestDefinitionCycle extends TestCase {
 	 */
 	protected Activity getDefinition() {
 		Activity performer1 = new Primitive("Object1", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				i=i+2;
 				return null;
 			}
 		});
 		Activity performer2 = new Primitive("Object2", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				i=i-1;
 				return null;
 			}

@@ -25,7 +25,7 @@ public class TestOrJoin extends TestActivity {
 	}
 	public void testOrJoin() {
 		Primitive p1 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotA("A");
@@ -34,7 +34,7 @@ public class TestOrJoin extends TestActivity {
 			}
 		});
 		Primitive p2 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotB("B");
@@ -43,7 +43,7 @@ public class TestOrJoin extends TestActivity {
 			}
 		});
 		Primitive p3 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setSlotC("C");
@@ -53,7 +53,7 @@ public class TestOrJoin extends TestActivity {
 		});
 		OrJoin join = new OrJoin();
 		join.setBody(new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					domainObject.setCounter(domainObject.getCounter()+1);	

@@ -46,7 +46,7 @@ public class Primitive extends Activity {
 	public static Primitive makeNop(String targetKey,String resultKey) {
 		Primitive nop=new Primitive(targetKey,resultKey,
 			new Performer() {
-				public Object execute() {
+				public Object execute() throws Exception {
 					return getTarget();
 				}});
 		return nop;

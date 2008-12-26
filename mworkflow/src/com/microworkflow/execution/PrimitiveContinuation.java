@@ -17,7 +17,7 @@ public class PrimitiveContinuation extends Continuation {
 	public PrimitiveContinuation(Continuation continuation) {
 		super(continuation);
 	}
-	public Continuation applyContinuationIn(WorkflowContext context) {
+	public Continuation applyContinuationIn(WorkflowContext context) throws Exception {
         fireUnderExecution();
 		performer.setTargetKey(targetKey);
 		performer.setResultKey(resultKey);

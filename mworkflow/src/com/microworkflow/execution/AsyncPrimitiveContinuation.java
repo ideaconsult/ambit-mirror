@@ -19,7 +19,7 @@ public class AsyncPrimitiveContinuation extends Continuation {
 	public AsyncPrimitiveContinuation(Continuation continuation) {
 		super(continuation, continuation.getWorkflow());
 	}
-	public Continuation applyContinuationIn(final WorkflowContext context) {
+	public Continuation applyContinuationIn(final WorkflowContext context) throws Exception {
         fireUnderExecution();        
 		Continuation ret = getNextContinuation().makeNullContinuation();
 		
@@ -38,11 +38,18 @@ public class AsyncPrimitiveContinuation extends Continuation {
 		}
 		return ret;
 	}
-	public void scheduleAsynchronousCommand(final WorkflowContext context) {
+	public void scheduleAsynchronousCommand(final WorkflowContext context) throws Exception {
 		Closure command = new Closure() {
 			public Object evaluate() {
-				performer.performOperation();	
-				return this;			
+				try {
+					performer.performOperation();
+				} catch (Exception e) {
+					//TODO exception handling
+					e.printStackTrace();
+				} finally {
+				}
+				return this;
+				
 			}
 		};
 		getScheduler().scheduleCommand(command);

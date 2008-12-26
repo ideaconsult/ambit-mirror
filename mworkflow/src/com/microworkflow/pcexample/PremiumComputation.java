@@ -84,7 +84,7 @@ public class PremiumComputation {
 		Primitive getBaseValue =
 			new Primitive("BaseClassPremiumTable","baseValue",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Table table=(Table)getTarget();
 						CustomerData cdata=(CustomerData)get("CustomerData");
 						return table.get(cdata.getPolicyType(),cdata.getTerritory());
@@ -94,7 +94,7 @@ public class PremiumComputation {
 		Primitive makeBasePremium =
 			new Primitive("PremiumFactory","baseClassPremium",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium premiumFactory=(Premium)getTarget();
 						Double value=(Double)get("baseValue");
 						return premiumFactory.premiumWith(value);
@@ -104,7 +104,7 @@ public class PremiumComputation {
 		Primitive getFormFactor =
 			new Primitive("FormFactorTable","formFactor",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Table table=(Table)getTarget();
 						CustomerData cdata=(CustomerData)get("CustomerData");
 						return table.get(cdata.getPolicyType());
@@ -114,7 +114,7 @@ public class PremiumComputation {
 		Primitive multFormFactor =
 			new Primitive("baseClassPremium","intermediatePremium",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium basePremium=(Premium)getTarget();
 						Double formFactor=(Double)get("formFactor");
 						return basePremium.mult(formFactor);
@@ -124,7 +124,7 @@ public class PremiumComputation {
 		Primitive getPCCFactor =
 			new Primitive("PCCFactorTable","pccFactor",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Table table=(Table)getTarget();
 						CustomerData cdata=(CustomerData)get("CustomerData");
 						return table.get(cdata.getConstructionType(),cdata.getProtectionClass());
@@ -134,7 +134,7 @@ public class PremiumComputation {
 		Primitive multPCCFactor =
 			new Primitive("intermediatePremium","keyPremium",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium premium=(Premium)getTarget();
 						Double pccFactor=(Double)get("pccFactor");
 						return premium.mult(pccFactor);
@@ -144,7 +144,7 @@ public class PremiumComputation {
 		Primitive getKeyFactor =
 			new Primitive("KeyFactorTable","keyFactor",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Table keyFactorTable=(Table)getTarget();
 						CustomerData cdata=(CustomerData)get("CustomerData");
 						return keyFactorTable.get(cdata.getCoverageType(),cdata.getCoverageAmount());
@@ -153,7 +153,7 @@ public class PremiumComputation {
 		Primitive multKeyFactor =
 			new Primitive("keyPremium","initialBasePremium",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium keyPremium=(Premium)getTarget();
 						Double keyFactor=(Double)get("keyFactor");
 						return keyPremium.mult(keyFactor);
@@ -174,7 +174,7 @@ public class PremiumComputation {
 		Primitive getOLFactor =
 			new Primitive("Ordinance/LawFactorTable","olFactor",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Table table=(Table)getTarget();
 						CustomerData cdata=(CustomerData)get("CustomerData");
 						return table.get(cdata.getIncreaseOrdinanceOrLawCoverage());
@@ -183,7 +183,7 @@ public class PremiumComputation {
 		Primitive multOLFactor =
 			new Primitive("initialBasePremium","finalBasePremium",
 				new Performer() {
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium p=(Premium)getTarget();
 						Double factor=(Double)get("olFactor");
 						return p.mult(factor);
@@ -197,7 +197,7 @@ public class PremiumComputation {
 				}},
 				new Primitive("finalBasePremium","finalBasePremium",
 					new Performer() {
-						public Object execute() {
+						public Object execute() throws Exception {
 							Premium p=(Premium)getTarget();
 							Double factor=(Double)get("SuperiorConstructionFactor");
 							return p.mult(factor);
@@ -210,7 +210,7 @@ public class PremiumComputation {
 		Primitive getPremiumValue =
 			new Primitive("finalBasePremium","premiumValue",
 				new Performer(){
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium p=(Premium)getTarget();
 						return p.getValue();
 					}}
@@ -218,7 +218,7 @@ public class PremiumComputation {
 		Primitive computeDebitOrCredit =
 			new Primitive("endorsement","debitOrCredit",
 				new Performer(){
-					public Object execute() {
+					public Object execute() throws Exception {
 						Endorsement endorsement=(Endorsement)getTarget();
 						Double basePremium=(Double)get("premiumValue");
 						return endorsement.computeDebitOrCreditFor(basePremium);
@@ -226,7 +226,7 @@ public class PremiumComputation {
 		Primitive addToPremium =
 			new Primitive("finalBasePremium",
 				new Performer(){
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium p=(Premium)getTarget();
 						Double debitOrCredit=(Double)get("debitOrCredit");
 						p.addDebitOrCredit(debitOrCredit);
@@ -236,7 +236,7 @@ public class PremiumComputation {
 			new Iterative(
 				"CustomerData",
 				new Performer(){
-					public Object execute() {
+					public Object execute() throws Exception {
 						CustomerData cdata=(CustomerData)getTarget();
 						return cdata.getEndorsements();
 					}},
@@ -245,7 +245,7 @@ public class PremiumComputation {
 		Primitive addDebitsAndCredits =
 			new Primitive("finalBasePremium","finalPremium",
 				new Performer(){
-					public Object execute() {
+					public Object execute() throws Exception {
 						Premium p=(Premium)getTarget();
 						return p.adjustValue();
 					}});

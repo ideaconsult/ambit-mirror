@@ -29,7 +29,7 @@ public abstract class Continuation {
 		workflow = w;
 	}
 	
-	public abstract Continuation applyContinuationIn(WorkflowContext context);
+	public abstract Continuation applyContinuationIn(WorkflowContext context) throws Exception;
 
 	public void resetState() {
 		getActivity().computeStateFor(this);

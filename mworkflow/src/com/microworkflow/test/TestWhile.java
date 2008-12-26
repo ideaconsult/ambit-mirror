@@ -30,14 +30,14 @@ public class TestWhile extends TestActivity {
 		super.setUp();
 		context.put(O2_KEY,new DomainObject("foo"));
 		Primitive p1 = new Primitive(O1_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				DomainObject obj=(DomainObject)getTarget();
 				obj.setCounter(obj.getCounter()+1);
 				return null;
 			}
 		});
 		Primitive p2 = new Primitive(O2_KEY, new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				DomainObject obj=(DomainObject)getTarget();
 				obj.setCounter(obj.getCounter()+2);
 				return null;

@@ -32,19 +32,16 @@ public abstract class Performer<Target,Result> extends WorkflowClosure {
 		this(targetKey, context);
 		this.resultKey = resultKey;
 	}
-	public Object performOperation() {
+	public Object performOperation() throws Exception {
 		Result ret = null;
 		preExecute();
 		logger.finer("About to send execute() in " + this);
-		try {
-			ret = execute();
-		} finally {
-			logger.finer(this +" executed; returned " + (ret == null ? "no result" : ret));
-			postExecute(ret);
-		}
+		ret = execute();
+		logger.finer(this +" executed; returned " + (ret == null ? "no result" : ret));
+		postExecute(ret);
 		return ret;
 	}
-	public abstract Result execute();
+	public abstract Result execute() throws Exception;
 
 	protected void preExecute() {
 		hasExecuted = false;

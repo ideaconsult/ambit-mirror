@@ -26,7 +26,7 @@ public class TestPrimitive extends TestActivity {
 	}
 	public void testPrimitive() {
 		Primitive p = new Primitive(O1_KEY,"result1", new Performer() {
-			public Object execute() {
+			public Object execute() throws Exception {
 				if (context.containsKey(targetKey)) {
 					DomainObject domainObject = (DomainObject) getTarget();
 					return domainObject.concat((String) get("argument1"));

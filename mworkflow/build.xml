@@ -1,7 +1,8 @@
 <project name="Micro-workflow" default="mworkflow" basedir=".">
-  <property name="version" value="1.0.1" />	
+  <property name="version" value="1.0.2" />	
   <description>
        Micro-workflow package by Dragos Manolescu (dam@micro-workflow.com)
+  	   Extended by Nina Jeliazkova nina@acad.bg	
    </description>
   <property name="src" location="src"/>
   <property name="concurrent_src" location="concurrent"/>

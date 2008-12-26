@@ -26,7 +26,7 @@ public class AndJoinContinuation extends JoinContinuation {
 		this.numberOfInputs = numberOfInputs;
 	}
 
-	public Continuation applyContinuationIn(WorkflowContext context) {
+	public Continuation applyContinuationIn(WorkflowContext context) throws Exception {
         fireUnderExecution();
 		counter = counter + 1;
 		if (counter == numberOfInputs) {

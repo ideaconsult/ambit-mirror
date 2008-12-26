@@ -32,7 +32,7 @@ public class TestIterative extends TestActivity {
 
 	public void testIterative() {
 		Primitive body=new Primitive("component", new Performer(){
-			public Object execute() {
+			public Object execute() throws Exception {
 				String component=(String)getTarget();
 				DomainObject domainObject=(DomainObject)get(O1_KEY);
 				if (domainObject.getString() != null) {
@@ -45,7 +45,7 @@ public class TestIterative extends TestActivity {
 		});
 		Iterative iterative=new Iterative(O1_KEY,
 			new Performer(){
-				public Object execute() {
+				public Object execute() throws Exception {
 					DomainObject target=(DomainObject)getTarget();
 					return target.getComponents();
 				}
