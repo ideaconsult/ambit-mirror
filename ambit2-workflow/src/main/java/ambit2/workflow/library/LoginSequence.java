@@ -46,7 +46,7 @@ public class LoginSequence extends Sequence {
                 DBWorkflowContext.DBCONNECTION_URI,
                 DBWorkflowContext.DBCONNECTION_URI,new Performer() {
             @Override
-            public Object execute() {
+            public Object execute() throws Exception {
                 Object o = getTarget();
                 if (o == null) {
                 	Object ol = context.get(DBWorkflowContext.LOGININFO);

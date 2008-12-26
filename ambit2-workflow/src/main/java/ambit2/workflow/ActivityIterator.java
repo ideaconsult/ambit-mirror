@@ -48,7 +48,7 @@ public class ActivityIterator<IterationTarget,IterationResult> extends Iterative
             String iterationResultKey, IProcessor<IterationTarget,IterationResult> body) {
         super(targetKey,
                 new Performer(){
-                    public Object execute() {
+                    public Object execute() throws Exception {
                         Object o = get(targetKey);
                         if (o instanceof Iterator) return (Iterator) o;
                         else return null;  

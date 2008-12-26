@@ -61,6 +61,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
         
     }
 	public IStoredQuery process(IQueryObject target) throws AmbitException {
+		if (target == null) throw new AmbitException("Undefined query!");
 		Connection c = getConnection();		
 		try {
 			StoredQuery result = new StoredQuery(-1);

@@ -265,6 +265,11 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         } else if (WorkflowEvent.WF_COMPLETE.equals(arg0.getPropertyName())) {
             wftm.setSelected(-1);
             //table.scrollRectToVisible(table.getCellRect(0, 0, true));
+        } else if (WorkflowEvent.WF_ABORTED.equals(arg0.getPropertyName())) {
+            wftm.setSelected(-1);
+            status.setText(arg0.getNewValue().toString());
+        } else if (WorkflowEvent.WF_RESUMED.equals(arg0.getPropertyName())) {
+            status.setText(arg0.getNewValue().toString());            
         } else 
         	if (arg0.getNewValue()!= null)
         		status.setText(status.getText()+"\n"+arg0.getNewValue().toString());

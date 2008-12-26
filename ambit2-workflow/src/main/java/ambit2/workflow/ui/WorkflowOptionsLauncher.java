@@ -84,14 +84,6 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 				} else {
 					latch.getLatch().setValue(null);
 				}
-				/*
-				if (JOptionPane.showConfirmDialog(getFrame(),p,
-						//((UserInteractionEvent)evt).getTitle()
-						""
-						,JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
-					latch.getLatch().setValue(latch.getValue());	
-				} else latch.getLatch().setValue(null);
-				*/
 			} catch (Exception x) {
 				latch.getLatch().setValue(null);
 				x.printStackTrace();

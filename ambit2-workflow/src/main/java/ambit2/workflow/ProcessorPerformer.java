@@ -56,7 +56,7 @@ public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Resul
         	((DefaultAmbitProcessor)processor).addPropertyChangeListener(this);
     }
     @Override
-    public Result execute() {
+    public Result execute() throws Exception {
         if (processor == null) return null;
         try {
             
