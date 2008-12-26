@@ -54,8 +54,11 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		} else
 			c.setBackground(oddColor);
 		if (value != null) {
-
-			setToolTipText(table.getColumnName(column) + "=" + value.toString());
+			String columnName = table.getColumnName(column);
+			if (columnName != null)
+				setToolTipText(table.getColumnName(column) + "=" + value.toString());
+			else
+				setToolTipText(value.toString());
 		} else
 			setToolTipText("");
 		return c;
