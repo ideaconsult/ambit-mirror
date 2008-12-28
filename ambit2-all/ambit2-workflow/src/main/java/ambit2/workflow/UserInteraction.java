@@ -34,7 +34,7 @@ public class UserInteraction<T> extends Primitive {
 	                    context.remove(DBWorkflowContext.USERINTERACTION);
 	                    return null;
 	                }
-	                if (li == null) throw new Exception("Cancelled");
+	                if (li == null) throw new Exception("Workflow cancelled.");
                     return li;	                
 	                
 	            } else return o;    

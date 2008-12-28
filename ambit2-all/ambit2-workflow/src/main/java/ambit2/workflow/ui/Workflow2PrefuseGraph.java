@@ -24,15 +24,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow.ui;
 
+
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 
 import com.microworkflow.process.Activity;
+import com.microworkflow.process.Conditional;
+import com.microworkflow.process.Fork;
+import com.microworkflow.process.Iterative;
+import com.microworkflow.process.JoinActivity;
+import com.microworkflow.process.NullActivity;
+import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Sequence;
+import com.microworkflow.process.While;
 import com.microworkflow.process.Workflow;
 
-public class Workflow2PrefuseGraph extends WorkflowTools<Node> {
-	   protected Graph graph;
+public class Workflow2PrefuseGraph extends WorkflowConvertor<Graph,Node> {
 	    public static final String FIELD_ID = "id";
 	    public static final String FIELD_SHORT_NAME = "short";
 	    public static final String FIELD_NAME = "name";
@@ -40,33 +48,32 @@ public class Workflow2PrefuseGraph extends WorkflowTools<Node> {
 	    public static final String FIELD_NODETYPE = "nodetype";
 	    public static final String FIELD_ANSWER = "answer";
 
-	    
-	    public Workflow2PrefuseGraph(Graph graph) {
-	        this.graph = graph;
-	    }
-
-
-	    public void init() {
-	        graph.addColumn(Workflow2PrefuseGraph.FIELD_ID, String.class);
-	        graph.addColumn(Workflow2PrefuseGraph.FIELD_SHORT_NAME, String.class);
-	        graph.addColumn(Workflow2PrefuseGraph.FIELD_NAME, String.class);
-	        graph.addColumn(Workflow2PrefuseGraph.FIELD_NODETYPE, String.class);
-	        graph.addColumn(Workflow2PrefuseGraph.FIELD_EXPLANATION, String.class);
-	        graph.addColumn(Workflow2PrefuseGraph.FIELD_ANSWER, Boolean.class);
+		public Workflow2PrefuseGraph(Graph graph) {
+			this.result = graph;
+		}
+	    @Override
+	    protected Graph init(Workflow workflow) throws Exception {
+	        result.addColumn(Workflow2PrefuseGraph.FIELD_ID, String.class);
+	        result.addColumn(Workflow2PrefuseGraph.FIELD_SHORT_NAME, String.class);
+	        result.addColumn(Workflow2PrefuseGraph.FIELD_NAME, String.class);
+	        result.addColumn(Workflow2PrefuseGraph.FIELD_NODETYPE, String.class);
+	        result.addColumn(Workflow2PrefuseGraph.FIELD_EXPLANATION, String.class);
+	        result.addColumn(Workflow2PrefuseGraph.FIELD_ANSWER, Boolean.class);
+	        return result;
 	   }
 
 	    public Node process(Activity[] parentActivity, Activity activity)  {
 
 	    	Node n1 = null;
-	    	for (int i=0; i < graph.getNodeCount();i++) {
-	    		Node n = graph.getNode(i);
+	    	for (int i=0; i < result.getNodeCount();i++) {
+	    		Node n = result.getNode(i);
 	    		if ((n.getString(FIELD_ID).equals(activity.getName()))) {
-	    			n1 = graph.getNode(i);
+	    			n1 = result.getNode(i);
 	    			break;
 	    		}
 	    	}
 	    	if (n1 == null) {
-		        n1 = graph.addNode(); 
+		        n1 = result.addNode(); 
 		        n1.setString(FIELD_ID, activity.getName());
 		        n1.setString(FIELD_NODETYPE,activity.getClass().getName());
 		        n1.setString(FIELD_EXPLANATION,activity.getClass().getName());
@@ -76,11 +83,11 @@ public class Workflow2PrefuseGraph extends WorkflowTools<Node> {
 	        if (parentActivity != null) {
 	        	for (Activity a : parentActivity) {
 		        	Node parentNode = null;
-			    	for (int i=0; i < graph.getNodeCount();i++) {
-			    		Node n = graph.getNode(i);
+			    	for (int i=0; i < result.getNodeCount();i++) {
+			    		Node n = result.getNode(i);
 			    		if ((n.getString(FIELD_ID).equals(a.getName()))) {
-			    			parentNode = graph.getNode(i);
-			    			Edge edge = getGraph().addEdge(parentNode, n1);
+			    			parentNode = result.getNode(i);
+			    			Edge edge = result.addEdge(parentNode, n1);
 			    			/*
 	                        if (answers[i])
 	                        	edge.setString(FIELD_ANSWER, AbstractRule.MSG_YES);
@@ -96,17 +103,47 @@ public class Workflow2PrefuseGraph extends WorkflowTools<Node> {
         
 	        return n1;
 	    }
-		public Graph getGraph() {
-			return graph;
+		@Override
+		public void customizeElement(Node element, JoinActivity activity) {
+			// TODO Auto-generated method stub
+			
 		}
-		public void setGraph(Graph graph) {
-			this.graph = graph;
+		@Override
+		public void customizeElement(Node element, Fork activity) {
+			// TODO Auto-generated method stub
+			
 		}
-
-	   public Activity[]  walkRules(Workflow workflow) {
-		        init();
-		        return traverseActivity(null,workflow.getDefinition(), 0, true);
-	   }
+		@Override
+		public void customizeElement(Node element, Primitive activity) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void customizeElement(Node element, Iterative activity) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void customizeElement(Node element, While activity) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void customizeElement(Node element, Conditional activity) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void customizeElement(Node element, Sequence activity) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void customizeElement(Node element, NullActivity activity) {
+			// TODO Auto-generated method stub
+			
+		}
+	
 	
 }
 
