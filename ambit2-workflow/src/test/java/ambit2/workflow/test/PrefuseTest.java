@@ -36,20 +36,10 @@ import javax.swing.JSplitPane;
 
 import prefuse.util.display.ExportDisplayAction;
 import ambit2.workflow.ui.WorkflowPrefuse;
-import ambit2.workflow.ui.WorkflowTools;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
-import com.microworkflow.process.Activity;
-import com.microworkflow.process.AndJoin;
-import com.microworkflow.process.Conditional;
-import com.microworkflow.process.Fork;
-import com.microworkflow.process.Iterative;
-import com.microworkflow.process.JoinActivity;
-import com.microworkflow.process.Primitive;
-import com.microworkflow.process.Sequence;
-import com.microworkflow.process.TestCondition;
-import com.microworkflow.process.While;
 import com.microworkflow.process.Workflow;
+import com.microworkflow.ui.WorkflowTools;
 
 public class PrefuseTest  {
   

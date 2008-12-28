@@ -3,7 +3,10 @@ package ambit2.workflow.ui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -13,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -21,6 +25,11 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.w3c.dom.Document;
+
+import ambit2.core.io.IInputState;
+import ambit2.core.io.MolFileFilter;
+import ambit2.core.io.MyIOUtilities;
 import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
 
@@ -36,6 +45,7 @@ import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.IWorkflowListenerUI;
+import com.microworkflow.ui.WorkflowTools;
 
 
 public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
@@ -47,6 +57,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     protected JTextArea status;
     protected String title="Workflow";
     protected ImageIcon ptr, executed, notyet, conditional, composite;
+
     /**
      * 
      */
@@ -167,13 +178,30 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         table.getColumnModel().getColumn(1).setMaxWidth(32);
         table.getColumnModel().getColumn(3).setMaxWidth(32);        
         table.setShowVerticalLines(false);
+        
+        table.addMouseListener(new MouseAdapter() {
+        	  public void mousePressed(MouseEvent evt) {              
+        	     if (evt.isPopupTrigger()) {
+        	    	JPopupMenu popupMenu = createPopupMenu();
+        	    	popupMenu.setVisible(true);
+        	        popupMenu.show(table,evt.getX(),getY());
+        	     }
+        	  }
+        	  public void mouseReleased(MouseEvent evt) {
+        	     if (evt.isPopupTrigger()) {
+         	    	JPopupMenu popupMenu = createPopupMenu();
+        	    	popupMenu.setVisible(true);
+        	        popupMenu.show(table,evt.getX(),getY());
+        	     }
+        	   }
+        	 });
         JScrollPane pane = new JScrollPane(table);
         pane.setPreferredSize(new Dimension(200,400));
         pane.setMaximumSize(new Dimension(Integer.MAX_VALUE,200));
         
         status  = new JTextArea();
         status.setBackground(getBackground());
-        status.setEditable(false);
+        status.setEditable(true);
         status.setBorder(null);
         status.setPreferredSize(new Dimension(200,200));
         //fake button 
@@ -190,23 +218,53 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         add(DefaultComponentFactory.getInstance ().createSeparator( "Workflow steps" ),cc.xy(1,1)) ;
         add(pane, cc.xy(1,2));        
         
-        JButton prefuse = new JButton(new AbstractAction("View") {
+
+        add(ButtonBarFactory.buildWizardBar(
+        		null
+        		, new JButton(action),cancel,
+        		new JButton[] {}),
+        		cc.xy(1,3)
+        		);
+        add(DefaultComponentFactory.getInstance ().createSeparator( "Messages" ),cc.xy(1,4)) ;
+        add(new JScrollPane(status,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),cc.xy(1,5));
+	    
+	    
+    }
+    protected JPopupMenu createPopupMenu() {
+    	JPopupMenu menu = new JPopupMenu();
+    	menu.add("Workflow options").setEnabled(false);
+    	menu.addSeparator();
+    	menu.add(
+    	new AbstractAction("View") {
         	public void actionPerformed(ActionEvent e) {
         		WorkflowPrefuse prefuse = new WorkflowPrefuse(workflow);
         		JOptionPane.showMessageDialog(table,new JScrollPane(prefuse));
         		
         	}
         });
-        add(ButtonBarFactory.buildWizardBar(
-        		new JButton[] {prefuse}
-        		, new JButton(action),cancel,
-        		new JButton[] {}),
-        		cc.xy(1,3)
-        		);
-        add(DefaultComponentFactory.getInstance ().createSeparator( "Messages" ),cc.xy(1,4)) ;
-        add(new JScrollPane(status),cc.xy(1,5));
-	    
-	    
+    	menu.addSeparator();    	
+    	menu.add(
+    	    	new AbstractAction("Export") {
+    	        	public void actionPerformed(ActionEvent e) {
+    	        		File file = MyIOUtilities.selectFile(
+    	        				JOptionPane.getFrameForComponent(table), 
+    	        				"Select file",
+    	        				"", 
+    	        				new String[]{".xpdl"},
+    	        				new String[] {"XPDL files (*.xpdl)"}, 
+    	        				false);
+    	        		if (file != null) {
+        	        		WorkflowExport export = new WorkflowExport();
+        	        		try {
+        	        			export.write(workflow,file);
+        	        		} catch (Exception x) {
+        	        			display("Error on exporting workflow ",x);
+        	        		}
+    	        		}    	        		
+    	        		
+    	        	}
+    	        });    	    	
+    	return menu;
     }
     public void setWorkflow(Workflow wf) {
        if (this.workflow != null)
@@ -251,8 +309,10 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
             	title = arg0.toString();
             	wftm.setActivities(null);
             	wftm.setActivities(getActivityList((Activity )arg0.getNewValue()));
+            	status.setText(arg0.toString());
             } else ;
         else if (WorkflowEvent.WF_EXECUTE.equals(arg0.getPropertyName())) {
+        	display("<"+arg0.getNewValue().getClass().getName()+"> ",arg0.getNewValue());
             if (animate) {
                 int index = wftm.findRow((Activity)arg0.getNewValue());
                 table.scrollRectToVisible(table.getCellRect(index, 0, true));
@@ -260,22 +320,32 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         } else if (WorkflowEvent.WF_ANIMATE.equals(arg0.getPropertyName())) {
              setAnimate((Boolean) arg0.getNewValue());
         } else if (WorkflowEvent.WF_START.equals(arg0.getPropertyName())) {
-            status.setText("");
+        	status.setText("");
+            display("Started","");
              
         } else if (WorkflowEvent.WF_COMPLETE.equals(arg0.getPropertyName())) {
             wftm.setSelected(-1);
             //table.scrollRectToVisible(table.getCellRect(0, 0, true));
+            display("Completed","");
         } else if (WorkflowEvent.WF_ABORTED.equals(arg0.getPropertyName())) {
             wftm.setSelected(-1);
-            status.setText(arg0.getNewValue().toString());
+            display("Error:",arg0.getNewValue());
         } else if (WorkflowEvent.WF_RESUMED.equals(arg0.getPropertyName())) {
-            status.setText(arg0.getNewValue().toString());            
+            display("Warning:",arg0.getNewValue());
         } else 
         	if (arg0.getNewValue()!= null)
-        		status.setText(status.getText()+"\n"+arg0.getNewValue().toString());
+        		status.setText(status.getText()+arg0.getNewValue().toString()+"\n");
 
 
         
+    }
+    
+    protected void display(String message,Object value) {
+    	if (value instanceof Exception)
+    		status.setText(status.getText()+message + ((Exception)value).getMessage()+"\n");
+    	else
+    		status.setText(status.getText()+message + value.toString()+"\n");
+    	
     }
         public synchronized boolean isAnimate() {
             return animate;

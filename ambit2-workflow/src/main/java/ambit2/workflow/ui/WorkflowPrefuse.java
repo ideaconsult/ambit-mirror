@@ -301,7 +301,7 @@ public class WorkflowPrefuse extends Display {
                 String nodeKey, String sourceKey, String targetKey)
                 */
         Workflow2PrefuseGraph tg = new Workflow2PrefuseGraph(graph);
-        tg.walkRules(workflow);
+        graph = tg.write(workflow);
         VisualGraph vg =  m_vis.addGraph(GRAPH, graph);
         //vg.addColumn(LABEL,"CONCAT([id], [name])");
         return vg;
