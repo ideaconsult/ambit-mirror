@@ -57,19 +57,22 @@ public class LoginSequence extends Sequence {
                     ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>((LoginInfo)ol);
                     context.put(DBWorkflowContext.USERINTERACTION,latch);
                     //This is a blocking operation!
+                    LoginInfo li = null;
                     try {
-                        LoginInfo li = latch.getLatch().getValue();
+                        li = latch.getLatch().getValue();
                         context.put(DBWorkflowContext.LOGININFO,li);
                         context.remove(DBWorkflowContext.USERINTERACTION);
-                        return DatasourceFactory.getConnectionURI(
-                                li.getScheme(), li.getHostname(), li.getPort(), 
-                                li.getDatabase(), li.getUser(), li.getPassword());
+
                     } catch (InterruptedException x) {
                     	context.remove(DBWorkflowContext.USERINTERACTION);
                         context.put(DBWorkflowContext.ERROR, x);
                         return null;
                     }
-                    
+                    if (li != null)
+                    	return DatasourceFactory.getConnectionURI(
+                            li.getScheme(), li.getHostname(), li.getPort(), 
+                            li.getDatabase(), li.getUser(), li.getPassword());      
+                    else throw new Exception("Cancelled");
                 } else return o;    
             }
         }); 
