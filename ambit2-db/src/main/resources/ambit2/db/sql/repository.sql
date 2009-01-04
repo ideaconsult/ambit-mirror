@@ -292,13 +292,14 @@ CREATE TABLE  `query` (
 DROP TABLE IF EXISTS `query_results`;
 CREATE TABLE  `query_results` (
   `idquery` int(10) unsigned NOT NULL,
-  `idchemical` int(10) unsigned NOT NULL,  
+  `idchemical` int(10) unsigned NOT NULL,
   `idstructure` int(11) unsigned NOT NULL,
   `selected` tinyint(1) NOT NULL default '1',
   `metric` float(10,6) NOT NULL default '1.000000',
   PRIMARY KEY  (`idquery`,`idchemical`,`idstructure`),
   KEY `FK_query_results_2` (`idstructure`),
   KEY `FK_query_results_3` (`idchemical`),
+  KEY `Index_4` USING BTREE (`idquery`,`metric`),
   CONSTRAINT `FK_query_results_1` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_results_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_results_3` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
