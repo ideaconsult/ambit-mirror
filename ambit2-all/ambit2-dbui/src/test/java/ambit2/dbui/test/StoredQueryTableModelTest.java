@@ -38,6 +38,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import ambit2.core.data.Profile;
+import ambit2.core.io.Property;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
 import ambit2.dbui.StoredQueryTableModel;
@@ -48,9 +50,11 @@ public class StoredQueryTableModelTest extends RepositoryTest {
 	@Test
 	public void test() throws Exception {
 		final IStoredQuery query = new StoredQuery();
-		query.setId(2);
+		query.setId(3);
 		final StoredQueryTableModel queryModel = new StoredQueryTableModel();
-
+		Profile profile = new Profile();
+		profile.put("CAS", new Property("CAS","CAS RN",0,String.class,true));
+		queryModel.setProfile(profile);
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
