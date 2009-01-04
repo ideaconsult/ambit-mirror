@@ -76,11 +76,15 @@ public class HeaderComboBoxModel extends AbstractListModel implements
         this.values = new ArrayList();
         int max =0;
         for (int i=0; i < table.getRowCount();i++) {
+        	try {
             Object value = table.getValueAt(i, column);
             if (values.indexOf(value) == -1) {
                 values.add(value);
                 if (max > 10) break;
             }
+        	} catch (Exception x) {
+        		
+        	}
             
         }
             
