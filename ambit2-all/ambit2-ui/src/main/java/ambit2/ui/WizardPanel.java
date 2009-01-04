@@ -16,8 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
 
-import nplugins.shell.application.SimpleInternalFrame;
-
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -147,11 +145,16 @@ public class WizardPanel extends JPanel {
         /**
          * This is the only class that depends on nplugins
          */
+        /*
         SimpleInternalFrame p = new SimpleInternalFrame("Help");
         
         p.setPreferredSize(new Dimension(78, 100));
         p.setContent(new JScrollPane(ta));
         ta.setBackground(p.getBackground());
+		return p;
+		*/
+        JScrollPane p = new JScrollPane(ta);
+        p.setPreferredSize(new Dimension(78, 100));
 		return p;
 	}
 	protected Component buildMainPanel(String subtitle,Component main) {
@@ -171,7 +174,7 @@ public class WizardPanel extends JPanel {
 	protected void buildPanel(Component left, Component center, Component navigation) {
 		FormLayout layout = new FormLayout(
 	            "6dlu,left:[pref,153px]:grow,12dlu, left:[pref,471dlu]:grow,12dlu",  //columns
-				"6dlu,top:[pref,328dlu]:grow, 12dlu,fill:48dlu:grow");  //rows
+				"6dlu,top:[pref,352dlu]:grow, 12dlu,fill:24dlu:n,6dlu");  //rows
 		setLayout(layout);
         CellConstraints cc = new CellConstraints();
 	     
