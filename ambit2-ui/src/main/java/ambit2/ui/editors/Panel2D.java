@@ -30,12 +30,16 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.core.io.CompoundImageTools;
 
@@ -45,7 +49,7 @@ import ambit2.core.io.CompoundImageTools;
  * @author Nina Jeliazkova
  *
  */
-public class Panel2D extends JPanel implements ICDKChangeListener, ComponentListener
+public class Panel2D extends JPanel implements ICDKChangeListener, ComponentListener, IAmbitEditor<IAtomContainer>
 {
 	/**
 	 * 
@@ -56,13 +60,30 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	protected IAtomContainer selected;
 	protected Image image=null;
 	protected boolean generate2d = true;
+	protected boolean editable = false;
+	protected MoleculeEditAction editAction;
 	
 	public Panel2D() {
 		super();
+		setEditable(true);
 		tools = new CompoundImageTools();
 		tools.setImageSize(getPreferredSize());
 		image=tools.getDefaultImage();
 		addComponentListener(this);
+        addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+    			super.mouseClicked(e);        		
+        		if (isEditable() && (e.getClickCount()==1)) {
+        			if (editAction == null)
+        				editAction = new MoleculeEditAction(null);
+        			editAction.setMolecule((IMolecule)getObject());
+        			editAction.actionPerformed(null);
+        			setAtomContainer(editAction.getMolecule(), true);
+        		}	
+        	}
+        });
+        setPreferredSize(new Dimension(150,150));
 	}
 	@Override
 	public void paint(Graphics g) {
@@ -94,14 +115,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 		image = null;
 		repaint();
 	}
-	public void componentHidden(ComponentEvent e) {
-		System.out.println(e);
-		
-	}
-	public void componentMoved(ComponentEvent e) {
-		System.out.println(e);
-		
-	}
+
 	public void componentResized(ComponentEvent e) {
 		Rectangle r = ((Component)e.getSource()).getBounds();
 		tools.setImageSize(new Dimension(r.width,r.height));
@@ -109,7 +123,34 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 		repaint();
 		
 	}
+
+	public JComponent getJComponent() {
+		return this;
+	}
+	public IAtomContainer getObject() {
+		return atomContainer;
+	}
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+		
+	}
+	public void setObject(IAtomContainer object) {
+		setAtomContainer(object);
+		
+	}
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 }
