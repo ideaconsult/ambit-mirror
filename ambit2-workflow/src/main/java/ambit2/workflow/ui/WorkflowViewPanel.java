@@ -21,14 +21,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import org.w3c.dom.Document;
-
-import ambit2.core.io.IInputState;
-import ambit2.core.io.MolFileFilter;
 import ambit2.core.io.MyIOUtilities;
 import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
@@ -142,33 +139,28 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         };
         setWorkflow(wf);
         
+        final ColorTableCellRenderer clrRenderer = new ColorTableCellRenderer();
         final ImageRenderer renderer = new ImageRenderer();
-        table = new JTable(wftm) {
+        TableColumnModel cm = new DefaultTableColumnModel();
+		final int columnSize[] = { 32, 32,0,32};
+		for (int i = 0; i < wftm.getColumnCount(); i++) {
+			TableColumn newColumn = new TableColumn(i);
+			cm.addColumn(newColumn);
+			if (columnSize[i] >0) 
+				newColumn.setMaxWidth(columnSize[i]);
+			newColumn.setCellRenderer(((i % 2) == 1)?renderer:clrRenderer);
+		}
+		
+        table = new JTable(wftm,cm) {
 			public void createDefaultColumnsFromModel() {
-				TableModel m = getModel();
-				if (m != null) {
-					// Remove any current columns
 					TableColumnModel cm = getColumnModel();
-					while (cm.getColumnCount() > 0) {
-						cm.removeColumn(cm.getColumn(0));
+					for (int i = 0; i < cm.getColumnCount(); i++) {
+						TableColumn newColumn = cm.getColumn(i);
+						newColumn.setCellRenderer(((i % 2) == 1)?renderer:clrRenderer);
 					}
-					// Create new columns from the data model info
-					final int columnSize[] = { 32, 32,0,32,0};
-					for (int i = 0; i < m.getColumnCount(); i++) {
-						TableColumn newColumn = new TableColumn(i);
-						if (columnSize[i] >0) {
-							newColumn.setMaxWidth(columnSize[i]);
-						}
-						addColumn(newColumn);
-						if ((i % 2) == 1)
-							newColumn.setCellRenderer(renderer);
-						else
-							newColumn.setCellRenderer(new ColorTableCellRenderer());
-					}
-				}
-
 			};
 		};        
+		table.setAutoCreateColumnsFromModel(false);
 		table.setRowSelectionAllowed(false);
 		table.setCellSelectionEnabled(false);
 		table.setGridColor(table.getBackground());
@@ -372,7 +364,10 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 	  public Component getTableCellRendererComponent(JTable table, Object value,
 	                                                 boolean isSelected, boolean hasFocus, 
 	                                                 int row, int column) {
-	    setIcon((ImageIcon)value);
+		if (value instanceof ImageIcon)
+			setIcon((ImageIcon)value);
+		else
+			setIcon(null);
 	    return this;
 	  }
 	}
