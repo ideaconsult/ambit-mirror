@@ -39,6 +39,7 @@ import javax.sql.DataSource;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import ambit2.core.data.Profile;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.search.IStoredQuery;
 import ambit2.dbui.StoredQueryTableModel;
@@ -128,6 +129,8 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
         Connection c = ((DataSource)getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
         tableModel.setConnection(c);
         tableModel.setQuery(query);
+        tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+
         
     }
 }
