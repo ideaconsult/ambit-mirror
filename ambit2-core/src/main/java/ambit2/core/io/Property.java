@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.core.io;
 
 
-public class Property  {
+public class Property<Generator>  {
 	public enum IO_QUESTION  {
 		IO_START,
 		IO_TRANSLATE_NAME,
@@ -36,7 +36,17 @@ public class Property  {
 	protected int order = 0;
 	protected Class clazz = java.lang.String.class;
 	protected boolean enabled = false;
+	protected Generator generator;
+
 	
+	public Generator getGenerator() {
+		return generator;
+	}
+
+	public void setGenerator(Generator generator) {
+		this.generator = generator;
+	}
+
 	public Property() {
 		
 	}
@@ -53,10 +63,15 @@ public class Property  {
 	}
 	
 	public Property(String name,String label,int order, Class clazz) {
+		this(name,label,order,clazz,false);
+	}	
+	
+	public Property(String name,String label,int order, Class clazz, boolean enabled) {
 		setName(name);
 		setLabel(label);
 		setOrder(order);
 		setClazz(clazz);
+		setEnabled(enabled);
 	}	
 	
 	public Class getClazz() {
