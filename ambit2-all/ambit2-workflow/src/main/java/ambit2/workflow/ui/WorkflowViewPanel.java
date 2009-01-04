@@ -364,7 +364,9 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 	  public Component getTableCellRendererComponent(JTable table, Object value,
 	                                                 boolean isSelected, boolean hasFocus, 
 	                                                 int row, int column) {
-		if (value instanceof ImageIcon)
+		if (value == null)
+			setIcon(null);
+		else if (value instanceof ImageIcon)
 			setIcon((ImageIcon)value);
 		else
 			setIcon(null);
