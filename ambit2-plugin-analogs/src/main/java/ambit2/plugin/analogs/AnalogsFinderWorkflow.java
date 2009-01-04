@@ -51,7 +51,7 @@ public class AnalogsFinderWorkflow extends Workflow {
     	//ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
     	ActivityPrimitive<IQueryObject,IStoredQuery> p1 = new ActivityPrimitive<IQueryObject,IStoredQuery>( 
     			DBWorkflowContext.QUERY,
-    			 DBWorkflowContext.STOREDQUERY,
+    			DBWorkflowContext.STOREDQUERY,
     				  (IDBProcessor)chain);
     	
     		

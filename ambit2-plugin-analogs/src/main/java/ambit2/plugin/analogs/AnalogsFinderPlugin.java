@@ -33,6 +33,8 @@ import javax.swing.ImageIcon;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
+import ambit2.core.data.Profile;
+import ambit2.core.io.Property;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.QueryResultsPanel;
@@ -53,13 +55,28 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		props.add(DBWorkflowContext.DBCONNECTION_URI);
 		props.add(DBWorkflowContext.DATASOURCE);
         props.add(DBWorkflowContext.DATASET);		
+        props.add("PROFILE_PROPERTY");
+        
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
+	  	Profile profile = new Profile();
+	  	profile.put("CAS",new Property("CAS"));
+	  	profile.put("CAS",new Property("CAS","CASNO"));
+	  	profile.put("Name",new Property("Name"));
+	  	profile.put("LogP", new Property("org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","LogP",-1,org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor.class));
+    	getWorkflowContext().put(DBWorkflowContext.PROFILE, profile);
+    	
+	  	Profile endpoints = new Profile();
+	  	endpoints.put("Aquatic toxicity",new Property("Aquatic toxicity"));
+	  	endpoints.put("Skin sensitisation",new Property("Skin sensitisation","EC3"));
+    	getWorkflowContext().put(DBWorkflowContext.ENDPOINTS, endpoints);    	
+    	
 	}
 	@Override
 	protected Workflow createWorkflow() {
-		return new AnalogsFinderWorkflow();
+		//return new AnalogsFinderWorkflow();
+		return new CategoryBuildingWorkflow();
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
 	    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
