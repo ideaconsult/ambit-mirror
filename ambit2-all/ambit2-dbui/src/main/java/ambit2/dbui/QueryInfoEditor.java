@@ -155,6 +155,7 @@ public class QueryInfoEditor extends JPanel implements IAmbitEditor<QueryInfo> {
 		final int pos_struc = 9;
 		
         panel2d = new Panel2D();
+        panel2d.setEditable(false);
         panel2d.setToolTipText("Click here to edit structure");
         panel2d.setBorder(BorderFactory.createEtchedBorder());
         
