@@ -5,8 +5,6 @@
 package ambit2.ui;
 
 //TODO derive from SimpleIOListener
-import java.util.Hashtable;
-
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.io.ReaderEvent;
@@ -14,8 +12,9 @@ import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
-import ambit2.core.io.MolPropertiesIOSetting;
+import ambit2.core.data.Profile;
 import ambit2.core.io.Property;
+import ambit2.ui.editors.SelectFieldsPanel;
 
 /**
  * An implementation of {@link org.openscience.cdk.io.listener.IReaderListener} and {@link org.openscience.cdk.io.listener.IWriterListener}.
@@ -30,7 +29,7 @@ import ambit2.core.io.Property;
  */
 public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     protected int level;
-    protected Hashtable<String,Property> properties;
+    protected Profile properties;
     protected int counter= 0;
 
     /**
@@ -40,7 +39,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     public AmbitSettingsListener(int level) {
         super();
         this.level = level;
-        properties =  new Hashtable<String, Property>();
+        properties =  new Profile();
 
     }
     /* (non-Javadoc)
@@ -100,10 +99,10 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     	
     	
     }
-	public Hashtable<String, Property> getProperties() {
+	public Profile getProperties() {
 		return properties;
 	}
-	public void setProperties(Hashtable<String, Property> properties) {
+	public void setProperties(Profile properties) {
 		this.properties = properties;
 	}
 }

@@ -104,7 +104,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 				return 2*(int)Math.ceil(rows);
 			}
 		case Columns:
-			return getDataModel().getColumnCount()+1;			
+			return getDataModel().getColumnCount();			
 		default:	
 			return rowCount;
 		}
@@ -222,7 +222,11 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	    	case 1:
 	    		return new Integer(realRow);
 	    	default:
+	    		try {
 	    		return getDataModel().getValueAt(realRow, col-2);
+	    		} catch (Exception x) {
+	    			return x.getMessage();
+	    		}
 	    	}
 		}
 
