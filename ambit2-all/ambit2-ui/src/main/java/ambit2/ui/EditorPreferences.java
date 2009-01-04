@@ -59,7 +59,11 @@ public class EditorPreferences {
 		{"ambit2.core.data.StringBean","ambit2.ui.editors.StringBeanEditor"},
 		{"ambit2.core.io.FileInputState","ambit2.ui.editors.FileSelector"},
 		{"ambit2.core.io.FileOutputState","ambit2.ui.editors.FileSelector"},
+		{"org.openscience.cdk.Molecule","ambit2.ui.editors.Panel2D"},		
+		{"org.openscience.cdk.AtomContainer","ambit2.ui.editors.Panel2D"},		
+		{"ambit2.core.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},		
 		
+
 	};
 	
 	protected static Properties getDefault() {
