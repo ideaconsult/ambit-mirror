@@ -24,8 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui.test;
 
-import java.util.Hashtable;
-
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -33,10 +31,16 @@ import javax.swing.UIManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ambit2.core.data.Profile;
 import ambit2.core.io.Property;
-import ambit2.ui.SelectFieldsPanel;
+import ambit2.ui.editors.SelectFieldsPanel;
 
 
+/**
+ * Test for {@link SelectFieldsPanel}
+ * @author nina
+ *
+ */
 
 public class SelectFieldsPanelTest {
     @BeforeClass public static void setUp() {
@@ -44,7 +48,7 @@ public class SelectFieldsPanelTest {
     }
 
     @Test public void test() throws Exception {
-    	Hashtable<String,Property> props = new Hashtable<String,Property>();
+    	Profile props = new Profile();
     	props.put("CAS",new Property("CAS"));
     	props.put("CAS",new Property("CAS","CASNO"));
     	props.put("Name",new Property("Name"));
@@ -65,7 +69,9 @@ public class SelectFieldsPanelTest {
     	String help = "All available fields that can be exported are listed in the left pane. Select those fields you want to be exported and click \">\" button to move them to right pane."+
     		"You can move exported columns up and down to change the order they will be saved in .csv file. You can also specify Target Column Name if you wish to set some other caption than default.";
     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());     
-    	SelectFieldsPanel panel = new SelectFieldsPanel(props,help);
+    	SelectFieldsPanel panel = new SelectFieldsPanel();
+    	panel.setHelp(help);
+    	panel.setObject(props);
     	panel.setBorder(BorderFactory.createEtchedBorder());
     	
     	JOptionPane.showMessageDialog(null,panel,panel.getClass().getName(),JOptionPane.PLAIN_MESSAGE);
