@@ -36,10 +36,12 @@ import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
+import ambit2.core.data.Profile;
+
 public class SimpleIOListener implements IReaderListener, IWriterListener {
 
     protected int level;
-    protected Hashtable<String,Property> properties;
+    protected Profile properties;
     protected int counter= 0;
 
     /**
@@ -49,7 +51,7 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
     public SimpleIOListener(int level) {
         super();
         this.level = level;
-        properties =  new Hashtable<String, Property>();
+        properties =  new Profile();
 
     }
     /* (non-Javadoc)
@@ -89,10 +91,10 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
         
         
     }
-    public Hashtable<String, Property> getProperties() {
+    public Profile getProperties() {
         return properties;
     }
-    public void setProperties(Hashtable<String, Property> properties) {
+    public void setProperties(Profile properties) {
         this.properties = properties;
     }
 }
