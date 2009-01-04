@@ -51,6 +51,10 @@ public class DBWorkflowContext extends WorkflowContext {
     public static String PAGE = "ambit2.workflow.DBWorkflowContext.PAGE";
     public static String PAGESIZE = "ambit2.workflow.DBWorkflowContext.PAGESIZE";
     public static String USERINTERACTION = "ambit2.workflow.DBWorkflowContext.USERINTERACTION";
+    public static String STRUCTURES = "ambit2.workflow.DBWorkflowContext.STRUCTURES";
+    public static String PROFILE = "ambit2.workflow.DBWorkflowContext.PROFILE";
+    public static String ENDPOINTS = "ambit2.workflow.DBWorkflowContext.ENDPOINTS";
+    public static String REPORT = "ambit2.workflow.DBWorkflowContext.REPORT";      
     
     
     public DataSource getDataSource() throws AmbitException {
