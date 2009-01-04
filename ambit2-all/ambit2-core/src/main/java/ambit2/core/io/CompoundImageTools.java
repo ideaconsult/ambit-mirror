@@ -258,6 +258,7 @@ public class CompoundImageTools {
 			}	
 
 		} else {
+			g.setBackground(Color.white);
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 	}
