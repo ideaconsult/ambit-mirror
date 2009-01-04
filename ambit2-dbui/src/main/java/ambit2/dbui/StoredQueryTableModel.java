@@ -28,19 +28,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Hashtable;
 
 import javax.swing.table.AbstractTableModel;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.core.data.Profile;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.io.Property;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
+import ambit2.db.readers.RetrieveField;
 import ambit2.db.search.IStoredQuery;
+import ambit2.db.search.QueryExecutor;
+import ambit2.ui.PropertiesTableModel;
+import ambit2.ui.table.ISortableColumns;
 
-public class StoredQueryTableModel extends AbstractTableModel {
+public class StoredQueryTableModel extends AbstractTableModel implements ISortableColumns {
 	/**
 	 * 
 	 */
@@ -49,12 +56,16 @@ public class StoredQueryTableModel extends AbstractTableModel {
 	protected Connection connection = null;
 	protected ResultSet records = null;
 	protected String countRecordsSQL = "SELECT count(*) FROM query_results where idquery=?";
-	protected String selectRecordsSQL = "SELECT selected,idchemical,idstructure,metric FROM query_results where idquery=?";
+	protected String selectRecordsSQL = "SELECT selected,idchemical,idstructure,metric FROM query_results where idquery=? order by metric ";
 	protected PreparedStatement countRecords = null;
 	protected PreparedStatement selectRecords = null;
 	
 	protected PreparedStatement structureRecords = null;
+	protected PreparedStatement structureField = null;	
 	protected RetrieveAtomContainer retrieveMolecule = new RetrieveAtomContainer();
+	protected RetrieveField<String,String> retrieveField = new RetrieveField<String,String>();
+	protected PropertiesTableModel fields;
+	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();
 	
 	protected int maxRecords = 0;
 	
@@ -62,6 +73,8 @@ public class StoredQueryTableModel extends AbstractTableModel {
 		super();
 		maxRecords = 0;
 		retrieveMolecule.setValue(new StructureRecord());
+		retrieveField.setValue(new StructureRecord());
+		order.put(new Integer(2), Boolean.FALSE);
 	}
 	protected ResultSet getResultSet() {
 		return records;
@@ -102,7 +115,7 @@ public class StoredQueryTableModel extends AbstractTableModel {
 		/**
 		 * Execute query
 		 */
-		if (selectRecords == null) selectRecords = getConnection().prepareStatement(selectRecordsSQL);
+		if (selectRecords == null) selectRecords = getConnection().prepareStatement(selectRecordsSQL + (order.get(new Integer(2))?"asc":"desc"));
 		selectRecords.setInt(1,getQuery().getId());
 		
 		try {
@@ -133,8 +146,40 @@ public class StoredQueryTableModel extends AbstractTableModel {
 			structureRecords.close();
 		structureRecords = null;
 
+		if (structureField != null)
+			structureField.close();
+		structureField = null;		
 	}
-	
+	protected String getField(int idstructure,String fieldname) throws SQLException, AmbitException {
+		if (structureField == null) structureField = 
+			getConnection().prepareStatement(retrieveField.getSQL());
+		
+		retrieveField.setFieldname(fieldname);
+		retrieveField.getValue().setIdstructure(idstructure);
+		structureField.clearParameters();
+		QueryExecutor.setParameters(structureField, retrieveField.getParameters());
+		
+		try {
+			ResultSet rs = structureField.executeQuery();
+			String value = null;
+			while (rs.next()) {
+				try {
+	    			value = retrieveField.getObject(rs);
+	    			if (value != null)
+	    			    break;
+				} catch (Exception x) {
+					value = null;
+				}
+		    }
+			rs.close();
+			return value;
+		} catch (Exception x) {
+			x.printStackTrace();
+			return null;
+		} finally {
+				
+		}
+	}	
 	protected IAtomContainer getAtomContainer(int idstructure) throws SQLException, AmbitException {
 		if (structureRecords == null) structureRecords = 
 			getConnection().prepareStatement(AbstractStructureRetrieval.sql);
@@ -160,12 +205,9 @@ public class StoredQueryTableModel extends AbstractTableModel {
 		} finally {
 				
 		}
-		
-		
-		
 	}
 	public int getColumnCount() {
-        return 4;
+		return ((fields==null)?3:(3+fields.getRowCount()));
 	}
 
 	public int getRowCount() {
@@ -175,13 +217,16 @@ public class StoredQueryTableModel extends AbstractTableModel {
 		try {
             records.first();
             records.relative(rowIndex);			
+            int idstructure = records.getInt("idstructure");
 			switch (columnIndex) {
 			//selected
 			case 0: return records.getBoolean("selected"); 
-			case 1: return getAtomContainer(records.getInt("idstructure"));
+			case 1: return getAtomContainer(idstructure);
 			case 2: return records.getFloat("metric");
 			default:
-				return records.getInt("idstructure");
+				return (fields==null)?"":
+					getField(idstructure, ((Property)fields.getValueAt(columnIndex-3,0)).getName());
+				//return records.getInt("idstructure");
 			}
 		} catch (Exception x) {
 			return x.getMessage();
@@ -243,7 +288,7 @@ public class StoredQueryTableModel extends AbstractTableModel {
 		case 0: return Boolean.class;
 		case 1: return IAtomContainer.class;
 		case 2: return Float.class;
-		default: return Integer.class;
+		default: return String.class;
 		}
 	}
     @Override
@@ -252,11 +297,32 @@ public class StoredQueryTableModel extends AbstractTableModel {
 		case 0: return "Select";
 		case 1: return "Structure";
 		case 2: return "Metric";
-		default: return "";
+		default: {
+			return (fields==null)?Integer.toString(column):
+				fields.getValueAt(column-3,1).toString();
+		}
 		}
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
     	return columnIndex==0;
+    }
+    
+    public void setProfile(Profile profile) {
+    	
+    	fields = (profile==null)?null:new PropertiesTableModel(profile,true,2);
+    }
+    public void sort(int column, boolean ascending)
+    		throws UnsupportedOperationException {
+    	if (column != 2) throw new UnsupportedOperationException("Column "+getColumnName(column) + " is not sortable!");
+    	order.put(new Integer(2),new Boolean(ascending));
+    	try {
+    		if (selectRecords != null)
+    			selectRecords.close();
+    		selectRecords = null;    		
+    		setQuery(query);
+    	} catch (Exception x) {
+    		throw new UnsupportedOperationException(x);
+    	}
     }
 }
