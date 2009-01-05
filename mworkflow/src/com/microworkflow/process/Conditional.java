@@ -27,6 +27,10 @@ public class Conditional extends Activity implements IConditionalActivity {
 		this.elseBranch=elseBranch;
 	}
 	
+	public TestCondition getTestCondition() {
+		return test;
+	}
+
 	public Conditional(TestCondition aClosure, Activity thenBranch) {
 		this(aClosure,thenBranch,null);
 	}

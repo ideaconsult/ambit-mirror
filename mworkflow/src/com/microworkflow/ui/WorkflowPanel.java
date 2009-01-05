@@ -31,6 +31,7 @@ package com.microworkflow.ui;
 
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -41,6 +42,7 @@ import javax.swing.table.TableModel;
 
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Activity;
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class WorkflowPanel extends JScrollPane implements IWorkflowListenerUI {
@@ -48,6 +50,7 @@ public class WorkflowPanel extends JScrollPane implements IWorkflowListenerUI {
     protected WorkflowTableModel wftm;
     protected JTable table;
     protected boolean animate = true;
+    protected String title="Workflow";    
     /**
      * 
      */
@@ -90,22 +93,48 @@ public class WorkflowPanel extends JScrollPane implements IWorkflowListenerUI {
         setMaximumSize(new Dimension(200,200));
     }
     public void setWorkflow(Workflow wf) {
-       if (this.workflow != null)
-           this.workflow.removePropertyChangeListener(this);
-       wftm.setActivity(null);
-       this.workflow = wf;
-       if (wf != null) {
-           wftm.setActivity(wf.getDefinition());
-           workflow.addPropertyChangeListener(this);
-       }
-    }
+        if (this.workflow != null)
+            this.workflow.removePropertyChangeListener(this);
+
+        
+        wftm.setActivities(null);
+        this.workflow = wf;
+        if (wf != null) {
+     	   final ArrayList<Activity> activities = getActivityList(wf.getDefinition());
+            workflow.addPropertyChangeListener(this);    	   
+     	   if (activities.size()>0 ) {
+ 	           wftm.setActivities(activities);
+
+ 	      	   title = wf.toString();
+ 	      	   return;
+     	   }
+        } 
+        title="No workflow defined!";
+     }
+    public ArrayList<Activity> getActivityList(Activity activity) {
+        final ArrayList<Activity> activities = new ArrayList<Activity>();
+        WorkflowTools tools = new WorkflowTools() {
+     	   @Override
+     	public Object process(Activity[] parentActivity, Activity activity) {
+     		if (activity instanceof Sequence) ;
+     		else
+     			activities.add(activity);
+     		return activity;
+     	}
+        };
+        if (activity != null) 
+     	   tools.traverseActivity(null,activity,0,true);
+        return activities;
+    }    
     public JComponent getUIComponent() {
         return this;
     }
     public void propertyChange(PropertyChangeEvent arg0) {
         if (WorkflowEvent.WF_DEFINITION.equals(arg0.getPropertyName()))
             if (arg0.getNewValue() instanceof Activity) {
-                wftm.setActivity((Activity )arg0.getNewValue());
+            	title = arg0.toString();
+            	wftm.setActivities(null);
+            	wftm.setActivities(getActivityList((Activity )arg0.getNewValue()));
             } else ;
         else if (WorkflowEvent.WF_EXECUTE.equals(arg0.getPropertyName())) {
             if (animate) {

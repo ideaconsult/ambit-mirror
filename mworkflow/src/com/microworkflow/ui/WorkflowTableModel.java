@@ -1,32 +1,3 @@
-/* WorkflowTableModel.java
- * Author: Nina Jeliazkova
- * Date: Mar 16, 2008 
- * Revision: 0.1 
- * 
- * Copyright (C) 2005-2008  Nina Jeliazkova
- * 
- * Contact: nina@acad.bg
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- * All we ask is that proper credit is given for our work, which includes
- * - but is not limited to - adding the above copyright notice to the beginning
- * of your source code files, and to any copyright notice that you may distribute
- * with programs based on this work.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
- */
-
 package com.microworkflow.ui;
 
 import java.util.ArrayList;
@@ -34,9 +5,11 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 import com.microworkflow.process.Activity;
+import com.microworkflow.ui.ILookAtActivity;
+import com.microworkflow.ui.WorkflowTools;
 
 public class WorkflowTableModel extends AbstractTableModel  {
-    ArrayList<ActivityNode> activities;
+    ArrayList<Activity> activities;
     protected String[] columnNames = {"No.","Running","Activity"};
     protected int selected = -1;
     protected static final String PTR= ">>";
@@ -45,50 +18,46 @@ public class WorkflowTableModel extends AbstractTableModel  {
      * 
      */
     private static final long serialVersionUID = -3757282646931180423L;
-    public WorkflowTableModel(Activity activity) {
+    public WorkflowTableModel(ArrayList<Activity> activities) {
         super();
-        activities = new ArrayList<ActivityNode>();
-        setActivity(activity);
+        setActivities(activities);
     }
-    public int getColumnCount() {
-        return 3;
+    public ArrayList<Activity> getActivities() {
+		return activities;
+	}
+	public void setActivities(ArrayList<Activity> activities) {
+		this.activities = activities;
+        fireTableStructureChanged();
+	}
+	public int getColumnCount() {
+        return 2;
     }
 
     public int getRowCount() {
-        return activities.size();
+    	if (activities == null) return 0;
+    	else
+    		return activities.size();
     }
 
     public Object getValueAt(int row, int col) {
         switch (col) {
         case 0:
             return row+1;
-        case 1:
+        case 2:
         	if (selected == row)
         		return PTR; 
         	else return NA;            
-        case 2:
-            return activities.get(row).getActivity().getName();
+        case 1:
+            return activities.get(row).getName();
 
         default:
             return row;
         }
     }
-    public void setActivity(Activity activity) {
-        activities.clear();
-        WorkflowTools.traverseActivity(activity, 0, new ILookAtActivity() {
-            public void look(Activity activity, int level) {
-                activities.add(new ActivityNode(activity,level));
-                
-            }
-        });
-        fireTableStructureChanged();        
-    }
     public Activity getActivity(int row) {
-    	return activities.get(row).getActivity();
+    	return activities.get(row);
     }
-    public int getLevel(int row) {
-    	return activities.get(row).getLevel();
-    }    
+
     public int findRow(Activity activity) {
     	int old_row = getSelected();
         setSelected(activities.indexOf(activity));
@@ -110,27 +79,3 @@ public class WorkflowTableModel extends AbstractTableModel  {
 
 }
 
-class ActivityNode {
-	
-	protected Activity activity;
-	protected int level;
-	
-	public ActivityNode(Activity activity, int level) {
-		setActivity(activity);
-		setLevel(level);
-	}
-	public Activity getActivity() {
-		return activity;
-	}
-	public void setActivity(Activity activity) {
-		this.activity = activity;
-	}
-	public int getLevel() {
-		return level;
-	}
-	public void setLevel(int level) {
-		this.level = level;
-	}
-	
-	
-}

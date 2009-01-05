@@ -16,21 +16,32 @@ import com.microworkflow.execution.*;
  * control tier (i.e., workflow) to the logic tier (i.e., domain objects).
  * The execution in the logic tier takes place synchronously.
  */
-public class Primitive extends Activity {
-	protected Performer performer;
+public class Primitive<Target,Result> extends Activity {
+	protected Performer<Target,Result> performer;
+	public Performer<Target,Result> getPerformer() {
+		return performer;
+	}
+
+	public String getResultKey() {
+		return resultKey;
+	}
+
+	public String getTargetKey() {
+		return targetKey;
+	}
 	protected String resultKey = null;
 	protected String targetKey = null;
 
-	public Primitive(Performer performer) {
+	public Primitive(Performer<Target,Result> performer) {
 		this.performer = performer;
 	}
 	
-	public Primitive(String targetKey, Performer performer) {
+	public Primitive(String targetKey, Performer<Target,Result> performer) {
 		this(performer);
 		this.targetKey = targetKey;
 	}
 	
-	public Primitive(String targetKey, String resultKey, Performer performer) {
+	public Primitive(String targetKey, String resultKey, Performer<Target,Result> performer) {
 		this(targetKey,performer);
 		this.resultKey = resultKey;
 	}

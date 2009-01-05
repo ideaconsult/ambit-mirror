@@ -14,6 +14,9 @@ public class While extends Activity implements IEmbeddedActivity {
 	protected Activity body;
 	protected TestCondition test;
 
+	public TestCondition getTestCondition() {
+		return test;
+	}
 	public Continuation continuationWith(Continuation continuation) {
 		WhileContinuation k = continuation.makeRepetitionContinuation(this);
 		k.setTestCondition(test);

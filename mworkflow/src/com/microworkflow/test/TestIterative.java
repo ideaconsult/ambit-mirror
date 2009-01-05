@@ -52,7 +52,7 @@ public class TestIterative extends TestActivity {
 			},
 			"component",
 			body);
-		wc=executeWorkflow(iterative);
+		wc = executeWorkflow(iterative);
 		DomainObject domainObject=(DomainObject)wc.get(O1_KEY);
 		assertTrue(DomainObject.TEST_STRING.concat("onetwothreefour").equalsIgnoreCase(domainObject.getString()));
 	}
