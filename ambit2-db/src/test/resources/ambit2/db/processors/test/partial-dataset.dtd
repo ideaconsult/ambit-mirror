@@ -1,10 +1,42 @@
 <!ELEMENT dataset (
+    users*,
+    roles*,
+    user_roles*,
     chemicals*,
     structure*,
     fp1024*,
-    users*,
-    user_roles*,
-    roles*)>
+    field_names*,
+    structure_fields*)>
+
+<!ELEMENT users EMPTY>
+<!ATTLIST users
+    user_name CDATA #REQUIRED
+    password CDATA #REQUIRED
+    email CDATA #REQUIRED
+    registration_status CDATA #REQUIRED
+    registration_date CDATA #REQUIRED
+    registration_id CDATA #IMPLIED
+    title CDATA #REQUIRED
+    firstname CDATA #REQUIRED
+    lastname CDATA #REQUIRED
+    address CDATA #REQUIRED
+    country CDATA #REQUIRED
+    webpage CDATA #REQUIRED
+    affiliation CDATA #REQUIRED
+    keywords CDATA #IMPLIED
+    reviewer CDATA #REQUIRED
+>
+
+<!ELEMENT roles EMPTY>
+<!ATTLIST roles
+    role_name CDATA #REQUIRED
+>
+
+<!ELEMENT user_roles EMPTY>
+<!ATTLIST user_roles
+    user_name CDATA #REQUIRED
+    role_name CDATA #REQUIRED
+>
 
 <!ELEMENT chemicals EMPTY>
 <!ATTLIST chemicals
@@ -55,33 +87,17 @@
     formula CDATA #IMPLIED
 >
 
-<!ELEMENT users EMPTY>
-<!ATTLIST users
-    user_name CDATA #REQUIRED
-    password CDATA #REQUIRED
-    email CDATA #REQUIRED
-    registration_status CDATA #REQUIRED
-    registration_date CDATA #REQUIRED
-    registration_id CDATA #IMPLIED
-    title CDATA #REQUIRED
-    firstname CDATA #REQUIRED
-    lastname CDATA #REQUIRED
-    address CDATA #REQUIRED
-    country CDATA #REQUIRED
-    webpage CDATA #REQUIRED
-    affiliation CDATA #REQUIRED
-    keywords CDATA #IMPLIED
-    reviewer CDATA #REQUIRED
+<!ELEMENT field_names EMPTY>
+<!ATTLIST field_names
+    idfieldname CDATA #REQUIRED
+    name CDATA #REQUIRED
+    iddictionary CDATA #IMPLIED
 >
 
-<!ELEMENT user_roles EMPTY>
-<!ATTLIST user_roles
-    user_name CDATA #REQUIRED
-    role_name CDATA #REQUIRED
->
-
-<!ELEMENT roles EMPTY>
-<!ATTLIST roles
-    role_name CDATA #REQUIRED
+<!ELEMENT structure_fields EMPTY>
+<!ATTLIST structure_fields
+    idstructure CDATA #REQUIRED
+    idfieldname CDATA #REQUIRED
+    value CDATA #IMPLIED
 >
 

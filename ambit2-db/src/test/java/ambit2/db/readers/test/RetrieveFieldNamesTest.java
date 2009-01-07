@@ -29,75 +29,78 @@
 
 package ambit2.db.readers.test;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 
+import junit.framework.Assert;
+
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.db.DatasourceFactory;
+import ambit2.db.processors.test.DbUnitTest;
 import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.test.RepositoryTest;
 
 /**
- * TODO dbunit test
+ * A dbunit test for {@link RetrieveFieldNames}
  * @author nina
  *
  */
-public class RetrieveFieldNamesTest extends RepositoryTest {
+public class RetrieveFieldNamesTest extends DbUnitTest {
 	protected RetrieveFieldNames query;
 	@Override
-	protected void setUp() throws Exception {
-		datasource = DatasourceFactory.getDataSource(
-				DatasourceFactory.getConnectionURI(
-						"jdbc:mysql", 
-						"localhost", "33060", "ambit2", "guest","guest" ));
+	public void setUp() throws Exception {
 		query = new RetrieveFieldNames();
 	}
 	@Test
 	public void testGetParameters() throws Exception {
-		assertNull(query.getParameters());
+		Assert.assertNull(query.getParameters());
 	}
 
 	@Test
 	public void testGetSQL() throws Exception {
-		assertEquals("select idfieldname,name from field_names", query.getSQL());
+		Assert.assertEquals("select idfieldname,name from field_names", query.getSQL());
 	}
 
 	@Test
 	public void testGetObject() throws Exception {
-		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();
-		Connection c = datasource.getConnection();
-		qe.setConnection(c);
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+
+		IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM FIELD_NAMES");		
+		Assert.assertEquals(36,names.getRowCount());
+
+		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();		
+		qe.setConnection(c.getConnection());
 		ResultSet rs = qe.process(query);
 		
 		while (rs.next()) {
-			System.out.println(query.getObject(rs));
+			names = 	c.createQueryTable("EXPECTED_NAME","SELECT * FROM FIELD_NAMES where name='"+query.getObject(rs)+"'");		
+			Assert.assertEquals(1,names.getRowCount());
 		}
 		rs.close();
 		qe.close();
-		if (!c.isClosed())
-			c.close();
+		c.close();
 	}	
 
 	@Test
 	public void testGetFieldID() {
-		assertEquals("idfieldname", query.getFieldID());
+		Assert.assertEquals("idfieldname", query.getFieldID());
 	}
 
 	@Test
 	public void testGetValueID() {
-		assertEquals("name", query.getValueID());
+		Assert.assertEquals("name", query.getValueID());
 	}
 
 	@Test
 	public void testGetFieldType() throws Exception {
-		assertEquals(String.class,query.getFieldType());
+		Assert.assertEquals(String.class,query.getFieldType());
 	}
 
 	@Test
 	public void testGetValueType() {
-		assertEquals(String.class,query.getValueType());
+		Assert.assertEquals(String.class,query.getValueType());
 	}
 
 }

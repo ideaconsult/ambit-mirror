@@ -17,16 +17,18 @@ public class ExtractDataForTest {
         Connection jdbcConnection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:33060/ambit2", "guest", "guest");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-
+        String ids = "(7,10,11, 29141)";
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
-        partialDataSet.addTable("chemicals", "SELECT * FROM chemicals WHERE idchemical in (7,10,11, 29141)");
-        partialDataSet.addTable("structure", "SELECT * FROM structure join chemicals using(idchemical) WHERE idchemical in (7,10,11, 29141)");
-        //BIGINT serializes to long and gives errors for 
-        partialDataSet.addTable("fp1024", "SELECT * FROM fp1024 join chemicals using(idchemical) WHERE idchemical in (7,10,11, 29141)");
         partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
+        partialDataSet.addTable("roles", "SELECT * FROM roles");              
         partialDataSet.addTable("user_roles", "SELECT * FROM user_roles WHERE user_name=\"guest\"");
-        partialDataSet.addTable("roles", "SELECT * FROM roles");         
+        partialDataSet.addTable("chemicals", "SELECT * FROM chemicals WHERE idchemical in "+ids);
+        partialDataSet.addTable("structure", "SELECT * FROM structure join chemicals using(idchemical) WHERE idchemical in "+ids);
+        //BIGINT serializes to long and gives errors for 
+        partialDataSet.addTable("fp1024", "SELECT * FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
+        partialDataSet.addTable("field_names", "SELECT * FROM field_names");            
+        partialDataSet.addTable("structure_fields", "SELECT idstructure,idfieldname,value FROM structure_fields join structure using(idstructure) join chemicals using(idchemical) WHERE idchemical in "+ids);        
         FlatDtdDataSet.write(partialDataSet, new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-dataset.dtd"));
         FlatXmlDataSet.write(partialDataSet, 
         		new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-dataset.xml"));

@@ -38,9 +38,14 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.Before;
 
 
 public abstract class DbUnitTest {
+	@Before
+	public void setUp() throws Exception {
+		
+	}
 	protected IDatabaseConnection getConnection() throws Exception {
 		  
         Class.forName("com.mysql.jdbc.Driver");
