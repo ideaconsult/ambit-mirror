@@ -27,10 +27,9 @@
  * 
  */
 
-package ambit2.db;
+package ambit2.core.processors;
 
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.IProcessor;
 
 public class ProcessorException extends AmbitException {
 	protected IProcessor processor;

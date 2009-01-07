@@ -31,8 +31,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.ProcessorException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;

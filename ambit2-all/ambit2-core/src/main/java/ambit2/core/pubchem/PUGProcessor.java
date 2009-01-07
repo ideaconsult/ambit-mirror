@@ -27,7 +27,7 @@
  * 
  */
 
-package ambit2.db.processors;
+package ambit2.core.pubchem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +65,7 @@ import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.SimpleErrorHandler;
 import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.db.ProcessorException;
+import ambit2.core.processors.ProcessorException;
 
 /**
  * 

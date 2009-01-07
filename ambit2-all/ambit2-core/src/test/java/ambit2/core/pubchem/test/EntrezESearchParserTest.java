@@ -25,75 +25,78 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 /**
  * 
  */
-package ambit2.db.test;
+package ambit2.core.pubchem.test;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import ambit2.core.data.IStructureRecord;
-import ambit2.db.processors.EntrezESearchParser;
-import ambit2.db.processors.PUGProcessor;
+import ambit2.core.pubchem.EntrezESearchParser;
+import ambit2.core.pubchem.PUGProcessor;
 
 /**
  * @author nina
  *
  */
-public class EntrezESearchParserTest extends TestCase {
+public class EntrezESearchParserTest  {
 	protected EntrezESearchParser parser;
-	/**
-	 * @param arg0
-	 */
-	public EntrezESearchParserTest(String arg0) {
-		super(arg0);
-	}
 
-	/* (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+
+	@Before
+	public void setUp() throws Exception {
 		parser = new EntrezESearchParser();
 	}
 
-	/* (non-Javadoc)
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		parser = null;
-		super.tearDown();
 	}
+	
+	@Test
 	public void test_single_id() throws Exception {
 		List<String> ids = new ArrayList<String>();
 		ids.add("7474");
-		process("data/pug/100-00-5.xml", 1, 0,ids);
+		process("/pug/100-00-5.xml", 1, 0,ids);
 	}
+	@Test	
 	public void test_two_ids() throws Exception {
 		List<String> ids = new ArrayList<String>();
 		ids.add("70475");
 		ids.add("7919");
-		process("data/pug/1000-90-4.xml", 2, 0,ids);
+		process("/pug/1000-90-4.xml", 2, 0,ids);
 	}
+	@Test	
 	public void test_notfound() throws Exception {
 		List<String> ids = new ArrayList<String>();
-		process("data/pug/100019-57-6.xml", 0, 1,ids);
-	}		
+		process("/pug/100019-57-6.xml", 0, 1,ids);
+	}	
+
 	public void process(String filename, int numids, int error, List<String> ids) throws Exception {
-		FileInputStream in = new FileInputStream(filename);
+		System.out.println("ambit2/core/pubchem"+filename);
+		InputStream in =  this.getClass().getClassLoader().getResourceAsStream(
+				//"ambit2/core/pubchem/pug/100019-57-6.xml");
+				  "ambit2/core/pubchem"+filename);
+		Assert.assertNotNull(in);
 		List<IStructureRecord> records = parser.process(in);
 		int cids = 0;
 		int err = 0;
 		for (IStructureRecord record : records) {
 			if (PUGProcessor.PUBCHEM_CID.equals(record.getFormat())) {
 				cids++;
-				assertTrue(ids.indexOf(record.getContent())>-1);
+				Assert.assertTrue(ids.indexOf(record.getContent())>-1);
 			}
 			else if ("PhraseNotFound".equals(record.getFormat())) err++;
 		}	
 		
-		assertEquals(numids,cids);
-		assertEquals(err,error);
+		Assert.assertEquals(numids,cids);
+		Assert.assertEquals(err,error);
 	}
 }
 

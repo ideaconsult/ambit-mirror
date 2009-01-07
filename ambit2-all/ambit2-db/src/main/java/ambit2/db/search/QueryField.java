@@ -31,7 +31,7 @@ import ambit2.core.exceptions.AmbitException;
 
 
 /**
- * select ?,idchemical,idstructure,? from structure_fields as f using (idstructure) join field_names using (idfieldname) where f.idfieldname=? and value=?
+ * Search for a structure with property with given name and value
  * @author nina
  *
  */

@@ -34,28 +34,7 @@ import ambit2.core.data.IStructureRecord;
 
 /**
  * <pre>
-DROP TABLE IF EXISTS `ambit_repository`.`field_names`;
-CREATE TABLE  `ambit_repository`.`field_names` (
-  `idfieldname` int(11) NOT NULL auto_increment,
-  `name` varchar(128) collate utf8_bin NOT NULL default 'NAME',
-  `unique` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`idfieldname`),
-  UNIQUE KEY `Index_2` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-DROP TABLE IF EXISTS `ambit_repository`.`structure_fields`;
-CREATE TABLE  `ambit_repository`.`structure_fields` (
-  `idstructure` int(11) NOT NULL,
-  `idfieldname` int(11) NOT NULL,
-  `value` varchar(256) collate utf8_bin default NULL,
-  PRIMARY KEY  USING BTREE (`idfieldname`,`idstructure`),
-  KEY `idstructure` (`idstructure`),
-  KEY `fk_structure` (`idstructure`),
-  KEY `fk_field` (`idfieldname`),
-  CONSTRAINT `fk_field` FOREIGN KEY (`idfieldname`) REFERENCES `field_names` (`idfieldname`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_structure` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
+writes properties
 </pre>
  * @author nina
  *
