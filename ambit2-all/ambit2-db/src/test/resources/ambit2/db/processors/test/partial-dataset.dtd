@@ -4,6 +4,8 @@
     user_roles*,
     catalog_references*,
     dictionary*,
+    descriptors*,
+    dvalues*,
     chemicals*,
     structure*,
     src_dataset*,
@@ -55,6 +57,27 @@
     idparent CDATA #REQUIRED
     name CDATA #REQUIRED
     idreference CDATA #REQUIRED
+>
+
+<!ELEMENT descriptors EMPTY>
+<!ATTLIST descriptors
+    iddescriptor CDATA #REQUIRED
+    idreference CDATA #REQUIRED
+    name CDATA #REQUIRED
+    units CDATA #REQUIRED
+    error CDATA #REQUIRED
+    comments CDATA #REQUIRED
+    islocal CDATA #REQUIRED
+>
+
+<!ELEMENT dvalues EMPTY>
+<!ATTLIST dvalues
+    iddescriptor CDATA #REQUIRED
+    idstructure CDATA #REQUIRED
+    value CDATA #IMPLIED
+    error CDATA #IMPLIED
+    status CDATA #REQUIRED
+    user_name CDATA #REQUIRED
 >
 
 <!ELEMENT chemicals EMPTY>
