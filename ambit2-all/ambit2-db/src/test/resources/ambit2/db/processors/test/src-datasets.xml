@@ -9,6 +9,8 @@
   <catalog_references idreference="3" title="Dbunit test" url="Dbunit"/>
   <dictionary iddictionary="1" idparent="0" name="CAS" idreference="1"/>
   <dictionary iddictionary="2" idparent="0" name="IUPAC Name" idreference="2"/>
+  <descriptors/>
+  <dvalues/>
   <chemicals idchemical="7"/>
   <chemicals idchemical="10"/>
   <chemicals idchemical="11"/>

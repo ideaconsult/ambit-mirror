@@ -26,7 +26,9 @@ public class ExtractDataForTest {
         
         partialDataSet.addTable("catalog_references", "SELECT * FROM catalog_references");
         
-        partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");        
+        partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");
+        partialDataSet.addTable("descriptors", "SELECT * FROM descriptors");           
+        partialDataSet.addTable("dvalues", "SELECT * FROM dvalues");        
         partialDataSet.addTable("chemicals", "SELECT * FROM chemicals WHERE idchemical in "+ids);
         partialDataSet.addTable("structure", "SELECT * FROM structure join chemicals using(idchemical) WHERE idchemical in "+ids);
         

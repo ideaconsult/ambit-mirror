@@ -50,7 +50,7 @@ public abstract class DbUnitTest {
 		  
         Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:33060/ambit-test", "root", "");
+                "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
 	        
 	   return new DatabaseConnection(jdbcConnection);
 	}
