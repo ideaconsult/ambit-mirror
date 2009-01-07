@@ -10,6 +10,7 @@
   <artifactId>ambit2-smi23d</artifactId>
   <name>ambit2-smi23d</name>
   <version>2.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>  
   <description>wrapper for  Smi23d executables http://www.chembiogrid.org/cheminfo/smi23d/ </description>
   <url></url>
    <build>
