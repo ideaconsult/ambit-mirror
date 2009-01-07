@@ -38,7 +38,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.db.ProcessorException;
+import ambit2.core.processors.ProcessorException;
 
 /**
  * 

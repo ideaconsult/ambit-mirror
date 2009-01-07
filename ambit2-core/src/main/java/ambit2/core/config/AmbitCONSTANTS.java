@@ -97,6 +97,10 @@ public class AmbitCONSTANTS {
 	 */
 	public static final String FingerprintTIME = "FP_TIME";
 	/**
+	 * fingerprint status invalid=1; valid=2; error = 3
+	 */
+	public static final String FingerprintSTATUS = "FP_STATUS";	
+	/**
 	 * Atom environment (circular fingerprints)
 	 */
 	public static final String AtomEnvironment = "ambit2.data.molecule.AtomEnvironmentDescriptor";

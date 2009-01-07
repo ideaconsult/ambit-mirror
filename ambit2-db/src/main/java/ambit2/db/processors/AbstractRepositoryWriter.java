@@ -28,8 +28,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.ProcessorException;
 import ambit2.db.exceptions.DbAmbitException;
 
 public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {

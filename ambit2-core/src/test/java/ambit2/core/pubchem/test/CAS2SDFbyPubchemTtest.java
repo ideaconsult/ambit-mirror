@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 /**
  * 
  */
-package ambit2.db.test;
+package ambit2.core.pubchem.test;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ambit2.db.processors.BatchRetrievePubChem;
+import ambit2.core.pubchem.BatchRetrievePubChem;
 
 /**
  * @author nina

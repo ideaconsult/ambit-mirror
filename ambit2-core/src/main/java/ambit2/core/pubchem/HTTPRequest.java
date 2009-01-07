@@ -22,7 +22,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.db.processors;
+package ambit2.core.pubchem;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +33,7 @@ import java.net.URLConnection;
 
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.db.ProcessorException;
+import ambit2.core.processors.ProcessorException;
 
 public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<Target, Result> {
 	protected int maxretry = 6;

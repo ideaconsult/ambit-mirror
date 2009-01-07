@@ -27,7 +27,7 @@
  * 
  */
 
-package ambit2.db.test;
+package ambit2.core.pubchem.test;
 
 
 import java.io.StringReader;
@@ -45,7 +45,7 @@ import org.xml.sax.InputSource;
 
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
-import ambit2.db.processors.PUGProcessor;
+import ambit2.core.pubchem.PUGProcessor;
 
 public class PUGProcessorTest extends TestCase {
     protected PUGProcessor pug;
