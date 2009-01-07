@@ -40,6 +40,7 @@ import ambit2.core.data.MoleculeTools;
  *
  */
 public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, IStructureRecord> {
+	public enum FP1024_status {invalid,valid,error};
 	protected long[] h16 = new long[16];	
 	/**
 	 * 
@@ -61,42 +62,42 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 		if (properties ==null) throw new SQLException("Missing properties");
 		Object time = properties.get(AmbitCONSTANTS.FingerprintTIME);
 		if (time == null)
-			time = new Long(-1);
+			time = new Long(0);
 		else ((Long) time).longValue();
 		Object fp = properties.get(AmbitCONSTANTS.Fingerprint);
-		if (fp == null) throw new SQLException("Fingerprint does not exist!");	
-		if (fp instanceof BitSet)		
-			writeBitSetValue(record.getIdchemical(), (BitSet) fp, ((Long)time).longValue());
-		else
-			 throw new SQLException("Fingerprint not a BitSet!");
-		return null;
+		if (fp == null) {
+			writeBitSetValue(record.getIdchemical(), null, ((Long)time).longValue(),FP1024_status.error);
+		} else if (fp instanceof BitSet)		
+			writeBitSetValue(record.getIdchemical(), (BitSet) fp, ((Long)time).longValue(),FP1024_status.valid);
+		else {
+			writeBitSetValue(record.getIdchemical(), null, ((Long)time).longValue(),FP1024_status.invalid);			
+		}
+		return record;
 	}
 	
-	protected void writeBitSetValue(int idchemical,BitSet bs, long fp_time ) throws SQLException {
+	protected void writeBitSetValue(int idchemical,BitSet bs, long fp_time , FP1024_status status) throws SQLException {
 		int bitCount = 0;
-		int status = -1;
-		bitCount = bs.cardinality();
-		status = 1;
+		if (bs != null)	bitCount = bs.cardinality();
 		ps_bitset.clearParameters();
 		ps_bitset.setInt(1,idchemical);
 		ps_bitset.setLong(2,fp_time);
 		ps_bitset.setInt(3,bitCount);
-		ps_bitset.setInt(4,status);
+		ps_bitset.setInt(4,status.ordinal()+1);
 		int o = 5+16;
 
-		MoleculeTools.bitset2Long16(bs,64,h16);		
+		if (bs == null)
+			for (int i=0; i < h16.length; i++) h16[i] = 0;
+		else 
+			MoleculeTools.bitset2Long16(bs,64,h16);		
 		for (int i=0; i < h16.length; i++) {
 			BigInteger ff= new BigInteger(Long.toHexString(h16[i]),16);
-			/*
-		    ps.setLong(i+5,h16[i]);
-		    ps.setLong(i+o+3,h16[i]);
-		    */
 			ps_bitset.setObject(i+5,ff);
 			ps_bitset.setObject(i+o+3,ff);
 		}
+		
 		ps_bitset.setLong(o,fp_time);
 		ps_bitset.setInt(o+1,bitCount);
-		ps_bitset.setInt(o+2,status);	
+		ps_bitset.setInt(o+2,status.ordinal()+1);	
 		ps_bitset.executeUpdate();
 		
 	}	
