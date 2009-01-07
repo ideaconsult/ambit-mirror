@@ -37,8 +37,9 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.db.processors.test.DbUnitTest;
+import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveFieldNames;
+import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
 /**
@@ -46,20 +47,20 @@ import ambit2.db.search.QueryExecutor;
  * @author nina
  *
  */
-public class RetrieveFieldNamesTest extends DbUnitTest {
-	protected RetrieveFieldNames query;
+public class RetrieveFieldNamesTest extends RetrieveTest<String> {
+
 	@Override
-	public void setUp() throws Exception {
-		query = new RetrieveFieldNames();
+	protected IRetrieval<String> createQuery() {
+		return new RetrieveFieldNames();
 	}
 	@Test
 	public void testGetParameters() throws Exception {
-		Assert.assertNull(query.getParameters());
+		Assert.assertNull(((IQueryObject)query).getParameters());
 	}
 
 	@Test
 	public void testGetSQL() throws Exception {
-		Assert.assertEquals("select idfieldname,name from field_names", query.getSQL());
+		Assert.assertEquals("select idfieldname,name from field_names", ((IQueryObject)query).getSQL());
 	}
 
 	@Test
@@ -72,7 +73,7 @@ public class RetrieveFieldNamesTest extends DbUnitTest {
 
 		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();		
 		qe.setConnection(c.getConnection());
-		ResultSet rs = qe.process(query);
+		ResultSet rs = qe.process((RetrieveFieldNames)query);
 		
 		while (rs.next()) {
 			names = 	c.createQueryTable("EXPECTED_NAME","SELECT * FROM FIELD_NAMES where name='"+query.getObject(rs)+"'");		
@@ -85,22 +86,22 @@ public class RetrieveFieldNamesTest extends DbUnitTest {
 
 	@Test
 	public void testGetFieldID() {
-		Assert.assertEquals("idfieldname", query.getFieldID());
+		Assert.assertEquals("idfieldname", ((RetrieveFieldNames)query).getFieldID());
 	}
 
 	@Test
 	public void testGetValueID() {
-		Assert.assertEquals("name", query.getValueID());
+		Assert.assertEquals("name", ((RetrieveFieldNames)query).getValueID());
 	}
 
 	@Test
 	public void testGetFieldType() throws Exception {
-		Assert.assertEquals(String.class,query.getFieldType());
+		Assert.assertEquals(String.class,((RetrieveFieldNames)query).getFieldType());
 	}
 
 	@Test
 	public void testGetValueType() {
-		Assert.assertEquals(String.class,query.getValueType());
+		Assert.assertEquals(String.class,((RetrieveFieldNames)query).getValueType());
 	}
 
 }

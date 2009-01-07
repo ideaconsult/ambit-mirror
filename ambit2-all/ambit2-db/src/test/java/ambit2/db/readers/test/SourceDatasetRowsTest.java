@@ -27,38 +27,37 @@
  * 
  */
 
-package ambit2.db.test;
+package ambit2.db.readers.test;
 
-import java.sql.Connection;
+import junit.framework.Assert;
+
+import org.dbunit.database.IDatabaseConnection;
+import org.junit.Test;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.SourceDatasetRows;
+import ambit2.db.processors.test.DbUnitTest;
 import ambit2.db.readers.RetrieveDatasets;
 
-public class SourceDatasetRowsTest extends RepositoryTest {
-
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-    public void test() throws Exception {
+public class SourceDatasetRowsTest extends DbUnitTest {
+	@Test
+    public void testSourceDatasetRows() throws Exception {
         SourceDatasetRows rows = new SourceDatasetRows();
-        Connection c = datasource.getConnection();
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+
+		IDatabaseConnection c = getConnection();        
         RetrieveDatasets query = new RetrieveDatasets();
-        query.setValue(null); //retrieve all datasets
+        query.setValue(null); 
         rows.setQuery(query);
-        rows.open(c);
+        rows.open(c.getConnection());
   
         while (rows.next()) {
             SourceDataset d = rows.getObject();
-            assertTrue(d.getId() > 0);
-            assertTrue(d.getReference().getId() > 0);
+            Assert.assertTrue(d.getId() > 0);
+            Assert.assertTrue(d.getReference().getId() > 0);
         }
         rows.close();
         c.close();
-    }
-    
+    }	
+
 }

@@ -2,8 +2,12 @@
     users*,
     roles*,
     user_roles*,
+    catalog_references*,
+    dictionary*,
     chemicals*,
     structure*,
+    src_dataset*,
+    struc_dataset*,
     fp1024*,
     field_names*,
     structure_fields*)>
@@ -38,6 +42,21 @@
     role_name CDATA #REQUIRED
 >
 
+<!ELEMENT catalog_references EMPTY>
+<!ATTLIST catalog_references
+    idreference CDATA #REQUIRED
+    title CDATA #REQUIRED
+    url CDATA #REQUIRED
+>
+
+<!ELEMENT dictionary EMPTY>
+<!ATTLIST dictionary
+    iddictionary CDATA #REQUIRED
+    idparent CDATA #REQUIRED
+    name CDATA #REQUIRED
+    idreference CDATA #REQUIRED
+>
+
 <!ELEMENT chemicals EMPTY>
 <!ATTLIST chemicals
     idchemical CDATA #REQUIRED
@@ -58,6 +77,20 @@
     inchi CDATA #IMPLIED
     smiles CDATA #IMPLIED
     formula CDATA #IMPLIED
+>
+
+<!ELEMENT src_dataset EMPTY>
+<!ATTLIST src_dataset
+    id_srcdataset CDATA #REQUIRED
+    name CDATA #REQUIRED
+    user_name CDATA #IMPLIED
+    idreference CDATA #REQUIRED
+>
+
+<!ELEMENT struc_dataset EMPTY>
+<!ATTLIST struc_dataset
+    idstructure CDATA #REQUIRED
+    id_srcdataset CDATA #REQUIRED
 >
 
 <!ELEMENT fp1024 EMPTY>
