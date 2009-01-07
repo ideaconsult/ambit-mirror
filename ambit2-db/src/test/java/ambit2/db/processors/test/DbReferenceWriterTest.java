@@ -1,9 +1,9 @@
-/* SourceDatasetWriterTest.java
+/* DbReferenceWriterTest.java
  * Author: Nina Jeliazkova
- * Date: May 5, 2008 
+ * Date: Jan 7, 2009 
  * Revision: 0.1 
  * 
- * Copyright (C) 2005-2008  Nina Jeliazkova
+ * Copyright (C) 2005-2009  Nina Jeliazkova
  * 
  * Contact: nina@acad.bg
  * 
@@ -27,36 +27,44 @@
  * 
  */
 
-package ambit2.db.test;
+package ambit2.db.processors.test;
 
-import java.sql.Connection;
+import junit.framework.Assert;
+
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
+import org.junit.Test;
 
 import ambit2.core.data.LiteratureEntry;
-import ambit2.db.SourceDataset;
-import ambit2.db.processors.DbSrcDatasetWriter;
+import ambit2.db.processors.DbReferenceWriter;
 
-public class DbSrcDatasetWriterTest extends RepositoryTest {
-
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+/**
+ * Test for {@link DbReferenceWriter}
+ * @author nina
+ *
+ */
+public class DbReferenceWriterTest extends DbUnitTest {
+	@Test
     public void test() throws Exception {
-        DbSrcDatasetWriter writer = new DbSrcDatasetWriter();
-        Connection c = datasource.getConnection();
-        writer.setConnection(c);
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+        IDatabaseConnection c = getConnection();	
+		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM catalog_references");
+		Assert.assertEquals(3,names.getRowCount());
+		
+        DbReferenceWriter writer = new DbReferenceWriter();
+
+        writer.setConnection(c.getConnection());
         writer.open();
         LiteratureEntry le = new LiteratureEntry("title","url");
         le.setId(-1);
-        SourceDataset ds = new SourceDataset("test",le);
-        ds.setId(-1);
-        SourceDataset newd = writer.write(ds);
+        LiteratureEntry newle = writer.write(le);
+
+        
+		names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM catalog_references");
+		Assert.assertEquals(4,names.getRowCount());
+		names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT title,url FROM catalog_references where title='title' and url='url'");
+		Assert.assertEquals(1,names.getRowCount());		
         c.close();
-        assertTrue(newd.getId() > 0);
-        assertTrue(newd.getReference().getId() > 0);
-    }    
+    }
 
 }
