@@ -49,7 +49,11 @@ import ambit2.core.data.IntArrayResult;
 
 
 public class DbDescriptorValuesWriter extends DbDescriptorWriter {
-    protected static final String insert_descriptorvalue = "INSERT IGNORE INTO dvalues (iddescriptor,idstructure,value,error,status,user_name) VALUES (?,?,?,?,?,SUBSTRING_INDEX(user(),'@',1))";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -9033487152125434784L;
+	protected static final String insert_descriptorvalue = "INSERT IGNORE INTO dvalues (iddescriptor,idstructure,value,error,status,user_name) VALUES (?,?,?,?,?,SUBSTRING_INDEX(user(),'@',1))";
     protected PreparedStatement ps_descriptorvalue;
     protected IStructureRecord structure;
     public synchronized IStructureRecord getStructure() {

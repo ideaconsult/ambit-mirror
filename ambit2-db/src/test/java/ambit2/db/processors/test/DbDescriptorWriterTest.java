@@ -3,7 +3,7 @@
  * Date: May 5, 2008 
  * Revision: 0.1 
  * 
- * Copyright (C) 2005-2008  Nina Jeliazkova
+ * Copyright (C) 2005-2009  Nina Jeliazkova
  * 
  * Contact: nina@acad.bg
  * 
@@ -27,10 +27,13 @@
  * 
  */
 
-package ambit2.db.test;
+package ambit2.db.processors.test;
 
-import java.sql.Connection;
+import junit.framework.Assert;
 
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
+import org.junit.Test;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
@@ -40,29 +43,27 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import ambit2.db.processors.DbDescriptorWriter;
 
 /**
- * TODO add description
+ * Tests writing two descriptors with different specifications
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> May 5, 2008
+ * <b>Modified</b> Jan 7, 2009
  */
-public class DbDescriptorWriterTest extends RepositoryTest {
+public class DbDescriptorWriterTest extends DbUnitTest {
 
-    /* (non-Javadoc)
-     * @see ambit2.test.repository.RepositoryTest#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+	
+	}
 
-    /* (non-Javadoc)
-     * @see ambit2.test.repository.RepositoryTest#tearDown()
-     */
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+	@Test
     public void test() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");			
         DbDescriptorWriter writer = new DbDescriptorWriter();
-        Connection c = datasource.getConnection();
-        writer.setConnection(c);
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM DESCRIPTORS");	
+		Assert.assertEquals(0,names.getRowCount());
+		
+        writer.setConnection(c.getConnection());
         writer.open();
         XLogPDescriptor xlogp = new XLogPDescriptor();
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
@@ -75,7 +76,14 @@ public class DbDescriptorWriterTest extends RepositoryTest {
                 );
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
         writer.write(v);
-        writer.close();
+        c.close();
+        
+        c = getConnection();
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM DESCRIPTORS");	
+		Assert.assertEquals(2,names.getRowCount());
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM DVALUES");	
+		Assert.assertEquals(0,values.getRowCount());		
+		c.close();
     }
 
 }
