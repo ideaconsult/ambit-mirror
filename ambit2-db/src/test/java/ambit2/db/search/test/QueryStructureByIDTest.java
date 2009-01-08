@@ -32,7 +32,6 @@ public class QueryStructureByIDTest extends QueryTest<QueryStructureByID> {
 	}
 	@Override
 	protected void verify(QueryStructureByID query, ResultSet rs) throws Exception {
-		System.out.println(query.getSQL());
 		int records = 0;
 		while (rs.next()) {
 			records++;

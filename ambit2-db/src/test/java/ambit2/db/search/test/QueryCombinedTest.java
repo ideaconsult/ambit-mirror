@@ -34,8 +34,6 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		
 		Assert.assertNotNull(q.getParameters().get(1).getValue());
 		qc.add(q);
-		System.out.println(qc.getSQL());
-		System.out.println(q.getSQL());
 		
 	}
 	@Test
@@ -60,7 +58,6 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 
 		qc.setCombine_as_and(false);
 		
-		System.out.println(qc.getSQL());
 		Assert.assertEquals("select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure <= ?\nunion\nselect ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure between ? and ?",
 				qc.getSQL());
 		
@@ -78,8 +75,6 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		}
 
 		qc.setScope(qs);
-		System.out.println();
-		System.out.println(qc.getSQL());
 		
 		/*
 		qc.setScope(null);

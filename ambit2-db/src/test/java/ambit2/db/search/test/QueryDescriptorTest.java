@@ -52,7 +52,6 @@ public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
 
 	@Override
 	protected void verify(QueryDescriptor query, ResultSet rs) throws Exception {
-		System.out.println(query.getSQL());		
 		int records = 0;
 		while (rs.next()) {
 			records ++;
