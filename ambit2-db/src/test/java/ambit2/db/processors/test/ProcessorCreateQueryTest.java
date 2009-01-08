@@ -22,9 +22,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.db.test;
+package ambit2.db.processors.test;
 
-import java.sql.Connection;
+import junit.framework.Assert;
+
+import org.dbunit.database.IDatabaseConnection;
+import org.junit.Test;
 
 import ambit2.db.SessionID;
 import ambit2.db.processors.ProcessorCreateQuery;
@@ -34,25 +37,26 @@ import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryStructureByID;
 
 
-public class ProcessorCreateQueryTest extends RepositoryTest {
+public class ProcessorCreateQueryTest extends DbUnitTest {
+	
+	@Test
 	public void test() throws Exception {
-		/*
-		IStoredQuery q = new StoredQuery();
-		q.setQuery();
-		q.setName("test");
-		*/
-		IQueryObject q = new QueryStructureByID(100,200); 
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
+		IQueryObject q = new QueryStructureByID(100211,100215); 
 		
-		Connection c = datasource.getConnection();
+		IDatabaseConnection c = getConnection();
 		ProcessorCreateSession ps = new ProcessorCreateSession();
-		ps.setConnection(c);
+		ps.setConnection(c.getConnection());
 		SessionID s = new SessionID();
 		s = ps.process(s);
+		
+		c = getConnection();
 		ProcessorCreateQuery pq = new ProcessorCreateQuery();
 		pq.setSession(s);
-		pq.setConnection(datasource.getConnection());
+		pq.setConnection(c.getConnection());
 		IStoredQuery storedQuery = pq.process(q);
-		assertEquals(101,storedQuery.getRows());
+		Assert.assertEquals(3,storedQuery.getRows());
+		c.close();
 	}
 }
 
