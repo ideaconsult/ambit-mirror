@@ -27,20 +27,22 @@ public class ExtractDataForTest {
         partialDataSet.addTable("catalog_references", "SELECT * FROM catalog_references");
         
         partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");
-        partialDataSet.addTable("descriptors", "SELECT * FROM descriptors");           
-        partialDataSet.addTable("dvalues", "SELECT * FROM dvalues");        
+   
         partialDataSet.addTable("chemicals", "SELECT * FROM chemicals WHERE idchemical in "+ids);
-        partialDataSet.addTable("structure", "SELECT * FROM structure join chemicals using(idchemical) WHERE idchemical in "+ids);
+        partialDataSet.addTable("structure", "SELECT idstructure,idchemical,structure,format,updated,user_name,type_structure FROM structure join chemicals using(idchemical) WHERE idchemical in "+ids);
+
+        partialDataSet.addTable("descriptors", "SELECT * FROM descriptors");           
+        partialDataSet.addTable("dvalues", "SELECT * FROM dvalues");     
         
         partialDataSet.addTable("src_dataset", "SELECT * FROM src_dataset");        
         partialDataSet.addTable("struc_dataset", "SELECT * FROM struc_dataset");        
         //BIGINT serializes to long and gives errors for 
-        partialDataSet.addTable("fp1024", "SELECT * FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
+        partialDataSet.addTable("fp1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
         partialDataSet.addTable("field_names", "SELECT * FROM field_names");            
         partialDataSet.addTable("structure_fields", "SELECT idstructure,idfieldname,value FROM structure_fields join structure using(idstructure) join chemicals using(idchemical) WHERE idchemical in "+ids);        
         FlatDtdDataSet.write(partialDataSet, new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-dataset.dtd"));
         FlatXmlDataSet.write(partialDataSet, 
-        		new FileOutputStream("src/test/resources/ambit2/db/processors/test/src-datasets.xml"));
+        		new FileOutputStream("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml"));
         
         /*
         // full database export
