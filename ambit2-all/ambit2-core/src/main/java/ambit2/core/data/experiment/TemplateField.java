@@ -163,12 +163,8 @@ public class TemplateField extends AmbitBean {
      * @see ambit2.data.AmbitObject#setName(java.lang.String)
      */
     public void setName(String name) {
-        String s = name.replace('"','\'');
-        /*
-        if (s.length()>64)
-            super.setName(s.substring(1,64));
-        else super.setName(s);
-        */
+        this.name = name.replace('"','\'');
+        
     }
 
 	public int getId() {
