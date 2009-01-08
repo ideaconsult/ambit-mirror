@@ -41,9 +41,11 @@ public class QueryStudyResultsTest extends QueryTest<QueryStudyResults> {
 		int count = 0; 
 		while (rs.next()) {
 			count++;
-			System.out.println(rs.getInt("idstructure"));
 		}
 		Assert.assertTrue(count>0);
 		
+	}
+	@Override
+	public void testSelect() throws Exception {
 	}
 }	

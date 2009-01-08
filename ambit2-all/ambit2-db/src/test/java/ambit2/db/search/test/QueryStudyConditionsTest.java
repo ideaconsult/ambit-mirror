@@ -48,12 +48,9 @@ public class QueryStudyConditionsTest extends QueryTest<QueryStudyConditions> {
 	}
 	@Override
 	protected void verify(QueryStudyConditions query, ResultSet rs) throws Exception {
-		System.out.println(query.getSQL());
-		System.out.println(query.getParameters());
 		int count = 0; 
 		while (rs.next()) {
 			count++;
-			System.out.println(rs.getInt("idstructure"));
 		}
 		Assert.assertTrue(count>0);
 		

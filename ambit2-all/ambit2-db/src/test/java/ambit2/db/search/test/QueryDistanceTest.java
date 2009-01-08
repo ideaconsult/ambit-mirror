@@ -13,10 +13,8 @@ import ambit2.db.search.QueryDistance;
 public class QueryDistanceTest extends QueryTest<QueryDistance> {
 
 	public void test() throws Exception {
-		System.out.println(query.getValue());
 		Assert.assertEquals("select ? as idquery,-1,idstructure,1 as selected,1 as metric from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance < ?",
 				query.getSQL());
-		System.out.println(query.getSQL());
 	}
 	
 	@Override
@@ -36,5 +34,8 @@ public class QueryDistanceTest extends QueryTest<QueryDistance> {
 		}
 		Assert.assertTrue(count >0);
 	}
+	@Override
+	public void testSelect() throws Exception {
+	}	
 
 }

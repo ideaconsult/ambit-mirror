@@ -29,7 +29,6 @@ public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor
 		int count = 0;
 		while (rs.next()) {
 			count++;
-			System.out.println(rs.getInt(2));
 		}
 		Assert.assertEquals(4,count);
 		
