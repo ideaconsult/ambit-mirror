@@ -34,12 +34,6 @@ The database can be searched by identifiers, attribute value or range, experimen
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
     	<groupId>cdk</groupId>
     	<artifactId>cdk</artifactId>
     	<version>1.1.svn-19012008</version>
