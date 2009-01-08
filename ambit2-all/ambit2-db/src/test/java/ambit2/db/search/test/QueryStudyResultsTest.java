@@ -3,13 +3,16 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+
 import ambit2.core.data.experiment.StudyTemplate;
 import ambit2.db.search.QueryStudyResults;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.TemplateFieldQuery;
 
 public class QueryStudyResultsTest extends QueryTest<QueryStudyResults> {
-
+	@Test
 	public void test() throws Exception {
 		
 		String s = 
@@ -24,12 +27,12 @@ public class QueryStudyResultsTest extends QueryTest<QueryStudyResults> {
 	}
 	@Override
 	protected QueryStudyResults createQuery() throws Exception {
-		TemplateFieldQuery<String> q = new TemplateFieldQuery<String>("field1","",false,false);
-		q.setValue("result1");
+		TemplateFieldQuery<String> q = new TemplateFieldQuery<String>("k1","",false,false);
+		q.setValue("116");
 		
 		QueryStudyResults qs = new QueryStudyResults();
 		qs.setCondition(StringCondition.getInstance("="));
-		qs.setFieldname(new StudyTemplate("template1"));
+		qs.setFieldname(new StudyTemplate("BCF"));
 		qs.setValue(q);
 		return qs;
 	}

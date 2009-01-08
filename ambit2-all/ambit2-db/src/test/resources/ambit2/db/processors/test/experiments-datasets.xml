@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <roles role_name="ambit_admin"/>
+  <roles role_name="ambit_guest"/>
+  <user_roles user_name="guest" role_name="ambit_guest"/>
+  <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
+  <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
+  <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>
+  <catalog_references idreference="4" title="XLogP another implementation" url="XLogP another implementation"/>
+  <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE"/>
+  <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
+  <dictionary iddictionary="1" idparent="0" name="CAS" idreference="1"/>
+  <dictionary iddictionary="2" idparent="0" name="IUPAC Name" idreference="2"/>
+  <chemicals idchemical="4891" inchi="InChI=1/C6H6Cl6/c7-1-2(8)4(10)6(12)5(11)3(1)9/h1-6H/t1-,2-,3-,4+,5+,6+" smiles="Cl[C@@H]1[C@H](Cl)[C@@H](Cl)[C@H](Cl)[C@H](Cl)[C@H]1Cl"/>
+  <chemicals idchemical="9083" inchi="InChI=1/C16H10/c1-3-11-7-9-13-5-2-6-14-10-8-12(4-1)15(11)16(13)14/h1-10H" smiles="c1cc2ccc3cccc4ccc(c1)c2c34"/>
+  <structure idstructure="105095" idchemical="4891" structure="ygkAAHicrVTbbts4EH3XV/BhHySElEjKulm7Rm3Gqd2NhTRuesFiISgK1xJCS4Vkd5O/L3WxY8lu
+G6QRCJBz5swZckYYBYBlnH7gqzTGDrGwS8yBQ88VBRBaLYDrRXaHdnmeBz5SjLEC5Ed103RNeUBE
+Ny2MKwzr0osBE73Ik6tWITr1vCoWYd3pqYAdlT5bBfxEpf+cI5X9i8DvvKiNqFUs/NK7PKlQ3cEv
+vAt6Vl1+VV30KnVBz+r0r+qCXuev21cXvUqP0Mt7ROs8ZJ+tgczD7EptD2rIPoSsHsuq/R2WhJwe
+S9puL6OEvB7LAwT3tCREuqzKpkcQoZ3ABQDT4FwZgT/ZeDlSLBe5HvKUCpjOgymTmJwpaIAJogdo
+GERrPlJW0XodoRmbgbwAjTGZsUPe4mKkMHtmM2HX8PzmaszCrI5WyTWkS2gWcHANrSW0Cw0RSKEJ
+B9CCNkr4QxQnIi/y+DEWeWVmvFHJ7vhDe4cDHwSnwxEEKonE1ySCtNnMW76J4KAxrGazK0xDbQKW
+zEdKvf1FjPYFRuwgWQfV1QYqwZqtEqpZKiGaqRLNMxKC7JmxIQhSBE0EB2fQOoP22ZNieM8fR8q7
+yy+fPy8uroL5+NPf79HbYP7lhk2uJzc1cbmYX05l2Zn4h715M/uXNJvKhNY5nYQIE7XI+20k0s1j
+eBndciFrlPD4nt+Ft48hj29rBouyPEvjSITLdSp42U34s3wn0jWPG28f5tl/+UhpD7Jw2AiGpGqK
+J9viyLYQCgkkWLbIhbYxHaoHHdNUR6Je5ZYxsrZGMR4SygTTOdPzas8bQzyZRjEZfiV+Sf3A9EvT
+Dyy/tPwrxy8dP/AkXnp+QIhvFGzYjCdYDyeI/XrmQSTn3d5ozi2PKA1PXkdvdjlJ5I4OuWhHbrio
+I4p6GXF1ag+NVl2+YLsOx5t8LZtA6B65yst0k37jrQfvHQFfRScdF0W0WvNsU+nswYX8q8URdbnh
+Bc9b2O7Bkzy767Bvsvss/z/rBP3AexT7odjyH2RrA48YTfBFXqwjwZKoWPEdxvK8uDtP5SPLNM/k
+bGp+v5IlaRGJ3bMXueDxVkRFWGnIQ3cGPbk/8XSVbKSMh3WXeq5Z+XdDKvidIfWH/JTvqW4pBw==" format="SDF" updated="2008-10-29 06:34:21.0" user_name="guest" type_structure="NA"/>
+  <structure idstructure="109287" idchemical="9083" structure="xwoAAHicpZVdk6I4FIbv+RVc7IVWJZiTED50lyqltdrabad77J6tvbJYzCo1CFugs9P/fg8fCuL0
+XAjFV568580JhIOm6+swelW7KGQ2SOaAMG3+oGk6WDq4us5+uLuuq3/hjDFNx40b3AUHbyg3pLRl
+wZiBvUz39Y8s2nvHRRiuI+37XMBgrgWFi2lIR9yZS+MChsst8z4XYQjHdvrm0rj0yaWO6PmOLvPA
+d+RI7vR16ZNLM6M+66VZdZZhmffO6OLSZNVr1TFDurbbd730cWlykYZrStE3l/tdMAle7lfILM9X
+yOogDBG3SHaQ0IF17BF1VTic3VGZOnTtMcq5QVhIrwOx7XZUWGvNjsou87pSOWVgWwVQptpFnScB
+vEyVd9D1I3zS9fnqQfP0X/3p2tOAu5QxyrSCzJeruY+QM5O63KaiRTer4KA87d/3TCWqzZ8WnuaD
+9QiVx/LteerfipfJVn2v8XMb+/ulp5WX32BU+YxCoIICUJu6FASVlFOLgkmBUYcCH+DdEOQA8GwN
+QAzBHO0Bex8bz81X9e5ps9l8+rL8/Oll/fz6+4q+PS4Wi+mnv6azUugHSZpEYRBv1ocoVrmnhRCG
+PAxDgUdo4jEIYYhEmGXAyymIo+P75o/gbxV72heVvT9Gu31r1Onp+zL5J/W0+gbnxEarMQABTkAS
+sAgIAiYBRhxiE5cIIolJLILdo/l4AIQPBwKJJNZwYKPIRe1wUDsUsdgojIajbDoGy+9so2w23lKY
+5HySn89bak5yOcmtLXWwIXJ7MpnkJso4Nq0cL7nAVqGUOV5GmT+uap1G6uJN2KQipK7DCKriQerf
+XgtUfzAEVWFoKc7gomCtAWpV/dNpgYuCtUY/p1MV9AawViJlZSyH1apxz+AsqOpVK7ELKN/q6nTY
+TI/pAdcGWBfynObRMfqm6h526VipXfDDjkUW7A4qORY+F/ikjkF8I10fVabSD/AsTbZX+C35mqT/
+JR8EXfXexL5mJ/XzwA8UizQ7BLG/D7KdOjM/TbPtQ4STzKM0wRpSfRW5v4+yID6rntJYhac4yDaF
+B95c1Y6m90+F39WxqET4UiXDR/8Lbtr/6UQp0w==" format="SDF" updated="2008-10-29 06:34:35.0" user_name="guest" type_structure="NA"/>
+  <descriptors iddescriptor="1" idreference="3" name="XLogP" units="" error="0.0" comments="Test entry for XLogP" islocal="false"/>
+  <descriptors iddescriptor="2" idreference="4" name="XLogP" units="" error="0.0" comments="XLogP another implementation" islocal="false"/>
+  <dvalues/>
+  <src_dataset/>
+  <struc_dataset/>
+  <fp1024 idchemical="4891" fp1="1" fp2="0" fp3="2182086656" fp4="4503599627370496" fp5="146366987906318337" fp6="562949953421312" fp7="70368744177664" fp8="0" fp9="1073741952" fp10="2305843009213693952" fp11="9223372036854775807" fp12="281749854617600" fp13="4611686293305294848" fp14="0" fp15="2251799815782400" fp16="24576" time="0" bc="24" status="invalid"/>
+  <fp1024 idchemical="9083" fp1="4611686018427387904" fp2="2147483648" fp3="8589934592" fp4="2305843009215791104" fp5="0" fp6="0" fp7="0" fp8="32768" fp9="4611686018435776512" fp10="0" fp11="0" fp12="274877906944" fp13="0" fp14="0" fp15="0" fp16="0" time="16" bc="9" status="invalid"/>
+  <field_names idfieldname="1" name="IsChiral"/>
+  <field_names idfieldname="2" name="InChI_key"/>
+  <field_names idfieldname="3" name="Num_MetalAtoms"/>
+  <field_names idfieldname="4" name="Num_UnknownStereoAtoms"/>
+  <field_names idfieldname="5" name="Index_Name"/>
+  <field_names idfieldname="6" name="InChI_AuxInfo"/>
+  <field_names idfieldname="7" name="Num_NegativeAtoms"/>
+  <field_names idfieldname="8" name="SMILES"/>
+  <field_names idfieldname="9" name="EINECS_Name"/>
+  <field_names idfieldname="10" name="Canonical_Smiles"/>
+  <field_names idfieldname="11" name="EINECS_MF"/>
+  <field_names idfieldname="12" name="Molecular_Formula"/>
+  <field_names idfieldname="13" name="Num_UnknownTrueStereoAtoms"/>
+  <field_names idfieldname="14" name="Num_TrueStereoAtoms"/>
+  <field_names idfieldname="15" name="CAS"/>
+  <field_names idfieldname="16" name="NumberOfTautomers"/>
+  <field_names idfieldname="17" name="Quality_Label"/>
+  <field_names idfieldname="18" name="InChI"/>
+  <field_names idfieldname="19" name="CanonicalTautomer"/>
+  <field_names idfieldname="20" name="Molecular_Weight"/>
+  <field_names idfieldname="21" name="Num_StereoAtoms"/>
+  <field_names idfieldname="22" name="Num_UnknownStereoBonds"/>
+  <field_names idfieldname="23" name="FormalCharge"/>
+  <field_names idfieldname="24" name="Num_Fragments"/>
+  <field_names idfieldname="25" name="EINECS"/>
+  <field_names idfieldname="26" name="Num_Atoms"/>
+  <field_names idfieldname="27" name="Num_StereoBonds"/>
+  <field_names idfieldname="28" name="CoordDimension"/>
+  <field_names idfieldname="29" name="Num_PositiveAtoms"/>
+  <field_names idfieldname="30" name="IUPAC_Name"/>
+  <field_names idfieldname="31" name="Message_Name"/>
+  <field_names idfieldname="32" name="Index_name"/>
+  <field_names idfieldname="33" name="IUPAC_name"/>
+  <field_names idfieldname="34" name="TooManyTautomers"/>
+  <field_names idfieldname="35" name="Common_Name"/>
+  <field_names idfieldname="36" name="Smiles"/>
+  <structure_fields idstructure="105095" idfieldname="1" value="1"/>
+  <structure_fields idstructure="105095" idfieldname="2" value="JLYXXMFPNIAWKQ-GNIYUCBRBU"/>
+  <structure_fields idstructure="105095" idfieldname="3" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="4" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="5" value="cyclohexane, 1,2,3,4,5,6-hexachloro-, (1alpha,2alpha,3beta,4alpha,5alpha,6beta)-"/>
+  <structure_fields idstructure="105095" idfieldname="6" value="AuxInfo=1/0/N:11,2,9,3,7,5,12,1,10,4,8,6/E:(1,2,3,4,5,6)(7,8,9,10,11,12)/rA:12ClC.eC.oClC.oClC.eClC.oClC.oCl/rB:p1;s2;N3;s3;N5;s5;P7;s7;N9;s2s9;N11;/rC:2.3383,-1.35,0;1.299,-.75,0;1.299,.75,0;2.3383,1.35,0;0,1.5,0;0,2.7,0;-1.299,.75,0;-2.3383,1.35,0;-1.299"/>
+  <structure_fields idstructure="105095" idfieldname="7" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="8" value="Cl[C@@H]1[C@@H](Cl)[C@@H](Cl)[C@H](Cl)[C@@H](Cl)[C@H]1Cl"/>
+  <structure_fields idstructure="105095" idfieldname="9" value="gamma-HCH or gamma-BHC"/>
+  <structure_fields idstructure="105095" idfieldname="10" value="Cl[C@@H]1[C@H](Cl)[C@@H](Cl)[C@H](Cl)[C@H](Cl)[C@H]1Cl"/>
+  <structure_fields idstructure="105095" idfieldname="11" value="C6H6Cl6"/>
+  <structure_fields idstructure="105095" idfieldname="12" value="C6H6Cl6"/>
+  <structure_fields idstructure="105095" idfieldname="13" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="14" value="6"/>
+  <structure_fields idstructure="105095" idfieldname="15" value="58-89-9"/>
+  <structure_fields idstructure="105095" idfieldname="17" value="checked_by_ecb"/>
+  <structure_fields idstructure="105095" idfieldname="18" value="InChI=1/C6H6Cl6/c7-1-2(8)4(10)6(12)5(11)3(1)9/h1-6H/t1-,2-,3-,4+,5+,6+"/>
+  <structure_fields idstructure="105095" idfieldname="20" value="290.82983"/>
+  <structure_fields idstructure="105095" idfieldname="21" value="6"/>
+  <structure_fields idstructure="105095" idfieldname="22" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="23" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="24" value="1"/>
+  <structure_fields idstructure="105095" idfieldname="25" value="200-401-2"/>
+  <structure_fields idstructure="105095" idfieldname="26" value="12"/>
+  <structure_fields idstructure="105095" idfieldname="27" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="28" value="2"/>
+  <structure_fields idstructure="105095" idfieldname="29" value="0"/>
+  <structure_fields idstructure="105095" idfieldname="30" value="(1R,2S,3r,4R,5S,6r)-1,2,3,4,5,6-hexachlorocyclohexane"/>
+  <structure_fields idstructure="105095" idfieldname="33" value="(1R,2S,3r,4R,5S,6r)-1,2,3,4,5,6-hexachlorocyclohexane"/>
+  <structure_fields idstructure="109287" idfieldname="1" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="2" value="BBEAQIROQSPTKN-UHFFFAOYAB"/>
+  <structure_fields idstructure="109287" idfieldname="3" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="4" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="5" value="Pyrene"/>
+  <structure_fields idstructure="109287" idfieldname="6" value="AuxInfo=1/0/N:11,12,15,16,13,14,10,8,7,9,3,5,4,6,2,1/E:(1,2)(3,4,5,6)(7,8,9,10)(11,12,13,14)(15,16)/rA:16CCCCCCCCCCCCCCCC/rB:d-1;s2;s1;s2;s1;d-4;s5;s6d-8;d-3s7;;;s4d-12;d-6s12;s3d-11;d-5s11;/rC:2.2918,-2.5575,0;2.2918,-3.9857,0;1.0961,-4.5835,0;1.0961,-1.9"/>
+  <structure_fields idstructure="109287" idfieldname="7" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="9" value="pyrene"/>
+  <structure_fields idstructure="109287" idfieldname="10" value="c1cc2ccc3cccc4ccc(c1)c2c34"/>
+  <structure_fields idstructure="109287" idfieldname="11" value="C16H10"/>
+  <structure_fields idstructure="109287" idfieldname="12" value="C16H10"/>
+  <structure_fields idstructure="109287" idfieldname="13" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="14" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="15" value="129-00-0"/>
+  <structure_fields idstructure="109287" idfieldname="17" value="VeryHigh"/>
+  <structure_fields idstructure="109287" idfieldname="18" value="InChI=1/C16H10/c1-3-11-7-9-13-5-2-6-14-10-8-12(4-1)15(11)16(13)14/h1-10H"/>
+  <structure_fields idstructure="109287" idfieldname="20" value="202.2506"/>
+  <structure_fields idstructure="109287" idfieldname="21" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="22" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="23" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="24" value="1"/>
+  <structure_fields idstructure="109287" idfieldname="25" value="204-927-3"/>
+  <structure_fields idstructure="109287" idfieldname="26" value="16"/>
+  <structure_fields idstructure="109287" idfieldname="27" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="28" value="2"/>
+  <structure_fields idstructure="109287" idfieldname="29" value="0"/>
+  <structure_fields idstructure="109287" idfieldname="30" value="pyrene"/>
+  <template idtemplate="1" name="BCF" template="QkNGIHRlc3QgdGVtcGxhdGU="/>
+  <study idstudy="1" idtemplate="1" name="BCF"/>
+  <study idstudy="2" idtemplate="1" name="BHC"/>
+  <study_fieldnames id_fieldname="1" name="Species scientific name" units="" fieldtype="string" fieldmode="condition"/>
+  <study_fieldnames id_fieldname="2" name="Species sex" units="" fieldtype="string" fieldmode="condition"/>
+  <study_fieldnames id_fieldname="3" name="Temperature" units="°C" fieldtype="numeric" fieldmode="condition"/>
+  <study_fieldnames id_fieldname="4" name="Exposure concentration" units="mg/L" fieldtype="numeric" fieldmode="condition"/>
+  <study_fieldnames id_fieldname="5" name="k1" units="d-1" fieldtype="numeric" fieldmode="result"/>
+  <study_fieldnames id_fieldname="6" name="k2" units="d-1" fieldtype="numeric" fieldmode="result"/>
+  <study_fieldnames id_fieldname="7" name="T95" units="d-1" fieldtype="numeric" fieldmode="result"/>
+  <study_fieldnames id_fieldname="8" name="T80" units="d-1" fieldtype="numeric" fieldmode="result"/>
+  <study_fieldnames id_fieldname="9" name="BCFss ww" units="Cf/Cw (L/kg)" fieldtype="numeric" fieldmode="result"/>
+  <study_fieldnames id_fieldname="10" name="BCFss lipid" units="Cf lipid/Cw (L/k" fieldtype="numeric" fieldmode="result"/>
+  <template_def idtemplate="1" id_fieldname="1"/>
+  <template_def idtemplate="1" id_fieldname="2"/>
+  <template_def idtemplate="1" id_fieldname="3"/>
+  <template_def idtemplate="1" id_fieldname="4"/>
+  <template_def idtemplate="1" id_fieldname="5"/>
+  <template_def idtemplate="1" id_fieldname="6"/>
+  <template_def idtemplate="1" id_fieldname="7"/>
+  <template_def idtemplate="1" id_fieldname="8"/>
+  <template_def idtemplate="1" id_fieldname="9"/>
+  <template_def idtemplate="1" id_fieldname="10"/>
+  <study_conditions idstudy="1" id_fieldname="4" value="0.0001"/>
+  <study_conditions idstudy="1" id_fieldname="3" value="25"/>
+  <study_conditions idstudy="1" id_fieldname="1" value="Cyprinodon variegatus"/>
+  <study_conditions idstudy="1" id_fieldname="2" value="MF"/>
+  <experiment idexperiment="1" idstudy="1" idreference="5" idstructure="109287" structure_type="tested" idstructure_parent="0"/>
+  <experiment idexperiment="3" idstudy="2" idreference="6" idstructure="105095" structure_type="tested" idstructure_parent="0"/>
+  <study_results idexperiment="1" id_fieldname="5" value_num="116.0"/>
+  <study_results idexperiment="1" id_fieldname="6" value_num="1.19"/>
+  <study_results idexperiment="1" id_fieldname="7" value_num="2.52"/>
+  <study_results idexperiment="1" id_fieldname="8" value_num="1.34"/>
+  <study_results idexperiment="1" id_fieldname="9" value_num="53.0"/>
+  <study_results idexperiment="1" id_fieldname="10" value_num="546.0"/>
+</dataset>

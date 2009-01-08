@@ -3,12 +3,24 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import ambit2.core.data.experiment.StudyTemplate;
 import ambit2.db.search.QueryStudyConditions;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.TemplateFieldQuery;
 
 public class QueryStudyConditionsTest extends QueryTest<QueryStudyConditions> {
+	
+	@Override
+	@Before
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/experiments-datasets.xml";		
+	}
+	@Test
 	public void test() throws Exception {
 		
 		String s = 
@@ -25,17 +37,19 @@ public class QueryStudyConditionsTest extends QueryTest<QueryStudyConditions> {
 	}
 	@Override
 	protected QueryStudyConditions createQuery() throws Exception {
-		TemplateFieldQuery<String> q = new TemplateFieldQuery<String>("field2","",false,false);
-		q.setValue("condition1");
+		TemplateFieldQuery<String> q = new TemplateFieldQuery<String>("Species scientific name","",false,false);
+		q.setValue("Cyprinodon variegatus");
 		
 		QueryStudyConditions qs = new QueryStudyConditions();
 		qs.setCondition(StringCondition.getInstance("="));
-		qs.setFieldname(new StudyTemplate("template1"));
+		qs.setFieldname(new StudyTemplate("BCF"));
 		qs.setValue(q);
 		return qs;
 	}
 	@Override
 	protected void verify(QueryStudyConditions query, ResultSet rs) throws Exception {
+		System.out.println(query.getSQL());
+		System.out.println(query.getParameters());
 		int count = 0; 
 		while (rs.next()) {
 			count++;
