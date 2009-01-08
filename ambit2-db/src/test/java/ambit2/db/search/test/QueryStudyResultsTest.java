@@ -2,6 +2,7 @@ package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
+import junit.framework.Assert;
 import ambit2.core.data.experiment.StudyTemplate;
 import ambit2.db.search.QueryStudyResults;
 import ambit2.db.search.StringCondition;
@@ -19,7 +20,7 @@ public class QueryStudyResultsTest extends QueryTest<QueryStudyResults> {
 		"join\n"+
 		"(select idstudy,idtemplate,id_fieldname from study join template_def using(idtemplate) join template using(idtemplate) where template.name=?) as T\n"+
 		"using(idstudy)";
-		assertEquals(s,query.getSQL());
+		Assert.assertEquals(s,query.getSQL());
 	}
 	@Override
 	protected QueryStudyResults createQuery() throws Exception {
@@ -39,7 +40,7 @@ public class QueryStudyResultsTest extends QueryTest<QueryStudyResults> {
 			count++;
 			System.out.println(rs.getInt("idstructure"));
 		}
-		assertTrue(count>0);
+		Assert.assertTrue(count>0);
 		
 	}
 }	

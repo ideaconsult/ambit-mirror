@@ -4,10 +4,10 @@
     user_roles*,
     catalog_references*,
     dictionary*,
-    descriptors*,
-    dvalues*,
     chemicals*,
     structure*,
+    descriptors*,
+    dvalues*,
     src_dataset*,
     struc_dataset*,
     fp1024*,
@@ -59,6 +59,25 @@
     idreference CDATA #REQUIRED
 >
 
+<!ELEMENT chemicals EMPTY>
+<!ATTLIST chemicals
+    idchemical CDATA #REQUIRED
+    inchi CDATA #IMPLIED
+    smiles CDATA #IMPLIED
+    formula CDATA #IMPLIED
+>
+
+<!ELEMENT structure EMPTY>
+<!ATTLIST structure
+    idstructure CDATA #REQUIRED
+    idchemical CDATA #REQUIRED
+    structure CDATA #REQUIRED
+    format CDATA #REQUIRED
+    updated CDATA #REQUIRED
+    user_name CDATA #IMPLIED
+    type_structure CDATA #REQUIRED
+>
+
 <!ELEMENT descriptors EMPTY>
 <!ATTLIST descriptors
     iddescriptor CDATA #REQUIRED
@@ -78,28 +97,6 @@
     error CDATA #IMPLIED
     status CDATA #REQUIRED
     user_name CDATA #REQUIRED
->
-
-<!ELEMENT chemicals EMPTY>
-<!ATTLIST chemicals
-    idchemical CDATA #REQUIRED
-    inchi CDATA #IMPLIED
-    smiles CDATA #IMPLIED
-    formula CDATA #IMPLIED
->
-
-<!ELEMENT structure EMPTY>
-<!ATTLIST structure
-    idchemical CDATA #REQUIRED
-    idstructure CDATA #REQUIRED
-    structure CDATA #REQUIRED
-    format CDATA #REQUIRED
-    updated CDATA #REQUIRED
-    user_name CDATA #IMPLIED
-    type_structure CDATA #REQUIRED
-    inchi CDATA #IMPLIED
-    smiles CDATA #IMPLIED
-    formula CDATA #IMPLIED
 >
 
 <!ELEMENT src_dataset EMPTY>
@@ -138,9 +135,6 @@
     time CDATA #IMPLIED
     bc CDATA #REQUIRED
     status CDATA #REQUIRED
-    inchi CDATA #IMPLIED
-    smiles CDATA #IMPLIED
-    formula CDATA #IMPLIED
 >
 
 <!ELEMENT field_names EMPTY>

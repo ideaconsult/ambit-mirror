@@ -3,6 +3,7 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 import java.util.List;
 
+import junit.framework.Assert;
 import ambit2.core.data.StructureRecord;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
@@ -16,27 +17,30 @@ public class QueryStructureByIDTest extends QueryTest<QueryStructureByID> {
 		qf.setId(1);
 		
 
-		assertEquals(QueryStructureByID.sqlField + qf.getCondition() + " ?", qf.getSQL());
+		Assert.assertEquals(QueryStructureByID.sqlField + qf.getCondition() + " ?", qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
-		assertNotNull(params);
-		assertEquals(2,params.size());
-		assertEquals(Integer.class,params.get(0).getType());
-		assertEquals(Integer.class,params.get(1).getType());
-		assertEquals(1,params.get(0).getValue());
-		assertEquals(2,params.get(1).getValue());
+		Assert.assertNotNull(params);
+		Assert.assertEquals(2,params.size());
+		Assert.assertEquals(Integer.class,params.get(0).getType());
+		Assert.assertEquals(Integer.class,params.get(1).getType());
+		Assert.assertEquals(1,params.get(0).getValue());
+		Assert.assertEquals(2,params.get(1).getValue());
 	}
 	@Override
 	protected QueryStructureByID createQuery() throws Exception {
-		return new QueryStructureByID(2);
+		return new QueryStructureByID(100211);
 	}
 	@Override
 	protected void verify(QueryStructureByID query, ResultSet rs) throws Exception {
 		System.out.println(query.getSQL());
-
+		int records = 0;
 		while (rs.next()) {
-			assertEquals(query.getId().intValue(),rs.getInt(1));
-			assertEquals(query.getValue().getIdstructure(),rs.getInt(2));
+			records++;
+			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
+			Assert.assertEquals(7,rs.getInt(2));			
+			Assert.assertEquals(query.getValue().getIdstructure(),rs.getInt(3));
 		}
+		Assert.assertEquals(1,records);
 		
 	}
 }

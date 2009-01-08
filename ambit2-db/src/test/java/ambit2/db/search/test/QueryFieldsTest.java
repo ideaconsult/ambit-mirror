@@ -27,35 +27,39 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 import java.util.List;
 
+import org.junit.Test;
+
+import junit.framework.Assert;
 import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 
 public class QueryFieldsTest extends  QueryTest<QueryField>  {
+	@Test
 	public void test() throws Exception {
 		QueryField qf = new QueryField();
 		qf.setFieldname("name");
 		qf.setValue("value");
 		qf.setCondition(StringCondition.getInstance("regexp"));
 		qf.setId(1);
-		assertEquals(QueryField.sqlField + " value " + qf.getCondition() + " ?", qf.getSQL());
+		Assert.assertEquals(QueryField.sqlField + " value " + qf.getCondition() + " ?", qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
-		assertNotNull(params);
-		assertEquals(3,params.size());
-		assertEquals(Integer.class,params.get(0).getType());
-		assertEquals(String.class,params.get(1).getType());
-		assertEquals(String.class,params.get(2).getType());
-		assertEquals(1,params.get(0).getValue());
-		assertEquals("name",params.get(1).getValue());
-		assertEquals("value",params.get(2).getValue());		
+		Assert.assertNotNull(params);
+		Assert.assertEquals(3,params.size());
+		Assert.assertEquals(Integer.class,params.get(0).getType());
+		Assert.assertEquals(String.class,params.get(1).getType());
+		Assert.assertEquals(String.class,params.get(2).getType());
+		Assert.assertEquals(1,params.get(0).getValue());
+		Assert.assertEquals("name",params.get(1).getValue());
+		Assert.assertEquals("value",params.get(2).getValue());		
 	}
 
 	@Override
 	protected QueryField createQuery() throws Exception {
 		QueryField qf = new QueryField();
 		qf.setFieldname("");
-		qf.setValue("100");
+		qf.setValue("VeryHigh");
 		qf.setCondition(StringCondition.getInstance("="));
 		qf.setId(1);
 		return qf;
@@ -63,11 +67,12 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 
 	@Override
 	protected void verify(QueryField query, ResultSet rs) throws Exception {
-		System.out.println(query.getSQL());
-
 		while (rs.next()) {
-			assertEquals(query.getId().intValue(),rs.getInt(1));
-			System.out.println(rs.getString(2));
+			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
+			Assert.assertEquals(29141,rs.getInt(2));
+			Assert.assertEquals(129345,rs.getInt(3));
+			Assert.assertEquals(1,rs.getInt(4));
+			Assert.assertEquals(1,rs.getInt(5));			
 			//assertEquals(query.getValue(),rs.getInt(2));
 		}
 	}

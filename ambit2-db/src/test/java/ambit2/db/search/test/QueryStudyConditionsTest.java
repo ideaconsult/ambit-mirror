@@ -2,6 +2,7 @@ package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
+import junit.framework.Assert;
 import ambit2.core.data.experiment.StudyTemplate;
 import ambit2.db.search.QueryStudyConditions;
 import ambit2.db.search.StringCondition;
@@ -20,7 +21,7 @@ public class QueryStudyConditionsTest extends QueryTest<QueryStudyConditions> {
 		"join\n"+
 		"(select idstudy,id_fieldname,value from study_conditions join study_fieldnames using(id_fieldname) where name=? and value = ?) as C\n"+
 		"using(id_fieldname)";
-		assertEquals(s,query.getSQL());
+		Assert.assertEquals(s,query.getSQL());
 	}
 	@Override
 	protected QueryStudyConditions createQuery() throws Exception {
@@ -40,7 +41,7 @@ public class QueryStudyConditionsTest extends QueryTest<QueryStudyConditions> {
 			count++;
 			System.out.println(rs.getInt("idstructure"));
 		}
-		assertTrue(count>0);
+		Assert.assertTrue(count>0);
 		
 	}
 }

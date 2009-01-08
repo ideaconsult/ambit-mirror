@@ -2,6 +2,8 @@ package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
+import junit.framework.Assert;
+
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 
@@ -12,7 +14,7 @@ public class QueryDistanceTest extends QueryTest<QueryDistance> {
 
 	public void test() throws Exception {
 		System.out.println(query.getValue());
-		assertEquals("select ? as idquery,-1,idstructure,1 as selected,1 as metric from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance < ?",
+		Assert.assertEquals("select ? as idquery,-1,idstructure,1 as selected,1 as metric from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance < ?",
 				query.getSQL());
 		System.out.println(query.getSQL());
 	}
@@ -32,7 +34,7 @@ public class QueryDistanceTest extends QueryTest<QueryDistance> {
 		while (rs.next()) {
 			count++;
 		}
-		assertTrue(count >0);
+		Assert.assertTrue(count >0);
 	}
 
 }
