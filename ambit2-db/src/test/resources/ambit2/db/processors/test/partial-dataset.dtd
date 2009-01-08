@@ -12,7 +12,14 @@
     struc_dataset*,
     fp1024*,
     field_names*,
-    structure_fields*)>
+    structure_fields*,
+    template*,
+    study*,
+    study_fieldnames*,
+    template_def*,
+    study_conditions*,
+    experiment*,
+    study_results*)>
 
 <!ELEMENT users EMPTY>
 <!ATTLIST users
@@ -149,5 +156,59 @@
     idstructure CDATA #REQUIRED
     idfieldname CDATA #REQUIRED
     value CDATA #IMPLIED
+>
+
+<!ELEMENT template EMPTY>
+<!ATTLIST template
+    idtemplate CDATA #REQUIRED
+    name CDATA #IMPLIED
+    template CDATA #REQUIRED
+>
+
+<!ELEMENT study EMPTY>
+<!ATTLIST study
+    idstudy CDATA #REQUIRED
+    idtemplate CDATA #REQUIRED
+    name CDATA #IMPLIED
+>
+
+<!ELEMENT study_fieldnames EMPTY>
+<!ATTLIST study_fieldnames
+    id_fieldname CDATA #REQUIRED
+    name CDATA #IMPLIED
+    units CDATA #IMPLIED
+    fieldtype CDATA #IMPLIED
+    fieldmode CDATA #IMPLIED
+>
+
+<!ELEMENT template_def EMPTY>
+<!ATTLIST template_def
+    idtemplate CDATA #REQUIRED
+    id_fieldname CDATA #REQUIRED
+>
+
+<!ELEMENT study_conditions EMPTY>
+<!ATTLIST study_conditions
+    idstudy CDATA #REQUIRED
+    id_fieldname CDATA #REQUIRED
+    value CDATA #IMPLIED
+>
+
+<!ELEMENT experiment EMPTY>
+<!ATTLIST experiment
+    idexperiment CDATA #REQUIRED
+    idstudy CDATA #REQUIRED
+    idreference CDATA #REQUIRED
+    idstructure CDATA #REQUIRED
+    structure_type CDATA #REQUIRED
+    idstructure_parent CDATA #REQUIRED
+>
+
+<!ELEMENT study_results EMPTY>
+<!ATTLIST study_results
+    idexperiment CDATA #REQUIRED
+    id_fieldname CDATA #REQUIRED
+    value CDATA #IMPLIED
+    value_num CDATA #IMPLIED
 >
 
