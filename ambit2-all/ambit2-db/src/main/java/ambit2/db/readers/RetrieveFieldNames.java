@@ -10,7 +10,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class RetrieveFieldNames extends AbstractQuery<String, String, StringCondition> implements IRetrieval<String>{
-	protected static String sql = "select idfieldname,name from field_names";
+	public static String sql = "select idproperty,name from properties";
 		/**
 	 * 
 	 */
@@ -33,7 +33,7 @@ public class RetrieveFieldNames extends AbstractQuery<String, String, StringCond
 			}
 		}
 		public String getFieldID() {
-			return "idfieldname";
+			return "idproperty";
 		}
 		public String getValueID() {
 			return "name";

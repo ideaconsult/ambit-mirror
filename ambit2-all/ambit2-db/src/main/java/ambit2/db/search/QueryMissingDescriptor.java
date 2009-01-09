@@ -8,15 +8,12 @@ import ambit2.core.exceptions.AmbitException;
 
 /**
  * reads structures, for each there are no descriptors with given name and reference title.
- * <pre>	
- * select ... from structure where idstructure not in (select idstructure from dvalues join descriptors using(iddescriptor) join catalog_references using(idreference) where name=? and title=?)
- * </pre>
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
 public class QueryMissingDescriptor extends AbstractQuery<LiteratureEntry,String,NumberCondition> {
     public static String MISSING_DESCRIPTOR = 
-        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure where idstructure not in (select idstructure from dvalues join descriptors using(iddescriptor) join catalog_references using(idreference) where name=? and title=?)";
+        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure where idstructure not in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where name=? and title=?)";
 
 	public String getSQL() throws AmbitException {
 		return MISSING_DESCRIPTOR;

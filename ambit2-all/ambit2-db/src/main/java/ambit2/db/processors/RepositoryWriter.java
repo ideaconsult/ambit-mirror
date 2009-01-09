@@ -34,6 +34,8 @@ import java.util.List;
 
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
+import ambit2.db.SourceDataset;
+import ambit2.db.exceptions.DbAmbitException;
 
 /**
 <pre>
@@ -55,6 +57,44 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))";
 	protected PreparedStatement ps_structure;
 
+	protected static final String insert_dataset = "insert into struc_dataset SELECT ?,id_srcdataset from src_dataset where name=?";
+	protected PreparedStatement ps_dataset;	
+	
+	protected DbSrcDatasetWriter datasetWriter;
+	protected SourceDataset dataset;
+	
+	public RepositoryWriter() {
+		datasetWriter = new DbSrcDatasetWriter();
+	}
+	@Override
+	public void open() throws DbAmbitException {
+		super.open();
+		datasetWriter.open();
+	}
+	@Override
+	public synchronized void setConnection(Connection connection)
+			throws DbAmbitException {
+		super.setConnection(connection);
+		datasetWriter.setConnection(connection);
+	}
+	public SourceDataset getDataset() {
+		return dataset;
+	}
+	public void setDataset(SourceDataset dataset) {
+		this.dataset = dataset;
+	}
+	public void writeDataset(IStructureRecord structure) throws SQLException {
+		if (dataset == null) dataset = new SourceDataset("Default");
+		datasetWriter.write(dataset);
+		
+		ps_dataset.clearParameters();
+		ps_dataset.setInt(1,structure.getIdstructure());
+		ps_dataset.setString(2,dataset.getName());
+		ps_dataset.execute();
+		
+		
+		
+	}
 	public List<IStructureRecord> write(IStructureRecord structure) throws SQLException {
         //find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
@@ -84,8 +124,11 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         ps_structure.setString(3,structure.getFormat());
         ps_structure.executeUpdate();
         ResultSet rss = ps_structure.getGeneratedKeys();
-        while (rss.next()) 
-            sr.add(new StructureRecord(structure.getIdchemical(),rss.getInt(1),null,structure.getFormat()));
+        while (rss.next())  {
+        	StructureRecord record = new StructureRecord(structure.getIdchemical(),rss.getInt(1),null,structure.getFormat());
+        	writeDataset(record);
+            sr.add(record);
+        }
         rss.close();
         
         return sr;
@@ -94,17 +137,22 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected void prepareStatement(Connection connection) throws SQLException {
 		 ps_chemicals = connection.prepareStatement(insert_chemical,Statement.RETURN_GENERATED_KEYS);
 		 ps_structure = connection.prepareStatement(insert_structure,Statement.RETURN_GENERATED_KEYS);
-         ps_selectchemicals = connection.prepareStatement(select_chemical);         
+         ps_selectchemicals = connection.prepareStatement(select_chemical);
+         ps_dataset = connection.prepareStatement(insert_dataset);
+         datasetWriter.prepareStatement(connection);
 	}
 	public void close() throws SQLException {
         try {
+        if (ps_dataset != null)
+        	ps_dataset.close();
         if (ps_chemicals != null)
             ps_chemicals.close();
         if (ps_structure != null)
             ps_structure.close();
         if (ps_selectchemicals != null)
             ps_selectchemicals.close();        
-
+        if (datasetWriter != null)
+        	datasetWriter.close();
         } catch (SQLException x) {
             logger.error(x);
         }

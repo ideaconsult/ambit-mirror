@@ -41,9 +41,9 @@ public class QueryField extends AbstractQuery<String,String, StringCondition> {
 	 */
 	private static final long serialVersionUID = -5810564793012596407L;
 	public final static String sqlField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join structure_fields using(idstructure) join field_names as f using (idfieldname) where f.name=? and ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join values_string using(idstructure) join properties as f using (idproperty) where f.name=? and ";
 	public final static String sqlAnyField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join structure_fields using(idstructure) join field_names as f using (idfieldname) where ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join values_string using(idstructure) join properties as f using (idproperty) where ";
 	public QueryField() {
 		setFieldname("");
 		setCondition(StringCondition.getInstance("="));

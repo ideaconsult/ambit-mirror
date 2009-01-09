@@ -16,7 +16,7 @@ public class RetrieveField<F,V> extends AbstractQuery<String,IStructureRecord,EQ
 	 * 
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
-	protected final String sql = "SELECT idstructure,d.name,f.name,value from dictionary as d right join field_names as f using(iddictionary) join structure_fields using(idfieldname) where idstructure=? ";
+	protected final String sql = "SELECT idstructure,f.name,value from properties as f join values_string using(idproperty) where idstructure=? ";
 	public String getSQL() throws AmbitException {
 		if ("".equals(getFieldname()))
 			return sql;

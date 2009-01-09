@@ -10,12 +10,9 @@ public class ConnectionStatisticsProcessor extends ConnectionStatusProcessor {
 	protected static final String[] sql = {
 			"Select count(*) as 'Datasets' from src_dataset",
 			"Select count(*) as 'Chemical compounds' from chemicals",
-			"Select count(*) as 'Identifiers' from structure_fields",
+			"Select count(*) as 'Properties' from properties",
 			"Select count(*) as 'Literature references' from catalog_references",
 			"Select count(*) as 'Descriptor specifications' from descriptors",
-			"Select count(*) as 'Descriptor values' from dvalues",
-			"Select count(*) as 'Experimental results' from study_results",
-			"Select count(*) as 'Study types' from study",
 			"Select count(*) as 'Study templates' from template"
 	};
 	/**

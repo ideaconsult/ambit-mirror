@@ -29,59 +29,22 @@
 
 package ambit2.db.processors;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import java.util.Arrays;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 
 import ambit2.core.data.LiteratureEntry;
-import ambit2.db.exceptions.DbAmbitException;
 
 
 
-public class DbDescriptorWriter extends AbstractRepositoryWriter<DescriptorValue,DescriptorValue> {
+public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,DescriptorValue> {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = -358115974932302101L;
-	protected static final String select_descriptor = "SELECT iddescriptor,idreference,name,units,error,comments,islocal,idreference,title,url from descriptors join catalog_references using(idreference) where name=? and idreference=?";
-    protected static final String insert_descriptor = "INSERT IGNORE INTO descriptors (iddescriptor,idreference,name,units,error,comments,islocal) VALUES (null,?,?,?,?,?,0)";
-    protected PreparedStatement ps_descriptor;
-    protected PreparedStatement ps_selectdescriptor;
-    protected DbReferenceWriter referenceWriter;
 
-    public synchronized DbReferenceWriter getReferenceWriter() {
-        return referenceWriter;
-    }
-
-    public synchronized void setReferenceWriter(DbReferenceWriter referenceWriter) {
-        this.referenceWriter = referenceWriter;
-    }
-
-    @Override
-    protected void prepareStatement(Connection connection) throws SQLException {
-        ps_descriptor = connection.prepareStatement(insert_descriptor,Statement.RETURN_GENERATED_KEYS);
-        ps_selectdescriptor = connection.prepareStatement(select_descriptor);
-    }
-    @Override
-    public synchronized void setConnection(Connection connection) throws DbAmbitException {
-        super.setConnection(connection);
-        if (referenceWriter == null) setReferenceWriter(new DbReferenceWriter());
-        referenceWriter.setConnection(connection);
-       
-    }
-    @Override
-    public void open() throws DbAmbitException {
-    	super.open();
-        referenceWriter.open();    	
-    }
-    /**
-     *  INSERT IGNORE INTO descriptors (iddescriptor,idreference,name,units,error,comments,islocal) VALUES (null,?,?,?,?,?,0)";
-     */
+	/*
     @Override
     public DescriptorValue write(DescriptorValue descriptor) throws SQLException {
 
@@ -107,8 +70,7 @@ public class DbDescriptorWriter extends AbstractRepositoryWriter<DescriptorValue
                 ps_descriptor.setInt(1,le.getId());
                 ps_descriptor.setString(2,names[i]);
                 ps_descriptor.setNull(3,Types.VARCHAR);
-                ps_descriptor.setNull(4,Types.FLOAT);
-                ps_descriptor.setString(5,descriptor.getSpecification().getImplementationIdentifier());
+                ps_descriptor.setString(4,descriptor.getSpecification().getImplementationIdentifier());
                 ps_descriptor.executeUpdate();
                 ResultSet rs = ps_descriptor.getGeneratedKeys();
     
@@ -121,22 +83,28 @@ public class DbDescriptorWriter extends AbstractRepositoryWriter<DescriptorValue
 
         return descriptor;
     }
-    
-    protected void descriptorEntry(DescriptorValue descriptor,int iddescriptor,int index) throws SQLException {
-        
+    */
+    @Override
+    protected DescriptorValue transform(DescriptorValue target) {
+    	return target;
     }
-    
-    public void close() throws SQLException {
-        if (ps_descriptor != null)
-            ps_descriptor.close();
-        ps_descriptor = null;
-        
-        if (ps_selectdescriptor != null)
-            ps_selectdescriptor.close();
-        ps_selectdescriptor = null;        
-        super.close();
-    }    
-
+    @Override
+    protected void descriptorEntry(DescriptorValue target, int idproperty,
+    		String propertyName, int propertyIndex) throws SQLException {
+    	
+    }
+	@Override
+	protected String getComments(DescriptorValue descriptor) {
+		return descriptor.getSpecification().getImplementationIdentifier();
+	}
+	@Override
+	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {
+		return Arrays.asList(descriptor.getNames());
+	}
+	@Override
+	protected LiteratureEntry getReference(DescriptorValue descriptor) {
+		return new LiteratureEntry(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
+	}
 
 
 }
