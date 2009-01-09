@@ -32,7 +32,8 @@
  */
 package ambit2.db.processors.test;
 
-import static org.junit.Assert.*;
+import java.io.StringReader;
+
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -43,15 +44,22 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import ambit2.core.data.IStructureRecord;
+import ambit2.core.data.StringDescriptorResultType;
 import ambit2.core.data.StructureRecord;
+import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.db.RepositoryReader;
 import ambit2.db.processors.DbDescriptorValuesWriter;
-import ambit2.db.processors.DbDescriptorWriter;
+import ambit2.db.processors.PropertyValuesWriter;
 
 /**
  * @author nina
@@ -114,11 +122,11 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 	 */
 	@Test
 	public void testWriteDescriptorValue() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");			
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM DESCRIPTORS");	
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
 		Assert.assertEquals(0,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM DVALUES");	
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(0,values.getRowCount());
 		
         writer.setConnection(c.getConnection());
@@ -126,29 +134,121 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         XLogPDescriptor xlogp = new XLogPDescriptor();
 		writer.setStructure(new StructureRecord(7,100211,"",""));
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM DESCRIPTORS");	
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
 		Assert.assertEquals(1,names.getRowCount());
-		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM DVALUES");	
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(1,values.getRowCount());	        
         
         DescriptorValue v = new DescriptorValue(
                 new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
                 new String[] {},
                 new Object[] {},
-                new DoubleResult(5),
+                new DoubleResult(5.01),
                 new String[] {"XLogP"}
                 );
 		writer.setStructure(new StructureRecord(10,100214,"",""));        
         writer.write(v);
+        //one more time
+        writer.write(v);        
         c.close();
         
         c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM DESCRIPTORS");	
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
 		Assert.assertEquals(2,names.getRowCount());
-		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM DVALUES WHERE idstructure=100214");	
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM VALUES_NUMBER WHERE idstructure=100214");	
 		Assert.assertEquals(1,values.getRowCount());
-		Assert.assertEquals(5.0,(Double)DataType.DOUBLE.typeCast(values.getValue(0,"value")),1E-10);	
+		Assert.assertEquals(5.01,(Double)DataType.DOUBLE.typeCast(values.getValue(0,"value")),1E-4);	
 		c.close();
 	}
 
+	@Test
+	public void testWriteStringDescriptorValue() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		Assert.assertEquals(0,names.getRowCount());
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
+		Assert.assertEquals(0,values.getRowCount());
+		
+        writer.setConnection(c.getConnection());
+        writer.open();
+        XLogPDescriptor xlogp = new XLogPDescriptor();
+		writer.setStructure(new StructureRecord(7,100211,"",""));
+        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		Assert.assertEquals(1,names.getRowCount());
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
+		Assert.assertEquals(1,values.getRowCount());	        
+        
+        DescriptorValue v = new DescriptorValue(
+                new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
+                new String[] {},
+                new Object[] {},
+                new StringDescriptorResultType("TESTVALUE"),
+                new String[] {"XLogP"}
+                );
+		writer.setStructure(new StructureRecord(10,100214,"",""));        
+        writer.write(v);
+        //one more time
+        writer.write(v);        
+        c.close();
+        
+        c = getConnection();
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		Assert.assertEquals(2,names.getRowCount());
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM VALUES_STRING WHERE idstructure=100214");	
+		Assert.assertEquals(1,values.getRowCount());
+		Assert.assertEquals("TESTVALUE",values.getValue(0,"value"));	
+		c.close();
+	}	
+	
+	@Test
+	public void testReadWriteProperty() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/experiments-datasets.xml");
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values");
+		Assert.assertEquals(0,names.getRowCount());
+		
+		XLogPDescriptor xlogp = new XLogPDescriptor();
+		
+        RepositoryReader reader = new RepositoryReader();
+        reader.setConnection(c.getConnection());
+
+        writer.setConnection(c.getConnection());
+        writer.open();
+        reader.open();
+        int records = 0;
+		long now = System.currentTimeMillis();
+		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IStructureRecord o  ;
+		while (reader.hasNext()) {
+			o = reader.next();
+			String content = reader.getStructure(o.getIdstructure());
+			if (content == null) continue;
+			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);
+			
+			if (mReader.hasNext()) {
+				Object mol = mReader.next();
+				if (mol instanceof IMolecule) {
+					writer.setStructure(o);
+					writer.write(xlogp.calculate((IMolecule)mol));
+				}
+			}
+			o.clear();
+			mReader.close();
+			mReader = null;
+			records ++;
+		}
+		reader.close();
+		writer.close();
+		now = System.currentTimeMillis() - now;
+		
+		c = getConnection();
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_number");
+		Assert.assertEquals(2,names.getRowCount());		
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values  where idstructure in (105095,109287)");
+		Assert.assertEquals(2,names.getRowCount());
+		c.close();
+		
+	}		
 }
