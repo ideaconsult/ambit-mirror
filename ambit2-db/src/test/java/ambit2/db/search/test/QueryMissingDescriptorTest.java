@@ -4,15 +4,17 @@ import java.sql.ResultSet;
 
 import junit.framework.Assert;
 
+import org.junit.Test;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 
 import ambit2.core.data.LiteratureEntry;
 import ambit2.db.search.QueryMissingDescriptor;
 
 public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor> {
+	@Test
 	public void test() throws Exception {
 		Assert.assertEquals(
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure where idstructure not in (select idstructure from dvalues join descriptors using(iddescriptor) join catalog_references using(idreference) where name=? and title=?)",
+		QueryMissingDescriptor.MISSING_DESCRIPTOR,
 		query.getSQL());
 	}
 	@Override
