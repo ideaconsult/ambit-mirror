@@ -8,6 +8,9 @@
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
   <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>
   <catalog_references idreference="4" title="XLogP another implementation" url="XLogP another implementation"/>
+  <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE"/>
+  <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
+  <catalog_references idreference="7" title="EINECS" url="EINECS"/>
   <dictionary iddictionary="1" idparent="0" name="CAS" idreference="1"/>
   <dictionary iddictionary="2" idparent="0" name="IUPAC Name" idreference="2"/>
   <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
@@ -70,163 +73,26 @@ sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S
 Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW
 QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="NA"/>
-  <descriptors iddescriptor="1" idreference="3" name="XLogP" units="" error="0.0" comments="Test entry for XLogP" islocal="false"/>
-  <descriptors iddescriptor="2" idreference="4" name="XLogP" units="" error="0.0" comments="XLogP another implementation" islocal="false"/>
-  <dvalues iddescriptor="1" idstructure="100211" value="5.2" error="0.0" status="OK" user_name="guest"/>
-  <dvalues iddescriptor="1" idstructure="100214" value="-3.0" error="0.0" status="OK" user_name="guest"/>
-  <dvalues iddescriptor="1" idstructure="129345" value="3.0" error="0.0" status="OK" user_name="guest"/>
-  <dvalues iddescriptor="2" idstructure="100211" value="5.5" error="0.0" status="OK" user_name="guest"/>
-  <dvalues iddescriptor="2" idstructure="100215" value="1.5" error="0.0" status="OK" user_name="guest"/>
-  <dvalues iddescriptor="2" idstructure="129345" value="3.5" error="0.0" status="OK" user_name="guest"/>
+ <properties/>
+  <template idtemplate="1" name="BCF"/>
+  <template_def idtemplate="1" idproperty="1"/>
+  <template_def idtemplate="1" idproperty="2"/>
+  <template_def idtemplate="1" idproperty="3"/>
+  <template_def idtemplate="1" idproperty="4"/>
+  <template_def idtemplate="1" idproperty="5"/>
+  <template_def idtemplate="1" idproperty="6"/>
+  <template_def idtemplate="1" idproperty="7"/>
+  <template_def idtemplate="1" idproperty="8"/>
+  <template_def idtemplate="1" idproperty="9"/>
+  <template_def idtemplate="1" idproperty="10"/>
+  <tuples/>
+  <property_number/>
+  <property_string/>
+  <property_values/>
   <src_dataset/>
   <struc_dataset/>
   <fp1024 idchemical="7" fp1="0" fp2="274877906944" fp3="5242896" fp4="0" fp5="0" fp6="33554432" fp7="1280" fp8="281474976710656" fp9="5368709120" fp10="2467972595799048192" fp11="0" fp12="299479479615490" fp13="6917529027641081856" fp14="562949953421312" fp15="0" fp16="0" time="0" bc="22" status="invalid"/>
   <fp1024 idchemical="10" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="274877906944" fp13="0" fp14="0" fp15="0" fp16="128" time="0" bc="2" status="invalid"/>
   <fp1024 idchemical="11" fp1="0" fp2="17594333528064" fp3="140746145400832" fp4="2305843009283162112" fp5="76561331104268288" fp6="70368744177728" fp7="0" fp8="4521191813414912" fp9="4613937822536040449" fp10="3602879701913174016" fp11="72057628397797376" fp12="1374389567488" fp13="0" fp14="4096" fp15="9663676417" fp16="524288" time="16" bc="37" status="invalid"/>
   <fp1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="70368744177664" fp16="0" time="0" bc="1" status="invalid"/>
-  <field_names idfieldname="1" name="IsChiral"/>
-  <field_names idfieldname="2" name="InChI_key"/>
-  <field_names idfieldname="3" name="Num_MetalAtoms"/>
-  <field_names idfieldname="4" name="Num_UnknownStereoAtoms"/>
-  <field_names idfieldname="5" name="Index_Name"/>
-  <field_names idfieldname="6" name="InChI_AuxInfo"/>
-  <field_names idfieldname="7" name="Num_NegativeAtoms"/>
-  <field_names idfieldname="8" name="SMILES"/>
-  <field_names idfieldname="9" name="EINECS_Name"/>
-  <field_names idfieldname="10" name="Canonical_Smiles"/>
-  <field_names idfieldname="11" name="EINECS_MF"/>
-  <field_names idfieldname="12" name="Molecular_Formula"/>
-  <field_names idfieldname="13" name="Num_UnknownTrueStereoAtoms"/>
-  <field_names idfieldname="14" name="Num_TrueStereoAtoms"/>
-  <field_names idfieldname="15" name="CAS"/>
-  <field_names idfieldname="16" name="NumberOfTautomers"/>
-  <field_names idfieldname="17" name="Quality_Label"/>
-  <field_names idfieldname="18" name="InChI"/>
-  <field_names idfieldname="19" name="CanonicalTautomer"/>
-  <field_names idfieldname="20" name="Molecular_Weight"/>
-  <field_names idfieldname="21" name="Num_StereoAtoms"/>
-  <field_names idfieldname="22" name="Num_UnknownStereoBonds"/>
-  <field_names idfieldname="23" name="FormalCharge"/>
-  <field_names idfieldname="24" name="Num_Fragments"/>
-  <field_names idfieldname="25" name="EINECS"/>
-  <field_names idfieldname="26" name="Num_Atoms"/>
-  <field_names idfieldname="27" name="Num_StereoBonds"/>
-  <field_names idfieldname="28" name="CoordDimension"/>
-  <field_names idfieldname="29" name="Num_PositiveAtoms"/>
-  <field_names idfieldname="30" name="IUPAC_Name"/>
-  <field_names idfieldname="31" name="Message_Name"/>
-  <field_names idfieldname="32" name="Index_name"/>
-  <field_names idfieldname="33" name="IUPAC_name"/>
-  <field_names idfieldname="34" name="TooManyTautomers"/>
-  <field_names idfieldname="35" name="Common_Name"/>
-  <field_names idfieldname="36" name="Smiles"/>
-  <structure_fields idstructure="100211" idfieldname="1" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="2" value="IKNSDPVLAJQDTH-VEGGDSSOAO"/>
-  <structure_fields idstructure="100211" idfieldname="3" value="1"/>
-  <structure_fields idstructure="100211" idfieldname="4" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="6" value="AuxInfo=1/1/N:7,11,6,10,5,4,3,2,8,9;17,21,16,20,15,14,13,12,18,19;1/E:2*(9,10);/rA:21Sn+2CCCCCCOO-CCCCCCCCOO-CC/rB:;s2;s3;s4;s5;s6;d2;s2;s3;s10;;s12;s13;s14;s15;s16;d12;s12;s13;s20;/rC:0,-1.9809,0;3.7716,-1.347,0;4.9284,-1.9809,0;6.0694,-1.347,0;7.2263,-1."/>
-  <structure_fields idstructure="100211" idfieldname="7" value="2"/>
-  <structure_fields idstructure="100211" idfieldname="9" value="tin bis(2-ethylhexanoate)"/>
-  <structure_fields idstructure="100211" idfieldname="10" value="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
-  <structure_fields idstructure="100211" idfieldname="11" value="C8H16O2.1/2Sn"/>
-  <structure_fields idstructure="100211" idfieldname="12" value="C16H34O4Sn"/>
-  <structure_fields idstructure="100211" idfieldname="13" value="2"/>
-  <structure_fields idstructure="100211" idfieldname="14" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="15" value="301-10-0"/>
-  <structure_fields idstructure="100211" idfieldname="17" value="checked_by_ecb"/>
-  <structure_fields idstructure="100211" idfieldname="18" value="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2"/>
-  <structure_fields idstructure="100211" idfieldname="20" value="409.14875"/>
-  <structure_fields idstructure="100211" idfieldname="21" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="22" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="23" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="24" value="3"/>
-  <structure_fields idstructure="100211" idfieldname="25" value="206-108-6"/>
-  <structure_fields idstructure="100211" idfieldname="26" value="21"/>
-  <structure_fields idstructure="100211" idfieldname="27" value="0"/>
-  <structure_fields idstructure="100211" idfieldname="28" value="2"/>
-  <structure_fields idstructure="100211" idfieldname="29" value="1"/>
-  <structure_fields idstructure="100211" idfieldname="31" value="Structure contains group(s) not supported in current version!"/>
-  <structure_fields idstructure="100214" idfieldname="1" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="2" value="BFXAWOHHDUIALU-REWHXWOFAS"/>
-  <structure_fields idstructure="100214" idfieldname="3" value="1"/>
-  <structure_fields idstructure="100214" idfieldname="4" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="5" value="hydrofluoric acid, fluoride, sodium salt (1:1:1)"/>
-  <structure_fields idstructure="100214" idfieldname="6" value="AuxInfo=1/1/N:1;2;3/rA:3FF-Na+/rB:;;/rC:1.4458,0,0;0,-8.5542,0;10,-8.5542,0;"/>
-  <structure_fields idstructure="100214" idfieldname="7" value="1"/>
-  <structure_fields idstructure="100214" idfieldname="8" value="[Na+].[F-].F"/>
-  <structure_fields idstructure="100214" idfieldname="9" value="sodium hydrogendifluoride"/>
-  <structure_fields idstructure="100214" idfieldname="10" value="F.[F-].[Na+]"/>
-  <structure_fields idstructure="100214" idfieldname="11" value="F2HNa"/>
-  <structure_fields idstructure="100214" idfieldname="12" value="F2HNa"/>
-  <structure_fields idstructure="100214" idfieldname="13" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="14" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="15" value="1333-83-1"/>
-  <structure_fields idstructure="100214" idfieldname="17" value="checked_by_ecb"/>
-  <structure_fields idstructure="100214" idfieldname="18" value="InChI=1/2FH.Na/h2*1H;/q;;+1/p-1"/>
-  <structure_fields idstructure="100214" idfieldname="20" value="61.99451"/>
-  <structure_fields idstructure="100214" idfieldname="21" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="22" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="23" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="24" value="3"/>
-  <structure_fields idstructure="100214" idfieldname="25" value="215-608-3"/>
-  <structure_fields idstructure="100214" idfieldname="26" value="3"/>
-  <structure_fields idstructure="100214" idfieldname="27" value="0"/>
-  <structure_fields idstructure="100214" idfieldname="28" value="2"/>
-  <structure_fields idstructure="100214" idfieldname="29" value="1"/>
-  <structure_fields idstructure="100214" idfieldname="30" value="sodium fluoride hydrofluoride"/>
-  <structure_fields idstructure="100215" idfieldname="1" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="2" value="JHYNXXDQQHTCHJ-REWHXWOFAX"/>
-  <structure_fields idstructure="100215" idfieldname="3" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="4" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="5" value="phosphonium, ethyltriphenyl-, bromide (1:1)"/>
-  <structure_fields idstructure="100215" idfieldname="6" value="AuxInfo=1/1/N:3,2,5,11,17,4,6,10,12,16,18,9,7,15,13,21,19,8,14,20,1;22/E:(3,4,5)(6,7,8,9,10,11)(12,13,14,15,16,17)(18,19,20);/CRV:21+1;/rA:22P+CCCCCCCCCCCCCCCCCCCCBr-/rB:s1;s2;;s4;d-5;s6;s1d+7;d-4s8;;s10;d-11;s12;s1d+13;d-10s14;;s16;d-17;s18;s1d+19;d-16s20"/>
-  <structure_fields idstructure="100215" idfieldname="7" value="1"/>
-  <structure_fields idstructure="100215" idfieldname="8" value="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"/>
-  <structure_fields idstructure="100215" idfieldname="9" value="ethyltriphenylfosfonium bromide"/>
-  <structure_fields idstructure="100215" idfieldname="10" value="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"/>
-  <structure_fields idstructure="100215" idfieldname="11" value="C20H20P.Br"/>
-  <structure_fields idstructure="100215" idfieldname="12" value="C20H20BrP"/>
-  <structure_fields idstructure="100215" idfieldname="13" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="14" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="15" value="1530-32-1"/>
-  <structure_fields idstructure="100215" idfieldname="17" value="checked_by_ecb"/>
-  <structure_fields idstructure="100215" idfieldname="18" value="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1"/>
-  <structure_fields idstructure="100215" idfieldname="20" value="371.25056"/>
-  <structure_fields idstructure="100215" idfieldname="21" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="22" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="23" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="24" value="2"/>
-  <structure_fields idstructure="100215" idfieldname="25" value="216-223-3"/>
-  <structure_fields idstructure="100215" idfieldname="26" value="22"/>
-  <structure_fields idstructure="100215" idfieldname="27" value="0"/>
-  <structure_fields idstructure="100215" idfieldname="28" value="2"/>
-  <structure_fields idstructure="100215" idfieldname="29" value="1"/>
-  <structure_fields idstructure="100215" idfieldname="30" value="ethyl(triphenyl)phosphonium bromide"/>
-  <structure_fields idstructure="129345" idfieldname="1" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="2" value="XEEYBQQBJWHFJM-UHFFFAOYAG"/>
-  <structure_fields idstructure="129345" idfieldname="3" value="1"/>
-  <structure_fields idstructure="129345" idfieldname="4" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="5" value="Iron"/>
-  <structure_fields idstructure="129345" idfieldname="6" value="AuxInfo=1/0/N:1/rA:1Fe/rB:/rC:;"/>
-  <structure_fields idstructure="129345" idfieldname="7" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="9" value="iron"/>
-  <structure_fields idstructure="129345" idfieldname="10" value="[Fe]"/>
-  <structure_fields idstructure="129345" idfieldname="11" value="Fe"/>
-  <structure_fields idstructure="129345" idfieldname="12" value="Fe"/>
-  <structure_fields idstructure="129345" idfieldname="13" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="14" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="15" value="7439-89-6"/>
-  <structure_fields idstructure="129345" idfieldname="17" value="VeryHigh"/>
-  <structure_fields idstructure="129345" idfieldname="18" value="InChI=1/Fe"/>
-  <structure_fields idstructure="129345" idfieldname="20" value="55.84499"/>
-  <structure_fields idstructure="129345" idfieldname="21" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="22" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="23" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="24" value="1"/>
-  <structure_fields idstructure="129345" idfieldname="25" value="231-096-4"/>
-  <structure_fields idstructure="129345" idfieldname="26" value="1"/>
-  <structure_fields idstructure="129345" idfieldname="27" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="28" value="2"/>
-  <structure_fields idstructure="129345" idfieldname="29" value="0"/>
-  <structure_fields idstructure="129345" idfieldname="30" value="iron"/>
 </dataset>

@@ -6,20 +6,17 @@
     dictionary*,
     chemicals*,
     structure*,
-    descriptors*,
-    dvalues*,
+    properties*,
+    template*,
+    template_def*,
+    tuples*,
+    property_number*,
+    property_string*,
+    property_values*,
+    property_tuples*,
     src_dataset*,
     struc_dataset*,
-    fp1024*,
-    field_names*,
-    structure_fields*,
-    template*,
-    study*,
-    study_fieldnames*,
-    template_def*,
-    study_conditions*,
-    experiment*,
-    study_results*)>
+    fp1024*)>
 
 <!ELEMENT users EMPTY>
 <!ATTLIST users
@@ -85,25 +82,63 @@
     type_structure CDATA #REQUIRED
 >
 
-<!ELEMENT descriptors EMPTY>
-<!ATTLIST descriptors
-    iddescriptor CDATA #REQUIRED
+<!ELEMENT properties EMPTY>
+<!ATTLIST properties
+    idproperty CDATA #REQUIRED
     idreference CDATA #REQUIRED
     name CDATA #REQUIRED
     units CDATA #REQUIRED
-    error CDATA #REQUIRED
     comments CDATA #REQUIRED
     islocal CDATA #REQUIRED
 >
 
-<!ELEMENT dvalues EMPTY>
-<!ATTLIST dvalues
-    iddescriptor CDATA #REQUIRED
+<!ELEMENT template EMPTY>
+<!ATTLIST template
+    idtemplate CDATA #REQUIRED
+    name CDATA #IMPLIED
+>
+
+<!ELEMENT template_def EMPTY>
+<!ATTLIST template_def
+    idtemplate CDATA #REQUIRED
+    idproperty CDATA #REQUIRED
+    order CDATA #REQUIRED
+>
+
+<!ELEMENT tuples EMPTY>
+<!ATTLIST tuples
+    idtuple CDATA #REQUIRED
+    idtemplate CDATA #REQUIRED
+>
+
+<!ELEMENT property_number EMPTY>
+<!ATTLIST property_number
+    idvalue CDATA #REQUIRED
+    idtype CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!ELEMENT property_string EMPTY>
+<!ATTLIST property_string
+    idvalue CDATA #REQUIRED
+    idtype CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!ELEMENT property_values EMPTY>
+<!ATTLIST property_values
+    id CDATA #REQUIRED
+    idproperty CDATA #REQUIRED
     idstructure CDATA #REQUIRED
-    value CDATA #IMPLIED
-    error CDATA #IMPLIED
+    idvalue CDATA #REQUIRED
     status CDATA #REQUIRED
     user_name CDATA #REQUIRED
+>
+
+<!ELEMENT property_tuples EMPTY>
+<!ATTLIST property_tuples
+    idtuple CDATA #REQUIRED
+    id CDATA #REQUIRED
 >
 
 <!ELEMENT src_dataset EMPTY>
@@ -142,73 +177,5 @@
     time CDATA #IMPLIED
     bc CDATA #REQUIRED
     status CDATA #REQUIRED
->
-
-<!ELEMENT field_names EMPTY>
-<!ATTLIST field_names
-    idfieldname CDATA #REQUIRED
-    name CDATA #REQUIRED
-    iddictionary CDATA #IMPLIED
->
-
-<!ELEMENT structure_fields EMPTY>
-<!ATTLIST structure_fields
-    idstructure CDATA #REQUIRED
-    idfieldname CDATA #REQUIRED
-    value CDATA #IMPLIED
->
-
-<!ELEMENT template EMPTY>
-<!ATTLIST template
-    idtemplate CDATA #REQUIRED
-    name CDATA #IMPLIED
-    template CDATA #REQUIRED
->
-
-<!ELEMENT study EMPTY>
-<!ATTLIST study
-    idstudy CDATA #REQUIRED
-    idtemplate CDATA #REQUIRED
-    name CDATA #IMPLIED
->
-
-<!ELEMENT study_fieldnames EMPTY>
-<!ATTLIST study_fieldnames
-    id_fieldname CDATA #REQUIRED
-    name CDATA #IMPLIED
-    units CDATA #IMPLIED
-    fieldtype CDATA #IMPLIED
-    fieldmode CDATA #IMPLIED
->
-
-<!ELEMENT template_def EMPTY>
-<!ATTLIST template_def
-    idtemplate CDATA #REQUIRED
-    id_fieldname CDATA #REQUIRED
->
-
-<!ELEMENT study_conditions EMPTY>
-<!ATTLIST study_conditions
-    idstudy CDATA #REQUIRED
-    id_fieldname CDATA #REQUIRED
-    value CDATA #IMPLIED
->
-
-<!ELEMENT experiment EMPTY>
-<!ATTLIST experiment
-    idexperiment CDATA #REQUIRED
-    idstudy CDATA #REQUIRED
-    idreference CDATA #REQUIRED
-    idstructure CDATA #REQUIRED
-    structure_type CDATA #REQUIRED
-    idstructure_parent CDATA #REQUIRED
->
-
-<!ELEMENT study_results EMPTY>
-<!ATTLIST study_results
-    idexperiment CDATA #REQUIRED
-    id_fieldname CDATA #REQUIRED
-    value CDATA #IMPLIED
-    value_num CDATA #IMPLIED
 >
 
