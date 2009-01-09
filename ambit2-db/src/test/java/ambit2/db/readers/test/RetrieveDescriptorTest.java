@@ -1,9 +1,9 @@
-/* RetrieveFieldNamesTest.java
+/* RetrieveDescriptorTest.java
  * Author: nina
- * Date: Dec 29, 2008
+ * Date: Jan 9, 2009
  * Revision: 0.1 
  * 
- * Copyright (C) 2005-2008  Ideaconsult Ltd.
+ * Copyright (C) 2005-2009  Ideaconsult Ltd.
  * 
  * Contact: nina
  * 
@@ -29,84 +29,66 @@
 
 package ambit2.db.readers.test;
 
+import static org.junit.Assert.fail;
+
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.qsar.result.DoubleResult;
 
+import ambit2.core.data.StructureRecord;
+import ambit2.db.SourceDataset;
 import ambit2.db.readers.IRetrieval;
-import ambit2.db.readers.RetrieveFieldNames;
-import ambit2.db.search.IQueryObject;
+import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.readers.RetrieveDescriptor;
 import ambit2.db.search.QueryExecutor;
 
-/**
- * A dbunit test for {@link RetrieveFieldNames}
- * @author nina
- *
- */
-public class RetrieveFieldNamesTest extends RetrieveTest<String> {
+public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue>{
 
-	@Override
-	protected IRetrieval<String> createQuery() {
-		RetrieveFieldNames q = new RetrieveFieldNames();
-		return q;
-	}
-	@Test
-	public void testGetParameters() throws Exception {
-		Assert.assertNull(((IQueryObject)query).getParameters());
-	}
-
-	@Test
-	public void testGetSQL() throws Exception {
-		Assert.assertEquals(RetrieveFieldNames.sql, ((IQueryObject)query).getSQL());
-	}
 
 	@Test
 	public void testGetObject() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");		
+		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM values_number");		
 		Assert.assertEquals(3,names.getRowCount());
 
-		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();		
+		QueryExecutor<RetrieveDescriptor> qe = new QueryExecutor<RetrieveDescriptor>();		
 		qe.setConnection(c.getConnection());
-
-		ResultSet rs = qe.process((RetrieveFieldNames)query);
-		
-		int count = 0; 
+		ResultSet rs = qe.process((RetrieveDescriptor)query);
+		int count = 0;
 		while (rs.next()) {
-			names = 	c.createQueryTable("EXPECTED_NAME","SELECT * FROM properties where name='"+query.getObject(rs)+"'");		
-			Assert.assertEquals(1,names.getRowCount());
+			DescriptorValue value = query.getObject(rs);
+			double d = ((DoubleResult)value.getValue()).doubleValue();
+			String[] descrnames = value.getNames();
+			for (String name: descrnames) {
+
+				names = c.createQueryTable("EXPECTED_DATASETS","SELECT value,name FROM properties join values_number using(idproperty) where name='"+name +"' and value="+d );		
+				Assert.assertEquals(1,names.getRowCount());
+			}
 			count++;
 		}
-		Assert.assertTrue(count>0);
+		Assert.assertEquals(2,count);
 		rs.close();
 		qe.close();
 		c.close();
-	}	
-
-	@Test
-	public void testGetFieldID() {
-		Assert.assertEquals("idproperty", ((RetrieveFieldNames)query).getFieldID());
 	}
 
-	@Test
-	public void testGetValueID() {
-		Assert.assertEquals("name", ((RetrieveFieldNames)query).getValueID());
-	}
-
-	@Test
-	public void testGetFieldType() throws Exception {
-		Assert.assertEquals(String.class,((RetrieveFieldNames)query).getFieldType());
-	}
-
-	@Test
-	public void testGetValueType() {
-		Assert.assertEquals(String.class,((RetrieveFieldNames)query).getValueType());
+	@Override
+	protected IRetrieval<DescriptorValue> createQuery() {
+		RetrieveDescriptor q = new RetrieveDescriptor();
+		q.setValue(new StructureRecord(0,100215,"",""));
+		return q;
 	}
 
 }
