@@ -29,6 +29,7 @@
 
 package ambit2.db.processors.test;
 
+import java.io.StringReader;
 import java.util.Hashtable;
 
 import junit.framework.Assert;
@@ -36,9 +37,16 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
-import ambit2.db.processors.PropertyWriter;
+import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.db.RepositoryReader;
+import ambit2.db.processors.BatchDBProcessor;
+import ambit2.db.processors.PropertyValuesWriter;
 
 public class PropertyWriterTest  extends DbUnitTest {
 
@@ -47,12 +55,12 @@ public class PropertyWriterTest  extends DbUnitTest {
 	@Test
 	public void testWrite() throws Exception {
 		
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();
         
-		ITable names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM structure_fields where idstructure=100211");
-		Assert.assertEquals(26,names.getRowCount());
-        PropertyWriter writer = new PropertyWriter();
+		ITable names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values where idstructure=100211");
+		Assert.assertEquals(0,names.getRowCount());
+        PropertyValuesWriter writer = new PropertyValuesWriter();
 
 		StructureRecord record = new StructureRecord(7,100211,"","");
 		record.setProperties(new Hashtable());
@@ -62,21 +70,71 @@ public class PropertyWriterTest  extends DbUnitTest {
         writer.setConnection(c.getConnection());
         writer.open();
         writer.write(record);
+        //second time to test how it behaves :)
+        writer.write(record);
         c.close();
         
         c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM structure_fields where idstructure=100211");
-		Assert.assertEquals(28,names.getRowCount());
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM values_number where idstructure=100211");
+		Assert.assertEquals(1,names.getRowCount());
 
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM structure_fields join field_names using(idfieldname) where idstructure=100211 and name='Property1'");
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM values_string join properties using(idproperty) where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals("Value1",names.getValue(0,"value"));
 	
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM structure_fields join field_names using(idfieldname) where idstructure=100211 and name='Property2'");
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM values_number join properties using(idproperty) where idstructure=100211 and name='Property2'");
 		Assert.assertEquals(1,names.getRowCount());
-		Assert.assertEquals("0.99",names.getValue(0,"value"));
+		Assert.assertEquals(0.99,Double.parseDouble(names.getValue(0,"value").toString()));
 		
 		c.close();
 	}
+	
 
+	@Test
+	public void testReadWriteProperty() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/experiments-datasets.xml");
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values");
+		Assert.assertEquals(0,names.getRowCount());
+		
+	
+		
+        RepositoryReader reader = new RepositoryReader();
+        reader.setConnection(c.getConnection());
+        PropertyValuesWriter propertyWriter = new PropertyValuesWriter();
+        propertyWriter.setConnection(c.getConnection());
+        propertyWriter.open();
+        reader.open();
+        int records = 0;
+		long now = System.currentTimeMillis();
+		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IStructureRecord o  ;
+		while (reader.hasNext()) {
+			o = reader.next();
+			String content = reader.getStructure(o.getIdstructure());
+			if (content == null) continue;
+			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);
+			
+			if (mReader.hasNext()) {
+				Object mol = mReader.next();
+				if (mol instanceof IMolecule) {
+					o.setProperties(((IMolecule)mol).getProperties());
+					propertyWriter.write(o);
+				}
+			}
+			o.clear();
+			mReader.close();
+			mReader = null;
+			records ++;
+		}
+		reader.close();
+		propertyWriter.close();
+		now = System.currentTimeMillis() - now;
+		
+		c = getConnection();
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values  where idstructure in (105095,109287)");
+		Assert.assertEquals(26,names.getRowCount());
+		c.close();
+		
+	}	
 }

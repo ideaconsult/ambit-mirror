@@ -47,11 +47,11 @@ import ambit2.db.processors.DbSrcDatasetWriter;
 public class DbSrcDatasetWriterTest extends DbUnitTest {
 	@Test
     public void test() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();
         
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset");
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(0,names.getRowCount());
         DbSrcDatasetWriter writer = new DbSrcDatasetWriter();
 
         writer.setConnection(c.getConnection());

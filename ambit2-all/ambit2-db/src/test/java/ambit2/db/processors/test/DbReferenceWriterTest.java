@@ -46,10 +46,10 @@ import ambit2.db.processors.DbReferenceWriter;
 public class DbReferenceWriterTest extends DbUnitTest {
 	@Test
     public void test() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();	
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM catalog_references");
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(7,names.getRowCount());
 		
         DbReferenceWriter writer = new DbReferenceWriter();
 
@@ -61,7 +61,7 @@ public class DbReferenceWriterTest extends DbUnitTest {
 
         
 		names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM catalog_references");
-		Assert.assertEquals(4,names.getRowCount());
+		Assert.assertEquals(8,names.getRowCount());
 		names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT title,url FROM catalog_references where title='title' and url='url'");
 		Assert.assertEquals(1,names.getRowCount());		
         c.close();
