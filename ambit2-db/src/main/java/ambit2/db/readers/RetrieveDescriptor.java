@@ -21,12 +21,13 @@ public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStru
 	 * 
 	 */
 	private static final long serialVersionUID = -2275940362173809147L;
-	public static final String sql = "SELECT iddescriptor,title,url,name,value,user_name FROM catalog_references join descriptors using(idreference) join dvalues using(iddescriptor) where idstructure=?";
+	public static final String sql = "SELECT idproperty,title,url,name,value,user_name FROM catalog_references join properties using(idreference) join values_number using(idproperty) where idstructure=?";
 	public String getSQL() throws AmbitException {
 		return sql;
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
+		if (getValue() == null) throw new AmbitException("Structure not defined");
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
 		return params;		

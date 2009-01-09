@@ -8,7 +8,7 @@ import ambit2.core.exceptions.AmbitException;
 public class QueryDescriptor extends NumberQuery<String> {
 
 	public final static String sqlField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from dvalues join descriptors as d using (iddescriptor) join structure using(idstructure) where d.name=? and value ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from values_number join properties as d using (idproperty) join structure using(idstructure) where d.name=? and value ";
 	
 
 	public String getSQL() throws AmbitException {
