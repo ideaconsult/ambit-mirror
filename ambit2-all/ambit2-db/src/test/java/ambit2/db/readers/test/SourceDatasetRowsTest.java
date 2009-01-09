@@ -43,7 +43,7 @@ public class SourceDatasetRowsTest extends DbUnitTest {
 	@Test
     public void testSourceDatasetRows() throws Exception {
         SourceDatasetRows rows = new SourceDatasetRows();
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 
 		IDatabaseConnection c = getConnection();        
         RetrieveDatasets query = new RetrieveDatasets();

@@ -29,6 +29,8 @@
 
 package ambit2.db.readers.test;
 
+import org.junit.Before;
+
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.db.readers.IRetrieval;
 
@@ -39,6 +41,7 @@ public abstract class RetrieveTest<T> extends DbUnitTest {
 	protected IRetrieval<T> query;
 	protected abstract IRetrieval<T> createQuery();
 	
+	@Before
 	@Override
 	public void setUp() throws Exception {
 		query = createQuery();
