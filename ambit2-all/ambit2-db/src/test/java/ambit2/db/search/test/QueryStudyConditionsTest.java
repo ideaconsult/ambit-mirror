@@ -55,4 +55,7 @@ public class QueryStudyConditionsTest extends QueryTest<QueryStudyConditions> {
 		Assert.assertTrue(count>0);
 		
 	}
+	@Override
+	public void testSelect() throws Exception {
+	}
 }

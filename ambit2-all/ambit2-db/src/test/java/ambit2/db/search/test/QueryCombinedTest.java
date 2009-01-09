@@ -22,6 +22,11 @@ import ambit2.db.search.QueryStructureByID;
 import ambit2.db.search.StringCondition;
 
 public class QueryCombinedTest extends QueryTest<QueryCombined> {
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
+	}
 	@Test
 	public void testStructure() throws Exception {
 		
@@ -94,13 +99,13 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		QueryCombined<IQueryObject> q = new QueryCombined<IQueryObject>();
 		QueryDescriptor d = new QueryDescriptor();
 		d.setCondition(NumberCondition.getInstance(NumberCondition.between));
-		d.setValue(new Double(3));
-		d.setMaxValue(new Double(5.5));
-		d.setFieldname("XLogP");
+		d.setValue(new Double(10));
+		d.setMaxValue(new Double(15));
+		d.setFieldname("Property 1");
 		
 		QueryStructure qf = new QueryStructure();
 		qf.setFieldname("smiles");
-		qf.setValue("[Fe]");
+		qf.setValue("[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3");
 		qf.setCondition(StringCondition.getInstance("="));
 		
 		q.setScope(null);
@@ -115,8 +120,8 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		while (rs.next()) {
 			records ++;
 			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
-			Assert.assertEquals(29141,rs.getInt(2));
-			Assert.assertEquals(129345,rs.getInt(3));
+			Assert.assertEquals(11,rs.getInt(2));
+			Assert.assertEquals(100215,rs.getInt(3));
 			Assert.assertEquals(1,rs.getInt(4));
 			Assert.assertEquals(1,rs.getInt(5));			
 

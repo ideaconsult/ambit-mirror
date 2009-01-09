@@ -5,6 +5,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.db.search.NumberCondition;
@@ -12,6 +13,12 @@ import ambit2.db.search.QueryDescriptor;
 import ambit2.db.search.QueryParam;
 
 public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
+	@Override
+	@Before
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
+	}
 	@Test
 	public void test() throws Exception {
 		QueryDescriptor qf = new QueryDescriptor();
@@ -43,9 +50,9 @@ public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
 	@Override
 	protected QueryDescriptor createQuery() throws Exception {
 		QueryDescriptor query = new QueryDescriptor();
-		query.setFieldname("XLogP");
-		query.setValue(1.0);
-		query.setMaxValue(2.2);
+		query.setFieldname("Property 1");
+		query.setValue(11.0);
+		query.setMaxValue(12.0);
 		query.setCondition(NumberCondition.getInstance("between"));		
 		return query;
 	}
