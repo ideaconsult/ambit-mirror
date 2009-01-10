@@ -121,6 +121,7 @@ public class ImportWorkflow extends Workflow {
 
         p1.setName("Read file and import structures");
         
+//        DbSrcDatasetWriter TODO
         setDefinition(new LoginSequence(new InputFileSelection(new DatasetSelection(p1))));
 	}
 }
