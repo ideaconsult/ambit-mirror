@@ -33,6 +33,7 @@ import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.io.InputStream;
 
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -64,19 +65,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
         /*
-        models = new PBTTableModel[defs.length];
-        for (int i=0; i < defs.length;i++) {
-	        try {
-	        	models[i] = new PBTTableModel();
-	        	models[i].setDefinition(defs[i]);
-		        tabbedPane.add(models[i].getValueAt(2,1).toString(),
-		        		new JScrollPane(PBTPageBuilder.buildPanel(models[i],-2,0)));	        	
-	        } catch (Exception x) {
-	        	x.printStackTrace();
-	        	tabbedPane.add("Error",new JLabel(x.getMessage()));
-	        }
 
-        }
         */
 
         try {
@@ -104,7 +93,19 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	        	
 	        });
         } catch (Exception x) {
-        	x.printStackTrace();
+            models = new PBTTableModel[defs.length];
+            for (int i=0; i < defs.length;i++) {
+    	        try {
+    	        	models[i] = new PBTTableModel();
+    	        	models[i].setDefinition(defs[i]);
+    		        tabbedPane.add(models[i].getValueAt(2,1).toString(),
+    		        		new JScrollPane(PBTPageBuilder.buildPanel(models[i],-2,0)));	        	
+    	        } catch (Exception xx) {
+    	        	x.printStackTrace();
+    	        	tabbedPane.add("Error",new JLabel(xx.getMessage()));
+    	        }
+
+            }
         }
     }
     @Override
