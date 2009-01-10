@@ -36,8 +36,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import org.openscience.cdk.qsar.DescriptorValue;
-
 import ambit2.core.data.LiteratureEntry;
 import ambit2.db.exceptions.DbAmbitException;
 
@@ -86,7 +84,8 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         
         if (ps_selectdescriptor != null)
             ps_selectdescriptor.close();
-        ps_selectdescriptor = null;        
+        ps_selectdescriptor = null;      
+        referenceWriter.close();
         super.close();
     }    
     protected abstract LiteratureEntry getReference(Target target);
@@ -117,18 +116,27 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
             rs1.close();
             
             if (!found) {
+            	if (ps_descriptor == null)
+                    ps_descriptor = connection.prepareStatement(insert_descriptor,Statement.RETURN_GENERATED_KEYS);
                 ps_descriptor.clearParameters();
                 ps_descriptor.setInt(1,le.getId());
                 ps_descriptor.setString(2,name);
                 ps_descriptor.setNull(3,Types.VARCHAR);
                 ps_descriptor.setString(4,getComments(target));
                 ps_descriptor.executeUpdate();
+                
                 ResultSet rs = ps_descriptor.getGeneratedKeys();
-    
-                while (rs.next()) {
-                    descriptorEntry(target,rs.getInt(1),name,i);
-                } 
-                rs.close();
+                try {
+	                while (rs.next()) {
+	                    descriptorEntry(target,rs.getInt(1),name,i);
+	                } 
+                } catch (Exception x) {
+                	logger.error(x);
+                } finally {
+	                rs.close();
+	                ps_descriptor.close();
+	                ps_descriptor = null;
+                }
             }
             i++;
         }

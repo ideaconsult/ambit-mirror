@@ -99,22 +99,31 @@ public class DbSrcDatasetWriter extends AbstractRepositoryWriter<SourceDataset, 
                 dataset.setUsername(ds.getName());
                 dataset.setReference(ds.getReference());
             }
-            rs.close();
+            exec.closeResults(rs);
             
             if (dataset.getId() > 0) return dataset;
             
             LiteratureEntry le = referenceWriter.write(dataset.getReference());
-                    
+                 
+            if (ps_dataset == null)
+            	ps_dataset = connection.prepareStatement(insert_dataset,Statement.RETURN_GENERATED_KEYS);
             ps_dataset.clearParameters();
             ps_dataset.setString(1,dataset.getName());
             ps_dataset.setInt(2,le.getId());
             ps_dataset.executeUpdate();
             rs = ps_dataset.getGeneratedKeys();
 
-            while (rs.next()) {
-                dataset.setId(rs.getInt(1));
-            } 
-            rs.close();
+            try {
+	            while (rs.next()) {
+	                dataset.setId(rs.getInt(1));
+	            }
+            } catch (Exception x) {
+            	logger.error(x);
+            } finally {
+	            rs.close();
+	            ps_dataset.close();
+	            ps_dataset = null;
+            }
             return dataset;            
         } catch (AmbitException x) {
             throw new SQLException(x.getMessage());

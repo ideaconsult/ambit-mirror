@@ -69,11 +69,12 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	if (ps_insertstring == null)
     		ps_insertstring = connection.prepareStatement(insert_string);
     	
+    	ps_insertstring.clearParameters();
     	ps_insertstring.setString(1,value);
     	ps_insertstring.execute();    	
     	
     	if (ps_descriptorvalue_string == null)
-            ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string,Statement.RETURN_GENERATED_KEYS);
+            ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string);
     	
     	ps_descriptorvalue_string.clearParameters();
     	ps_descriptorvalue_string.setInt(1,idproperty);
@@ -87,11 +88,12 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	if (ps_insertnumber == null)
             ps_insertnumber = connection.prepareStatement(insert_number);    
     	
+    	ps_insertnumber.clearParameters();
     	ps_insertnumber.setDouble(1,value);
     	ps_insertnumber.execute();
 
     	if (ps_descriptorvalue_number == null)
-    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number,Statement.RETURN_GENERATED_KEYS);
+    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number);
     	
     	ps_descriptorvalue_number.clearParameters();
     	ps_descriptorvalue_number.setInt(1,idproperty);

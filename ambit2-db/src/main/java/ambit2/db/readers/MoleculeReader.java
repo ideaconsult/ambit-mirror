@@ -37,6 +37,7 @@ import ambit2.core.exceptions.AmbitException;
 import ambit2.core.processors.DefaultAmbitProcessor;
 
 public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtomContainer> {
+	public enum MOL_TYPE {SDF,CML,CSV};
 
 
 
@@ -48,7 +49,7 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
     public IAtomContainer process(IStructureRecord target) throws AmbitException {
         try {
             IAtomContainer ac = null;
-            if ("SDF".equals(target.getFormat()))
+            if (MOL_TYPE.SDF == MOL_TYPE.valueOf(target.getFormat()))
                 ac = MoleculeTools.readMolfile(target.getContent());
             else     
                 ac = MoleculeTools.readCMLMolecule(target.getContent());
