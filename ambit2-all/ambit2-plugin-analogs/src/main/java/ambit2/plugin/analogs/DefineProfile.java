@@ -38,7 +38,6 @@ import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
-import ambit2.workflow.library.LoginSequence;
 
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
@@ -55,34 +54,38 @@ public class DefineProfile extends Sequence {
 		Primitive<IQueryObject, Profile> retrieve = new Primitive<IQueryObject, Profile>(
 				DBWorkflowContext.QUERY,
 				DBWorkflowContext.PROFILE,
-				new QueryPerformer<IQueryObject, Profile,String>() {
-					@Override
-					protected IQueryObject getTarget() {
-						return new RetrieveFieldNames();
-					};
-					protected Profile process(IQueryObject query,ResultSet rs) throws Exception {							
-						throw new Exception("Not implemented");
-					}
-					protected Profile retrieve(IRetrieval<String> query,
-							ResultSet rs) throws Exception {
-						Profile profile = new Profile();
-			            while (rs.next()) {
-			            	String value = query.getObject(rs);
-			            	profile.put(value,new Property(value));
-			            };
-			            return profile;
-					};
-				}
+				new QueryProfile()
 				) {
 			@Override
 			public synchronized String getName() {
 				return "Retrieve available fields";
 			};
 		};
-		addStep(new LoginSequence(retrieve));
-        addStep(new UserInteraction<Profile>(
-        		new Profile(),
-        		DBWorkflowContext.PROFILE,
-        		"Define profile"));			
+		addStep(retrieve);
+	    addStep(new UserInteraction<Profile>(
+	        		new Profile(),
+	        		DBWorkflowContext.PROFILE,
+	        		"Define profile"));
 	}
+}
+
+
+class QueryProfile extends QueryPerformer<IQueryObject, Profile,String> {
+	@Override
+	protected IQueryObject getTarget() {
+		return new RetrieveFieldNames();
+	};
+	protected Profile process(IQueryObject query,ResultSet rs) throws Exception {							
+		throw new Exception("Not implemented");
+	}
+	protected Profile retrieve(IRetrieval<String> query,
+			ResultSet rs) throws Exception {
+		System.out.println(query.toString());
+		Profile profile = new Profile();
+        while (rs.next()) {
+        	String value = query.getObject(rs);
+        	profile.put(value,new Property(value));
+        };
+        return profile;
+	};	
 }

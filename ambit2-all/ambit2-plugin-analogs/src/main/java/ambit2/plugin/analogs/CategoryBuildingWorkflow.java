@@ -1,6 +1,7 @@
 package ambit2.plugin.analogs;
 
 import ambit2.workflow.library.GenerateReport;
+import ambit2.workflow.library.LoginSequence;
 
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
@@ -32,8 +33,10 @@ perhaps a statistics over the pairwise similarity matrix - median, dispersion; l
 public class CategoryBuildingWorkflow extends Workflow {
 	public CategoryBuildingWorkflow() {
     	
+		
         Sequence seq=new Sequence();
         seq.setName("Category building");    	
+        
         
         seq.addStep(new DefineStructure());
         seq.addStep(new EndpointSelection());        
@@ -43,26 +46,8 @@ public class CategoryBuildingWorkflow extends Workflow {
         seq.addStep(new FindSimilarSubstances());
         seq.addStep(new ProfileAnalysis());
         seq.addStep(new GenerateReport());
-        
-        /*
-        DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor> chain = new DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor>();
-        chain.add(new QueryInfo2Query());
-        chain.add(new ProcessorCreateQuery());
-    	//ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
-    	ActivityPrimitive<IQueryObject,IStoredQuery> p1 = new ActivityPrimitive<IQueryObject,IStoredQuery>( 
-    			DBWorkflowContext.QUERY,
-    			 DBWorkflowContext.STOREDQUERY,
-    				  (IDBProcessor)chain);
-    	
-    		
-	
-        p1.setName("Search");    
-        //TODO fill in queryinfo
-        seq.addStep(new UserInteraction<QueryInfo>(new QueryInfo(),DBWorkflowContext.QUERY,"Define query"));
-        seq.addStep(p1);
+       
         setDefinition(new LoginSequence(seq));
-        */
-        setDefinition(seq);
 	}
 	@Override
 	public String toString() {

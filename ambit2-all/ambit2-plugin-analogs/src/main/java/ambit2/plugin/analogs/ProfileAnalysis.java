@@ -41,6 +41,6 @@ import com.microworkflow.process.Sequence;
  */
 public class ProfileAnalysis extends Sequence {
 	public ProfileAnalysis() {
-		addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.ENDPOINTS));
+		//addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.ENDPOINTS));
 	}
 }
