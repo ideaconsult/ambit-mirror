@@ -24,11 +24,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
+import java.awt.Color;
+import java.util.Iterator;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.util.CellRangeAddress;
+
+import com.jgoodies.binding.adapter.BasicComponentFactory;
 
 import ambit2.core.data.AmbitBean;
 
@@ -1757,6 +1771,7 @@ public class PBTWorksheet  extends AmbitBean {
 	public void setH28(String value) {
 		 set(27,7,value);
 	}
+
 
 
 }
