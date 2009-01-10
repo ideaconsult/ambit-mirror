@@ -66,16 +66,24 @@ public class DbReferenceWriter extends AbstractRepositoryWriter<LiteratureEntry,
         rs.close();
         if (le.getId() > 0) return le;
         
+        if (ps_reference == null)
+        	ps_reference = connection.prepareStatement(insert_reference,Statement.RETURN_GENERATED_KEYS);
         ps_reference.clearParameters();
         ps_reference.setString(1,le.getTitle());
         ps_reference.setString(2, le.getURL());
         ps_reference.executeUpdate();
+        
+        try {
         rs = ps_reference.getGeneratedKeys();
 
         while (rs.next()) {
             le.setId(rs.getInt(1));
         } 
-        rs.close();
+        } finally {
+        	rs.close();
+        	ps_reference.close();
+        	ps_reference = null;
+        }
         return le;
     }
     

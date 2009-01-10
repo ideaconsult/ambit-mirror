@@ -56,7 +56,7 @@ public class DbCompoundImageTools extends CompoundImageTools {
 		IAtomContainer result = q.getObject(rs);
         BufferedImage image = getImage(result);
         try {
-            rs.close();
+            exec.closeResults(rs);
         } catch (SQLException x) {
             x.printStackTrace();
         }

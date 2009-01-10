@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import ambit2.core.exceptions.AmbitException;
@@ -70,11 +71,10 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 			
 			connection.setAutoCommit(false);	
 			
-			PreparedStatement s = c.prepareStatement(sql);
+			PreparedStatement s = c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			s.setInt(1,getSession().getId().intValue());
 			s.setString(2,result.getName());
             s.setString(3,result.getSQL());
-			System.out.println(s);
 			if (s.executeUpdate()>0) {
 				ResultSet rss = s.getGeneratedKeys();
 				while (rss.next())

@@ -17,7 +17,8 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 	 * 
 	 */
 	private static final long serialVersionUID = 5821244671560506456L;
-	protected PreparedStatement sresults;
+	protected PreparedStatement sresults=null;
+	protected Statement statement=null;
 	public void open() throws DbAmbitException {
 	}
 
@@ -27,8 +28,9 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 		try {
 				List<QueryParam> params = target.getParameters();
 				if (params == null) {
-					Statement st = c.createStatement();
-					return st.executeQuery(target.getSQL());
+					statement = c.createStatement();
+					ResultSet rs = statement.executeQuery(target.getSQL());
+					return rs;
 				} else {
 					sresults = c.prepareStatement(target.getSQL());					
 					QueryExecutor.setParameters(sresults, params);
@@ -40,9 +42,14 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 			throw new ProcessorException(this,x);
 		}
 	}
+	public void closeResults(ResultSet rs) throws SQLException {
+		if (rs != null) rs.close();
+		if (sresults != null) sresults.close(); sresults = null;
+		if (statement != null) statement.close();		statement = null;
+	}
 	@Override
 	public void close() throws SQLException {
-		if (sresults != null) sresults.close();
+		closeResults(null);		
 		super.close();
 	}
 	public static void setParameters(PreparedStatement ps, List<QueryParam> params) throws SQLException {

@@ -61,6 +61,10 @@ public class RepositoryWriterTest extends DbUnitTest {
 		Assert.assertEquals(0,srcdataset.getRowCount());
 		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
 		Assert.assertEquals(0,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(0,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(0,property_values.getRowCount());
 		
 		write(c.getConnection());
         c.close();
@@ -74,6 +78,12 @@ public class RepositoryWriterTest extends DbUnitTest {
 		Assert.assertEquals(1,srcdataset.getRowCount());
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
 		Assert.assertEquals(2,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(13,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(26,property_values.getRowCount());		
+		
 		c.close();
 
 	}
