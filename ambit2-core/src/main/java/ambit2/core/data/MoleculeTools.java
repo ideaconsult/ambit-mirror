@@ -29,6 +29,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.Renderer2D;
 import org.openscience.cdk.renderer.Renderer2DModel;
@@ -36,7 +37,7 @@ import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.MFAnalyser;
 
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.smiles.SmilesParserWrapper;
 
 
@@ -231,23 +232,33 @@ public class MoleculeTools {
 		while (true) {}
 	}
 	public static IMolecule readMolfile(Reader molfile) throws Exception {
-		MDLReader reader = new MDLReader(molfile);
-        ChemFile chemFile = (ChemFile) reader.read(new ChemFile());
-        IChemSequence seq = chemFile.getChemSequence(0);
-        IChemModel model = seq.getChemModel(0);
-        IMoleculeSet som = model.getMoleculeSet();
-        return som.getMolecule(0);
+		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(molfile,DefaultChemObjectBuilder.getInstance());
+		IMolecule molecule = null;
+		while (mReader.hasNext()) {
+			Object mol = mReader.next();
+			if (mol instanceof IMolecule) {
+				molecule =  (IMolecule)mol;
+				break;
+			}
+		}
+		mReader.close();
+        return molecule;
         
     }    	
 	public static IMolecule readMolfile(String molfile) throws Exception {
-		return readMolfile(new StringReader(molfile));
+		StringReader reader = new StringReader(molfile);
+		IMolecule mol= readMolfile(reader);
+		reader.close();
+		return mol;
     }    
     public static IMolecule readCMLMolecule(String cml) throws Exception {
         IMolecule mol = null;
         StringReader strReader = null;
         try {
             strReader= new StringReader(cml);
-            return readCMLMolecule(strReader);
+            mol = readCMLMolecule(strReader);
+            strReader.close();
+            return mol;
         } catch (Exception e) {
             e.printStackTrace();
             return mol;
