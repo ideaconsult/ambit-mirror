@@ -37,12 +37,19 @@ import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.core.data.Profile;
 import ambit2.core.io.Property;
+import ambit2.db.IDBProcessor;
 import ambit2.db.SourceDataset;
+import ambit2.db.processors.DBProcessorsChain;
+import ambit2.db.processors.ProcessorCreateQuery;
+import ambit2.db.processors.QueryInfo2Query;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.IQueryObject;
+import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryInfo;
+import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.UserInteraction;
 
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
@@ -65,7 +72,19 @@ public class FindSimilarSubstances extends Sequence {
 				return "Query initialization";
 			};		
 		};
-		addStep(retrieve.addStep(new AnalogsFinderWorkflow().getDefinition()));
+		
+        DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor> chain = new DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor>();
+        chain.add(new QueryInfo2Query());
+        chain.add(new ProcessorCreateQuery());
+    	ActivityPrimitive<IQueryObject,IStoredQuery> p1 = new ActivityPrimitive<IQueryObject,IStoredQuery>( 
+    			DBWorkflowContext.QUERY,
+    			DBWorkflowContext.STOREDQUERY,
+    				  (IDBProcessor)chain);
+        p1.setName("Search");    
+
+        addStep(retrieve);
+        addStep(new UserInteraction<QueryInfo>(new QueryInfo(),DBWorkflowContext.QUERY,"Define query"));
+        addStep(p1);
 	}
 }
 

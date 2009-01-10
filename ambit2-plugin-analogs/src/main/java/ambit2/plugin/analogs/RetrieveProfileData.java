@@ -41,7 +41,10 @@ import com.microworkflow.process.Sequence;
  */
 public class RetrieveProfileData extends Sequence {
 	public RetrieveProfileData() {
-		addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.PROFILE));
+		//addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.PROFILE));
 	}
-	
+	@Override
+	public synchronized String getName() {
+		return "Retrieve";
+	}
 }
