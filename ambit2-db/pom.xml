@@ -98,7 +98,6 @@ The database can be searched by identifiers, attribute value or range, experimen
 		      <srcFiles>
 		      
 		          <srcFile>src/main/resources/ambit2/db/sql/repository.sql</srcFile>
-		          <srcFile>src/main/resources/ambit2/db/sql/create_trigger.sql</srcFile>		          
 		       </srcFiles>           	  	          
 	        </configuration>
 	        <dependencies>
