@@ -67,24 +67,21 @@ CREATE TABLE  `catalog_references` (
 -- -----------------------------------------------------
 -- Table `chemicals`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `chemicals` ;
-
-CREATE  TABLE IF NOT EXISTS `chemicals` (
-  `idchemical` int(11) unsigned NOT NULL  AUTO_INCREMENT ,
+DROP TABLE IF EXISTS `chemicals`;
+CREATE TABLE  `chemicals` (
+  `idchemical` int(11) unsigned NOT NULL auto_increment,
   `inchi` text character set latin1 collate latin1_bin,
   `smiles` text character set latin1 collate latin1_bin,
-  `formula` VARCHAR(64) NULL ,
-  PRIMARY KEY (`idchemical`),
+  `formula` varchar(64) default NULL,
+  `hashcode` bigint(20) NOT NULL default '0',
+  PRIMARY KEY  (`idchemical`),
   KEY `sinchi` (`inchi`(760)),
-  KEY `ssmiles` (`smiles`(760))
-)  ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE INDEX idchemical ON `chemicals` (idchemical) ;
-
-CREATE INDEX inchi ON `chemicals` (inchi(1024)) ;
-
-CREATE INDEX formula ON `chemicals` (`formula` ASC) ;
-
+  KEY `ssmiles` (`smiles`(760)),
+  KEY `idchemical` (`idchemical`),
+  KEY `inchi` (`inchi`(767)),
+  KEY `formula` (`formula`),
+  KEY `hashcode` USING BTREE (`hashcode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `structure`
