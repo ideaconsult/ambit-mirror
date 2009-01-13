@@ -40,19 +40,33 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 
+import ambit2.core.data.StringBean;
+import ambit2.db.processors.DbCreateDatabase;
+
 
 public abstract class DbUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		
+		IDatabaseConnection c = getConnection("mysql","33060","root","");
+		try {
+			DbCreateDatabase db = new DbCreateDatabase();
+			db.setConnection(c.getConnection());
+			db.process(new StringBean("ambit-test"));
+		} finally {
+			c.close();
+		}
 	}
-	protected IDatabaseConnection getConnection() throws Exception {
+	protected IDatabaseConnection getConnection(String db,String port,String user, String pass) throws Exception {
 		  
         Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
+                "jdbc:mysql://localhost:"+port +"/"+db, user,pass);
 	        
 	   return new DatabaseConnection(jdbcConnection);
+	}	
+	protected IDatabaseConnection getConnection() throws Exception {
+	   return getConnection("ambit-test","33060", "guest", "guest");
 	}
     public void setUpDatabase(String xmlfile) throws Exception {
 
