@@ -76,7 +76,7 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
                     Property p = new Property(setting.getName(),setting.getDefaultSetting(),counter);
                     if (setting.getLevel() > this.level)
                         p.setEnabled(true);
-                    properties.put(setting.getName(),p);
+                    properties.add(p);
                     counter++;
                 }   
             }

@@ -68,7 +68,7 @@ public class PropertiesTableModel extends AbstractTableModel {
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return columnIndex>0;
 	}
-	public void setFields(Hashtable<String,Property> fields) {
+	public void setFields(Profile fields) {
 		visibleFields.clear();
 		if (fields != null) {
 			Iterator<Property> i = fields.values().iterator();

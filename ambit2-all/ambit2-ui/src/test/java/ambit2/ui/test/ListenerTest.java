@@ -5,7 +5,6 @@
 package ambit2.ui.test;
 
 import java.io.FileInputStream;
-import java.util.Hashtable;
 
 import junit.framework.Assert;
 
@@ -17,6 +16,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 
+import ambit2.core.data.Profile;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.IteratingXLSReader;
@@ -75,7 +75,7 @@ public class ListenerTest  {
 			//System.out.println(++record);
 		}
         Assert.assertNotNull(listener.getProperties());
-        Hashtable<String,Property> props = listener.getProperties();
+        Profile props = listener.getProperties();
         Assert.assertEquals(labels.length,props.size());
         
         for (String s: labels) {

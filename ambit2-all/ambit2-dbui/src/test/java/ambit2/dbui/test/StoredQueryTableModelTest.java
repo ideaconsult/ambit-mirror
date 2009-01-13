@@ -53,7 +53,7 @@ public class StoredQueryTableModelTest extends RepositoryTest {
 		query.setId(3);
 		final StoredQueryTableModel queryModel = new StoredQueryTableModel();
 		Profile profile = new Profile();
-		profile.put("CAS", new Property("CAS","CAS RN",0,String.class,true));
+		profile.add(new Property("CAS","CAS RN",0,String.class,true));
 		queryModel.setProfile(profile);
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

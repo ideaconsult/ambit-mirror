@@ -84,7 +84,7 @@ class QueryProfile extends QueryPerformer<IQueryObject, Profile,String> {
 		Profile profile = new Profile();
         while (rs.next()) {
         	String value = query.getObject(rs);
-        	profile.put(value,new Property(value));
+        	profile.add(new Property(value));
         };
         return profile;
 	};	
