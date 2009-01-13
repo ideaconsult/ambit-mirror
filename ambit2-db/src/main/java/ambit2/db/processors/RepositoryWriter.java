@@ -29,17 +29,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.MoleculeReader;
+import ambit2.db.search.QueryExecutor;
+import ambit2.db.search.QueryStructure;
 
 /**
 <pre>
@@ -57,7 +63,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
     protected static final String select_chemical = "SELECT idchemical FROM CHEMICALS where idchemical=?";
     protected PreparedStatement ps_selectchemicals;
 
-    protected static final String insert_chemical = "INSERT INTO CHEMICALS (idchemical) values (null)";
+    protected static final String insert_chemical = "INSERT INTO CHEMICALS (idchemical,smiles) values (null,?)";
 	protected PreparedStatement ps_chemicals;
 	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))";
 	protected PreparedStatement ps_structure;
@@ -69,11 +75,19 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected PropertyValuesWriter propertyWriter;
 	protected SourceDataset dataset;
 	protected MoleculeReader molReader;
+	protected IStructureKey key;
+	protected QueryStructure query_chemicals;
+	protected QueryExecutor exec;
 	
 	public RepositoryWriter() {
 		datasetWriter = new DbSrcDatasetWriter();
 		propertyWriter = new PropertyValuesWriter();
 		molReader = new MoleculeReader();
+		key = new SmilesKey();
+		query_chemicals = new QueryStructure();
+		query_chemicals.setId(-1);
+		query_chemicals.setFieldname(key.getKey());
+		exec = new QueryExecutor();
 	}
 	@Override
 	public void open() throws DbAmbitException {
@@ -87,6 +101,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		super.setConnection(connection);
 		datasetWriter.setConnection(connection);
 		propertyWriter.setConnection(connection);
+		exec.setConnection(connection);
 	}
 	public SourceDataset getDataset() {
 		return dataset;
@@ -103,14 +118,50 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		ps_dataset.setString(2,dataset.getName());
 		ps_dataset.execute();
 	}
-	public void writeProperties(IStructureRecord structure) throws SQLException, AmbitException {
-			IAtomContainer molecule = molReader.process(structure);
+	public void writeProperties(IStructureRecord structure,IAtomContainer molecule) throws SQLException, AmbitException {
+			if (molecule == null)
+				return;
 			structure.setProperties(molecule.getProperties());
 			propertyWriter.process(structure);
 			structure.setProperties(null);
-			molecule = null;
+
 	}	
+	protected IAtomContainer getAtomContainer(IStructureRecord structure) {
+		try {
+			return molReader.process(structure);
+		} catch (AmbitException x) {
+			logger.error(x);
+			return null;
+		}
+	}
+	protected void findChemical(String inchi, IStructureRecord record)  {
+		if (inchi == null) return;
+		ResultSet rs = null;
+		try {
+			query_chemicals.setValue(inchi);
+			rs = exec.process(query_chemicals);
+			while (rs.next()) {
+				record.setIdchemical(rs.getInt(2));
+				break;
+			}
+			exec.closeResults(rs);
+		} catch (Exception x) {
+			logger.error(x);
+		} finally {
+			try {
+			 exec.closeResults(rs);
+			} catch (Exception x) {logger.error(x);}
+		}
+		
+	}
 	public List<IStructureRecord> write(IStructureRecord structure) throws SQLException {
+		IAtomContainer molecule = getAtomContainer(structure);
+		String thekey = null;
+		try {
+			thekey = key.process(molecule);
+		} catch (Exception x) {
+			thekey = null;
+		}
         //find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
         	ps_selectchemicals.clearParameters();
@@ -127,12 +178,16 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
             } finally {
             	rs.close();
             }
-        }
+        } else findChemical(thekey,structure);
         List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
         //add a new idchemical if idchemical <=0
         if (structure.getIdchemical() <= 0) {
         	if (ps_chemicals == null)
        		 ps_chemicals = connection.prepareStatement(insert_chemical,Statement.RETURN_GENERATED_KEYS);
+        	if (thekey==null)
+        		ps_chemicals.setNull(1,Types.CHAR);
+        	else
+        		ps_chemicals.setString(1,thekey);
     		ps_chemicals.executeUpdate();
     		ResultSet rs = ps_chemicals.getGeneratedKeys();
     		try {
@@ -162,7 +217,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	writeDataset(record);
         	try {
         		structure.setIdstructure(record.getIdstructure());
-        		writeProperties(structure);
+        		writeProperties(structure,molecule);
         	} catch (AmbitException x) {
         		logger.warn(x);
         	}
@@ -171,7 +226,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         rss.close();
         ps_structure.close();
         ps_structure = null;
-
+		molecule = null;
         
         return sr;
         
@@ -196,10 +251,60 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         if (datasetWriter != null)
         	datasetWriter.close();
         if (propertyWriter != null)
-        	propertyWriter.close();        
+        	propertyWriter.close();
+        if (exec != null)
+        	exec.close();
         } catch (SQLException x) {
             logger.error(x);
         }
         super.close();
+	}
+}
+
+interface IStructureKey {
+	public String getKey();
+	public String process(IAtomContainer molecule) throws AmbitException;
+}
+class SmilesKey implements IStructureKey {
+	protected SmilesGenerator gen;
+	protected String key="smiles";
+	public SmilesKey() {
+		gen = new SmilesGenerator();
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public String process(IAtomContainer molecule) throws AmbitException {
+		return gen.createSMILES((IMolecule)molecule);
+	}
+}
+
+class EmptyKey implements IStructureKey {
+	
+	public String getKey() {
+		return null;
+	}
+	public String process(IAtomContainer molecule) throws AmbitException {
+		return null;
+	}
+}
+
+class InchiKey implements IStructureKey {
+	protected InchiProcessor inchi;
+	protected String key;
+	public InchiKey() {
+		inchi = new InchiProcessor();
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public String process(IAtomContainer molecule) throws AmbitException {
+		return inchi.process(molecule).getInchi();
 	}
 }

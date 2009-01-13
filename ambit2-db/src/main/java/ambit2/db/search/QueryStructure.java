@@ -1,16 +1,21 @@
 package ambit2.db.search;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.core.data.IStructureRecord;
+import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.db.readers.IRetrieval;
 
 /**
  * Search for smiles, inchi, formula
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryStructure extends AbstractQuery<String,String,StringCondition> {
+public class QueryStructure extends AbstractQuery<String,String,StringCondition> implements IRetrieval<IStructureRecord>{
 	
 	/**
 	 * 
@@ -34,5 +39,14 @@ public class QueryStructure extends AbstractQuery<String,String,StringCondition>
 		params.add(new QueryParam<String>(String.class, getValue()));
 		return params;
 	}
-
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		try {
+			IStructureRecord record = new StructureRecord();
+			record.setIdchemical(rs.getInt(2));
+			record.setIdstructure(rs.getInt(3));
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+	}
 }
