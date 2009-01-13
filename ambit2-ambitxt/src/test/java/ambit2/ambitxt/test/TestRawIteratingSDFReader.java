@@ -28,7 +28,6 @@ import ambit2.db.CachedRowSetFactory;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.FP1024Writer;
-import ambit2.db.processors.PropertyWriter;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ui.AmbitWorkflowContextPanel;
@@ -116,6 +115,7 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
 		now = System.currentTimeMillis() - now;
 		System.out.println("msec/records "+(double)now/(double)records);
 	}	
+	/*
 	public void xtestPropertyWriter() throws Exception {
 		datasource = DatasourceFactory.getDataSource(
 				DatasourceFactory.getConnectionURI(
@@ -159,22 +159,9 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
 		now = System.currentTimeMillis() - now;
 		System.out.println("msec/records "+(double)now/(double)records);
 	}
+	*/
     public void xtestCachedRecordSet() throws Exception {
-        /**
-  Contacts.setDataSourceName("Databases/ContactsDB/Datasource");
-  Contacts.setCommand("SELECT name, telephone from Contacts");
-  Contacts.execute();
-         */
-/**
-  // get connection from pool
-  InitialContext ctx = new InitialContext(); 
-  javax.sql.DataSource ds =
-    (javax.sql.DataSource)ctx.lookup("Databases/ContactsDB/DataSource");
-  java.sql.Connection con = ds.getConnection();
-  Contacts.setCommand("SELECT name, telephone from Contacts");
-  // supply the connection to the RowSet
-  Contacts.execute(con);
- */        
+       
         Connection c = datasource.getConnection();
         PreparedStatement ps = c.prepareStatement("SELECT idstructure,uncompress(structure),format FROM structure where idstructure>?",
                         ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
