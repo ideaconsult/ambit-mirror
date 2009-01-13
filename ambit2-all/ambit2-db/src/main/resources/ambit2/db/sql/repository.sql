@@ -2,11 +2,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-SET @dbname:='ambit2';
-
-DROP DATABASE IF EXISTS `ambit2` ;
-CREATE SCHEMA IF NOT EXISTS `ambit2` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
-USE ambit2;
+DROP DATABASE IF EXISTS `ambit-test` ;
+CREATE SCHEMA IF NOT EXISTS `ambit-test` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
+USE `ambit-test`;
 
 -- -----------------------------------------------------
 -- Table `roles`  User roles
@@ -486,12 +484,12 @@ insert into catalog_references (idreference,title,url) values (2,"IUPAC name","h
 insert into dictionary (iddictionary,idparent,name,idreference) values (null,0,"IUPAC Name",2);
 
 
--- Grants for ambit2@localhost
-REVOKE ALL PRIVILEGES ON ambit2.* FROM 'admin'@'localhost';
-REVOKE ALL PRIVILEGES ON ambit2.* FROM 'guest'@'localhost';
-GRANT USAGE ON ambit2.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';
-GRANT ALL PRIVILEGES ON ambit2.* TO 'admin'@'localhost' WITH GRANT OPTION;
-GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON ambit2.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
+-- Grants for ambit-test@localhost
+-- REVOKE ALL PRIVILEGES ON `ambit-test`.* FROM 'admin'@'localhost';
+-- REVOKE ALL PRIVILEGES ON `ambit-test`.* FROM 'guest'@'localhost';
+GRANT USAGE ON `ambit-test`.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';
+GRANT ALL PRIVILEGES ON `ambit-test`.* TO 'admin'@'localhost' WITH GRANT OPTION;
+GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `ambit-test`.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
