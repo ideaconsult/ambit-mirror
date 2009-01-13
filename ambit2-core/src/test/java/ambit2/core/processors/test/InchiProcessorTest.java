@@ -1,0 +1,81 @@
+/* InchiProcessorTest.java
+ * Author: nina
+ * Date: Jan 11, 2009
+ * Revision: 0.1 
+ * 
+ * Copyright (C) 2005-2009  Ideaconsult Ltd.
+ * 
+ * Contact: nina
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+
+package ambit2.core.processors.test;
+
+import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.templates.MoleculeFactory;
+
+import ambit2.core.processors.structure.InchiProcessor;
+
+public class InchiProcessorTest {
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testProcess() throws Exception {
+		generate(MoleculeFactory.makeBenzene(),"InChI=1/C6/c1-2-4-6-5-3-1");
+		generate(MoleculeFactory.makeAlkane(10),"");		
+//		Assert.assertEquals("AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/CRV:1.3,2.3,3.3,4.3,5.3,6.3/rA:6C3C3C3C3C3C3/rB:s1;d2;s3;d4;d1s5;/rC:;;;;;;",auxinfo);
+	}
+	public void generate(IAtomContainer mol,String expected) throws Exception {
+		InchiProcessor p = new InchiProcessor();
+		InChIGenerator gen = p.process(mol);
+		String inchi = gen.getInchi();
+		String auxinfo = gen.getAuxInfo();
+		Assert.assertEquals(expected, inchi);
+		System.out.println(inchi);
+		//Assert.assertEquals("AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/CRV:1.3,2.3,3.3,4.3,5.3,6.3/rA:6C3C3C3C3C3C3/rB:s1;d2;s3;d4;d1s5;/rC:;;;;;;",auxinfo);
+
+		gen = p.process(MoleculeFactory.makeAlkane(10));
+	}
+
+}
