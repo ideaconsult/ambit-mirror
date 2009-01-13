@@ -4,16 +4,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 
-		<sql:query var="rs" dataSource="jdbc/einecs">
+		<sql:query var="rs" dataSource="jdbc/ambit2">
 			SELECT count(idstructure) as c from structure
 
 		</sql:query>
 		<c:forEach var="row" items="${rs.rows}">
 			EINECS : ${row.c} records
 		</c:forEach>
-		<sql:query var="rs" dataSource="jdbc/einecs">
-			SELECT name,count(idstructure),idfieldname  FROM structure_fields join field_names using (idfieldname) where idfieldname=6 or idfieldname=3  group by idfieldname
-
+		<sql:query var="rs" dataSource="jdbc/ambit2">
+			select name,idproperty from properties 
 		</sql:query>
 		<table bgcolor="#DDDDDD" border="0">
 			<tr bgcolor="#DDDDDD">
@@ -25,16 +24,16 @@
 			<td align="right">${row.name}</td>
 			<td colspan="2">
 
-						<sql:query var="subq" dataSource="jdbc/einecs">
-						SELECT count(idstructure) as c,value,idfieldname  FROM structure_fields  where idfieldname=? group by value
-							<sql:param value="${row.idfieldname}"/>
+						<sql:query var="subq" dataSource="jdbc/ambit2">
+						SELECT count(idstructure) as c,value,idproperty  FROM values_string where idproperty=? group by value
+							<sql:param value="${row.idproperty}"/>
 						</sql:query>
 
 						<c:forEach var="rq" items="${subq.rows}">
 												<c:url value="" var="url">
 													<c:param name="page" value="${item}"/>
 													<c:param name="pagesize" value="${param.pagesize}"/>
-													<c:param name="fieldname" value="${rq.idfieldname}"/>
+													<c:param name="fieldname" value="${rq.idproperty}"/>
 													<c:param name="fieldvalue" value="${rq.value}"/>
 												</c:url>
 												<a href="
@@ -47,8 +46,8 @@
 			</tr>
 		</c:forEach>
 
-		<sql:query var="rs" dataSource="jdbc/einecs">
-			SELECT name,idfieldname  FROM field_names
+		<sql:query var="rs" dataSource="jdbc/ambit2">
+			SELECT name,idproperty  FROM properties
 		</sql:query>
 
 <form>
@@ -57,10 +56,10 @@
 	<select name="fieldname">
 	<c:forEach var="row" items="${rs.rows}">
 		<c:set var="tag" value=""/>
-			<c:if test="${row.idfieldname eq param.fieldname}">
+			<c:if test="${row.idproperty eq param.fieldname}">
 				<c:set var="tag" value="selected"/>
 			</c:if>
-		<option value="${row.idfieldname}" ${tag} >${row.name}</option>
+		<option value="${row.idproperty}" ${tag} >${row.name}</option>
 	</c:forEach>
 </select>
 </td>
@@ -115,8 +114,8 @@ Records per page ${pagesize}
 	<c:if test="${!empty param.fieldvalue}">
 
 
-		<sql:query var="rc" dataSource="jdbc/einecs">
-			select name from field_names
+		<sql:query var="rc" dataSource="jdbc/ambit2">
+			select name from properties
 		</sql:query>
 		<c:set var="tokens" value=""/>
 		<c:set var="delim" value=""/>
@@ -126,8 +125,8 @@ Records per page ${pagesize}
 		</c:forEach>
 
 
-		<sql:query var="rc" dataSource="jdbc/einecs">
-			select name from field_names where idfieldname=?
+		<sql:query var="rc" dataSource="jdbc/ambit2">
+			select name from properties where idproperty=?
 			<sql:param value="${param.fieldname}"/>
 		</sql:query>
 		<c:forEach var="row" items="${rc.rows}">
@@ -135,7 +134,7 @@ Records per page ${pagesize}
 		</c:forEach>
 
 		<sql:query var="rc" dataSource="jdbc/einecs">
-			select idchemical,idstructure,inchi,smiles,formula,format from chemicals join structure using(idchemical) join structure_fields as f using (idstructure) join field_names using (idfieldname) where f.idfieldname=? and value=? limit ${page*pagesize},${pagesize}
+			select idchemical,idstructure,inchi,smiles,formula,format from chemicals join structure using(idchemical) join property_values as f using (idstructure) join properties using (idproperty) where f.idproperty=? and value=? limit ${page*pagesize},${pagesize}
 			<sql:param value="${param.fieldname}"/>
 			<sql:param value="${param.fieldvalue}"/>
 		</sql:query>
@@ -169,7 +168,7 @@ Records per page ${pagesize}
 			 		</td>
 					<c:forTokens var="t" items="${tokens}" delims=",">
 						<sql:query var="rf" dataSource="jdbc/einecs">
-							select value,name,idfieldname from structure_fields as f join field_names using (idfieldname) where f.idstructure =? and name=?
+							select value,name,idproperty from values_string as f join properties using (idproperty) where f.idstructure =? and name=?
 							<sql:param value="${row.idstructure}"/>
 							<sql:param value="${t}"/>
 						</sql:query>
@@ -184,7 +183,7 @@ Records per page ${pagesize}
 												<c:url value="" var="url">
 													<c:param name="page" value="${item}"/>
 													<c:param name="pagesize" value="${param.pagesize}"/>
-													<c:param name="fieldname" value="${rowf.idfieldname}"/>
+													<c:param name="fieldname" value="${rowf.idproperty}"/>
 													<c:param name="fieldvalue" value="${rowf.value}"/>
 												</c:url>
 												<a href="
@@ -205,7 +204,7 @@ Records per page ${pagesize}
 												<c:url value="" var="url">
 													<c:param name="page" value="${item}"/>
 													<c:param name="pagesize" value="${param.pagesize}"/>
-													<c:param name="fieldname" value="${rowf.idfieldname}"/>
+													<c:param name="fieldname" value="${rowf.idproperty}"/>
 													<c:param name="fieldvalue" value="${rowf.value}"/>
 												</c:url>
 
@@ -229,7 +228,7 @@ Records per page ${pagesize}
 											<c:url value="" var="url">
 													<c:param name="page" value="${item}"/>
 													<c:param name="pagesize" value="${param.pagesize}"/>
-													<c:param name="fieldname" value="${rowf.idfieldname}"/>
+													<c:param name="fieldname" value="${rowf.idproperty}"/>
 													<c:param name="fieldvalue" value="${rowf.value}"/>
 												</c:url>
 
@@ -256,7 +255,7 @@ Records per page ${pagesize}
 												<c:url value="" var="url">
 													<c:param name="page" value="${item}"/>
 													<c:param name="pagesize" value="${param.pagesize}"/>
-													<c:param name="fieldname" value="${rowf.idfieldname}"/>
+													<c:param name="fieldname" value="${rowf.idproperty}"/>
 													<c:param name="fieldvalue" value="${rowf.value}"/>
 												</c:url>
 												<a href="
