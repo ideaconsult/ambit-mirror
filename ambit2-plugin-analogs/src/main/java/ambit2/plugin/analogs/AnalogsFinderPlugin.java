@@ -61,15 +61,15 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
 	  	Profile profile = new Profile();
-	  	profile.put("CAS",new Property("CAS"));
-	  	profile.put("CAS",new Property("CAS","CASNO"));
-	  	profile.put("Name",new Property("Name"));
-	  	profile.put("LogP", new Property("org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","LogP",-1,org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor.class));
+	  	profile.add(new Property("CAS"));
+	  	profile.add(new Property("CAS","CASNO"));
+	  	profile.add(new Property("Name"));
+	  	profile.add(new Property("org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","LogP",-1,org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor.class));
     	getWorkflowContext().put(DBWorkflowContext.PROFILE, profile);
     	
 	  	Profile endpoints = new Profile();
-	  	endpoints.put("Aquatic toxicity",new Property("Aquatic toxicity"));
-	  	endpoints.put("Skin sensitisation",new Property("Skin sensitisation","EC3"));
+	  	endpoints.add(new Property("Aquatic toxicity"));
+	  	endpoints.add(new Property("Skin sensitisation","EC3"));
     	getWorkflowContext().put(DBWorkflowContext.ENDPOINTS, endpoints);    	
     	
 	}

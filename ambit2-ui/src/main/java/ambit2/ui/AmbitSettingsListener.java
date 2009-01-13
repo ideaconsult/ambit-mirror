@@ -55,7 +55,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
         		case IO_TRANSLATE_NAME: { 
         			if (!"".equals(setting.getName().trim())) {
         				if (properties.get(setting.getName())==null) {
-        					properties.put(setting.getName(),
+        					properties.add(
         							new Property(setting.getName(),setting.getDefaultSetting(),counter));
         					counter++;
         				}	
@@ -77,7 +77,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
         				if (properties.get(setting.getName())==null) {
         					Property p = new Property(setting.getName(),setting.getDefaultSetting(),counter);
         					p.setEnabled(true);
-        					properties.put(setting.getName(),p);
+        					properties.add(p);
         					counter++;
         				}	
         			}

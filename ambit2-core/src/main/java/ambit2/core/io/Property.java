@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.core.io;
 
+import ambit2.core.data.LiteratureEntry;
+
 
 public class Property<Generator>  {
 	public enum IO_QUESTION  {
@@ -36,15 +38,14 @@ public class Property<Generator>  {
 	protected int order = 0;
 	protected Class clazz = java.lang.String.class;
 	protected boolean enabled = false;
-	protected Generator generator;
+	protected LiteratureEntry reference;
 
-	
-	public Generator getGenerator() {
-		return generator;
+	public LiteratureEntry getReference() {
+		return reference;
 	}
 
-	public void setGenerator(Generator generator) {
-		this.generator = generator;
+	public void setReference(LiteratureEntry reference) {
+		this.reference = reference;
 	}
 
 	public Property() {
