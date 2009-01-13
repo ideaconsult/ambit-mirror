@@ -44,7 +44,6 @@ import ambit2.core.data.StringBean;
 public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String> {
 	
     /**
-	 * 
 	 */
 	private static final long serialVersionUID = -335737998721944578L;
 	protected String SQLFile = "ambit2/db/sql/create_tables.sql";
@@ -112,14 +111,13 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
                         if (line == null) break;
                         if (line.toUpperCase().startsWith("DELIMITER")) {
                             delimiter = line.substring(line.indexOf("DELIMITER")+10).trim();
-                            System.out.println(table.toString());
+                            logger.debug(table.toString());
                             //t.execute(table.toString());
                             table = new StringBuffer();                             
                             continue;
                         }
                         if (line.trim().toUpperCase().startsWith("END")) {
                             table.append("END");
-                            System.out.println(table.toString());
                             t.execute(table.toString());
                             logger.debug(table.toString());
                             table = new StringBuffer();                            
@@ -132,8 +130,8 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
                         table.append("\n");
                         if (line.indexOf(delimiter) >= 0) {
                             //t.addBatch(table.toString());
-                            
-                            System.out.println(table.toString());
+                            logger.debug(table.toString());
+				
                             
                             t.execute(table.toString());
                             

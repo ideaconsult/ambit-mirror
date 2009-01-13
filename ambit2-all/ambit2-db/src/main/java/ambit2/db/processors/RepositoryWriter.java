@@ -33,6 +33,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -46,6 +47,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.MoleculeReader;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryStructure;
+import ambit2.hashcode.MoleculeAndAtomsHashing;
 
 /**
 <pre>
@@ -63,7 +65,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
     protected static final String select_chemical = "SELECT idchemical FROM CHEMICALS where idchemical=?";
     protected PreparedStatement ps_selectchemicals;
 
-    protected static final String insert_chemical = "INSERT INTO CHEMICALS (idchemical,smiles) values (null,?)";
+    protected static final String insert_chemical = "INSERT INTO CHEMICALS (idchemical,smiles,hashcode) values (null,?,?)";
 	protected PreparedStatement ps_chemicals;
 	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))";
 	protected PreparedStatement ps_structure;
@@ -75,19 +77,23 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected PropertyValuesWriter propertyWriter;
 	protected SourceDataset dataset;
 	protected MoleculeReader molReader;
-	protected IStructureKey key;
+	protected IStructureKey<String> key;
 	protected QueryStructure query_chemicals;
 	protected QueryExecutor exec;
+	protected HashcodeKey hashcode;
+
 	
 	public RepositoryWriter() {
 		datasetWriter = new DbSrcDatasetWriter();
 		propertyWriter = new PropertyValuesWriter();
 		molReader = new MoleculeReader();
 		key = new SmilesKey();
+		hashcode = new HashcodeKey();
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
 		query_chemicals.setFieldname(key.getKey());
 		exec = new QueryExecutor();
+
 	}
 	@Override
 	public void open() throws DbAmbitException {
@@ -156,6 +162,17 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	}
 	public List<IStructureRecord> write(IStructureRecord structure) throws SQLException {
 		IAtomContainer molecule = getAtomContainer(structure);
+		Long hash = null;
+		try {
+			hash = hashcode.process(molecule);
+			System.out.println(Long.toString(hash));
+		} catch (Exception x) {
+			logger.warn(x);
+			x.printStackTrace();
+			hash = 0L;
+		} finally {
+			
+		}
 		String thekey = null;
 		try {
 			thekey = key.process(molecule);
@@ -188,6 +205,9 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		ps_chemicals.setNull(1,Types.CHAR);
         	else
         		ps_chemicals.setString(1,thekey);
+        	if (hash == null) hash = 0L;
+        	ps_chemicals.setLong(2,hash);
+        	
     		ps_chemicals.executeUpdate();
     		ResultSet rs = ps_chemicals.getGeneratedKeys();
     		try {
@@ -261,11 +281,11 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	}
 }
 
-interface IStructureKey {
+interface IStructureKey<T> {
 	public String getKey();
-	public String process(IAtomContainer molecule) throws AmbitException;
+	public T process(IAtomContainer molecule) throws AmbitException;
 }
-class SmilesKey implements IStructureKey {
+class SmilesKey implements IStructureKey<String> {
 	protected SmilesGenerator gen;
 	protected String key="smiles";
 	public SmilesKey() {
@@ -282,7 +302,7 @@ class SmilesKey implements IStructureKey {
 	}
 }
 
-class EmptyKey implements IStructureKey {
+class EmptyKey implements IStructureKey<String> {
 	
 	public String getKey() {
 		return null;
@@ -292,7 +312,7 @@ class EmptyKey implements IStructureKey {
 	}
 }
 
-class InchiKey implements IStructureKey {
+class InchiKey implements IStructureKey<String> {
 	protected InchiProcessor inchi;
 	protected String key;
 	public InchiKey() {
@@ -306,5 +326,22 @@ class InchiKey implements IStructureKey {
 	}
 	public String process(IAtomContainer molecule) throws AmbitException {
 		return inchi.process(molecule).getInchi();
+	}
+}
+
+class HashcodeKey implements IStructureKey<Long> {
+	protected MoleculeAndAtomsHashing hashing;
+	protected String key;
+	public HashcodeKey() {
+		hashing = new MoleculeAndAtomsHashing();
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public Long process(IAtomContainer molecule) throws AmbitException {
+		return hashing.getMoleculeHash(molecule);
 	}
 }
