@@ -83,7 +83,10 @@ public class RepositoryWriterTest extends DbUnitTest {
 		Assert.assertEquals(73,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(202,property_values.getRowCount());		
-		
+		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
+		Assert.assertEquals(5,tuples.getRowCount());			
+		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
+		Assert.assertEquals(202,p_tuples.getRowCount());				
 		c.close();
 
 	}

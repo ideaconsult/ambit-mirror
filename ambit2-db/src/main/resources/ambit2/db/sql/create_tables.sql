@@ -171,7 +171,7 @@ CREATE TABLE  `property_number` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
--- Table `template` defines tuples
+-- Table `template` defines templates
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `template`;
 CREATE TABLE  `template` (
@@ -182,7 +182,7 @@ CREATE TABLE  `template` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
--- Table `template_def` defines tuples
+-- Table `template_def` template definitions
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `template_def`;
 CREATE TABLE  `template_def` (
@@ -199,10 +199,10 @@ CREATE TABLE  `template_def` (
 DROP TABLE IF EXISTS `tuples`;
 CREATE TABLE  `tuples` (
   `idtuple` int(10) unsigned NOT NULL auto_increment,
-  `idtemplate` int(10) unsigned NOT NULL,
+  `id_srcdataset` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`idtuple`),
-  KEY `FK_tuples_1` (`idtemplate`),
-  CONSTRAINT `FK_tuples_1` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_tuples_1` (`id_srcdataset`),
+  CONSTRAINT `FK_tuples_1` FOREIGN KEY (`id_srcdataset`) REFERENCES `src_dataset` (`id_srcdataset`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -259,10 +259,12 @@ CREATE TABLE  `history` (
   CONSTRAINT `FK_history_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
+-- -----------------------------------------------------
+-- Table `src_dataset` datasets
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `src_dataset`;
 CREATE TABLE  `src_dataset` (
-  `id_srcdataset` int(11) NOT NULL auto_increment,
+  `id_srcdataset` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) collate utf8_bin NOT NULL default 'default',
   `user_name` varchar(16) collate utf8_bin default NULL,
   `idreference` int(11) unsigned NOT NULL,
@@ -274,12 +276,13 @@ CREATE TABLE  `src_dataset` (
   CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+-- -----------------------------------------------------
+-- Table `struc_dataset` structures per dataset
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `struc_dataset`;
-
-
 CREATE TABLE IF NOT EXISTS  `struc_dataset` (
   `idstructure` int unsigned  NOT NULL ,
-  `id_srcdataset` int  NOT NULL ,
+  `id_srcdataset` int unsigned NOT NULL ,
   PRIMARY KEY  (`idstructure`,`id_srcdataset`),
   KEY `struc_dataset` (`id_srcdataset`),
   CONSTRAINT `struc_dataset_ibfk_1`
