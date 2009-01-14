@@ -37,6 +37,7 @@ import java.sql.Statement;
 import java.sql.Types;
 
 import ambit2.core.data.LiteratureEntry;
+import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
@@ -46,6 +47,15 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     protected PreparedStatement ps_descriptor;
     protected PreparedStatement ps_selectdescriptor;
     protected DbReferenceWriter referenceWriter;
+    protected SourceDataset dataset = null;
+	public SourceDataset getDataset() {
+		return dataset;
+	}
+
+	public void setDataset(SourceDataset dataset) {
+		this.dataset = dataset;
+	}
+
 	/**
 	 * 
 	 */
@@ -91,7 +101,10 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     protected abstract LiteratureEntry getReference(Target target);
     protected abstract Iterable<String> getPropertyNames(Target target);
     protected abstract String getComments(Target target);
-    protected abstract void descriptorEntry(Target target,int idproperty,String propertyName, int propertyIndex) throws SQLException;
+    protected abstract void descriptorEntry(Target target,int idproperty,String propertyName, int propertyIndex,int idtuple) throws SQLException;
+    protected int getTuple(SourceDataset dataset) {
+    	return -1;
+    }
     protected abstract Result transform(Target target) ;
     
     public Result write(Target target) throws SQLException {
@@ -100,6 +113,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         le = referenceWriter.write(le);
         
         Iterable<String> names = getPropertyNames(target);
+        int idtuple = getTuple(getDataset());
         int i=0;
         for (String name: names) {
         	
@@ -110,7 +124,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
             boolean found = false;
             ResultSet rs1 = ps_selectdescriptor.executeQuery();
             while (rs1.next()) {
-                descriptorEntry(target,rs1.getInt(1),name,i);
+                descriptorEntry(target,rs1.getInt(1),name,i,idtuple);
                 found = true;
             }
             rs1.close();
@@ -128,7 +142,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
                 ResultSet rs = ps_descriptor.getGeneratedKeys();
                 try {
 	                while (rs.next()) {
-	                    descriptorEntry(target,rs.getInt(1),name,i);
+	                    descriptorEntry(target,rs.getInt(1),name,i,idtuple);
 	                } 
                 } catch (Exception x) {
                 	logger.error(x);

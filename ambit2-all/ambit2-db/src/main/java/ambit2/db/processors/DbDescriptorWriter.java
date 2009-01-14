@@ -90,7 +90,7 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
     }
     @Override
     protected void descriptorEntry(DescriptorValue target, int idproperty,
-    		String propertyName, int propertyIndex) throws SQLException {
+    		String propertyName, int propertyIndex, int idtuple) throws SQLException {
     	
     }
 	@Override

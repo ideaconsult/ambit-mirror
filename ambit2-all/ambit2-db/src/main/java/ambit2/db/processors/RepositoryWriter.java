@@ -114,9 +114,10 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	}
 	public void setDataset(SourceDataset dataset) {
 		this.dataset = dataset;
+		propertyWriter.setDataset(dataset);
 	}
 	public void writeDataset(IStructureRecord structure) throws SQLException {
-		if (dataset == null) dataset = new SourceDataset("Default");
+		if (getDataset() == null) setDataset(new SourceDataset("Default"));
 		datasetWriter.write(dataset);
 		
 		ps_dataset.clearParameters();
@@ -165,7 +166,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		Long hash = null;
 		try {
 			hash = hashcode.process(molecule);
-			System.out.println(Long.toString(hash));
 		} catch (Exception x) {
 			logger.warn(x);
 			x.printStackTrace();
