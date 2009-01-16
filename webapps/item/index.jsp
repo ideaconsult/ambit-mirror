@@ -1,4 +1,7 @@
-<jsp:include page="header.jsp" flush="true"/>
+<jsp:include page="header.jsp" flush="true">
+	<jsp:param name="title_short" value="Repdose"/>
+	<jsp:param name="title" value="${initParam['application_title']}"/>
+</jsp:include>
 
 <blockquote>
 <ul>
@@ -9,6 +12,7 @@
 
 
 <jsp:include page="footer.jsp" flush="true"/>
+
 
 
 </body>

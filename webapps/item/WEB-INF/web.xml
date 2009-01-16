@@ -59,8 +59,18 @@
 		<param-name>support-email</param-name>
 		<param-value>nina@acad.bg</param-value>
 	</context-param>
-
-
+	<context-param>
+		<param-name>external_validation</param-name>
+		<param-value>http://ambit.acad.bg/ambit/php/demo.php</param-value>
+	</context-param>
+	<context-param>
+		<param-name>validation_param</param-name>
+		<param-value>session</param-value>
+	</context-param>
+	<context-param>
+		<param-name>application_title</param-name>
+		<param-value>REPDOSE structure search</param-value>
+	</context-param>
 
     <security-constraint>
 	  <web-resource-collection>
