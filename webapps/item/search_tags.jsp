@@ -13,124 +13,112 @@
 	<c:set var="search_threshold" value="${param.threshold}" scope="session"/>
 </c:if>
 
-<c:if test="${param.similarity != null}">
-	<c:set var="search_similarity" value="${param.similarity}" scope="session"/>
-</c:if>
+<c:set var="search_mode" value="exact"/>
+	
 
-<c:if test="${param.cas != null}">
-	<c:set var="search_cas" value="${param.cas}" scope="session"/>
+<!-- CAS Registry number,Formula,Chemical name,Alias -->
+<c:if test="${param.search_criteria eq 'CAS Registry number'}">
+	<c:set var="search_cas" value="${param.search_value}"/>
+	<c:set var="search_mode" value="exact"/>
 </c:if>
-<c:if test="${param.formula != null}">
-	<c:set var="search_formula" value="${param.formula}" scope="session"/>
+<c:if test="${param.search_criteria eq 'Formula'}">
+	<c:set var="search_formula" value="${param.search_value}"/>
+	<c:set var="search_mode" value="exact"/>	
 </c:if>
-<c:if test="${param.name != null}">
-	<c:set var="search_name" value="${param.name}" scope="session"/>
+<c:if test="${param.search_criteria eq 'Chemical name'}">
+	<c:set var="search_name" value="${param.search_value}"/>
+	<c:set var="search_mode" value="exact"/>	
 </c:if>
-<c:if test="${param.identifier != null}">
-	<c:set var="search_identifier" value="${param.identifier}" scope="session"/>
+<c:if test="${param.search_criteria eq 'Alias'}">
+	<c:set var="search_identifier" value="${param.search_value}"/>
+	<c:set var="search_mode" value="exact"/>	
 </c:if>
 <c:if test="${param.smiles != null}">
-	<c:set var="search_smiles" value="${param.smiles}" scope="session"/>
+	<c:set var="search_smiles" value="${param.smiles}"/>
+	<c:set var="search_mode" value="${param.search_mode}"/>	
+</c:if>
+<c:if test="${param.mol != null}">
+	<c:set var="search_mol" value="${param.mol}"/>
+	<c:set var="search_mode" value="${param.search_mode}"/>	
 </c:if>
 
-<!-- no structure submitted, will do exact search -->
-<c:if test="${(param.similarity ne 'exact') && ((empty param.mol) && (empty sessionScope.search_smiles))}">
+<c:set var="search_criteria" value="${param.search_criteria}" scope="session"/>
+<c:set var="search_value" value="${param.search_value}" scope="session"/>
+<c:set var="smiles" value="${param.smiles}" scope="session"/>
+<c:set var="source" value="${param.source}" scope="session"/>
+<c:set var="threshold" value="${param.threshold}" scope="session"/>
+<c:set var="mol" value="${param.mol}" scope="session"/>
 
-		<!-- will try to get those compounds and then perform similarity search -->
-		<c:catch var="error">
-		<a:exactsearch var="sql" params="p"  cas="${param.cas}" name="${param.name}" formula="${param.formula}" mol="${param.mol}" smiles="${sessionScope.search_smiles}" />
-		</c:catch>
-		<c:choose>
-			<c:when test="${!empty error}">
-					<c:set var="search_similarity" value="exact" scope="session"/>
-			</c:when>
-			<c:otherwise>
-					<c:catch var="error">
-							<sql:query var="rs" dataSource="jdbc/repdose">
-									${sql}
-									<c:forEach var="r" items="${p}">
-											<sql:param value="${r}"/>
-									</c:forEach>
-							</sql:query>
-					</c:catch>
-
-					<c:choose>
-						<c:when test="${!empty error}">
-								<c:set var="search_similarity" value="exact" scope="session"/>
-						</c:when>
-						<c:otherwise>
-
-								<c:forEach var="row" items="${rs.rows}">
-										<c:set var="search_smiles" value="${row.smiles}" scope="session"/>
-								</c:forEach>
-						</c:otherwise>
-					</c:choose>
-
-			</c:otherwise>
-		</c:choose>
-
-</c:if>
-
-<c:set var="sql" value=""/>
-<c:set var="error" value=""/>
-<c:set var="title" value=""/>
 
 <c:choose>
 
-<c:when test="${sessionScope.search_similarity eq 'fingerprint'}">
+<c:when test="${search_mode eq 'fingerprint'}">
 	<c:catch var="error">
-	<a:similarity var="sql" params="p" prescreen="false" threshold="${param.threshold}" mol="${param.mol}" smiles="${sessionScope.search_smiles}" page="0" pagesize="1000"/>
+	<a:similarity var="sql" params="p" prescreen="false" threshold="${param.threshold}" 
+			mol="${search_mol}" 
+			smiles="${search_smiles}" 
+			page="0" pagesize="1000"/>
 	</c:catch>
 	<c:set var="title" value="Similar structures (Tanimoto distance > ${param.threshold})"/>
 </c:when>
-<c:when test="${sessionScope.search_similarity eq 'substructure'}">
+<c:when test="${search_mode eq 'substructure'}">
 	<c:catch var="error">
-	<a:similarity var="sql" params="p" prescreen="true" threshold="${param.threshold}" mol="${param.mol}" smiles="${sessionScope.search_smiles}"  page="0" pagesize="1000"/>
+	<a:similarity var="sql" params="p" prescreen="true" threshold="${param.threshold}" 
+			mol="${param.mol}" 
+			smiles="${search_smiles}"  
+			page="0" pagesize="1000"/>
 	</c:catch>
 	<c:choose>
-		<c:when test="${!empty sessionScope.search_smiles}">
-				<c:set var="query" value="${sessionScope.search_smiles}"/>
+		<c:when test="${!empty search_smiles}">
+				<c:set var="query" value="${search_smiles}"/>
 				<c:set var="queryType" value="smiles"/>
 		</c:when>
 		<c:otherwise>
-				<c:set var="query" value="${param.mol}"/>
+				<c:set var="query" value="${search_mol}"/>
 				<c:set var="queryType" value="mol"/>
 		</c:otherwise>
 		</c:choose>
 	<c:set var="title" value="Substructure"/>
 </c:when>
-<c:otherwise>
+<c:when test="${search_mode eq 'structure'}">
 	<c:catch var="error">
-	<a:exactsearch var="sql" params="p"  cas="${param.cas}" name="${param.name}" formula="${param.formula}" mol="${param.mol}" smiles="${sessionScope.search_smiles}" />
+	<a:exactsearch var="sql" params="p"  
+		cas="" 
+		name="" 
+		formula="" 
+		mol="${search_mol}" 
+		smiles="${search_smiles}" />
 	</c:catch>
-	<c:set var="title" value="Exact search "/>
+	<c:set var="title" value="${search_criteria}"/>
+</c:when>	
+<c:when test="${search_mode eq 'exact'}">
+	<c:catch var="error">
+	<a:exactsearch var="sql" params="p"  
+		cas="${search_cas}" 
+		name="${search_name}" 
+		formula="${search_formula}" 
+		mol="${search_mol}" 
+		smiles="${search_smiles}" />
+	</c:catch>
+	<c:set var="title" value="${search_criteria}"/>
+</c:when>	
+<c:otherwise>	
+		<c:set var="error" value="${search_mode}" scope="session"/>
+		<c:redirect url="search.jsp"/>
 </c:otherwise>
 </c:choose>
 
-		<c:if test="${!empty param.cas}">
-			<c:set var="title" value="${title}CAS No=${param.cas}&nbsp;"/>
-		</c:if>
-		<c:if test="${!empty param.name}">
-			<c:set var="title" value="${title}Chemical name =${param.name}&nbsp"/>
-		</c:if>
-		<c:if test="${!empty param.formula}">
-			<c:set var="title" value="${title}Formula=${param.formula}&nbsp;"/>
-		</c:if>
-
 <c:choose>
 <c:when test="${empty sql}">
-		<c:redirect url="search_substances.jsp">
-				<c:param name="error" value="Search criteria not specified! ${error}"/>
-		</c:redirect>
+		<c:set var="error" value="Search criteria not specified" scope="session"/>
+		<c:redirect url="search.jsp"/>
 </c:when>
 <c:when test="${!empty error}">
-		<c:redirect url="search_substances.jsp">
-				<c:param name="error" value="${error}"/>
-		</c:redirect>
+		<c:set var="error" value="${error}" scope="session"/>
+		<c:redirect url="search.jsp"/>
 </c:when>
 <c:otherwise>
 <c:catch var="error">
-
 		<sql:query var="rs" dataSource="jdbc/repdose">
 				${sql}
 				<c:forEach var="r" items="${p}">
@@ -141,16 +129,15 @@
 </c:catch>
 
 <c:if test="${!empty error}">
-		<c:redirect url="search_substances.jsp">
-			<c:param name="error" value="${error}"/>
+		<c:set var="error" value="${error}" scope="session"/>
+		<c:redirect url="search.jsp">
 		</c:redirect>
 </c:if>
 
 <c:choose>
 <c:when test="${rs.rowCount eq 0}">
-		<c:redirect url="search_substances.jsp">
-				<c:param name="error" value="No records found. ${sql}"/>
-		</c:redirect>
+		<c:set var="error" value="No records found. ${search_criteria} ${title}" scope="session"/>
+		<c:redirect url="search.jsp"/>
 </c:when>
 <c:when test="${empty error}">
 
@@ -165,7 +152,7 @@
 	<sql:transaction dataSource="jdbc/repdose">
 		<sql:update var="dsname">
 			insert into dsname select null,substring(?,1,32),idambituser,now() from ambituser where mysqluser=? on duplicate key update updated=now()
-			<sql:param value="${sessionScope.search_similarity}"/>
+			<sql:param value="${search_mode}"/>
 			<sql:param value="${ambituser}"/>
 		</sql:update>
 		<sql:query var="dsname" sql="SELECT LAST_INSERT_ID() AS idquery" />
@@ -177,7 +164,7 @@
 		<c:forEach var="row" items="${rs.rows}">
 			<c:set var="error" value=""/>
 			<c:set var="match" value="1"/>
-			<c:if test="${sessionScope.search_similarity eq 'substructure'}">
+			<c:if test="${search_mode eq 'substructure'}">
 						<c:catch var ="error">
 								<a:isomorphism var="match" subgraph="true" mol="${row.smiles}" molType="smiles" query="${query}" queryType="${queryType}" />
 						</c:catch>
@@ -200,8 +187,8 @@
 </c:catch>
 </c:when>
 <c:otherwise>
-		<c:redirect url="search_substances.jsp">
-				<c:param name="error" value="${error}"/>
+		<c:set var="error" value="${error}"/>
+		<c:redirect url="search.jsp">
 		</c:redirect>
 </c:otherwise>
 </c:choose>
@@ -212,7 +199,6 @@
 </c:choose>
 
 		<c:if test="${!empty idquery}">
-
 			<c:redirect url="query.jsp">
 				<c:param name="idquery" value="${idquery}"/>
 				<c:param name="title" value="${title}"/>

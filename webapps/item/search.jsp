@@ -20,15 +20,21 @@
 <title>Search substances in REPDOSE</title>
 <SCRIPT type="text/javascript">
 function clearFields(){
-   document.searchForm.cas.value = "";
-
+   document.identifiersForm.search_value = "";
+   
+}
+function getSimilarityMol(){
+   document.similarityForm.mol.value = escape(document.JCPApplet.getMolFile());
+   return document.similarityForm.mol.value;
    }
-function getMol(){
-   document.searchForm.mol.value = escape(document.JCPApplet.getMolFile());
-   return document.searchForm.mol.value;
+function getStrucMol(){
+   document.strucForm.mol.value = escape(document.JCPApplet.getMolFile());
+   return document.strucForm.mol.value;
    }
+   
 function load(){
-	 document.searchForm.mol.value = "";
+	 document.strucForm.mol.value = "";
+	 document.similarityForm.mol.value = "";
    //document.JCPApplet.setMolFile(null);
    window.status="Page is loaded"
    }
@@ -70,13 +76,15 @@ function load(){
 
 <!-- end initialization -->
 
-<c:if test="${!empty param.error}">
+<c:if test="${!empty sessionScope.error}">
 	<div class="success">
-	${param.error}
+	${sessionScope.error}
 	</div>
+	<c:set var="error" value="" scope="session"/>
 </c:if>
 
-<c:set var="headercolor" value="#DDDDDD"/>
+
+<c:set var="headercolor" value="#BBBBBB"/>
 
 <table bgcolor="#FFFFFF" width="95%" border="0">
 
@@ -115,9 +123,6 @@ function load(){
 </td>
 <td>
 	<input type="text" id="search_value" name="search_value" value="${sessionScope.search_value}" size="30" MAXLENGTH="40">
-	<!--
-	<input type="checkbox" name="soundsLike" >Sounds like
-	-->
 </td>
 <td align="right">
 	<input type="submit" value="Search">
@@ -125,8 +130,6 @@ function load(){
 </td>
 
 </form>
-
-<form action="search_tags.jsp"  name="searchForm" method="post"  onSubmit="return getMol()" onReset="return clearFields()">
 
 <td align="right">
 </td>
@@ -156,25 +159,30 @@ function load(){
 		-->
 		<a href="http://almost.cubic.uni-koeln.de/cdk/jcp" target=_blank>JChemPaint</a> structure diagram editor . If you don't see Java applet here, check your Java browse settings.
 		</applet>
-	<input type="hidden" name="mol" value="" >		
 </th>
 
 </tr>
 
 <tr bgcolor="${querycolor}">
+<form action="search_tags.jsp"  name="strucForm" method="post"  onSubmit="return getStrucMol()" onReset="return clearFields()">
 <td align="left">
-<select name="struc_source" id="struc_source">
-	<option value ="SMILES">SMILES</option>
-	<option value ="Structure diagram" selected="YES">Structure diagram</option>	
+<select name="source" id="source">
+	<option value ="smiles">SMILES</option>
+	<option value ="mol" selected="YES">Structure diagram</option>	
 </select>
 </td>
 
-<td ><input type="text" id="smiles" name="smiles"  value="${search_smiles}" size="30" MAXLENGTH="40"></td>
+<td >
+<input type="text" id="smiles" name="smiles"  value="${sessionScope.smiles}" size="30" MAXLENGTH="40">
+<input type="hidden" id="mol" value="" name="mol" >
+<input type="hidden" id="search_mode" value="structure" name="search_mode"> 
+</td>
 <td align="right">
 <input type="submit" value="Search">
 <a href="help.jsp?anchor=search_structures" target="help"><img src="images/help.png" alt="help" title="How to search structures in REPDOSE?" border="0"></a>
 </td>
 
+</form>
 
 </tr>
 <tr bgcolor="${headercolor}">
@@ -184,14 +192,20 @@ function load(){
 </tr>
 
 <tr bgcolor="${querycolor}">
+
+<form action="search_tags.jsp"  name="similarityForm" method="post"  onSubmit="return getSimilarityMol()" onReset="return clearFields()">
 <td align="left">
-<select name="similarity_source" id="similarity_source">
-	<option value ="SMILES">SMILES</option>
-	<option value ="Structure diagram" selected="YES">Structure diagram</option>	
+<select name="source" id="source">
+	<option value ="smiles">SMILES</option>
+	<option value ="mol" selected="YES">Structure diagram</option>	
 </select>
 </td>
 
-<td colspan="1"><input type="text" id="smiles" name="smiles"  value="${search_smiles}" size="30" MAXLENGTH="40"></td>
+<td colspan="1">
+	<input type="text" id="smiles" name="smiles"  value="${sessionScope.smiles}" size="30" MAXLENGTH="40">
+	<input type="hidden" name="mol" value="" >
+	<input type="hidden" id="search_mode" value="fingerprint" name="search_mode">	
+</td>
 <td align="right">
 <input type="submit" value="Search">
 <a href="help.jsp?anchor=search_similarity" target="help"><img src="images/help.png" alt="help" title="How to search similar structures in REPDOSE?" border="0"></a>
@@ -204,14 +218,14 @@ function load(){
 
 <td colspan="2">
 				<c:set var="thresholds">1.0,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1</c:set>
-				<c:if test="${empty sessionScope.search_threshold}">
-					<c:set var="search_threshold" value="0.5" scope="session"/>
+				<c:if test="${empty sessionScope.threshold}">
+					<c:set var="threshold" value="0.5" scope="session"/>
 				</c:if>
 
 				<select name="threshold" id="threshold">
 					<c:forTokens var="t" items="${thresholds}" delims=",">
 						<c:set	var="checked" value=""/>
-						<c:if test="${t eq sessionScope.search_threshold}">
+						<c:if test="${t eq sessionScope.threshold}">
 							<c:set	var="checked" value="selected"/>
 						</c:if>
 
@@ -219,8 +233,9 @@ function load(){
 		  		</c:forTokens>
 				</select>
 </td>
-</tr>
 </form>
+</tr>
+
 
 <tr bgcolor="${headercolor}">
 <th colspan="3"><i>Substructure</i></th>
