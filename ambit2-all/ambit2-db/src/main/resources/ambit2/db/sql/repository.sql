@@ -464,6 +464,14 @@ SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype
 FROM property_values join property_string using(idvalue,idtype);
 
 -- -----------------------------------------------------
+-- templates
+-- -----------------------------------------------------
+create view `template_view` as
+SELECT idtemplate,template.name as tname,idproperty,properties.name,idreference,units,comments 
+FROM template join template_def using(idtemplate) join properties using(idproperty) 
+order by template.idtemplate
+
+-- -----------------------------------------------------
 -- default users (guest, admin)
 -- -----------------------------------------------------
 
