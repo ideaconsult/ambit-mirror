@@ -39,7 +39,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ambit2.core.data.Profile;
-import ambit2.core.io.Property;
+import ambit2.core.data.Property;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
 import ambit2.dbui.StoredQueryTableModel;

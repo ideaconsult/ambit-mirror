@@ -40,6 +40,8 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
 
+import ambit2.core.data.Property;
+
 /**
  * Iterating reader for delimited files.
  * 

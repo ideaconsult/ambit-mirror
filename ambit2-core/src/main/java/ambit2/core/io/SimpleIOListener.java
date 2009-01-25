@@ -37,6 +37,7 @@ import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
 import ambit2.core.data.Profile;
+import ambit2.core.data.Property;
 
 public class SimpleIOListener implements IReaderListener, IWriterListener {
 

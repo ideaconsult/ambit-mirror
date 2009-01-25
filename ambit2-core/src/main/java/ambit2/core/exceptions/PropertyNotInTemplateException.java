@@ -24,16 +24,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.core.exceptions;
 
-import ambit2.core.data.experiment.StudyTemplate;
+import ambit2.core.data.Template;
 
 public class PropertyNotInTemplateException extends AmbitException {
 	public static final String MESSAGE="Property not in template!"; 
 	Object key;
-	StudyTemplate template;
+	Template template;
 	public PropertyNotInTemplateException() {
 		this(MESSAGE,null,null,null);
 	}
-	public PropertyNotInTemplateException(Object key, StudyTemplate template) {
+	public PropertyNotInTemplateException(Object key, Template template) {
 		this(MESSAGE,null,key,template);
 	}
 	public PropertyNotInTemplateException(String arg0) {
@@ -44,7 +44,7 @@ public class PropertyNotInTemplateException extends AmbitException {
 		this(null,arg0,null,null);
 	}
 
-	public PropertyNotInTemplateException(String arg0, Throwable arg1, Object key, StudyTemplate template) {
+	public PropertyNotInTemplateException(String arg0, Throwable arg1, Object key, Template template) {
 		super(arg0, arg1);
 		this.key = key;
 		this.template = template;
@@ -55,10 +55,10 @@ public class PropertyNotInTemplateException extends AmbitException {
 	public void setKey(Object key) {
 		this.key = key;
 	}
-	public StudyTemplate getTemplate() {
+	public Template getTemplate() {
 		return template;
 	}
-	public void setTemplate(StudyTemplate template) {
+	public void setTemplate(Template template) {
 		this.template = template;
 	}
 

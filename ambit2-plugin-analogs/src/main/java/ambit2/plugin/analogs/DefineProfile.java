@@ -32,7 +32,7 @@ package ambit2.plugin.analogs;
 import java.sql.ResultSet;
 
 import ambit2.core.data.Profile;
-import ambit2.core.io.Property;
+import ambit2.core.data.Property;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;

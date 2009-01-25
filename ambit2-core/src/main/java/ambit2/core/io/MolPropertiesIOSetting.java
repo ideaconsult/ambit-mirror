@@ -11,9 +11,11 @@ import java.util.Map;
 
 import org.openscience.cdk.io.setting.IOSetting;
 
+import ambit2.core.data.Property;
+
 /**
  * An {@link org.openscience.cdk.io.setting.IOSetting} descendant to provide means for transforming property names. See
- * {@link ambit2.core.io.Property} and {@link ambit2.ui.AmbitSettingsListener}. 
+ * {@link ambit2.core.data.Property} and {@link ambit2.ui.AmbitSettingsListener}. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-2-18
  */

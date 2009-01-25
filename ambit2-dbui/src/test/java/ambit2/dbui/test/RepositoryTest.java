@@ -37,7 +37,7 @@ public abstract class RepositoryTest extends TestCase {
 		datasource = DatasourceFactory.getDataSource(
 				DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "3306", "ambit2", "guest","guest" ));
+						"localhost", "33060", "ambit2", "guest","guest" ));
 		
 	}
 	@Override

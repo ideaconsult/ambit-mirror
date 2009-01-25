@@ -31,12 +31,12 @@ package ambit2.core.data.experiment;
 
 import java.util.Hashtable;
 
+import weka.experiment.Experiment;
 import ambit2.core.data.AmbitBean;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.PropertyNotInTemplateException;
+import ambit2.core.data.Template;
 
 /**
- * A single study, defined by its template {@link StudyTemplate} and conditions. 
+ * A single study, defined by its template {@link Template} and conditions. 
  * The template defines only condition names (e.g. "Species", "Duration") and here in the {@link Study} class 
  * the condition values have to be specified. (e.g.  Species="Fathead Minnow", "Duration"="96h").
  * Conditions are stored in a {@link java.util.Hashtable}. 
@@ -49,8 +49,7 @@ public class Study extends AmbitBean {
 	 * 
 	 */
 	private static final long serialVersionUID = -1502943233991253317L;
-	protected StudyTemplate template = null;
-    protected Hashtable studyConditions = null;
+	protected Template template = null;
     protected Hashtable studyResults = null;
     protected String name;
     protected int id;
@@ -77,10 +76,9 @@ public class Study extends AmbitBean {
     /**
      * @param name
      */
-    public Study(String name,StudyTemplate template) {
+    public Study(String name,Template template) {
         super();
         setName(name);
-        studyConditions = new Hashtable();
         studyResults = new Hashtable();
         setTemplate(template);
         
@@ -90,65 +88,31 @@ public class Study extends AmbitBean {
      * @param name
      * @param id
      */
-    public Study(String name, int id,StudyTemplate template) {
+    public Study(String name, int id,Template template) {
         this(name,template);
         setId(id);
-        studyConditions = new Hashtable();
         studyResults = new Hashtable();
         setTemplate(template);
     }
 
-    public synchronized Hashtable getStudyConditions() {
-        return studyConditions;
-    }
-    public synchronized void setStudyConditions(Hashtable studyConditions) {
-        if (studyConditions == null) studyConditions = new Hashtable();
-        this.studyConditions.clear();
-        this.studyConditions.putAll(studyConditions);
-    }
-    public synchronized StudyTemplate getTemplate() {
+    public synchronized Template getTemplate() {
         return template;
     }
-    public synchronized void setTemplate(StudyTemplate template) {
+    public synchronized void setTemplate(Template template) {
         this.template = template;
         setName(template.getName());
-        if (studyConditions != null)  studyConditions.clear();
-        else studyConditions = new Hashtable();
-        if (template !=null)
-        template.getStudyConditions(studyConditions);
         
         if (studyResults != null) studyResults.clear();
         else studyResults = new Hashtable();
-        if (template !=null)
-        template.getStudyResults(studyResults);        
+       
     }
-    public void clearStudyConditions() {
-    	if (studyConditions != null) studyConditions.clear();
-    }
-    /**
-     * The field has to be one of the study conditions, defined in the template.
-     * @param field
-     * @param value
-     * @throws AmbitException
-     */
-    public void setStudyCondition(Object field, Object value) throws AmbitException {
-        if (template == null) throw new AmbitException("Undefined study template!");
-        TemplateField tf = template.getField(field);
-        if (tf == null)  throw new PropertyNotInTemplateException("Unknown field "+field);
-        if (studyConditions == null) studyConditions = new Hashtable();
-        studyConditions.put(tf,value);
-    }
-    public Object getStudyCondition(Object field) throws AmbitException {
-        if (studyConditions == null) return null;
-        else return studyConditions.get(field);
-    }
+
     /* (non-Javadoc)
      * @see ambit2.data.AmbitObject#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
         if (obj instanceof Study) {
             return super.equals(obj) && template.equals(((Study)obj).template) 
-            &&       	studyConditions.equals(((Study)obj).studyConditions)
             ;
         } else return false;
     }
@@ -158,17 +122,14 @@ public class Study extends AmbitBean {
     public Object clone() throws CloneNotSupportedException {
         Study study = (Study)super.clone();
         study.setTemplate(template);
-        if (studyConditions != null) study.setStudyConditions((Hashtable)studyConditions.clone());
-        else study.setStudyConditions(null);
         if (studyResults != null) study.setStudyResults((Hashtable)studyResults.clone());
         else study.setStudyResults(null);        
         return study;
     }
     public void clear() {
-    	if (studyConditions != null) studyConditions.clear();
     }
     public String toString() {
-    	return getName() + "\n" + template.getName() + "\n" + studyConditions.toString();
+    	return getName() + "\n" + template.getName();
     }
     
 	public Hashtable getStudyResults() {
@@ -181,11 +142,11 @@ public class Study extends AmbitBean {
         this.studyResults.putAll(studyResults);
 	}
 	public String getTemplateName() {
-		if (template == null) template = new StudyTemplate("");
+		if (template == null) template = new Template("");
 		return getTemplate().getName();
 	}
 	public void setTemplateName(String templatename) {
-		if (template == null) template = new StudyTemplate("");
+		if (template == null) template = new Template("");
 		getTemplate().setName(templatename);
 	}	
 }

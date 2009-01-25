@@ -34,7 +34,7 @@ import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
 import ambit2.core.data.Profile;
-import ambit2.core.io.Property;
+import ambit2.core.data.Property;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.QueryResultsPanel;

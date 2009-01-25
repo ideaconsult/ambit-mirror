@@ -42,6 +42,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
 
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.Property;
 import ambit2.core.exceptions.AmbitIOException;
 
 /**

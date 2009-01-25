@@ -36,7 +36,7 @@ import java.util.Iterator;
 import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.core.data.Profile;
-import ambit2.core.io.Property;
+import ambit2.core.data.Property;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.DBProcessorsChain;

@@ -34,6 +34,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.core.data.Property;
 import ambit2.core.smiles.SmilesParserWrapper;
 
 /**

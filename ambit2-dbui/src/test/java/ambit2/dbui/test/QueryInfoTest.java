@@ -136,19 +136,4 @@ public class QueryInfoTest extends QueryTest<IQueryObject> {
 	}	
     */
 }
-/*
- * AND
-select Q1.idquery,s.idchemical,idstructure,Q1.selected as selected,Q1.metric as metric from structure as s
-join
-(select 1 as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join struc_dataset using(idstructure) join src_dataset using (id_srcdataset) where src_dataset.name = "EINECS")
-as QSCOPE
-using (idstructure)
-join
-(select 1 as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join structure_fields using(idstructure) join field_names as f using (idfieldname) where f.name="Field_1" and  value = "20")
-as Q1
-using (idstructure)
-join
-(select 1 as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join structure_fields using(idstructure) join field_names as f using (idfieldname) where f.name="Field_2" and  value = "40")
-as Q2
-using (idstructure)
- */
+
