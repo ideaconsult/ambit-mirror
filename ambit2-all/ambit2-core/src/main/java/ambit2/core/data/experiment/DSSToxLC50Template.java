@@ -1,12 +1,14 @@
 package ambit2.core.data.experiment;
 
+import ambit2.core.data.Template;
+
 /**
  * A template with fields extracted from DSSTox EPA Fathead Minnow database.
  * Use when importing DSSTox Fathead Minnow SDF file.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
  */
-public class DSSToxLC50Template extends StudyTemplate {
+public class DSSToxLC50Template extends Template {
 
 	public DSSToxLC50Template(String name) {
 		super(name);

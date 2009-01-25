@@ -17,10 +17,10 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 
 import ambit2.core.data.Profile;
+import ambit2.core.data.Property;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.IteratingXLSReader;
-import ambit2.core.io.Property;
 import ambit2.ui.AmbitSettingsListener;
 
 /**

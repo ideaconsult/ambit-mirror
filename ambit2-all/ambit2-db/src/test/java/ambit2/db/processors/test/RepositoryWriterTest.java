@@ -88,6 +88,18 @@ public class RepositoryWriterTest extends DbUnitTest {
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
 		Assert.assertEquals(202,p_tuples.getRowCount());				
 		c.close();
+		/**
+		 * Removing redundant properties
+insert ignore into property_values
+select id,idproperty,idstructure,idvalue,idtype,user_name,status from property_values where idstructure>3
+on duplicate key update idstructure=3
+delete from property_values where idstructure>3
+
+insert ignore into struc_dataset
+select idstructure,id_srcdataset from struc_dataset where idstructure>3
+on duplicate key update idstructure=3
+delete from struc_dataset where idstructure>3
+		 */
 
 	}
 	

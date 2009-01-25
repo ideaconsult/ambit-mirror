@@ -7,30 +7,39 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import ambit2.core.io.Property;
 
 /**
  * A set of properties, defining a (e.g. toxicological) profile
  * @author nina
  *
  */
-public class Profile {
-	protected Hashtable<String,Property> container;
+public class Profile<P extends Property> {
+	protected Hashtable<String,P> container;
+	protected String name;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5818041819278493531L;
 	public Profile() {
-		container = new Hashtable<String, Property>();
+		container = new Hashtable<String, P>();
 	}
+	
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}	
 	/**
 	 * 
 	 * @return
 	 */
-	public Iterator<Property> getProperties(final boolean enabled) {
-		return new Iterator<Property>() {
-			Property nextProperty = null;
-			Enumeration<Property> properties = container.elements();
+	public Iterator<P> getProperties(final boolean enabled) {
+		return new Iterator<P>() {
+			P nextProperty = null;
+			Enumeration<P> properties = container.elements();
 		public boolean hasNext() {
 				while (properties.hasMoreElements()) {
 					nextProperty = properties.nextElement();
@@ -40,7 +49,7 @@ public class Profile {
 				return false;
 			}
 
-		public Property next() {
+		public P next() {
 			return nextProperty;
 		}
 
@@ -51,17 +60,24 @@ public class Profile {
 		
 		
 	}
-	public Property get(String key) {
+	public P get(String key) {
 		return container.get(key);
 	}
-	public void add(Property property) {
+	public P get(P query) {
+		return container.get(query.getName());
+	}	
+	public void add(P property) {
 		container.put(property.getName(),property);
-
 	}
+
 	public int size() {
 		return container.size();
 	}
-	public Collection<Property> values() {
+	public Collection<P> values() {
 		return container.values();
 	}
+	public void clear() {
+		container.clear();
+	}
+
 }

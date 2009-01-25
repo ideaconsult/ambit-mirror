@@ -25,10 +25,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.core.data.experiment;
 
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.Template;
 
 
 
-public class AquireTemplate extends StudyTemplate {
+public class AquireTemplate extends Template {
 	protected boolean simple = true;
     public static String[] AQUIREConditions = {
     		"Endpoint","LatinName","ConcentrationUnits","AquireLocation","Effect","Exposure","TestDuration","TestDurationOp","Tissue",

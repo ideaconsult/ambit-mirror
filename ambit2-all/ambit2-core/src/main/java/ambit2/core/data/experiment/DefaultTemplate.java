@@ -29,13 +29,15 @@
 
 package ambit2.core.data.experiment;
 
+import ambit2.core.data.Template;
+
 
 /**
  * Default template.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-5-2
  */
-public class DefaultTemplate extends StudyTemplate {
+public class DefaultTemplate extends Template {
     public static final String species = "Species";
     public static final String species_sex = "Species.sex";
     public static final String species_strain = "Species.strain";

@@ -15,6 +15,8 @@ import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
 
+import ambit2.core.data.Property;
+
 /**
  * A descendant of {@link IteratingMDLReader} able to ask for type of each SDF property
  * @author Nina Jeliazkova nina@acad.bg

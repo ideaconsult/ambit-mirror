@@ -13,7 +13,7 @@ import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
 import ambit2.core.data.Profile;
-import ambit2.core.io.Property;
+import ambit2.core.data.Property;
 import ambit2.ui.editors.SelectFieldsPanel;
 
 /**
@@ -29,7 +29,7 @@ import ambit2.ui.editors.SelectFieldsPanel;
  */
 public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     protected int level;
-    protected Profile properties;
+    protected Profile<Property> properties;
     protected int counter= 0;
 
     /**
@@ -99,7 +99,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     	
     	
     }
-	public Profile getProperties() {
+	public Profile<Property> getProperties() {
 		return properties;
 	}
 	public void setProperties(Profile properties) {

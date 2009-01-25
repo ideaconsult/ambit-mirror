@@ -35,9 +35,9 @@ import javax.swing.table.AbstractTableModel;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.data.Profile;
+import ambit2.core.data.Property;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.io.Property;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;

@@ -193,9 +193,15 @@ The database can be searched by identifiers, attribute value or range, experimen
   		<name>ambit at acad</name>
   		<url>scp://ambit.acad.bg/var/www/html/ambit/maven</url>
   	</snapshotRepository>
+  	<!-- 
     <site>
       <id>website_acad</id>
       <url>scp://ambit.acad.bg/var/www/html/ambit/ambit2</url>
+    </site>
+     -->
+    <site>
+      <id>website_ambit</id>
+      <url>scp://web.sourceforge.net/home/groups/a/ambit/htdocs</url>
     </site>
  	
   </distributionManagement>

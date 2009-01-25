@@ -1,12 +1,14 @@
 package ambit2.core.data.experiment;
 
+import ambit2.core.data.Template;
+
 
 /**
  * Template for LLNA data.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
  */
-public class LLNATemplate extends StudyTemplate {
+public class LLNATemplate extends Template {
 	/**
      * 
      */
