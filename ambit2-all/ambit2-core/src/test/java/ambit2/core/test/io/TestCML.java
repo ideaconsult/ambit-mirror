@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.util.Iterator;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
@@ -16,13 +18,12 @@ import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.smiles.SmilesParser;
 
-public class TestCML extends TestCase 
+public class TestCML 
 {   protected SmilesParser parser;
 
-    @Override
-        protected void setUp() throws Exception {
-            super.setUp();
-            parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+    @Before
+        public void setUp() throws Exception {
+              parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         }
 		
     protected String writeCML(IMolecule mol) throws Exception {
@@ -32,6 +33,7 @@ public class TestCML extends TestCase
         cmlwriter.close();
         return output.toString();        
     }
+    @Test
     public void testCML_twoPropertiesForAllAtoms() throws Exception
     {       
         final String prop1 = "PropFirst_ID";
@@ -48,9 +50,9 @@ public class TestCML extends TestCase
 
         for (int i=0; i < mol.getAtomCount(); i++) {
             String id = Integer.toString(i+1);
-            assertEquals(id,mol.getAtom(i).getProperty(prop2+id));
-            assertEquals(id,mol.getAtom(i).getProperty(prop2+id));
-            assertEquals(2,mol.getAtom(i).getProperties().size());
+            Assert.assertEquals(id,mol.getAtom(i).getProperty(prop2+id));
+            Assert.assertEquals(id,mol.getAtom(i).getProperty(prop2+id));
+            Assert.assertEquals(2,mol.getAtom(i).getProperties().size());
         }
         
         String cmlcode = writeCML(mol);
@@ -62,15 +64,15 @@ public class TestCML extends TestCase
         
         for (int i=0; i < mol2.getAtomCount(); i++) {
             String id = mol2.getAtom(i).getID();
-            assertEquals(id,mol2.getAtom(i).getProperty(prop1+id));
-            assertEquals(id,mol2.getAtom(i).getProperty(prop2+id));
-            assertEquals(2,mol2.getAtom(i).getProperties().size());
+            Assert.assertEquals(id,mol2.getAtom(i).getProperty(prop1+id));
+            Assert.assertEquals(id,mol2.getAtom(i).getProperty(prop2+id));
+            Assert.assertEquals(2,mol2.getAtom(i).getProperties().size());
         }
         
         
             
     }       
-    
+    @Test
     public void xtestCML_singlePropertyForAllAtoms() throws Exception
     {       
         String smiles = "CCCC";
@@ -84,8 +86,8 @@ public class TestCML extends TestCase
         printAtomProperties(mol);
         for (int i=0; i < mol.getAtomCount(); i++) {
             String id = Integer.toString(i+1);
-            assertEquals(id,mol.getAtom(i).getProperty("Prop"+id));
-            assertEquals(1,mol.getAtom(i).getProperties().size());
+            Assert.assertEquals(id,mol.getAtom(i).getProperty("Prop"+id));
+            Assert.assertEquals(1,mol.getAtom(i).getProperties().size());
         }
         
         String cmlcode = writeCML(mol);
@@ -96,15 +98,15 @@ public class TestCML extends TestCase
         printAtomProperties(mol2);
         for (int i=0; i < mol2.getAtomCount(); i++) {
             String id = mol2.getAtom(i).getID();
-            assertEquals(id,mol2.getAtom(i).getProperty("Prop"+id));
-            assertEquals(1,mol2.getAtom(i).getProperties().size());
+            Assert.assertEquals(id,mol2.getAtom(i).getProperty("Prop"+id));
+            Assert.assertEquals(1,mol2.getAtom(i).getProperties().size());
         }
         
         System.out.println(writeCML(mol2));
             
     }       
 
-	
+	@Test
 	public void xtestCML_AromaticFlag() throws Exception 
 	{		
 	    String smiles = "c1ccccc1";
@@ -114,7 +116,7 @@ public class TestCML extends TestCase
 			String cmlcode = writeCML(mol);
             Iterator<IAtom> atoms = mol.atoms();
             while (atoms.hasNext()) {
-                assertTrue(atoms.next().getFlag(CDKConstants.ISAROMATIC));
+                Assert.assertTrue(atoms.next().getFlag(CDKConstants.ISAROMATIC));
             }			
 			System.out.println(cmlcode);
 			
@@ -124,7 +126,7 @@ public class TestCML extends TestCase
 			printAromaticity(mol2);
 		    atoms = mol2.atoms();
 		    while (atoms.hasNext()) {
-		        assertTrue(atoms.next().getFlag(CDKConstants.ISAROMATIC));
+		        Assert.assertTrue(atoms.next().getFlag(CDKConstants.ISAROMATIC));
 	        }
 	}	
 	
@@ -167,4 +169,5 @@ public class TestCML extends TestCase
         chemFile = (IChemFile)reader.read(new org.openscience.cdk.ChemFile());
         return chemFile;
     }
+
 }
