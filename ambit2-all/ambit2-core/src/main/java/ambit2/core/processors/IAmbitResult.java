@@ -1,4 +1,4 @@
-package ambit2.similarity;
+package ambit2.core.processors;
 
 import java.io.Serializable;
 import java.io.Writer;
