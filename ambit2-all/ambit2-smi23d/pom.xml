@@ -6,7 +6,7 @@
     <version>2.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ambit2-smi23d</groupId>
+  <groupId>ambit</groupId>
   <artifactId>ambit2-smi23d</artifactId>
   <name>ambit2-smi23d</name>
   <version>2.0.0-SNAPSHOT</version>
