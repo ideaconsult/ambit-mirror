@@ -5,7 +5,7 @@
     <version>2.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ambit2-hashcode</groupId>
+  <groupId>ambit</groupId>
   <artifactId>ambit2-hashcode</artifactId>
   <name>ambit2-hashcode</name>
   <version>2.0.0-SNAPSHOT</version>
