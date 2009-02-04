@@ -1,6 +1,7 @@
 package ambit2.similarity;
 
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.IAmbitResult;
 import ambit2.model.AbstractModel;
 import ambit2.model.IDataset;
 
