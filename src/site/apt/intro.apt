@@ -7,20 +7,41 @@
 
 Introduction
 
+*AMBIT
+~~~~~~
+  AMBIT, a software for chemoinformatic data management, is an outcome of the LRI project: 
+  <<Building blocks for a future (Q)SAR ((Quantitative) Structure Activity Relationship) decision support system>>. 
+  
+  The objective of the software is to support decisions, including chemical grouping and QSAR applicability domain appraisal.
+  The name AMBIT was chosen meaning 'an area in which something acts or operates or has power or control'. 
+  
+  The AMBIT software is available online and as a stand-alone application for beta testing at {{{http://ambit.acad.bg}AMBIT}}.
+
+  The AMBIT system consists of a database and functional modules allowing a variety of flexible searches and mining of the data stored in the database. 
+  The AMBIT database stores chemical structures, their identifiers such as CAS, Einecs, Inchi numbers; attributes such as molecular descriptors, experimental data together with test descriptions, literature references. The database can also store QSAR models. In addition the software can generate a suite of 2D and 3D molecular descriptors. 
+
+  The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. 
+  AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on "descriptor space"; 
+  approaches based on mechanistic understanding; and approaches based on structural similarity. 
+  Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.
+  
+
+*AMBIT2
+~~~~~~~  
   AMBIT2 is a complete redesign of {{{http://ambit.acad.bg}AMBIT}} software, featuring improved user interface, support for workflows, plugins and reporting for user actions.
 
-* Timeline
-	
-   * Prototype 
+** Timeline
+~~~~~~~~~~~	
+*** Prototype 
 
-		* Oct 2008
+	* Oct 2008
 
-		* Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.00-setup.exe} AmbitXT Prototype}} Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed will contain the original EINECS list.
+	* Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.00-setup.exe} AmbitXT Prototype}} Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed will contain the original EINECS list.
 
-   * Initial release
+*** Initial release
+~~~~~~~~~~~
+    * Dec 2008
 
- 		* Dec 2008
-
-   * Final release
-
+*** Final release
+~~~~~~~~~~~
  		* June 2009
