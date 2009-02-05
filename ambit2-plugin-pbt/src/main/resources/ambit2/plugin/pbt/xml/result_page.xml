@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page columns="4" rows="25" name="Result">
-<title row="1" col="1" colspan="4">
-PBT SCREENING TOOL FOR REACH
-</title>
-<title row="2" col="1" colspan="4">
-SCREENING RESULTS, ALERTS &amp; RECOMMENDATIONS						
-</title>
+<title row="14" col="1" colspan="1"/>
+<title row="15" col="1" colspan="1"/>
 
-<title row="5" col="1" colspan="1">
-P Assessment result						
-</title>
-<formula row="5" col="3" colspan="2">
-</formula>
-
-<title row="6" col="1" colspan="1">
-B Assessment result						
-</title>
-<formula row="6" col="3" colspan="2">
-</formula>
-
-
-<title row="7" col="1" colspan="1">
-T Assessment result						
-</title>
-<formula row="7" col="3" colspan="2">
-</formula>
 </page>

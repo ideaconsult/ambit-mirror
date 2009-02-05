@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page columns="6" rows="20" name="Bioaccumulation check">
+<!-- 
 <title row="1" col="1" colspan="6">
 PBT SCREENING TOOL FOR REACH
 </title>
 <title row="2" col="1" colspan="6">
 BIOACCUMULATION CHECK									
 </title>
-
 <section row="3" col="1" colspan="6" rowspan="1" value="SECTION MEASURED OR ESTIMATED QUANTITATIVE BIOACCUMULATION">
-
-<!-- 2nd row -->
 <title row="4" col="1" colspan="1">
 MEASURED BCF	
 </title>
@@ -28,16 +26,16 @@ B' RESULT \nBASED ON TEST
 <title row="4" col="6" colspan="1">
 REPORT REFERENCE
 </title>
-
-<!-- 3 row (input)-->
-<list id="A5" row="5" col="1" colspan="1">
+ -->
+<list id="A6" row="6" col="1" colspan="1">
 	<item>	
-	OECD 305 'Fish BCF Test'
+BMF (field data)
 	</item>
 	<item>	
-	Fish Dietary Test
+other (see Remark / Reference)
 	</item>	
 </list>
+<!-- 
 <input id="B5" row="5" col="2" colspan="1">
 </input>
 <input id="C5" row="5" col="3" colspan="1">
@@ -46,28 +44,20 @@ REPORT REFERENCE
 </formula>
 <formula id="E5" row="5" col="5" colspan="1">
 </formula>
-<input id="F5" row="5" col="6" colspan="1">
-</input>
+ -->
 
-<!-- 6 row -->
-<title row="6" col="1" colspan="1">
-MEASURED Log Kow 
-</title>
-<title row="6" col="3" colspan="1">
-MEASURED \nLog Kow
-</title>
-<title row="6" col="4" colspan="1">
-B' CRITERIA ASSOCIATED
-</title>
-<title row="6" col="5" colspan="1">
-B' RESULT \nBASED ON TEST
-</title>
-<title row="6" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 7 row (input)-->
-<list id="A7" row="7" col="1" colspan="1">
+<list id="A8" row="8" col="1" colspan="1">
+	<item>	
+OECD 305 'Fish BCF Test'
+	</item>
+	<item>	
+Fish Dietary Test
+	</item>	
+	<item>	
+other (see Remark / Reference)
+	</item>	
+</list>
+<list id="A10" row="10" col="1" colspan="1">
 	<item>	
 OECD 107 'Kow Shake Flask Test'
 	</item>
@@ -75,214 +65,35 @@ OECD 107 'Kow Shake Flask Test'
 OECD 117 'Kow HPLC Method'
 	</item>
 	<item>	
-OECD 123 'Kow Slow Stirring Method'	
+OECD 123 'Kow Slow Stirring Method'
 	</item>
 	<item>	
+other (see Remark / Reference)
 	</item>
-	<item>	
-US EPA QSAR KowWIN
-	</item>	
 </list>
-<title id="B7" row="7" col="2" colspan="1">
-n.a.
-</title>
-<input id="C7" row="7" col="3" colspan="1">
-</input>
-<formula id="D7" row="7" col="4" colspan="1">
-</formula>
-<formula id="E7" row="7" col="5" colspan="1">
-</formula>
-<input id="F7" row="7" col="6" colspan="1">
-</input>
 
-<!-- 8 row -->
-<title row="8" col="1" colspan="1">
-MEASURED Log Coctanol/Cwater
-</title>
-<title row="8" col="3" colspan="1">
-Log Coct./Cwater
-</title>
-<title row="8" col="4" colspan="1">
-B' CRITERIA \nASSOCIATED
-</title>
-<title row="8" col="5" colspan="1">
-B' RESULT \nBASED ON TEST
-</title>
-<title row="8" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 9 row (input)-->
-<formula id="A9" row="9" col="1" colspan="1" hint="(see SUBSTANCE Worksheet)">
-Is calculated if data available
-</formula>
-<title id="B9" row="9" col="2" colspan="1">
-n.a.
-</title>
-<formula id="C9" row="9" col="3" colspan="1">
-</formula>
-<formula id="D9" row="9" col="4" colspan="1">
-</formula>
-<formula id="E9" row="9" col="5" colspan="1">
-</formula>
-<input id="F9" row="9" col="6" colspan="1">
-</input>
-
-<!-- 10 row -->
-<title row="10" col="1" colspan="1">
-QSAR (Log Kow)
-</title>
-<title row="10" col="3" colspan="1">
-CALCULATED \nLog Kow
-</title>
-<title row="10" col="4" colspan="1">
-B' CRITERIA \nASSOCIATED
-</title>
-<title row="10" col="5" colspan="1">
-B' RESULT \nBASED ON TEST
-</title>
-<title row="10" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 11 row (input)-->
-<list id="A11" row="11" col="1" colspan="1">
-	<item>	
-	</item>
-	<item>	
+<list id="A14" row="14" col="1" colspan="1">
+<item>	
 US EPA QSAR KowWIN
 	</item>
-</list>
-<title id="B11" row="11" col="2" colspan="1">
-n.a.
-</title>
-<input id="C11" row="11" col="3" colspan="1">
-</input>
-<formula id="D11" row="11" col="4" colspan="1">
-</formula>
-<formula id="E11" row="11" col="5" colspan="1">
-</formula>
-<input id="F11" row="11" col="6" colspan="1">
-
-</input>
-</section>
-
-<section row="12" col="1" colspan="6" rowspan="1" value="SECTION QUALITATIVE INDICATORS FOR BIOACCUMULATION">
-<!-- 13 row -->
-<title row="13" col="1" colspan="2">
-Critical Body Burden (CBB) \n(mg/L)
-</title>
-<title row="13" col="2" colspan="1">
-Octanol \nsolub. (mg/L)
-</title>
-<title row="13" col="3" colspan="1">
-Coctanol &lt; CBB
-</title>
-<title row="13" col="4" colspan="1">
-REDUCED \nBIOACCUMULATION
-</title>
-<title row="13" col="5" colspan="1">
-B' RESULT \nBASED ON CBB
-</title>
-<title row="13" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 14 row (input)-->
-<formula id="A14" row="14" col="1" colspan="1">
-</formula>
-<formula id="B14" row="14" col="2" colspan="1">
-</formula>
-<formula id="C14" row="14" col="3" colspan="1">
-</formula>
-<formula id="D14" row="14" col="4" colspan="1">
-</formula>
-<formula id="E14" row="14" col="5" colspan="1">
-</formula>
-<input id="F14" row="14" col="6" colspan="1">
-</input>
-
-<!-- 15 row (input)-->
-<title id="A15" row="15" col="1" colspan="1">
-Molecular size &amp; MW Criteria
-</title>
-<title id="C15" row="15" col="3" colspan="1">
-Criteria
-</title>
-<title id="D15" row="15" col="4" colspan="1">
-REDUCED \nBIOACCUMULATION
-</title>
-<title id="E15" row="15" col="5" colspan="1">
-B' RESULT \nBASED ON MW &amp; SIZE
-</title>
-<title id="F15" row="15" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 16 row (input)-->
-<formula id="A16" row="16" col="1" colspan="1" hint="(see SUBSTANCE Worksheet)">
-Is calculated if data available
-</formula>
-<title id="B16" row="16" col="2" colspan="1">
-n.a.
-</title>
-<formula id="C16" row="16" col="5" colspan="1">
-</formula>
-<formula id="D16" row="16" col="4" colspan="1">
-</formula>
-<formula id="E16" row="16" col="5" colspan="1">
-</formula>
-<input id="F16" row="16" col="6" colspan="1">
-</input>
-
-<!-- 17 row (input)-->
-<title id="A17" row="17" col="1" colspan="1">
-Bioaccumulation data from \nMammalian studies
-</title>
-<title id="C17" row="17" col="3" colspan="1">
-Limited  or NO Uptake observed
-</title>
-<title id="D17" row="17" col="4" colspan="1">
-REDUCED \nBIOACCUMULATION
-</title>
-<title id="E17" row="17" col="5" colspan="1">
-B' RESULT \nBASED ON CBB
-</title>
-<title id="F17" row="17" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 18 row (input)-->
-<formula id="A18" row="18" col="1" colspan="1" >
-Check appropriate studies
-</formula>
-<title id="B18" row="18" col="2" colspan="1">
-n.a.
-</title>
-<list id="C18" row="18" col="3" colspan="1">
-	<item>
-	Yes
+	<item>	
+other (see Remark / Reference)	
 	</item>
-	<item>
-	No
-	</item>
-</list>
-<formula id="D18" row="18" col="4" colspan="1">
-</formula>
-<formula id="E18" row="18" col="5" colspan="1">
-</formula>
-<input id="F18" row="18" col="6" colspan="1">
-</input>
-</section>
-
-<section row="19" col="1" colspan="6" rowspan="1" value="OVERALL B Assessment Result">
-	<!-- 19 row -->
 	
-<formula id="C19" row="20" col="3" colspan="1">
-=L80
-</formula>
-<formula id="D19" row="20" col="4" colspan="3">
-=M80
-</formula>
-</section>	
+</list>
+
+<list id="C21" row="21" col="3" colspan="1">
+	<item>
+	yes
+	</item>
+	<item>
+	no
+	</item>
+</list>
+
+<title row="11" col="2" colspan="1"/>
+<title row="13" col="2" colspan="1"/>
+<title row="18" col="2" colspan="1"/>
+<title row="20" col="2" colspan="1"/>
+
 </page>

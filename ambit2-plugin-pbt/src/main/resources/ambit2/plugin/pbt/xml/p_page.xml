@@ -1,54 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page columns="6" rows="20" name="Persistency check">
-<title row="1" col="1" colspan="6">
-PBT SCREENING TOOL FOR REACH
-</title>
-<title row="2" col="1" colspan="6">
-PERSISTENCY CHECK					
-</title>
-
-
-<!-- Section biodegradation -->
-<section row="3" col="1" colspan="6" rowspan="1" value="SECTION BIODEGRADATION">
-	
-<!-- 2nd row -->
-<title row="4" col="1" colspan="1">
-READY TESTS (Freshwater)		
-</title>
-<title row="4" col="2" colspan="1">
-TEST \nDURATION
-</title>
-<title row="4" col="3" colspan="1">
-TEST CRITERIA \nACHIEVEMENT
-</title>
-<title row="4" col="4" colspan="1">
-TEST RESULT
-</title>
-<title row="4" col="5" colspan="1">
-P' RESULT \nBASED ON TEST
-</title>
-<title row="4" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 3 row (input)-->
-<list id="A5" row="5" col="1" colspan="1">
+<list id="A6" row="6" col="1" colspan="1">
 	<item>	
-	OECD 301 A 'DOC Die-Away Test'
+OECD 301 A 'DOC Die-Away Test'
 	</item>
 	<item>	
-	OECD 301 B 'CO2 Evolution Test'
+OECD 301 B 'CO2 Evolution Test'
 	</item>	
 	<item>	
-	OECD 301 C 'MITI I Test'
+OECD 301 C 'MITI I Test'
 	</item>	
 	<item>	
-	OECD 301 D 'Closed Bottle Test'
-	</item>	
+OECD 301 D 'Closed Bottle Test'
+	</item>
+	<item>		
+OECD 301 E 'Modified OECD Screening Test'
+	</item>
+	<item>		
+OECD 301 F 'Manometric Respirometry'
+	</item>
+	<item>		
+other (see Remark / Reference)
+	</item>
 </list>
-<input id="B5" row="5" col="2" colspan="1">
-</input>
-<list id="C5" row="5" col="3" colspan="1">
+
+
+<list id="C6" row="6" col="3" colspan="1">
 	<item>	
 		DOC: &gt;70%
 	</item>
@@ -65,49 +42,28 @@ REPORT REFERENCE
 		ThOD: &gt; 60%
 	</item>	
 	<item>	
-		ThOD: &gt; 60%
+		ThOD: &lt; 60%
 	</item>		
+	<item>		
+other:achieved (see Remark / Reference)
+</item>		
+	<item>	
+other: not achieved (see Remark / Reference)
+</item>			
 </list>
-<formula id="D5" row="5" col="4" colspan="1">
-</formula>
-<formula id="E5" row="5" col="5" colspan="1">
-</formula>
-<input id="F5" row="5" col="6" colspan="1">
-</input>
-
-
-<!-- 6 row -->
-<title row="6" col="1" colspan="1">
-READY TESTS (Seawater)
-</title>
-<title row="6" col="2" colspan="1">
-TEST \nDURATION
-</title>
-<title row="6" col="3" colspan="1">
-TEST CRITERIA \nACHIEVEMENT
-</title>
-<title row="6" col="4" colspan="1">
-TEST RESULT
-</title>
-<title row="6" col="5" colspan="1">
-P' RESULT \nBASED ON TEST
-</title>
-<title row="6" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
 <!-- 7 row (input)-->
-<list id="A7" row="7" col="1" colspan="1">
+<list id="A8" row="8" col="1" colspan="1">
 	<item>	
 	OECD 306 'Shake Flask Test'
 	</item>
 	<item>	
 	OECD 306 'Closed Bottle Test'
 	</item>	
+	<item>
+other (see Remark / Reference)
+		</item>	
 </list>
-<input id="B7" row="7" col="2" colspan="1">
-</input>
-<list id="C7" row="7" col="3" colspan="1">
+<list id="C8" row="8" col="3" colspan="1">
 	<item>	
 		DOC: &gt;70%
 	</item>
@@ -120,222 +76,118 @@ REPORT REFERENCE
 	<item>	
 		ThOD: &gt; 60%
 	</item>		
-</list>
-<formula id="D7" row="7" col="4" colspan="1">
-</formula>
-<formula id="E7" row="7" col="5" colspan="1">
-</formula>
-<input id="F7" row="7" col="6" colspan="1">
-</input>
-
-<!-- 8 row -->
-<title row="8" col="1" colspan="1">
-INHERENT TESTS
-</title>
-<title row="8" col="2" colspan="1">
-TEST \nDURATION
-</title>
-<title row="8" col="3" colspan="1">
-TEST CRITERIA \nACHIEVEMENT
-</title>
-<title row="8" col="4" colspan="1">
-TEST RESULT
-</title>
-<title row="8" col="5" colspan="1">
-P' RESULT \nBASED ON TEST
-</title>
-<title row="8" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 9 row (input)-->
-<list id="A9" row="9" col="1" colspan="1">
 	<item>	
-	OECD 301 A 'SCAS Test'
-	</item>
-	<item>	
-	OECD 302 B 'Zahn-Wellens Test'
-	</item>
-	<item>	
-	OECD 302 C 'MITI II Test'
-	</item>
-</list>
-<input id="B9" row="9" col="2" colspan="1">
-</input>
-<list id="C9" row="9" col="3" colspan="1">
-	<item>	
-		DOC: &gt;70%
-	</item>
-	<item>	
-		DOC: &lt; 70%
+other:achieved (see Remark / Reference)
 	</item>	
 	<item>	
-		ThOD: &gt; 60%
+other: not achieved (see Remark / Reference)
+	</item>			
+</list>
+
+<list id="A10" row="10" col="1" colspan="1">
+	<item>	
+OECD 302 A 'SCAS Test'
+	</item>
+	<item>	
+OECD 302 B 'Zahn-Wellens Test'
+	</item>
+	<item>	
+OECD 302 C 'MITI II Test'
+	</item>
+	<item>	
+other (see Remark / Reference)
+	</item>	
+</list>
+
+<list id="C10" row="10" col="3" colspan="1">
+	<item>	
+		DOC: &gt;70% after 7d
+	</item>
+	<item>	
+		DOC: &lt; 70% after 7d
 	</item>	
 	<item>	
-		ThOD: &gt; 60%
+		ThOD: &gt; 60% after 7d
+	</item>	
+	<item>	
+		ThOD: &gt; 60% after 7d
+	</item>		
+	<item>	
+		other:achieved (see Remark / Reference)
+	</item>		
+	<item>	
+		other: not achieved (see Remark / Reference)
 	</item>		
 </list>
-<formula id="D9" row="9" col="4" colspan="1">
-</formula>
-<formula id="E9" row="9" col="5" colspan="1">
-</formula>
-<input id="F9" row="9" col="6" colspan="1">
-</input>
-
-<!-- 10 row -->
-<title row="10" col="1" colspan="1">
-SIMULATION TESTS
-</title>
-<title row="10" col="2" colspan="1">
-TEST \nDURATION
-</title>
-<title row="10" col="3" colspan="1">
-HALF-LIFE CRITERIA \nACHIEVEMENT
-</title>
-<title row="10" col="4" colspan="1">
-TEST RESULT
-</title>
-<title row="10" col="5" colspan="1">
-P' RESULT \nBASED ON TEST
-</title>
-<title row="10" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 11 row (input)-->
-<list id="A11" row="11" col="1" colspan="1">
+<!-- 12 row (input)-->
+<list id="A12" row="12" col="1" colspan="1">
+	<item>	
+OECD 307 'Transf. In Soil'
+	</item>
 	<item>	
 	OECD 308 'Transf. In Sediments'
 	</item>
 	<item>	
-	OECD 309 'Aerobic Mineralis. Water'
+OECD 309 'Aerobic Mineralis. Water'
 	</item>
 	<item>	
-	River Die-Away Test
+River Die-Away Test
+	</item>
+	<item>	
+other (see Remark / Reference)
 	</item>
 </list>
-<input id="B11" row="11" col="2" colspan="1">
-</input>
-<list id="C11" row="11" col="3" colspan="1">
+
+<list id="A12" row="12" col="2" colspan="1">
 	<item>	
-	Marine water: t 1/2 &lt; 60d
+Water (fresh/estuarine)
 	</item>
 	<item>	
-	Marine sedim.: t 1/2 &lt; 180d
-	</item>	
+Water (marine)
+	</item>
 	<item>	
-	Marine water: t 1/2 &gt; 60d
-	</item>	
+Sediment (fresh/estuarine)
+	</item>
 	<item>	
-	Marine sedim.: t 1/2 &gt; 180d
+Sediment (marine)
 	</item>
-	<item>
-	Fresh water: t 1/2 &lt; 40d	
-	</item>
-	<item>
-	Fresh w. sed.: t 1/2 &lt; 120d	
-	</item>
-	<item>
-	Fresh water: t 1/2 &gt; 40d	
-	</item>
-	<item>
-	Fresh w. sed.: t 1/2 &gt; 120d	
+	<item>	
+Soil
 	</item>
 </list>
-<formula id="D11" row="11" col="4" colspan="1">
-</formula>
-<formula id="E11" row="11" col="5" colspan="1">
-</formula>
-<input id="F11" row="11" col="6" colspan="1">
-
-</input>
-
-
-<!-- 12 row -->
-<title row="12" col="1" colspan="2">
-QSAR (Biodegradation)
-</title>
-<title row="12" col="3" colspan="1">
-QSAR CRITERIA \nACHIEVEMENT
-</title>
-<title row="12" col="4" colspan="1">
-RESULT
-</title>
-<title row="12" col="5" colspan="1">
-P' RESULT \nBASED ON QSAR
-</title>
-<title row="12" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 13 row (input)-->
-<formula id="A13" row="13" col="1" colspan="2">
-US EPA BioWin	
-</formula>
-<input id="C13" row="13" col="3" colspan="1">
-</input>
-<input id="D13" row="13" col="4" colspan="1">
-</input>
-<formula id="E13" row="13" col="5" colspan="1">
-</formula>
-<input id="F13" row="13" col="6" colspan="1">
-</input>
-
-<!-- 14 row -->
-<title row="14" col="1" colspan="1">
-READ ACROSS (Biodegradation)
-</title>
-<title row="14" col="2" colspan="2">
-CAS NO. / NAME OF READ ACROSS SUBSTANCE	
-</title>
-<title row="14" col="4" colspan="1">
-RESULT FROM READ ACROSS
-</title>
-<title row="14" col="5" colspan="1">
-P' RESULT BASED \nON READ ACROSS
-</title>
-<title row="14" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 15 row (input)-->
-<formula id="A15" row="15" col="1" colspan="1">
-</formula>
-<input id="B15" row="15" col="2" colspan="2">
-</input>
-<input id="D15" row="15" col="4" colspan="1">
-</input>
-<formula id="E15" row="15" col="5" colspan="1">
-</formula>
-<input id="F15" row="15" col="6" colspan="1">
-</input>
-</section>
-
-<section row="16" col="1" colspan="6" rowspan="1" value="SECTION ABIOTIC DEGRADATION">
-	<!-- ninth row -->
-	
-<title row="17" col="1" colspan="2">
-HYDROLYSIS
-</title>
-<title row="17" col="3" colspan="1">
-HALF-LIFE CRITERIA \nACHIEVEMENT"
-</title>
-<title row="17" col="4" colspan="1">
-RESULT \nFROM HYDROLYSIS
-</title>
-<title row="17" col="5" colspan="1">
-P' RESULT \nBASED ON TEST
-</title>
-<title row="17" col="6" colspan="1">
-REPORT REFERENCE
-</title>
-
-<!-- 18 row (input)-->
-<formula id="A18" row="18" col="1" colspan="2">
-OECD 111	
-</formula>
-<list id="C18" row="18" col="3" colspan="1">
+<list id="C14" row="14" col="1" colspan="2">
+	<item>
+US EPA Biowin
+	</item>
+	<item>
+other (see Remark / Reference)
+	</item>
+</list>
+<list id="C14" row="14" col="3" colspan="1">
+	<item>
+Prediction: ready biodeg.
+	</item>
+	<item>
+Prediction: no ready biodeg.
+	</item>
+</list>
+<list id="C16" row="16" col="4" colspan="1">
+	<item>
+Read across: ready biodeg.
+	</item>
+	<item>
+Read across: no ready biodeg.
+	</item>
+</list>
+<list id="C19" row="19" col="1" colspan="1">
+	<item>
+OECD 111 'Hydrolysis'
+	</item>
+	<item>
+other (see Remark / Reference)
+	</item>
+</list>
+<list id="C19" row="19" col="3" colspan="1">
 	<item>
 	Hydrolysis: t 1/2 &lt; 40d
 	</item>
@@ -343,22 +195,4 @@ OECD 111
 	Hydrolysis: t 1/2 &gt; 40d
 	</item>
 </list>
-<formula id="D18" row="18" col="4" colspan="1">
-</formula>
-<formula id="E18" row="18" col="5" colspan="1">
-</formula>
-<input id="F18" row="18" col="6" colspan="1">
-</input>
-
-</section>	
-
-<section row="19" col="1" colspan="6" rowspan="1" value="OVERALL P Assessment Result">
-	<!-- ninth row -->
-	
-<formula id="C19" row="20" col="3" colspan="1">
-=K58
-</formula>
-<formula id="D19" row="20" col="4" colspan="3">
-</formula>
-</section>	
 </page>

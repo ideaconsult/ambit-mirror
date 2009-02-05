@@ -55,6 +55,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	protected JTabbedPane tabbedPane;
     protected PBTTableModel[] models;
     protected static String[] defs = {
+    	"ambit2/plugin/pbt/xml/welcome.xml",    	
     	"ambit2/plugin/pbt/xml/substance_page.xml",
     	"ambit2/plugin/pbt/xml/p_page.xml",
     	"ambit2/plugin/pbt/xml/b_page.xml",
@@ -62,6 +63,9 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     	"ambit2/plugin/pbt/xml/result_page.xml"
     };
     public PBTMainPanel() {
+    	this(null);
+    }
+    public PBTMainPanel(String[] pages) {
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
         /*
@@ -76,13 +80,14 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 			HSSFWorkbook workbook = new HSSFWorkbook(poifsFileSystem);
 			
 			final PBTWorksheet[] pbt_worksheets = new PBTWorksheet[6];
-			pbt_worksheets[0] = new PBTWorksheet(workbook,"TERMS & CONDITIONS",27,6);
-			pbt_worksheets[1]  = new PBTWorksheet(workbook,"SUBSTANCE",28,8);
-			pbt_worksheets[2]  = new PBTWorksheet(workbook,"P-Sheet",20,6);
-			pbt_worksheets[3] = new PBTWorksheet(workbook,"B-Sheet",22,6);
-			pbt_worksheets[4]  = new PBTWorksheet(workbook,"T-Sheet",19,6);
+			pbt_worksheets[0] = new PBTWorksheet(workbook,"TERMS & CONDITIONS",27,3,defs[0]);
+
+			pbt_worksheets[1]  = new PBTWorksheet(workbook,"SUBSTANCE",22,6,defs[1]);
+			pbt_worksheets[2]  = new PBTWorksheet(workbook,"P-Sheet",20,6,defs[2]);
+			pbt_worksheets[3] = new PBTWorksheet(workbook,"B-Sheet",22,6,defs[3]);
+			pbt_worksheets[4]  = new PBTWorksheet(workbook,"T-Sheet",19,6,defs[4]);
 			pbt_worksheets[5] = new PBTWorksheet(workbook,"Result",15,5);
-			
+
 			for (int i=0; i < pbt_worksheets.length;i++) 
 				tabbedPane.add(pbt_worksheets[i].getWorkbook().getSheetName(i),
 						new JScrollPane(PBTPageBuilder.buildPanel(pbt_worksheets[i],1,1)));	

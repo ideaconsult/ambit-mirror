@@ -1,36 +1,26 @@
 package ambit2.plugin.pbt;
 
 
-import java.awt.Color;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 import junit.framework.Assert;
 
 import org.apache.poi.hssf.record.DVRecord;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
-import org.apache.poi.hssf.usermodel.HSSFPalette;
-import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
-
-import com.jgoodies.binding.adapter.BasicComponentFactory;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.templates.MoleculeFactory;
 
 
 public class TestPBTWorksheet {
@@ -55,7 +45,7 @@ public class TestPBTWorksheet {
 		//WorksheetProxyFactory.getProxy(null,workbook.getSheet("T-Sheet"));
 	}
 	@Test
-	public void testEvaluate() throws Exception {
+	public void testEvaluateTSheet() throws Exception {
 		PBTWorksheet ws = new PBTWorksheet(workbook,"T-Sheet");
 		PBTWorksheet result = new PBTWorksheet(workbook,"Result");
 		
@@ -70,11 +60,19 @@ public class TestPBTWorksheet {
 		Assert.assertEquals("Not toxic (not T)", result.getC7());
 	}	
 	@Test
+	public void testEvaluateSubstanceSheet() throws Exception {
+		PBTWorksheet ws = new PBTWorksheet(workbook,"SUBSTANCE");
+		
+		ws.set(10,5,MoleculeFactory.makeBenzene());
+		Object o = ws.getExtendedCell(12,1);
+		Assert.assertTrue(o instanceof WorksheetAction);
+	}	
+	@Test
 	public void test() throws Exception {
 		
         
 
-		HSSFSheet sheet = workbook.getSheet("P-Sheet");
+		HSSFSheet sheet = workbook.getSheet("SUBSTANCE");
 		
 		HSSFFormulaEvaluator formulaEvaluator = new HSSFFormulaEvaluator(workbook);
 
@@ -137,7 +135,9 @@ public class TestPBTWorksheet {
 			}
 		}
 		
-
+/*
+Data validation is not yet supported.  plan to include it in 3.5-final
+ */
 		List<DVRecord> list = sheet.getDVRecords();
 		for (int i =0; i < list.size(); i++) {
 			DVRecord record = list.get(i);

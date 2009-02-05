@@ -15,5 +15,6 @@ public class PBTMainPanelTest {
 		PBTMainPanel pbtPanel = new PBTMainPanel();
 		pbtPanel.setPreferredSize(new Dimension(800,600));
 		JOptionPane.showMessageDialog(null,pbtPanel,pbtPanel.toString(),JOptionPane.OK_OPTION);
+
 	}
 }

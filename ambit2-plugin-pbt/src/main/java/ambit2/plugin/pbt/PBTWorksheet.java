@@ -24,29 +24,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
-import java.awt.Color;
-import java.util.Iterator;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
-import org.apache.poi.hssf.usermodel.HSSFPalette;
-import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.util.CellRangeAddress;
-
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 
 import ambit2.core.data.AmbitBean;
 
-public class PBTWorksheet  extends AmbitBean {
+public class PBTWorksheet  extends AmbitBean  {
+	protected PBTTableModel moreInfo= null;
 	protected String oldValue[][] ;
 
 	protected int maxRow = 22;
@@ -85,18 +72,41 @@ public class PBTWorksheet  extends AmbitBean {
 	 */
 	private static final long serialVersionUID = 5725226752787199270L;
 	public PBTWorksheet(HSSFWorkbook workbook, String sheetName) {
-		this(workbook,sheetName,28,8);
+		this(workbook,sheetName,28,8,null);
 	}
 	public PBTWorksheet(HSSFWorkbook workbook, String sheetName, int maxRow, int maxCol) {
+		this(workbook,sheetName,maxRow,maxCol,null);
+	}
+	public PBTWorksheet(HSSFWorkbook workbook, String sheetName, int maxRow, int maxCol, String xmlConfig) {
 		PBTWorksheet.workbook = workbook;
 		sheet = workbook.getSheet(sheetName);
 		if (formulaEvaluator == null)
 			formulaEvaluator = new HSSFFormulaEvaluator(workbook);		
 		setMaxCol(maxCol);
 		setMaxRow(maxRow);
-		
+		if (xmlConfig != null) {
+			moreInfo = new PBTTableModel();
+			try {
+				moreInfo.setDefinition(xmlConfig);
+				
+			} catch (Exception x) {
+				moreInfo = null;
+			}
+		}
+	
 	}
+	public Object getExtendedCell(int row, int col) {
+		if (moreInfo != null)
+			return moreInfo.getValueAt(row, col);
+		else return null;
+	}
+	public void setExtendedCell(Object value,int row, int col) {
+		if (moreInfo != null) {
+			moreInfo.setValueAt(value, row, col);
+	    	firePropertyChange("E"+getCellName(row-1, col-1).toLowerCase(), null, value);
+		}
 
+	}	
 	public HSSFCell getCell(int row, int col) {
 		HSSFRow arow = sheet.getRow(row);
 		if (arow != null) return arow.getCell(col);
@@ -178,6 +188,7 @@ public class PBTWorksheet  extends AmbitBean {
 
     	
 	}
+
 	public void notifyCells(int row, int col) {
 //		workbook.getNumberOfSheets()
 		for (int r=0; r < maxRow; r++)
@@ -203,6 +214,7 @@ public class PBTWorksheet  extends AmbitBean {
 		return b.toString();
 	}
 	
+
 	public String getA1() {
 		return get(0,0).toString();
 	}
