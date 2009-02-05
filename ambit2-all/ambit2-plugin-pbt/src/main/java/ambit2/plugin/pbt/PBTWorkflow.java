@@ -24,8 +24,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
+import com.microworkflow.execution.Performer;
+import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class PBTWorkflow extends Workflow {
+	public PBTWorkflow() {
+		Performer perf = new Performer() {
+			public Object execute() throws Exception {return null;};
+		};
+		Primitive p1 = new Primitive(perf) {
+			@Override
+			public String toString() {
+				return "PBT";
+			}
+			@Override
+			public synchronized String getName() {
+				return "PBT";
+			}
+		};
 
+        Sequence seq=new Sequence();
+        seq.setName("PBT");
+        seq.addStep(p1);
+		setDefinition(seq);
+		}
+	@Override
+	public String toString() {
+		return "PBT";
+	}
 }

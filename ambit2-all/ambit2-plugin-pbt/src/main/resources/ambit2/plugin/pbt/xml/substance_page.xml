@@ -1,89 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page columns="9" rows="28" name="Result">
-<title row="1" col="1" colspan="4">
-SCREENING TOOL FOR REACH
-</title>
-<title row="2" col="1" colspan="8">
-SUBSTANCE IDENTIFICATION
-</title>
+<page columns="6" rows="22" name="SUBSTANCE">
 
-<section row="9" col="1" colspan="8" rowspan="1" value="SUBSTANCE IDENTIFICATION">
-<title row="9" col="1" colspan="1">
-Substance data					
-</title>
-<title row="9" col="5" colspan="4">
-Structure
-</title>
+<title row="9" col="2" colspan="1"/>
+<title row="9" col="3" colspan="1"/>
+<title row="9" col="4" colspan="1"/>
 
-<title row="10" col="1" colspan="1">
-Name					
-</title>
-<input id="B10" row="10" col="2" colspan="3">
+<structure row="10" col="5" colspan="2" rowspan="10"/>
 
-</input>
-<input id="E10" row="10" col="5" colspan="4" rowspan="10">
-aaaaaaaaaaaaaaaaaaaaaaaa
-</input>
+<action row="10" col="1" colspan="1" processor="ambit2.namestructure.Name2StructureProcessor" sourcerow="10" sourcecol="2" resultrow="10" resultcol="5" result="extended" errorRow="10" errorCol="2" hint="Generates structure by chemical name"/>
+<action row="11" col="1" colspan="1" processor="findbycas" sourcerow="10" sourcecol="5" resultrow="11" resultcol="2" errorRow="11" errorCol="2" hint="Finds structure by CAS number"/>
+<action row="12" col="1" colspan="1" descriptor="org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor" sourcerow="10" sourcecol="5" source="extended" resultrow="12" resultcol="2" errorRow="12" errorCol="2" hint="Calculates molecular weight"/>
+<action row="13" col="1" colspan="1" descriptor="ambit2.descriptors.CrossSectionalDiameterDescriptor" builder3d="true" sourcerow="10" sourcecol="5" source="extended" resultrow="13" resultcol="2" errorRow="13" errorCol="2" hint="Calculates crossectional diameter. If no 3D available,launches MOPAC to obtain 3D structure"/>
+<action row="14" col="1" colspan="1" descriptor="WaterSol" sourcerow="10" sourcecol="5" resultrow="14" resultcol="2" errorRow="14" errorCol="2"/>
+<action row="15" col="1" colspan="1" descriptor="OctanolSol" sourcerow="10" sourcecol="5" resultrow="15" resultcol="2" errorRow="14" errorCol="2"/>
 
-<title row="11" col="1" colspan="1">
-CAS	No.					
-</title>
-<input id="B11" row="11" col="2" colspan="1">
-</input>
-<error row="11" col="3" colspan="2">
-</error>
+<title row="16" col="3" colspan="1"/>
+<title row="16" col="4" colspan="1"/>
 
-<title row="12" col="1" colspan="1">
-Mol. weight (g/mol)			
-</title>
-<input id="B12" row="12" col="2" colspan="1">
-?
-</input>
-<error row="12" col="3" colspan="2">
-</error>
-
-<title row="13" col="1" colspan="1">
-Molecular size Dmax (Angstrom)			
-</title>
-<input id="B13" row="13" col="2" colspan="1">
-?
-</input>
-<error row="13" col="3" colspan="2">
-</error>
-
-<title row="14" col="1" colspan="1">
-Water solubility (mg L)		
-</title>
-<input id="B14" row="14" col="2" colspan="1">
-?
-</input>
-<error row="14" col="3" colspan="2">
-</error>
-
-<title row="15" col="1" colspan="1">
-Octanol solubility (mg L)		
-</title>
-<input id="B15" row="15" col="2" colspan="1">
-?
-</input>
-<error row="15" col="3" colspan="2">
-</error>
+<list id="B16" row="16" col="2" colspan="1">
+	<item>	
+narcotic
+	</item>
+	<item>	
+not narcotic or unknown
+	</item>	
+</list>
 
 
-<title row="16" col="1" colspan="1">
-Mode of action	
-</title>
-<input id="B16" row="16" col="2" colspan="1">
-?
-</input>
 
+<title row="17" col="3" colspan="1"/>
+<title row="17" col="4" colspan="1"/>
 
-<title row="18" col="1" colspan="1">
-Substance remark					
-</title>
-<input id="B18" row="18" col="2" colspan="7" rowspn="6">
-?
-</input>
+<title row="18" col="3" colspan="1"/>
+<title row="18" col="4" colspan="1"/>
+<title row="19" col="3" colspan="1"/>
 
-</section>
+<title row="22" col="6" colspan="1"/>
+<title row="22" col="5" colspan="1"/>
 </page>

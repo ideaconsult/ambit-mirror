@@ -28,6 +28,8 @@ import java.beans.PropertyChangeEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -81,5 +83,9 @@ public class PBTCheckerPlugin extends MWorkflowPlugin {
 	@Override
 	public String toString() {
 		return "PBT";
+	}
+	@Override
+	public JComponent[] createDetailsComponent() {
+		return new JComponent[] {new JLabel()};
 	}
 }

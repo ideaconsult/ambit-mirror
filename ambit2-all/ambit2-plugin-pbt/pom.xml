@@ -33,5 +33,21 @@
     	<artifactId>ambit2-core</artifactId>
     	<version>${project.version}</version>
     </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-descriptors</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-mopac</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-namestructure</artifactId>
+    	<version>${project.version}</version>
+    	<type>jar</type>
+    </dependency>
   </dependencies>
 </project>

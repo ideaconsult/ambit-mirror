@@ -3,18 +3,35 @@ package ambit2.plugin.pbt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.swing.Action;
 import javax.swing.table.AbstractTableModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nplugins.core.Introspection;
+
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import ambit2.core.external.ShellException;
+import ambit2.core.processors.IProcessor;
+import ambit2.core.processors.ProcessorsChain;
+import ambit2.core.processors.structure.CloneProcessor;
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
+import ambit2.descriptors.processors.DescriptorCalculationProcessor;
+import ambit2.descriptors.processors.DescriptorResultFormatter;
+import ambit2.mopac.MopacShell;
 
 public class PBTTableModel extends AbstractTableModel {
 	/**
@@ -28,7 +45,9 @@ public class PBTTableModel extends AbstractTableModel {
 	public static final String ATTRIBUTE_COLSPAN="colspan";
 	public static final String ATTRIBUTE_VALUE="value";
 	
+	public static final String NODE_STRUCTURE="structure";
 	public static final String NODE_TITLE="title";
+	public static final String NODE_ACTION="action";	
 	public static final String NODE_SECTION="section";
 	public static final String NODE_LIST="list";
 	public static final String NODE_FORMULA="formula";
@@ -70,9 +89,14 @@ public class PBTTableModel extends AbstractTableModel {
 		Object value;
 		if ((value = table.get(query)) != null) 
 			return value;
-		return "-";
+		return null;
 	}
-
+	@Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		Cell cell = new Cell(rowIndex,columnIndex);
+		table.put(cell,value);	
+		fireTableDataChanged();
+	}
 	public void setDefinition(String definition) throws IOException, ParserConfigurationException, SAXException {
 	    InputStream in = PBTTableModel.class.getClassLoader().getResourceAsStream(definition);
 	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -86,7 +110,7 @@ public class PBTTableModel extends AbstractTableModel {
 	    
 	    addNode(root);
 	    fireTableStructureChanged();
-	    System.out.println(table);
+//	    System.out.println(table);
 	} 
 	
 	public void addNode(Element node) {
@@ -103,6 +127,27 @@ public class PBTTableModel extends AbstractTableModel {
 					x.printStackTrace();
 				}
 			} else
+			if (NODE_ACTION.equals(node.getNodeName())) {
+					Cell cell = new Cell(row,col,colspan);
+					try {
+						table.put(cell,node.getTextContent().trim());
+						table.put(cell,createAction(node));
+						cell.setMode(Cell.CELL_MODE.ACTION);						
+						
+					} catch (NumberFormatException x) {
+						x.printStackTrace();
+						table.put(cell,node.getTextContent().trim());
+					}
+			} else						
+			if (NODE_STRUCTURE.equals(node.getNodeName())) {
+					try {
+						Cell cell = new Cell(row,col,colspan);
+						table.put(cell,DefaultChemObjectBuilder.getInstance().newMolecule());
+						cell.setMode(Cell.CELL_MODE.STRUCTURE);
+					} catch (NumberFormatException x) {
+						x.printStackTrace();
+					}
+			} else				
 			if (NODE_ERROR.equals(node.getNodeName())) {
 				try {
 					Cell cell = new Cell(row,col,colspan);
@@ -116,7 +161,14 @@ public class PBTTableModel extends AbstractTableModel {
 					try {
 						Cell cell = new Cell(row,col,colspan);
 						cell.setMode(Cell.CELL_MODE.LIST);
-						table.put(cell,node.getTextContent().trim());
+						NodeList items = node.getChildNodes();
+						ArrayList<String> pickup = new ArrayList<String>();
+						for (int i=0; i < items.getLength();i++) {
+							if (items.item(i).getNodeType() == Node.ELEMENT_NODE)
+								pickup.add(items.item(i).getTextContent().trim());
+						}
+						//table.put(cell,node.getTextContent().trim());
+						table.put(cell,pickup);
 					} catch (NumberFormatException x) {
 						x.printStackTrace();
 					}
@@ -160,11 +212,52 @@ public class PBTTableModel extends AbstractTableModel {
 		    }
 		}
 
+	
+	protected WorksheetAction createAction(Element node) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+		final WorksheetAction<IAtomContainer, String> action = new WorksheetAction<IAtomContainer, String>(node.getTextContent());
+		action.setResultRow(Integer.parseInt(node.getAttribute("resultrow")));
+		action.setResultCol(Integer.parseInt(node.getAttribute("resultcol")));
+		action.setTargetRow(Integer.parseInt(node.getAttribute("sourcerow")));
+		action.setTargetCol(Integer.parseInt(node.getAttribute("sourcecol")));
+		action.setErrorRow(Integer.parseInt(node.getAttribute("errorRow")));
+		action.setErrorCol(Integer.parseInt(node.getAttribute("errorCol")));		
+		action.setResultExtended("extended".equals(node.getAttribute("result")));
+		action.setSourceExtended("extended".equals(node.getAttribute("source")));
+		action.putValue(Action.SHORT_DESCRIPTION, node.getAttribute("hint"));
+		
+		ProcessorsChain<IAtomContainer, String, IProcessor> chain = new ProcessorsChain<IAtomContainer, String, IProcessor>();
+		chain.setAbortOnError(true);
+		if ((node.getAttribute("descriptor") != null) && !"".equals(node.getAttribute("descriptor")) ) {
+			Object d = Introspection.loadCreateObject(node.getAttribute("descriptor"));
+			if (d instanceof IMolecularDescriptor) {
+				chain.add(new CloneProcessor());				
+				chain.add(new HydrogenAdderProcessor());
+				
+				if ((node.getAttribute("builder3d") != null) && (node.getAttribute("builder3d").equals("true"))) {
+					//add 3d builder
+					try {
+						chain.add(new MopacShell());
+					} catch (ShellException x) {
+						x.printStackTrace();
+					}
+				}
+				DescriptorCalculationProcessor descriptors = new DescriptorCalculationProcessor((IMolecularDescriptor)d);
+				chain.add(descriptors);
+				chain.add(new DescriptorResultFormatter());
+			}
+		} else 	if (node.getAttribute("processor") != null) {
+			Object p = Introspection.loadCreateObject(node.getAttribute("processor"));
+			if (p instanceof IProcessor)
+				chain.add((IProcessor)p);
+		}	
+		action.setProcessor(chain);	
+		return action;
+	}	
 }
 
 class Cell implements Comparable<Cell> {
 	public enum CELL_MODE {
-		SECTION,TITLE,FORMULA,LIST,INPUT,ERROR
+		SECTION,TITLE,FORMULA,LIST,INPUT,ERROR,STRUCTURE,ACTION
 	};
 	protected CELL_MODE mode;
 	int row;
@@ -238,4 +331,5 @@ class Cell implements Comparable<Cell> {
 			(column == ((Cell)obj).column);
 		} else return false;
 	}
+
 }

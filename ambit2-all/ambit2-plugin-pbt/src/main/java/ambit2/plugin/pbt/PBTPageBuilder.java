@@ -30,11 +30,15 @@
 package ambit2.plugin.pbt;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,6 +53,9 @@ import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.openscience.cdk.interfaces.IAtomContainer;
+
+import ambit2.ui.editors.Panel2D;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -65,11 +72,11 @@ public class PBTPageBuilder {
     protected static Border risedBorder = BorderFactory.createEmptyBorder();
     protected PBTPageBuilder() {
     }
-    private static String getLayoutString(int repeat) {
+    private static String getLayoutString(int repeat,String spec) {
     	StringBuffer b = new StringBuffer();
     	for (int i=0; i < repeat; i++) {
     		if (i>0) b.append(",");
-    		b.append("pref");
+    		b.append(spec);
     	}
     	return b.toString();
     }
@@ -78,8 +85,8 @@ public class PBTPageBuilder {
     }
     public static JPanel buildPanel(PBTTableModel model, int rowOffset, int colOffset) {
         FormLayout layout = new FormLayout(
-                getLayoutString(model.getColumnCount()+colOffset),
-                getLayoutString(model.getRowCount()+rowOffset));
+                getLayoutString(model.getColumnCount()+colOffset,"10dlu"),
+                getLayoutString(model.getRowCount()+rowOffset,"pref"));
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();  
         cc.insets = new Insets(3,3,3,3);
@@ -147,13 +154,13 @@ public class PBTPageBuilder {
     public static JPanel buildPanel(PBTWorksheet worksheet, int rowOffset, int colOffset) {
 
         FormLayout layout = new FormLayout(
-                getLayoutString(worksheet.getMaxCol()+colOffset),
-                getLayoutString(worksheet.getMaxRow()+rowOffset));
+                getLayoutString(worksheet.getMaxCol()+colOffset,"100dlu:grow"),
+                getLayoutString(worksheet.getMaxRow()+rowOffset,"pref:grow"));
         
         
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();  
-        cc.insets = new Insets(3,3,3,3);
+        cc.insets = new Insets(1,1,1,1);
         cc.hAlign = CellConstraints.DEFAULT;
 
         PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet);
@@ -178,25 +185,26 @@ public class PBTPageBuilder {
 				int rowspan = 1;
 		        for (int i=0; i < worksheet.getSheet().getNumMergedRegions();i++) {
 					CellRangeAddress merged = worksheet.getSheet().getMergedRegion(i);
-  
-					if ((cell.getRowIndex() >= merged.getFirstRow()) && (cell.getRowIndex() <= merged.getLastRow())) {
-						if (cell.getRowIndex() == merged.getFirstRow()) {
+					if ((cell.getRowIndex() >= merged.getFirstRow()) && (cell.getRowIndex() <= merged.getLastRow()) && 
+						(cell.getColumnIndex() >= merged.getFirstColumn()) && (cell.getColumnIndex() <= merged.getLastColumn())) {
+						if ((cell.getRowIndex() == merged.getFirstRow()) && (cell.getColumnIndex() == merged.getFirstColumn())) {
 							rowspan = merged.getLastRow() - merged.getFirstRow() +1;
 							if (rowspan > worksheet.getMaxRow())
-								rowspan = worksheet.getMaxRow();
-						} else hidden = true;						
-					} else continue;
-					
-					if ((cell.getColumnIndex() >= merged.getFirstColumn()) && (cell.getColumnIndex() <= merged.getLastColumn())) {
-						if (cell.getColumnIndex() == merged.getFirstColumn()) {
+								rowspan = worksheet.getMaxRow() - merged.getFirstRow() + 1;
 							colspan = merged.getLastColumn() - merged.getFirstColumn() +1;
 							if (colspan > worksheet.getMaxCol())
-								colspan = worksheet.getMaxCol()  - merged.getFirstColumn() +1;
-						} else hidden = true;						
-					} else continue;					
-				}				
+								colspan = worksheet.getMaxCol()  - merged.getFirstColumn() +1;							
+//							System.out.println("Cell " + merged.getFirstRow() + "," + merged.getFirstColumn() + "-" + merged.getLastRow() + "," + merged.getLastColumn());							
+						} else {
+							//System.out.println("Merged " + merged.getFirstRow() + "," + merged.getFirstColumn() + "-" + merged.getLastRow() + "," + merged.getLastColumn());							
+							hidden = true;						
+						}
+					} else continue;
+
+				}
+		        //System.out.println(cell.getRowIndex() + "," + cell.getColumnIndex() + "\t" + cell.toString());		        
 		        if (hidden) continue;
-		        
+
 				HSSFPalette palette = worksheet.getWorkbook().getCustomPalette();
 				HSSFColor color = palette.getColor(cell.getCellStyle().getFillForegroundColor());
 				Color background = Color.white;
@@ -210,25 +218,42 @@ public class PBTPageBuilder {
 				default: 
 					component_alignment = JComponent.LEFT_ALIGNMENT;
 				}
-				
+				Object extCell = worksheet.getExtendedCell(cell.getRowIndex()+1,cell.getColumnIndex()+1);
 				String propertyName = PBTWorksheet.getCellName(cell.getRowIndex(),cell.getColumnIndex()).toLowerCase();
 				//if (cell.getRowIndex()!=5) propertyName = "dummy";
-				
+				//Dimension d = new Dimension(140,20);	
 				if ((colspan >= worksheet.getMaxCol()) && (cell.getRowIndex()>1)) { 
+					colspan = worksheet.getMaxCol()-cell.getColumnIndex();
 	        		JComponent separator = builder.addSeparator(cell.toString().trim(), 
 	        				cc.xywh(cell.getColumnIndex()+colOffset,cell.getRowIndex()+rowOffset,
 	    	        				colspan,rowspan));
 	        		separator.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-
+	        		
+				} else if (extCell != null) {
+					if (extCell instanceof List) { 
+						c = BasicComponentFactory.createComboBox(new SelectionInList(((List)extCell),model.getModel(propertyName)));
+						//c.setPreferredSize(d);	
+		        		c.setBackground(background);
+		        		c.setEnabled(true);
+		        	} else if (extCell instanceof IAtomContainer) {
+		        		c = new Panel2D();
+		        		((Panel2D)c).setAtomContainer((IAtomContainer)extCell,true);
+		        		worksheet.addPropertyChangeListener("E"+worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()).toLowerCase(),(Panel2D)c);
+		        	} else if (extCell instanceof WorksheetAction) {
+		        		((WorksheetAction)extCell).setWorksheet(worksheet);
+						c = createLabel(cell.toString(),(WorksheetAction)extCell);
+						//c.setBackground(background);		        		
+					} else {
+						c = createLabel(cell.toString(),null);
+						//c.setBackground(background);
+					}						
 				} else
 				switch (cell.getCellType()) {
 				case  HSSFCell.CELL_TYPE_BLANK: {
-					
-	        		c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
-	        		c.setBackground(background);
-	        		c.setEnabled(true);
-	        		c.setBorder(loweredBorder);
-
+						c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
+		        		c.setBackground(background);
+		        		c.setEnabled(true);
+		        		c.setBorder(loweredBorder);						
 	        		break;
 				}
 				case  HSSFCell.CELL_TYPE_BOOLEAN: {
@@ -236,20 +261,12 @@ public class PBTPageBuilder {
 	        		c.setBackground(inputColor);
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
+					//c.setPreferredSize(d);
 	        		break;
 				}		
 				case  HSSFCell.CELL_TYPE_STRING: {
-	        		//c = BasicComponentFactory.createTextField(valueModel,true);
-					/*
-	        		c = new JTextField(cell.toString());
-	        		c.setBackground(inputColor);
-	        		c.setEnabled(true);
-	        		c.setBorder(loweredBorder);
-	        		*/
-	        		c = new JLabel("<html>"+cell.toString().replace("\\n", "<br>")+"</html>");
-	        		c.setOpaque(true);
-	        		//c.setBackground(background);
-	        		c.setBorder(risedBorder);
+					c = createLabel(cell.toString(),null);
+					//c.setBackground(background);
 	        		break;	        		
 				}			
 				case  HSSFCell.CELL_TYPE_NUMERIC: {
@@ -258,6 +275,7 @@ public class PBTPageBuilder {
 	        		c.setBackground(background);
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
+					//c.setPreferredSize(d);       		
 	        		break;
 				}				
 				case  HSSFCell.CELL_TYPE_ERROR: {
@@ -277,9 +295,12 @@ public class PBTPageBuilder {
 					//System.out.print(cell.toString());
 				}
 	        	if (c != null) {
+	        		//System.out.println(cell.toString());
 	        		if (cell.getCellComment() != null)
 	        				c.setToolTipText(cell.getCellComment().getString().getString());
 	        		c.setAlignmentX(component_alignment);
+	        		if (colspan >= worksheet.getMaxCol())
+						colspan = worksheet.getMaxCol()-cell.getColumnIndex();
 	        		builder.add(c,cc.xywh(cell.getColumnIndex()+colOffset,cell.getRowIndex()+rowOffset,
 	        				colspan,rowspan));
 	        	}
@@ -337,5 +358,24 @@ public class PBTPageBuilder {
 */        
         builder.setBorder(BorderFactory.createEtchedBorder());
         return builder.getPanel();
-    }        
+    }       
+    
+    protected static JComponent createLabel(String string, WorksheetAction action) {
+    	String t = "???";
+    	if (string != null)
+    		t = "<html><body>"+string.trim().replace("\n", "<br>")+"</body></html>";
+    	
+		JComponent c;
+		if (action == null)
+			c = new JLabel(t);
+		else {
+			action.putValue(Action.NAME, string);
+			c = new JButton(action);
+		}
+		c.setOpaque(true);
+		c.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		//c.setBackground(background);
+		//c.setBorder(risedBorder);
+		return c;
+    }
 }
