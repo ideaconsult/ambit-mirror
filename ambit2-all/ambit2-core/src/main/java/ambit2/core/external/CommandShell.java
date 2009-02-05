@@ -36,9 +36,11 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.Command;
 import ambit2.core.io.DownloadTool;
 import ambit2.core.log.AmbitLogger;
+import ambit2.core.processors.IProcessor;
 
 /**
  * A wrapper for an external executable (OS dependent). 
@@ -51,7 +53,7 @@ import ambit2.core.log.AmbitLogger;
  * @author nina
  *
  */
-public abstract class CommandShell<INPUT,OUTPUT> {
+public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUTPUT> {
 	protected String prefix = "ambit2/";
 	public static final String os_MAC = "Mac OS";
 	public static final String os_WINDOWS = "Windows";
@@ -64,6 +66,14 @@ public abstract class CommandShell<INPUT,OUTPUT> {
 	protected String outputFile = null;
 	protected boolean runAsync = false;
 	
+	protected boolean enabled=true;
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 	protected CommandShell() throws ShellException {
 		executables = new Hashtable<String, Command>();
 		initialize();
@@ -151,6 +161,13 @@ public abstract class CommandShell<INPUT,OUTPUT> {
         return runShell(mol,getExecutable());
  
     }
+    public OUTPUT process(INPUT target) throws ambit2.core.exceptions.AmbitException {
+    	try {
+    		return runShell(target);
+    	} catch (ShellException x) {
+    		throw new AmbitException(x);
+    	}
+    };
     /**
      * Returns empty string, override with smth meaningfull
      * @param mol
