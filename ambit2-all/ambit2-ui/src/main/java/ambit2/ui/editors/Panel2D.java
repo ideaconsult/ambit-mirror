@@ -32,6 +32,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.EventObject;
 
 import javax.swing.JComponent;
@@ -49,7 +51,7 @@ import ambit2.core.io.CompoundImageTools;
  * @author Nina Jeliazkova
  *
  */
-public class Panel2D extends JPanel implements ICDKChangeListener, ComponentListener, IAmbitEditor<IAtomContainer>
+public class Panel2D extends JPanel implements ICDKChangeListener, ComponentListener, IAmbitEditor<IAtomContainer>, PropertyChangeListener
 {
 	/**
 	 * 
@@ -151,6 +153,11 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	}
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getNewValue() instanceof IAtomContainer)
+			setAtomContainer((IAtomContainer)evt.getNewValue(),true);
 		
 	}
 }
