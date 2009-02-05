@@ -192,6 +192,7 @@
     <module>ambit2-smi23d</module>
     <module>ambit2-mopac</module>
     <module>ambit2-model</module>
+    <module>ambit2-namestructure</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
