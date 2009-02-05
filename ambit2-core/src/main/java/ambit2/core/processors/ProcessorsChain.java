@@ -18,6 +18,17 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 	 * 
 	 */
 	private static final long serialVersionUID = 1289381455884215893L;
+	protected boolean abortOnError = false;
+	public boolean isAbortOnError() {
+		return abortOnError;
+	}
+
+
+	public void setAbortOnError(boolean abortOnError) {
+		this.abortOnError = abortOnError;
+	}
+
+
 	public ProcessorsChain() {
 		super();
 	}
@@ -30,7 +41,8 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 		    if (get(i).isEnabled())
 		        o = get(i).process(o);
 			} catch (Exception x) {
-				System.out.println(get(i));
+				if (abortOnError)
+					throw new AmbitException(x);
 				x.printStackTrace();
 			}
 		}
