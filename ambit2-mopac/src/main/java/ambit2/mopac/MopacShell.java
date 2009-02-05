@@ -41,8 +41,10 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.MFAnalyser;
 
+import ambit2.core.exceptions.AmbitException;
 import ambit2.core.external.CommandShell;
 import ambit2.core.external.ShellException;
+import ambit2.core.processors.IProcessor;
 import ambit2.smi23d.ShellMengine;
 import ambit2.smi23d.ShellSmi2SDF;
 
@@ -181,6 +183,8 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 			return mol;
 	}	
 	protected boolean canApply(IAtomContainer atomcontainer) throws ShellException {
+		if ((atomcontainer==null) || (atomcontainer.getAtomCount()==0)) 
+			throw new ShellException(this,"Undefined structure");
     	IAtomContainerSet a  = ConnectivityChecker.partitionIntoMolecules(atomcontainer);
     	IAtomContainer mol = null;
     	if (a.getAtomContainerCount()>1)
@@ -212,6 +216,11 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
             }
         }
         return true;
+	}
+	@Override
+	public IAtomContainer process(IAtomContainer target) throws AmbitException {
+
+		return super.process(target);
 	}
 }
 
