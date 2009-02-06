@@ -55,12 +55,9 @@ import org.xml.sax.InputSource;
 import ambit2.core.exceptions.AmbitIOException;
 
 /**
- * Study templates are introduced in order to provide generic framework for storing experimental data results, without predefined fieldnames, which may not be relevant to all endpoints (e.g. species strain or vehicle is not relevant to all species or endpoints). On other hand, fields with the same meaning have to have the same name to make queries feasible (e.g. “species” field should be the same across all endpoints in order to be able to search for species). <br>
- * A template consists of a name, fields defining study conditions and fields defining study results. Each field has a name, units and a flag specifying whether it is a condition or a result. See {@link ambit2.core.data.experiment.DefaultTemplate} ,
- * {@link ambit2.core.data.experiment.DSSToxCarcinogenicityTemplate}, {@link ambit2.core.data.experiment.DSSToxERBindingTemplate},
- * {@link ambit2.core.data.experiment.DSSToxLC50Template} for specific examples. 
+ * Templates are just a (meaningful) set of properties 
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> 2006-5-2
+ * <b>Modified</b> 2009-2-6
  */
 public class Template extends Profile<Property> {
 	/**
