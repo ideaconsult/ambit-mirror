@@ -38,8 +38,10 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -47,15 +49,14 @@ import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.pubchem.PUGProcessor;
 
-public class PUGProcessorTest extends TestCase {
+public class PUGProcessorTest {
     protected PUGProcessor pug;
 
+    @Before
     public void setUp() throws Exception {
         pug = new PUGProcessor();
     }
-
-    public void tearDown() throws Exception {
-    }
+    @Test
     public void testGetInput() throws Exception {
         List<IStructureRecord> sids = new ArrayList<IStructureRecord>();
         sids.add(new StructureRecord(-1,-1,"1",PUGProcessor.PUBCHEM_CID));
@@ -64,19 +65,20 @@ public class PUGProcessorTest extends TestCase {
         PUGProcessor.createDownloadRequest(sids,out);
         System.out.println(out.toString());
     }
+    @Test
     public void testProcess() throws Exception {
         List<IStructureRecord> sids = new ArrayList<IStructureRecord>();
         sids.add(new StructureRecord(-1,-1,"111",PUGProcessor.PUBCHEM_CID));
         sids.add(new StructureRecord(-1,-1,"992",PUGProcessor.PUBCHEM_CID));
         List<IStructureRecord> results = pug.process(sids);
         for (IStructureRecord record: results) {
-        	assertEquals("sdf",record.getFormat());
+        	Assert.assertEquals("sdf",record.getFormat());
         	System.out.println(record.getContent());
         }
-        assertEquals(2,results.size());        
+        Assert.assertEquals(2,results.size());        
     }    
     /*
-    public void xtestParseOutput() throws Exception {
+    public void testParseOutput() throws Exception {
     	StringBuilder b = new StringBuilder();
     	b.append("<?xml version=\"1.0\"?>");
     	b.append("<!DOCTYPE PCT-Data PUBLIC \"-//NCBI//NCBI PCTools/EN\" \"http://pubchem.ncbi.nlm.nih.gov/pug/pug.dtd\">");
@@ -105,9 +107,9 @@ public class PUGProcessorTest extends TestCase {
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(b.toString())));
         doc.normalize();    	
-        List<StructureRecord> results = PUGProcessor.parseOutput(doc);
-        for (StructureRecord result: results) {
-            URL url = new URL(StructureRecord.getc);
+        List<IStructureRecord> results = PUGProcessor.parseOutput(doc);
+        for (IStructureRecord result: results) {
+            URL url = new URL(IStructureRecord.get);
             URLConnection connection= url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(connection.getInputStream())));
             String input;
@@ -119,6 +121,7 @@ public class PUGProcessorTest extends TestCase {
         System.out.println(results);
     }
     */
+    @Test
     public void testParseOutputWaiting() throws Exception {
     	StringBuilder b = new StringBuilder();
     
@@ -149,9 +152,9 @@ public class PUGProcessorTest extends TestCase {
         Document doc = builder.parse(new InputSource(new StringReader(b.toString())));
         doc.normalize();    	
         List<IStructureRecord> results = PUGProcessor.parseOutput(doc);
-        assertNotNull(results);
-        assertEquals(1,results.size());
-        assertEquals("1130503662625978916", results.get(0).getContent());
+        Assert.assertNotNull(results);
+        Assert.assertEquals(1,results.size());
+        Assert.assertEquals("1130503662625978916", results.get(0).getContent());
     }
     /**
      * poll

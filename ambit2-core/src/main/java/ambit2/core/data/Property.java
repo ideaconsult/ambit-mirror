@@ -33,7 +33,7 @@ import ambit2.core.exceptions.AmbitIOException;
 
 
 
-public class Property<Generator>  {
+public class Property  {
 	public enum IO_QUESTION  {
 		IO_START,
 		IO_TRANSLATE_NAME,
