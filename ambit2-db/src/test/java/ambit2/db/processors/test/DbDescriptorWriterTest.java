@@ -61,7 +61,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(0,names.getRowCount());
+		Assert.assertEquals(3,names.getRowCount());
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -80,7 +80,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(2,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(0,values.getRowCount());		
 		c.close();

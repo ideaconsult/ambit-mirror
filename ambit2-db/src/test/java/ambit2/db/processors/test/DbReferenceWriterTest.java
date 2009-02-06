@@ -49,7 +49,7 @@ public class DbReferenceWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();	
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM catalog_references");
-		Assert.assertEquals(7,names.getRowCount());
+		Assert.assertEquals(8,names.getRowCount());
 		
         DbReferenceWriter writer = new DbReferenceWriter();
 
@@ -60,8 +60,8 @@ public class DbReferenceWriterTest extends DbUnitTest {
         LiteratureEntry newle = writer.write(le);
 
         
-		names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM catalog_references");
-		Assert.assertEquals(8,names.getRowCount());
+		names = 	c.createQueryTable("EXPECTED_REFS","SELECT * FROM catalog_references");
+		Assert.assertEquals(9,names.getRowCount());
 		names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT title,url FROM catalog_references where title='title' and url='url'");
 		Assert.assertEquals(1,names.getRowCount());		
         c.close();

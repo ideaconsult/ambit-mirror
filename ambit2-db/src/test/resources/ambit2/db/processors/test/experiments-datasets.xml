@@ -6,8 +6,7 @@
   <user_roles user_name="guest" role_name="ambit_guest"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
-  <dictionary iddictionary="1" idparent="0" name="CAS" idreference="1"/>
-  <dictionary iddictionary="2" idparent="0" name="IUPAC Name" idreference="2"/>
+
   <chemicals idchemical="4891"/>
   <chemicals idchemical="9083"/>
   <structure idstructure="105095" idchemical="4891" structure="ZgYAAHicjVRdb9owFH33r/DDHkDFxtcfiS3WSChkBakN28K2h6pCEc1WpBa2Qjf13+86FC8tZY2V

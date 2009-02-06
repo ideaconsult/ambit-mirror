@@ -125,9 +125,13 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(0,names.getRowCount());
+		Assert.assertEquals(3,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(0,values.getRowCount());
+		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM TEMPLATE");	
+		Assert.assertEquals(5,templates.getRowCount());		
+		ITable dictionary = 	c.createQueryTable("EXPECTED_ONTOLOGY","SELECT * FROM DICTIONARY");	
+		Assert.assertEquals(3,dictionary.getRowCount());		
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -135,7 +139,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		writer.setStructure(new StructureRecord(7,100211,"",""));
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(1,names.getRowCount());
+		Assert.assertEquals(4,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(1,values.getRowCount());	        
         
@@ -154,7 +158,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(2,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM VALUES_NUMBER WHERE idstructure=100214");	
 		Assert.assertEquals(1,values.getRowCount());
 		Assert.assertEquals(5.01,(Double)DataType.DOUBLE.typeCast(values.getValue(0,"value")),1E-4);	
@@ -166,7 +170,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(0,names.getRowCount());
+		Assert.assertEquals(3,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(0,values.getRowCount());
 		
@@ -176,7 +180,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		writer.setStructure(new StructureRecord(7,100211,"",""));
         writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(1,names.getRowCount());
+		Assert.assertEquals(4,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
 		Assert.assertEquals(1,values.getRowCount());	        
         
@@ -195,7 +199,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
-		Assert.assertEquals(2,names.getRowCount());
+		Assert.assertEquals(5,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM VALUES_STRING WHERE idstructure=100214");	
 		Assert.assertEquals(1,values.getRowCount());
 		Assert.assertEquals("TESTVALUE",values.getValue(0,"value"));	

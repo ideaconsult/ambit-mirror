@@ -57,10 +57,9 @@
 
 <!ELEMENT dictionary EMPTY>
 <!ATTLIST dictionary
-    iddictionary CDATA #REQUIRED
-    idparent CDATA #REQUIRED
-    name CDATA #REQUIRED
-    idreference CDATA #REQUIRED
+    idsubject CDATA #REQUIRED
+    relationship CDATA #REQUIRED
+    idobject CDATA #REQUIRED
 >
 
 <!ELEMENT chemicals EMPTY>
@@ -69,6 +68,7 @@
     inchi CDATA #IMPLIED
     smiles CDATA #IMPLIED
     formula CDATA #IMPLIED
+    hashcode CDATA #REQUIRED
 >
 
 <!ELEMENT structure EMPTY>
@@ -108,7 +108,7 @@
 <!ELEMENT tuples EMPTY>
 <!ATTLIST tuples
     idtuple CDATA #REQUIRED
-    idtemplate CDATA #REQUIRED
+    id_srcdataset CDATA #REQUIRED
 >
 
 <!ELEMENT property_number EMPTY>
