@@ -11,8 +11,8 @@
   <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE"/>
   <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
   <catalog_references idreference="7" title="EINECS" url="EINECS"/>
-  <dictionary iddictionary="1" idparent="0" name="CAS" idreference="1"/>
-  <dictionary iddictionary="2" idparent="0" name="IUPAC Name" idreference="2"/>
+  <catalog_references idreference="8" title="Dummy reference" url="NA"/>
+  
   <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
   <chemicals idchemical="10" inchi="InChI=1/2FH.Na/h2*1H;/q;;+1/p-1" smiles="F.[F-].[Na+]"/>
   <chemicals idchemical="11" inchi="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"/>
@@ -73,18 +73,26 @@ sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S
 Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW
 QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="NA"/>
- <properties/>
+  
+  <properties idproperty="1" idreference="8" name="Property 1" units="" comments="" islocal="false"/>
+  <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
+  <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
+
+  
   <template idtemplate="1" name="BCF"/>
+  <template idtemplate="44" name="Octanol-water partition coefficient (Kow)"/>
+  <template idtemplate="5" name="Physicochemical effects"/>
+  <template idtemplate="85" name="Endpoints"/>
+  <template idtemplate="84"/>
+  
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
-  <template_def idtemplate="1" idproperty="4"/>
-  <template_def idtemplate="1" idproperty="5"/>
-  <template_def idtemplate="1" idproperty="6"/>
-  <template_def idtemplate="1" idproperty="7"/>
-  <template_def idtemplate="1" idproperty="8"/>
-  <template_def idtemplate="1" idproperty="9"/>
-  <template_def idtemplate="1" idproperty="10"/>
+
+  <dictionary idsubject="44" idobject="5"/>
+  <dictionary idsubject="5" idobject="85"/>  
+  <dictionary idsubject="85" relationship="is_part_of" idobject="84"/>  
+    
   <tuples/>
   <property_number/>
   <property_string/>
@@ -95,4 +103,5 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <fp1024 idchemical="10" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="274877906944" fp13="0" fp14="0" fp15="0" fp16="128" time="0" bc="2" status="invalid"/>
   <fp1024 idchemical="11" fp1="0" fp2="17594333528064" fp3="140746145400832" fp4="2305843009283162112" fp5="76561331104268288" fp6="70368744177728" fp7="0" fp8="4521191813414912" fp9="4613937822536040449" fp10="3602879701913174016" fp11="72057628397797376" fp12="1374389567488" fp13="0" fp14="4096" fp15="9663676417" fp16="524288" time="16" bc="37" status="invalid"/>
   <fp1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="70368744177664" fp16="0" time="0" bc="1" status="invalid"/>
+
 </dataset>
