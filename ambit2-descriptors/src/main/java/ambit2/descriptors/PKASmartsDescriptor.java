@@ -81,7 +81,7 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
                     new VerboseDescriptorResult<String,DoubleResult>(new DoubleResult(node.getPka()),trace.toString()),
                     new String[]{title});        
             
-        } catch (SMARTSException x) {
+        } catch (Exception x) {
             throw new CDKException(x.getMessage());
         }
     }
