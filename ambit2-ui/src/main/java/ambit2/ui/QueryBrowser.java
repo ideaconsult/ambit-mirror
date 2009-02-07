@@ -42,19 +42,18 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import org.apache.poi.hssf.util.CellReference;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.table.BrowserModeNavigator;
 import ambit2.ui.table.FindNavigator;
 import ambit2.ui.table.IBrowserMode;
@@ -75,37 +74,67 @@ import com.jgoodies.forms.layout.FormLayout;
 
 
 
-public class QueryBrowser<T extends AbstractTableModel> extends JPanel implements PropertyChangeListener  {
+public class QueryBrowser<T extends TableModel> extends JPanel implements PropertyChangeListener, IAmbitEditor<T>  {
 	protected final JTable browser_table;
 	protected IHeaderAction[] headerActions = getHeaderActions();
 	//protected Dimension cellSize = new Dimension(200,200);	
 	protected Hashtable<BrowserMode, ImageCellRenderer> imageRenderers = new Hashtable<BrowserMode, ImageCellRenderer>();
 	protected BrowserModeCellRenderer cellRenderer = new BrowserModeCellRenderer(BrowserMode.Spreadsheet);
+	protected boolean editable;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public QueryBrowser() {
+		this(null);
+	}	
 	public QueryBrowser(T model) {
 		this(model,new Dimension(150,150));
 	}
 	public QueryBrowser(T model,Dimension cellSize) {
 		super(new BorderLayout());
 		//this.cellSize = cellSize;
-		
+
 		if (model instanceof IBrowserMode) 
 			((IBrowserMode)model).addPropertyChangeListener(this);
 		browser_table = addWidgets(model);
-		
 		JScrollPane p = new JScrollPane(browser_table);
 		p.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		browser_table.setPreferredScrollableViewportSize(new Dimension(600, 200));
 		add(p, BorderLayout.CENTER);
-		add(addControls(), BorderLayout.NORTH);
 		setMinimumSize(new Dimension(200, 200));
+		setObject(model);		
+	}
+	/**
+	 * IAmbitEditor
+	 */
+	public void setObject(T object) {
+		if (object != null) {
+			browser_table.setModel(object);
+			add(addControls(), BorderLayout.NORTH);
+		}
+	};
+	public T getObject() {
+		return (T) browser_table.getModel();
 	}
 	
-	
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}	
+	public JComponent getJComponent() {
+		return this;
+	}
+	/**
+	 * IAmbitEditor methods end
+	*/
+	/**
+	 * @return
+	 */
 	protected JComponent addControls() {
 		/**
 		JToolBar toolBar = new JToolBar();
@@ -166,7 +195,7 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 	}
 	protected JTable addWidgets(T model) {
 		
-		JTable table = new JTable(model) {
+		JTable table = new JTable() {
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
 				  Object value = getValueAt(row,column);
@@ -377,7 +406,10 @@ public class QueryBrowser<T extends AbstractTableModel> extends JPanel implement
 		
 	}
 	protected void setCellSize(JTable browser_table) {
-		BrowserMode mode = ((IBrowserMode) browser_table.getModel()).getBrowserMode();
+		BrowserMode mode = BrowserMode.Spreadsheet;
+		TableModel model = browser_table.getModel();
+		if ((model != null) && (model instanceof IBrowserMode))
+				mode = ((IBrowserMode) browser_table.getModel()).getBrowserMode();
 		for (int row = 0; row < browser_table.getRowCount();row++) 
 			for (int col=0; col < browser_table.getColumnCount(); col++) {
 				TableColumn c = browser_table.getColumnModel().getColumn(col);

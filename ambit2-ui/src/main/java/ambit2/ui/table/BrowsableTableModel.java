@@ -87,7 +87,9 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			return rowCount+1;
 		}	
 		default:	
-			return getDataModel().getColumnCount()+2;
+			if (getDataModel()!= null)
+				return getDataModel().getColumnCount()+2;
+			else return 0;
 		}
 	}
 
@@ -258,7 +260,8 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	    if (this.dataModel != null)
 	        this.dataModel.removeTableModelListener(this);
 		this.dataModel = dataModel;
-		this.dataModel.addTableModelListener(this);
+		if (this.dataModel != null)
+			this.dataModel.addTableModelListener(this);
 		fireTableStructureChanged();
 		setRecord(0);
 	}
@@ -320,7 +323,9 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	}
 
 	public int getMaxRecords() {
-		return dataModel.getRowCount();
+		if (dataModel == null) return 0;
+		else
+			return dataModel.getRowCount();
 	}
 
 	public int getRecord() {
