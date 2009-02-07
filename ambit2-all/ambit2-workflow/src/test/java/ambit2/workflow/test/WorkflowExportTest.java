@@ -1,6 +1,5 @@
 package ambit2.workflow.test;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 
@@ -17,13 +16,8 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import ambit2.core.data.experiment.TemplateField;
-import ambit2.core.exceptions.AmbitIOException;
 import ambit2.core.io.DownloadTool;
 import ambit2.workflow.ui.WorkflowExport;
 
