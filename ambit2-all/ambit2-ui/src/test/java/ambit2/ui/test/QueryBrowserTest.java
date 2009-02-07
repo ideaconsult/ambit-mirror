@@ -79,8 +79,10 @@ public class QueryBrowserTest {
 		};
 		*/
 
-		//QueryBrowser<TestTableModel> browser = new QueryBrowser<TestTableModel>(dataModel);
-		QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(new BrowsableTableModel(dataModel));
+		//QueryBrowser<TestTableModel> browser = new QueryBrowser<TestTableModel>();
+		//QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(new BrowsableTableModel(dataModel));
+		QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>();
+		browser.setObject(new BrowsableTableModel(dataModel));
 		browser.setPreferredSize(new Dimension(800,600));
 		JOptionPane.showMessageDialog(null,browser,"",JOptionPane.PLAIN_MESSAGE,null);
 	}
