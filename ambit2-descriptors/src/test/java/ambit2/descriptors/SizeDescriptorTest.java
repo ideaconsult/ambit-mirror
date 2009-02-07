@@ -24,16 +24,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.descriptors;
 
-import java.io.FileInputStream;
+import junit.framework.Assert;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openscience.cdk.Molecule;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.IDescriptor;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
@@ -41,18 +40,16 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.core.data.MoleculeTools;
 
-public class SizeDescriptorTest extends TestCase {
+public class SizeDescriptorTest  {
 	IMolecule molecule = null;
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(SizeDescriptorTest.class);
-	}
-	protected void setUp() throws Exception {
-		super.setUp();
+
+	@Before
+	public void setUp() throws Exception {
 		molecule = getTestMolecule();
 	}
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		molecule = null;
-		super.tearDown();
 	}
 	public IMolecule getTestMolecule1() throws Exception {
 		String cml = 
@@ -138,7 +135,8 @@ public class SizeDescriptorTest extends TestCase {
 	
 	public IMolecule getTestMolecule() throws Exception {
 		IMolecule mol = new org.openscience.cdk. Molecule();
-		MDLReader reader = new MDLReader(new FileInputStream("data/misc/224824.sdf"));
+		MDLReader reader = new MDLReader(getClass().getClassLoader().getResourceAsStream(
+				"ambit2/descriptors/size/224824.sdf"));
 		
 		mol = (Molecule) reader.read(mol);
 		reader.close();
@@ -161,37 +159,34 @@ public class SizeDescriptorTest extends TestCase {
 		}
 	}
 	*/
-	public void testSizeDescriptor() {
+	@Test
+	public void testSizeDescriptor() throws Exception {
 		SizeDescriptor d = new SizeDescriptor();
-		try {
+
 			DescriptorValue value = d.calculate(molecule);
 			IDescriptorResult result = value.getValue();
-			assertTrue(result instanceof DoubleArrayResult);
+			Assert.assertTrue(result instanceof DoubleArrayResult);
 			
 			DoubleArrayResult a = (DoubleArrayResult) result;
-			assertEquals(3,a.length());
+			Assert.assertEquals(3,a.length());
 			System.out.println(a.get(0));
 			System.out.println(a.get(1));
 			System.out.println(a.get(2));
 	
 			IMolecularDescriptor p = new PlanarityDescriptor();
 			value = p.calculate(molecule);
-			assertEquals(a.get(2),((DoubleResult) (value.getValue())).doubleValue(),0.00001);
+			Assert.assertEquals(a.get(2),((DoubleResult) (value.getValue())).doubleValue(),0.00001);
 
 			p = new MaximumDiameterDescriptor();
 			value = p.calculate(molecule);
-			assertEquals(a.get(0),((DoubleResult) (value.getValue())).doubleValue(),0.00001);			
+			Assert.assertEquals(a.get(0),((DoubleResult) (value.getValue())).doubleValue(),0.00001);			
 			
 			p = new CrossSectionalDiameterDescriptor();
 			value = p.calculate(molecule);
-			assertEquals(a.get(1),((DoubleResult) (value.getValue())).doubleValue(),0.00001);
+			Assert.assertEquals(a.get(1),((DoubleResult) (value.getValue())).doubleValue(),0.00001);
 			
 			System.out.println(molecule.getProperties());
-			
-		} catch (CDKException x) {
-			x.printStackTrace();
-			fail();
-		}
+
 	}
 	
 	
