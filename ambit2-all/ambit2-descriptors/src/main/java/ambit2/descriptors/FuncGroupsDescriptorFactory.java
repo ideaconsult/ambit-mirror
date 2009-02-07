@@ -26,8 +26,10 @@ package ambit2.descriptors;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -43,93 +45,103 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class FuncGroupsDescriptorFactory {
+import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.DefaultAmbitProcessor;
+
+public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,List<FunctionalGroup>>{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3836212586696127104L;
 	public transient static final String[] extensions = {".xml"};
 	public transient static final String[] extensionDescription = 
 		{"Functional groups with SMARTS notation (*.xml)"
 		};	
 
 	
-	private FuncGroupsDescriptorFactory() {
-		super();
-	}
-
-	
 	public static Document getDocument(String filename)
 			throws Exception {
+
 		return getDocument(new File(filename));
 	}
 	public static Document getDocument(File file) throws Exception {
+		logger.debug("Trying to load from file "+file.getAbsolutePath());		
 		FileReader filereader = new FileReader(file);
-		return getDocument(new InputSource(filereader));
+		try {
+			return getDocument(new InputSource(filereader));
+		} catch (Exception x) {
+			throw new Exception(x);
+		} finally {
+			filereader.close();	
+		}
+		
 	}	
-	
+	public static Document getDocument(InputStream stream) throws Exception {
+		logger.debug("Trying to load from as a resource stream ");		
+		try {
+			return  getDocument(new InputSource(stream));
+		} catch (Exception x) {
+			throw new Exception(x);
+		} finally {
+			stream.close();	
+		}		
+	}	
 	public static Document getDocument() throws Exception {
-		return  getDocument(new InputSource(
+		logger.debug("Trying to load the default ambit2/data/descriptors/funcgroups.xml");		
+		return  getDocument(
 				FuncGroupsDescriptorFactory.class
 				.getClassLoader().getResourceAsStream(
-						"ambit2/data/descriptors/funcgroups.xml")
-				));
+						"ambit2/descriptors/funcgroups.xml")
+				);
 	}	
 	
 	public static Document getDocument(InputSource source) throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		return builder.parse(source);
-}	
-	
-	public static void getDescriptors(
-			IProcessDescriptor<FunctionalGroupDescriptor> process)
-			throws Exception {
-		Document doc = getDocument();
-		NodeList nodes = doc.getDocumentElement().getChildNodes();
-		for (int i = 0; i < nodes.getLength(); i++)
-			if (nodes.item(i).getNodeType() == Element.ELEMENT_NODE) {
-				Element e = ((Element) nodes.item(i));
+	}	
+	public List<FunctionalGroup> process(String target) throws AmbitException {
+		List<FunctionalGroup> groups = new ArrayList<FunctionalGroup>();
+		try {
+			Document doc=null;
+			if (target == null)
+				doc = getDocument();
+			else
 				try {
-					FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
-					d.setParameters(new String[] { 
-							e.getAttribute("smarts"),
-							e.getAttribute("name"),
-							e.getAttribute("hint")});
-					process.process(d);
+					doc = getDocument(target);
 				} catch (Exception x) {
-					x.printStackTrace();
-				}
+					try {
+						
+						doc = getDocument(FuncGroupsDescriptorFactory.class
+							.getClassLoader().getResourceAsStream(target));
+					} catch (Exception xx) {
+						//if this fails, everything fails
+						doc = getDocument();					
+					}
 			}
+			NodeList nodes = doc.getDocumentElement().getChildNodes();
+			for (int i = 0; i < nodes.getLength(); i++)
+				if (nodes.item(i).getNodeType() == Element.ELEMENT_NODE) {
+					Element e = ((Element) nodes.item(i));
+					try {
+						groups.add(new FunctionalGroup(
+								e.getAttribute("name"),
+								e.getAttribute("smarts"),
+								e.getAttribute("hint"),
+								e.getAttribute("family")
+								));
+					} catch (Exception x) {
+						x.printStackTrace();
+					}
+				}
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+		return groups;
 	}
 
-	public static List<FunctionalGroupDescriptor> create() throws Exception {
-		final ArrayList<FunctionalGroupDescriptor> list = new ArrayList<FunctionalGroupDescriptor>();
-		getDescriptors(new IProcessDescriptor<FunctionalGroupDescriptor>() {
-			public void process(FunctionalGroupDescriptor descriptor)
-					throws Exception {
-				list.add(descriptor);
-			}
-		});
-		return list;
-	}
-	
-	public static void getFragments(Document doc,List<FunctionalGroup> fragments) throws Exception {
-		fragments.clear();
-		NodeList nodes = doc.getDocumentElement().getChildNodes();
-		for (int i = 0; i < nodes.getLength(); i++)
-			if (nodes.item(i).getNodeType() == Element.ELEMENT_NODE) {
-				Element e = ((Element) nodes.item(i));
-				try {
-					fragments.add(new FunctionalGroup(
-							e.getAttribute("name"),
-							e.getAttribute("smarts"),
-							e.getAttribute("hint"),
-							e.getAttribute("family")
-							));
-					
-				} catch (Exception x) {
-					x.printStackTrace();
-				}
-			}
-	}	
-	public static void saveFragments(OutputStream writer,List<FunctionalGroup> fragments) throws Exception {
+
+	public static void saveFragments(OutputStream writer,Collection<FunctionalGroup> fragments) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -137,10 +149,13 @@ public class FuncGroupsDescriptorFactory {
 
 		Element top = doc.createElement("funcgroups");
 		doc.appendChild(top);
-		for (int i=0; i < fragments.size();i++) {
-			FunctionalGroup group = fragments.get(i);
-			top.appendChild(group.toXML(doc));
-		}
+		for (FunctionalGroup group : fragments)
+			try {
+				top.appendChild(group.toXML(doc));
+			} catch (Exception x) {
+				logger.error(x);
+			}
+		
 		
     	DOMSource domSource = new DOMSource(doc);
     	StreamResult streamResult = new StreamResult(writer);

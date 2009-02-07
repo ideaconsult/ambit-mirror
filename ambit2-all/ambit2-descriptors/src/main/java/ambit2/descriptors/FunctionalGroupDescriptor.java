@@ -24,19 +24,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.descriptors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
+import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
-import org.openscience.cdk.qsar.result.IntegerResultType;
-
-import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.query.smarts.ISmartsPattern;
-import ambit2.core.query.smarts.SMARTSException;
-import ambit2.core.query.smarts.SmartsPatternFactory;
 
 
 /**
@@ -45,7 +43,10 @@ import ambit2.core.query.smarts.SmartsPatternFactory;
  *
  */
 public class FunctionalGroupDescriptor implements IMolecularDescriptor {
-	protected ISmartsPattern<IAtomContainer> query;
+    public final String[] paramNames = {"funcgroups","verbose"};
+	protected List<FunctionalGroup> groups;
+	protected String[] names;
+
 	protected boolean verbose = false;
 	public boolean isVerbose() {
 		return verbose;
@@ -53,54 +54,62 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
+		for (FunctionalGroup group:groups)	group.setVerboseMatch(verbose);
 	}
 
-	public FunctionalGroupDescriptor() throws SMARTSException {
-		query = SmartsPatternFactory.createSmartsPattern(
-				SmartsPatternFactory.SmartsParser.smarts_nk, "", false);
-	}
-
-	public DescriptorValue calculate(IAtomContainer arg0) throws CDKException {
+	public FunctionalGroupDescriptor() {
 		try {
-			
-			int hits = 0;
-			IAtomContainer match = null;
-			IDescriptorResult result;
-			if (isVerbose()) 
-				try {
-					match = query.getMatchingStructure(arg0);
-					hits = (match.getAtomCount()>0) ?1:0;
-					result = new VerboseDescriptorResult<IAtomContainer,IntegerResult>(new IntegerResult(hits),match);
-				} catch (SMARTSException x) {
-					match = null;
-					hits = 0;
-					result = new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),x.getMessage());
-				}
-			else {
-				hits = query.match(arg0);
-				result = new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),null);
-			}	
-			
+			FuncGroupsDescriptorFactory factory = new FuncGroupsDescriptorFactory();
+			setGroups(factory.process(null));
+		} catch (Exception x) {
+			setGroups(new ArrayList<FunctionalGroup>());
+		}
+	}
+	protected void  setGroups(List<FunctionalGroup> groups) {
+		this.groups = groups;
+		names= new String[groups.size()];
+		for (int i=0; i < groups.size();i++)
+			names[i]=groups.get(i).getName();
+		for (FunctionalGroup group:groups)	group.setVerboseMatch(isVerbose());		
+	}
+	public DescriptorValue calculate(IAtomContainer target) throws CDKException {
+		try {
+			IntegerArrayResult results = new IntegerArrayResult(groups.size());
+			Object[] explanation = new Object[groups.size()];
+			for (int i=0; i < groups.size();i++) {
+				VerboseDescriptorResult<Object,IntegerResult> result = groups.get(i).process(target);
+				results.add(result.getResult().intValue());
+				explanation[i] = result.getExplanation();
+				
+			}
+			VerboseDescriptorResult<Object, IntegerArrayResult> result = new VerboseDescriptorResult<Object, IntegerArrayResult>(
+					results,
+					explanation
+					);
+
 	        return new DescriptorValue(getSpecification(), getParameterNames(), 
 	                getParameters(), 
 	                result,
-	                new String[] {AmbitCONSTANTS.SMARTSQuery});
+	                names);
 		} catch (Exception x) {
+			x.printStackTrace();
 			throw new CDKException(x.getMessage());
 		}
 	}
 
     public String[] getParameterNames() {
-        String[] params = new String[4];
-        params[0] = "smarts";
-        params[1] = "name";
-        params[2] = "comment";
-        params[3] = "verbose";
-        return params;
+        return paramNames;
     }
 
     public Object getParameterType(String name) {
-        return "";
+    	for (int i=0; i < paramNames.length;i++)
+    		if (paramNames[i].equals(name))
+	    		switch (i) {
+	    		case 0: return new ArrayList<FunctionalGroup>();
+	    		case 1: return false;
+	    		default: return null;
+	    		}
+    	return null;
     }
 
 	public DescriptorSpecification getSpecification() {
@@ -114,21 +123,25 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
      * 3 parameters : Smarts,name,hint; first two are mandatory.
      */
 	public void setParameters(Object[] params) throws CDKException {
-        if (params.length < 2) 
-            throw new CDKException("FunctionalGroupDescriptor expects at least two parameter");
+        if (params.length < 1) 
+            throw new CDKException("FunctionalGroupDescriptor expects at least one parameter");
         
-        if (!(params[0] instanceof String)) 
-            throw new CDKException("The first parameter must be of type String");
-        if (!(params[1] instanceof String)) 
-            throw new CDKException("The second parameter must be of type String");
+        if (!(params[0] instanceof List)) 
+            throw new CDKException("The first parameter must be of type List<FunctionalGroup> instead of "+ params[0].getClass().getName());
+        
+        if (params.length > 1)         
+        if (!(params[1] instanceof Boolean)) 
+            throw new CDKException("The second parameter must be of type Boolean instead of "+params[1].getClass().getName());
 
         try {
-        	query.setSmarts(params[0].toString());
-        	query.setName(params[1].toString());
-            if ((params.length > 2))
-            	query.setHint(params[2].toString());
-            if ((params.length > 3))
-            	setVerbose(Boolean.valueOf(params[3].toString()));
+        	setGroups((List<FunctionalGroup>)params[0]);
+        } catch (Exception x) {
+        	setGroups(new ArrayList<FunctionalGroup>());
+        	throw new CDKException(x.getMessage());
+        }
+        try {
+            if ((params.length > 1))
+            	setVerbose(Boolean.valueOf(params[1].toString()));
             else
             	setVerbose(false);
         		
@@ -138,28 +151,19 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
         }
 	}
     public Object[] getParameters() {
-        Object[] params = new Object[4];
-        params[0] = new String(query.getSmarts());
-        params[1] = new String(query.getName());
-        if (query.getHint() == null)
-        	params[2] = null;
-        else
-        	params[2] = new String(query.getHint());
-        params[3] = new Boolean(isVerbose());
+        Object[] params = new Object[2];
+        params[0] = groups;
+        params[1] = new Boolean(isVerbose());
         return params;
     }	
     @Override
     public String toString() {
-    	if (query == null) return getClass().getName();
-    	else return "Functional group: "+query.toString();
-    }
-    public int hashCode() {
-    	return query.hashCode();
+    	return "Functional groups: ("+groups.size()+")";
     }
 
 	public IDescriptorResult getDescriptorResultType() {
 
-		return new IntegerResultType();
+		return new VerboseDescriptorResult(null,null);
 	}
 }
 

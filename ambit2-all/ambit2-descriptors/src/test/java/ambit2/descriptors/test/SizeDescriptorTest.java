@@ -22,7 +22,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.descriptors;
+package ambit2.descriptors.test;
 
 import junit.framework.Assert;
 
@@ -39,6 +39,10 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.core.data.MoleculeTools;
+import ambit2.descriptors.CrossSectionalDiameterDescriptor;
+import ambit2.descriptors.MaximumDiameterDescriptor;
+import ambit2.descriptors.PlanarityDescriptor;
+import ambit2.descriptors.SizeDescriptor;
 
 public class SizeDescriptorTest  {
 	IMolecule molecule = null;

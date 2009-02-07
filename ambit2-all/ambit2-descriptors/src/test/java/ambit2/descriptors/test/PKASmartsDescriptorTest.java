@@ -27,7 +27,7 @@
  * 
  */
 
-package ambit2.descriptors;
+package ambit2.descriptors.test;
 
 
 import java.io.File;
@@ -43,14 +43,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.config.Preferences;
+import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.DelimitedFileWriter;
 import ambit2.core.io.IteratingDelimitedFileReader;
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.query.smarts.SmartsPatternAmbit;
+import ambit2.descriptors.PKANode;
+import ambit2.descriptors.PKASmartsDescriptor;
+import ambit2.descriptors.VerboseDescriptorResult;
 
 public class PKASmartsDescriptorTest {
 	protected PKASmartsDescriptor pka;
@@ -112,32 +118,43 @@ public class PKASmartsDescriptorTest {
     	System.out.println(file.getAbsolutePath());
     	DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
     	
+		HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,"true");		    	
     	InputStream in = PKASmartsDescriptor.class.getClassLoader().getResourceAsStream("ambit2/descriptors/pka/benchmark_new.csv");
     	IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
     	while (reader.hasNext()) {
     		Object o = reader.next();
     		Assert.assertTrue(o instanceof IAtomContainer);
-
-    		
-    		IAtomContainer a = (IAtomContainer)o;
-        	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
-            CDKHueckelAromaticityDetector.detectAromaticity(a);    		
-    		DescriptorValue value = pka.calculate(a);
-    		VerboseDescriptorResult<String,DoubleResult> result = (VerboseDescriptorResult<String,DoubleResult>)value.getValue(); 
-    		a.setProperty(value.getNames()[0], result.getResult().doubleValue());
-    		a.setProperty(value.getNames()[0]+"-trace", result.getExplanation());
-    		
-    		Double d = Double.valueOf(a.getProperty("SMARTS pKa").toString());
-    		if (!d.equals(result.getResult().doubleValue())) {
-        		System.out.print(result.getResult().doubleValue());
-        		System.out.print('\t');
-        		System.out.print(a.getProperty("SMARTS pKa"));
-        		System.out.print('\t');
-        		System.out.println(a.getProperty("SMILES"));
-    			
+    		IAtomContainer a = null;
+    		try {
+    			a = ha.process((IAtomContainer)o);
+	        	//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
+	            CDKHueckelAromaticityDetector.detectAromaticity(a);    		
+	    		DescriptorValue value = pka.calculate(a);
+	    		VerboseDescriptorResult<String,DoubleResult> result = (VerboseDescriptorResult<String,DoubleResult>)value.getValue(); 
+	    		a.setProperty(value.getNames()[0], result.getResult().doubleValue());
+	    		a.setProperty(value.getNames()[0]+"-trace", result.getExplanation());
+	    		
+	    		Double d = Double.valueOf(a.getProperty("SMARTS pKa").toString());
+	    		if (!d.equals(result.getResult().doubleValue())) {
+	        		System.out.print(result.getResult().doubleValue());
+	        		System.out.print('\t');
+	        		System.out.print(a.getProperty("SMARTS pKa"));
+	        		System.out.print('\t');
+	        		System.out.println(a.getProperty("SMILES"));
+	    			
+	    		}
+	
+	    		writer.write(a);
+    		} catch (CDKException x) {
+    			continue;
+    		} catch (AmbitException x) {
+    			continue;
+    		} catch (Exception x) {
+    			x.printStackTrace();
+    			continue;
     		}
-
-    		writer.write(a);
+	    		
     	}
     	in.close();
     	writer.close();
