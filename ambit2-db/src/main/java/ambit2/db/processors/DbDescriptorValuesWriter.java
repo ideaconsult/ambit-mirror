@@ -29,6 +29,7 @@
 
 package ambit2.db.processors;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -39,9 +40,11 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+import ambit2.core.data.Dictionary;
 import ambit2.core.data.IntArrayResult;
 import ambit2.core.data.LiteratureEntry;
 import ambit2.core.data.StringDescriptorResultType;
+import ambit2.descriptors.VerboseDescriptorResult;
 
 
 /**
@@ -79,6 +82,8 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 	protected Object getValue(DescriptorValue descriptor,String propertyName, int propertyIndex) {
         IDescriptorResult result = descriptor.getValue();
         double value = Double.NaN;
+        if (result instanceof VerboseDescriptorResult)
+        	result = ((VerboseDescriptorResult)result).getResult();
         if (result instanceof DoubleResult) value = ((DoubleResult) result).doubleValue();
         else if (result instanceof IntegerResult) value = ((IntegerResult) result).intValue();
         else if (result instanceof BooleanResult) {
@@ -91,6 +96,11 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
         else if (result instanceof StringDescriptorResultType) 
             return descriptor.getValue().toString();
         return new Double(value);    
+	}
+	@Override
+	protected Dictionary getTemplate(DescriptorValue target)
+			throws SQLException {
+		return new Dictionary("Descriptors","All");
 	}
 
 }

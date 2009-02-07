@@ -34,6 +34,7 @@ import java.util.Arrays;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 
+import ambit2.core.data.Dictionary;
 import ambit2.core.data.LiteratureEntry;
 
 
@@ -93,6 +94,7 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
     		String propertyName, int propertyIndex, int idtuple) throws SQLException {
     	
     }
+
 	@Override
 	protected String getComments(DescriptorValue descriptor) {
 		return descriptor.getSpecification().getImplementationIdentifier();
@@ -105,6 +107,10 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 	protected LiteratureEntry getReference(DescriptorValue descriptor) {
 		return new LiteratureEntry(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
 	}
-
+	@Override
+	protected Dictionary getTemplate(DescriptorValue target)
+			throws SQLException {
+		return new Dictionary("Descriptors","All");
+	}
 
 }

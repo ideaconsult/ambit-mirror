@@ -33,7 +33,7 @@ public class FP1024WriterTest extends DbUnitTest {
 		IDatabaseConnection dbConnection = getConnection();
 		String query = "SELECT idchemical,idstructure,uncompress(structure) as c,format FROM structure";
 		ITable chemicals = 	dbConnection.createQueryTable("EXPECTED_CHEMICALS",query);
-		ITable fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM FP1024 where status='valid'");
+		ITable fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM fp1024 where status='valid'");
 		Assert.assertEquals(5, chemicals.getRowCount());
 		Assert.assertEquals(0, fp.getRowCount());
 		
@@ -83,9 +83,9 @@ public class FP1024WriterTest extends DbUnitTest {
 		}
 		reader.close();
 		
-		fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM FP1024 where status = 'valid'");
+		fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM fp1024 where status = 'valid'");
 		Assert.assertEquals(4, fp.getRowCount());		
-		fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM FP1024 where status = 'error'");
+		fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM fp1024 where status = 'error'");
 		Assert.assertEquals(1, fp.getRowCount());				
 		fpWriter.close();
 

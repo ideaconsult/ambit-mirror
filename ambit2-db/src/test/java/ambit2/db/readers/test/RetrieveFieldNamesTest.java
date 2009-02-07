@@ -37,6 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
+import ambit2.core.data.Property;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;
@@ -47,10 +48,10 @@ import ambit2.db.search.QueryExecutor;
  * @author nina
  *
  */
-public class RetrieveFieldNamesTest extends RetrieveTest<String> {
+public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 
 	@Override
-	protected IRetrieval<String> createQuery() {
+	protected IRetrieval<Property> createQuery() {
 		RetrieveFieldNames q = new RetrieveFieldNames();
 		return q;
 	}

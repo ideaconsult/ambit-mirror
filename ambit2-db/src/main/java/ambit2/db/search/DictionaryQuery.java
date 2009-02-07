@@ -29,22 +29,29 @@
 
 package ambit2.db.search;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.core.data.Dictionary;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.db.readers.IRetrieval;
 
-public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition> {
+public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition> implements IRetrieval<Dictionary>{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7315142224794511557L;
 	public static final String SQL = 
-		"select tObject.idtemplate,tObject.name,tSubject.idtemplate,tSubject.name from dictionary d "+
+		"select tObject.name as Category,tSubject.name as Name from dictionary d "+
 		"join template as tSubject on d.idsubject=tSubject.idtemplate "+
 		"join template as tObject on d.idobject=tObject.idtemplate "+
 		"where %s.name %s ? order by tObject.idtemplate";
 	
+	public DictionaryQuery() {
+		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getValue()));
@@ -59,5 +66,12 @@ public abstract class DictionaryQuery extends AbstractQuery<String, String, Stri
 	@Override
 	public String getFieldname() {
 		return getTemplateName();
+	}
+	public Dictionary getObject(ResultSet rs) throws AmbitException {
+		try {
+			return new Dictionary(rs.getString(2),rs.getString(1));
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
 	}
 }

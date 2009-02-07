@@ -29,17 +29,26 @@
 
 package ambit2.db.search;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.core.data.Property;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.db.readers.IRetrieval;
 
-public class TemplateQuery extends AbstractQuery<String, String, StringCondition> {
+public class TemplateQuery extends AbstractQuery<String, String, StringCondition> implements IRetrieval<Property> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6746077496508519227L;
-	public static final String SQL = "SELECT template.idtemplate,name,idproperty,`order` from template join template_def using(idtemplate) where name=?";
+	public static final String SQL = 
+			"SELECT properties.name,properties.units from template join template_def using(idtemplate) "+
+			"join properties using(idproperty) " +
+			"where template.name=?";
+	public TemplateQuery() {
+		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getValue()));
@@ -55,5 +64,14 @@ public class TemplateQuery extends AbstractQuery<String, String, StringCondition
 	}
 	@Override
 	public void setFieldname(String fieldname) {
+	}
+	public Property getObject(ResultSet rs) throws AmbitException {
+		try {
+			Property p =new Property(rs.getString(1));
+			p.setUnits(rs.getString(2));
+			return p;
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
 	}
 }

@@ -37,6 +37,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ambit2.core.data.Dictionary;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.DictionarySubjectQuery;
@@ -63,10 +64,9 @@ public class DictionaryObjectTest extends QueryTest<DictionaryQuery> {
 		int records = 0;
 		while (rs.next()) {
 			records ++;
-			Assert.assertEquals(85,rs.getInt(1));
-			Assert.assertEquals(5,rs.getInt(3));
-			Assert.assertEquals("Endpoints",rs.getString(2));
-			Assert.assertEquals("Physicochemical effects",rs.getString(4));			
+			Dictionary d = query.getObject(rs);
+			Assert.assertEquals("Endpoints",d.getParentTemplate());
+			Assert.assertEquals("Physicochemical effects",d.getTemplate());			
 		}
 		Assert.assertEquals(1,records);
 		

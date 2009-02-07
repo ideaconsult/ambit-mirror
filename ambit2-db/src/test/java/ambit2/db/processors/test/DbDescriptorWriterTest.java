@@ -60,7 +60,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
 		Assert.assertEquals(3,names.getRowCount());
 		
         writer.setConnection(c.getConnection());
@@ -79,11 +79,41 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         c.close();
         
         c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
 		Assert.assertEquals(5,names.getRowCount());
-		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM PROPERTY_VALUES");	
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
 		Assert.assertEquals(0,values.getRowCount());		
 		c.close();
     }
-
+	@Test
+    public void testWriteAllDescriptors() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
+        DbDescriptorWriter writer = new DbDescriptorWriter();
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		Assert.assertEquals(3,names.getRowCount());
+		
+		
+        writer.setConnection(c.getConnection());
+        writer.open();
+        XLogPDescriptor xlogp = new XLogPDescriptor();
+        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+        DescriptorValue v = new DescriptorValue(
+                new DescriptorSpecification("XLogPReference","XLogPTitle","XLogPIdentifier","XLogPVendor"),
+                new String[] {},
+                new Object[] {},
+                new DoubleResult(5),
+                new String[] {"XLogP"}
+                );
+        writer.write(xlogp.calculate(MoleculeFactory.makeAlkane(10)));
+        writer.write(v);
+        c.close();
+        
+        c = getConnection();
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
+		Assert.assertEquals(5,names.getRowCount());
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
+		Assert.assertEquals(0,values.getRowCount());		
+		c.close();
+    }
 }

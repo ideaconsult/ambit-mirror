@@ -67,7 +67,7 @@ import ambit2.db.search.QueryExecutor;
 public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowSet{
 	protected Q query;
 	protected CachedRowSet rowset;
-	
+	protected QueryExecutor<Q> executor = new QueryExecutor<Q>();
     public AmbitRows() throws SQLException {
         super();
         rowset = CachedRowSetFactory.getCachedRowSet();
@@ -75,9 +75,13 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
     public abstract T getObject() throws AmbitException ;
     
     public void open(Connection connection) throws AmbitException {
+    	try {
+    		rowset.close();
+    	} catch (Exception x) {}
     	if (query == null) throw new AmbitException("Query not defined!");
-    	QueryExecutor<Q> executor = new QueryExecutor<Q>();
-    	executor.setConnection(connection);
+    	if (connection != null)
+    		executor.setConnection(connection);
+   	
     	executor.open();
     	try {
     		populate(executor.process(query));
@@ -85,11 +89,20 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
     		throw new AmbitException(x);
     	}
     }
+    @Override
+    protected void finalize() throws Throwable {
+    	try { close(); } catch (Exception x) {}
+    	super.finalize();
+    }
 	public Q getQuery() {
 		return query;
 	}
 	public void setQuery(Q query) {
 		this.query = query;
+		try {
+		open(null);
+		} catch (Exception x) {}
+		
 	}
     public void populate(ResultSet data) throws SQLException {
         rowset.populate(data);
@@ -488,6 +501,7 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
         
     }
     public void close() throws SQLException {
+    	executor.close();
         rowset.close();
         
     }
