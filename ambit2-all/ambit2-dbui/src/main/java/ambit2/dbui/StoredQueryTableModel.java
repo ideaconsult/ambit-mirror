@@ -30,8 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.data.Profile;
@@ -47,14 +45,13 @@ import ambit2.db.search.QueryExecutor;
 import ambit2.ui.PropertiesTableModel;
 import ambit2.ui.table.ISortableColumns;
 
-public class StoredQueryTableModel extends AbstractTableModel implements ISortableColumns {
+public class StoredQueryTableModel extends ResultSetTableModel implements ISortableColumns {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7273714299667490819L;
 	protected IStoredQuery query;
-	protected Connection connection = null;
-	protected ResultSet records = null;
+
 	protected String countRecordsSQL = "SELECT count(*) FROM query_results where idquery=?";
 	protected String selectRecordsSQL = "SELECT selected,idchemical,idstructure,metric FROM query_results where idquery=? order by metric ";
 	protected PreparedStatement countRecords = null;
@@ -67,46 +64,52 @@ public class StoredQueryTableModel extends AbstractTableModel implements ISortab
 	protected PropertiesTableModel fields;
 	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();
 	
-	protected int maxRecords = 0;
+
 	
 	public StoredQueryTableModel() {
 		super();
-		maxRecords = 0;
 		retrieveMolecule.setValue(new StructureRecord());
 		retrieveField.setValue(new StructureRecord());
 		order.put(new Integer(2), Boolean.FALSE);
 	}
-	protected ResultSet getResultSet() {
-		return records;
-	}
-	protected void setResultSet(ResultSet resultSet) throws SQLException {
-		if (this.records!=null) 
-			this.records.close();
-			
-		this.records = resultSet;
-		maxRecords = 0;
-		/**
-		 * Count number of records
-		 */
-		if (resultSet != null) {
-			if (countRecords == null) countRecords = getConnection().prepareStatement(countRecordsSQL);
-			countRecords.setInt(1,getQuery().getId());
-			ResultSet count = countRecords.executeQuery();
-			
-			while (count.next()) {
-				maxRecords = count.getInt(1);
-			}
-			count.close();		
-		}
-		fireTableStructureChanged();
-		
-	}
 
+	@Override
+	protected int getRecordsNumber() throws SQLException {
+		if (countRecords == null) countRecords = getConnection().prepareStatement(countRecordsSQL);
+		countRecords.setInt(1,getQuery().getId());
+		ResultSet count = countRecords.executeQuery();
+		int mr = 0;
+		while (count.next()) {
+			mr = count.getInt(1);
+		}
+		count.close();
+		return mr;
+	}
 	
 	public IStoredQuery getQuery() {
 		return query;
 	}
-	
+	public Connection getConnection() {
+		return connection;
+	}
+	public void setConnection(Connection connection) throws SQLException, DbAmbitException {
+		this.connection = connection;
+		setResultSet(null);
+		if (countRecords != null)
+			countRecords.close(); 
+		countRecords = null;
+		if (selectRecords != null)
+			selectRecords.close();
+		selectRecords = null;
+		
+		if (structureRecords != null)
+			structureRecords.close();
+		structureRecords = null;
+
+		if (structureField != null)
+			structureField.close();
+		structureField = null;		
+	}		
 	public void setQuery(IStoredQuery query) throws SQLException, AmbitException {
 		if (getConnection() == null) throw new AmbitException("No connection!");
 		this.query = query;
@@ -129,27 +132,6 @@ public class StoredQueryTableModel extends AbstractTableModel implements ISortab
 	
 	
 
-	public Connection getConnection() {
-		return connection;
-	}
-	public void setConnection(Connection connection) throws SQLException, DbAmbitException {
-		this.connection = connection;
-		setResultSet(null);
-		if (countRecords != null)
-			countRecords.close(); 
-		countRecords = null;
-		if (selectRecords != null)
-			selectRecords.close();
-		selectRecords = null;
-		
-		if (structureRecords != null)
-			structureRecords.close();
-		structureRecords = null;
-
-		if (structureField != null)
-			structureField.close();
-		structureField = null;		
-	}
 	protected String getField(int idstructure,String fieldname) throws SQLException, AmbitException {
 		if (structureField == null) structureField = 
 			getConnection().prepareStatement(retrieveField.getSQL());
