@@ -29,33 +29,71 @@
 
 package ambit2.core.processors.structure;
 
-import java.io.IOException;
-
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.HydrogenAdder;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.config.Preferences;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
 
-public class HydrogenAdderProcessor extends
-		DefaultAmbitProcessor<IAtomContainer, IAtomContainer> {
-	protected HydrogenAdder adder = new HydrogenAdder();
+public class HydrogenAdderProcessor extends	AtomConfigurator {
+	protected CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
+	protected boolean addEexplicitHydrogens = true;
+	public boolean isAddEexplicitHydrogens() {
+		return addEexplicitHydrogens;
+	}
+
+
+	public void setAddEexplicitHydrogens(boolean addEexplicitHydrogens) {
+		this.addEexplicitHydrogens = addEexplicitHydrogens;
+	}
+
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6788800174158558265L;
 	
 		
-	public IAtomContainer process(IAtomContainer target) throws AmbitException {
+	public IAtomContainer process(IAtomContainer mol) throws AmbitException {
+		super.process(mol);
 		try {
-			adder.addExplicitHydrogensToSatisfyValency(target);
-			return target;
+	       	if (mol instanceof IMolecule) {
+                try {
+    	            adder.addImplicitHydrogens(mol);
+    	            logger.debug("Adding implicit hydrogens; atom count "+mol.getAtomCount());
+    	            if (isAddEexplicitHydrogens()) {
+	    	            AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+	    	            logger.debug("Convert explicit hydrogens; atom count "+mol.getAtomCount());
+    	            }
 
-		} catch (IOException x) {
-			throw new AmbitException(x);			
-		} catch (ClassNotFoundException x) {
-			throw new AmbitException(x);
+                } catch (Exception x) {
+                	x.printStackTrace();
+                    logger.error(x);
+                    if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
+                        throw new AmbitException(x);
+                    }
+                }
+        	} else {
+        		IMoleculeSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(mol);
+        	      
+        	      for (int k = 0; k < moleculeSet.getMoleculeCount(); k++) {
+        	    	  IMolecule molPart = moleculeSet.getMolecule(k);
+      		          adder.addImplicitHydrogens(molPart);
+      		          logger.debug("Adding implicit hydrogens; atom count "+molPart.getAtomCount());
+      		          if (isAddEexplicitHydrogens()) {
+	    		          AtomContainerManipulator.convertImplicitToExplicitHydrogens(molPart);
+	    		          logger.debug("Convert explicit hydrogens; atom count "+molPart.getAtomCount());
+      		          }
+        	      }
+        	}
+            return mol;
+
 		} catch (CDKException x) {
 			throw new AmbitException(x);
 		}

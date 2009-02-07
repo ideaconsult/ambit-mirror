@@ -39,6 +39,17 @@ public class Preferences {
 	public static String GENERATE2D="generate2D";
 	public static String DEFAULT_DIR="defaultDir";
 	public static String SMILESPARSER="smilesParser";
+    public static String STOP_AT_UNKNOWNATOMTYPES="atomtypes.stop";
+    public static String MOPAC_DIR="mopac.dir";
+    public static String MOPAC_EXE="mopac.exe";
+    public static String MENGINE_WIN="mengine.win";
+    public static String MENGINE_LINUX="mengine.linux";
+    public static String OPENBABEL_WIN="obabel.win";
+    public static String OPENBABEL_LINUX="obabel.linux";
+    public static String SMI2SDF_WIN="smi2sdf.win";
+    public static String SMI2SDF_LINUX="smi2sdf.linux";
+    public static String SMILES_FIELD="SMILES";
+    public static String SMILES_GEN="smi2sdf.smiles.generate";
 	public static String SCHEME="Scheme";
 	public static String DATABASE="Database";
 	public static String HOST="Host";
@@ -48,17 +59,33 @@ public class Preferences {
 	
 	protected final static String filename="ambit2.pref";
 	protected static Properties props = null;
+
 	public static Object[][] default_values = {
-		{DEFAULT_DIR,"Default directory","",String.class},		
-		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class},
-		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class},
-		{SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class},
-		{DATABASE,"Default database schema","ambit2",String.class},
-		{PORT,"Default database port","3306",String.class},
-		{HOST,"Host","localhost",String.class},
-		{SCHEME,"Scheme","jdbc:mysql",String.class},
-		
+		//{tag, name, default value, class, hint, hidden}
+		{DEFAULT_DIR,"Default directory","",String.class,"Remembers the directory of the last opened/saved file",false},		
+		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",false},
+		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false},
+        {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false},
+        {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"Report an error if an unknown atom type is encountered.",false},
+        
+		{DATABASE,"Default database schema","ambit2",String.class,"Default database schema"},
+		{PORT,"Default database port","33060",String.class,""},
+		{HOST,"Host","localhost",String.class,""},
+		{SCHEME,"Scheme","jdbc:mysql",String.class,""},
+		/*
+        {OPENBABEL_WIN,"Path to OpenBabel (Windows)","helper/openbabel/win/babel.exe",String.class,"Where to find Openbabel in Windows",false},
+        {OPENBABEL_LINUX,"Path to OpenBabel (Linux)","helper/openbabel/linux/babel",String.class,"Where to find OpenBabel in Linux",false},
+		{MOPAC_DIR,"MOPAC directory","helper",String.class,"Directory where MOPAC resides",false},
+        {MOPAC_EXE,"MOPAC executable","MOPAC_7.1.exe",String.class,"Name of the MOPAC executable. Used to calculate electronic descriptors as eHOMO/eLUMO, required by some plugins. OpenMopac available at http://openmopac.net/",false},
+        {MENGINE_WIN,"mengine (3D builder - Windows)","helper/smi23d/win/mengine.exe",String.class,"MMFF94 force field by mengine (http://www.chembiogrid.org/cheminfo/smi23d/). Structures without 3D coordinates are submitted to mengine before running MOPAC.",false},
+        {MENGINE_LINUX,"mengine (3D builder - Linux)","helper/smi23d/linux/mengine",String.class,"MMFF94 force field by mengine (http://www.chembiogrid.org/cheminfo/smi23d/). Structures without 3D coordinates are submitted to mengine before running MOPAC.",false},
+        {SMI2SDF_WIN,"smi2sdf (Windows) (used by mengine)","helper/smi23d/win/smi2sdf.exe",String.class,"Generates rough 3D structure. First step before mengine http://www.chembiogrid.org/cheminfo/smi23d/)",false},
+        {SMI2SDF_LINUX,"smi2sdf (Linux) (used by mengine)","helper/smi23d/linux/smi2sdf",String.class,"Generates rough 3D structure. First step before mengine (http://www.chembiogrid.org/cheminfo/smi23d/)",false},
+        {SMILES_FIELD,"Name of the field containing SMILES","SMILES",String.class,"Name of the field, containing SMILES in SDF,CSV,TXT files.",true},
+        {SMILES_GEN,"Generate the smiles submitted to smi2sdf","true",Boolean.class,"Generate the smiles , submitted to smi2sdf, or use the one in the file",true}
+		*/
 	};
+	
 	
 	protected static Properties getDefault() {
 		Properties p = new Properties();
