@@ -40,7 +40,6 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.FunctionalGroupDescriptor;
@@ -70,7 +69,7 @@ public class FunctionalGroupDescriptorTest {
 	public void testVerbose() throws Exception {
 		groups = new ArrayList<FunctionalGroup>();
 		groups.add(new FunctionalGroup("C","C","testC"));
-		calculate(groups,true,MoleculeFactory.makeAlkane(4));
+		calculate(groups,true,MoleculeFactory.makeAlkane(4),1);
 
 	}
 	@Test
@@ -78,7 +77,7 @@ public class FunctionalGroupDescriptorTest {
 	
 		groups = new ArrayList<FunctionalGroup>();
 		groups.add(new FunctionalGroup("C4","CCCC","test4"));	
-		calculate(groups,false,MoleculeFactory.makeAlkane(4));
+		calculate(groups,false,MoleculeFactory.makeAlkane(4),1);
 
 
 	}	
@@ -88,7 +87,7 @@ public class FunctionalGroupDescriptorTest {
 		groups = new ArrayList<FunctionalGroup>();
 		groups.add(new FunctionalGroup("C4","CCCC","test4"));	
 		groups.add(new FunctionalGroup("C5","CCCCC","test5"));	
-		calculate(groups,false,MoleculeFactory.makeAlkane(4));
+		calculate(groups,false,MoleculeFactory.makeAlkane(4),1);
 
 	}		
 	
@@ -97,28 +96,29 @@ public class FunctionalGroupDescriptorTest {
 		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
 		IAtomContainer mol = MoleculeFactory.makeAlkane(10);
 		mol = hadder.process(mol);
-		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol );
+		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,2);
 
 	}			
 		
-	protected void calculate(List<FunctionalGroup> groups,boolean verbose,IAtomContainer m) throws Exception {
+	protected void calculate(List<FunctionalGroup> groups,boolean verbose,IAtomContainer m, int hits) throws Exception {
 		d.setParameters(new Object[]{groups,verbose});
 		m = hadder.process(m);
 		DescriptorValue value = d.calculate(m);
 		IDescriptorResult v = value.getValue();
-		Assert.assertEquals(groups.size(),value.getNames().length);
+		Assert.assertEquals(hits,value.getNames().length);
+		/*
 		for (int i=0; i < groups.size();i++)
 			Assert.assertEquals(groups.get(i).getName(),value.getNames()[i]);
-		
+		*/
 		Assert.assertTrue(v instanceof VerboseDescriptorResult);
 		VerboseDescriptorResult verboseResult = (VerboseDescriptorResult) v;
 		IDescriptorResult r = verboseResult.getResult();
 		Assert.assertTrue(r instanceof IntegerArrayResult);
-		Assert.assertEquals(groups.size(),((IntegerArrayResult)r).length());		
+		Assert.assertEquals(hits,((IntegerArrayResult)r).length());		
 		
 		if (verbose) {
-			Assert.assertTrue(verboseResult.getExplanation() instanceof Object[]);
-			Assert.assertTrue(((Object[])verboseResult.getExplanation())[0] instanceof IAtomContainer);			
+			Assert.assertTrue(verboseResult.getExplanation() instanceof List);
+			Assert.assertTrue(((List)verboseResult.getExplanation()).get(0) instanceof IAtomContainer);			
 		}
 			
 	}

@@ -74,14 +74,19 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	}
 	public DescriptorValue calculate(IAtomContainer target) throws CDKException {
 		try {
-			IntegerArrayResult results = new IntegerArrayResult(groups.size());
-			Object[] explanation = new Object[groups.size()];
+			IntegerArrayResult results = new IntegerArrayResult();
+			List explanation = new ArrayList();
+			List<String> realNames = new ArrayList<String>();
+			
 			for (int i=0; i < groups.size();i++) {
 				VerboseDescriptorResult<Object,IntegerResult> result = groups.get(i).process(target);
-				results.add(result.getResult().intValue());
-				explanation[i] = result.getExplanation();
-				
+				if (result.getResult().intValue()>0) {
+					results.add(result.getResult().intValue());
+					explanation.add(result.getExplanation());
+					realNames.add(groups.get(i).getName());
+				}
 			}
+			String[] n = new String[realNames.size()];
 			VerboseDescriptorResult<Object, IntegerArrayResult> result = new VerboseDescriptorResult<Object, IntegerArrayResult>(
 					results,
 					explanation
@@ -90,7 +95,7 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	        return new DescriptorValue(getSpecification(), getParameterNames(), 
 	                getParameters(), 
 	                result,
-	                names);
+	                realNames.toArray(n));
 		} catch (Exception x) {
 			x.printStackTrace();
 			throw new CDKException(x.getMessage());
