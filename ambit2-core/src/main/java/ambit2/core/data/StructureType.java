@@ -4,7 +4,6 @@
  */
 package ambit2.core.data;
 
-import ambit2.core.data.AmbitBean;
 
 
 /**
