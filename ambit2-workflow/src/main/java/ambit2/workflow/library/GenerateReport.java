@@ -36,6 +36,6 @@ import com.microworkflow.process.Sequence;
 
 public class GenerateReport extends Sequence {
 	public GenerateReport() {
-		addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.REPORT));
+		//addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.REPORT));
 	}
 }
