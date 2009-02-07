@@ -1,4 +1,4 @@
-/* DictionarySubjectQuery.java
+/* TemplateRows.java
  * Author: nina
  * Date: Feb 6, 2009
  * Revision: 0.1 
@@ -27,22 +27,22 @@
  * 
  */
 
-package ambit2.db.search;
+package ambit2.db.readers;
 
+import java.sql.SQLException;
 
-public class DictionarySubjectQuery extends DictionaryQuery {
+import ambit2.core.data.Property;
+import ambit2.core.exceptions.AmbitException;
+import ambit2.db.AmbitRows;
+import ambit2.db.search.TemplateQuery;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4370465438653357188L;
-	public DictionarySubjectQuery() {
+public class TemplateRows extends AmbitRows<Property, TemplateQuery> {
+	public TemplateRows() throws SQLException {
 		super();
-
 	}
 	@Override
-	protected String getTemplateName() {
-		return "tSubject";
+	public Property getObject() throws AmbitException {
+		return getQuery().getObject(this);
 	}
 
 }

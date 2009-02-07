@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import ambit2.core.data.Dictionary;
 import ambit2.core.data.LiteratureEntry;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
@@ -44,9 +45,12 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
 	protected static final String select_descriptor = "SELECT idproperty,idreference,name,units,comments,islocal,idreference,title,url from properties join catalog_references using(idreference) where name=? and idreference=?";
     protected static final String insert_descriptor = "INSERT IGNORE INTO properties (idproperty,idreference,name,units,comments,islocal) VALUES (null,?,?,?,?,0)";
+    protected static final String insert_templatedef = "INSERT IGNORE INTO template_def SELECT ?,name,? from template WHERE name=?";
     protected PreparedStatement ps_descriptor;
     protected PreparedStatement ps_selectdescriptor;
+    protected PreparedStatement ps_templatedef;
     protected DbReferenceWriter referenceWriter;
+    protected TemplateWriter templateWriter;
     protected SourceDataset dataset = null;
 	public SourceDataset getDataset() {
 		return dataset;
@@ -73,18 +77,22 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     protected void prepareStatement(Connection connection) throws SQLException {
         ps_descriptor = connection.prepareStatement(insert_descriptor,Statement.RETURN_GENERATED_KEYS);
         ps_selectdescriptor = connection.prepareStatement(select_descriptor);
+        ps_templatedef = connection.prepareStatement(insert_templatedef);
     }
     @Override
     public synchronized void setConnection(Connection connection) throws DbAmbitException {
         super.setConnection(connection);
         if (referenceWriter == null) setReferenceWriter(new DbReferenceWriter());
         referenceWriter.setConnection(connection);
+        if (templateWriter == null) templateWriter = new TemplateWriter();
+        templateWriter.setConnection(connection);        
        
     }
     @Override
     public void open() throws DbAmbitException {
     	super.open();
-        referenceWriter.open();    	
+        referenceWriter.open();
+        templateWriter.open();
     }
 
     public void close() throws SQLException {
@@ -95,6 +103,11 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         if (ps_selectdescriptor != null)
             ps_selectdescriptor.close();
         ps_selectdescriptor = null;      
+        
+        if (ps_templatedef != null) 
+        	ps_templatedef.close();
+        ps_templatedef = null;
+        templateWriter.close();        
         referenceWriter.close();
         super.close();
     }    
@@ -102,6 +115,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     protected abstract Iterable<String> getPropertyNames(Target target);
     protected abstract String getComments(Target target);
     protected abstract void descriptorEntry(Target target,int idproperty,String propertyName, int propertyIndex,int idtuple) throws SQLException;
+
     protected int getTuple(SourceDataset dataset) {
     	return -1;
     }
@@ -124,6 +138,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
             boolean found = false;
             ResultSet rs1 = ps_selectdescriptor.executeQuery();
             while (rs1.next()) {
+
                 descriptorEntry(target,rs1.getInt(1),name,i,idtuple);
                 found = true;
             }
@@ -142,7 +157,10 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
                 ResultSet rs = ps_descriptor.getGeneratedKeys();
                 try {
 	                while (rs.next()) {
-	                    descriptorEntry(target,rs.getInt(1),name,i,idtuple);
+	                	//
+	                	int iddescriptor = rs.getInt(1);
+	                    descriptorEntry(target,iddescriptor,name,i,idtuple);
+	                	templateEntry(target,iddescriptor);		                    
 	                } 
                 } catch (Exception x) {
                 	logger.error(x);
@@ -157,4 +175,19 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 
         return transform(target);    	
     };
+    protected abstract Dictionary getTemplate(Target target)  throws SQLException ;
+
+    	//SELECT ?,name,? from template WHERE name=?"
+    
+    protected  void templateEntry(Target target,int idproperty) throws SQLException {
+    	
+    	Dictionary dict = getTemplate(target);
+    	System.out.println(idproperty + "\t" + dict.getTemplate());
+    	templateWriter.write(dict);
+    	ps_templatedef.clearParameters();
+    	ps_templatedef.setInt(1,idproperty);
+    	ps_templatedef.setInt(2,idproperty);
+    	ps_templatedef.setString(3,dict.getTemplate());    	
+    	ps_templatedef.execute();
+    }
 }

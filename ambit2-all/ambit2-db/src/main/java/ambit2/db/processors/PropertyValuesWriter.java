@@ -26,6 +26,7 @@ package ambit2.db.processors;
 
 import java.sql.SQLException;
 
+import ambit2.core.data.Dictionary;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.LiteratureEntry;
 
@@ -72,6 +73,14 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	public IStructureRecord write(IStructureRecord target) throws SQLException {
 		setStructure(target);
 		return super.write(target);
+	}
+	@Override
+	protected Dictionary getTemplate(IStructureRecord target)
+			throws SQLException {
+		if (getDataset() != null)
+			return new Dictionary(getDataset().getName(),"Datasets");
+		else
+			return new Dictionary("Datasets","All");
 	}
 }
 

@@ -1,4 +1,4 @@
-/* DictionarySubjectQuery.java
+/* TemplateQueryTest.java
  * Author: nina
  * Date: Feb 6, 2009
  * Revision: 0.1 
@@ -27,22 +27,34 @@
  * 
  */
 
-package ambit2.db.search;
+package ambit2.db.search.test;
 
+import java.sql.ResultSet;
 
-public class DictionarySubjectQuery extends DictionaryQuery {
+import junit.framework.Assert;
+import ambit2.core.data.Property;
+import ambit2.db.search.TemplateQuery;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4370465438653357188L;
-	public DictionarySubjectQuery() {
-		super();
+public class TemplateQueryTest extends QueryTest<TemplateQuery> {
 
-	}
 	@Override
-	protected String getTemplateName() {
-		return "tSubject";
+	protected TemplateQuery createQuery() throws Exception {
+		TemplateQuery query = new TemplateQuery();
+		query.setValue("BCF");
+		return query;
+	}
+
+	@Override
+	protected void verify(TemplateQuery query, ResultSet rs) throws Exception {
+		
+		int records = 0;
+		while (rs.next()) {
+			records ++;
+			Property p = query.getObject(rs);
+			//System.out.println(p); //todo test
+		}
+		Assert.assertEquals(3,records);
+		
 	}
 
 }

@@ -4,13 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import ambit2.core.data.LiteratureEntry;
+import ambit2.core.data.Property;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class RetrieveFieldNames extends AbstractQuery<String, String, StringCondition> implements IRetrieval<String>{
-	public static String sql = "select idproperty,name from properties";
+public class RetrieveFieldNames extends AbstractQuery<String, String, StringCondition> implements IRetrieval<Property>{
+	public static String sql = "select idproperty,name,units,title,url,idreference from properties join catalog_references using(idreference)";
 		/**
 	 * 
 	 */
@@ -25,9 +27,16 @@ public class RetrieveFieldNames extends AbstractQuery<String, String, StringCond
 		/**
 		 * returns field name
 		 */
-		public String getObject(ResultSet rs) throws AmbitException {
+		public Property getObject(ResultSet rs) throws AmbitException {
 			try {
-				return rs.getString("name");
+				Property p = new Property(rs.getString(2));
+				p.setId(rs.getInt(1));
+				p.setUnits(rs.getString(3));
+				LiteratureEntry reference = new LiteratureEntry(rs.getString(4));
+				reference.setId(rs.getInt(6));
+				reference.setURL(rs.getString(5));
+				p.setReference(reference);
+				return p;
 			} catch (SQLException x) {
 				throw new AmbitException(x);
 			}
