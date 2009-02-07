@@ -1,0 +1,106 @@
+/*
+Copyright (C) 2005-2008  
+
+Contact: nina@acad.bg
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
+All we ask is that proper credit is given for our work, which includes
+- but is not limited to - adding the above copyright notice to the beginning
+of your source code files, and to any copyright notice that you may distribute
+with programs based on this work.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+*/
+
+package ambit2.dbui.dictionary;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import ambit2.db.AmbitRows;
+import ambit2.db.search.IQueryObject;
+import ambit2.dbui.CachedRowSetTableModel;
+import ambit2.ui.QueryBrowser;
+import ambit2.ui.editors.IAmbitEditor;
+
+public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, Q>> 
+							extends JPanel implements IAmbitEditor<Rows> {
+    protected CachedRowSetTableModel srtm;
+    private static final long serialVersionUID = 2854619268267349642L;
+    protected boolean editable;
+    protected QueryBrowser<CachedRowSetTableModel> browser ;
+    
+    public AmbitRowsPanel() {
+        super();
+        addWidgets();
+    }
+    protected void addWidgets() {
+    	setLayout(new BorderLayout());
+    	srtm = new CachedRowSetTableModel();
+    	browser = new QueryBrowser<CachedRowSetTableModel>(null,new Dimension(150,20));
+    	add(browser, BorderLayout.CENTER);
+    	/*
+        JTable table = new JTable(srtm);
+        //table.setRowHeight(150);
+        table.setDefaultRenderer(IAtomContainer.class, new ImageCellRenderer(new Dimension(150,150)));
+        add(new JScrollPane(table), BorderLayout.CENTER);
+        JToolBar b = new JToolBar();
+        b.add(new AbstractAction("<<") {
+           public void actionPerformed(ActionEvent arg0) {
+               try {
+                srtm.previousPage();
+               } catch (SQLException x) {
+                   x.printStackTrace();
+               }
+                
+            } 
+        });
+        b.add(new AbstractAction(">>") {
+            public void actionPerformed(ActionEvent arg0) {
+                try {
+                 srtm.nextPage();
+                } catch (SQLException x) {
+                    x.printStackTrace();
+                }
+                 
+             } 
+         });        
+        add(b,BorderLayout.NORTH);    	
+        */
+    }
+    public JComponent getJComponent() {
+    	return this;
+    }
+    public boolean isEditable() {
+    	return editable;
+    }
+    public void setEditable(boolean editable) {
+    	this.editable = editable;
+    	
+    }
+    public Rows getObject() {
+    	return (Rows)srtm.getRecords();
+    }
+    public void setObject(Rows object) {
+    	try { getObject().close(); } catch (Exception x) {};
+  		srtm.setRecords(object);
+  		browser.setObject(srtm);
+    }
+    
+
+}
+
+

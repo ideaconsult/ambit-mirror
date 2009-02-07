@@ -100,7 +100,7 @@ public class QueryInfoTest extends QueryTest<IQueryObject> {
 		ResultSet rs = qe.process(fn);
 		ArrayList<String> fieldnames = new ArrayList<String>();
 		while (rs.next()) {
-			fieldnames.add(fn.getObject(rs));
+			fieldnames.add(fn.getObject(rs).getName());
 		}
 		rs.close();
 		qe.close();
