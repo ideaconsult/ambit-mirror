@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import javax.imageio.ImageWriter;
-
 import org.openscience.cdk.io.HINWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLWriter;
