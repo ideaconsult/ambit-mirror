@@ -33,24 +33,12 @@ package ambit2.core.processors.structure;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Symbols;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.interfaces.IRing;
-import org.openscience.cdk.interfaces.IRingSet;
-import org.openscience.cdk.ringsearch.AllRingsFinder;
-import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import ambit2.core.config.Preferences;
@@ -89,8 +77,32 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
     	if (mol==null) throw new AmbitException("Null molecule!");
     	if (mol.getAtomCount()==0) throw new AmbitException("No atoms!");
     	
-    	try {
+
     		logger.debug("Configuring atom types ...");
+        	//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+    		CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
+    		Iterator<IAtom> atoms = mol.atoms();
+    		while (atoms.hasNext()) {
+    			IAtom atom = atoms.next();
+                if (!(atom instanceof IPseudoAtom)) 
+                try {
+                    IAtomType matched = matcher.findMatchingAtomType(mol, atom);
+                    if (matched != null) {
+                    	AtomTypeManipulator.configure(atom, matched);
+                    	atom.setValency(matched.getValency());
+                        atom.setAtomicNumber(matched.getAtomicNumber());
+                        atom.setExactMass(matched.getExactMass());                      	
+                    }
+ 	           } catch (Exception x) {
+	        	   logger.error(x.getMessage() + " " + atom.getSymbol(),x);
+                   if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
+                       throw new AmbitException(atom.getSymbol(),x);
+                   }
+                   
+	           }
+            }        	
+        	/*
+            CDKHueckelAromaticityDetector.detectAromaticity(molecule);    		
 	        CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
 	        Iterator<IAtom> atoms = mol.atoms();
 	        while (atoms.hasNext()) {
@@ -107,7 +119,8 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
                    }
                    
 	           }
-	        }    	        
+	        }    	   
+	        */     
 
         	atoms = mol.atoms();
 	        while (atoms.hasNext()) {
@@ -117,12 +130,10 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
 		        	   if (no != null)
 		        		   atom.setAtomicNumber(no.intValue());
 		           }	   
-		        }            	
+		        }        
+
 	        return mol;
-    	} catch (CDKException x) {
-    		throw new AmbitException(x);
-    		
-    	}
+
     }
 
 }
