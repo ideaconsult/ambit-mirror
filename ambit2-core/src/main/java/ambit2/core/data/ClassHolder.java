@@ -23,6 +23,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
  */
 package ambit2.core.data;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.core.exceptions.AmbitException;
+
 import com.jgoodies.binding.beans.Model;
 
 /**
@@ -75,5 +83,29 @@ public class ClassHolder extends Model {
 		return getTitle();
 	}
 
+	public static List<ClassHolder> load(InputStream input) throws AmbitException {
+		List<ClassHolder> classes = new ArrayList<ClassHolder>();
 
+		try {
+	      	BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+	        boolean eof = false;
+	        String fileLine;
+	        while (!eof) {
+	          fileLine = reader.readLine();
+	          if (fileLine == null)
+	            eof = true;
+	          else {
+	        	  classes.add(new ClassHolder(fileLine.trim(),fileLine,"",null));
+	          }
+	        }
+	        reader.close();
+		} catch (Exception x) {
+			
+		} finally {
+			try {
+				input.close();
+			}catch (Exception x) {}
+		}
+		return classes;
+	}
 }
