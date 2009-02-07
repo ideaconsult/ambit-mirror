@@ -42,11 +42,14 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.core.config.Preferences;
 import ambit2.core.exceptions.AmbitException;
@@ -111,14 +114,33 @@ public class PKASmartsDescriptorTest {
         Assert.assertEquals(1527,allnodes);
         
     }
-
+    @Test
+    public void testOne() throws Exception {
+    	SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+    	IAtomContainer a = MoleculeFactory.makeBenzene();
+    	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+    	//SmartParser throws error if explicit hydrogens are used!
+    	ha.setAddEexplicitHydrogens(false);
+    	CDKHueckelAromaticityDetector.detectAromaticity(a);
+		a = ha.process(a);
+		for (int i=0; i < a.getAtomCount();i++) {
+			Assert.assertNotNull(a.getAtom(i).getValency());
+		}
+		for (int i=0; i < a.getBondCount();i++) {
+			Assert.assertNotNull(a.getBond(i).getOrder());
+		}		
+//        CDKHueckelAromaticityDetector.detectAromaticity(a);    		
+		DescriptorValue value = pka.calculate(a);
+		System.out.println(value.getValue());
+    }
     @Test
     public void testPredictions() throws Exception {
     	File file = new File("src/test/resources/ambit2/descriptors/pka/ambit_results.csv");
     	System.out.println(file.getAbsolutePath());
     	DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
     	
-		HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+    	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+		
 		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,"true");		    	
     	InputStream in = PKASmartsDescriptor.class.getClassLoader().getResourceAsStream("ambit2/descriptors/pka/benchmark_new.csv");
     	IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
@@ -147,10 +169,12 @@ public class PKASmartsDescriptorTest {
 	
 	    		writer.write(a);
     		} catch (CDKException x) {
+    			System.err.println(a.getProperty("SMILES"));
     			continue;
     		} catch (AmbitException x) {
     			continue;
     		} catch (Exception x) {
+    			
     			x.printStackTrace();
     			continue;
     		}

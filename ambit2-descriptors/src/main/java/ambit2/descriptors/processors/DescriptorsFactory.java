@@ -48,21 +48,31 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile> {
 	public Profile process(String target)
 			throws AmbitException {
 		Profile p = new Profile();
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream(target);
+		if (target==null)
+			target="ambit2/descriptors/descriptors.txt";
+		InputStream in = DescriptorsFactory.class.getClassLoader().getResourceAsStream(target);
 		List<ClassHolder> classes = ClassHolder.load(in);
 		for (int i=0; i < classes.size();i++) {
 			try {
-				Class clazz = this.getClass().getClassLoader().loadClass(classes.get(i).getClazz());
+				boolean enabled = true;
+				String name= classes.get(i).getClazz();
+				if (classes.get(i).getClazz().indexOf(";")==0) {
+					name = classes.get(i).getClazz().substring(1);
+					enabled = false;
+				}
+				Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(name);
 				//if (o instanceof IMolecularDescriptor) {verify for interface
 					Property property = new Property();
 					property.setName(clazz.getName());
 					property.setLabel("Descriptors");
 					property.setOrder(i);
 					property.setClazz(clazz);
+					property.setEnabled(enabled);
 					p.add(property);
 				//}
+;
 			} catch (Exception x) {
-				
+				x.printStackTrace();
 			}
 		}
 		return p;
