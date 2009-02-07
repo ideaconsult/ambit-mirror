@@ -28,12 +28,6 @@
 </build>  				
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-core</artifactId>
     	<version>${project.version}</version>
