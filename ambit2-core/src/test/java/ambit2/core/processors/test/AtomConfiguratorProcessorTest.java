@@ -61,11 +61,13 @@ public class AtomConfiguratorProcessorTest {
 		for (int i=0; i < mol.getAtomCount(); i++) {
 			Assert.assertEquals(0,mol.getAtom(i).getAtomicNumber());
 			Assert.assertNull(mol.getAtom(i).getHybridization());
+			//Assert.assertNull(mol.getAtom(i).getValency());
 		}
 		mol = p.process(mol);
 		for (int i=0; i < mol.getAtomCount(); i++) {
 			Assert.assertEquals(6,mol.getAtom(i).getAtomicNumber());
 			Assert.assertEquals(Hybridization.SP2,mol.getAtom(i).getHybridization());
+			Assert.assertNotNull(mol.getAtom(i).getValency());
 		}
 	}
 }
