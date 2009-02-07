@@ -12,7 +12,6 @@ import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
-import ambit2.workflow.ui.AmbitWorkflowContextPanel;
 import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
