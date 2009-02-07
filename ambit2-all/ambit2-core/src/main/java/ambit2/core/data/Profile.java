@@ -79,5 +79,9 @@ public class Profile<P extends Property> {
 	public void clear() {
 		container.clear();
 	}
-
+	public void add(Profile<P> profile, boolean enabled) {
+		Iterator<P> i = profile.getProperties(enabled);
+		while (i.hasNext()) 
+			add(i.next());
+	}
 }
