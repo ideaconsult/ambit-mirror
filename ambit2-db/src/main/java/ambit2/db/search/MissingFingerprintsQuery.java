@@ -1,6 +1,6 @@
-/* DictionaryQuery.java
+/* MissingFingerprintsQuery.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Feb 8, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -29,50 +29,41 @@
 
 package ambit2.db.search;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.Dictionary;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.db.readers.IQueryRetrieval;
 
-public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition,Dictionary> 
-								implements IQueryRetrieval<Dictionary>{
+public class MissingFingerprintsQuery extends AbstractStructureQuery<String, String, EQCondition> {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7315142224794511557L;
-	public static final String SQL = 
-		"select tObject.name as Category,tSubject.name as Name from dictionary d "+
-		"join template as tSubject on d.idsubject=tSubject.idtemplate "+
-		"join template as tObject on d.idobject=tObject.idtemplate "+
-		"where %s.name %s ? order by tObject.idtemplate";
-	
-	public DictionaryQuery() {
-		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+	private static final long serialVersionUID = -8554160549010780854L;
+	public final static String sqlField =
+		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric\n"+
+		"from structure join chemicals using(idchemical)\n"+
+		"left join fp1024 using(idchemical)\n"+
+		"where (fp1024.status is null)\n"+
+		"union\n"+
+		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,0 as metric\n"+
+		"from structure join chemicals using(idchemical)\n"+
+		"join fp1024 using(idchemical)\n"+
+		"where (fp1024.status != 'valid')\n";
+	public MissingFingerprintsQuery() {
+		setCondition(EQCondition.getInstance());
+	}
+	public String getSQL() throws AmbitException {
+		return sqlField;
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getValue()));
+		params.add(new QueryParam<Integer>(Integer.class, getId()));
+		params.add(new QueryParam<Integer>(Integer.class, getId()));		
 		return params;
 	}
-	public String getSQL() throws AmbitException {
-		return String.format
-		   (SQL, getTemplateName(), getCondition());
-
-	}	
-	protected abstract String getTemplateName();
 	@Override
-	public String getFieldname() {
-		return getTemplateName();
-	}
-	public Dictionary getObject(ResultSet rs) throws AmbitException {
-		try {
-			return new Dictionary(rs.getString(2),rs.getString(1));
-		} catch (SQLException x) {
-			throw new AmbitException(x);
-		}
-	}
+	public String toString() {
+		return "Fingerprints to be calculated";
+	}	
 }

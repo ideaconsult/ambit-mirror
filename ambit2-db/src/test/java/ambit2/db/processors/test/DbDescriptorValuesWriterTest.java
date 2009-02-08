@@ -339,11 +339,11 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		
 		
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(121,names.getRowCount());
+		Assert.assertEquals(15,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values WHERE status ='OK' ");	
-		Assert.assertEquals(81,values.getRowCount());    
+		Assert.assertEquals(12,values.getRowCount());    
 		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template join template_def using(idtemplate) where name='Descriptors'");	
-		Assert.assertEquals(118,template_def.getRowCount());			
+		Assert.assertEquals(12,template_def.getRowCount());			
         
 		/*
         DescriptorValue v = new DescriptorValue(

@@ -35,9 +35,9 @@ import java.util.List;
 
 import ambit2.core.data.Property;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.db.readers.IRetrieval;
+import ambit2.db.readers.IQueryRetrieval;
 
-public class TemplateQuery extends AbstractQuery<String, String, StringCondition,Property> implements IRetrieval<Property> {
+public class TemplateQuery extends AbstractQuery<String, String, StringCondition,Property> implements IQueryRetrieval<Property> {
 	/**
 	 * 
 	 */

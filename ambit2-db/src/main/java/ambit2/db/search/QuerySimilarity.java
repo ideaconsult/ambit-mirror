@@ -1,7 +1,8 @@
 package ambit2.db.search;
 
 
-public abstract class QuerySimilarity<T,C extends IQueryCondition,ResultType> extends AbstractQuery<String,T,C,ResultType> {
+public abstract class QuerySimilarity<T,C extends IQueryCondition> 
+			extends AbstractStructureQuery<String,T,C> {
 	protected double threshold = 0.5;
 	
 	public QuerySimilarity() {

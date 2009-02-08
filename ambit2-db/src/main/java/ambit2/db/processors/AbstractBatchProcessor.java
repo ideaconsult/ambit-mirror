@@ -57,7 +57,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	 * 
 	 */
 	private static final long serialVersionUID = 6221299717393378599L;
-	protected IBatchStatistics batchStatistics;
+	protected IBatchStatistics batchStatistics = null;
 	public static String PROPERTY_BATCHSTATS="ambit2.core.processors.batch.IBatchStatistics";	
 	protected long now = System.currentTimeMillis(); //ms
 	protected ProcessorsChain<ItemInput,IBatchStatistics,IProcessor> processor;	
@@ -115,14 +115,16 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	}
 	public void beforeProcessing(Target target)	throws AmbitException {
 		now = System.currentTimeMillis();
+		batchStatistics = getResult(target);
 	
 	}
 	public IBatchStatistics getResult(Target target) {
-		DefaultBatchStatistics stats = new DefaultBatchStatistics();
-		stats.setResultCaption("Read");
+		if (batchStatistics!=null) return batchStatistics;
+		batchStatistics = new DefaultBatchStatistics();
+		batchStatistics.setResultCaption("Read");
 		long freq = 1;
-		stats.setFrequency(freq);
-		return (IBatchStatistics) stats;
+		((DefaultBatchStatistics)batchStatistics).setFrequency(freq);
+		return batchStatistics;
 	}
 	public void onItemProcessing(ItemInput input, Object output,
 			IBatchStatistics stats) {
@@ -132,6 +134,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 		
 	}
 	public void open() throws DbAmbitException {
+		if (getProcessorChain()!=null)
 		for (IProcessor p : getProcessorChain())
 			if (p instanceof IDBProcessor)
 				((IDBProcessor)p).open();
@@ -160,6 +163,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	@Override
 	public void setSession(SessionID sessionID) {
 		super.setSession(sessionID);
+		if (getProcessorChain() != null)
 		for (IProcessor p : getProcessorChain())
 			if (p instanceof IDBProcessor)
 				((IDBProcessor)p).setSession(sessionID);
@@ -167,15 +171,17 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
-		for (IProcessor p : getProcessorChain())
-			if (p instanceof IDBProcessor)
-				((IDBProcessor)p).setConnection(connection);		
+		if (getProcessorChain() != null)
+			for (IProcessor p : getProcessorChain())
+				if (p instanceof IDBProcessor)
+					((IDBProcessor)p).setConnection(connection);		
 
 		
 	}
 	@Override
 	public void close() throws SQLException {
-		processor.close();
+		if (processor != null)
+			processor.close();
 		super.close();
 	}	
 }

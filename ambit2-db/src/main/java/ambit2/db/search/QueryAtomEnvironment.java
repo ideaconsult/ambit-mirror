@@ -6,6 +6,10 @@ import ambit2.core.exceptions.AmbitException;
 
 public class QueryAtomEnvironment extends QuerySimilarity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7235494968515516274L;
 	public String getSQL() throws AmbitException {
 		throw new AmbitException("not implemented");
 	}

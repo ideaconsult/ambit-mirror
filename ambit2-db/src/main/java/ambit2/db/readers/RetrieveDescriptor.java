@@ -16,7 +16,7 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStructureRecord,EQCondition,DescriptorValue> implements IRetrieval<DescriptorValue> {
+public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStructureRecord,EQCondition,DescriptorValue> implements IQueryRetrieval<DescriptorValue> {
 	/**
 	 * 
 	 */

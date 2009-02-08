@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryDescriptor;
@@ -96,7 +95,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	}
 	@Override
 	protected QueryCombined createQuery() throws Exception {
-		QueryCombined<IQueryObject> q = new QueryCombined<IQueryObject>();
+		QueryCombined q = new QueryCombined();
 		QueryDescriptor d = new QueryDescriptor();
 		d.setCondition(NumberCondition.getInstance(NumberCondition.between));
 		d.setValue(new Double(10));

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
 /**
@@ -13,7 +12,7 @@ import ambit2.core.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryMissingDistances extends AbstractQuery<String, IBond, NumberCondition,IStructureRecord> {
+public class QueryMissingDistances extends AbstractStructureQuery<String, IBond, NumberCondition> {
 	  /**
 	 * 
 	 */

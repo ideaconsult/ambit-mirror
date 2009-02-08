@@ -3,7 +3,6 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 
@@ -12,7 +11,7 @@ import ambit2.db.SourceDataset;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryDataset extends AbstractQuery<String,SourceDataset,EQCondition,IStructureRecord> {
+public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,EQCondition> {
 	/**
 	 * 
 	 */
@@ -22,6 +21,10 @@ public class QueryDataset extends AbstractQuery<String,SourceDataset,EQCondition
 	public QueryDataset() {
 		setCondition(EQCondition.getInstance());
 	}
+	public QueryDataset(String name) {
+		setCondition(EQCondition.getInstance());
+		setValue(new SourceDataset(name));
+	}	
 	public String getSQL() throws AmbitException {
 		return sqlField;
 	}

@@ -20,7 +20,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	protected C condition;
 	protected boolean selected;
 	protected String name;
-	protected Integer id;
+	protected Integer id=-1;
 	
 
 	public Integer getId() {
@@ -72,5 +72,15 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	}
 	public boolean test(T object) throws AmbitException {
 		throw new AmbitException("Not implemented");
+	}
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append(getFieldname());
+		b.append(' ');
+		b.append(getCondition());
+		b.append(' ');
+		b.append(getValue());
+		return b.toString();
 	}
 }

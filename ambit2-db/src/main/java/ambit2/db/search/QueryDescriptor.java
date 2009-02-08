@@ -3,15 +3,24 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
-public class QueryDescriptor extends NumberQuery<String,IStructureRecord> {
+public class QueryDescriptor extends AbstractStructureQuery<String,Double,NumberCondition> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8053931040773141051L;
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from values_number join properties as d using (idproperty) join structure using(idstructure) where d.name=? and value ";
 	
-
+	protected Double maxValue;
+	public Double getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(Double maxValue) {
+		this.maxValue = maxValue;
+	}
 	public String getSQL() throws AmbitException {
 		if (NumberCondition.between.equals(getCondition().getSQL()))
 			return sqlField +  getCondition().getSQL() + " ? and ?";

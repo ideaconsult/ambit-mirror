@@ -45,7 +45,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 									{
 
 	protected ResultSet resultSet;
-	
+	protected QueryExecutor<IQueryObject<ResultType>> executor;
 	/**
 	 * 
 	 */
@@ -56,8 +56,9 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	}
 	public Iterator<ResultType> getIterator(final IQueryRetrieval<ResultType> query)
 			throws AmbitException {
-		QueryExecutor<IQueryObject<ResultType>> exec = new QueryExecutor<IQueryObject<ResultType>>();
-		setResultSet(exec.process(query));
+		executor = new QueryExecutor<IQueryObject<ResultType>>();
+		executor.setConnection(connection);
+		setResultSet(executor.process(query));
 		return new Iterator<ResultType>() {
 			public boolean hasNext() {
 				try {
@@ -83,12 +84,18 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 			
 	};
 	@Override
+	public void beforeProcessing(IQueryRetrieval<ResultType> target)
+			throws AmbitException {
+		super.beforeProcessing(target);
+
+	}
+	@Override
 	public void afterProcessing(IQueryRetrieval<ResultType> target,
 			Iterator<ResultType> iterator) throws AmbitException {
 		
 		try {
-			if (resultSet != null)
-				resultSet.close();
+			executor.closeResults(getResultSet());
+			resultSet = null;
 		} catch (SQLException x) {
 
 			throw new AmbitException(x);
@@ -96,7 +103,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		super.afterProcessing(target,iterator);
 	}
 	
-	public ResultSet getResultSet() {
+	protected ResultSet getResultSet() {
 		return resultSet;
 	}
 	public void setResultSet(ResultSet resultSet) {

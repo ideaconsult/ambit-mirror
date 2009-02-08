@@ -1,6 +1,6 @@
-/* DictionaryQuery.java
+/* AbstractStructureRetrieval.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Feb 8, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -31,46 +31,26 @@ package ambit2.db.search;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import ambit2.core.data.Dictionary;
+import ambit2.core.data.IStructureRecord;
+import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 
-public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition,Dictionary> 
-								implements IQueryRetrieval<Dictionary>{
+public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition> 
+			extends AbstractQuery<F, T, C, IStructureRecord> 
+		    implements IQueryRetrieval<IStructureRecord>{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7315142224794511557L;
-	public static final String SQL = 
-		"select tObject.name as Category,tSubject.name as Name from dictionary d "+
-		"join template as tSubject on d.idsubject=tSubject.idtemplate "+
-		"join template as tObject on d.idobject=tObject.idtemplate "+
-		"where %s.name %s ? order by tObject.idtemplate";
-	
-	public DictionaryQuery() {
-		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
-	}
-	public List<QueryParam> getParameters() throws AmbitException {
-		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getValue()));
-		return params;
-	}
-	public String getSQL() throws AmbitException {
-		return String.format
-		   (SQL, getTemplateName(), getCondition());
-
-	}	
-	protected abstract String getTemplateName();
-	@Override
-	public String getFieldname() {
-		return getTemplateName();
-	}
-	public Dictionary getObject(ResultSet rs) throws AmbitException {
+	private static final long serialVersionUID = 3149398052063483705L;
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
-			return new Dictionary(rs.getString(2),rs.getString(1));
+			IStructureRecord record = new StructureRecord();
+			record.setIdchemical(rs.getInt(2));
+			record.setIdstructure(rs.getInt(3));
+			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

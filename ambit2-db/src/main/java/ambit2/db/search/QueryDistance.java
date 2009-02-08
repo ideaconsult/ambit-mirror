@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
 /**
@@ -13,10 +12,21 @@ import ambit2.core.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryDistance extends NumberQuery<IBond,IStructureRecord> {
+public class QueryDistance extends AbstractStructureQuery<IBond,Double,NumberCondition> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5464266255373802342L;
 	public final static String sqlField = 
 		"select ? as idquery,-1,idstructure,1 as selected,1 as metric from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance ";
 
+	protected Double maxValue;
+	public Double getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(Double maxValue) {
+		this.maxValue = maxValue;
+	}	
 	public String getSQL() throws AmbitException {
 		if (NumberCondition.between.equals(getCondition().getSQL()))
 			return sqlField +  getCondition().getSQL() + " ? and ?";

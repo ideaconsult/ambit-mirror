@@ -34,6 +34,7 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 				} else {
 					sresults = c.prepareStatement(target.getSQL());					
 					QueryExecutor.setParameters(sresults, params);
+					System.out.println(sresults);
 					ResultSet rs = sresults.executeQuery();
 					return rs;
 				}
