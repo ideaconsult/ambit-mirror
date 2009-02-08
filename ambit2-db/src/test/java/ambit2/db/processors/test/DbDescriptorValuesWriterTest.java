@@ -295,6 +295,8 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		Assert.assertEquals(0,values.getRowCount());
 		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template");	
 		Assert.assertEquals(5,templates.getRowCount());		
+		ITable template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template_def");	
+		Assert.assertEquals(3,template_def.getRowCount());		
 		ITable dictionary = 	c.createQueryTable("EXPECTED_ONTOLOGY","SELECT * FROM dictionary");	
 		Assert.assertEquals(3,dictionary.getRowCount());		
 		
@@ -338,8 +340,10 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
 		Assert.assertEquals(121,names.getRowCount());
-		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values WHERE status ='OK' ");	
 		Assert.assertEquals(81,values.getRowCount());    
+		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template join template_def using(idtemplate) where name='Descriptors'");	
+		Assert.assertEquals(118,template_def.getRowCount());			
         
 		/*
         DescriptorValue v = new DescriptorValue(

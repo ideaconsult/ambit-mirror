@@ -93,7 +93,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	}
     	return tuple;
     }
-    protected boolean insertValue(String value, int idproperty, int idtuple) throws SQLException {
+    protected boolean insertValue(String value, int idproperty, int idtuple, mode error) throws SQLException {
     	if (structure == null) throw new SQLException("Undefined structure");    	
     	if (ps_insertstring == null)
     		ps_insertstring = connection.prepareStatement(insert_string);
@@ -108,7 +108,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_descriptorvalue_string.clearParameters();
     	ps_descriptorvalue_string.setInt(1,idproperty);
     	ps_descriptorvalue_string.setInt(2,structure.getIdstructure());
-    	ps_descriptorvalue_string.setString(3, "OK");
+    	ps_descriptorvalue_string.setString(3, error.toString());
     	ps_descriptorvalue_string.setString(4, value);
     	if (ps_descriptorvalue_string.executeUpdate()>0) { 
     		if (idtuple >0 ) {
@@ -124,7 +124,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	} else return false;
     	return true;
     }
-    protected boolean insertValue(double value, int idproperty,int idtuple) throws SQLException {
+    protected boolean insertValue(double value, int idproperty,int idtuple,mode error) throws SQLException {
     	if (structure == null) throw new SQLException("Undefined structure");
     	if (ps_insertnumber == null)
             ps_insertnumber = connection.prepareStatement(insert_number);    
@@ -139,7 +139,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_descriptorvalue_number.clearParameters();
     	ps_descriptorvalue_number.setInt(1,idproperty);
     	ps_descriptorvalue_number.setInt(2,structure.getIdstructure());
-        ps_descriptorvalue_number.setString(3, "OK");
+        ps_descriptorvalue_number.setString(3, error.toString());
         ps_descriptorvalue_number.setDouble(4, value);
         if (ps_descriptorvalue_number.executeUpdate()>0) {
         		if (idtuple >0 ) {
@@ -158,12 +158,16 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     }        
     
     protected void descriptorEntry(Target target, int idproperty, String propertyName, int propertyIndex, int idtuple) throws SQLException {
-    	boolean ok;
     	Object value = getValue(target,propertyName,propertyIndex);
-    	if (value instanceof Number)
-    		ok = insertValue(((Number)value).doubleValue(),idproperty,idtuple);
-    	else
-    		ok = insertValue(value.toString(),idproperty,idtuple);
+    	if (value instanceof Number) {
+    		if ((value instanceof Double) && ((Double)value).isNaN()) {
+    			logger.warn(propertyName + value);
+    			insertValue(value.toString(),idproperty,idtuple,mode.ERROR);
+    		} else
+    			insertValue(((Number)value).doubleValue(),idproperty,idtuple,mode.OK);
+    			
+    	} else
+    		insertValue(value.toString(),idproperty,idtuple,mode.OK);
 	
     };
     protected abstract Object getValue(Target target, String propertyName, int index);

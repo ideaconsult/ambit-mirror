@@ -43,9 +43,10 @@ import ambit2.db.exceptions.DbAmbitException;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
+	protected enum mode  {OK, ERROR};
 	protected static final String select_descriptor = "SELECT idproperty,idreference,name,units,comments,islocal,idreference,title,url from properties join catalog_references using(idreference) where name=? and idreference=?";
     protected static final String insert_descriptor = "INSERT IGNORE INTO properties (idproperty,idreference,name,units,comments,islocal) VALUES (null,?,?,?,?,0)";
-    protected static final String insert_templatedef = "INSERT IGNORE INTO template_def SELECT ?,name,? from template WHERE name=?";
+    protected static final String insert_templatedef = "INSERT IGNORE INTO template_def SELECT idtemplate,?,? from template WHERE name=?";
     protected PreparedStatement ps_descriptor;
     protected PreparedStatement ps_selectdescriptor;
     protected PreparedStatement ps_templatedef;
@@ -159,10 +160,12 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	                while (rs.next()) {
 	                	//
 	                	int iddescriptor = rs.getInt(1);
+	                	templateEntry(target,iddescriptor);	                	
 	                    descriptorEntry(target,iddescriptor,name,i,idtuple);
-	                	templateEntry(target,iddescriptor);		                    
+		                    
 	                } 
                 } catch (Exception x) {
+                	x.printStackTrace();
                 	logger.error(x);
                 } finally {
 	                rs.close();
@@ -182,12 +185,13 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     protected  void templateEntry(Target target,int idproperty) throws SQLException {
     	
     	Dictionary dict = getTemplate(target);
-    	System.out.println(idproperty + "\t" + dict.getTemplate());
+
     	templateWriter.write(dict);
     	ps_templatedef.clearParameters();
     	ps_templatedef.setInt(1,idproperty);
     	ps_templatedef.setInt(2,idproperty);
     	ps_templatedef.setString(3,dict.getTemplate());    	
     	ps_templatedef.execute();
+
     }
 }
