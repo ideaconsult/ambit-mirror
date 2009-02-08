@@ -31,9 +31,10 @@ package ambit2.plugin.pbt;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
-import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
-import javax.swing.JLabel;
+import javax.sql.DataSource;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -42,9 +43,17 @@ import javax.swing.event.ChangeListener;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.core.data.IStructureRecord;
+import ambit2.db.readers.IRetrieval;
+import ambit2.db.readers.RetrieveAtomContainer;
+import ambit2.db.search.IQueryObject;
+import ambit2.db.search.IStoredQuery;
+import ambit2.db.search.QueryExecutor;
+import ambit2.workflow.DBWorkflowContext;
+
+import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.WorkflowContextListenerPanel;
 
 public class PBTMainPanel extends WorkflowContextListenerPanel implements INPluginUI<INanoPlugin>  {
@@ -53,72 +62,104 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	 */
 	private static final long serialVersionUID = 2943141896545107613L;
 	protected JTabbedPane tabbedPane;
-    protected PBTTableModel[] models;
-    protected static String[] defs = {
-    	"ambit2/plugin/pbt/xml/welcome.xml",    	
-    	"ambit2/plugin/pbt/xml/substance_page.xml",
-    	"ambit2/plugin/pbt/xml/p_page.xml",
-    	"ambit2/plugin/pbt/xml/b_page.xml",
-    	"ambit2/plugin/pbt/xml/t_page.xml",
-    	"ambit2/plugin/pbt/xml/result_page.xml"
-    };
+	protected PBTWorkBook pbt_workbook;
+
+
+
+    public PBTMainPanel(WorkflowContext wfcontext) {
+        this();
+        setWorkflowContext(wfcontext);
+
+    }    
     public PBTMainPanel() {
-    	this(null);
-    }
-    public PBTMainPanel(String[] pages) {
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
-        /*
-
-        */
 
         try {
-			String file = "2008-12-03_REACH PBT Screening Tool_V0.99b_U N P R O T E C T E D.xls";
-			InputStream in = PBTMainPanel.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
-			POIFSFileSystem poifsFileSystem = new POIFSFileSystem(in);
-			
-			HSSFWorkbook workbook = new HSSFWorkbook(poifsFileSystem);
-			
-			final PBTWorksheet[] pbt_worksheets = new PBTWorksheet[6];
-			pbt_worksheets[0] = new PBTWorksheet(workbook,"TERMS & CONDITIONS",27,3,defs[0]);
+        	pbt_workbook = new PBTWorkBook();
+        	
+			for (int i=0; i < pbt_workbook.size();i++) 
+				tabbedPane.add(pbt_workbook.getTitle(i),
+						new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i),1,1)));
 
-			pbt_worksheets[1]  = new PBTWorksheet(workbook,"SUBSTANCE",22,6,defs[1]);
-			pbt_worksheets[2]  = new PBTWorksheet(workbook,"P-Sheet",20,6,defs[2]);
-			pbt_worksheets[3] = new PBTWorksheet(workbook,"B-Sheet",22,6,defs[3]);
-			pbt_worksheets[4]  = new PBTWorksheet(workbook,"T-Sheet",19,6,defs[4]);
-			pbt_worksheets[5] = new PBTWorksheet(workbook,"Result",15,5);
-
-			for (int i=0; i < pbt_worksheets.length;i++) 
-				tabbedPane.add(pbt_worksheets[i].getWorkbook().getSheetName(i),
-						new JScrollPane(PBTPageBuilder.buildPanel(pbt_worksheets[i],1,1)));	
 	        tabbedPane.addChangeListener(new ChangeListener() {
 	        	public void stateChanged(ChangeEvent e) {
-	           		pbt_worksheets[((JTabbedPane)e.getSource()).getSelectedIndex()].notifyCells(-1,-1);
+	        		pbt_workbook.getWorksheet(((JTabbedPane)e.getSource()).getSelectedIndex()).notifyCells(-1,-1);
 	        	}
 	        	
 	        });
+			tabbedPane.setSelectedIndex(1);	        
         } catch (Exception x) {
-            models = new PBTTableModel[defs.length];
-            for (int i=0; i < defs.length;i++) {
-    	        try {
-    	        	models[i] = new PBTTableModel();
-    	        	models[i].setDefinition(defs[i]);
-    		        tabbedPane.add(models[i].getValueAt(2,1).toString(),
-    		        		new JScrollPane(PBTPageBuilder.buildPanel(models[i],-2,0)));	        	
-    	        } catch (Exception xx) {
-    	        	x.printStackTrace();
-    	        	tabbedPane.add("Error",new JLabel(xx.getMessage()));
-    	        }
-
-            }
+        	x.printStackTrace();
         }
     }
     @Override
+    protected void finalize() throws Throwable {
+    	// TODO Auto-generated method stub
+    	super.finalize();
+    }
+    @Override
     protected void animate(PropertyChangeEvent arg0) {
-        // TODO Auto-generated method stub
+    	
+        if (arg0.getPropertyName().equals(ambit2.workflow.DBWorkflowContext.STOREDQUERY)) {
+        	
+        	try {
+	        	IAtomContainer a = execute(((IStoredQuery) arg0.getNewValue()));
+	        	pbt_workbook.getWorksheet(1).setExtendedCell(a, 10,5);
+        	} catch (Exception x) {
+        		x.printStackTrace();
+        	}
+        	
+        	System.out.println(arg0.getNewValue());
+        }
+        
 
     }
-
+    
+	public IAtomContainer execute(IStoredQuery q) throws Exception {
+		IQueryObject<IStructureRecord> query = q.getQuery();
+		if (query == null)
+			throw new Exception("Undefined query");
+     	DataSource datasource = (DataSource) getWorkflowContext().get(DBWorkflowContext.DATASOURCE);
+		if (datasource == null)
+			throw new Exception("Undefined datasource");
+        Connection c = datasource.getConnection();     
+		if (datasource == null)
+			throw new Exception("Undefined db connection");        
+		QueryExecutor  queryExecutor = new QueryExecutor<IQueryObject> ();
+        queryExecutor.setConnection(c);            
+        queryExecutor.open();
+        ResultSet resultSet = null;
+        try {
+	        resultSet = queryExecutor.process(query);
+	        if ((query instanceof IRetrieval)&&(resultSet.next())) {
+	        	
+	        	Object result = ((IRetrieval) query).getObject(resultSet);
+	        	queryExecutor.closeResults(resultSet);
+	        	if (result instanceof IStructureRecord) {
+	        		
+	    	        RetrieveAtomContainer rc = new RetrieveAtomContainer();
+	    	        rc.setValue((IStructureRecord)result);
+	    	        ResultSet rs1 = queryExecutor.process(rc);
+	    	        if (rs1.next()) {
+	    	        	IAtomContainer a =  rc.getObject(rs1);
+	    	        	queryExecutor.closeResults(rs1);
+	    	        	return a;
+	    	        }
+	    	        return null;	        		
+	        	}
+	        }
+	        
+	        return null;
+        } catch (Exception x) {
+        	throw new Exception();
+        } finally {
+        	
+            queryExecutor.close();            
+            if (!c.isClosed()) c.close();	        	
+        }
+        
+	}
     @Override
     public void clear() {
         // TODO Auto-generated method stub

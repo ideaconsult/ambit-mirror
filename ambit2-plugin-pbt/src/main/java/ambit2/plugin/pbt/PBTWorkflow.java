@@ -24,6 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
+import ambit2.db.search.QueryField;
+import ambit2.workflow.ExecuteAndStoreQuery;
+import ambit2.workflow.QueryInteraction;
+import ambit2.workflow.library.LoginSequence;
+
 import com.microworkflow.execution.Performer;
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
@@ -31,24 +36,29 @@ import com.microworkflow.process.Workflow;
 
 public class PBTWorkflow extends Workflow {
 	public PBTWorkflow() {
-		Performer perf = new Performer() {
-			public Object execute() throws Exception {return null;};
-		};
-		Primitive p1 = new Primitive(perf) {
-			@Override
-			public String toString() {
-				return "PBT";
-			}
-			@Override
-			public synchronized String getName() {
-				return "PBT";
-			}
-		};
-
+		
+    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
+        p1.setName("Search");    
         Sequence seq=new Sequence();
-        seq.setName("PBT");
-        seq.addStep(p1);
-		setDefinition(seq);
+        seq.setName("Substance search");
+        seq.addStep(new QueryInteraction(new QueryField()));
+		seq.addStep(p1);
+				
+        seq.setName("PBT Assessment");
+        String[] pbt = new String[] {"Substance definition","Persistence","Bioaccumulation","Toxicity","Results"};
+        for (String a : pbt) {
+        	Primitive p = new Primitive(new Performer(){
+        		public Object execute() throws Exception { return null;};
+        	});
+        	p.setName(a);
+        	seq.addStep(p);
+        }
+        setDefinition(seq);        	
+        
+
+
+		setDefinition(new LoginSequence(seq));
+	
 		}
 	@Override
 	public String toString() {
