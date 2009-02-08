@@ -47,7 +47,15 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	@Override
 	protected Object getValue(IStructureRecord record, String propertyName,
 			int index) {
-		return record.getProperties().get(propertyName);
+		Object o = record.getProperties().get(propertyName);
+
+		try {
+			return Double.parseDouble(o.toString());
+		} catch (Exception x) {
+			//System.err.println(propertyName + "\t" + o + "\t" + x.getMessage());
+			return o;
+		}
+	
 	}
 
 	@Override
