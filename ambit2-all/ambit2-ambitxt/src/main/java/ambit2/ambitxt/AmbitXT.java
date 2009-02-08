@@ -5,7 +5,6 @@ import java.util.prefs.BackingStoreException;
 
 import javax.swing.ImageIcon;
 
-import nplugins.core.Introspection;
 import nplugins.core.PluginClassPath;
 import nplugins.shell.NanoPluginsManager;
 import nplugins.shell.application.NPluginsApplication;
