@@ -19,6 +19,8 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -30,6 +32,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.graph.ConnectivityChecker;
+
 
 
 
@@ -431,7 +434,10 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 		//tu.showFullAtomMappings("CCN", "CCCNCCC");
 		//tu.showFullAtomMappings("C1CC=C1", "C1CC=C1CCC");
-		tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
+		
+		tu.testHydrogenCount();
 	}
 	
 	public void printAromaticity(IAtomContainer mol)
@@ -732,6 +738,22 @@ public class TestUtilities
 				strBuff.append("0");
 		}
 		return(strBuff.toString());
+		
+	}
+	
+	void testHydrogenCount()
+	{
+		IAtomContainer mol = new AtomContainer();
+		mol.addAtom(new Atom("C"));
+		
+		Integer hc = mol.getAtom(0).getHydrogenCount();
+		Integer fc = mol.getAtom(0).getFormalCharge();
+		Integer nc = mol.getAtom(0).getFormalNeighbourCount();
+		Integer v = mol.getAtom(0).getValency();
+		System.out.println("getHydrogenCount() = " + hc);
+		System.out.println("getFormalCharge() = " + fc);
+		System.out.println("getFormalNeighbourCount() = " + nc);
+		System.out.println("getValency() = " + v);
 		
 	}
 }

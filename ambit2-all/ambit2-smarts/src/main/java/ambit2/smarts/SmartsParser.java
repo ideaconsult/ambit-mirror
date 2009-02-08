@@ -1931,10 +1931,17 @@ public class SmartsParser
 	static public void setValenceData(IAtomContainer container)
 	{	
 		IBond bond = null;		
+		Integer hci;
+		int hc;
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{
-			IAtom at = container.getAtom(i);			
-			at.setValency(at.getHydrogenCount());
+			IAtom at = container.getAtom(i);
+			hci = at.getHydrogenCount();
+    		hc = 0;
+    		if (hci != null)
+    			hc = hci.intValue();
+			//at.setValency(at.getHydrogenCount());   !!! - in some cases getHydrogenCount() returns null 
+    		at.setValency(hc);
 		}
 		
 		for (int f = 0; f < container.getBondCount(); f++)
