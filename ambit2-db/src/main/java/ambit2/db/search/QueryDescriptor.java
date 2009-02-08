@@ -3,9 +3,10 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
-public class QueryDescriptor extends NumberQuery<String> {
+public class QueryDescriptor extends NumberQuery<String,IStructureRecord> {
 
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from values_number join properties as d using (idproperty) join structure using(idstructure) where d.name=? and value ";

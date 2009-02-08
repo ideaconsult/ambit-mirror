@@ -12,7 +12,7 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveDatasets extends AbstractQuery<String,SourceDataset,EQCondition>  implements IRetrieval<SourceDataset>{
+public class RetrieveDatasets extends AbstractQuery<String,SourceDataset,EQCondition,SourceDataset>  implements IRetrieval<SourceDataset>{
     public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url FROM src_dataset join catalog_references using(idreference) order by name";
     public static final String select_dataset_byname = "SELECT id_srcdataset,name,user_name,idreference,title,url FROM src_dataset join catalog_references using(idreference) WHERE name=?";
 

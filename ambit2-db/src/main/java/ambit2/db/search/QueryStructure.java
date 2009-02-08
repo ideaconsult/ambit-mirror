@@ -15,7 +15,7 @@ import ambit2.db.readers.IRetrieval;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryStructure extends AbstractQuery<String,String,StringCondition> implements IRetrieval<IStructureRecord>{
+public class QueryStructure extends AbstractQuery<String,String,StringCondition,IStructureRecord> implements IRetrieval<IStructureRecord>{
 	
 	/**
 	 * 

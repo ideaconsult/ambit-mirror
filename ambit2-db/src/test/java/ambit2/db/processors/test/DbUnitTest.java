@@ -45,14 +45,33 @@ import ambit2.db.processors.DbCreateDatabase;
 
 
 public abstract class DbUnitTest {
+	//TODO make use of properties
+	protected String getDatabase() {
+		return "ambit-test";
+	}
+	protected String getPort() {
+		return "33060";
+	}
+	protected String getUser() {
+		return"guest";
+	}
+	protected String getPWD() {
+		return "guest";
+	}
+	protected String getAdminUser() {
+		return "root";
+	}
+	protected String getAdminPWD() {
+		return "";
+	}	
 	@Before
 	public void setUp() throws Exception {
 		
-		IDatabaseConnection c = getConnection("mysql","33060","root","");
+		IDatabaseConnection c = getConnection("mysql",getPort(),getAdminUser(),getAdminPWD());
 		try {
 			DbCreateDatabase db = new DbCreateDatabase();
 			db.setConnection(c.getConnection());
-			db.process(new StringBean("ambit-test"));
+			db.process(new StringBean(getDatabase()));
 		} finally {
 			c.close();
 		}
@@ -66,7 +85,7 @@ public abstract class DbUnitTest {
 	   return new DatabaseConnection(jdbcConnection);
 	}	
 	protected IDatabaseConnection getConnection() throws Exception {
-	   return getConnection("ambit-test","33060", "guest", "guest");
+	   return getConnection(getDatabase(),getPort(),getUser(),getPWD());
 	}
     public void setUpDatabase(String xmlfile) throws Exception {
 

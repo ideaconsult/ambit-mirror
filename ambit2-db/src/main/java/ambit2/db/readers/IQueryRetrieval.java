@@ -1,11 +1,11 @@
-/* IQueryObject.java
- * Author: Nina Jeliazkova
- * Date: May 7, 2008 
+/* IQueryRetrieval.java
+ * Author: nina
+ * Date: Feb 8, 2009
  * Revision: 0.1 
  * 
- * Copyright (C) 2005-2008  Nina Jeliazkova
+ * Copyright (C) 2005-2009  Ideaconsult Ltd.
  * 
- * Contact: nina@acad.bg
+ * Contact: nina
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -27,26 +27,11 @@
  * 
  */
 
-package ambit2.db.search;
+package ambit2.db.readers;
 
-import java.util.List;
+import ambit2.db.search.IQueryObject;
 
-import ambit2.core.exceptions.AmbitException;
+public interface IQueryRetrieval<ResultType> extends IQueryObject<ResultType>,
+		IRetrieval<ResultType> {
 
-/**
- * 
- * Interface for a query
- * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> May 7, 2008
- */
-public interface IQueryObject<ResultType> {
-	/*
-	Element toXML();
-	void fromXML(Element node);
-	*/
-
-	Integer getId();
-	void setId(Integer id);	
-	String getSQL() throws AmbitException;
-	List<QueryParam> getParameters() throws AmbitException;
 }

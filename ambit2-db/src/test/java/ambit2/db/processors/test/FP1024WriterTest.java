@@ -19,9 +19,9 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.FP1024Writer;
-import ambit2.db.readers.MoleculeReader;
 import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.search.QueryExecutor;
 

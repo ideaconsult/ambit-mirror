@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
 /**
@@ -12,8 +13,12 @@ import ambit2.core.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryMissingDistances extends AbstractQuery<String, IBond, NumberCondition> {
-	  public static String MISSING_DISTANCES =
+public class QueryMissingDistances extends AbstractQuery<String, IBond, NumberCondition,IStructureRecord> {
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8633296656332829455L;
+	public static String MISSING_DISTANCES =
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure left join atom_structure using(idstructure) where (type_structure>\"2D with H\") and (iddistance is null) group by (idstructure)";
 	     
 	public String getSQL() throws AmbitException {
