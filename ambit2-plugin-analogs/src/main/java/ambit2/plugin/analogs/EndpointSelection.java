@@ -29,10 +29,17 @@
 
 package ambit2.plugin.analogs;
 
+import java.util.List;
+
+import ambit2.core.data.Dictionary;
 import ambit2.core.data.Profile;
+import ambit2.db.search.IQueryObject;
+import ambit2.plugin.performers.QueryProperties;
+import ambit2.plugin.performers.QueryTemplates;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
+import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 
 /**
@@ -43,9 +50,33 @@ import com.microworkflow.process.Sequence;
  */
 public class EndpointSelection extends Sequence {
 	public EndpointSelection() {
+		Primitive<IQueryObject, List<Dictionary>> retrieveTemplates = new Primitive<IQueryObject, List<Dictionary>>(
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.TEMPLATES,
+				new QueryTemplates("skin irritation")
+				) {
+			@Override
+			public synchronized String getName() {
+				return "Retrieve available templates";
+			};
+		};		
+		Primitive<IQueryObject, Profile> retrieveFields = new Primitive<IQueryObject, Profile>(
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.ENDPOINTS,
+				new QueryProperties(DBWorkflowContext.TEMPLATES)
+				) {
+			@Override
+			public synchronized String getName() {
+				return "Retrieve available endpoints";
+			};
+		};
+		addStep(retrieveTemplates);
+		addStep(retrieveFields);		
         addStep(new UserInteraction<Profile>(
         		new Profile(),
         		DBWorkflowContext.ENDPOINTS,
         		"Define endpoints"));			
 	}
 }
+
+

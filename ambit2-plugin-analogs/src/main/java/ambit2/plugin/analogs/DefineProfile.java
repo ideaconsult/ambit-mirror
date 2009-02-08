@@ -30,12 +30,16 @@
 package ambit2.plugin.analogs;
 
 import java.sql.ResultSet;
+import java.util.List;
 
+import ambit2.core.data.Dictionary;
 import ambit2.core.data.Profile;
 import ambit2.core.data.Property;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;
+import ambit2.plugin.performers.QueryProperties;
+import ambit2.plugin.performers.QueryTemplates;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
@@ -51,17 +55,28 @@ import com.microworkflow.process.Sequence;
 public class DefineProfile extends Sequence {
 	public DefineProfile() {
 
-		Primitive<IQueryObject, Profile> retrieve = new Primitive<IQueryObject, Profile>(
+		Primitive<IQueryObject, List<Dictionary>> retrieveTemplates = new Primitive<IQueryObject, List<Dictionary>>(
 				DBWorkflowContext.QUERY,
-				DBWorkflowContext.PROFILE,
-				new QueryProfile()
+				DBWorkflowContext.DESCRIPTORS,
+				new QueryTemplates("Descriptors")
 				) {
 			@Override
 			public synchronized String getName() {
-				return "Retrieve available fields";
+				return "Select available descriptors";
+			};
+		};		
+		Primitive<IQueryObject, Profile> retrieveFields = new Primitive<IQueryObject, Profile>(
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.PROFILE,
+				new QueryProperties(DBWorkflowContext.DESCRIPTORS)
+				) {
+			@Override
+			public synchronized String getName() {
+				return "Retrieve available endpoints";
 			};
 		};
-		addStep(retrieve);
+		addStep(retrieveTemplates);
+		addStep(retrieveFields);
 	    addStep(new UserInteraction<Profile>(
 	        		new Profile(),
 	        		DBWorkflowContext.PROFILE,
@@ -70,7 +85,7 @@ public class DefineProfile extends Sequence {
 }
 
 
-class QueryProfile extends QueryPerformer<IQueryObject, Profile,String> {
+class QueryProfile extends QueryPerformer<IQueryObject, Profile,Property> {
 	@Override
 	protected IQueryObject getTarget() {
 		return new RetrieveFieldNames();
@@ -78,13 +93,13 @@ class QueryProfile extends QueryPerformer<IQueryObject, Profile,String> {
 	protected Profile process(IQueryObject query,ResultSet rs) throws Exception {							
 		throw new Exception("Not implemented");
 	}
-	protected Profile retrieve(IRetrieval<String> query,
+	protected Profile retrieve(IRetrieval<Property> query,
 			ResultSet rs) throws Exception {
 		System.out.println(query.toString());
 		Profile profile = new Profile();
         while (rs.next()) {
-        	String value = query.getObject(rs);
-        	profile.add(new Property(value));
+        	Property value = query.getObject(rs);
+        	profile.add(value);
         };
         return profile;
 	};	
