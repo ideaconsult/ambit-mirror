@@ -47,16 +47,26 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
     private static final long serialVersionUID = 1811923574213153916L;
 
     public IAtomContainer process(IStructureRecord target) throws AmbitException {
-        try {
-            IAtomContainer ac = null;
-            if (MOL_TYPE.SDF == MOL_TYPE.valueOf(target.getFormat()))
-                ac = MoleculeTools.readMolfile(target.getContent());
-            else     
-                ac = MoleculeTools.readCMLMolecule(target.getContent());
-            return ac;
-        } catch (Exception x) {
-            throw new AmbitException(x);
-        }
+
+            switch (MOL_TYPE.valueOf(target.getFormat())) {
+            case SDF: {
+            	try {
+            		return MoleculeTools.readMolfile(target.getContent());
+                } catch (Exception x) {
+                    throw new AmbitException(x);
+                }
+                
+            }
+           case CML:     
+        	   	try {
+        	   		return MoleculeTools.readCMLMolecule(target.getContent());
+                } catch (Exception x) {
+                    throw new AmbitException(x);
+                }
+            default: {
+            	 throw new AmbitException("Unknown format "+target.getFormat());
+            }
+            }
     }
 
 }
