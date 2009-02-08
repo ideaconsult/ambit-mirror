@@ -14,7 +14,7 @@ import com.jgoodies.binding.beans.Model;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 10, 2008
  */
-public abstract class AbstractQuery<F,T,C extends IQueryCondition>  extends Model implements IQueryObject {
+public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  extends Model implements IQueryObject<ResultType> {
 	protected F fieldname;
 	protected T value;
 	protected C condition;

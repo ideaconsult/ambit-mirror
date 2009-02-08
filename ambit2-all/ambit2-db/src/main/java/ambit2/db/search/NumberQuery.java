@@ -1,7 +1,7 @@
 package ambit2.db.search;
 
 
-public abstract class NumberQuery<F> extends AbstractQuery<F,Double,NumberCondition> {
+public abstract class NumberQuery<F,ResultType> extends AbstractQuery<F,Double,NumberCondition,ResultType> {
 
 	protected Double maxValue;
 	public Double getMaxValue() {

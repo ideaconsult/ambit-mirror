@@ -11,7 +11,7 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class RetrieveFieldNames extends AbstractQuery<String, String, StringCondition> implements IRetrieval<Property>{
+public class RetrieveFieldNames extends AbstractQuery<String, String, StringCondition,Property> implements IRetrieval<Property>{
 	public static String sql = "select idproperty,name,units,title,url,idreference from properties join catalog_references using(idreference)";
 		/**
 	 * 

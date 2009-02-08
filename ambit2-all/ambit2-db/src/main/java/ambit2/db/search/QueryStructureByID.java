@@ -12,7 +12,7 @@ import ambit2.core.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryStructureByID extends AbstractQuery<String,IStructureRecord,NumberCondition> {
+public class QueryStructureByID extends AbstractQuery<String,IStructureRecord,NumberCondition,IStructureRecord> {
 	/**
      * 
      */

@@ -39,6 +39,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.structure.MoleculeReader;
 
 public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomContainer> {
     protected MoleculeReader transform;

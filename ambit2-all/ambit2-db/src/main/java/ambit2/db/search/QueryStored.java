@@ -3,9 +3,10 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
-public class QueryStored extends AbstractQuery<String,IStoredQuery,EQCondition> {
+public class QueryStored extends AbstractQuery<String,IStoredQuery,EQCondition,IStructureRecord> {
 	/**
 	 * 
 	 */

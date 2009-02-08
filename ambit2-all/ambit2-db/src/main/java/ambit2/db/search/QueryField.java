@@ -27,6 +27,7 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
 
@@ -35,7 +36,7 @@ import ambit2.core.exceptions.AmbitException;
  * @author nina
  *
  */
-public class QueryField extends AbstractQuery<String,String, StringCondition> {
+public class QueryField extends AbstractQuery<String,String, StringCondition,IStructureRecord> {
 	/**
 	 * 
 	 */

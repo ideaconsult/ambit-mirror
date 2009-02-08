@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 
 /**
@@ -12,7 +13,7 @@ import ambit2.core.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryDistance extends NumberQuery<IBond> {
+public class QueryDistance extends NumberQuery<IBond,IStructureRecord> {
 	public final static String sqlField = 
 		"select ? as idquery,-1,idstructure,1 as selected,1 as metric from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance ";
 

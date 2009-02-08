@@ -38,7 +38,7 @@ import ambit2.core.data.Dictionary;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.readers.IRetrieval;
 
-public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition> implements IRetrieval<Dictionary>{
+public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition,Dictionary> implements IRetrieval<Dictionary>{
 	/**
 	 * 
 	 */
