@@ -112,28 +112,6 @@ public class QueryInfoTest extends QueryTest<IQueryObject> {
 			t[i]=fieldnames.get(i);
 		return t;	
 	}
-	/*
-	protected SourceDataset[] datasets() throws Exception {
-		Connection c = datasource.getConnection();
-		RetrieveFieldNames fn = new RetrieveFieldNames();
-		
-		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();
-		qe.setConnection(c);
-		ResultSet rs = qe.process(fn);
-		ArrayList<String> fieldnames = new ArrayList<String>();
-		while (rs.next()) {
-			fieldnames.add(fn.getObject(rs));
-		}
-		rs.close();
-		qe.close();
-		if (!c.isClosed())
-			c.close();
-		
-		String[] t = new String[fieldnames.size()];
-		for (int i=0; i < t.length;i ++)
-			t[i]=fieldnames.get(i);
-		return t;	
-	}	
-    */
+	
 }
 
