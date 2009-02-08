@@ -67,8 +67,10 @@ public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Resul
         }
     }
 	public void propertyChange(PropertyChangeEvent evt) {
+		if ((context !=null) && (evt != null)) {
 		context.put(evt.getPropertyName(),null);
 		context.put(evt.getPropertyName(),evt.getNewValue());
+		}
 	}
 
 }
