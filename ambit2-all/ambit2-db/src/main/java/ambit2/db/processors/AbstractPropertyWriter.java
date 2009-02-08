@@ -139,8 +139,9 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
             boolean found = false;
             ResultSet rs1 = ps_selectdescriptor.executeQuery();
             while (rs1.next()) {
-
-                descriptorEntry(target,rs1.getInt(1),name,i,idtuple);
+            	int iddescriptor = rs1.getInt(1);
+            	templateEntry(target,iddescriptor);	  
+                descriptorEntry(target,iddescriptor,name,i,idtuple);
                 found = true;
             }
             rs1.close();

@@ -23,49 +23,67 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 package ambit2.db.processors;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.FileReader;
 import java.util.Iterator;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.io.IInputState;
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.batch.DefaultBatchStatistics;
-import ambit2.core.processors.batch.IBatchProcessor;
-import ambit2.core.processors.batch.IBatchStatistics;
-import ambit2.db.AbstractDBProcessor;
-import ambit2.db.IDBProcessor;
-import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-public abstract class BatchDBProcessor<Target,Result> extends AbstractDBProcessor<IInputState,IBatchStatistics> implements IBatchProcessor<Target,Result> {
-	public static String PROPERTY_BATCHSTATS="ambit2.core.processors.batch.IBatchStatistics";
-	protected IDBProcessor<Target,Result> processor;
+import ambit2.core.data.IStructureRecord;
+import ambit2.core.exceptions.AmbitException;
+import ambit2.core.io.FileInputState;
+import ambit2.core.io.IInputState;
+import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.processors.IProcessor;
+import ambit2.core.processors.ProcessorsChain;
+import ambit2.core.processors.batch.IBatchStatistics;
+
+/**
+ * Reads file 
+ * @author nina
+ *
+ * @param <ItemOutput>
+ */
+public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String> 
+						{
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5659435501205598414L;
 	public BatchDBProcessor() {
-		this(null);
+		// TODO Auto-generated constructor stub
 	}
-	public BatchDBProcessor(IProcessor<Target,Result> processor) {
-		super();
-		setProcessor(processor);
+	public BatchDBProcessor(ProcessorsChain<String,IBatchStatistics,IProcessor> processor) {
+		super(processor);
+
 	}	
-	public void open() throws DbAmbitException {
-		processor.open();
+	public Iterator<String> getIterator(IInputState target)
+			throws AmbitException {
+		if (target instanceof FileInputState)
+			try {
+			return new RawIteratingSDFReader(
+					new FileReader(((FileInputState)target).getFile())
+					);
+			} catch (Exception x) {
+				throw new AmbitException(x);
+			}
+		else throw new AmbitException("Not a file");
+	}
+	@Override
+	public void afterProcessing(IInputState target,
+			Iterator<String> iterator) throws AmbitException {
+		
+		try {
+				if (iterator instanceof IIteratingChemObjectReader)
+			((IIteratingChemObjectReader)iterator).close();
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		} finally {
+			super.afterProcessing(target, iterator);
+		}
 		
 	}
-	public IProcessor<Target,Result> getProcessor() {
-		return processor;
-	}
-	public void setProcessor(IProcessor<Target,Result> processor) {
-		if (processor instanceof IDBProcessor)
-			this.processor = (IDBProcessor<Target, Result>)processor;
-	}
-	protected abstract Iterator getIterator(IInputState target) throws AmbitException ;	
-	protected abstract void closeIterator(Iterator iterator) throws AmbitException;
-
+/*
 	public IBatchStatistics process(IInputState target) throws AmbitException {
 		try {
 			DefaultBatchStatistics stats = new DefaultBatchStatistics();
@@ -74,7 +92,7 @@ public abstract class BatchDBProcessor<Target,Result> extends AbstractDBProcesso
 			stats.setFrequency(freq);
 
 			Iterator reader = getIterator(target);
-			IProcessor<Target,Result> processor = getProcessor();
+			ProcessorsChain<Target,Result,IProcessor> processor = getProcessorChain();
 			if (processor == null)
 				throw new AmbitException("Processor not defined");
 			while (reader.hasNext()) {
@@ -112,21 +130,6 @@ public abstract class BatchDBProcessor<Target,Result> extends AbstractDBProcesso
 			throw new AmbitException(x);
 		}
 	}
-	@Override
-	public void setSession(SessionID sessionID) {
-		super.setSession(sessionID);
-		processor.setSession(sessionID);
-	}
-	@Override
-	public void setConnection(Connection connection) throws DbAmbitException {
-		super.setConnection(connection);
-		processor.setConnection(connection);
-		
-	}
-	@Override
-	public void close() throws SQLException {
-		processor.close();
-		super.close();
-	}
-
+	*/
+	
 }
