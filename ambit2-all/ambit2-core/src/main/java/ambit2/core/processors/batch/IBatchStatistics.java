@@ -68,5 +68,6 @@ public interface IBatchStatistics extends Serializable {
 	 * @param resultCaption
 	 */
 	public void setResultCaption(String resultCaption);
+	long getFrequency();
     
 }

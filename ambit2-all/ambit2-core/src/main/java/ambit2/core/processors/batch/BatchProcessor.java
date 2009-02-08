@@ -26,13 +26,14 @@ package ambit2.core.processors.batch;
 import java.util.Iterator;
 
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.io.IInputState;
 import ambit2.core.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.IProcessor;
+import ambit2.core.processors.ProcessorsChain;
 
-public abstract class BatchProcessor<Target,Result> extends DefaultAmbitProcessor<IInputState,IBatchStatistics> implements IBatchProcessor<Target,Result> {
+public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor<INPUT,IBatchStatistics> 
+					implements IBatchProcessor<INPUT,Target,IBatchStatistics> {
 	public static String PROPERTY_BATCHSTATS="ambit2.core.processors.batch.IBatchStatistics";
-	protected IProcessor<Target,Result> processor;
+	protected ProcessorsChain<Target,IBatchStatistics,IProcessor> processor;
 	/**
 	 * 
 	 */
@@ -40,17 +41,18 @@ public abstract class BatchProcessor<Target,Result> extends DefaultAmbitProcesso
 	public BatchProcessor() {
 		this(null);
 	}
-	public BatchProcessor(IProcessor<Target,Result> processor) {
+	public BatchProcessor(ProcessorsChain<Target,IBatchStatistics,IProcessor> processor) {
 		super();
-		setProcessor(processor);
+		setProcessorChain(processor);
 	}	
-	public IProcessor<Target,Result> getProcessor() {
+	public ProcessorsChain<Target, IBatchStatistics, IProcessor> getProcessorChain() {
 		return processor;
 	}
-	public void setProcessor(IProcessor<Target,Result> processor) {
+	public void setProcessorChain(
+			ProcessorsChain<Target, IBatchStatistics, IProcessor> processor) {
 		this.processor = processor;
+		
 	}
-	protected abstract Iterator getIterator(IInputState target) throws AmbitException ;	
 	protected abstract void closeIterator(Iterator iterator) throws AmbitException;
 /*
 	protected Iterator getIterator(IInputState target) throws AmbitException {
@@ -61,14 +63,14 @@ public abstract class BatchProcessor<Target,Result> extends DefaultAmbitProcesso
 		iterator.close();
 	}
 	*/	
-	public IBatchStatistics process(IInputState target) throws AmbitException {
+	public IBatchStatistics process(INPUT target) throws AmbitException {
 		try {
 			DefaultBatchStatistics stats = new DefaultBatchStatistics();
 			stats.setResultCaption("Read");
 			stats.frequency = 1;
 
 			Iterator reader = getIterator(target);
-			IProcessor<Target,Result> processor = getProcessor();
+			ProcessorsChain<Target,IBatchStatistics,IProcessor> processor = getProcessorChain();
 			if (processor == null)
 				throw new AmbitException("Processor not defined");
 			while (reader.hasNext()) {
