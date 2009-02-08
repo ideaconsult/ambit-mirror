@@ -113,5 +113,13 @@ public class StructureRecord implements IStructureRecord {
 		setProperties(null);
 		setFormat(null);
 	}
-
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("idchemical=");
+		b.append(getIdchemical());
+		b.append("\tidstructure=");
+		b.append(getIdstructure());		
+		return b.toString();
+	}
 }	
