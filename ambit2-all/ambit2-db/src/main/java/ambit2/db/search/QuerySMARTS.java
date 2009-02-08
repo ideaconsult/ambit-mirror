@@ -3,7 +3,6 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.query.smarts.ISmartsPattern;
 
@@ -12,7 +11,7 @@ import ambit2.core.query.smarts.ISmartsPattern;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QuerySMARTS extends AbstractQuery<String,ISmartsPattern,EQCondition,IStructureRecord> {
+public class QuerySMARTS extends AbstractStructureQuery<String,ISmartsPattern,EQCondition> {
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,-1,1 as selected,1 as metric from funcgroups join struc_fgroups as f using (idfuncgroup) where smarts = ?";
 	public String getSQL() throws AmbitException {

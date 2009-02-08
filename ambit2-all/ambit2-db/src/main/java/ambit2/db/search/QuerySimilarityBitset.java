@@ -16,7 +16,7 @@ import ambit2.core.processors.structure.FingerprintGenerator;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QuerySimilarityBitset extends QuerySimilarity<BitSet,NumberCondition,IStructureRecord> {
+public class QuerySimilarityBitset extends QuerySimilarity<BitSet,NumberCondition> {
 
 	/**
 	 * 

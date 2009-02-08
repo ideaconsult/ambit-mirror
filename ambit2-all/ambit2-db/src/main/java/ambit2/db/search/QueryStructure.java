@@ -8,14 +8,13 @@ import java.util.List;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.db.readers.IRetrieval;
 
 /**
  * Search for smiles, inchi, formula
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryStructure extends AbstractQuery<String,String,StringCondition,IStructureRecord> implements IRetrieval<IStructureRecord>{
+public class QueryStructure extends AbstractStructureQuery<String,String,StringCondition> {
 	
 	/**
 	 * 

@@ -1,5 +1,7 @@
 package ambit2.db.search;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import ambit2.core.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryStructureByID extends AbstractQuery<String,IStructureRecord,NumberCondition,IStructureRecord> {
+public class QueryStructureByID extends AbstractStructureQuery<String,IStructureRecord,NumberCondition> { 
 	/**
      * 
      */
@@ -58,5 +60,6 @@ public class QueryStructureByID extends AbstractQuery<String,IStructureRecord,Nu
 			params.add(new QueryParam<Integer>(Integer.class, getMaxValue().getIdstructure()));
 		return params;
 	}
+
 
 }

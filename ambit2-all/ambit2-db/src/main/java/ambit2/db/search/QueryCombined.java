@@ -1,9 +1,11 @@
 package ambit2.db.search;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.core.exceptions.AmbitException;
+import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Set of {@link IQueryObject}, combined with logical "and or logical "or".
@@ -11,12 +13,16 @@ import ambit2.core.exceptions.AmbitException;
  *
  * @param <Q>
  */
-public class QueryCombined<Q extends IQueryObject> extends ArrayList<Q> implements IQueryObject {
+public class QueryCombined<T>  implements IQueryRetrieval<T> {
+	protected List<IQueryRetrieval<T>> queries;
+	public List<IQueryRetrieval<T>> getQueries() {
+		return queries;
+	}
 	protected boolean combine_as_and;
 	protected Integer id = null;
 	protected static final String union="\nunion\n";
 	protected static final String join="\njoin\n";
-	protected IQueryObject scope;
+	protected IQueryObject<T> scope;
 	/**
 	 * 
 	 */
@@ -25,17 +31,19 @@ public class QueryCombined<Q extends IQueryObject> extends ArrayList<Q> implemen
 	public Integer getId() {
 		return id;
 	}
-
+	public QueryCombined() {
+		queries = new ArrayList<IQueryRetrieval<T>>();
+	}
 	public void setId(Integer id) {
 		this.id = id;
-		for (IQueryObject q: this) 
+		for (IQueryObject q: queries) 
 			q.setId(id);
 		if (getScope() != null)
 			getScope().setId(id);
 	}
 
 	public String getSQL() throws AmbitException {
-		if (size() == 0)
+		if (queries.size() == 0)
 			throw new AmbitException("Undefined query");
 		if (combine_as_and)
 			return getSQL_and();
@@ -56,7 +64,7 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 	protected String getSQL_or() throws AmbitException {
 		StringBuffer b = new StringBuffer();
 		String c = "";
-		for (IQueryObject q : this) {
+		for (IQueryObject q : queries) {
 			b.append(c);
 			b.append(q.getSQL());
 			c = union;
@@ -99,8 +107,8 @@ using(idstructure)
 		if (scope != null) {
 			join(scope,"SCOPE",b);
 		}		
-		for (int i=0; i < size();i++) {
-			IQueryObject q = get(i);
+		for (int i=0; i < queries.size();i++) {
+			IQueryObject q = queries.get(i);
 			join(q,Integer.toString(i+1),b);
 		}
 
@@ -129,8 +137,8 @@ using(idstructure)
 				param.add(qp);
 			}			
 		}
-		for (int i=0; i < size(); i++) {
-			IQueryObject q = get(i);
+		for (int i=0; i < queries.size(); i++) {
+			IQueryObject q = queries.get(i);
 			List<QueryParam> p = q.getParameters();
 			for (int j=0; j < p.size(); j++) {
 				QueryParam qp = p.get(j);
@@ -150,13 +158,28 @@ using(idstructure)
 		this.combine_as_and = combine_as_and;
 	}
 
-	public IQueryObject getScope() {
+	public IQueryObject<T> getScope() {
 		return scope;
 	}
 
-	public void setScope(Q scope) {
+	public void setScope(IQueryObject<T> scope) {
 		if (scope instanceof QueryCombined) return;
 		this.scope = scope;
+	}
+	public void add(IQueryRetrieval<T> query) {
+		queries.add(query);
+	}
+	public IQueryRetrieval<T> get(int index) {
+		return queries.get(index);
+	}
+	public int size() {
+		return queries.size();
+	}
+	public T getObject(ResultSet rs) throws AmbitException {
+		if (queries.size()>0)
+			return queries.get(0).getObject(rs);
+		else
+			return null;
 	}
 
 }
