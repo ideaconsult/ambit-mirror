@@ -26,21 +26,53 @@ package ambit2.plugin.pbt;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
-import nplugins.workflow.MWorkflowPlugin;
+import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.DBWorkflowPlugin;
+import ambit2.workflow.ui.UserInteractionEvent;
+import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
 import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 
-public class PBTCheckerPlugin extends MWorkflowPlugin {
+public class PBTCheckerPlugin extends DBWorkflowPlugin {
+	protected WorkflowOptionsLauncher contextListener;
+	public PBTCheckerPlugin() {
+		contextListener = new WorkflowOptionsLauncher(null);
+		Vector<String> props = new Vector<String>();		
+		props.add(UserInteractionEvent.PROPERTYNAME);
+		props.add(DBWorkflowContext.ERROR);
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DBCONNECTION_URI);
+		props.add(DBWorkflowContext.DATASOURCE);
+        props.add(DBWorkflowContext.DATASET);		
+        props.add(DBWorkflowContext.STOREDQUERY);	        
+		contextListener.setProperties(props);
+		contextListener.setWorkflowContext(getWorkflowContext());
+		/*
+		QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
+		Vector<String> p = new Vector<String>();
+		p.add(DBWorkflowContext.STOREDQUERY);
+		p.add(DBWorkflowContext.ERROR);
+		results.setProperties(p);
+		results.setAnimate(true);
+		return new JComponent[] {results};		
+		*/
+	}
+	@Override
+	public void setWorkflowContext(WorkflowContext workflowContext) {
+		super.setWorkflowContext(workflowContext);
+		if (contextListener!= null)
+		contextListener.setWorkflowContext(workflowContext);
 
+	}	
 	@Override
 	protected WorkflowContext createWorkflowContext() {
 		return new WorkflowContext();
@@ -50,7 +82,14 @@ public class PBTCheckerPlugin extends MWorkflowPlugin {
 		return new PBTWorkflow();
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		return new PBTMainPanel();
+		PBTMainPanel results = new PBTMainPanel(getWorkflowContext());
+		Vector<String> p = new Vector<String>();
+		p.add(DBWorkflowContext.STOREDQUERY);
+		p.add(DBWorkflowContext.ERROR);
+		results.setProperties(p);
+		results.setAnimate(true);
+		return results;		
+
 	}
 
 	public ImageIcon getIcon() {
@@ -86,6 +125,6 @@ public class PBTCheckerPlugin extends MWorkflowPlugin {
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
-		return new JComponent[] {new JLabel()};
+		return super.createDetailsComponent();
 	}
 }
