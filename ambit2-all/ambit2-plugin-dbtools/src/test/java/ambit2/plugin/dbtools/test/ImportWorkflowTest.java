@@ -20,17 +20,16 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 package ambit2.plugin.dbtools.test;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.util.Vector;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.core.io.FileInputState;
@@ -40,75 +39,78 @@ import ambit2.db.SourceDataset;
 import ambit2.plugin.dbtools.ImportWorkflow;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.library.InputFileSelection;
-import ambit2.workflow.ui.SilentWorkflowListener;
-import ambit2.workflow.ui.UserInteractionEvent;
-import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.events.WorkflowListener;
 
-public class ImportWorkflowTest {
-	protected WorkflowOptionsLauncher contextListener;
-	protected int count = 0;
-	protected DBWorkflowContext context;
-	protected boolean completed = false;
-	@Before
-	public void setUp() throws Exception {
-		context = new DBWorkflowContext();	
-		contextListener = new SilentWorkflowListener(null);
-		Vector<String> props = new Vector<String>();		
-		props.add(UserInteractionEvent.PROPERTYNAME);
-		props.add(DBWorkflowContext.ERROR);
-		props.add(DBWorkflowContext.LOGININFO);
-		props.add(DBWorkflowContext.DBCONNECTION_URI);
-		props.add(DBWorkflowContext.DATASOURCE);
-        props.add(DBWorkflowContext.DATASET);		
-        props.add(BatchProcessor.PROPERTY_BATCHSTATS);
-		contextListener.setProperties(props);
-		contextListener.setWorkflowContext(context);		
-	}
+public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 
+
+	protected int count = 0;
+	@Override
+	protected ImportWorkflow getWorkflow() {
+		return new ImportWorkflow();
+	}
 	@Test
 	public void testExecuteWith() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/plugin/dbtools/test/empty-datasets.xml");
+		IDatabaseConnection c = getConnection();
+		ITable structures = c.createQueryTable("EXPECTED_STRUCTURES",
+		"SELECT * FROM structure");
+		Assert.assertEquals(0, structures.getRowCount());			
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(0, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(0, values.getRowCount());
+		ITable templates = c.createQueryTable("EXPECTED_TEMPLATES",
+				"SELECT * FROM template");
+		Assert.assertEquals(2, templates.getRowCount());
+		ITable dictionary = c.createQueryTable("EXPECTED_ONTOLOGY",
+				"SELECT * FROM dictionary");
+		Assert.assertEquals(0, dictionary.getRowCount());
+
 		LoginInfo li = new LoginInfo();
-		li.setDatabase("ambit100");
-		li.setPort("33060");
-		li.setUser("guest");
-		li.setPassword("guest");
+		li.setDatabase(getDatabase());
+		li.setPort(getPort());
+		li.setUser(getUser());
+		li.setPassword(getUser());
+
 		context.put(DBWorkflowContext.LOGININFO, li);
-		context.put(InputFileSelection.INPUTFILE,
-				new FileInputState(new File("D:/src/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/M__STY/sgroup.sdf")
-				));
-		context.put(DBWorkflowContext.DATASET, new SourceDataset("TEST-INPUTWORKFLOW"));
-		ImportWorkflow wf = new ImportWorkflow();
+		context
+				.put(InputFileSelection.INPUTFILE,
+					 new FileInputState("src/test/resources/ambit2/plugin/dbtools/test/sdf/test.sdf"));
+		context.put(DBWorkflowContext.DATASET, new SourceDataset(
+				"TEST-INPUTWORKFLOW"));
+		ImportWorkflow wf = getWorkflow();
 
 		wf.addPropertyChangeListener(new WorkflowListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName().equals(WorkflowEvent.WF_COMPLETE))
 					completed = true;
-				
-				
+
 			}
 		});
 		completed = false;
 
-		context.addPropertyChangeListener(BatchProcessor.PROPERTY_BATCHSTATS,new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				
-				if (evt.getNewValue()!=null) {
-					System.out.println(evt.getPropertyName()+"\t"+evt.getNewValue());
-					count++;
-				}
-				
-			}
-		});
-		wf.executeWith(context);		
+		context.addPropertyChangeListener(BatchProcessor.PROPERTY_BATCHSTATS,
+				new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent evt) {
+
+						if (evt.getNewValue() != null) {
+							count++;
+						}
+
+					}
+				});
+		wf.executeWith(context);
 		while (!completed) {
 
 		}
-		System.out.print(completed);
-		System.out.println(count);		
-		Assert.assertEquals(24,count);
+		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
+		Assert.assertEquals(7, structures.getRowCount());	
+		Assert.assertEquals(7, count);
 	}
 
 }
