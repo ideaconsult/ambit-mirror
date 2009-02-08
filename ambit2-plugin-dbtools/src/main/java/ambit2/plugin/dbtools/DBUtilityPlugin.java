@@ -66,7 +66,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		workflows = new ArrayList<ClassHolder>();
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate descriptors for structures in database","images/calculate.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start/Stop local MySQL database server","images/mysql.png"));
 		
 		contextListener = new WorkflowOptionsLauncher(null);

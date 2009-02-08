@@ -1,24 +1,19 @@
 package ambit2.plugin.dbtools;
 
-import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Iterator;
-
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
-import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.processors.IProcessor;
+import ambit2.core.processors.ProcessorsChain;
 import ambit2.core.processors.batch.IBatchStatistics;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.BatchDBProcessor;
-import ambit2.db.processors.DBProcessorsChain;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
@@ -45,6 +40,7 @@ public class ImportWorkflow extends Workflow {
         		r.setIdstructure(-1);
         		r.setFormat("SDF");
         		r.setContent(target);
+        		System.out.println(target);
         		return r;
                 //return new StructureRecord(-1,-1,target,"SDF");
         	}
@@ -86,33 +82,14 @@ public class ImportWorkflow extends Workflow {
 			}
         };
         
-        DBProcessorsChain<String,IStructureRecord, IDBProcessor> chain = 
-        		new DBProcessorsChain<String,IStructureRecord,IDBProcessor>();
+        ProcessorsChain<String, IBatchStatistics,IProcessor> chain = 
+        		new ProcessorsChain<String, IBatchStatistics,IProcessor>();
         chain.add(processor);
         chain.add(new RepositoryWriter());
 
         
-        BatchDBProcessor batch = new BatchDBProcessor<String,IStructureRecord>(chain) {
-        	protected Iterator getIterator(IInputState target) throws AmbitException {
-        		if (target instanceof FileInputState)
-        			try {
-        			return new RawIteratingSDFReader(
-        					new FileReader(((FileInputState)target).getFile())
-        					);
-        			} catch (Exception x) {
-        				throw new AmbitException(x);
-        			}
-        		else throw new AmbitException("Not a file");
-        	}
-        	protected void closeIterator(Iterator iterator) throws AmbitException {
-        		if (iterator instanceof IIteratingChemObjectReader)
-        			try {
-        			((IIteratingChemObjectReader)iterator).close();
-        			} catch (Exception x) {
-        				throw new AmbitException(x);
-        			}
-        	}        	
-		};
+        BatchDBProcessor batch = new BatchDBProcessor();
+        batch.setProcessorChain(chain);
     	ActivityPrimitive<IInputState,IBatchStatistics> p1 = 
     		new ActivityPrimitive<IInputState,IBatchStatistics>( 
     			InputFileSelection.INPUTFILE,
