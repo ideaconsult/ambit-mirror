@@ -119,8 +119,8 @@ public class PKASmartsDescriptorTest {
     	SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
     	IAtomContainer a = MoleculeFactory.makeBenzene();
     	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
-    	//SmartParser throws error if explicit hydrogens are used!
-    	ha.setAddEexplicitHydrogens(false);
+    	//SmartParser throws error if explicit hydrogens are used - fixed
+    	ha.setAddEexplicitHydrogens(true);
     	CDKHueckelAromaticityDetector.detectAromaticity(a);
 		a = ha.process(a);
 		for (int i=0; i < a.getAtomCount();i++) {
@@ -140,7 +140,7 @@ public class PKASmartsDescriptorTest {
     	DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
     	
     	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
-		
+		ha.setAddEexplicitHydrogens(true);
 		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,"true");		    	
     	InputStream in = PKASmartsDescriptor.class.getClassLoader().getResourceAsStream("ambit2/descriptors/pka/benchmark_new.csv");
     	IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
