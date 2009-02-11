@@ -8,10 +8,21 @@ import javax.swing.ImageIcon;
 import nplugins.core.PluginClassPath;
 import nplugins.shell.NanoPluginsManager;
 import nplugins.shell.application.NPluginsApplication;
+import ambit2.mopac.MopacShell;
+import ambit2.namestructure.Name2StructureProcessor;
 
 public class AmbitXT extends NPluginsApplication {
 	public AmbitXT(String title, int width, int height, String[] args) {
 		super(title,width,height,args);
+		//this is a quick dirty hack to make the builder include mopac and name structure packages ...
+		try {
+		MopacShell mopac = new MopacShell();
+		System.out.println(mopac.getExecutable());
+		Name2StructureProcessor p = new Name2StructureProcessor();
+		p.process("benzene");
+		} catch (Throwable x) {
+			x.printStackTrace();
+		}
 	}
 	@Override
 	protected NanoPluginsManager createManager() {
@@ -44,7 +55,7 @@ public class AmbitXT extends NPluginsApplication {
 			        createImageIcon("images/database_16.png"));
 			manager.addPackage("ambit2.plugin.usermgr.UserManagerPlugin","Users",
 			        createImageIcon("images/user_16.png"));
-			
+
 		} catch (Exception x) {
             x.printStackTrace();
 			logger.severe(x.getMessage());
