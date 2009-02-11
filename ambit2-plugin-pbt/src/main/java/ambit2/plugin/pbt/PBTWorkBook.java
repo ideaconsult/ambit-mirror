@@ -7,7 +7,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 
 public class PBTWorkBook {
-	protected static final String PBT_CLARIANT="pbt_0_99.xls";
+	protected static final String PBT_CLARIANT="pbt_1_00.xls";
 	final protected HSSFWorkbook workbook; 
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
@@ -15,7 +15,8 @@ public class PBTWorkBook {
 	
     protected static Object[][] defs = {
     	{"TERMS & CONDITIONS",new Integer(27),new Integer(3),"ambit2/plugin/pbt/xml/welcome.xml"},   	
-    	{"SUBSTANCE",new Integer(22),new Integer(6),"ambit2/plugin/pbt/xml/substance_page.xml"},
+    	{"SUBSTANCE",new Integer(28),new Integer(6),"ambit2/plugin/pbt/xml/substance_page.xml"},
+
     	{"P-Sheet",new Integer(20),new Integer(6),"ambit2/plugin/pbt/xml/p_page.xml"},
     	{"B-Sheet",new Integer(22),new Integer(6),"ambit2/plugin/pbt/xml/b_page.xml"},
     	{"T-Sheet",new Integer(19),new Integer(6),"ambit2/plugin/pbt/xml/t_page.xml"},
