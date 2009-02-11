@@ -106,12 +106,8 @@ other (see Remark / Reference)
 	<item>	
 		DOC: &lt; 70% after 7d
 	</item>	
-	<item>	
-		ThOD: &gt; 60% after 7d
-	</item>	
-	<item>	
-		ThOD: &gt; 60% after 7d
-	</item>		
+	<item>ThOD: &gt; 70% after 14d</item>	
+	<item>ThOD: &lt; 70% after 14d</item>		
 	<item>	
 		other:achieved (see Remark / Reference)
 	</item>		
@@ -165,10 +161,10 @@ other (see Remark / Reference)
 </list>
 <list id="C14" row="14" col="3" colspan="1">
 	<item>
-Prediction: ready biodeg.
+Estimation: Fast biodegradation
 	</item>
 	<item>
-Prediction: no ready biodeg.
+Estimation: No fast biodegradation
 	</item>
 </list>
 <list id="C16" row="16" col="4" colspan="1">
