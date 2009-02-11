@@ -71,6 +71,7 @@ public class WorksheetAction<Target,Result> extends AbstractAction {
 			else
 				worksheet.set(resultRow-1,resultCol-1,result);
 		} catch (Exception x) {
+			x.printStackTrace();
 			Throwable error = x;
 			while (error.getCause()!=null) 
 				error = error.getCause();

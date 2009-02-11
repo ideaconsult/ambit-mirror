@@ -63,24 +63,28 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	private static final long serialVersionUID = 2943141896545107613L;
 	protected JTabbedPane tabbedPane;
 	protected PBTWorkBook pbt_workbook;
-
+	protected boolean hack=true;
 
 
     public PBTMainPanel(WorkflowContext wfcontext) {
         this();
+        try {
         setWorkflowContext(wfcontext);
-
+        } catch (Exception x) {
+        	x.printStackTrace();
+        }
     }    
     public PBTMainPanel() {
+
         tabbedPane = new JTabbedPane();
         add(tabbedPane);
-
         try {
         	pbt_workbook = new PBTWorkBook();
-        	
-			for (int i=0; i < pbt_workbook.size();i++) 
+			for (int i=0; i < pbt_workbook.size();i++)  {
+				if (pbt_workbook.getWorksheet(i)!=null)
 				tabbedPane.add(pbt_workbook.getTitle(i),
 						new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i),1,1)));
+			}
 
 	        tabbedPane.addChangeListener(new ChangeListener() {
 	        	public void stateChanged(ChangeEvent e) {
@@ -92,15 +96,15 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         } catch (Exception x) {
         	x.printStackTrace();
         }
+        hack = false;
     }
     @Override
     protected void finalize() throws Throwable {
-    	// TODO Auto-generated method stub
     	super.finalize();
     }
     @Override
     protected void animate(PropertyChangeEvent arg0) {
-    	
+    	if (hack) return; 
         if (arg0.getPropertyName().equals(ambit2.workflow.DBWorkflowContext.STOREDQUERY)) {
         	
         	try {
@@ -110,8 +114,9 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         		x.printStackTrace();
         	}
         	
-        	System.out.println(arg0.getNewValue());
+
         }
+        
         
 
     }
