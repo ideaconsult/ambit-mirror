@@ -7,7 +7,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 
 public class PBTWorkBook {
-	protected static final String PBT_CLARIANT="2008-12-03_REACH PBT Screening Tool_V0.99b_U N P R O T E C T E D.xls";
+	protected static final String PBT_CLARIANT="pbt_0_99.xls";
 	final protected HSSFWorkbook workbook; 
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
@@ -25,8 +25,10 @@ public class PBTWorkBook {
     	this(PBT_CLARIANT);
     }
     public PBTWorkBook(String file) throws Exception {
-		workbook_stream = PBTMainPanel.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
-		poifsFileSystem = new POIFSFileSystem(workbook_stream);		
+		workbook_stream = PBTWorkBook.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
+		if (workbook_stream==null)
+			throw new Exception("Can't find "+file);
+		poifsFileSystem = new POIFSFileSystem(workbook_stream);	
 		workbook = new HSSFWorkbook(poifsFileSystem);
 		pbt_worksheets = new PBTWorksheet[defs.length];
 		for (int i=0; i < defs.length;i++)
@@ -43,12 +45,18 @@ public class PBTWorkBook {
     }
     
     protected PBTWorksheet createSheet(HSSFWorkbook workbook,int index) {
-		
-		return new PBTWorksheet(workbook,
-				defs[index][0].toString(),
-				(Integer)defs[index][1],
-				(Integer)defs[index][2],
-				defs[index][3].toString());
+		try {
+	
+			PBTWorksheet ws =  new PBTWorksheet(workbook,
+					defs[index][0].toString(),
+					(Integer)defs[index][1],
+					(Integer)defs[index][2],
+					defs[index][3].toString());
+			return ws;
+		} catch (Throwable x) {
+			x.printStackTrace();
+			return null;
+		}
     }
     
     @Override

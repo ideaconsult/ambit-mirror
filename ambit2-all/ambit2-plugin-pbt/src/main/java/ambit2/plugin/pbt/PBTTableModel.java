@@ -24,14 +24,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import ambit2.core.external.ShellException;
 import ambit2.core.processors.IProcessor;
 import ambit2.core.processors.ProcessorsChain;
 import ambit2.core.processors.structure.CloneProcessor;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.processors.DescriptorCalculationProcessor;
 import ambit2.descriptors.processors.DescriptorResultFormatter;
-import ambit2.mopac.MopacShell;
+import ambit2.plugin.pbt.processors.ProcessorProxy;
 
 public class PBTTableModel extends AbstractTableModel {
 	/**
@@ -236,8 +235,10 @@ public class PBTTableModel extends AbstractTableModel {
 				if ((node.getAttribute("builder3d") != null) && (node.getAttribute("builder3d").equals("true"))) {
 					//add 3d builder
 					try {
-						chain.add(new MopacShell());
-					} catch (ShellException x) {
+						ProcessorProxy proxy = new ProcessorProxy();
+						proxy.setClassName("ambit2.mopac.MopacShell");
+						chain.add(proxy);
+					} catch (Throwable x) {
 						x.printStackTrace();
 					}
 				}
@@ -246,9 +247,14 @@ public class PBTTableModel extends AbstractTableModel {
 				chain.add(new DescriptorResultFormatter());
 			}
 		} else 	if (node.getAttribute("processor") != null) {
+			ProcessorProxy proxy = new ProcessorProxy();
+			proxy.setClassName(node.getAttribute("processor"));
+			chain.add(proxy);
+			/*
 			Object p = Introspection.loadCreateObject(node.getAttribute("processor"));
 			if (p instanceof IProcessor)
 				chain.add((IProcessor)p);
+				*/
 		}	
 		action.setProcessor(chain);	
 		return action;
