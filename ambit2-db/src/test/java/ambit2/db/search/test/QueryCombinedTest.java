@@ -125,7 +125,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 			Assert.assertEquals(1,rs.getInt(5));			
 
 		}
-		Assert.assertEquals(2,records);
+		Assert.assertEquals(1,records);
 		
 	}
 }

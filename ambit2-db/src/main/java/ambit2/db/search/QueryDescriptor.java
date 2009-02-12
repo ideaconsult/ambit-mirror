@@ -22,7 +22,7 @@ public class QueryDescriptor extends AbstractStructureQuery<String,Double,Number
 		this.maxValue = maxValue;
 	}
 	public String getSQL() throws AmbitException {
-		if (NumberCondition.between.equals(getCondition().getSQL()))
+		if (NumberCondition.getInstance(NumberCondition.between).equals(getCondition()))
 			return sqlField +  getCondition().getSQL() + " ? and ?";
 		else 
 			return sqlField +  getCondition().getSQL() + " ?";
@@ -36,6 +36,12 @@ public class QueryDescriptor extends AbstractStructureQuery<String,Double,Number
 			params.add(new QueryParam<Double>(Double.class, getMaxValue()));
 		return params;
 	}
-
+	@Override
+	public String toString() {
+		if (NumberCondition.getInstance(NumberCondition.between).equals(getCondition()))
+			return super.toString() + " and " + getMaxValue();
+		else
+			return super.toString();
+	}
 
 }

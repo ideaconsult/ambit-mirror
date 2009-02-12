@@ -85,8 +85,8 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <property_number idvalue="2" idtype="1" value="12.0"/>
   <property_number idvalue="3" idtype="1" value="13.0"/>
   <property_string/>
-  <property_values id="1" idproperty="1" idstructure="100215" idvalue="1" status="OK" user_name="guest"/>
-  <property_values id="2" idproperty="1" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
+  <property_values id="1" idproperty="1" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
+  <property_values id="2" idproperty="2" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
   <property_values id="3" idproperty="1" idstructure="100211" idvalue="3" status="OK" user_name="guest"/>  
   <property_tuples/>
   <src_dataset/>
