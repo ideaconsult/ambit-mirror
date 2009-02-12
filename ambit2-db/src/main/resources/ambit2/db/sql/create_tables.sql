@@ -485,6 +485,15 @@ SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype
 FROM property_values join property_string using(idvalue,idtype);
 
 -- -----------------------------------------------------
+-- all property values
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `values_all`;
+create view values_all as
+SELECT idstructure,idproperty,name,null as value_string,value as value_number FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
+union
+SELECT idstructure,idproperty,name,value as value_string,null  FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype)
+
+-- -----------------------------------------------------
 -- default users (guest, admin)
 -- -----------------------------------------------------
 
