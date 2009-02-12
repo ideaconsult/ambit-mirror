@@ -240,12 +240,13 @@ CREATE TABLE  `property_values` (
   `user_name` varchar(16) collate utf8_bin NOT NULL,
   `status` enum('OK','ERROR') collate utf8_bin NOT NULL default 'OK',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `Index_2` (`idproperty`,`idstructure`,`idvalue`,`idtype`),
+  UNIQUE KEY `Index_2` USING BTREE (`idproperty`,`idstructure`,`idtype`),
   KEY `FK_property_values_1` (`user_name`),
   KEY `FK_property_values_2` (`idstructure`),
-  CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `Index_5` USING BTREE (`idvalue`,`idtype`),
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------

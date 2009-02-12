@@ -54,8 +54,10 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.core.data.IStructureRecord;
@@ -216,6 +218,46 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		c.close();
 	}	
 	
+	/**
+	 * Multiple values with the same name for a given structure are not allowed.
+	 * @throws Exception
+	 */
+	@Test
+	public void testWriteMultipleValues() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
+		Assert.assertEquals(3,names.getRowCount());
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM values_number join properties using(idproperty)");	
+		Assert.assertEquals(0,values.getRowCount());
+		
+        writer.setConnection(c.getConnection());
+        writer.open();
+        WeightDescriptor xlogp = new WeightDescriptor();
+		writer.setStructure(new StructureRecord(7,100211,"",""));
+		DescriptorValue value = xlogp.calculate(MoleculeFactory.makeBenzene());
+		Assert.assertEquals(72.0,((DoubleResult)value.getValue()).doubleValue(),1E-4);
+        writer.write(value);
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
+		Assert.assertEquals(4,names.getRowCount());
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM values_number join properties using(idproperty) WHERE abs(value-72)<1E-4");
+		Assert.assertEquals(1,values.getRowCount());	        
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM values_number join properties using(idproperty) WHERE abs(value-144)<1E-4");
+		Assert.assertEquals(0,values.getRowCount());
+		
+		value = xlogp.calculate(MoleculeFactory.makeAlkane(12));
+		Assert.assertEquals(144.0,((DoubleResult)value.getValue()).doubleValue(),1E-4);		
+		System.out.println(value.getValue());
+        writer.write(value);
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM values_number join properties using(idproperty) WHERE abs(value-144)<1E-4");	
+		Assert.assertEquals(1,values.getRowCount());
+		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM values_number join properties using(idproperty) WHERE abs(value-72)<1E-4");	
+		Assert.assertEquals(0,values.getRowCount());	                
+		
+        c.close();
+        
+
+	}		
 	@Test
 	public void testReadWriteProperty() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/experiments-datasets.xml");

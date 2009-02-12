@@ -50,11 +50,14 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	 * 
 	 */
 	private static final long serialVersionUID = 8373222804070419878L;
-	protected static final String insert_descriptorvalue = "INSERT IGNORE INTO property_values (id,idproperty,idstructure,idvalue,status,user_name,idtype) ";
+	protected static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue,status,user_name,idtype) ";
 	protected static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
 	protected static final String insert_number = "INSERT IGNORE INTO property_number (value) VALUES (?)";
 	protected static final String select_string = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_string where value=?";
 	protected static final String select_number = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_number where abs(value-?)<1E-4";
+	protected static final String onduplicate_number = " on duplicate key update property_values.idvalue=property_number.idvalue";
+	protected static final String onduplicate_string = " on duplicate key update property_values.idvalue=property_string.idvalue";
+	
 	protected static final String insert_tuple_string = "insert into property_tuples select ?,id from values_string where idproperty=? and idstructure=? and value=? and idtype=?";
 	protected static final String insert_tuple_number = "insert into property_tuples select ?,id from values_number where idproperty=? and idstructure=? and (abs(value-?)<1E-4) and idtype=?";
 	protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";
@@ -104,7 +107,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_insertstring.execute();    	
     	
     	if (ps_descriptorvalue_string == null)
-            ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string);
+            ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string+onduplicate_string);
     	
     	ps_descriptorvalue_string.clearParameters();
     	ps_descriptorvalue_string.setInt(1,idproperty);
@@ -140,7 +143,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_insertnumber.execute();
 
     	if (ps_descriptorvalue_number == null)
-    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number);
+    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number+onduplicate_number);
     	
     	ps_descriptorvalue_number.clearParameters();
     	ps_descriptorvalue_number.setInt(1,idproperty);
