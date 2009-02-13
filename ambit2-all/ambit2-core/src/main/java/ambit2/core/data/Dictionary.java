@@ -35,6 +35,10 @@ package ambit2.core.data;
  *
  */
 public class Dictionary extends AmbitBean {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1091010081539426004L;
 	protected String template;
 	protected String parentTemplate;
 	protected String relationship;
@@ -67,6 +71,16 @@ public class Dictionary extends AmbitBean {
 	}
 	public void setRelationship(String relationship) {
 		this.relationship = relationship;
+	}
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append(getTemplate());
+		b.append(' ');
+		b.append(getRelationship());
+		b.append(' ');
+		b.append(getParentTemplate());
+		return b.toString();
 	}
 
 	
