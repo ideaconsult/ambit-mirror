@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import ambit2.core.data.Dictionary;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.LiteratureEntry;
+import ambit2.db.SourceDataset;
 
 /**
  * <pre>
@@ -43,7 +44,16 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	 * 
 	 */
 	private static final long serialVersionUID = 3140079486695024274L;
+	protected Dictionary dictionary = new Dictionary();
 
+	@Override
+	public void setDataset(SourceDataset dataset) {
+		super.setDataset(dataset);
+		if (getDataset() != null)
+			dictionary = new Dictionary(getDataset().getName(),"Dataset");
+		else
+			dictionary = new Dictionary("Dataset","All");
+	}
 	@Override
 	protected Object getValue(IStructureRecord record, String propertyName,
 			int index) {
@@ -85,10 +95,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	@Override
 	protected Dictionary getTemplate(IStructureRecord target)
 			throws SQLException {
-		if (getDataset() != null)
-			return new Dictionary(getDataset().getName(),"Datasets");
-		else
-			return new Dictionary("Datasets","All");
+		return dictionary;
 	}
 }
 
