@@ -155,7 +155,8 @@ CREATE TABLE  `property_number` (
   KEY `Index_2` (`idvalue`,`idtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-templates
+-- --------
+-- templates
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `template`;
 CREATE TABLE  `template` (
@@ -491,7 +492,7 @@ DROP VIEW IF EXISTS `values_all`;
 create view values_all as
 SELECT idstructure,idproperty,name,null as value_string,value as value_number FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
 union
-SELECT idstructure,idproperty,name,value as value_string,null  FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype)
+SELECT idstructure,idproperty,name,value as value_string,null  FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype);
 
 -- -----------------------------------------------------
 -- templates
@@ -499,7 +500,7 @@ SELECT idstructure,idproperty,name,value as value_string,null  FROM properties j
 create view `template_view` as
 SELECT idtemplate,template.name as tname,idproperty,properties.name,idreference,units,comments 
 FROM template join template_def using(idtemplate) join properties using(idproperty) 
-order by template.idtemplate
+order by template.idtemplate;
 
 -- -----------------------------------------------------
 -- default users (guest, admin)
