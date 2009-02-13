@@ -105,12 +105,13 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 					}
 				});
 		wf.executeWith(context);
-		while (!completed) {
-
-		}
+		while (!completed) {}
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
 		Assert.assertEquals(7, structures.getRowCount());	
-		Assert.assertEquals(7, count);
+		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='Test'");
+		Assert.assertEquals(7, structures.getRowCount());	
+		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='Test'");
+		Assert.assertEquals(6, templates.getRowCount());			
 	}
 
 }
