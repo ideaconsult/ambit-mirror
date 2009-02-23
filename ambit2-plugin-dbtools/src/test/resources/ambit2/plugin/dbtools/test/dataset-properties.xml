@@ -85,15 +85,14 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <property_number idvalue="2" idtype="1" value="12.0"/>
   <property_number idvalue="3" idtype="1" value="13.0"/>
   <property_string/>
-  <property_values id="1" idproperty="1" idstructure="100215" idvalue="1" status="OK" user_name="guest"/>
-  <property_values id="2" idproperty="1" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
+  <property_values id="1" idproperty="1" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
+  <property_values id="2" idproperty="2" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
   <property_values id="3" idproperty="1" idstructure="100211" idvalue="3" status="OK" user_name="guest"/>  
   <property_tuples/>
-  <src_dataset id_srcdataset="1" name="Default" idreference="7"/>
-  <struc_dataset id_srcdataset="1" idstructure="100211"/>
-  <struc_dataset id_srcdataset="1" idstructure="100215"/>
+  <src_dataset/>
+  <struc_dataset/>
   <fp1024 idchemical="7" fp1="0" fp2="274877906944" fp3="5242896" fp4="0" fp5="0" fp6="33554432" fp7="1280" fp8="281474976710656" fp9="5368709120" fp10="2467972595799048192" fp11="0" fp12="299479479615490" fp13="6917529027641081856" fp14="562949953421312" fp15="0" fp16="0" time="0" bc="22" status="invalid"/>
   <fp1024 idchemical="10" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="274877906944" fp13="0" fp14="0" fp15="0" fp16="128" time="0" bc="2" status="invalid"/>
   <fp1024 idchemical="11" fp1="0" fp2="17594333528064" fp3="140746145400832" fp4="2305843009283162112" fp5="76561331104268288" fp6="70368744177728" fp7="0" fp8="4521191813414912" fp9="4613937822536040449" fp10="3602879701913174016" fp11="72057628397797376" fp12="1374389567488" fp13="0" fp14="4096" fp15="9663676417" fp16="524288" time="16" bc="37" status="invalid"/>
-  
+  <fp1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="70368744177664" fp16="0" time="0" bc="1" status="invalid"/>
 </dataset>
