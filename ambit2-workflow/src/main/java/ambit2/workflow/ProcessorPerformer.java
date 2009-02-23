@@ -59,13 +59,19 @@ public class ProcessorPerformer<P extends IProcessor<Target,Result>,Target,Resul
     public Result execute() throws Exception {
         if (processor == null) return null;
         try {
-            
             return processor.process(getTarget());
         } catch (AmbitException e) {
             context.put(errorTag, e);
             return null;
         }
     }
+    @Override
+    protected Target getTarget() {
+    	Target t = super.getTarget();
+        if ((t != null) && (t instanceof ParamSets))
+        	((ParamSets)t).setContext(getContext());   
+        return t;
+    }    
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ((context !=null) && (evt != null)) {
 		context.put(evt.getPropertyName(),null);
