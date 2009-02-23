@@ -56,7 +56,8 @@ public class DBWorkflowContext extends WorkflowContext {
     public static String TEMPLATES = "ambit2.workflow.DBWorkflowContext.TEMPLATES";
     public static String DESCRIPTORS = "ambit2.workflow.DBWorkflowContext.DESCRIPTORS";
     public static String ENDPOINTS = "ambit2.workflow.DBWorkflowContext.ENDPOINTS";
-    public static String REPORT = "ambit2.workflow.DBWorkflowContext.REPORT";      
+    public static String REPORT = "ambit2.workflow.DBWorkflowContext.REPORT";
+    public static String PARAMS = "ambit2.workflow.DBWorkflowContext.PARAMETERS";  
     
     
     public DataSource getDataSource() throws AmbitException {
