@@ -1,1 +1,1 @@
-mysqladmin.exe --port=33060 --user=root shutdown
+mysqladmin.exe --port=33060 -uroot shutdown

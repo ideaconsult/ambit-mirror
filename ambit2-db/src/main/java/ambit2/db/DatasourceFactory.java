@@ -31,6 +31,7 @@ package ambit2.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -168,17 +169,21 @@ public class DatasourceFactory {
     }
     public static boolean ping(LoginInfo li) {
     	Connection connection = null;
+    	Statement st = null;
     	try {
 	        String dburi = DatasourceFactory.getConnectionURI(
 	                    li.getScheme(), li.getHostname(), li.getPort(), 
 	                    li.getDatabase(), li.getUser(), li.getPassword());    	    					
 	
 	        connection = DatasourceFactory.getConnection(dburi.toString());
-
+	        st = connection.createStatement();
+	        st.execute("SELECT 1");
 	        return true;    
     	} catch (Exception x) {
+    		System.out.println(x);
     		return false;
     	} finally {
+    		if (st != null) try {st.close();} catch (Exception x) {};
             if (connection != null) try {connection.close();} catch (Exception x) {};
     	}
     }
