@@ -166,5 +166,20 @@ public class DatasourceFactory {
             String database) {
         return getConnectionURI("jdbc:mysql", hostname, port, database,null,null);
     }
-    
+    public static boolean ping(LoginInfo li) {
+    	Connection connection = null;
+    	try {
+	        String dburi = DatasourceFactory.getConnectionURI(
+	                    li.getScheme(), li.getHostname(), li.getPort(), 
+	                    li.getDatabase(), li.getUser(), li.getPassword());    	    					
+	
+	        connection = DatasourceFactory.getConnection(dburi.toString());
+
+	        return true;    
+    	} catch (Exception x) {
+    		return false;
+    	} finally {
+            if (connection != null) try {connection.close();} catch (Exception x) {};
+    	}
+    }
 }
