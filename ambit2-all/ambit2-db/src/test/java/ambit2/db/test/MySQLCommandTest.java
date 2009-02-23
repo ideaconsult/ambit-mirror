@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ambit2.core.config.Preferences;
 import ambit2.db.processors.MySQLCommand;
 
 /**
@@ -30,6 +31,9 @@ public class MySQLCommandTest {
 	 */
 	@Test
 	public void testGetInfo() {
+		Preferences.setProperty(Preferences.USER, "root");
+		Preferences.setProperty(Preferences.PORT, "33060");
+
 		MySQLCommand command = new MySQLCommand();
 		Assert.assertEquals("33060",command.getInfo().getPort());
 		Assert.assertEquals("root",command.getInfo().getUser());

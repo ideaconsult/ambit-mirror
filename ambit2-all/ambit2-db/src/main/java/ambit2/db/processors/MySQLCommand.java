@@ -43,6 +43,7 @@ public class MySQLCommand implements ICommand, Serializable {
 	/**
 	 * 
 	 */
+	public static String MYSQLCOMMAND = "ambit2.db.processors.MySQLCommand";
 	private static final long serialVersionUID = 9084470164513487836L;
 	protected COMMAND command;
     protected String startFile = "ambit2/db/windows/mysql-start.txt";
