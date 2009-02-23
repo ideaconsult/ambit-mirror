@@ -24,7 +24,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 import ambit2.core.io.MyIOUtilities;
 import ambit2.ui.ColorTableCellRenderer;
@@ -40,6 +39,7 @@ import com.microworkflow.process.CompositeActivity;
 import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
+import com.microworkflow.process.TestCondition;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.IWorkflowListenerUI;
 import com.microworkflow.ui.WorkflowTools;
@@ -53,7 +53,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     protected boolean animate = true;
     protected JTextArea status;
     protected String title="Workflow";
-    protected ImageIcon ptr, executed, notyet, conditional, composite;
+    protected ImageIcon ptr, executed, notyet, conditional, composite, yes, no;
 
     /**
      * 
@@ -83,11 +83,21 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     		}  
         
         try {
-            conditional =  Utils.createImageIcon("images/arrow_divide.png");
+            conditional =  Utils.createImageIcon("images/help.png");
             } catch (Exception e) {
             	conditional  = null;
     		}  
-
+            
+        try {
+            yes =  Utils.createImageIcon("images/accept.png");
+            } catch (Exception e) {
+          	yes  = null;
+        }  
+        try {
+            no =  Utils.createImageIcon("images/exclamation.png");
+            } catch (Exception e) {
+          	no  = null;
+        }  
             
 
         wftm = new WorkflowTableModel(null) {
@@ -111,9 +121,13 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
                				return (((Primitive)a).hasExecuted()) ? executed : notyet;
 	               		else if (a instanceof CompositeActivity)
 	               			return composite;
-	               		else if (a instanceof Conditional)	    
-	               			return conditional;
-	               		else
+	               		else if (a instanceof Conditional)	{    
+	               			TestCondition test = ((Conditional)a).getTestCondition();
+	               			if (test.hasExecuted())
+	               				return test.getResult() ? yes : no;
+	               			else
+	               				return conditional;
+	               		} else
 	               			return null;
 	
                 case 1:
