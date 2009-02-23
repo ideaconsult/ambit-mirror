@@ -1,8 +1,6 @@
 package ambit2.plugin.dbtools;
 
 import ambit2.core.config.Preferences;
-import ambit2.db.DatasourceFactory;
-import ambit2.db.LoginInfo;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.db.processors.MySQLShell;
 import ambit2.workflow.DBWorkflowContext;
@@ -10,21 +8,18 @@ import ambit2.workflow.ProcessorPerformer;
 
 import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.TestCondition;
 import com.microworkflow.process.Workflow;
 
-/**
- * Starts and stops local MySQL server. 
- * @author nina
- *
- */
-public class MysqlServerLauncher extends Workflow {
-	
-	public MysqlServerLauncher() {
+public class MySQLServerStop extends Workflow {
+	public MySQLServerStop() {
 		Preferences.setProperty(Preferences.USER,"guest");
 		Preferences.setProperty(Preferences.PASSWORD,"guest");
-       
-    	Primitive<MySQLCommand,MySQLCommand> start = new Primitive<MySQLCommand,MySQLCommand>( 
+        Sequence seq=new Sequence();
+        seq.setName("MySQL server");     
+        
+    	Primitive<MySQLCommand,MySQLCommand> stop = new Primitive<MySQLCommand,MySQLCommand>( 
     			MySQLCommand.MYSQLCOMMAND,
     			MySQLCommand.MYSQLCOMMAND,
     			new ProcessorPerformer<MySQLShell, MySQLCommand,MySQLCommand>(
@@ -34,35 +29,39 @@ public class MysqlServerLauncher extends Workflow {
     					MySQLCommand cmd = getTarget();
     					if (cmd == null)
     						cmd = new MySQLCommand();
-   						cmd.setCommand(MySQLCommand.COMMAND.START);
+   						cmd.setCommand(MySQLCommand.COMMAND.STOP);
    						context.put(MySQLCommand.MYSQLCOMMAND,cmd);
-    					cmd =  super.execute();
+      					cmd =  super.execute();
     					if (cmd.getException() != null)
     						context.put(DBWorkflowContext.ERROR, cmd.getException());
     					else
-    						context.put(DBWorkflowContext.BATCHSTATS, "MySQL started");
-
+    						context.put(DBWorkflowContext.BATCHSTATS, "MySQL server stopped");    						
     					return cmd;
     				}
     			}
     			);
-        start.setName("Start MySQL");    
+        stop.setName("Stop MySQL");       
         
-        Conditional connected = new Conditional(
+        Conditional canStop = new Conditional(
                 new TestCondition() {
                     public boolean evaluate() {
-	    				LoginInfo li = new LoginInfo();
-	    				li.setPort("33060");
-	    				li.setUser("guest");
-	    				li.setPassword("guest");
-                        return DatasourceFactory.ping(li);
+                    	
+    					Object target = context.get(MySQLCommand.MYSQLCOMMAND);
+    					if (target != null) {
+    						MySQLCommand mc = (MySQLCommand) target;
+    						if (mc.getProcess()!=null) {
+    							mc.setCommand(MySQLCommand.COMMAND.STOP);	
+    							return true;
+    						} 
+    					}
+    					context.put(DBWorkflowContext.ERROR, "MySQL has been started outside of AMBIT. Unable to stop MySQL server.");
+    					return false;
                     }
                 }, 
-                null,
-                start);
-        connected.setName("Is MySQL running already?");
-        
-        setDefinition(connected);
+                stop,
+                null
+                );
+        canStop.setName("Was MySQL started by AMBIT XT?");
+        setDefinition(canStop);        
 	}
-	
 }

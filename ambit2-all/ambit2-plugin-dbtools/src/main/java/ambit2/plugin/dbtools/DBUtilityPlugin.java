@@ -67,7 +67,8 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start/Stop local MySQL database server","images/mysql.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start local MySQL database server","images/mysql_start.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MySQLServerStop","MySQL","Stop local MySQL database server","images/mysql1.png"));		
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
@@ -82,7 +83,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
-		getWorkflowContext().put(MysqlServerLauncher.MYSQLCOMMAND, new MySQLCommand());
+		getWorkflowContext().put(MySQLCommand.MYSQLCOMMAND, new MySQLCommand());
 	}
 	public List<ClassHolder> getWorkflows() {
 		return workflows;
