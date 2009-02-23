@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import ambit2.core.data.IStructureRecord;
+import ambit2.core.data.LiteratureEntry;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.FileInputState;
@@ -31,7 +32,7 @@ import com.microworkflow.process.Workflow;
 public class ImportWorkflow extends Workflow {
 
 	public ImportWorkflow()  {
-		SourceDataset dataset = new SourceDataset("Test");
+		SourceDataset dataset = new SourceDataset("Default");
 		
         Sequence seq=new Sequence();
         seq.setName("[Import chemical structures]");    	
@@ -87,35 +88,44 @@ public class ImportWorkflow extends Workflow {
 			}
         };
         
-        RepositoryWriter writer = new RepositoryWriter();
+        final RepositoryWriter writer = new RepositoryWriter();
         writer.setDataset(dataset);
-        ProcessorsChain<String, IBatchStatistics,IProcessor> chain = 
+        final ProcessorsChain<String, IBatchStatistics,IProcessor> chain = 
         		new ProcessorsChain<String, IBatchStatistics,IProcessor>();
         chain.add(processor);
         chain.add(writer);
 
-        
-        BatchDBProcessor batch = new BatchDBProcessor();
+        final BatchDBProcessor batch = new BatchDBProcessor();
         batch.setProcessorChain(chain);
     	ActivityPrimitive<IInputState,IBatchStatistics> p1 = 
     		new ActivityPrimitive<IInputState,IBatchStatistics>( 
     			InputFileSelection.INPUTFILE,
     			DBWorkflowContext.BATCHSTATS,
-    			(IDBProcessor)batch,false);
+    			(IDBProcessor)batch,false) {
+    		
+    	};
 
         p1.setName("Read file and import structures");
         
         Sequence s1 = new Sequence();
-        Primitive p2 = new Primitive<FileInputState, SourceDataset> (new Performer<FileInputState, SourceDataset>() {
+        Primitive<FileInputState, SourceDataset> p2 = new Primitive<FileInputState, SourceDataset> (
+        				InputFileSelection.INPUTFILE,
+        				DBWorkflowContext.DATASET,
+        				new Performer<FileInputState, SourceDataset>() {
         	public SourceDataset execute() throws Exception {
-        			return new SourceDataset(getTarget().getFilename());
+        			SourceDataset dataset = 
+        						new SourceDataset(getTarget().getFile().getName(),
+        						new LiteratureEntry(getTarget().getFilename(),"file"));
+        			writer.setDataset(dataset);
+        			return dataset;
         	};
         }
         );
         s1.addStep(p2);
         s1.addStep(new DatasetSelection(p1,dataset));
-        
-//        DbSrcDatasetWriter TODO
+
         setDefinition(new LoginSequence(new InputFileSelection(s1)));
+
 	}
+
 }

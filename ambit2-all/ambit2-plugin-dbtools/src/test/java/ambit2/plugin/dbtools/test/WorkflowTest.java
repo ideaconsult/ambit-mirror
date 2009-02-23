@@ -19,6 +19,7 @@ public abstract class WorkflowTest<W extends Workflow> extends DbUnitTest {
 	
 	@Before
 	public void setUp() throws Exception {
+		super.setUp();
 		context = new DBWorkflowContext();
 		contextListener = new SilentWorkflowListener(null);
 		Vector<String> props = new Vector<String>();

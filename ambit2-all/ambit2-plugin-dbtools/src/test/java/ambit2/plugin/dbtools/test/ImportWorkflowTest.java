@@ -77,13 +77,12 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 		li.setUser(getUser());
 		li.setPassword(getUser());
 
-		context.put(DBWorkflowContext.LOGININFO, li);
-		context
-				.put(InputFileSelection.INPUTFILE,
-					 new FileInputState("src/test/resources/ambit2/plugin/dbtools/test/sdf/test.sdf"));
-		context.put(DBWorkflowContext.DATASET, new SourceDataset(
-				"TEST-INPUTWORKFLOW"));
 		ImportWorkflow wf = getWorkflow();
+		context.put(DBWorkflowContext.LOGININFO, li);
+		context.put(InputFileSelection.INPUTFILE,
+					 new FileInputState("src/test/resources/ambit2/plugin/dbtools/test/sdf/test.sdf"));
+
+		
 
 		wf.addPropertyChangeListener(new WorkflowListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -92,6 +91,7 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 
 			}
 		});
+;
 		completed = false;
 
 		context.addPropertyChangeListener(BatchProcessor.PROPERTY_BATCHSTATS,
@@ -108,9 +108,9 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 		while (!completed) {}
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
 		Assert.assertEquals(7, structures.getRowCount());	
-		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='Test'");
+		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='test.sdf'");
 		Assert.assertEquals(7, structures.getRowCount());	
-		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='Test'");
+		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='test.sdf'");
 		Assert.assertEquals(6, templates.getRowCount());			
 	}
 
