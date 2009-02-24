@@ -34,11 +34,6 @@
     	<version>2.1.4</version>
     </dependency>
     <dependency>
-    	<groupId>ambit</groupId>
-    	<artifactId>nplugins</artifactId>
-    	<version>1.0</version>
-    </dependency>
-    <dependency>
     	<groupId>jasperreports</groupId>
     	<artifactId>jasperreports</artifactId>
     	<version>3.1.0</version>
