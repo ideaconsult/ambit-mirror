@@ -29,7 +29,7 @@
 -->
 <project basedir="../" default="all" name="nplugins">
 
-	<property name="version" value="1.0" />
+	<property name="version" value="1.0.1" />
     <!-- compile options -->
      <property name="build.sysclasspath" value="ignore" />
      <property name="build.compiler" value="modern" />
@@ -41,7 +41,7 @@
 
     <property name="dist" value="dist" />
     <property name="sourcedist.dir" value="sourcedist" />
-    <property name="appdist.dir" value ="${dist}/nplugins-v${version}" />
+    <property name="appdist.dir" value ="${dist}/nplugins-${version}" />
 
     <property name="src" value="src" />
     <property name="ant" value="ant" />
@@ -104,7 +104,7 @@
 	</target>
 
     <target id="dist" name="dist" depends="build">
-    <jar jarfile="${appdist.dir}/bin/nplugins.jar" compress="true"
+    <jar jarfile="${appdist.dir}/bin/nplugins-${version}.jar" compress="true"
 		manifest="${src}/nplugins/core/MANIFEST.MFT" >
 	<fileset dir="${build}">
 		<includesfile name="${src}/nplugins.classes" />
@@ -131,7 +131,7 @@
 
 
 			<echo message="Using ${keystore}"/>
-   		 <signjar	jar="${appdist.dir}/bin/nplugins.jar"
+   		 <signjar	jar="${appdist.dir}/bin/nplugins-${version}.jar"
    						keystore="${keystore}"
    						alias="${alias}" storepass="${storepass}"
    						keypass="${storepass}"
@@ -256,13 +256,13 @@
 
 	<target id="help" name="help" >
         <echo message="Usage::" />
-        <echo message="ant all (default) - compiles and builds everything. The distribution is in dist/nplugins-v${version} folder. " />
+        <echo message="ant all (default) - compiles and builds everything. The distribution is in dist/nplugins-${version} folder. " />
         <echo message="ant appdist       - builds binary and source distribution (included in default build)" />
         <echo message="ant srcdist       - builds only source distribution (included in default build)" />
         <echo message="ant plugin-demo   - builds demo plugin (not included in default build)" />
         <echo message="ant clean         - deletes compiled classes" />
         <echo message="ant help          - this screen" />
-        <echo message="ant -buildfile javadoc.xml  - builds javadoc (to be found in dist/nplugins-v${version}/doc folder" />
+        <echo message="ant -buildfile javadoc.xml  - builds javadoc (to be found in dist/nplugins-${version}/doc folder" />
         </target>
 
     <target id="checkPlatforms" name="checkPlatforms">

@@ -77,13 +77,13 @@ import com.jgoodies.looks.Options;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2008-12-4
  */
-public class NPluginsApplication implements PropertyChangeListener {
+public abstract class NPluginsApplication implements PropertyChangeListener {
 	final static String LOOKANDFEEL = "System"; //"System";
 	final static String THEME = "Ocean";
 	protected static String[] cmdOpts = null;
     private final INPApplicationContext applicationContext;
     private NanoPluginsManager pluginsManager;
-    protected static Logger logger = Logger.getLogger("nplugins.application.NPluginsApplication");
+    protected static Logger logger = Logger.getLogger("nplugins.shell.application.NPluginsApplication");
     
     protected final SimpleInternalFrame rightPanel;
     protected final SimpleInternalFrame leftPanel;
@@ -206,18 +206,8 @@ public class NPluginsApplication implements PropertyChangeListener {
 	protected NanoPluginsManager createManager() {
 	    return new NanoPluginsManager();
 	}
-	protected void addPlugins(NanoPluginsManager manager) {
-		try {
-			manager.addPackage("nplugins.demo.DemoPlugin");
-			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"1"},"Demo",null);
-			manager.addPackage("nplugins.demo.DemoPlugin",new String[] {"2"},"Demo",null);
-			manager.addPackage("nplugins.workflow.MWorkflowPlugin",new String[] {"2"},"MWorkflow",null);
-			
-		} catch (Exception x) {
-            x.printStackTrace();
-			logger.severe(x.getMessage());
-		}		
-	}
+	protected abstract void addPlugins(NanoPluginsManager manager) ;	
+
 	protected JComponent createMainPanel(Component parent) {
         JSplitPane mainpane = UIFSplitPane.createStrippedSplitPane(
 
@@ -304,27 +294,41 @@ public class NPluginsApplication implements PropertyChangeListener {
 			private static final long serialVersionUID = -9037830763076468481L;
 
 			public void actionPerformed(ActionEvent arg0) {
-        		Package jcpPackage = Package.getPackage("nplugins.core");
+				Package jcpPackage = getClass().getPackage();
         		//version will be only available if started from jar file
         		//version is specified in package manifest 
         		// See MANIFESTAPP.MFT file
+				String title = jcpPackage.getImplementationTitle();
+				if (title == null)
+					title = getClass().getName();
         		String version = jcpPackage.getImplementationVersion();
-        		
+        		if (version == null)
+        			version = " ";
+        		else version = " v"+version;
+        		String vendor = jcpPackage.getImplementationVendor();
+        		if (vendor == null)
+        			vendor = "http://ambit.sourceforge.net";
         		ImageIcon icon  = null;
         		try {
         			icon = createImageIcon();
         		} catch (Exception x) {
         			icon =null;
         		}
-        		String m = "<html>shell v" + version +  
-				"<br>Developed by <font color='#0000FF'><u>http://ambit.acad.bg</u></font><br>e-mail <u>nina@acad.bg</u><br></html>";
-        		JLabel logo = new JLabel(m,icon,SwingConstants.CENTER);
+        		StringBuilder builder = new StringBuilder();
+        		builder.append("<html>");
+        		builder.append(title);
+
+        		builder.append(version);
+        		builder.append("<br>Developed by <font color='#0000FF'><u>");
+        		builder.append(vendor);
+        		builder.append("</u></font></html>");
+        		JLabel logo = new JLabel(builder.toString(),icon,SwingConstants.CENTER);
         		logo.setToolTipText("Click here to go to ambit site");
         		logo.addMouseListener(new MouseAdapter(){
         			@Override
 					public void mouseClicked(MouseEvent arg0) {
         				super.mouseClicked(arg0);
-        				//openURL("http://ambit.acad.bg");
+        				Utils.openURL(getAppURL());
         			}
         		});        		
         		JOptionPane.showMessageDialog(mainFrame,logo,"About",JOptionPane.PLAIN_MESSAGE);
@@ -334,6 +338,9 @@ public class NPluginsApplication implements PropertyChangeListener {
  
     	return menu;
         
+    }
+    protected String getAppURL() {
+    	return "http://ambit.sourceforge.net";
     }
 
     protected boolean canClose() {
@@ -423,7 +430,13 @@ public class NPluginsApplication implements PropertyChangeListener {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
-                new NPluginsApplication("Nano plugins",800,800,args);
+                new NPluginsApplication("Nano plugins",800,800,args) {
+                	@Override
+                	protected void addPlugins(NanoPluginsManager arg0) {
+                		// TODO Auto-generated method stub
+                		
+                	}
+                };
             }
         });
    }

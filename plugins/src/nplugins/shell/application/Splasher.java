@@ -39,7 +39,7 @@ public class Splasher {
 
     public static void main(String[] args) {
         SplashWindow.splash(Splasher.class.getResource("/ambit2/ui/images/splash.png"));
-        SplashWindow.invokeMain("ambit2.applications.dbadmin.AmbitDatabase", args);
+        SplashWindow.invokeMain("nplugins.shell.application.NPluginsApplication", args);
         SplashWindow.disposeSplash();
     }
 
