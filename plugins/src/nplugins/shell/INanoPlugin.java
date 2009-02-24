@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package nplugins.shell;
 
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
@@ -41,7 +42,7 @@ import javax.swing.JComponent;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> July 3, 2008
  */
-public interface INanoPlugin extends PropertyChangeListener, Comparable<INanoPlugin> {
+public interface INanoPlugin extends PropertyChangeListener, Comparable<INanoPlugin>, Serializable {
 	
 	INPApplicationContext getApplicationContext();
 	

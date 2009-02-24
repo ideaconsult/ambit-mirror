@@ -26,6 +26,11 @@ package nplugins.shell;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.Hashtable;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -61,9 +66,15 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	protected PluginsPackageEntries packageEntries = null;
     protected INanoPlugin thePlugin = null;
     public static final String property_plugin = "plugin";
+    protected  IPluginsStorage storage;
     
-    
-    public NanoPluginsManager() {
+    public IPluginsStorage getStorage() {
+		return storage;
+	}
+	public void setStorage(IPluginsStorage storage) {
+		this.storage = storage;
+	}
+	public NanoPluginsManager() {
        this(true,null);
     }    
     /**
@@ -78,6 +89,7 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
          
 			logger.severe(x.getMessage());
 		}
+		storage = new MemStorage();
 	}
 	public void init(boolean load,String pref_key) throws NPluginsException {
 	    if (pref_key != null)
@@ -221,16 +233,16 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
         return thePlugin;
     }
     public synchronized void setThePlugin(INanoPlugin thePlugin) {
-    	System.out.println(thePlugin);
         if (this.thePlugin == thePlugin) return;
         firePropertyChange(property_plugin,this.thePlugin,thePlugin);
         
-        //if (this.thePlugin != null)
-          //  this.thePlugin.clear();
+        if (this.thePlugin != null)
+        	storage.savePlugin(this.thePlugin);
         this.thePlugin = thePlugin;
         
         logger.info("Set plugin " + thePlugin);
     }
+   
     public synchronized String[] getCmd_args() {
         return cmd_args;
     }

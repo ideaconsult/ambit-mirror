@@ -29,6 +29,8 @@
 
 package nplugins.shell;
 
+import java.io.Serializable;
+
 import nplugins.core.NPluginsException;
 import nplugins.shell.application.TaskMonitor;
 
@@ -66,7 +68,7 @@ import nplugins.shell.application.TaskMonitor;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Jul 5, 2008
  */
-public interface INPApplicationContext {
+public interface INPApplicationContext extends Serializable {
     TaskMonitor getTaskMonitor();
     Object getBean(String id) throws NPluginsException;
 }

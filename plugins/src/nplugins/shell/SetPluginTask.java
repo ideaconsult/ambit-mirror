@@ -68,7 +68,9 @@ public class SetPluginTask implements Task<INanoPlugin,Void> {
                 return (INanoPlugin)thePlugin;                
             } else {
                 logger.fine("Creating object from "+plugin);
-                Object thePlugin = plugin.createObject();
+                Object thePlugin  = manager.getStorage().restorePlugin(plugin);
+                if (thePlugin == null)
+                	thePlugin = plugin.createObject();
                 if (thePlugin instanceof INanoPlugin) {
                 	((INanoPlugin)thePlugin).setApplicationContext(manager.getApplicationContext());
                     ((INanoPlugin)thePlugin).setParameters(plugin.getParameters());
