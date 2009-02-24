@@ -26,6 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -53,14 +54,16 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	protected IMultiWorkflowsPlugin plugin;
     private IndirectListModel<ClassHolder> listModel;
     private JList       objectList;	
+    protected Action action;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2128986015636595519L;
 
 
-	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin) {
+	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin,Action action) {
 	        super(new BorderLayout());
+	        this.action = action;
 	        setBackground(Color.white);
 	        setPlugin(plugin);	        
 	        setObject(plugin.getWorkflows());
@@ -112,8 +115,17 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	
 	protected void runWorkflow(ClassHolder clazz) throws Exception  {
 		Object o = Introspection.loadCreateObject(clazz.getClazz()); 
-		if ( o instanceof Workflow) 
+		if ( o instanceof Workflow) {
 			plugin.getWorkflow().setDefinition(((Workflow) o).getDefinition());
+			try {
+				action.setEnabled(false);
+				action.actionPerformed(null);
+			} catch (Exception x) {
+				throw new Exception(x);
+			} finally {
+				action.setEnabled(true);
+			}
+		}
 	}
 	public Component getComponent() {
 		return this;

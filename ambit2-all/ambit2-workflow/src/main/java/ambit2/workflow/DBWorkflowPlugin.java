@@ -39,7 +39,17 @@ import com.microworkflow.process.WorkflowContext;
 
 public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	
+	protected NPluginsAction<WorkflowContext,Void> runAction = null;
 	
+	protected NPluginsAction<WorkflowContext,Void> getAction() {
+		if (runAction == null) {
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+		    runAction =  new NPluginsAction<WorkflowContext,Void>(
+		             task,"Run",null);
+		    runAction.setTaskMonitor(getApplicationContext().getTaskMonitor());				
+		}
+		return runAction;
+	}
 	
 	@Override
 	protected WorkflowContext createWorkflowContext() {
@@ -47,11 +57,8 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	}
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {
-			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
-		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
-		             task,"Run",null);
-		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
-			optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,action)};
+		
+			optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
 		}
 		return optionsComponent;
 	}	
