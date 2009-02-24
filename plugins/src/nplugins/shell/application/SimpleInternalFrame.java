@@ -231,9 +231,11 @@ public class SimpleInternalFrame extends JPanel {
     public void setContent(Component newContent) {
         Component oldContent = getContent();
         if (hasContent()) {
+        	
             remove(oldContent);
         }
-        add(newContent, BorderLayout.CENTER);
+        if (newContent != null)
+        	add(newContent, BorderLayout.CENTER);
         firePropertyChange("content", oldContent, newContent);
     }
     

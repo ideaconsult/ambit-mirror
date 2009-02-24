@@ -24,12 +24,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package nplugins.shell;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import nplugins.core.PluginPackageEntry;
 
 
-public class PluginsManagerPanel extends PluginMainPanel<NanoPluginsManager> {
-
+public class PluginsManagerPanel extends PluginMainPanel<NanoPluginsManager>  {
+	//protected PackageEntryPanel pkgPanel;
+	protected PluginsIndexPanel pluginsPanel;
 	/**
 	 * 
 	 */
@@ -37,41 +40,29 @@ public class PluginsManagerPanel extends PluginMainPanel<NanoPluginsManager> {
 
 	public PluginsManagerPanel(NanoPluginsManager model) {
 		super(model);
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
 	protected void addWidgets() {
-		add(new JScrollPane(new JTextArea(getPlugin().toString())));
-		//JButton actionButton = new JButton(actionMap().get("blockAction"));
+		/*
+		pkgPanel = new PackageEntryPanel();
+		add(pkgPanel);
+		*/
+		pluginsPanel = new PluginsIndexPanel(getPlugin().packageEntries) {
+			protected PluginPackageEntry selectEntry(int row) {
+				return ((NanoPluginsManager)getPlugin()).selectPackageEntry(super.selectEntry(row));
+			}			
+		};
+		add(pluginsPanel);
 
 	}
-
-    /* Progress is interdeterminate for the first 150ms, then
-
-    private class LoadPluginTask extends Task<INanoPlugin, PluginsPackageEntries> {
-    	LoadPluginTask() {
-            super(Application.getInstance());
-            setUserCanCancel(true);
-        }
-	@Override protected INanoPlugin doInBackground() throws InterruptedException {
-	    for(int i = 0; i < 50; i++) {
-		setMessage("Working... [" + i + "]");
-		Thread.sleep(150L);
-		setProgress(i, 0, 49);
-	    }
-	    Thread.sleep(150L);
-            return null;
+	/*
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getNewValue() instanceof PluginPackageEntry) {
+			//pkgPanel.setEntry((PluginPackageEntry)evt.getNewValue());
+		}
+		
 	}
-	
-	@Override protected void succeeded(INanoPlugin ignored) {
-	    setMessage("Done");
-	}
-	@Override protected void cancelled() {
-	    setMessage("Canceled");
-	}
-
-    
-    }
-     */	
+	*/
 }

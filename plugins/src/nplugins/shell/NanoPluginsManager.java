@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package nplugins.shell;
 
+import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -33,6 +34,11 @@ import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import sun.security.action.GetBooleanAction;
 
 import nplugins.core.Introspection;
 import nplugins.core.NPluginsException;
@@ -85,7 +91,9 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	}
 
 	public JComponent[] createDetailsComponent() {
-		return new JComponent[] {new JLabel("test")};
+		PackageEntryPanel pkgPanel =  new PackageEntryPanel();
+		addPropertyChangeListener("PluginPackageEntry",pkgPanel);
+		return new JComponent[] {pkgPanel};
 	}
 
 	public PluginMainPanel createMainComponent() {
@@ -93,10 +101,26 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	}
 
 	public JComponent[] createOptionsComponent() {
-
-		return new JComponent[] {new JLabel("test1"),new JLabel("test2")};
+		JPanel welcome = new JPanel(new BorderLayout()) {
+			@Override
+			public String toString() {
+				return "About";
+			}
+		};
+		JTextArea text = new JTextArea(getHelp());
+		text.setBorder(null);
+		text.setBackground(welcome.getBackground());
+		text.setEditable(false);
+		
+		welcome.add(new JLabel(getLogo()),BorderLayout.NORTH);
+		welcome.add(new JScrollPane(text),BorderLayout.CENTER);
+		return new JComponent[] {welcome};
+	
 	}
-
+	protected PluginPackageEntry selectPackageEntry(PluginPackageEntry entry) {
+		firePropertyChange("PluginPackageEntry",null,entry);
+		return entry;
+	}
 	public ActionMap getActions() {
         String group = "toolbar";
         ActionMap map = new ActionMap();
@@ -149,11 +173,13 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	public String toString() {
         StringBuffer b = new StringBuffer();
         b.append("Available plugins " + size());
+        /*
         if (packageEntries != null)
             for (int i=0; i < packageEntries.size();i++) {
                 b.append(packageEntries.get(i).toString());
                 b.append('\n');
             }
+            */
         return b.toString();
 	}
 	public int size() {
@@ -185,17 +211,24 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	public ImageIcon getIcon() {
 		return Utils.createImageIcon("nplugins/shell/resources/plugin_edit.png");
 	}
+	public ImageIcon getLogo() {
+		return getIcon();
+	}	
+	public String getHelp() {
+		return "Welcome";
+	}
     public synchronized INanoPlugin getThePlugin() {
         return thePlugin;
     }
     public synchronized void setThePlugin(INanoPlugin thePlugin) {
+    	System.out.println(thePlugin);
         if (this.thePlugin == thePlugin) return;
         firePropertyChange(property_plugin,this.thePlugin,thePlugin);
         
-        if (this.thePlugin != null)
-            this.thePlugin.clear();
+        //if (this.thePlugin != null)
+          //  this.thePlugin.clear();
         this.thePlugin = thePlugin;
-
+        
         logger.info("Set plugin " + thePlugin);
     }
     public synchronized String[] getCmd_args() {

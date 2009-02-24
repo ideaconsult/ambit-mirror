@@ -294,18 +294,18 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
 			private static final long serialVersionUID = -9037830763076468481L;
 
 			public void actionPerformed(ActionEvent arg0) {
-				Package jcpPackage = getClass().getPackage();
+				Package pkg = getPackage();
         		//version will be only available if started from jar file
         		//version is specified in package manifest 
         		// See MANIFESTAPP.MFT file
-				String title = jcpPackage.getImplementationTitle();
+				String title = pkg.getImplementationTitle();
 				if (title == null)
 					title = getClass().getName();
-        		String version = jcpPackage.getImplementationVersion();
+        		String version = pkg.getImplementationVersion();
         		if (version == null)
         			version = " ";
         		else version = " v"+version;
-        		String vendor = jcpPackage.getImplementationVendor();
+        		String vendor = pkg.getImplementationVendor();
         		if (vendor == null)
         			vendor = "http://ambit.sourceforge.net";
         		ImageIcon icon  = null;
@@ -446,17 +446,23 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     }	
 
     public String getTitle() {
-		Package jcpPackage = Package.getPackage("nplugins.application");
+		Package pkg = getPackage();
 		//version will be only available if started from jar file
 		//version is specified in package manifest 
 		// See MANIFESTAPP.MFT file
-		if (jcpPackage != null) {
-			String version = jcpPackage.getImplementationVersion();
-			String title = jcpPackage.getImplementationTitle();
+		if (pkg != null) {
+			String version = pkg.getImplementationVersion();
+			String title = pkg.getImplementationTitle();
 			if ((version != null) && (title != null)) return title+version;
     	}
 		return "Nano Plugins shell";
     	
+    }
+    protected Package getPackage() {
+    	Package pkg =  Package.getPackage("nplugins.shell.application");
+    	if (pkg == null) 
+    		return getClass().getPackage();
+    	return pkg;
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
