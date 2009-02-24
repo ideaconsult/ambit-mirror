@@ -128,6 +128,6 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
-		return super.createDetailsComponent();
+		return null;
 	}
 }
