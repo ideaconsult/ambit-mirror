@@ -351,7 +351,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     		status.setText(status.getText()+message + ((Exception)value).getMessage()+"\n");
     	else
     		status.setText(status.getText()+message + value.toString()+"\n");
-    	
+    	repaint();
     }
         public synchronized boolean isAnimate() {
             return animate;
