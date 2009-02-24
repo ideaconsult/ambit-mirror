@@ -79,13 +79,16 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		return new CategoryBuildingWorkflow();
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
-	    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
-		Vector<String> p = new Vector<String>();
-		p.add(DBWorkflowContext.STOREDQUERY);
-		p.add(DBWorkflowContext.ERROR);
-		results.setProperties(p);
-		results.setAnimate(true);
-		return results;
+		if (mainComponent == null) {
+		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
+			Vector<String> p = new Vector<String>();
+			p.add(DBWorkflowContext.STOREDQUERY);
+			p.add(DBWorkflowContext.ERROR);
+			results.setProperties(p);
+			results.setAnimate(true);
+			mainComponent = results;
+		} 
+		return mainComponent;
 	}
 	public ImageIcon getIcon() {
 	    return Utils.createImageIcon("ambit2/plugin/analogs/images/molecule_16.png");

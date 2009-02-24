@@ -48,13 +48,16 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
-		Vector<String> p = new Vector<String>();
-		p.add(DBWorkflowContext.STOREDQUERY);
-		p.add(DBWorkflowContext.ERROR);
-		results.setProperties(p);
-		results.setAnimate(true);
-		return results;
+		if (mainComponent == null) {
+			QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
+			Vector<String> p = new Vector<String>();
+			p.add(DBWorkflowContext.STOREDQUERY);
+			p.add(DBWorkflowContext.ERROR);
+			results.setProperties(p);
+			results.setAnimate(true);
+			mainComponent = results;
+		} 
+		return mainComponent;
 	}
 
 	public ImageIcon getIcon() {

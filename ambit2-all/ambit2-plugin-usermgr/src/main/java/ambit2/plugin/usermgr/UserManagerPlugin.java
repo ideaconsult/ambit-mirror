@@ -73,24 +73,29 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		return new MultiWorkflowsPanel<UserManagerPlugin>(this);
+		if (mainComponent == null) 
+			mainComponent = new MultiWorkflowsPanel<UserManagerPlugin>(this);
+		return mainComponent;
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
-		JComponent[] c = super.createDetailsComponent();
-		/*
-		 * smt weird happen if passing workflow at constructor - workflows can't be run!
-		 */
-		WorkflowConsolePanel reports = new WorkflowConsolePanel();
-		//WorkflowConsolePanel reports = new WorkflowConsolePanel(getWorkflow());
-		reports.setWorkflowContext(getWorkflowContext());
-
-		Vector<String> props = new Vector<String>();	
-		props.add(DBWorkflowContext.LOGININFO);
-		props.add(DBWorkflowContext.DATASET);
-		props.add(DBWorkflowContext.ERROR);
-		reports.setProperties(props);
-		return new JComponent[] {reports,c[0]};
+		if (detailsComponent == null) {
+			JComponent[] c = super.createDetailsComponent();
+			/*
+			 * smt weird happen if passing workflow at constructor - workflows can't be run!
+			 */
+			WorkflowConsolePanel reports = new WorkflowConsolePanel();
+			//WorkflowConsolePanel reports = new WorkflowConsolePanel(getWorkflow());
+			reports.setWorkflowContext(getWorkflowContext());
+	
+			Vector<String> props = new Vector<String>();	
+			props.add(DBWorkflowContext.LOGININFO);
+			props.add(DBWorkflowContext.DATASET);
+			props.add(DBWorkflowContext.ERROR);
+			reports.setProperties(props);
+			detailsComponent = new JComponent[] {reports,c[0]};
+		}
+		return detailsComponent;
 	}	
 	
 	public ImageIcon getIcon() {
