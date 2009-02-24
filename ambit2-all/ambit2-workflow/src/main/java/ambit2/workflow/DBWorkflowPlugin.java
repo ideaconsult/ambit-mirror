@@ -46,28 +46,34 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 		return new DBWorkflowContext();
 	}
 	public JComponent[] createOptionsComponent() {
-		ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
-	    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
-	             task,"Run",null);
-	    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
-		return new JComponent[] {new WorkflowViewPanel(workflow,action)};
+		if (optionsComponent == null) {
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+		             task,"Run",null);
+		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
+			optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,action)};
+		}
+		return optionsComponent;
 	}	
 	@Override
 	public JComponent[] createDetailsComponent() {
-		JComponent[] c = super.createDetailsComponent();
-		/*
-		 * smt weird happen if passing workflow at constructor - workflows can't be run!
-		 */
-		WorkflowConsolePanel reports = new WorkflowConsolePanel();
-		reports.setWorkflowContext(getWorkflowContext());
-		Vector<String> props = new Vector<String>();	
-		props.add(DBWorkflowContext.LOGININFO);
-		props.add(DBWorkflowContext.DATASET);
-		props.add(DBWorkflowContext.ERROR);
-		props.add(DBWorkflowContext.BATCHSTATS);
-        props.add(BatchProcessor.PROPERTY_BATCHSTATS);		
-		reports.setProperties(props);
-		return new JComponent[] {reports};
+		if (detailsComponent == null) {
+			JComponent[] c = super.createDetailsComponent();
+			/*
+			 * smt weird happen if passing workflow at constructor - workflows can't be run!
+			 */
+			WorkflowConsolePanel reports = new WorkflowConsolePanel();
+			reports.setWorkflowContext(getWorkflowContext());
+			Vector<String> props = new Vector<String>();	
+			props.add(DBWorkflowContext.LOGININFO);
+			props.add(DBWorkflowContext.DATASET);
+			props.add(DBWorkflowContext.ERROR);
+			props.add(DBWorkflowContext.BATCHSTATS);
+	        props.add(BatchProcessor.PROPERTY_BATCHSTATS);		
+			reports.setProperties(props);
+			detailsComponent =  new JComponent[] {reports};
+		}
+		return detailsComponent;
 	}	
 
 }
