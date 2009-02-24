@@ -68,7 +68,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start local MySQL database server","images/mysql_start.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MySQLServerStop","MySQL","Stop local MySQL database server","images/mysql1.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MySQLServerStop","MySQL","Stop local MySQL database server","images/mysql_stop.png"));		
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
@@ -99,7 +99,9 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		return new MultiWorkflowsPanel<DBUtilityPlugin>(this);
+		if (mainComponent == null)
+			mainComponent = new MultiWorkflowsPanel<DBUtilityPlugin>(this);
+		return mainComponent;
 	}
 
 	public ImageIcon getIcon() {
@@ -135,11 +137,14 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	}
 	
 	public JComponent[] createOptionsComponent() {
-		ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
-	    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
-	             task,"Run",null);
-	    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
-		return new JComponent[] {new WorkflowViewPanel(workflow,action)};
+		if (optionsComponent == null) {
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+		             task,"Run",null);
+		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
+			optionsComponent = new JComponent[] {new WorkflowViewPanel(workflow,action)};
+		} 
+		return optionsComponent;
 	}	
 	
 }

@@ -82,13 +82,16 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 		return new PBTWorkflow();
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		PBTMainPanel results = new PBTMainPanel(getWorkflowContext());
-		Vector<String> p = new Vector<String>();
-		p.add(DBWorkflowContext.STOREDQUERY);
-		p.add(DBWorkflowContext.ERROR);
-		results.setProperties(p);
-		results.setAnimate(true);
-		return results;		
+		if (mainComponent == null) {
+			PBTMainPanel results = new PBTMainPanel(getWorkflowContext());
+			Vector<String> p = new Vector<String>();
+			p.add(DBWorkflowContext.STOREDQUERY);
+			p.add(DBWorkflowContext.ERROR);
+			results.setProperties(p);
+			results.setAnimate(true);
+			mainComponent = results;
+		}
+		return mainComponent;
 
 	}
 
