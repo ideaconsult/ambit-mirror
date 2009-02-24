@@ -23,6 +23,8 @@ import nplugins.shell.application.Utils;
 public class DemoPlugin implements INanoPlugin {
 	protected INPApplicationContext applicationContext;
 	protected String name="demo";
+	protected DemoMainPanel mainPanel = null;
+	protected JComponent[] options = null;
     public DemoPlugin() {
         try {
         Thread.sleep(1000);
@@ -31,7 +33,9 @@ public class DemoPlugin implements INanoPlugin {
         }
     }
 	public PluginMainPanel createMainComponent() {
-		return new DemoMainPanel(this);
+		if (mainPanel == null)
+			mainPanel = new DemoMainPanel(this);
+		return mainPanel;
 	}
 
 	public JComponent[] createDetailsComponent() {
@@ -40,13 +44,16 @@ public class DemoPlugin implements INanoPlugin {
 	}
 
 	public JComponent[] createOptionsComponent() {
-        ActionMap a = getActions();
-        Object[] keys = a.keys();
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p,BoxLayout.PAGE_AXIS));
-        for (int i=0; i < keys.length;i++)
-            p.add(new JButton(a.get(keys[i])));
-        return new JComponent[] {p};
+		if (options == null) {
+	        ActionMap a = getActions();
+	        Object[] keys = a.keys();
+	        JPanel p = new JPanel();
+	        p.setLayout(new BoxLayout(p,BoxLayout.PAGE_AXIS));
+	        for (int i=0; i < keys.length;i++)
+	            p.add(new JButton(a.get(keys[i])));
+	        options = new JComponent[] {p};
+		}
+		return options;
 	}
 
 	public ActionMap getActions() {

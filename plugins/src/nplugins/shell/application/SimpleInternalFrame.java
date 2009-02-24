@@ -236,6 +236,7 @@ public class SimpleInternalFrame extends JPanel {
         }
         if (newContent != null)
         	add(newContent, BorderLayout.CENTER);
+        repaint();
         firePropertyChange("content", oldContent, newContent);
     }
     

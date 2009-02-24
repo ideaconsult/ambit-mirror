@@ -26,11 +26,6 @@ package nplugins.shell;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.util.Hashtable;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -42,8 +37,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
-import sun.security.action.GetBooleanAction;
 
 import nplugins.core.Introspection;
 import nplugins.core.NPluginsException;
@@ -67,6 +60,9 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
     protected INanoPlugin thePlugin = null;
     public static final String property_plugin = "plugin";
     protected  IPluginsStorage storage;
+    protected PluginMainPanel mainPanel=null;
+    protected JComponent[] detailsComponents = null;
+    protected JComponent[] optionComponent = null;
     
     public IPluginsStorage getStorage() {
 		return storage;
@@ -103,30 +99,38 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	}
 
 	public JComponent[] createDetailsComponent() {
-		PackageEntryPanel pkgPanel =  new PackageEntryPanel();
-		addPropertyChangeListener("PluginPackageEntry",pkgPanel);
-		return new JComponent[] {pkgPanel};
+		if (detailsComponents == null) {
+			PackageEntryPanel pkgPanel =  new PackageEntryPanel();
+			addPropertyChangeListener("PluginPackageEntry",pkgPanel);
+			detailsComponents = new JComponent[] {pkgPanel};
+		}
+		return detailsComponents;
 	}
 
 	public PluginMainPanel createMainComponent() {
-		return new PluginsManagerPanel(this);
+		if (mainPanel == null)
+			mainPanel =  new PluginsManagerPanel(this);
+		return mainPanel;
 	}
 
 	public JComponent[] createOptionsComponent() {
-		JPanel welcome = new JPanel(new BorderLayout()) {
-			@Override
-			public String toString() {
-				return "About";
-			}
-		};
-		JTextArea text = new JTextArea(getHelp());
-		text.setBorder(null);
-		text.setBackground(welcome.getBackground());
-		text.setEditable(false);
-		
-		welcome.add(new JLabel(getLogo()),BorderLayout.NORTH);
-		welcome.add(new JScrollPane(text),BorderLayout.CENTER);
-		return new JComponent[] {welcome};
+		if (optionComponent == null) {
+			JPanel welcome = new JPanel(new BorderLayout()) {
+				@Override
+				public String toString() {
+					return "About";
+				}
+			};
+			JTextArea text = new JTextArea(getHelp());
+			text.setBorder(null);
+			text.setBackground(welcome.getBackground());
+			text.setEditable(false);
+			
+			welcome.add(new JLabel(getLogo()),BorderLayout.NORTH);
+			welcome.add(new JScrollPane(text),BorderLayout.CENTER);
+			optionComponent = new JComponent[] {welcome};
+		}
+		return optionComponent;
 	
 	}
 	protected PluginPackageEntry selectPackageEntry(PluginPackageEntry entry) {

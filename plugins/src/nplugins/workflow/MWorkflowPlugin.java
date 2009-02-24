@@ -43,6 +43,9 @@ public abstract class MWorkflowPlugin implements INanoPlugin {
 	protected INPApplicationContext applicationContext;
 	protected Workflow workflow;
 	protected WorkflowContext workflowContext;
+	protected JComponent[] detailsComponent = null;
+	protected JComponent[] optionsComponent = null;
+	protected INPluginUI<INanoPlugin> mainComponent = null;
 	
 	public MWorkflowPlugin() {
 		setWorkflow(createWorkflow());
@@ -57,17 +60,23 @@ public abstract class MWorkflowPlugin implements INanoPlugin {
 	}
 	
 	public JComponent[] createDetailsComponent() {
-        ActionMap a = getActions();
-        Object[] keys = a.keys();
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p,BoxLayout.PAGE_AXIS));
-        for (int i=0; i < keys.length;i++)
-            p.add(new JButton(a.get(keys[i])));
-        return new JComponent[] {p};
+		if (detailsComponent == null) {
+	        ActionMap a = getActions();
+	        Object[] keys = a.keys();
+	        JPanel p = new JPanel();
+	        p.setLayout(new BoxLayout(p,BoxLayout.PAGE_AXIS));
+	        for (int i=0; i < keys.length;i++)
+	            p.add(new JButton(a.get(keys[i])));
+	        detailsComponent = new JComponent[] {p};
+		}
+		return detailsComponent;
+		
 	}
 
 	public JComponent[] createOptionsComponent() {
-		return new JComponent[] {new WorkflowPanel(getWorkflow())};
+		if (optionsComponent == null)
+			optionsComponent = new JComponent[] {new WorkflowPanel(getWorkflow())};
+		return optionsComponent;
 	}
 
 	public ActionMap getActions() {
