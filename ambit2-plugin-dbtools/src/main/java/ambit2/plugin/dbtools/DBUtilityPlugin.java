@@ -100,7 +100,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null)
-			mainComponent = new MultiWorkflowsPanel<DBUtilityPlugin>(this);
+			mainComponent = new MultiWorkflowsPanel<DBUtilityPlugin>(this,getAction());
 		return mainComponent;
 	}
 
