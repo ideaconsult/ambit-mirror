@@ -31,8 +31,8 @@ import javax.servlet.jsp.JspException;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.query.smarts.SMARTSException;
-import ambit2.core.query.smarts.SmartsPatternAmbit;
+import ambit2.smarts.query.SMARTSException;
+import ambit2.smarts.query.SmartsPatternAmbit;
 
 public class AmbitSMARTSTag extends AmbitMolTag {
 	protected String  var ="match";

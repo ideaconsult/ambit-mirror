@@ -56,10 +56,10 @@ import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.DelimitedFileWriter;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
-import ambit2.core.query.smarts.SmartsPatternAmbit;
 import ambit2.descriptors.PKANode;
 import ambit2.descriptors.PKASmartsDescriptor;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.smarts.query.SmartsPatternAmbit;
 
 public class PKASmartsDescriptorTest {
 	protected PKASmartsDescriptor pka;

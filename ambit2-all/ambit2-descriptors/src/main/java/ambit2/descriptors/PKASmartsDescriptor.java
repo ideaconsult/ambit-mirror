@@ -46,7 +46,7 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
-import ambit2.core.query.smarts.SMARTSException;
+import ambit2.smarts.query.SMARTSException;
 
 /**
  * pKa calculation 

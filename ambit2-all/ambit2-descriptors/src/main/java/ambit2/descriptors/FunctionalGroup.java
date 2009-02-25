@@ -35,9 +35,9 @@ import org.w3c.dom.Element;
 import ambit2.core.data.AmbitBean;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.processors.IProcessor;
-import ambit2.core.query.smarts.ISmartsPattern;
-import ambit2.core.query.smarts.SMARTSException;
-import ambit2.core.query.smarts.SmartsPatternFactory;
+import ambit2.smarts.query.ISmartsPattern;
+import ambit2.smarts.query.SMARTSException;
+import ambit2.smarts.query.SmartsPatternFactory;
 
 public class FunctionalGroup extends AmbitBean implements 
 				IProcessor<IAtomContainer,VerboseDescriptorResult> {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.query.smarts.ISmartsPattern;
+import ambit2.smarts.query.ISmartsPattern;
 
 /**
  * Select structures by querying fungroups table by smarts
