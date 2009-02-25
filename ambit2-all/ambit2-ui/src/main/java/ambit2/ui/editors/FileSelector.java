@@ -93,8 +93,8 @@ public class FileSelector extends JPanel implements IAmbitEditor<FileState>, Act
 	}
 	public void actionPerformed(ActionEvent e) {
 		File file = MyIOUtilities.selectFile(JOptionPane.getFrameForComponent(this), "Select file",
-				"", MolFileFilter.supported_extensions,
-				MolFileFilter.supported_exts_description, 
+				"", getObject().getSupportedExtensions(),
+				getObject().getSupportedExtDescriptions(), 
 				getObject() instanceof IInputState);
 		if (file != null) {
 			getObject().setFile(file);
