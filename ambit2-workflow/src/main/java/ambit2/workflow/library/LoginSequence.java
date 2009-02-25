@@ -41,7 +41,17 @@ import com.microworkflow.process.TestCondition;
 import com.microworkflow.process.ValueLatchPair;
 
 public class LoginSequence extends Sequence {
+	protected boolean silent = false;
+	public boolean isSilent() {
+		return silent;
+	}
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
 	public LoginSequence(Activity onSuccess) {
+		this(onSuccess,null);
+	}
+	public LoginSequence(Activity onSuccess,Activity onFailure) {
         Primitive login = new Primitive(
                 DBWorkflowContext.DBCONNECTION_URI,
                 DBWorkflowContext.DBCONNECTION_URI,new Performer() {
@@ -53,21 +63,25 @@ public class LoginSequence extends Sequence {
                 	if ((ol == null) || !(ol instanceof LoginInfo)) {
                 		ol = new LoginInfo();
                 	}
+                	LoginInfo li = null;
+                	if (!silent) {
                 		
-                    ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>((LoginInfo)ol);
-                    context.put(DBWorkflowContext.USERINTERACTION,latch);
-                    //This is a blocking operation!
-                    LoginInfo li = null;
-                    try {
-                        li = latch.getLatch().getValue();
-                        context.put(DBWorkflowContext.LOGININFO,li);
-                        context.remove(DBWorkflowContext.USERINTERACTION);
-
-                    } catch (InterruptedException x) {
-                    	context.remove(DBWorkflowContext.USERINTERACTION);
-                        context.put(DBWorkflowContext.ERROR, x);
-                        return null;
-                    }
+	                    ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>((LoginInfo)ol);
+	                    context.put(DBWorkflowContext.USERINTERACTION,latch);
+	                    //This is a blocking operation!
+	                    
+	                    try {
+	                        li = latch.getLatch().getValue();
+	                        context.put(DBWorkflowContext.LOGININFO,li);
+	                        context.remove(DBWorkflowContext.USERINTERACTION);
+	
+	                    } catch (InterruptedException x) {
+	                    	context.remove(DBWorkflowContext.USERINTERACTION);
+	                        context.put(DBWorkflowContext.ERROR, x);
+	                        return null;
+	                    }
+                	} else li = (LoginInfo)ol;
+                	
                     if (li != null)
                     	return DatasourceFactory.getConnectionURI(
                             li.getScheme(), li.getHostname(), li.getPort(), 
@@ -109,7 +123,7 @@ public class LoginSequence extends Sequence {
                     }
                 }, 
                 onSuccess,
-                null);
+                onFailure);
         connect.setName("Connect");
         setName("[Log into database]");
         

@@ -28,6 +28,7 @@ import java.util.Vector;
 
 import javax.swing.JComponent;
 
+import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.NPluginsAction;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
@@ -39,6 +40,10 @@ import com.microworkflow.process.WorkflowContext;
 
 public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7190224146559024307L;
 	protected NPluginsAction<WorkflowContext,Void> runAction = null;
 	
 	protected NPluginsAction<WorkflowContext,Void> getAction() {
@@ -82,5 +87,7 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 		}
 		return detailsComponent;
 	}	
-
+	public int compareTo(INanoPlugin o) {
+		return getOrder()-o.getOrder();
+	}
 }
