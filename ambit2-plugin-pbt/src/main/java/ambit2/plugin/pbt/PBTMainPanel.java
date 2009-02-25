@@ -43,6 +43,7 @@ import javax.swing.event.ChangeListener;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.data.IStructureRecord;
@@ -63,7 +64,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 	private static final long serialVersionUID = 2943141896545107613L;
 	protected JTabbedPane tabbedPane;
 	protected PBTWorkBook pbt_workbook;
-	protected boolean hack=true;
+	//protected boolean hack=true;
 
 
     public PBTMainPanel(WorkflowContext wfcontext) {
@@ -75,50 +76,70 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         }
     }    
     public PBTMainPanel() {
-
+    	
         tabbedPane = new JTabbedPane();
+        tabbedPane.addChangeListener(new ChangeListener(){
+            public void stateChanged(ChangeEvent e) {
+        		if (getWorkbook()!=null) {
+        			int index = ((JTabbedPane)e.getSource()).getSelectedIndex();
+        			HSSFFormulaEvaluator.evaluateAllFormulaCells(getWorkbook().workbook);
+        			//for (int i=0; i < getWorkbook().size();i++)
+        				getWorkbook().getWorksheet(index).notifyCells(-1,-1);
+        			tabbedPane.getComponentAt(index).repaint();
+        			
+        		}
+            }        	
+        });
         add(tabbedPane);
-        try {
-        	pbt_workbook = new PBTWorkBook();
-			for (int i=0; i < pbt_workbook.size();i++)  {
-				if (pbt_workbook.getWorksheet(i)!=null)
-				tabbedPane.add(pbt_workbook.getTitle(i),
-						new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i),1,1)));
-			}
+        setWorkbook(null);
 
-	        tabbedPane.addChangeListener(new ChangeListener() {
-	        	public void stateChanged(ChangeEvent e) {
-	        		pbt_workbook.getWorksheet(((JTabbedPane)e.getSource()).getSelectedIndex()).notifyCells(-1,-1);
-	        	}
-	        	
-	        });
-			tabbedPane.setSelectedIndex(1);	        
+    }
+  
+    protected PBTWorkBook getWorkbook() {
+    	return pbt_workbook;
+    }
+    protected void setWorkbook(PBTWorkBook pbt_workbook) {
+    	this.pbt_workbook = pbt_workbook;
+        try {
+        	//hack = true;
+        	tabbedPane.removeAll();
+        	if (pbt_workbook !=null) {
+        	
+				for (int i=0; i < pbt_workbook.size();i++)  {
+					if (pbt_workbook.getWorksheet(i)!=null)
+					tabbedPane.add(pbt_workbook.getTitle(i),
+							new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i),1,1)));
+				}
+	
+		        
+				tabbedPane.setSelectedIndex(1);	      
+        	}
         } catch (Exception x) {
         	x.printStackTrace();
+        } finally {
+        	//hack = false;
         }
-        hack = false;
     }
+
     @Override
     protected void finalize() throws Throwable {
     	super.finalize();
     }
     @Override
-    protected void animate(PropertyChangeEvent arg0) {
-    	if (hack) return; 
-        if (arg0.getPropertyName().equals(ambit2.workflow.DBWorkflowContext.STOREDQUERY)) {
-        	
+    protected void animate(PropertyChangeEvent event) {
+    	//if (hack) return; 
+        if (event.getPropertyName().equals(ambit2.workflow.DBWorkflowContext.STOREDQUERY)) {
         	try {
-	        	IAtomContainer a = execute(((IStoredQuery) arg0.getNewValue()));
+	        	IAtomContainer a = execute(((IStoredQuery) event.getNewValue()));
 	        	pbt_workbook.getWorksheet(1).setExtendedCell(a, 10,5);
         	} catch (Exception x) {
         		x.printStackTrace();
         	}
-        	
-
+        } else if (event.getPropertyName().equals(PBTWorkBook.PBT_WORKBOOK)) {   
+        	if (event.getNewValue() instanceof PBTWorkBook) {
+        		setWorkbook((PBTWorkBook) event.getNewValue() );
+        	}
         }
-        
-        
-
     }
     
 	public IAtomContainer execute(IStoredQuery q) throws Exception {

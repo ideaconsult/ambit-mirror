@@ -1,6 +1,7 @@
 package ambit2.plugin.pbt;
 
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +20,9 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import ambit2.core.io.FileOutputState;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
+import ambit2.plugin.pbt.processors.PBTExporter;
 
 
 public class TestPBTWorksheet {
@@ -53,20 +56,86 @@ public class TestPBTWorksheet {
 		Assert.assertEquals("Not toxic (not T)", result.getC7());
 	}	
 	@Test
-	public void testEvaluateSubstanceSheet() throws Exception {
+	public void testProperties() throws Exception {
+		
+		int maxLen = 0;
+		for (WORKSHEET_INDEX w : WORKSHEET_INDEX.values() ) {
+			PBTWorksheet ws = workbook.getWorksheet(w);
+			for (int r=0; r < ws.getMaxRow(); r++)
+				for (int c=0; c < ws.getMaxCol(); c++) {
+	
+					Object value = ws.get(r,c);
+					if ((value != null) && (!value.toString().equals(""))) {
+						System.out.print(ws.getCellName(r,c));
+						System.out.print("\t=\t");
+						System.out.print("\"");	
+						System.out.print(value);
+						System.out.println("\"");	
+						if (value.toString().length()>maxLen)
+							maxLen = value.toString().length();
+					}
+	
+				}
+		}
+		System.out.println(maxLen);
+				
+	}	
+	@Test
+	public void testRTF() throws Exception {
+		setMolecule(MoleculeFactory.makeBenzene());
+		PBTExporter exporter = new PBTExporter();
+		exporter.setWorkbook(workbook);
+		File file = exporter.process(new FileOutputState(System.getProperty("user.home")+"/PBT.rtf"));
+		Assert.assertTrue(file.exists());
+	}
+	@Test
+	public void testPDF() throws Exception {
+		setMolecule(MoleculeFactory.makeBenzene());
+		PBTExporter exporter = new PBTExporter();
+		exporter.setWorkbook(workbook);
+		File file = exporter.process(new FileOutputState(System.getProperty("user.home")+"/PBT.pdf"));
+		Assert.assertTrue(file.exists());
+	}
+	@Test
+	public void testHTML() throws Exception {
+		setMolecule(MoleculeFactory.makeBenzene());
+		PBTExporter exporter = new PBTExporter();
+		exporter.setWorkbook(workbook);
+		File file = exporter.process(new FileOutputState(System.getProperty("user.home")+"/PBT.html"));
+		Assert.assertTrue(file.exists());
+	}	
+	@Test
+	public void testEvaluateSubstanceAntTSheet() throws Exception {
+		Assert.assertEquals(78.047,setMolecule(MoleculeFactory.makeBenzene()));
+
+		PBTWorksheet t = workbook.getWorksheet(WORKSHEET_INDEX.T);
+		Assert.assertEquals(10.0,t.get(17,1));
+		Assert.assertEquals(0.156094,t.get(17,0));
+		
+		PBTWorksheet result = workbook.getWorksheet(WORKSHEET_INDEX.RESULT);
+		Assert.assertEquals("\"T Assessment\" failed",result.getC7());
+		t.setC6("0.1");
+		Assert.assertEquals("Toxic (T)",result.getC7());
+		
+	}	
+	public Object setMolecule(IMolecule molecule) throws Exception {
 		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.SUBSTANCE);
 		
-		ws.setExtendedCell(MoleculeFactory.makeBenzene(),10,5);
+		ws.setExtendedCell(molecule,10,5);
 		Assert.assertTrue(ws.getExtendedCell(10,5) instanceof IMolecule);
-		Assert.assertEquals(6,((IMolecule)ws.getExtendedCell(10,5)).getAtomCount());
+		Assert.assertEquals(molecule.getAtomCount(),((IMolecule)ws.getExtendedCell(10,5)).getAtomCount());
 		Object o = ws.getExtendedCell(12,1);
 		Assert.assertTrue(o instanceof WorksheetAction);
 		((WorksheetAction)o).setWorksheet(ws);
 		((WorksheetAction)o).actionPerformed(null);
 		int targetRow = ((WorksheetAction)o).getResultRow();
 		int targetCol = ((WorksheetAction)o).getResultCol();
-		Assert.assertEquals(78.047,ws.get(targetRow-1,targetCol-1));
-	}	
+		ws.set(targetRow+1,targetCol-1,100);
+		ws.set(targetRow+2,targetCol-1,10);
+		ws.set(targetRow+3,targetCol-1,"narcotic");
+		return ws.get(targetRow-1,targetCol-1);
+		
+	}		
 	@Test
 	public void test() throws Exception {
 		

@@ -188,6 +188,8 @@ public class PBTWorksheet  extends AmbitBean  {
     				cell.setCellValue(value.toString());
     			}
     		formulaEvaluator.notifyUpdateCell(cell);
+    		//formulaEvaluator.clearAllCachedResultValues();
+
     		HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
     		    		
     	}
@@ -200,6 +202,7 @@ public class PBTWorksheet  extends AmbitBean  {
 
 	public void notifyCells(int row, int col) {
 //		workbook.getNumberOfSheets()
+		
 		for (int r=0; r < maxRow; r++)
 			for (int c=0; c < maxCol; c++) 
 				if ((r == row) && (c == col)) ;
@@ -207,7 +210,7 @@ public class PBTWorksheet  extends AmbitBean  {
 					HSSFCell cell = getCell(r,c);
 					
 					if ((cell !=null) && (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA))
-						firePropertyChange(getCellName(r, c).toLowerCase(), oldValue[r][c] , get(r,c).toString());
+						firePropertyChange(getCellName(r, c).toLowerCase(), oldValue[r][c],  get(r,c).toString());
 				}
 		
 						
@@ -1792,7 +1795,7 @@ public class PBTWorksheet  extends AmbitBean  {
 	public void setH28(String value) {
 		 set(27,7,value);
 	}
-
+	
 
 
 }

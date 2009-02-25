@@ -18,6 +18,7 @@ public class PBTMainPanelTest {
 		try {
 	  	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		
 			PBTMainPanel pbtPanel = new PBTMainPanel();
+			pbtPanel.setWorkbook(new PBTWorkBook());
 			pbtPanel.setPreferredSize(new Dimension(800,600));
 			JOptionPane.showMessageDialog(null,pbtPanel,pbtPanel.toString(),JOptionPane.OK_OPTION);
 		} catch (Exception x) {
