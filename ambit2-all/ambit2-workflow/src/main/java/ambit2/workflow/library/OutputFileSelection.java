@@ -54,7 +54,7 @@ public class OutputFileSelection extends Sequence {
 	protected static FileOutputState getInitialFile(WorkflowContext context) {
     	Object ol = context.get(OUTPUTFILE);
     	if ((ol == null) || !(ol instanceof FileOutputState)) {
-    		ol = new FileInputState();
+    		ol = new FileOutputState();
     	}        
     	return (FileOutputState)ol;
 	}

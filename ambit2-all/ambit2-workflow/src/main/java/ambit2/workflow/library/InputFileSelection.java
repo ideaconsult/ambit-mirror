@@ -2,8 +2,6 @@ package ambit2.workflow.library;
 
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.FileState;
-import ambit2.db.LoginInfo;
-import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
 import com.microworkflow.process.Activity;
