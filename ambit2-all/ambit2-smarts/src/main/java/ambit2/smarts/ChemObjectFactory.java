@@ -8,11 +8,13 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 
 
 /** Utilities for generation of different types of 
@@ -227,12 +229,6 @@ public class ChemObjectFactory
 		return(mol);
 	}
 	
-	
-	
-	
-	
-	
-	
 	IAtom getAtomCopy(IAtom atom)
 	{
 		IAtom copyAtom = new Atom(atom.getSymbol());
@@ -322,6 +318,7 @@ public class ChemObjectFactory
 	}
 	
 	
+	
 	void connectFragmentToMolecule(IAtomContainer base, IAtomContainer fragment, 
 							int bondType, int basePos, int fragPos) 
 	{
@@ -340,4 +337,55 @@ public class ChemObjectFactory
 		//TODO
 	}
 	
+	
+	//--------------------------------------------------------------------------------------
+	
+		
+	
+	public void produceStructuresExhaustively (IAtomContainer mol, Vector<StructInfo> vStr, int maxNumSeqSteps)
+	{	
+		ChemObjectToSmiles cots = new ChemObjectToSmiles();
+		for (int k = 0; k < mol.getAtomCount(); k++)
+		{
+			setAtomSequence(mol, mol.getAtom(k));
+			int n = sequence.size();
+			if (n > maxNumSeqSteps)
+				n = maxNumSeqSteps;
+			for (int i = 0; i < n; i++)
+			{
+				IAtomContainer struct = getFragmentFromSequence(i);
+				String smiles = cots.getSMILES(struct);
+				if (!checkForDuplication(smiles, vStr))
+				{	
+					StructInfo strInfo = new StructInfo();
+					strInfo.smiles = smiles;
+					strInfo.atomCount = struct.getAtomCount();
+					strInfo.bondCount = struct.getBondCount();
+					vStr.add(strInfo);
+				}	
+			}
+		}
+	}
+	
+	
+	boolean checkForDuplication(String smarts, Vector<StructInfo> vStr)
+	{
+		SmartsManager man = new SmartsManager();
+		man.setQuery(smarts);
+		;
+		
+		for (int i = 0; i < vStr.size(); i++)
+		{
+			StructInfo s = vStr.get(i);
+			if (man.getQueryContaner().getAtomCount() == s.atomCount)
+				if (man.getQueryContaner().getBondCount() == s.bondCount)
+				{
+					IAtomContainer ac = SmartsHelper.getMoleculeFromSmiles(s.smiles);
+					boolean res = man.searchIn(ac);
+					if (res)
+						return(true);
+				}
+		}
+		return(false);
+	}
 }

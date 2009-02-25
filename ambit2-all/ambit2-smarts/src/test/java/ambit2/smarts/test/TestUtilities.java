@@ -442,7 +442,8 @@ public class TestUtilities
 		//tu.testChemObjectToSmiles("C1CCCCC=1");
 		//tu.testChemObjectToSmiles("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2");
 		
-		tu.testFragmentation("CCC(CCC)CCCN");
+		//tu.testFragmentation("CCC(CCC)CCCN");
+		tu.testProduceStructuresExhaustively("CC(CCCN)CCC", 12);
 		
 	}
 	
@@ -759,8 +760,7 @@ public class TestUtilities
 		System.out.println("getHydrogenCount() = " + hc);
 		System.out.println("getFormalCharge() = " + fc);
 		System.out.println("getFormalNeighbourCount() = " + nc);
-		System.out.println("getValency() = " + v);
-		
+		System.out.println("getValency() = " + v);		
 	}
 		
 	void testFragmentation(String smiles)
@@ -781,5 +781,18 @@ public class TestUtilities
 		System.out.println(smiles+ "  --->  "+cots.getSMILES(mol)); 
 	}
 	
+	void testProduceStructuresExhaustively(String smiles, int maxNumSteps)
+	{
+		System.out.println("Producing structs form " + smiles+ "   maxNumSteps = " + maxNumSteps);
+		System.out.println("-------------------------------");
+		Vector<StructInfo> vStr = new Vector<StructInfo>();
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		ChemObjectFactory cof = new ChemObjectFactory();
+		
+		cof.produceStructuresExhaustively(mol, vStr, maxNumSteps);
+		
+		for (int i = 0; i < vStr.size(); i++)
+			System.out.println(vStr.get(i).smiles);
+	}
 	
 }
