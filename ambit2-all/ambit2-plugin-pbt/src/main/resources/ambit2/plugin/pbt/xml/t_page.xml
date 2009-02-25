@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page columns="6" rows="21" name="Toxicity check">
+<page columns="6" rows="19" name="Toxicity check">
 
 <!-- 5 row (input)-->
 <list id="A6" row="6" col="1" colspan="1">

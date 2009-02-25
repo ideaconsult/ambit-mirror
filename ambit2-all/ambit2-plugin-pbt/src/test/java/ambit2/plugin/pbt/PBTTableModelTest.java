@@ -10,7 +10,7 @@ public class PBTTableModelTest {
 		PBTTableModel model = new PBTTableModel();
 		model.setDefinition("ambit2/plugin/pbt/xml/p_page.xml");
 		assertEquals(6,model.getColumnCount());
-		assertEquals(19,model.getRowCount());
+		assertEquals(20,model.getRowCount());
 		
 		for (int i=0;i < model.getRowCount();i++) {
 			System.out.print(i);
@@ -23,10 +23,13 @@ public class PBTTableModelTest {
 			}
 		System.out.println();
 		}
-		
-		assertEquals("SECTION BIODEGRADATION",model.getValueAt(3,1));
+		/*
+		 * This values are not stored in the table model TODO - a test for the worksheet
+		assertEquals("SECTION BIODEGRADATION",model.getValueAt(4,0));
 		assertEquals("REPORT REFERENCE",model.getValueAt(6,6));
 		assertEquals("READY TESTS (Seawater)",model.getValueAt(6,1));
+		*/
+		
 		
 		
 	}

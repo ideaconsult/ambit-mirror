@@ -9,45 +9,38 @@ import junit.framework.Assert;
 
 import org.apache.poi.hssf.record.DVRecord;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
+
+import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
 
 
 public class TestPBTWorksheet {
-	protected HSSFWorkbook workbook ;
+	protected PBTWorkBook workbook;
 	protected InputStream in;
 	
 	@Before
 	public void setup() throws Exception {
-		String file = "2008-12-03_REACH PBT Screening Tool_V0.99b_U N P R O T E C T E D.xls";
-		in = PBTWorkflow.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
-		POIFSFileSystem poifsFileSystem = new POIFSFileSystem(in);
-		
-		 workbook = new HSSFWorkbook(poifsFileSystem);
+ 	    workbook = new PBTWorkBook();
+		 
 
 	}
 	@After
 	public void cleanup() throws Exception {
-		in.close();
+		workbook = null;
 	}
-	@Test
-	public void testProxy() throws Exception {
-		//WorksheetProxyFactory.getProxy(null,workbook.getSheet("T-Sheet"));
-	}
+
 	@Test
 	public void testEvaluateTSheet() throws Exception {
-		PBTWorksheet ws = new PBTWorksheet(workbook,"T-Sheet");
-		PBTWorksheet result = new PBTWorksheet(workbook,"Result");
+		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.T);
+		PBTWorksheet result = workbook.getWorksheet(WORKSHEET_INDEX.RESULT);
 		
 		//ws.set(5,2,0.1);
 		ws.setC6("0.1");
@@ -61,21 +54,24 @@ public class TestPBTWorksheet {
 	}	
 	@Test
 	public void testEvaluateSubstanceSheet() throws Exception {
-		PBTWorksheet ws = new PBTWorksheet(workbook,"SUBSTANCE");
+		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.SUBSTANCE);
 		
-		ws.set(10,5,MoleculeFactory.makeBenzene());
+		ws.setExtendedCell(MoleculeFactory.makeBenzene(),10,5);
+		Assert.assertTrue(ws.getExtendedCell(10,5) instanceof IMolecule);
+		Assert.assertEquals(6,((IMolecule)ws.getExtendedCell(10,5)).getAtomCount());
 		Object o = ws.getExtendedCell(12,1);
 		Assert.assertTrue(o instanceof WorksheetAction);
+		((WorksheetAction)o).setWorksheet(ws);
+		((WorksheetAction)o).actionPerformed(null);
+		int targetRow = ((WorksheetAction)o).getResultRow();
+		int targetCol = ((WorksheetAction)o).getResultCol();
+		Assert.assertEquals(78.047,ws.get(targetRow-1,targetCol-1));
 	}	
 	@Test
 	public void test() throws Exception {
 		
-        
-
-		HSSFSheet sheet = workbook.getSheet("SUBSTANCE");
-		
-		HSSFFormulaEvaluator formulaEvaluator = new HSSFFormulaEvaluator(workbook);
-
+		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.SUBSTANCE);
+		HSSFSheet sheet = ws.getSheet();
 		Iterator<HSSFRow> rows = sheet.rowIterator();
 		while (rows.hasNext()) {
 			HSSFRow row = rows.next();
@@ -116,7 +112,7 @@ public class TestPBTWorksheet {
 				}				
 				case  HSSFCell.CELL_TYPE_FORMULA: {
 					try {
-						CellValue value = formulaEvaluator.evaluate(cell);
+						CellValue value = ws.evaluate(cell);
 						System.out.print(value.getStringValue());
 					} catch (Exception x) {
 						System.out.print(x.getMessage());

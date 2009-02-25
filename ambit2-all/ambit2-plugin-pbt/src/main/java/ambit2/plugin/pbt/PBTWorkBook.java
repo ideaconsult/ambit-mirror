@@ -7,11 +7,12 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 
 public class PBTWorkBook {
-	protected static final String PBT_CLARIANT="pbt_1_00.xls";
+	protected static final String PBT_CLARIANT="ambit2/plugin/pbt/xml/pbt_1_00.xls";
 	final protected HSSFWorkbook workbook; 
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
 	final PBTWorksheet[] pbt_worksheets; 
+	public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,P,B,T,RESULT};
 	
     protected static Object[][] defs = {
     	{"TERMS & CONDITIONS",new Integer(27),new Integer(3),"ambit2/plugin/pbt/xml/welcome.xml"},   	
@@ -26,7 +27,7 @@ public class PBTWorkBook {
     	this(PBT_CLARIANT);
     }
     public PBTWorkBook(String file) throws Exception {
-		workbook_stream = PBTWorkBook.class.getClassLoader().getResourceAsStream("ambit2/plugin/pbt/xml/"+file);
+		workbook_stream = PBTWorkBook.class.getClassLoader().getResourceAsStream(file);
 		if (workbook_stream==null)
 			throw new Exception("Can't find "+file);
 		poifsFileSystem = new POIFSFileSystem(workbook_stream);	
@@ -38,7 +39,10 @@ public class PBTWorkBook {
     public String getTitle(int index) {
     	return workbook.getSheetName(index);
     }    
-    public PBTWorksheet getWorksheet(int index) {
+    public PBTWorksheet getWorksheet(WORKSHEET_INDEX index) {
+    	return getWorksheet(index.ordinal());
+    }    
+    protected PBTWorksheet getWorksheet(int index) {
     	return pbt_worksheets[index];
     }
     public int size() {
