@@ -28,11 +28,6 @@
     	<version>3.5-beta4</version>
     </dependency>
     <dependency>
-    	<groupId>ambit</groupId>
-    	<artifactId>ambit2-smarts</artifactId>
-    	<version>${project.version}</version>
-    </dependency>
-    <dependency>
     	<groupId>com.lowagie</groupId>
     	<artifactId>itext</artifactId>
     	<version>1.4.8</version>

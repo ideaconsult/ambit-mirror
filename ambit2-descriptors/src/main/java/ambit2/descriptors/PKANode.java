@@ -33,8 +33,8 @@ import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.core.query.smarts.SMARTSException;
-import ambit2.core.query.smarts.SmartsPatternAmbit;
+import ambit2.smarts.query.SMARTSException;
+import ambit2.smarts.query.SmartsPatternAmbit;
 
 public class PKANode {
 	protected static Hashtable<String,SmartsPatternAmbit> smartsPattern = new Hashtable<String,SmartsPatternAmbit>();
