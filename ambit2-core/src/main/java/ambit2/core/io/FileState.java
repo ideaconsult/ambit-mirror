@@ -30,6 +30,8 @@ public class FileState extends Model implements IInputOutputState {
 	protected static transient String MSG_UNSUPPORTEDFORMAT = "UNSUPPORTED FORMAT\t";
 	protected static transient String MSG_ERRORSAVE = "Error when writing file\t";
 	protected String responseType = "text/plain";	
+	protected String[] supportedExtensions = new String[] {"*.*"};
+	protected String[] extensionDescriptions = new String[] {"All files"};
 	/**
 	 * Comment for <code>serialVersionUID</code>
 	 */
@@ -227,4 +229,16 @@ public class FileState extends Model implements IInputOutputState {
     public void setResponseType(String responseType) {
     	this.responseType = responseType;
     }
+    public String[] getSupportedExtensions() {
+    	return supportedExtensions;
+    }
+    public String[] getSupportedExtDescriptions() {
+    	return extensionDescriptions;
+    }    
+    public void setSupportedExtensions(String[] ext) {
+    	supportedExtensions = ext;
+    }
+    public void setSupportedExtDescriptions(String[] descr) {
+    	extensionDescriptions = descr;
+    }     
 }

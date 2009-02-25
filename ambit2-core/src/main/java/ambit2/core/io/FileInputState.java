@@ -51,14 +51,20 @@ public class FileInputState extends FileState implements IInputState {
 		"Microsoft Office Excel file (*.xls)"};	
 	public FileInputState() {
 		super();
+		setSupportedExtDescriptions(extensionDescription);
+		setSupportedExtensions(extensions);		
 	}
 
 	public FileInputState(String filename) {
 		super(filename);
+		setSupportedExtDescriptions(extensionDescription);
+		setSupportedExtensions(extensions);		
 	}
 
 	public FileInputState(File file) {
 		super(file);
+		setSupportedExtDescriptions(extensionDescription);
+		setSupportedExtensions(extensions);
 	}
 
 	public IIteratingChemObjectReader getReader()
@@ -105,5 +111,5 @@ public class FileInputState extends FileState implements IInputState {
 			return new IteratingXLSReader(stream,0);
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
-
+	
 }
