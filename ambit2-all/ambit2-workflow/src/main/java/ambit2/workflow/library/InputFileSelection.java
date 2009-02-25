@@ -13,7 +13,7 @@ import com.microworkflow.process.TestCondition;
 import com.microworkflow.process.WorkflowContext;
 
 public class InputFileSelection extends Sequence {
-	public static String INPUTFILE = "ambit2.plugin.dbtools.INPUTFILE";
+	public static String INPUTFILE = "ambit2.workflow.library.INPUTFILE";
 
 	public InputFileSelection(Activity onSuccess, WorkflowContext context) {
         this(onSuccess,getInitialFile(context));
