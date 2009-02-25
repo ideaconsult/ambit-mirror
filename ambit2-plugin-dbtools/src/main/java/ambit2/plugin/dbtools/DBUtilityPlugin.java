@@ -39,11 +39,14 @@ import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
 import nplugins.workflow.ExecuteWorkflowTask;
 import ambit2.core.data.ClassHolder;
+import ambit2.core.io.FileInputState;
+import ambit2.core.io.MolFileFilter;
 import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
+import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
@@ -59,12 +62,16 @@ import com.microworkflow.process.WorkflowContext;
  *
  */
 public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflowsPlugin{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -189422892768202994L;
 	protected List<ClassHolder> workflows;	
 	protected WorkflowOptionsLauncher contextListener;
 	public DBUtilityPlugin() {
 		super();
 		workflows = new ArrayList<ClassHolder>();
-		workflows.add(new ClassHolder("ambit2.plugin.dbtools.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));
+
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start local MySQL database server","images/mysql_start.png"));
@@ -84,6 +91,10 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
 		getWorkflowContext().put(MySQLCommand.MYSQLCOMMAND, new MySQLCommand());
+		FileInputState fs = new FileInputState();
+		fs.setSupportedExtDescriptions(MolFileFilter.supported_exts_description);
+		fs.setSupportedExtensions(MolFileFilter.supported_extensions);
+		getWorkflowContext().put(InputFileSelection.INPUTFILE, fs);
 	}
 	public List<ClassHolder> getWorkflows() {
 		return workflows;
@@ -127,10 +138,6 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 
 	}
 
-	public int compareTo(INanoPlugin o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	@Override
 	public String toString() {
 		return "Database tools";

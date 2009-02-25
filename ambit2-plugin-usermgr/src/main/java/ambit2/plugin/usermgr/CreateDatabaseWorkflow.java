@@ -1,4 +1,4 @@
-package ambit2.plugin.dbtools;
+package ambit2.plugin.usermgr;
 
 import ambit2.core.data.StringBean;
 import ambit2.db.processors.DbCreateDatabase;

@@ -44,6 +44,7 @@ public class PBTWorkflow extends Workflow {
         seq.addStep(new QueryInteraction(new QueryField()));
 		seq.addStep(p1);
 				
+		/*
         seq.setName("PBT Assessment");
         String[] pbt = new String[] {"Substance definition","Persistence","Bioaccumulation","Toxicity","Results"};
         for (String a : pbt) {
@@ -53,6 +54,7 @@ public class PBTWorkflow extends Workflow {
         	p.setName(a);
         	seq.addStep(p);
         }
+        */
         setDefinition(seq);        	
         
 
