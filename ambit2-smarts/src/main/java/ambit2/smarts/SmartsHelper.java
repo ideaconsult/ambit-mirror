@@ -173,6 +173,18 @@ public class SmartsHelper
 		return("-");
 	}
 	
+	static public String smilesBondToString(IBond b)
+	{			
+		if (b.getOrder() == IBond.Order.SINGLE)
+			return("");
+		if (b.getOrder() == IBond.Order.DOUBLE)
+			return("=");
+		if (b.getOrder() == IBond.Order.TRIPLE)
+			return("#");
+		
+		return("");
+	}
+	
 	static public String bondAtomNumbersToString(IAtomContainer container, IBond b)
 	{
 		return(" "+ container.getAtomNumber(b.getAtom(0))+ " "+container.getAtomNumber(b.getAtom(1)));				
