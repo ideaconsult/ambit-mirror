@@ -29,6 +29,7 @@ import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellValue;
 
 import ambit2.core.data.AmbitBean;
 
@@ -39,33 +40,12 @@ public class PBTWorksheet  extends AmbitBean  {
 	protected int maxRow = 22;
 	protected int maxCol = 6;
 	
-	public int getMaxRow() {
-		return maxRow;
-	}
 
-	public void setMaxRow(int maxRow) {
-		this.maxRow = maxRow;
-		oldValue = new String[maxRow][maxCol];
-	}
 
-	public int getMaxCol() {
-		return maxCol;
-	}
-
-	public void setMaxCol(int maxCol) {
-		this.maxCol = maxCol;
-		oldValue = new String[maxRow][maxCol];
-	}
-
-	public HSSFWorkbook getWorkbook() {
-		return workbook;
-	}
 	protected static HSSFWorkbook workbook;
 	protected HSSFSheet sheet;
-	public HSSFSheet getSheet() {
-		return sheet;
-	}
-	protected static HSSFFormulaEvaluator formulaEvaluator = null;
+
+	protected HSSFFormulaEvaluator formulaEvaluator = null;
 	
 	/**
 	 * 
@@ -95,6 +75,35 @@ public class PBTWorksheet  extends AmbitBean  {
 		}
 	
 	}
+	public CellValue evaluate(HSSFCell cell) {
+		if (formulaEvaluator!=null)
+			return formulaEvaluator.evaluate(cell);
+		else return null;
+	}
+	public HSSFSheet getSheet() {
+		return sheet;
+	}
+	public HSSFWorkbook getWorkbook() {
+		return workbook;
+	}		
+	public int getMaxRow() {
+		return maxRow;
+	}
+
+	public void setMaxRow(int maxRow) {
+		this.maxRow = maxRow;
+		oldValue = new String[maxRow][maxCol];
+	}
+
+	public int getMaxCol() {
+		return maxCol;
+	}
+
+	public void setMaxCol(int maxCol) {
+		this.maxCol = maxCol;
+		oldValue = new String[maxRow][maxCol];
+	}
+	
 	public Object getExtendedCell(int row, int col) {
 		if (moreInfo != null)
 			return moreInfo.getValueAt(row, col);

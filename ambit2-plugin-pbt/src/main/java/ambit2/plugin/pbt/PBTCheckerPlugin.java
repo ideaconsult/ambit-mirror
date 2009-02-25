@@ -43,6 +43,10 @@ import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 
 public class PBTCheckerPlugin extends DBWorkflowPlugin {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2604797602709881671L;
 	protected WorkflowOptionsLauncher contextListener;
 	public PBTCheckerPlugin() {
 		contextListener = new WorkflowOptionsLauncher(null);
@@ -128,6 +132,6 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
-		return null;
+		return super.createDetailsComponent();
 	}
 }
