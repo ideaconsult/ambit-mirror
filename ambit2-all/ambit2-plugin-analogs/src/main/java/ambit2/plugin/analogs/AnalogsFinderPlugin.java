@@ -113,10 +113,7 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 
 	}
 
-	public int compareTo(INanoPlugin o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
 	@Override
 	public String toString() {
 	    return "Find Analogs";

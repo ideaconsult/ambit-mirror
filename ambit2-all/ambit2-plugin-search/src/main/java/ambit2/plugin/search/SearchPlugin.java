@@ -89,10 +89,6 @@ public class SearchPlugin extends DBWorkflowPlugin {
 
 	}
 
-	public int compareTo(INanoPlugin arg0) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	@Override
 	public String toString() {
 		return "Simple Search";

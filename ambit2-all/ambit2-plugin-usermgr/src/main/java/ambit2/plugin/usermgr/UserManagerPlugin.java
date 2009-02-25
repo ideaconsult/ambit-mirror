@@ -47,12 +47,22 @@ import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
 import com.microworkflow.process.Workflow;
 
+/**
+ * Any administrative utilities, requiring admin DB rights 
+ * @author nina
+ *
+ */
 public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflowsPlugin {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8337122459874022752L;
 	protected List<ClassHolder> workflows;	
 	protected WorkflowOptionsLauncher contextListener;
 	public UserManagerPlugin() {
 		workflows = new ArrayList<ClassHolder>();
-		workflows.add(new ClassHolder("ambit2.plugin.usemgr.UserManagerWorkflow","Add user","Add new user in AMBIT database","images/users.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.UserManagerWorkflow","Add user","Add new user in AMBIT database","images/users.png"));
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
 		props.add(UserInteractionEvent.PROPERTYNAME);
@@ -121,9 +131,10 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 
 	}
 
-	public int compareTo(INanoPlugin o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
+	@Override
+	public String toString() {
+
+		return "Administrative tools";
+	}
 }
