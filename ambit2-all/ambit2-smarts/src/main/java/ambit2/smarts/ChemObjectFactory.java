@@ -20,7 +20,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 public class ChemObjectFactory 
 {
 	
-	Vector<SequenceElement> sequence = new Vector<SequenceElement>();
+	public Vector<SequenceElement> sequence = new Vector<SequenceElement>();
 	Vector<IAtom> sequencedAtoms = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
@@ -147,7 +147,7 @@ public class ChemObjectFactory
 		int a[] = new int[topLayer.atoms.size()];
 		for (int i = 0; i <topLayer.atoms.size(); i++)
 		{	
-			if (containsAtom(sequencedAtoms,(IQueryAtom)topLayer.atoms.get(i)))
+			if (containsAtom(sequencedAtoms, topLayer.atoms.get(i)))
 			{	
 				a[i] = 1;
 			}	
@@ -207,10 +207,31 @@ public class ChemObjectFactory
 		
 		for (int i = 1; i < numSteps; i++)
 		{
-			//TODO
+			el = sequence.get(i);
+			if (el.center == null) //Handling a closing bond
+			{	 
+				addBond(mol,m.get(el.atoms[0]),m.get(el.atoms[1]), 
+						el.bonds[0].getOrder(), el.bonds[0].getFlag(CDKConstants.ISAROMATIC));
+			}
+			else
+			{
+				for (int k = 0; k < el.atoms.length; k++)
+				{
+					IAtom a = getAtomCopy(el.atoms[k]);
+					mol.addAtom(a);
+					m.put(el.atoms[k],a);
+					addBond(mol, m.get(el.center), a, el.bonds[k].getOrder(), el.bonds[k].getFlag(CDKConstants.ISAROMATIC) );
+				}
+			}
 		}
 		return(mol);
 	}
+	
+	
+	
+	
+	
+	
 	
 	IAtom getAtomCopy(IAtom atom)
 	{

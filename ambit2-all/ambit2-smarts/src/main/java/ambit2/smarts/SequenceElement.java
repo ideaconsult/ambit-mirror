@@ -11,7 +11,7 @@ public class SequenceElement
 	//This class represents two types of objects: 
 	//(1) an atom with a part of its first topological layer or
 	//(2) a bond between two atoms which has already been sequenced  
-	//For the second case center == null and atoms.lenght = 2 and bonds.lenght = 1
+	//For the second case center == null and atoms.length = 2 and bonds.length = 1
 	IAtom center;	
 	IAtom atoms[];	
 	IBond bonds[];	

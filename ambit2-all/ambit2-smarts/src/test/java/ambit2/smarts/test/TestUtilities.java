@@ -35,8 +35,6 @@ import org.openscience.cdk.graph.ConnectivityChecker;
 
 
 
-
-
 public class TestUtilities 
 {	
 	static SmartsParser sp = new SmartsParser();
@@ -44,6 +42,7 @@ public class TestUtilities
 	static SmartsManager man = new SmartsManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
+	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
 	
 	
 	public static void printSmartsTokens(String smarts)
@@ -435,9 +434,16 @@ public class TestUtilities
 		//tu.showFullAtomMappings("CCN", "CCCNCCC");
 		//tu.showFullAtomMappings("C1CC=C1", "C1CC=C1CCC");
 		//tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
+		//tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
 		
-		tu.testHydrogenCount();
+		//tu.testHydrogenCount();
+		
+		//tu.testChemObjectToSmiles("CCC(CC)CC#CNCC1CC(CCNCl)CC1");
+		//tu.testChemObjectToSmiles("C1CCCCC=1");
+		//tu.testChemObjectToSmiles("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2");
+		
+		tu.testFragmentation("CCC(CCC)CCCN");
+		
 	}
 	
 	public void printAromaticity(IAtomContainer mol)
@@ -756,4 +762,24 @@ public class TestUtilities
 		System.out.println("getValency() = " + v);
 		
 	}
+		
+	void testFragmentation(String smiles)
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		ChemObjectFactory cof = new ChemObjectFactory();
+		cof.setAtomSequence(mol, mol.getAtom(0));
+		for (int i = 0; i < cof.sequence.size(); i++)
+		{
+			IAtomContainer frag = cof.getFragmentFromSequence(i);
+			System.out.println(cots.getSMILES(frag)); 
+		}
+	}
+	
+	void testChemObjectToSmiles(String smiles)
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		System.out.println(smiles+ "  --->  "+cots.getSMILES(mol)); 
+	}
+	
+	
 }
