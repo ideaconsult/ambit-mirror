@@ -48,6 +48,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	 */
 	private static final long serialVersionUID = 2604797602709881671L;
 	protected WorkflowOptionsLauncher contextListener;
+	
 	public PBTCheckerPlugin() {
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
@@ -69,6 +70,11 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 		results.setAnimate(true);
 		return new JComponent[] {results};		
 		*/
+		try {
+			getWorkflowContext().put(PBTWorkBook.PBT_WORKBOOK,new PBTWorkBook());
+		} catch (Exception x) {
+			getWorkflowContext().put(DBWorkflowContext.ERROR,x);
+		}
 	}
 	@Override
 	public void setWorkflowContext(WorkflowContext workflowContext) {
@@ -88,6 +94,11 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
 			PBTMainPanel results = new PBTMainPanel(getWorkflowContext());
+			try {
+				results.setWorkbook((PBTWorkBook)getWorkflowContext().get(PBTWorkBook.PBT_WORKBOOK));
+			} catch (Exception x) {
+				
+			}
 			Vector<String> p = new Vector<String>();
 			p.add(DBWorkflowContext.STOREDQUERY);
 			p.add(DBWorkflowContext.ERROR);

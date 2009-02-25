@@ -60,6 +60,7 @@ import ambit2.ui.editors.Panel2D;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -163,7 +164,9 @@ public class PBTPageBuilder {
         cc.insets = new Insets(1,1,1,1);
         cc.hAlign = CellConstraints.DEFAULT;
 
-        PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet);
+        PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet) {
+       
+        };
  
         Iterator<HSSFRow> rows = worksheet.getSheet().rowIterator();
 		while (rows.hasNext()) {
