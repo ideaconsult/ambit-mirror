@@ -62,14 +62,20 @@ public class FileOutputState extends FileState implements IOutputState {
 		};
 	public FileOutputState() {
 		super();
+		setSupportedExtDescriptions(extensionDescription);
+		setSupportedExtensions(extensions);		
 	}
 
 	public FileOutputState(String filename) {
 		super(filename);
+		setSupportedExtDescriptions(extensionDescription);
+		setSupportedExtensions(extensions);		
 	}
 
 	public FileOutputState(File file) {
 		super(file);
+		setSupportedExtDescriptions(extensionDescription);
+		setSupportedExtensions(extensions);		
 	}
 
 	public IChemObjectWriter getWriter() throws AmbitIOException {
