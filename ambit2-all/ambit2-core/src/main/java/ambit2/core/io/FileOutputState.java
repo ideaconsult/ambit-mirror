@@ -35,10 +35,11 @@ public class FileOutputState extends FileState implements IOutputState {
 	public transient static final int SVG_INDEX = 12;
 	public transient static final int JPG_INDEX = 13;
 	public transient static final int PNG_INDEX = 14;
+	public transient static final int RTF_INDEX = 15;	
 	
 	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".cml",
 			".mol",".hin",".pdb",".xyz",".xls",
-			".html",".pdf",".svg",".jpg",".png"};
+			".html",".pdf",".svg",".jpg",".png",".rtf"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -56,6 +57,7 @@ public class FileOutputState extends FileState implements IOutputState {
 		"SVG (*.svg)",
 		"JPEG image (*.jpg)",
 		"PNG image (*.png)",
+		"Rich Text Format (*.rtf)",
 
 		};
 	public FileOutputState() {
