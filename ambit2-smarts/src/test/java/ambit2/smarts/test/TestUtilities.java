@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.BitSet;
+import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.*;
 
 import org.openscience.cdk.interfaces.IChemFile;
@@ -443,7 +445,9 @@ public class TestUtilities
 		//tu.testChemObjectToSmiles("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2");
 		
 		//tu.testFragmentation("CCC(CCC)CCCN");
-		tu.testProduceStructuresExhaustively("CC(CCCN)CCC", 12);
+		//tu.testProduceStructuresExhaustively("CC(CCCN)CCC", 12);
+		
+		tu.produceStructures();
 		
 	}
 	
@@ -793,6 +797,29 @@ public class TestUtilities
 		
 		for (int i = 0; i < vStr.size(); i++)
 			System.out.println(vStr.get(i).smiles);
+	}
+	
+	void produceStructures() 
+	{
+		try
+		{
+			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf"),b);
+			//ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
+			int record=0;
+
+			while (reader.hasNext()) 
+			{
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					System.out.println(""+record + "  "+cots.getSMILES((IAtomContainer)o));
+					record++;
+				}
+			}	
+		}
+		catch(Exception e){}
+			
 	}
 	
 }
