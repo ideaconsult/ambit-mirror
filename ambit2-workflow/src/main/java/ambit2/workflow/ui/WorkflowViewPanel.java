@@ -55,6 +55,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     protected String title="Workflow";
     protected ImageIcon ptr, executed, notyet, conditional, composite, yes, no;
 
+
     /**
      * 
      */
@@ -221,7 +222,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 			
         CellConstraints cc = new CellConstraints();        
         
-        add(DefaultComponentFactory.getInstance ().createSeparator( "Workflow steps" ),cc.xy(1,1)) ;
+        //add(DefaultComponentFactory.getInstance ().createSeparator( "Workflow steps" ),cc.xy(1,1)) ;
         add(pane, cc.xy(1,2));        
         
 
@@ -231,8 +232,8 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         		new JButton[] {}),
         		cc.xy(1,3)
         		);
-        add(DefaultComponentFactory.getInstance ().createSeparator( "Messages" ),cc.xy(1,4)) ;
-        add(new JScrollPane(status,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),cc.xy(1,5));
+        //add(DefaultComponentFactory.getInstance ().createSeparator( "Messages" ),cc.xy(1,4)) ;
+        //add(new JScrollPane(status,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),cc.xy(1,5));
 	    
 	    
     }

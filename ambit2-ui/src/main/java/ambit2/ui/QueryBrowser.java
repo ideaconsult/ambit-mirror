@@ -28,6 +28,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
@@ -81,7 +83,9 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	protected Hashtable<BrowserMode, ImageCellRenderer> imageRenderers = new Hashtable<BrowserMode, ImageCellRenderer>();
 	protected BrowserModeCellRenderer cellRenderer = new BrowserModeCellRenderer(BrowserMode.Spreadsheet);
 	protected boolean editable;
-
+	protected String controlsPosition = BorderLayout.NORTH;  
+	protected boolean showHeader = true;
+	
 	/**
 	 * 
 	 */
@@ -89,12 +93,16 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	
 	public QueryBrowser() {
 		this(null);
+		
 	}	
 	public QueryBrowser(T model) {
-		this(model,new Dimension(150,150));
+		this(model,new Dimension(150,150),BorderLayout.NORTH,BrowserMode.Spreadsheet);
 	}
-	public QueryBrowser(T model,Dimension cellSize) {
+	public QueryBrowser(T model,Dimension cellSize,String controlsPosition,BrowserMode mode) {
 		super(new BorderLayout());
+		showHeader = (BrowserMode.Columns.equals(mode))?false:true;
+		this.controlsPosition = controlsPosition;
+		this.cellRenderer  = new BrowserModeCellRenderer(mode);
 		//this.cellSize = cellSize;
 
 		if (model instanceof IBrowserMode) 
@@ -104,7 +112,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 		p.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		browser_table.setPreferredScrollableViewportSize(new Dimension(600, 200));
 		add(p, BorderLayout.CENTER);
-		setMinimumSize(new Dimension(200, 200));
+		setMinimumSize(new Dimension(200, 100));
 		setObject(model);		
 	}
 	/**
@@ -113,7 +121,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	public void setObject(T object) {
 		if (object != null) {
 			browser_table.setModel(object);
-			add(addControls(), BorderLayout.NORTH);
+			add(addControls(), controlsPosition);
 		}
 	};
 	public T getObject() {
@@ -142,21 +150,46 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 		toolBar.putClientProperty("JToolBar.isRollover", Boolean.FALSE);
 		*/
 		
-		FormLayout layout = new FormLayout(
-	            "pref, pref",
-			"pref,pref");
-		PanelBuilder pb = new PanelBuilder(layout);
-		JPanel toolBar = pb.getPanel();
-		JComponent c = createPageControls(toolBar);
+
+
 		CellConstraints cc = new CellConstraints();
-		if (c != null) pb.add(c,cc.xy(1,1));
-		c = createBrowseModeControls(toolBar);
-		if (c != null) pb.add(c,cc.xy(2,1));
-		c= createRecordControls(toolBar);
-		if (c != null) pb.add(c,cc.xy(1,2));
-		c = createFindControls(toolBar);
-		if (c != null) pb.add(c,cc.xy(2,2));
-		return toolBar;
+		if (controlsPosition.equals(BorderLayout.EAST) || controlsPosition.equals(BorderLayout.WEST)) {
+			FormLayout layout = new FormLayout(
+					"pref",
+			        "pref, pref,pref"
+					);		
+				PanelBuilder pb = new PanelBuilder(layout);
+				JPanel toolBar = pb.getPanel();
+				
+				JComponent c = createPageControls(toolBar);				
+			if (c != null) pb.add(c,cc.xy(1,1));
+			c = createBrowseModeControls(toolBar);
+			if (c != null) pb.add(c,cc.xy(1,2));
+			
+			c= createRecordControls(toolBar);
+			if (c != null) pb.add(c,cc.xy(1,3));
+			/*
+			c = createFindControls(toolBar);
+			if (c != null) pb.add(c,cc.xy(1,4));	
+			*/
+			return toolBar;
+		} else {
+			FormLayout layout = new FormLayout(
+		        "pref, pref",
+				"pref,pref");		
+			PanelBuilder pb = new PanelBuilder(layout);
+			JPanel toolBar = pb.getPanel();
+			JComponent c = createPageControls(toolBar);			
+			if (c != null) pb.add(c,cc.xy(1,1));
+			c = createBrowseModeControls(toolBar);
+			if (c != null) pb.add(c,cc.xy(2,1));
+			c= createRecordControls(toolBar);
+			if (c != null) pb.add(c,cc.xy(1,2));
+			c = createFindControls(toolBar);
+			if (c != null) pb.add(c,cc.xy(2,2));
+			return toolBar;
+		}
+		
 	}
 	
 	protected JComponent createPageControls(JComponent toolbar) {
@@ -257,6 +290,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 				        				new JComboBox(new HeaderComboBoxModel(this,i,headerActions))));
 				        				    
 					}
+					
 					if (getTableHeader()!=null)
 						getTableHeader().setColumnModel(cm);
 					
@@ -267,7 +301,9 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 			};
 		};
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.setTableHeader(new EditableHeader(table.getColumnModel(),false));
+		if (showHeader)
+			table.setTableHeader(new EditableHeader(table.getColumnModel(),false));
+		else table.setTableHeader(null);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
@@ -311,25 +347,40 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	    table.setShowVerticalLines(BrowserMode.Spreadsheet.showGridVertical());
 	    table.setGridColor(Color.gray);
 	    setCellSize( table);
+	    
+	    table.addMouseListener(new MouseAdapter(){
+	        public void mouseClicked(MouseEvent e){
+	         if (e.getClickCount() == 2){
+	        	 if (browser_table.getModel() instanceof IRecordNavigator) {
+	        		 
+	     			//((IRecordNavigator) browser_table.getModel()).getRecord()
+	     			
+	     		 }	        	 
+	            
+	            }
+	         }
+	        } );
+	      	    
 		return table;
 	}	
 	protected void setRecord(int row, int col) {
 		if ((row < 0) || (col < 0)) return ;
+		
+		int record = row;
+		if (browser_table.getModel() instanceof IBrowserMode) {
+			IBrowserMode bm = ((IBrowserMode)browser_table.getModel());
+			record = bm.getBrowserMode().cellToRecord(row, col);
+			if (record < 0) return ;
+		}
+		if (browser_table.getModel() instanceof IPageNavigator) {
+			IPageNavigator pn = ((IPageNavigator)browser_table.getModel());
+			if (record >= pn.getPageSize()) {
+				record = (pn.getPageSize()-1) + pn.getPage()*pn.getPageSize();
+			} else
+				record = record + pn.getPage()*pn.getPageSize();
+		}
+		
 		if (browser_table.getModel() instanceof IRecordNavigator) {
-			
-			int record = row;
-			if (browser_table.getModel() instanceof IBrowserMode) {
-				IBrowserMode bm = ((IBrowserMode)browser_table.getModel());
-				record = bm.getBrowserMode().cellToRecord(row, col);
-				if (record < 0) return ;
-			}
-			if (browser_table.getModel() instanceof IPageNavigator) {
-				IPageNavigator pn = ((IPageNavigator)browser_table.getModel());
-				if (record >= pn.getPageSize()) {
-					record = (pn.getPageSize()-1) + pn.getPage()*pn.getPageSize();
-				} else
-					record = record + pn.getPage()*pn.getPageSize();
-			}
 			((IRecordNavigator) browser_table.getModel()).setRecord(record);
 		}
 	}
@@ -376,6 +427,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 			browser_table.setShowHorizontalLines(mode.showGridHorizontal());
 			browser_table.setShowVerticalLines(mode.showGridVertical());
 			
+			
 			if (browser_table.getModel() instanceof IBrowserMode)  {
 				BrowserMode oldmode = ((BrowserMode)evt.getOldValue());
 				((IBrowserMode)browser_table.getModel()).removePropertyChangeListener(getImageRenderer(oldmode));				
@@ -391,6 +443,8 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 						mode.getCellSize(1,0).height
 						);
 			}
+			
+
 
 		} else if (IBrowserMode.PROPERTY_ZOOM.equals(evt.getPropertyName())) {
 		

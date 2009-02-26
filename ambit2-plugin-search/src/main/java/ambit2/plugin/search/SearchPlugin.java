@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.QueryResultsPanel;
@@ -49,7 +50,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
-			QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
+			QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BrowserMode.Spreadsheet);
 			Vector<String> p = new Vector<String>();
 			p.add(DBWorkflowContext.STOREDQUERY);
 			p.add(DBWorkflowContext.ERROR);

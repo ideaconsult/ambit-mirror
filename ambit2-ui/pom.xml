@@ -38,6 +38,11 @@
     	<artifactId>jasperreports</artifactId>
     	<version>3.1.0</version>
     </dependency>
+    <dependency>
+    	<groupId>org.swinglabs</groupId>
+    	<artifactId>swingx</artifactId>
+    	<version>0.9.5-2</version>
+    </dependency>
   </dependencies>
 <licenses>
   <license>

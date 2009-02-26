@@ -35,6 +35,7 @@ import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
 import ambit2.core.data.Profile;
 import ambit2.core.data.Property;
+import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.QueryResultsPanel;
@@ -80,7 +81,7 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
-		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext());
+		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BrowserMode.Spreadsheet);
 			Vector<String> p = new Vector<String>();
 			p.add(DBWorkflowContext.STOREDQUERY);
 			p.add(DBWorkflowContext.ERROR);

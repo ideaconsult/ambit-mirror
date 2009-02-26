@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.openscience.cdk.interfaces.IMolecule;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -21,7 +22,7 @@ public class PBTWorkBook {
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
 	final PBTWorksheet[] pbt_worksheets; 
-	public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,P,B,T,RESULT};
+	public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
 	
     protected static Object[][] defs = {
     	{"TERMS & CONDITIONS",new Integer(27),new Integer(3),"ambit2/plugin/pbt/xml/welcome.xml"},   	
@@ -156,5 +157,22 @@ public class PBTWorkBook {
 
 			document.add(new Paragraph(""));
 		}    	
+    }
+    public boolean isCompleted(WORKSHEET_INDEX index) {
+    	switch (index) {
+    	case WELCOME : return true;
+    	case SUBSTANCE: {
+    		PBTWorksheet ws = getWorksheet(index);
+    		Object o = ws.getExtendedCell(10,5);
+    		if ((o != null) && (o instanceof IMolecule) && (((IMolecule)o).getAtomCount()>0)) 
+    			return true;
+    		else return (!"".equals(ws.getB10())) && (!"".equals(ws.getB11()));
+    	}
+    	case Persistence: return !getWorksheet(index).getE20().trim().equals("due to insufficient / conflicting data");
+    	case Bioaccumulation: return !getWorksheet(index).getD22().trim().equals("due to insufficient / conflicting data");
+    	case Toxicity: return !getWorksheet(index).getD19().trim().equals("due to insufficient / conflicting data");
+    	case RESULT: return !getWorksheet(index).getC9().trim().equals("PBT & vPvB Assessment failed");
+    	default: return false;
+    	}
     }
 }

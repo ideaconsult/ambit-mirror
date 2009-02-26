@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
+import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,11 @@ import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
 import ambit2.core.data.ClassHolder;
+import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
-import ambit2.workflow.ui.MultiWorkflowsPanel;
+import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
@@ -57,7 +59,8 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 	
 	public PBTCheckerPlugin() {
 		workflows = new ArrayList<ClassHolder>();
-		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","Search","Search for structures to be imported into PBT assessment","images/search_16.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","PBT","Verifies if PBT assessment is complete","images/pill_16.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment","images/search_16.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/page_white_acrobat.png"));
 		//workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 
@@ -87,6 +90,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 		} catch (Exception x) {
 			getWorkflowContext().put(DBWorkflowContext.ERROR,x);
 		}
+		
 	}
 	@Override
 	public void setWorkflowContext(WorkflowContext workflowContext) {
@@ -101,12 +105,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 	}
 	@Override
 	protected Workflow createWorkflow() {
-		return new Workflow() {
-			@Override
-			public String toString() {
-				return "PBT";
-			}
-		};		
+		return new PBTWorkflow();	
 		
 	}
 	public INPluginUI<INanoPlugin> createMainComponent() {
@@ -157,8 +156,18 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
-		if (detailsComponent == null)
-			detailsComponent = new JComponent[] {new MultiWorkflowsPanel<PBTCheckerPlugin>(this,getAction())};
+		if (detailsComponent == null) {
+		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BorderLayout.EAST,BrowserMode.Columns);
+		    
+			Vector<String> p = new Vector<String>();
+			p.add(DBWorkflowContext.STOREDQUERY);
+			p.add(DBWorkflowContext.ERROR);
+			results.setProperties(p);
+			results.setAnimate(true);
+			detailsComponent = new JComponent[] {results};			
+		}
+			//detailsComponent = new JComponent[] {new MultiWorkflowsPanel<PBTCheckerPlugin>(this,getAction())};
+			
 		return detailsComponent;
 	}
 	public List<ClassHolder> getWorkflows() {

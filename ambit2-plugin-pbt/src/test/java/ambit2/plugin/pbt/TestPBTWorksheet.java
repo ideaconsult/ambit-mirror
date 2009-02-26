@@ -42,7 +42,7 @@ public class TestPBTWorksheet {
 
 	@Test
 	public void testEvaluateTSheet() throws Exception {
-		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.T);
+		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.Toxicity);
 		PBTWorksheet result = workbook.getWorksheet(WORKSHEET_INDEX.RESULT);
 		
 		//ws.set(5,2,0.1);
@@ -108,7 +108,7 @@ public class TestPBTWorksheet {
 	public void testEvaluateSubstanceAntTSheet() throws Exception {
 		Assert.assertEquals(78.047,setMolecule(MoleculeFactory.makeBenzene()));
 
-		PBTWorksheet t = workbook.getWorksheet(WORKSHEET_INDEX.T);
+		PBTWorksheet t = workbook.getWorksheet(WORKSHEET_INDEX.Toxicity);
 		Assert.assertEquals(10.0,t.get(17,1));
 		Assert.assertEquals(0.156094,t.get(17,0));
 		

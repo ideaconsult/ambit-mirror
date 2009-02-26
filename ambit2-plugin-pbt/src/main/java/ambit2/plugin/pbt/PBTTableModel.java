@@ -92,8 +92,10 @@ public class PBTTableModel extends AbstractTableModel {
 	}
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		
 		Cell cell = new Cell(rowIndex,columnIndex);
-		table.put(cell,value);	
+		if (value == null) table.remove(cell);
+		else table.put(cell,value);	
 		fireTableDataChanged();
 	}
 	public void setDefinition(String definition) throws IOException, ParserConfigurationException, SAXException {
