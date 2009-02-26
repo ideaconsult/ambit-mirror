@@ -116,20 +116,22 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         	   }
       	   } ); 
 
-        leftPanel = new SimpleInternalFrame("Options");
+        JComponent leftComponent = buildMainLeftPanel(pluginsManager);
+        leftPanel = new SimpleInternalFrame((leftComponent != null)?leftComponent.toString():"Options");
         leftPanel.setPreferredSize(new Dimension(150, 100));
-        leftPanel.setContent(buildMainLeftPanel(pluginsManager));
+        leftPanel.setContent(leftComponent);
         
-        rightPanel = new SimpleInternalFrame("Main");
+        Component rightComponent = buildMainRightPanel(pluginsManager);
+        rightPanel = new SimpleInternalFrame((rightComponent != null)?rightComponent.toString():"Main");
         rightPanel.setPreferredSize(new Dimension(400,400));
         rightPanel.setContent(buildMainRightPanel(pluginsManager));
         
-        detailsPanel = new SimpleInternalFrame("Details");
+        JComponent detailsComponent = buildDetailsPanel(pluginsManager);
+        detailsPanel = new SimpleInternalFrame((detailsComponent != null)?detailsComponent.toString():"Details");
         detailsPanel.setPreferredSize(new Dimension(400,100));
-        JComponent details = buildDetailsPanel(pluginsManager);
-        if (details != null)
-        	detailsPanel.setContent(details);
-        detailsPanel.setVisible(details != null);
+        if (detailsComponent != null)
+        	detailsPanel.setContent(detailsComponent);
+        detailsPanel.setVisible(detailsComponent != null);
         
 		mainFrame.getContentPane().setLayout(new BorderLayout());
 		mainFrame.getRootPane().setJMenuBar(createMenuBar());
@@ -229,7 +231,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         return pane;
 	}
 	
-    private JComponent buildMainLeftPanel(INanoPlugin plugin) {
+    protected JComponent buildMainLeftPanel(INanoPlugin plugin) {
         JComponent c = null;
         JComponent[] options = plugin.createOptionsComponent();
         if (options!= null) 
@@ -245,7 +247,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         return c;
     }
     
-    private JComponent buildDetailsPanel(INanoPlugin plugin) {
+    protected JComponent buildDetailsPanel(INanoPlugin plugin) {
         JComponent c = null;
         JComponent[] options = plugin.createDetailsComponent();
         if (options!= null) 
@@ -260,7 +262,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     }
     
     
-    private Component buildMainRightPanel(INanoPlugin plugin) {
+    protected Component buildMainRightPanel(INanoPlugin plugin) {
     	 
     	 Component c = plugin.createMainComponent().getComponent();
     	 if (c == null) c = new JLabel("N/A");
