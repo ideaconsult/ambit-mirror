@@ -43,6 +43,7 @@ import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
+import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
@@ -141,14 +142,5 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 
 		return "Administrative tools";
 	}
-	public JComponent[] createOptionsComponent() {
-		if (optionsComponent == null) {
-			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
-		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
-		             task,"Run",null);
-		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
-			optionsComponent = new JComponent[] {new WorkflowViewPanel(workflow,action)};
-		} 
-		return optionsComponent;
-	}		
+	
 }

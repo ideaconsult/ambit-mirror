@@ -48,6 +48,7 @@ import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
+import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 import ambit2.workflow.ui.WorkflowViewPanel;
@@ -142,16 +143,6 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 	public String toString() {
 		return "Database tools";
 	}
-	
-	public JComponent[] createOptionsComponent() {
-		if (optionsComponent == null) {
-			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
-		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
-		             task,"Run",null);
-		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
-			optionsComponent = new JComponent[] {new WorkflowViewPanel(workflow,action)};
-		} 
-		return optionsComponent;
-	}	
+
 	
 }
