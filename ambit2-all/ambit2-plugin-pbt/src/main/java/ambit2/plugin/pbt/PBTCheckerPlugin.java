@@ -42,9 +42,12 @@ import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
+import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.QueryResultsPanel;
+import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
+import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
@@ -170,6 +173,28 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 			
 		return detailsComponent;
 	}
+	
+	public JComponent[] createOptionsComponent() {
+		if (optionsComponent == null) {
+			if (this instanceof IMultiWorkflowsPlugin) {
+				StatusPanel p = new StatusPanel(getWorkflowContext());
+				Vector<String> props = new Vector<String>();	
+				props.add(DBWorkflowContext.LOGININFO);
+				props.add(DBWorkflowContext.DBCONNECTION_URI);
+				props.add(DBWorkflowContext.DATASOURCE);
+				p.setProperties(props);
+				
+				getWorkflowContext().addPropertyChangeListener(p);
+				optionsComponent =  new JComponent[] {
+						new WorkflowViewPanel(workflow,getAction()),
+						new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,getAction()),
+						p
+				};
+			} else
+				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
+		}
+		return optionsComponent;
+	}		
 	public List<ClassHolder> getWorkflows() {
 
 		return workflows;

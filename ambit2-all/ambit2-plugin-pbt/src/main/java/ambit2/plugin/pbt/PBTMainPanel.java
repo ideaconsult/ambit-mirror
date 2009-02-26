@@ -131,7 +131,8 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         if (event.getPropertyName().equals(ambit2.workflow.DBWorkflowContext.STOREDQUERY)) {
         	try {
 	        	IAtomContainer a = execute(((IStoredQuery) event.getNewValue()));
-	        	pbt_workbook.getWorksheet(1).setExtendedCell(a, 10,5);
+	        	if (pbt_workbook!= null)
+	        		pbt_workbook.getWorksheet(1).setExtendedCell(a, 10,5);
         	} catch (Exception x) {
         		x.printStackTrace();
         	}
