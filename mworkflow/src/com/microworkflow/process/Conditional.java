@@ -72,4 +72,7 @@ public class Conditional extends Activity implements IConditionalActivity {
     public Activity getThenBranch() {
         return thenBranch;
     }
+    public void setNotExecuted() {
+    	if (test != null) test.setNotExecuted();
+    }
 }

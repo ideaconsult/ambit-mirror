@@ -70,5 +70,7 @@ public class Primitive<Target,Result> extends Activity {
 		if (performer != null) return performer.hasExecuted();
 		else return false;
 	}
-
+    public void setNotExecuted() {
+    	if (performer != null) performer.setNotExecuted();
+    }
 }

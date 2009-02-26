@@ -82,4 +82,7 @@ public abstract class Performer<Target,Result> extends WorkflowClosure {
         // TODO Auto-generated method stub
         return "[" + targetKey + " --> " + resultKey + "]";
     }
+    public void setNotExecuted() {
+    	hasExecuted = false;
+    }
 }

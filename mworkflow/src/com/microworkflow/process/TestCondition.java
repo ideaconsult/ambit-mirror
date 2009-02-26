@@ -32,5 +32,7 @@ public abstract class TestCondition extends WorkflowClosure {
 	public boolean hasExecuted() {
 		return !status.equals(STATUS.NOTEXECUTED);
 	}
-
+    public void setNotExecuted() {
+    	status = STATUS.NOTEXECUTED;
+    }
 }

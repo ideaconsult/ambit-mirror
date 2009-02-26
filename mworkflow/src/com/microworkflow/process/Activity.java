@@ -47,4 +47,7 @@ public abstract class Activity {
 	public String toString() {
 	    return getName();
 	}
+    public void setNotExecuted() {
+    	
+    }	
 }
