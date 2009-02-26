@@ -35,11 +35,13 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
+import java.util.Iterator;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
@@ -81,7 +83,13 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
         				editAction = new MoleculeEditAction(null);
         			editAction.setMolecule((IMolecule)getObject());
         			editAction.actionPerformed(null);
-        			setAtomContainer(editAction.getMolecule(), true);
+        			IMolecule molecule = editAction.getMolecule();
+        			if (molecule != null) {
+        				//to force 2D generation, otherwise the image is broken
+	        			//Iterator<IAtom> atoms = molecule.atoms();
+	        			//while (atoms.hasNext()) {atoms.next().setPoint2d(null);}
+        			}
+        			setAtomContainer(molecule, true);
         		}	
         	}
         });
@@ -91,7 +99,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	public void paint(Graphics g) {
 		super.paintComponent(g);    
 		if (image == null) {
-			image = tools.getImage(atomContainer,selected);
+			image = tools.getImage(atomContainer,selected,generate2d);
 		}
 		g.drawImage(image,0,0,this);
 	}
