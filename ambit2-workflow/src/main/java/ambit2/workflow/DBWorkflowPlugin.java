@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
-import java.awt.event.ActionEvent;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -37,6 +36,7 @@ import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
 import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
+import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
@@ -81,18 +81,24 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	protected WorkflowContext createWorkflowContext() {
 		return new DBWorkflowContext();
 	}
+
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {
-			if (this instanceof IMultiWorkflowsPlugin) {
-				optionsComponent =  new JComponent[] {
-						new WorkflowViewPanel(workflow,getAction()),
-						new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,getAction())
-				};
-			} else
-				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
-		}
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+		             task,"Run",null);
+		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());
+			StatusPanel p = new StatusPanel(getWorkflowContext());
+			Vector<String> props = new Vector<String>();	
+			props.add(DBWorkflowContext.LOGININFO);
+			props.add(DBWorkflowContext.DBCONNECTION_URI);
+			props.add(DBWorkflowContext.DATASOURCE);
+			p.setProperties(props);		    
+			optionsComponent = new JComponent[] {
+					new WorkflowViewPanel(workflow,action),p};
+		} 
 		return optionsComponent;
-	}	
+	}		
 	@Override
 	public JComponent[] createDetailsComponent() {
 		if (detailsComponent == null) {
