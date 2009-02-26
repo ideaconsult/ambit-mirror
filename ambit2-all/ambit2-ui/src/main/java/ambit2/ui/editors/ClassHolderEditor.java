@@ -20,6 +20,8 @@ import ambit2.core.data.ClassHolder;
 import ambit2.ui.Utils;
 
 public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder> {
+	public static Color BorderColor = new Color(216,240,250);
+	public static Color SelectedColor = new Color(244,250,253);
 	/**
 	 * 
 	 */
@@ -42,8 +44,8 @@ public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder
 
 class ImageCellRenderer extends DefaultListCellRenderer {
 	protected final int size = 48;
-	protected Border shadow = BorderFactory.createLineBorder(new Color(216,240,250));
-	protected Color selectedClr = new Color(244,250,253);
+	protected Border shadow = BorderFactory.createLineBorder(ClassHolderEditor.BorderColor);
+	protected Color selectedClr = ClassHolderEditor.SelectedColor;
 	/**
 	 * 
 	 */

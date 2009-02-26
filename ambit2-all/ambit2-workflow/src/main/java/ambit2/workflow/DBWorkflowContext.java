@@ -33,7 +33,9 @@ import javax.sql.DataSource;
 
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
+import ambit2.db.LoginInfo;
 import ambit2.db.SourceDataset;
+import ambit2.db.processors.MySQLCommand;
 import ambit2.db.search.IStoredQuery;
 
 import com.microworkflow.process.WorkflowContext;
@@ -71,12 +73,32 @@ public class DBWorkflowContext extends WorkflowContext {
         } else throw new AmbitException("Found instance of "+o.getClass().getName()+ " instead of javax.sql.DataSource");
         return ds;
     }
-
+    public String getUserName() {
+    	try {
+    	 return ((LoginInfo) get(LOGININFO)).getUser();
+    	} catch (Exception x) {
+    		return "";
+    	}
+    }
+    public String getDatabase() {
+    	try {
+    	 return ((LoginInfo) get(LOGININFO)).getDatabase();
+    	} catch (Exception x) {
+    		return "";
+    	}
+    }    
     public String getConnectionURI() {
         return get(DBCONNECTION_URI).toString();
     }
     public void setConnectionURI(String connURI) {
         put(DBCONNECTION_URI,connURI);
+    }
+    public LoginInfo getLoginInfo() {
+    	return (LoginInfo)get(LOGININFO);
+    }
+    public boolean isMySQLStarted() {
+    	Object o = get(MySQLCommand.MYSQLCOMMAND);
+    	return (o!=null) && (o instanceof MySQLCommand) && (((MySQLCommand)o).getProcess()!=null);
     }
     @Override
     public String toString() {
