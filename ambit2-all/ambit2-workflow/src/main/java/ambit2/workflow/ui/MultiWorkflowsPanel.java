@@ -41,7 +41,10 @@ import ambit2.ui.editors.ClassHolderEditor;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 
 import com.jgoodies.binding.list.IndirectListModel;
+import com.microworkflow.process.Activity;
+import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Workflow;
+import com.microworkflow.ui.WorkflowTools;
 
 /**
  * User interface for multiple workflows plugins. 
@@ -139,5 +142,9 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 		this.plugin = (IMultiWorkflowsPlugin)plugin;
 		
 	}
+	@Override
+	public String toString() {
 
+		return "Options";
+	}
 }

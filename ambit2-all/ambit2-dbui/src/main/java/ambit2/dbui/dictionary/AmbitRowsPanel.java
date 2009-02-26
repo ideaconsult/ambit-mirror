@@ -35,6 +35,7 @@ import ambit2.db.search.IQueryObject;
 import ambit2.dbui.CachedRowSetTableModel;
 import ambit2.ui.QueryBrowser;
 import ambit2.ui.editors.IAmbitEditor;
+import ambit2.ui.table.IBrowserMode.BrowserMode;
 
 public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, Q>> 
 							extends JPanel implements IAmbitEditor<Rows> {
@@ -50,7 +51,7 @@ public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, 
     protected void addWidgets() {
     	setLayout(new BorderLayout());
     	srtm = new CachedRowSetTableModel();
-    	browser = new QueryBrowser<CachedRowSetTableModel>(null,new Dimension(150,20));
+    	browser = new QueryBrowser<CachedRowSetTableModel>(null,new Dimension(150,20),BorderLayout.NORTH,BrowserMode.Spreadsheet);
     	add(browser, BorderLayout.CENTER);
     	/*
         JTable table = new JTable(srtm);

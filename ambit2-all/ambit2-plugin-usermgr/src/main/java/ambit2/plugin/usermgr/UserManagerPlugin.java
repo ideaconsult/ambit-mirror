@@ -35,7 +35,9 @@ import javax.swing.JComponent;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
+import nplugins.workflow.ExecuteWorkflowTask;
 import ambit2.core.data.ClassHolder;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -44,8 +46,10 @@ import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
+import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.process.Workflow;
+import com.microworkflow.process.WorkflowContext;
 
 /**
  * Any administrative utilities, requiring admin DB rights 
@@ -137,4 +141,14 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 
 		return "Administrative tools";
 	}
+	public JComponent[] createOptionsComponent() {
+		if (optionsComponent == null) {
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+		             task,"Run",null);
+		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());			
+			optionsComponent = new JComponent[] {new WorkflowViewPanel(workflow,action)};
+		} 
+		return optionsComponent;
+	}		
 }

@@ -24,19 +24,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
+import java.awt.event.ActionEvent;
 import java.util.Vector;
 
 import javax.swing.JComponent;
 
+import nplugins.core.NPluginsException;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.NPluginsAction;
+import nplugins.shell.application.TaskMonitor;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
 import ambit2.core.processors.batch.BatchProcessor;
+import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
+import com.microworkflow.process.Activity;
 import com.microworkflow.process.WorkflowContext;
+import com.microworkflow.ui.WorkflowTools;
 
 public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	
@@ -48,7 +54,22 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	
 	protected NPluginsAction<WorkflowContext,Void> getAction() {
 		if (runAction == null) {
-			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext) {
+				@Override
+				public WorkflowContext execute(TaskMonitor monitor)
+						throws NPluginsException {
+					WorkflowTools tools = new WorkflowTools() {
+						@Override
+						public Object process(Activity[] parentActivity,
+								Activity activity) {
+							activity.setNotExecuted();
+							return activity;
+						}
+					};
+					tools.traverseActivity(null,getWorkflow().getDefinition(),0,true);
+					return super.execute(monitor);
+				}
+			};
 		    runAction =  new NPluginsAction<WorkflowContext,Void>(
 		             task,"Run",null);
 		    runAction.setTaskMonitor(getApplicationContext().getTaskMonitor());				
@@ -62,8 +83,13 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	}
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {
-		
-			optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
+			if (this instanceof IMultiWorkflowsPlugin) {
+				optionsComponent =  new JComponent[] {
+						new WorkflowViewPanel(workflow,getAction()),
+						new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,getAction())
+				};
+			} else
+				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
 		}
 		return optionsComponent;
 	}	

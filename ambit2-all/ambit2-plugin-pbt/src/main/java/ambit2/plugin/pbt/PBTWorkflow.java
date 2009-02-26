@@ -24,46 +24,47 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
-import ambit2.db.search.QueryField;
-import ambit2.workflow.ExecuteAndStoreQuery;
-import ambit2.workflow.QueryInteraction;
-import ambit2.workflow.library.LoginSequence;
+import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
 
-import com.microworkflow.execution.Performer;
-import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Activity;
+import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Sequence;
+import com.microworkflow.process.TestCondition;
 import com.microworkflow.process.Workflow;
 
 public class PBTWorkflow extends Workflow {
 	public PBTWorkflow() {
 		
-    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
-        p1.setName("Search");    
         Sequence seq=new Sequence();
-        seq.setName("Substance search");
-        seq.addStep(new QueryInteraction(new QueryField()));
-		seq.addStep(p1);
-				
-		/*
-        seq.setName("PBT Assessment");
-        String[] pbt = new String[] {"Substance definition","Persistence","Bioaccumulation","Toxicity","Results"};
-        for (String a : pbt) {
-        	Primitive p = new Primitive(new Performer(){
-        		public Object execute() throws Exception { return null;};
-        	});
-        	p.setName(a);
-        	seq.addStep(p);
+        seq.setName(toString());
+        Activity prev = null;
+        for (int i=WORKSHEET_INDEX.values().length-1;i>0;i--) {
+        	TestCondition test = new WorksheetCompleted(WORKSHEET_INDEX.values()[i]);
+        	Conditional c = new Conditional(test,prev);
+        	c.setName(WORKSHEET_INDEX.values()[i].toString());
+        	prev = c;
+       	
         }
-        */
+        seq.addStep(prev);
         setDefinition(seq);        	
-        
 
-
-		setDefinition(new LoginSequence(seq));
-	
 		}
 	@Override
 	public String toString() {
 		return "PBT";
+	}
+}
+
+class WorksheetCompleted extends TestCondition {
+	WORKSHEET_INDEX index = WORKSHEET_INDEX.SUBSTANCE;
+	public WorksheetCompleted(WORKSHEET_INDEX index) {
+		this.index = index;
+	}
+	@Override
+	public boolean evaluate() {
+		Object o = getContext().get(PBTWorkBook.PBT_WORKBOOK);
+		if ((o==null) || !(o instanceof PBTWorkBook)) return false;
+		return ((PBTWorkBook)o).isCompleted(index);
+		
 	}
 }

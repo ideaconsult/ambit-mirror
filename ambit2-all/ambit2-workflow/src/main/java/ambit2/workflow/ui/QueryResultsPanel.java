@@ -31,6 +31,7 @@ package ambit2.workflow.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -45,6 +46,7 @@ import ambit2.db.search.IStoredQuery;
 import ambit2.dbui.StoredQueryTableModel;
 import ambit2.ui.QueryBrowser;
 import ambit2.ui.table.BrowsableTableModel;
+import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.process.WorkflowContext;
@@ -72,22 +74,28 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
         QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(
                 new BrowsableTableModel(model));
      */
-    public QueryResultsPanel(IWorkflowContextFactory wfcfactory) {
+    public QueryResultsPanel(IWorkflowContextFactory wfcfactory,String controlsPosition,BrowserMode mode) {
         super(wfcfactory);
-        addWidgets();
+        addWidgets(controlsPosition,mode);
     }
-    public QueryResultsPanel(WorkflowContext wfcontext) {
+    public QueryResultsPanel(IWorkflowContextFactory wfcfactory,BrowserMode mode) {
+    	this(wfcfactory,BorderLayout.NORTH,mode);
+    }    
+    public QueryResultsPanel(WorkflowContext wfcontext,BrowserMode mode) {
+        this(wfcontext,BorderLayout.NORTH,mode);
+    }
+    public QueryResultsPanel(WorkflowContext wfcontext,String controlsPosition,BrowserMode mode) {
         super(null);
         setWorkflowContext(wfcontext);
-        addWidgets();
-    }
-    
-    protected void addWidgets() {
+        addWidgets(controlsPosition,mode);
+    }    
+    protected void addWidgets(String controlsPosition,BrowserMode mode) {
         setLayout(new BorderLayout());
         setAnimate(true);
         tableModel = new StoredQueryTableModel();
         browser = new QueryBrowser<BrowsableTableModel>(
-                    new BrowsableTableModel(tableModel));
+                    new BrowsableTableModel(tableModel),
+                    new Dimension(100,100),controlsPosition,mode);
         add(browser,BorderLayout.CENTER);
     }
     @Override
@@ -132,5 +140,9 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
         tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
 
         
+    }
+    @Override
+    public String toString() {
+    	return "Search results";
     }
 }

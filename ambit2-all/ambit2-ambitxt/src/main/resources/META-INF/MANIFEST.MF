@@ -1,15 +1,14 @@
-Package: ambit2.ambitxt
+Manifest-Version: 2.0
 Main-Class: ambit2.ambitxt.Splasher
-
-Name: ambit2/ambitxt/Splasher.class
+Name: AmbitXT
 Specification-Title: Ambit XT
-Specification-Version: 2.0
+Specification-Version: 2.0.0
 Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Package-Title: ambit2.ambitxt
-Package-Version: 2.0
+Package-Version: 2.0.0
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: Ambit XT
-Implementation-Version: 2.0
+Implementation-Version: 2.0.0
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net
