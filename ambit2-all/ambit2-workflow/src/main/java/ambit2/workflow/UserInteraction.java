@@ -27,12 +27,11 @@ public class UserInteraction<T> extends Primitive {
 	                T li = null;
 	                try {
 	                	li = latch.getLatch().getValue();
-	                    context.remove(DBWorkflowContext.USERINTERACTION);
-
 	                } catch (InterruptedException x) {
 	                    context.put(DBWorkflowContext.ERROR, x);
-	                    context.remove(DBWorkflowContext.USERINTERACTION);
 	                    return null;
+	                } finally {
+	                	context.remove(DBWorkflowContext.USERINTERACTION);
 	                }
 	                if (li == null) throw new Exception("Workflow cancelled.");
                     return li;	                

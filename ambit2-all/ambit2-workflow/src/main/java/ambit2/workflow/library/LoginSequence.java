@@ -72,13 +72,21 @@ public class LoginSequence extends Sequence {
 	                    
 	                    try {
 	                        li = latch.getLatch().getValue();
-	                        context.put(DBWorkflowContext.LOGININFO,li);
+	                        if (li!=null)
+	                        	context.put(DBWorkflowContext.LOGININFO,li);
+	                        else
+	                        	context.remove(DBWorkflowContext.LOGININFO);
 	                        context.remove(DBWorkflowContext.USERINTERACTION);
-	
 	                    } catch (InterruptedException x) {
 	                    	context.remove(DBWorkflowContext.USERINTERACTION);
 	                        context.put(DBWorkflowContext.ERROR, x);
 	                        return null;
+	                    } catch (Exception x) {
+	                    	context.remove(DBWorkflowContext.USERINTERACTION);
+	                    	context.put(DBWorkflowContext.ERROR, x);
+	                    	return null;
+	                    } finally {
+	                    	context.remove(DBWorkflowContext.USERINTERACTION);
 	                    }
                 	} else li = (LoginInfo)ol;
                 	
@@ -106,8 +114,8 @@ public class LoginSequence extends Sequence {
                                 	conn.close();
                                     return  true;
                                 } catch (Exception x) {
-                                	context.put(DBWorkflowContext.ERROR, x);
                                     context.remove(DBWorkflowContext.DBCONNECTION_URI);
+                                    context.put(DBWorkflowContext.ERROR, x);
                                     return false;                                	
                                 }
 
@@ -116,8 +124,8 @@ public class LoginSequence extends Sequence {
                                 return false;
                             }
                         } catch (Exception x) {
-                            context.put(DBWorkflowContext.ERROR, x);
                             context.remove(DBWorkflowContext.DBCONNECTION_URI);
+                            context.put(DBWorkflowContext.ERROR, x);                            
                             return false;
                         }
                     }
