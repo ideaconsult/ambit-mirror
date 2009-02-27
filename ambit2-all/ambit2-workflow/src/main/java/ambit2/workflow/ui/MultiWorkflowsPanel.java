@@ -22,6 +22,7 @@ package ambit2.workflow.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -121,7 +122,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 				}
 			});
 		}
-		
+		setPreferredSize(new Dimension(cellSize*10,cellSize*(object.size()+1)));
 
 	}	
 	
