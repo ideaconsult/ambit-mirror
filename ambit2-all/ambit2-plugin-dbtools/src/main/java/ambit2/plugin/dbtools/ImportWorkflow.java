@@ -121,6 +121,7 @@ public class ImportWorkflow extends Workflow {
         	};
         }
         );
+        p2.setName("Create new dataset");
         s1.addStep(p2);
         s1.addStep(new DatasetSelection(p1,dataset));
 

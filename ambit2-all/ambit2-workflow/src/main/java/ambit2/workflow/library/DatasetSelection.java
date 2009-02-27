@@ -52,8 +52,8 @@ public class DatasetSelection extends Sequence {
 	public DatasetSelection(Activity onSuccess, SourceDataset dataset) {
         
         UserInteraction<SourceDataset> input = new UserInteraction<SourceDataset>(
-        		dataset,DBWorkflowContext.DATASET,"Select dataset");
-        input.setName("Select dataset");
+        		dataset,DBWorkflowContext.DATASET,"Dataset configuration");
+        input.setName("Dataset configuration");
 
         Conditional verify = new Conditional(
                 new TestCondition() {
@@ -68,7 +68,7 @@ public class DatasetSelection extends Sequence {
                 onSuccess,
                 null);
         verify.setName("Verify dataset");
-        setName("[Select dataset]");
+        setName("[Dataset configuration]");
         
         addStep(input);
         addStep(verify);

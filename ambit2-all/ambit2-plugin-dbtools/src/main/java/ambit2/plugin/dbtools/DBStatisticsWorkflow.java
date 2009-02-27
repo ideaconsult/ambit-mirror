@@ -22,7 +22,9 @@ public class DBStatisticsWorkflow extends Workflow {
     		public String toString() {
     			return "Statistics";
     		}
+    		
     	};
+    	p1.setName("Table statistics");
     	 setDefinition(new LoginSequence(p1));
     	 
 	}

@@ -10,6 +10,8 @@ public class ConnectionStatisticsProcessor extends ConnectionStatusProcessor {
 	protected static final String[] sql = {
 			"Select concat(idmajor,'.',idminor) as 'Ambit database version' from version",
 			"Select concat(DATE(date),' ',time(date)) as 'Ambit database created on' from version",
+			"Select count(*) as 'Chemicals' from chemicals",
+			"Select count(*) as 'Structures' from structure",
 			"Select count(*) as 'Datasets' from src_dataset",
 			"select concat('\tDataset\t','Reference\t','\tURL') as 'Datasets list'",
 			"select concat('\t',name,'\t',title,'\t',URL,'\n') as 'Dataset' from src_dataset join catalog_references using(idreference)",
