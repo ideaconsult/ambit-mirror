@@ -96,7 +96,7 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
     }
 
 	@Override
-	protected String getComments(DescriptorValue descriptor) {
+	protected String getComments(String name,DescriptorValue descriptor) {
 		return descriptor.getSpecification().getImplementationIdentifier();
 	}
 	@Override

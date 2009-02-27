@@ -26,6 +26,8 @@ package ambit2.db.processors;
 
 import java.sql.SQLException;
 
+import org.openscience.cdk.CDKConstants;
+
 import ambit2.core.data.Dictionary;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.LiteratureEntry;
@@ -62,15 +64,21 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 		try {
 			return Double.parseDouble(o.toString());
 		} catch (Exception x) {
-			//System.err.println(propertyName + "\t" + o + "\t" + x.getMessage());
+			logger.warn(x);
 			return o;
 		}
 	
 	}
 
 	@Override
-	protected String getComments(IStructureRecord target) {
-		return "Structure";
+	protected String getComments(String name,IStructureRecord target) {
+		String n = name.toLowerCase();
+		if (n.startsWith("cas")) return CDKConstants.CASRN;
+		if (n.contains("name")) return CDKConstants.NAMES;
+		if (n.contains("iupac")) return "IUPAC Name";
+		if (n.contains("inchi")) return CDKConstants.INCHI;
+		if (n.contains("smiles")) return CDKConstants.SMILES;
+		return name;
 	}
 
 	@Override

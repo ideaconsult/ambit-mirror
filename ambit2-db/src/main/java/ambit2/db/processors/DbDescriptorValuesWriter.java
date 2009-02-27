@@ -66,7 +66,7 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
     }
     
 	@Override
-	protected String getComments(DescriptorValue descriptor) {
+	protected String getComments(String name,DescriptorValue descriptor) {
 		return descriptor.getSpecification().getImplementationIdentifier();
 	}
 	@Override
