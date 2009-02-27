@@ -39,6 +39,8 @@ import ambit2.core.data.ClassHolder;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.MolFileFilter;
 import ambit2.core.processors.batch.BatchProcessor;
+import ambit2.db.DatasourceFactory;
+import ambit2.db.LoginInfo;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -91,6 +93,13 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		fs.setSupportedExtDescriptions(MolFileFilter.supported_exts_description);
 		fs.setSupportedExtensions(MolFileFilter.supported_extensions);
 		getWorkflowContext().put(InputFileSelection.INPUTFILE, fs);
+		
+		LoginInfo li = new LoginInfo();
+		li.setUser("guest");
+		li.setPassword(li.getUser());
+		String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());
+		getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
+		getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);		
 	}
 	public List<ClassHolder> getWorkflows() {
 		return workflows;

@@ -121,7 +121,7 @@ public class StatusPanel extends WorkflowContextListenerPanel {
 			}
 		} else
 		*/
-		if (DBWorkflowContext.DBCONNECTION_URI.equals(e.getPropertyName())) {
+		if (DBWorkflowContext.DBCONNECTION_URI.equals(e.getPropertyName()) || DBWorkflowContext.DATASOURCE.equals(e.getPropertyName())) {
 			if (e.getNewValue()!= null) {
 				labels[0][0].setText("Logged in"); 
 				labels[0][2].setText("<html><u>Log out</u></html>");
