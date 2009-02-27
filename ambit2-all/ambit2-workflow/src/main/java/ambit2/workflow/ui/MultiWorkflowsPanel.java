@@ -41,10 +41,7 @@ import ambit2.ui.editors.ClassHolderEditor;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 
 import com.jgoodies.binding.list.IndirectListModel;
-import com.microworkflow.process.Activity;
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Workflow;
-import com.microworkflow.ui.WorkflowTools;
 
 /**
  * User interface for multiple workflows plugins. 
@@ -58,14 +55,22 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
     private IndirectListModel<ClassHolder> listModel;
     private JList       objectList;	
     protected Action action;
+    protected int cellSize = 64;
+	public int getCellSize() {
+		return cellSize;
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2128986015636595519L;
 
-
 	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin,Action action) {
+		this(plugin,action,64);
+	}
+	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin,Action action, int cellSize) {
 	        super(new BorderLayout());
+	        this.cellSize = cellSize;
 	        this.action = action;
 	        setBackground(Color.white);
 	        setPlugin(plugin);	        
@@ -92,7 +97,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 			};
 			objectList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			objectList.setCellRenderer(ClassHolderEditor.createListCellRenderer());
+			objectList.setCellRenderer(ClassHolderEditor.createListCellRenderer(getCellSize()));
 			objectList.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
