@@ -696,6 +696,16 @@ public class TestUtilities
 			System.out.println(vStr.get(i).smiles);
 	}
 	
+	void printSequence(String smiles)
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		ChemObjectFactory cof = new ChemObjectFactory();
+		cof.setAtomSequence(mol, mol.getAtom(0));
+		System.out.println(smiles);
+		for (int i = 0; i < cof.sequence.size(); i++)
+			System.out.println("SeqEl " + i + " : "+cof.sequence.get(i).toString());
+	}
+	
 	void produceStructures() 
 	{
 		try
@@ -826,10 +836,14 @@ public class TestUtilities
 		//tu.testChemObjectToSmiles("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2");		
 		//tu.testChemObjectToSmiles("C1=CC=CC=C1");
 		
-		//tu.testFragmentation("C1CC(CCC)CC1CN");
-		//tu.testProduceStructuresExhaustively("CC(CCCN)CCC", 12);
 		
-		tu.produceStructures();
+		//tu.printSequence("P1CS=N1");
+		//tu.testFragmentation("P1CS=N1");
+		tu.testProduceStructuresExhaustively("C1CCCC1", 12);
+		tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2", 12);
+		
+		//tu.produceStructures();
+		
 		
 	}
 	
