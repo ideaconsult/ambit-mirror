@@ -125,7 +125,7 @@ public class ChemObjectFactory
 						newSeqEl.atoms = new IAtom[2];
 						newSeqEl.bonds = new IBond[1];
 						newSeqEl.atoms[0] = curSeqAt.atoms[i];
-						newSeqEl.atoms[1] = (IQueryAtom)topLayer.atoms.get(k);
+						newSeqEl.atoms[1] = topLayer.atoms.get(k);
 						addSeqBond(newSeqEl.atoms[0],newSeqEl.atoms[1]);
 						newSeqEl.bonds[0] = topLayer.bonds.get(k);
 						sequence.add(newSeqEl);						
@@ -207,7 +207,7 @@ public class ChemObjectFactory
 			addBond(mol, m.get(el.center), a, el.bonds[k].getOrder(), el.bonds[k].getFlag(CDKConstants.ISAROMATIC) );
 		}
 		
-		for (int i = 1; i < numSteps; i++)
+		for (int i = 1; i <= numSteps; i++)
 		{
 			el = sequence.get(i);
 			if (el.center == null) //Handling a closing bond
