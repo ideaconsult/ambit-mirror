@@ -3,6 +3,7 @@ package ambit2.plugin.pbt;
 import java.awt.Color;
 import java.io.InputStream;
 
+import org.apache.commons.collections.set.CompositeSet.SetMutator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -156,8 +157,11 @@ public class PBTWorkBook {
 			document.add(table);
 
 			document.add(new Paragraph(""));
+			ws.setModified(false);
 		}    	
+		
     }
+    
     public boolean isCompleted(WORKSHEET_INDEX index) {
     	switch (index) {
     	case WELCOME : return true;
@@ -175,4 +179,10 @@ public class PBTWorkBook {
     	default: return false;
     	}
     }
+    public boolean isModified() {
+    	for (WORKSHEET_INDEX w : WORKSHEET_INDEX.values() ) 
+			if (getWorksheet(w).isModified()) return true;
+		return false;
+
+    }    
 }
