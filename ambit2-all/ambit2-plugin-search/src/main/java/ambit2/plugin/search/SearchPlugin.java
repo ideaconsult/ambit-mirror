@@ -54,6 +54,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 			Vector<String> p = new Vector<String>();
 			p.add(DBWorkflowContext.STOREDQUERY);
 			p.add(DBWorkflowContext.ERROR);
+			p.add(DBWorkflowContext.DBCONNECTION_URI);			
 			results.setProperties(p);
 			results.setAnimate(true);
 			mainComponent = results;

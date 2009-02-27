@@ -35,11 +35,13 @@ import nplugins.shell.application.TaskMonitor;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
 import ambit2.core.processors.batch.BatchProcessor;
+import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.process.Activity;
+import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.WorkflowTools;
 
@@ -80,6 +82,7 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 		return runAction;
 	}
 	
+
 	@Override
 	protected WorkflowContext createWorkflowContext() {
 		return new DBWorkflowContext();
@@ -91,6 +94,8 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
 		             task,"Run",null);
 		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());
+		    Workflow logout = new Workflow();
+			logout.setDefinition(new LogoutSequence());		    
 			StatusPanel p = new StatusPanel(getWorkflowContext());
 			Vector<String> props = new Vector<String>();	
 			props.add(DBWorkflowContext.LOGININFO);

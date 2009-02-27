@@ -133,6 +133,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 	
 
 	protected String getField(int idstructure,String fieldname) throws SQLException, AmbitException {
+		if (getConnection() == null) return null;
 		if (structureField == null) structureField = 
 			getConnection().prepareStatement(retrieveField.getSQL());
 		
@@ -199,6 +200,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 		try {
             records.first();
             records.relative(rowIndex);			
+            if (records.isAfterLast()) return "";
             int idstructure = records.getInt("idstructure");
 			switch (columnIndex) {
 			//selected

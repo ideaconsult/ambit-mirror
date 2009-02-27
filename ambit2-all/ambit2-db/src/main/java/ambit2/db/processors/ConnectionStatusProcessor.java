@@ -16,7 +16,8 @@ public class ConnectionStatusProcessor extends AbstractDBProcessor<String,String
 
 	public StringBuffer process(String target) throws AmbitException {
 	    StringBuffer b = new StringBuffer();
-	    b.append(target);
+	    if (target != null)
+	    	b.append(target);
 	    b.append('\n');
 	    try {
 			java.sql.DatabaseMetaData db = connection.getMetaData();

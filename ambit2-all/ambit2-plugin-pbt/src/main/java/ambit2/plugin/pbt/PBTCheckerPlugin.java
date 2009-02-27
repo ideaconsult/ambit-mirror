@@ -42,6 +42,7 @@ import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
+import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.StatusPanel;
@@ -165,6 +166,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 			Vector<String> p = new Vector<String>();
 			p.add(DBWorkflowContext.STOREDQUERY);
 			p.add(DBWorkflowContext.ERROR);
+			p.add(DBWorkflowContext.DBCONNECTION_URI);			
 			results.setProperties(p);
 			results.setAnimate(true);
 			detailsComponent = new JComponent[] {results};			
@@ -177,6 +179,9 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {
 			if (this instanceof IMultiWorkflowsPlugin) {
+				
+				Workflow logout = new Workflow();
+				logout.setDefinition(new LogoutSequence());
 				StatusPanel p = new StatusPanel(getWorkflowContext());
 				Vector<String> props = new Vector<String>();	
 				props.add(DBWorkflowContext.LOGININFO);
