@@ -350,7 +350,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     	exitConfirmed = true;
     	PropertyChangeListener listener = new PropertyChangeListener() {
         	public void propertyChange(PropertyChangeEvent evt) {
-        		exitConfirmed = JOptionPane.showConfirmDialog(null,
+        		exitConfirmed = exitConfirmed && JOptionPane.showConfirmDialog(null,
         				"<html>Do you want ignore changes in <p><i>'"+evt.getNewValue()+"</i>' module?",
         				"Warning - data not saved!",JOptionPane.YES_NO_OPTION)
         				== JOptionPane.YES_OPTION;
