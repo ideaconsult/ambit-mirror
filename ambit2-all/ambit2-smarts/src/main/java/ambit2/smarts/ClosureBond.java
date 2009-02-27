@@ -7,7 +7,7 @@ public class ClosureBond
 	//This class is used for IAtomContainers. (RingClosure is used for QueryAtomContaner)
 	public int at1;
 	public int at2;
-	public IBond.Order bt;
+	public IBond bt;
 	public int index;
 	
 	public String getIndexAt1()
@@ -19,14 +19,9 @@ public class ClosureBond
 	}
 	
 	
-	public String getIndexAt2()
+	public String getIndexAt2(boolean aromaticity)
 	{		
-		String boString = "";
-		if (bt == IBond.Order.DOUBLE)
-			boString = "=";
-		else
-			if (bt == IBond.Order.TRIPLE)
-				boString = "#";
+		String boString = SmartsHelper.smilesBondToString(bt, aromaticity);
 		
 		if (index > 9)
 			return(boString+"%" + index);

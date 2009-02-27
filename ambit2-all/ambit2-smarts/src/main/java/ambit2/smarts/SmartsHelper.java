@@ -173,8 +173,12 @@ public class SmartsHelper
 		return("-");
 	}
 	
-	static public String smilesBondToString(IBond b)
+	static public String smilesBondToString(IBond b, boolean aromaticity)
 	{			
+		if (aromaticity)
+			if (b.getFlag(CDKConstants.ISAROMATIC))
+				return("");
+		
 		if (b.getOrder() == IBond.Order.SINGLE)
 			return("");
 		if (b.getOrder() == IBond.Order.DOUBLE)
@@ -306,11 +310,13 @@ public class SmartsHelper
 		try
 		{
 			writer.write(mol);
+			writer.close();
 		}
 		catch (Exception e)
 		{
 			System.out.println(e.toString());
 		}
+		
 		return(result.toString());
 	}
 	

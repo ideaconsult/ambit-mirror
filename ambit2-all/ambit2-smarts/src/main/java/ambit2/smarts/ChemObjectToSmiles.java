@@ -11,6 +11,9 @@ import java.util.List;
 
 public class ChemObjectToSmiles 
 {
+	//When this flag is true the aromaticity is encoded with small letters.
+	public boolean mAromaticity = true;   
+	
 	IAtomContainer mol;
 	int NA;
 	int walkedAtoms[];
@@ -63,8 +66,13 @@ public class ChemObjectToSmiles
 			at.getSymbol().equals("I")
 			)
 		{
-			if (at.getFlag(CDKConstants.ISAROMATIC))				
-				return(at.getSymbol().toLowerCase());
+			if (mAromaticity)
+			{	
+				if (at.getFlag(CDKConstants.ISAROMATIC))				
+					return(at.getSymbol().toLowerCase());
+				else
+					return(at.getSymbol());
+			}	
 			else
 				return(at.getSymbol());
 		}
@@ -79,7 +87,7 @@ public class ChemObjectToSmiles
 		{
 			ClosureBond cb = closures.get(i);
 			closureNums[cb.at1]+= cb.getIndexAt1();
-			closureNums[cb.at2]+= cb.getIndexAt2();
+			closureNums[cb.at2]+= cb.getIndexAt2(mAromaticity);
 		}
 	}
 	
@@ -103,7 +111,7 @@ public class ChemObjectToSmiles
 				ClosureBond  cb = new ClosureBond();
 				cb.at2 = atNum;
 				cb.at1 = a;
-				cb.bt = tl.bonds.get(i).getOrder();
+				cb.bt = tl.bonds.get(i);
 				cb.index = curIndex;
 				addClosureBond(cb);			
 			}
@@ -137,7 +145,7 @@ public class ChemObjectToSmiles
 			{			
 				walkedAtoms[a] = 1;	
 				IBond b = tl.bonds.get(i);
-				v.add(SmartsHelper.smilesBondToString(b)+getAtomWalkString(a,atNum));			
+				v.add(SmartsHelper.smilesBondToString(b,mAromaticity)+getAtomWalkString(a,atNum));			
 			}		
 		}
 		

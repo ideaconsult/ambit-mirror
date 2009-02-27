@@ -18,6 +18,7 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
@@ -30,6 +31,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -344,112 +346,7 @@ public class TestUtilities
 	
 	
 	
-	//-------------------------------------------------------------------------------
 	
-	
-	public static void main(String[] args)
-	{
-		TestUtilities tu = new TestUtilities();
-		//tu.testSmartsManagerBoolSearch("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
-		//tu.testSmartsManagerBoolSearch("[x1;C]", "CCCC");
-		//tu.testSmartsManagerAtomMapping("N", "CCNCCNCC");
-		//tu.testSmartsManagerAtomMapping("[x2]", "C1CCC12CC2");
-		//tu.testSmartsManagerBoolSearch("c1ccccc1[N+]", "c1ccccc1[N+]");		
-		//tu.testSmartsManagerBoolSearch("(CCC.C1CC12CC2).C=CC#C.CCN.(ClC)", "CCCCC");
-		//tu.testSmartsManagerBoolSearch("(CCCC.CC.CCCN).N.C", "CCCCC.CCCN");
-		//tu.testSmartsManagerBoolSearch("(Cl.CCCC.CC.CCCCN).N.C", "CCCCC.CCCN");
-		//tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
-		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
-		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
-		
-		
-		
-		sp.mUseMOEvPrimitive = true;
-		//sp.mSupportMOEExtension = true;
-		//printSmartsTokens("[#6,i,#G3,#X,#N,q3,v2]");
-		//tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
-		//tu.testSmartsManagerBoolSearch("[#G6]", "CCC");
-		//tu.testSmartsManagerBoolSearch("[#G6]", "CCS");
-		//tu.testSmartsManagerBoolSearch("[#G4]", "CCS");
-		//tu.testSmartsManagerBoolSearch("[#G4]", "O-O");
-		//tu.testSmartsManagerBoolSearch("[#X]", "CCC");
-		//tu.testSmartsManagerBoolSearch("[#X]", "CCS");
-		//tu.testSmartsManagerBoolSearch("[q2]", "C1CCC1");
-		//tu.testSmartsManagerBoolSearch("[q3]", "C1CCC1");
-		//tu.testSmartsManagerBoolSearch("[q0]", "CCCC");  //!!!!!
-		//tu.testSmartsManagerBoolSearch("[#N]", "CCC");
-		//tu.testSmartsManagerBoolSearch("[#N]", "CCF");
-		//tu.testSmartsManagerBoolSearch("[v2]", "CCC");
-		//tu.testSmartsManagerBoolSearch("[v4]", "CCC");
-		//man.useMOEvPrimitive(true);
-		//tu.testSmartsManagerBoolSearch("[v2]", "CCC");
-		//tu.testSmartsManagerBoolSearch("[#G7]", "CCC");
-		//tu.testSmartsManagerBoolSearch("[#G7]", "CCCF");
-		//tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
-		
-		//Cheking [OH]AA!-*
-		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "COCC=N");
-		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC=N");
-		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC-N");
-		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[H][O]CC=N");
-		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[O+]CC=N");
-		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OSC=N");
-		
-		//tu.testSmartsManagerBoolSearch("C~/[i]=[i]~/C", "CC=CC");
-		
-		
-		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
-		//tu.testAtomSequencing(smarts);		
-		//tu.testAtomSequencingFromFile("\\NCI001000.txt");
-		
-		/*
-		tu.testIsomorphismTester("C1CCC1","CCCCC");
-		tu.testIsomorphismTester("CC","CCCCC");
-		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
-		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
-		tu.testIsomorphismTester("CC[C,O]C","CCCC");
-		tu.testIsomorphismTester("CC[C,O]C","COCC");
-		tu.testIsomorphismTester("CC[C,O]C","COC=C");
-		tu.testIsomorphismTester("C(C)(C)(C)C","CC(C)(C)CC");
-		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");
-		*/
-		
-		//tu.getCarbonSkelletonsFromString();		
-		//tu.testAtomIndexesForMapping(4, 5);
-		//tu.testCML("[H]C1CCC12CCNCC2");
-		//tu.testIntParsing("1234");
-		
-		//tu.testFingerprint();
-		//tu.testWithFile("\\NCI001000.txt","ExtractAtomContainer");
-		
-		//int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
-		//int res = tu.testExtractAtomContainer("CC=CC#CCN");
-		//int res = tu.testExtractAtomContainer("c1ccccc1");
-		//System.out.println("res = " + res);
-		
-		//tu.testSMARTStoChemObj("*CCCC*CC~CN");
-		//tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
-		
-		man.useMOEvPrimitive(true);
-		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		//tu.showFullAtomMappings("CCN", "CCCNCCC");
-		//tu.showFullAtomMappings("C1CC=C1", "C1CC=C1CCC");
-		//tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		//tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
-		
-		//tu.testHydrogenCount();
-		
-		//tu.testChemObjectToSmiles("CCC(CC)CC#CNCC1CC(CCNCl)CC1");
-		//tu.testChemObjectToSmiles("C1CCCCC=1");
-		//tu.testChemObjectToSmiles("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2");
-		
-		//tu.testFragmentation("CCC(CCC)CCCN");
-		//tu.testProduceStructuresExhaustively("CC(CCCN)CCC", 12);
-		
-		tu.produceStructures();
-		
-	}
 	
 	public void printAromaticity(IAtomContainer mol)
 	{	
@@ -809,17 +706,131 @@ public class TestUtilities
 			int record=0;
 
 			while (reader.hasNext()) 
-			{
+			{	
+				record++;
 				Object o = reader.next();
 				if (o instanceof IAtomContainer) 
 				{
-					System.out.println(""+record + "  "+cots.getSMILES((IAtomContainer)o));
-					record++;
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					System.out.println("" + record + "  " + cots.getSMILES(mol));
 				}
 			}	
 		}
-		catch(Exception e){}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
 			
+	}
+	
+//-------------------------------------------------------------------------------
+	
+	
+	public static void main(String[] args)
+	{
+		TestUtilities tu = new TestUtilities();
+		//tu.testSmartsManagerBoolSearch("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
+		//tu.testSmartsManagerBoolSearch("[x1;C]", "CCCC");
+		//tu.testSmartsManagerAtomMapping("N", "CCNCCNCC");
+		//tu.testSmartsManagerAtomMapping("[x2]", "C1CCC12CC2");
+		//tu.testSmartsManagerBoolSearch("c1ccccc1[N+]", "c1ccccc1[N+]");		
+		//tu.testSmartsManagerBoolSearch("(CCC.C1CC12CC2).C=CC#C.CCN.(ClC)", "CCCCC");
+		//tu.testSmartsManagerBoolSearch("(CCCC.CC.CCCN).N.C", "CCCCC.CCCN");
+		//tu.testSmartsManagerBoolSearch("(Cl.CCCC.CC.CCCCN).N.C", "CCCCC.CCCN");
+		//tu.testSmartsManagerBoolSearch("(CCCC.CC).(CCCN).N.C", "CCCCC.CCCN");
+		//tu.testSmartsManagerBoolSearch("(CCBr.CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		//tu.testSmartsManagerBoolSearch("(CCBr).(CCN).(OCC)", "BrCCCCC.CCCN.OCCC");
+		
+		
+		
+		sp.mUseMOEvPrimitive = true;
+		//sp.mSupportMOEExtension = true;
+		//printSmartsTokens("[#6,i,#G3,#X,#N,q3,v2]");
+		//tu.testSmartsManagerBoolSearch("[#6,i]", "c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("[#G6]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#G6]", "CCS");
+		//tu.testSmartsManagerBoolSearch("[#G4]", "CCS");
+		//tu.testSmartsManagerBoolSearch("[#G4]", "O-O");
+		//tu.testSmartsManagerBoolSearch("[#X]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#X]", "CCS");
+		//tu.testSmartsManagerBoolSearch("[q2]", "C1CCC1");
+		//tu.testSmartsManagerBoolSearch("[q3]", "C1CCC1");
+		//tu.testSmartsManagerBoolSearch("[q0]", "CCCC");  //!!!!!
+		//tu.testSmartsManagerBoolSearch("[#N]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#N]", "CCF");
+		//tu.testSmartsManagerBoolSearch("[v2]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[v4]", "CCC");
+		//man.useMOEvPrimitive(true);
+		//tu.testSmartsManagerBoolSearch("[v2]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#G7]", "CCC");
+		//tu.testSmartsManagerBoolSearch("[#G7]", "CCCF");
+		//tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
+		
+		//Cheking [OH]AA!-*
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "COCC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OCC-N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[H][O]CC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "[O+]CC=N");
+		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "OSC=N");
+		
+		//tu.testSmartsManagerBoolSearch("C~/[i]=[i]~/C", "CC=CC");
+		
+		
+		//String smarts[] = {"CCC", "CCCCC", "C1CCC(C2CCC2C)CCCCC1"};
+		//tu.testAtomSequencing(smarts);		
+		//tu.testAtomSequencingFromFile("\\NCI001000.txt");
+		
+		/*
+		tu.testIsomorphismTester("C1CCC1","CCCCC");
+		tu.testIsomorphismTester("CC","CCCCC");
+		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
+		tu.testIsomorphismTester("CC1CCC1","C1CCC1C");
+		tu.testIsomorphismTester("CC[C,O]C","CCCC");
+		tu.testIsomorphismTester("CC[C,O]C","COCC");
+		tu.testIsomorphismTester("CC[C,O]C","COC=C");
+		tu.testIsomorphismTester("C(C)(C)(C)C","CC(C)(C)CC");
+		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");
+		*/
+		
+		//tu.getCarbonSkelletonsFromString();		
+		//tu.testAtomIndexesForMapping(4, 5);
+		//tu.testCML("[H]C1CCC12CCNCC2");
+		//tu.testIntParsing("1234");
+		
+		//tu.testFingerprint();
+		//tu.testWithFile("\\NCI001000.txt","ExtractAtomContainer");
+		
+		//int res = tu.testExtractAtomContainer("C1=CC=CC=C1");
+		//int res = tu.testExtractAtomContainer("CC=CC#CCN");
+		//int res = tu.testExtractAtomContainer("c1ccccc1");
+		//System.out.println("res = " + res);
+		
+		//tu.testSMARTStoChemObj("*CCCC*CC~CN");
+		//tu.testSMARTStoChemObj("C[#3]CCC[n;++H2][O+,o,O-][$([O,O-,O++]CBr)]CC");
+		
+		man.useMOEvPrimitive(true);
+		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.showFullAtomMappings("CCN", "CCCNCCC");
+		//tu.showFullAtomMappings("C1CC=C1", "C1CC=C1CCC");
+		//tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
+		
+		//tu.testHydrogenCount();
+		
+		//tu.testChemObjectToSmiles("CCC(CC)CC#CNCC1CC(CCNCl)CC1");
+		//tu.testChemObjectToSmiles("C1CCCCC=1");		
+		//tu.testChemObjectToSmiles("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2");		
+		//tu.testChemObjectToSmiles("C1=CC=CC=C1");
+		
+		//tu.testFragmentation("C1CC(CCC)CC1CN");
+		//tu.testProduceStructuresExhaustively("CC(CCCN)CCC", 12);
+		
+		tu.produceStructures();
+		
 	}
 	
 }
