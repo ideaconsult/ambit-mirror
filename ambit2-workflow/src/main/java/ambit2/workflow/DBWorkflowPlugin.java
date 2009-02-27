@@ -35,7 +35,6 @@ import nplugins.shell.application.TaskMonitor;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
 import ambit2.core.processors.batch.BatchProcessor;
-import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
@@ -50,6 +49,10 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 	 * 
 	 */
 	private static final long serialVersionUID = 7190224146559024307L;
+	public DBWorkflowPlugin() {
+		super();
+		setModified(false);
+	}
 	protected NPluginsAction<WorkflowContext,Void> runAction = null;
 	
 	protected NPluginsAction<WorkflowContext,Void> getAction() {

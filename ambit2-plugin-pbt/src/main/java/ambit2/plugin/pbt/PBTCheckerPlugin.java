@@ -201,6 +201,17 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 
 		return workflows;
 	}
-	
+	@Override
+	public boolean isModified() {
+		try {
+			Object o = getWorkflowContext().get(PBTWorkBook.PBT_WORKBOOK);
+			if ((o!=null) && (o instanceof PBTWorkBook))
+				return ((PBTWorkBook)o).isModified();
+			else 
+				return false;
+		} catch (Exception x) {
+			return false;
+		}
+	}
 	
 }

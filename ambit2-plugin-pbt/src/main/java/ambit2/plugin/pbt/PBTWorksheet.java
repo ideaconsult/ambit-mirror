@@ -46,7 +46,15 @@ public class PBTWorksheet  extends AmbitBean  {
 	protected HSSFSheet sheet;
 
 	protected HSSFFormulaEvaluator formulaEvaluator = null;
+	protected boolean modified = false;
 	
+	public boolean isModified() {
+		return modified;
+	}
+	public void setModified(boolean modified) {
+		this.modified = modified;
+	}
+
 	/**
 	 * 
 	 */
@@ -111,6 +119,7 @@ public class PBTWorksheet  extends AmbitBean  {
 	}
 	public void setExtendedCell(Object value,int row, int col) {
 		if (moreInfo != null) {
+			setModified(true);
 			moreInfo.setValueAt(value, row, col);
 	    	firePropertyChange("E"+getCellName(row-1, col-1).toLowerCase(), null, value);
 		}
@@ -179,6 +188,7 @@ public class PBTWorksheet  extends AmbitBean  {
     	}
     	*/
     	default: {
+    		setModified(true);
     		if (value instanceof Number)
     			cell.setCellValue(((Number)value).doubleValue());
     		else
