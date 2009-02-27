@@ -7,7 +7,7 @@ Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Package-Title: ambit2.plugin.usermgr
 Package-Version: 2.0
 Package-Vendor: http://ambit.sourceforge.net
-Implementation-Title: Users
+Implementation-Title: Admin
 Implementation-Version: 2.0
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
