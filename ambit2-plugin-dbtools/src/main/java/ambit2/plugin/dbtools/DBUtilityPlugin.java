@@ -31,13 +31,10 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
-import nplugins.workflow.ExecuteWorkflowTask;
 import ambit2.core.data.ClassHolder;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.MolFileFilter;
@@ -48,13 +45,10 @@ import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
-import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
-import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.process.Workflow;
-import com.microworkflow.process.WorkflowContext;
 
 /**
  * Provides workflows for several database related tasks
@@ -76,7 +70,8 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL","Start local MySQL database server","images/mysql_start.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MySQLServerStop","MySQL","Stop local MySQL database server","images/mysql_stop.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MySQLServerStop","MySQL","Stop local MySQL database server","images/mysql_stop.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBStatisticsWorkflow","DB statistics","Displays database statistics","images/database3.png"));
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
