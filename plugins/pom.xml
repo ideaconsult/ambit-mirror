@@ -5,7 +5,7 @@
   <groupId>ambit</groupId>
   <artifactId>nplugins</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>Nano plugins</name>
   <description>An application framework for dynamically loaded plugins</description>  
    <distributionManagement>

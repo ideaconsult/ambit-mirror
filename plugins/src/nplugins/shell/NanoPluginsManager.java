@@ -26,6 +26,7 @@ package nplugins.shell;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -49,6 +50,7 @@ import nplugins.shell.application.Utils;
 import com.jgoodies.binding.beans.Model;
 
 public class NanoPluginsManager extends Model implements INanoPlugin {
+	public final static String PROPERTY_CANTCLOSE="nplugins.shell.PROPERTY_CANTCLOSE"; 
 	INPApplicationContext applicationContext;
 	/**
      * 
@@ -258,6 +260,38 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	}
 	public void setApplicationContext(INPApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
+	}
+	public boolean canClose() {
+		//verify the current plugin first
+		if ((thePlugin!=null) && (thePlugin != this) && !thePlugin.canClose()) {
+				firePropertyChange(PROPERTY_CANTCLOSE, null, thePlugin.toString());
+				return false;
+		}
+		boolean ok = true;
+		Iterator<PluginPackageEntry> i = packageEntries.iterator();
+		while (i.hasNext()) {
+			PluginPackageEntry key = i.next();
+			INanoPlugin plugin = storage.restorePlugin(key);
+			if (plugin != null) {
+				if (!plugin.canClose()) {
+					firePropertyChange(PROPERTY_CANTCLOSE, null, plugin.toString());					
+					ok = false;
+				}
+			}
+		}
+		return ok;
+	}
+	public void close() {
+		// TODO Auto-generated method stub
+		
+	};
+	public boolean isModified() {
+
+		return false;
+	}
+	public void setModified(boolean modified) {
+
+		
 	}
 	
 }

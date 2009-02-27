@@ -1,5 +1,5 @@
 /*
- * Copyright Ideaconsult Ltd. (C) 2005-2008 
+ * Copyright Ideaconsult Ltd. (C) 2005-2009 
  *
  * Contact: nina@acad.bg
  *
@@ -88,6 +88,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     protected final SimpleInternalFrame rightPanel;
     protected final SimpleInternalFrame leftPanel;
     protected final SimpleInternalFrame detailsPanel;
+    protected boolean exitConfirmed = true;
 
 	JFrame mainFrame;
 	
@@ -200,7 +201,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
 		pluginsManager = createManager();
 		pluginsManager.setParameters(args);
 		pluginsManager.setApplicationContext(applicationContext);
-        
+
 		addPlugins(pluginsManager);
 
         pluginsManager.addPropertyChangeListener(this);        
@@ -346,10 +347,30 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     }
 
     protected boolean canClose() {
-    	
-    	String msgexit = "Are you sure you want to exit?";
-        return (JOptionPane.showConfirmDialog(null,msgexit,"Please confirm",JOptionPane.YES_NO_OPTION)
-        		==JOptionPane.YES_OPTION);
+    	exitConfirmed = true;
+    	PropertyChangeListener listener = new PropertyChangeListener() {
+        	public void propertyChange(PropertyChangeEvent evt) {
+        		exitConfirmed = JOptionPane.showConfirmDialog(null,
+        				"<html>Do you want ignore changes in <p><i>'"+evt.getNewValue()+"</i>' module?",
+        				"Warning - data not saved!",JOptionPane.YES_NO_OPTION)
+        				== JOptionPane.YES_OPTION;
+        		
+        	}
+        };
+        pluginsManager.addPropertyChangeListener(NanoPluginsManager.PROPERTY_CANTCLOSE,listener)  ; 	
+        try {
+	    	if (pluginsManager.canClose() || exitConfirmed) {
+		    	String msgexit = "Are you sure you would like to exit?";
+		        return (JOptionPane.showConfirmDialog(null,msgexit,"Please confirm",JOptionPane.YES_NO_OPTION)
+		        		==JOptionPane.YES_OPTION);
+	    	} 
+        } catch (Exception x) {
+        	x.printStackTrace();
+        	JOptionPane.showMessageDialog(null,x.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        } finally {
+        	pluginsManager.removePropertyChangeListener(NanoPluginsManager.PROPERTY_CANTCLOSE,listener);
+        }
+        return false;
      }
     protected void doClose() {
           mainFrame.setVisible(false);

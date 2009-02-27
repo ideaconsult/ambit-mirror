@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package nplugins.workflow;
 
+import java.beans.PropertyChangeListener;
+
 import javax.swing.ActionMap;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -46,7 +48,16 @@ public abstract class MWorkflowPlugin implements INanoPlugin {
 	protected JComponent[] detailsComponent = null;
 	protected JComponent[] optionsComponent = null;
 	protected INPluginUI<INanoPlugin> mainComponent = null;
+	protected boolean modified;
 	
+	public boolean isModified() {
+		return modified;
+	}
+
+	public void setModified(boolean modified) {
+		this.modified = modified;
+	}
+
 	public MWorkflowPlugin() {
 		setWorkflow(createWorkflow());
 		setWorkflowContext(createWorkflowContext());
@@ -119,5 +130,15 @@ public abstract class MWorkflowPlugin implements INanoPlugin {
 		this.workflowContext = workflowContext;
 		this.workflowContext.setName(toString());
 	}
-
+	public boolean canClose() {
+		return !isModified();
+	}
+	public void close() {
+		if (workflowContext!=null)
+			workflowContext.clear();
+		if (workflow!=null)
+		for (PropertyChangeListener l : workflow.getPropertyChangeListeners())
+			workflow.removePropertyChangeListener(l);
+		
+	}
 }

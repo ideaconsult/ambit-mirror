@@ -94,4 +94,10 @@ public interface INanoPlugin extends PropertyChangeListener, Comparable<INanoPlu
     public ResourceBundle getResourceBundle();
     
     public ImageIcon getIcon();
+    
+    boolean isModified();
+    void setModified(boolean modified);
+    boolean canClose();
+    
+    void close();
 }

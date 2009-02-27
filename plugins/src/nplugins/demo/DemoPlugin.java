@@ -22,10 +22,12 @@ import nplugins.shell.application.Utils;
 
 public class DemoPlugin implements INanoPlugin {
 	protected INPApplicationContext applicationContext;
-	protected String name="demo";
+	protected String name="Save";
 	protected DemoMainPanel mainPanel = null;
 	protected JComponent[] options = null;
+	protected boolean modified = false;
     public DemoPlugin() {
+    	setModified(true);
         try {
         Thread.sleep(1000);
         } catch (Exception x) {
@@ -73,6 +75,8 @@ public class DemoPlugin implements INanoPlugin {
                      throw new Exception("test");
                  } catch (Exception x) {
                      throw new NPluginsException(x);
+                 } finally {
+                	 setModified(false);
                  }
                } 
 
@@ -143,5 +147,19 @@ public class DemoPlugin implements INanoPlugin {
 	}
 	public void setApplicationContext(INPApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
+	}
+	public boolean canClose() {
+		return !isModified();
+	}
+	public void close() {
+		// TODO Auto-generated method stub
+		
+	}
+	public boolean isModified() {
+		return modified;
+	}
+	public void setModified(boolean modified) {
+		this.modified = modified;
+		
 	}
 }
