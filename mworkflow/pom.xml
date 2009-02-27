@@ -5,7 +5,7 @@
   <groupId>ambit</groupId>
   <artifactId>mworkflow</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <name>Micro-workflow</name>
     
    <distributionManagement>
@@ -21,6 +21,7 @@
     
 
   </distributionManagement>
+   <description>An extension of Micro-workflow , based on Dragos Manolescu microworkflow http://sourceforge.net/projects/micro-workflow/</description>
 
   <build>
     <plugins>

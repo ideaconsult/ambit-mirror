@@ -33,7 +33,11 @@ public class WorkflowContext<V> extends ObjectWithPropertyChangeSupport implemen
     
 	public V put(String key, V value) {
         Object oldValue = context.get(key);
-		V v = context.put(key,value);
+        V v = null;
+        if (value != null)
+        	v = context.put(key,value);
+        else
+        	context.remove(key);
         firePropertyChange(new WorkflowContextEvent(this,key, oldValue, value));
         return v;
 	}

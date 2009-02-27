@@ -44,8 +44,8 @@ public class WorkflowContextEvent extends PropertyChangeEvent {
     }
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
-        return "WFC:\t"+getPropertyName()+"\t"+getOldValue()+"\t"+getNewValue();
+        
+        return "WFC:\t"+getPropertyName(); //+"\t"+getOldValue()+"\t"+getNewValue();
     }
 
 }
