@@ -83,11 +83,11 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 			
 
 				PreparedStatement sresults = c.prepareStatement(result.getSQL());
-				System.out.println(result.getSQL());
+				//System.out.println(result.getSQL());
 				List<QueryParam> params = result.getParameters();
-				System.out.println(params);				
+				//System.out.println(params);				
 				QueryExecutor.setParameters(sresults, params);
-				System.out.println(sresults);								
+				//System.out.println(sresults);								
 				int rows = sresults.executeUpdate();
 				result.setRows(rows);
 				sresults.close();

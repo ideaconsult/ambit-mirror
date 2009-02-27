@@ -114,7 +114,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     }    
     protected abstract LiteratureEntry getReference(Target target);
     protected abstract Iterable<String> getPropertyNames(Target target);
-    protected abstract String getComments(Target target);
+    protected abstract String getComments(String name,Target target);
     protected abstract void descriptorEntry(Target target,int idproperty,String propertyName, int propertyIndex,int idtuple) throws SQLException;
 
     protected int getTuple(SourceDataset dataset) {
@@ -153,7 +153,9 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
                 ps_descriptor.setInt(1,le.getId());
                 ps_descriptor.setString(2,name);
                 ps_descriptor.setNull(3,Types.VARCHAR);
-                ps_descriptor.setString(4,getComments(target));
+                String comments = getComments(name,target);
+                if (comments == null) comments = name;
+                ps_descriptor.setString(4,comments);
                 ps_descriptor.executeUpdate();
                 
                 ResultSet rs = ps_descriptor.getGeneratedKeys();
