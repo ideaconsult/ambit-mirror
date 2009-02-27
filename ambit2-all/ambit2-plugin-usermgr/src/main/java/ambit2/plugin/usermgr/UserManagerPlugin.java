@@ -39,6 +39,7 @@ import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
 import nplugins.workflow.ExecuteWorkflowTask;
 import ambit2.core.data.ClassHolder;
+import ambit2.db.LoginInfo;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
@@ -77,6 +78,11 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
+		
+		LoginInfo li = new LoginInfo();
+		li.setUser("root");
+		li.setDatabase("mysql");
+		getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
 		
 	}
 	public List<ClassHolder> getWorkflows() {

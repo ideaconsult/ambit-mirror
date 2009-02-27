@@ -37,7 +37,10 @@ import javax.swing.JComponent;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
+import ambit2.core.config.Preferences;
 import ambit2.core.data.ClassHolder;
+import ambit2.db.DatasourceFactory;
+import ambit2.db.LoginInfo;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -91,6 +94,13 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 		*/
 		try {
 			getWorkflowContext().put(PBTWorkBook.PBT_WORKBOOK,new PBTWorkBook());
+			
+			LoginInfo li = new LoginInfo();
+			li.setUser("guest");
+			li.setPassword(li.getUser());
+			String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());
+			getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
+			getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);
 		} catch (Exception x) {
 			getWorkflowContext().put(DBWorkflowContext.ERROR,x);
 		}
