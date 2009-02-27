@@ -8,12 +8,19 @@ import ambit2.core.exceptions.AmbitException;
 
 public class ConnectionStatisticsProcessor extends ConnectionStatusProcessor {
 	protected static final String[] sql = {
+			"Select concat(idmajor,'.',idminor) as 'Ambit database version' from version",
+			"Select concat(DATE(date),' ',time(date)) as 'Ambit database created on' from version",
 			"Select count(*) as 'Datasets' from src_dataset",
-			"Select count(*) as 'Chemical compounds' from chemicals",
+			"select concat('\tDataset\t','Reference\t','\tURL') as 'Datasets list'",
+			"select concat('\t',name,'\t',title,'\t',URL,'\n') as 'Dataset' from src_dataset join catalog_references using(idreference)",
 			"Select count(*) as 'Properties' from properties",
+			"Select count(*) as 'Property values' from property_values",
 			"Select count(*) as 'Literature references' from catalog_references",
-			"Select count(*) as 'Descriptor specifications' from descriptors",
-			"Select count(*) as 'Study templates' from template"
+			"Select count(*) as 'Templates' from template",
+			"Select count(*) as 'Template definitions' from template_def",
+			"Select count(*) as 'Fingerprints' from fp1024",
+			"Select count(*) as 'Users' from users",
+			"Select count(*) as 'Queries' from query",			
 	};
 	/**
 	 * 
@@ -33,7 +40,7 @@ public class ConnectionStatisticsProcessor extends ConnectionStatusProcessor {
 	    		while (rs.next()) {	
 		    		b.append(rs.getMetaData().getColumnName(1));
 		    		b.append('\t');
-		    		b.append(rs.getInt(1));
+		    		b.append(rs.getString(1));
 		    		b.append('\n');
 	    		}
 	    		rs.close();

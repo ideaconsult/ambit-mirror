@@ -61,6 +61,21 @@ public class DBWorkflowContext extends WorkflowContext {
     public static String REPORT = "ambit2.workflow.DBWorkflowContext.REPORT";
     public static String PARAMS = "ambit2.workflow.DBWorkflowContext.PARAMETERS";  
     
+    public void logout(String connectURI) throws AmbitException {
+    	Object o = get(DBCONNECTION_URI);
+    	if (o == null) throw new AmbitException("No connection URI!");
+    	if (!connectURI.equals(o.toString())) throw new AmbitException(connectURI +" and "+ o.toString() + " do not match!");
+    	o = get(DATASOURCE);
+    	if (o==null) throw new AmbitException("Not logged in!");
+    	if (o instanceof DataSource) {
+    		put(DBCONNECTION_URI,null); //notify everybody this datasource is going to close
+    		put(DATASOURCE,null);
+    		put(SESSION,null);
+    		DatasourceFactory.logout(connectURI);    		
+    	} else 
+    		throw  new AmbitException("Found instance of "+o.getClass().getName()+ " instead of javax.sql.DataSource");
+  
+    }
     
     public DataSource getDataSource() throws AmbitException {
         DataSource ds = null;
@@ -127,6 +142,7 @@ public class DBWorkflowContext extends WorkflowContext {
         } else return (SourceDataset) o;
     }
     
+    
     public void setDataset(SourceDataset dataset) {
         put(DATASET,dataset);
     }
@@ -157,5 +173,6 @@ public class DBWorkflowContext extends WorkflowContext {
     }    
     public int getPagesize() {
         return getInt(PAGESIZE,25);
-    }    
+    }
+
 }

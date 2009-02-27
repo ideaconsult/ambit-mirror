@@ -72,7 +72,8 @@ public class DBProcessorPerformer<Target,Result> extends ProcessorPerformer<IDBP
             processor.open();
             Target t = getTarget();
             Result result = processor.process(t);
-            processor.close();            
+            processor.close();          
+            processor.setConnection(null);     
             if (!c.isClosed()) c.close();
 
             return result;

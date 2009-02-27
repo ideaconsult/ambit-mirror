@@ -76,6 +76,8 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	        setPlugin(plugin);	        
 	        setObject(plugin.getWorkflows());
 	        add(new JScrollPane(objectList));
+	        setToolTipText("Double click to run the selected workflow");
+	        objectList.setToolTipText(getToolTipText());
 	}
 
 	public void setObject(List<ClassHolder> object) {
@@ -85,7 +87,8 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 			listModel.setList(object);
 		}
 		if (objectList == null) {
-			objectList = new JList(listModel) {
+			objectList = new JList(listModel) ;
+			/*{
 				@Override
 				public String getToolTipText(MouseEvent evt) {
 			           // Get item index
@@ -95,6 +98,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 
 				}
 			};
+			*/
 			objectList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			objectList.setCellRenderer(ClassHolderEditor.createListCellRenderer(getCellSize()));

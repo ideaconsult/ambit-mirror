@@ -52,9 +52,9 @@ public class DatasourceFactory {
     protected static final String colon=":";
     protected static final String eqmark="=";
     protected static final String amark="&";
-    protected Map<String, DataSource> datasources;
+    protected Map<String, DataSourceAndPool> datasources;
     private DatasourceFactory() {
-        datasources = new ConcurrentHashMap<String, DataSource>();
+        datasources = new ConcurrentHashMap<String, DataSourceAndPool>();
     }
     private static class DatasourceFactoryHolder { 
         private final static DatasourceFactory instance = new DatasourceFactory();
@@ -66,12 +66,36 @@ public class DatasourceFactory {
     
     public static DataSource getDataSource(String connectURI) throws AmbitException {
         if (connectURI == null) throw new AmbitException("Connection URI not specified!");
-        DataSource ds = getInstance().datasources.get(connectURI);
+        DataSourceAndPool ds = getInstance().datasources.get(connectURI);
         if (ds == null) {
-            ds = setupDataSource(connectURI);
+        	ds = setupDataSource(connectURI);
             getInstance().datasources.put(connectURI, ds);
+            
         }
-        return ds;
+        if (ds!= null) return ds.getDatasource();
+        else return null;
+
+    }
+    /**
+     * Does nothing, the pool will be still active
+     * @param connectURI
+     * @throws AmbitException
+     */
+    public static void logout(String connectURI) throws AmbitException {
+    	
+    	/*
+
+        if (connectURI == null) throw new AmbitException("Connection URI not specified!");
+        DataSourceAndPool dspool = getInstance().datasources.get(connectURI);
+        if (dspool != null) {
+            getInstance().datasources.remove(connectURI);
+            try {
+            	
+            } catch (Exception x) {x.printStackTrace();};
+        }
+    	 * 
+    	 */        
+  	
     }
     public static Connection getConnection(String connectURI) throws AmbitException {
         try {
@@ -80,39 +104,10 @@ public class DatasourceFactory {
             throw new AmbitException(x);
         }
     }    
-    public static DataSource setupDataSource(String connectURI) throws AmbitException {
+    public static DataSourceAndPool setupDataSource(String connectURI) throws AmbitException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            //
-            // First, we'll need a ObjectPool that serves as the
-            // actual pool of connections.
-            //
-            // We'll use a GenericObjectPool instance, although
-            // any ObjectPool implementation will suffice.
-            //
-            ObjectPool connectionPool = new GenericObjectPool(null);
-    
-            //
-            // Next, we'll create a ConnectionFactory that the
-            // pool will use to create Connections.
-            // We'll use the DriverManagerConnectionFactory,
-            // using the connect string passed in the command line
-            // arguments.
-            //
-            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(connectURI,null);
-    
-            //
-            // Now we'll create the PoolableConnectionFactory, which wraps
-            // the "real" Connections created by the ConnectionFactory with
-            // the classes that implement the pooling functionality.
-            //
-            PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory,connectionPool,null,null,false,true);
-    
-            //
-            // Finally, we create the PoolingDriver itself,
-            // passing in the object pool we created.
-            //
-            PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
+            DataSourceAndPool dataSource = new DataSourceAndPool(connectURI);
+            
             return dataSource;
         } catch (Exception x) {
             throw new AmbitException(x);
@@ -187,4 +182,60 @@ public class DatasourceFactory {
             if (connection != null) try {connection.close();} catch (Exception x) {};
     	}
     }
+}
+
+class DataSourceAndPool {
+	protected PoolingDataSource datasource;
+	protected PoolableConnectionFactory poolableConnectionFactory;
+	public PoolingDataSource getDatasource() {
+		return datasource;
+	}
+	public ObjectPool getPool() {
+		return poolableConnectionFactory.getPool();
+	}
+	
+	public DataSourceAndPool(String connectURI)  throws Exception {
+        Class.forName("com.mysql.jdbc.Driver");
+        //
+        // First, we'll need a ObjectPool that serves as the
+        // actual pool of connections.
+        //
+        // We'll use a GenericObjectPool instance, although
+        // any ObjectPool implementation will suffice.
+        //
+        ObjectPool connectionPool = new GenericObjectPool(null);
+
+        //
+        // Next, we'll create a ConnectionFactory that the
+        // pool will use to create Connections.
+        // We'll use the DriverManagerConnectionFactory,
+        // using the connect string passed in the command line
+        // arguments.
+        //
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(connectURI,null);		
+        //
+        // Now we'll create the PoolableConnectionFactory, which wraps
+        // the "real" Connections created by the ConnectionFactory with
+        // the classes that implement the pooling functionality.
+        //
+        poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory,connectionPool,null,null,false,true);
+		
+		datasource = new PoolingDataSource(connectionPool);
+	}
+	public void close() throws Exception {
+		
+		if (poolableConnectionFactory.getPool() != null)
+			poolableConnectionFactory.getPool().close();
+
+		datasource = null;
+	}
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+		close();
+		} catch (Exception x) {
+			
+		}
+		super.finalize();
+	}
 }

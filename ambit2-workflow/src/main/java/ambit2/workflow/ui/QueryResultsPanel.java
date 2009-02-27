@@ -110,7 +110,15 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
                     x.printStackTrace();
                 }
             }
-        }
+        } else
+            if (DBWorkflowContext.DBCONNECTION_URI.equals(arg0.getPropertyName())) {
+            	if (arg0.getNewValue() == null) 
+            	try {
+            		tableModel.setConnection(null);
+            	} catch (Exception x) {
+            		x.printStackTrace();
+            	}
+            }        	
         
     }
 
