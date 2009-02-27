@@ -21,6 +21,7 @@ import ambit2.ui.Utils;
 
 public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder> {
 	public static Color BorderColor = new Color(216,240,250);
+	
 	public static Color SelectedColor = new Color(244,250,253);
 	/**
 	 * 
@@ -38,28 +39,39 @@ public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder
 		setLayoutOrientation(JList.HORIZONTAL_WRAP);		
 	}
 	public static ListCellRenderer createListCellRenderer() {
-		return new ImageCellRenderer();
+		return createListCellRenderer(48);
 	}
+	public static ListCellRenderer createListCellRenderer(int size) {
+		return new ImageCellRenderer(size);
+	}	
 }
 
 class ImageCellRenderer extends DefaultListCellRenderer {
-	protected final int size = 48;
+	protected int size = 48;
 	protected Border shadow = BorderFactory.createLineBorder(ClassHolderEditor.BorderColor);
 	protected Color selectedClr = ClassHolderEditor.SelectedColor;
+	protected JLabel label;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5986970740680430732L;
-
+	public ImageCellRenderer(int size) {
+		super();
+		this.size = size;
+		this.label = new JLabel();
+	}
+	public ImageCellRenderer() {
+		this(48);
+	}	
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
-        JLabel label =   new JLabel(value.toString());
+        label.setText(value.toString());
         /*
             (JLabel) super.getListCellRendererComponent(list,   
                 value, index, isSelected, cellHasFocus);   
   */
 		ClassHolder item = (ClassHolder)value;
-		label.setText("<html><b>"+value.toString()+"</b></html>");
+		label.setText("<html><b>"+value.toString()+"</b><p>"+item.getDescription()+"</html>");
 		try {
 			String iconFile = item.getIcon();
 			if (iconFile !=null) {
@@ -81,7 +93,7 @@ class ImageCellRenderer extends DefaultListCellRenderer {
 			x.printStackTrace();
 			label.setIcon(null);
 		}
-		label.setPreferredSize(new Dimension(size*3,size));
+		label.setPreferredSize(new Dimension(size*8,size));
         return label;   
 	}
 	

@@ -63,8 +63,8 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 	public PBTCheckerPlugin() {
 		workflows = new ArrayList<ClassHolder>();
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","PBT","Verifies if PBT assessment is complete","images/pill_16.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment","images/search_16.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/page_white_acrobat.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment","images/search_256.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
 		//workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 
 		
@@ -183,11 +183,13 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 				props.add(DBWorkflowContext.DBCONNECTION_URI);
 				props.add(DBWorkflowContext.DATASOURCE);
 				p.setProperties(props);
-				
 				getWorkflowContext().addPropertyChangeListener(p);
+				
+				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,getAction(),32);
+
 				optionsComponent =  new JComponent[] {
 						new WorkflowViewPanel(workflow,getAction()),
-						new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,getAction()),
+						mw,
 						p
 				};
 			} else
