@@ -25,19 +25,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package nplugins.shell;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import javax.swing.ActionMap;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import nplugins.core.Introspection;
 import nplugins.core.NPluginsException;
@@ -123,13 +128,26 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 					return "About";
 				}
 			};
-			JTextArea text = new JTextArea(getHelp());
-			text.setBorder(null);
-			text.setBackground(welcome.getBackground());
-			text.setEditable(false);
+			welcome.setBackground(Color.white);
+			JEditorPane  textPane = new JEditorPane();
+			try {
+				java.net.URL helpURL = getHelp();
+				textPane.setPage(helpURL);
+			} catch (Exception x) {
+				
+			}
 			
+			textPane.setBorder(null);
+			textPane.setBackground(welcome.getBackground());
+			textPane.setEditable(false);
+			
+			Icon logo = getLogo();
 			welcome.add(new JLabel(getLogo()),BorderLayout.NORTH);
-			welcome.add(new JScrollPane(text),BorderLayout.CENTER);
+			welcome.add(new JScrollPane(textPane),BorderLayout.CENTER);
+			
+			welcome.setPreferredSize(new Dimension((logo.getIconWidth()<128?128:logo.getIconWidth()),Integer.MAX_VALUE));
+			welcome.setMinimumSize(new Dimension(logo.getIconWidth(),Integer.MAX_VALUE));
+			welcome.setMaximumSize(welcome.getPreferredSize());
 			optionComponent = new JComponent[] {welcome};
 		}
 		return optionComponent;
@@ -232,8 +250,8 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	public ImageIcon getLogo() {
 		return getIcon();
 	}	
-	public String getHelp() {
-		return "Welcome";
+	public java.net.URL getHelp() throws MalformedURLException {
+		return new URL("http://ambit.sourceforge.net");
 	}
     public synchronized INanoPlugin getThePlugin() {
         return thePlugin;
@@ -282,8 +300,19 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 		return ok;
 	}
 	public void close() {
-		// TODO Auto-generated method stub
-		
+		if ((thePlugin != null) && (thePlugin != this)) { 
+			thePlugin.close();
+			storage.removePlugin(thePlugin);
+		}
+		Iterator<PluginPackageEntry> i = packageEntries.iterator();
+		while (i.hasNext()) {
+			PluginPackageEntry key = i.next();
+			INanoPlugin plugin = storage.restorePlugin(key);
+			if (plugin != null) 
+				plugin.close();
+			
+		}
+
 	};
 	public boolean isModified() {
 

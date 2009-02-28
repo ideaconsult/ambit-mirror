@@ -68,5 +68,9 @@ public class FileStorage extends Hashtable<String, String> implements IPluginsSt
 			}
 			 
 	    }
+	public void removePlugin(INanoPlugin plugin) {
+		//todo
+		
+	}
 	    
 }

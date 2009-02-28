@@ -152,7 +152,7 @@ public class DemoPlugin implements INanoPlugin {
 		return !isModified();
 	}
 	public void close() {
-		// TODO Auto-generated method stub
+		System.out.println("Closing ..");
 		
 	}
 	public boolean isModified() {

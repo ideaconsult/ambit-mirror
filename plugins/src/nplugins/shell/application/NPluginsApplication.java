@@ -119,19 +119,31 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
 
         JComponent leftComponent = buildMainLeftPanel(pluginsManager);
         leftPanel = new SimpleInternalFrame((leftComponent != null)?leftComponent.toString():"Options");
-        leftPanel.setPreferredSize(new Dimension(150, 100));
+        leftPanel.setPreferredSize(leftComponent.getPreferredSize());
+        leftPanel.setMaximumSize(leftComponent.getMaximumSize());
+        leftPanel.setMinimumSize(leftComponent.getMinimumSize());
         leftPanel.setContent(leftComponent);
         
         Component rightComponent = buildMainRightPanel(pluginsManager);
         rightPanel = new SimpleInternalFrame((rightComponent != null)?rightComponent.toString():"Main");
-        rightPanel.setPreferredSize(new Dimension(400,400));
+        if (rightComponent!= null) {
+	        rightPanel.setPreferredSize(rightComponent.getPreferredSize());
+	        rightPanel.setMaximumSize(rightComponent.getMaximumSize());
+	        rightPanel.setMinimumSize(rightComponent.getMinimumSize());
+        }
         rightPanel.setContent(buildMainRightPanel(pluginsManager));
         
         JComponent detailsComponent = buildDetailsPanel(pluginsManager);
         detailsPanel = new SimpleInternalFrame((detailsComponent != null)?detailsComponent.toString():"Details");
-        detailsPanel.setPreferredSize(new Dimension(400,100));
-        if (detailsComponent != null)
+       
+        if (detailsComponent!= null) {
+        	detailsPanel.setPreferredSize(detailsComponent.getPreferredSize());
+        	detailsPanel.setMaximumSize(detailsComponent.getMaximumSize());
+        	detailsPanel.setMinimumSize(detailsComponent.getMinimumSize());
         	detailsPanel.setContent(detailsComponent);
+        } else
+        	 detailsPanel.setPreferredSize(new Dimension(400,100));
+       	
         detailsPanel.setVisible(detailsComponent != null);
         
 		mainFrame.getContentPane().setLayout(new BorderLayout());
@@ -373,6 +385,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         return false;
      }
     protected void doClose() {
+    	  pluginsManager.close();
           mainFrame.setVisible(false);
           mainFrame.dispose();
  		  Runtime.getRuntime().runFinalization();						 

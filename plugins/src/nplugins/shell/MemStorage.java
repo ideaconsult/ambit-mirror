@@ -31,5 +31,8 @@ public class MemStorage extends Hashtable<String, INanoPlugin> implements IPlugi
 		put(getKey(plugin), plugin);
 		
 	}
-
+	public void removePlugin(INanoPlugin plugin) {
+		remove(getKey(plugin));
+		
+	}
 }
