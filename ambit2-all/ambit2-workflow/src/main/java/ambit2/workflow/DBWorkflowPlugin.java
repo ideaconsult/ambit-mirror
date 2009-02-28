@@ -24,16 +24,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JComponent;
 
+import nplugins.core.Introspection;
 import nplugins.core.NPluginsException;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.TaskMonitor;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
+import ambit2.core.data.ClassHolder;
 import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.StatusPanel;
@@ -45,16 +49,21 @@ import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.WorkflowTools;
 
-public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
+public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMultiWorkflowsPlugin {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7190224146559024307L;
+	protected List<ClassHolder> workflows;	
 	public DBWorkflowPlugin() {
 		super();
+		workflows = new ArrayList<ClassHolder>();
 		setModified(false);
 	}
+	public List<ClassHolder> getWorkflows() {
+		return workflows;
+	}	
 	protected NPluginsAction<WorkflowContext,Void> runAction = null;
 	
 	protected NPluginsAction<WorkflowContext,Void> getAction() {
@@ -82,6 +91,20 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin {
 		return runAction;
 	}
 	
+	public void runWorkflow(ClassHolder clazz) throws Exception  {
+		Object o = Introspection.loadCreateObject(clazz.getClazz()); 
+		if ( o instanceof Workflow) {
+			getWorkflow().setDefinition(((Workflow) o).getDefinition());
+			try {
+				runAction.setEnabled(false);
+				runAction.actionPerformed(null);
+			} catch (Exception x) {
+				throw new Exception(x);
+			} finally {
+				runAction.setEnabled(true);
+			}
+		}
+	}		
 
 	@Override
 	protected WorkflowContext createWorkflowContext() {

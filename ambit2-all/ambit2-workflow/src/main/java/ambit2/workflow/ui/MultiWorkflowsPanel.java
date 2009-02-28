@@ -34,7 +34,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
-import nplugins.core.Introspection;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import ambit2.core.data.ClassHolder;
@@ -42,7 +41,6 @@ import ambit2.ui.editors.ClassHolderEditor;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 
 import com.jgoodies.binding.list.IndirectListModel;
-import com.microworkflow.process.Workflow;
 
 /**
  * User interface for multiple workflows plugins. 
@@ -55,7 +53,6 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	protected IMultiWorkflowsPlugin plugin;
     private IndirectListModel<ClassHolder> listModel;
     private JList       objectList;	
-    protected Action action;
     protected int cellSize = 64;
 	public int getCellSize() {
 		return cellSize;
@@ -66,13 +63,12 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	 */
 	private static final long serialVersionUID = 2128986015636595519L;
 
-	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin,Action action) {
-		this(plugin,action,64);
+	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin) {
+		this(plugin,64);
 	}
-	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin,Action action, int cellSize) {
+	public MultiWorkflowsPanel(IMultiWorkflowsPlugin plugin,int cellSize) {
 	        super(new BorderLayout());
 	        this.cellSize = cellSize;
-	        this.action = action;
 	        setBackground(Color.white);
 	        setPlugin(plugin);	        
 	        setObject(plugin.getWorkflows());
@@ -89,17 +85,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 		}
 		if (objectList == null) {
 			objectList = new JList(listModel) ;
-			/*{
-				@Override
-				public String getToolTipText(MouseEvent evt) {
-			           // Get item index
-		            int index = locationToIndex(evt.getPoint());
-		            ClassHolder item = (ClassHolder)getModel().getElementAt(index);
-		            return item.getDescription();
 
-				}
-			};
-			*/
 			objectList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			objectList.setCellRenderer(ClassHolderEditor.createListCellRenderer(getCellSize()));
@@ -113,7 +99,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 					     objectList.ensureIndexIsVisible(index);
 					     
 					     try {
-					    	 runWorkflow((ClassHolder)item);
+					    	 plugin.runWorkflow((ClassHolder)item);
 					     } catch (Exception x) {
 					    	 x.printStackTrace();
 					     }
@@ -126,20 +112,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 
 	}	
 	
-	protected void runWorkflow(ClassHolder clazz) throws Exception  {
-		Object o = Introspection.loadCreateObject(clazz.getClazz()); 
-		if ( o instanceof Workflow) {
-			plugin.getWorkflow().setDefinition(((Workflow) o).getDefinition());
-			try {
-				action.setEnabled(false);
-				action.actionPerformed(null);
-			} catch (Exception x) {
-				throw new Exception(x);
-			} finally {
-				action.setEnabled(true);
-			}
-		}
-	}
+
 	public Component getComponent() {
 		return this;
 	}
