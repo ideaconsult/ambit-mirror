@@ -43,7 +43,7 @@ public class TemplateQuery extends AbstractQuery<String, String, StringCondition
 	 */
 	private static final long serialVersionUID = 6746077496508519227L;
 	public static final String SQL = 
-			"SELECT properties.name,properties.units from template join template_def using(idtemplate) "+
+			"SELECT properties.name,properties.units,properties.comments from template join template_def using(idtemplate) "+
 			"join properties using(idproperty) " +
 			"where template.name=?";
 	public TemplateQuery() {
@@ -69,6 +69,7 @@ public class TemplateQuery extends AbstractQuery<String, String, StringCondition
 		try {
 			Property p =new Property(rs.getString(1));
 			p.setUnits(rs.getString(2));
+			p.setLabel(rs.getString(3));
 			return p;
 		} catch (Exception x) {
 			throw new AmbitException(x);
