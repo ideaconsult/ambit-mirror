@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.StringWriter;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.*;
@@ -344,9 +345,7 @@ public class TestUtilities
 			System.out.println(failSmiles.get(i));
 	}
 	
-	
-	
-	
+		
 	
 	public void printAromaticity(IAtomContainer mol)
 	{	
@@ -361,6 +360,12 @@ public class TestUtilities
 			IBond bond = mol.getBond(i);
 			System.out.println("Bond " + i + "  aromatic = " +bond.getFlag(CDKConstants.ISAROMATIC));
 		}
+	}
+	
+	public void printAromaticity(String smiles)
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		printAromaticity(mol);
 	}
 	
 	public void testSmartsManagerAtomMapping(String smarts, String smiles)
@@ -708,31 +713,19 @@ public class TestUtilities
 	
 	void produceStructures() 
 	{
-		try
-		{
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf"),b);
-			//ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
-			int record=0;
-
-			while (reader.hasNext()) 
-			{	
-				record++;
-				Object o = reader.next();
-				if (o instanceof IAtomContainer) 
-				{
-					IAtomContainer mol = (IAtomContainer)o;
-					if (mol.getAtomCount() == 0) continue;
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-					CDKHueckelAromaticityDetector.detectAromaticity(mol);
-					System.out.println("" + record + "  " + cots.getSMILES(mol));
-				}
-			}	
-		}
-		catch(Exception e){
-			System.out.println(e.toString());
-		}
-			
+		ChemObjectFactory cof = new ChemObjectFactory();
+		Vector<StructInfo> vStr = new Vector<StructInfo>();
+		cof.produceStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
+					7, 50000, vStr, "/java_frags.txt");
+		
+	}
+	
+	void makeStructureStatistics()
+	{
+		ChemObjectFactory cof = new ChemObjectFactory();
+		cof.performStructureStatistics("/java_frags.txt", 
+							"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
+							50, 100, "/java_frags_stat.txt");
 	}
 	
 //-------------------------------------------------------------------------------
@@ -839,10 +832,12 @@ public class TestUtilities
 		
 		//tu.printSequence("P1CS=N1");
 		//tu.testFragmentation("P1CS=N1");
-		tu.testProduceStructuresExhaustively("C1CCCC1", 12);
-		tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC[Na])CCNNCC2CCCCCCCC2", 12);
+		//tu.testProduceStructuresExhaustively("CCc1cc(CC)ccc1", 12);
+		//tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC)CCNNCC2CCCCCCCC2", 12);
 		
 		//tu.produceStructures();
+		//tu.printAromaticity("cccccc");
+		tu.makeStructureStatistics();
 		
 		
 	}

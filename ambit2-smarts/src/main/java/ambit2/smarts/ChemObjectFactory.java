@@ -1,5 +1,8 @@
 package ambit2.smarts;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
@@ -8,24 +11,34 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
-import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.hashcode.MoleculeAndAtomsHashing;
 
 /** Utilities for generation of different types of 
  * chemical objects: molecules, fragments, queries */
 public class ChemObjectFactory 
-{
-	
+{	
 	public Vector<SequenceElement> sequence = new Vector<SequenceElement>();
 	Vector<IAtom> sequencedAtoms = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
+	MoleculeAndAtomsHashing molHash = new MoleculeAndAtomsHashing();
+	SmartsManager man = new SmartsManager();
+	SmartsParser parser = new SmartsParser();
+	SmartsToChemObject stco = new SmartsToChemObject(); 
+	IsomorphismTester isoTester = new IsomorphismTester();
+	
+	
 	
 	public void setAtomSequence(IAtomContainer target, IAtom startAtom)
 	{	
@@ -355,10 +368,13 @@ public class ChemObjectFactory
 			{
 				IAtomContainer struct = getFragmentFromSequence(i);
 				String smiles = cots.getSMILES(struct);
+				//Long hash = molHash.getMoleculeHash(struct);
+				
 				if (!checkForDuplication(smiles, vStr))
 				{	
 					StructInfo strInfo = new StructInfo();
 					strInfo.smiles = smiles;
+					//strInfo.hash = hash;
 					strInfo.atomCount = struct.getAtomCount();
 					strInfo.bondCount = struct.getBondCount();
 					vStr.add(strInfo);
@@ -369,23 +385,217 @@ public class ChemObjectFactory
 	
 	
 	boolean checkForDuplication(String smarts, Vector<StructInfo> vStr)
-	{
-		SmartsManager man = new SmartsManager();
+	{	
 		man.setQuery(smarts);
-		;
-		
 		for (int i = 0; i < vStr.size(); i++)
 		{
 			StructInfo s = vStr.get(i);
 			if (man.getQueryContaner().getAtomCount() == s.atomCount)
 				if (man.getQueryContaner().getBondCount() == s.bondCount)
-				{
-					IAtomContainer ac = SmartsHelper.getMoleculeFromSmiles(s.smiles);
+				{					
+					if (smarts.equals(s.smiles))
+						return(true);
+					
+					QueryAtomContainer q = parser.parse(s.smiles);
+					IAtomContainer ac = stco.extractAtomContainer(q,null);
 					boolean res = man.searchIn(ac);
 					if (res)
 						return(true);
+					
+					//	if (hash.equals(s.hash))
+					//		return(true);
 				}
 		}
 		return(false);
 	}
+	
+	public void produceStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord, 
+				Vector<StructInfo> vStr, String outFile)
+	{	
+		try
+		{
+			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;
+				if (record % 50 == 0)
+					saveStructs(vStr,outFile);
+				
+				if (record > maxNumRecord)
+					break;
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					produceStructuresExhaustively(mol, vStr, maxNumSeqSteps);
+					System.out.println("record " + record+ "  " + vStr.size());
+				}
+			}	
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		saveStructs(vStr,outFile);
+	}
+	
+	void saveStructs(Vector<StructInfo> vStr, String fName)
+	{
+		try
+		{	
+			File file = new File(fName);
+			RandomAccessFile f = new RandomAccessFile(file,"rw");
+			f.setLength(0);
+			for (int i = 0; i<vStr.size(); i++)
+				f.write((vStr.get(i).smiles + "\r\n").getBytes());
+			f.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	void saveStructStatistics(Vector<String> smiles, Vector<Integer> stat, String fName)
+	{
+		try
+		{	
+			File file = new File(fName);
+			RandomAccessFile f = new RandomAccessFile(file,"rw");
+			f.setLength(0);
+			for (int i = 0; i<smiles.size(); i++)
+				f.write((stat.get(i).toString()+"  "+smiles.get(i) + "\r\n").getBytes());
+			f.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	
+	public void performStructureStatistics(String smilesFile, String mdlFile, 
+				int portionSize, int nUsedStr, String outFile)
+	{
+		//Each structure from smilesFile is searched against mdlFile
+		//The process is done in portions.
+		try
+		{	
+			File file = new File(smilesFile);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			
+			Vector<String> smiles = new Vector<String>();
+			Vector<String> allSmiles = new Vector<String>();
+			Vector<Integer> allStat = new Vector<Integer>();
+			int n = 0;
+			while (f.getFilePointer() < length)
+			{	
+				n++;
+				//System.out.print(" " + n);
+				String line = f.readLine();
+				smiles.add(line);
+				if (smiles.size() % portionSize == 0)
+				{
+					System.out.println("Stattistics " + n);
+					Vector<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
+					for (int i = 0; i < smiles.size(); i++)
+					{
+						allSmiles.add(smiles.get(i));
+						allStat.add(stat.get(i));
+					}
+					smiles.clear();
+					saveStructStatistics(allSmiles, allStat, outFile);
+				}
+			}
+			
+			//What left from smiles vector is processed as well
+			if (!smiles.isEmpty())
+			{	
+				Vector<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
+				for (int i = 0; i < smiles.size(); i++)
+				{
+					allSmiles.add(smiles.get(i));
+					allStat.add(stat.get(i));
+				}			
+				saveStructStatistics(allSmiles, allStat, outFile);
+			}
+			f.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	Vector<Integer> doStatisticsForStructs(Vector<String> smiles, String mdlFile, int nUsedStr)
+	{	
+		System.out.print(" queries ..." );
+		Vector<QueryAtomContainer> queries = new Vector<QueryAtomContainer> ();
+		int n = smiles.size();
+		int frequency[] = new int[n];
+		for (int i = 0; i < n; i++)
+		{
+			QueryAtomContainer q = parser.parse(smiles.get(i));
+			queries.add(q);
+			frequency[i] = 0;
+		}
+		System.out.println(" done" );
+		
+		try
+		{
+			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			int record=0;
+			boolean res;
+
+			while (reader.hasNext()) 
+			{	
+				record++;
+				if (record % 10 == 0)
+					System.out.println("  searched records " + record);
+				
+				if (record > nUsedStr)
+					break;
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					//The target is not "prepared" since the queries are not complicated expressions
+					//parser.prepareTargetForSMARTSSearch
+					//System.out.println("  $ record " + record+ "  " + SmartsHelper.moleculeToSMILES(mol));
+										
+					for (int i = 0; i < n; i++)
+					{						
+						res = UniversalIsomorphismTester.isSubgraph(mol, queries.get(i));						
+						//isoTester.setQuery(queries.get(i));						
+						//res = isoTester.hasIsomorphism(mol);						
+						if (res)
+							frequency[i]++;
+					}
+					
+				}
+			}	
+		}
+		catch(Exception e){
+			System.out.println("**** " + e.toString());
+		}
+		
+		
+		Vector<Integer> stat = new Vector<Integer>();
+		for (int i = 0; i < n; i++)
+			stat.add(new Integer(frequency[i]));
+		
+		return(stat);
+	}
+	
 }
