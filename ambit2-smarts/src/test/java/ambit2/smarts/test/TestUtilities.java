@@ -695,7 +695,7 @@ public class TestUtilities
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		ChemObjectFactory cof = new ChemObjectFactory();
 		
-		cof.produceStructuresExhaustively(mol, vStr, maxNumSteps);
+		cof.produceStructuresExhaustively(mol, vStr, maxNumSteps, 100);
 		
 		for (int i = 0; i < vStr.size(); i++)
 			System.out.println(vStr.get(i).smiles);
@@ -716,7 +716,7 @@ public class TestUtilities
 		ChemObjectFactory cof = new ChemObjectFactory();
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
 		cof.produceStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
-					7, 50000, vStr, "/java_frags.txt");
+					5, 50000, 8, vStr, "/java_frags.txt");
 		
 	}
 	
@@ -725,7 +725,51 @@ public class TestUtilities
 		ChemObjectFactory cof = new ChemObjectFactory();
 		cof.performStructureStatistics("/java_frags.txt", 
 							"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
-							50, 100, "/java_frags_stat.txt");
+							200, 10000, "/java_frags_stat10000.txt");
+	}
+	
+	void filterStructsBySize(String inputSmilesFile, String outSmilesFile, int maxNumAtoms)	
+	{
+		Vector<String> outSmiles = new Vector<String>();
+		try
+		{	
+			File file = new File(inputSmilesFile);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+						
+			int n = 0;
+			while (f.getFilePointer() < length)
+			{	
+				n++;
+				if (n % 1000 == 0)
+					System.out.print(" " + n + "  " + outSmiles.size());
+				
+				String line = f.readLine();
+				QueryAtomContainer q = sp.parse(line);
+				if (q.getAtomCount() <= maxNumAtoms)
+					outSmiles.add(line);
+			}
+			f.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		
+		try
+		{	
+			File file = new File(outSmilesFile);
+			RandomAccessFile f = new RandomAccessFile(file,"rw");
+			f.setLength(0);
+			for (int i = 0; i<outSmiles.size(); i++)
+				f.write((outSmiles.get(i) + "\r\n").getBytes());
+			f.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
 	}
 	
 //-------------------------------------------------------------------------------
@@ -823,6 +867,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
 		
 		//tu.testHydrogenCount();
+		//tu.printAromaticity("cccccc");
 		
 		//tu.testChemObjectToSmiles("CCC(CC)CC#CNCC1CC(CCNCl)CC1");
 		//tu.testChemObjectToSmiles("C1CCCCC=1");		
@@ -835,11 +880,9 @@ public class TestUtilities
 		//tu.testProduceStructuresExhaustively("CCc1cc(CC)ccc1", 12);
 		//tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC)CCNNCC2CCCCCCCC2", 12);
 		
-		//tu.produceStructures();
-		//tu.printAromaticity("cccccc");
-		tu.makeStructureStatistics();
-		
-		
+		tu.produceStructures();
+		//tu.makeStructureStatistics();
+		//tu.filterStructsBySize("/java_frags0.txt","/java_frags.txt",8);
 	}
 	
 }
