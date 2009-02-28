@@ -33,8 +33,11 @@ import javax.swing.ImageIcon;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
+import ambit2.core.data.ClassHolder;
 import ambit2.core.data.Profile;
 import ambit2.core.data.Property;
+import ambit2.db.DatasourceFactory;
+import ambit2.db.LoginInfo;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -42,12 +45,16 @@ import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
-import com.microworkflow.process.Workflow;
-
 public class AnalogsFinderPlugin extends DBWorkflowPlugin {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3973575896403234559L;
 	protected WorkflowOptionsLauncher contextListener;
 	public AnalogsFinderPlugin() {
 		super();
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryBuildingWorkflow","Category building","Category building","images/search_256.png"));
+		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
 		props.add(UserInteractionEvent.PROPERTYNAME);
@@ -73,12 +80,15 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	  	endpoints.add(new Property("Skin sensitisation","EC3"));
     	getWorkflowContext().put(DBWorkflowContext.ENDPOINTS, endpoints);    	
     	
+		LoginInfo li = new LoginInfo();
+		li.setUser("guest");
+		li.setPassword(li.getUser());
+		String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());
+		getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
+		getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);	    	
+    	
 	}
-	@Override
-	protected Workflow createWorkflow() {
-		//return new AnalogsFinderWorkflow();
-		return new CategoryBuildingWorkflow();
-	}
+
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
 		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BrowserMode.Spreadsheet);

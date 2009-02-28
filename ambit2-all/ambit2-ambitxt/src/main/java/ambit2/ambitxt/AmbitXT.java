@@ -1,7 +1,6 @@
 package ambit2.ambitxt;
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -9,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.RenderingHints;
+import java.beans.PropertyChangeEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Hashtable;
@@ -19,7 +19,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -43,6 +43,8 @@ import ambit2.mopac.MopacShell;
 import ambit2.namestructure.Name2StructureProcessor;
 
 public class AmbitXT extends NPluginsApplication {
+	protected AmbitSplitPane multiworkflowPanel;
+	protected JXTaskPaneContainer taskPane;
 	public AmbitXT(String title, int width, int height, String[] args) {
 		super(title,width,height,args);
 		//this is a quick dirty hack to make the builder include mopac and name structure packages ...
@@ -67,20 +69,21 @@ public class AmbitXT extends NPluginsApplication {
         JComponent[] options = plugin.createOptionsComponent();
         if (options!= null) 
             if (options.length > 1) {
-            	JPanel p = new JPanel(new BorderLayout()) {
-            		public String toString() {
-            			return "Workflow";
-            		}            		
-            	};
-            	p.add(options[0],BorderLayout.CENTER);
-            	JXTaskPaneContainer taskPane = createContainer();
-            	
+            	if  (multiworkflowPanel == null) {
+            		multiworkflowPanel = new AmbitSplitPane();
+            		if (taskPane == null) taskPane = createContainer();
+            		multiworkflowPanel.setRightComponent(taskPane);
+            	}
+            	multiworkflowPanel.setLeftComponent(options[0]);
+            	multiworkflowPanel.setTitle(plugin.toString() + " workflow");
+            	taskPane.removeAll();            	
                 for (int i=1; i < options.length; i++) {
   	    		  	taskPane.add(addPane(options[i],taskPane));
                 }
-                p.add(taskPane,BorderLayout.SOUTH);
-                p.setToolTipText("The active workflow");
-                c = p;
+                
+                
+                c = multiworkflowPanel;
+                multiworkflowPanel.invalidate();
             } else c = options[0];
         else 
             c = new JLabel("No options");
@@ -182,12 +185,23 @@ public class AmbitXT extends NPluginsApplication {
     	    			return  AmbitXT.class.getClassLoader().getResource("news.html");
     	    		}
     	    	}
+    	    	@Override
+    	    	public synchronized void setThePlugin(INanoPlugin arg0) {
+    	    		super.setThePlugin(arg0);
+    	    		repaint();
+    	    		
+    	    	}
     	    };
 	    } catch (BackingStoreException x) {
 	        return new NanoPluginsManager(false,null);
 	    }
 	    
 	    
+	}
+	protected void repaint() {
+		leftPanel.invalidate();
+		rightPanel.invalidate();
+		detailsPanel.invalidate();
 	}
 	@Override
 	protected Package getPackage() {
@@ -253,6 +267,8 @@ public class AmbitXT extends NPluginsApplication {
     public ImageIcon createImageIcon() {
     	return Utils.createImageIcon("images/ambit.png");
     }		
+    
+   
 }
 
 class AmbitTaskPaneContainerUI extends BasicTaskPaneContainerUI {
@@ -362,5 +378,23 @@ class AmbitPaneUI extends BasicTaskPaneUI {
             }
         }
     }	
+ 
+}
 
+class AmbitSplitPane extends JSplitPane {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5429696670087007856L;
+	String title = "";
+	public AmbitSplitPane() {
+		super(JSplitPane.VERTICAL_SPLIT);
+	}
+	public void setTitle(String value) {
+		title = value;
+	}
+	@Override
+	public String toString() {
+		return title;
+	}
 }

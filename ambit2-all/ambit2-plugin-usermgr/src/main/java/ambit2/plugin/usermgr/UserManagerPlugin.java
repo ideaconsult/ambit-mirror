@@ -43,6 +43,7 @@ import ambit2.db.LoginInfo;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
+import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
@@ -149,4 +150,23 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 		return "Administrative tools";
 	}
 	
+	public JComponent[] createOptionsComponent() {
+		if (optionsComponent == null) {
+			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
+		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
+		             task,"Run",null);
+		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());
+		    Workflow logout = new Workflow();
+			logout.setDefinition(new LogoutSequence());		    
+			StatusPanel p = new StatusPanel(getWorkflowContext());
+			Vector<String> props = new Vector<String>();	
+			props.add(DBWorkflowContext.LOGININFO);
+			props.add(DBWorkflowContext.DBCONNECTION_URI);
+			props.add(DBWorkflowContext.DATASOURCE);
+			p.setProperties(props);		    
+			optionsComponent = new JComponent[] {
+					new WorkflowViewPanel(workflow,action),p};
+		} 
+		return optionsComponent;
+	}			
 }

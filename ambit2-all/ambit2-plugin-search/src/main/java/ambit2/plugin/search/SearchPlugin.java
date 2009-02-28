@@ -10,6 +10,9 @@ import javax.swing.ImageIcon;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import ambit2.core.data.ClassHolder;
+import ambit2.db.DatasourceFactory;
+import ambit2.db.LoginInfo;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -17,13 +20,20 @@ import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
-import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 
 public class SearchPlugin extends DBWorkflowPlugin {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4102054050740161163L;
 	protected WorkflowOptionsLauncher contextListener;
 	public SearchPlugin() {
 		super();
+		workflows.add(new ClassHolder("ambit2.plugin.search.SearchWorkflow","Simple search","Search by single property or identifier","images/search_256.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.search.AnalogsFinderWorkflow","Advanced search","Search by multiple criteria","images/search_256.png"));
+//		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
+		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
 		props.add(UserInteractionEvent.PROPERTYNAME);
@@ -35,6 +45,13 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
+		LoginInfo li = new LoginInfo();
+		li.setUser("guest");
+		li.setPassword(li.getUser());
+		String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());
+		getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
+		getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);			
+		
 	}
 	@Override
 	public void setWorkflowContext(WorkflowContext workflowContext) {
@@ -43,11 +60,12 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		contextListener.setWorkflowContext(workflowContext);
 
 	}
+
 	@Override
-	protected Workflow createWorkflow() {
-		return new SearchWorkflow();
+	public synchronized void runWorkflow(ClassHolder clazz) throws Exception {
+		getWorkflowContext().put(DBWorkflowContext.QUERY,null);
+		super.runWorkflow(clazz);
 	}
-	
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
 			QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BrowserMode.Spreadsheet);
