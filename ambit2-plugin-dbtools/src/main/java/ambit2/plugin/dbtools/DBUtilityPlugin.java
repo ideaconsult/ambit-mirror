@@ -32,6 +32,7 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
+import nplugins.core.Introspection;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
@@ -58,16 +59,16 @@ import com.microworkflow.process.Workflow;
  * @author nina
  *
  */
-public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflowsPlugin{
+public class DBUtilityPlugin extends DBWorkflowPlugin {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -189422892768202994L;
-	protected List<ClassHolder> workflows;	
+	
 	protected WorkflowOptionsLauncher contextListener;
 	public DBUtilityPlugin() {
 		super();
-		workflows = new ArrayList<ClassHolder>();
+		
 
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
@@ -101,9 +102,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 		getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
 		getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);		
 	}
-	public List<ClassHolder> getWorkflows() {
-		return workflows;
-	}
+
 	@Override
 	protected Workflow createWorkflow() {
 		return new Workflow() {
@@ -113,10 +112,11 @@ public class DBUtilityPlugin extends DBWorkflowPlugin implements IMultiWorkflows
 			}
 		};
 	}
+
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null)
-			mainComponent = new MultiWorkflowsPanel<DBUtilityPlugin>(this,getAction());
+			mainComponent = new MultiWorkflowsPanel<DBUtilityPlugin>(this);
 		return mainComponent;
 	}
 

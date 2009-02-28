@@ -63,10 +63,10 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	 * 
 	 */
 	private static final long serialVersionUID = -8337122459874022752L;
-	protected List<ClassHolder> workflows;	
+
 	protected WorkflowOptionsLauncher contextListener;
 	public UserManagerPlugin() {
-		workflows = new ArrayList<ClassHolder>();
+		super();
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));		
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.UserManagerWorkflow","Add user","Add new user in AMBIT database","images/users.png"));
 		contextListener = new WorkflowOptionsLauncher(null);
@@ -95,7 +95,7 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) 
-			mainComponent = new MultiWorkflowsPanel<UserManagerPlugin>(this,getAction());
+			mainComponent = new MultiWorkflowsPanel<UserManagerPlugin>(this);
 		return mainComponent;
 	}
 	@Override

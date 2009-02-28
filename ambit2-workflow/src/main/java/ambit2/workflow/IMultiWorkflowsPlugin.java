@@ -43,4 +43,5 @@ public interface IMultiWorkflowsPlugin extends INanoPlugin {
 	 * @return Class description only, workflow objects are instantiated on demand 
 	 */
 	List<ClassHolder> getWorkflows();	
+	void runWorkflow(ClassHolder clazz) throws Exception;
 }

@@ -31,8 +31,8 @@ public class WorkflowConsolePanel<T> extends AbstractEditor<T> implements Workfl
 	}	
 	@Override
 	protected void animate(PropertyChangeEvent arg0) {
-		//if (arg0.getNewValue()!=null)
-		text.setText(arg0.getPropertyName() + "\t"+ arg0.getNewValue());
+		if (arg0.getNewValue()!=null)
+			text.setText(arg0.getNewValue().toString());
 		
 	}
 

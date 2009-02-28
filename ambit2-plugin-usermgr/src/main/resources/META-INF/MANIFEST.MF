@@ -1,7 +1,7 @@
 Package: ambit2.plugin.usermgr
 
 Name: ambit2/plugin/usermgr/UserManagerPlugin.class
-Specification-Title: DB User manager plugin for Ambit XT
+Specification-Title: Administrative tools for Ambit XT
 Specification-Version: 2.0
 Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Package-Title: ambit2.plugin.usermgr

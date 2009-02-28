@@ -37,7 +37,6 @@ import javax.swing.JComponent;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
-import ambit2.core.config.Preferences;
 import ambit2.core.data.ClassHolder;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
@@ -56,13 +55,12 @@ import ambit2.workflow.ui.WorkflowViewPanel;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 
-public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflowsPlugin{
+public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2604797602709881671L;
 	protected WorkflowOptionsLauncher contextListener;
-	protected List<ClassHolder> workflows;	
 	
 	public PBTCheckerPlugin() {
 		workflows = new ArrayList<ClassHolder>();
@@ -200,7 +198,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 				p.setProperties(props);
 				getWorkflowContext().addPropertyChangeListener(p);
 				
-				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,getAction(),32);
+				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,32);
 
 				optionsComponent =  new JComponent[] {
 						new WorkflowViewPanel(workflow,getAction()),
@@ -212,10 +210,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin implements IMultiWorkflow
 		}
 		return optionsComponent;
 	}		
-	public List<ClassHolder> getWorkflows() {
 
-		return workflows;
-	}
 	@Override
 	public boolean isModified() {
 		try {
