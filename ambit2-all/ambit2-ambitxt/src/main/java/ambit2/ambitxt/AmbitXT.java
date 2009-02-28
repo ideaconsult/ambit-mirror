@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.RenderingHints;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.prefs.BackingStoreException;
 
@@ -72,10 +74,12 @@ public class AmbitXT extends NPluginsApplication {
             	};
             	p.add(options[0],BorderLayout.CENTER);
             	JXTaskPaneContainer taskPane = createContainer();
+            	
                 for (int i=1; i < options.length; i++) {
   	    		  	taskPane.add(addPane(options[i],taskPane));
                 }
                 p.add(taskPane,BorderLayout.SOUTH);
+                p.setToolTipText("The active workflow");
                 c = p;
             } else c = options[0];
         else 
@@ -126,6 +130,7 @@ public class AmbitXT extends NPluginsApplication {
 		pane.setUI(new AmbitPaneUI());
 		pane.setName(comp.toString());
 	    pane.setTitle(comp.toString());
+	    
 	    pane.setSpecial(true);
 	    pane.add(comp);
 	    if (comp instanceof JComponent)
@@ -151,6 +156,7 @@ public class AmbitXT extends NPluginsApplication {
 		}
 		return oldValues;
 	}	
+
 	@Override
 	protected NanoPluginsManager createManager() {
 	    PluginClassPath path;
@@ -164,6 +170,17 @@ public class AmbitXT extends NPluginsApplication {
     	    	@Override
     	    	public ImageIcon getLogo() {
     	    		return  Utils.createImageIcon("images/splash.png");
+    	    	}
+    	    	@Override
+    	    	public URL getHelp() throws MalformedURLException {
+    	    		try {
+    	    			URL url = new URL("http://ambit.sourceforge.net/news.html");
+    	    			url.getContent(); //verify if can read
+    	    			return url; 
+    	    		} catch (Exception x) {
+    	    			
+    	    			return  AmbitXT.class.getClassLoader().getResource("news.html");
+    	    		}
     	    	}
     	    };
 	    } catch (BackingStoreException x) {
@@ -345,4 +362,5 @@ class AmbitPaneUI extends BasicTaskPaneUI {
             }
         }
     }	
+
 }
