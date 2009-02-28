@@ -44,9 +44,7 @@
 								</descriptorRef>
 							</descriptorRefs>
 							<archive>
-								<manifest>
-									<mainClass>ambit2.ambitxt.AmbitXT</mainClass>
-								</manifest>
+								<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 							</archive>
 						</configuration>
 					</execution>
