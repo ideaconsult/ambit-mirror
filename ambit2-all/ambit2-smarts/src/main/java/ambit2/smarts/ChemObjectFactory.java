@@ -355,7 +355,8 @@ public class ChemObjectFactory
 	
 		
 	
-	public void produceStructuresExhaustively (IAtomContainer mol, Vector<StructInfo> vStr, int maxNumSeqSteps)
+	public void produceStructuresExhaustively (IAtomContainer mol, Vector<StructInfo> vStr, 
+				int maxNumSeqSteps, int maxStrSize)
 	{	
 		ChemObjectToSmiles cots = new ChemObjectToSmiles();
 		for (int k = 0; k < mol.getAtomCount(); k++)
@@ -367,6 +368,8 @@ public class ChemObjectFactory
 			for (int i = 0; i < n; i++)
 			{
 				IAtomContainer struct = getFragmentFromSequence(i);
+				if (struct.getAtomCount() > maxStrSize)
+					break;
 				String smiles = cots.getSMILES(struct);
 				//Long hash = molHash.getMoleculeHash(struct);
 				
@@ -409,7 +412,7 @@ public class ChemObjectFactory
 		return(false);
 	}
 	
-	public void produceStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord, 
+	public void produceStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord, int maxStrSize,
 				Vector<StructInfo> vStr, String outFile)
 	{	
 		try
@@ -433,7 +436,7 @@ public class ChemObjectFactory
 					if (mol.getAtomCount() == 0) continue;
 					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
-					produceStructuresExhaustively(mol, vStr, maxNumSeqSteps);
+					produceStructuresExhaustively(mol, vStr, maxNumSeqSteps, maxStrSize);
 					System.out.println("record " + record+ "  " + vStr.size());
 				}
 			}	
@@ -558,7 +561,7 @@ public class ChemObjectFactory
 			while (reader.hasNext()) 
 			{	
 				record++;
-				if (record % 10 == 0)
+				if (record % 200 == 0)
 					System.out.println("  searched records " + record);
 				
 				if (record > nUsedStr)
