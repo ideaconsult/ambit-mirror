@@ -24,10 +24,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 
 import nplugins.core.Introspection;
@@ -40,10 +42,13 @@ import nplugins.workflow.MWorkflowPlugin;
 import ambit2.core.data.ClassHolder;
 import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.workflow.library.LogoutSequence;
+import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
+import com.microworkflow.events.WorkflowEvent;
+import com.microworkflow.events.WorkflowListener;
 import com.microworkflow.process.Activity;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
@@ -56,15 +61,54 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 	 */
 	private static final long serialVersionUID = 7190224146559024307L;
 	protected List<ClassHolder> workflows;	
+	protected NPluginsAction<WorkflowContext,Void> runAction = null;
+	private boolean running = false;
+	public synchronized boolean isRunning() {
+		return running;
+	}
+
+	public synchronized void setRunning(boolean running) {
+		System.out.println(running);
+		this.running = running;
+		getAction().setEnabled(!running);		
+	}
+
 	public DBWorkflowPlugin() {
 		super();
 		workflows = new ArrayList<ClassHolder>();
 		setModified(false);
+
+		getWorkflow().addPropertyChangeListener(new WorkflowListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				System.out.println(evt);
+				if (evt.getPropertyName().equals(WorkflowEvent.WF_COMPLETE)) {
+
+					setRunning(false);
+				}
+				if (evt.getPropertyName().equals(WorkflowEvent.WF_START)) {
+
+					setRunning(true);
+				}
+				if (evt.getPropertyName().equals(WorkflowEvent.WF_ABORTED)) {
+
+					setRunning(false);
+				}				
+			}
+		});		
 	}
+	
+	@Override
+	public boolean canClose() {
+		return !running && !isModified();
+	}
+	@Override
+	protected Workflow createWorkflow() {
+		return new MyWorkflow();
+	}	
 	public List<ClassHolder> getWorkflows() {
 		return workflows;
 	}	
-	protected NPluginsAction<WorkflowContext,Void> runAction = null;
+	
 	
 	protected NPluginsAction<WorkflowContext,Void> getAction() {
 		if (runAction == null) {
@@ -91,45 +135,70 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 		return runAction;
 	}
 	
-	public void runWorkflow(ClassHolder clazz) throws Exception  {
-		Object o = Introspection.loadCreateObject(clazz.getClazz()); 
-		if ( o instanceof Workflow) {
-			getWorkflow().setDefinition(((Workflow) o).getDefinition());
+	public synchronized void runWorkflow(ClassHolder clazz) throws Exception  {
+		if (isRunning()) {
+			getWorkflowContext().put(DBWorkflowContext.ERROR, "Unable to start '"+clazz.getTitle()+ "' workflow! \n'"+ getWorkflow() + "' workflow already running!");
+			return;
+		}
+		Object o = Introspection.loadCreateObject(clazz.getClazz());
+		if ( o instanceof Workflow) 
+			if ( getWorkflow() instanceof MyWorkflow)
+				((MyWorkflow)getWorkflow()).setWorkflow((Workflow)o);			
+			else
+				getWorkflow().setDefinition(((Workflow) o).getDefinition());
+		else throw new Exception("Not an workflow");
+		
+		
+			Action action = getAction();
+			if (action == null)
+				throw new Exception("Unable to run workflow!");
 			try {
-				runAction.setEnabled(false);
-				runAction.actionPerformed(null);
+				getWorkflowContext().put(DBWorkflowContext.BATCHSTATS,"Workflow '"+clazz.getTitle()+"'");
+				
+				action.setEnabled(false);
+				action.actionPerformed(null);
+
 			} catch (Exception x) {
+				getWorkflowContext().put(DBWorkflowContext.BATCHSTATS,"Error when running '"+clazz.getTitle()+"' : "+x.getMessage());
 				throw new Exception(x);
 			} finally {
-				runAction.setEnabled(true);
+				action.setEnabled(true);
+			
+				o = null;
 			}
-		}
+		
 	}		
 
 	@Override
 	protected WorkflowContext createWorkflowContext() {
 		return new DBWorkflowContext();
 	}
-
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {
-			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext);
-		    NPluginsAction action =  new NPluginsAction<WorkflowContext,Void>(
-		             task,"Run",null);
-		    action.setTaskMonitor(getApplicationContext().getTaskMonitor());
-		    Workflow logout = new Workflow();
-			logout.setDefinition(new LogoutSequence());		    
-			StatusPanel p = new StatusPanel(getWorkflowContext());
-			Vector<String> props = new Vector<String>();	
-			props.add(DBWorkflowContext.LOGININFO);
-			props.add(DBWorkflowContext.DBCONNECTION_URI);
-			props.add(DBWorkflowContext.DATASOURCE);
-			p.setProperties(props);		    
-			optionsComponent = new JComponent[] {
-					new WorkflowViewPanel(workflow,action),p};
-		} 
+			if (this instanceof IMultiWorkflowsPlugin) {
+				
+				Workflow logout = new Workflow();
+				logout.setDefinition(new LogoutSequence());
+				StatusPanel p = new StatusPanel(getWorkflowContext());
+				Vector<String> props = new Vector<String>();	
+				props.add(DBWorkflowContext.LOGININFO);
+				props.add(DBWorkflowContext.DBCONNECTION_URI);
+				props.add(DBWorkflowContext.DATASOURCE);
+				p.setProperties(props);
+				getWorkflowContext().addPropertyChangeListener(p);
+				
+				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,32);
+
+				optionsComponent =  new JComponent[] {
+						new WorkflowViewPanel(workflow,getAction()),
+						mw,
+						p
+				};
+			} else
+				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
+		}
 		return optionsComponent;
-	}		
+	}	
 	@Override
 	public JComponent[] createDetailsComponent() {
 		if (detailsComponent == null) {
@@ -152,5 +221,17 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 	}	
 	public int compareTo(INanoPlugin o) {
 		return getOrder()-o.getOrder();
+	}
+}
+
+class MyWorkflow extends Workflow {
+	String title = "Workflow";
+	public void setWorkflow(Workflow workflow) {
+		title = workflow.toString();
+		setDefinition(workflow.getDefinition());
+	}
+	@Override
+	public String toString() {
+		return title;
 	}
 }
