@@ -81,7 +81,13 @@ public class QueryBrowserTest {
 
 		//QueryBrowser<TestTableModel> browser = new QueryBrowser<TestTableModel>();
 		//QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(new BrowsableTableModel(dataModel));
-		QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>();
+		QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>() {
+	     	protected int setRecord(int row, int col) {
+        		int record = super.setRecord(row, col);
+        		System.out.println("Record " +record);
+        		return record;
+        	}			
+		};
 		browser.setObject(new BrowsableTableModel(dataModel));
 		browser.setPreferredSize(new Dimension(800,600));
 		JOptionPane.showMessageDialog(null,browser,"",JOptionPane.PLAIN_MESSAGE,null);

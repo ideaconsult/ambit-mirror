@@ -299,7 +299,7 @@ public interface IBrowserMode {
 
 			@Override
 			public int[] recordToCell(int record) {
-				return new int[] {-1,record};
+				return new int[] {-1,record+1};
 			}
 
 			@Override
