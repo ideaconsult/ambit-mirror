@@ -11,6 +11,9 @@ import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.library.LoginSequence;
 
+import com.microworkflow.execution.Performer;
+import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class SavePBTWorkflow extends Workflow {
@@ -30,14 +33,30 @@ public class SavePBTWorkflow extends Workflow {
     			PBTWorkBook.PBT_WORKBOOK,
     			DBWorkflowContext.BATCHSTATS,
     			chain,false) {
+    		
     		@Override
     		public String toString() {
     			return "Save PBT";
     		}
     		
     	};
+    	Primitive p2 = new Primitive(new Performer<PBTWorkBook,Boolean>() {
+    		@Override
+    		public Boolean execute() throws Exception {
+    			Object o = context.get(PBTWorkBook.PBT_WORKBOOK);
+    			if ((o!=null) && (o instanceof PBTWorkBook)) {
+    				((PBTWorkBook)o).setModified(false);
+    			} 
+    			return true;
+    		}
+    	});
+    	p2.setName("");	
     	p1.setName("Save PBT");
-    	setDefinition(new LoginSequence(p1));
+    	Sequence s = new Sequence();
+    	s.addStep(p1);
+    	s.addStep(p2);
+    	s.setName("Completed");
+    	setDefinition(new LoginSequence(s));
 
 	}
 

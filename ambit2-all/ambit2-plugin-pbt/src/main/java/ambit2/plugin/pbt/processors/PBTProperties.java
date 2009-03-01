@@ -26,6 +26,15 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 	public IStructureRecord process(PBTWorkBook target) throws AmbitException {
 		IStructureRecord record = target.getRecord();
 		if (record ==null) record = new StructureRecord();
+		IAtomContainer a = getAtomContainer(target);
+		
+		record.setContent(molwriter.process(a));
+		record.setFormat(MOL_TYPE.SDF.toString());
+		record.setProperties(a.getProperties());
+		return record;
+	}
+	
+	public static IAtomContainer getAtomContainer(PBTWorkBook target) throws AmbitException {
 		IAtomContainer a = target.getStructure();
 		if (a == null) a = DefaultChemObjectBuilder.getInstance().newAtomContainer();
 		a.setProperties(new TreeMap());
@@ -35,12 +44,9 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 			if (w != WORKSHEET_INDEX.WELCOME)
 				addKeys(a,w.toString(),target.getWorksheet(w));
 		
-		record.setContent(molwriter.process(a));
-		record.setFormat(MOL_TYPE.SDF.toString());
-		record.setProperties(a.getProperties());
-		return record;
-	}
-	protected void addKeys(IAtomContainer record,String prefix,PBTWorksheet ws) {
+		return a;
+	}	
+	protected static void addKeys(IAtomContainer record,String prefix,PBTWorksheet ws) {
 		for (int r = 0; r < ws.getMaxRow();r++)
 			for (int c = 0; c < ws.getMaxCol();c++) {
 				Object value = ws.get(r,c);

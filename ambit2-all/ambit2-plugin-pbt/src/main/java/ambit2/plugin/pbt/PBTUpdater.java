@@ -56,6 +56,11 @@ public class PBTUpdater implements WorkflowContextListener {
 					(record.getIdstructure()==newrecord.getIdstructure()))
 				return; //same record
 		} 
+		if (pbtModified()) {
+			context.put(DBWorkflowContext.ERROR,null);
+			context.put(DBWorkflowContext.ERROR,"PBT workbook has unsaved changes, unable to set new structure");
+			return;
+		}
 		record = newrecord;
 		PBTReader reader = new PBTReader();
 		Connection c = null;
@@ -78,5 +83,12 @@ public class PBTUpdater implements WorkflowContextListener {
 			try {if (c !=null) c.close();} catch (Exception e) {};
 		}
 		
+	}
+	protected boolean pbtModified() {
+		Object o = context.get(PBTWorkBook.PBT_WORKBOOK);
+		if (o==null) return false;
+		if (o instanceof PBTWorkBook) {
+			return ((PBTWorkBook)o).isModified();
+		} else return false;
 	}
 }

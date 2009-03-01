@@ -93,8 +93,8 @@ public class FileOutputState extends FileState implements IOutputState {
 		IChemObjectWriter writer = null;
 		try {
 			if (fname.endsWith(extensions[SDF_INDEX])) {
-				writer = new MDLWriter(stream);
-				((MDLWriter) writer).dontWriteAromatic();
+				writer = new ambit2.core.io.MDLWriter(stream);
+				((ambit2.core.io.MDLWriter) writer).dontWriteAromatic();
 			} else if (fname.endsWith(extensions[CSV_INDEX])) 
 				writer = new DelimitedFileWriter(stream);
 			else if ((fname.endsWith(extensions[TXT_INDEX]))) 
@@ -117,7 +117,7 @@ public class FileOutputState extends FileState implements IOutputState {
 			else if ((fname.endsWith(extensions[HIN_INDEX]))) 
 				writer = new HINWriter(stream);
 			else if ((fname.endsWith(extensions[MOL_INDEX]))) 
-				writer = new MDLWriter(stream);			
+				writer = new ambit2.core.io.MDLWriter(stream);			
 			else if ((fname.endsWith(extensions[SVG_INDEX]))) 
 				writer = new SVGWriter(stream);
 			else if ((fname.endsWith(extensions[XLS_INDEX]))) 

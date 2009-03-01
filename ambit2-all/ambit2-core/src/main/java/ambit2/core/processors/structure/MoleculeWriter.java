@@ -32,9 +32,9 @@ package ambit2.core.processors.structure;
 import java.io.StringWriter;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.MDLWriter;
 
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.DefaultAmbitProcessor;
 
 public class MoleculeWriter extends DefaultAmbitProcessor<IAtomContainer,String> {
@@ -47,7 +47,7 @@ public class MoleculeWriter extends DefaultAmbitProcessor<IAtomContainer,String>
 			throws AmbitException {
 		try {
 			StringWriter w = new StringWriter();
-			MDLWriter writer = new MDLWriter(w);
+			ambit2.core.io.MDLWriter writer = new ambit2.core.io.MDLWriter(w);
 			writer.setSdFields(target.getProperties());
 			writer.write(target);
 			writer.close();

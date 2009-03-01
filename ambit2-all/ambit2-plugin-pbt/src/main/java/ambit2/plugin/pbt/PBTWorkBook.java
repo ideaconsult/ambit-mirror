@@ -229,7 +229,7 @@ public class PBTWorkBook {
     	WORKSHEET_INDEX sheet = WORKSHEET_INDEX.valueOf(fieldname.substring(0,i));
     	fieldname = fieldname.substring(i+1);
     	PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(getWorksheet(sheet));
-    	model.setValue(fieldname.toLowerCase(), value.toString());
+    	model.setValue(fieldname.toLowerCase(), value.toString().trim());
     	
     }
 }
