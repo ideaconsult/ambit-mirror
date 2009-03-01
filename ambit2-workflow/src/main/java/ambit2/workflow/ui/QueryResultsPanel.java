@@ -40,7 +40,9 @@ import javax.sql.DataSource;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.Profile;
+import ambit2.core.data.StructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.search.IStoredQuery;
 import ambit2.dbui.StoredQueryTableModel;
@@ -95,7 +97,20 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
         tableModel = new StoredQueryTableModel();
         browser = new QueryBrowser<BrowsableTableModel>(
                     new BrowsableTableModel(tableModel),
-                    new Dimension(100,100),controlsPosition,mode);
+                    new Dimension(100,100)) {
+        	@Override
+        	protected int setRecord(int row, int col) {
+        		int record = super.setRecord(row, col);
+//        		System.out.println("set record "+record + "("+row+","+col+")");        		
+
+      			IStructureRecord struc = new StructureRecord();
+        		tableModel.update(record, struc);
+        		getWorkflowContext().put(DBWorkflowContext.RECORD,null);
+        		getWorkflowContext().put(DBWorkflowContext.RECORD,struc);        		
+        		return record;
+        	}
+        };
+        browser.setMode(BrowserMode.Spreadsheet,BrowserMode.Columns);
         add(browser,BorderLayout.CENTER);
     }
     @Override
