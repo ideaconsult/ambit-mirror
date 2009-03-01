@@ -26,6 +26,8 @@ package ambit2.core.data;
 
 import java.util.Map;
 
+import ambit2.core.processors.structure.MoleculeReader.MOL_TYPE;
+
 
 public class StructureRecord implements IStructureRecord {
 	protected int idchemical;
@@ -84,6 +86,14 @@ public class StructureRecord implements IStructureRecord {
      */
 	public String getContent() {
 		return content;
+	}
+	public String getWritableContent() {
+		if (MOL_TYPE.SDF.toString().equals(getFormat())) {
+			int p = getContent().indexOf("M  END");
+			if (p > 0)
+				return getContent().substring(0,p+6);
+		} 
+		return getContent();
 	}
 	/* (non-Javadoc)
      * @see ambit2.repository.IStructureRecord#setContent(java.lang.String)
