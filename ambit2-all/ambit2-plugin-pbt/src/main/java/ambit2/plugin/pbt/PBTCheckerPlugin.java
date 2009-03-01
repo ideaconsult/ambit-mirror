@@ -62,6 +62,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	protected PBTUpdater updater;
 	
 	public PBTCheckerPlugin() {
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTCreator","New","Creates a new PBT workbook","images/pill_16.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","PBT","Verifies if PBT assessment is complete","images/pill_16.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
