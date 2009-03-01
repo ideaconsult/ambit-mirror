@@ -181,20 +181,24 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		}
         //find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
-        	ps_selectchemicals.clearParameters();
-            ps_selectchemicals.setInt(1,structure.getIdchemical());
-            
-            ResultSet rs = ps_selectchemicals.executeQuery();
-            structure.setIdchemical(-1);
-            structure.setIdstructure(-1);
-            try {
-	            while (rs.next()) {
-	                structure.setIdchemical(rs.getInt(1));
+        	if (structure.getIdstructure()>0) {
+        		
+        	} else {
+	        	ps_selectchemicals.clearParameters();
+	            ps_selectchemicals.setInt(1,structure.getIdchemical());
+	            
+	            ResultSet rs = ps_selectchemicals.executeQuery();
+	            structure.setIdchemical(-1);
+	            structure.setIdstructure(-1);
+	            try {
+		            while (rs.next()) {
+		                structure.setIdchemical(rs.getInt(1));
+		            }
+	            } catch (Exception x) {
+	            } finally {
+	            	rs.close();
 	            }
-            } catch (Exception x) {
-            } finally {
-            	rs.close();
-            }
+        	}
         } else findChemical(thekey,structure);
         List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
         //add a new idchemical if idchemical <=0
@@ -224,29 +228,37 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
     	
         }
         //add a new entry in structure table
-        if (ps_structure==null)
-        	ps_structure = connection.prepareStatement(insert_structure,Statement.RETURN_GENERATED_KEYS);
-		ps_structure.clearParameters();        
-        ps_structure.setInt(1,structure.getIdchemical());
-        ps_structure.setString(2,structure.getContent());
-        ps_structure.setString(3,structure.getFormat());
-        ps_structure.executeUpdate();
-        ResultSet rss = ps_structure.getGeneratedKeys();
-        while (rss.next())  {
-        	StructureRecord record = new StructureRecord(structure.getIdchemical(),rss.getInt(1),null,structure.getFormat());
-        	writeDataset(record);
+        if (structure.getIdstructure() <= 0) {
+	        if (ps_structure==null)
+	        	ps_structure = connection.prepareStatement(insert_structure,Statement.RETURN_GENERATED_KEYS);
+			ps_structure.clearParameters();        
+	        ps_structure.setInt(1,structure.getIdchemical());
+	        ps_structure.setString(2,structure.getWritableContent());
+	        ps_structure.setString(3,structure.getFormat());
+	        ps_structure.executeUpdate();
+	        ResultSet rss = ps_structure.getGeneratedKeys();
+	        while (rss.next())  {
+	        	StructureRecord record = new StructureRecord(structure.getIdchemical(),rss.getInt(1),null,structure.getFormat());
+	        	writeDataset(record);
+	        	try {
+	        		structure.setIdstructure(record.getIdstructure());
+	        		writeProperties(structure,molecule);
+	        	} catch (AmbitException x) {
+	        		logger.warn(x);
+	        	}
+	            sr.add(record);
+	        }
+	        rss.close();
+	        ps_structure.close();
+	        ps_structure = null;
+			molecule = null;
+        } else {
         	try {
-        		structure.setIdstructure(record.getIdstructure());
         		writeProperties(structure,molecule);
         	} catch (AmbitException x) {
         		logger.warn(x);
-        	}
-            sr.add(record);
+        	}        	
         }
-        rss.close();
-        ps_structure.close();
-        ps_structure = null;
-		molecule = null;
         
         return sr;
         
