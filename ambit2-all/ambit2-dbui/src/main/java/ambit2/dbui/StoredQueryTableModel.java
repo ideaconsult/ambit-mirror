@@ -32,6 +32,7 @@ import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.Profile;
 import ambit2.core.data.Property;
 import ambit2.core.data.StructureRecord;
@@ -163,7 +164,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 				
 		}
 	}	
-	protected IAtomContainer getAtomContainer(int idstructure) throws SQLException, AmbitException {
+	public IAtomContainer getAtomContainer(int idstructure) throws SQLException, AmbitException {
 		if (structureRecords == null) structureRecords = 
 			getConnection().prepareStatement(AbstractStructureRetrieval.sql);
 		structureRecords.clearParameters();
@@ -196,12 +197,31 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 	public int getRowCount() {
 		return maxRecords;
 	}
+	public void update(int record,IStructureRecord struc)  {
+		try {
+			if (record >=0) {
+	            records.first();
+	            records.relative(record);			
+	            if (!records.isAfterLast()) {	
+					struc.setIdstructure(records.getInt("idstructure"));
+					struc.setIdchemical(records.getInt("idchemical"));
+					return;
+	            }
+			}
+		} catch (Exception x) {
+
+		}
+		struc.setIdchemical(-1);
+		struc.setIdstructure(-1);		
+	}
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		try {
             records.first();
             records.relative(rowIndex);			
             if (records.isAfterLast()) return "";
+            
             int idstructure = records.getInt("idstructure");
+            //System.out.println("idstruc" +idstructure);
 			switch (columnIndex) {
 			//selected
 			case 0: return records.getBoolean("selected"); 

@@ -51,7 +51,7 @@ public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, 
     protected void addWidgets() {
     	setLayout(new BorderLayout());
     	srtm = new CachedRowSetTableModel();
-    	browser = new QueryBrowser<CachedRowSetTableModel>(null,new Dimension(150,20),BorderLayout.NORTH,BrowserMode.Spreadsheet);
+    	browser = new QueryBrowser<CachedRowSetTableModel>(null,new Dimension(150,20));
     	add(browser, BorderLayout.CENTER);
     	/*
         JTable table = new JTable(srtm);
