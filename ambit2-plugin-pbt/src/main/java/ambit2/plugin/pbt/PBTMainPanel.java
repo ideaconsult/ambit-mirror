@@ -82,10 +82,13 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
             public void stateChanged(ChangeEvent e) {
         		if (getWorkbook()!=null) {
         			int index = ((JTabbedPane)e.getSource()).getSelectedIndex();
-        			HSSFFormulaEvaluator.evaluateAllFormulaCells(getWorkbook().workbook);
-        			//for (int i=0; i < getWorkbook().size();i++)
-        				getWorkbook().getWorksheet(index).notifyCells(-1,-1);
-        			tabbedPane.getComponentAt(index).repaint();
+        			if (index >=0) {
+	        			HSSFFormulaEvaluator.evaluateAllFormulaCells(getWorkbook().workbook);
+	        			//for (int i=0; i < getWorkbook().size();i++)
+	        			if (getWorkbook()!=null && (getWorkbook().getWorksheet(index)!=null))
+	        				getWorkbook().getWorksheet(index).notifyCells(-1,-1);
+	        			tabbedPane.getComponentAt(index).repaint();
+        			}
         			
         		}
             }        	
@@ -102,6 +105,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     	this.pbt_workbook = pbt_workbook;
         try {
         	//hack = true;
+        	
         	tabbedPane.removeAll();
         	if (pbt_workbook !=null) {
         	
@@ -127,22 +131,34 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     }
     @Override
     protected void animate(PropertyChangeEvent event) {
-    	//if (hack) return; 
-        if (event.getPropertyName().equals(ambit2.workflow.DBWorkflowContext.STOREDQUERY)) {
-        	try {
-	        	IAtomContainer a = execute(((IStoredQuery) event.getNewValue()));
-	        	if (pbt_workbook!= null)
-	        		pbt_workbook.getWorksheet(1).setExtendedCell(a, 10,5);
-        	} catch (Exception x) {
-        		x.printStackTrace();
-        	}
-        } else if (event.getPropertyName().equals(PBTWorkBook.PBT_WORKBOOK)) {   
+        if (event.getPropertyName().equals(PBTWorkBook.PBT_WORKBOOK)) {   
         	if (event.getNewValue() instanceof PBTWorkBook) {
         		setWorkbook((PBTWorkBook) event.getNewValue() );
         	}
+        	
         }
+        /*
+        else if (event.getPropertyName().equals(DBWorkflowContext.RECORD)) {   
+        	if (event.getNewValue() instanceof IStructureRecord) {
+        		if (!pbt_workbook.isModified()) {
+        			pbt_workbook.setRecord((IStructureRecord)event.getNewValue());
+        			pbt_workbook.setModified(false);
+        		}
+        	}
+        }
+        */
+        /*
+        else if (event.getPropertyName().equals(DBWorkflowContext.STRUCTURES)) {   
+        	if (event.getNewValue() instanceof IAtomContainer) {
+        		if (!pbt_workbook.isModified()) { 
+        			pbt_workbook.setStructure((IAtomContainer)event.getNewValue());
+        			pbt_workbook.setModified(false);
+        		}
+        	}
+        }
+        */
     }
-    
+    /*
 	public IAtomContainer execute(IStoredQuery q) throws Exception {
 		IQueryObject<IStructureRecord> query = q.getQuery();
 		if (query == null)
@@ -187,6 +203,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         }
         
 	}
+	*/
     @Override
     public void clear() {
         // TODO Auto-generated method stub

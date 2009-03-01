@@ -59,12 +59,13 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	 */
 	private static final long serialVersionUID = 2604797602709881671L;
 	protected WorkflowOptionsLauncher contextListener;
+	protected PBTUpdater updater;
 	
 	public PBTCheckerPlugin() {
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","PBT","Verifies if PBT assessment is complete","images/pill_16.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
-		//workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import","Import chemical structures into database","images/import.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.SavePBTWorkflow","Save","Save PBT assessment results into database","images/import.png"));
 
 		
 		contextListener = new WorkflowOptionsLauncher(null);
@@ -99,6 +100,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 		} catch (Exception x) {
 			getWorkflowContext().put(DBWorkflowContext.ERROR,x);
 		}
+		updater = new PBTUpdater(getWorkflowContext());
 		
 	}
 	@Override
@@ -116,18 +118,20 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
 			PBTMainPanel results = new PBTMainPanel(getWorkflowContext());
-			try {
-				results.setWorkbook((PBTWorkBook)getWorkflowContext().get(PBTWorkBook.PBT_WORKBOOK));
-			} catch (Exception x) {
-				
-			}
+	
 			Vector<String> p = new Vector<String>();
-			p.add(DBWorkflowContext.STOREDQUERY);
-			p.add(DBWorkflowContext.ERROR);
+			p.add(PBTWorkBook.PBT_WORKBOOK);
+			//p.add(DBWorkflowContext.STOREDQUERY);
+			//p.add(DBWorkflowContext.ERROR);
+			//p.add(DBWorkflowContext.RECORD);
+			//p.add(DBWorkflowContext.STRUCTURES);			
 			results.setProperties(p);
 			results.setAnimate(true);
 			mainComponent = results;
 		}
+		Object pbt = getWorkflowContext().get(PBTWorkBook.PBT_WORKBOOK);
+		if (pbt != null)
+			((PBTMainPanel)mainComponent).setWorkbook((PBTWorkBook)pbt);
 		return mainComponent;
 
 	}
@@ -162,7 +166,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	@Override
 	public JComponent[] createDetailsComponent() {
 		if (detailsComponent == null) {
-		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BorderLayout.EAST,BrowserMode.Columns);
+		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BorderLayout.NORTH,BrowserMode.Columns);
 		    
 			Vector<String> p = new Vector<String>();
 			p.add(DBWorkflowContext.STOREDQUERY);
