@@ -55,4 +55,5 @@ public interface IStructureRecord {
 
     public abstract void clear();
 
+    public abstract String getWritableContent();
 }
