@@ -3,12 +3,17 @@ package ambit2.plugin.pbt;
 import java.awt.Color;
 import java.io.InputStream;
 
-import org.apache.commons.collections.set.CompositeSet.SetMutator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.core.data.IStructureRecord;
+import ambit2.core.exceptions.AmbitException;
+import ambit2.core.processors.structure.MoleculeReader;
+
+import com.jgoodies.binding.PresentationModel;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -17,6 +22,9 @@ import com.lowagie.text.Table;
 
 
 public class PBTWorkBook {
+	
+	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.0.0";
+
 	public static final String PBT_WORKBOOK = "ambit2.plugin.pbt.WORKBOOK";
 	protected static final String PBT_CLARIANT="ambit2/plugin/pbt/xml/pbt_1_00.xls";
 	final protected HSSFWorkbook workbook; 
@@ -24,7 +32,7 @@ public class PBTWorkBook {
 	final protected POIFSFileSystem poifsFileSystem;
 	final PBTWorksheet[] pbt_worksheets; 
 	public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
-	
+	protected IStructureRecord record  = null;
     protected static Object[][] defs = {
     	{"TERMS & CONDITIONS",new Integer(27),new Integer(3),"ambit2/plugin/pbt/xml/welcome.xml"},   	
     	{"SUBSTANCE",new Integer(28),new Integer(6),"ambit2/plugin/pbt/xml/substance_page.xml"},
@@ -54,7 +62,9 @@ public class PBTWorkBook {
     	return getWorksheet(index.ordinal());
     }    
     protected PBTWorksheet getWorksheet(int index) {
-    	return pbt_worksheets[index];
+    	if (index < pbt_worksheets.length)
+    		return pbt_worksheets[index];
+    	else return null;
     }
     public int size() {
     	return pbt_worksheets.length;
@@ -185,4 +195,41 @@ public class PBTWorkBook {
 		return false;
 
     }    
+    public void setModified(boolean value) {
+    	for (WORKSHEET_INDEX w : WORKSHEET_INDEX.values() ) 
+			getWorksheet(w).setModified(value);    	
+    }
+    public void setRecord(IStructureRecord record) {
+    	this.record = record;
+    	MoleculeReader molreader = new MoleculeReader();
+    	try {
+    		setStructure(molreader.process(record));
+    	} catch (Exception x) {
+    		setStructure(null);
+    	}
+    }
+    public IStructureRecord getRecord() {
+    	return record;
+    }
+    public void setStructure(IAtomContainer structure) {
+    	getWorksheet(1).setExtendedCell(structure, 10,5);    	
+    }
+    public IAtomContainer getStructure() {
+    	Object a = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCell(10,5);
+    	if (a instanceof IAtomContainer)
+    		return ((IAtomContainer)a);
+    	else 
+    		return null;
+    }
+    public void set(String fieldname,Object value) throws AmbitException {
+    	
+    	int i = fieldname.indexOf('_');
+    	if (i <= 0) throw new AmbitException("Invalid fieldname");
+    	
+    	WORKSHEET_INDEX sheet = WORKSHEET_INDEX.valueOf(fieldname.substring(0,i));
+    	fieldname = fieldname.substring(i+1);
+    	PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(getWorksheet(sheet));
+    	model.setValue(fieldname.toLowerCase(), value.toString());
+    	
+    }
 }
