@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.IChemObjectWriter;
+
+import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.FileOutputState;
+import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.plugin.pbt.PBTWorkBook;
 
 import com.lowagie.text.Document;
@@ -47,11 +53,23 @@ public class PBTExporter extends DefaultAmbitProcessor<FileOutputState, File> {
         Document document = new Document(PageSize.A4.rotate());
         try {
         	File file = target.getFile();
-        	if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.PDF_INDEX]))
+        	if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.SDF_INDEX])) {
+        		IAtomContainer a = PBTProperties.getAtomContainer(workbook);
+        		IChemObjectWriter writer = FileOutputState.getWriter( new FileOutputStream(file),FileOutputState.extensions[FileOutputState.SDF_INDEX]);
+        		try {
+        			if (writer instanceof MDLWriter)
+        				((MDLWriter)writer).setSdFields(a.getProperties());
+	        		writer.write(a);
+	        		writer.close();
+        		} catch (Exception x) {
+        			
+        		}
+        		return file;
+        	} else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.PDF_INDEX]))
         		PdfWriter.getInstance(document, new FileOutputStream(file));
-        	if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.RTF_INDEX]))
+        	else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.RTF_INDEX]))
         		RtfWriter2.getInstance(document, new FileOutputStream(file));
-        	if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.HTML_INDEX]))
+        	else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.HTML_INDEX]))
         		HtmlWriter.getInstance(document, new FileOutputStream(file));        		
             document.open();
             workbook.write(document);

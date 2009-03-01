@@ -28,11 +28,11 @@ public class ExportWorkflow extends Workflow {
     			OutputFileSelection.OUTPUTFILE,
     			"FILE",
     			new Exporter(new PBTExporter()));
-    	export.setName("Export as PDF/RTF/HTML file");
+    	export.setName("Export as PDF/RTF/HTML/SDF file");
     	
     	FileOutputState fo = new FileOutputState();
-    	fo.setSupportedExtensions(new String[] {".pdf",".rtf",".html"});
-    	fo.setSupportedExtDescriptions(new String[] {"Adobe PDF files (*.pdf)","Rich Text Format files (*.rtf)","HTML files (*.html)"});
+    	fo.setSupportedExtensions(new String[] {".pdf",".rtf",".html",".sdf"});
+    	fo.setSupportedExtDescriptions(new String[] {"Adobe PDF files (*.pdf)","Rich Text Format files (*.rtf)","HTML files (*.html)","SDF (*.sdf)"});
         setDefinition(new OutputFileSelection(export, fo));
 	}
 
