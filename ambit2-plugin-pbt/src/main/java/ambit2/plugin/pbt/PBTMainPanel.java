@@ -31,10 +31,7 @@ package ambit2.plugin.pbt;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
-import java.sql.Connection;
-import java.sql.ResultSet;
 
-import javax.sql.DataSource;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -44,15 +41,6 @@ import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
-import org.openscience.cdk.interfaces.IAtomContainer;
-
-import ambit2.core.data.IStructureRecord;
-import ambit2.db.readers.IRetrieval;
-import ambit2.db.readers.RetrieveAtomContainer;
-import ambit2.db.search.IQueryObject;
-import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.QueryExecutor;
-import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.WorkflowContextListenerPanel;
