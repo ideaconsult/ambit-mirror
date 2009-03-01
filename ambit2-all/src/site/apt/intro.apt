@@ -36,12 +36,19 @@ Introduction
 
 	* Oct 2008
 
-	* Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.00-setup.exe} AmbitXT Prototype}} Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed will contain the original EINECS list.
-
 *** Initial release
 ~~~~~~~~~~~
-    * Dec 2008
-
+    * Feb 2009
+    
+    * Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.0.0-setup.exe} AmbitXT Initial release}} Beta version of the software.
+    
+    	* Updated database schema
+    	* Workflow support
+    	* Example workflow for identifiers, substructure and similarity search. 
+    	* Workflow for PBT assessment, following REACH guidance. 
+    	* The database distributed contains the original EINECS list.
+    	
+    
 *** Final release
 ~~~~~~~~~~~
  		* June 2009
