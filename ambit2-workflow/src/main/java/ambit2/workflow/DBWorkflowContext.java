@@ -54,6 +54,7 @@ public class DBWorkflowContext extends WorkflowContext {
     public static String PAGESIZE = "ambit2.workflow.DBWorkflowContext.PAGESIZE";
     public static String USERINTERACTION = "ambit2.workflow.DBWorkflowContext.USERINTERACTION";
     public static String STRUCTURES = "ambit2.workflow.DBWorkflowContext.STRUCTURES";
+    public static String RECORD = "ambit2.workflow.DBWorkflowContext.RECORD";
     public static String PROFILE = "ambit2.workflow.DBWorkflowContext.PROFILE";
     public static String TEMPLATES = "ambit2.workflow.DBWorkflowContext.TEMPLATES";
     public static String DESCRIPTORS = "ambit2.workflow.DBWorkflowContext.DESCRIPTORS";

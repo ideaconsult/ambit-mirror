@@ -154,10 +154,10 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 				throw new Exception("Unable to run workflow!");
 			try {
 				getWorkflowContext().put(DBWorkflowContext.BATCHSTATS,"Workflow '"+clazz.getTitle()+"'");
-				
+				//System.out.println("Started "+o);
 				action.setEnabled(false);
 				action.actionPerformed(null);
-
+				//System.out.println("Done "+o);
 			} catch (Exception x) {
 				getWorkflowContext().put(DBWorkflowContext.BATCHSTATS,"Error when running '"+clazz.getTitle()+"' : "+x.getMessage());
 				throw new Exception(x);
@@ -213,7 +213,8 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 			props.add(DBWorkflowContext.DATASET);
 			props.add(DBWorkflowContext.ERROR);
 			props.add(DBWorkflowContext.BATCHSTATS);
-	        props.add(BatchProcessor.PROPERTY_BATCHSTATS);		
+	        props.add(BatchProcessor.PROPERTY_BATCHSTATS);
+	        props.add(DBWorkflowContext.RECORD);		
 			reports.setProperties(props);
 			detailsComponent =  new JComponent[] {reports};
 		}
