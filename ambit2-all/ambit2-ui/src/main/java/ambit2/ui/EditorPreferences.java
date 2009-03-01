@@ -61,7 +61,8 @@ public class EditorPreferences {
 		{"ambit2.core.io.FileOutputState","ambit2.ui.editors.FileSelector"},
 		{"org.openscience.cdk.Molecule","ambit2.ui.editors.Panel2D"},		
 		{"org.openscience.cdk.AtomContainer","ambit2.ui.editors.Panel2D"},		
-		{"ambit2.core.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},		
+		{"ambit2.core.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},
+		{"ambit2.core.data.SelectionBean","ambit2.workflow.ui.SelectionEditor"}		
 		
 
 	};

@@ -3,10 +3,12 @@ package ambit2.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -32,24 +34,24 @@ public class WizardPanel extends JPanel {
 	private static final long serialVersionUID = -4624498162154536082L;
 	public WizardPanel(String subtitle,Component component,String help) {
 		super();
-		buildPanel(buildLeft(help),buildCenter(subtitle,component),buildNavigation(true));
+		buildPanel(buildLeft(help),buildCenter(subtitle,component),buildNavigation(true,help));
 	}
 
 	protected Component buildLeft(String help) {
-		if (help == null) return buildGraphicsPanel();
+		//if (help == null) return buildGraphicsPanel();
 		return buildHelpPanel(help);
 	}
 	protected Component buildCenter(String subtitle,Component component) {
 		return  buildMainPanel(subtitle, component);
 	}
-	protected Component buildNavigation(boolean grouped) {
+	protected Component buildNavigation(boolean grouped, final String help) {
         FormLayout layout = new FormLayout(
             "pref, 6dlu, pref, 6dlu,pref, 6dlu:grow, 12dlu, pref, 6dlu, pref",
             "pref");
         if (grouped) {
             layout.setColumnGroups(new int[][]{{1, 5, 6, 8, 10}});
         }
-        JPanel panel = buildPanel(layout);
+        final JPanel panel = buildPanel(layout);
         CellConstraints cc = new CellConstraints();
 
         JButton backButton = new JButton("< Back");
@@ -57,7 +59,11 @@ public class WizardPanel extends JPanel {
         JButton nextButton = new JButton("Next >");
         JButton finishButton = new JButton("Finish");
         finishButton.setEnabled(false);
-        JButton helpButton = new JButton("Help");
+        JButton helpButton = new JButton(new AbstractAction("Help") {
+        	public void actionPerformed(ActionEvent e) {
+        		JOptionPane.showMessageDialog(panel,help);
+        	}
+        });
         JButton cancelButton = new JButton("Cancel");
         
         
@@ -119,43 +125,25 @@ public class WizardPanel extends JPanel {
 		return p;
 	}	
 	protected Component buildHelpPanel(String help) {
-        JTextPane ta =  new JTextPane();
-        ta.setAutoscrolls(true);
-        //ta.setContentType("text/html");
-        ta.setText(help);
-        ta.setBorder(null);
-        ta.setPreferredSize(new Dimension(78,Integer.MAX_VALUE));
-        ta.setForeground(new Color(0,128,250));
-        ta.setEditable(false);
-	    
-	    /*
-        FormLayout layout = new FormLayout(
-        		//"right:[40dlu,pref]",
-        		//"153dlu",
-                "78dlu",
-                //"12dlu, 12dlu, fill:[pref,264dlu]"
-        		"12dlu, top:276px"
-                );
-        CellConstraints cc = new CellConstraints();        
-        JPanel p = buildPanel(layout);
-        
-       	p.add(createSeparator("&Help"),cc.xyw(1,1,1));
-        p.add(ta,cc.xywh(1,2,1,1));
-        */
-        /**
-         * This is the only class that depends on nplugins
-         */
-        /*
-        SimpleInternalFrame p = new SimpleInternalFrame("Help");
-        
-        p.setPreferredSize(new Dimension(78, 100));
-        p.setContent(new JScrollPane(ta));
-        ta.setBackground(p.getBackground());
+		try {
+			JLabel label = new JLabel(Utils.createImageIcon("images/ambit-wizard.png"));
+			label.setToolTipText(help);
+			return label;
+		} catch (Exception x) {}
+		
+	    JTextPane ta =  new JTextPane();
+	    ta.setAutoscrolls(true);
+	     //ta.setContentType("text/html");
+	    ta.setText(help);
+	    ta.setBorder(null);
+	    ta.setPreferredSize(new Dimension(78,Integer.MAX_VALUE));
+	    ta.setForeground(new Color(0,128,250));
+	    ta.setEditable(false);
+		    
+	    JScrollPane p = new JScrollPane(ta);
+	    p.setPreferredSize(new Dimension(78, 100));
 		return p;
-		*/
-        JScrollPane p = new JScrollPane(ta);
-        p.setPreferredSize(new Dimension(78, 100));
-		return p;
+		
 	}
 	protected Component buildMainPanel(String subtitle,Component main) {
         FormLayout layout = new FormLayout(
