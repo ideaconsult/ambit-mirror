@@ -1,5 +1,6 @@
 package ambit2.workflow.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -203,39 +204,27 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         	   }
         	 });
         JScrollPane pane = new JScrollPane(table);
-        pane.setPreferredSize(new Dimension(200,400));
-        pane.setMaximumSize(new Dimension(Integer.MAX_VALUE,200));
+        pane.setPreferredSize(new Dimension(128,300));
+       // pane.setMaximumSize(new Dimension(Integer.MAX_VALUE,200));
         
         status  = new JTextArea();
         status.setBackground(getBackground());
         status.setEditable(true);
         status.setBorder(null);
-        status.setPreferredSize(new Dimension(200,200));
+        status.setPreferredSize(new Dimension(100,100));
         //fake button 
         JButton cancel = new JButton("Stop");
         cancel.setEnabled(false);
         
-		FormLayout layout = new FormLayout(
-	            "pref:grow",
-				"top:pref,top:pref:grow,pref,pref,bottom:pref");
-			setLayout(layout);
-			
-        CellConstraints cc = new CellConstraints();        
-        
-        //add(DefaultComponentFactory.getInstance ().createSeparator( "Workflow steps" ),cc.xy(1,1)) ;
-        add(pane, cc.xy(1,2));        
-        
-
+		setLayout(new BorderLayout());
+		add(pane,BorderLayout.CENTER);
         add(ButtonBarFactory.buildWizardBar(
         		null
         		, new JButton(action),cancel,
         		new JButton[] {}),
-        		cc.xy(1,3)
+        		BorderLayout.SOUTH
         		);
-        //add(DefaultComponentFactory.getInstance ().createSeparator( "Messages" ),cc.xy(1,4)) ;
-        //add(new JScrollPane(status,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),cc.xy(1,5));
-	    
-	    
+    
     }
     protected JPopupMenu createPopupMenu() {
     	JPopupMenu menu = new JPopupMenu();
