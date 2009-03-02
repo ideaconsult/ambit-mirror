@@ -725,7 +725,7 @@ public class TestUtilities
 		ChemObjectFactory cof = new ChemObjectFactory();
 		cof.performStructureStatistics("/java_frags.txt", 
 							"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
-							200, 10000, "/java_frags_stat10000.txt");
+							100, 20000, "/java_frags_stat20000.txt");
 	}
 	
 	void filterStructsBySize(String inputSmilesFile, String outSmilesFile, int maxNumAtoms)	
@@ -880,8 +880,8 @@ public class TestUtilities
 		//tu.testProduceStructuresExhaustively("CCc1cc(CC)ccc1", 12);
 		//tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC)CCNNCC2CCCCCCCC2", 12);
 		
-		tu.produceStructures();
-		//tu.makeStructureStatistics();
+		//tu.produceStructures();
+		tu.makeStructureStatistics();
 		//tu.filterStructsBySize("/java_frags0.txt","/java_frags.txt",8);
 	}
 	
