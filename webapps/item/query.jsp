@@ -11,12 +11,13 @@
 </div>
 
 <c:if test="${!empty param.idquery}">
-
+	<form action="/repdose/from-ambit.php" method="post">
 	<c:catch var="error">
 		<sql:query var="rs" dataSource="jdbc/repdose">
 			select structure.idstructure,smiles,casno from substance join structure using(idsubstance) join datasets using(idstructure) right join cas using(idstructure) where iddsname=?
 			<sql:param value="${param.idquery}"/>			
 		</sql:query>
+		
 		<table bgcolor="#DDDDDD">
 			<tr bgcolor="#FFFFFF">
 				<th>ID</th>
@@ -24,7 +25,7 @@
 				<th>Name</th>
 				<th>SMILES</th>
 				<th>Structure diagram</th>
-				<th>REPDOSE</a></th>
+				<th>Please choose items to be retrieved from Repdose</th>
 			</tr>
 		<c:set var="count" value="0"/>
 		<c:forEach var="row" items="${rs.rows}">
@@ -49,12 +50,14 @@
 					</td>
 
 					<td>
-						TO BE RETRIEVED FROM REPDOSE
+						<input type="checkbox" name="cas[]" value="${row.casno}">
 					</td>
 				</tr>
 		</c:forEach>
 	</table>
 	</c:catch>
+	<input type='submit' value=' Take selected results to Repdose '>
+	</form>
 	<c:if test="${!empty error}">
 		<font color="#FF0000">
 		${error}
