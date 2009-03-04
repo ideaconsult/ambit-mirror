@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 import ambit2.core.log.AmbitLogger;
 
 /**
- * A histogram. Used in {@link ambit2.domain.DataCoverageAtomEnvironmentCore}
+ * A histogram.
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-6-20
  */

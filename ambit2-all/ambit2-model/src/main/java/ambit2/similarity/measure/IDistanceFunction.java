@@ -34,7 +34,7 @@ public interface IDistanceFunction<T> {
      * Distance should be large if objects are "far away" from each other, i.e. dissimilar.
      * @param object1
      * @param object2
-     * @return
+     * @return the distance
      * @throws Exception
      */
     public float getDistance(T object1,T object2) throws Exception;
@@ -43,7 +43,7 @@ public interface IDistanceFunction<T> {
      * Similarity is large if objects are similar to each other, in contrast with {@link #getDistance(Object, Object)}.
      * @param object1
      * @param object2
-     * @return
+     * @return the distance
      * @throws Exception
      */
     public float getNativeComparison(T object1,T object2) throws Exception;

@@ -74,7 +74,7 @@ public class NearestNeighborsSearch<T> extends ArrayList<DistanceComparable<T>> 
      * 
      * @param o Object
      * @param property property to be predicted
-     * @return
+     * @return boolean
      */
     public boolean addObject(T o, Object property) {
         if (o != null)

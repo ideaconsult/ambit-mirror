@@ -8,7 +8,7 @@ import ambit2.featureselection.IAttributeSelection;
  * Defines a model, derived from objects of type FeatureType
  * @author nina
  *
- * @param <T>
+ * 
  */
 public interface IModelDefinition<ID,Features,ResultType extends Comparable<?>> {
 	Object getParameter(Object name);
