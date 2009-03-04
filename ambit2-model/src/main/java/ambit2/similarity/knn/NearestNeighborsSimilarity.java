@@ -95,7 +95,7 @@ public abstract class NearestNeighborsSimilarity<ID, Features> extends
      * Weighted average Sum((1/distance)*property).
      * @param query
      * @param neighbors
-     * @return
+     * @return the property
      * @throws Exception
      */
     protected Object calculateProperty(T query, List<DistanceComparable<T>> neighbors) throws Exception  {

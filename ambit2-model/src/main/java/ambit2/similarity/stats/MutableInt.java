@@ -7,7 +7,7 @@
 package ambit2.similarity.stats;
 
 /**
- * A mutable integer object. Used in {@link ambit2.stats.datastructures.Histogram}
+ * A mutable integer object. {@link Histogram}
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-6-17
  */
