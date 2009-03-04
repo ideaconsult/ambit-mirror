@@ -7,8 +7,6 @@
 <jsp:include page="header.jsp" flush="true"/>
 
 <div style="text-align:left;">
-<h3>Query</h3>
-<h4>${param.title}</h4>
 
 </div>
 
@@ -38,8 +36,8 @@
 				<tr bgcolor="#FFFFFF">
 					<td>${count}</td>
 					<td>${row.casno}</td>
-					<td>${name}</td>
-					<td>${match}</td>
+					<td>${row.name}</td>
+					<td>${row.smiles}</td>
 					<td>
 							<img src="
 							<c:url value="image.jsp">

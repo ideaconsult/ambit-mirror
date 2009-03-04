@@ -11,11 +11,6 @@ response.setHeader("Cache-Control", "no-store");
 response.setHeader("Expires", "0");
 %>
 
-<jsp:include page="top.jsp" flush="true">
-    <jsp:param name="title" value="QMRF Database Help"/>
-</jsp:include>
-
-
 <table>
 
 		<c:import var="helpxml" url="help.xml" scope="page"/>

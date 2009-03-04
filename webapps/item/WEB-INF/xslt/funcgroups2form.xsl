@@ -15,7 +15,7 @@
 
 
 <xsl:template match="group">
-		<OPTION >
+		<OPTION>
 				<xsl:attribute name="value">
 						<xsl:value-of select="@smarts"/>
 				</xsl:attribute>
