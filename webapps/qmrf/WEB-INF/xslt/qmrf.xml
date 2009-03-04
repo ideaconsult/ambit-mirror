@@ -111,10 +111,10 @@
       </attachments>
     </QSAR_Miscelaneous>
     <QMRF_Summary chapter="10" help="" name="Summary (JRC QSAR Model Database)">
-      <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by ECB</QMRF_number>
-      <date_publication chapter="10.2" help="" name="Publication date">To be entered by ECB</date_publication>
-      <keywords chapter="10.3" help="" name="Keywords">To be entered by ECB</keywords>
-      <summary_comments chapter="10.4" help="" name="Comments">To be entered by ECB</summary_comments>
+      <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by JRC</QMRF_number>
+      <date_publication chapter="10.2" help="" name="Publication date">To be entered by JRC</date_publication>
+      <keywords chapter="10.3" help="" name="Keywords">To be entered by JRC</keywords>
+      <summary_comments chapter="10.4" help="" name="Comments">To be entered by JRC</summary_comments>
     </QMRF_Summary>
   </QMRF_chapters>
   <Catalogs>

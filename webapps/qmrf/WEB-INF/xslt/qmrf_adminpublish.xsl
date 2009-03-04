@@ -102,7 +102,7 @@
 </xsl:template>
 <xsl:template match="QMRF_chapters/QMRF_Summary/QMRF_number">
 	<tr><th colspan="2">
-	<h3>10. Summary (ECB Inventory)</h3>
+	<h3>10. Summary (JRC Inventory)</h3>
 	</th>
 	</tr>
 	<tr><th>10.1.QMRF number</th>

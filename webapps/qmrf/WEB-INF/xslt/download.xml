@@ -89,7 +89,7 @@
 <attachment_documents/>
 </attachments>
 </QSAR_Miscelaneous>
-<QMRF_Summary chapter="10" help="" name="Summary (ECB Inventory)">
+<QMRF_Summary chapter="10" help="" name="Summary (JRC Inventory)">
 <QMRF_number chapter="10.1" help="" name="QMRF number">Q1-1-1-2</QMRF_number>
 <date_publication chapter="10.2" help="" name="Publication date">2007/11/18</date_publication>
 <keywords chapter="10.3" help="" name="Keywords">test</keywords>
