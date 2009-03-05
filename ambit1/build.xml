@@ -26,7 +26,7 @@
 	<property name="sourcedist.dir" value="sourcedist" />
 
 	<!-- Used when signing jars (Thawte freemail cert) -->
-    <property name="keystore" value="../../../certificates/keystore/keystore.ks" />
+    <property name="keystore" value="../certificates/keystore/keystore.ks" />
 
     <!-- CLASSPATH -->
     <path id="project.class.path">
@@ -694,7 +694,17 @@
 
 	</target>
 	<!-- Lazy signing is used, so the files will only be signed if they are not already signed -->
-	<target name="sign">
+	<target name="copyjars">
+        <copy todir="${dist}/bin/jars">
+        	<fileset dir="${lib}" includes="*.*" excludes="avalon*.*"/>
+		    <fileset dir="${lib}/axis" includes="*.*" />
+        	<fileset dir="${lib}/cdk" includes="*.*" />
+        	<fileset dir="${lib}/help" includes="*.*" />
+        	<fileset dir="${lib}/jfree" includes="*.*" />
+        	<fileset dir="${lib}/l2fprod" includes="*.*" />
+        </copy>		
+	</target>
+	<target name="sign" depends="copyjars">
 			<input addproperty="alias" message="Enter Keystore alias"/>
 	 	  <input addproperty="storepass" message="Enter Keystore password"/>
 			<echo message="Using ${keystore}"/>
