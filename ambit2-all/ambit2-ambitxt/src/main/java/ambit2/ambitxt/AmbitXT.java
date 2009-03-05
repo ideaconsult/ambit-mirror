@@ -172,7 +172,7 @@ public class AmbitXT extends NPluginsApplication {
     	    return new NanoPluginsManager(true,path.getPref_key()) {
     	    	@Override
     	    	public ImageIcon getLogo() {
-    	    		return  Utils.createImageIcon("images/splash.png");
+    	    		return  Utils.createImageIcon("images/ambit-256x256.png");
     	    	}
     	    	@Override
     	    	public URL getHelp() throws MalformedURLException {
@@ -265,7 +265,7 @@ public class AmbitXT extends NPluginsApplication {
 	}
 	
     public ImageIcon createImageIcon() {
-    	return Utils.createImageIcon("images/ambit.png");
+    	return Utils.createImageIcon("images/ambit-32x32.png");
     }		
     
    
