@@ -286,6 +286,7 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 				return false;
 		}
 		boolean ok = true;
+		if (packageEntries==null) return true;
 		Iterator<PluginPackageEntry> i = packageEntries.iterator();
 		while (i.hasNext()) {
 			PluginPackageEntry key = i.next();

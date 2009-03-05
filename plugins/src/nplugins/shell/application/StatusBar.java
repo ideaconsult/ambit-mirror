@@ -65,7 +65,7 @@ public class StatusBar extends JPanel implements PropertyChangeListener {
 	messageTimeout = 5000;
 	messageTimer = 	new Timer(messageTimeout, new ClearOldMessage()); 
 	messageTimer.setRepeats(false);
-	idleIcon = null;//Utils.createImageIcon("nplugins/shell/resources/busyicons/idle-icon.png");
+	idleIcon = Utils.createImageIcon("nplugins/shell/resources/busyicons/idle-icon.png");
 	busyIcon = Utils.createImageIcon("nplugins/shell/resources/busyicons/24x24_ambit.gif");
 	progressBar.setEnabled(false);
 	statusAnimationLabel.setIcon(idleIcon);
