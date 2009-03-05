@@ -63,7 +63,7 @@ public class NearestNeighborsSearch<T> extends ArrayList<DistanceComparable<T>> 
     /**
      * null property
      * @param o Object
-     * @return
+     * @return true if successful
      */
     public boolean addObject(T o) {
         if (o != null)
