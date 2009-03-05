@@ -135,7 +135,7 @@ public class QMRFObject extends AmbitObject implements InterfaceQMRF, IAmbitObje
             {"QSAR_Predictivity","Defining predictivity – OECD Principle 4"},
             {"QSAR_Interpretation","Providing a mechanistic interpretation – OECD Principle 5"},
             {"QSAR_Miscelaneous","Miscellaneous information"},
-            {"QMRF_Summary","Summary (ECB Inventory)"}
+            {"QMRF_Summary","Summary (JRC Inventory)"}
     };
     
 

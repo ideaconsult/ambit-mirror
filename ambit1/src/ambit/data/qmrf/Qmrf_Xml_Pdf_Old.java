@@ -232,7 +232,7 @@ XmlParser.parse(documentB, "Chap0703.xml", "tagmap0703.xml");
 
 
 						Text = findNodeValue(xml_QMRF_number, doc);
-						Chunk ident_title = new Chunk("QMRF identifier (ECB Inventory):");
+						Chunk ident_title = new Chunk("QMRF identifier (JRC Inventory):");
 						Chunk ident_text = new Chunk(Text);
 						ident_title.setFont(new Font(Font.TIMES_ROMAN, 12,Font.BOLDITALIC));
 						ident_text.setFont(new Font(Font.TIMES_ROMAN, 12,Font.ITALIC));

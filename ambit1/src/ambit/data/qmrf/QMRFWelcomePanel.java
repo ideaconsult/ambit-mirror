@@ -107,7 +107,7 @@ public class QMRFWelcomePanel extends JPanel implements IAmbitEditor {
         	));
         /*
         add(createLabel("<html><b>Disclaimer</b></html>"));
-        add(createText("The JRC accepts no liability for the use of any information obtained from the QRF and related documentation. This is not the final version of the QRF which is still under development. It is likely that newer versions will be released soon. Please, check the ECB website for the latest version available.."));
+        add(createText("The JRC accepts no liability for the use of any information obtained from the QRF and related documentation. This is not the final version of the QRF which is still under development. It is likely that newer versions will be released soon. Please, check the JRC website for the latest version available.."));
         */
         
 	}

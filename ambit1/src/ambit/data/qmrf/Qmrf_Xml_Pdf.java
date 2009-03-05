@@ -412,7 +412,7 @@ public class Qmrf_Xml_Pdf extends QMRFConverter {
 			try{
 
 					Text = findNodeValue(xml_QMRF_number, xmldoc);
-					Chunk ident_title = new Chunk("QMRF identifier (ECB Inventory):");
+					Chunk ident_title = new Chunk("QMRF identifier (JRC Inventory):");
 					Chunk ident_text = new Chunk(Text);
 
 		            Font bi_font = new Font(baseFont, header_font_size, Font.BOLDITALIC);
