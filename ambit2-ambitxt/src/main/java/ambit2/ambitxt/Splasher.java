@@ -12,7 +12,7 @@ public class Splasher {
 
 
     public static void main(String[] args) {
-        SplashWindow.splash(Splasher.class.getResource("/images/splash.png"));
+        SplashWindow.splash(Splasher.class.getResource("/images/ambit-256x256.png"));
         SplashWindow.invokeMain("ambit2.ambitxt.AmbitXT", args);
         SplashWindow.disposeSplash();
     }
