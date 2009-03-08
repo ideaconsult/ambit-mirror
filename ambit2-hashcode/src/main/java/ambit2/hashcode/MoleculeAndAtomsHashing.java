@@ -63,6 +63,7 @@ public class MoleculeAndAtomsHashing {
 	private Hashtable<String,Integer> seedHashtable; 
 	private Hashtable<IAtom,IAtomParity> atomParities;
 	private Hash atomsHash,atomHash,moleculeSizeHash,moleculeHash,bondHash,bondsHash;
+	private Hash atomic_numberHash,bonded_neighbor_atomsHash,bonded_hydrogen_neighbor_atomsHash,formal_chargeHash,stereo_centerHash,type_of_bondHash;
     
 	public  MoleculeAndAtomsHashing(){
 	 this.seedHashtable= Prime.createPrimeNumberHashtable();
@@ -94,6 +95,12 @@ public class MoleculeAndAtomsHashing {
         	bonded_hydrogen_neighbor_atoms = 0;
         	formal_charge = getFormalCharge(atom);        	
         	//stereo_parity = getStereoParity(atom);
+        	/*if(BondTools.isStereo(mol, atom)){
+        		stereo_parity = 1;
+        	}
+        	else{
+        		stereo_parity = 0;
+        	}*/
         	
     		for (int f = 0; f < neighbors.size(); f++){    			
     			neighbor = neighbors.get(f);
@@ -108,7 +115,7 @@ public class MoleculeAndAtomsHashing {
     		formal_chargePrime = this.seedHashtable.get("FormalCharge"+formal_charge);
     		//stereo_parityPrime = this.seedHashtable.get("StereoParity"+stereo_parity);
     		//atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime+formal_chargePrime+stereo_parityPrime);
-    		cis_trans = getCisTrans(k,mol);
+    		/*cis_trans = getCisTrans(k,mol);
     		if(cis_trans != -1){
     			atom_double_bonds++;
     			cis_transPrime = this.seedHashtable.get("CisTrans"+cis_trans);
@@ -119,9 +126,26 @@ public class MoleculeAndAtomsHashing {
     		else{
     			atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime+formal_chargePrime);
     		}
-    		atomsHash = atomsHash.sag(atomHash);
-    		k++;
+    		k++;*/
+    		//atomHash = new Hash(atomic_numberPrime+bonded_neighbor_atomsPrime+bonded_hydrogen_neighbor_atomsPrime+formal_chargePrime);
+    		//
+    		
+    		atomic_numberHash = new Hash(atomic_numberPrime);
+    		bonded_neighbor_atomsHash = new Hash(bonded_neighbor_atomsPrime);
+    		bonded_hydrogen_neighbor_atomsHash = new Hash(bonded_hydrogen_neighbor_atomsPrime);
+    		formal_chargeHash = new Hash(formal_chargePrime);
+    		
+    		//atomHash = new Hash(atomic_numberPrime*bonded_neighbor_atomsPrime*bonded_hydrogen_neighbor_atomsPrime*formal_chargePrime);
+    	    //atomsHash = atomsHash.sag(atomHash);
+    		
+    		atomsHash = atomsHash.sag(atomic_numberHash);
+    		atomsHash = atomsHash.sag(bonded_neighbor_atomsHash);
+    		atomsHash = atomsHash.sag(bonded_hydrogen_neighbor_atomsHash);
+    		atomsHash = atomsHash.sag(formal_chargeHash);
+    		
+    		
         }
+        //System.out.println(atomsHash.hash_value());
         number_of_atomsPrime =  seedHashtable.get("MolSize"+number_of_atoms);
         moleculeSizeHash = new Hash(number_of_atomsPrime);
         moleculeHash = atomsHash; 
@@ -163,11 +187,21 @@ public class MoleculeAndAtomsHashing {
          }
         	stereo_centerPrime = this.seedHashtable.get("StereoCenter"+stereo_center);
     		type_of_bondPrime = this.seedHashtable.get("TypeOfBond"+type_of_bond);
-    		bondHash = new Hash(stereo_centerPrime+type_of_bondPrime);
-    		bondsHash = bondsHash.sag(bondHash);
+    		//bondHash = new Hash(stereo_centerPrime+type_of_bondPrime);
+    		//*
+    		//bondHash = new Hash(stereo_centerPrime*type_of_bondPrime);
+    		//bondsHash = bondsHash.sag(bondHash);
+    		stereo_centerHash = new Hash(stereo_centerPrime);
+    		type_of_bondHash = new Hash(type_of_bondPrime);
+    		bondsHash = bondsHash.sag(stereo_centerHash);
+    		bondsHash = bondsHash.sag(type_of_bondHash);
+    		
         	
         }
-        moleculeHash = moleculeHash.sag(bondsHash);        
+       // System.out.println(bondsHash.hash_value());
+        moleculeHash = moleculeHash.sag(bondsHash); 
+       // System.out.println(moleculeHash.hash_value());
+       // System.out.println("END");
         return moleculeHash.hash_value();
     	
     }
@@ -209,13 +243,15 @@ public class MoleculeAndAtomsHashing {
     	catch(Exception e){}
     	return stereo_parity;
     }
+    
     public static int getCisTrans(int k,IAtomContainer mol){
 	    boolean trans=false;
-	    IMolecule withh = mol.getBuilder().newMolecule(mol);
+	    //IMolecule withh = mol.getBuilder().newMolecule(mol);
+	    
    		if(GeometryTools.has2DCoordinatesNew(mol)==2){
    		try{
-   			if(k>2 && BondTools.isValidDoubleBondConfiguration(withh,withh.getBond(withh.getAtom(k-2),withh.getAtom(k-1)))){
-   				trans=BondTools.isCisTrans(withh.getAtom(k-3),withh.getAtom(k-2),withh.getAtom(k-1),withh.getAtom(k-0),withh);
+   			if(k>2 && BondTools.isValidDoubleBondConfiguration(mol,mol.getBond(mol.getAtom(k-2),mol.getAtom(k-1)))){
+   				trans=BondTools.isCisTrans(mol.getAtom(k-3),mol.getAtom(k-2),mol.getAtom(k-1),mol.getAtom(k-0),mol);
    				
    				if(trans){
    					//cis
