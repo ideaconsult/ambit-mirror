@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="AMBITXT">
+  <bannerLeft>
+    <name>Maven</name>
+    <src>http://ambit.sourceforge.net/images/ambit-logo.png</src>
+    <href>index.html</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>http://ambit.sourceforge.net/images/ambit-version.png</src>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Toxtree" href="http://toxtree.sourceforge.net"/>
+      <item name="Toxmatch" href="http://ecb.jrc.ec.europa.eu/qsar/qsar-tools/index.php?c=TOXMATCH"/>
+      <item name="AMBIT" href="http://ambit.acad.bg"/>
+      <item name="AMBIT 2.0" href="http://ambit.sourceforge.net"/>
+    </links>
+
+    <menu name="AMBIT XT">
+      <item name="Introduction" href="/intro.html"/>
+      <item name="Download" href="/downloads.html"/>
+	  <item name="Demo" href="/demo.html"/>
+    </menu>
+
+
+    <menu ref="reports"/>
+    <menu ref="modules" />
+    <menu ref="parent"/>
+
+
+
+  </body>
+  <publishDate position="navigation-bottom" format="MM-dd-yy"/>
+  <poweredBy>
+    <logo name="Maven" href="http://maven.apache.org/"
+          img="http://maven.apache.org/images/logos/maven-feather.png"/>
+  </poweredBy>
+
+</project>
