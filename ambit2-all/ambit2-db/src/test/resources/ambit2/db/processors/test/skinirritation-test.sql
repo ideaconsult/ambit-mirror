@@ -1,4 +1,4 @@
--- MySQL dump 10.11
+ï»¿-- MySQL dump 10.11
 --
 -- Host: localhost    Database: ambit-test
 -- ------------------------------------------------------
@@ -19,11 +19,11 @@
 -- Current Database: `ambit-test`
 --
 
-/*!40000 DROP DATABASE IF EXISTS `ambit-test`*/;
+/*!40000 DROP DATABASE IF EXISTS `ambit-skin`*/;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ambit-test` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ambit-skin` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
 
-USE `ambit-test`;
+USE `ambit-skin`;
 
 --
 -- Table structure for table `atom_distance`
@@ -656,7 +656,18 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `structure` WRITE;
 /*!40000 ALTER TABLE `structure` DISABLE KEYS */;
-INSERT INTO `structure` VALUES (1,1,'f\0\0xœT]oÚ0}÷¯ðÃ@ÅÆ×‰-ÖH(d©\rÛÂ¶‡ªBÍV¤¶B7õßï:/-e•(çÜ{îñíd³¾^>ÜÑmµ½/¯«Åã-Ý<Ü~/·¡´X,gÕåBhiD,œˆäˆ*K©h\\ÿ†sŽ~•B¬§Rqéœõqà öHpÌ\nš—u¥\"»˜ŒD´C`„jèRº›„ì\\”ÕÙØìÑ¡NòH<ËÑ)îZù.[ùEÜ´ò‹yìêM?ÇEÐýÇWmü\0xÔÊOr×ÊOûýmág¸iåqÛÊÏr8æ7mê×OçïÀ¯hè¤àF9õêù;âÜ™£óîüÄÓ‰5Bêê0Œ3Á®‘‘	Q¢8D6D.‡gbO¸»H\n¡D:@¡D:@¡DþW q\r\"÷\\PšŽÏêŒøÛçøL–HBßOF	ÑÖñ$	å˜µÌÖ‘¼¼«²9ú³òš,Mˆ†)+˜ª#’‚+1ÕÏË:8Yý®VÛõý²Ú$dTœ÷fE:¬3gYž}Î²Ñ¼¸˜œgØÃe^ž\\ñôÙ˜Ói×ß—SvõjáüÓCy»Ü>&ä|ýç…bß“ty‰]½Ì~KˆÂÏ@+©iGâwh<‘Nq¡îõäËÇa:Ïò·V¦Q±Jo&	©§Ðo.NL2Å43,b1³Ì1€d h–ë€éAÔ…xÐ¿Á¾IÆª×÷êDâî ÿkpýŸ¸Ãäòžà8}','SDF','2009-01-15 08:00:16','guest','NA'),(2,2,'9\0\0xœQÝJÃ0¾ÏSäÂ…î$iÚ´0Új®¨›óBdŒZÖÂÖIÂÞÞ4µ;Bóý%\'§áïÅ&Ûåû5°>öUµ]g„ÒiZÌ²U‘¢Í%º¨ÐáÑºk&væïPJÑ9GDR3fÙR\n\r€[ˆ‚Õ\Zj„H}Úl&æJ¬Ïf¡à¢/Ç,Î„l\\¡ìÞÜAkv¸öäàÄyI7wæýà¼~µÌÍ·&\Z‰–hd©&\ZÉÖÑÈi‰c2¼%îÁ™P\Z&ñèuxDáHšøã©GDà#àFI–›Ì#¼çåëDèk(ÅÀ1ÊäÖ#¾©Ä°¸üÎÊÝ¶*²OXFº“ði<ƒÅtß‡º¦Ÿ²4}-£·”ùÿF_Ëu±Û{džUû¨XåG±¿E;ú‹îOZÌæö‘??ŒýE˜œn¯“/ý<öˆYnØÐ¦$°ÁçR^ña®ÉÀx¤ê…äÑªû','SDF','2009-01-15 08:00:16','guest','NA'),(3,3,'\Z\n\0\0xœ¥T]kÛ0}×¯ÐÃlˆ]}X6¬† t$°&…}=ŒQœÔà€‡$ƒ…Ñÿ>ÅV›¦¶Õ‘!+çèž{tìa<Òãáçt±£S4‚+6F¦=ðwF)EØ\\<ˆ€I³ 2P2†#FÃR¬q¿ÄiXBUDRÅ.UyöÂ!¥¸Ö8åáe*`¼¸^$D×žèäåštO^^V¨¼¤Ah \"~¡Š­¨½Ø³]¤\"¢Xžé=¯æÿ«bZ³z>C\rÄëù-ªÚ{ÍFÑF\r$Û¨ÂN4j£ag7³1îBv¢ð½Ãøv6F	Æ?UÛòw‘&H?üú41sô4G\r÷#A EÀDÌDén— Q±¬òªØ5à,-³¥äk¶Ý¬ÖYUàŸðËî}IP)‰´›«1Ñ¬wåªÈŒœÖp£µöÌÝ×ÞÜ÷´¯mýp¦4³¿n·‡}ž•)ö¶éb±Úcð	ä	¢úÑ¡Ÿf†fý4wÓê$>Ï;Œõ“\'á6É\\¤Ëkººhwµ+önoÕëûÜXi*yÙÇ;–¸;îŽƒ»ãàMoÞO«ÞCqWÜ‡5ÕK¾²t—¥kœY_ÍÛtSÇ·8P]T@@»¨:ønAÕªªj£Ö„ê êŠ‚µºX¢ÝÞêõiî§Ó‰À~nFëU™»¾øœhæ\"ÏöôÛýH?4EF<AÊlŸŠåaYTyö‡p’­	Cáo¶Õ&]FªÂ–®un×·j ˆæÃ%ˆ’ØSD’Èê±÷†¹Ä€É@5a |bl|0ú3¾1_','SDF','2009-01-15 08:00:16','guest','NA');
+INSERT INTO `structure` VALUES (1,1,'f\0\0xï¿½ï¿½T]oï¿½0}ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½-ï¿½H(dï¿½\rï¿½Â¶ï¿½ï¿½Bï¿½Vï¿½ï¿½B7ï¿½ï¿½ï¿½:/-eï¿½ï¿½(ï¿½ï¿½{ï¿½ï¿½ï¿½dï¿½ï¿½^>ï¿½ï¿½mï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½-ï¿½<ï¿½~/ï¿½ï¿½ï¿½X,gÕï¿½BhiD,ï¿½ï¿½ï¿½*Kï¿½h\\ï¿½ï¿½sï¿½~ï¿½Bï¿½ï¿½Rqï¿½ï¿½qï¿½ ï¿½ï¿½Hpï¿½\nï¿½ï¿½uï¿½\"ï¿½ï¿½ï¿½Dï¿½C`ï¿½jï¿½Rï¿½ï¿½ï¿½ï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡Nï¿½H<ï¿½ï¿½)ï¿½Zï¿½.[ï¿½EÜ´ï¿½yï¿½ï¿½M?ï¿½Eï¿½ï¿½ï¿½Wmï¿½\0xï¿½ï¿½Orï¿½ï¿½Oï¿½ï¿½mï¿½gï¿½iï¿½qï¿½ï¿½ï¿½r8ï¿½7mï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½hï¿½ï¿½F9ï¿½ï¿½ï¿½;ï¿½Ü™ï¿½ï¿½ï¿½ï¿½ï¿½Ó‰5Bï¿½
+ï¿½0ï¿½3ï¿½ï¿½ï¿½ï¿½	Qï¿½8D6D.ï¿½gbOï¿½ï¿½ï¿½H\nï¿½D:@ï¿½D:@ï¿½Dï¿½W q\r\"ï¿½\\Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½HBï¿½OF	ï¿½ï¿½ï¿½$	å˜µï¿½Ö‘ï¿½ï¿½ï¿½ï¿½9ï¿½ï¿½ï¿½,Mï¿½ï¿½)+ï¿½ï¿½#ï¿½ï¿½+1ï¿½ï¿½ï¿½:8Yï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½$dTï¿½ï¿½fE:ï¿½3gYï¿½}Î²Ñ¼ï¿½ï¿½ï¿½gï¿½ï¿½e^ï¿½\\ï¿½ï¿½Ù˜ï¿½ï¿½iï¿½ß—Svï¿½jï¿½ï¿½ï¿½Cyï¿½ï¿½>&ï¿½|ï¿½ï¿½bß“tyï¿½]ï¿½ï¿½~Kï¿½ï¿½ï¿½@+ï¿½iGï¿½whï¿½<ï¿½Nqï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½a:ï¿½ï¿½Vï¿½Qï¿½Jo&	ï¿½ï¿½ï¿½o.NL2ï¿½43,b1ï¿½ï¿½1
+ï¿½ï¿½dï¿½hï¿½ï¿½ï¿½ï¿½AÔ…xÐ¿ï¿½ï¿½IÆªï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½kpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8}','SDF','2009-01-15 08:00:16','guest','NA'),(2,2,'9\0\0xï¿½ï¿½Qï¿½Jï¿½0ï¿½ï¿½Sï¿½ï¿½
+ï¿½ï¿½ï¿½$iï¿½ï¿½0ï¿½j
+ï¿½ï¿½ï¿½ï¿½Bdï¿½Zï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½4ï¿½;Bï¿½ï¿½%\'ï¿½ï¿½ï¿½ï¿½&ï¿½ï¿½ï¿½5ï¿½>ï¿½Uï¿½]gï¿½ï¿½iZÌ²Uï¿½ï¿½ï¿½%ï¿½ï¿½ï¿½ï¿½Ñºk&vï¿½ï¿½PJï¿½9GDR3fï¿½R\n\rï¿½[ï¿½ï¿½ï¿½\Zjï¿½H}ï¿½l&ï¿½ï¿½Jï¿½ï¿½fï¿½ï¿½/ï¿½,Î„l\\ï¿½ï¿½ï¿½ï¿½Akvï¿½ï¿½ï¿½ï¿½ï¿½yI7wï¿½ï¿½ï¿½~ï¿½ï¿½Í·&\Zï¿½ï¿½hdï¿½&\Zï¿½ï¿½ï¿½ï¿½iï¿½c2ï¿½%ï¿½ï¿½ï¿½P\Z&ï¿½ï¿½uxDï¿½Hï¿½ï¿½ï¿½ï¿½GDï¿½#ï¿½FIï¿½ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½Dï¿½k(ï¿½ï¿½1ï¿½ï¿½ï¿½#ï¿½ï¿½Ä°ï¿½ï¿½ï¿½ï¿½Ý¶*ï¿½Oï¿½XFï¿½
+ï¿½ï¿½i<
+ï¿½ï¿½tß‡ï¿½ï¿½ï¿½ï¿½4}-ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½_ï¿½uï¿½ï¿½{dï¿½Uï¿½ï¿½Xï¿½Gï¿½ï¿½E;ï¿½ï¿½ï¿½OZï¿½ï¿½ï¿½ï¿½??ï¿½ï¿½Eï¿½ï¿½nï¿½ï¿½/ï¿½<ï¿½ï¿½Ynï¿½ï¿½ï¿½
+$ï¿½ï¿½ï¿½R^ï¿½aï¿½ï¿½ï¿½ï¿½
+xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','SDF','2009-01-15 08:00:16','guest','NA'),(3,3,'\Z\n\0\0xï¿½ï¿½T]kï¿½0}×¯ï¿½ï¿½lï¿½]}X6ï¿½ï¿½ï¿½t$ï¿½&ï¿½}=ï¿½Qï¿½ï¿½ï¿½ï¿½$ï¿½ï¿½ï¿½ï¿½>ï¿½Vï¿½ï¿½ï¿½Õ‘!+ï¿½ï¿½{tï¿½a<ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½S4ï¿½ï¿½+6Fï¿½=ï¿½wF)Eï¿½\\<ï¿½ï¿½Iï¿½ 2P2ï¿½#Fï¿½Rï¿½qï¿½ï¿½iXBUDRï¿½.Uyï¿½ï¿½!ï¿½ï¿½ï¿½
+
+8ï¿½ï¿½e*`ï¿½ï¿½^$D×žï¿½ï¿½ï¿½tO^^Vï¿½ï¿½ï¿½Ah \"~ï¿½ï¿½ï¿½ï¿½ï¿½Ø³]ï¿½\"ï¿½Xï¿½ï¿½=ï¿½ï¿½ï¿½ï¿½bZï¿½z>C\rï¿½ï¿½ï¿½-ï¿½ï¿½{ï¿½Fï¿½F\r$Û¨ï¿½ï¿½N4jï¿½ag7ï¿½1ï¿½Bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½v6F	ï¿½?Uï¿½ï¿½wï¿½&H?ï¿½ï¿½41sï¿½4G\rï¿½#A Eï¿½Dï¿½Dï¿½nï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½5ï¿½,-ï¿½ï¿½ï¿½kï¿½Ý¬ï¿½YUï¿½ï¿½ï¿½ï¿½}IP)ï¿½ï¿½ï¿½ï¿½1Ñ¬wï¿½ÈŒï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½pï¿½4ï¿½ï¿½nï¿½ï¿½}ï¿½ï¿½)ï¿½ï¿½ï¿½bï¿½ï¿½cï¿½	ï¿½	ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½fï¿½4wï¿½ï¿½$>ï¿½;ï¿½ï¿½ï¿½\'ï¿½6ï¿½\\ï¿½ï¿½kï¿½ï¿½hwï¿½+ï¿½noï¿½ï¿½ï¿½ï¿½Xi*yï¿½ï¿½;ï¿½ï¿½;îŽƒï¿½ï¿½ï¿½Moï¿½Oï¿½ï¿½CqWï¿½ï¿½5ï¿½Kï¿½ï¿½tï¿½ï¿½kï¿½Y_ï¿½ï¿½tSÇ·8P]T@@ï¿½ï¿½:ï¿½nAÕªï¿½jï¿½Ö„ï¿½ ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½~nFï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½hï¿½\"ï¿½ï¿½ï¿½ï¿½ï¿½H?4EF<Aï¿½lï¿½ï¿½ï¿½aYTyï¿½ï¿½pï¿½ï¿½	ï¿½Cï¿½oï¿½ï¿½&]Fï¿½Â–ï¿½un×·jï¿½ï¿½ï¿½ï¿½%ï¿½ï¿½ï¿½ï¿½SDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@5a |bl|0ï¿½3ï¿½1_','SDF','2009-01-15 08:00:16','guest','NA');
 /*!40000 ALTER TABLE `structure` ENABLE KEYS */;
 UNLOCK TABLES;
 

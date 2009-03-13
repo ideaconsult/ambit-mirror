@@ -9,7 +9,7 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public abstract class AbstractStructureRetrieval<R> extends AbstractQuery<IStructureRecord,IStructureRecord,EQCondition,R> implements IRetrieval<R> {
+public abstract class AbstractStructureRetrieval<R> extends AbstractQuery<IStructureRecord,IStructureRecord,EQCondition,R> implements IQueryRetrieval<R> {
 	/**
 	 * 
 	 */
