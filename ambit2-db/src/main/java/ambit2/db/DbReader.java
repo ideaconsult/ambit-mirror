@@ -46,6 +46,13 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 
 	protected ResultSet resultSet;
 	protected QueryExecutor<IQueryObject<ResultType>> executor;
+	protected int maxRecords = 0;
+	public int getMaxRecords() {
+		return maxRecords;
+	}
+	public void setMaxRecords(int maxRecords) {
+		this.maxRecords = maxRecords;
+	}
 	/**
 	 * 
 	 */
@@ -57,6 +64,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	public Iterator<ResultType> getIterator(final IQueryRetrieval<ResultType> query)
 			throws AmbitException {
 		executor = new QueryExecutor<IQueryObject<ResultType>>();
+		executor.setMaxRecords(getMaxRecords());
 		executor.setConnection(connection);
 		setResultSet(executor.process(query));
 		return new Iterator<ResultType>() {

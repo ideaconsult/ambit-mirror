@@ -19,6 +19,15 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 	private static final long serialVersionUID = 5821244671560506456L;
 	protected PreparedStatement sresults=null;
 	protected Statement statement=null;
+	protected int maxRecords = 0;
+	public int getMaxRecords() {
+		return maxRecords;
+	}
+
+	public void setMaxRecords(int maxRecords) {
+		this.maxRecords = maxRecords;
+	}
+
 	public void open() throws DbAmbitException {
 	}
 
@@ -29,10 +38,16 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 				List<QueryParam> params = target.getParameters();
 				if (params == null) {
 					statement = c.createStatement();
-					ResultSet rs = statement.executeQuery(target.getSQL());
+					String sql = target.getSQL();
+					if (maxRecords > 0)
+						sql = sql + " limit " + Integer.toString(maxRecords);
+					ResultSet rs = statement.executeQuery(sql);
 					return rs;
 				} else {
-					sresults = c.prepareStatement(target.getSQL());					
+					String sql = target.getSQL();
+					if (maxRecords > 0)
+						sql = sql + " limit " + Integer.toString(maxRecords);					
+					sresults = c.prepareStatement(sql);					
 					QueryExecutor.setParameters(sresults, params);
 					logger.debug(sresults);
 					ResultSet rs = sresults.executeQuery();

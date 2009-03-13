@@ -36,13 +36,30 @@ import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
+import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryExecutor;
 
 public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {
-	protected RetrieveStructure query = new RetrieveStructure();
+	protected IQueryRetrieval<IStructureRecord> query;
+	public ProcessorStructureRetrieval() {
+		this(new RetrieveStructure());
+	}
+	public ProcessorStructureRetrieval(IQueryRetrieval<IStructureRecord> query) {
+		this.query = query;
+	}	
+	public IQueryRetrieval<IStructureRecord> getQuery() {
+		return query;
+	}
+
+	public void setQuery(IQueryRetrieval<IStructureRecord> query) {
+		this.query = query;
+	}
+
 	/**
 	 * 
 	 */
@@ -52,8 +69,10 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
 			throws AmbitException {
 		QueryExecutor<IQueryObject<IStructureRecord>> exec = new QueryExecutor<IQueryObject<IStructureRecord>>();
 		exec.setConnection(getConnection());
-        query.setValue(target);
-        query.setCondition(EQCondition.getInstance());
+		if (query instanceof AbstractQuery) {
+	        ((AbstractQuery)query).setValue(target);
+	        //((AbstractQuery)query).setCondition(NumberCondition.getInstance());
+		}
         ResultSet rs = null;
         try { 
         	rs = exec.process(query);
