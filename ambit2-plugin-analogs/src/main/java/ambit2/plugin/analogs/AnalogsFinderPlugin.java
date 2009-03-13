@@ -53,7 +53,7 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	protected WorkflowOptionsLauncher contextListener;
 	public AnalogsFinderPlugin() {
 		super();
-		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryBuildingWorkflow","Category building","Category building","images/search_256.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryBuildingWorkflow","Category building","Category building","ambit2/plugin/analogs/images/32x32_category_building.png"));
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
