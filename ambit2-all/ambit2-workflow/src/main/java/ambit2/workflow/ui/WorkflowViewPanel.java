@@ -85,7 +85,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     		}  
         
         try {
-            conditional =  Utils.createImageIcon("images/help.png");
+            conditional =  Utils.createImageIcon("images/arrow_branch.png");
             } catch (Exception e) {
             	conditional  = null;
     		}  
