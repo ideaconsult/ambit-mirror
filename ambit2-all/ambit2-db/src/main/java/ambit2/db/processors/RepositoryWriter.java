@@ -128,7 +128,10 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	public void writeProperties(IStructureRecord structure,IAtomContainer molecule) throws SQLException, AmbitException {
 			if (molecule == null)
 				return;
-			structure.setProperties(molecule.getProperties());
+			if (structure.getProperties()==null)
+				structure.setProperties(molecule.getProperties());
+			else
+				structure.getProperties().putAll(molecule.getProperties());
 			propertyWriter.process(structure);
 			structure.setProperties(null);
 

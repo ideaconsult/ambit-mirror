@@ -23,15 +23,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 package ambit2.db.processors;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.util.Iterator;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
+import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.IProcessor;
 import ambit2.core.processors.ProcessorsChain;
@@ -61,9 +63,18 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 			throws AmbitException {
 		if (target instanceof FileInputState)
 			try {
-			return new RawIteratingSDFReader(
-					new FileReader(((FileInputState)target).getFile())
-					);
+				File file = ((FileInputState)target).getFile();
+				if (file.isDirectory()) {
+					FilenameFilter filter = new FilenameFilter() {
+					        public boolean accept(File dir, String name) {
+					            return !name.startsWith(".");
+					        }
+					};					
+					return new RawIteratingFolderReader(file.listFiles(filter));
+				} else
+					return new RawIteratingSDFReader(
+							new FileReader(((FileInputState)target).getFile())
+													);
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}

@@ -81,6 +81,7 @@ public class BatchDBProcessorTest {
 		
 		ProcessorsChain<String, IBatchStatistics,IProcessor>  p = 
 				new ProcessorsChain<String, IBatchStatistics, IProcessor>();
+		/*
 		p.add(new IProcessor<String, IStructureRecord>() {
 			public boolean isEnabled() {
 				return true;
@@ -93,6 +94,7 @@ public class BatchDBProcessorTest {
 			public void setEnabled(boolean value) {
 			}
 		});
+		*/
 		p.add(new MoleculeReader());
 		p.add(new AtomConfigurator());
 		p.add(new FunctionalGroup("Test","N","Test"));
