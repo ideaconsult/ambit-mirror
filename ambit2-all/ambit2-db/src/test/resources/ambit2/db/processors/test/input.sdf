@@ -135,6 +135,48 @@ C6H9N
 InChI=1/C6H9N/c1-5-3-4-7-6(5)2/h3-4,7H,1-2H3
 
 $$$$
+Bradykinin
+  SciTegic04250709062D
+
+  0  0  0  0  0  0            999 V2000
+M  END
+> <ID>
+361
+
+> <CAS>
+58-82-2
+
+> <Name>
+Bradykinin
+
+> <EC>
+200-398-8
+
+> <MF>
+C50H73N15O11
+
+> <Inventories>
+.
+
+> <GENERATED_SMILES>
+.
+
+> <GENERATED_SMILES_Quality>
+N/A
+
+> <GENERATED_MF>
+.
+
+> <GENERATED_MW>
+.
+
+> <GENERATED_IUPAC_EN>
+.
+
+> <GENERATED_InChI>
+.
+
+$$$$
 
   ACD/Labs08270816372D
 
@@ -745,5 +787,47 @@ NC
 
 >  <InChI>
 InChI=1/C10H18O/c1-8-4-6-9(7-5-8)10(2,3)11/h4,9,11H,5-7H2,1-3H3
+
+$$$$
+(??)-(isopropyl)(beta,3,4-trihydroxyphenethyl)ammonium [R-(R*,R*)]-hydrogen tartrate
+  SciTegic04250709062D
+
+  0  0  0  0  0  0            999 V2000
+M  END
+> <ID>
+397
+
+> <CAS>
+59-60-9
+
+> <Name>
+(??)-(isopropyl)(beta,3,4-trihydroxyphenethyl)ammonium [R-(R*,R*)]-hydrogen tartrate
+
+> <EC>
+200-437-9
+
+> <MF>
+C11H17NO3.C4H6O6
+
+> <Inventories>
+.
+
+> <GENERATED_SMILES>
+.
+
+> <GENERATED_SMILES_Quality>
+N/A
+
+> <GENERATED_MF>
+.
+
+> <GENERATED_MW>
+.
+
+> <GENERATED_IUPAC_EN>
+.
+
+> <GENERATED_InChI>
+.
 
 $$$$

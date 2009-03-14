@@ -71,22 +71,22 @@ public class RepositoryWriterTest extends DbUnitTest {
         
         c = getConnection();
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
-		Assert.assertEquals(3,chemicals.getRowCount());
+		Assert.assertEquals(5,chemicals.getRowCount());
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(5,strucs.getRowCount());
+		Assert.assertEquals(7,strucs.getRowCount());
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
-		Assert.assertEquals(5,struc_src.getRowCount());
+		Assert.assertEquals(7,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(73,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(202,property_values.getRowCount());		
+		Assert.assertEquals(228,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(5,tuples.getRowCount());			
+		Assert.assertEquals(7,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(202,p_tuples.getRowCount());				
+		Assert.assertEquals(228,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties

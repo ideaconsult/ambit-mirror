@@ -310,6 +310,8 @@ class SmilesKey implements IStructureKey<String> {
 		this.key = key;
 	}
 	public String process(IAtomContainer molecule) throws AmbitException {
+		if ((molecule==null) || (molecule.getAtomCount()==0))
+			throw new AmbitException("Empty molecule!");
 		return gen.createSMILES((IMolecule)molecule);
 	}
 }
@@ -354,6 +356,7 @@ class HashcodeKey implements IStructureKey<Long> {
 		this.key = key;
 	}
 	public Long process(IAtomContainer molecule) throws AmbitException {
+		if ((molecule==null)||(molecule.getAtomCount()==0)) return 0L;
 		return hashing.getMoleculeHash(molecule);
 	}
 }
