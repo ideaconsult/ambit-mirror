@@ -6,7 +6,8 @@
   <packaging>pom</packaging>
   <version>2.0.0-SNAPSHOT</version>
   <name>ambit2-all</name>
-  <description>A software for chemoinformatic data management, chemical grouping and (Q)SAR support</description>
+  <description>A software for chemoinformatic data management, chemical grouping and (Q)SAR support.
+AMBIT2 is a complete redesign of AMBIT software, featuring improved user interface, support for workflows, plugins and reporting for user actions.</description>
   <url>http://ambit.sourceforge.net</url>
   <repositories>
   	<repository>
@@ -95,6 +96,12 @@
   			<role>Quality assurance</role>  		
   			<role>Installer development</role>
   		</roles>    	  		
+  	</developer>
+  	<developer>
+  		<name>Chelsea Jiang</name>
+  		<roles>
+  			<role>Technical writer</role>
+  		</roles>
   	</developer> 
   </developers>
   <scm>
@@ -275,25 +282,35 @@
 	            <version>4.6</version>
 	          </docletArtifact>
 	          <additionalparam>
-	          <!--  http://www.umlgraph.org/doc/cd-opt.html --> 
+	          <!--  http://www.umlgraph.org/doc/cd-opt.html 
 	          	-attributes
 	          	-views
 	          	-types 
 	            -inferrel -inferdep -quiet -hide java.*
 	            -collpackages java.util.* -qualify
-	            -postfixpackage -nodefontsize 9
-	            -nodefontpackagesize 7
+	            -postfixpackage 
+	            --> 
+	            -all
 	          </additionalparam>
 	    
 	        </configuration>
           
          </plugin>
+		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-project-info-reports-plugin</artifactId>
+ 			<version>2.1</version> 		    
+		    <configuration>
+		      <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+		    </configuration>
+		  </plugin>          
+         <!-- 
           <plugin>
           	<groupId>org.apache.maven.plugins</groupId>
           	<artifactId>maven-pmd-plugin</artifactId>
           	<version>2.4</version>
 			<configuration>
-				<linkXref>failse</linkXref>
+				<linkXref>false</linkXref>
 				<sourceEncoding>utf-8</sourceEncoding>
 				<minimumTokens>100</minimumTokens>
 				<targetJdk>
@@ -304,6 +321,7 @@
 				</excludes>
 			</configuration>          	
           </plugin>
+           -->
           <plugin>
           	<groupId>org.codehaus.mojo</groupId>
           	<artifactId>taglist-maven-plugin</artifactId>
