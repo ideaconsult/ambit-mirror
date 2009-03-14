@@ -29,6 +29,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import ambit2.core.exceptions.AmbitException;
 
 import com.jgoodies.binding.beans.Model;
@@ -47,13 +49,25 @@ public class ClassHolder extends Model {
 	protected String title;
 	protected String description;
 	protected String icon;
+	protected ImageIcon image;
 	
+	public ImageIcon getImage() {
+		return image;
+	}
+	public void setImage(ImageIcon image) {
+		this.image = image;
+	}
 	public ClassHolder(String clazz, String title, String description, String icon) {
 		setClazz(clazz);
 		setTitle(title);
 		setDescription(description);
 		setIcon(icon);
+		setImage(null);
 	}
+	public ClassHolder(String clazz, String title, String description, ImageIcon icon) {
+		this(clazz,title,description,"");
+		setImage(icon);
+	}	
 	public String getClazz() {
 		return clazz;
 	}
@@ -95,7 +109,7 @@ public class ClassHolder extends Model {
 	          if (fileLine == null)
 	            eof = true;
 	          else {
-	        	  classes.add(new ClassHolder(fileLine.trim(),fileLine,"",null));
+	        	  classes.add(new ClassHolder(fileLine.trim(),fileLine,"",(String)null));
 	          }
 	        }
 	        reader.close();

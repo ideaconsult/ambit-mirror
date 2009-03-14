@@ -10,6 +10,7 @@ import ambit2.core.data.StructureRecord;
 
 public class RawIteratingSDFReader extends RawIteratingReader<IStructureRecord> {
 	public static final String delimiter = "$$$$"; 
+	protected final StructureRecord r = new StructureRecord();
 	public RawIteratingSDFReader(Reader in) {
 		super(in);
 	}
@@ -25,7 +26,17 @@ public class RawIteratingSDFReader extends RawIteratingReader<IStructureRecord> 
     @Override
     public IStructureRecord nextRecord() {
         Object o = next();
-        return new StructureRecord(-1,-1,o.toString(),"SDF");
+        if (o instanceof IStructureRecord) return (IStructureRecord)o;
+        else return new StructureRecord(-1,-1,o.toString(),"SDF");
+    }
+    @Override
+    public Object next() {
+    	Object o = super.next();
+		r.setIdchemical(-1);
+		r.setIdstructure(-1);
+		r.setFormat("SDF");
+		r.setContent(o.toString());
+		return r;    	
     }
     
 }

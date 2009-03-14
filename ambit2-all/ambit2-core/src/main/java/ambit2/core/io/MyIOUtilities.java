@@ -48,7 +48,8 @@ public class MyIOUtilities {
 	        String currentDirectory,
 	        String[] ext,String[] extDescription, boolean open, JComponent accessoryPanel) {
 		JFileChooser fc = new JFileChooser();
-		
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
 		for (int i=0; i < ext.length; i++)
 			fc.addChoosableFileFilter(new AmbitFileFilter(ext[i],extDescription[i]));
 		fc.setFileFilter(fc.getChoosableFileFilters()[1]);
@@ -64,10 +65,11 @@ public class MyIOUtilities {
 		else  returnVal =  fc.showSaveDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            FileFilter ff = fc.getFileFilter();
-            if (ff instanceof AmbitFileFilter)
-            	file = ((AmbitFileFilter)ff).changeExtension(file);
-            
+            if (!file.isDirectory()) {
+	            FileFilter ff = fc.getFileFilter();
+	            if (ff instanceof AmbitFileFilter)
+	            	file = ((AmbitFileFilter)ff).changeExtension(file);
+            }
             fc = null;
             
             return file;
