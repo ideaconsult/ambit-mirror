@@ -73,9 +73,11 @@ class ImageCellRenderer extends DefaultListCellRenderer {
 		ClassHolder item = (ClassHolder)value;
 		label.setText("<html><b>"+value.toString()+"</b><p>"+item.getDescription()+"</html>");
 		try {
-			String iconFile = item.getIcon();
-			if (iconFile !=null) {
-				ImageIcon icon = Utils.createImageIcon(iconFile);
+			ImageIcon icon = item.getImage();
+			if (icon == null) {
+				icon = Utils.createImageIcon(item.getIcon());
+			}
+			if (icon !=null) {
 				icon.setImage(icon.getImage().getScaledInstance(size,size,1));
 				label.setIcon(icon);
 			}
