@@ -24,47 +24,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.hashcode.test;
 
-import java.io.FileReader;
 import java.io.StringReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.HashSet;
 
 import javax.sql.DataSource;
 
-
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.core.io.RawIteratingSDFReader;
-import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.RepositoryReader;
-import ambit2.db.processors.FP1024Writer;
-import ambit2.db.processors.RepositoryWriter;
-import ambit2.hashcode.Hash;
-import ambit2.hashcode.Prime;
-import junit.framework.TestCase;
+import ambit2.db.processors.test.DbUnitTest;
 
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
-
-public class testHash extends TestCase {
-
+/**
+ * Hashcodes tests. 
+ * @author nina
+ *
+ */
+public class testHash extends DbUnitTest{
+	//TODO make use of DBUnit test!
 	public void testGetHashForDoubles() throws Exception {
 		DataSource datasource;
 	    Class driverClass = Class.forName("com.mysql.jdbc.Driver");
@@ -80,16 +67,17 @@ public class testHash extends TestCase {
         Hashtable<Long, List<String>> histogram = new Hashtable<Long, List<String>>();
        
      
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-			int[] idchemicals ={3109,25703};			
-			for(int i=0;i<idchemicals.length;i++){
-			String content = reader.getStructure(idchemicals[i]);		
-			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);			
-			if (mReader.hasNext()) {
-				Object mol = mReader.next();
-				if (mol instanceof IMolecule) {
-					try{
-						Long hash = molHash.getMoleculeHash((IMolecule)mol);
+		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		int[] idchemicals ={3109,25703};			
+		for(int i=0;i<idchemicals.length;i++){
+		String content = reader.getStructure(idchemicals[i]);	
+			
+		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);			
+		if (mReader.hasNext()) {
+			Object mol = mReader.next();
+			if (mol instanceof IMolecule) {
+				try{
+					Long hash = molHash.getMoleculeHash((IMolecule)mol);
 						
 						
 					} catch (Exception e) {
@@ -101,18 +89,12 @@ public class testHash extends TestCase {
 				}
 				
 			}
-			}
-			
-		
+		}
 		reader.close();
-		
-		
-		
-		
-		
 }
 
-public void testGetHashFomDB() throws Exception {
+	
+public static void testGetHashFomDB() throws Exception {
 		DataSource datasource;
 	    Class driverClass = Class.forName("com.mysql.jdbc.Driver");
 	    datasource = DatasourceFactory.getDataSource(
@@ -238,4 +220,11 @@ public void testGetHashFomDB() throws Exception {
 		System.out.println(cis_trns);
 	}	
 	
+	public static void main(String[] args) {
+		try {
+			testGetHashFomDB();
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	}
 }
