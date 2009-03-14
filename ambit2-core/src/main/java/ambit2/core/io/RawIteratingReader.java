@@ -9,7 +9,7 @@ import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
 import ambit2.core.log.AmbitLogger;
 
-public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader {
+public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader implements IRawReader<T>{
 	protected static AmbitLogger logger = new AmbitLogger(RawIteratingReader.class);
 	private BufferedReader input;
 	protected StringBuffer recordBuffer = null;
