@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<description>Allows to query AMBIT database by REST style web services.</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -8,7 +9,7 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-www</artifactId>
   <packaging>war</packaging>
-  <name>Ambit2 Webapp</name>
+  <name>Ambit2 REST web services</name>
   <version>2.0.0-SNAPSHOT</version>
   <build>
     <finalName>ambit2</finalName>
@@ -80,9 +81,9 @@
   </dependencies>
 	<repositories>
 		<repository>
-			<id>codehaus</id>
-			<name>Codehaus maven repository</name>
-			<url>http://dist.codehaus.org/</url>
+			<id>maven-restlet</id>
+			<name>Public online Restlet repository</name>
+			<url>http://maven.restlet.org</url>
 			<layout>legacy</layout>
 		</repository>
 	</repositories>  
