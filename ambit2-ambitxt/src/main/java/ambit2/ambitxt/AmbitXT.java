@@ -222,7 +222,7 @@ public class AmbitXT extends NPluginsApplication {
 			manager.addPackage("ambit2.plugin.search.SearchPlugin","Simple search",
 			        createImageIcon("images/search_16.png"));
 			manager.addPackage("ambit2.plugin.analogs.AnalogsFinderPlugin","Find analogs",
-			        createImageIcon("images/molecule_16.png"));
+			        createImageIcon("images/analogue.png"));
 			manager.addPackage("ambit2.plugin.pbt.PBTCheckerPlugin","PBT Assessment",
 			        createImageIcon("images/pill_16.png"));
 			manager.addPackage("ambit2.plugin.dbtools.DBUtilityPlugin","Database tools",
