@@ -32,25 +32,17 @@ Introduction
  
   AMBIT2 consists of multiple modules with well defined dependencies, which can be used in a stand alone mode or embedded in other applications.
   
-** Applications, available for end users:  
-
-*** AMBIT XT 
+** AMBIT XT 
 	
 	A stand alone application, including modules for Analog identification, Category building, Category verification, Endpoints validation, PBT assessment, etc.
 
-*** AMBIT REST Web services
-	
-	Allows to query AMBIT database by REST style web services. 
-	
-	The prototype {{{http://nina.acad.bg/ambit2/}service}} and {{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/ambit-rest-client/}client}} are available.
+*** Timeline
 
-** Timeline
-
-*** Prototype 
+**** Prototype 
 
 	* Oct 2008 : Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed contains the original EINECS list.
 
-*** Initial release
+**** Initial release
  
     * Feb 2009 : Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.0.0-setup.exe} AmbitXT Initial release}} Beta version of the software.
     
@@ -63,8 +55,14 @@ Introduction
     	* Workflow for PBT assessment, following REACH guidance. 
     	
     	* The database distributed contains the original EINECS list.
-    	
-    	
-*** Final release
+    	  	
+**** Final release
 
  		* June 2009
+
+** AMBIT REST Web services
+	
+	Allows to query AMBIT database by REST style web services. 
+	
+	The prototype {{{http://nina.acad.bg/ambit2/}service}} and {{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/ambit-rest-client/}client}} are available.
+
