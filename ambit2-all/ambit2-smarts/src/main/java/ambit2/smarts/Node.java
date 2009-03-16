@@ -32,7 +32,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class Node 
 {
-	//The Node represent a partial information in the
+	//The Node represents a partial information in the
 	//isomorphism searching tree
 	//array element atoms[k] contains the target atom which is mapped to the k-th query atom
 	
