@@ -1,9 +1,10 @@
 package ambit2.rest.query;
 
+import java.net.ConnectException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.restlet.Context;
-import org.restlet.Restlet;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -14,9 +15,11 @@ import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.RepresentationConvertor;
+
 
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Resource {
 	protected Q query;
@@ -49,10 +52,22 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Res
 		        	convertor.getReporter().setConnection(connection);
 		        	Representation r = convertor.process(query);
 		        	return r;
+	        	} catch (NotFoundException x) {
+	        		x.printStackTrace();
+	    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+	    			return new StringRepresentation("<error>Query returns no results! "+x.getMessage()+"</error>",
+	    					variant.getMediaType());	
+	    			
+	        	} catch (SQLException x) {
+	        		x.printStackTrace();
+	    			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+	    			return new StringRepresentation("<error>Error connecting to database "+x.getMessage()+"</error>",
+	    					variant.getMediaType());		        		
 	        	} catch (Exception x) {
+	        		x.printStackTrace();
 	    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-	    			return new StringRepresentation("there was an error retrieving the data "+x.getMessage(),
-	    			MediaType.TEXT_PLAIN);		        		
+	    			return new StringRepresentation("<error>there was an error retrieving the data "+x.getMessage()+"</error>",
+	    					variant.getMediaType());		        		
 	        	} finally {
 	        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
 	        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
@@ -61,12 +76,12 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Res
 	        	
 	        } else {
 	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	        	return new StringRepresentation(error.getMessage());	        	
+	        	return new StringRepresentation(error.getMessage(),variant.getMediaType());	        	
 	        }
 		} catch (Exception x) {
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
 			return new StringRepresentation("there was an error retrieving the data "+x.getMessage(),
-			MediaType.TEXT_PLAIN);			
+					variant.getMediaType());			
 		}
 	}		
 		

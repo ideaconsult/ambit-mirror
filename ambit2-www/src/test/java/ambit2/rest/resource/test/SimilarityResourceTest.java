@@ -37,6 +37,10 @@ public class SimilarityResourceTest extends ResourceTest {
 	}
 	
 	@Test
+	public void testNoResults() throws Exception {
+		runQuery(ChemicalMediaType.CHEMICAL_SMILES,"http://localhost:8080/query/similarity/method/fp1024/distance/tanimoto/0.1/smiles/[I]");
+	}		
+	@Test
 	public void testSmiles() throws Exception {
 		runQuery(ChemicalMediaType.CHEMICAL_SMILES);
 	}	
@@ -54,14 +58,19 @@ public class SimilarityResourceTest extends ResourceTest {
 		runQuery(MediaType.TEXT_URI_LIST);
 	}		
 	public void runQuery(MediaType mediaType) throws Exception {
+		runQuery(mediaType,URI);
+	}
+	public void runQuery(MediaType mediaType,String uri) throws Exception {
 		long now = System.currentTimeMillis();
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		request.setResourceRef(URI);
+		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
-		request.getClientInfo().getAcceptedMediaTypes().
-		add(new Preference(mediaType));
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference(mediaType));
+		System.out.println(request.getClientInfo().getAcceptedMediaTypes());
 		Response response = client.handle(request);
+		
+		System.out.println(response.getStatus());
 		
 		Assert.assertTrue(response.isEntityAvailable());
 		InputStream in = response.getEntity().getStream();
