@@ -30,7 +30,6 @@
 package ambit2.db.search;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -97,10 +96,19 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
             r.setContent(null);
             if (r.getProperties()==null)
             	r.setProperties(new Hashtable());
-            r.getProperties().put(CDKConstants.SMILES,rs.getString("smiles"));
-            r.getProperties().put(CDKConstants.INCHI,rs.getString("inchi"));
+                     	
+            String smiles = rs.getString("smiles");
+            if (smiles!= null)
+            	r.getProperties().put(CDKConstants.SMILES,smiles);
+            else
+            	r.getProperties().remove(CDKConstants.SMILES);
+            String inchi = rs.getString("inchi");
+            if (inchi!= null)
+            	r.getProperties().put(CDKConstants.INCHI,inchi);  
+            else
+            	r.getProperties().remove(CDKConstants.INCHI);
             return r;
-        } catch (SQLException x){
+        } catch (Exception x){
             throw new AmbitException(x);
         }
 	}
