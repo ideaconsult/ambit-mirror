@@ -29,9 +29,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import java.util.Vector;
 import java.util.Stack;
 import java.util.List;
+
 
 /**
  * 
@@ -223,11 +225,31 @@ public class IsomorphismTester
 	
 	public boolean hasIsomorphism(IAtomContainer container)
 	{	
-		target = container;
+		target = container;		
+		if (query.getAtomCount() == 1)
+			return(singleAtomIsomorphism());
+		
 		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
 		executeSequence();
 		return(isomorphismFound);
 	}
+	
+	
+	boolean singleAtomIsomorphism()
+	{	
+		SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+		isomorphismFound = false;
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{	
+			if (qa.matches(target.getAtom(i)))
+			{	
+				isomorphismFound = true;
+				break;
+			}
+		}	
+		return(isomorphismFound);
+	}
+	
 	
 	void executeSequence()
 	{	

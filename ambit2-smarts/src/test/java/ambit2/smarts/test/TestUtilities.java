@@ -134,8 +134,7 @@ public class TestUtilities
 		{
 			System.out.println("Smarts Parser errors:\n" + errorMsg);			
 			return;
-		}
-						
+		}						
 		
 		isoTester.setQuery(query);
 		System.out.println("IsomorphismTester: " + smarts  + "  in  " + smiles + 
@@ -780,6 +779,78 @@ public class TestUtilities
 			System.out.println(" " + (i+1) + "  " + keys.get(i));
 	}
 	
+	int compareIsoTester(String smarts, String mdlFile)
+	{
+		QueryAtomContainer query  = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return -1;
+		}
+		
+		int numRecords = 10000;
+		boolean CDKRes, isoRes;
+		int numDiff = 0;
+		int numOfIso = 0;
+		
+		try
+		{
+			String fileName;
+			if (mdlFile == null)			 
+				fileName = "../src/test/resources/einecs/einecs_structures_V13Apr07.sdf";
+			else
+				fileName = mdlFile;
+				
+			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(fileName),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;
+				if (record % 1000 == 0)
+					System.out.print("  -->" + record);
+				if (record > numRecords)
+					break;
+				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					CDKRes = UniversalIsomorphismTester.isSubgraph(mol, query);						
+					isoTester.setQuery(query);						
+					isoRes = isoTester.hasIsomorphism(mol);	
+					if (isoRes)
+						numOfIso++;
+					
+					if (CDKRes != isoRes)
+						numDiff++;
+				}
+			}
+			System.out.println();	
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		System.out.println("numDiff = " + numDiff + "  numIso = " + numOfIso + "   " + smarts);
+		return (numDiff);
+	}
+	
+	void compareIsoTesterMulti()
+	{
+		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
+		Vector<String> keys = smKeys.getKeys();
+		for (int i = 0; i < keys.size(); i++)
+			compareIsoTester (keys.get(i), null);
+	}
+	
 //-------------------------------------------------------------------------------
 	
 	
@@ -847,7 +918,7 @@ public class TestUtilities
 		tu.testIsomorphismTester("CC[C,O]C","COCC");
 		tu.testIsomorphismTester("CC[C,O]C","COC=C");
 		tu.testIsomorphismTester("C(C)(C)(C)C","CC(C)(C)CC");
-		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");
+		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");		
 		*/
 		
 		//tu.getCarbonSkelletonsFromString();		
@@ -891,7 +962,11 @@ public class TestUtilities
 		//tu.produceStructures();
 		//tu.makeStructureStatistics();
 		//tu.filterStructsBySize("/java_frags0.txt","/java_frags.txt",8);
-		tu.testSmartsSreeningKeys();
+		//tu.testSmartsSreeningKeys();
+		
+		tu.compareIsoTesterMulti();
+		//tu.compareIsoTester("C",null);
+		//tu.testIsomorphismTester("C", "CCCCC");
 	}
 	
 }
