@@ -10,6 +10,10 @@
 
 </div>
 
+<c:set var="selected" value=""/>
+<c:if test="${!empty param.checked && (param.checked eq 'checked')}">
+	<c:set var="selected" value="checked"/>
+</c:if>
 <c:if test="${!empty param.idquery}">
 	<form action="/repdose/index.php" method="post">
 	<c:catch var="error">
@@ -50,13 +54,34 @@
 					</td>
 
 					<td>
-						<input type="checkbox" name="cas[]" value="${row.casno}">
+						<input type="checkbox" name="cas[]" "${selected}" value="${row.casno}">
 					</td>
 				</tr>
 		</c:forEach>
+		<tr>
+			<td colspan="5" align="left">
+				<input type='submit' value=' Take selected results to Repdose '>			
+			</td>
+			<td colspan="1" align="right">
+				<a href="
+				<c:url value="">
+					<c:param name="idquery" value="${param.idquery}"/>
+					<c:param name="title" value="${param.title}"/>
+					<c:param name="checked" value="checked"/>
+				</c:url>
+				">Select all</a>
+				<a href="
+				<c:url value="">
+					<c:param name="idquery" value="${param.idquery}"/>
+					<c:param name="title" value="${param.title}"/>
+					<c:param name="checked" value=""/>
+				</c:url>	
+				">Select none</a>
+			</td>			
+		</tr>
 	</table>
 	</c:catch>
-	<input type='submit' value=' Take selected results to Repdose '>
+
 	</form>
 	<c:if test="${!empty error}">
 		<font color="#FF0000">
