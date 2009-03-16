@@ -11,7 +11,7 @@
 </div>
 
 <c:if test="${!empty param.idquery}">
-	<form action="/repdose/from-ambit.php" method="post">
+	<form action="/repdose/index.php" method="post">
 	<c:catch var="error">
 		<sql:query var="rs" dataSource="jdbc/repdose">
 			select structure.idstructure,smiles,casno from substance join structure using(idsubstance) join datasets using(idstructure) right join cas using(idstructure) where iddsname=?
