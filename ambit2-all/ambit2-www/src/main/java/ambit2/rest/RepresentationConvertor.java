@@ -34,6 +34,8 @@ public abstract class RepresentationConvertor<T,Q extends IQueryRetrieval<T>,Out
 		if (this.reporter != null) this.reporter.setMaxRecords(5000);
 	}
 	public abstract Representation process(Q query) throws ambit2.core.exceptions.AmbitException;
+	
+	
 
 	
 }
