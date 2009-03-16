@@ -219,6 +219,7 @@ class DataSourceAndPool {
         // the classes that implement the pooling functionality.
         //
         poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory,connectionPool,null,null,false,true);
+        poolableConnectionFactory.setValidationQuery("select idmajor,idminor from version");
 		
 		datasource = new PoolingDataSource(connectionPool);
 	}
