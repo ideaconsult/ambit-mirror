@@ -81,7 +81,7 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
         	else
         		return target;
         } catch (Exception x) {
-        	throw new AmbitException(x + query.getSQL());
+        	throw new AmbitException(query.getSQL(),x);
         } finally {
 	        try {
 	            exec.closeResults(rs);
