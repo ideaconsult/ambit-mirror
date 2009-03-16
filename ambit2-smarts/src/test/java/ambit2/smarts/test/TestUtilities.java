@@ -772,6 +772,14 @@ public class TestUtilities
 		}
 	}
 	
+	void testSmartsSreeningKeys()
+	{
+		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
+		Vector<String> keys = smKeys.getKeys();
+		for (int i = 0; i < keys.size(); i++)
+			System.out.println(" " + (i+1) + "  " + keys.get(i));
+	}
+	
 //-------------------------------------------------------------------------------
 	
 	
@@ -881,8 +889,9 @@ public class TestUtilities
 		//tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC)CCNNCC2CCCCCCCC2", 12);
 		
 		//tu.produceStructures();
-		tu.makeStructureStatistics();
+		//tu.makeStructureStatistics();
 		//tu.filterStructsBySize("/java_frags0.txt","/java_frags.txt",8);
+		tu.testSmartsSreeningKeys();
 	}
 	
 }
