@@ -6,6 +6,7 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.Random;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
@@ -386,6 +387,39 @@ public class ChemObjectFactory
 		}
 	}
 	
+	public void produceStructuresRandomly(IAtomContainer mol, Vector<StructInfo> vStr, 
+			int maxNumSeqSteps, int numStructs)
+	{	
+		Random random = new Random();
+		
+		ChemObjectToSmiles cots = new ChemObjectToSmiles();
+		for (int k = 0; k < numStructs; k++)
+		{
+			int atNum = random.nextInt(mol.getAtomCount());
+			setAtomSequence(mol, mol.getAtom(atNum));
+			int n = sequence.size()-1;
+			if (n > maxNumSeqSteps)
+				n = maxNumSeqSteps;			
+			
+			int numSteps = n;
+			if (n > 1)
+				numSteps = 1 + random.nextInt(n-1);			
+			
+			IAtomContainer struct = getFragmentFromSequence(numSteps);				
+			String smiles = cots.getSMILES(struct);
+			
+			StructInfo strInfo = new StructInfo();
+			strInfo.smiles = smiles;					
+			strInfo.atomCount = struct.getAtomCount();
+			strInfo.bondCount = struct.getBondCount();
+			vStr.add(strInfo);
+			
+			if (mol.getAtomCount() < 15)
+				break; //For smaller molecules only one structure is produced 
+		}	
+			
+	}
+	
 	
 	boolean checkForDuplication(String smarts, Vector<StructInfo> vStr)
 	{	
@@ -445,6 +479,43 @@ public class ChemObjectFactory
 			System.out.println(e.toString());
 		}
 		
+		saveStructs(vStr,outFile);
+	}
+	
+	public void produceRandomStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord,
+			Vector<StructInfo> vStr, String outFile)
+	{	
+		try
+		{
+			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;
+				if (record % 50 == 0)
+					saveStructs(vStr,outFile);
+
+				if (record > maxNumRecord)
+					break;
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					produceStructuresRandomly(mol, vStr, maxNumSeqSteps, 4);					
+					System.out.println("record " + record+ "  " + vStr.size());
+				}
+			}	
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+
 		saveStructs(vStr,outFile);
 	}
 	
