@@ -719,6 +719,14 @@ public class TestUtilities
 		
 	}
 	
+	void produceRandomStructures() 
+	{
+		ChemObjectFactory cof = new ChemObjectFactory();
+		Vector<StructInfo> vStr = new Vector<StructInfo>();
+		cof.produceRandomStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
+					30, 50000, vStr, "/java_random_frags.txt");
+	}
+	
 	void makeStructureStatistics()
 	{
 		ChemObjectFactory cof = new ChemObjectFactory();
@@ -959,12 +967,12 @@ public class TestUtilities
 		//tu.testProduceStructuresExhaustively("CCc1cc(CC)ccc1", 12);
 		//tu.testProduceStructuresExhaustively("c1cc(Br)ccc1CC(CCC)CCNNCC2CCCCCCCC2", 12);
 		
-		//tu.produceStructures();
+		//tu.produceRandomStructures();
 		//tu.makeStructureStatistics();
 		//tu.filterStructsBySize("/java_frags0.txt","/java_frags.txt",8);
 		//tu.testSmartsSreeningKeys();
 		
-		tu.compareIsoTesterMulti();
+		//tu.compareIsoTesterMulti();
 		//tu.compareIsoTester("C",null);
 		//tu.testIsomorphismTester("C", "CCCCC");
 	}
