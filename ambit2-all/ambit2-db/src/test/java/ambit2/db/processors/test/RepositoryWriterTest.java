@@ -177,11 +177,11 @@ delete from struc_dataset where idstructure>3
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(32,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(349,property_values.getRowCount());		
+		Assert.assertEquals(355,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(13,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(349,p_tuples.getRowCount());				
+		Assert.assertEquals(355,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties
