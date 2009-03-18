@@ -12,7 +12,7 @@ public class QueryDescriptor extends AbstractStructureQuery<String,Double,Number
 	 */
 	private static final long serialVersionUID = 8053931040773141051L;
 	public final static String sqlField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from values_number join properties as d using (idproperty) join structure using(idstructure) where d.name=? and value ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from values_int_float join properties as d using (idproperty) join structure using(idstructure) where d.name=? and value ";
 	
 	protected Double maxValue;
 	public Double getMaxValue() {

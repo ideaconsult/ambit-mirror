@@ -53,20 +53,33 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	protected static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue,status,user_name,idtype) ";
 	protected static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
 	protected static final String insert_number = "INSERT IGNORE INTO property_number (value) VALUES (?)";
+	protected static final String insert_int = "INSERT IGNORE INTO property_int (value) VALUES (?)";
+	
 	protected static final String select_string = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_string where value=?";
 	protected static final String select_number = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_number where abs(value-?)<1E-4";
+	protected static final String select_int = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_int where value=?";
+	
 	protected static final String onduplicate_number = " on duplicate key update property_values.idvalue=property_number.idvalue";
 	protected static final String onduplicate_string = " on duplicate key update property_values.idvalue=property_string.idvalue";
+	protected static final String onduplicate_int = " on duplicate key update property_values.idvalue=property_int.idvalue";
 	
 	protected static final String insert_tuple_string = "insert into property_tuples select ?,id from values_string where idproperty=? and idstructure=? and value=? and idtype=?";
 	protected static final String insert_tuple_number = "insert into property_tuples select ?,id from values_number where idproperty=? and idstructure=? and (abs(value-?)<1E-4) and idtype=?";
+	protected static final String insert_tuple_int = "insert into property_tuples select ?,id from values_int where idproperty=? and idstructure=? and value=? and idtype=?";
+	
 	protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";
     protected PreparedStatement ps_descriptorvalue_string;
     protected PreparedStatement ps_descriptorvalue_number;    
+    protected PreparedStatement ps_descriptorvalue_int;
+    
     protected PreparedStatement ps_insertstring;
     protected PreparedStatement ps_insertnumber;
+    protected PreparedStatement ps_insertint;
+    
     protected PreparedStatement ps_inserttuplestring = null;
-    protected PreparedStatement ps_inserttuplenumber = null;    
+    protected PreparedStatement ps_inserttuplenumber = null;
+    protected PreparedStatement ps_inserttupleint = null;
+    
     protected PreparedStatement ps_inserttuple = null;
     
     protected IStructureRecord structure;
@@ -133,6 +146,41 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	} else return false;
     	return true;
     }
+    protected boolean insertValue(int value, int idproperty, int idtuple, mode error) throws SQLException {
+    	if (structure == null) throw new SQLException("Undefined structure");    	
+    	if (ps_insertint == null)
+    		ps_insertint = connection.prepareStatement(insert_int);
+    	
+    	ps_insertint.clearParameters();
+    	ps_insertint.setInt(1,value);
+    	ps_insertint.execute();    	
+    	
+    	if (ps_descriptorvalue_int == null)
+            ps_descriptorvalue_int = connection.prepareStatement(insert_descriptorvalue+select_int+onduplicate_int);
+    	
+    	ps_descriptorvalue_int.clearParameters();
+    	ps_descriptorvalue_int.setInt(1,idproperty);
+    	ps_descriptorvalue_int.setInt(2,structure.getIdstructure());
+    	ps_descriptorvalue_int.setString(3, error.toString());
+   		ps_descriptorvalue_int.setInt(4, value);
+   		
+    	if (ps_descriptorvalue_int.executeUpdate()>0) { 
+    		if (idtuple >0 ) {
+	        	if (ps_inserttupleint == null) ps_inserttupleint = connection.prepareStatement(insert_tuple_int);
+	        	ps_inserttupleint.clearParameters();
+	        	ps_inserttupleint.setInt(1,idtuple);
+	        	ps_inserttupleint.setInt(2,idproperty);
+	        	ps_inserttupleint.setInt(3,structure.getIdstructure());
+	        	ps_inserttupleint.setInt(4,value);
+	        	ps_inserttupleint.setInt(5,2);
+	        	if (ps_inserttupleint.executeUpdate()<=0)
+	        		logger.warn("Tuple not inserted "+idproperty+ " "+value);
+
+    		} 
+    	} else return false;
+    	return true;
+    }
+    
     protected boolean insertValue(double value, int idproperty,int idtuple,mode error) throws SQLException {
     	if (structure == null) throw new SQLException("Undefined structure");
     	if (ps_insertnumber == null)
@@ -180,6 +228,10 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     protected void descriptorEntry(Target target, int idproperty, String propertyName, int propertyIndex, int idtuple) throws SQLException {
     	Object value = getValue(target,propertyName,propertyIndex);
     	if (value instanceof Number) {
+    		if (value instanceof Integer) {
+    			logger.warn(propertyName + value);
+    			insertValue(((Integer)value).intValue(),idproperty,idtuple,mode.OK);
+    		} else
     		if ((value instanceof Double) && ((Double)value).isNaN()) {
     			logger.warn(propertyName + value);
     			insertValue(value.toString(),idproperty,idtuple,mode.ERROR);

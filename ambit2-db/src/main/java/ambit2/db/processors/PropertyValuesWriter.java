@@ -62,10 +62,16 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 		Object o = record.getProperties().get(propertyName);
 
 		try {
-			return Double.parseDouble(o.toString());
+			if (o instanceof Number) return o;  
+			return Integer.parseInt(o.toString());
+			
 		} catch (Exception x) {
-			logger.warn(x);
-			return o;
+			try {
+				return Double.parseDouble(o.toString());
+			} catch (Exception xx) {
+				logger.warn(xx);
+				return o;
+			}
 		}
 	
 	}

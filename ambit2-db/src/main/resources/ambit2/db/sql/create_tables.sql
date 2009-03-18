@@ -149,6 +149,19 @@ CREATE TABLE  `property_number` (
   `idtype` int(10) unsigned NOT NULL default '1',
   `value` float(10,4) NOT NULL,
   PRIMARY KEY  (`idvalue`),
+  KEY `Index_3` (`value`),
+  KEY `Index_2` (`idvalue`,`idtype`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- Table `property_int` numeric values
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `property_int`;
+CREATE TABLE  `property_int` (
+  `idvalue` int(10) unsigned NOT NULL auto_increment,
+  `idtype` int(10) unsigned NOT NULL default '2',
+  `value` int(10) NOT NULL,
+  PRIMARY KEY  (`idvalue`),
   UNIQUE KEY `Index_3` (`value`),
   KEY `Index_2` (`idvalue`,`idtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -468,6 +481,14 @@ CREATE TABLE  `version` (
 insert into version (idmajor,idminor,comment) values (2,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
+-- integer property values
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `values_int`;
+create view `values_int` as
+SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype
+FROM property_values join property_int using(idvalue,idtype);
+
+-- -----------------------------------------------------
 -- numeric property values
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `values_number`;
@@ -489,9 +510,20 @@ FROM property_values join property_string using(idvalue,idtype);
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `values_all`;
 create view values_all as
-SELECT idstructure,idproperty,name,null as value_string,value as value_number FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
+SELECT idstructure,idproperty,name,null as value_string,value as value_number,idreference FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
 union
-SELECT idstructure,idproperty,name,value as value_string,null  FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype);
+SELECT idstructure,idproperty,name,value as value_string,null as value_number,idreference FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype)
+union
+SELECT idstructure,idproperty,name,null as value_string,value as value_number,idreference FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype);
+
+-- -----------------------------------------------------
+-- numeric property values
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `values_int_float`;
+create view values_int_float as
+SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype,idreference,name FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
+union
+SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype,idreference,name FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype);
 
 -- -----------------------------------------------------
 -- default users (guest, admin)

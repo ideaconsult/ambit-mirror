@@ -16,21 +16,30 @@ public class RetrieveField<F,V> extends AbstractQuery<String,IStructureRecord,EQ
 	 * 
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
-	protected final String sql_string = "SELECT idstructure,f.name,value from properties as f join values_string using(idproperty) where idstructure=? ";
-	protected final String sql_number = "SELECT idstructure,f.name,value from properties as f join values_number using(idproperty) where idstructure=? ";
+	protected final String sql = 
+					"select name,idreference,idproperty,idstructure,value,idtype from properties join\n"+
+					"(\n"+
+					"select idstructure,idproperty,value,idtype from values_int where idstructure=?\n"+
+					"union\n"+
+					"select idstructure,idproperty,value,idtype from values_number where idstructure=?\n"+
+					"union\n"+
+					"select idstructure,idproperty,value,idtype from values_string where idstructure=?\n"+
+					") as L using (idproperty)\n";
+	protected final String where = "where name=?";
+	
 	public String getSQL() throws AmbitException {
 		if ("".equals(getFieldname()))
-			return sql_string + " union " + sql_number;
+			return sql
+;
 		else
-			return sql_string + "and f.name = ?" + " union " + sql_number + "and f.name = ?";	
+			return sql + where;	
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
-		if (!"".equals(getFieldname()))
-			params.add(new QueryParam<String>(String.class, getFieldname()));		
-		params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
+		for (int i=0; i < 3; i++) {
+			params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
+		}
 		if (!"".equals(getFieldname()))
 			params.add(new QueryParam<String>(String.class, getFieldname()));		
 		return params;		

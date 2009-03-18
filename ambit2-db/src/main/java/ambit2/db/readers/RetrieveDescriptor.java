@@ -21,7 +21,7 @@ public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStru
 	 * 
 	 */
 	private static final long serialVersionUID = -2275940362173809147L;
-	public static final String sql = "SELECT idproperty,title,url,name,value,user_name FROM catalog_references join properties using(idreference) join values_number using(idproperty) where idstructure=?";
+	public static final String sql = "SELECT idproperty,title,url,name,value,user_name FROM values_int_float join catalog_references using(idreference) where idstructure=?";
 	public String getSQL() throws AmbitException {
 		return sql;
 	}
