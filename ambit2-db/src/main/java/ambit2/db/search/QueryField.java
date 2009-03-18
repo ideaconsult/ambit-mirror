@@ -41,18 +41,21 @@ public class QueryField extends AbstractStructureQuery<String,String, StringCond
 	 */
 	private static final long serialVersionUID = -5810564793012596407L;
 	public final static String sqlField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join values_string using(idstructure) join properties as f using (idproperty) where f.name=? and ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure\n"+
+		"join property_values using(idstructure) join property_string as f using (idvalue,idtype)"+
+		"join properties using(idproperty) where\n"+
+		"name=? and value %s ?";
 	public final static String sqlAnyField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join values_string using(idstructure) join properties as f using (idproperty) where ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join property_values using(idstructure) join property_string as f using (idvalue,idtype) where value %s ?";
 	public QueryField() {
 		setFieldname("");
 		setCondition(StringCondition.getInstance("="));
 	}
 	public String getSQL() throws AmbitException {
-		if ("".equals(getFieldname()))
-			return sqlAnyField + " value " + getCondition().getSQL() + " ?";
+		if ((getFieldname() ==null) || "".equals(getFieldname()))
+			return String.format(sqlAnyField,getCondition().getSQL());
 		else
-			return sqlField + " value " + getCondition().getSQL() + " ?";
+			return String.format(sqlField,getCondition().getSQL());
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");
@@ -60,6 +63,7 @@ public class QueryField extends AbstractStructureQuery<String,String, StringCond
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
 		if (!"".equals(getFieldname()))
 			params.add(new QueryParam<String>(String.class, getFieldname()));
+
 		params.add(new QueryParam<String>(String.class, getValue()));
 		return params;
 	}

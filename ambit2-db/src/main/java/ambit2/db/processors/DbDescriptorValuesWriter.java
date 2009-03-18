@@ -59,15 +59,21 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 	 * 
 	 */
 	private static final long serialVersionUID = 3453741433797677188L;
+	protected Dictionary descriptorDictionary;
 
+	public DbDescriptorValuesWriter() {
+		descriptorDictionary = new Dictionary();
+		descriptorDictionary.setParentTemplate("Descriptors");
+	}
 	@Override
     protected DescriptorValue transform(DescriptorValue target) {
     	return target;
     }
     
 	@Override
-	protected String getComments(String name,DescriptorValue descriptor) {
-		return descriptor.getSpecification().getImplementationIdentifier();
+	protected Dictionary getComments(String name,DescriptorValue descriptor) {
+		descriptorDictionary.setTemplate(name);
+		return descriptorDictionary;
 	}
 	@Override
 	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {

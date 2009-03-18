@@ -137,7 +137,7 @@ CREATE TABLE  `property_string` (
   `value` varchar(200) collate utf8_bin NOT NULL,
   PRIMARY KEY  (`idvalue`),
   UNIQUE KEY `Index_3` (`value`),
-  KEY `Index_2` (`idvalue`,`idtype`)
+  UNIQUE KEY `Index_2` (`idvalue`,`idtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -149,8 +149,8 @@ CREATE TABLE  `property_number` (
   `idtype` int(10) unsigned NOT NULL default '1',
   `value` float(10,4) NOT NULL,
   PRIMARY KEY  (`idvalue`),
-  KEY `Index_3` (`value`),
-  KEY `Index_2` (`idvalue`,`idtype`)
+  UNIQUE KEY `Index_3` (`value`),
+  UNIQUE KEY `Index_2` (`idvalue`,`idtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE  `property_int` (
   `value` int(10) NOT NULL,
   PRIMARY KEY  (`idvalue`),
   UNIQUE KEY `Index_3` (`value`),
-  KEY `Index_2` (`idvalue`,`idtype`)
+  UNIQUE KEY `Index_2` (`idvalue`,`idtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -184,7 +184,7 @@ CREATE TABLE  `template` (
 
 LOCK TABLES `template` WRITE;
 /*!40000 ALTER TABLE `template` DISABLE KEYS */;
-INSERT INTO `template` VALUES (84,NULL),(7,'Acute dermal toxicity'),(8,'Acute inhalation toicity'),(9,'Acute oral toxicity'),(10,'Acute photoirritation'),(11,'Acute toxicity to fish (lethality)'),(12,'Adsorption/Desorption in sediment'),(13,'Adsorption/Desorption in soil '),(14,'Air- water partition coefficient (Henry`s law constant, H)'),(15,'BAF fish'),(16,'BAF other organisms '),(17,'BCF fish'),(18,'BCF other organisms '),(78,'Bioaccumulation'),(79,'Bioconcentration '),(19,'Biodegradation time frame (primary, ultimate degradation)'),(20,'Blood-brain barrier penetration'),(21,'Blood-lung barrier penetration'),(22,'Blood-testis barrier penetration'),(23,'Boiling point'),(89,'CAS Registry number'),(24,'Carcinogenicity'),(91,'Chemical name'),(27,'DNA-binding'),(86,'Descriptors'),(25,'Direct photolysis'),(26,'Dissociation constant (pKa)'),(1,'Ecotoxic effects'),(83,'Endocrine Activity'),(85,'Endpoints'),(2,'Environmental fate parameters '),(28,'Eye irritation/corrosion'),(29,'Gastrointestinal absorption'),(3,'Human health effects'),(30,'Hydrolysis '),(90,'IUPAC name'),(88,'Identifiers'),(31,'In vitro reproductive toxicity (e.g. embryotoxic effects in cell culture such as embryo stem cells)  '),(32,'In vivo pre-, peri-, post natal development and / or fertility (1 or 2 gen. Study or enhanced 1 gen study) '),(33,'In vivo pre-natal-developmental toxicity'),(34,'Indirect photolysis (OH-radical reaction, ozone-radical reaction, other)'),(35,'Long-term toxicity (survival, growth, reproduction)'),(36,'Long-term toxicity to Daphnia (lethality, inhibition of reproduction)'),(37,'Long-term toxicity to fish (egg/sac fry, growth inhibition of juvenile fish, early life stage, full life cycle)'),(38,'Melting point'),(39,'Metabolism (including metabolic clearance)'),(40,'Microbial inhibition (activated sludge respiration inhibition, inhibition of nitrification, other)'),(41,'Mutagenicity '),(42,'Octanol-air partition coefficient (Koa)'),(43,'Octanol-water distribution coefficient (D)'),(44,'Octanol-water partition coefficient (Kow)'),(45,'Ocular membrane penetration'),(46,'Organic carbon-sorption partition coefficient (organic carbon; Koc)'),(4,'Other'),(47,'Other (e.g. inhibition of specific enzymes involved in hormone synthesis or regulation, specify enzyme(s) and hormone)'),(48,'Oxidation '),(80,'Persistence: Abiotic degradation in air (Phototransformation)'),(81,'Persistence: Abiotic degradation in water'),(82,'Persistence: Biodegradation'),(49,'Photocarcinogenicity'),(50,'Photomutagenicity'),(51,'Photosensitisation'),(5,'Physicochemical effects '),(52,'Placental barrier penetration'),(53,'Protein-binding'),(54,'Ready/not ready biodegradability'),(55,'Receptor binding and gene expression (specify receptor)'),(56,'Receptor-binding (specify receptor)'),(57,'Repeated dose toxicity '),(58,'Respiratory sensitisation'),(59,'Short term toxicity (feeding, gavage, other)'),(61,'Short-term toxicity to Daphnia (immobilisation)'),(60,'Short-term toxicity to algae (inhibition of the exponential growth rate)'),(62,'Skin irritation /corrosion'),(63,'Skin penetration'),(64,'Skin sensitisation'),(65,'Surface tension'),(77,'Toxicity to birds'),(66,'Toxicity to earthworms (survival, growth, reproduction)'),(67,'Toxicity to plants (leaves, seed germination, root elongation)'),(68,'Toxicity to sediment organisms (survival, growth, reproduction)'),(69,'Toxicity to soil invertebrates (survival, growth, reproduction)'),(70,'Toxicity to soil microorganisms (inhibition of C-mineralisation, inhibition of N-mineralisation, other)'),(6,'Toxicokinetics '),(71,'Vapour pressure'),(72,'Vegetation-air partition coefficient'),(73,'Vegetation-soil partition coefficient'),(74,'Vegetation-water partition coefficient'),(75,'Water solubility');
+INSERT INTO `template` VALUES (84,NULL),(7,'Acute dermal toxicity'),(8,'Acute inhalation toicity'),(9,'Acute oral toxicity'),(10,'Acute photoirritation'),(11,'Acute toxicity to fish (lethality)'),(12,'Adsorption/Desorption in sediment'),(13,'Adsorption/Desorption in soil '),(14,'Air- water partition coefficient (Henry`s law constant, H)'),(15,'BAF fish'),(16,'BAF other organisms '),(17,'BCF fish'),(18,'BCF other organisms '),(78,'Bioaccumulation'),(79,'Bioconcentration '),(19,'Biodegradation time frame (primary, ultimate degradation)'),(20,'Blood-brain barrier penetration'),(21,'Blood-lung barrier penetration'),(22,'Blood-testis barrier penetration'),(23,'Boiling point'),(89,'CasRN'),(24,'Carcinogenicity'),(91,'Names'),(27,'DNA-binding'),(86,'Descriptors'),(25,'Direct photolysis'),(26,'Dissociation constant (pKa)'),(1,'Ecotoxic effects'),(83,'Endocrine Activity'),(85,'Endpoints'),(2,'Environmental fate parameters '),(28,'Eye irritation/corrosion'),(29,'Gastrointestinal absorption'),(3,'Human health effects'),(30,'Hydrolysis '),(90,'IUPAC name'),(88,'Identifiers'),(31,'In vitro reproductive toxicity (e.g. embryotoxic effects in cell culture such as embryo stem cells)  '),(32,'In vivo pre-, peri-, post natal development and / or fertility (1 or 2 gen. Study or enhanced 1 gen study) '),(33,'In vivo pre-natal-developmental toxicity'),(34,'Indirect photolysis (OH-radical reaction, ozone-radical reaction, other)'),(35,'Long-term toxicity (survival, growth, reproduction)'),(36,'Long-term toxicity to Daphnia (lethality, inhibition of reproduction)'),(37,'Long-term toxicity to fish (egg/sac fry, growth inhibition of juvenile fish, early life stage, full life cycle)'),(38,'Melting point'),(39,'Metabolism (including metabolic clearance)'),(40,'Microbial inhibition (activated sludge respiration inhibition, inhibition of nitrification, other)'),(41,'Mutagenicity '),(42,'Octanol-air partition coefficient (Koa)'),(43,'Octanol-water distribution coefficient (D)'),(44,'Octanol-water partition coefficient (Kow)'),(45,'Ocular membrane penetration'),(46,'Organic carbon-sorption partition coefficient (organic carbon; Koc)'),(4,'Other'),(47,'Other (e.g. inhibition of specific enzymes involved in hormone synthesis or regulation, specify enzyme(s) and hormone)'),(48,'Oxidation '),(80,'Persistence: Abiotic degradation in air (Phototransformation)'),(81,'Persistence: Abiotic degradation in water'),(82,'Persistence: Biodegradation'),(49,'Photocarcinogenicity'),(50,'Photomutagenicity'),(51,'Photosensitisation'),(5,'Physicochemical effects '),(52,'Placental barrier penetration'),(53,'Protein-binding'),(54,'Ready/not ready biodegradability'),(55,'Receptor binding and gene expression (specify receptor)'),(56,'Receptor-binding (specify receptor)'),(57,'Repeated dose toxicity '),(58,'Respiratory sensitisation'),(59,'Short term toxicity (feeding, gavage, other)'),(61,'Short-term toxicity to Daphnia (immobilisation)'),(60,'Short-term toxicity to algae (inhibition of the exponential growth rate)'),(62,'Skin irritation /corrosion'),(63,'Skin penetration'),(64,'Skin sensitisation'),(65,'Surface tension'),(77,'Toxicity to birds'),(66,'Toxicity to earthworms (survival, growth, reproduction)'),(67,'Toxicity to plants (leaves, seed germination, root elongation)'),(68,'Toxicity to sediment organisms (survival, growth, reproduction)'),(69,'Toxicity to soil invertebrates (survival, growth, reproduction)'),(70,'Toxicity to soil microorganisms (inhibition of C-mineralisation, inhibition of N-mineralisation, other)'),(6,'Toxicokinetics '),(71,'Vapour pressure'),(72,'Vegetation-air partition coefficient'),(73,'Vegetation-soil partition coefficient'),(74,'Vegetation-water partition coefficient'),(75,'Water solubility');
 /*!40000 ALTER TABLE `template` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +223,7 @@ CREATE TABLE  `dictionary` (
 
 LOCK TABLES `dictionary` WRITE;
 /*!40000 ALTER TABLE `dictionary` DISABLE KEYS */;
-INSERT INTO `dictionary` VALUES (11,'is_a',1),(35,'is_a',1),(36,'is_a',1),(37,'is_a',1),(40,'is_a',1),(59,'is_a',1),(60,'is_a',1),(61,'is_a',1),(66,'is_a',1),(67,'is_a',1),(68,'is_a',1),(69,'is_a',1),(70,'is_a',1),(77,'is_a',1),(4,'is_a',2),(12,'is_a',2),(13,'is_a',2),(19,'is_a',2),(25,'is_a',2),(30,'is_a',2),(34,'is_a',2),(46,'is_a',2),(48,'is_a',2),(54,'is_a',2),(72,'is_a',2),(73,'is_a',2),(74,'is_a',2),(78,'is_a',2),(79,'is_a',2),(80,'is_a',2),(81,'is_a',2),(82,'is_a',2),(7,'is_a',3),(8,'is_a',3),(9,'is_a',3),(10,'is_a',3),(24,'is_a',3),(28,'is_a',3),(31,'is_a',3),(32,'is_a',3),(33,'is_a',3),(41,'is_a',3),(47,'is_a',3),(49,'is_a',3),(50,'is_a',3),(51,'is_a',3),(55,'is_a',3),(56,'is_a',3),(57,'is_a',3),(58,'is_a',3),(62,'is_a',3),(64,'is_a',3),(4,'is_a',4),(14,'is_a',5),(23,'is_a',5),(26,'is_a',5),(38,'is_a',5),(42,'is_a',5),(43,'is_a',5),(44,'is_a',5),(65,'is_a',5),(71,'is_a',5),(75,'is_a',5),(20,'is_a',6),(21,'is_a',6),(22,'is_a',6),(27,'is_a',6),(29,'is_a',6),(39,'is_a',6),(45,'is_a',6),(52,'is_a',6),(53,'is_a',6),(63,'is_a',6),(15,'is_a',78),(16,'is_a',78),(17,'is_a',79),(18,'is_a',79),(85,'is_part_of',84),(86,'is_part_of',84),(88,'is_part_of',84),(1,'is_a',85),(2,'is_a',85),(3,'is_a',85),(4,'is_a',85),(5,'is_a',85),(6,'is_a',85),(89,'is_part_of',88),(90,'is_part_of',88),(91,'is_part_of',88);
+INSERT INTO `dictionary` VALUES (11,'is_a',1),(35,'is_a',1),(36,'is_a',1),(37,'is_a',1),(40,'is_a',1),(59,'is_a',1),(60,'is_a',1),(61,'is_a',1),(66,'is_a',1),(67,'is_a',1),(68,'is_a',1),(69,'is_a',1),(70,'is_a',1),(77,'is_a',1),(4,'is_a',2),(12,'is_a',2),(13,'is_a',2),(19,'is_a',2),(25,'is_a',2),(30,'is_a',2),(34,'is_a',2),(46,'is_a',2),(48,'is_a',2),(54,'is_a',2),(72,'is_a',2),(73,'is_a',2),(74,'is_a',2),(78,'is_a',2),(79,'is_a',2),(80,'is_a',2),(81,'is_a',2),(82,'is_a',2),(7,'is_a',3),(8,'is_a',3),(9,'is_a',3),(10,'is_a',3),(24,'is_a',3),(28,'is_a',3),(31,'is_a',3),(32,'is_a',3),(33,'is_a',3),(41,'is_a',3),(47,'is_a',3),(49,'is_a',3),(50,'is_a',3),(51,'is_a',3),(55,'is_a',3),(56,'is_a',3),(57,'is_a',3),(58,'is_a',3),(62,'is_a',3),(64,'is_a',3),(4,'is_a',4),(14,'is_a',5),(23,'is_a',5),(26,'is_a',5),(38,'is_a',5),(42,'is_a',5),(43,'is_a',5),(44,'is_a',5),(65,'is_a',5),(71,'is_a',5),(75,'is_a',5),(20,'is_a',6),(21,'is_a',6),(22,'is_a',6),(27,'is_a',6),(29,'is_a',6),(39,'is_a',6),(45,'is_a',6),(52,'is_a',6),(53,'is_a',6),(63,'is_a',6),(15,'is_a',78),(16,'is_a',78),(17,'is_a',79),(18,'is_a',79),(85,'is_part_of',84),(86,'is_part_of',84),(88,'is_part_of',84),(1,'is_a',85),(2,'is_a',85),(3,'is_a',85),(4,'is_a',85),(5,'is_a',85),(6,'is_a',85),(89,'is_a',88),(90,'is_a',88),(91,'is_a',88);
 /*!40000 ALTER TABLE `dictionary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,7 +478,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- integer property values
@@ -524,6 +524,13 @@ create view values_int_float as
 SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype,idreference,name FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
 union
 SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype,idreference,name FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype);
+
+-- -----------------------------------------------------
+-- ontology
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `ontology`;
+create view ontology as
+SELECT t1.idtemplate as subjectid,t2.idtemplate as objectid,t1.name as subject,relationship,t2.name as object FROM template as t1 join dictionary as d on t1.idtemplate=d.idsubject join template as t2 on d.idobject=t2.idtemplate;
 
 -- -----------------------------------------------------
 -- default users (guest, admin)
