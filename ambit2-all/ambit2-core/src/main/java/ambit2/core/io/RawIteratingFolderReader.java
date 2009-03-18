@@ -57,7 +57,9 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 	}
 	public IStructureRecord nextRecord() {
 		if (reader == null) return null;
-		return reader.nextRecord();
+		IStructureRecord record = reader.nextRecord();
+		assignCASRN(record);
+		return record;
 	}
 	//does file name contain CAS number? 
 	protected void assignCASRN(IStructureRecord record) {
