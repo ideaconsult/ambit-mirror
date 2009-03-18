@@ -31,9 +31,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.poi.hssf.record.formula.functions.T;
+import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -45,8 +46,11 @@ import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.search.AbstractStructureQuery;
 import ambit2.db.search.QueryExecutor;
+import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryStructure;
+import ambit2.db.search.StringCondition;
 import ambit2.hashcode.MoleculeAndAtomsHashing;
 
 /**
@@ -77,8 +81,10 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected PropertyValuesWriter propertyWriter;
 	protected SourceDataset dataset;
 	protected MoleculeReader molReader;
-	protected IStructureKey<String> key;
-	protected QueryStructure query_chemicals;
+	protected SmilesKey key;
+	protected CASKey casKey;
+	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
+	protected AbstractStructureQuery<String,String,StringCondition> query_cas;
 	protected QueryExecutor exec;
 	protected HashcodeKey hashcode;
 
@@ -88,10 +94,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		propertyWriter = new PropertyValuesWriter();
 		molReader = new MoleculeReader();
 		key = new SmilesKey();
+		casKey = new CASKey();
 		hashcode = new HashcodeKey();
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
 		query_chemicals.setFieldname(key.getKey());
+		
+		query_cas = new QueryField();
+		query_cas.setId(-1);
 		exec = new QueryExecutor();
 
 	}
@@ -128,33 +138,33 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	public void writeProperties(IStructureRecord structure,IAtomContainer molecule) throws SQLException, AmbitException {
 			if (molecule == null)
 				return;
-			if (structure.getProperties()==null)
-				structure.setProperties(molecule.getProperties());
-			else
-				structure.getProperties().putAll(molecule.getProperties());
 			propertyWriter.process(structure);
 			structure.setProperties(null);
 
 	}	
 	protected IAtomContainer getAtomContainer(IStructureRecord structure) {
 		try {
-			return molReader.process(structure);
+			IAtomContainer molecule = molReader.process(structure);
+			if (structure.getProperties()==null)
+				structure.setProperties(molecule.getProperties());
+			else
+				structure.getProperties().putAll(molecule.getProperties());
+			return molecule;
 		} catch (AmbitException x) {
 			logger.error(x);
 			return null;
 		}
 	}
-	protected void findChemical(String inchi, IStructureRecord record)  {
-		if (inchi == null) return;
+	protected void findChemical(AbstractStructureQuery<String,String,StringCondition> query, String value, IStructureRecord record)  {
+		if (value == null) return;
 		ResultSet rs = null;
 		try {
-			query_chemicals.setValue(inchi);
-			rs = exec.process(query_chemicals);
+			query.setValue(value);
+			rs = exec.process(query);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(2));
 				break;
 			}
-			exec.closeResults(rs);
 		} catch (Exception x) {
 			logger.error(x);
 		} finally {
@@ -176,11 +186,11 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		} finally {
 			
 		}
-		String thekey = null;
+		String smiles = null;
 		try {
-			thekey = key.process(molecule);
+			smiles = key.process(molecule);
 		} catch (Exception x) {
-			thekey = null;
+			smiles = null;
 		}
         //find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
@@ -202,16 +212,29 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	            	rs.close();
 	            }
         	}
-        } else findChemical(thekey,structure);
+        } else {
+        	//find by CAS
+        	String cas = null;
+        	try {
+        		cas = casKey.process(structure);
+        		if (cas!=null)
+        			findChemical(query_cas,cas,structure);
+        	} catch (Exception x) {
+        		logger.warn(x);
+        	}
+        	//if not found, find by SMILES
+        	if (structure.getIdchemical()<=0)
+        		findChemical(query_chemicals,smiles,structure);
+        }
         List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
         //add a new idchemical if idchemical <=0
         if (structure.getIdchemical() <= 0) {
         	if (ps_chemicals == null)
        		 ps_chemicals = connection.prepareStatement(insert_chemical,Statement.RETURN_GENERATED_KEYS);
-        	if (thekey==null)
+        	if (smiles==null)
         		ps_chemicals.setNull(1,Types.CHAR);
         	else
-        		ps_chemicals.setString(1,thekey);
+        		ps_chemicals.setString(1,smiles);
         	if (hash == null) hash = 0L;
         	ps_chemicals.setLong(2,hash);
         	
@@ -296,11 +319,44 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	}
 }
 
-interface IStructureKey<T> {
+interface IStructureKey<Value,M> {
 	public String getKey();
-	public T process(IAtomContainer molecule) throws AmbitException;
+	public Value process(M molecule) throws AmbitException;
 }
-class SmilesKey implements IStructureKey<String> {
+
+class CASKey implements IStructureKey<String,IStructureRecord> {
+	protected String key=null;
+	public CASKey() {
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public String process(IStructureRecord structure) throws AmbitException {
+		if (structure==null)
+			throw new AmbitException("Empty molecule!");
+		Object cas = structure.getProperty(key);
+		if ((key == null) || (cas==null)) {
+			//find which key corresponds to CAS
+			Iterator keys = structure.getProperties().keySet().iterator();
+			while (keys.hasNext()) {
+				Object newkey = keys.next();
+				if (CASNumber.isValid(structure.getProperties().get(newkey).toString())) {
+					this.key = newkey.toString();
+					return structure.getProperties().get(newkey).toString();
+				}
+			}
+		}
+		if (key == null) throw new AmbitException("CAS tag not defined");
+		Object o = structure.getProperty(key);
+		if (o != null) return o.toString();
+		else return null;
+	}
+}
+
+class SmilesKey implements IStructureKey<String,IAtomContainer> {
 	protected SmilesGenerator gen;
 	protected String key="smiles";
 	public SmilesKey() {
@@ -319,7 +375,7 @@ class SmilesKey implements IStructureKey<String> {
 	}
 }
 
-class EmptyKey implements IStructureKey<String> {
+class EmptyKey implements IStructureKey<String,IAtomContainer> {
 	
 	public String getKey() {
 		return null;
@@ -329,7 +385,7 @@ class EmptyKey implements IStructureKey<String> {
 	}
 }
 
-class InchiKey implements IStructureKey<String> {
+class InchiKey implements IStructureKey<String,IAtomContainer> {
 	protected InchiProcessor inchi;
 	protected String key;
 	public InchiKey() {
@@ -346,7 +402,7 @@ class InchiKey implements IStructureKey<String> {
 	}
 }
 
-class HashcodeKey implements IStructureKey<Long> {
+class HashcodeKey implements IStructureKey<Long,IAtomContainer> {
 	protected MoleculeAndAtomsHashing hashing;
 	protected String key;
 	public HashcodeKey() {

@@ -47,6 +47,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	 */
 	private static final long serialVersionUID = 3140079486695024274L;
 	protected Dictionary dictionary = new Dictionary();
+	protected Dictionary propertyDictionary = new Dictionary();
 
 	@Override
 	public void setDataset(SourceDataset dataset) {
@@ -77,14 +78,17 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	}
 
 	@Override
-	protected String getComments(String name,IStructureRecord target) {
+	protected Dictionary getComments(String name,IStructureRecord target) {
 		String n = name.toLowerCase();
-		if (n.startsWith("cas")) return CDKConstants.CASRN;
-		if (n.contains("name")) return CDKConstants.NAMES;
-		if (n.contains("iupac")) return "IUPAC Name";
-		if (n.contains("inchi")) return CDKConstants.INCHI;
-		if (n.contains("smiles")) return CDKConstants.SMILES;
-		return name;
+		propertyDictionary.setRelationship("is_a");
+		propertyDictionary.setParentTemplate("Identifiers");
+		if (n.startsWith("cas")) propertyDictionary.setTemplate(CDKConstants.CASRN);
+		else if (n.contains("name")) propertyDictionary.setTemplate(CDKConstants.NAMES);
+		else if (n.contains("iupac")) propertyDictionary.setTemplate("IUPAC Name");
+		else if (n.contains("inchi")) propertyDictionary.setTemplate(CDKConstants.INCHI);
+		else if (n.contains("smiles")) propertyDictionary.setTemplate(CDKConstants.SMILES);
+		else return null;
+		return propertyDictionary;
 	}
 
 	@Override

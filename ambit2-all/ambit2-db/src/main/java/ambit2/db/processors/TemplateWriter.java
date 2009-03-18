@@ -62,6 +62,7 @@ public class TemplateWriter extends AbstractRepositoryWriter<Dictionary, Diction
     	
     }
     public Dictionary write(Dictionary entry) throws SQLException {
+    	
     	boolean commit = getConnection().getAutoCommit();
     	try {
     		getConnection().setAutoCommit(false);
@@ -76,7 +77,7 @@ public class TemplateWriter extends AbstractRepositoryWriter<Dictionary, Diction
 		    	ps_template.execute(); 
 	    	}
 	    	
-	    	if ((entry.getTemplate()!=null ) && (entry.getParentTemplate()!=null )) {
+	    	if ((entry.getTemplate()!=null ) && (entry.getParentTemplate()!=null ) && (!entry.getTemplate().equals(entry.getParentTemplate()))) {
 		    	ps_dictionary.clearParameters();
 		    	ps_dictionary.setString(1,entry.getRelationship());
 		    	ps_dictionary.setString(2,entry.getTemplate());

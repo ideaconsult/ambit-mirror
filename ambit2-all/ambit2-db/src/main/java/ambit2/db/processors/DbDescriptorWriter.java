@@ -44,47 +44,11 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 	 * 
 	 */
 	private static final long serialVersionUID = -358115974932302101L;
-
-	/*
-    @Override
-    public DescriptorValue write(DescriptorValue descriptor) throws SQLException {
-
-        LiteratureEntry le = new LiteratureEntry(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
-        le = referenceWriter.write(le);
-        
-        String[] names = descriptor.getNames();
-        for (int i=0; i < names.length; i++) {
-            ps_selectdescriptor.clearParameters();
-            ps_selectdescriptor.setString(1, names[i]);
-            ps_selectdescriptor.setInt(2, le.getId());
-            
-            boolean found = false;
-            ResultSet rs1 = ps_selectdescriptor.executeQuery();
-            while (rs1.next()) {
-                descriptorEntry(descriptor,rs1.getInt(1),i);
-                found = true;
-            }
-            rs1.close();
-            
-            if (!found) {
-                ps_descriptor.clearParameters();
-                ps_descriptor.setInt(1,le.getId());
-                ps_descriptor.setString(2,names[i]);
-                ps_descriptor.setNull(3,Types.VARCHAR);
-                ps_descriptor.setString(4,descriptor.getSpecification().getImplementationIdentifier());
-                ps_descriptor.executeUpdate();
-                ResultSet rs = ps_descriptor.getGeneratedKeys();
-    
-                while (rs.next()) {
-                    descriptorEntry(descriptor,rs.getInt(1),i);
-                } 
-                rs.close();
-            }
-        }
-
-        return descriptor;
-    }
-    */
+	protected Dictionary descriptorDictionary;
+	public DbDescriptorWriter() {
+		descriptorDictionary = new Dictionary();
+		descriptorDictionary.setParentTemplate("Descriptors");
+	}
     @Override
     protected DescriptorValue transform(DescriptorValue target) {
     	return target;
@@ -96,8 +60,9 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
     }
 
 	@Override
-	protected String getComments(String name,DescriptorValue descriptor) {
-		return descriptor.getSpecification().getImplementationIdentifier();
+	protected Dictionary getComments(String name,DescriptorValue descriptor) {
+		descriptorDictionary.setTemplate(name);
+		return descriptorDictionary;
 	}
 	@Override
 	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {

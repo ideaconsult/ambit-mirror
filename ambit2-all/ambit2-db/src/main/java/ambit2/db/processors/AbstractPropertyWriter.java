@@ -53,6 +53,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     protected DbReferenceWriter referenceWriter;
     protected TemplateWriter templateWriter;
     protected SourceDataset dataset = null;
+
 	public SourceDataset getDataset() {
 		return dataset;
 	}
@@ -114,7 +115,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     }    
     protected abstract LiteratureEntry getReference(Target target);
     protected abstract Iterable<String> getPropertyNames(Target target);
-    protected abstract String getComments(String name,Target target);
+    protected abstract Dictionary getComments(String name,Target target);
     protected abstract void descriptorEntry(Target target,int idproperty,String propertyName, int propertyIndex,int idtuple) throws SQLException;
 
     protected int getTuple(SourceDataset dataset) {
@@ -153,9 +154,11 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
                 ps_descriptor.setInt(1,le.getId());
                 ps_descriptor.setString(2,name);
                 ps_descriptor.setNull(3,Types.VARCHAR);
-                String comments = getComments(name,target);
-                if (comments == null) comments = name;
-                ps_descriptor.setString(4,comments);
+                Dictionary comments = getComments(name,target);
+                if (comments == null)
+                	ps_descriptor.setString(4,name);
+                else
+                	ps_descriptor.setString(4,comments.getTemplate());
                 ps_descriptor.executeUpdate();
                 
                 ResultSet rs = ps_descriptor.getGeneratedKeys();
@@ -163,6 +166,13 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	                while (rs.next()) {
 	                	//
 	                	int iddescriptor = rs.getInt(1);
+	                	
+	                    if (comments != null) {
+	                    	templateWriter.write(comments);
+	                    	comments.setParentTemplate(comments.getTemplate());
+	                    	comments.setTemplate(name);
+	                    	write(comments,iddescriptor);                	
+	                    }	                	
 	                	templateEntry(target,iddescriptor);	                	
 	                    descriptorEntry(target,iddescriptor,name,i,idtuple);
 		                    
@@ -187,14 +197,17 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     
     protected  void templateEntry(Target target,int idproperty) throws SQLException {
     	
-    	Dictionary dict = getTemplate(target);
-
-    	templateWriter.write(dict);
-    	ps_templatedef.clearParameters();
-    	ps_templatedef.setInt(1,idproperty);
-    	ps_templatedef.setInt(2,idproperty);
-    	ps_templatedef.setString(3,dict.getTemplate());    	
-    	ps_templatedef.execute();
+    	write(getTemplate(target),idproperty);
 
     }
+    protected  void write(Dictionary template,int idproperty) throws SQLException {
+    	
+    	templateWriter.write(template);
+    	ps_templatedef.clearParameters();
+    	ps_templatedef.setInt(1,idproperty);//idproperty
+    	ps_templatedef.setInt(2,idproperty);//order
+    	ps_templatedef.setString(3,template.getTemplate());    	
+    	ps_templatedef.execute();
+
+    }    
 }
