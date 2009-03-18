@@ -53,6 +53,7 @@ public interface IStructureRecord {
 
     public abstract void setProperties(Map properties);
 
+    public Object getProperty(Object key);
     public abstract void clear();
 
     public abstract String getWritableContent();

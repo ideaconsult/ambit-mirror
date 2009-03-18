@@ -113,6 +113,11 @@ public class StructureRecord implements IStructureRecord {
 	public void setProperties(Map properties) {
 		this.properties = properties;
 	}
+	public Object getProperty(Object key) {
+		if (properties != null)
+			return properties.get(key);
+		else return null;
+	}
 	/* (non-Javadoc)
      * @see ambit2.repository.IStructureRecord#clear()
      */
