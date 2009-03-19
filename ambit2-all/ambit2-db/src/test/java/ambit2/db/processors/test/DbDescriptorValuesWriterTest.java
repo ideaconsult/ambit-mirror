@@ -54,6 +54,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
@@ -355,7 +356,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		
 		
 		DescriptorsFactory factory = new DescriptorsFactory();
-		
+
 		PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
 		Profile profile = factory.process(null);
 		Iterator<Property> i = profile.getProperties(true);
@@ -374,18 +375,18 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 
 				}
 			} catch (Exception x) {
-				x.printStackTrace();
+				throw new Exception(x);
 			}
 			
 		}
 		
 		
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(15,names.getRowCount());
+		Assert.assertEquals(3+countValues,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values WHERE status ='OK' ");	
-		Assert.assertEquals(12,values.getRowCount());    
-		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template join template_def using(idtemplate) where name='Descriptors'");	
-		Assert.assertEquals(12,template_def.getRowCount());			
+		Assert.assertEquals(countValues,values.getRowCount());    
+		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT subject,object,properties.name FROM ontology join template_def on ontology.subjectid = template_def.idtemplate join properties using(idproperty) where object=\"Descriptors\"");	
+		Assert.assertEquals(countValues,template_def.getRowCount());			
         
 		/*
         DescriptorValue v = new DescriptorValue(

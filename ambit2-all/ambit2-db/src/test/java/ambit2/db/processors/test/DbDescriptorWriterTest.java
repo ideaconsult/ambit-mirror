@@ -41,6 +41,8 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.db.processors.DbDescriptorWriter;
+import ambit2.descriptors.FunctionalGroup;
+import ambit2.descriptors.FunctionalGroupDescriptor;
 
 /**
  * Tests writing two descriptors with different specifications
@@ -116,4 +118,35 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 		Assert.assertEquals(0,values.getRowCount());		
 		c.close();
     }
+	@Test
+    public void testWriteFunctionalGroups() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
+        DbDescriptorWriter writer = new DbDescriptorWriter();
+        IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		Assert.assertEquals(3,names.getRowCount());
+		
+		
+        writer.setConnection(c.getConnection());
+        writer.open();
+        FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
+
+        DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
+        //for (String name: v.getNames())      	System.out.println(name);
+        Assert.assertEquals(4,v.getNames().length);
+        writer.write(v);
+        c.close();
+        
+        c = getConnection();
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
+		Assert.assertEquals(7,names.getRowCount());
+		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
+		Assert.assertEquals(0,values.getRowCount());		
+		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template where name=\""+d.getSpecification().getImplementationTitle()+"\"");	
+		Assert.assertEquals(1,templates.getRowCount());			
+		templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template_properties where template=\""+d.getSpecification().getImplementationTitle()+"\"");	
+		Assert.assertEquals(v.getNames().length,templates.getRowCount());			
+
+		c.close();
+    }	
 }

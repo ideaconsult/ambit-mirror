@@ -72,8 +72,7 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
     
 	@Override
 	protected Dictionary getComments(String name,DescriptorValue descriptor) {
-		descriptorDictionary.setTemplate(name);
-		return descriptorDictionary;
+		return null;
 	}
 	@Override
 	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {
@@ -104,9 +103,11 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
         return new Double(value);    
 	}
 	@Override
-	protected Dictionary getTemplate(DescriptorValue target)
+	protected Dictionary getTemplate(DescriptorValue descriptor)
 			throws SQLException {
-		return new Dictionary("Descriptors","All");
+		descriptorDictionary.setTemplate(descriptor.getSpecification().getImplementationTitle());
+		descriptorDictionary.setParentTemplate("Descriptors");
+		return descriptorDictionary;
 	}
 
 }

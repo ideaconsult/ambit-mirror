@@ -61,8 +61,9 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 
 	@Override
 	protected Dictionary getComments(String name,DescriptorValue descriptor) {
-		descriptorDictionary.setTemplate(name);
-		return descriptorDictionary;
+		//descriptorDictionary.setParentTemplate(descriptor.getSpecification().getSpecificationReference());
+		//descriptorDictionary.setTemplate(name);
+		return null;//descriptorDictionary;
 	}
 	@Override
 	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {
@@ -70,12 +71,14 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 	}
 	@Override
 	protected LiteratureEntry getReference(DescriptorValue descriptor) {
-		return new LiteratureEntry(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
+		return new LiteratureEntry(descriptor.getSpecification().getImplementationIdentifier(),descriptor.getSpecification().getSpecificationReference());
 	}
 	@Override
-	protected Dictionary getTemplate(DescriptorValue target)
+	protected Dictionary getTemplate(DescriptorValue descriptor)
 			throws SQLException {
-		return new Dictionary("Descriptors","All");
+		descriptorDictionary.setTemplate(descriptor.getSpecification().getImplementationTitle());
+		descriptorDictionary.setParentTemplate("Descriptors");
+		return descriptorDictionary;
 	}
 
 }

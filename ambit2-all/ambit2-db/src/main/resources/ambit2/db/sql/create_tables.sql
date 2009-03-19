@@ -533,6 +533,13 @@ create view ontology as
 SELECT t1.idtemplate as subjectid,t2.idtemplate as objectid,t1.name as subject,relationship,t2.name as object FROM template as t1 join dictionary as d on t1.idtemplate=d.idsubject join template as t2 on d.idobject=t2.idtemplate;
 
 -- -----------------------------------------------------
+-- Template definitions
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `template_properties`;
+create view template_properties as
+SELECT idtemplate,template.name as template,idproperty,properties.name as property FROM template join template_def using(idtemplate) join properties using(idproperty);
+
+-- -----------------------------------------------------
 -- default users (guest, admin)
 -- -----------------------------------------------------
 
