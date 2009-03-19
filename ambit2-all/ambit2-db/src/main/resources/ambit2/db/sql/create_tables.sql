@@ -134,7 +134,7 @@ DROP TABLE IF EXISTS `property_string`;
 CREATE TABLE  `property_string` (
   `idvalue` int(10) unsigned NOT NULL auto_increment,
   `idtype` int(10) unsigned NOT NULL default '0',
-  `value` varchar(200) collate utf8_bin NOT NULL,
+  `value` varchar(255) collate utf8_bin NOT NULL,
   PRIMARY KEY  (`idvalue`),
   UNIQUE KEY `Index_3` (`value`),
   UNIQUE KEY `Index_2` (`idvalue`,`idtype`)

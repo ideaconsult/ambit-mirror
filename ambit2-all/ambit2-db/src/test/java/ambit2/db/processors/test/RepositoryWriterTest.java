@@ -177,11 +177,11 @@ delete from struc_dataset where idstructure>3
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(34,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(371,property_values.getRowCount());		
+		Assert.assertEquals(378,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(15,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(371,p_tuples.getRowCount());				
+		Assert.assertEquals(378,p_tuples.getRowCount());				
 		ITable p_cas = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,name,value FROM structure join values_string using(idstructure) join properties using(idproperty) where name=\"CasRN\"");
 		Assert.assertEquals(13,p_cas.getRowCount());
 	

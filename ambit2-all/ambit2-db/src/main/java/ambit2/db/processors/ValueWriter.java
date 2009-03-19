@@ -111,6 +111,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	return tuple;
     }
     protected boolean insertValue(String value, int idproperty, int idtuple, mode error) throws SQLException {
+    	if ((value != null) && (value.length()>255))
+    		value = value.substring(0,255);
     	if (structure == null) throw new SQLException("Undefined structure");    	
     	if (ps_insertstring == null)
     		ps_insertstring = connection.prepareStatement(insert_string);
@@ -128,8 +130,9 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_descriptorvalue_string.setString(3, error.toString());
     	if (value == null)
     		ps_descriptorvalue_string.setNull(4,Types.VARCHAR);
-    	else
+    	else 
     		ps_descriptorvalue_string.setString(4, value);
+    	
     	if (ps_descriptorvalue_string.executeUpdate()>0) { 
     		if (idtuple >0 ) {
 	        	if (ps_inserttuplestring == null) ps_inserttuplestring = connection.prepareStatement(insert_tuple_string);
