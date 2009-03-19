@@ -224,13 +224,16 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		cas = casKey.process(structure);
         		if (cas!=null)
         			findChemical(query_cas,cas,structure);
+        		else 
+        			findChemical(query_chemicals,smiles,structure);
         	} catch (Exception x) {
         		x.printStackTrace();
         		logger.warn(x);
+            	//if not found, find by SMILES
+            	if (structure.getIdchemical()<=0)
+            		findChemical(query_chemicals,smiles,structure);        		
         	}
-        	//if not found, find by SMILES
-        	if (structure.getIdchemical()<=0)
-        		findChemical(query_chemicals,smiles,structure);
+
         }
         List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
         //add a new idchemical if idchemical <=0
