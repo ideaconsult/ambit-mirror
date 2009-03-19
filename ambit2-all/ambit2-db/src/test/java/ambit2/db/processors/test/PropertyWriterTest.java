@@ -45,7 +45,6 @@ import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.RepositoryReader;
-import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.PropertyValuesWriter;
 
 public class PropertyWriterTest  extends DbUnitTest {
