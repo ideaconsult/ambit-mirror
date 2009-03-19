@@ -34,7 +34,6 @@
 
 <group family="amine (-amino)" name="Enamine" smarts="[NX3][CX3]=[CX3]" hint=""/>
 <group family="amine (-amino)" name="Primary amine, not amide" smarts="[NX3;H2;!$(NC=[!#6]);!$(NC#[!#6])][#6]" hint="Not amide (C not double bonded to a hetero-atom), not ammonium ion (N must be 3-connected), not ammonia (N's H-count can't be 3), not cyanamide (C not triple bonded to a hetero-atom)"/>
-<group family="amine (-amino)" name="Two primary or secondary amines" smarts="[NX3;H2,H1;!$(NC=O)].[NX3;H2,H1;!$(NC=O)]" hint="Here we use the disconnection symbol ('.') to match two separate unbonded identical patterns."/>
 <group family="amine (-amino)" name="Enamine or Aniline Nitrogen" smarts="[NX3][$(C=C),$(cc)]" hint=""/>
 <group family="amino acids" name="Generic amino acid: low specificity" smarts="[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]" hint="For use w/ non-standard a.a. search. hits pro but not gly. Hits acids and conjugate bases. Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal)"/>
 <group family="amino acids" name="Dipeptide group. generic amino acid: low specificity. " smarts="[NX3H2,NH3X4+][CX4H]([*])[CX3](=[OX1])[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-]" hint="Won't hit pro or gly. Hits acids and conjugate bases."/>
@@ -49,7 +48,7 @@
 <group family="azide (-azido)" name="Azide group." hint="Hits any atom with an attached azide." smarts="[$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]"/>
 <group family="azide (-azido)" name="Azide ion." smarts="[$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])]" hint="Hits N in azide ion"/>
 
-<group family="azo" name="ANitrogen." smarts="[#7]" hint="Nitrogen in N-containing compound. aromatic or aliphatic. Most general interpretation of 'azo'"/>
+<group family="azo" name="A Nitrogen." smarts="[#7]" hint="Nitrogen in N-containing compound. aromatic or aliphatic. Most general interpretation of 'azo'"/>
 <group family="azo" name="Azo Nitrogen. Low specificity." smarts="[NX2]=N" hint="Hits diazene, azoxy and some diazo structures"/>
 <group family="azo" name="Azo Nitrogen.diazene" smarts="[NX2]=[NX2]" hint="(diaza alkene)"/>
 <!--
