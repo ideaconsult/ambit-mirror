@@ -38,6 +38,7 @@ import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.tools.MFAnalyser;
 
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.StructureRecord;
@@ -156,12 +157,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		}
 	}
 	protected void findChemical(AbstractStructureQuery<String,String,StringCondition> query, String value, IStructureRecord record)  {
+		//System.out.println("Search chemical  "+value);
 		if (value == null) return;
 		ResultSet rs = null;
 		try {
 			query.setValue(value);
 			rs = exec.process(query);
 			while (rs.next()) {
+				//System.out.println("Found chemical "+rs.getInt(2)+ " "+value);
 				record.setIdchemical(rs.getInt(2));
 				break;
 			}
@@ -189,9 +192,11 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		String smiles = null;
 		try {
 			smiles = key.process(molecule);
+			if ("".equals(smiles)) smiles= null;
 		} catch (Exception x) {
 			smiles = null;
 		}
+		
         //find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
         	if (structure.getIdstructure()>0) {
@@ -220,6 +225,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		if (cas!=null)
         			findChemical(query_cas,cas,structure);
         	} catch (Exception x) {
+        		x.printStackTrace();
         		logger.warn(x);
         	}
         	//if not found, find by SMILES
@@ -337,8 +343,8 @@ class CASKey implements IStructureKey<String,IStructureRecord> {
 	public String process(IStructureRecord structure) throws AmbitException {
 		if (structure==null)
 			throw new AmbitException("Empty molecule!");
-		Object cas = structure.getProperty(key);
-		if ((key == null) || (cas==null)) {
+		
+		if ((key == null) || (structure.getProperty(key)==null)) {
 			//find which key corresponds to CAS
 			Iterator keys = structure.getProperties().keySet().iterator();
 			while (keys.hasNext()) {
@@ -371,7 +377,14 @@ class SmilesKey implements IStructureKey<String,IAtomContainer> {
 	public String process(IAtomContainer molecule) throws AmbitException {
 		if ((molecule==null) || (molecule.getAtomCount()==0))
 			throw new AmbitException("Empty molecule!");
-		return gen.createSMILES((IMolecule)molecule);
+		try {
+			IAtomContainer mol = (IAtomContainer)molecule.clone();
+			MFAnalyser mf = new MFAnalyser((IMolecule)mol);
+			mol = mf.removeHydrogensPreserveMultiplyBonded();
+			return gen.createChiralSMILES((IMolecule)mol,new boolean[mol.getAtomCount()]);
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
 	}
 }
 
