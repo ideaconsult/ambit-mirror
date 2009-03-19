@@ -48,13 +48,16 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	private static final long serialVersionUID = 3140079486695024274L;
 	protected Dictionary dictionary = new Dictionary();
 	protected Dictionary propertyDictionary = new Dictionary();
+	protected LiteratureEntry reference = new LiteratureEntry("Structure properties");
 
 	@Override
 	public void setDataset(SourceDataset dataset) {
 		super.setDataset(dataset);
-		if (getDataset() != null)
+		if (getDataset() != null) {
 			dictionary = new Dictionary(getDataset().getName(),"Dataset");
-		else
+			reference.setTitle(dataset.getTitle());
+			reference.setURL(dataset.getURL());
+		} else
 			dictionary = new Dictionary("Dataset","All");
 	}
 	@Override
@@ -98,7 +101,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 
 	@Override
 	protected LiteratureEntry getReference(IStructureRecord target) {
-		return new LiteratureEntry("Structure properties");
+		return reference;
 	}
 
 	@Override
