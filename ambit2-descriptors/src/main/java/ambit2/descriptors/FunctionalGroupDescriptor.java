@@ -36,6 +36,8 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
+
 
 /**
  * Functional groups (by SMARTS)
@@ -46,7 +48,7 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
     public final String[] paramNames = {"funcgroups","verbose"};
 	protected List<FunctionalGroup> groups;
 	protected String[] names;
-
+	protected HydrogenAdderProcessor hp = new HydrogenAdderProcessor();
 	protected boolean verbose = false;
 	public boolean isVerbose() {
 		return verbose;
@@ -72,8 +74,9 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 			names[i]=groups.get(i).getName();
 		for (FunctionalGroup group:groups)	group.setVerboseMatch(isVerbose());		
 	}
-	public DescriptorValue calculate(IAtomContainer target) throws CDKException {
+	public DescriptorValue calculate(IAtomContainer atomcontainer) throws CDKException {
 		try {
+			IAtomContainer target = hp.process((IAtomContainer)atomcontainer.clone());
 			IntegerArrayResult results = new IntegerArrayResult();
 			List explanation = new ArrayList();
 			List<String> realNames = new ArrayList<String>();
@@ -119,10 +122,10 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml",
+            "Functional groups, defined as in http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml",
 		    this.getClass().getName(),
-		    "$Id: FunctionalGroupDescriptor.java,v 0.1 2007/12/13 14:59:00 Nina Jeliazkova Exp $",
-            "ambit.acad.bg");
+		    "$Id: FunctionalGroupDescriptor.java,v 0.2 2009/03/19 08:10:00 Nina Jeliazkova Exp $",
+            "http://ambit.sourceforge.net");
     };
     /**
      * 3 parameters : Smarts,name,hint; first two are mandatory.

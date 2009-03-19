@@ -95,8 +95,7 @@ public class FunctionalGroupDescriptorTest {
 	public void testDefaultGroups() throws Exception {
 		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
 		IAtomContainer mol = MoleculeFactory.makeAlkane(10);
-		mol = hadder.process(mol);
-		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,2);
+		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,1);
 
 	}			
 		
@@ -106,10 +105,10 @@ public class FunctionalGroupDescriptorTest {
 		DescriptorValue value = d.calculate(m);
 		IDescriptorResult v = value.getValue();
 		Assert.assertEquals(hits,value.getNames().length);
-		/*
-		for (int i=0; i < groups.size();i++)
-			Assert.assertEquals(groups.get(i).getName(),value.getNames()[i]);
-		*/
+		
+		//for (int i=0; i < groups.size();i++)
+			//Assert.assertEquals(groups.get(i).getName(),value.getNames()[i]);
+		
 		Assert.assertTrue(v instanceof VerboseDescriptorResult);
 		VerboseDescriptorResult verboseResult = (VerboseDescriptorResult) v;
 		IDescriptorResult r = verboseResult.getResult();
@@ -142,7 +141,8 @@ public class FunctionalGroupDescriptorTest {
 	public void testGetSpecification() {
 		DescriptorSpecification spec = d.getSpecification();
 		assertEquals(FunctionalGroupDescriptor.class.getName(),spec.getImplementationTitle());
-		assertEquals("http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml",spec.getSpecificationReference());
+		assertEquals("Functional groups, defined as in http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml"
+				,spec.getSpecificationReference());
 	}
 
 	@Test

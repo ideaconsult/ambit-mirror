@@ -1,6 +1,5 @@
 package ambit2.descriptors.processors;
 
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -37,7 +36,7 @@ public class DescriptorCalculationProcessor extends
 		
 		try {
 				return descriptor.calculate(target);
-		} catch (CDKException x) {
+		} catch (Exception x) {
 				throw new AmbitException(x);
 		
 		}
