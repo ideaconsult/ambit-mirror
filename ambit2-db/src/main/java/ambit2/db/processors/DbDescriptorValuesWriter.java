@@ -32,6 +32,8 @@ package ambit2.db.processors;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import javax.xml.transform.OutputKeys;
+
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -109,5 +111,22 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 		descriptorDictionary.setParentTemplate("Descriptors");
 		return descriptorDictionary;
 	}
-
+	@Override
+	protected boolean insertValue(double value, int idproperty, int idtuple,
+			ambit2.db.processors.AbstractPropertyWriter.mode error)
+			throws SQLException {
+		return super.insertValue(value, idproperty, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
+	}
+	@Override
+	protected boolean insertValue(int value, int idproperty, int idtuple,
+			ambit2.db.processors.AbstractPropertyWriter.mode error)
+			throws SQLException {
+		return super.insertValue(value, idproperty, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
+	}
+	@Override
+	protected boolean insertValue(String value, int idproperty, int idtuple,
+			ambit2.db.processors.AbstractPropertyWriter.mode error)
+			throws SQLException {
+		return super.insertValue(value, idproperty, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
+	}
 }

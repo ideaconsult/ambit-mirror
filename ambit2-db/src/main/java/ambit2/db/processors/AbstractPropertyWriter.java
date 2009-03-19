@@ -43,7 +43,7 @@ import ambit2.db.exceptions.DbAmbitException;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
-	protected enum mode  {OK, ERROR};
+	protected enum mode  {OK, UNKNOWN,ERROR};
 	protected static final String select_descriptor = "SELECT idproperty,idreference,name,units,comments,islocal,idreference,title,url from properties join catalog_references using(idreference) where name=? and idreference=?";
     protected static final String insert_descriptor = "INSERT IGNORE INTO properties (idproperty,idreference,name,units,comments,islocal) VALUES (null,?,?,?,?,0)";
     protected static final String insert_templatedef = "INSERT IGNORE INTO template_def SELECT idtemplate,?,? from template WHERE name=?";

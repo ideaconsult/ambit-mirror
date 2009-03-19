@@ -199,22 +199,22 @@ delete from struc_dataset where idstructure>3
         
         c = getConnection();
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
-		Assert.assertEquals(2,chemicals.getRowCount());
+		Assert.assertEquals(3,chemicals.getRowCount());
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(2,strucs.getRowCount());
+		Assert.assertEquals(3,strucs.getRowCount());
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
-		Assert.assertEquals(2,struc_src.getRowCount());
+		Assert.assertEquals(3,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(13,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(26,property_values.getRowCount());		
+		Assert.assertEquals(39,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(2,tuples.getRowCount());			
+		Assert.assertEquals(3,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(26,p_tuples.getRowCount());				
+		Assert.assertEquals(39,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties
@@ -242,7 +242,7 @@ delete from struc_dataset where idstructure>3
             IStructureRecord record = reader.nextRecord();
 			writer.write(record);
 			records ++;
-			//System.out.println(record);
+			System.out.println(record);
 		}
 		reader.close();
 		writer.close();
