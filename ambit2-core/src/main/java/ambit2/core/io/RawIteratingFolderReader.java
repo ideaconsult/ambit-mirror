@@ -63,6 +63,8 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 	}
 	//does file name contain CAS number? 
 	protected void assignCASRN(IStructureRecord record) {
+		if (record.getProperty(CDKConstants.CASRN)!=null)
+			record.getProperties().remove(CDKConstants.CASRN);
 		int dot = files[index].getName().indexOf('.');
 		if (dot >= 0) {
 			String cas = files[index].getName().substring(0,dot);
@@ -75,7 +77,7 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 	}
 	protected IRawReader<IStructureRecord> getItemReader(int index) throws Exception {
 		String name = files[index].getName().toLowerCase();
-		//System.out.println(index+ "\t"+name);
+		System.out.println(index+ "\t"+name);
 		if (name.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) 
 			return (IRawReader<IStructureRecord>)new RawIteratingSDFReader(new FileReader(files[index]));
 		else throw new Exception("Unsupported format "+name); 
