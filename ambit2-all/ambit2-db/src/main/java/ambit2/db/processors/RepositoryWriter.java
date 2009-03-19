@@ -360,7 +360,7 @@ class CASKey implements IStructureKey<String,IStructureRecord> {
 		}
 		if (key == null) throw new AmbitException("CAS tag not defined");
 		Object o = structure.getProperty(key);
-		if (o != null) return o.toString();
+		if ((o != null) && CASNumber.isValid(o.toString())) return o.toString();
 		else return null;
 	}
 }

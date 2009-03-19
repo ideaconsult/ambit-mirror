@@ -71,41 +71,43 @@ CREATE TABLE  `chemicals` (
   `smiles` text character set latin1 collate latin1_bin,
   `formula` varchar(64) default NULL,
   `hashcode` bigint(20) NOT NULL default '0',
+  `label` enum('OK','UNKNOWN','ERROR') NOT NULL default 'UNKNOWN',
   PRIMARY KEY  (`idchemical`),
   KEY `sinchi` (`inchi`(760)),
   KEY `ssmiles` (`smiles`(760)),
   KEY `idchemical` (`idchemical`),
   KEY `inchi` (`inchi`(767)),
   KEY `formula` (`formula`),
-  KEY `hashcode` USING BTREE (`hashcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+  KEY `hashcode` USING BTREE (`hashcode`),
+  KEY `Index_8` (`label`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `structure`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `structure` ;
-
 CREATE TABLE  `structure` (
   `idstructure` int(11) unsigned NOT NULL auto_increment,
   `idchemical` int(11) unsigned NOT NULL,
   `structure` blob NOT NULL,
-  `format` enum('SDF','CML') collate utf8_bin NOT NULL default 'CML',
+  `format` enum('SDF','CML','MOL') collate utf8_bin NOT NULL default 'CML',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `user_name` varchar(16) collate utf8_bin default NULL,
   `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
+  `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
   PRIMARY KEY  (`idstructure`),
   KEY `FK_structure_2` (`user_name`),
   KEY `idchemical` USING BTREE (`idchemical`),
+  KEY `Index_4` (`label`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DELIMITER $
 CREATE TRIGGER copy_history BEFORE UPDATE ON STRUCTURE
   FOR EACH ROW BEGIN
-   INSERT INTO HISTORY (idstructure,structure,format,updated,user_name,type_structure)
-        SELECT idstructure,structure,format,updated,user_name,type_structure FROM structure
+   INSERT INTO HISTORY (idstructure,structure,format,updated,user_name,type_structure,label)
+        SELECT idstructure,structure,format,updated,user_name,type_structure,label FROM structure
         WHERE structure.idstructure = OLD.idstructure;
   END $
 DELIMITER ;
@@ -251,7 +253,7 @@ CREATE TABLE  `property_values` (
   `idvalue` int(10) unsigned NOT NULL,
   `idtype` int(10) unsigned NOT NULL default '1',
   `user_name` varchar(16) collate utf8_bin NOT NULL,
-  `status` enum('OK','ERROR') collate utf8_bin NOT NULL default 'OK',
+  `status` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `Index_2` USING BTREE (`idproperty`,`idstructure`,`idtype`),
   KEY `FK_property_values_1` (`user_name`),
@@ -260,6 +262,36 @@ CREATE TABLE  `property_values` (
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- Table `quality_labels` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `quality_labels`;
+CREATE TABLE  `quality_labels` (
+  `id` int(10) unsigned NOT NULL,
+  `user_name` varchar(16) collate utf8_bin NOT NULL,
+  `label` enum('OK','Probably OK','Unknown','Probably ERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
+  PRIMARY KEY  USING BTREE (`id`,`user_name`),
+  KEY `FK_quality_labels_2` (`user_name`),
+  KEY `FK_quality_labels_3` (`label`),
+  CONSTRAINT `FK_quality_labels_1` FOREIGN KEY (`id`) REFERENCES `property_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_quality_labels_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- Table `quality_structure` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `quality_structure`;
+CREATE TABLE  `quality_structure` (
+  `idstructure` int(10) unsigned NOT NULL,
+  `user_name` varchar(16) collate utf8_bin NOT NULL,
+  `label` enum('OK','Probably OK','Unknown','Probably ERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
+  PRIMARY KEY  USING BTREE (`idstructure`,`user_name`),
+  KEY `FK_quality_struc_2` (`user_name`),
+  KEY `FK_quality_struc_3` (`label`),
+  CONSTRAINT `FK_quality_struc_1` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_quality_struc_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -478,7 +510,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,3,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- integer property values

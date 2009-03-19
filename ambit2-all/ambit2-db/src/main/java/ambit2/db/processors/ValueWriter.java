@@ -233,17 +233,17 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	if (value instanceof Number) {
     		if (value instanceof Integer) {
     			logger.warn(propertyName + value);
-    			insertValue(((Integer)value).intValue(),idproperty,idtuple,mode.OK);
+    			insertValue(((Integer)value).intValue(),idproperty,idtuple,mode.UNKNOWN);
     		} else
     		if ((value instanceof Double) && ((Double)value).isNaN()) {
     			logger.warn(propertyName + value);
     			insertValue(value.toString(),idproperty,idtuple,mode.ERROR);
     		} else
-    			insertValue(((Number)value).doubleValue(),idproperty,idtuple,mode.OK);
+    			insertValue(((Number)value).doubleValue(),idproperty,idtuple,mode.UNKNOWN);
     			
     	} else
     		if (value != null)
-    			insertValue(value.toString(),idproperty,idtuple,mode.OK);
+    			insertValue(value.toString(),idproperty,idtuple,mode.UNKNOWN);
     		else
     			insertValue(null,idproperty,idtuple,mode.ERROR);
 	
