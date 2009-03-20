@@ -34,11 +34,11 @@ public class OutputStreamConvertor<T,Q extends IQueryRetrieval<T>>  extends Repr
 	            		writer = new OutputStreamWriter(stream);	  
 	            		getReporter().setOutput(writer);
 	            		getReporter().process(query);
-	            		writer.flush();
-	            		stream.flush();
+	            		//writer.flush();
+	            		//stream.flush();
 	            	} catch (AmbitException x) {
 	            		x.printStackTrace();
-	            		throw new IOException(x.getMessage());
+	            		//throw new IOException(x.getMessage());
 	            	} finally {
 	            		try {if (writer !=null) writer.flush(); } catch (Exception x) { x.printStackTrace();}
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
