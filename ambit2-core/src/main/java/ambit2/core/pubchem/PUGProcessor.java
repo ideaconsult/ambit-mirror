@@ -77,6 +77,10 @@ import ambit2.core.processors.ProcessorException;
  * <b>Modified</b> Apr 20, 2008
  */
 public class PUGProcessor extends DefaultAmbitProcessor<List<IStructureRecord>,List<IStructureRecord>> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4410271093960202855L;
 	public final static String PUBCHEM_CID = "CID";
 	protected static String pugURL = "http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi?tool="+PUGProcessor.class.getName();
 	protected QuerySupport<List<IStructureRecord>,List<IStructureRecord>> support = new QuerySupport<List<IStructureRecord>,List<IStructureRecord>>();
@@ -245,7 +249,8 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
     	Future<List<IStructureRecord>> fresult = support.lookup(target, downloadRequest, listener);
     	
     	try {
-    		List<IStructureRecord> data = fresult.get();    		
+    		List<IStructureRecord> data = fresult.get();    
+    		if (data == null) return null;
     		
     		boolean wait = true;
         	HTTPRequest<List<IStructureRecord>, List<IStructureRecord>> pollRequest = null;
@@ -492,7 +497,10 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
 	        RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(new GZIPInputStream(connection.getInputStream())));
 	        while (reader.hasNext()) {
 	        	Object o = reader.next();
-	        	result.add(new StructureRecord(-1,-1,o.toString(),PCT_download_format[PCT_download_format_sdf]));
+	        	if (o instanceof IStructureRecord)
+	        		result.add((IStructureRecord)o);
+	        	else
+	        		result.add(new StructureRecord(-1,-1,o.toString(),PCT_download_format[PCT_download_format_sdf]));
 	        }
 	        /*
 	        StringBuilder b = new StringBuilder();

@@ -36,6 +36,10 @@ import ambit2.core.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.ProcessorException;
 
 public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<Target, Result> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3444405772335211466L;
 	protected int maxretry = 6;
 	protected String url;
 	protected String httpMethod = "POST";
@@ -65,9 +69,10 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	                hc.setRequestMethod(httpMethod);
 	                hc.setDoOutput(true);
 	                prepareOutput(target, hc.getOutputStream());
-
-	                return parseInput(target, hc.getInputStream());
-
+	                InputStream in = hc.getInputStream();
+	                Result result =  parseInput(target, hc.getInputStream());
+	                in.close();
+	                return result;
 	            } else
 	            	return null;
 	       	} catch (SocketTimeoutException x) {
@@ -75,6 +80,8 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	    	   setCancelled(retry >= maxretry);
 	        } catch (Exception x) {
 	            throw new ProcessorException(this,x);
+	        } finally {
+
 	        }
 		}    
 		throw new ProcessorException(this,"Maximum retry count reached "+maxretry);
