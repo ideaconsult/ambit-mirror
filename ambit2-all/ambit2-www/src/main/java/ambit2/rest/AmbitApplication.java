@@ -13,10 +13,12 @@ import org.restlet.data.Protocol;
 
 import ambit2.core.config.Preferences;
 import ambit2.core.exceptions.AmbitException;
+import ambit2.core.pubchem.EntrezSearchProcessor;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.StructureResource;
@@ -51,7 +53,7 @@ public class AmbitApplication extends Application {
                 li.getScheme(), li.getHostname(), li.getPort(), 
                 li.getDatabase(), li.getUser(), li.getPassword()); 
 	
-		
+		EntrezSearchProcessor entrezQuery = new EntrezSearchProcessor();
 	}
 	
 	
@@ -69,7 +71,8 @@ public class AmbitApplication extends Application {
 		
 		//router.attach("/cas/{cas}"+fp,SimilarityResource.class);
 		//router.attach("/name/{name}"+fp,SimilarityResource.class);		
-		router.attach("/structure/{idstructure}",StructureResource.class);			
+		router.attach("/structure/{idstructure}",StructureResource.class);
+		router.attach("/pubchem/query/{term}",PubchemResource.class);			
 		
 		router.attach(query,QueryListResource.class);		
 
