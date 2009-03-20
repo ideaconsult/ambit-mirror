@@ -30,18 +30,19 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
-import junit.framework.TestCase;
+import ambit2.core.data.IStructureRecord;
+import ambit2.core.pubchem.EntrezSearchProcessor;
 
-public class HTTPRequestTest extends TestCase {
-	public void test() throws Exception {
-        URL url = new URL("http://pubchem.ncbi.nlm.nih.gov/");
+public class HTTPRequestTest {
+	public void read(URL url) throws Exception {
+
         URLConnection connection= url.openConnection();
         if (connection instanceof HttpURLConnection) {
             HttpURLConnection hc = ((HttpURLConnection)connection);
-;
-            hc.setConnectTimeout(10);
-            hc.setReadTimeout(60);
+            //hc.setConnectTimeout(1000);
+            //hc.setReadTimeout(6000);
             try {
 	            BufferedReader in = new BufferedReader(new InputStreamReader(hc.getInputStream()));
 	            String input;
@@ -58,6 +59,25 @@ public class HTTPRequestTest extends TestCase {
         }    
 
 	}
+	
+	public static void main(String[] args) {
+		EntrezSearchProcessor test = new EntrezSearchProcessor();
+		try {
+			List<IStructureRecord> records = test.process("InChI=1S/CH2O/c1-2/h1H2");
+			System.out.println("results");
+			for (IStructureRecord record:records) {
+				System.out.print(record.getFormat());
+				System.out.print('\t');
+				System.out.println(record.getContent());
+			}
+			
+			//test.read(new URL("http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&term=50-00-0"));
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		System.out.println("Done.");
+	}
+	       
 }
 
 
