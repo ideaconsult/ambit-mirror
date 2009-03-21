@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
+<eSearchResult>
+	<Count>0</Count>
+	<RetMax>0</RetMax>
+	<RetStart>0</RetStart>
+	<IdList>
+	</IdList>
+	<TranslationSet>
+	</TranslationSet>
+	<TranslationStack>
+		<TermSet>
+			<Term>100019[All Fields]</Term>
+			<Field>All Fields</Field>
+			<Count>2</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<TermSet>
+			<Term>57[All Fields]</Term>
+			<Field>All Fields</Field>
+			<Count>41693</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<OP>AND</OP>
+		<TermSet>
+			<Term>6[All Fields]</Term>
+			<Field>All Fields</Field>
+			<Count>5678894</Count>
+			<Explode>Y</Explode>
+		</TermSet>
+		<OP>AND</OP>
+		<OP>GROUP</OP>
+	</TranslationStack>
+	<QueryTranslation>100019[All Fields] AND 57[All Fields] AND 6[All Fields]</QueryTranslation>
+	<ErrorList>
+		<PhraseNotFound>100019-57-6</PhraseNotFound>
+	</ErrorList>
+</eSearchResult>
