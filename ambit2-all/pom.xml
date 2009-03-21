@@ -200,6 +200,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
     <module>ambit2-mopac</module>
     <module>ambit2-model</module>
     <module>ambit2-namestructure</module>
+    <module>ambit2-pubchem</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>
