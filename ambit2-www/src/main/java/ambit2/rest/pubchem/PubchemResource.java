@@ -20,7 +20,7 @@ import org.restlet.resource.Variant;
 import ambit2.core.data.IStructureRecord;
 import ambit2.core.exceptions.AmbitException;
 import ambit2.core.exceptions.NotFoundException;
-import ambit2.core.pubchem.EntrezSearchProcessor;
+import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.ChemicalMediaType;
 
 public class PubchemResource extends Resource {
@@ -69,7 +69,8 @@ public class PubchemResource extends Resource {
 			    	 StringBuilder b = new StringBuilder();
 	            		for (IStructureRecord record:records)
 	            			if (record.getFormat().toLowerCase().equals("sdf"))
-	            				b.append(record.getContent());			
+	            				b.append(record.getContent());		
+	            		
 	            	 return new StringRepresentation(b.toString());
 			     }
 	        } else {
