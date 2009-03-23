@@ -13,9 +13,9 @@ import org.restlet.data.Protocol;
 
 import ambit2.core.config.Preferences;
 import ambit2.core.exceptions.AmbitException;
-import ambit2.core.pubchem.EntrezSearchProcessor;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
+import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -53,7 +53,6 @@ public class AmbitApplication extends Application {
                 li.getScheme(), li.getHostname(), li.getPort(), 
                 li.getDatabase(), li.getUser(), li.getPassword()); 
 	
-		EntrezSearchProcessor entrezQuery = new EntrezSearchProcessor();
 	}
 	
 	
