@@ -33,9 +33,10 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
   </repositories>
   <dependencies>
     <dependency>
-    	<groupId>cdk</groupId>
-    	<artifactId>cdk</artifactId>
-    	<version>1.1.svn-19012008</version>
+    	<groupId>junit</groupId>
+    	<artifactId>junit</artifactId>
+    	<version>4.0</version>
+    	<scope>test</scope>
     </dependency>
     <!--
       <dependency>
@@ -43,13 +44,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
      <artifactId>cdk-{module}</artifactId>
      <version> 1.1.4.20090105 / 1.2.x-SNAPSHOT </version> <<< pick one!
    </dependency>
-     -->
-    <dependency>
-    	<groupId>junit</groupId>
-    	<artifactId>junit</artifactId>
-    	<version>4.0</version>
-    	<scope>test</scope>
-    </dependency>    
+     -->    
   </dependencies>
   <inceptionYear>2004</inceptionYear>
   <issueManagement>
@@ -201,6 +196,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
     <module>ambit2-model</module>
     <module>ambit2-namestructure</module>
     <module>ambit2-pubchem</module>
+    <module>ambit2-base</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>

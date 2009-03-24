@@ -39,8 +39,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.ui.PropertiesTableModel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;

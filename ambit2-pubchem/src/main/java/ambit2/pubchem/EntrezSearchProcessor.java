@@ -45,10 +45,10 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.NotFoundException;
-import ambit2.core.processors.ProcessorException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorException;
 
 /**
  * Searches PubChem for structures given search terms (via Entrez) and returns SDF files. 

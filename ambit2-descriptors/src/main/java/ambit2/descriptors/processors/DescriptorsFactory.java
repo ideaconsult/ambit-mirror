@@ -32,11 +32,11 @@ package ambit2.descriptors.processors;
 import java.io.InputStream;
 import java.util.List;
 
-import ambit2.core.data.ClassHolder;
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.data.ClassHolder;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile> {
 

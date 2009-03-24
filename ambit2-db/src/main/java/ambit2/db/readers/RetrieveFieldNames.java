@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import ambit2.core.data.LiteratureEntry;
-import ambit2.core.data.Property;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;

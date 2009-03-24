@@ -37,8 +37,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.descriptors.processors.DescriptorsFactory;
 
 public class DescriptorsFactoryTest {

@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import ambit2.core.io.DownloadTool;
+import ambit2.base.io.DownloadTool;
 import ambit2.workflow.ui.WorkflowExport;
 
 import com.microworkflow.process.Workflow;

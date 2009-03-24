@@ -1,5 +1,6 @@
 package ambit2.plugin.analogs;
 
+import ambit2.workflow.library.DefineProfile;
 import ambit2.workflow.library.GenerateReport;
 import ambit2.workflow.library.LoginSequence;
 

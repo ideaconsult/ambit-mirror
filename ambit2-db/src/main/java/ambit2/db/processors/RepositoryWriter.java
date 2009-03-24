@@ -31,20 +31,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tools.MFAnalyser;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.structure.InchiProcessor;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.AbstractStructureQuery;
@@ -52,7 +48,7 @@ import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
-import ambit2.hashcode.MoleculeAndAtomsHashing;
+import ambit2.hashcode.HashcodeKey;
 
 /**
 <pre>
@@ -325,113 +321,5 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
             logger.error(x);
         }
         super.close();
-	}
-}
-
-interface IStructureKey<Value,M> {
-	public String getKey();
-	public Value process(M molecule) throws AmbitException;
-}
-
-class CASKey implements IStructureKey<String,IStructureRecord> {
-	protected String key=null;
-	public CASKey() {
-	}
-	public String getKey() {
-		return key;
-	}
-	public void setKey(String key) {
-		this.key = key;
-	}
-	public String process(IStructureRecord structure) throws AmbitException {
-		if (structure==null)
-			throw new AmbitException("Empty molecule!");
-		
-		if ((key == null) || (structure.getProperty(key)==null)) {
-			//find which key corresponds to CAS
-			Iterator keys = structure.getProperties().keySet().iterator();
-			while (keys.hasNext()) {
-				Object newkey = keys.next();
-				if (CASNumber.isValid(structure.getProperties().get(newkey).toString())) {
-					this.key = newkey.toString();
-					return structure.getProperties().get(newkey).toString();
-				}
-			}
-		}
-		if (key == null) throw new AmbitException("CAS tag not defined");
-		Object o = structure.getProperty(key);
-		if ((o != null) && CASNumber.isValid(o.toString())) return o.toString();
-		else return null;
-	}
-}
-
-class SmilesKey implements IStructureKey<String,IAtomContainer> {
-	protected SmilesGenerator gen;
-	protected String key="smiles";
-	public SmilesKey() {
-		gen = new SmilesGenerator();
-	}
-	public String getKey() {
-		return key;
-	}
-	public void setKey(String key) {
-		this.key = key;
-	}
-	public String process(IAtomContainer molecule) throws AmbitException {
-		if ((molecule==null) || (molecule.getAtomCount()==0))
-			throw new AmbitException("Empty molecule!");
-		try {
-			IAtomContainer mol = (IAtomContainer)molecule.clone();
-			MFAnalyser mf = new MFAnalyser((IMolecule)mol);
-			mol = mf.removeHydrogensPreserveMultiplyBonded();
-			return gen.createChiralSMILES((IMolecule)mol,new boolean[mol.getAtomCount()]);
-		} catch (Exception x) {
-			throw new AmbitException(x);
-		}
-	}
-}
-
-class EmptyKey implements IStructureKey<String,IAtomContainer> {
-	
-	public String getKey() {
-		return null;
-	}
-	public String process(IAtomContainer molecule) throws AmbitException {
-		return null;
-	}
-}
-
-class InchiKey implements IStructureKey<String,IAtomContainer> {
-	protected InchiProcessor inchi;
-	protected String key;
-	public InchiKey() {
-		inchi = new InchiProcessor();
-	}
-	public String getKey() {
-		return key;
-	}
-	public void setKey(String key) {
-		this.key = key;
-	}
-	public String process(IAtomContainer molecule) throws AmbitException {
-		return inchi.process(molecule).getInchi();
-	}
-}
-
-class HashcodeKey implements IStructureKey<Long,IAtomContainer> {
-	protected MoleculeAndAtomsHashing hashing;
-	protected String key;
-	public HashcodeKey() {
-		hashing = new MoleculeAndAtomsHashing();
-	}
-	public String getKey() {
-		return key;
-	}
-	public void setKey(String key) {
-		this.key = key;
-	}
-	public Long process(IAtomContainer molecule) throws AmbitException {
-		if ((molecule==null)||(molecule.getAtomCount()==0)) return 0L;
-		return hashing.getMoleculeHash(molecule);
 	}
 }

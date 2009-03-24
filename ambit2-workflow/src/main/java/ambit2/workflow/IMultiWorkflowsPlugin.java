@@ -26,7 +26,7 @@ package ambit2.workflow;
 import java.util.List;
 
 import nplugins.shell.INanoPlugin;
-import ambit2.core.data.ClassHolder;
+import ambit2.base.data.ClassHolder;
 
 import com.microworkflow.process.Workflow;
 

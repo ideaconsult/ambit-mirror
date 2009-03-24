@@ -35,7 +35,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
 
 public class DbReferenceWriter extends AbstractRepositoryWriter<LiteratureEntry, LiteratureEntry> {
     /**

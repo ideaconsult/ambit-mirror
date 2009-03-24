@@ -52,7 +52,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.poi.hssf.record.formula.functions.Isref;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -60,13 +59,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.io.SimpleErrorHandler;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorException;
 import ambit2.core.io.RawIteratingSDFReader;
-import ambit2.core.io.SimpleErrorHandler;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.ProcessorException;
 
 /**
  * 

@@ -42,9 +42,9 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
-import ambit2.core.data.Dictionary;
+import ambit2.base.data.Dictionary;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.core.data.IntArrayResult;
-import ambit2.core.data.LiteratureEntry;
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.descriptors.VerboseDescriptorResult;
 

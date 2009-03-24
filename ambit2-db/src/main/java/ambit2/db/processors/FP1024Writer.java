@@ -30,8 +30,8 @@ import java.sql.SQLException;
 import java.util.BitSet;
 import java.util.Map;
 
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 
 /**

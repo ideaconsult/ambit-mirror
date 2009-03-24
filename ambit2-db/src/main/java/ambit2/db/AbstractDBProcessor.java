@@ -28,8 +28,8 @@ package ambit2.db;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ambit2.core.log.AmbitLogger;
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.log.AmbitLogger;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.IRepositoryAccess;
 

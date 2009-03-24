@@ -98,7 +98,7 @@
   	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
-  		<artifactId>ambit2-core</artifactId>
+  		<artifactId>ambit2-base</artifactId>
   		<version>${project.version}</version>
   	</dependency>
   	<dependency>

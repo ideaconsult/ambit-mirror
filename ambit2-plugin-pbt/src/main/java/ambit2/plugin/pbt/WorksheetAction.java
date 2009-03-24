@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import ambit2.core.processors.IProcessor;
+import ambit2.base.interfaces.IProcessor;
 
 public class WorksheetAction<Target,Result> extends AbstractAction {
 	/**

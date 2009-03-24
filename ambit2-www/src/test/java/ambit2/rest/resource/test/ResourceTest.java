@@ -7,7 +7,7 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
 
-import ambit2.core.config.Preferences;
+import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.test.DbUnitTest;
 

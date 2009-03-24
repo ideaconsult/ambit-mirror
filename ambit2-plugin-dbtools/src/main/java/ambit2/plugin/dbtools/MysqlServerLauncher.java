@@ -1,6 +1,6 @@
 package ambit2.plugin.dbtools;
 
-import ambit2.core.config.Preferences;
+import ambit2.base.config.Preferences;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.db.processors.MySQLCommand;

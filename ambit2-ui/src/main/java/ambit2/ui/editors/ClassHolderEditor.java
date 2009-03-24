@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.Border;
 
-import ambit2.core.data.ClassHolder;
+import ambit2.base.data.ClassHolder;
 import ambit2.ui.Utils;
 
 public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder> {

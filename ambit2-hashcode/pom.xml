@@ -15,7 +15,6 @@
     	<artifactId>ambit2-core</artifactId>
     	<version>${project.version}</version>
     	<type>jar</type>
-    	<scope>test</scope>
     </dependency>
   </dependencies>
   <developers>

@@ -54,7 +54,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitIOException;
 
 /**
  * Study templates are introduced in order to provide generic framework for storing experimental data results, without predefined fieldnames, which may not be relevant to all endpoints (e.g. species strain or vehicle is not relevant to all species or endpoints). On other hand, fields with the same meaning have to have the same name to make queries feasible (e.g. “species” field should be the same across all endpoints in order to be able to search for species). <br>

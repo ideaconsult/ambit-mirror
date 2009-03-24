@@ -1,6 +1,6 @@
 package ambit2.model;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 
 
 public interface IDataset<ID,Features,ResultType extends Comparable<?>> {

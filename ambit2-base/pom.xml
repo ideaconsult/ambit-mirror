@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+	<description>Base classes, without cheminformatics functionality</description>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-base</artifactId>
+  <name>ambit2-base</name>
+  <version>2.0.0-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>log4j</groupId>
+    	<artifactId>log4j</artifactId>
+    	<version>1.2.14</version>
+    </dependency>
+    <dependency>
+    	<groupId>jgoodies</groupId>
+    	<artifactId>binding</artifactId>
+    	<version>2.0.2</version>
+    </dependency>
+  </dependencies>
+</project>

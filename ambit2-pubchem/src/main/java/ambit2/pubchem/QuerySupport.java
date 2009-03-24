@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import ambit2.core.processors.IProcessor;
+import ambit2.base.interfaces.IProcessor;
 
 
 /**

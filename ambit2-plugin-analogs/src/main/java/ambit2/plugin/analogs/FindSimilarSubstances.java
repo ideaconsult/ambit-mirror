@@ -35,8 +35,8 @@ import java.util.Iterator;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.DBProcessorsChain;
@@ -50,6 +50,7 @@ import ambit2.db.search.QueryInfo;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
+import ambit2.workflow.library.QueryPerformer;
 
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;

@@ -47,6 +47,8 @@ import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.base.interfaces.IRandomAccessChemObjectReader;
+
 /**
  * Random access to text files of compounds. First reads the file and builds an index in memory.
  * The index stores offset, length and number of atoms of the molecule in that record.

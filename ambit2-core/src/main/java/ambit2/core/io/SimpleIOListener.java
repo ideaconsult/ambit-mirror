@@ -29,15 +29,13 @@
 
 package ambit2.core.io;
 
-import java.util.Hashtable;
-
 import org.openscience.cdk.io.ReaderEvent;
 import org.openscience.cdk.io.listener.IReaderListener;
 import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 
 public class SimpleIOListener implements IReaderListener, IWriterListener {
 

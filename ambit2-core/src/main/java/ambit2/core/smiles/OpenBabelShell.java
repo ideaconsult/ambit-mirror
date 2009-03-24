@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.external.CommandShell;
-import ambit2.core.external.ShellException;
+import ambit2.base.external.CommandShell;
+import ambit2.base.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
 public class OpenBabelShell extends ShellSDFoutput<String> {

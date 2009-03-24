@@ -60,7 +60,7 @@ import javax.sql.rowset.RowSetWarning;
 import javax.sql.rowset.spi.SyncProvider;
 import javax.sql.rowset.spi.SyncProviderException;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 

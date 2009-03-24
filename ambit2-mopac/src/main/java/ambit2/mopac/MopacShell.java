@@ -41,10 +41,10 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.MFAnalyser;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.external.CommandShell;
-import ambit2.core.external.ShellException;
-import ambit2.core.processors.IProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.external.CommandShell;
+import ambit2.base.external.ShellException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.smi23d.ShellMengine;
 import ambit2.smi23d.ShellSmi2SDF;
 

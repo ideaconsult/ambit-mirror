@@ -37,7 +37,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.data.Dictionary;
+import ambit2.base.data.Dictionary;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.DictionarySubjectQuery;

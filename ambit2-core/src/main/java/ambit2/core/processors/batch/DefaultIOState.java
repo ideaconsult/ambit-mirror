@@ -1,6 +1,6 @@
 package ambit2.core.processors.batch;
 
-import ambit2.core.io.IInputOutputState;
+import ambit2.base.interfaces.IInputOutputState;
 
 public class DefaultIOState implements IInputOutputState {
 	protected long currentRecord;

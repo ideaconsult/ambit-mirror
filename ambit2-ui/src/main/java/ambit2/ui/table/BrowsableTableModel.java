@@ -66,7 +66,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			selectedIcon = null;
 		}
 		try {
-			currentIcon = Utils.createImageIcon("images/bullet_red.png");
+			currentIcon = Utils.createImageIcon("images/resultset_next.png");
 		} catch (Exception x) {
 			currentIcon = null;
 		}

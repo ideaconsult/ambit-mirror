@@ -35,7 +35,7 @@ import javax.swing.JComponent;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
-import ambit2.core.data.ClassHolder;
+import ambit2.base.data.ClassHolder;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
@@ -62,9 +62,9 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	protected PBTUpdater updater;
 	
 	public PBTCheckerPlugin() {
-		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTCreator","New","Creates a new PBT workbook","ambit2/plugin/pbt/images/pbt_new.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","PBT","Verifies if PBT assessment is complete","ambit2/plugin/pbt/images/pbt_verify.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment","ambit2/plugin/pbt/images/pbt_search.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTCreator","New","Creates a new PBT workbook",Utils.createImageIcon("ambit2/plugin/pbt/images/pbt_new.png")));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.PBTWorkflow","PBT","Verifies if PBT assessment is complete",Utils.createImageIcon("ambit2/plugin/pbt/images/pbt_verify.png")));
+		workflows.add(new ClassHolder("ambit2.plugin.pbt.SearchWorkflow","Search","Search for structures to be imported into PBT assessment",Utils.createImageIcon("ambit2/plugin/pbt/images/pbt_search.png")));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML/SDF files","images/report.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.pbt.SavePBTWorkflow","Save","Save PBT assessment results into database","images/import.png"));
 

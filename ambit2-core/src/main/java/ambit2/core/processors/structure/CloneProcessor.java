@@ -31,9 +31,9 @@ package ambit2.core.processors.structure;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.ProcessorsChain;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorsChain;
 
 /**
  * Clones IAtomContainer. To be used within {@link ProcessorsChain}

@@ -2,7 +2,7 @@ package ambit2.db.processors;
 
 import java.sql.SQLException;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 

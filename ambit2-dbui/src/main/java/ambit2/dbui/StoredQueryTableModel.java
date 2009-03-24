@@ -32,11 +32,11 @@ import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
@@ -315,6 +315,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
     public void setProfile(Profile profile) {
     	
     	fields = (profile==null)?null:new PropertiesTableModel(profile,true,2);
+    	fireTableStructureChanged();
     }
     public void sort(int column, boolean ascending)
     		throws UnsupportedOperationException {

@@ -40,7 +40,7 @@ import org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.data.Property;
+import ambit2.base.data.Property;
 import ambit2.descriptors.processors.PropertyCalculationProcessor;
 
 public class PropertyCalculationProcessorTest {

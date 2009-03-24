@@ -35,7 +35,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
 
 /**

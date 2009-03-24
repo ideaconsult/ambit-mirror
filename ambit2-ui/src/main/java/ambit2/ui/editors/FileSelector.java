@@ -12,10 +12,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ambit2.base.io.MolFileFilter;
+import ambit2.base.io.MyIOUtilities;
 import ambit2.core.io.FileState;
 import ambit2.core.io.IInputState;
-import ambit2.core.io.MolFileFilter;
-import ambit2.core.io.MyIOUtilities;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;

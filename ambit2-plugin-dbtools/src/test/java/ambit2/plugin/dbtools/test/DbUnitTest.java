@@ -40,7 +40,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 
-import ambit2.core.data.StringBean;
+import ambit2.base.data.StringBean;
 import ambit2.db.processors.DbCreateDatabase;
 
 

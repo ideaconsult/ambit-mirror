@@ -37,7 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.core.data.Property;
+import ambit2.base.data.Property;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;

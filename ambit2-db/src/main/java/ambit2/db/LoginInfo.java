@@ -27,7 +27,7 @@ package ambit2.db;
 import java.net.URI;
 import java.sql.Connection;
 
-import ambit2.core.config.Preferences;
+import ambit2.base.config.Preferences;
 
 import com.jgoodies.binding.beans.Model;
 

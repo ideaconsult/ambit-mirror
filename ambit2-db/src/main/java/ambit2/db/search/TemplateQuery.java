@@ -33,8 +33,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.Property;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 
 public class TemplateQuery extends AbstractQuery<String, String, StringCondition,Property> implements IQueryRetrieval<Property> {

@@ -3,15 +3,15 @@ package ambit2.plugin.dbtools;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.LiteratureEntry;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.ProcessorsChain;
-import ambit2.core.processors.batch.IBatchStatistics;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.SourceDataset;
@@ -37,7 +37,7 @@ public class ImportWorkflow extends Workflow {
         Sequence seq=new Sequence();
         seq.setName("[Import chemical structures]");    	
 
-        
+        /*
         IDBProcessor<String,IStructureRecord> processor = 
         	new IDBProcessor<String,IStructureRecord>() {
         	protected final StructureRecord r = new StructureRecord();
@@ -87,12 +87,13 @@ public class ImportWorkflow extends Workflow {
 				
 			}
         };
+        */
         
         final RepositoryWriter writer = new RepositoryWriter();
         writer.setDataset(dataset);
         final ProcessorsChain<String, IBatchStatistics,IProcessor> chain = 
         		new ProcessorsChain<String, IBatchStatistics,IProcessor>();
-        chain.add(processor);
+        //chain.add(processor);
         chain.add(writer);
 
         final BatchDBProcessor batch = new BatchDBProcessor();

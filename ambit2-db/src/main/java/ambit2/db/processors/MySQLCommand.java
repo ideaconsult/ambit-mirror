@@ -30,8 +30,8 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitIOException;
 import ambit2.db.LoginInfo;
 
 /**

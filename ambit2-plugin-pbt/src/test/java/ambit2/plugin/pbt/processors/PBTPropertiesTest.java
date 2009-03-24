@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.plugin.pbt.PBTWorkBook;
 
 public class PBTPropertiesTest {

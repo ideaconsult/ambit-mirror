@@ -30,7 +30,7 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.db.LoginInfo;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.DBProcessorsChain;

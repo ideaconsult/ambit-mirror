@@ -33,8 +33,8 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
-import ambit2.core.external.CommandShell;
-import ambit2.core.external.ShellException;
+import ambit2.base.external.CommandShell;
+import ambit2.base.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
 public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {

@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
  */
 package ambit2.ui.editors;
 
-import ambit2.core.data.AmbitUser;
+import ambit2.base.data.AmbitUser;
 
 /**
  * Editor for {@link AmbitUser}

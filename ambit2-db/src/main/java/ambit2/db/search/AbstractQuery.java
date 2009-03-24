@@ -1,6 +1,6 @@
 package ambit2.db.search;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 
 import com.jgoodies.binding.beans.Model;
 

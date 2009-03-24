@@ -1,6 +1,6 @@
 package ambit2.plugin.usermgr;
 
-import ambit2.core.data.StringBean;
+import ambit2.base.data.StringBean;
 import ambit2.db.processors.DbCreateDatabase;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;

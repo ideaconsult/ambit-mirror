@@ -29,7 +29,7 @@
 
 package ambit2.core.data.experiment;
 
-import ambit2.core.data.Template;
+import ambit2.base.data.Template;
 
 
 /**

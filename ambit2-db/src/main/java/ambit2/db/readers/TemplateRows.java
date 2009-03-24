@@ -31,8 +31,8 @@ package ambit2.db.readers;
 
 import java.sql.SQLException;
 
-import ambit2.core.data.Property;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.AmbitRows;
 import ambit2.db.search.TemplateQuery;
 

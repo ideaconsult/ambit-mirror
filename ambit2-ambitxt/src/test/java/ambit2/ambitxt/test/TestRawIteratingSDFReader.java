@@ -10,8 +10,8 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.data.IStructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.processors.structure.FingerprintGenerator;

@@ -36,8 +36,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import ambit2.core.data.Dictionary;
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.Dictionary;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 

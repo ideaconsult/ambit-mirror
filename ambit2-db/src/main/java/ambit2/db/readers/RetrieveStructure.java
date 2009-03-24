@@ -32,8 +32,8 @@ package ambit2.db.readers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 
 public class RetrieveStructure extends AbstractStructureRetrieval<IStructureRecord> {
     /**

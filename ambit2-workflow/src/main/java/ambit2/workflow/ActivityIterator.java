@@ -31,7 +31,7 @@ package ambit2.workflow;
 
 import java.util.Iterator;
 
-import ambit2.core.processors.IProcessor;
+import ambit2.base.interfaces.IProcessor;
 
 import com.microworkflow.execution.Performer;
 import com.microworkflow.process.Iterative;

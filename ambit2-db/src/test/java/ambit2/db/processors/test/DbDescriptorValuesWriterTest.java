@@ -61,11 +61,11 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.StringDescriptorResultType;
-import ambit2.core.data.StructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.db.RepositoryReader;
@@ -120,7 +120,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 	}
 
 	/**
-	 * Test method for {@link ambit2.db.processors.DbDescriptorValuesWriter#setStructure(ambit2.core.data.IStructureRecord)}.
+	 * Test method for {@link ambit2.db.processors.DbDescriptorValuesWriter#setStructure(ambit2.base.interfaces.IStructureRecord)}.
 	 */
 	@Test
 	public void testSetStructure() {

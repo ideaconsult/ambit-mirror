@@ -10,7 +10,7 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.StringRepresentation;
 import org.w3c.dom.Document;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 

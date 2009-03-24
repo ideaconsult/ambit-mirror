@@ -3,7 +3,7 @@ package ambit2.rest;
 import org.restlet.data.MediaType;
 import org.restlet.resource.Representation;
 
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
@@ -33,7 +33,7 @@ public abstract class RepresentationConvertor<T,Q extends IQueryRetrieval<T>,Out
 		this.reporter = reporter;
 		if (this.reporter != null) this.reporter.setMaxRecords(5000);
 	}
-	public abstract Representation process(Q query) throws ambit2.core.exceptions.AmbitException;
+	public abstract Representation process(Q query) throws ambit2.base.exceptions.AmbitException;
 	
 	
 

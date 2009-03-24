@@ -37,7 +37,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.EntrezESearchParser;
 import ambit2.pubchem.PUGProcessor;
 

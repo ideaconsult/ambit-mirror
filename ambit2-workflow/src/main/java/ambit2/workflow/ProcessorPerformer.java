@@ -32,9 +32,9 @@ package ambit2.workflow;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.IProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.DefaultAmbitProcessor;
 
 import com.microworkflow.execution.Performer;
 

@@ -35,7 +35,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 
-import ambit2.core.data.Dictionary;
+import ambit2.base.data.Dictionary;
 import ambit2.db.readers.DictionaryRows;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.DictionarySubjectQuery;

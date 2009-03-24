@@ -37,7 +37,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import ambit2.core.data.StringBean;
+import ambit2.base.data.StringBean;
 
 
 

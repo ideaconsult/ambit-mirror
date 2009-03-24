@@ -7,11 +7,11 @@ import java.io.FileOutputStream;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.io.FileOutputState;
 import ambit2.core.io.MDLWriter;
-import ambit2.core.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.plugin.pbt.PBTWorkBook;
 

@@ -38,7 +38,7 @@ import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.NPluginsAction;
 import nplugins.shell.application.Utils;
 import nplugins.workflow.ExecuteWorkflowTask;
-import ambit2.core.data.ClassHolder;
+import ambit2.base.data.ClassHolder;
 import ambit2.db.LoginInfo;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;

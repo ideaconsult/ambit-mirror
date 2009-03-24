@@ -31,7 +31,7 @@ package ambit2.db;
 
 import java.sql.Connection;
 
-import ambit2.core.processors.IProcessor;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.IRepositoryAccess;
 

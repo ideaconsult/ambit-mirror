@@ -14,8 +14,8 @@ import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.NotFoundException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.RepresentationConvertor;

@@ -35,7 +35,7 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-import ambit2.core.data.StringBean;
+import ambit2.base.data.StringBean;
 import ambit2.db.DBVersion;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;

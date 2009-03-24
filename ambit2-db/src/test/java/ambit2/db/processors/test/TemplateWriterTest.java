@@ -37,7 +37,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.data.Dictionary;
+import ambit2.base.data.Dictionary;
 import ambit2.db.processors.TemplateWriter;
 
 public class TemplateWriterTest extends DbUnitTest  {

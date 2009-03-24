@@ -34,8 +34,8 @@ import java.util.Arrays;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 
-import ambit2.core.data.Dictionary;
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.Dictionary;
+import ambit2.base.data.LiteratureEntry;
 
 
 

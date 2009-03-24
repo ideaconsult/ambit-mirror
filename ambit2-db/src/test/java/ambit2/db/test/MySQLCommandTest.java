@@ -9,7 +9,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.config.Preferences;
+import ambit2.base.config.Preferences;
 import ambit2.db.processors.MySQLCommand;
 
 /**

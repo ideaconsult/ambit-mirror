@@ -39,10 +39,10 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.AmbitIOException;
-import ambit2.core.log.AmbitLogger;
-import ambit2.core.processors.IProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitIOException;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.log.AmbitLogger;
 import ambit2.db.processors.ICommand.COMMAND;
 
 /**

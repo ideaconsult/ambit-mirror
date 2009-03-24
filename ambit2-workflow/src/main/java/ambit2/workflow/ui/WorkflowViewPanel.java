@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import ambit2.core.io.MyIOUtilities;
+import ambit2.base.io.MyIOUtilities;
 import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
 
