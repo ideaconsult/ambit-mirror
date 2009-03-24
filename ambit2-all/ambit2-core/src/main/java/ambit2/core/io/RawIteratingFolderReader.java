@@ -36,7 +36,7 @@ import java.util.Hashtable;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.index.CASNumber;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 
 /*
  * Raw reader for multiple files in a folder

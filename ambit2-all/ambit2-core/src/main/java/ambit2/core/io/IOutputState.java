@@ -2,7 +2,8 @@ package ambit2.core.io;
 
 import org.openscience.cdk.io.IChemObjectWriter;
 
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitIOException;
+import ambit2.base.interfaces.IInputOutputState;
 
 /**
  * Status of the output writer. 

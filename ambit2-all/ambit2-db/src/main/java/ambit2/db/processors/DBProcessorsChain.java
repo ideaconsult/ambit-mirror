@@ -27,7 +27,7 @@ package ambit2.db.processors;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ambit2.core.processors.ProcessorsChain;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.exceptions.DbAmbitException;

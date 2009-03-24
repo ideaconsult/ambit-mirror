@@ -11,7 +11,8 @@ import java.io.ObjectOutputStream;
 
 import org.openscience.cdk.io.formats.IChemFormat;
 
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitIOException;
+import ambit2.base.interfaces.IInputOutputState;
 
 import com.jgoodies.binding.beans.Model;
 

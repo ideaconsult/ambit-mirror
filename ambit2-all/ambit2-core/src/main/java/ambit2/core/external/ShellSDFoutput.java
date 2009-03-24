@@ -7,6 +7,9 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 
+import ambit2.base.external.CommandShell;
+import ambit2.base.external.ShellException;
+
 public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule> {
 	protected boolean readOutput;
 	

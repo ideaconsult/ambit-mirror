@@ -26,7 +26,7 @@ package ambit2.db.search;
 
 import java.util.List;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 
 
 /**

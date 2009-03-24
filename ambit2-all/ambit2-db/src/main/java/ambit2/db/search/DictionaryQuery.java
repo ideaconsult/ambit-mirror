@@ -34,8 +34,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.Dictionary;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.Dictionary;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 
 public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition,Dictionary> 

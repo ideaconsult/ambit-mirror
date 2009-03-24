@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.log.AmbitLogger;
-import ambit2.core.processors.IAmbitResult;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.log.AmbitLogger;
+import ambit2.base.processors.IAmbitResult;
 import ambit2.descriptors.AtomEnvironment;
 
 /**

@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.plugin.pbt.processors.PBTReader;
 import ambit2.workflow.DBWorkflowContext;
 

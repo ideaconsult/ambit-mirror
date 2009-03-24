@@ -36,7 +36,7 @@ import javax.swing.ListSelectionModel;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import ambit2.core.data.ClassHolder;
+import ambit2.base.data.ClassHolder;
 import ambit2.ui.editors.ClassHolderEditor;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 

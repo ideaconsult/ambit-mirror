@@ -33,8 +33,8 @@ import java.io.IOException;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class ProcessorCloseReader extends DefaultAmbitProcessor<IIteratingChemObjectReader, IOException> {
 	

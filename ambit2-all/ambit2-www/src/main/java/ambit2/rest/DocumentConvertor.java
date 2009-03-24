@@ -5,7 +5,7 @@ import org.restlet.resource.DomRepresentation;
 import org.restlet.resource.Representation;
 import org.w3c.dom.Document;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 

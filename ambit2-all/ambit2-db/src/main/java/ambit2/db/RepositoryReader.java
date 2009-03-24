@@ -29,9 +29,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.ProcessorException;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.ProcessorException;
 import ambit2.db.exceptions.DbAmbitException;
 /**
  * TODO parameterize

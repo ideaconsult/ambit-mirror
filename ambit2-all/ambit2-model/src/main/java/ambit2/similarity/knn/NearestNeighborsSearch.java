@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
-import ambit2.core.log.AmbitLogger;
+import ambit2.base.log.AmbitLogger;
 import ambit2.similarity.measure.DistanceComparable;
 import ambit2.similarity.measure.IDistanceFunction;
 

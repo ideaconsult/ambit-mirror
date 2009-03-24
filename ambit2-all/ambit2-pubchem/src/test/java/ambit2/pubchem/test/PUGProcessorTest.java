@@ -45,8 +45,8 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.PUGProcessor;
 
 public class PUGProcessorTest {

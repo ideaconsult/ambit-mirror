@@ -13,9 +13,9 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.MFAnalyser;
 
-import ambit2.core.external.CommandShell;
+import ambit2.base.external.CommandShell;
+import ambit2.base.log.AmbitLogger;
 import ambit2.core.external.ShellSDFoutput;
-import ambit2.core.log.AmbitLogger;
 import ambit2.core.smiles.OpenBabelShell;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;

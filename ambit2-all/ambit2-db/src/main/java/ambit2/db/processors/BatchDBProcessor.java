@@ -30,14 +30,14 @@ import java.util.Iterator;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.ProcessorsChain;
-import ambit2.core.processors.batch.IBatchStatistics;
 
 /**
  * Reads file 

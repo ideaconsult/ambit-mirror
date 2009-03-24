@@ -38,8 +38,8 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
-import ambit2.core.external.ShellException;
-import ambit2.core.log.AmbitLogger;
+import ambit2.base.external.ShellException;
+import ambit2.base.log.AmbitLogger;
 
 
 /**

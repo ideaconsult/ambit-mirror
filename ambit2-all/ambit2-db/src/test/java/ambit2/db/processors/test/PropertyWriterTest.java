@@ -41,8 +41,8 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.PropertyValuesWriter;

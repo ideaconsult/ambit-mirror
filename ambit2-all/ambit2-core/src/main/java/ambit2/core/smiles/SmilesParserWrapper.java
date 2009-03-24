@@ -9,8 +9,8 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesParser;
 
-import ambit2.core.config.Preferences;
-import ambit2.core.external.ShellException;
+import ambit2.base.config.Preferences;
+import ambit2.base.external.ShellException;
 
 
 public class SmilesParserWrapper implements PropertyChangeListener {

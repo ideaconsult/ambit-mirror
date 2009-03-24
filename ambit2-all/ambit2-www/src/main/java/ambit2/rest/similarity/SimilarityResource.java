@@ -9,7 +9,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QuerySimilarityBitset;

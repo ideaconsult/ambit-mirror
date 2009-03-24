@@ -1,11 +1,11 @@
 package ambit2.db.reporters;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.NotFoundException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.ProcessorsChain;
-import ambit2.core.processors.batch.IBatchStatistics;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.readers.IQueryRetrieval;

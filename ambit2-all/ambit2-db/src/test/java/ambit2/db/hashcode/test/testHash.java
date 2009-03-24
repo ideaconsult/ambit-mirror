@@ -39,7 +39,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.RepositoryReader;

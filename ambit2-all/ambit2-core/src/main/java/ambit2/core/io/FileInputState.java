@@ -15,7 +15,7 @@ import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitIOException;
 
 /**
  * Use {@link #getReader(InputStream, String)} to get a reader of the right type.

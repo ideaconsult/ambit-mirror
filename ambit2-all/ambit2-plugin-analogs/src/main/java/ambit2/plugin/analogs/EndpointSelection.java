@@ -31,13 +31,13 @@ package ambit2.plugin.analogs;
 
 import java.util.List;
 
-import ambit2.core.data.Dictionary;
-import ambit2.core.data.Profile;
+import ambit2.base.data.Dictionary;
+import ambit2.base.data.Profile;
 import ambit2.db.search.IQueryObject;
-import ambit2.plugin.performers.QueryProperties;
-import ambit2.plugin.performers.QueryTemplates;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
+import ambit2.workflow.library.QueryProperties;
+import ambit2.workflow.library.QueryTemplates;
 
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;

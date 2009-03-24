@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import org.junit.Before;
 
-import ambit2.core.processors.batch.BatchProcessor;
+import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ui.SilentWorkflowListener;
 import ambit2.workflow.ui.UserInteractionEvent;

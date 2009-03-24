@@ -6,7 +6,7 @@ import java.io.Writer;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;

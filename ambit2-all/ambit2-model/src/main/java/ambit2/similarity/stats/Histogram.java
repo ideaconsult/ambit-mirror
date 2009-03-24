@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import ambit2.core.log.AmbitLogger;
+import ambit2.base.log.AmbitLogger;
 
 /**
  * A histogram.

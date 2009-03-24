@@ -31,13 +31,14 @@ package ambit2.core.processors.structure;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.core.data.IStructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
 
 public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtomContainer> {
-	public enum MOL_TYPE {SDF,CML,CSV};
+	
 
 
 

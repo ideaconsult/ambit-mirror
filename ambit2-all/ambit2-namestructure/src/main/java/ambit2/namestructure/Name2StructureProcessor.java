@@ -5,9 +5,9 @@ import nu.xom.Element;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
 
 public class Name2StructureProcessor extends
 		DefaultAmbitProcessor<String,IAtomContainer> {

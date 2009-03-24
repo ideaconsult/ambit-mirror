@@ -41,8 +41,8 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;

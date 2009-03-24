@@ -32,8 +32,8 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
+import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.core.io.FileInputState;
-import ambit2.core.processors.batch.BatchProcessor;
 import ambit2.db.LoginInfo;
 import ambit2.db.SourceDataset;
 import ambit2.plugin.dbtools.ImportWorkflow;
@@ -114,4 +114,70 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 		Assert.assertEquals(6, templates.getRowCount());			
 	}
 
+	
+	@Test
+	public void testMultiFile() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/plugin/dbtools/test/empty-datasets.xml");
+		IDatabaseConnection c = getConnection();
+		ITable structures = c.createQueryTable("EXPECTED_STRUCTURES",
+		"SELECT * FROM structure");
+		Assert.assertEquals(0, structures.getRowCount());			
+		ITable names = c.createQueryTable("EXPECTED_NAMES",
+				"SELECT * FROM properties");
+		Assert.assertEquals(0, names.getRowCount());
+		ITable values = c.createQueryTable("EXPECTED_VALUES",
+				"SELECT * FROM property_values");
+		Assert.assertEquals(0, values.getRowCount());
+		ITable templates = c.createQueryTable("EXPECTED_TEMPLATES",
+				"SELECT * FROM template");
+		Assert.assertEquals(2, templates.getRowCount());
+		ITable dictionary = c.createQueryTable("EXPECTED_ONTOLOGY",
+				"SELECT * FROM dictionary");
+		Assert.assertEquals(0, dictionary.getRowCount());
+
+		LoginInfo li = new LoginInfo();
+		li.setDatabase(getDatabase());
+		li.setPort(getPort());
+		li.setUser(getUser());
+		li.setPassword(getUser());
+
+		ImportWorkflow wf = getWorkflow();
+		context.put(DBWorkflowContext.LOGININFO, li);
+		context.put(InputFileSelection.INPUTFILE,
+					 new FileInputState("src/test/resources/ambit2/plugin/dbtools/test/sdf"));
+
+		
+
+		wf.addPropertyChangeListener(new WorkflowListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(WorkflowEvent.WF_COMPLETE))
+					completed = true;
+
+			}
+		});
+;
+		completed = false;
+
+		context.addPropertyChangeListener(BatchProcessor.PROPERTY_BATCHSTATS,
+				new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent evt) {
+
+						if (evt.getNewValue() != null) {
+							count++;
+						}
+
+					}
+				});
+		wf.executeWith(context);
+		while (!completed) {}
+		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
+		Assert.assertEquals(8, structures.getRowCount());	
+		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='sdf'");
+		Assert.assertEquals(8, structures.getRowCount());	
+		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='sdf'");
+		Assert.assertEquals(38, templates.getRowCount());
+		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT name,value FROM values_string join properties using(idproperty) where name='CasRN' and value='110-51-0'");
+		Assert.assertEquals(1, templates.getRowCount());			
+		
+	}	
 }

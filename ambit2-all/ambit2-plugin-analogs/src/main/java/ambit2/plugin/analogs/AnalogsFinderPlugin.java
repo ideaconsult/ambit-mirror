@@ -33,9 +33,9 @@ import javax.swing.ImageIcon;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
-import ambit2.core.data.ClassHolder;
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.ClassHolder;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
@@ -53,7 +53,7 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	protected WorkflowOptionsLauncher contextListener;
 	public AnalogsFinderPlugin() {
 		super();
-		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryBuildingWorkflow","Category building","Category building","ambit2/plugin/analogs/images/32x32_category_building.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryBuildingWorkflow","Category building","Category building",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_category_building.png")));
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		

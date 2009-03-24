@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.apache.poi.hssf.record.formula.functions.T;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.featureselection.IAttributeSelection;
 import ambit2.similarity.AbstractSimilarityModel;
 import ambit2.similarity.measure.DistanceComparable;

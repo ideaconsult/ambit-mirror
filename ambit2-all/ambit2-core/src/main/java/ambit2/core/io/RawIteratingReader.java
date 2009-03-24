@@ -7,7 +7,7 @@ import java.io.Reader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
-import ambit2.core.log.AmbitLogger;
+import ambit2.base.log.AmbitLogger;
 
 public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader implements IRawReader<T>{
 	protected static AmbitLogger logger = new AmbitLogger(RawIteratingReader.class);

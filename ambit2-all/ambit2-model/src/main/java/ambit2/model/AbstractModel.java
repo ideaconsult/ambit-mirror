@@ -3,8 +3,8 @@ package ambit2.model;
 import java.beans.PropertyChangeSupport;
 import java.util.Hashtable;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.log.AmbitLogger;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.log.AmbitLogger;
 import ambit2.featureselection.IAttributeSelection;
 
 public abstract class AbstractModel<ID,Features,ResultType extends Comparable<?>> implements 

@@ -39,11 +39,11 @@ import java.util.TimeZone;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorException;
 import ambit2.core.io.MDLWriter;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.ProcessorException;
 
 public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> {
 	/**

@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.RenderingHints;
-import java.beans.PropertyChangeEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Hashtable;
@@ -40,7 +39,6 @@ import org.jdesktop.swingx.plaf.basic.BasicTaskPaneContainerUI;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
 
 import ambit2.mopac.MopacShell;
-import ambit2.namestructure.Name2StructureProcessor;
 
 public class AmbitXT extends NPluginsApplication {
 	protected AmbitSplitPane multiworkflowPanel;
@@ -54,8 +52,8 @@ public class AmbitXT extends NPluginsApplication {
 		System.out.println(pkg.getImplementationVendor());
 		try {
 			MopacShell mopac = new MopacShell();
-			Name2StructureProcessor p = new Name2StructureProcessor();
-			p.process("benzene");
+			//Name2StructureProcessor p = new Name2StructureProcessor();
+			//p.process("benzene");
 		} catch (Throwable x) {
 			x.printStackTrace();
 		}

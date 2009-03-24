@@ -34,8 +34,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import ambit2.core.data.AmbitBean;
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.data.AmbitBean;
+import ambit2.base.exceptions.AmbitIOException;
 
 /**
  * A {@link ambit2.core.data.experiment.StudyTemplate} field.

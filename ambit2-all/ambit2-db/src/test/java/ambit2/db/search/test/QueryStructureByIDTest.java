@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import junit.framework.Assert;
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.QueryStructureByID;

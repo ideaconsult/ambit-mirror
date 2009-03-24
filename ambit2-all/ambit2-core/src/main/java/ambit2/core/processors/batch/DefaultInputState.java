@@ -2,7 +2,7 @@ package ambit2.core.processors.batch;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.IInputState;
 
 public class DefaultInputState extends DefaultIOState implements IInputState {

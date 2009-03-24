@@ -37,7 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveField;
 import ambit2.db.search.QueryExecutor;

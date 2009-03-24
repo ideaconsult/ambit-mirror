@@ -1,9 +1,9 @@
 package ambit2.plugin.pbt.processors;
 
 import nplugins.core.Introspection;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.IProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class ProcessorProxy<Target, Result> extends DefaultAmbitProcessor<Target, Result> {
 	/**

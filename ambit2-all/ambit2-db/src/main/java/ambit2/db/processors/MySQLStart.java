@@ -9,10 +9,10 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.AmbitIOException;
-import ambit2.core.external.CommandShell;
-import ambit2.core.external.ShellException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitIOException;
+import ambit2.base.external.CommandShell;
+import ambit2.base.external.ShellException;
 import ambit2.db.processors.ICommand.COMMAND;
 
 /**

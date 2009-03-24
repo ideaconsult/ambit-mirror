@@ -32,9 +32,9 @@ package ambit2.db.search;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 
 public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition> 

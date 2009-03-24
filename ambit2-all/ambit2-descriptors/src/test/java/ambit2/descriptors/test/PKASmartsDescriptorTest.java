@@ -51,8 +51,8 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.config.Preferences;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.config.Preferences;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.core.io.DelimitedFileWriter;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;

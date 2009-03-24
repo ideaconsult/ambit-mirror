@@ -34,8 +34,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import ambit2.core.data.AmbitUser;
-import ambit2.core.data.AmbitUser.USER_TYPE;
+import ambit2.base.data.AmbitUser;
+import ambit2.base.data.AmbitUser.USER_TYPE;
 import ambit2.db.LoginInfo;
 
 public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {

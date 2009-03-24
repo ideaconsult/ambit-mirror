@@ -31,9 +31,9 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.ProcessorException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorException;
 
 public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<Target, Result> {
 	/**

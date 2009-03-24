@@ -33,15 +33,15 @@ import java.util.Iterator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.ProcessorsChain;
-import ambit2.core.processors.batch.IBatchStatistics;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -54,9 +54,8 @@ import ambit2.db.processors.DbDescriptorValuesWriter;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.MissingFingerprintsQuery;
-import ambit2.db.search.QueryDataset;
+import ambit2.db.search.QueryMissingDescriptor;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.descriptors.processors.PropertyCalculationProcessor;
 import ambit2.workflow.ActivityPrimitive;
@@ -83,8 +82,8 @@ public class DBUtilityWorkflow extends Workflow {
         seq.addStep(new Primitive("NEWQUERY","NEWQUERY",new Performer() {
         	@Override
         	public Object execute() throws Exception {
-                QueryDataset q = new QueryDataset("Default");
-
+                //QueryDataset q = new QueryDataset("Default");
+                QueryMissingDescriptor q = new QueryMissingDescriptor();
         		return q;
         	}
         	@Override

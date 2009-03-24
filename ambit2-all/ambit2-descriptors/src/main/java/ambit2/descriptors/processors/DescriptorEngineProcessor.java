@@ -31,8 +31,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorEngine;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
 /**
  * Calculates descriptors found in cdk jars. Uses {@link DescriptorEngine}
  * @author Nina Jeliazkova

@@ -15,10 +15,10 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.core.external.CommandShell;
-import ambit2.core.external.ShellException;
+import ambit2.base.external.CommandShell;
+import ambit2.base.external.ShellException;
+import ambit2.base.log.AmbitLogger;
 import ambit2.core.io.IteratingDelimitedFileReader;
-import ambit2.core.log.AmbitLogger;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.mopac.MopacShell;

@@ -11,8 +11,8 @@ import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.Protocol;
 
-import ambit2.core.config.Preferences;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.config.Preferences;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.pubchem.EntrezSearchProcessor;

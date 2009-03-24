@@ -30,6 +30,7 @@
 package ambit2.descriptors.processors;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -38,8 +39,8 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
 
 /**
  * Prints {@link DescriptorValue} as a string
@@ -49,6 +50,7 @@ import ambit2.core.processors.DefaultAmbitProcessor;
 public class DescriptorResultFormatter extends
 		DefaultAmbitProcessor<DescriptorValue, String> {
 	protected DecimalFormat format = new DecimalFormat("#####.####");
+	//protected Locale locale = new Locale("us", "US");
 	protected int index = -1;
 	/**
 	 * Index of the array, if the Descrptor value is of type DoubleArrayResult or IntegerArrayResult
@@ -68,6 +70,7 @@ public class DescriptorResultFormatter extends
 	private static final long serialVersionUID = -8879440610070527255L;
 
 	public String process(DescriptorValue target) throws AmbitException {
+		
 		IDescriptorResult result = target.getValue();
 		if (result instanceof DoubleResult)
 			return format.format(

@@ -32,8 +32,8 @@ import java.sql.SQLException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.core.io.CompoundImageTools;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;

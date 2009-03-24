@@ -29,7 +29,7 @@
 
 package ambit2.dbui.dictionary;
 
-import ambit2.core.data.Property;
+import ambit2.base.data.Property;
 import ambit2.db.readers.TemplateRows;
 import ambit2.db.search.TemplateQuery;
 

@@ -31,7 +31,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellValue;
 
-import ambit2.core.data.AmbitBean;
+import ambit2.base.data.AmbitBean;
 
 public class PBTWorksheet  extends AmbitBean  {
 	protected PBTTableModel moreInfo= null;

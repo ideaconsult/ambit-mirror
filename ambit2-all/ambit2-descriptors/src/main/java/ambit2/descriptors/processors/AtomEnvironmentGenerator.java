@@ -8,10 +8,10 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.IAmbitResult;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.IAmbitResult;
 import ambit2.descriptors.AtomEnvironment;
 import ambit2.descriptors.AtomEnvironmentDescriptor;
 

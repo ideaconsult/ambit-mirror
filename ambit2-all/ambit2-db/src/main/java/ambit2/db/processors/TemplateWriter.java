@@ -33,7 +33,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import ambit2.core.data.Dictionary;
+import ambit2.base.data.Dictionary;
 
 /**
  * to write into template tables

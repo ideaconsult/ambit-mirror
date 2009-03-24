@@ -11,7 +11,7 @@ import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.SVGWriter;
 import org.openscience.cdk.io.XYZWriter;
 
-import ambit2.core.exceptions.AmbitIOException;
+import ambit2.base.exceptions.AmbitIOException;
 
 /**
  *  Use {@link #getWriter(OutputStream, String)} to get a writer of the right type.

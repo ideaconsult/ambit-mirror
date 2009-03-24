@@ -41,9 +41,9 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
-import ambit2.core.config.Preferences;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
+import ambit2.base.config.Preferences;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
 
 
 /**

@@ -1,6 +1,6 @@
 package ambit2.ui.editors;
 
-import ambit2.core.data.StringBean;
+import ambit2.base.data.StringBean;
 
 public class StringBeanEditor extends BeanEditor<StringBean> {
 	

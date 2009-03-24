@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import ambit2.core.data.ClassHolder;
+import ambit2.base.data.ClassHolder;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
@@ -32,6 +32,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		super();
 		workflows.add(new ClassHolder("ambit2.plugin.search.SearchWorkflow","Simple search","Search by single property or identifier","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.search.AnalogsFinderWorkflow","Advanced search","Search by multiple criteria","images/search_256.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.search.ProfileWorkflow","Properties","Select properties to be displayed","images/database_statistics.png"));		
 //		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
 		
 		contextListener = new WorkflowOptionsLauncher(null);

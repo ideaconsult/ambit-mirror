@@ -3,8 +3,8 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.core.data.LiteratureEntry;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.exceptions.AmbitException;
 
 /**
  * reads structures, for each there are no descriptors with given name and reference title.

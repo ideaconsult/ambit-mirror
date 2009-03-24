@@ -38,8 +38,8 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-import ambit2.core.config.Preferences;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.config.Preferences;
+import ambit2.base.exceptions.AmbitException;
 
 public class HydrogenAdderProcessor extends	AtomConfigurator {
 	protected CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());

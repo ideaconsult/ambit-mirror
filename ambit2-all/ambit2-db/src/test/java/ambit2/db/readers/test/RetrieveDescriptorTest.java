@@ -45,7 +45,7 @@ import org.junit.Test;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDatasets;

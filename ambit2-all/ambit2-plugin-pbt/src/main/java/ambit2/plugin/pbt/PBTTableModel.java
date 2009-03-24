@@ -24,8 +24,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.ProcessorsChain;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.processors.structure.CloneProcessor;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.processors.DescriptorCalculationProcessor;

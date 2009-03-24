@@ -35,7 +35,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import javax.swing.JOptionPane;
 
-import ambit2.core.data.AmbitUser;
+import ambit2.base.data.AmbitUser;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.db.processors.DbAddUser;

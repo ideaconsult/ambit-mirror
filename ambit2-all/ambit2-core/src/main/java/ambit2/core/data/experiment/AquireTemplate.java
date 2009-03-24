@@ -24,8 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.core.data.experiment;
 
+import ambit2.base.data.Template;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.data.Template;
 
 
 

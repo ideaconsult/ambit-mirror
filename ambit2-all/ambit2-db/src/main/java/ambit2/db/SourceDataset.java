@@ -4,8 +4,8 @@
  */
 package ambit2.db;
 
-import ambit2.core.data.AmbitBean;
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.AmbitBean;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.db.processors.DbSrcDatasetWriter;
 
 

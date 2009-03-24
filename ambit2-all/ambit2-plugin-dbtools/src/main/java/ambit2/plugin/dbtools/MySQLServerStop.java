@@ -1,6 +1,6 @@
 package ambit2.plugin.dbtools;
 
-import ambit2.core.config.Preferences;
+import ambit2.base.config.Preferences;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.db.processors.MySQLShell;
 import ambit2.workflow.DBWorkflowContext;

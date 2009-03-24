@@ -10,7 +10,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.core.processors.batch.BatchProcessor;
+import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.db.LoginInfo;
 import ambit2.db.search.MissingFingerprintsQuery;
 import ambit2.db.search.QueryDataset;

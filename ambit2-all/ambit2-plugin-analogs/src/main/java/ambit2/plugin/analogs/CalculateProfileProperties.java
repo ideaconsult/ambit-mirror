@@ -31,7 +31,7 @@ package ambit2.plugin.analogs;
 
 import java.util.Iterator;
 
-import ambit2.core.data.Profile;
+import ambit2.base.data.Profile;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.execution.Performer;

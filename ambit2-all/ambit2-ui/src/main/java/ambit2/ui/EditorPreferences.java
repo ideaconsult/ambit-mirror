@@ -33,7 +33,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import ambit2.core.config.Preferences;
+import ambit2.base.config.Preferences;
 import ambit2.ui.editors.IAmbitEditor;
 
 public class EditorPreferences {
@@ -47,7 +47,7 @@ public class EditorPreferences {
 		{"ambit2.db.LoginInfo","ambit2.dbui.LoginPanel"},
 		//{"ambit2.core.data.LiteratureEntry","ambit2.ui.editors.ReferenceEditor"},
 		{"ambit2.db.SourceDataset","ambit2.dbui.SourceDatasetEditor"},
-		{"ambit2.core.data.AmbitUser","ambit2.ui.editors.AmbitUserEditor"},
+		{"ambit2.base.data.AmbitUser","ambit2.ui.editors.AmbitUserEditor"},
 		//{"java.lang.StringBuffer","ambit2.ui.query.DbStatusPanel"},
 		{"ambit2.core.data.experiment.StudyTemplate","ambit2.ui.editors.StudyTemplateEditor"},
 		{"ambit2.core.data.experiment.Study","ambit2.ui.editors.StudyEditor"},
@@ -56,13 +56,13 @@ public class EditorPreferences {
 		{"ambit2.db.search.QueryField","ambit2.dbui.QueryFieldEditor"},
 		{"ambit2.db.search.QueryCombined","ambit2.dbui.QueryCombinedEditor"},
 		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},
-		{"ambit2.core.data.StringBean","ambit2.ui.editors.StringBeanEditor"},
+		{"ambit2.base.data.StringBean","ambit2.ui.editors.StringBeanEditor"},
 		{"ambit2.core.io.FileInputState","ambit2.ui.editors.FileSelector"},
 		{"ambit2.core.io.FileOutputState","ambit2.ui.editors.FileSelector"},
 		{"org.openscience.cdk.Molecule","ambit2.ui.editors.Panel2D"},		
 		{"org.openscience.cdk.AtomContainer","ambit2.ui.editors.Panel2D"},		
-		{"ambit2.core.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},
-		{"ambit2.core.data.SelectionBean","ambit2.workflow.ui.SelectionEditor"}		
+		{"ambit2.base.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},
+		{"ambit2.base.data.SelectionBean","ambit2.workflow.ui.SelectionEditor"}		
 		
 
 	};

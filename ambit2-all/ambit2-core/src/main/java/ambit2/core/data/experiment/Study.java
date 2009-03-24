@@ -32,8 +32,8 @@ package ambit2.core.data.experiment;
 import java.util.Hashtable;
 
 import weka.experiment.Experiment;
-import ambit2.core.data.AmbitBean;
-import ambit2.core.data.Template;
+import ambit2.base.data.AmbitBean;
+import ambit2.base.data.Template;
 
 /**
  * A single study, defined by its template {@link Template} and conditions. 

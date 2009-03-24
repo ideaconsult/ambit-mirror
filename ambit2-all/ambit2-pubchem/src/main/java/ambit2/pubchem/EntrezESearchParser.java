@@ -33,12 +33,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.openscience.cdk.io.formats.PubChemFormat;
 import org.w3c.dom.Document;
@@ -47,11 +41,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.ProcessorException;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorException;
 
 /**
  * Reads Entrez eSearch query result  (DTD available at http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd )

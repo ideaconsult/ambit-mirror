@@ -32,9 +32,9 @@ import org.openscience.cdk.qsar.result.IntegerResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import ambit2.core.data.AmbitBean;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.IProcessor;
+import ambit2.base.data.AmbitBean;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SMARTSException;
 import ambit2.smarts.query.SmartsPatternFactory;

@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import ambit2.core.data.Profile;
-import ambit2.core.data.Property;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 
 /**
  * Table model for {@link Profile}

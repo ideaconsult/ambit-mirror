@@ -37,11 +37,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.IProcessor;
-import ambit2.core.processors.ProcessorsChain;
-import ambit2.core.processors.batch.IBatchStatistics;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.DbReader;

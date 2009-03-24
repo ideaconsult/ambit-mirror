@@ -32,7 +32,7 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-import ambit2.core.data.Property;
+import ambit2.base.data.Property;
 import ambit2.db.search.TemplateQuery;
 
 public class TemplateQueryTest extends QueryTest<TemplateQuery> {

@@ -9,8 +9,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeReader;
 
 import com.jgoodies.binding.PresentationModel;

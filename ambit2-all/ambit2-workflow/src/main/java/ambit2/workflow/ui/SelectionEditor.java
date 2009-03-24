@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import ambit2.core.data.SelectionBean;
+import ambit2.base.data.SelectionBean;
 
 /**
  * An editor for {@link SelectionBean}

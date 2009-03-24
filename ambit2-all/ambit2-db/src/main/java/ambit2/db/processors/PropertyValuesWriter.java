@@ -28,9 +28,9 @@ import java.sql.SQLException;
 
 import org.openscience.cdk.CDKConstants;
 
-import ambit2.core.data.Dictionary;
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.LiteratureEntry;
+import ambit2.base.data.Dictionary;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
 
 /**

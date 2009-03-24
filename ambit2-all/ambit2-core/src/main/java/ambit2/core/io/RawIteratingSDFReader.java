@@ -5,8 +5,8 @@ import java.io.Reader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
 
 public class RawIteratingSDFReader extends RawIteratingReader<IStructureRecord> {
 	public static final String delimiter = "$$$$"; 

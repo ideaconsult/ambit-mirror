@@ -30,7 +30,7 @@
 package ambit2.workflow;
 
 
-import ambit2.core.processors.IProcessor;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.db.IDBProcessor;
 
 import com.microworkflow.process.Primitive;

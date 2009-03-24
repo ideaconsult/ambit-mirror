@@ -33,7 +33,7 @@ package ambit2.descriptors.processors;
 
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
-import ambit2.core.data.Property;
+import ambit2.base.data.Property;
 
 public class PropertyCalculationProcessor extends  DescriptorCalculationProcessor {
 	protected Property property = null;

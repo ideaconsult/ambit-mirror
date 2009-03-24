@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
 
 public class ConnectionStatisticsProcessor extends ConnectionStatusProcessor {
 	protected static final String[] sql = {

@@ -8,10 +8,10 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.MFAnalyser;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.log.AmbitLogger;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.log.AmbitLogger;
-import ambit2.core.processors.DefaultAmbitProcessor;
 
 
 /**

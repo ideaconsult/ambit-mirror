@@ -17,9 +17,9 @@ import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.exceptions.NotFoundException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.ChemicalMediaType;
 

@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.data.StructureRecord;
+import ambit2.base.data.StructureRecord;
 import ambit2.plugin.pbt.DbUnitTest;
 import ambit2.plugin.pbt.PBTWorkBook;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;

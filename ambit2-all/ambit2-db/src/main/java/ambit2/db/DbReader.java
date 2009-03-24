@@ -33,8 +33,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import ambit2.core.exceptions.AmbitException;
-import ambit2.core.processors.batch.IBatchStatistics;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IQueryObject;

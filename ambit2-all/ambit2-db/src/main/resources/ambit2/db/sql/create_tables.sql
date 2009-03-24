@@ -80,7 +80,7 @@ CREATE TABLE  `chemicals` (
   KEY `formula` (`formula`),
   KEY `hashcode` USING BTREE (`hashcode`),
   KEY `Index_8` (`label`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `structure`
@@ -101,7 +101,7 @@ CREATE TABLE  `structure` (
   KEY `Index_4` (`label`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DELIMITER $
 CREATE TRIGGER copy_history BEFORE UPDATE ON STRUCTURE
@@ -258,11 +258,12 @@ CREATE TABLE  `property_values` (
   UNIQUE KEY `Index_2` USING BTREE (`idproperty`,`idstructure`,`idtype`),
   KEY `FK_property_values_1` (`user_name`),
   KEY `FK_property_values_2` (`idstructure`),
-  KEY `Index_5` USING BTREE (`idvalue`,`idtype`),
+  KEY `Index_5` (`idvalue`,`idtype`),
+  KEY `Index_6` (`idtype`,`idproperty`),
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `quality_labels` 

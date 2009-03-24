@@ -6,8 +6,8 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;

@@ -2,7 +2,7 @@ package ambit2.plugin.pbt;
 
 import java.util.ArrayList;
 
-import ambit2.core.data.SelectionBean;
+import ambit2.base.data.SelectionBean;
 import ambit2.core.io.FileOutputState;
 import ambit2.workflow.UserInteraction;
 

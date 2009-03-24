@@ -3,8 +3,8 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.exceptions.AmbitException;
 
 public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 	/**

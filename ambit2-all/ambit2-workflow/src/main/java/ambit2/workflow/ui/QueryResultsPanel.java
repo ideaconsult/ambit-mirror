@@ -40,10 +40,10 @@ import javax.sql.DataSource;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
-import ambit2.core.data.IStructureRecord;
-import ambit2.core.data.Profile;
-import ambit2.core.data.StructureRecord;
-import ambit2.core.exceptions.AmbitException;
+import ambit2.base.data.Profile;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.IStoredQuery;
 import ambit2.dbui.StoredQueryTableModel;
 import ambit2.ui.QueryBrowser;
@@ -125,15 +125,18 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
                     x.printStackTrace();
                 }
             }
-        } else
-            if (DBWorkflowContext.DBCONNECTION_URI.equals(arg0.getPropertyName())) {
+        } else if (DBWorkflowContext.DBCONNECTION_URI.equals(arg0.getPropertyName())) {
             	if (arg0.getNewValue() == null) 
             	try {
             		tableModel.setConnection(null);
             	} catch (Exception x) {
             		x.printStackTrace();
             	}
-            }        	
+        } else   if (DBWorkflowContext.PROFILE.equals(arg0.getPropertyName())) {
+        	tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+        }
+        
+        
         
     }
 
