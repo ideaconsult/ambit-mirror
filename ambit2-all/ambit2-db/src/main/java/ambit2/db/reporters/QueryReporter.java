@@ -67,7 +67,9 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output> exten
 			if (stats.getRecords(IBatchStatistics.RECORDS_READ)==0)
 				throw new NotFoundException(query.toString());
 			return output;
-		} catch (Exception x) {
+		} catch (AmbitException x) {
+			throw x;
+		} catch (Exception x ) {
 			throw new AmbitException(x);
 		} finally {
 			try {batch.close();} catch (Exception x) {}
