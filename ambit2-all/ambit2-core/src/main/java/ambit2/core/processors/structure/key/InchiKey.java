@@ -60,4 +60,11 @@ public class InchiKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 	public String process(IAtomContainer molecule) throws AmbitException {
 		return inchi.process(molecule).getInchi();
 	}
+	public String getQueryKey() {
+		return null;
+	}
+	public Class getType() {
+		return String.class;
+	}
+	
 }
