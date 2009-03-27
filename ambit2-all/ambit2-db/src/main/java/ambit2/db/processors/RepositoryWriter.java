@@ -40,12 +40,14 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.AbstractStructureQuery;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryField;
+import ambit2.db.search.QueryFieldNumeric;
 import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
 import ambit2.hashcode.HashcodeKey;
@@ -78,10 +80,24 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected PropertyValuesWriter propertyWriter;
 	protected SourceDataset dataset;
 	protected MoleculeReader molReader;
-	protected SmilesKey key;
-	protected CASKey casKey;
+	protected SmilesKey smilesKey;
+	protected PropertyKey propertyKey;
+	
+	public PropertyKey getPropertyKey() {
+		return propertyKey;
+	}
+	public void setPropertyKey(PropertyKey propertyKey) {
+		this.propertyKey = propertyKey;
+		if ((propertyKey.getType() == Number.class) || (propertyKey.getType() == Integer.class) ||(propertyKey.getType() == Double.class))
+			query_property = new QueryFieldNumeric();
+		else
+			query_property = new QueryField();
+		
+		query_property.setId(-1);
+
+	}
 	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
-	protected AbstractStructureQuery<String,String,StringCondition> query_cas;
+	protected AbstractStructureQuery query_property;
 	protected QueryExecutor exec;
 	protected HashcodeKey hashcode;
 
@@ -90,15 +106,15 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		datasetWriter = new DbSrcDatasetWriter();
 		propertyWriter = new PropertyValuesWriter();
 		molReader = new MoleculeReader();
-		key = new SmilesKey();
-		casKey = new CASKey();
+		smilesKey = new SmilesKey();
+		
+		setPropertyKey(new CASKey());
+
 		hashcode = new HashcodeKey();
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
-		query_chemicals.setFieldname(key.getKey());
+		query_chemicals.setFieldname(smilesKey.getKey());
 		
-		query_cas = new QueryField();
-		query_cas.setId(-1);
 		exec = new QueryExecutor();
 
 	}
@@ -152,20 +168,28 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			return null;
 		}
 	}
-	protected void findChemical(AbstractStructureQuery<String,String,StringCondition> query, String value, IStructureRecord record)  {
+	protected void findChemical(AbstractStructureQuery query, String key,Object value, IStructureRecord record) throws SQLException, AmbitException {
 		//System.out.println("Search chemical  "+value);
 		if (value == null) return;
+		
 		ResultSet rs = null;
 		try {
 			query.setValue(value);
+			if (key != null)
+				query.setFieldname(key);
 			rs = exec.process(query);
 			while (rs.next()) {
 				//System.out.println("Found chemical "+rs.getInt(2)+ " "+value);
 				record.setIdchemical(rs.getInt(2));
 				break;
 			}
+		} catch (SQLException x) {
+			throw x;
+		} catch (AmbitException x) {
+			throw x;
 		} catch (Exception x) {
 			logger.error(x);
+			throw new AmbitException(x);
 		} finally {
 			try {
 			 exec.closeResults(rs);
@@ -187,7 +211,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		}
 		String smiles = null;
 		try {
-			smiles = key.process(molecule);
+			smiles = smilesKey.process(molecule);
 			if ("".equals(smiles)) smiles= null;
 		} catch (Exception x) {
 			smiles = null;
@@ -215,19 +239,26 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	}
         } else {
         	//find by CAS
-        	String cas = null;
+        	Object property = null;
         	try {
-        		cas = casKey.process(structure);
-        		if (cas!=null)
-        			findChemical(query_cas,cas,structure);
+        		property = propertyKey.process(structure);
+        		if (property!=null)
+        			findChemical(query_property,propertyKey.getKey(),property,structure);
         		else 
-        			findChemical(query_chemicals,smiles,structure);
+        			findChemical(query_chemicals,null,smiles,structure);
+        	} catch (SQLException x) {
+        		throw x;
         	} catch (Exception x) {
         		x.printStackTrace();
         		logger.warn(x);
             	//if not found, find by SMILES
             	if (structure.getIdchemical()<=0)
-            		findChemical(query_chemicals,smiles,structure);        		
+            		try {
+            			findChemical(query_chemicals,null,smiles,structure);
+            		} catch (Exception ex) {
+                		x.printStackTrace();
+                		logger.warn(x);
+            		}
         	}
 
         }

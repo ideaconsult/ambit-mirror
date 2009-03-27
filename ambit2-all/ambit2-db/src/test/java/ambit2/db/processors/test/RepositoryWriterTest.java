@@ -46,6 +46,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.processors.structure.key.PropertyKey;
+import ambit2.core.processors.structure.key.PubchemCID;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.RepositoryWriter;
 
@@ -231,9 +233,14 @@ delete from struc_dataset where idstructure>3
 
 	}		
 	public int write(IRawReader<IStructureRecord> reader,Connection connection) throws Exception  {
+		return write(reader, connection,null);
+	}
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
 		
 
 		RepositoryWriter writer = new RepositoryWriter();
+		if (key != null)
+			writer.setPropertyKey(key);
 		writer.setDataset(new SourceDataset("TEST INPUT",new LiteratureEntry("File","file:input.sdf")));
 		writer.setConnection(connection);
         writer.open();
@@ -320,4 +327,64 @@ delete from struc_dataset where idstructure>3
 		 */
 
 	}	
+	
+	@Test
+	public void testSeekByCID() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        
+		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(0,chemicals.getRowCount());
+		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(0,strucs.getRowCount());
+		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset");
+		Assert.assertEquals(0,srcdataset.getRowCount());
+		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(0,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(0,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(0,property_values.getRowCount());
+		
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/cid/712.sdf");
+		Assert.assertNotNull(in);
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		
+		write(reader,c.getConnection(),new PubchemCID());
+        c.close();
+        
+        c = getConnection();
+		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(1,chemicals.getRowCount());
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(3,strucs.getRowCount());
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
+		Assert.assertEquals(1,srcdataset.getRowCount());
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(3,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(39,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(66,property_values.getRowCount());		
+		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
+		Assert.assertEquals(3,tuples.getRowCount());			
+		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
+		Assert.assertEquals(66,p_tuples.getRowCount());				
+		c.close();
+		/**
+		 * Removing redundant properties
+insert ignore into property_values
+select id,idproperty,idstructure,idvalue,idtype,user_name,status from property_values where idstructure>3
+on duplicate key update idstructure=3
+delete from property_values where idstructure>3
+
+insert ignore into struc_dataset
+select idstructure,id_srcdataset from struc_dataset where idstructure>3
+on duplicate key update idstructure=3
+delete from struc_dataset where idstructure>3
+		 */
+
+	}		
 }
