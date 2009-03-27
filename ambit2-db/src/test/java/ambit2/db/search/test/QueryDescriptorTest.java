@@ -10,9 +10,10 @@ import org.junit.Test;
 
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryDescriptor;
+import ambit2.db.search.QueryFieldNumeric;
 import ambit2.db.search.QueryParam;
 
-public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
+public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 	@Override
 	@Before
 	public void setUp() throws Exception {
@@ -21,13 +22,19 @@ public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
 	}
 	@Test
 	public void test() throws Exception {
-		QueryDescriptor qf = new QueryDescriptor();
+		QueryFieldNumeric qf = new QueryFieldNumeric();
 		qf.setFieldname("name");
 		qf.setValue(3.0);
 		qf.setMaxValue(20.2);
 		qf.setCondition(NumberCondition.getInstance("between"));
 		qf.setId(1);
-		Assert.assertEquals(QueryDescriptor.sqlField  +  qf.getCondition() + " ? and ?", qf.getSQL());
+		System.out.println(qf.getSQL());
+		Assert.assertEquals(
+				"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure\n"+
+				"join property_values using(idstructure) join property_number as f using (idvalue,idtype)\n"+
+				"join properties using(idproperty) where\n"+
+				"name=? and value between ? and ?",				
+				qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(4,params.size());
@@ -41,15 +48,21 @@ public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
 		Assert.assertEquals(20.2,params.get(3).getValue());
 		
 		qf.setCondition(NumberCondition.getInstance("="));
-		Assert.assertEquals(QueryDescriptor.sqlField  +  qf.getCondition() + " ?", qf.getSQL());
+		System.out.println(qf.getSQL());
+		Assert.assertEquals(
+				"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure\n"+
+				"join property_values using(idstructure) join property_number as f using (idvalue,idtype)\n"+
+				"join properties using(idproperty) where\n"+
+				"name=? and value = ?"
+				, qf.getSQL());
 		params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(3,params.size());		
 	}
 
 	@Override
-	protected QueryDescriptor createQuery() throws Exception {
-		QueryDescriptor query = new QueryDescriptor();
+	protected QueryFieldNumeric createQuery() throws Exception {
+		QueryFieldNumeric query = new QueryFieldNumeric();
 		query.setFieldname("Property 1");
 		query.setValue(11.0);
 		query.setMaxValue(12.0);
@@ -58,7 +71,7 @@ public class QueryDescriptorTest extends QueryTest<QueryDescriptor> {
 	}
 
 	@Override
-	protected void verify(QueryDescriptor query, ResultSet rs) throws Exception {
+	protected void verify(QueryFieldNumeric query, ResultSet rs) throws Exception {
 		int records = 0;
 		while (rs.next()) {
 			records ++;
