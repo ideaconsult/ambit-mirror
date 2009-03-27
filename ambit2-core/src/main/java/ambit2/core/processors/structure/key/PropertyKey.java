@@ -35,16 +35,27 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 
-public abstract class PropertyKey extends DefaultAmbitProcessor<IStructureRecord,String>
-		implements IStructureKey<IStructureRecord,String> {
+public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructureRecord,Result>
+		implements IStructureKey<IStructureRecord,Result> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6393097111823664858L;
 	protected String key=null;
+	public PropertyKey() {
+		this(null);
+	}
+	public PropertyKey(String key) {
+		setKey(key);
+	}
+		
 	public String getKey() {
 		return key;
 	}
 	public void setKey(String key) {
 		this.key = key;
 	}	
-	public String process(IStructureRecord structure) throws AmbitException {
+	public Result process(IStructureRecord structure) throws AmbitException {
 		if (structure==null)
 			throw new AmbitException("Empty molecule!");
 		
@@ -55,14 +66,17 @@ public abstract class PropertyKey extends DefaultAmbitProcessor<IStructureRecord
 				Object newkey = keys.next();
 				if (isValid(newkey, structure.getProperties().get(newkey).toString())) {
 					this.key = newkey.toString();
-					return structure.getProperties().get(newkey).toString();
+					return getProperty(structure);
 				}
 			}
 		}
 		if (key == null) throw new AmbitException(toString() + " not defined");
-		Object o = structure.getProperty(key);
-		if ((o != null) && isValid(key,o.toString())) return o.toString();
+		Result o = getProperty(structure);
+		if ((o != null) && isValid(key,o.toString())) return o;
 		else return null;
+	}
+	protected Result getProperty(IStructureRecord structure) throws AmbitException {
+		return (Result)structure.getProperty(key);
 	}
 	@Override
 	public String toString() {
@@ -71,4 +85,8 @@ public abstract class PropertyKey extends DefaultAmbitProcessor<IStructureRecord
 	protected boolean isValid(Object key, Object value) {
 		return key != null;
 	}
+	public String getQueryKey() {
+		return null;
+	}
+	public abstract Class getType();
 }

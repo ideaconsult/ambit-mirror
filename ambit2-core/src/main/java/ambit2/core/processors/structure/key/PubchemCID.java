@@ -29,23 +29,28 @@
 
 package ambit2.core.processors.structure.key;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+
 /**
  * returns pubchem cid given the structure properties
  * @author nina
  *
  */
-public class PubchemCID extends PropertyKey {
+public class PubchemCID extends PropertyKey<Number> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5172763951258433726L;
-
+	public PubchemCID() {
+		super("PUBCHEM_COMPOUND_CID");
+	}
 	@Override
-	protected boolean isValid(Object key, Object value) {
-		if (key != null) {
-			key = key.toString().toUpperCase();
-			if ("PUBCHEM_CID".equals(key) || "CID".equals(key)) try {
+	protected boolean isValid(Object newkey, Object value) {
+		if (newkey != null) {
+			newkey = newkey.toString().toUpperCase();
+			if (key.equals(newkey)) try {
 				return Integer.parseInt(value.toString()) > 0;
 			} catch(Exception x) {
 				return false;
@@ -53,5 +58,23 @@ public class PubchemCID extends PropertyKey {
 		} 
 		return false;
 	}
+	@Override
+	public Number process(IStructureRecord structure) throws AmbitException {
+		Object o = super.process(structure);
+		if (o == null) return null;
+		try {
+			return new Integer(o.toString());
+		} catch (NumberFormatException x) {
+			throw new AmbitException(x);
+		}
+	}
+	@Override
+	public String getQueryKey() {
+		return getKey();
+	}
+	public Class getType() {
+		return Integer.class;
+	}
+
 
 }

@@ -47,5 +47,9 @@ public class EINECSKey extends PropertyKey {
 	protected boolean isValid(Object key, Object value) {
 		return EINECS.isValid(value.toString());
 	}
+	public Class getType() {
+		return String.class;
+	}
+	
 
 }

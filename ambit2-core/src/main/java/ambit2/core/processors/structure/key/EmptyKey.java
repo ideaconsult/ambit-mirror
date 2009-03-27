@@ -52,4 +52,11 @@ public class EmptyKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 	public String process(IAtomContainer molecule) throws AmbitException {
 		return null;
 	}
+	public String getQueryKey() {
+		return null;
+	}
+	public Class getType() {
+		return String.class;
+	}
+	
 }
