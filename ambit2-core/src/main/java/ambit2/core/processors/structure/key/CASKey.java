@@ -41,7 +41,7 @@ import ambit2.base.interfaces.IStructureRecord;
  * @author nina
  *
  */
-public class CASKey extends PropertyKey {
+public class CASKey extends PropertyKey<String> {
 	/**
 	 * 
 	 */
@@ -74,4 +74,8 @@ public class CASKey extends PropertyKey {
 	protected boolean isValid(Object key, Object value) {
 		return CASNumber.isValid(value.toString());
 	}
+	public Class getType() {
+		return String.class;
+	}
+	
 }
