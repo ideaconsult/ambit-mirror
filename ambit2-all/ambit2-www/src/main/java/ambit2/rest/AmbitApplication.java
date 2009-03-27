@@ -1,6 +1,7 @@
 package ambit2.rest;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -15,7 +16,6 @@ import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
-import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -82,7 +82,20 @@ public class AmbitApplication extends Application {
 	}
 	
 	public Connection getConnection() throws AmbitException , SQLException{
-		return DatasourceFactory.getDataSource(connectionURI).getConnection();
+		for (int retry=0; retry< 2; retry++)
+		try {
+			Connection c = DatasourceFactory.getDataSource(connectionURI).getConnection();
+			Statement t = c.createStatement();
+			t.execute("SELECT 1");
+			t.close();
+			return c;
+		} catch (SQLException x) {
+			if (retry >= 2)
+				throw x;
+		} finally {
+			
+		}
+		throw new SQLException("Can't establish connection!");
 	}
 	
 	/**

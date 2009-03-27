@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.restlet.Client;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -16,6 +18,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.similarity.SimilarityResource;
 
 
 
@@ -57,6 +60,19 @@ public class SimilarityResourceTest extends ResourceTest {
 	public void testURIList() throws Exception {
 		runQuery(MediaType.TEXT_URI_LIST);
 	}		
+	@Test
+	public void testGetSmiles() {
+		SimilarityResource resource = new SimilarityResource(null,null,null);
+		try {
+			IMolecule mol = resource.getMolecule("NC1=CC=C(N)C=C");
+			//IMolecule mol = resource.getMolecule("c1cccc");
+
+			Assert.assertTrue(false);
+
+		} catch (InvalidSmilesException x) {
+			Assert.assertTrue(true);
+		}
+	}
 	public void runQuery(MediaType mediaType) throws Exception {
 		runQuery(mediaType,URI);
 	}
@@ -71,15 +87,16 @@ public class SimilarityResourceTest extends ResourceTest {
 		Response response = client.handle(request);
 		
 		System.out.println(response.getStatus());
-		
-		Assert.assertTrue(response.isEntityAvailable());
-		InputStream in = response.getEntity().getStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		while ((line = reader.readLine())!=null)
-			System.out.println(line);
-
-		in.close();
+		if (response.getStatus().equals(org.restlet.data.Status.SUCCESS_OK)) {
+			Assert.assertTrue(response.isEntityAvailable());
+			InputStream in = response.getEntity().getStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			while ((line = reader.readLine())!=null)
+				System.out.println(line);
+	
+			in.close();
+		}
 		/*
 		Diff diff = new Diff(new FileReader(
 			new File("./etc/control-xml/control-web-races.xml")),

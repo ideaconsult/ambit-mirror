@@ -46,33 +46,44 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Res
 	        if (query != null) {
 	        	RepresentationConvertor convertor = null;
 	        	Connection connection = null;
-	        	try {
-	        		convertor = createConvertor(variant);
-	        		connection = ((AmbitApplication)getApplication()).getConnection();
-		        	convertor.getReporter().setConnection(connection);
-		        	Representation r = convertor.process(query);
-		        	return r;
-	        	} catch (NotFoundException x) {
-	        		x.printStackTrace();
-	    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-	    			return new StringRepresentation("<error>Query returns no results! "+x.getMessage()+"</error>",
-	    					variant.getMediaType());	
-	    			
-	        	} catch (SQLException x) {
-	        		x.printStackTrace();
-	    			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
-	    			return new StringRepresentation("<error>Error connecting to database "+x.getMessage()+"</error>",
-	    					variant.getMediaType());		        		
-	        	} catch (Exception x) {
-	        		x.printStackTrace();
-	    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-	    			return new StringRepresentation("<error>there was an error retrieving the data "+x.getMessage()+"</error>",
-	    					variant.getMediaType());		        		
-	        	} finally {
-	        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
-	        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
+	        	int retry=0;
+	        	while (retry <2) {
+		        	try {
+		        		convertor = createConvertor(variant);
+		        		connection = ((AmbitApplication)getApplication()).getConnection();
+		        		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
+			        	convertor.getReporter().setConnection(connection);
+			        	Representation r = convertor.process(query);
+			        	return r;
+		        	} catch (NotFoundException x) {
+		        		x.printStackTrace();
+		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+		    			return new StringRepresentation("<error>Query returns no results! "+x.getMessage()+"</error>",
+		    					variant.getMediaType());	
+		    			
+		        	} catch (SQLException x) {
+		        		x.printStackTrace();
+		        		if (retry <2) {
+		        			retry++;
+		        			continue;
+		        		}
+		        		else {
+			    			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+			    			return new StringRepresentation("<error>Error connecting to database "+x.getMessage()+"</error>",
+			    					variant.getMediaType());
+		        		}
+		        	} catch (Exception x) {
+		        		x.printStackTrace();
+		    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
+		    			return new StringRepresentation("<error>there was an error retrieving the data "+x.getMessage()+"</error>",
+		    					variant.getMediaType());		        		
+		        	} finally {
+		        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
+		        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
+		        	}
 	        	}
-	        		
+    			return new StringRepresentation("<error>Error</error>",
+    					variant.getMediaType());	
 	        	
 	        } else {
 	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
