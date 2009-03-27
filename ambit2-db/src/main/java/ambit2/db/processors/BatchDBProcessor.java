@@ -26,11 +26,13 @@ package ambit2.db.processors;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.AmbitIOException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
@@ -75,6 +77,8 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 					return new RawIteratingSDFReader(
 							new FileReader(((FileInputState)target).getFile())
 													);
+			} catch (IOException x) {
+				throw new AmbitIOException(x);
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}

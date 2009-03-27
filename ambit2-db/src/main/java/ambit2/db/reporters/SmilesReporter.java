@@ -32,9 +32,14 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	@Override
 	protected void processItem(IStructureRecord item, Writer output) {
 		try {
-			output.write(item.getProperties().get(CDKConstants.SMILES).toString());
-			output.write('\n');
-			output.flush();
+			Object smiles = item.getProperty(CDKConstants.SMILES);
+			if (smiles == null)
+				System.out.println(item.getProperties());
+			else {
+				output.write(smiles.toString());
+				output.write('\n');
+				output.flush();
+			}
 		} catch (IOException x) {
 			x.printStackTrace();
 		}

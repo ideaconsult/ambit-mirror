@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
@@ -99,7 +100,11 @@ public class DatasourceFactory {
     }
     public static Connection getConnection(String connectURI) throws AmbitException {
         try {
-            return getDataSource(connectURI).getConnection();
+            Connection connection = getDataSource(connectURI).getConnection();
+            if (connection.isClosed()) 
+            	return getDataSource(connectURI).getConnection();
+            else
+            	return connection;
         } catch (SQLException x) {
             throw new AmbitException(x);
         }
@@ -144,6 +149,8 @@ public class DatasourceFactory {
             b.append(q); q = amark;            
             b.append("password").append(eqmark).append(password);
         }
+        b.append(amark);
+       // b.append("[validationQuery]=[SELECT 1]");
         return b.toString();
     }
     /**
@@ -212,16 +219,32 @@ class DataSourceAndPool {
         // using the connect string passed in the command line
         // arguments.
         //
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(connectURI,null);		
+        Properties jdbcProperties = new Properties();
+        jdbcProperties.setProperty("autoReconnectForPools", "true");
+        jdbcProperties.setProperty("testOnBorrow", "true");
+        jdbcProperties.setProperty("testWhileIdle", "true");
+        jdbcProperties.setProperty("timeBetweenEvictionRunsMillis", "60000");
+        jdbcProperties.setProperty("minEvictableIdleTimeMillis", "1800000");
+        jdbcProperties.setProperty("numTestsPerEvictionRun", "3");
+        jdbcProperties.setProperty("maxActive", "100");
+        jdbcProperties.setProperty("maxIdle", "3");
+        jdbcProperties.setProperty("maxWait", "15000");
+        jdbcProperties.setProperty("validationQuery", "SELECT 1");
+        jdbcProperties.setProperty("removeAbandoned", "true");
+        jdbcProperties.setProperty("removeAbandonedTimeout", "300");
+        jdbcProperties.setProperty("logAbandoned", "true");
+
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(connectURI,jdbcProperties);		
         //
         // Now we'll create the PoolableConnectionFactory, which wraps
         // the "real" Connections created by the ConnectionFactory with
         // the classes that implement the pooling functionality.
         //
         poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory,connectionPool,null,null,false,true);
-        poolableConnectionFactory.setValidationQuery("select idmajor,idminor from version");
+        //poolableConnectionFactory.setValidationQuery("select idmajor,idminor from version");
 		
 		datasource = new PoolingDataSource(connectionPool);
+
 	}
 	public void close() throws Exception {
 		
@@ -240,3 +263,5 @@ class DataSourceAndPool {
 		super.finalize();
 	}
 }
+
+
