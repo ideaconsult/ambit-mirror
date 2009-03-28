@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.base.data;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -118,6 +119,14 @@ public class StructureRecord implements IStructureRecord {
 			return properties.get(key);
 		else return null;
 	}
+	public void setProperty(Object key,Object value) {
+		if (key == null) return;
+		if (properties == null) setProperties(new Hashtable());
+		if (value == null) properties.remove(key);
+		else properties.put(key, value);
+			
+	}
+	
 	/* (non-Javadoc)
      * @see ambit2.repository.IStructureRecord#clear()
      */
