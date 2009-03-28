@@ -50,6 +50,8 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 			IStructureRecord record = new StructureRecord();
 			record.setIdchemical(rs.getInt(2));
 			record.setIdstructure(rs.getInt(3));
+			//metric
+			record.setProperty(rs.getMetaData().getColumnName(5), rs.getFloat(5));
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
