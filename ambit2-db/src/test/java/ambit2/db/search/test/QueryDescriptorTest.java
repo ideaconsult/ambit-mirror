@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryDescriptor;
 import ambit2.db.search.QueryFieldNumeric;
 import ambit2.db.search.QueryParam;
 
