@@ -7,7 +7,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import ambit2.db.search.QueryDescriptor;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
