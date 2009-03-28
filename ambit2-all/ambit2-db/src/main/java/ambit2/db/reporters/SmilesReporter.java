@@ -2,6 +2,7 @@ package ambit2.db.reporters;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.openscience.cdk.CDKConstants;
 
@@ -37,6 +38,20 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 				System.out.println(item.getProperties());
 			else {
 				output.write(smiles.toString());
+				if (item.getProperties() != null) {
+					Iterator keys = item.getProperties().keySet().iterator();
+					while (keys.hasNext()) {
+						Object key = keys.next();
+						if (key.equals(CDKConstants.SMILES)) continue;
+						Object property = item.getProperty(key);
+						output.write("\t");							
+						output.write(key.toString());
+						output.write("=");
+						if (property!=null) 
+							output.write(property.toString());
+					}
+						
+				}
 				output.write('\n');
 				output.flush();
 			}
