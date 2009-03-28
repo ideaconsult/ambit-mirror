@@ -337,6 +337,7 @@ CREATE TABLE  `src_dataset` (
   `name` varchar(255) collate utf8_bin NOT NULL default 'default',
   `user_name` varchar(16) collate utf8_bin default NULL,
   `idreference` int(11) unsigned NOT NULL,
+  `created` timestamp NOT NULL default CURRENT_TIMESTAMP,  
   PRIMARY KEY  (`id_srcdataset`),
   UNIQUE KEY `src_dataset_name` (`name`),
   KEY `FK_src_dataset_1` (`user_name`),
@@ -352,6 +353,7 @@ DROP TABLE IF EXISTS `struc_dataset`;
 CREATE TABLE IF NOT EXISTS  `struc_dataset` (
   `idstructure` int unsigned  NOT NULL ,
   `id_srcdataset` int unsigned NOT NULL ,
+  `created` timestamp NOT NULL default CURRENT_TIMESTAMP,  
   PRIMARY KEY  (`idstructure`,`id_srcdataset`),
   KEY `struc_dataset` (`id_srcdataset`),
   CONSTRAINT `struc_dataset_ibfk_1`
@@ -361,7 +363,6 @@ CREATE TABLE IF NOT EXISTS  `struc_dataset` (
     FOREIGN KEY (`id_srcdataset`)
     REFERENCES `src_dataset` (`id_srcdataset`) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 
 -- -----------------------------------------------------
 -- Table `sessions` User sessions

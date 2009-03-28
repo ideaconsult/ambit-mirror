@@ -73,7 +73,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))";
 	protected PreparedStatement ps_structure;
 
-	protected static final String insert_dataset = "insert into struc_dataset SELECT ?,id_srcdataset from src_dataset where name=?";
+	protected static final String insert_dataset = "insert into struc_dataset (idstructure,id_srcdataset) SELECT ?,id_srcdataset from src_dataset where name=?";
 	protected PreparedStatement ps_dataset;	
 	
 	protected DbSrcDatasetWriter datasetWriter;
