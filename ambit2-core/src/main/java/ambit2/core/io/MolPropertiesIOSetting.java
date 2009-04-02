@@ -53,7 +53,7 @@ public class MolPropertiesIOSetting extends IOSetting {
     public void addProperties(Map newProperties) {
     	Iterator e = newProperties.keySet().iterator();
     	while (e.hasNext()) {
-    		properties.add(new Property(e.next().toString()));
+    		properties.add(Property.getInstance(e.next().toString(),"I/O"));
     	}
     }
     /*

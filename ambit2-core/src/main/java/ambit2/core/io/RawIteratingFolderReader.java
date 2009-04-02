@@ -31,11 +31,12 @@ package ambit2.core.io;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Hashtable;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.index.CASNumber;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 
 /*
@@ -63,23 +64,24 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 	}
 	//does file name contain CAS number? 
 	protected void assignCASRN(IStructureRecord record) {
-		if (record.getProperty(CDKConstants.CASRN)!=null)
-			record.getProperties().remove(CDKConstants.CASRN);
+		if (record.getProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN))!=null)
+			record.removeProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN));
 		int dot = files[index].getName().indexOf('.');
 		if (dot >= 0) {
 			String cas = files[index].getName().substring(0,dot);
 			if (CASNumber.isValid(cas)) {
-				if (record.getProperties()==null)
-					record.setProperties(new Hashtable());
-				record.getProperties().put(CDKConstants.CASRN, cas);
+				record.setProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN), cas);
 			}
 		}		
 	}
 	protected IRawReader<IStructureRecord> getItemReader(int index) throws Exception {
 		String name = files[index].getName().toLowerCase();
-		System.out.println(index+ "\t"+name);
-		if (name.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) 
-			return (IRawReader<IStructureRecord>)new RawIteratingSDFReader(new FileReader(files[index]));
+		if (name.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
+			RawIteratingSDFReader r = new RawIteratingSDFReader(new FileReader(files[index]));
+			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
+			return (IRawReader<IStructureRecord>) r;
+		}
+			
 		else throw new Exception("Unsupported format "+name); 
 	}
 }

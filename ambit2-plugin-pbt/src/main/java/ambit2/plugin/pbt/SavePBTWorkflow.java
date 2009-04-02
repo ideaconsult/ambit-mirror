@@ -20,7 +20,7 @@ public class SavePBTWorkflow extends Workflow {
 	public SavePBTWorkflow() {
 		
 		SourceDataset dataset = new SourceDataset(PBTWorkBook.PBT_TITLE,
-				new LiteratureEntry(PBTWorkBook.PBT_TITLE,"by Clariant"));		
+				LiteratureEntry.getInstance(PBTWorkBook.PBT_TITLE,"by Clariant"));		
         final RepositoryWriter writer = new RepositoryWriter();
         writer.setDataset(dataset);
         

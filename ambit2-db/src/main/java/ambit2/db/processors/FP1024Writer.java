@@ -28,8 +28,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.BitSet;
-import java.util.Map;
 
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
@@ -58,13 +58,11 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 	@Override
 	public IStructureRecord write(IStructureRecord record) throws SQLException {
 		if (record.getIdchemical() < 0) throw new SQLException("Undefined ID");
-		Map properties = record.getProperties();
-		if (properties ==null) throw new SQLException("Missing properties");
-		Object time = properties.get(AmbitCONSTANTS.FingerprintTIME);
+		Object time = record.getProperty(Property.getInstance(AmbitCONSTANTS.FingerprintTIME,AmbitCONSTANTS.Fingerprint));
 		if (time == null)
 			time = new Long(0);
 		else ((Long) time).longValue();
-		Object fp = properties.get(AmbitCONSTANTS.Fingerprint);
+		Object fp = record.getProperty(Property.getInstance(AmbitCONSTANTS.Fingerprint,AmbitCONSTANTS.Fingerprint));
 		if (fp == null) {
 			writeBitSetValue(record.getIdchemical(), null, ((Long)time).longValue(),FP1024_status.error);
 		} else if (fp instanceof BitSet)		

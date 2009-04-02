@@ -1,6 +1,9 @@
 package ambit2.rest.similarity;
 
 import java.util.BitSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -19,6 +22,9 @@ import ambit2.rest.query.StructureQueryResource;
 
 public class SimilarityResource extends StructureQueryResource<QuerySimilarityBitset> {
 	protected String dataset_id;
+	protected static String delim = null;
+	protected static String bracketLeft="[";
+	protected static String bracketRight="]";
 	
 	public SimilarityResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -28,7 +34,13 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 		} catch (Exception x) {
 			this.dataset_id = null;
 		}
-
+		if (delim == null) {
+			StringBuilder d = new StringBuilder();
+			d.append("-=#+-()/\\.@");
+			for (char a='a';a<='z';a++)	d.append(a);
+			for (char a='A';a<='Z';a++)	d.append(a);
+			delim = d.toString();
+		}
 
 	}
 	@Override
@@ -48,7 +60,9 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 		
 		
 		try {
+			System.out.println(request.getAttributes().get("smiles").toString());
 	        String smiles = Reference.decode(request.getAttributes().get("smiles").toString());
+	        System.out.println(smiles);
 			q.setBitset(getBitset(getMolecule(smiles)));			
 			return q;
 		} catch (InvalidSmilesException x) {
@@ -60,18 +74,31 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 	}
 	public IMolecule getMolecule(String smiles) throws InvalidSmilesException {
 		SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-		String test = smiles;
 		//This is a workaround for a bug in CDK smiles parser
-		for (int i=1; i < 9; i++) {
-			int pos=0;
-			int count = 0;			
-			while ((pos =test.indexOf(Integer.toString(i)))>0) {
-				test = test.substring(pos+1);
-				count++;
-			}
-			if ((count % 2)==1) throw new InvalidSmilesException(smiles);	
-		}
+
+		StringTokenizer t = new StringTokenizer(smiles,"[]",true);
+		int bracket = 0;
+		Hashtable<String, Integer> digits = new Hashtable<String, Integer>();
+		while (t.hasMoreTokens())  {
+			String token = t.nextToken();
+			if (bracketLeft.equals(token)) { bracket++; continue;}
+			if (bracketRight.equals(token)) { bracket = 0; continue;}
+			if (bracket>0) continue;
 			
+			StringTokenizer t1 = new StringTokenizer(token,delim,false);
+			while (t1.hasMoreTokens()) {
+				String d = t1.nextToken();
+				Integer i = digits.get(d);
+				if (i==null) digits.put(d,1);
+				else digits.put(d,i+1);
+			}
+			Iterator<Integer> d = digits.values().iterator();
+			while (d.hasNext())
+				if ((d.next() %2)==1) throw new InvalidSmilesException(smiles);
+		}
+	
+
+	
 		return parser.parseSmiles(smiles);
 	}
 	public BitSet getBitset(IMolecule molecule) throws AmbitException {

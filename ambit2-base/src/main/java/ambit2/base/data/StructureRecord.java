@@ -24,18 +24,50 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.base.data;
 
+import java.lang.ref.Reference;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 import ambit2.base.interfaces.IStructureRecord;
 
 
 public class StructureRecord implements IStructureRecord {
+	protected long hash;
+	protected String formula;
+	protected String smiles;
+	protected String inchi;
 	protected int idchemical;
 	protected int idstructure;
 	protected String content;
 	protected String format;
-	protected Map properties;
+	protected LiteratureEntry reference = null;
+	protected Map<Property,Object> properties;
+	
+	public String getFormula() {
+		return formula;
+	}
+	public void setFormula(String formula) {
+		this.formula = formula;
+	}
+	public long getHash() {
+		return hash;
+	}
+	public void setHash(long hash) {
+		this.hash = hash;
+	}
+	public String getSmiles() {
+		return smiles;
+	}
+	public void setSmiles(String smiles) {
+		this.smiles = smiles;
+	}
+	public String getInchi() {
+		return inchi;
+	}
+	public void setInchi(String inchi) {
+		this.inchi = inchi;
+	}
 	
 	public StructureRecord() {
 		this(-1,-1,"","");
@@ -102,39 +134,45 @@ public class StructureRecord implements IStructureRecord {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#getProperties()
-     */
+	/* 
 	public Map getProperties() {
 		return properties;
 	}
-	/* (non-Javadoc)
-     * @see ambit2.repository.IStructureRecord#setProperties(java.util.Map)
-     */
+
 	public void setProperties(Map properties) {
 		this.properties = properties;
 	}
-	public Object getProperty(Object key) {
+	*/
+	public Object getProperty(Property key) {
 		if (properties != null)
 			return properties.get(key);
 		else return null;
 	}
-	public void setProperty(Object key,Object value) {
+	public void setProperty(Property key,Object value) {
 		if (key == null) return;
-		if (properties == null) setProperties(new Hashtable());
+		if (properties == null) properties = new Hashtable<Property,Object>();
 		if (value == null) properties.remove(key);
 		else properties.put(key, value);
 			
+	}
+	public Iterable<Property> getProperties() {
+		if (properties==null) properties = new Hashtable<Property,Object>();
+		return properties.keySet();
 	}
 	
 	/* (non-Javadoc)
      * @see ambit2.repository.IStructureRecord#clear()
      */
 	public void clear() {
+		setSmiles(null);
+		setInchi(null);
+		setHash(0L);
+		setFormula(null);
 		setContent(null);
 		setIdchemical(-1);
 		setIdstructure(-1);
-		setProperties(null);
+		setReference(null);
+		if (properties!=null) properties.clear();
 		setFormat(null);
 	}
 	@Override
@@ -145,5 +183,36 @@ public class StructureRecord implements IStructureRecord {
 		b.append("\tidstructure=");
 		b.append(getIdstructure());		
 		return b.toString();
+	}
+	public int getNumberOfProperties() {
+		if (properties==null) return 0;
+		return properties.size();
+	}
+	public Object removeProperty(Property key) {
+		if (properties!= null)
+			return properties.remove(key);
+		else return null;
+		
+	}
+	public void clearProperties() {
+		if (properties!=null)
+			properties.clear();
+		
+	}
+	public void addProperties(Map newProperties) {
+		Iterator keys = newProperties.keySet().iterator();
+		while (keys.hasNext()) {
+			Object key = keys.next();
+			if (key instanceof Property)
+				setProperty((Property)key,newProperties.get(key));
+			else
+				setProperty(Property.getInstance(key.toString(),getReference()),newProperties.get(key));
+		}
+	}
+	public LiteratureEntry getReference() {
+		return reference;
+	}
+	public void setReference(LiteratureEntry reference) {
+		this.reference = reference;
 	}
 }	

@@ -6,7 +6,6 @@ import java.io.OutputStream;
 
 import org.openscience.cdk.io.HINWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
-import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.SVGWriter;
 import org.openscience.cdk.io.XYZWriter;

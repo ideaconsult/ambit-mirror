@@ -3,8 +3,6 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.IQueryObject;
 
 public class QueryAquireTest extends QueryTest {

@@ -117,7 +117,6 @@ public static void testGetHashFomDB() throws Exception {
 		IStructureRecord o  ;
 		while (reader.hasNext()) {
 			o = reader.next();
-			if (o.getProperties() == null) o.setProperties(new Hashtable());
 			String content = reader.getStructure(o.getIdstructure());
 			if (content == null) continue;
 			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);

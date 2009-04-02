@@ -29,6 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -50,8 +51,10 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 	private static final long serialVersionUID = 8319267963784553472L;
 	protected SmilesGenerator gen;
 	protected String key="smiles";
+	//protected AtomConfigurator conf = new AtomConfigurator();
 	public SmilesKey() {
 		gen = new SmilesGenerator();
+		gen.setUseAromaticityFlag(true);
 	}
 	public String getKey() {
 		return key;
@@ -62,11 +65,15 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 	public String process(IAtomContainer molecule) throws AmbitException {
 		if ((molecule==null) || (molecule.getAtomCount()==0))
 			throw new AmbitException("Empty molecule!");
+		IAtomContainer mol = null;
 		try {
-			IAtomContainer mol = (IAtomContainer)molecule.clone();
+			mol = (IAtomContainer)molecule.clone();
 			MFAnalyser mf = new MFAnalyser((IMolecule)mol);
 			mol = mf.removeHydrogensPreserveMultiplyBonded();
 			return gen.createChiralSMILES((IMolecule)mol,new boolean[mol.getAtomCount()]);
+		} catch (CDKException x) {
+			logger.warn(x);
+			return gen.createSMILES((IMolecule)mol);
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}

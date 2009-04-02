@@ -29,6 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
@@ -44,8 +45,9 @@ public class PubchemCID extends PropertyKey<Number> {
 	 */
 	private static final long serialVersionUID = -5172763951258433726L;
 	public PubchemCID() {
-		super("PUBCHEM_COMPOUND_CID");
+		super(Property.getInstance("PUBCHEM_COMPOUND_CID","PUBCHEM", "http://pubchem.ncbi.nlm.nih.gov"));
 	}
+
 	@Override
 	protected boolean isValid(Object newkey, Object value) {
 		if (newkey != null) {

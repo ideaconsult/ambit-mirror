@@ -27,15 +27,43 @@ package ambit2.db.processors;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.naming.OperationNotSupportedException;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
+import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.search.IQueryObject;
+import ambit2.db.search.QueryExecutor;
+import ambit2.db.update.IQueryUpdate;
 
 public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDBProcessor<Target, Result>  {
-
-    public synchronized void setConnection(Connection connection)  throws DbAmbitException  {
+	public enum OP {CREATE,READ,UPDATE,DELETE};
+	protected OP operation =OP.CREATE;
+    protected UpdateExecutor<IQueryUpdate> exec;
+    protected QueryExecutor<IQueryObject> queryexec;    
+    
+	public AbstractRepositoryWriter() {
+		exec = new UpdateExecutor<IQueryUpdate>();
+		queryexec = new QueryExecutor<IQueryObject>();
+	}
+	@Override
+	public void close() throws SQLException {
+		super.close();
+		exec.close();
+	}
+	
+    public OP getOperation() {
+		return operation;
+	}
+	public void setOperation(OP operation)  {
+		this.operation = operation;
+	}
+	public synchronized void setConnection(Connection connection)  throws DbAmbitException  {
         super.setConnection(connection);
+        exec.setConnection(connection);
+        queryexec.setConnection(connection);
     }       
     public void open() throws DbAmbitException {
         try {
@@ -45,25 +73,75 @@ public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDB
         }
     }
    
-	protected abstract void prepareStatement(Connection connection) throws SQLException;
-	public Result transaction(Target arg0) throws SQLException {
+
+    protected void prepareStatement(Connection connection) throws SQLException {
+       
+    }
+	public Result transaction(Target target) throws SQLException, AmbitException {
 	    Result result = null;
 		try {
 			connection.setAutoCommit(false);	
-			result = write(arg0);
-	        connection.commit();			
+        	switch (getOperation()) {
+			case CREATE: {
+				result = create(target);
+				break;
+			}
+			case READ: {
+				result = read(target);
+				break;
+			}
+			case DELETE: { 
+				result = delete(target);
+			}
+			case UPDATE: {
+				result = update(target);
+			}
+			default:
+				throw new SQLException("OperationNotSupported " + getOperation());
+			}
+	        connection.commit();	
+	    } catch (OperationNotSupportedException x) {
+	    	connection.rollback();
 	    } catch (SQLException x) {
 	    	connection.rollback();
 	    } finally {
 	        
 	    }
         return result;
+        
 	}	
-	public abstract Result write(Target arg0) throws SQLException ;
-    
+	public Result write(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
+		return create(arg0);
+	}
+	public Result create(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
+		return write(arg0);
+	}
+	public Result delete(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException  {
+		throw new OperationNotSupportedException(getOperation().toString());		
+	}
+	public Result read(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
+		throw new OperationNotSupportedException(getOperation().toString());		
+	}
+	public Result update(Target arg0) throws SQLException,OperationNotSupportedException,AmbitException {
+		throw new OperationNotSupportedException(getOperation().toString());
+	}
+	
 	public Result process(Target target) throws AmbitException {
         try {
-            return write(target);
+        	switch (getOperation()) {
+			case CREATE:
+				return create(target);
+			case READ:
+				return read(target);
+			case DELETE:
+				return delete(target);
+			case UPDATE:
+				return update(target);
+			default:
+				throw new AmbitException("OperationNotSupported " + getOperation());
+			}
+        } catch (OperationNotSupportedException x) {
+            throw new ProcessorException(this,x);
         } catch (SQLException x) {
             throw new ProcessorException(this,x);
         }

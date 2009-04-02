@@ -62,7 +62,7 @@ public class HTTPRequestTest {
 	
 	public static void main(String[] args) {
 		if (args.length<1) {
-			System.out.println("");
+			System.out.println("Query not defined");
 			Runtime.getRuntime().exit(1);
 		}
 		EntrezSearchProcessor test = new EntrezSearchProcessor();

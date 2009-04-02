@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -30,7 +31,8 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 		
 		record.setContent(molwriter.process(a));
 		record.setFormat(MOL_TYPE.SDF.toString());
-		record.setProperties(a.getProperties());
+		record.clearProperties();
+		record.addProperties(a.getProperties());
 		return record;
 	}
 	

@@ -2,24 +2,20 @@ package ambit2.db.processors.test;
 
 import java.sql.ResultSet;
 import java.util.BitSet;
-import java.util.Hashtable;
 
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.datatype.DataType;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.renderer.color.IAtomColorer;
 
-import ambit2.base.data.StructureRecord;
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.RepositoryReader;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.readers.RetrieveAtomContainer;
@@ -54,7 +50,6 @@ public class FP1024WriterTest extends DbUnitTest {
 		
 		while (reader.hasNext()) {
 			o = reader.next();
-			if (o.getProperties() == null) o.setProperties(new Hashtable());
 			String content = reader.getStructure(o.getIdstructure());
 			if (content == null) continue;
 			molReader.setValue(o);
@@ -66,11 +61,11 @@ public class FP1024WriterTest extends DbUnitTest {
 				BitSet bitset = null;
 				try {
 					bitset = gen.process((IMolecule)mol);
-					o.getProperties().put(AmbitCONSTANTS.Fingerprint,bitset);					
+					o.setProperty(Property.getInstance(AmbitCONSTANTS.Fingerprint,AmbitCONSTANTS.Fingerprint),bitset);					
 				} catch (Exception x) {
 
 				}
-	  			o.getProperties().put(AmbitCONSTANTS.FingerprintTIME,System.currentTimeMillis()-mark);
+	  			o.setProperty(Property.getInstance(AmbitCONSTANTS.FingerprintTIME,AmbitCONSTANTS.Fingerprint),System.currentTimeMillis()-mark);
 
 				fpWriter.write(o);	
 			}

@@ -1,25 +1,14 @@
 package ambit2.rest.resource.test;
 
-import static org.junit.Assert.fail;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Client;
-import org.restlet.Component;
-import org.restlet.Context;
 import org.restlet.data.Protocol;
 import org.restlet.data.Response;
 
-import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
 
 public class DatasetsResourceTest extends ResourceTest {
 
-	@Test
-	public void testGetRepresentationVariant() {
-		fail("Not yet implemented");
-	}
 	@Test
 	public void getDatasets() throws Exception {
 		Client client = new Client(Protocol.HTTP);

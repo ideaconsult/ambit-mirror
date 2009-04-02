@@ -268,5 +268,22 @@ public class AmbitUser extends Model {
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append(getName());
+		b.append(" ");
+		if (!getTitle().equals(""))
+			b.append(getTitle());
+		if (!getFirstName().equals("")) {
+			b.append(" ");
+			b.append(getFirstName());
+		}
+		if (!getLastName().equals("")) {
+			b.append(" ");
+			b.append(getLastName());	
+		}
+		return b.toString();
+	}
 }
 

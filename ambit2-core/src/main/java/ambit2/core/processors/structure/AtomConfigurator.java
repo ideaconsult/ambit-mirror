@@ -53,7 +53,11 @@ import ambit2.base.processors.DefaultAmbitProcessor;
  */
 public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtomContainer>{
 
-    protected static Hashtable<String,Integer> elements = null;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1245226849382037921L;
+	protected static Hashtable<String,Integer> elements = null;
 	
     /**
      * 

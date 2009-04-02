@@ -40,12 +40,18 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.io.FileInputState;
 import ambit2.core.io.IRawReader;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.PubchemCID;
 import ambit2.db.SourceDataset;
@@ -75,7 +81,7 @@ public class RepositoryWriterTest extends DbUnitTest {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/input.sdf");
 		Assert.assertNotNull(in);
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
-		
+		reader.setReference(LiteratureEntry.getInstance("input.sdf"));
 		write(reader,c.getConnection());
         c.close();
         
@@ -135,7 +141,7 @@ delete from struc_dataset where idstructure>3
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/problem.sdf");
 		Assert.assertNotNull(in);
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
-		
+		reader.setReference(LiteratureEntry.getInstance("Empty smiles"));
 		write(reader,c.getConnection());
         c.close();
         
@@ -195,7 +201,7 @@ delete from struc_dataset where idstructure>3
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/struc_cas.sdf");
 		Assert.assertNotNull(in);
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
-		
+		reader.setReference(LiteratureEntry.getInstance("Multi strucsame smiles"));
 		write(reader,c.getConnection());
         c.close();
         
@@ -241,7 +247,7 @@ delete from struc_dataset where idstructure>3
 		RepositoryWriter writer = new RepositoryWriter();
 		if (key != null)
 			writer.setPropertyKey(key);
-		writer.setDataset(new SourceDataset("TEST INPUT",new LiteratureEntry("File","file:input.sdf")));
+		writer.setDataset(new SourceDataset("TEST INPUT",LiteratureEntry.getInstance("File","file:input.sdf")));
 		writer.setConnection(connection);
         writer.open();
 		int records = 0;
@@ -256,6 +262,35 @@ delete from struc_dataset where idstructure>3
 		return records;
 	}	
 	
+	public int write(IIteratingChemObjectReader reader,Connection connection,PropertyKey key) throws Exception  {
+		
+		IStructureRecord record = new StructureRecord();
+		MoleculeWriter molwriter = new MoleculeWriter();
+		RepositoryWriter writer = new RepositoryWriter();
+		if (key != null)
+			writer.setPropertyKey(key);
+		writer.setDataset(new SourceDataset("Dataset 1",LiteratureEntry.getInstance("File","file:property.csv")));
+		writer.setConnection(connection);
+        writer.open();
+		int records = 0;
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			if (o instanceof IAtomContainer) {
+				record.setReference(LiteratureEntry.getInstance("File","file:property.csv"));
+				record.setIdchemical(-1);
+				record.setIdstructure(-1);
+				record.setFormat(IStructureRecord.MOL_TYPE.SDF.toString());
+				record.clearProperties();
+				record.addProperties(((IAtomContainer)o).getProperties());
+				record.setContent(molwriter.process((IAtomContainer)o));
+				writer.write(record);
+				records ++;
+			} else throw new AmbitException("Unsupported class "+o.getClass().getName());
+		}
+		reader.close();
+		writer.close();
+		return records;
+	}		
 	@Test
 	public void testWriteMultipleFiles() throws Exception {
 		
@@ -302,7 +337,8 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(15,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
-		Assert.assertEquals(34,property.getRowCount());
+		//Assert.assertEquals(34,property.getRowCount());
+		Assert.assertEquals(220,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(378,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
@@ -350,7 +386,7 @@ delete from struc_dataset where idstructure>3
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/cid/712.sdf");
 		Assert.assertNotNull(in);
 		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
-		
+		reader.setReference(LiteratureEntry.getInstance("712.sdf"));
 		write(reader,c.getConnection(),new PubchemCID());
         c.close();
         
@@ -387,4 +423,66 @@ delete from struc_dataset where idstructure>3
 		 */
 
 	}		
+	
+	
+	public void testImportProperties() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+        IDatabaseConnection c = getConnection();
+        
+		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(4,chemicals.getRowCount());
+		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(4,strucs.getRowCount());
+		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset");
+		Assert.assertEquals(1,srcdataset.getRowCount());
+		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(2,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(3,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(3,property_values.getRowCount());
+		
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/cid/property.csv");
+		Assert.assertNotNull(in);
+		IIteratingChemObjectReader reader = FileInputState.getReader(in,".csv");
+		
+		write(reader,c.getConnection(),null);
+        c.close();
+        
+        c = getConnection();
+		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(4,chemicals.getRowCount());
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(4,strucs.getRowCount());
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='Dataset 1'");
+		Assert.assertEquals(1,srcdataset.getRowCount());
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(2,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(7,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(11,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
+		Assert.assertEquals(6,property_values.getRowCount());			
+		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
+		Assert.assertEquals(2,tuples.getRowCount());			
+		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
+		Assert.assertEquals(8,p_tuples.getRowCount());				
+		c.close();
+		/**
+		 * Removing redundant properties
+insert ignore into property_values
+select id,idproperty,idstructure,idvalue,idtype,user_name,status from property_values where idstructure>3
+on duplicate key update idstructure=3
+delete from property_values where idstructure>3
+
+insert ignore into struc_dataset
+select idstructure,id_srcdataset from struc_dataset where idstructure>3
+on duplicate key update idstructure=3
+delete from struc_dataset where idstructure>3
+		 */
+
+	}			
 }

@@ -30,9 +30,8 @@
 package ambit2.db.processors;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-
-import javax.xml.transform.OutputKeys;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.BooleanResult;
@@ -44,6 +43,7 @@ import org.openscience.cdk.qsar.result.IntegerResult;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.core.data.IntArrayResult;
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.descriptors.VerboseDescriptorResult;
@@ -77,16 +77,24 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 		return null;
 	}
 	@Override
-	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {
-		return Arrays.asList(descriptor.getNames());
+	protected Iterable<Property> getPropertyNames(DescriptorValue descriptor) {
+		List<Property> p = new ArrayList<Property>();
+		for (String name: descriptor.getNames()) {
+			p.add(Property.getInstance(name,
+					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
+					));
+		}
+		return p;
 	}
+	/*
 	@Override
 	protected LiteratureEntry getReference(DescriptorValue descriptor) {
-		return new LiteratureEntry(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
+		return LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
 	}
+	*/
 
 	@Override
-	protected Object getValue(DescriptorValue descriptor,String propertyName, int propertyIndex) {
+	protected Object getValue(DescriptorValue descriptor,Property property, int propertyIndex) {
         IDescriptorResult result = descriptor.getValue();
         double value = Double.NaN;
         if (result instanceof VerboseDescriptorResult)
@@ -112,21 +120,21 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 		return descriptorDictionary;
 	}
 	@Override
-	protected boolean insertValue(double value, int idproperty, int idtuple,
+	protected boolean insertValue(double value, Property property, int idtuple,
 			ambit2.db.processors.AbstractPropertyWriter.mode error)
 			throws SQLException {
-		return super.insertValue(value, idproperty, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
+		return super.insertValue(value, property, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
 	}
 	@Override
-	protected boolean insertValue(int value, int idproperty, int idtuple,
+	protected boolean insertValue(int value, Property property, int idtuple,
 			ambit2.db.processors.AbstractPropertyWriter.mode error)
 			throws SQLException {
-		return super.insertValue(value, idproperty, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
+		return super.insertValue(value, property, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
 	}
 	@Override
-	protected boolean insertValue(String value, int idproperty, int idtuple,
+	protected boolean insertValue(String value, Property property, int idtuple,
 			ambit2.db.processors.AbstractPropertyWriter.mode error)
 			throws SQLException {
-		return super.insertValue(value, idproperty, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
+		return super.insertValue(value, property, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
 	}
 }

@@ -31,6 +31,7 @@ import java.util.Iterator;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -73,10 +74,12 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 					        }
 					};					
 					return new RawIteratingFolderReader(file.listFiles(filter));
-				} else
-					return new RawIteratingSDFReader(
-							new FileReader(((FileInputState)target).getFile())
-													);
+				} else {
+					RawIteratingSDFReader reader = new RawIteratingSDFReader(
+							new FileReader(file));
+					reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+					return reader;
+				}
 			} catch (IOException x) {
 				throw new AmbitIOException(x);
 			} catch (Exception x) {

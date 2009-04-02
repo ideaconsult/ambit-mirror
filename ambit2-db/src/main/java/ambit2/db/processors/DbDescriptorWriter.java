@@ -30,12 +30,14 @@
 package ambit2.db.processors;
 
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 
 
 
@@ -54,8 +56,8 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
     	return target;
     }
     @Override
-    protected void descriptorEntry(DescriptorValue target, int idproperty,
-    		String propertyName, int propertyIndex, int idtuple) throws SQLException {
+    protected void descriptorEntry(DescriptorValue target, Property property,
+    		 int propertyIndex, int idtuple) throws SQLException {
     	
     }
 
@@ -66,13 +68,21 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 		return null;//descriptorDictionary;
 	}
 	@Override
-	protected Iterable<String> getPropertyNames(DescriptorValue descriptor) {
-		return Arrays.asList(descriptor.getNames());
+	protected Iterable<Property> getPropertyNames(DescriptorValue descriptor) {
+		List<Property> p = new ArrayList<Property>();
+		for (String name: descriptor.getNames()) {
+			p.add(Property.getInstance(name,
+					 LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationIdentifier(),descriptor.getSpecification().getSpecificationReference())
+					 ));
+		}
+		return p;
 	}
+	/*
 	@Override
 	protected LiteratureEntry getReference(DescriptorValue descriptor) {
-		return new LiteratureEntry(descriptor.getSpecification().getImplementationIdentifier(),descriptor.getSpecification().getSpecificationReference());
+		return LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationIdentifier(),descriptor.getSpecification().getSpecificationReference());
 	}
+	*/
 	@Override
 	protected Dictionary getTemplate(DescriptorValue descriptor)
 			throws SQLException {

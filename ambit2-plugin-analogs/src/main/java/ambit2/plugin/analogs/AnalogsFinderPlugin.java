@@ -69,15 +69,20 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
 	  	Profile profile = new Profile();
-	  	profile.add(new Property("CAS"));
-	  	profile.add(new Property("CAS","CASNO"));
-	  	profile.add(new Property("Name"));
-	  	profile.add(new Property("org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","LogP",-1,org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor.class));
+	  	profile.add(Property.getInstance("CAS","CAS Registry Number", "http://www.cas.org"));
+	  	profile.add(Property.getInstance("CAS","CAS Registry Number", "http://www.cas.org"));
+	  	profile.add(Property.getInstance("Name","Chemical name","http://www.iupac.org"));
+	  	Property p = Property.getInstance("org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","Descriptors");
+	  	p.setLabel("LogP");
+	  	p.setClazz(org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor.class);
+	  	profile.add(p);
     	getWorkflowContext().put(DBWorkflowContext.PROFILE, profile);
     	
 	  	Profile endpoints = new Profile();
-	  	endpoints.add(new Property("Aquatic toxicity"));
-	  	endpoints.add(new Property("Skin sensitisation","EC3"));
+	  	endpoints.add(Property.getInstance("Aquatic toxicity","Endpoints"));
+	  	p =Property.getInstance("Skin sensitisation","Endpoints");
+	  	p.setLabel("EC3");
+	  	endpoints.add(p);
     	getWorkflowContext().put(DBWorkflowContext.ENDPOINTS, endpoints);    	
     	
 		LoginInfo li = new LoginInfo();

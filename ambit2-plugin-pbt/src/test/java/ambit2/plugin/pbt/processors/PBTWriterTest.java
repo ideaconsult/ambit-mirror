@@ -73,7 +73,7 @@ public class PBTWriterTest extends DbUnitTest {
 		pbt.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setB12("72.2");
 	
 		SourceDataset dataset = new SourceDataset(PBTWorkBook.PBT_TITLE,
-				new LiteratureEntry(PBTWorkBook.PBT_TITLE,"by Clariant"));
+				LiteratureEntry.getInstance(PBTWorkBook.PBT_TITLE,"by Clariant"));
 		
 		RepositoryWriter writer = new RepositoryWriter();
 		

@@ -84,11 +84,41 @@ public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 			Assert.assertEquals(1,names.getRowCount());
 			count++;
 		}
-		Assert.assertTrue(count>0);
+		Assert.assertEquals(3,count);
 		rs.close();
 		qe.close();
 		c.close();
 	}	
+	
+	@Test
+	public void testGetObjectByName() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+
+		IDatabaseConnection c = getConnection();
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");		
+		Assert.assertEquals(3,names.getRowCount());
+
+		QueryExecutor<RetrieveFieldNames> qe = new QueryExecutor<RetrieveFieldNames>();		
+		qe.setConnection(c.getConnection());
+
+		Property p = Property.getInstance("Property 1","CAS Registry Number");
+		RetrieveFieldNames q = new RetrieveFieldNames();
+		q.setFieldname("name");
+		q.setValue(p);
+		ResultSet rs = qe.process(q);
+		
+		int count = 0; 
+		while (rs.next()) {
+			
+			names = 	c.createQueryTable("EXPECTED_NAME","SELECT * FROM properties where idproperty="+query.getObject(rs).getId());		
+			Assert.assertEquals(1,names.getRowCount());
+			count++;
+		}
+		Assert.assertEquals(1,count);
+		rs.close();
+		qe.close();
+		c.close();
+	}		
 
 	@Test
 	public void testGetFieldID() {

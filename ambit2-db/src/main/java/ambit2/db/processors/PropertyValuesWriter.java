@@ -26,10 +26,14 @@ package ambit2.db.processors;
 
 import java.sql.SQLException;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.openscience.cdk.CDKConstants;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
 
@@ -48,22 +52,21 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	private static final long serialVersionUID = 3140079486695024274L;
 	protected Dictionary dictionary = new Dictionary();
 	protected Dictionary propertyDictionary = new Dictionary();
-	protected LiteratureEntry reference = new LiteratureEntry("Structure properties");
+	protected LiteratureEntry reference = LiteratureEntry.getInstance("Structure properties");
 
 	@Override
 	public void setDataset(SourceDataset dataset) {
 		super.setDataset(dataset);
 		if (getDataset() != null) {
 			dictionary = new Dictionary(getDataset().getName(),"Dataset");
-			reference.setTitle(dataset.getTitle());
-			reference.setURL(dataset.getURL());
+			reference = LiteratureEntry.getInstance(dataset.getTitle(),dataset.getURL());
 		} else
 			dictionary = new Dictionary("Dataset","All");
 	}
 	@Override
-	protected Object getValue(IStructureRecord record, String propertyName,
+	protected Object getValue(IStructureRecord record, Property property,
 			int index) {
-		Object o = record.getProperties().get(propertyName);
+		Object o = record.getProperty(property);
 
 		try {
 			if (o instanceof Number) return o;  
@@ -95,21 +98,23 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	}
 
 	@Override
-	protected Iterable<String> getPropertyNames(IStructureRecord record) {
-		return record.getProperties().keySet();
+	protected Iterable<Property> getPropertyNames(IStructureRecord record) {
+		return record.getProperties();
 	}
 
+	/*
 	@Override
 	protected LiteratureEntry getReference(IStructureRecord target) {
 		return reference;
 	}
+	*/
 
 	@Override
 	protected IStructureRecord transform(IStructureRecord target) {
 		return target;
 	}
 	@Override
-	public IStructureRecord write(IStructureRecord target) throws SQLException {
+	public IStructureRecord write(IStructureRecord target) throws SQLException, AmbitException, OperationNotSupportedException {
 		setStructure(target);
 		return super.write(target);
 	}

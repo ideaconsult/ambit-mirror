@@ -29,30 +29,31 @@
 
 package ambit2.db.processors;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+
+import javax.naming.OperationNotSupportedException;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
-import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.RetrieveFieldNames;
+import ambit2.db.update.dictionary.TemplateAddProperty;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
 	protected enum mode  {OK, UNKNOWN,ERROR};
-	protected static final String select_descriptor = "SELECT idproperty,idreference,name,units,comments,islocal,idreference,title,url from properties join catalog_references using(idreference) where name=? and idreference=?";
-    protected static final String insert_descriptor = "INSERT IGNORE INTO properties (idproperty,idreference,name,units,comments,islocal) VALUES (null,?,?,?,?,0)";
-    protected static final String insert_templatedef = "INSERT IGNORE INTO template_def SELECT idtemplate,?,? from template WHERE name=?";
-    protected PreparedStatement ps_descriptor;
-    protected PreparedStatement ps_selectdescriptor;
-    protected PreparedStatement ps_templatedef;
-    protected DbReferenceWriter referenceWriter;
-    protected TemplateWriter templateWriter;
+	protected TemplateAddProperty templateWriter;
     protected SourceDataset dataset = null;
+    protected RetrieveFieldNames selectField = new RetrieveFieldNames();
+    
+    public AbstractPropertyWriter() {
+		super();
+		selectField.setFieldname("name");
+        templateWriter = new TemplateAddProperty();
+	}
 
 	public SourceDataset getDataset() {
 		return dataset;
@@ -67,124 +68,52 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	 */
 	private static final long serialVersionUID = 3962356158979832113L;
 
-    
-    public synchronized DbReferenceWriter getReferenceWriter() {
-        return referenceWriter;
-    }
-
-    public synchronized void setReferenceWriter(DbReferenceWriter referenceWriter) {
-        this.referenceWriter = referenceWriter;
-    }    
-    @Override
-    protected void prepareStatement(Connection connection) throws SQLException {
-        ps_descriptor = connection.prepareStatement(insert_descriptor,Statement.RETURN_GENERATED_KEYS);
-        ps_selectdescriptor = connection.prepareStatement(select_descriptor);
-        ps_templatedef = connection.prepareStatement(insert_templatedef);
-    }
-    @Override
-    public synchronized void setConnection(Connection connection) throws DbAmbitException {
-        super.setConnection(connection);
-        if (referenceWriter == null) setReferenceWriter(new DbReferenceWriter());
-        referenceWriter.setConnection(connection);
-        if (templateWriter == null) templateWriter = new TemplateWriter();
-        templateWriter.setConnection(connection);        
-       
-    }
-    @Override
-    public void open() throws DbAmbitException {
-    	super.open();
-        referenceWriter.open();
-        templateWriter.open();
-    }
-
-    public void close() throws SQLException {
-        if (ps_descriptor != null)
-            ps_descriptor.close();
-        ps_descriptor = null;
-        
-        if (ps_selectdescriptor != null)
-            ps_selectdescriptor.close();
-        ps_selectdescriptor = null;      
-        
-        if (ps_templatedef != null) 
-        	ps_templatedef.close();
-        ps_templatedef = null;
-        templateWriter.close();        
-        referenceWriter.close();
-        super.close();
-    }    
-    protected abstract LiteratureEntry getReference(Target target);
-    protected abstract Iterable<String> getPropertyNames(Target target);
+ 
+   // protected abstract LiteratureEntry getReference(Target target);
+    protected abstract Iterable<Property> getPropertyNames(Target target);
     protected abstract Dictionary getComments(String name,Target target);
-    protected abstract void descriptorEntry(Target target,int idproperty,String propertyName, int propertyIndex,int idtuple) throws SQLException;
+    protected abstract void descriptorEntry(Target target,Property property, int propertyIndex,int idtuple) throws SQLException;
 
     protected int getTuple(SourceDataset dataset) {
     	return -1;
     }
     protected abstract Result transform(Target target) ;
     
-    public Result write(Target target) throws SQLException {
+    public Result write(Target target) throws SQLException, AmbitException, OperationNotSupportedException {
 
-        LiteratureEntry le = getReference(target);
-        le = referenceWriter.write(le);
-        
-        Iterable<String> names = getPropertyNames(target);
+        Iterable<Property> names = getPropertyNames(target);
         int idtuple = getTuple(getDataset());
         int i=0;
-        for (String name: names) {
-        	
-            ps_selectdescriptor.clearParameters();
-            ps_selectdescriptor.setString(1, name);
-            ps_selectdescriptor.setInt(2, le.getId());
+        for (Property property: names) {
+        	property.setId(-1);
+            selectField.setValue(property);
             
             boolean found = false;
-            ResultSet rs1 = ps_selectdescriptor.executeQuery();
+            ResultSet rs1 = queryexec.process(selectField);
             while (rs1.next()) {
-            	int iddescriptor = rs1.getInt(1);
-            	templateEntry(target,iddescriptor);	  
-                descriptorEntry(target,iddescriptor,name,i,idtuple);
+            	property = selectField.getObject(rs1);
+            	templateEntry(target, property);	  
+                descriptorEntry(target, property,i,idtuple);
                 found = true;
             }
-            rs1.close();
+            queryexec.closeResults(rs1);
             
             if (!found) {
-            	if (ps_descriptor == null)
-                    ps_descriptor = connection.prepareStatement(insert_descriptor,Statement.RETURN_GENERATED_KEYS);
-                ps_descriptor.clearParameters();
-                ps_descriptor.setInt(1,le.getId());
-                ps_descriptor.setString(2,name);
-                ps_descriptor.setNull(3,Types.VARCHAR);
-                Dictionary comments = getComments(name,target);
+            	
+                Dictionary comments = getComments(property.getName(),target);
                 if (comments == null)
-                	ps_descriptor.setString(4,name);
+                	property.setLabel(property.getName());
                 else
-                	ps_descriptor.setString(4,comments.getTemplate());
-                ps_descriptor.executeUpdate();
+                	property.setLabel(comments.getTemplate());
+
+                if (comments != null) {
+                	comments.setParentTemplate(comments.getTemplate());
+                	comments.setTemplate(property.getName());
+                	write(comments,property);                	
+                }	                	
+            	templateEntry(target,property);	                	
+                descriptorEntry(target,property,i,idtuple);
                 
-                ResultSet rs = ps_descriptor.getGeneratedKeys();
-                try {
-	                while (rs.next()) {
-	                	//
-	                	int iddescriptor = rs.getInt(1);
-	                	
-	                    if (comments != null) {
-	                    	templateWriter.write(comments);
-	                    	comments.setParentTemplate(comments.getTemplate());
-	                    	comments.setTemplate(name);
-	                    	write(comments,iddescriptor);                	
-	                    }	                	
-	                	templateEntry(target,iddescriptor);	                	
-	                    descriptorEntry(target,iddescriptor,name,i,idtuple);
-		                    
-	                } 
-                } catch (Exception x) {
-                	x.printStackTrace();
-                	logger.error(x);
-                } finally {
-	                rs.close();
-	                ps_descriptor.close();
-	                ps_descriptor = null;
-                }
             }
             i++;
         }
@@ -193,21 +122,21 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     };
     protected abstract Dictionary getTemplate(Target target)  throws SQLException ;
 
-    	//SELECT ?,name,? from template WHERE name=?"
     
-    protected  void templateEntry(Target target,int idproperty) throws SQLException {
+    protected  void templateEntry(Target target,Property property) throws SQLException {
     	
-    	write(getTemplate(target),idproperty);
+    	write(getTemplate(target),property);
 
     }
-    protected  void write(Dictionary template,int idproperty) throws SQLException {
+    protected  void write(Dictionary template,Property property) throws SQLException {
+    	try {
     	
-    	templateWriter.write(template);
-    	ps_templatedef.clearParameters();
-    	ps_templatedef.setInt(1,idproperty);//idproperty
-    	ps_templatedef.setInt(2,idproperty);//order
-    	ps_templatedef.setString(3,template.getTemplate());    	
-    	ps_templatedef.execute();
+	    	templateWriter.setGroup(template);
+	    	templateWriter.setObject(property);
+	    	exec.process(templateWriter);	  
 
+    	} catch (Exception x) {
+    		throw new SQLException(x.getMessage());
+    	}
     }    
 }

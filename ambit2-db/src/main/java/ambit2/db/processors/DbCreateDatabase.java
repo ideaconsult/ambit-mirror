@@ -48,13 +48,16 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
 	private static final long serialVersionUID = -335737998721944578L;
 	protected String SQLFile = "ambit2/db/sql/create_tables.sql";
 
+	public DbCreateDatabase() {
+		setOperation(OP.CREATE);
+	}
     @Override
     protected void prepareStatement(Connection connection) throws SQLException {
         // TODO Auto-generated method stub
 
     }
     @Override
-    public String write(StringBean database) throws SQLException {
+    public String create(StringBean database) throws SQLException {
         createDatabase(database.toString());
         createTables(database.toString());
         

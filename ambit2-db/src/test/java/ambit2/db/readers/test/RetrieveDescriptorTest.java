@@ -29,26 +29,18 @@
 
 package ambit2.db.readers.test;
 
-import static org.junit.Assert.fail;
-
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.db.SourceDataset;
 import ambit2.db.readers.IRetrieval;
-import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.readers.RetrieveDescriptor;
 import ambit2.db.search.QueryExecutor;
 

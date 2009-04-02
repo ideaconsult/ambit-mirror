@@ -54,11 +54,9 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
-import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Profile;

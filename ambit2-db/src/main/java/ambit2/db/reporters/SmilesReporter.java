@@ -2,10 +2,10 @@ package ambit2.db.reporters;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.openscience.cdk.CDKConstants;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -33,15 +33,14 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	@Override
 	protected void processItem(IStructureRecord item, Writer output) {
 		try {
-			Object smiles = item.getProperty(CDKConstants.SMILES);
+			Object smiles = item.getProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
 			if (smiles == null)
 				System.out.println(item.getProperties());
 			else {
 				output.write(smiles.toString());
 				if (item.getProperties() != null) {
-					Iterator keys = item.getProperties().keySet().iterator();
-					while (keys.hasNext()) {
-						Object key = keys.next();
+					for (Property key: item.getProperties()) {
+
 						if (key.equals(CDKConstants.SMILES)) continue;
 						Object property = item.getProperty(key);
 						output.write("\t");							

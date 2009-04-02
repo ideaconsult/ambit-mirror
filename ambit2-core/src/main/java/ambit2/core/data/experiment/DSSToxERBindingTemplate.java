@@ -1,6 +1,5 @@
 package ambit2.core.data.experiment;
 
-import java.util.Collection;
 
 /**
  * A template with fields extracted from DSSTox estrogen binding database.

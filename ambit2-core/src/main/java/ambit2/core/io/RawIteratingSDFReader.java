@@ -27,7 +27,11 @@ public class RawIteratingSDFReader extends RawIteratingReader<IStructureRecord> 
     public IStructureRecord nextRecord() {
         Object o = next();
         if (o instanceof IStructureRecord) return (IStructureRecord)o;
-        else return new StructureRecord(-1,-1,o.toString(),"SDF");
+        else {
+        	StructureRecord r = new StructureRecord(-1,-1,o.toString(),"SDF");
+        	r.setReference(reference);
+        	return r;
+        }
     }
     @Override
     public Object next() {
@@ -36,6 +40,7 @@ public class RawIteratingSDFReader extends RawIteratingReader<IStructureRecord> 
 		r.setIdstructure(-1);
 		r.setFormat("SDF");
 		r.setContent(o.toString());
+		r.setReference(getReference());
 		return r;    	
     }
     

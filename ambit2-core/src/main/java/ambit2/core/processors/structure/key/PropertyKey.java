@@ -29,8 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
-import java.util.Iterator;
-
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -41,18 +40,19 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 	 * 
 	 */
 	private static final long serialVersionUID = 6393097111823664858L;
-	protected String key=null;
+	protected Property key=null;
 	public PropertyKey() {
 		this(null);
 	}
-	public PropertyKey(String key) {
+	public PropertyKey(Property key) {
 		setKey(key);
 	}
 		
 	public String getKey() {
-		return key;
+		if (key == null) return null;
+		return key.getName();
 	}
-	public void setKey(String key) {
+	public void setKey(Property key) {
 		this.key = key;
 	}	
 	public Result process(IStructureRecord structure) throws AmbitException {
@@ -61,11 +61,10 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 		
 		if ((key == null) || (structure.getProperty(key)==null)) {
 			//find which key corresponds to CAS
-			Iterator keys = structure.getProperties().keySet().iterator();
-			while (keys.hasNext()) {
-				Object newkey = keys.next();
-				if (isValid(newkey, structure.getProperties().get(newkey).toString())) {
-					this.key = newkey.toString();
+			for (Property newkey: structure.getProperties()) {
+
+				if (isValid(newkey, structure.getProperty(newkey).toString())) {
+					this.key = newkey;
 					return getProperty(structure);
 				}
 			}

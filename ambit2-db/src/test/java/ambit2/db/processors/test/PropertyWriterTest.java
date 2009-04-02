@@ -30,7 +30,6 @@
 package ambit2.db.processors.test;
 
 import java.io.StringReader;
-import java.util.Hashtable;
 
 import junit.framework.Assert;
 
@@ -41,6 +40,8 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
@@ -62,9 +63,8 @@ public class PropertyWriterTest  extends DbUnitTest {
         PropertyValuesWriter writer = new PropertyValuesWriter();
 
 		StructureRecord record = new StructureRecord(7,100211,"","");
-		record.setProperties(new Hashtable());
-		record.getProperties().put("Property1", "Value1");
-		record.getProperties().put("Property2", 0.99);
+		record.setProperty(Property.getInstance("Property1","Reference 1"), "Value1");
+		record.setProperty(Property.getInstance("Property2","Reference 1"), 0.99);
 		
         writer.setConnection(c.getConnection());
         writer.open();
@@ -117,7 +117,8 @@ public class PropertyWriterTest  extends DbUnitTest {
 			if (mReader.hasNext()) {
 				Object mol = mReader.next();
 				if (mol instanceof IMolecule) {
-					o.setProperties(((IMolecule)mol).getProperties());
+					o.clearProperties();
+					o.addProperties(((IMolecule)mol).getProperties());
 					propertyWriter.write(o);
 				}
 			}

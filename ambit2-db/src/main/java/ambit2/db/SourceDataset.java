@@ -6,12 +6,11 @@ package ambit2.db;
 
 import ambit2.base.data.AmbitBean;
 import ambit2.base.data.LiteratureEntry;
-import ambit2.db.processors.DbSrcDatasetWriter;
 
 
 
 /**
- * An origin dataset . Used in {@link DbSrcDatasetWriter}.
+ * A dataset
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2008-4-20
  */
@@ -33,7 +32,7 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
 		this("");
 	}
 	public SourceDataset(String name) {
-		this(name,new LiteratureEntry());
+		this(name,LiteratureEntry.getInstance());
 	}
 	/**
 	 * @param name
@@ -82,19 +81,17 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
         return getName().compareTo(o.getName());
     }
     public String getTitle() {
-    	if (reference == null) reference = new LiteratureEntry();
+    	if (reference == null) reference = LiteratureEntry.getInstance(getTitle(),getURL());
     	return reference.getTitle();
     }
     public String getURL() {
-    	if (reference == null) reference = new LiteratureEntry();
+    	if (reference == null) reference = LiteratureEntry.getInstance(getTitle());
     	return reference.getURL();
     }    
     public void setTitle(String title) {
-    	if (reference == null) reference = new LiteratureEntry();
-    	reference.setTitle(title);    	
+    	reference = LiteratureEntry.getInstance(title,getURL());
     }
     public void setURL(String url) {
-    	if (reference == null) reference = new LiteratureEntry();
-    	reference.setURL(url);    	
+    	reference = LiteratureEntry.getInstance(getTitle(),url);
     }    
 }

@@ -10,8 +10,10 @@ import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.db.SourceDataset;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
+import ambit2.db.search.QueryDataset;
 import ambit2.db.search.QueryFieldNumeric;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.QuerySimilarityBitset;
@@ -40,6 +42,22 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		qc.add(q);
 		
 	}
+	
+	@Test
+	public void testDataset() throws Exception {
+		
+		QueryCombined qc = new QueryCombined();
+		qc.setId(55);
+		QueryStructure qs = new QueryStructure();
+		qs.setFieldname("idchemical");
+		qs.setValue("10");
+		QueryDataset dataset = new QueryDataset();
+		dataset.setValue(new SourceDataset("Dataset 1"));
+		qc.setScope(dataset);
+		qc.add(qs);
+		System.out.println(qc.getSQL());
+		
+	}	
 	@Test
 	public void test() throws Exception {
 		QueryStored qs = new QueryStored();
@@ -104,7 +122,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		
 		QueryStructure qf = new QueryStructure();
 		qf.setFieldname("smiles");
-		qf.setValue("[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3");
+		qf.setValue("[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC");
 		qf.setCondition(StringCondition.getInstance("="));
 		
 		q.setScope(null);
