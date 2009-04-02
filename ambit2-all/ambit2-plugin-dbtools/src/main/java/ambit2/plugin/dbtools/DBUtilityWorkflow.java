@@ -27,7 +27,6 @@ package ambit2.plugin.dbtools;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.BitSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -149,7 +148,6 @@ class FPGenerator extends DefaultAmbitProcessor<IStructureRecord,IStructureRecor
     
     public IStructureRecord process(IStructureRecord target)
     		throws AmbitException {
-    	if (target.getProperties() == null) target.setProperties(new Hashtable());
     	IAtomContainer a = reader.process(target);
     	//CDKHueckelAromaticityDetector d = new CDKHueckelAromaticityDetector();
     	try {
@@ -157,8 +155,8 @@ class FPGenerator extends DefaultAmbitProcessor<IStructureRecord,IStructureRecor
     	} catch (Exception x) {}
     	long mark = System.currentTimeMillis();
     	BitSet bitset = fp.process(a);
-    	target.getProperties().put(AmbitCONSTANTS.Fingerprint,bitset);	
-    	target.getProperties().put(AmbitCONSTANTS.FingerprintTIME,System.currentTimeMillis()-mark);
+    	target.setProperty(Property.getInstance(AmbitCONSTANTS.Fingerprint,AmbitCONSTANTS.Fingerprint),bitset);	
+    	target.setProperty(Property.getInstance(AmbitCONSTANTS.FingerprintTIME,AmbitCONSTANTS.Fingerprint),System.currentTimeMillis()-mark);
 
     	return target;
 
@@ -179,7 +177,6 @@ class Calculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> 
     
     public IStructureRecord process(IStructureRecord target)
     		throws AmbitException {
-    	if (target.getProperties() == null) target.setProperties(new Hashtable());
     	IAtomContainer a = reader.process(target);
     	ha.process(a);
     	writer.setStructure(target);

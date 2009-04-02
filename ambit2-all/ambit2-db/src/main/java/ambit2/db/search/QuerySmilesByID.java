@@ -31,11 +31,11 @@ package ambit2.db.search;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -94,19 +94,17 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
             r.setIdchemical(rs.getInt("idchemical"));
             r.setIdstructure(rs.getInt("idstructure"));
             r.setContent(null);
-            if (r.getProperties()==null)
-            	r.setProperties(new Hashtable());
                      	
             String smiles = rs.getString("smiles");
             if (smiles!= null)
-            	r.getProperties().put(CDKConstants.SMILES,smiles);
+            	r.setProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES),smiles);
             else
-            	r.getProperties().remove(CDKConstants.SMILES);
+            	r.removeProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
             String inchi = rs.getString("inchi");
             if (inchi!= null)
-            	r.getProperties().put(CDKConstants.INCHI,inchi);  
+            	r.setProperty(Property.getInstance(CDKConstants.INCHI,CDKConstants.INCHI),inchi);  
             else
-            	r.getProperties().remove(CDKConstants.INCHI);
+            	r.removeProperty(Property.getInstance(CDKConstants.INCHI,CDKConstants.INCHI));
             return r;
         } catch (Exception x){
             throw new AmbitException(x);

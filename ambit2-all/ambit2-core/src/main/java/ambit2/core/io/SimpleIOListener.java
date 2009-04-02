@@ -72,7 +72,9 @@ public class SimpleIOListener implements IReaderListener, IWriterListener {
         case IO_TRANSLATE_NAME: { 
             if (!"".equals(setting.getName().trim())) {
                 if (properties.get(setting.getName())==null) {
-                    Property p = new Property(setting.getName(),setting.getDefaultSetting(),counter);
+					Property p = Property.getInstance(setting.getName(),"I/O");
+					p.setLabel(setting.getDefaultSetting());
+					p.setOrder(counter);
                     if (setting.getLevel() > this.level)
                         p.setEnabled(true);
                     properties.add(p);

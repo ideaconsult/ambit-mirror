@@ -1,21 +1,13 @@
 package ambit2.plugin.dbtools;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
 import ambit2.db.IDBProcessor;
-import ambit2.db.SessionID;
 import ambit2.db.SourceDataset;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.workflow.ActivityPrimitive;
@@ -116,7 +108,7 @@ public class ImportWorkflow extends Workflow {
         	public SourceDataset execute() throws Exception {
         			SourceDataset dataset = 
         						new SourceDataset(getTarget().getFile().getName(),
-        						new LiteratureEntry(getTarget().getFilename(),"file"));
+        						LiteratureEntry.getInstance(getTarget().getFilename(),"file"));
         			writer.setDataset(dataset);
         			return dataset;
         	};

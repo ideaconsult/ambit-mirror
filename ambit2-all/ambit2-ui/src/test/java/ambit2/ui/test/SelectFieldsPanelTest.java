@@ -49,23 +49,23 @@ public class SelectFieldsPanelTest {
 
     @Test public void test() throws Exception {
     	Profile props = new Profile();
-    	props.add(new Property("CAS"));
-    	props.add(new Property("CAS","CASNO"));
-    	props.add(new Property("Name"));
-    	Property p = new Property("Inchi");
+    	props.add(Property.getInstance("CAS","CAS"));
+    	props.add(Property.getInstance("CAS","CAS"));
+    	props.add(Property.getInstance("Name","Name"));
+    	Property p = Property.getInstance("Inchi","Inchi");
     	p.setEnabled(true);
     	props.add(p);
-    	props.add(new Property("XLogP"));
-    	props.add(new Property("pKA"));
-    	props.add(new Property("eHOMO"));
-    	props.add(new Property("eLUMO"));
-    	props.add(new Property("A"));
-    	props.add(new Property("B"));
-    	props.add(new Property("V"));
-    	props.add(new Property("D"));
-    	props.add(new Property("X"));
-    	props.add(new Property("Y"));
-    	props.add(new Property("Z"));
+    	props.add(Property.getInstance("XLogP","Descriptors"));
+    	props.add(Property.getInstance("pKA","Descriptors"));
+    	props.add(Property.getInstance("eHOMO","Descriptors"));
+    	props.add(Property.getInstance("eLUMO","Descriptors"));
+    	props.add(Property.getInstance("A","Descriptors"));
+    	props.add(Property.getInstance("B","Descriptors"));
+    	props.add(Property.getInstance("V","Descriptors"));
+    	props.add(Property.getInstance("D","Descriptors"));
+    	props.add(Property.getInstance("X","Descriptors"));
+    	props.add(Property.getInstance("Y","Descriptors"));
+    	props.add(Property.getInstance("Z","Descriptors"));
     	String help = "All available fields that can be exported are listed in the left pane. Select those fields you want to be exported and click \">\" button to move them to right pane."+
     		"You can move exported columns up and down to change the order they will be saved in .csv file. You can also specify Target Column Name if you wish to set some other caption than default.";
     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());     

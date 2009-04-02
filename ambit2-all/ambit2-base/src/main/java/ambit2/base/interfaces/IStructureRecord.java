@@ -31,32 +31,32 @@ package ambit2.base.interfaces;
 
 import java.util.Map;
 
-public interface IStructureRecord {
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
+
+public interface IStructureRecord extends IChemical{
 	public enum MOL_TYPE {SDF,CML,CSV};
-    public abstract String getFormat();
+	
+	
+    String getFormat();
+    void setFormat(String format);
 
-    public abstract void setFormat(String format);
+    int getIdstructure();
+    void setIdstructure(int idstructure);
 
-    public abstract int getIdchemical();
+    String getContent();
+    void setContent(String content);
 
-    public abstract void setIdchemical(int idchemical);
-
-    public abstract int getIdstructure();
-
-    public abstract void setIdstructure(int idstructure);
-
-    public abstract String getContent();
-
-    public abstract void setContent(String content);
-
-    public abstract Map getProperties();
-
-    public abstract void setProperties(Map properties);
-    
-    public void setProperty(Object key,Object value);    
-    public Object getProperty(Object key);
-    
-    public abstract void clear();
-
-    public abstract String getWritableContent();
+    int getNumberOfProperties();
+    Iterable<Property> getProperties();
+    //void setProperties(Map properties);
+    void setProperty(Property key,Object value);    
+    Object getProperty(Property key);
+    Object removeProperty(Property key);
+    void clearProperties();
+    void addProperties(Map newProperties);
+    void clear();
+    String getWritableContent();
+    LiteratureEntry getReference();
+    void setReference(LiteratureEntry reference);
 }

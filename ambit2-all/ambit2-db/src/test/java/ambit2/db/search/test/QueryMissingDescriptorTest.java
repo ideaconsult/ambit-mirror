@@ -22,7 +22,7 @@ public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor
 		XLogPDescriptor d = new XLogPDescriptor();
 		QueryMissingDescriptor q = new QueryMissingDescriptor();
 		q.setValue("XLogP");
-		q.setFieldname(new LiteratureEntry(d.getSpecification().getImplementationIdentifier()));
+		q.setFieldname(LiteratureEntry.getInstance(d.getSpecification().getImplementationIdentifier()));
 		return q;
 	}
 

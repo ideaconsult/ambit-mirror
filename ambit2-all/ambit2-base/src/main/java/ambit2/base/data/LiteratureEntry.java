@@ -4,6 +4,8 @@
  */
 package ambit2.base.data;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 
 
 /**
@@ -24,31 +26,37 @@ public class LiteratureEntry extends AmbitBean {
 	protected String URL;
     protected int id = -1;
     protected boolean editable;
-	public LiteratureEntry() {
-		this("","");
-		
-	}
-	public LiteratureEntry(String title) {
-		this(title,"");
-		
+
+	private static java.util.concurrent.CopyOnWriteArrayList<LiteratureEntry> references = 
+		new CopyOnWriteArrayList<LiteratureEntry>();
+
+	public static synchronized LiteratureEntry getInstance() {
+		return getInstance("Default","http://ambit.sourceforge.net");
 	}	
+	public static synchronized LiteratureEntry getInstance(String name) {
+		return getInstance(name,"http://ambit.sourceforge.net");
+	}
+	public static synchronized LiteratureEntry getInstance(String name,String url) {
+		int index =  references.indexOf(name);
+		if (index < 0) {
+			LiteratureEntry et = new LiteratureEntry(name,url);
+			references.add(et);
+			return et;
+		} else {
+			return references.get(index);
+		}
 
-
+	}	    
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
+
 	public String getURL() {
 		return URL;
 	}
-	public void setURL(String url) {
-		URL = url;
-	}
-	public LiteratureEntry(String title, String url) {
-		setTitle(title);
-		setURL(url);
+	private LiteratureEntry(String title, String url) {
+		this.title = title;
+		this.URL = url;
 	}
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
@@ -69,6 +77,19 @@ public class LiteratureEntry extends AmbitBean {
         this.id = id;
         
     }
+    @Override
+    public boolean equals(Object obj) {
+    	if (obj instanceof LiteratureEntry)
+    		return ((LiteratureEntry)obj).getTitle().equals(getTitle());
+    	else return false;
+    }
+    public int hashCode() {
+    	int hash = 7;
+    	int var_code = (null == getName() ? 0 : getTitle().hashCode());
+    	hash = 31 * hash + var_code; 
+
+    	return hash;
+    }	    
 
 
 }

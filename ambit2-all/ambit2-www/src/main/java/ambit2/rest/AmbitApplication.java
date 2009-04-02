@@ -22,6 +22,7 @@ import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.StructureResource;
+import ambit2.rest.structure.diagram.DaylightDepict;
 
 
 public class AmbitApplication extends Application {
@@ -71,7 +72,9 @@ public class AmbitApplication extends Application {
 		//router.attach("/cas/{cas}"+fp,SimilarityResource.class);
 		//router.attach("/name/{name}"+fp,SimilarityResource.class);		
 		router.attach("/structure/{idstructure}",StructureResource.class);
-		router.attach("/pubchem/query/{term}",PubchemResource.class);			
+		router.attach("/pubchem/query/{term}",PubchemResource.class);
+		
+		router.attach("/daylight/depict/{smiles}",DaylightDepict.class);			
 		
 		router.attach(query,QueryListResource.class);		
 

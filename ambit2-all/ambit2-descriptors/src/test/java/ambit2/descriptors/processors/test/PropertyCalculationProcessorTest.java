@@ -36,7 +36,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -55,7 +54,10 @@ public class PropertyCalculationProcessorTest {
 	@Test
 	public void testProcess() throws Exception {
 		PropertyCalculationProcessor p = new PropertyCalculationProcessor();
-		p.setProperty(new Property("Count","Count",0,Class.forName("org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor")));
+		Property prop = Property.getInstance("Count","Descriptors");
+		prop.setLabel("Count");
+		prop.setClazz(Class.forName("org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor"));
+		p.setProperty(prop);
 		DescriptorValue value = p.process(MoleculeFactory.makeAlkane(10));
 		Assert.assertNotNull(value);
 		Assert.assertEquals(10,((IntegerResult)value.getValue()).intValue());

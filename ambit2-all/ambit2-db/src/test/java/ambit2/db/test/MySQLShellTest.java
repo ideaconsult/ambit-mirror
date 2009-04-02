@@ -33,7 +33,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.external.CommandShell;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.processors.ICommand;
 import ambit2.db.processors.MySQLCommand;

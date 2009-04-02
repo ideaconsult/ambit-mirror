@@ -47,7 +47,6 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.DbReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.search.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;

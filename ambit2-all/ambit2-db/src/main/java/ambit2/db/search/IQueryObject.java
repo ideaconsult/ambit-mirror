@@ -32,6 +32,7 @@ package ambit2.db.search;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.IStatement;
 
 /**
  * 
@@ -39,14 +40,13 @@ import ambit2.base.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> May 7, 2008
  */
-public interface IQueryObject<ResultType> {
+public interface IQueryObject<ResultType> extends IStatement {
 	/*
 	Element toXML();
 	void fromXML(Element node);
 	*/
-
+	String getSQL() throws AmbitException;
 	Integer getId();
 	void setId(Integer id);	
-	String getSQL() throws AmbitException;
-	List<QueryParam> getParameters() throws AmbitException;
+	List<QueryParam> getParameters() throws AmbitException;	
 }

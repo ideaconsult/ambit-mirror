@@ -28,29 +28,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import javax.naming.OperationNotSupportedException;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.AbstractStructureQuery;
-import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryFieldNumeric;
 import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
-import ambit2.hashcode.HashcodeKey;
 
 /**
 <pre>
@@ -65,23 +58,27 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
      * 
      */
     private static final long serialVersionUID = 6530309499663693100L;
-    protected static final String select_chemical = "SELECT idchemical FROM CHEMICALS where idchemical=?";
-    protected PreparedStatement ps_selectchemicals;
-
-    protected static final String insert_chemical = "INSERT INTO CHEMICALS (idchemical,smiles,hashcode) values (null,?,?)";
-	protected PreparedStatement ps_chemicals;
-	protected static final String insert_structure = "INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))";
-	protected PreparedStatement ps_structure;
-
-	protected static final String insert_dataset = "insert into struc_dataset (idstructure,id_srcdataset) SELECT ?,id_srcdataset from src_dataset where name=?";
-	protected PreparedStatement ps_dataset;	
-	
-	protected DbSrcDatasetWriter datasetWriter;
-	protected PropertyValuesWriter propertyWriter;
-	protected SourceDataset dataset;
-	protected MoleculeReader molReader;
+	protected DbStructureWriter structureWriter;
 	protected SmilesKey smilesKey;
 	protected PropertyKey propertyKey;
+	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
+	protected AbstractStructureQuery query_property;
+	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
+	protected PreparedStatement ps_seekdataset;		
+	protected StructureNormalizer normalizer = new StructureNormalizer(); 
+	
+	protected final String idchemical_tag="idchemical";
+	
+	public RepositoryWriter() {
+		structureWriter = new DbStructureWriter();
+		smilesKey = new SmilesKey();
+		setPropertyKey(new CASKey());
+		query_chemicals = new QueryStructure();
+		query_chemicals.setId(-1);
+		query_chemicals.setFieldname(smilesKey.getKey());
+
+	}
+	
 	
 	public PropertyKey getPropertyKey() {
 		return propertyKey;
@@ -96,93 +93,56 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		query_property.setId(-1);
 
 	}
-	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
-	protected AbstractStructureQuery query_property;
-	protected QueryExecutor exec;
-	protected HashcodeKey hashcode;
-
 	
-	public RepositoryWriter() {
-		datasetWriter = new DbSrcDatasetWriter();
-		propertyWriter = new PropertyValuesWriter();
-		molReader = new MoleculeReader();
-		smilesKey = new SmilesKey();
-		
-		setPropertyKey(new CASKey());
-
-		hashcode = new HashcodeKey();
-		query_chemicals = new QueryStructure();
-		query_chemicals.setId(-1);
-		query_chemicals.setFieldname(smilesKey.getKey());
-		
-		exec = new QueryExecutor();
-
-	}
 	@Override
 	public void open() throws DbAmbitException {
 		super.open();
-		datasetWriter.open();
-		propertyWriter.open();
+		structureWriter.open();
 	}
 	@Override
 	public synchronized void setConnection(Connection connection)
 			throws DbAmbitException {
 		super.setConnection(connection);
-		datasetWriter.setConnection(connection);
-		propertyWriter.setConnection(connection);
+		structureWriter.setConnection(connection);
 		exec.setConnection(connection);
 	}
 	public SourceDataset getDataset() {
-		return dataset;
+		return structureWriter.getDataset();
 	}
 	public void setDataset(SourceDataset dataset) {
-		this.dataset = dataset;
-		propertyWriter.setDataset(dataset);
-	}
-	public void writeDataset(IStructureRecord structure) throws SQLException {
-		if (getDataset() == null) setDataset(new SourceDataset("Default"));
-		datasetWriter.write(dataset);
-		
-		ps_dataset.clearParameters();
-		ps_dataset.setInt(1,structure.getIdstructure());
-		ps_dataset.setString(2,dataset.getName());
-		ps_dataset.execute();
-	}
-	public void writeProperties(IStructureRecord structure,IAtomContainer molecule) throws SQLException, AmbitException {
-			if (molecule == null)
-				return;
-			propertyWriter.process(structure);
-			structure.setProperties(null);
-
-	}	
-	protected IAtomContainer getAtomContainer(IStructureRecord structure) {
-		try {
-			IAtomContainer molecule = molReader.process(structure);
-			if (structure.getProperties()==null)
-				structure.setProperties(molecule.getProperties());
-			else
-				structure.getProperties().putAll(molecule.getProperties());
-			return molecule;
-		} catch (AmbitException x) {
-			logger.error(x);
-			return null;
-		}
+		structureWriter.setDataset(dataset);
 	}
 	protected void findChemical(AbstractStructureQuery query, String key,Object value, IStructureRecord record) throws SQLException, AmbitException {
-		//System.out.println("Search chemical  "+value);
+		System.out.println(query.getClass().getName() + " key=" + key + " value="+value);
 		if (value == null) return;
-		
 		ResultSet rs = null;
 		try {
 			query.setValue(value);
 			if (key != null)
 				query.setFieldname(key);
-			rs = exec.process(query);
+			rs = queryexec.process(query);
 			while (rs.next()) {
-				//System.out.println("Found chemical "+rs.getInt(2)+ " "+value);
 				record.setIdchemical(rs.getInt(2));
+				System.out.println("found "+record);
+/*
+				ps_seekdataset.clearParameters();
+				ps_seekdataset.setString(1,getDataset().getName());
+				ps_seekdataset.setInt(2,record.getIdchemical());
+				ResultSet strucs = ps_seekdataset.executeQuery();
+				while (strucs.next()) 
+					if (record.getFormat().equals(strucs.getString("format")) &&
+						record.getWritableContent().equals(strucs.getString("s"))							
+							) {
+						
+						record.setIdstructure(strucs.getInt(1));
+						System.out.println("--found "+record + record.getContent());
+					}
+
+				if (strucs != null) strucs.close();
+					*/
 				break;
 			}
+		
 		} catch (SQLException x) {
 			throw x;
 		} catch (AmbitException x) {
@@ -192,60 +152,40 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			throw new AmbitException(x);
 		} finally {
 			try {
-			 exec.closeResults(rs);
+			 queryexec.closeResults(rs);
 			} catch (Exception x) {logger.error(x);}
 		}
 		
 	}
-	public List<IStructureRecord> write(IStructureRecord structure) throws SQLException {
-		IAtomContainer molecule = getAtomContainer(structure);
-		Long hash = null;
-		try {
-			hash = hashcode.process(molecule);
-		} catch (Exception x) {
-			logger.warn(x);
-			x.printStackTrace();
-			hash = 0L;
-		} finally {
-			
-		}
-		String smiles = null;
-		try {
-			smiles = smilesKey.process(molecule);
-			if ("".equals(smiles)) smiles= null;
-		} catch (Exception x) {
-			smiles = null;
-		}
-		
-        //find if a structure with specified idchemical exists
+	public List<IStructureRecord> write(IStructureRecord structure) throws SQLException, AmbitException, OperationNotSupportedException {
+
+		structure = normalizer.process(structure);
+
+		//find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
         	if (structure.getIdstructure()>0) {
-        		
+        		//don't search for anything
+
         	} else {
-	        	ps_selectchemicals.clearParameters();
-	            ps_selectchemicals.setInt(1,structure.getIdchemical());
-	            
-	            ResultSet rs = ps_selectchemicals.executeQuery();
-	            structure.setIdchemical(-1);
-	            structure.setIdstructure(-1);
-	            try {
-		            while (rs.next()) {
-		                structure.setIdchemical(rs.getInt(1));
-		            }
-	            } catch (Exception x) {
-	            } finally {
-	            	rs.close();
-	            }
+        		try {
+        			findChemical(query_chemicals, idchemical_tag, structure.getIdchemical(), structure);
+        		} catch (Exception x) {
+        			x.printStackTrace();
+        			structure.setIdchemical(-1);
+        		}
         	}
         } else {
-        	//find by CAS
+        	//find by a property
         	Object property = null;
         	try {
         		property = propertyKey.process(structure);
         		if (property!=null)
         			findChemical(query_property,propertyKey.getKey(),property,structure);
-        		else 
-        			findChemical(query_chemicals,null,smiles,structure);
+        		else
+	        		if (structure.getIdchemical() <= 0) {
+	        			query_chemicals.setFieldname(smilesKey.getKey());        			
+	        			findChemical(query_chemicals,null,structure.getSmiles(),structure);
+	        		}
         	} catch (SQLException x) {
         		throw x;
         	} catch (Exception x) {
@@ -254,7 +194,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
             	//if not found, find by SMILES
             	if (structure.getIdchemical()<=0)
             		try {
-            			findChemical(query_chemicals,null,smiles,structure);
+            			findChemical(query_chemicals,null,structure.getSmiles(),structure);
             		} catch (Exception ex) {
                 		x.printStackTrace();
                 		logger.warn(x);
@@ -262,90 +202,20 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	}
 
         }
-        List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
         //add a new idchemical if idchemical <=0
-        if (structure.getIdchemical() <= 0) {
-        	if (ps_chemicals == null)
-       		 ps_chemicals = connection.prepareStatement(insert_chemical,Statement.RETURN_GENERATED_KEYS);
-        	if (smiles==null)
-        		ps_chemicals.setNull(1,Types.CHAR);
-        	else
-        		ps_chemicals.setString(1,smiles);
-        	if (hash == null) hash = 0L;
-        	ps_chemicals.setLong(2,hash);
-        	
-    		ps_chemicals.executeUpdate();
-    		ResultSet rs = ps_chemicals.getGeneratedKeys();
-    		try {
-	    		while (rs.next()) {
-	                structure.setIdchemical(rs.getInt(1));
-	    		} 
-    		} catch (Exception x) {
-    			logger.error(x);
-    		} finally {
-	    		rs.close();
-	    		ps_chemicals.close();
-	    		ps_chemicals = null;
-    		}
-    	
-        }
-        //add a new entry in structure table
-        if (structure.getIdstructure() <= 0) {
-	        if (ps_structure==null)
-	        	ps_structure = connection.prepareStatement(insert_structure,Statement.RETURN_GENERATED_KEYS);
-			ps_structure.clearParameters();        
-	        ps_structure.setInt(1,structure.getIdchemical());
-	        ps_structure.setString(2,structure.getWritableContent());
-	        ps_structure.setString(3,structure.getFormat());
-	        ps_structure.executeUpdate();
-	        ResultSet rss = ps_structure.getGeneratedKeys();
-	        while (rss.next())  {
-	        	StructureRecord record = new StructureRecord(structure.getIdchemical(),rss.getInt(1),null,structure.getFormat());
-	        	writeDataset(record);
-	        	try {
-	        		structure.setIdstructure(record.getIdstructure());
-	        		writeProperties(structure,molecule);
-	        	} catch (AmbitException x) {
-	        		logger.warn(x);
-	        	}
-	            sr.add(record);
-	        }
-	        rss.close();
-	        ps_structure.close();
-	        ps_structure = null;
-			molecule = null;
-        } else {
-        	try {
-        		writeProperties(structure,molecule);
-        	} catch (AmbitException x) {
-        		logger.warn(x);
-        	}        	
-        }
-        
-        return sr;
+        return structureWriter.writeStructure(structure);
         
 	}
 	protected void prepareStatement(Connection connection) throws SQLException {
-		 ps_chemicals = connection.prepareStatement(insert_chemical,Statement.RETURN_GENERATED_KEYS);
-		 ps_structure = connection.prepareStatement(insert_structure,Statement.RETURN_GENERATED_KEYS);
-         ps_selectchemicals = connection.prepareStatement(select_chemical);
-         ps_dataset = connection.prepareStatement(insert_dataset);
-         datasetWriter.prepareStatement(connection);
+        ps_seekdataset = connection.prepareStatement(seek_dataset);
+
 	}
 	public void close() throws SQLException {
         try {
-        if (ps_dataset != null)
-        	ps_dataset.close();
-        if (ps_chemicals != null)
-            ps_chemicals.close();
-        if (ps_structure != null)
-            ps_structure.close();
-        if (ps_selectchemicals != null)
-            ps_selectchemicals.close();        
-        if (datasetWriter != null)
-        	datasetWriter.close();
-        if (propertyWriter != null)
-        	propertyWriter.close();
+
+        if (ps_seekdataset != null)
+            ps_seekdataset.close();        
+  
         if (exec != null)
         	exec.close();
         } catch (SQLException x) {

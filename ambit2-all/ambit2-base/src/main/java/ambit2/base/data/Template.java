@@ -85,7 +85,10 @@ public class Template extends Profile<Property> {
 			add(name,units,String.class);
 	}    
 	public void add(String name, String units, Class clazz) {
-		Property p = new Property(name,name,1,clazz);
+		Property p = Property.getInstance(name,getName());
+		p.setLabel(name);
+		p.setOrder(1);
+		p.setClazz(clazz);
 		p.setUnits(units);
 		add(p);
 	}
@@ -188,7 +191,7 @@ public class Template extends Profile<Property> {
 		        		Element element = (Element) node;
 			        	String name = element.getNodeName();
 			        	if ("field".equals(name)) {
-		                    Property field = new Property(element.getAttribute("name").toString());
+		                    Property field = Property.getInstance(element.getAttribute("name").toString(),getName());
 		                    field.setUnits(element.getAttribute("units").toString());
 		                    String className=element.getAttribute("class").toString();
 		                    try {

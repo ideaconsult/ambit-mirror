@@ -39,9 +39,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryExecutor;
 
 public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {

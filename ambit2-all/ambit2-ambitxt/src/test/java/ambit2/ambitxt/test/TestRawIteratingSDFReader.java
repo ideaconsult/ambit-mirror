@@ -4,12 +4,12 @@ import java.io.FileReader;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.util.BitSet;
-import java.util.Hashtable;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.io.MyIteratingMDLReader;
@@ -70,7 +70,6 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
 		IStructureRecord o  ;
 		while (reader.hasNext()) {
 			o = reader.next();
-			if (o.getProperties() == null) o.setProperties(new Hashtable());
 			String content = reader.getStructure(o.getIdstructure());
 			if (content == null) continue;
 			IIteratingChemObjectReader mReader = new MyIteratingMDLReader(new StringReader(content),b);
@@ -80,8 +79,8 @@ public class TestRawIteratingSDFReader extends RepositoryTest {
 				if (mol instanceof IMolecule) {
 					long mark = System.currentTimeMillis();
 					BitSet bitset = gen.process((IMolecule)mol);
-	      			o.getProperties().put(AmbitCONSTANTS.FingerprintTIME,System.currentTimeMillis()-mark);
-					o.getProperties().put(AmbitCONSTANTS.Fingerprint,bitset);
+	      			o.setProperty(Property.getInstance(AmbitCONSTANTS.FingerprintTIME,AmbitCONSTANTS.Fingerprint),System.currentTimeMillis()-mark);
+	      			o.setProperty(Property.getInstance(AmbitCONSTANTS.Fingerprint,AmbitCONSTANTS.Fingerprint),bitset);
 					fpWriter.write(o);
 				}
 				

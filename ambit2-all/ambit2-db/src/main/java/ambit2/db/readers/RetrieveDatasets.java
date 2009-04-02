@@ -38,7 +38,7 @@ public class RetrieveDatasets extends AbstractQuery<String,SourceDataset,EQCondi
 
 	public SourceDataset getObject(ResultSet rs) throws AmbitException {
 		try {
-	        LiteratureEntry le = new LiteratureEntry(rs.getString(5),rs.getString(6));
+	        LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(5),rs.getString(6));
 	        le.setId(rs.getInt(4));
 	        SourceDataset d = new SourceDataset(rs.getString(2),le);
 	        d.setUsername(rs.getString(3));

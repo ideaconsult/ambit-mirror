@@ -83,4 +83,5 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 		b.append(getValue());
 		return b.toString();
 	}
+
 }

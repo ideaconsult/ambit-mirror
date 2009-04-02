@@ -35,6 +35,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
 
@@ -110,7 +111,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	}
     	return tuple;
     }
-    protected boolean insertValue(String value, int idproperty, int idtuple, mode error) throws SQLException {
+    protected boolean insertValue(String value, Property property, int idtuple, mode error) throws SQLException {
     	if ((value != null) && (value.length()>255))
     		value = value.substring(0,255);
     	if (structure == null) throw new SQLException("Undefined structure");    	
@@ -125,7 +126,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
             ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string+onduplicate_string);
     	
     	ps_descriptorvalue_string.clearParameters();
-    	ps_descriptorvalue_string.setInt(1,idproperty);
+    	ps_descriptorvalue_string.setInt(1,property.getId());
     	ps_descriptorvalue_string.setInt(2,structure.getIdstructure());
     	ps_descriptorvalue_string.setString(3, error.toString());
     	if (value == null)
@@ -138,18 +139,18 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	        	if (ps_inserttuplestring == null) ps_inserttuplestring = connection.prepareStatement(insert_tuple_string);
 	        	ps_inserttuplestring.clearParameters();
 	        	ps_inserttuplestring.setInt(1,idtuple);
-	        	ps_inserttuplestring.setInt(2,idproperty);
+	        	ps_inserttuplestring.setInt(2,property.getId());
 	        	ps_inserttuplestring.setInt(3,structure.getIdstructure());
 	        	ps_inserttuplestring.setString(4,value);
 	        	ps_inserttuplestring.setInt(5,0);
 	        	if (ps_inserttuplestring.executeUpdate()<=0)
-	        		logger.warn("Tuple not inserted "+idproperty+ " "+value);
+	        		logger.warn("Tuple not inserted "+property.getId()+ " "+value);
 
     		} 
     	} else return false;
     	return true;
     }
-    protected boolean insertValue(int value, int idproperty, int idtuple, mode error) throws SQLException {
+    protected boolean insertValue(int value, Property property, int idtuple, mode error) throws SQLException {
     	if (structure == null) throw new SQLException("Undefined structure");    	
     	if (ps_insertint == null)
     		ps_insertint = connection.prepareStatement(insert_int);
@@ -162,7 +163,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
             ps_descriptorvalue_int = connection.prepareStatement(insert_descriptorvalue+select_int+onduplicate_int);
     	
     	ps_descriptorvalue_int.clearParameters();
-    	ps_descriptorvalue_int.setInt(1,idproperty);
+    	ps_descriptorvalue_int.setInt(1,property.getId());
     	ps_descriptorvalue_int.setInt(2,structure.getIdstructure());
     	ps_descriptorvalue_int.setString(3, error.toString());
    		ps_descriptorvalue_int.setInt(4, value);
@@ -172,19 +173,19 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	        	if (ps_inserttupleint == null) ps_inserttupleint = connection.prepareStatement(insert_tuple_int);
 	        	ps_inserttupleint.clearParameters();
 	        	ps_inserttupleint.setInt(1,idtuple);
-	        	ps_inserttupleint.setInt(2,idproperty);
+	        	ps_inserttupleint.setInt(2,property.getId());
 	        	ps_inserttupleint.setInt(3,structure.getIdstructure());
 	        	ps_inserttupleint.setInt(4,value);
 	        	ps_inserttupleint.setInt(5,2);
 	        	if (ps_inserttupleint.executeUpdate()<=0)
-	        		logger.warn("Tuple not inserted "+idproperty+ " "+value);
+	        		logger.warn("Tuple not inserted "+property.getId()+ " "+value);
 
     		} 
     	} else return false;
     	return true;
     }
     
-    protected boolean insertValue(double value, int idproperty,int idtuple,mode error) throws SQLException {
+    protected boolean insertValue(double value, Property property,int idtuple,mode error) throws SQLException {
     	if (structure == null) throw new SQLException("Undefined structure");
     	if (ps_insertnumber == null)
             ps_insertnumber = connection.prepareStatement(insert_number);    
@@ -197,7 +198,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number+onduplicate_number);
     	
     	ps_descriptorvalue_number.clearParameters();
-    	ps_descriptorvalue_number.setInt(1,idproperty);
+    	ps_descriptorvalue_number.setInt(1,property.getId());
     	ps_descriptorvalue_number.setInt(2,structure.getIdstructure());
         ps_descriptorvalue_number.setString(3, error.toString());
         ps_descriptorvalue_number.setDouble(4, value);
@@ -207,48 +208,48 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	        		ps_inserttuplenumber = connection.prepareStatement(insert_tuple_number);
     	        	ps_inserttuplenumber.clearParameters();
     	        	ps_inserttuplenumber.setInt(1,idtuple);
-    	        	ps_inserttuplenumber.setInt(2,idproperty);
+    	        	ps_inserttuplenumber.setInt(2,property.getId());
     	        	ps_inserttuplenumber.setInt(3,structure.getIdstructure());
     	        	ps_inserttuplenumber.setDouble(4, value);
     	        	ps_inserttuplenumber.setInt(5,1);
     	        	int ok = ps_inserttuplenumber.executeUpdate();
     	        	if (ok<=0) {
-    	        		logger.warn("Tuple not inserted "+idproperty+ " "+value + " " +ps_inserttuplenumber);
+    	        		logger.warn("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
 
     	        	}
 
         	} else {
-        		logger.warn("Tuple < 0 "+idproperty+ " "+value + " " +ps_inserttuplenumber);
+        		logger.warn("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
         	}
        	} else {
-       		logger.warn("idtuple="+idtuple+" idproperty="+idproperty+" value "+value);
+       		logger.warn("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
        		return false;
        	}
        	return true;
 
     }        
     
-    protected void descriptorEntry(Target target, int idproperty, String propertyName, int propertyIndex, int idtuple) throws SQLException {
-    	Object value = getValue(target,propertyName,propertyIndex);
+    protected void descriptorEntry(Target target, Property property, int propertyIndex, int idtuple) throws SQLException {
+    	Object value = getValue(target,property,propertyIndex);
     	if (value instanceof Number) {
     		if (value instanceof Integer) {
-    			logger.warn(propertyName + value);
-    			insertValue(((Integer)value).intValue(),idproperty,idtuple,mode.UNKNOWN);
+    			logger.warn(property.getName() + value);
+    			insertValue(((Integer)value).intValue(),property,idtuple,mode.UNKNOWN);
     		} else
     		if ((value instanceof Double) && ((Double)value).isNaN()) {
-    			logger.warn(propertyName + value);
-    			insertValue(value.toString(),idproperty,idtuple,mode.ERROR);
+    			logger.warn(property.getName() + value);
+    			insertValue(value.toString(),property,idtuple,mode.ERROR);
     		} else
-    			insertValue(((Number)value).doubleValue(),idproperty,idtuple,mode.UNKNOWN);
+    			insertValue(((Number)value).doubleValue(),property,idtuple,mode.UNKNOWN);
     			
     	} else
     		if (value != null)
-    			insertValue(value.toString(),idproperty,idtuple,mode.UNKNOWN);
+    			insertValue(value.toString(),property,idtuple,mode.UNKNOWN);
     		else
-    			insertValue(null,idproperty,idtuple,mode.ERROR);
+    			insertValue(null,property,idtuple,mode.ERROR);
 	
     };
-    protected abstract Object getValue(Target target, String propertyName, int index);
+    protected abstract Object getValue(Target target, Property propertyName, int index);
     
     public void close() throws SQLException {
     	super.close();

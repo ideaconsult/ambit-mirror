@@ -41,7 +41,6 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.db.processors.DbDescriptorWriter;
-import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.FunctionalGroupDescriptor;
 
 /**

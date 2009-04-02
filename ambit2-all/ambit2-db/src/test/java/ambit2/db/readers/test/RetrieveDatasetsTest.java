@@ -38,7 +38,6 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.db.SourceDataset;
-import ambit2.db.SourceDatasetRows;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.IQueryObject;

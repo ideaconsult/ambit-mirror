@@ -10,7 +10,6 @@ import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.QuerySimilarityBitset;
 

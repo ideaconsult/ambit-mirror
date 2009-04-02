@@ -15,7 +15,7 @@ public class QueryAquire extends QueryExperiment {
 	}
 	/*
         srcDataset = new SourceDataset("AQUIRE",
-                ReferenceFactory.createDatasetReference("EPA Aquire database","http://mountain.epa.gov/ecotox/"));
+                LiteratureEntry.createDatasetReference("EPA Aquire database","http://mountain.epa.gov/ecotox/"));
 
    protected String prepareSQL(String endpoint, String species,int page,int pagesize) {
     	String where = " where ";

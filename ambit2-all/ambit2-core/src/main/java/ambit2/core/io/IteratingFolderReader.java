@@ -36,6 +36,8 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.data.LiteratureEntry;
+
 /*
  * reader for multiple files in a folder
  */
@@ -43,7 +45,7 @@ public abstract class IteratingFolderReader<T, ItemReader extends IIteratingChem
 	protected File[] files;
 	protected int index = -1;
 	protected ItemReader reader;		
-	
+
 	public IteratingFolderReader(File[] files) {
 		super();
 		setFiles(files);

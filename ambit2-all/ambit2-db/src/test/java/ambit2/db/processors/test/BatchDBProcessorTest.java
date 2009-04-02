@@ -39,11 +39,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.core.io.FileInputState;

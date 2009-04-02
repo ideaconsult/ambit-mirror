@@ -72,7 +72,7 @@ public class StructureTest extends ResourceTest {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		while ((line = reader.readLine())!=null)
-			Assert.assertEquals("F.[F-].[Na+]",line);
+			Assert.assertEquals("F.[F-].[Na+]	metric=1.0",line);
 
 		in.close();
 

@@ -9,10 +9,10 @@ import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
-import ambit2.db.AbstractDBProcessor;
+import ambit2.db.StatementExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 
-public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q,ResultSet> {
+public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,ResultSet> {
 	/**
 	 * 
 	 */
@@ -20,6 +20,7 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 	protected PreparedStatement sresults=null;
 	protected Statement statement=null;
 	protected int maxRecords = 0;
+	
 	public int getMaxRecords() {
 		return maxRecords;
 	}
@@ -58,34 +59,33 @@ public class QueryExecutor<Q extends IQueryObject> extends AbstractDBProcessor<Q
 			throw new ProcessorException(this,x);
 		}
 	}
+	@Override
+	protected ResultSet execute(Connection c,Q target) throws SQLException, AmbitException {
+		String sql = getSQL(target); 
+		List<QueryParam> params = target.getParameters();		
+		if (params == null) {
+			statement = c.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+			return rs;
+		} else {
+			sresults = c.prepareStatement(sql);					
+			setParameters(sresults, params);
+			logger.debug(sresults);
+			ResultSet rs = sresults.executeQuery();
+			return rs;
+		}
+	}
+	protected String getSQL(Q target) throws AmbitException {
+		String sql = target.getSQL();
+		if (maxRecords > 0)
+			sql = sql + " limit " + Integer.toString(maxRecords);
+		return sql;
+	}
+	@Override
 	public void closeResults(ResultSet rs) throws SQLException {
 		if (rs != null) rs.close();
 		if (sresults != null) sresults.close(); sresults = null;
-		if (statement != null) statement.close();		statement = null;
+		if (statement != null) statement.close();statement = null;		
 	}
-	@Override
-	public void close() throws SQLException {
-		closeResults(null);		
-		super.close();
-	}
-	public static void setParameters(PreparedStatement ps, List<QueryParam> params) throws SQLException {
-		if (params != null)
-			for (int i=0; i < params.size(); i++) {
-				if (params.get(i).getValue()== null) throw new SQLException("Null parameter found at "+(i+1));
-				Class clazz = params.get(i).getType();
-				if (Integer.class.equals(clazz))
-					ps.setInt(i+1, ((Integer)params.get(i).getValue()).intValue());
-				else
-				if (Long.class.equals(clazz))
-					ps.setLong(i+1, ((Long)params.get(i).getValue()).longValue());
-				else
-				if (Double.class.equals(clazz))
-					ps.setDouble(i+1, ((Double)params.get(i).getValue()).doubleValue());
-				else
-				if (String.class.equals(clazz))
-					ps.setString(i+1, params.get(i).getValue().toString());
-				else
-					throw new SQLException("Unsupported type "+clazz);
-			}		
-	}
+
 }

@@ -30,48 +30,61 @@
 package ambit2.db.processors;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.OperationNotSupportedException;
+
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.AmbitUser.USER_TYPE;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.LoginInfo;
+import ambit2.db.search.QueryUser;
+import ambit2.db.update.user.CreateUser;
 
 public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1394498894723529507L;
-	protected PreparedStatement insertRoles;
-    protected PreparedStatement insertUser;
-    protected PreparedStatement insertUserRoles;
-
-    
+	protected CreateUser createUser = new CreateUser();
+    protected QueryUser queryUser = new QueryUser();
+	
     @Override
     protected void prepareStatement(Connection connection) throws SQLException {
-        insertRoles = connection.prepareStatement("insert ignore into roles (role_name) values (?)");
-        insertUser = connection.prepareStatement("insert into users (user_name,password,email,firstname,lastname,registration_date,registration_status,webpage) values (?,MD5(?),?,?,?,now(),\"confirmed\",?) ON DUPLICATE KEY UPDATE password=MD5(?)");
-        insertUserRoles = connection.prepareStatement("insert ignore into user_roles (user_name,role_name) values (?,?)");
-
+    	
     }
     @Override
-    public AmbitUser write(AmbitUser user) throws SQLException {
-        String role = "ambit_"+user.getType();
-        insertRoles.setString(1, role);
-        insertUser.setString(1, user.getName());
-        insertUser.setString(2, user.getPassword());
-        insertUser.setString(3, user.getEmail());
-        insertUser.setString(4, user.getFirstName());
-        insertUser.setString(5, user.getLastName());
-        insertUser.setString(6, user.getWww());
-        insertUser.setString(7, user.getPassword());
-        insertUserRoles.setString(1, user.getName());
-        insertUserRoles.setString(2, role);
+    public AmbitUser read(AmbitUser user) throws SQLException,
+    		OperationNotSupportedException,AmbitException {
+    	
+    	queryUser.setFieldname("user_name");
+    	queryUser.setValue(user.getName());
+    	ResultSet rs = null;
+    	try {
+    		queryexec.setConnection(connection);
+    		rs = queryexec.process(queryUser);
+    		while (rs.next()) {
+    			user = queryUser.getObject(rs);
+    		}
+    	} catch (SQLException x) {
+    		throw x;
+    	} catch (AmbitException x) {
+    		throw x;
+    	} catch (Exception x) {
+    		throw new AmbitException(x);
+    	} finally  {
+    		queryexec.closeResults(rs);
+    	}
+    	return user;
+    }
+    
 
-        insertRoles.executeUpdate();
-        insertUser.executeUpdate();
-        insertUserRoles.executeUpdate();
+    @Override
+    public AmbitUser create(AmbitUser user) throws SQLException, AmbitException {
+    	createUser.setObject(user);
+    	exec.process(createUser);
         
         try {
             LoginInfo li = new LoginInfo();
@@ -106,12 +119,7 @@ public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {
         
         return user;
     }
-        @Override
-        public void close() throws SQLException {
-           if (insertRoles != null) insertRoles.close();
-           if (insertUser != null) insertUser.close();
-           if (insertUserRoles != null) insertUserRoles.close();
-            super.close();
-        }
+
+      
     
 }

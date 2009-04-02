@@ -29,10 +29,9 @@
 
 package ambit2.core.processors.structure.key;
 
-import java.util.Iterator;
-
 import org.openscience.cdk.index.CASNumber;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
@@ -46,7 +45,7 @@ public class CASKey extends PropertyKey<String> {
 	 * 
 	 */
 	private static final long serialVersionUID = 3848970585289051369L;
-	protected String key=null;
+	protected Property key=null;
 	public CASKey() {
 	}
 
@@ -56,12 +55,12 @@ public class CASKey extends PropertyKey<String> {
 		
 		if ((key == null) || (structure.getProperty(key)==null)) {
 			//find which key corresponds to CAS
-			Iterator keys = structure.getProperties().keySet().iterator();
-			while (keys.hasNext()) {
-				Object newkey = keys.next();
-				if (CASNumber.isValid(structure.getProperties().get(newkey).toString())) {
-					this.key = newkey.toString();
-					return structure.getProperties().get(newkey).toString();
+			for (Property newkey: structure.getProperties()) {
+				Object cas = structure.getProperty(newkey);
+				if (cas == null) continue;
+				if (CASNumber.isValid(cas.toString())) {
+					this.key = newkey;
+					return cas.toString();
 				}
 			}
 		}

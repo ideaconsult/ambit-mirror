@@ -3,6 +3,8 @@ package ambit2.rest.resource.test;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import junit.framework.Assert;
 
@@ -64,14 +66,36 @@ public class SimilarityResourceTest extends ResourceTest {
 	public void testGetSmiles() {
 		SimilarityResource resource = new SimilarityResource(null,null,null);
 		try {
-			IMolecule mol = resource.getMolecule("NC1=CC=C(N)C=C");
-			//IMolecule mol = resource.getMolecule("c1cccc");
-
+			resource.getMolecule("NC1=CC=C(N)C=C");
 			Assert.assertTrue(false);
-
 		} catch (InvalidSmilesException x) {
 			Assert.assertTrue(true);
 		}
+		try {
+			resource.getMolecule("[13CH4]");			
+			Assert.assertTrue(true);
+		} catch (InvalidSmilesException x) {
+			Assert.assertTrue(false);
+		}
+		try {
+			resource.getMolecule("C1CC[13CH4]CCC11");			
+			Assert.assertTrue(false);
+		} catch (InvalidSmilesException x) {
+			Assert.assertTrue(true);
+		}		
+		try {
+			resource.getMolecule("c1cccc11");			
+			Assert.assertTrue(false);
+		} catch (InvalidSmilesException x) {
+			Assert.assertTrue(true);
+		}			
+		try {
+			resource.getMolecule("c2cccc2c1ccccc1");			
+			Assert.assertTrue(true);
+		} catch (InvalidSmilesException x) {
+			Assert.assertTrue(false);
+		}		
+	 	
 	}
 	public void runQuery(MediaType mediaType) throws Exception {
 		runQuery(mediaType,URI);

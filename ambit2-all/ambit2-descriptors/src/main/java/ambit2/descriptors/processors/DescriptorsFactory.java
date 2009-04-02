@@ -62,8 +62,7 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile> {
 				}
 				Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(name);
 				//if (o instanceof IMolecularDescriptor) {verify for interface
-					Property property = new Property();
-					property.setName(clazz.getName());
+					Property property = Property.getInstance(clazz.getName(),"Descriptors");
 					property.setLabel("Descriptors");
 					property.setOrder(i);
 					property.setClazz(clazz);

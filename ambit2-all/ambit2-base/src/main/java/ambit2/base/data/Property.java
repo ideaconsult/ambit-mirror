@@ -28,12 +28,40 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import ambit2.base.exceptions.AmbitIOException;
 
 
 
 public class Property  {
+	private static java.util.concurrent.CopyOnWriteArrayList<Property> properties = 
+		new CopyOnWriteArrayList<Property>();	
+	private static String defaultReference = "Default property reference";
+
+/*
+	public static synchronized Property getInstance(String name) {
+	return getInstance(name,defaultReference);
+	}
+	*/
+	public static synchronized Property getInstance(String name,String reference) {
+		return getInstance(name, reference,"");
+	}
+	public static synchronized Property getInstance(String name,LiteratureEntry reference) {
+		if (reference == null)
+			return getInstance(name, defaultReference,"http://ambit.sourceforge.net");
+		else
+			return getInstance(name, reference.getTitle(),reference.getURL());
+	}	
+	public static synchronized Property getInstance(String name,String reference, String url) {
+		for (Property p: properties)
+			if (p.getName().equals(name) && p.getReference().getTitle().equals(reference)) {
+			return p;
+		}
+		Property p = new Property(name,LiteratureEntry.getInstance(reference,url));
+		properties.add(p);
+		return p;
+	}		
 	public enum IO_QUESTION  {
 		IO_START,
 		IO_TRANSLATE_NAME,
@@ -43,6 +71,10 @@ public class Property  {
 	protected String label = "NA";
 	protected String units = "";
 	protected int id=-1;
+	protected int order = 0;
+	protected Class clazz = java.lang.String.class;
+	protected boolean enabled = false;
+	protected LiteratureEntry reference = LiteratureEntry.getInstance();
 	
 	public int getId() {
 		return id;
@@ -59,46 +91,52 @@ public class Property  {
 	public void setUnits(String units) {
 		this.units = units;
 	}
-	protected int order = 0;
-	protected Class clazz = java.lang.String.class;
-	protected boolean enabled = false;
-	protected LiteratureEntry reference;
 
 	public LiteratureEntry getReference() {
 		return reference;
 	}
 
-	public void setReference(LiteratureEntry reference) {
-		this.reference = reference;
-	}
 
-	public Property() {
+	private Property() {
 		
 	}
 
-	public Property(String name) {
+	private Property(String name) {
 		this(name,name);
 	}
-	public Property(String name,String label) {
+	private Property(String name, LiteratureEntry reference) {
+		this(name,name);
+		this.reference = reference;
+	}	
+	private Property(String name,String label) {
 		this(name,label,0);
 	}
 	
-	public Property(String name,String label,int order) {
+	private Property(String name,String label,int order) {
 		this(name,label,order,java.lang.String.class);
 	}
 	
-	public Property(String name,String label,int order, Class clazz) {
+	private Property(String name,String label,int order, Class clazz) {
 		this(name,label,order,clazz,false);
 	}	
 	
-	public Property(String name,String label,int order, Class clazz, boolean enabled) {
-		setName(name);
+	private Property(String name,String label,int order, Class clazz, boolean enabled) {
+		this.name = name;
 		setLabel(label);
 		setOrder(order);
 		setClazz(clazz);
 		setEnabled(enabled);
 	}	
 	
+    public int hashCode() {
+    	int hash = 7;
+    	int var_code = (null == getName() ? 0 : getName().hashCode());
+    	hash = 31 * hash + var_code; 
+    	var_code = (null == getReference().getTitle() ? 0 : getReference().getTitle().hashCode());
+    	hash = 31 * hash + var_code; 
+	
+    	return hash;
+    }	
 	public Class getClazz() {
 		return clazz;
 	}
@@ -114,9 +152,7 @@ public class Property  {
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public int getOrder() {
 		return order;
 	}
@@ -154,4 +190,12 @@ public class Property  {
 			throw new AmbitIOException(this.getClass().getName(),x);
 		}
 	}	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Property) {
+			return
+			((Property)obj).getName().equals(getName()) &&
+			((Property)obj).getReference().equals(getReference()) ; 
+		} else return false;
+	}
 }

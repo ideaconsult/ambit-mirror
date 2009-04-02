@@ -67,6 +67,7 @@ public class DbAddUserTest extends RepositoryTest {
     protected void tearDown() throws Exception {
         super.tearDown();
     }
+    
     public void test() throws Exception {
         DbAddUser r = new DbAddUser();
         

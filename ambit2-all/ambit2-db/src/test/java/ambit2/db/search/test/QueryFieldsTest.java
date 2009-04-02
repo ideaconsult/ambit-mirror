@@ -27,9 +27,10 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
-import junit.framework.Assert;
 import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
