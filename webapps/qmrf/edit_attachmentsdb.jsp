@@ -141,8 +141,9 @@ response.setHeader("Expires", "0");
 								<c:param name="xml" value="${row.xml}"/>
 							</c:import>
 							<sql:update>
-								update documents set xml=?,updated=now()
+								update documents set xml=?,updated=now() where idqmrf=?
 								<sql:param value="${newxml}"/>
+								<sql:param value="${row.idqmrf}"/>
 							</sql:update>
 						</c:forEach>
 						</sql:transaction>
@@ -236,8 +237,9 @@ response.setHeader("Expires", "0");
 								<c:param name="xml" value="${row.xml}"/>
 							</c:import>
 							<sql:update>
-								update documents set xml=?,updated=now()
+								update documents set xml=?,updated=now() where idqmrf=?
 								<sql:param value="${newxml}"/>
+								<sql:param value="${row.idqmrf}"/>
 							</sql:update>
 						</c:forEach>
 						</sql:transaction>
