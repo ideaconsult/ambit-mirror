@@ -86,9 +86,9 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				if (statement == null) {
 					if (sql[i].indexOf("INSERT")>=0)
 						statement = c.prepareStatement(sql[i],Statement.RETURN_GENERATED_KEYS);
-					else
+					else {
 						statement = c.prepareStatement(sql[i]);
-					addStatementToCache(sql[i],statement);
+					}
 				} else {
 					statement.clearParameters();
 				}
@@ -111,7 +111,10 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				System.err.println(statement);
 				throw x;
 			} finally {
-				//try { statement.close();} catch (Exception x) {}
+				if (sql[i].indexOf("INSERT")>=0) 
+					try { statement.close();} catch (Exception x) {}
+				else
+					addStatementToCache(sql[i],statement);						
 			}	
 		}
 		return count;
