@@ -174,6 +174,7 @@ class Calculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> 
     DescriptorsFactory d = new DescriptorsFactory();
     Profile descriptors = null;
     DbDescriptorValuesWriter writer = new DbDescriptorValuesWriter();
+    protected PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
     
     public IStructureRecord process(IStructureRecord target)
     		throws AmbitException {
@@ -181,7 +182,6 @@ class Calculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> 
     	ha.process(a);
     	writer.setStructure(target);
     	if (descriptors==null)	descriptors = d.process(null);
-		PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
 		Iterator<Property> i = descriptors.getProperties(true);
 		int count = 0;
 		int countValues = 0;
