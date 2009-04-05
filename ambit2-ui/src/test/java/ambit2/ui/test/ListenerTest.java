@@ -43,7 +43,8 @@ public class ListenerTest  {
 		String[] labels = {"Code","Compound","SMILES","MolWeigth",
 				"CasRN","log_P","eLumo","eHomo","IL","Dev.","Pred","abs dev","Obs"};
 		IIteratingChemObjectReader reader = new IteratingXLSReader(
-				new FileInputStream("data/misc/Debnath_smiles.xls"),0);
+				getClass().getClassLoader().getResourceAsStream("Debnath_smiles.xls")
+				,0);
 	    readFile(reader,labels);
 }
     
@@ -51,7 +52,7 @@ public class ListenerTest  {
     		String[] labels = {"Code","Compound","SMILES","MolWeigth",
     				"CasRN","log_P","eLumo","eHomo","IL","Dev.","Pred","abs dev","Obs"};
 			IIteratingChemObjectReader reader = new IteratingDelimitedFileReader(
-					new FileInputStream("data/misc/Debnath_smiles.csv"));
+					getClass().getClassLoader().getResourceAsStream("Debnath_smiles.csv"));
 		    readFile(reader,labels);
     }
     
@@ -85,7 +86,7 @@ public class ListenerTest  {
     
     @Test public void testListenerSDF() throws Exception {
 			IIteratingChemObjectReader reader = new InteractiveIteratingMDLReader(
-		        new FileInputStream("data/misc/test_properties.sdf"), DefaultChemObjectBuilder.getInstance());
+					getClass().getClassLoader().getResourceAsStream("test_properties.sdf"), DefaultChemObjectBuilder.getInstance());
 			String[] labels = {"ID","SMILES","WEIGHT","FORMULA","NAME","Drug" };
 			readFile(reader,labels);
 			reader.close();
