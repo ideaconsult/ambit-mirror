@@ -78,14 +78,6 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 		setMolecule(editMolecule(getMolecule()));
 	}
 	public IMolecule editMolecule(IMolecule mole) {		
-		//if (userData instanceof ISharedData) {
-			/*
-		    ISharedDbData dbaData = ((ISharedDbData) userData);
-		
-			IMolecule mole = null;
-			if (query) mole = dbaData.getQuery();
-			else mole = dbaData.getMolecule();
-			*/
 			if (mole == null) {
 		    	mole = DefaultChemObjectBuilder.getInstance().newMolecule();
 		    	mole.addAtom(new Atom("C"));

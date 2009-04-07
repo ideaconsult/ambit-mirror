@@ -174,4 +174,7 @@ public class BeanEditor<L> extends JPanel implements IAmbitEditor<L>{
 		public boolean isEditable() {
 			return editable;
 		}		
+		public boolean confirm() {
+			return true;
+		}
 }

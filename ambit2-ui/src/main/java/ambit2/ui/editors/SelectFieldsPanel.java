@@ -278,6 +278,9 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 	public void setHelp(String help) {
 		this.help = help;
 	}
+	public boolean confirm() {
+		return true;
+	}	
 }
 
 
