@@ -1,9 +1,9 @@
 package ambit2.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -146,16 +146,10 @@ public class WizardPanel extends JPanel {
 		
 	}
 	protected Component buildMainPanel(String subtitle,Component main) {
-        FormLayout layout = new FormLayout(
-        		//"right:[40dlu,pref]",
-        		//"left:[pref,471px]:grow",
-        		"fill:pref:grow",
-                "pref, top:[pref,264px]:grow"
-                );
-        CellConstraints cc = new CellConstraints();        
-        JPanel p = buildPanel(layout);
-        p.add(createSeparator(subtitle),cc.xywh(1,1,1,1));
-        p.add(main,cc.xywh(1,2,1,1));
+
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(createSeparator(subtitle),BorderLayout.NORTH);
+		p.add(main,BorderLayout.CENTER);
 		return p;
 	}	
 	
