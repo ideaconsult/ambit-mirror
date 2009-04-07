@@ -168,6 +168,9 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 			setAtomContainer((IAtomContainer)evt.getNewValue(),true);
 		
 	}
+	public boolean confirm() {
+		return true;
+	}	
 }
 
 

@@ -103,4 +103,7 @@ public class FileSelector extends JPanel implements IAmbitEditor<FileState>, Act
 		}
 		
 	}
+	public boolean confirm() {
+		return true;
+	}	
 }

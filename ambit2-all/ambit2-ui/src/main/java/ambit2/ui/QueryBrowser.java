@@ -486,6 +486,9 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
         };            
         return actions;
 	}
+	public boolean confirm() {
+		return true;
+	}
 }
 
 abstract class MultiCells<Key,T> {

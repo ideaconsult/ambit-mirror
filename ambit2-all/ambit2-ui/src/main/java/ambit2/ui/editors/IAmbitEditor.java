@@ -16,5 +16,6 @@ public interface IAmbitEditor<T>  {
 	JComponent getJComponent();
 	void setEditable(boolean editable);
 	boolean isEditable();
+	boolean confirm();
 
 }

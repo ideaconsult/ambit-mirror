@@ -180,6 +180,9 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
     	if (objectList != null)
     		objectList.setCellRenderer(cellRenderer);
     }
+	public boolean confirm() {
+		return true;
+	}
 }
 
 class CustomListCellRenderer<V> extends DefaultListCellRenderer {
