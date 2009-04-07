@@ -29,58 +29,6 @@ public class ImportWorkflow extends Workflow {
         Sequence seq=new Sequence();
         seq.setName("[Import chemical structures]");    	
 
-        /*
-        IDBProcessor<String,IStructureRecord> processor = 
-        	new IDBProcessor<String,IStructureRecord>() {
-        	protected final StructureRecord r = new StructureRecord();
-        	public IStructureRecord process(String target)
-        			throws AmbitException {
-        		r.setIdchemical(-1);
-        		r.setIdstructure(-1);
-        		r.setFormat("SDF");
-        		r.setContent(target);
-        		return r;
-                //return new StructureRecord(-1,-1,target,"SDF");
-        	}
-
-			public boolean isEnabled() {
-				return true;
-			}
-
-			public void setEnabled(boolean value) {
-			}
-			public Connection getConnection() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-			public SessionID getSession() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-			public void setConnection(Connection connection)
-					throws DbAmbitException {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void close() throws SQLException {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void open() throws DbAmbitException {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void setSession(SessionID session) {
-				// TODO Auto-generated method stub
-				
-			}
-        };
-        */
-        
         final RepositoryWriter writer = new RepositoryWriter();
         writer.setDataset(dataset);
         final ProcessorsChain<String, IBatchStatistics,IProcessor> chain = 

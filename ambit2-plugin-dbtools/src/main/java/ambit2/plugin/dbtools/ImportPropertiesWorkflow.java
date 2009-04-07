@@ -1,0 +1,137 @@
+package ambit2.plugin.dbtools;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Iterator;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.ProcessorsChain;
+import ambit2.core.io.FileInputState;
+import ambit2.core.io.IInputState;
+import ambit2.core.io.IteratingMolFolderReader;
+import ambit2.db.IDBProcessor;
+import ambit2.db.SourceDataset;
+import ambit2.db.processors.AbstractBatchProcessor;
+import ambit2.db.processors.PropertyImporter;
+import ambit2.workflow.ActivityPrimitive;
+import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.library.DatasetSelection;
+import ambit2.workflow.library.InputFileSelection;
+import ambit2.workflow.library.LoginSequence;
+
+import com.microworkflow.execution.Performer;
+import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Sequence;
+import com.microworkflow.process.Workflow;
+
+public class ImportPropertiesWorkflow extends Workflow  {
+
+	public ImportPropertiesWorkflow()  {
+		SourceDataset dataset = new SourceDataset("Default");
+		
+        Sequence seq=new Sequence();
+        seq.setName("[Import properties for structures available in the database]");    	
+
+        final PropertyImporter writer = new PropertyImporter();
+        writer.setDataset(dataset);
+        final ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor> chain = 
+        		new ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor>();
+        chain.add(writer);
+
+        final BatchMolProcessor batch = new BatchMolProcessor();
+        batch.setProcessorChain(chain);
+    	ActivityPrimitive<IInputState,IBatchStatistics> p1 = 
+    		new ActivityPrimitive<IInputState,IBatchStatistics>( 
+    			InputFileSelection.INPUTFILE,
+    			DBWorkflowContext.BATCHSTATS,
+    			(IDBProcessor)batch,false) {
+    		
+    	};
+
+        p1.setName("Read file and import properties into structures, available into database.");
+        
+        Sequence s1 = new Sequence();
+        Primitive<FileInputState, SourceDataset> p2 = new Primitive<FileInputState, SourceDataset> (
+        				InputFileSelection.INPUTFILE,
+        				DBWorkflowContext.DATASET,
+        				new Performer<FileInputState, SourceDataset>() {
+        	public SourceDataset execute() throws Exception {
+        			SourceDataset dataset = 
+        						new SourceDataset(getTarget().getFile().getName(),
+        						LiteratureEntry.getInstance(getTarget().getFilename(),"file"));
+        			writer.setDataset(dataset);
+        			return dataset;
+        	};
+        }
+        );
+        p2.setName("Create new dataset");
+        s1.addStep(p2);
+        s1.addStep(new DatasetSelection(p1,dataset));
+
+        setDefinition(new LoginSequence(new InputFileSelection(s1)));
+
+	}
+}
+
+class BatchMolProcessor extends AbstractBatchProcessor<IInputState,IAtomContainer> 
+						{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5659435501205598414L;
+	public BatchMolProcessor() {
+	}
+	public BatchMolProcessor(ProcessorsChain<IAtomContainer,IBatchStatistics,IProcessor> processor) {
+		super(processor);
+
+	}	
+	public Iterator<IAtomContainer> getIterator(IInputState target)
+			throws AmbitException {
+		if (target instanceof FileInputState)
+			try {
+				File file = ((FileInputState)target).getFile();
+				if (file.isDirectory()) {
+					FilenameFilter filter = new FilenameFilter() {
+					        public boolean accept(File dir, String name) {
+					            return !name.startsWith(".");
+					        }
+					};					
+					return  new IteratingMolFolderReader(file.listFiles(filter));
+				} else {
+					IIteratingChemObjectReader reader = target.getReader();
+					//reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+					return reader;
+				}
+
+			} catch (Exception x) {
+				throw new AmbitException(x);
+			}
+		else throw new AmbitException("Not a file");
+	}
+	@Override
+	public void afterProcessing(IInputState target,
+			Iterator<IAtomContainer> iterator) throws AmbitException {
+		
+		try {
+				if (iterator instanceof IIteratingChemObjectReader)
+			((IIteratingChemObjectReader)iterator).close();
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		} finally {
+			super.afterProcessing(target, iterator);
+		}
+		
+	}
+	
+}
+
+
+
+

@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.db.LoginInfo;
-import ambit2.db.search.MissingFingerprintsQuery;
-import ambit2.db.search.QueryDataset;
+import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.db.search.structure.QueryDataset;
 import ambit2.plugin.dbtools.DBUtilityWorkflow;
 import ambit2.workflow.DBWorkflowContext;
 
