@@ -4,21 +4,22 @@ import java.util.BitSet;
 
 import org.openscience.cdk.smiles.SmilesGenerator;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
-import ambit2.db.search.QueryCombined;
-import ambit2.db.search.QueryDataset;
-import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryInfo;
-import ambit2.db.search.QueryPrescreenBitSet;
-import ambit2.db.search.QuerySimilarityBitset;
-import ambit2.db.search.QueryStored;
-import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.search.structure.QueryDataset;
+import ambit2.db.search.structure.QueryField;
+import ambit2.db.search.structure.QueryPrescreenBitSet;
+import ambit2.db.search.structure.QuerySimilarityBitset;
+import ambit2.db.search.structure.QueryStored;
+import ambit2.db.search.structure.QueryStructure;
 
 public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject> {
 
@@ -28,14 +29,14 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 	private static final long serialVersionUID = 2333531372300024401L;
 
 	public IQueryObject process(QueryInfo target) throws AmbitException {
-		QueryCombined combined = new QueryCombined();
+		QueryCombinedStructure combined = new QueryCombinedStructure();
 		//scope
 		if (QueryInfo.SCOPE_DATABASE.equals(target.getScope()))
 			combined.setScope(null);
 		else if (QueryInfo.SCOPE_DATASET.equals(target.getScope())) {
 			if (target.getDataset() != null) {
 				QueryDataset d = new QueryDataset();
-				d.setCondition(EQCondition.getInstance());
+				d.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 				d.setValue(target.getDataset());
 				combined.setScope(d);
 			} else {
@@ -58,11 +59,11 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 		
 		//identifiers
 		QueryField 
-			f = createQueryField(target.getFieldname1(), target.getIdentifier1(), target.getCondition1());
+			f = createQueryField(Property.getInstance(target.getFieldname1(),""), target.getIdentifier1(), target.getCondition1());
 		if (f != null) combined.add(f);
-			f = createQueryField(target.getFieldname2(), target.getIdentifier2(), target.getCondition2());
+			f = createQueryField(Property.getInstance(target.getFieldname2(),""), target.getIdentifier2(), target.getCondition2());
 		if (f != null) combined.add(f);
-			f = createQueryField(target.getFieldname3(), target.getIdentifier3(), target.getCondition3());
+			f = createQueryField(Property.getInstance(target.getFieldname3(),""), target.getIdentifier3(), target.getCondition3());
 		if (f != null) combined.add(f);		
 		
 		//formula, smiles, inchi
@@ -117,7 +118,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			FingerprintGenerator g = new FingerprintGenerator();
 			BitSet bitset = g.process(target.getMolecule());
 			QueryPrescreenBitSet qs = new QueryPrescreenBitSet();
-			qs.setBitset(bitset);
+			qs.setValue(bitset);
 			return qs;
 		} else return null;		
 	}	
@@ -127,7 +128,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			FingerprintGenerator g = new FingerprintGenerator();
 			BitSet bitset = g.process(target.getMolecule());
 			QuerySimilarityBitset qs = new QuerySimilarityBitset();
-			qs.setBitset(bitset);
+			qs.setValue(bitset);
 			qs.setThreshold(target.getThreshold());
 			return qs;
 		} else return null;		
@@ -144,11 +145,10 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 		return f;
 	}	
 
-	protected QueryField createQueryField(String field, String value, String condition) {
+	protected QueryField createQueryField(Property field, String value, String condition) {
 		if (value == null) return null;
 		if ("".equals(value.trim())) return null;
-		if (field == null) field = "";
-		
+	
 		QueryField f = new QueryField();
 		if (condition == null)
 			f.setCondition(StringCondition.getInstance(StringCondition.C_EQ));

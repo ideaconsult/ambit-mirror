@@ -1,6 +1,6 @@
-/* DictionaryRows.java
+/* QueryChangeEvent.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 5, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,24 +27,25 @@
  * 
  */
 
-package ambit2.db.readers;
+package ambit2.db.results;
 
-import java.sql.SQLException;
+import java.beans.PropertyChangeEvent;
 
-import ambit2.base.data.Dictionary;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.AmbitRows;
-import ambit2.db.search.DictionaryQuery;
+import ambit2.db.readers.IQueryRetrieval;
 
-public class DictionaryRows extends AmbitRows<Dictionary, DictionaryQuery> {
+public class QueryChangeEvent<T> extends PropertyChangeEvent {
 
-    public DictionaryRows() throws SQLException {
-        super();
-    }
-	@Override
-	public Dictionary getObject() throws AmbitException {
-		return getQuery().getObject(this);
+	public QueryChangeEvent(Object source, String propertyName,
+			IQueryRetrieval<T> oldQuery, IQueryRetrieval<T> newQuery) {
+		super(source, propertyName, oldQuery,newQuery);
+		
 	}
-	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8430039223408120160L;
+	IQueryRetrieval<T> getNewQuery() {
+		return (IQueryRetrieval<T>)getNewValue();
+	}
 }

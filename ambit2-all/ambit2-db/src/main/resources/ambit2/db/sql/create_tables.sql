@@ -251,7 +251,7 @@ CREATE TABLE  `property_values` (
   `idproperty` int(10) unsigned NOT NULL,
   `idstructure` int(10) unsigned NOT NULL,
   `idvalue` int(10) unsigned NOT NULL,
-  `idtype` int(10) unsigned NOT NULL default '1',
+  `idtype` int(10) unsigned NOT NULL,
   `user_name` varchar(16) collate utf8_bin NOT NULL,
   `status` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN',
   PRIMARY KEY  (`id`),

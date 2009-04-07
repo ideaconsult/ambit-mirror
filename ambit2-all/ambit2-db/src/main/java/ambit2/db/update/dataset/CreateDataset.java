@@ -87,5 +87,8 @@ public class CreateDataset extends AbstractObjectUpdate<SourceDataset> {
 	public String[] getSQL() throws AmbitException {
 		return create_sql;
 	}
-
+	@Override
+	public boolean returnKeys(int index) {
+		return true;
+	}
 }

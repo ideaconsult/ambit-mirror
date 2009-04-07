@@ -47,10 +47,10 @@ public class SourceDatasetRowsTest extends DbUnitTest {
 
 		IDatabaseConnection c = getConnection();        
         RetrieveDatasets query = new RetrieveDatasets();
-        query.setValue(null); 
+        query.setValue(null);
+        rows.setConnection(c.getConnection());        
         rows.setQuery(query);
-        rows.open(c.getConnection());
-  
+ 
         while (rows.next()) {
             SourceDataset d = rows.getObject();
             Assert.assertTrue(d.getId() > 0);

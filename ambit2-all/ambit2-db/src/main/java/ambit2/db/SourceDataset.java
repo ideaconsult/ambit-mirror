@@ -80,6 +80,12 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
     public int compareTo(SourceDataset o) {
         return getName().compareTo(o.getName());
     }
+    @Override
+    public boolean equals(Object o) {
+    	if (o instanceof SourceDataset) 
+    		return compareTo((SourceDataset)o)==0;
+    	return false;
+    }
     public String getTitle() {
     	if (reference == null) reference = LiteratureEntry.getInstance(getTitle(),getURL());
     	return reference.getTitle();

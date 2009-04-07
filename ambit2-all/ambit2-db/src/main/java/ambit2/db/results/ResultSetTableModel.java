@@ -1,6 +1,6 @@
-/* IQueryUpdate.java
+/* ResultSetTableModel.java
  * Author: nina
- * Date: Mar 28, 2009
+ * Date: Feb 6, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,21 +27,52 @@
  * 
  */
 
-package ambit2.db.update;
+package ambit2.db.results;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.IStatement;
-import ambit2.db.search.QueryParam;
+import javax.swing.table.AbstractTableModel;
 
-public interface IQueryUpdate<Group,Target> extends IStatement {
-	String[] getSQL() throws AmbitException;	
-	Target getObject();
-	void setObject(Target object);
-	Group getGroup();
-	void setGroup(Group object);	
-	List<QueryParam> getParameters(int index) throws AmbitException;
-	void setID(int index, int id);
-	boolean returnKeys(int index);
+public abstract class ResultSetTableModel extends AbstractTableModel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2273479288973954063L;
+	protected Connection connection = null;
+	protected ResultSet records = null;
+	protected int maxRecords = 0;
+	
+	public ResultSetTableModel() {
+		super();
+		maxRecords = 0;
+
+	}	
+	
+	protected ResultSet getResultSet() {
+		return records;
+	}
+	protected void setResultSet(ResultSet resultSet) throws SQLException {
+		if (this.records!=null) 
+			this.records.close();
+			
+		this.records = resultSet;
+		maxRecords = 0;
+		/**
+		 * Count number of records
+		 */
+		if (resultSet != null) try {
+			maxRecords = getRecordsNumber();
+		
+		} catch (Exception x) {
+			maxRecords = 0;
+		}
+		fireTableStructureChanged();
+		
+	}
+
+
+	protected abstract int getRecordsNumber() throws SQLException  ;
 }

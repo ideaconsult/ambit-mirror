@@ -63,13 +63,13 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 					if (params.get(i).getValue()==null)
 						ps.setNull(i+1, Types.LONG);
 					else					
-						ps.setLong(i+1, ((Long)params.get(i).getValue()).longValue());
+						ps.setLong(i+1, ((Number)params.get(i).getValue()).longValue());
 				} else
 				if (Double.class.equals(clazz)) {
 					if (params.get(i).getValue()==null)
 						ps.setNull(i+1, Types.DOUBLE);
 					else					
-						ps.setDouble(i+1, ((Double)params.get(i).getValue()).doubleValue());
+						ps.setDouble(i+1, ((Number)params.get(i).getValue()).doubleValue());
 				} else
 				if (String.class.equals(clazz)) {
 					if (params.get(i).getValue()==null)

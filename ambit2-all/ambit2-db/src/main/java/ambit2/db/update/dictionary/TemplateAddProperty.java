@@ -108,5 +108,20 @@ public class TemplateAddProperty extends AbstractUpdate<Dictionary,Property> {
 		sql[sql.length-1]=create_sql;
 		return sql;
 	}
+	@Override
+	public boolean returnKeys(int index) {
+		try {
+			String[] dictionary = createDictionary.getSQL();
+			if (index < dictionary.length) 
+				return createDictionary.returnKeys(index);
+			String[] property = createProperty.getSQL();
+			if (index < dictionary.length+property.length)
+				return createProperty.returnKeys(index-dictionary.length);
+			
+		} catch (AmbitException x) {
+			
+		}
+		return false;
+	}
 
 }

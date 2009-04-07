@@ -45,7 +45,7 @@ public abstract class DictionaryQuery extends AbstractQuery<String, String, Stri
 	 */
 	private static final long serialVersionUID = -7315142224794511557L;
 	public static final String SQL = 
-		"select tObject.name as Category,tSubject.name as Name from dictionary d "+
+		"select tObject.name as category,tSubject.name as field,relationship  from dictionary d "+
 		"join template as tSubject on d.idsubject=tSubject.idtemplate "+
 		"join template as tObject on d.idobject=tObject.idtemplate "+
 		"where %s.name %s ? order by tObject.idtemplate";
@@ -70,7 +70,7 @@ public abstract class DictionaryQuery extends AbstractQuery<String, String, Stri
 	}
 	public Dictionary getObject(ResultSet rs) throws AmbitException {
 		try {
-			return new Dictionary(rs.getString(2),rs.getString(1));
+			return new Dictionary(rs.getString(2),rs.getString(1),rs.getString(3));
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

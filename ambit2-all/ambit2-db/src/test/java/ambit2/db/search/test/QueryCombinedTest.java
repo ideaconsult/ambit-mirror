@@ -9,18 +9,20 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import ambit2.base.data.Property;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.SourceDataset;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
-import ambit2.db.search.QueryDataset;
-import ambit2.db.search.QueryFieldNumeric;
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.QuerySimilarityBitset;
-import ambit2.db.search.QueryStored;
-import ambit2.db.search.QueryStructure;
-import ambit2.db.search.QueryStructureByID;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.search.structure.QueryDataset;
+import ambit2.db.search.structure.QueryFieldNumeric;
+import ambit2.db.search.structure.QuerySimilarityBitset;
+import ambit2.db.search.structure.QueryStored;
+import ambit2.db.search.structure.QueryStructure;
+import ambit2.db.search.structure.QueryStructureByID;
 
 public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	@Override
@@ -31,12 +33,12 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	@Test
 	public void testStructure() throws Exception {
 		
-		QueryCombined qc = new QueryCombined();
+		QueryCombined qc = new QueryCombinedStructure();
 		qc.setId(55);
 		QuerySimilarityBitset q = new QuerySimilarityBitset();
 		FingerprintGenerator gen = new FingerprintGenerator();
 		BitSet bitset = gen.process(MoleculeFactory.makeAlkane(10));
-		q.setBitset(bitset);
+		q.setValue(bitset);
 		
 		Assert.assertNotNull(q.getParameters().get(1).getValue());
 		qc.add(q);
@@ -46,7 +48,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	@Test
 	public void testDataset() throws Exception {
 		
-		QueryCombined qc = new QueryCombined();
+		QueryCombined qc = new QueryCombinedStructure();
 		qc.setId(55);
 		QueryStructure qs = new QueryStructure();
 		qs.setFieldname("idchemical");
@@ -63,7 +65,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		QueryStored qs = new QueryStored();
 		qs.setName("test");
 		
-		QueryCombined qc = new QueryCombined();
+		QueryCombined qc = new QueryCombinedStructure();
 		qc.setId(55);
 		QueryStructureByID q = new QueryStructureByID(100);
 		q.setCondition(NumberCondition.getInstance("<="));
@@ -113,12 +115,12 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	}
 	@Override
 	protected QueryCombined createQuery() throws Exception {
-		QueryCombined q = new QueryCombined();
+		QueryCombined q = new QueryCombinedStructure();
 		QueryFieldNumeric d = new QueryFieldNumeric();
 		d.setCondition(NumberCondition.getInstance(NumberCondition.between));
 		d.setValue(new Double(10));
 		d.setMaxValue(new Double(15));
-		d.setFieldname("Property 1");
+		d.setFieldname(Property.getInstance("Property 1","ref"));
 		
 		QueryStructure qf = new QueryStructure();
 		qf.setFieldname("smiles");
@@ -140,7 +142,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 			Assert.assertEquals(11,rs.getInt(2));
 			Assert.assertEquals(100215,rs.getInt(3));
 			Assert.assertEquals(1,rs.getInt(4));
-			Assert.assertEquals(1,rs.getInt(5));			
+			Assert.assertEquals(12.0,rs.getDouble(5));			
 
 		}
 		Assert.assertEquals(1,records);

@@ -1,10 +1,12 @@
-package ambit2.db.search;
+package ambit2.db.search.structure;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.search.NumberCondition;
+import ambit2.db.search.QueryParam;
 
 /**
  * reads structures, for each there are no descriptors with given name and reference title.

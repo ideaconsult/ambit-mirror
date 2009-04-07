@@ -63,4 +63,8 @@ public class CreateReference extends AbstractObjectUpdate<LiteratureEntry>{
 	public void setID(int index, int id) {
 		getObject().setId(id);
 	}
+	@Override
+	public boolean returnKeys(int index) {
+		return true;
+	}
 }

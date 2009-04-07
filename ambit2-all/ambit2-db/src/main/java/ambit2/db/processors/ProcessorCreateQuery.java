@@ -73,7 +73,10 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 			
 			PreparedStatement s = c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			s.setInt(1,getSession().getId().intValue());
-			s.setString(2,result.getName());
+			if (result.getName().length()>45)
+				s.setString(2,result.getName().substring(0,44));
+			else
+				s.setString(2,result.getName());
             s.setString(3,result.getSQL());
 			if (s.executeUpdate()>0) {
 				ResultSet rss = s.getGeneratedKeys();
@@ -87,7 +90,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 				List<QueryParam> params = result.getParameters();
 				//System.out.println(params);				
 				QueryExecutor.setParameters(sresults, params);
-				//System.out.println(sresults);								
+				System.out.println(sresults);								
 				int rows = sresults.executeUpdate();
 				result.setRows(rows);
 				sresults.close();

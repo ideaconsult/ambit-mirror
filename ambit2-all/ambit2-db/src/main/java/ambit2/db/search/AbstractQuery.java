@@ -15,6 +15,10 @@ import com.jgoodies.binding.beans.Model;
  * <b>Modified</b> Aug 10, 2008
  */
 public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  extends Model implements IQueryObject<ResultType> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3120118597644963365L;
 	protected F fieldname;
 	protected T value;
 	protected C condition;
@@ -75,6 +79,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	}
 	@Override
 	public String toString() {
+		if ((getFieldname()==null) && (getValue()==null)) return getClass().getName();
 		StringBuilder b = new StringBuilder();
 		b.append(getFieldname());
 		b.append(' ');

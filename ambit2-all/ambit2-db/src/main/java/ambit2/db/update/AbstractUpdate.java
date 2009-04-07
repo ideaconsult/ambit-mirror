@@ -51,5 +51,8 @@ public abstract class AbstractUpdate<Group,Target>  implements IQueryUpdate<Grou
 	public void setObject(Target object) {
 		this.object = object;
 	}
+	public boolean returnKeys(int index) {
+		return false;
+	}
 
 }

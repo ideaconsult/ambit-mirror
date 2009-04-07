@@ -11,19 +11,19 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveField<F,V> extends AbstractQuery<String,IStructureRecord,EQCondition,String> implements IQueryRetrieval<String> {
+public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondition,String> implements IQueryRetrieval<String> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
 	protected final String sql = 
-					"select name,idreference,idproperty,idstructure,value,idtype from properties join\n"+
+					"select name,idreference,idproperty,idstructure,value_string,value_num,idtype from properties join\n"+
 					"(\n"+
-					"select idstructure,idproperty,value,idtype from values_int where idstructure=?\n"+
+					"select idstructure,idproperty,null as value_string,value as value_num,idtype from values_int where idstructure=?\n"+
 					"union\n"+
-					"select idstructure,idproperty,value,idtype from values_number where idstructure=?\n"+
+					"select idstructure,idproperty,null as value_string,value as value_num,idtype from values_number where idstructure=?\n"+
 					"union\n"+
-					"select idstructure,idproperty,value,idtype from values_string where idstructure=?\n"+
+					"select idstructure,idproperty,value as value_string,null,idtype from values_string where idstructure=?\n"+
 					") as L using (idproperty)\n";
 	protected final String where = "where name=?";
 	
@@ -47,7 +47,10 @@ public class RetrieveField<F,V> extends AbstractQuery<String,IStructureRecord,EQ
 
 	public String getObject(ResultSet rs) throws AmbitException {
 		try {
-			return rs.getString("value");
+			Object o = rs.getString(5);
+			if (o != null)
+				return o.toString();
+			else return rs.getString(6);
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

@@ -29,21 +29,46 @@
 
 package ambit2.db.readers.test;
 
+import org.dbunit.database.IDatabaseConnection;
 import org.junit.Before;
+import org.junit.Test;
 
 import ambit2.db.processors.test.DbUnitTest;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.IRetrieval;
+import ambit2.db.results.AmbitRows;
 
 
 
 
 public abstract class RetrieveTest<T> extends DbUnitTest {
 	protected IRetrieval<T> query;
-	protected abstract IRetrieval<T> createQuery();
+	protected abstract IQueryRetrieval<T> createQuery();
 	
 	@Before
 	@Override
 	public void setUp() throws Exception {
 		query = createQuery();
 	}
+	
+	protected abstract String getTestDatabase();
+	
+	protected AmbitRows<T> createRows() throws Exception {
+		throw new Exception("Not implemented");
+	}
+	@Test
+	public void testRows() throws Exception {
+		setUpDatabase(getTestDatabase());
+		IDatabaseConnection c = getConnection();
+		AmbitRows<T> rows = createRows();
+		rows.setConnection(c.getConnection());		
+		rows.setQuery(createQuery());
+		verifyRows(rows);
+		rows.close();
+		c.close();
+	}
+	protected void verifyRows(AmbitRows<T> rows) throws Exception {
+		throw new Exception("Not implemented");
+	}
+
 }

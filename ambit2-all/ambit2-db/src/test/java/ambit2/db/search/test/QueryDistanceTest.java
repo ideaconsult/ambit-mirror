@@ -8,7 +8,7 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QueryDistance;
+import ambit2.db.search.structure.QueryDistance;
 
 public class QueryDistanceTest extends QueryTest<QueryDistance> {
 

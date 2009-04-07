@@ -38,8 +38,11 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.db.SourceDataset;
+import ambit2.db.SourceDatasetRows;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.results.AmbitRows;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
@@ -55,10 +58,13 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		Assert.assertEquals(0,((IQueryObject)query).getParameters().size());
 	}
 
-
+	@Override
+	protected String getTestDatabase() {
+		return "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
+	}
 	@Test
 	public void testGetObject() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET");		
@@ -80,7 +86,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 	
 	@Test
 	public void testGetObjectByName() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
+		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET where name='Dataset 1'");		
@@ -100,9 +106,27 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		qe.close();
 		c.close();
 	}	
-
 	@Override
-	protected IRetrieval<SourceDataset> createQuery() {
+	protected void verifyRows(AmbitRows<SourceDataset> rows) throws Exception {
+		IDatabaseConnection c = getConnection();
+		Assert.assertNotNull(rows);
+		Assert.assertEquals(3,rows.size());
+		while (rows.next()) {
+			SourceDataset dataset = rows.getObject();
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,name,user_name,idreference,title,url FROM src_dataset join catalog_references using(idreference) where name='"+ dataset.getName() +"'");		
+			Assert.assertEquals(1,table.getRowCount());			
+			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
+				Assert.assertEquals(table.getValue(0,rows.getMetaData().getColumnName(i)).toString(),rows.getString(i));
+			}
+		}
+		
+	}
+	@Override
+	protected AmbitRows<SourceDataset> createRows() throws Exception {
+		return new SourceDatasetRows();
+	}
+	@Override
+	protected IQueryRetrieval<SourceDataset> createQuery() {
 		return new RetrieveDatasets();
 	}	
 }

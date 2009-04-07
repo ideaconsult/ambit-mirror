@@ -1,4 +1,4 @@
-package ambit2.db.search;
+package ambit2.db.search.structure;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -9,6 +9,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.db.search.NumberCondition;
+import ambit2.db.search.QueryParam;
 
 /**
  * Tanimoto similarity of {@link BitSet}. Use {@link  FingerprintGenerator} to obtain Bitset of {@link  IAtomContainer}.
@@ -54,9 +56,10 @@ public class QuerySimilarityBitset extends QuerySimilarity<BitSet,NumberConditio
 
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
+		if (getValue()==null) throw new AmbitException("Fingerprint not defined!");
 		long[] h16 = new long[16];
-		MoleculeTools.bitset2Long16(getBitset(),64,h16);
-		int bc = getBitset().cardinality();
+		MoleculeTools.bitset2Long16(getValue(),64,h16);
+		int bc = getValue().cardinality();
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
 		params.add(new QueryParam<Integer>(Integer.class, bc));
@@ -69,12 +72,5 @@ public class QuerySimilarityBitset extends QuerySimilarity<BitSet,NumberConditio
 	/*
 			    
  */
-	public BitSet getBitset() {
-		return getValue();
-	}
-	public void setBitset(BitSet bitset) {
-		setValue(bitset);
-	}
-
 
 }

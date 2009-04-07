@@ -21,7 +21,7 @@ public class ExtractData {
         Connection jdbcConnection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-        String ids = "(4891,9083,1)";
+        String ids = "(29142)";
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
@@ -44,7 +44,8 @@ public class ExtractData {
         partialDataSet.addTable("src_dataset", "SELECT * FROM src_dataset");
         partialDataSet.addTable("tuples","select * from tuples"); 
         partialDataSet.addTable("property_number", "SELECT * FROM property_number");        
-        partialDataSet.addTable("property_string", "SELECT * FROM property_string");        
+        partialDataSet.addTable("property_string", "SELECT * FROM property_string");
+        partialDataSet.addTable("property_int", "SELECT * FROM property_int");            
         partialDataSet.addTable("property_values", "SELECT id,idproperty,idstructure,idvalue,idtype,status,property_values.user_name FROM property_values join structure using(idstructure) where idchemical in "+ids);     
         partialDataSet.addTable("property_tuples", "SELECT * FROM property_tuples");          
         partialDataSet.addTable("struc_dataset", "SELECT * FROM struc_dataset");        

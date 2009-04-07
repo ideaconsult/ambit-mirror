@@ -1,6 +1,6 @@
-/* IQueryUpdate.java
+/* DictionaryRows.java
  * Author: nina
- * Date: Mar 28, 2009
+ * Date: Feb 6, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,21 +27,17 @@
  * 
  */
 
-package ambit2.db.update;
+package ambit2.db.results;
 
-import java.util.List;
+import java.sql.SQLException;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.IStatement;
-import ambit2.db.search.QueryParam;
+import ambit2.base.data.Dictionary;
 
-public interface IQueryUpdate<Group,Target> extends IStatement {
-	String[] getSQL() throws AmbitException;	
-	Target getObject();
-	void setObject(Target object);
-	Group getGroup();
-	void setGroup(Group object);	
-	List<QueryParam> getParameters(int index) throws AmbitException;
-	void setID(int index, int id);
-	boolean returnKeys(int index);
+public class DictionaryRows extends AmbitRows<Dictionary> {
+
+    public DictionaryRows() throws SQLException {
+        super();
+    }
+
+
 }

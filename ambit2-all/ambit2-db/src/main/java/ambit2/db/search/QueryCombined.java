@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 
 /**
@@ -13,7 +14,7 @@ import ambit2.db.readers.IQueryRetrieval;
  *
  * @param <Q>
  */
-public class QueryCombined<T>  implements IQueryRetrieval<T> {
+public abstract class QueryCombined<T>  implements IQueryRetrieval<T> {
 	protected List<IQueryRetrieval<T>> queries;
 	public List<IQueryRetrieval<T>> getQueries() {
 		return queries;
@@ -36,7 +37,7 @@ public class QueryCombined<T>  implements IQueryRetrieval<T> {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-		for (IQueryObject q: queries) 
+		for (IQueryObject<T> q: queries) 
 			q.setId(id);
 		if (getScope() != null)
 			getScope().setId(id);
@@ -64,7 +65,7 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 	protected String getSQL_or() throws AmbitException {
 		StringBuffer b = new StringBuffer();
 		String c = "";
-		for (IQueryObject q : queries) {
+		for (IQueryObject<T> q : queries) {
 			b.append(c);
 			b.append(q.getSQL());
 			c = union;
@@ -73,7 +74,7 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 			return b.toString();
 		else {
 			StringBuffer bb = new StringBuffer();
-			c = "select QSCOPE.idquery,s.idchemical,idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric from structure as s";
+			c = getScopeSQL();
 			bb.append(c);
 			join(scope,"SCOPE",bb);
 			bb.append(join);
@@ -113,8 +114,9 @@ using(idstructure)
 		}
 
 		return b.toString();		
-	}
-	protected void join(IQueryObject q,String qname,StringBuffer b) throws AmbitException {
+	}	
+	protected abstract String getScopeSQL();
+	protected void join(IQueryObject<T> q,String qname,StringBuffer b) throws AmbitException {
 		b.append(join);
 		b.append("(");
 		b.append(q.getSQL());
@@ -138,7 +140,7 @@ using(idstructure)
 			}			
 		}
 		for (int i=0; i < queries.size(); i++) {
-			IQueryObject q = queries.get(i);
+			IQueryObject<T> q = queries.get(i);
 			List<QueryParam> p = q.getParameters();
 			for (int j=0; j < p.size(); j++) {
 				QueryParam qp = p.get(j);
