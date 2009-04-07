@@ -78,7 +78,7 @@ public class Dictionary extends AmbitBean {
 		StringBuilder b = new StringBuilder();
 		b.append(getTemplate());
 		b.append(' ');
-		b.append(getRelationship());
+		b.append(getRelationship().replaceAll("_", " "));
 		b.append(' ');
 		b.append(getParentTemplate());
 		return b.toString();
