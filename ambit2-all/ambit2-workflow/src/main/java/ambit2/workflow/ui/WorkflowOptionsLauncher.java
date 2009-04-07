@@ -25,12 +25,14 @@ package ambit2.workflow.ui;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
+import java.sql.Connection;
 import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import ambit2.db.IDBProcessor;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.Utils;
 import ambit2.ui.WizardPanel;
@@ -61,25 +63,34 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 			JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getFrame()), evt.getNewValue());
 		} else if (evt.getPropertyName().equals(DBWorkflowContext.USERINTERACTION)) {
 			//if (evt instanceof UserInteractionEvent) {
-			ValueLatchPair latch = null; 			
+			ValueLatchPair latch = null; 	
+			IAmbitEditor editor = null;
+			Connection connection = null;
 			try {
 				if (evt.getNewValue() instanceof ValueLatchPair)
 					latch = (ValueLatchPair) evt.getNewValue();
 				else return;
 				//ValueLatchPair latch = ((UserInteractionEvent) evt).getLatch();
-				IAmbitEditor e = EditorPreferences.getEditor(latch.getValue());
+				editor = EditorPreferences.getEditor(latch.getValue());
 				JComponent p = null;
-				if (e !=null)
-					p = e.getJComponent();
-				else {
+				if (editor !=null) {
+					p = editor.getJComponent();
+					if (editor instanceof IDBProcessor) {
+						connection =((DBWorkflowContext)context).getDataSource().getConnection();
+						((IDBProcessor)editor).setConnection(connection);	
+						((IDBProcessor)editor).open();
+					}
+				} else {
 					p = new JLabel(latch.getValue().toString());
 				}
 
 				String help = Utils.getHelp(latch.getValue().getClass());
 				String title = Utils.getTitle(latch.getValue().getClass());
 				WizardPanel wizard = new WizardPanel(title,p,help);
-				if (wizard.display(JOptionPane.getFrameForComponent(getFrame()),context.getName() + " Wizard",true)
+				if (wizard.display(JOptionPane.getFrameForComponent(wizard),context.getName() + " Wizard",true)
 						== WizardPanel.ANSWER_MODE.next) {
+					if (editor!=null)
+						editor.confirm();
 					latch.getLatch().setValue(latch.getValue());
 				} else {
 					latch.getLatch().setValue(null);
@@ -88,6 +99,15 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 				latch.getLatch().setValue(null);
 				x.printStackTrace();
 				JOptionPane.showMessageDialog(getFrame(),x.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);	
+			} finally {
+				try {
+					if (editor instanceof IDBProcessor) 
+						((IDBProcessor)editor).getConnection().close();
+					if (connection != null) connection.close();
+				} catch (Exception x) {
+					
+				}
+				
 			}
 		}
 

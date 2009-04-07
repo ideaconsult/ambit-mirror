@@ -55,6 +55,9 @@ public abstract class AbstractEditor<T> extends WorkflowContextListenerPanel imp
 		this.object = object;
 		
 	}
+	public boolean confirm() {
+		return true;
+	}
 
 }
 
