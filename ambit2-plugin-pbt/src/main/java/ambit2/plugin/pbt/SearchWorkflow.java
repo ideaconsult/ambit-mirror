@@ -1,6 +1,6 @@
 package ambit2.plugin.pbt;
 
-import ambit2.db.search.QueryField;
+import ambit2.db.search.structure.QueryField;
 import ambit2.workflow.ExecuteAndStoreQuery;
 import ambit2.workflow.QueryInteraction;
 import ambit2.workflow.library.LoginSequence;
