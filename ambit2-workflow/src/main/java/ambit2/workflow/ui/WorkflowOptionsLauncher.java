@@ -75,7 +75,7 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 				JComponent p = null;
 				if (editor !=null) {
 					p = editor.getJComponent();
-					if (editor instanceof IDBProcessor) {
+					if ((editor instanceof IDBProcessor) && (context instanceof DBWorkflowContext)) {
 						connection =((DBWorkflowContext)context).getDataSource().getConnection();
 						((IDBProcessor)editor).setConnection(connection);	
 						((IDBProcessor)editor).open();

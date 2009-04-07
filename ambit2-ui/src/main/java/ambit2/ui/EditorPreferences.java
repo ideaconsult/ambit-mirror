@@ -67,7 +67,7 @@ public class EditorPreferences {
 		{"org.openscience.cdk.Molecule","ambit2.ui.editors.Panel2D"},		
 		{"org.openscience.cdk.AtomContainer","ambit2.ui.editors.Panel2D"},		
 		{"ambit2.base.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},
-		{"ambit2.base.data.SelectionBean","ambit2.workflow.ui.SelectionEditor"}		
+		{"ambit2.base.data.SelectionBean","ambit2.workflow.ui.SingleSelectionEditor"}		
 		
 
 	};
