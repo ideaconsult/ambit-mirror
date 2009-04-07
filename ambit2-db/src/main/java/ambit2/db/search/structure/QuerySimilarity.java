@@ -1,0 +1,41 @@
+package ambit2.db.search.structure;
+
+import ambit2.db.search.IQueryCondition;
+
+
+public abstract class QuerySimilarity<T,C extends IQueryCondition> extends AbstractStructureQuery<String,T,C> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3509155736213435907L;
+	protected double threshold = 0.5;
+	protected boolean forceOrdering = false;
+	public boolean isForceOrdering() {
+		return forceOrdering;
+	}
+	public void setForceOrdering(boolean forceOrdering) {
+		this.forceOrdering = forceOrdering;
+	}
+	public QuerySimilarity() {
+		setFieldname("similarity");
+
+
+	}
+	public void setThreshold(Double threshold) {
+		this.threshold = threshold;
+	}
+	public double getThreshold() {
+		return threshold;
+	}
+	@Override
+	public String toString() {
+		if ((getFieldname()==null) && (getValue()==null)) return getClass().getName();
+		StringBuilder b = new StringBuilder();
+		b.append(getFieldname());
+		b.append(' ');
+		b.append(getCondition());
+		b.append(' ');
+		b.append(getThreshold());
+		return b.toString();
+	}	
+}

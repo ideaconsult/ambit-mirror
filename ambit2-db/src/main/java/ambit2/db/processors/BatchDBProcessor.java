@@ -56,7 +56,6 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 	 */
 	private static final long serialVersionUID = -5659435501205598414L;
 	public BatchDBProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 	public BatchDBProcessor(ProcessorsChain<String,IBatchStatistics,IProcessor> processor) {
 		super(processor);
@@ -101,53 +100,5 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 		}
 		
 	}
-/*
-	public IBatchStatistics process(IInputState target) throws AmbitException {
-		try {
-			DefaultBatchStatistics stats = new DefaultBatchStatistics();
-			stats.setResultCaption("Read");
-			long freq = 1;
-			stats.setFrequency(freq);
-
-			Iterator reader = getIterator(target);
-			ProcessorsChain<Target,Result,IProcessor> processor = getProcessorChain();
-			if (processor == null)
-				throw new AmbitException("Processor not defined");
-			while (reader.hasNext()) {
-				freq = stats.getFrequency();
-				if ((stats.getRecords(IBatchStatistics.RECORDS_READ) % freq)==0)
-					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);				
-				Object object= null;
-				long ms = System.currentTimeMillis();
-				try {
-					object = reader.next();
-					stats.increment(IBatchStatistics.RECORDS_READ);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_READ, System.currentTimeMillis()-ms);
-				} catch (Exception x) {
-					stats.increment(IBatchStatistics.RECORDS_ERROR);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-ms);					
-					continue;					
-				}
-				ms = System.currentTimeMillis();
-				try {
-					processor.process((Target)object);
-					stats.increment(IBatchStatistics.RECORDS_PROCESSED);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_PROCESSED, System.currentTimeMillis()-ms);
-				} catch (Exception x) {
-					stats.increment(IBatchStatistics.RECORDS_ERROR);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-ms);					
-					continue;
-				}				
-								
-			}
-			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
-			closeIterator(reader);
-			
-			return stats;
-		} catch (Exception x) {
-			throw new AmbitException(x);
-		}
-	}
-	*/
 	
 }

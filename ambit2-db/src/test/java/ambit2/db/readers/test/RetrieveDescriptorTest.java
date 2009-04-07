@@ -40,16 +40,21 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 
 import ambit2.base.data.StructureRecord;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDescriptor;
+import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;
 
 public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue>{
 
-
+	@Override
+	protected String getTestDatabase() {
+		return "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";
+	}
 	@Test
 	public void testGetObject() throws Exception {
-		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM values_number");		
@@ -76,11 +81,38 @@ public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue>{
 		c.close();
 	}
 
+	
 	@Override
-	protected IRetrieval<DescriptorValue> createQuery() {
+	protected IQueryRetrieval<DescriptorValue> createQuery() {
 		RetrieveDescriptor q = new RetrieveDescriptor();
 		q.setValue(new StructureRecord(0,100215,"",""));
 		return q;
 	}
-
+	@Override
+	protected AmbitRows<DescriptorValue> createRows() throws Exception {
+		return new AmbitRows<DescriptorValue>();
+	}
+	@Override
+	protected void verifyRows(AmbitRows<DescriptorValue> rows) throws Exception {
+		IDatabaseConnection c = getConnection();
+		Assert.assertNotNull(rows);
+		Assert.assertEquals(2,rows.size());
+		while (rows.next()) {
+			DescriptorValue value = rows.getObject();
+			Assert.assertEquals(1,value.getNames().length);
+			ITable table = 	c.createQueryTable("EXPECTED",
+					"SELECT idproperty,title,url,name,value,user_name FROM values_int_float join catalog_references using(idreference) where idstructure=100215 and name='"+value.getNames()[0]+"'");			
+			Assert.assertEquals(1,table.getRowCount());		
+			
+			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
+				Object expected = table.getValue(0,rows.getMetaData().getColumnName(i));
+				Object actual = rows.getObject(i);
+				if ((expected == null) && (actual == null)) continue;
+				else
+					Assert.assertEquals(expected.toString(),actual.toString());
+				
+			}
+			
+		}
+	}
 }

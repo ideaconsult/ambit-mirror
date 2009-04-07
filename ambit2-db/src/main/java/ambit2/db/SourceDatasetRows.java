@@ -32,9 +32,9 @@ package ambit2.db;
 import java.sql.SQLException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.results.AmbitRows;
 
-public class SourceDatasetRows extends AmbitRows<SourceDataset,RetrieveDatasets> {
+public class SourceDatasetRows extends AmbitRows<SourceDataset> {
     /**
      * 
      */

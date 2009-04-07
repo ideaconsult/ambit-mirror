@@ -1,6 +1,6 @@
-/* IQueryUpdate.java
+/* AbstractStructureRetrieval.java
  * Author: nina
- * Date: Mar 28, 2009
+ * Date: Feb 8, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,21 +27,37 @@
  * 
  */
 
-package ambit2.db.update;
+package ambit2.db.search.structure;
 
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.IStatement;
-import ambit2.db.search.QueryParam;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.AbstractQuery;
+import ambit2.db.search.IQueryCondition;
 
-public interface IQueryUpdate<Group,Target> extends IStatement {
-	String[] getSQL() throws AmbitException;	
-	Target getObject();
-	void setObject(Target object);
-	Group getGroup();
-	void setGroup(Group object);	
-	List<QueryParam> getParameters(int index) throws AmbitException;
-	void setID(int index, int id);
-	boolean returnKeys(int index);
+public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition> 
+			extends AbstractQuery<F, T, C, IStructureRecord> 
+		    implements IQueryRetrieval<IStructureRecord>{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3149398052063483705L;
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		try {
+			IStructureRecord record = new StructureRecord();
+			record.setIdchemical(rs.getInt(2));
+			record.setIdstructure(rs.getInt(3));
+			//metric
+			record.setProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), rs.getFloat(5));
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+	}
 }

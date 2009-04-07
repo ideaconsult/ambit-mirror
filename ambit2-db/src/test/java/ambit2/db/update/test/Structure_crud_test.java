@@ -40,7 +40,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.QueryStructure;
+import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.structure.CreateStructure;
 import ambit2.db.update.structure.DeleteStructure;

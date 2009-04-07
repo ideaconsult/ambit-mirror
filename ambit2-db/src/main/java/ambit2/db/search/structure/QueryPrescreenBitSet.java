@@ -1,10 +1,11 @@
-package ambit2.db.search;
+package ambit2.db.search.structure;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.MoleculeTools;
+import ambit2.db.search.QueryParam;
 
 public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 	/**
@@ -39,8 +40,8 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 	
 	public List<QueryParam> getParameters() throws AmbitException {
 		long[] h16 = new long[16];
-		MoleculeTools.bitset2Long16(getBitset(),64,h16);
-		int bc = getBitset().cardinality();
+		MoleculeTools.bitset2Long16(getValue(),64,h16);
+		int bc = getValue().cardinality();
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
 		for (int h=0; h < 16; h++)

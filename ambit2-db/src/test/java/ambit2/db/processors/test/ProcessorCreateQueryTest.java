@@ -34,7 +34,7 @@ import ambit2.db.processors.ProcessorCreateQuery;
 import ambit2.db.processors.ProcessorCreateSession;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.QueryStructureByID;
+import ambit2.db.search.structure.QueryStructureByID;
 
 
 public class ProcessorCreateQueryTest extends DbUnitTest {

@@ -11,14 +11,18 @@
   <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE"/>
   <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
   <catalog_references idreference="7" title="EINECS" url="EINECS"/>
+  <catalog_references idreference="8" title="PUBCHEM" url="PUBCHEM"/>
  <properties idproperty="1" idreference="1" name="Property 1" units="" comments="" islocal="false"/>
   <properties idproperty="2" idreference="1" name="Property 2" units="" comments="" islocal="false"/>
   <properties idproperty="3" idreference="1" name="Property 3" units="" comments="" islocal="false"/>
+  <properties idproperty="4" idreference="8" name="PUBCHEM_COMPOUND_CID" units="" comments="" islocal="false"/>
+    
   
   <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
   <chemicals idchemical="10" inchi="InChI=1/2FH.Na/h2*1H;/q;;+1/p-1" smiles="F.[F-].[Na+]"/>
   <chemicals idchemical="11" inchi="InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1" smiles="[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC"/>
   <chemicals idchemical="29141" inchi="InChI=1/Fe" smiles="[Fe]"/>
+  <chemicals idchemical="29142" inchi="InChI=1S/CH2O/c1-2/h1H2" smiles="C=O"/>
   <structure idstructure="100211" idchemical="7" structure="5QwAAHicpVZdc6M2FH3nV6gzfbATgXUFCAhdz3ixE6fd2LtDmj7s7HgIUW0mNmQBbzf/vpcP2xgn
 nSYwHls69+joSFe+QiHED6NbuYxCZoHJbNANi48VhXAgYBPCXvw4jkPuOGNMIfgwDVsIExU0x2ZO
 A/PjcgBvDDZO5UoVXbMsEJUKmmANFY+8ZuRExdAcbhsvenmDitCYcIyuXiyNc6F39WJrurB4Vy+O
@@ -75,19 +79,23 @@ sXhCUTdsR14v8i7RGiVpnjBHW+3AI9GlFx7QIhcVUCSt0Yc04xRx2JB0eh2z/22pnsPrFqbvkC1S
 Lf/AViB7IYdSfChwK8oKdH0Uk0Et1En4pAYL5iThDQ+Mnh/hqX7R5q8+M3Sknsze2AY+Hzzj4MZW
 QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="NA"/>
- 
+  <structure idstructure="129346" idchemical="29142" structure="" format="SDF" user_name="guest" type_structure="NA"/>
   <template idtemplate="1" name="BCF"/>
+  <template idtemplate="2" name="All"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
+  <dictionary idsubject="1" idobject="2"/>  
   <tuples/>
   <property_number idvalue="1" idtype="1" value="10.5"/>
   <property_number idvalue="2" idtype="1" value="12.0"/>
   <property_number idvalue="3" idtype="1" value="13.0"/>
+  <property_int idvalue="1" idtype="2" value="712"/>
   <property_string/>
-  <property_values id="1" idproperty="1" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
-  <property_values id="2" idproperty="2" idstructure="100215" idvalue="2" status="OK" user_name="guest"/>
-  <property_values id="3" idproperty="1" idstructure="100211" idvalue="3" status="OK" user_name="guest"/>  
+  <property_values id="1" idproperty="1" idstructure="100215" idvalue="2" idtype="1" status="OK" user_name="guest"/>
+  <property_values id="2" idproperty="2" idstructure="100215" idvalue="2" idtype="1" status="OK" user_name="guest"/>
+  <property_values id="3" idproperty="1" idstructure="100211" idvalue="3" idtype="1" status="OK" user_name="guest"/>  
+  <property_values id="4" idproperty="4" idstructure="129346" idvalue="1" idtype="2" status="OK" user_name="guest"/>
   <property_tuples/>
   <src_dataset id_srcdataset="1" name="Dataset 1" user_name="guest" idreference="7"/>
   <struc_dataset idstructure="100215" id_srcdataset="1"/>

@@ -1,6 +1,6 @@
-/* TemplateRows.java
+/* RowsModel.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 6, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,22 +27,45 @@
  * 
  */
 
-package ambit2.db.readers;
+package ambit2.db.results;
 
-import java.sql.SQLException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.AmbitRows;
-import ambit2.db.search.TemplateQuery;
+import javax.swing.AbstractListModel;
 
-public class TemplateRows extends AmbitRows<Property, TemplateQuery> {
-	public TemplateRows() throws SQLException {
-		super();
+public class RowsModel<T> extends AbstractListModel implements PropertyChangeListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5034323147503404064L;
+	protected AmbitRows<T> rows;
+	public RowsModel(AmbitRows<T> rows) {
+		this.rows = rows;
+		rows.addPropertyChangeListener(this);
 	}
-	@Override
-	public Property getObject() throws AmbitException {
-		return getQuery().getObject(this);
+
+	public Object getElementAt(int index) {
+		try {
+	        rows.first();
+	        rows.relative(index);
+			return rows.getObject();
+		}catch (Exception x) {
+			return x.getMessage();
+		}
 	}
 
+	public int getSize() {
+		if (rows == null) return 0;
+		return rows.size();
+	}
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals("status")) {
+			fireContentsChanged(this,0,rows.size());
+
+		}
+		
+	}
+
+	
 }

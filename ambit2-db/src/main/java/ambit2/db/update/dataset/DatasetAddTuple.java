@@ -1,6 +1,6 @@
-/* CreateStructure.java
+/* DatasetAddTuple.java
  * Author: nina
- * Date: Mar 31, 2009
+ * Date: Apr 3, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,75 +27,72 @@
  * 
  */
 
-package ambit2.db.update.structure;
+package ambit2.db.update.dataset;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.SourceDataset;
 import ambit2.db.search.QueryParam;
-import ambit2.db.update.AbstractObjectUpdate;
-import ambit2.db.update.chemical.CreateChemical;
+import ambit2.db.update.AbstractUpdate;
 
-public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
-	protected CreateChemical chemical;
+public class DatasetAddTuple extends AbstractUpdate<SourceDataset,Integer>{
+
+	protected CreateDataset createDataset = new CreateDataset();
 	
 	public static final String create_sql = 
-		"INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))"
-	;
+		"insert into tuples select null,id_srcdataset from src_dataset where name=?";
 
-	public CreateStructure(IStructureRecord structure) {
-		super(structure);
+
+	public DatasetAddTuple(SourceDataset dataset,Integer tuple) {
+		super();
+		setGroup(dataset);
+		setObject(tuple);
 	}
-	public CreateStructure() {
-		this(null);
-	}		
+	
+	public DatasetAddTuple() {
+		this(null,null);
+	}
+	@Override
+	public void setGroup(SourceDataset group) {
+		super.setGroup(group);
+		createDataset.setObject(group);
+	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (getObject()==null) throw new AmbitException("Structure not defined");
-		if (index < chemical.getSQL().length)
-			return chemical.getParameters(index);
-		else {
+		if (getGroup()==null || getGroup().getName()==null) throw new AmbitException("Dataset not defined!");
+		
+		if (index < createDataset.getSQL().length) 
+			return createDataset.getParameters(index);
+		else  {
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
-			if (getObject().getIdchemical()>0)
-				params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
-			else
-				params1.add(new QueryParam<Integer>(Integer.class, null));		
-			params1.add(new QueryParam<String>(String.class, getObject().getWritableContent()));		
-			params1.add(new QueryParam<String>(String.class, getObject().getFormat()));
+			params1.add(new QueryParam<String>(String.class, getGroup().getName()));
 			return params1;
 		}
 		
 	}
-	@Override
-	public void setObject(IStructureRecord object) {
-		super.setObject(object);
-		if (chemical == null) chemical = new CreateChemical();
-		chemical.setObject(object);
-	}
 	public void setID(int index, int id) {
 		try {
-			if (index < chemical.getSQL().length)
-				chemical.setID(index, id);
+			String[] dataset = createDataset.getSQL();
+			if (index >= dataset.length)
+				setObject(id);
 			else
-				getObject().setIdstructure(id);
+				createDataset.setID(index, id);
 		} catch (Exception x) {
-			x.printStackTrace();
+			
 		}
-
+		
 	}
 	@Override
 	public boolean returnKeys(int index) {
 		return true;
 	}
-
 	public String[] getSQL() throws AmbitException {
-		String[] dataset = chemical.getSQL();
+		String[] dataset = createDataset.getSQL();
 		String[] sql = new String[dataset.length+1];
 		for (int i=0; i < dataset.length;i++)
 			sql[i]=dataset[i];
 		sql[sql.length-1]=create_sql;
 		return sql;
 	}
-
 }

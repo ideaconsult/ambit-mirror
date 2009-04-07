@@ -71,5 +71,8 @@ public class CreateChemical  extends AbstractObjectUpdate<IChemical> {
 	public String[] getSQL() throws AmbitException {
 		return create_sql;
 	}
-
+	@Override
+	public boolean returnKeys(int index) {
+		return true;
+	}
 }

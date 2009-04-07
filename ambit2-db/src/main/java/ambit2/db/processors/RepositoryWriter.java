@@ -35,15 +35,16 @@ import javax.naming.OperationNotSupportedException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.search.AbstractStructureQuery;
-import ambit2.db.search.QueryField;
-import ambit2.db.search.QueryFieldNumeric;
-import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryField;
+import ambit2.db.search.structure.QueryFieldNumeric;
+import ambit2.db.search.structure.QueryStructure;
 
 /**
 <pre>
@@ -75,7 +76,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		setPropertyKey(new CASKey());
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
-		query_chemicals.setFieldname(smilesKey.getKey());
+		query_chemicals.setFieldname(smilesKey.getKey().toString());
 
 	}
 	
@@ -112,8 +113,8 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	public void setDataset(SourceDataset dataset) {
 		structureWriter.setDataset(dataset);
 	}
-	protected void findChemical(AbstractStructureQuery query, String key,Object value, IStructureRecord record) throws SQLException, AmbitException {
-		System.out.println(query.getClass().getName() + " key=" + key + " value="+value);
+	protected void findChemical(AbstractStructureQuery query, Object key,Object value, IStructureRecord record) throws SQLException, AmbitException {
+		//System.out.println(query.getClass().getName() + " key=" + key + " value="+value);
 		if (value == null) return;
 		ResultSet rs = null;
 		try {
@@ -123,7 +124,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			rs = queryexec.process(query);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(2));
-				System.out.println("found "+record);
+				//System.out.println("found "+record);
 /*
 				ps_seekdataset.clearParameters();
 				ps_seekdataset.setString(1,getDataset().getName());
@@ -183,7 +184,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         			findChemical(query_property,propertyKey.getKey(),property,structure);
         		else
 	        		if (structure.getIdchemical() <= 0) {
-	        			query_chemicals.setFieldname(smilesKey.getKey());        			
+	        			query_chemicals.setFieldname(smilesKey.getKey().toString());        			
 	        			findChemical(query_chemicals,null,structure.getSmiles(),structure);
 	        		}
         	} catch (SQLException x) {

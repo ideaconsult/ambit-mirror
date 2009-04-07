@@ -31,16 +31,17 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import ambit2.db.search.QueryField;
+import ambit2.base.data.Property;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.QueryField;
 
 
 public class QueryFieldsTest extends  QueryTest<QueryField>  {
 	@Test
 	public void test() throws Exception {
 		QueryField qf = new QueryField();
-		qf.setFieldname("name");
+		qf.setFieldname(Property.getInstance("name","ref"));
 		qf.setValue("value");
 		qf.setCondition(StringCondition.getInstance("regexp"));
 		qf.setId(1);
@@ -59,7 +60,7 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 	@Override
 	protected QueryField createQuery() throws Exception {
 		QueryField qf = new QueryField();
-		qf.setFieldname("");
+		qf.setFieldname(null);
 		qf.setValue("VeryHigh");
 		qf.setCondition(StringCondition.getInstance("="));
 		qf.setId(1);

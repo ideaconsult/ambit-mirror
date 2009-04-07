@@ -27,8 +27,10 @@
  * 
  */
 
-package ambit2.db;
+package ambit2.db.results;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -61,52 +63,101 @@ import javax.sql.rowset.spi.SyncProvider;
 import javax.sql.rowset.spi.SyncProviderException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.IQueryObject;
+import ambit2.db.AbstractDBProcessor;
+import ambit2.db.CachedRowSetFactory;
+import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 
-public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowSet{
-	protected Q query;
+public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> implements CachedRowSet, PropertyChangeListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4124120461604514413L;
+	protected IQueryRetrieval<T> query;
 	protected CachedRowSet rowset;
-	protected QueryExecutor<Q> executor = new QueryExecutor<Q>();
-    public AmbitRows() throws SQLException {
+	protected QueryExecutor<IQueryRetrieval<T>> executor = new QueryExecutor<IQueryRetrieval<T>>();
+	protected String propertyname = getClass().getName();
+	protected boolean ready = false;
+    public synchronized boolean isReady() {
+		return ready;
+	}
+
+	public synchronized void setReady(boolean ready) {
+		boolean status = this.ready;
+		this.ready = ready;
+		propertyChangeSupport.firePropertyChange("status", status,ready);
+	}
+
+	public String getPropertyname() {
+		return propertyname;
+	}
+
+	public synchronized void setPropertyname(String propertyname) {
+		this.propertyname = propertyname;
+	}
+
+	public AmbitRows() {
         super();
-        rowset = CachedRowSetFactory.getCachedRowSet();
+        rowset = null;
     }
-    public abstract T getObject() throws AmbitException ;
-    
-    public void open(Connection connection) throws AmbitException {
+
+    protected synchronized IQueryRetrieval createNewQuery(T target) throws AmbitException {
+    	return null;
+    }
+    public synchronized IQueryRetrieval process(T target) throws AmbitException {
+    	IQueryRetrieval q = createNewQuery(target);
+    	propertyChangeSupport.firePropertyChange(new QueryChangeEvent(this,getPropertyname(),null,q));
+    	return q;
+    };
+	public synchronized T getObject() throws AmbitException {
+		return getQuery().getObject(this);
+	}
+	public synchronized void setObject(T object) throws AmbitException {
+		//throw new AmbitException("N/A");
+	}
+	public synchronized void open() throws DbAmbitException {
+    	if (query == null) throw new DbAmbitException("Query not defined!");
+    	setReady(false);
     	try {
-    		rowset.close();
-    	} catch (Exception x) {}
-    	if (query == null) throw new AmbitException("Query not defined!");
-    	if (connection != null)
+    		close();
+    		//rowset.close();
+    	} catch (Exception x) { x.printStackTrace();}
+
+    	if (getConnection() != null)
     		executor.setConnection(connection);
-   	
+	
     	executor.open();
     	try {
     		populate(executor.process(query));
+
+    	} catch (AmbitException x) {
+    		throw new DbAmbitException(x);
     	} catch (SQLException x) {
-    		throw new AmbitException(x);
+    		throw new DbAmbitException(x);
+    	} finally {
+    		setReady(true);
+    		System.out.println(size());
     	}
+    	
     }
     @Override
     protected void finalize() throws Throwable {
     	try { close(); } catch (Exception x) {}
     	super.finalize();
     }
-	public Q getQuery() {
+	public synchronized IQueryRetrieval<T> getQuery() {
 		return query;
 	}
-	public void setQuery(Q query) {
+	public synchronized void setQuery(IQueryRetrieval<T> query)  throws AmbitException {
 		this.query = query;
-		try {
-		open(null);
-		} catch (Exception x) {}
+		open();
 		
 	}
-    public void populate(ResultSet data) throws SQLException {
+    public synchronized void populate(ResultSet data) throws SQLException {
+    	if (rowset == null) rowset = CachedRowSetFactory.getCachedRowSet();
         rowset.populate(data);
-        
+        executor.closeResults(data);
     }
     public void populate(ResultSet rs, int startRow) throws SQLException {
         rowset.populate(rs, startRow);
@@ -171,7 +222,7 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
     public String getTableName() throws SQLException {
         return rowset.getTableName();
     }
-    public boolean nextPage() throws SQLException {
+    public synchronized boolean  nextPage() throws SQLException {
         return rowset.nextPage();
     }
     public boolean previousPage() throws SQLException {
@@ -227,6 +278,8 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
         
     }
     public int size() {
+    	if (!isReady()) return 0;
+    	if (rowset == null) return 0;
         return rowset.size();
     }
     public Collection<?> toCollection() throws SQLException {
@@ -500,10 +553,11 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
         rowset.clearWarnings();
         
     }
-    public void close() throws SQLException {
-    	executor.close();
-        rowset.close();
-        
+    public synchronized void close() throws SQLException {
+  	
+    	executor.closeResults(null);
+    	if (rowset != null)  rowset.close();
+        rowset = null;
     }
     public void deleteRow() throws SQLException {
         rowset.deleteRow();
@@ -745,7 +799,7 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
     public void moveToInsertRow() throws SQLException {
         rowset.moveToInsertRow();
     }
-    public boolean next() throws SQLException {
+    public synchronized boolean  next() throws SQLException {
         return rowset.next();
     }
     public boolean previous() throws SQLException {
@@ -1014,6 +1068,20 @@ public abstract class AmbitRows<T, Q extends IQueryObject> implements CachedRowS
         rowset.unsetMatchColumn(columnName);
         
     }
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt instanceof QueryChangeEvent) 
+			try {
+				
+				setQuery(((QueryChangeEvent)evt).getNewQuery());
+			} catch (Exception x) {
+				System.out.println(getPropertyname() + x);
+			}
+		else {
+			System.out.println(getPropertyname() + ":"+evt.getNewValue());
+		}
+		
+	}
 	
 
 }

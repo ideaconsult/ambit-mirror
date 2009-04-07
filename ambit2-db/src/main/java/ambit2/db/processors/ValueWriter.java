@@ -36,8 +36,10 @@ import java.sql.Statement;
 import java.sql.Types;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
+import ambit2.db.update.dataset.DatasetAddTuple;
 
 /**
  * Writes values into property tables
@@ -68,7 +70,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	protected static final String insert_tuple_number = "insert into property_tuples select ?,id from property_values join property_number using(idvalue,idtype) where idproperty=? and idstructure=?  and (abs(value-?)<1E-4) and idtype=?";
 	protected static final String insert_tuple_int = 	"insert into property_tuples select ?,id from property_values join property_int using(idvalue,idtype) where idproperty=? and idstructure=? and value=? and idtype=?";
 	
-	protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";
+	//protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";
     protected PreparedStatement ps_descriptorvalue_string;
     protected PreparedStatement ps_descriptorvalue_number;    
     protected PreparedStatement ps_descriptorvalue_int;
@@ -84,6 +86,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     protected PreparedStatement ps_inserttuple = null;
     
     protected IStructureRecord structure;
+    protected DatasetAddTuple tuple = new DatasetAddTuple();
     
     public synchronized IStructureRecord getStructure() {
         return structure;
@@ -93,24 +96,20 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     }
     @Override
     protected int getTuple(SourceDataset dataset) {
-    	int tuple = -1;
-    	PreparedStatement ps = null;
     	try {
-	    	ps = connection.prepareStatement(insert_tuple,Statement.RETURN_GENERATED_KEYS);
-	    	ps.setString(1,dataset.getName());
-	    	if (ps.executeUpdate() > 0) { //row inserted
-	    		ResultSet rs = ps.getGeneratedKeys();
-	    		while (rs.next()) tuple = rs.getInt(1);
-	    		rs.close();
-	    	}
-    	} catch (Exception x) {
-    		logger.error(x);
-    		tuple = -1;
+    		if (dataset == null) return -1;
+	    	tuple.setGroup(dataset);
+	    	tuple.setObject(-1);
+	    	exec.process(tuple);
+	    	return tuple.getObject();
+    	} catch (AmbitException x) {
+    		x.printStackTrace();
+    		return -1;
     	} finally {
-    		try {ps.close();} catch (Exception x) {logger.error(x);}
+    		
     	}
-    	return tuple;
-    }
+     }
+
     protected boolean insertValue(String value, Property property, int idtuple, mode error) throws SQLException {
     	if ((value != null) && (value.length()>255))
     		value = value.substring(0,255);

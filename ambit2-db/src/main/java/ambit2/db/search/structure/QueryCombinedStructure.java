@@ -1,6 +1,6 @@
-/* IQueryUpdate.java
+/* QueryCombinedStructure.java
  * Author: nina
- * Date: Mar 28, 2009
+ * Date: Apr 5, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,21 +27,20 @@
  * 
  */
 
-package ambit2.db.update;
+package ambit2.db.search.structure;
 
-import java.util.List;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.search.QueryCombined;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.IStatement;
-import ambit2.db.search.QueryParam;
+public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
+	
+	
+	protected String getScopeSQL() {
+		if (combine_as_and)
+			return "select Q1.idquery,s.idchemical,idstructure,Q1.selected as selected,Q1.metric as metric from structure as s";
+		else
+			return "select QSCOPE.idquery,s.idchemical,idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric from structure as s";
+	
+	}
 
-public interface IQueryUpdate<Group,Target> extends IStatement {
-	String[] getSQL() throws AmbitException;	
-	Target getObject();
-	void setObject(Target object);
-	Group getGroup();
-	void setGroup(Group object);	
-	List<QueryParam> getParameters(int index) throws AmbitException;
-	void setID(int index, int id);
-	boolean returnKeys(int index);
 }

@@ -29,14 +29,14 @@
 
 package ambit2.db.processors;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.MFAnalyser;
 
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.hashcode.HashcodeKey;
 
@@ -48,11 +48,12 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	protected MoleculeReader molReader;
 	protected HashcodeKey hashcode;	
 	protected SmilesKey smilesKey;
-
+	protected InchiPropertyKey inchiKey;
 	public StructureNormalizer() {
 		molReader = new MoleculeReader();
 		hashcode = new HashcodeKey();
 		smilesKey = new SmilesKey();
+		inchiKey = new InchiPropertyKey();
 	}
 	public IStructureRecord process(IStructureRecord structure)
 			throws AmbitException {
@@ -73,6 +74,22 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		} catch (Exception x) {
 			structure.setSmiles(null);
 		}		
+		
+		try {
+			structure.setInchi(inchiKey.process(structure));
+			if ("".equals(structure.getInchi())) structure.setInchi(null);
+		} catch (Exception x) {
+			structure.setInchi(null);
+		}				
+
+		try {
+			MFAnalyser mf = new MFAnalyser(molecule);
+			structure.setFormula(mf.getMolecularFormula());
+			if ("".equals(structure.getFormula())) structure.setFormula(null);
+		} catch (Exception x) {
+			structure.setFormula(null);
+		}		
+		
 		return structure;
 	}
 

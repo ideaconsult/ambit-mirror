@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 
 import ambit2.base.data.LiteratureEntry;
-import ambit2.db.search.QueryMissingDescriptor;
+import ambit2.db.search.structure.QueryMissingDescriptor;
 
 public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor> {
 	@Test

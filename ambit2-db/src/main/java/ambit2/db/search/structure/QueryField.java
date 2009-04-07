@@ -22,12 +22,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.db.search;
+package ambit2.db.search.structure;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.search.NumberCondition;
+import ambit2.db.search.QueryParam;
+import ambit2.db.search.StringCondition;
 
 
 /**
@@ -35,7 +39,7 @@ import ambit2.base.exceptions.AmbitException;
  * @author nina
  *
  */
-public class QueryField extends AbstractStructureQuery<String,String, StringCondition> {
+public class QueryField extends AbstractStructureQuery<Property,String, StringCondition> {
 	/**
 	 * 
 	 */
@@ -48,11 +52,11 @@ public class QueryField extends AbstractStructureQuery<String,String, StringCond
 	public final static String sqlAnyField = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join property_values using(idstructure) join property_string as f using (idvalue,idtype) where value %s ?";
 	public QueryField() {
-		setFieldname("");
+		setFieldname(null);
 		setCondition(StringCondition.getInstance("="));
 	}
 	public String getSQL() throws AmbitException {
-		if ((getFieldname() ==null) || "".equals(getFieldname()))
+		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
 			return String.format(sqlAnyField,getCondition().getSQL());
 		else
 			return String.format(sqlField,getCondition().getSQL());
@@ -61,12 +65,20 @@ public class QueryField extends AbstractStructureQuery<String,String, StringCond
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
-		if (!"".equals(getFieldname()))
-			params.add(new QueryParam<String>(String.class, getFieldname()));
+		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
+			;
+		else
+			params.add(new QueryParam<String>(String.class, getFieldname().getName()));
 
 		params.add(new QueryParam<String>(String.class, getValue()));
 		return params;
 	}
+	@Override
+	public String toString() {
+		if ((getFieldname()==null) && (getValue()==null)) return "Search by text properties";
+		else return super.toString();
+
+	}	
 }
 
 

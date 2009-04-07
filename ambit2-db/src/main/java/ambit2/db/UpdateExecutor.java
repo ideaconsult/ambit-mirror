@@ -84,7 +84,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				List<QueryParam> params = target.getParameters(i);
 				statement = getCachedStatement(sql[i]);
 				if (statement == null) {
-					if (sql[i].indexOf("INSERT")>=0)
+					if (target.returnKeys(i))
 						statement = c.prepareStatement(sql[i],Statement.RETURN_GENERATED_KEYS);
 					else {
 						statement = c.prepareStatement(sql[i]);
@@ -96,7 +96,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				
 					logger.debug(statement);
 					count += statement.executeUpdate();
-					if (sql[i].indexOf("INSERT")>=0) {
+					if (target.returnKeys(i)) {
 						ResultSet keys = statement.getGeneratedKeys();
 		                try {
 			                while (keys.next()) 
@@ -111,8 +111,8 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				System.err.println(statement);
 				throw x;
 			} finally {
-				if (sql[i].indexOf("INSERT")>=0) 
-					try { statement.close();} catch (Exception x) {}
+				if (target.returnKeys(i))
+					try { statement.close();} catch (Exception x) {} finally {statement = null;}
 				else
 					addStatementToCache(sql[i],statement);						
 			}	

@@ -7,7 +7,7 @@ import junit.framework.Assert;
 import ambit2.base.data.StructureRecord;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.QueryStructureByID;
+import ambit2.db.search.structure.QueryStructureByID;
 
 public class QueryStructureByIDTest extends QueryTest<QueryStructureByID> {
 	public void test() throws Exception {

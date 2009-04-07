@@ -51,6 +51,10 @@ public class CreateProperty extends AbstractObjectUpdate<Property> {
 		this(null);
 	}		
 	@Override
+	public boolean returnKeys(int index) {
+		return true;
+	}
+	@Override
 	public void setObject(Property object) {
 		super.setObject(object);
 		if (object != null ) {

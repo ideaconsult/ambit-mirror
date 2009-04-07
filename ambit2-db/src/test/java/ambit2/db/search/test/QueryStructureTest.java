@@ -8,8 +8,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.QueryStructure;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.QueryStructure;
 
 public class QueryStructureTest extends QueryTest<QueryStructure>{
 	@Test
@@ -19,10 +19,11 @@ public class QueryStructureTest extends QueryTest<QueryStructure>{
 		qf.setValue("CC");
 		qf.setCondition(StringCondition.getInstance("="));
 		qf.setId(1);
-		Assert.assertEquals(QueryStructure.sqlSMILES + qf.getFieldname() + " " + qf.getCondition() + " ?",qf.getSQL());
+		Assert.assertEquals(String.format(QueryStructure.sqlSMILES, qf.getFieldname(),qf.getCondition(),qf.getFieldname(),qf.getCondition())
+				,qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
-		Assert.assertEquals(2,params.size());
+		Assert.assertEquals(3,params.size());
 		Assert.assertEquals(Integer.class,params.get(0).getType());
 		Assert.assertEquals(String.class,params.get(1).getType());
 		Assert.assertEquals(1,params.get(0).getValue());
@@ -34,6 +35,7 @@ public class QueryStructureTest extends QueryTest<QueryStructure>{
 		QueryStructure qf = new QueryStructure();
 		qf.setFieldname("smiles");
 		qf.setValue("F.[F-].[Na+]");
+		//qf.setValue("[F-].F.[Na+]");
 		qf.setCondition(StringCondition.getInstance("="));
 		return qf;
 	}

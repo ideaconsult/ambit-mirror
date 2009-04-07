@@ -1,4 +1,4 @@
-package ambit2.db.search;
+package ambit2.db.search.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.search.NumberCondition;
+import ambit2.db.search.QueryParam;
 
 /**
  * Distance between two atoms, provided as symbols.
