@@ -47,21 +47,21 @@ public class HashcodeKey extends DefaultAmbitProcessor<IAtomContainer,Long>
 	 */
 	private static final long serialVersionUID = 8380664924329486420L;
 	protected MoleculeAndAtomsHashing hashing;
-	protected String key="hashcode";
+	protected Object key="hashcode";
 	public HashcodeKey() {
 		hashing = new MoleculeAndAtomsHashing();
 	}
-	public String getKey() {
+	public Object getKey() {
 		return key;
 	}
-	public void setKey(String key) {
+	public void setKey(Object key) {
 		this.key = key;
 	}
 	public Long process(IAtomContainer molecule) throws AmbitException {
 		if ((molecule==null)||(molecule.getAtomCount()==0)) return 0L;
 		return hashing.getMoleculeHash(molecule);
 	}
-	public String getQueryKey() {
+	public Object getQueryKey() {
 		return null;
 	}
 	public Class getType() {
