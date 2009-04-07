@@ -1,6 +1,6 @@
-/* ResultSetTableModel.java
+/* QueryDatasetEditorTest.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 7, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,52 +27,39 @@
  * 
  */
 
-package ambit2.dbui;
+package ambit2.dbui.test;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import javax.swing.table.AbstractTableModel;
+import javax.swing.JOptionPane;
 
-public abstract class ResultSetTableModel extends AbstractTableModel {
+import ambit2.db.IDBProcessor;
+import ambit2.db.search.structure.QueryDataset;
+import ambit2.ui.EditorPreferences;
+import ambit2.ui.editors.IAmbitEditor;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2273479288973954063L;
-	protected Connection connection = null;
-	protected ResultSet records = null;
-	protected int maxRecords = 0;
-	
-	public ResultSetTableModel() {
-		super();
-		maxRecords = 0;
+public class QueryDatasetEditorTest extends  RepositoryTest {
 
-	}	
-	
-	protected ResultSet getResultSet() {
-		return records;
-	}
-	protected void setResultSet(ResultSet resultSet) throws SQLException {
-		if (this.records!=null) 
-			this.records.close();
-			
-		this.records = resultSet;
-		maxRecords = 0;
-		/**
-		 * Count number of records
-		 */
-		if (resultSet != null) try {
-			maxRecords = getRecordsNumber();
-		
+	protected void demo() {
+		QueryDataset query = new QueryDataset();
+		try {
+			initDatasource();
+			Connection c = datasource.getConnection();
+			IAmbitEditor editor = EditorPreferences.getEditor(query);
+			if (editor instanceof IDBProcessor) {
+				((IDBProcessor)editor).setConnection(c);
+				((IDBProcessor)editor).open();
+			}
+			JOptionPane.showMessageDialog(null,editor.getJComponent());
+			System.out.println(query.toString());
+			System.out.println(query.getSQL());
+			System.out.println(query.getParameters());
+			c.close();
 		} catch (Exception x) {
-			maxRecords = 0;
-		}
-		fireTableStructureChanged();
-		
+			x.printStackTrace();
+		}		
 	}
-
-
-	protected abstract int getRecordsNumber() throws SQLException  ;
+	public static void main(String args[]) {
+		new QueryDatasetEditorTest().demo();
+	}
 }

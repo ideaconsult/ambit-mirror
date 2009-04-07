@@ -36,12 +36,12 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 
 import ambit2.base.data.Dictionary;
-import ambit2.db.readers.DictionaryRows;
-import ambit2.db.search.DictionaryQuery;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.results.DictionaryRows;
 import ambit2.db.search.DictionarySubjectQuery;
 import ambit2.ui.editors.BeanEditor;
 
-public class DictionaryQueryPanel extends AmbitRowsPanel<Dictionary, DictionaryQuery, DictionaryRows> {
+public class DictionaryQueryPanel extends AmbitRowsPanel<Dictionary,  DictionaryRows> {
 	/**
 	 * 
 	 */
@@ -58,7 +58,11 @@ public class DictionaryQueryPanel extends AmbitRowsPanel<Dictionary, DictionaryQ
 			public void actionPerformed(ActionEvent e) {
 				DictionarySubjectQuery q = new DictionarySubjectQuery();
 				q.setValue("a");
-				getObject().setQuery(q);
+				try {
+					getObject().setQuery(q);
+				} catch (AmbitException x) {
+					
+				}
 				
 			}
 		}),BorderLayout.EAST);

@@ -30,10 +30,9 @@
 package ambit2.dbui.dictionary;
 
 import ambit2.base.data.Property;
-import ambit2.db.readers.TemplateRows;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.results.PropertyRows;
 
-public class TemplatePropertyPanel extends AmbitRowsPanel<Property, TemplateQuery, TemplateRows > {
+public class TemplatePropertyPanel extends AmbitRowsPanel<Property, PropertyRows > {
 
 	/**
 	 * 

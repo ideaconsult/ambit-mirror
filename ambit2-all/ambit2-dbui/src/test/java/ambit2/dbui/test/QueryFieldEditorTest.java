@@ -1,6 +1,6 @@
-/* TemplateRowsTest.java
+/* QueryFieldEditorTest.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 5, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -30,40 +30,31 @@
 package ambit2.dbui.test;
 
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-
 import javax.swing.JOptionPane;
 
-import junit.framework.Assert;
-import ambit2.db.results.PropertyRows;
-import ambit2.db.search.TemplateQuery;
-import ambit2.dbui.dictionary.TemplatePropertyPanel;
+import org.junit.After;
+import org.junit.Before;
 
-public class TemplateRowsTest extends QueryTest<TemplateQuery>{
+import ambit2.db.search.structure.QueryFieldNumeric;
+import ambit2.ui.EditorPreferences;
 
-		@Override
-		protected TemplateQuery createQuery() throws Exception {
-			TemplateQuery q = new TemplateQuery();
-			q.setValue("ambit2.descriptors.FunctionalGroupDescriptor");
-			return q;
+public class QueryFieldEditorTest {
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+	public static void main(String args[]) {
+		QueryFieldNumeric query = new QueryFieldNumeric();
+		try {
+			JOptionPane.showMessageDialog(null,EditorPreferences.getEditor(query).getJComponent());
+			System.out.println(query.toString());
+			System.out.println(query.getSQL());
+		} catch (Exception x) {
+			x.printStackTrace();
 		}
-		@Override
-		public void testSelect() throws Exception {
-			PropertyRows rows = new PropertyRows();
-
-			Connection c = datasource.getConnection();
-			rows.setConnection(c);
-			rows.setQuery(query);
-			Assert.assertTrue(rows.size()>0);
-			TemplatePropertyPanel panel = new TemplatePropertyPanel();
-			panel.setObject(rows);
-			JOptionPane.showMessageDialog(null,panel);
-			rows.close();
-		};
-		@Override
-		protected void verify(TemplateQuery query, ResultSet rs) throws Exception {
-		// TODO Auto-generated method stub
-		
-		}
+	}
 }

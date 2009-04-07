@@ -35,7 +35,7 @@ import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
 
-import ambit2.db.readers.DictionaryRows;
+import ambit2.db.results.DictionaryRows;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.dbui.dictionary.DictionaryQueryPanel;
@@ -51,9 +51,9 @@ public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 	@Override
 	public void testSelect() throws Exception {
 		DictionaryRows rows = new DictionaryRows();
-		rows.setQuery(query);
 		Connection c = datasource.getConnection();
-		rows.open(c);
+		rows.setConnection(c);
+		rows.setQuery(query);
 		DictionaryQueryPanel panel = new DictionaryQueryPanel();
 		panel.setObject(rows);
 		JOptionPane.showMessageDialog(null,panel);

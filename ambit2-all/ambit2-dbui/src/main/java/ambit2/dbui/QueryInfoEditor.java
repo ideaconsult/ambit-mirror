@@ -238,7 +238,9 @@ public class QueryInfoEditor extends JPanel implements IAmbitEditor<QueryInfo> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	public boolean confirm() {
+		return true;
+	}
 
 }
 
