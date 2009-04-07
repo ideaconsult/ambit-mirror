@@ -20,8 +20,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.IDBProcessor;
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QuerySimilarityBitset;
-import ambit2.db.search.QueryStructureByID;
+import ambit2.db.search.structure.QuerySimilarityBitset;
+import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.query.XMLTags;
@@ -59,7 +59,7 @@ public class QueryXMLReporterTest extends DbUnitTest {
 		
 		try {
 			convertor.getReporter().setConnection(c.getConnection());
-			q.setBitset(gen.process(parser.parseSmiles("C")));			
+			q.setValue(gen.process(parser.parseSmiles("C")));			
 			System.out.println(convertor.process(q).getText());
 			
 		} catch (InvalidSmilesException x) {
