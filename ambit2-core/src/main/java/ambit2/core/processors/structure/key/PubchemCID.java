@@ -52,7 +52,7 @@ public class PubchemCID extends PropertyKey<Number> {
 	protected boolean isValid(Object newkey, Object value) {
 		if (newkey != null) {
 			newkey = newkey.toString().toUpperCase();
-			if (key.equals(newkey)) try {
+			if (key.getName().equals(newkey)) try {
 				return Integer.parseInt(value.toString()) > 0;
 			} catch(Exception x) {
 				return false;
@@ -71,7 +71,7 @@ public class PubchemCID extends PropertyKey<Number> {
 		}
 	}
 	@Override
-	public String getQueryKey() {
+	public Object getQueryKey() {
 		return getKey();
 	}
 	public Class getType() {

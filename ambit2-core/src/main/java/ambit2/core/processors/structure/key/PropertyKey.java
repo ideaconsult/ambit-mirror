@@ -48,9 +48,9 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 		setKey(key);
 	}
 		
-	public String getKey() {
+	public Object getKey() {
 		if (key == null) return null;
-		return key.getName();
+		return key;
 	}
 	public void setKey(Property key) {
 		this.key = key;
@@ -84,7 +84,7 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 	protected boolean isValid(Object key, Object value) {
 		return key != null;
 	}
-	public String getQueryKey() {
+	public Object getQueryKey() {
 		return null;
 	}
 	public abstract Class getType();
