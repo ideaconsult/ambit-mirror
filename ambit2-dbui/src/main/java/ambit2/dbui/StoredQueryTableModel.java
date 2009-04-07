@@ -41,6 +41,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.readers.RetrieveField;
+import ambit2.db.results.ResultSetTableModel;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
 import ambit2.ui.PropertiesTableModel;
@@ -61,7 +62,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 	protected PreparedStatement structureRecords = null;
 	protected PreparedStatement structureField = null;	
 	protected RetrieveAtomContainer retrieveMolecule = new RetrieveAtomContainer();
-	protected RetrieveField<String,String> retrieveField = new RetrieveField<String,String>();
+	protected RetrieveField retrieveField = new RetrieveField();
 	protected PropertiesTableModel fields;
 	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();
 	

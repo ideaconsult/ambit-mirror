@@ -9,15 +9,15 @@ import javax.swing.JOptionPane;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.QueryInfo2Query;
-import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryCombined;
-import ambit2.db.search.QueryDataset;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.QueryField;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.RetrieveFieldNames;
+import ambit2.db.search.structure.QueryDataset;
+import ambit2.db.search.structure.QueryField;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.editors.IAmbitEditor;
 
@@ -53,7 +53,7 @@ public class QueryInfoTest extends QueryTest<IQueryObject> {
 		
 		//first query
 		assertTrue(q.get(0) instanceof QueryField);
-		assertEquals("Field_1",((QueryField) q.get(0)).getFieldname());
+		assertEquals("Field_1",((QueryField) q.get(0)).getFieldname().getName());
 		assertEquals("20",((QueryField) q.get(0)).getValue());
 		assertEquals(StringCondition.getInstance("="),((QueryField) q.get(0)).getCondition());				
 		

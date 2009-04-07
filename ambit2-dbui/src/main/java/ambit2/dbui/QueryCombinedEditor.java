@@ -5,10 +5,10 @@ package ambit2.dbui;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import ambit2.db.search.QueryCombined;
+import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.ui.editors.IAmbitEditor;
 
-public class QueryCombinedEditor extends JPanel implements IAmbitEditor<QueryCombined> {
+public class QueryCombinedEditor extends JPanel implements IAmbitEditor<QueryCombinedStructure> {
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class QueryCombinedEditor extends JPanel implements IAmbitEditor<QueryCom
 		return null;
 	}
 
-	public QueryCombined getObject() {
+	public QueryCombinedStructure getObject() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -40,9 +40,12 @@ public class QueryCombinedEditor extends JPanel implements IAmbitEditor<QueryCom
 		
 	}
 
-	public void setObject(QueryCombined object) {
+	public void setObject(QueryCombinedStructure object) {
 		// TODO Auto-generated method stub
 		
 	}
+	public boolean confirm() {
+		return true;
+	}	
 
 }

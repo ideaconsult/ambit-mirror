@@ -34,11 +34,14 @@ public abstract class RepositoryTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		initDatasource();
+		
+	}
+	protected void initDatasource()  throws Exception {
 		datasource = DatasourceFactory.getDataSource(
 				DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "33060", "ambit2", "guest","guest" ));
-		
+						"localhost", "33060", "ambit2", "guest","guest" ));		
 	}
 	@Override
 	protected void tearDown() throws Exception {

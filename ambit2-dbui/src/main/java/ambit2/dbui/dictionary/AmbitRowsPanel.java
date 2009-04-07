@@ -30,19 +30,18 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import ambit2.db.AmbitRows;
-import ambit2.db.search.IQueryObject;
+import ambit2.db.results.AmbitRows;
 import ambit2.dbui.CachedRowSetTableModel;
 import ambit2.ui.QueryBrowser;
 import ambit2.ui.editors.IAmbitEditor;
-import ambit2.ui.table.IBrowserMode.BrowserMode;
+import ambit2.ui.table.BrowsableTableModel;
 
-public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, Q>> 
+public class AmbitRowsPanel<T, Rows extends AmbitRows<T>> 
 							extends JPanel implements IAmbitEditor<Rows> {
     protected CachedRowSetTableModel srtm;
     private static final long serialVersionUID = 2854619268267349642L;
     protected boolean editable;
-    protected QueryBrowser<CachedRowSetTableModel> browser ;
+    protected QueryBrowser<BrowsableTableModel> browser ;
     
     public AmbitRowsPanel() {
         super();
@@ -51,36 +50,9 @@ public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, 
     protected void addWidgets() {
     	setLayout(new BorderLayout());
     	srtm = new CachedRowSetTableModel();
-    	browser = new QueryBrowser<CachedRowSetTableModel>(null,new Dimension(150,20));
+    	browser = new QueryBrowser<BrowsableTableModel>(null,new Dimension(150,20));
     	add(browser, BorderLayout.CENTER);
-    	/*
-        JTable table = new JTable(srtm);
-        //table.setRowHeight(150);
-        table.setDefaultRenderer(IAtomContainer.class, new ImageCellRenderer(new Dimension(150,150)));
-        add(new JScrollPane(table), BorderLayout.CENTER);
-        JToolBar b = new JToolBar();
-        b.add(new AbstractAction("<<") {
-           public void actionPerformed(ActionEvent arg0) {
-               try {
-                srtm.previousPage();
-               } catch (SQLException x) {
-                   x.printStackTrace();
-               }
-                
-            } 
-        });
-        b.add(new AbstractAction(">>") {
-            public void actionPerformed(ActionEvent arg0) {
-                try {
-                 srtm.nextPage();
-                } catch (SQLException x) {
-                    x.printStackTrace();
-                }
-                 
-             } 
-         });        
-        add(b,BorderLayout.NORTH);    	
-        */
+   
     }
     public JComponent getJComponent() {
     	return this;
@@ -98,10 +70,12 @@ public class AmbitRowsPanel<T,Q extends IQueryObject, Rows extends AmbitRows<T, 
     public void setObject(Rows object) {
     	try { getObject().close(); } catch (Exception x) {};
   		srtm.setRecords(object);
-  		browser.setObject(srtm);
+  		browser.setObject(new BrowsableTableModel(srtm));
     }
     
-
+    public boolean confirm() {
+    	return true;
+    }
 }
 
 
