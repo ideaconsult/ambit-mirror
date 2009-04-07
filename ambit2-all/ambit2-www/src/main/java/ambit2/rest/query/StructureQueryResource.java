@@ -11,7 +11,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
-import ambit2.db.search.QueryStructureByID;
+import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;

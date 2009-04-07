@@ -17,7 +17,7 @@ import org.restlet.data.Response;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
-import ambit2.db.search.QuerySimilarityBitset;
+import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.rest.query.StructureQueryResource;
 
 public class SimilarityResource extends StructureQueryResource<QuerySimilarityBitset> {
@@ -63,7 +63,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 			System.out.println(request.getAttributes().get("smiles").toString());
 	        String smiles = Reference.decode(request.getAttributes().get("smiles").toString());
 	        System.out.println(smiles);
-			q.setBitset(getBitset(getMolecule(smiles)));			
+			q.setValue(getBitset(getMolecule(smiles)));			
 			return q;
 		} catch (InvalidSmilesException x) {
 			throw new AmbitException(x);
