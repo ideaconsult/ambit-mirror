@@ -50,16 +50,16 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 	 */
 	private static final long serialVersionUID = 8319267963784553472L;
 	protected SmilesGenerator gen;
-	protected String key="smiles";
+	protected Object key="smiles";
 	//protected AtomConfigurator conf = new AtomConfigurator();
 	public SmilesKey() {
 		gen = new SmilesGenerator();
 		gen.setUseAromaticityFlag(true);
 	}
-	public String getKey() {
+	public Object getKey() {
 		return key;
 	}
-	public void setKey(String key) {
+	public void setKey(Object key) {
 		this.key = key;
 	}
 	public String process(IAtomContainer molecule) throws AmbitException {
@@ -78,8 +78,8 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 			throw new AmbitException(x);
 		}
 	}
-	public String getQueryKey() {
-		return null;
+	public Object getQueryKey() {
+		return "smiles";
 	}
 	public Class getType() {
 		return String.class;

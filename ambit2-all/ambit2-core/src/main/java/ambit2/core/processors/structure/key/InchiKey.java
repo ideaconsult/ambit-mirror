@@ -47,20 +47,20 @@ public class InchiKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 	 */
 	private static final long serialVersionUID = -4957862884677389524L;
 	protected InchiProcessor inchi;
-	protected String key;
+	protected Object key;
 	public InchiKey() {
 		inchi = new InchiProcessor();
 	}
-	public String getKey() {
+	public Object getKey() {
 		return key;
 	}
-	public void setKey(String key) {
+	public void setKey(Object key) {
 		this.key = key;
 	}
 	public String process(IAtomContainer molecule) throws AmbitException {
 		return inchi.process(molecule).getInchi();
 	}
-	public String getQueryKey() {
+	public Object getQueryKey() {
 		return null;
 	}
 	public Class getType() {

@@ -32,7 +32,7 @@ package ambit2.core.processors.structure.key;
 import ambit2.base.interfaces.IProcessor;
 
 public interface IStructureKey<Target, Result> extends IProcessor<Target, Result>{
-	public String getKey();
-	public String getQueryKey();
+	public Object getKey();
+	public Object getQueryKey();
 	public Class getType();
 }

@@ -46,13 +46,13 @@ public class EmptyKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 	 * 
 	 */
 	private static final long serialVersionUID = -2365056130992400384L;
-	public String getKey() {
+	public Object getKey() {
 		return null;
 	}
 	public String process(IAtomContainer molecule) throws AmbitException {
 		return null;
 	}
-	public String getQueryKey() {
+	public Object getQueryKey() {
 		return null;
 	}
 	public Class getType() {
