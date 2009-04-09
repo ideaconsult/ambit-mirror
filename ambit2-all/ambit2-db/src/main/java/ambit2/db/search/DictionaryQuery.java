@@ -31,6 +31,7 @@ package ambit2.db.search;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,14 +54,20 @@ public abstract class DictionaryQuery extends AbstractQuery<String, String, Stri
 	public DictionaryQuery() {
 		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
 	}
+	public DictionaryQuery(String value) {
+		this();
+		setValue(value);
+	}		
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getValue()));
 		return params;
 	}
 	public String getSQL() throws AmbitException {
-		return String.format
-		   (SQL, getTemplateName(), getCondition());
+		if (getValue() == null)
+			return String.format(SQL, getTemplateName(), "is");
+		else
+			return String.format(SQL, getTemplateName(), getCondition());
 
 	}	
 	protected abstract String getTemplateName();
