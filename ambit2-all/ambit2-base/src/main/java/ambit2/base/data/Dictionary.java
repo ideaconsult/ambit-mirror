@@ -83,6 +83,21 @@ public class Dictionary extends AmbitBean {
 		b.append(getParentTemplate());
 		return b.toString();
 	}
-
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Dictionary) {
+			Dictionary d = (Dictionary)obj;
+			boolean parentOK = (getParentTemplate() == null) && (d.getParentTemplate()==null);
+			parentOK = parentOK || (
+					(getParentTemplate() != null) && (d.getParentTemplate()!=null) &&
+					getParentTemplate().equals(d.getParentTemplate())
+					);
+			if (parentOK) {
+				if ((getTemplate() == null) && (d.getTemplate()==null)) return true;
+				else return (getTemplate() != null) && (d.getTemplate()!=null) &&  getTemplate().equals(d.getTemplate());
+			}
+		} 
+		return false;
+	}
 	
 }
