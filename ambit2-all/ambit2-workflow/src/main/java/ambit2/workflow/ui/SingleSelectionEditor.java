@@ -30,9 +30,9 @@
 package ambit2.workflow.ui;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 import org.apache.poi.hssf.record.formula.functions.T;
@@ -56,7 +56,7 @@ public class SingleSelectionEditor extends AbstractEditor<SelectionBean<T>> {
 	}
 	protected void buildPanel() {
 		removeAll();
-
+		add(new JLabel(getObject().getTitle()));
 		ValueHolder selectionModel = new ValueHolder();
         for (int i=0; i < getObject().getOptions().size();i++) {
         	Object t = getObject().getOptions().get(i);
