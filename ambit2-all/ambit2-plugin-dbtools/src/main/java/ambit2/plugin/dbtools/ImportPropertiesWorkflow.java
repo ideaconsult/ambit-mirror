@@ -50,6 +50,7 @@ public class ImportPropertiesWorkflow extends Workflow  {
         final ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor> chain = 
         		new ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor>();
         chain.add(writer);
+        chain.setAbortOnError(true);
         
 		final SelectionBean<ClassHolder> selection = new SelectionBean<ClassHolder>(
 				new ClassHolder[] {
@@ -69,7 +70,8 @@ public class ImportPropertiesWorkflow extends Workflow  {
        
         Performer<SelectionBean<ClassHolder>,IStructureKey> performer = new Performer<SelectionBean<ClassHolder>,IStructureKey>() {
     		public IStructureKey execute() throws Exception {
-    			
+    			if (getTarget() instanceof IStructureKey) 
+    				return (IStructureKey) getTarget();
     			ClassHolder ch = getTarget().getSelected();
     			Object o = Introspection.loadCreateObject(ch.getClazz());
     			if (o instanceof IStructureKey) {
