@@ -76,27 +76,27 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 			if (processor == null)
 				throw new AmbitException("Processor not defined");
 			while (reader.hasNext()) {
-				if ((stats.getRecords(IBatchStatistics.RECORDS_READ) % stats.frequency)==0)
+				if ((stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ) % stats.frequency)==0)
 					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);				
 				Object object= null;
 				long ms = System.currentTimeMillis();
 				try {
 					object = reader.next();
-					stats.increment(IBatchStatistics.RECORDS_READ);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_READ, System.currentTimeMillis()-ms);
+					stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_READ);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_READ, System.currentTimeMillis()-ms);
 				} catch (Exception x) {
-					stats.increment(IBatchStatistics.RECORDS_ERROR);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-ms);					
+					stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR, System.currentTimeMillis()-ms);					
 					continue;					
 				}
 				ms = System.currentTimeMillis();
 				try {
 					processor.process((Target)object);
-					stats.increment(IBatchStatistics.RECORDS_PROCESSED);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_PROCESSED, System.currentTimeMillis()-ms);
+					stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED, System.currentTimeMillis()-ms);
 				} catch (Exception x) {
-					stats.increment(IBatchStatistics.RECORDS_ERROR);
-					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-ms);					
+					stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR, System.currentTimeMillis()-ms);					
 					continue;
 				}				
 								

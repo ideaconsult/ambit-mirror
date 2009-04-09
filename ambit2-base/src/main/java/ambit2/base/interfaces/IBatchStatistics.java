@@ -9,45 +9,67 @@ import java.io.Serializable;
  * <b>Modified</b> Aug 29, 2006
  */
 public interface IBatchStatistics extends Serializable {
-    final int RECORDS_READ = 0;
-    final int RECORDS_PROCESSED = 1;
-    final int RECORDS_WRITTEN = 2;
-    final int RECORDS_ERROR = 3;
+	public enum RECORDS_STATS {
+		RECORDS_READ {
+			@Override
+			public String toString() {
+				return "read";
+			}
+		},
+		RECORDS_PROCESSED {
+			@Override
+			public String toString() {
+				return "processed";
+			}
+		},
+		RECORDS_WRITTEN {
+			@Override
+			public String toString() {
+				return "written";
+			}
+		},
+		RECORDS_ERROR {
+			@Override
+			public String toString() {
+				return "error";
+			}
+		}
+		};
     /**
      * Returns number of records of a type   
      * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      * @return number of records of the specified type
      */
-    long getRecords(int recordType);
+    long getRecords(RECORDS_STATS recordType);
     /**
      * Sets number of records of a type   
      * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      * @param number number of records of the specified type
      */
-    void setRecords(int recordType, long number);
+    void setRecords(RECORDS_STATS recordType, long number);
     /**
      * Increments number of records of a type   
      * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      */
-    void increment(int recordType);
+    void increment(RECORDS_STATS recordType);
     /**
      * Return  time elapsed for of records of a type
      * @param recordType  RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      * @return time elapsed
      */
-    long getTimeElapsed(int recordType);
+    long getTimeElapsed(RECORDS_STATS recordType);
     /**
      * Sets time elapsed for of records of a type
      * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      * @param milliseconds
      */
-    void setTimeElapsed(int recordType, long milliseconds);
+    void setTimeElapsed(RECORDS_STATS recordType, long milliseconds);
     /**
      * Increments time elapsed for of records of a type
      * @param recordType RECORDS_READ,RECORDS_PROCESSED,RECORDS_WRITTEN,RECORDS_ERROR
      * @param milliseconds
      */
-    void incrementTimeElapsed(int recordType, long milliseconds);
+    void incrementTimeElapsed(RECORDS_STATS recordType, long milliseconds);
     /**
      * Clears records
      *
@@ -69,5 +91,6 @@ public interface IBatchStatistics extends Serializable {
 	 */
 	public void setResultCaption(String resultCaption);
 	long getFrequency();
+	boolean isTimeToPrint(long silentInterval) ;
     
 }

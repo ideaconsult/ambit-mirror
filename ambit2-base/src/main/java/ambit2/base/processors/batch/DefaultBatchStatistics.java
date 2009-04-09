@@ -12,9 +12,14 @@ import ambit2.base.interfaces.IBatchStatistics;
  */
 public class DefaultBatchStatistics extends Observable implements
 		IBatchStatistics {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8714835013929249115L;
 	protected long[] records = {0,0,0,0};
 	protected long[] time_elapsed = {0,0,0,0};
 	protected long frequency = 50;
+	protected long last_time_print_stats = 0;
 	public long getFrequency() {
 		return frequency;
 	}
@@ -43,55 +48,64 @@ public class DefaultBatchStatistics extends Observable implements
         notifyObservers();        
 
     }
-    public long getRecords(int recordType) {
-        return records[recordType];
+    public long getRecords(IBatchStatistics.RECORDS_STATS recordType) {
+        return records[recordType.ordinal()];
     }
-    public void setRecords(int recordType, long number) {
-        records[recordType] = number;
+    public void setRecords(IBatchStatistics.RECORDS_STATS recordType, long number) {
+        records[recordType.ordinal()] = number;
         setChanged();
         notifyObservers();        
     }
-    public void increment(int recordType) {
-        records[recordType]++;
+    public void increment(IBatchStatistics.RECORDS_STATS recordType) {
+        records[recordType.ordinal()]++;
         setChanged();
         notifyObservers();
     }
     public long getTimeElapsed() {
-        return time_elapsed[IBatchStatistics.RECORDS_READ]+
-        time_elapsed[IBatchStatistics.RECORDS_PROCESSED]+
-        time_elapsed[IBatchStatistics.RECORDS_WRITTEN]+
-        time_elapsed[IBatchStatistics.RECORDS_ERROR];
+        return time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_READ.ordinal()]+
+        time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED.ordinal()]+
+        time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_WRITTEN.ordinal()]+
+        time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_ERROR.ordinal()];
 
     }
-    public long getTimeElapsed(int recordType) {
-    	return  time_elapsed[recordType];
+    public long getTimeElapsed(RECORDS_STATS recordType) {
+    	return  time_elapsed[recordType.ordinal()];
     }
-    public void setTimeElapsed(int recordType, long milliseconds) {
-    	time_elapsed[recordType] = milliseconds;
+    public void setTimeElapsed(RECORDS_STATS recordType, long milliseconds) {
+    	time_elapsed[recordType.ordinal()] = milliseconds;
         setChanged();
         notifyObservers();            	
     }
-    public  void incrementTimeElapsed(int recordType, long milliseconds) {
-    	time_elapsed[recordType] += milliseconds;
+    public  void incrementTimeElapsed(RECORDS_STATS recordType, long milliseconds) {
+    	time_elapsed[recordType.ordinal()] += milliseconds;
         setChanged();
         notifyObservers();    	
     }
-    
+    public boolean isTimeToPrint(long silentInterval) {
+    	//(getRecords(RECORDS_STATS.RECORDS_READ) % frequency) == 0)
+    	long now = System.currentTimeMillis();
+    	if ((now-last_time_print_stats) > silentInterval) {
+    		last_time_print_stats = now;
+    		return true;
+    	} else return false;
+    }
     public String toString() {
-        if (!inProgress ||
-                (records[IBatchStatistics.RECORDS_READ] % frequency) == 0) {
+       // if (!inProgress || isTimeToPrint(100)) {
             long t = getTimeElapsed();
             
             StringBuffer b = new StringBuffer();
-            b.append(resultCaption);
-            b.append(" ");
-            b.append(Long.toString(records[IBatchStatistics.RECORDS_READ]));
+            for (RECORDS_STATS stats : RECORDS_STATS.values()) {
+	            b.append(stats.toString());
+	            b.append(' ');
+	            b.append(Long.toString(getRecords(stats)));
+	            b.append(' ');	            
+            }
             b.append(" records in ");
             b.append(Long.toString(t));
             b.append(" ms");
-            if (records[IBatchStatistics.RECORDS_READ] > 0) {
+            if (getRecords(RECORDS_STATS.RECORDS_READ) > 0) {
                 b.append("(");
-                long s = t/records[IBatchStatistics.RECORDS_READ];
+                long s = t/getRecords(RECORDS_STATS.RECORDS_READ);
                 if (s > 1000) {
 		            b.append(s/1000);
 		            b.append(" s per record)");                	
@@ -101,8 +115,8 @@ public class DefaultBatchStatistics extends Observable implements
                 }
             }
             return b.toString();
-        }	
-        else return blank;
+       // }	
+       // else return blank;
     }
 	public String getResultCaption() {
 		return resultCaption;

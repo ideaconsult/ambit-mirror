@@ -129,7 +129,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	public void onItemProcessing(ItemInput input, Object output,
 			IBatchStatistics stats) {
 		long freq = stats.getFrequency();
-		if ((stats.getRecords(IBatchStatistics.RECORDS_READ) % freq)==0)
+		if ((stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ) % freq)==0)
 			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
 		
 	}
@@ -142,21 +142,22 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	}
 	public void onError(ItemInput input, Object output,
 			IBatchStatistics stats, Exception x) {
-		stats.increment(IBatchStatistics.RECORDS_ERROR);
-		stats.incrementTimeElapsed(IBatchStatistics.RECORDS_ERROR, System.currentTimeMillis()-now);
+		stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR);
+		stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR, System.currentTimeMillis()-now);
 		now = System.currentTimeMillis();		
 	}
 	public void onItemProcessed(ItemInput input, Object output,
 			IBatchStatistics stats) {
-		stats.increment(IBatchStatistics.RECORDS_PROCESSED);
-		stats.incrementTimeElapsed(IBatchStatistics.RECORDS_PROCESSED, System.currentTimeMillis()-now);
-		propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
+		stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED);
+		stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED, System.currentTimeMillis()-now);
+		if (stats.isTimeToPrint(200)) 
+			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
 		now = System.currentTimeMillis();
 		
 	}
 	public void onItemRead(ItemInput input, IBatchStatistics stats) {
-		stats.increment(IBatchStatistics.RECORDS_READ);
-		stats.incrementTimeElapsed(IBatchStatistics.RECORDS_READ, System.currentTimeMillis()-now);
+		stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_READ);
+		stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_READ, System.currentTimeMillis()-now);
 		now = System.currentTimeMillis();
 		
 	}	
