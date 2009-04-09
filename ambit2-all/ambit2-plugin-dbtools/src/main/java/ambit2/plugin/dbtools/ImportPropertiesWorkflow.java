@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Iterator;
 
+import nplugins.core.Introspection;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.data.ClassHolder;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.SelectionBean;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -15,12 +19,15 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
 import ambit2.core.io.IteratingMolFolderReader;
+import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.PropertyImporter;
+import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.UserInteraction;
 import ambit2.workflow.library.DatasetSelection;
 import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.library.LoginSequence;
@@ -43,7 +50,46 @@ public class ImportPropertiesWorkflow extends Workflow  {
         final ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor> chain = 
         		new ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor>();
         chain.add(writer);
+        
+		final SelectionBean<ClassHolder> selection = new SelectionBean<ClassHolder>(
+				new ClassHolder[] {
+						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.EINECSKey","EINECS registry number","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.PubchemCID","PubChem Compound ID (PUBCHEM_COMPOUND_CID)","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.InchiPropertyKey","InChi","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.SmilesKey","SMILES","",""),
+						//new ClassHolder("ambit2.core.processors.structure.key.PropertyKey","Other property - to be defined","",""),
+				},"Match chemical compounds from file and the database by:"
+				);
 
+        UserInteraction<SelectionBean<ClassHolder>> selectKey = new UserInteraction<SelectionBean<ClassHolder>>(
+        		selection,
+        		"SELECTION","??????");
+        selectKey.setName("Select how to match file and database entries");
+       
+        Performer<SelectionBean<ClassHolder>,IStructureKey> performer = new Performer<SelectionBean<ClassHolder>,IStructureKey>() {
+    		public IStructureKey execute() throws Exception {
+    			
+    			ClassHolder ch = getTarget().getSelected();
+    			Object o = Introspection.loadCreateObject(ch.getClazz());
+    			if (o instanceof IStructureKey) {
+        			writer.setPropertyKey((IStructureKey)o);    				
+    				return (IStructureKey)o;
+    			}
+    			else throw new Exception(o.getClass().getName() + " not expected");
+    		}        	
+        };
+        
+    	Primitive<SelectionBean<ClassHolder>,IStructureKey> match = 
+    		new Primitive<SelectionBean<ClassHolder>,IStructureKey>( 
+    			"SELECTION",
+    			"KEY",performer) {
+    		@Override
+    		public synchronized String getName() {
+    			return selection.getTitle();
+    		}
+    	};
+    	
         final BatchMolProcessor batch = new BatchMolProcessor();
         batch.setProcessorChain(chain);
     	ActivityPrimitive<IInputState,IBatchStatistics> p1 = 
@@ -72,7 +118,10 @@ public class ImportPropertiesWorkflow extends Workflow  {
         );
         p2.setName("Create new dataset");
         s1.addStep(p2);
+        s1.addStep(selectKey);
+        s1.addStep(match);        
         s1.addStep(new DatasetSelection(p1,dataset));
+
 
         setDefinition(new LoginSequence(new InputFileSelection(s1)));
 
