@@ -52,7 +52,8 @@ public class QueryParam<T> {
 	}
 	@Override
 	public String toString() {
-		return value.toString();
+		if (value == null) return null;
+		else return value.toString();
 	}
 }
 
