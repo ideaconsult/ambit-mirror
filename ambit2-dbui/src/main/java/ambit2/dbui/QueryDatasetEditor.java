@@ -31,9 +31,12 @@ package ambit2.dbui;
 
 import java.sql.Connection;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListModel;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
@@ -62,7 +65,7 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 	}		
 	@Override
 	protected JComponent createConditionComponent() {
-		return BasicComponentFactory.createComboBox(
+		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<StringCondition>(
                 		new StringCondition[] {
                 			StringCondition.getInstance(StringCondition.C_EQ),
@@ -72,6 +75,8 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
                 			StringCondition.getInstance(StringCondition.C_SOUNDSLIKE),
                 		},
                 		presentationModel.getModel("condition")));
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 
 	@Override
@@ -83,8 +88,10 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 	@Override
 	protected JComponent createValueComponent() {
 		ListModel fieldnames = new RowsModel<SourceDataset>(datasets);		
-		return BasicComponentFactory.createComboBox(
+		JComboBox box = BasicComponentFactory.createComboBox(
 				new SelectionInList<SourceDataset>(fieldnames, presentationModel.getModel("dataset")));
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 
 	public void open() throws DbAmbitException {

@@ -29,7 +29,10 @@
 
 package ambit2.dbui;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
@@ -50,7 +53,7 @@ public class QueryChemicalEditor  extends QueryEditor<String,String,StringCondit
 
 	@Override
 	protected JComponent createConditionComponent() {
-		return BasicComponentFactory.createComboBox(
+		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<StringCondition>(
                 		new StringCondition[] {
                 			StringCondition.getInstance(StringCondition.C_EQ),
@@ -60,10 +63,12 @@ public class QueryChemicalEditor  extends QueryEditor<String,String,StringCondit
                 			StringCondition.getInstance(StringCondition.C_SOUNDSLIKE),
                 		},
                 		presentationModel.getModel("condition")));
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 	@Override
 	protected JComponent createFieldnameComponent() {
-		return BasicComponentFactory.createComboBox(
+		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<String>(
                 		new String[] {
                 			"inchi",
@@ -71,6 +76,8 @@ public class QueryChemicalEditor  extends QueryEditor<String,String,StringCondit
                 			"formula",
                 		},
                 		presentationModel.getModel("fieldname")));
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 
 

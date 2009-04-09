@@ -33,9 +33,11 @@ import java.awt.Dimension;
 import java.text.NumberFormat;
 import java.util.Calendar;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.openscience.cdk.applications.jchempaint.JCPPropertyHandler;
 import org.openscience.cdk.applications.jchempaint.JChemPaintEditorPanel;
 import org.openscience.cdk.applications.jchempaint.JChemPaintModel;
@@ -120,7 +122,9 @@ public class QuerySimilarityEditor extends QueryEditor<String, IMoleculeSet,Numb
 			nc[i] = NumberCondition.getInstance(NumberCondition.conditions[i]);
 		}
 		SelectionInList<NumberCondition> selectionInList = new SelectionInList<NumberCondition>(nc, presentationModel.getModel("condition"));
-		return BasicComponentFactory.createComboBox(selectionInList);
+		JComboBox box = BasicComponentFactory.createComboBox(selectionInList);
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 
 	@Override
@@ -129,7 +133,9 @@ public class QuerySimilarityEditor extends QueryEditor<String, IMoleculeSet,Numb
 				new String[] {
 						"Tanimoto"
 				}, presentationModel.getModel("fieldname"));
-		return BasicComponentFactory.createComboBox(selectionInList);
+		JComboBox box = BasicComponentFactory.createComboBox(selectionInList);
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 	protected JComponent createThresholdComponent() {
 		/*
