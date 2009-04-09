@@ -51,7 +51,7 @@ public class RowsModel<T> extends AbstractListModel implements PropertyChangeLis
 	        rows.relative(index);
 			return rows.getObject();
 		}catch (Exception x) {
-			return x.getMessage();
+			return null;
 		}
 	}
 
