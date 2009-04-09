@@ -98,6 +98,6 @@ public class ImportPropertiesTest extends WorkflowTest<ImportPropertiesWorkflow>
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='test.sdf'");
 		Assert.assertEquals(0, structures.getRowCount());	
 		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='test.sdf'");
-		Assert.assertEquals(1, templates.getRowCount());			
+		Assert.assertEquals(0, templates.getRowCount());			
 	}
 }
