@@ -64,7 +64,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output> exten
 			batch.setProcessorChain(processors);
 			batch.setConnection(connection);			
 			IBatchStatistics stats = batch.process(query);
-			if (stats.getRecords(IBatchStatistics.RECORDS_READ)==0)
+			if (stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ)==0)
 				throw new NotFoundException(query.toString());
 			return output;
 		} catch (AmbitException x) {

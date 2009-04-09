@@ -70,8 +70,8 @@ public class BatchDBProcessorTest {
 	public void testReadRecordsOnly() throws Exception {
 		//batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
 		IBatchStatistics stats = batch.process(new FileInputState(file));
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_READ));
-		Assert.assertEquals(0,stats.getRecords(IBatchStatistics.RECORDS_PROCESSED));
+		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
+		Assert.assertEquals(0,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
 	}
 
 	@Test
@@ -119,8 +119,8 @@ public class BatchDBProcessorTest {
 		});
 		
 		IBatchStatistics stats = batch.process(new FileInputState(file));
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_READ));
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_PROCESSED));
+		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
+		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
 		Assert.assertEquals(2,count);
 	}
 	

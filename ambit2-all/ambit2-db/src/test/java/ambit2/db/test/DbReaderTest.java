@@ -79,8 +79,8 @@ public class DbReaderTest extends DbUnitTest {
 		batch.setConnection(c.getConnection());
 		batch.open();
 		IBatchStatistics stats = batch.process(query);
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_READ));
-		Assert.assertEquals(0,stats.getRecords(IBatchStatistics.RECORDS_PROCESSED));
+		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
+		Assert.assertEquals(0,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
 	}
 
 	@Test
@@ -131,8 +131,8 @@ public class DbReaderTest extends DbUnitTest {
 		batch.setConnection(c.getConnection());
 		batch.open();
 		IBatchStatistics stats = batch.process(query);
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_READ));
-		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_PROCESSED));
+		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ));
+		Assert.assertEquals(1,stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED));
 		//C20H20BrP
 	}
 	
