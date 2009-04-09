@@ -30,15 +30,19 @@
 package ambit2.dbui.test;
 
 
+import java.sql.Connection;
+
 import javax.swing.JOptionPane;
 
 import org.junit.After;
 import org.junit.Before;
 
-import ambit2.db.search.structure.QueryFieldNumeric;
+import ambit2.db.IDBProcessor;
+import ambit2.db.search.structure.QueryField;
 import ambit2.ui.EditorPreferences;
+import ambit2.ui.editors.IAmbitEditor;
 
-public class QueryFieldEditorTest {
+public class QueryFieldEditorTest  extends  RepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,14 +51,28 @@ public class QueryFieldEditorTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	public static void main(String args[]) {
-		QueryFieldNumeric query = new QueryFieldNumeric();
+
+	
+	protected void demo() {
+		QueryField query = new QueryField();
 		try {
-			JOptionPane.showMessageDialog(null,EditorPreferences.getEditor(query).getJComponent());
+			initDatasource();
+			Connection c = datasource.getConnection();
+			IAmbitEditor editor = EditorPreferences.getEditor(query);
+			if (editor instanceof IDBProcessor) {
+				((IDBProcessor)editor).setConnection(c);
+				((IDBProcessor)editor).open();
+			}
+			JOptionPane.showMessageDialog(null,editor.getJComponent());
 			System.out.println(query.toString());
 			System.out.println(query.getSQL());
+			System.out.println(query.getParameters());
+			c.close();
 		} catch (Exception x) {
 			x.printStackTrace();
-		}
+		}		
 	}
+	public static void main(String args[]) {
+		new QueryFieldEditorTest().demo();
+	}	
 }

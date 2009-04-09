@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import ambit2.db.SourceDataset;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.StringCondition.STRING_CONDITION;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.MoleculeEditAction;
 import ambit2.ui.editors.Panel2D;
@@ -100,13 +101,13 @@ public class QueryInfoEditor extends JPanel implements IAmbitEditor<QueryInfo> {
 
         ValueModel cond1ChoiceModel = detailsModel.getModel(QueryInfo.PROPERTY_COND1);
         cond1 = BasicComponentFactory.createComboBox(
-                new SelectionInList<Object>(StringCondition.conditions, cond1ChoiceModel));
+                new SelectionInList<STRING_CONDITION>(STRING_CONDITION.values(), cond1ChoiceModel));
         ValueModel cond2ChoiceModel = detailsModel.getModel(QueryInfo.PROPERTY_COND2);
         cond2 = BasicComponentFactory.createComboBox(
-                new SelectionInList<Object>(StringCondition.conditions, cond2ChoiceModel));
+                new SelectionInList<STRING_CONDITION>(STRING_CONDITION.values(), cond2ChoiceModel));
         ValueModel cond3ChoiceModel = detailsModel.getModel(QueryInfo.PROPERTY_COND3);
         cond3 = BasicComponentFactory.createComboBox(
-                new SelectionInList<Object>(StringCondition.conditions, cond3ChoiceModel));
+                new SelectionInList<STRING_CONDITION>(STRING_CONDITION.values(), cond3ChoiceModel));
         
         ValueModel thresholdModel = detailsModel.getModel(QueryInfo.PROPERTY_THRESHOLD);
         threshold = BasicComponentFactory.createComboBox(

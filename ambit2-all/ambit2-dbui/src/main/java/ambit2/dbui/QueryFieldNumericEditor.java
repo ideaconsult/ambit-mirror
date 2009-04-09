@@ -29,16 +29,23 @@
 
 package ambit2.dbui;
 
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.text.NumberFormat;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.ListModel;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyStats;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
@@ -46,6 +53,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.NumberCondition;
+import ambit2.db.search.property.PropertyStatsNumeric;
 import ambit2.db.search.property.RetrieveFieldNamesByType;
 import ambit2.db.search.structure.QueryFieldNumeric;
 
@@ -65,6 +73,11 @@ public class QueryFieldNumericEditor  extends
 	 */
 	private static final long serialVersionUID = 3347607199840621061L;
 	protected AmbitRows<Property> properties;
+	protected AmbitRows<PropertyStats> stats;
+	protected PropertyStatsNumeric statsQuery = new PropertyStatsNumeric();
+	protected PropertyStats propertyStats ;
+	protected PresentationModel<PropertyStats> statsAdapter ;       
+
 	
 	protected PresentationModel<QueryFieldNumeric> createPresentationModel() {
 		return new PresentationModel<QueryFieldNumeric>(new ValueHolder(null, true));
@@ -72,9 +85,10 @@ public class QueryFieldNumericEditor  extends
 	}
 	public JComponent buildPanel() {
 		properties = new AmbitRows<Property>();
+		stats = new AmbitRows<PropertyStats>();
 		FormLayout layout = new FormLayout(
 	            "125dlu,3dlu,75dlu,3dlu,61dlu,3dlu,61dlu",
-				"pref,pref");        
+				"pref,pref,pref,pref");        
 	     PanelBuilder panel = new PanelBuilder(layout);
 	     panel.setDefaultDialogBorder();
 
@@ -90,15 +104,79 @@ public class QueryFieldNumericEditor  extends
 	     JComponent mv = createMaxValueComponent();
 	     panel.add(mv, cc.xywh(7,2,1,1));
 	     
+	     panel.add(createStatsButton(), cc.xywh(1,4,1,1));
+	     JComponent[] s = createStatsFields();
+	     for (JComponent c:s)
+	    	 c.setBackground(panel.getPanel().getBackground());
+
+	     //panel.add(createStatsCheckBox(), cc.xywh(1,3,1,1));
+	     panel.addSeparator("Average", cc.xywh(3,3,1,1));
+	     panel.addSeparator("Min", cc.xywh(5,3,1,1));
+	     panel.addSeparator("Max", cc.xywh(7,3,1,1));
+	     panel.add(s[0],cc.xywh(3,4,1,1));
+	     panel.add(s[1],cc.xywh(5,4,1,1));
+	     panel.add(s[2],cc.xywh(7,4,1,1));
 	     return panel.getPanel();
+	}
+
+	
+	protected JComponent[] createStatsFields() {
+		propertyStats = new PropertyStats();
+		statsAdapter = new PresentationModel<PropertyStats>(propertyStats);       
+		
+		return new JComponent[] {
+				BasicComponentFactory.createFormattedTextField(statsAdapter.getModel("avg"),NumberFormat.getNumberInstance()),
+				BasicComponentFactory.createFormattedTextField(statsAdapter.getModel("min"),NumberFormat.getNumberInstance()),
+				BasicComponentFactory.createFormattedTextField(statsAdapter.getModel("max"),NumberFormat.getNumberInstance())};
+	}
+	protected JButton createStatsButton() {
+    
+		
+		JButton b = new JButton(new AbstractAction("Retrieve statistics") {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					stats.setQuery(statsQuery);
+
+					while (stats.next()) {
+						statsAdapter.setBean(stats.getObject());
+						System.out.println(statsQuery.getFieldname() + " " +propertyStats);
+					}
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+			}
+		});
+		return b;
 	}
 
 	@Override
 	protected JComponent createFieldnameComponent() {
 		
-		ListModel fieldnames = new RowsModel<Property>(properties);		
-		return BasicComponentFactory.createComboBox(
-				new SelectionInList<Object>(fieldnames, presentationModel.getModel("fieldname")));
+		ListModel fieldnames = new RowsModel<Property>(properties) {
+			@Override
+			public int getSize() {
+				return super.getSize()+1;
+			}
+			@Override
+			public Object getElementAt(int index) {
+				if (index == 0) return null;
+				else
+					return super.getElementAt(index-1);
+			}
+		};
+		SelectionInList<Property> p = new SelectionInList<Property>(fieldnames, presentationModel.getModel("fieldname"));
+		p.addPropertyChangeListener("value",new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				statsQuery.setFieldname((Property)evt.getNewValue());
+				
+			}
+		});		
+		JComboBox box = BasicComponentFactory.createComboBox(p);
+		AutoCompleteDecorator.decorate(box);
+		return box;
+
+				
+
 	}
 	@Override
 	protected JComponent createConditionComponent() {
@@ -112,7 +190,9 @@ public class QueryFieldNumericEditor  extends
 				presentationModel.getComponentModel("maxValue").setVisible(NumberCondition.between.equals(evt.getNewValue().toString()));
 			}
 		});
-		return BasicComponentFactory.createComboBox(selectionInList);
+		JComboBox box = BasicComponentFactory.createComboBox(selectionInList);
+		AutoCompleteDecorator.decorate(box);
+		return box;
 	}
 	@Override
 	protected JComponent createValueComponent() {
@@ -151,6 +231,7 @@ public class QueryFieldNumericEditor  extends
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
 		properties.setConnection(connection);
+		stats.setConnection(connection);
 	}
 }
 
