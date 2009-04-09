@@ -29,6 +29,8 @@
 
 package ambit2.db.search;
 
+import ambit2.base.data.Dictionary;
+
 
 public class DictionarySubjectQuery extends DictionaryQuery {
 
@@ -36,10 +38,17 @@ public class DictionarySubjectQuery extends DictionaryQuery {
 	 * 
 	 */
 	private static final long serialVersionUID = -4370465438653357188L;
+	public DictionarySubjectQuery(Dictionary value) {
+		super((value==null)?null:value.getParentTemplate());
+	}	
 	public DictionarySubjectQuery() {
-		super();
+		super(null);
+	}	
 
-	}
+	public DictionarySubjectQuery(String value) {
+		super(value);
+	}	
+
 	@Override
 	protected String getTemplateName() {
 		return "tSubject";
