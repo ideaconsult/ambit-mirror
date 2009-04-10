@@ -20,7 +20,7 @@ import ambit2.db.search.QueryParam;
  * introduce query caching - in this case via BitSet
  *
  */
-public class QuerySimilarityBitset extends QuerySimilarity<BitSet,NumberCondition> {
+public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberCondition> {
 
 	/**
 	 * 

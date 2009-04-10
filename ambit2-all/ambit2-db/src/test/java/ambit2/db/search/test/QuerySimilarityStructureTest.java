@@ -81,5 +81,33 @@ public class QuerySimilarityStructureTest  extends QueryTest<QuerySimilarityStru
 			Assert.assertEquals(0.25,rs.getFloat(5),1E-4);	
 			Assert.assertEquals(0.25,rs.getFloat("tanimoto"),1E-4);	
 		}
-	}	
+	}
+	
+	@Test
+	public void testSetFieldname() throws Exception {
+		QuerySimilarityStructure q = new QuerySimilarityStructure();
+		q.setThreshold(0.81);
+		q.setForceOrdering(false);
+		q.setCondition(NumberCondition.getInstance("<"));
+		q.setStructure(MoleculeFactory.makeAlkane(10));
+		String similaritySQL = q.getSQL();		
+		
+		q.setFieldname(QuerySimilarityStructure.methods[1]);
+		Assert.assertEquals(0.81, q.getThreshold());
+		Assert.assertEquals(false, q.isForceOrdering());
+		Assert.assertEquals(NumberCondition.getInstance("<"), q.getCondition());
+		Assert.assertEquals(1,q.getValue().getAtomContainerCount());
+		Assert.assertEquals(10,q.getValue().getAtomContainer(0).getAtomCount());
+		Assert.assertFalse(similaritySQL.equals(q.getSQL()));
+		System.out.println(similaritySQL);
+		
+		q.setFieldname(QuerySimilarityStructure.methods[2]);
+		//Assert.assertEquals(0.81, q.getThreshold());
+		//Assert.assertEquals(false, q.isForceOrdering());
+		//Assert.assertEquals(NumberCondition.getInstance("<"), q.getCondition());
+		Assert.assertEquals(1,q.getValue().getAtomContainerCount());
+		Assert.assertEquals(10,q.getValue().getAtomContainer(0).getAtomCount());
+		Assert.assertFalse(similaritySQL.equals(q.getSQL()));
+		System.out.println(q.getSQL());		
+	}
 }

@@ -3,7 +3,7 @@ package ambit2.db.search.structure;
 import ambit2.db.search.IQueryCondition;
 
 
-public abstract class QuerySimilarity<T,C extends IQueryCondition> extends AbstractStructureQuery<String,T,C> {
+public abstract class QuerySimilarity<F,T,C extends IQueryCondition> extends AbstractStructureQuery<F,T,C> {
 	/**
 	 * 
 	 */
@@ -17,7 +17,7 @@ public abstract class QuerySimilarity<T,C extends IQueryCondition> extends Abstr
 		this.forceOrdering = forceOrdering;
 	}
 	public QuerySimilarity() {
-		setFieldname("similarity");
+		//setFieldname("similarity");
 
 
 	}

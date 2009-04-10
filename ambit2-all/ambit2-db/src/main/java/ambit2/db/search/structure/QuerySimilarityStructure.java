@@ -37,57 +37,96 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
+import ambit2.base.data.ClassHolder;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 
-public class QuerySimilarityStructure extends QuerySimilarity<IMoleculeSet,NumberCondition> {
+public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMoleculeSet,NumberCondition> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7669825969508301397L;
-	protected QuerySimilarityBitset bitsetSimilarity;
+	protected AbstractStructureQuery query;
 	protected FingerprintGenerator g;
+	public static ClassHolder[] methods = new ClassHolder[] {
+			new ClassHolder("ambit2.db.search.structure.QuerySimilarityBitset","Tanimoto [fingerprints]","",""),
+			new ClassHolder("ambit2.db.search.structure.QueryPrescreenBitSet","Substructure","",""),
+			new ClassHolder("ambit2.db.search.structure.QueryExactStructure","Exact structure","",""),
+			
+	};
 
 	public QuerySimilarityStructure() {
 		super();
-		bitsetSimilarity = new QuerySimilarityBitset();
+		query = new QuerySimilarityBitset();
 		g = new FingerprintGenerator();
 		setCondition(NumberCondition.getInstance(">="));	
 		setThreshold(0.75);		
 	}
 	@Override
+	public void setFieldname(ClassHolder method) {
+		try {
+			Class classDefinition = getClass().getClassLoader().loadClass(method.getClazz());
+			Object o = classDefinition.newInstance();
+			if (o instanceof QuerySimilarityBitset) {
+				QuerySimilarityBitset query = (QuerySimilarityBitset)o;
+				query.setCondition(getCondition());
+				query.setThreshold(getThreshold());
+				query.setForceOrdering(isForceOrdering());
+				this.query  = query;
+				setValue(getValue());
+				super.setFieldname(method);				
+			} else if (o instanceof QueryExactStructure) {
+				QueryExactStructure query = (QueryExactStructure)o;
+				query.setCondition(getCondition());
+				this.query  = query;
+				setValue(getValue());
+				super.setFieldname(method);						
+			}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	}
+	@Override
 	public void setForceOrdering(boolean forceOrdering) {
-		bitsetSimilarity.setForceOrdering(forceOrdering);
+		if (query instanceof QuerySimilarityBitset)
+			((QuerySimilarityBitset)query).setForceOrdering(forceOrdering);
 	}
 	
 	@Override
 	public boolean isForceOrdering() {
-		return bitsetSimilarity.isForceOrdering();
+		if (query instanceof QuerySimilarityBitset)
+			return ((QuerySimilarityBitset)query).isForceOrdering();
+		return false;
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
-		return bitsetSimilarity.getParameters();
+		return query.getParameters();
 	}
 	@Override
 	public void setThreshold(Double threshold) {
-		bitsetSimilarity.setThreshold(threshold);
+		if (query instanceof QuerySimilarityBitset)
+			((QuerySimilarityBitset)query).setThreshold(threshold);
 	}
 	@Override
 	public double getThreshold() {
-		return bitsetSimilarity.getThreshold();
+		if (query instanceof QuerySimilarityBitset)
+			return ((QuerySimilarityBitset)query).getThreshold();
+		return 0.75;		
 	}
 	@Override
 	public void setCondition(NumberCondition condition) {
-		bitsetSimilarity.setCondition(condition);
+		query.setCondition(condition);
 	}
 	@Override
 	public NumberCondition getCondition() {
-		return bitsetSimilarity.getCondition();
+		if (query.getCondition() instanceof NumberCondition)
+			return (NumberCondition)query.getCondition();		
+		else return NumberCondition.getInstance("=");
 	}
 	public String getSQL() throws AmbitException {
-		return bitsetSimilarity.getSQL();
+		return query.getSQL();
 	}
 	public void setStructure(IAtomContainer structure) {
 		if (getValue()==null) setValue(NoNotificationChemObjectBuilder.getInstance().newMoleculeSet());
@@ -100,31 +139,34 @@ public class QuerySimilarityStructure extends QuerySimilarity<IMoleculeSet,Numbe
 	public void setValue(IMoleculeSet set) {
 		super.setValue(set);
 		try {
-			Iterator<IAtomContainer> i = set.molecules();
-			BitSet bitset = new BitSet();
-			while (i.hasNext()) {
-				bitset.or(g.process(i.next()));
-			}
-			bitsetSimilarity.setValue(bitset);
+			if (query instanceof QuerySimilarityBitset) {
+				Iterator<IAtomContainer> i = set.molecules();
+				BitSet bitset = new BitSet();
+				while (i.hasNext()) {
+					bitset.or(g.process(i.next()));
+				}
+				query.setValue(bitset);
+			} else
+				query.setValue(set);
 		} catch (Exception x) {
-			bitsetSimilarity.setValue(null);
+			query.setValue(null);
 		}
 	}
 	@Override
 	public void setId(Integer id) {
 		super.setId(id);
-		bitsetSimilarity.setId(id);
+		query.setId(id);
 	}
 	@Override
 	public Integer getId() {
-		return bitsetSimilarity.getId();
+		return query.getId();
 	}
 	@Override
 	public String getName() {
-		return bitsetSimilarity.getName();
+		return query.getName();
 	}
 	@Override
 	public void setName(String name) {
-		bitsetSimilarity.setName(name);
+		query.setName(name);
 	}
 }

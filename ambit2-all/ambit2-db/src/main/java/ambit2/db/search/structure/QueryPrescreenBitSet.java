@@ -13,7 +13,7 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 	 */
 	private static final long serialVersionUID = -4995229206173686206L;
 	/**
-	 * select ? as idquery,idchemical,idstructure,1 as selected,cbits as metric
+	 * select ? as idquery,idchemical,idstructure,1 as selected,cbits as substructure
 	 */
 	public String getSQL() throws AmbitException {
 
