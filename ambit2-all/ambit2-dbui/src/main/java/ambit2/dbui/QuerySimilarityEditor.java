@@ -43,6 +43,7 @@ import org.openscience.cdk.applications.jchempaint.JChemPaintEditorPanel;
 import org.openscience.cdk.applications.jchempaint.JChemPaintModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 
+import ambit2.base.data.ClassHolder;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.NumberCondition;
@@ -54,7 +55,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class QuerySimilarityEditor extends QueryEditor<String, IMoleculeSet,NumberCondition,IStructureRecord,
+public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IMoleculeSet,NumberCondition,IStructureRecord,
 															QuerySimilarityStructure>  {
 
 	/**
@@ -129,10 +130,8 @@ public class QuerySimilarityEditor extends QueryEditor<String, IMoleculeSet,Numb
 
 	@Override
 	protected JComponent createFieldnameComponent() {
-		SelectionInList<String> selectionInList = new SelectionInList<String>(
-				new String[] {
-						"Tanimoto"
-				}, presentationModel.getModel("fieldname"));
+		SelectionInList<ClassHolder> selectionInList = new SelectionInList<ClassHolder>(
+				QuerySimilarityStructure.methods, presentationModel.getModel("fieldname"));
 		JComboBox box = BasicComponentFactory.createComboBox(selectionInList);
 		AutoCompleteDecorator.decorate(box);
 		return box;
