@@ -34,7 +34,6 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import ambit2.ui.table.IHeaderAction;
@@ -75,6 +74,7 @@ public class HeaderComboBoxModel extends AbstractListModel implements
         this.actions = actions;
         this.values = new ArrayList();
         int max =0;
+        /*
         for (int i=0; i < table.getRowCount();i++) {
         	try {
             Object value = table.getValueAt(i, column);
@@ -87,6 +87,7 @@ public class HeaderComboBoxModel extends AbstractListModel implements
         	}
             
         }
+        */
             
     }
 

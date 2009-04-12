@@ -1,6 +1,6 @@
-/* ResultSetTableModel.java
+/* SearchStoredQueriesTest.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 12, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,56 +27,40 @@
  * 
  */
 
-package ambit2.db.results;
+package ambit2.db.search.test;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import javax.swing.table.AbstractTableModel;
+import junit.framework.Assert;
+import ambit2.db.search.IStoredQuery;
+import ambit2.db.search.storedquery.SearchStoredQueries;
 
-public abstract class ResultSetTableModel extends AbstractTableModel {
+public class SearchStoredQueriesTest extends QueryTest<SearchStoredQueries> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2273479288973954063L;
-	protected Connection connection = null;
-	protected ResultSet records = null;
-	protected int maxRecords = 0;
-	
-	public ResultSetTableModel() {
-		super();
-		maxRecords = 0;
-
-	}	
-	
-	protected ResultSet getResultSet() {
-		return records;
+	@Override
+	protected SearchStoredQueries createQuery() throws Exception {
+		SearchStoredQueries q = new SearchStoredQueries();
+		q.setValue("test");
+		Assert.assertEquals("select idquery,count(idstructure) as rows,name from query_results join query using(idquery) join sessions using (idsessions) where user_name=SUBSTRING_INDEX(user(),'@',1)  and name regexp ? group by idquery order by idquery desc",q.getSQL());
+		Assert.assertEquals("^test",q.getValue());
+		return q;
 	}
-	protected void setResultSet(ResultSet resultSet) throws SQLException {
-		if (this.records!=null) 
-			this.records.close();
+
+	@Override
+	protected void verify(SearchStoredQueries query, ResultSet rs) throws Exception {
+		int count = 0;
+		while (rs.next()) {
+			IStoredQuery q = query.getObject(rs);
 			
-		this.records = resultSet;
-		maxRecords = 0;
-		/**
-		 * Count number of records
-		 */
-		if (resultSet != null) try {
-			maxRecords = getRecordsNumber();
-		
-		} catch (Exception x) {
-			maxRecords = 0;
+			Assert.assertTrue(
+					((q.getId()==1) && (q.getName().equals("test query 1")))
+					||
+					((q.getId()==2) && (q.getName().equals("test query 2")))
+					);
+			count++;
 		}
-		fireTableStructureChanged();
+		Assert.assertEquals(2,count);
 		
 	}
 
-
-	protected int getRecordsNumber() throws SQLException  {
-		this.records.last();
-		return records.getRow();
-
-	}
 }

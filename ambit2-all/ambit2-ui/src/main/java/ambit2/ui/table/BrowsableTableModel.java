@@ -32,9 +32,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
+import ambit2.base.data.IFilteredColumns;
+import ambit2.base.data.ISelectableRecords;
+import ambit2.base.data.ISortableColumns;
 import ambit2.ui.Utils;
 
-public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator, TableModelListener {
+public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator, ISelectableRecords, TableModelListener {
 	protected PropertyChangeSupport  ps;
 	protected AbstractTableModel dataModel;
 	protected int pageSize = 10;
@@ -473,5 +476,15 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	        
 	    fireTableChanged(e);
 	    
+	}
+	public void setSelection(SELECTION_MODE mode) {
+		if ((dataModel!=null) && (dataModel instanceof ISelectableRecords))
+			((ISelectableRecords) dataModel).setSelection(mode);
+	}
+	public SELECTION_MODE getSelection() {
+		if ((dataModel!=null) && (dataModel instanceof ISelectableRecords))
+			return ((ISelectableRecords) dataModel).getSelection();
+		else return SELECTION_MODE.NO_CHANGE;
+
 	}
 }

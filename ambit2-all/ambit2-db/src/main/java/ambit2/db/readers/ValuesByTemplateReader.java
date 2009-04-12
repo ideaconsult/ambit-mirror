@@ -60,7 +60,7 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 				try {
 					values = executorn.process(names);
 					while (values.next()) {
-						String value = names.getObject(values);
+						Object value = names.getObject(values);
 						if (book == null)
 							book = createResult();
 						set(book,p.getName(), value);
@@ -82,7 +82,7 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 	}
 	protected abstract Result createResult() throws AmbitException ;
 	protected abstract String getTemplateName();
-	protected abstract void set(Result result, String fieldname, String value) throws AmbitException;
+	protected abstract void set(Result result, String fieldname, Object value) throws AmbitException;
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		

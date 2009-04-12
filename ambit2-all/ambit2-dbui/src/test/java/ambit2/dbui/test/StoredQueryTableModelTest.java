@@ -50,7 +50,7 @@ public class StoredQueryTableModelTest extends RepositoryTest {
 	@Test
 	public void test() throws Exception {
 		final IStoredQuery query = new StoredQuery();
-		query.setId(3);
+		query.setId(93);//83);//142
 		final StoredQueryTableModel queryModel = new StoredQueryTableModel();
 		Profile profile = new Profile();
 		Property prop = Property.getInstance("CAS","CAS");
@@ -58,6 +58,7 @@ public class StoredQueryTableModelTest extends RepositoryTest {
 		prop.setClazz(String.class);
 		prop.setEnabled(true);
 		profile.add(prop);
+		profile.add(Property.getInstance("PUBCHEM_COMPOUND_CID", "PUBCHEM_COMPOUND_CID"));
 		queryModel.setProfile(profile);
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

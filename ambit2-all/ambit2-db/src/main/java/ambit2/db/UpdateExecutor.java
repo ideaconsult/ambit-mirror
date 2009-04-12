@@ -78,7 +78,9 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 	protected Integer execute(Connection c, Q target) throws SQLException, AmbitException {
 		int count = 0;
 		String[] sql = target.getSQL();
+		if (sql == null) return 0;
 		for (int i=0; i < sql.length;i++) {
+			if (sql[i] == null) continue;
 			PreparedStatement statement = null;
 			try {
 				List<QueryParam> params = target.getParameters(i);
@@ -93,7 +95,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 					statement.clearParameters();
 				}
 				setParameters(statement, params);
-				
+					System.out.println(statement);
 					logger.debug(statement);
 					count += statement.executeUpdate();
 					if (target.returnKeys(i)) {

@@ -47,7 +47,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 		} else if (QueryInfo.SCOPE_QUERY.equals(target.getScope())) {
 			if (target.getStoredQuery() != null) {
 				QueryStoredResults d = new QueryStoredResults();
-				d.setCondition(StringCondition.getInstance("="));
+				d.setCondition(EQCondition.getInstance());
 				d.setFieldname(target.getStoredQuery());
 				combined.setScope(d);
 			} else {

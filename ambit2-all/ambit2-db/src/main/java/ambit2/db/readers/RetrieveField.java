@@ -11,7 +11,7 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondition,String> implements IQueryRetrieval<String> {
+public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondition,Object> implements IQueryRetrieval<Object> {
 	/**
 	 * 
 	 */
@@ -45,12 +45,22 @@ public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondi
 		return params;		
 	}
 
-	public String getObject(ResultSet rs) throws AmbitException {
+	public Object getObject(ResultSet rs) throws AmbitException {
 		try {
+			switch(rs.getInt(7)) {
+			case 0: { return rs.getString(5);}
+			case 1: { return rs.getFloat(6);}
+			case 2: { return rs.getInt(6);}
+			default: {
+				return rs.getString(5);
+			}
+			}
+			/*
 			Object o = rs.getString(5);
 			if (o != null)
 				return o.toString();
 			else return rs.getString(6);
+			*/
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

@@ -55,38 +55,8 @@ public class BooleanCondition implements IQueryCondition {
 			public String getSQL() {
 				return "false";
 			}
-		},
-		B_TOGGLE {
-			@Override
-			public String toString() {
-				return "invert";
-			}
-			@Override
-			public String getSQL() {
-				return "!";
-			}
-			
-		},
-		B_YESTOALL {
-			@Override
-			public String toString() {
-				return "Yes to all";
-			}
-			@Override
-			public String getSQL() {
-				return "true";
-			}
-		},
-		B_NOTOALL {
-			@Override
-			public String toString() {
-				return "No to all";
-			}
-			@Override
-			public String getSQL() {
-				return "false";
-			}
 		};
+
 		public String getName() {
 			return toString();
 		}

@@ -22,10 +22,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.ui.table;
+package ambit2.base.data;
 
 
-public interface IFilteredColumns {
-	void setFilter(int column, Object value) throws UnsupportedOperationException;
-	void dropFilter(int column) throws UnsupportedOperationException;
+public interface ISortableColumns {
+	void sort(int column, boolean ascending) throws UnsupportedOperationException;
 }
