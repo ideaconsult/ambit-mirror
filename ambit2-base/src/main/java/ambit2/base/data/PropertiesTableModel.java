@@ -1,4 +1,4 @@
-package ambit2.ui;
+package ambit2.base.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 
 /**
  * Table model for {@link Profile}

@@ -222,7 +222,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 	    		return getRecordMarker(realRow);
 	    	}	
 	    	case 1:
-	    		return new Integer(realRow);
+	    		return new Integer(realRow+1);
 	    	default:
 	    		try {
 	    		return getDataModel().getValueAt(realRow, col-2);

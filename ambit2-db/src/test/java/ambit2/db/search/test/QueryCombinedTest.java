@@ -16,11 +16,11 @@ import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.storedquery.RetrieveStoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QuerySimilarityBitset;
-import ambit2.db.search.structure.QueryStored;
 import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByID;
 
@@ -62,7 +62,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	}	
 	@Test
 	public void test() throws Exception {
-		QueryStored qs = new QueryStored();
+		RetrieveStoredQuery qs = new RetrieveStoredQuery();
 		qs.setName("test");
 		
 		QueryCombined qc = new QueryCombinedStructure();

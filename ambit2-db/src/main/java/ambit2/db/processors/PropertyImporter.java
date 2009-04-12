@@ -72,7 +72,7 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 	
 	public PropertyImporter() {
 		propertyWriter = new PropertyValuesWriter();
-		setPropertyKey(new EINECSKey());
+		setPropertyKey(new CASKey());
 	}
 
 	
@@ -138,7 +138,7 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 		ResultSet rs = null;
 		try {
 				Object value = getValue(molecule);
-				if (value == null) return null;			
+				if (value == null) throw new AmbitException("No value to match "+getPropertyKey());			
 				query_property.setValue(value);
 				if (queryKey.getQueryKey()!=null)
 					query_property.setFieldname(queryKey.getQueryKey());
@@ -152,9 +152,12 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 					structure.addProperties(molecule.getProperties());
 					propertyWriter.process(structure);
 					sr.add(structure);
+					
 				}
-		} catch (Exception x) {
-			x.printStackTrace();
+				if (sr.size()==0)
+					throw new AmbitException("No matching entry! "+getPropertyKey()+"="+value);	
+		} catch (SQLException x) {
+			throw new AmbitException(x);	
 		} finally {
 			if (rs != null) queryexec.closeResults(rs);
 		}

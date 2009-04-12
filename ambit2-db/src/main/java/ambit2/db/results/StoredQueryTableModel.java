@@ -22,7 +22,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 
-package ambit2.dbui;
+package ambit2.db.results;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,6 +33,7 @@ import java.util.Hashtable;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.Profile;
+import ambit2.base.data.PropertiesTableModel;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -41,13 +42,10 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.readers.RetrieveField;
-import ambit2.db.results.ResultSetTableModel;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
-import ambit2.ui.PropertiesTableModel;
-import ambit2.ui.table.ISortableColumns;
 
-public class StoredQueryTableModel extends ResultSetTableModel implements ISortableColumns {
+public class StoredQueryTableModel extends ResultSetTableModel  {
 	/**
 	 * 
 	 */
@@ -55,7 +53,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 	protected IStoredQuery query;
 
 	protected String countRecordsSQL = "SELECT count(*) FROM query_results where idquery=?";
-	protected String selectRecordsSQL = "SELECT selected,idchemical,idstructure,metric FROM query_results where idquery=? order by metric ";
+	protected String selectRecordsSQL = "SELECT selected,idchemical,idstructure,metric,idquery FROM query_results where idquery=? order by metric ";
 	protected PreparedStatement countRecords = null;
 	protected PreparedStatement selectRecords = null;
 	
@@ -120,7 +118,8 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 		/**
 		 * Execute query
 		 */
-		if (selectRecords == null) selectRecords = getConnection().prepareStatement(selectRecordsSQL + (order.get(new Integer(2))?"asc":"desc"));
+		if (selectRecords == null) selectRecords = getConnection().prepareStatement(
+				selectRecordsSQL + (order.get(new Integer(2))?"asc":"desc"),ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 		selectRecords.setInt(1,getQuery().getId());
 		
 		try {
@@ -215,6 +214,21 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISorta
 		struc.setIdchemical(-1);
 		struc.setIdstructure(-1);		
 	}
+	@Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		switch (columnIndex) {
+		case 0: {
+			try {
+				records.updateBoolean("selected", (Boolean)value);
+				records.updateRow();
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+		}
+		default: return;
+		}
+	}
+	
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		try {
             records.first();

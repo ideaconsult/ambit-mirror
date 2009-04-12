@@ -408,11 +408,11 @@ CREATE TABLE  `query_results` (
   KEY `FK_query_results_2` (`idstructure`),
   KEY `FK_query_results_3` (`idchemical`),
   KEY `Index_4` USING BTREE (`idquery`,`metric`),
+  KEY `Index_5` (`idquery`),
   CONSTRAINT `FK_query_results_1` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_results_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_results_3` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 
 -- -----------------------------------------------------
 -- Table `funcgroups` Functional groups

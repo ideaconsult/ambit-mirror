@@ -40,6 +40,7 @@ import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
+import ambit2.db.search.structure.QueryStoredResults;
 
 /**
  * Inserts into query table idstructure numbers from a query identified by {@link StoredQuery}. Example:
@@ -63,11 +64,14 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
     }
 	public IStoredQuery process(IQueryObject target) throws AmbitException {
 		if (target == null) throw new AmbitException("Undefined query!");
+		if (target instanceof QueryStoredResults) {
+			return ((QueryStoredResults) target).getFieldname();
+		}
 		Connection c = getConnection();		
 		try {
 			StoredQuery result = new StoredQuery(-1);
 			result.setQuery(target);
-			result.setName(target.getClass().getName());
+			result.setName(target.toString());
 			
 			connection.setAutoCommit(false);	
 			

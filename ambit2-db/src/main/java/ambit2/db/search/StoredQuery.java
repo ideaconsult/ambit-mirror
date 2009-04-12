@@ -27,6 +27,7 @@ package ambit2.db.search;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 
 
 /**
@@ -37,15 +38,17 @@ import ambit2.base.exceptions.AmbitException;
 public class StoredQuery implements IStoredQuery {
 	protected Integer id;
 	protected String name="Default query";
-	protected IQueryObject query;
-	//protected String sql = null;
+	protected IQueryObject<IStructureRecord> query;
+
 	protected int rows= 0;
 	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		if (name.length()>45)
+			this.name = name.substring(0,45);
+		else this.name = name;
 	}
 	public StoredQuery() {
 	}
@@ -93,6 +96,12 @@ public class StoredQuery implements IStoredQuery {
 			throw new AmbitException("Query not available!");
 		
 		return SQL_INSERT + query.getSQL();
+	}
+	@Override
+	public String toString() {
+		if (rows>0)
+			return getName() + "["+rows+"]";
+		return getName();
 	}
 	
 }
