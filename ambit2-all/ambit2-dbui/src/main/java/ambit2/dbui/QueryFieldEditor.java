@@ -89,19 +89,7 @@ public class QueryFieldEditor extends QueryEditor<Property,String, StringConditi
 	@Override
 	protected JComponent createValueComponent() {
 		RowsModel rows = new RowsModel<String>(stats);
-		/*{
-			@Override
-			public int getSize() {
-				return super.getSize()+1;
-			}
-			@Override
-			public Object getElementAt(int index) {
-				if (index == 0) return "";
-				else
-					return super.getElementAt(index-1);
-			}
-		};
-		*/
+
 		ComboBoxAdapter<String> adapter = new ComboBoxAdapter<String>(rows,
 					presentationModel.getModel("value"));
 		JComboBox box = new JComboBox(adapter);

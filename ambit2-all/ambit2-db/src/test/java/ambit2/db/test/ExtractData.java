@@ -49,6 +49,10 @@ public class ExtractData {
         partialDataSet.addTable("property_values", "SELECT id,idproperty,idstructure,idvalue,idtype,status,property_values.user_name FROM property_values join structure using(idstructure) where idchemical in "+ids);     
         partialDataSet.addTable("property_tuples", "SELECT * FROM property_tuples");          
         partialDataSet.addTable("struc_dataset", "SELECT * FROM struc_dataset");        
+        
+        partialDataSet.addTable("query", "SELECT * FROM query where idquery<5");
+        partialDataSet.addTable("query_results", "SELECT * FROM query_results where idquery<5");
+        partialDataSet.addTable("sessions", "SELECT * FROM sessions");
         //BIGINT serializes to long and gives errors for 
         partialDataSet.addTable("fp1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
         

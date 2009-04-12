@@ -40,8 +40,8 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 
 import ambit2.base.data.Profile;
+import ambit2.base.data.PropertiesTableModel;
 import ambit2.base.data.Property;
-import ambit2.ui.PropertiesTableModel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;

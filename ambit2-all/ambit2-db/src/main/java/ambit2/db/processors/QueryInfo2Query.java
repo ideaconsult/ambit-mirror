@@ -13,12 +13,13 @@ import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.storedquery.RetrieveStoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryPrescreenBitSet;
 import ambit2.db.search.structure.QuerySimilarityBitset;
-import ambit2.db.search.structure.QueryStored;
+import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.QueryStructure;
 
 public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject> {
@@ -45,9 +46,9 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			}
 		} else if (QueryInfo.SCOPE_QUERY.equals(target.getScope())) {
 			if (target.getStoredQuery() != null) {
-				QueryStored d = new QueryStored();
-				d.setCondition(EQCondition.getInstance());
-				d.setValue(target.getStoredQuery());
+				QueryStoredResults d = new QueryStoredResults();
+				d.setCondition(StringCondition.getInstance("="));
+				d.setFieldname(target.getStoredQuery());
 				combined.setScope(d);
 			} else {
 				logger.warn("Stored query not defined!");

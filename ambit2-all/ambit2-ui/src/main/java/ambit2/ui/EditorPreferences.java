@@ -59,6 +59,11 @@ public class EditorPreferences {
 		{"ambit2.db.search.structure.QueryCombinedStructure","ambit2.dbui.QueryCombinedEditor"},
 		{"ambit2.db.search.structure.QueryStructure","ambit2.dbui.QueryChemicalEditor"},
 		{"ambit2.db.search.structure.QuerySimilarityStructure","ambit2.dbui.QuerySimilarityEditor"},
+		{"ambit2.db.search.DictionarySubjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
+		{"ambit2.db.search.DictionaryObjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
+		{"ambit2.db.search.DictionaryQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
+		{"ambit2.db.search.structure.QueryStoredResults","ambit2.dbui.QueryStoredResultsEditor"},		
+		
 		
 		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},
 		{"ambit2.base.data.StringBean","ambit2.ui.editors.StringBeanEditor"},

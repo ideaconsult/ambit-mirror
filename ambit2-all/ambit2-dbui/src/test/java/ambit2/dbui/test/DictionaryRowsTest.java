@@ -35,10 +35,14 @@ import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
 
+import ambit2.db.IDBProcessor;
 import ambit2.db.results.DictionaryRows;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
+import ambit2.db.search.DictionarySubjectQuery;
 import ambit2.dbui.dictionary.DictionaryQueryPanel;
+import ambit2.ui.EditorPreferences;
+import ambit2.ui.editors.IAmbitEditor;
 
 public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 
@@ -52,11 +56,10 @@ public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 	public void testSelect() throws Exception {
 		DictionaryRows rows = new DictionaryRows();
 		Connection c = datasource.getConnection();
-		rows.setConnection(c);
-		rows.setQuery(query);
-		DictionaryQueryPanel panel = new DictionaryQueryPanel();
-		panel.setObject(rows);
-		JOptionPane.showMessageDialog(null,panel);
+		DictionaryQueryPanel panel = (DictionaryQueryPanel) EditorPreferences.getEditor(query);
+		panel.setConnection(c);
+		panel.setObject(query);
+		JOptionPane.showMessageDialog(null,panel.getJComponent());
 		rows.close();
 	}
 	/*
@@ -145,5 +148,24 @@ public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 	protected void verify(DictionaryQuery query, ResultSet rs) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	protected void demo() {
+		DictionarySubjectQuery query = new DictionarySubjectQuery();
+		try {
+			initDatasource();
+			Connection c = datasource.getConnection();
+			IAmbitEditor editor = EditorPreferences.getEditor(query);
+			if (editor instanceof IDBProcessor) {
+				((IDBProcessor)editor).setConnection(c);
+				((IDBProcessor)editor).open();
+			}
+			JOptionPane.showMessageDialog(null,editor.getJComponent());
+			c.close();
+		} catch (Exception x) {
+			x.printStackTrace();
+		}		
+	}
+	public static void main(String args[]) {
+		new DictionaryRowsTest().demo();
 	}
 }
