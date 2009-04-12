@@ -1,6 +1,6 @@
-/* ResultSetTableModel.java
+/* QueryStoredTest.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 10, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,56 +27,38 @@
  * 
  */
 
-package ambit2.db.results;
+package ambit2.db.search.test;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import javax.swing.table.AbstractTableModel;
+import junit.framework.Assert;
 
-public abstract class ResultSetTableModel extends AbstractTableModel {
+import ambit2.db.SessionID;
+import ambit2.db.search.IStoredQuery;
+import ambit2.db.search.storedquery.RetrieveStoredQuery;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2273479288973954063L;
-	protected Connection connection = null;
-	protected ResultSet records = null;
-	protected int maxRecords = 0;
-	
-	public ResultSetTableModel() {
-		super();
-		maxRecords = 0;
+public class QueryStoredTest extends QueryTest<RetrieveStoredQuery> {
 
-	}	
-	
-	protected ResultSet getResultSet() {
-		return records;
+	@Override
+	protected RetrieveStoredQuery createQuery() throws Exception {
+		RetrieveStoredQuery q = new RetrieveStoredQuery();
+		q.setFieldname(new SessionID(1));
+		Assert.assertEquals("select idquery,idsessions,name,content from query join sessions using(idsessions)\nwhere user_name=SUBSTRING_INDEX(user(),'@',1) and idsessions = ? ",q.getSQL());
+		return q;
 	}
-	protected void setResultSet(ResultSet resultSet) throws SQLException {
-		if (this.records!=null) 
-			this.records.close();
+
+	@Override
+	protected void verify(RetrieveStoredQuery query, ResultSet rs) throws Exception {
+		while (rs.next()) {
+			IStoredQuery q = query.getObject(rs);
 			
-		this.records = resultSet;
-		maxRecords = 0;
-		/**
-		 * Count number of records
-		 */
-		if (resultSet != null) try {
-			maxRecords = getRecordsNumber();
-		
-		} catch (Exception x) {
-			maxRecords = 0;
+			Assert.assertTrue(
+					((q.getId()==1) && (q.getName().equals("test query 1")))
+					||
+					((q.getId()==2) && (q.getName().equals("test query 2")))
+					);
 		}
-		fireTableStructureChanged();
 		
 	}
 
-
-	protected int getRecordsNumber() throws SQLException  {
-		this.records.last();
-		return records.getRow();
-
-	}
 }

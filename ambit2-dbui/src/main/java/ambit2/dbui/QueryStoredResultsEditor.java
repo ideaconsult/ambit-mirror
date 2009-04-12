@@ -40,6 +40,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.results.RowsModel;
+import ambit2.db.search.EQCondition;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.storedquery.SearchStoredQueries;
@@ -50,7 +51,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class QueryStoredResultsEditor extends QueryEditor<IStoredQuery, String, StringCondition,IStructureRecord,QueryStoredResults>  {
+public class QueryStoredResultsEditor extends QueryEditor<IStoredQuery, Boolean, EQCondition,IStructureRecord,QueryStoredResults>  {
 
 	/**
 	 * 

@@ -36,8 +36,8 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.db.readers.IRetrieval;
-import ambit2.db.readers.RetrieveFieldNames;
 import ambit2.db.search.IQueryObject;
+import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
@@ -56,7 +56,7 @@ public class DefineProfile extends Sequence {
 		Primitive<IQueryObject, List<Dictionary>> retrieveTemplates = new Primitive<IQueryObject, List<Dictionary>>(
 				DBWorkflowContext.QUERY,
 				DBWorkflowContext.DESCRIPTORS,
-				new QueryTemplates("Dataset")
+				new QueryTemplates("einecs_structures_V13Apr07-EINECS-CID.csv")
 				) {
 			@Override
 			public synchronized String getName() {

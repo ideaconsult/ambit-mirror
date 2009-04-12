@@ -43,10 +43,10 @@ import ambit2.db.readers.RetrieveField;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;
 
-public class RetrieveFieldTest extends RetrieveTest<String> {
+public class RetrieveFieldTest extends RetrieveTest<Object> {
 
 	@Override
-	protected IQueryRetrieval<String> createQuery() {
+	protected IQueryRetrieval<Object> createQuery() {
 		RetrieveField q = new RetrieveField();
 		q.setValue(new StructureRecord(-1,100215,null,null));
 		q.setFieldname("Property 1");
@@ -82,11 +82,11 @@ public class RetrieveFieldTest extends RetrieveTest<String> {
 		c.close();
 	}	
 	@Override
-	protected AmbitRows<String> createRows() throws Exception {
-		return new AmbitRows<String>();
+	protected AmbitRows<Object> createRows() throws Exception {
+		return new AmbitRows<Object>();
 	}
 	@Override
-	protected void verifyRows(AmbitRows<String> rows) throws Exception {
+	protected void verifyRows(AmbitRows<Object> rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
 		Assert.assertEquals(1,rows.size());

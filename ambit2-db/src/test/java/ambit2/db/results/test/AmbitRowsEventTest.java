@@ -148,11 +148,11 @@ public class AmbitRowsEventTest extends DbUnitTest {
 		return properties;
 	}
 	
-	protected AmbitRows<String> createValueQuery() throws Exception {
-		final AmbitRows<String> property = new AmbitRows<String>() {
+	protected AmbitRows<Object> createValueQuery() throws Exception {
+		final AmbitRows<Object> property = new AmbitRows<Object>() {
 			@Override
 			protected synchronized IQueryRetrieval createNewQuery(
-					String target) throws AmbitException {
+					Object target) throws AmbitException {
 				return null; 
 
 			}
@@ -164,7 +164,7 @@ public class AmbitRowsEventTest extends DbUnitTest {
 					if (evt instanceof QueryChangeEvent)
 						prop++;					
 					while (next()) {
-						Assert.assertEquals(12.0,Double.parseDouble(getObject()),1E-4);
+						Assert.assertEquals(12.0,Double.parseDouble(getObject().toString()),1E-4);
 						obj++;
 					}
 				} catch (Exception x) {
@@ -191,7 +191,7 @@ public class AmbitRowsEventTest extends DbUnitTest {
 		final AmbitRows<Property> properties = createPropertyQuery();
 		dictionary.addPropertyChangeListener(dictionary.getPropertyname(),properties);
 		
-		final AmbitRows<String> property = createValueQuery();
+		final AmbitRows<Object> property = createValueQuery();
 		properties.addPropertyChangeListener(properties.getPropertyname(),property);
 
 

@@ -20,7 +20,26 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	protected PreparedStatement sresults=null;
 	protected Statement statement=null;
 	protected int maxRecords = 0;
-	
+	//ResultSet.TYPE_FORWARD_ONLY, ResultSet.TYPE_SCROLL_INSENSITIVE
+	protected int resultType = ResultSet.TYPE_SCROLL_INSENSITIVE;
+	public int getResultType() {
+		return resultType;
+	}
+
+	public void setResultType(int resultType) {
+		this.resultType = resultType;
+	}
+
+	public int getResultTypeConcurency() {
+		return resultTypeConcurency;
+	}
+
+	public void setResultTypeConcurency(int resultTypeConcurency) {
+		this.resultTypeConcurency = resultTypeConcurency;
+	}
+	//one of ResultSet.CONCUR_READ_ONLY or ResultSet.CONCUR_UPDATABLE
+	protected int resultTypeConcurency = ResultSet.CONCUR_READ_ONLY;
+
 	public int getMaxRecords() {
 		return maxRecords;
 	}
@@ -38,7 +57,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 		try {
 				List<QueryParam> params = target.getParameters();
 				if (params == null) {
-					statement = c.createStatement();
+					statement = c.createStatement(getResultType(),getResultTypeConcurency());
 					String sql = target.getSQL();
 					if (maxRecords > 0)
 						sql = sql + " limit " + Integer.toString(maxRecords);
@@ -48,7 +67,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 					String sql = target.getSQL();
 					if (maxRecords > 0)
 						sql = sql + " limit " + Integer.toString(maxRecords);					
-					sresults = c.prepareStatement(sql);					
+					sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());					
 					QueryExecutor.setParameters(sresults, params);
 					logger.debug(sresults);
 					ResultSet rs = sresults.executeQuery();

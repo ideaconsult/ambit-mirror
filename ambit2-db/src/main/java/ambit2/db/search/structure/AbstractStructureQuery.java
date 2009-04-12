@@ -48,6 +48,7 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 	 * 
 	 */
 	private static final long serialVersionUID = 3149398052063483705L;
+	public static enum FIELD_NAMES  {idquery, idchemical,idstructure,selected,metric};
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = new StructureRecord();

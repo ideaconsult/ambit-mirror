@@ -49,28 +49,30 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.base.data.IFilteredColumns;
+import ambit2.base.data.ISelectableRecords;
+import ambit2.base.data.ISortableColumns;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.table.BrowserModeNavigator;
 import ambit2.ui.table.FindNavigator;
 import ambit2.ui.table.IBrowserMode;
-import ambit2.ui.table.IFilteredColumns;
 import ambit2.ui.table.IFindNavigator;
 import ambit2.ui.table.IHeaderAction;
 import ambit2.ui.table.IPageNavigator;
 import ambit2.ui.table.IRecordNavigator;
-import ambit2.ui.table.ISortableColumns;
 import ambit2.ui.table.PageNavigator;
 import ambit2.ui.table.RecordNavigator;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.beans.PropertyAdapter;
+import com.jgoodies.binding.list.SelectionInList;
 
 
 
@@ -251,9 +253,17 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 
 						addColumn(newColumn);
 						
-						((EditableHeaderTableColumn)newColumn).setHeaderEditor(
-				        		new DefaultCellEditor(
-				        				new JComboBox(new HeaderComboBoxModel(this,i,headerActions))));
+						if ((getColumnClass(i) == Boolean.class) && (m instanceof ISelectableRecords)) {
+							PropertyAdapter selectionAdapter = new PropertyAdapter(this.dataModel, "selection");
+							SelectionInList<ISelectableRecords.SELECTION_MODE> list = 
+								new SelectionInList<ISelectableRecords.SELECTION_MODE>(ISelectableRecords.SELECTION_MODE.values(),selectionAdapter);
+							JComboBox box = BasicComponentFactory.createComboBox(list);
+							AutoCompleteDecorator.decorate(box);
+							((EditableHeaderTableColumn)newColumn).setHeaderEditor(new DefaultCellEditor(box));							
+						} else {
+							((EditableHeaderTableColumn)newColumn).setHeaderEditor(
+				        		new DefaultCellEditor(new JComboBox(new HeaderComboBoxModel(this,i,headerActions))));
+						}
 				        				    
 					}
 					if (getTableHeader()!=null)

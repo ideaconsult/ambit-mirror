@@ -32,38 +32,47 @@ import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.data.IFilteredColumns;
+import ambit2.base.data.ISelectableRecords;
+import ambit2.base.data.ISortableColumns;
 import ambit2.base.data.Profile;
 import ambit2.base.data.PropertiesTableModel;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.readers.RetrieveField;
+import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
+import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.update.IQueryUpdate;
+import ambit2.db.update.storedquery.UpdateSelectedRecords;
 
-public class StoredQueryTableModel extends ResultSetTableModel  {
+public class StoredQueryTableModel extends ResultSetTableModel implements ISelectableRecords, ISortableColumns, IFilteredColumns{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7273714299667490819L;
-	protected IStoredQuery query;
-
-	protected String countRecordsSQL = "SELECT count(*) FROM query_results where idquery=?";
-	protected String selectRecordsSQL = "SELECT selected,idchemical,idstructure,metric,idquery FROM query_results where idquery=? order by metric ";
-	protected PreparedStatement countRecords = null;
-	protected PreparedStatement selectRecords = null;
+	protected SELECTION_MODE selectionMode = SELECTION_MODE.NO_CHANGE;
+	protected QueryStoredResults storedResults;
+	
 	
 	protected PreparedStatement structureRecords = null;
 	protected PreparedStatement structureField = null;	
+	
 	protected RetrieveAtomContainer retrieveMolecule = new RetrieveAtomContainer();
 	protected RetrieveField retrieveField = new RetrieveField();
 	protected PropertiesTableModel fields;
 	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();
-	
+	protected UpdateExecutor<IQueryUpdate> updateExecutor = new UpdateExecutor<IQueryUpdate>();
+	protected QueryExecutor<IQueryObject> queryExecutor;
+
 
 	
 	public StoredQueryTableModel() {
@@ -71,10 +80,15 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 		retrieveMolecule.setValue(new StructureRecord());
 		retrieveField.setValue(new StructureRecord());
 		order.put(new Integer(2), Boolean.FALSE);
+		storedResults = new QueryStoredResults();
+		queryExecutor = new QueryExecutor<IQueryObject>();
+		queryExecutor.setResultTypeConcurency(ResultSet.CONCUR_UPDATABLE);
 	}
-
+	/*
 	@Override
 	protected int getRecordsNumber() throws SQLException {
+		return storedResults.getFieldname().getRows();
+	
 		if (countRecords == null) countRecords = getConnection().prepareStatement(countRecordsSQL);
 		countRecords.setInt(1,getQuery().getId());
 		ResultSet count = countRecords.executeQuery();
@@ -83,11 +97,14 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 			mr = count.getInt(1);
 		}
 		count.close();
+		getResultSet().last();
+		System.out.println(getResultSet().getRow());
 		return mr;
-	}
 	
+	}
+	*/
 	public IStoredQuery getQuery() {
-		return query;
+		return storedResults.getFieldname();
 	}
 	public Connection getConnection() {
 		return connection;
@@ -95,35 +112,54 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 	public void setConnection(Connection connection) throws SQLException, DbAmbitException {
 		this.connection = connection;
 		setResultSet(null);
+		/*
 		if (countRecords != null)
 			countRecords.close(); 
 		countRecords = null;
+		*/
+		/*
 		if (selectRecords != null)
 			selectRecords.close();
 		selectRecords = null;
-		
+		*/
 		if (structureRecords != null)
 			structureRecords.close();
 		structureRecords = null;
 
 		if (structureField != null)
 			structureField.close();
-		structureField = null;		
+		structureField = null;
+		try {
+			queryExecutor.closeResults(getResultSet());
+			queryExecutor.close();
+			queryExecutor.setConnection(connection);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}		
+		try {
+			updateExecutor.close();
+			updateExecutor.setConnection(connection);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	}		
 	public void setQuery(IStoredQuery query) throws SQLException, AmbitException {
 		if (getConnection() == null) throw new AmbitException("No connection!");
-		this.query = query;
+		storedResults.setFieldname(query);
+		query.setRows(0);
 		setResultSet(null);
 		
 		/**
+		
+		if (selectRecords == null) selectRecords = getConnection().prepareStatement(
+				selectRecordsSQL + (order.get(new Integer(2))?"asc":"desc"),
+				ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+		selectRecords.setInt(1,getQuery().getId());
 		 * Execute query
 		 */
-		if (selectRecords == null) selectRecords = getConnection().prepareStatement(
-				selectRecordsSQL + (order.get(new Integer(2))?"asc":"desc"),ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-		selectRecords.setInt(1,getQuery().getId());
-		
 		try {
-			setResultSet(selectRecords.executeQuery());
+			setResultSet(queryExecutor.process(storedResults));
+			query.setRows(maxRecords);		
 		} catch (SQLException x) {
 			setResultSet(null);
 			throw new AmbitException(x);
@@ -133,7 +169,7 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 	
 	
 
-	protected String getField(int idstructure,String fieldname) throws SQLException, AmbitException {
+	protected Object getField(int idstructure,String fieldname) throws SQLException, AmbitException {
 		if (getConnection() == null) return null;
 		if (structureField == null) structureField = 
 			getConnection().prepareStatement(retrieveField.getSQL());
@@ -145,7 +181,7 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 		
 		try {
 			ResultSet rs = structureField.executeQuery();
-			String value = null;
+			Object value = null;
 			while (rs.next()) {
 				try {
 	    			value = retrieveField.getObject(rs);
@@ -201,7 +237,7 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 		try {
 			if (record >=0) {
 	            records.first();
-	            records.relative(record);			
+	            records.relative(record);
 	            if (!records.isAfterLast()) {	
 					struc.setIdstructure(records.getInt("idstructure"));
 					struc.setIdchemical(records.getInt("idchemical"));
@@ -215,18 +251,32 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
 		struc.setIdstructure(-1);		
 	}
 	@Override
-	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		switch (columnIndex) {
-		case 0: {
-			try {
-				records.updateBoolean("selected", (Boolean)value);
-				records.updateRow();
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
+	public void setValueAt(Object value, int record, int columnIndex) {
+		try {
+			if (record >=0) {
+	            records.first();
+	            records.relative(record);
+	
+	            if (!records.isAfterLast() && !records.isAfterLast()) {	
+	        		switch (columnIndex) {
+	        		case 0: {
+	        			try {
+	        				records.updateBoolean("selected", (Boolean)value);
+	        				records.updateRow();
+	        				break;
+	        			} catch (Exception x) {
+	        				x.printStackTrace();
+	        			}
+	        		}
+	        		default: return;
+	        		}
+	            }
+			}	
+		} catch (Exception x) {
+			x.printStackTrace();
 		}
-		default: return;
-		}
+		
+
 	}
 	
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -235,13 +285,13 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
             records.relative(rowIndex);			
             if (records.isAfterLast()) return "";
             
-            int idstructure = records.getInt("idstructure");
+            int idstructure = records.getInt(AbstractStructureQuery.FIELD_NAMES.idstructure.toString());
             //System.out.println("idstruc" +idstructure);
 			switch (columnIndex) {
 			//selected
-			case 0: return records.getBoolean("selected"); 
+			case 0: return records.getBoolean(AbstractStructureQuery.FIELD_NAMES.selected.toString()); 
 			case 1: return getAtomContainer(idstructure);
-			case 2: return records.getFloat("metric");
+			case 2: return records.getFloat(AbstractStructureQuery.FIELD_NAMES.metric.toString());
 			default:
 				return (fields==null)?"":
 					getField(idstructure, ((Property)fields.getValueAt(columnIndex-3,0)).getName());
@@ -334,15 +384,83 @@ public class StoredQueryTableModel extends ResultSetTableModel  {
     }
     public void sort(int column, boolean ascending)
     		throws UnsupportedOperationException {
-    	if (column != 2) throw new UnsupportedOperationException("Column "+getColumnName(column) + " is not sortable!");
-    	order.put(new Integer(2),new Boolean(ascending));
+    	if (storedResults.getFieldname()==null) return;
+    	String col = getColumnName(column);
+    	if (!AbstractStructureQuery.FIELD_NAMES.metric.toString().equals(col.toLowerCase())) throw new UnsupportedOperationException("Column "+getColumnName(column) + " is not sortable!");
+    	order.put(new Integer(column),new Boolean(ascending));
     	try {
-    		if (selectRecords != null)
-    			selectRecords.close();
-    		selectRecords = null;    		
-    		setQuery(query);
+    		queryExecutor.closeResults(getResultSet());
+    		setResultSet(null);
+    		storedResults.setOrder_descendant(!ascending);
+    		setQuery(storedResults.getFieldname());
     	} catch (Exception x) {
     		throw new UnsupportedOperationException(x);
     	}
+    }
+    public SELECTION_MODE getSelection() {
+    	return selectionMode ;
+    }
+    public void setSelection(SELECTION_MODE mode) {
+    	if (mode == null) return;
+    	this.selectionMode = mode;
+    	try {
+        	switch (mode) {
+        	case UNSELECT_ALL: {
+        		selectRecords(mode);
+        		break;
+        	}
+        	case SELECT_ALL: {
+        		selectRecords(mode);
+        		break;
+        	}
+        	case INVERT_SELECTIONS: {
+        		selectRecords(mode);
+        		break;
+        	} 
+        	case HIDE_SELECTIONS: {
+        		storedResults.setValue(false);
+        		setQuery(storedResults.getFieldname());
+        		break;
+        	}
+        	case SHOW_ALL: {
+        		storedResults.setValue(null);
+        		setQuery(storedResults.getFieldname());
+        		break;        		
+        	}
+        	case SHOW_SELECTIONS: {
+        		storedResults.setValue(true);
+        		setQuery(storedResults.getFieldname());
+        		break;        		
+        	}
+        	}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+
+    	}
+    }
+    protected void selectRecords(SELECTION_MODE mode) throws AmbitException,SQLException {
+    	if (storedResults.getFieldname()==null) return;
+    	UpdateSelectedRecords r = new UpdateSelectedRecords();
+    	r.setObject(mode);
+    	r.setGroup(getQuery());
+    	int updated = updateExecutor.process(r);
+    	System.out.println(mode + " Records updated "+updated);
+    	if (updated > 0)
+    		setQuery(getQuery());    	
+    }
+    public void dropFilter(int column) throws UnsupportedOperationException {
+    	try {
+    		storedResults.setValue(null);
+    		setQuery(storedResults.getFieldname());
+    	} catch (Exception x) {
+    		throw new UnsupportedOperationException(x);
+    	}
+    	
+    }
+    public void setFilter(int column, Object value)
+    		throws UnsupportedOperationException {
+    	throw new  UnsupportedOperationException();
+    	
     }
 }
