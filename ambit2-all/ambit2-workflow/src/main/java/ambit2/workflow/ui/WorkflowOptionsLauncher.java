@@ -87,7 +87,7 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 				String help = Utils.getHelp(latch.getValue().getClass());
 				String title = Utils.getTitle(latch.getValue().getClass());
 				WizardPanel wizard = new WizardPanel(title,p,help);
-				if (wizard.display(JOptionPane.getFrameForComponent(wizard),context.getName() + " Wizard",true)
+				if (wizard.display(JOptionPane.getFrameForComponent(getFrame()),context.getName() + " Wizard",true)
 						== WizardPanel.ANSWER_MODE.next) {
 					if (editor!=null)
 						editor.confirm();
@@ -98,7 +98,7 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
 			} catch (Exception x) {
 				latch.getLatch().setValue(null);
 				x.printStackTrace();
-				JOptionPane.showMessageDialog(getFrame(),x.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);	
+				JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getFrame()),x.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);	
 			} finally {
 				try {
 					if (editor instanceof IDBProcessor) 
