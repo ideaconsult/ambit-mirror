@@ -23,6 +23,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class WizardPanel extends JPanel {
+	protected JDialog dialog = null;
 	public enum ANSWER_MODE {
 	    back,next,finish,help,cancel,none 
 	}
@@ -97,20 +98,20 @@ public class WizardPanel extends JPanel {
     }
 	public void back(ActionEvent e) {
 		setAnswer(ANSWER_MODE.back);
-		JOptionPane.getFrameForComponent(this).setVisible(false);
+		dialog.setVisible(false);
 	}
 	public void next(ActionEvent e) {
 		setAnswer(ANSWER_MODE.next);
-		JOptionPane.getFrameForComponent(this).setVisible(false);
+		dialog.setVisible(false);
 
 	}
 	public void finish(ActionEvent e) {
 		setAnswer(ANSWER_MODE.finish);
-		JOptionPane.getFrameForComponent(this).setVisible(false);
+		dialog.setVisible(false);
 	}	
 	public void cancel(ActionEvent e) {
 		setAnswer(ANSWER_MODE.cancel);
-		JOptionPane.getFrameForComponent(this).setVisible(false);
+		dialog.setVisible(false);
 	}
 	protected Component buildGraphicsPanel() {
         FormLayout layout = new FormLayout(
@@ -168,15 +169,17 @@ public class WizardPanel extends JPanel {
 
 	
 	public ANSWER_MODE display(Frame owner, String title,  boolean modal) {
-		JDialog frame = new JDialog(owner,title,modal);
+		if (dialog == null)
+			dialog = new JDialog(owner,title,modal);
 		try {
-	        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-	        frame.getContentPane().add(this);
-	        frame.pack();
-	        frame.setLocationRelativeTo(owner);      
-	        frame.setVisible(true);        
+	        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+	        dialog.getContentPane().add(this);
+	        dialog.pack();
+	        dialog.setLocationRelativeTo(owner);      
+	        dialog.setVisible(true);        
 		} finally {
-			frame.dispose();
+			dialog.dispose();
+			dialog = null;
 		}
         return getAnswer();
     }
