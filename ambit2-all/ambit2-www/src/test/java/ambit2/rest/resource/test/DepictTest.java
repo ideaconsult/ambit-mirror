@@ -17,7 +17,7 @@ public class DepictTest extends ResourceTest {
 		Client client = new Client(Protocol.HTTP);
 		Response response =	client.get(URI);
 		InputStream in = response.getEntity().getStream();
-		DownloadTool.download(in, new File("test.gif"));
+		DownloadTool.download(in, new File("test.png"));
 	}
 	
 }
