@@ -52,7 +52,7 @@ public class PBTReader extends ValuesByTemplateReader<PBTWorkBook> {
 		}
 	}
 	@Override
-	protected void set(PBTWorkBook result, String fieldname, String value)
+	protected void set(PBTWorkBook result, String fieldname, Object value)
 			throws AmbitException {
 		result.set(fieldname, value);
 		

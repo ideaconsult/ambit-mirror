@@ -29,6 +29,7 @@ import javax.swing.table.TableColumnModel;
 import ambit2.base.io.MyIOUtilities;
 import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
+import ambit2.workflow.DBWorkflowContext;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
@@ -41,6 +42,7 @@ import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.TestCondition;
+import com.microworkflow.process.While;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.ui.IWorkflowListenerUI;
 import com.microworkflow.ui.WorkflowTools;
@@ -55,13 +57,13 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     protected JTextArea status;
     protected String title="Workflow";
     protected ImageIcon ptr, executed, notyet, conditional, composite, yes, no;
-
+    protected JButton stopButton;
 
     /**
      * 
      */
     private static final long serialVersionUID = -9177580035692770353L;
-    public WorkflowViewPanel(Workflow wf,Action action) {
+    public WorkflowViewPanel(Workflow wf,Action action, Action stopAction) {
         super();
         try {
         	ptr = Utils.createImageIcon("images/resultset_next.png");
@@ -213,14 +215,12 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         status.setBorder(null);
         status.setPreferredSize(new Dimension(100,100));
         //fake button 
-        JButton cancel = new JButton("Stop");
-        cancel.setEnabled(false);
-        
+        stopButton = new JButton(stopAction); 
 		setLayout(new BorderLayout());
 		add(pane,BorderLayout.CENTER);
         add(ButtonBarFactory.buildWizardBar(
         		null
-        		, new JButton(action),cancel,
+        		, new JButton(action),stopButton,
         		new JButton[] {}),
         		BorderLayout.SOUTH
         		);
@@ -263,8 +263,9 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     	return menu;
     }
     public void setWorkflow(Workflow wf) {
-       if (this.workflow != null)
+       if (this.workflow != null) {
            this.workflow.removePropertyChangeListener(this);
+       }
 
        
        wftm.setActivities(null);
@@ -280,6 +281,9 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
     	   }
        } 
        title="No workflow defined!";
+       //listener.setWorkflowContext(this.)
+       //this.workflow.addPropertyChangeListener(DBWorkflowContext.USERCONFIRMATION,listener);
+       
     }
     public ArrayList<Activity> getActivityList(Activity activity) {
         final ArrayList<Activity> activities = new ArrayList<Activity>();
@@ -291,6 +295,12 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
      			activities.add(activity);
      		return activity;
      	}
+     	@Override
+     		public Activity[] traverseActivity(Activity[] arg0, While arg1,
+     				int arg2, boolean arg3) {
+     			//don't expand while component
+     			return super.traverseActivity(arg0, arg1, arg2, false);
+     		}
         };
         if (activity != null) 
      	   tools.traverseActivity(null,activity,0,true);
@@ -316,17 +326,21 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         } else if (WorkflowEvent.WF_ANIMATE.equals(arg0.getPropertyName())) {
              setAnimate((Boolean) arg0.getNewValue());
         } else if (WorkflowEvent.WF_START.equals(arg0.getPropertyName())) {
+        	stopButton.setEnabled(true);
         	status.setText("");
             display("Started","");
              
         } else if (WorkflowEvent.WF_COMPLETE.equals(arg0.getPropertyName())) {
+        	stopButton.setEnabled(false);
             wftm.setSelected(-1);
             //table.scrollRectToVisible(table.getCellRect(0, 0, true));
             display("Completed","");
         } else if (WorkflowEvent.WF_ABORTED.equals(arg0.getPropertyName())) {
+        	stopButton.setEnabled(false);
             wftm.setSelected(-1);
             display("Error:",arg0.getNewValue());
         } else if (WorkflowEvent.WF_RESUMED.equals(arg0.getPropertyName())) {
+        	stopButton.setEnabled(true);
             display("Warning:",arg0.getNewValue());
         } else 
         	if (arg0.getNewValue()!= null)
@@ -376,4 +390,6 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 			setIcon(null);
 	    return this;
 	  }
-	}
+}
+ 
+

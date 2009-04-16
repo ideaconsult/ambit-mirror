@@ -57,17 +57,23 @@ public abstract class QueryPerformer<Q extends IQueryObject,Result,RecordValue> 
 	public QueryPerformer() {
 		queryExecutor = new QueryExecutor<IQueryObject>();
 	}
-	@Override
-	public Result execute() throws Exception {
-		IQueryObject query = getTarget();
-		if (query == null)
-			throw new Exception("Undefined query");
+	protected Connection getConnection() throws Exception{
      	DataSource datasource = (DataSource)get(DBWorkflowContext.DATASOURCE);
 		if (datasource == null)
 			throw new Exception("Undefined datasource");
         Connection c = datasource.getConnection();     
-		if (datasource == null)
-			throw new Exception("Undefined db connection");        
+		if (c == null)
+			throw new Exception("Undefined db connection");  
+		return c;
+		
+	}
+	@Override
+	public Result execute() throws Exception {
+		Q query = getTarget();
+		if (query == null)
+			throw new Exception("Undefined query");
+		
+        Connection c = getConnection();    
         queryExecutor.setConnection(c);            
         queryExecutor.open();
         Result result = null;
@@ -87,7 +93,7 @@ public abstract class QueryPerformer<Q extends IQueryObject,Result,RecordValue> 
         }
         
 	}
-	protected abstract Result process(IQueryObject query,ResultSet resultset) throws Exception ;
+	protected abstract Result process(Q query,ResultSet resultset) throws Exception ;
 	protected abstract Result retrieve(IRetrieval<RecordValue> query,ResultSet resultset) throws Exception ;	
 
 }

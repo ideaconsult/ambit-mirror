@@ -58,7 +58,10 @@ public class StoredQueryTableModelTest extends RepositoryTest {
 		prop.setClazz(String.class);
 		prop.setEnabled(true);
 		profile.add(prop);
-		profile.add(Property.getInstance("PUBCHEM_COMPOUND_CID", "PUBCHEM_COMPOUND_CID"));
+		prop =Property.getInstance("PUBCHEM_COMPOUND_CID", "PUBCHEM_COMPOUND_CID");
+		prop.setEnabled(true);
+		
+		profile.add(prop);
 		queryModel.setProfile(profile);
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

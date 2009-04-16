@@ -62,7 +62,9 @@ public class EditorPreferences {
 		{"ambit2.db.search.DictionarySubjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
 		{"ambit2.db.search.DictionaryObjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
 		{"ambit2.db.search.DictionaryQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
-		{"ambit2.db.search.structure.QueryStoredResults","ambit2.dbui.QueryStoredResultsEditor"},		
+		{"ambit2.db.search.structure.QueryStoredResults","ambit2.dbui.QueryStoredResultsEditor"},
+		
+		{"ambit2.base.data.StructureRecord","ambit2.workflow.ui.StructureRecordEditor"},		
 		
 		
 		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},

@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -42,6 +43,7 @@ import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.ui.QueryResultsPanel;
+import ambit2.workflow.ui.RecordsBrowserPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
@@ -96,17 +98,14 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 
 	public INPluginUI<INanoPlugin> createMainComponent() {
 		if (mainComponent == null) {
-		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BrowserMode.Spreadsheet);
-			Vector<String> p = new Vector<String>();
-			p.add(DBWorkflowContext.STOREDQUERY);
-			p.add(DBWorkflowContext.ERROR);
-			p.add(DBWorkflowContext.DBCONNECTION_URI);
-			results.setProperties(p);
-			results.setAnimate(true);
-			mainComponent = results;
+			mainComponent = new AnalogsMainPanel(getWorkflowContext());
+			contextListener.setFrame(mainComponent.getComponent());
 		} 
 		return mainComponent;
 	}
+	//
+	
+	
 	public ImageIcon getIcon() {
 	    return Utils.createImageIcon("ambit2/plugin/analogs/images/molecule_16.png");
 	}

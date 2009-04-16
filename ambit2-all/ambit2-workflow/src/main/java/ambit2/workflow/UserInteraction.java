@@ -10,7 +10,10 @@ public class UserInteraction<T> extends Primitive {
 		this(query,resultTag,"User input");
 	}
 	public UserInteraction(final T query, final String resultTag, String title) {
-	    super(DBWorkflowContext.USERINTERACTION,resultTag,new Performer<T,T>() {
+		this(query,DBWorkflowContext.USERINTERACTION,resultTag,title);
+	}
+	public UserInteraction(final T query, final String targetTag,  final String resultTag, String title) {
+	    super(targetTag,resultTag,new Performer<T,T>() {
 	        @Override
 	        public T execute() throws Exception {
 	            T o = getTarget();
@@ -23,8 +26,8 @@ public class UserInteraction<T> extends Primitive {
 	            	System.out.println(getClass().getName()+" " +ol);
 	                ValueLatchPair<T> latch = new ValueLatchPair<T>((T)ol);
 	                System.out.println("block " +ol);
-	                context.put(DBWorkflowContext.USERINTERACTION,latch);
-	                System.out.println("Unblock " +ol);
+	                context.put(getTargetKey(),latch);
+	                //System.out.println("Unblock " +ol);
 	                
 	                T li = null;
 	                try {
@@ -34,7 +37,7 @@ public class UserInteraction<T> extends Primitive {
 	                    context.put(DBWorkflowContext.ERROR, x);
 	                    return null;
 	                } finally {
-	                	context.remove(DBWorkflowContext.USERINTERACTION);
+	                	context.remove(getTargetKey());
 	                }
 	                if (li == null) throw new Exception("Workflow cancelled.");
                     return li;	                

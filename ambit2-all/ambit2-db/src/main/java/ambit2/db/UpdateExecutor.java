@@ -95,7 +95,6 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 					statement.clearParameters();
 				}
 				setParameters(statement, params);
-					System.out.println(statement);
 					logger.debug(statement);
 					count += statement.executeUpdate();
 					if (target.returnKeys(i)) {

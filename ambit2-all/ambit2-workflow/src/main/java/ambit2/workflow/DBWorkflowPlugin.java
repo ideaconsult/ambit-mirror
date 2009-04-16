@@ -24,11 +24,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.workflow;
 
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 
@@ -45,11 +47,13 @@ import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.WorkflowConsolePanel;
+import ambit2.workflow.ui.WorkflowOptionsLauncher;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.events.WorkflowListener;
 import com.microworkflow.process.Activity;
+import com.microworkflow.process.ValueLatchPair;
 import com.microworkflow.process.Workflow;
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.WorkflowTools;
@@ -62,13 +66,15 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 	private static final long serialVersionUID = 7190224146559024307L;
 	protected List<ClassHolder> workflows;	
 	protected NPluginsAction<WorkflowContext,Void> runAction = null;
+	protected StopContinueAction stopAction = null;
 	private boolean running = false;
+	protected WorkflowOptionsLauncher listener;
+	
 	public synchronized boolean isRunning() {
 		return running;
 	}
 
 	public synchronized void setRunning(boolean running) {
-		System.out.println(running);
 		this.running = running;
 		getAction().setEnabled(!running);		
 	}
@@ -80,7 +86,6 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 
 		getWorkflow().addPropertyChangeListener(new WorkflowListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				System.out.println(evt);
 				if (evt.getPropertyName().equals(WorkflowEvent.WF_COMPLETE)) {
 
 					setRunning(false);
@@ -95,6 +100,21 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 				}				
 			}
 		});		
+        listener = new WorkflowOptionsLauncher(null,DBWorkflowContext.USERCONFIRMATION) {
+      	   @Override
+      	public void propertyChange(PropertyChangeEvent evt) {
+      		
+      		if (evt.getNewValue() instanceof ValueLatchPair) {
+      			stopAction.setContinue(true);
+      			stopAction.setLatch((ValueLatchPair) evt.getNewValue());
+      		}
+      	}
+        };		
+		Vector<String> props = new Vector<String>();		
+		props.add(DBWorkflowContext.USERCONFIRMATION);
+        
+        listener.setProperties(props);
+        listener.setWorkflowContext(getWorkflowContext());
 	}
 	
 	@Override
@@ -109,7 +129,10 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 		return workflows;
 	}	
 	
-	
+	protected AbstractAction getStopAction() {
+		if (stopAction == null) stopAction = new StopContinueAction();
+		return stopAction;
+	}
 	protected NPluginsAction<WorkflowContext,Void> getAction() {
 		if (runAction == null) {
 			ExecuteWorkflowTask task = new ExecuteWorkflowTask(workflow,workflowContext) {
@@ -190,12 +213,12 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,32);
 
 				optionsComponent =  new JComponent[] {
-						new WorkflowViewPanel(workflow,getAction()),
+						new WorkflowViewPanel(workflow,getAction(),getStopAction()),
 						mw,
 						p
 				};
 			} else
-				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction())};
+				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction(),getStopAction())};
 		}
 		return optionsComponent;
 	}	
@@ -214,7 +237,8 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 			props.add(DBWorkflowContext.ERROR);
 			props.add(DBWorkflowContext.BATCHSTATS);
 	        props.add(BatchProcessor.PROPERTY_BATCHSTATS);
-	        props.add(DBWorkflowContext.RECORD);		
+	        props.add(DBWorkflowContext.RECORD);
+	        props.add(DBWorkflowContext.RECORDS);	
 			reports.setProperties(props);
 			detailsComponent =  new JComponent[] {reports};
 		}
@@ -235,4 +259,37 @@ class MyWorkflow extends Workflow {
 	public String toString() {
 		return title;
 	}
+}
+
+class StopContinueAction extends AbstractAction {
+	protected ValueLatchPair latch = null;
+	public ValueLatchPair getLatch() {
+		return latch;
+	}
+	public void setLatch(ValueLatchPair latch) {
+		this.latch = latch;
+		latch.getLatch().setTimeout_seconds(-1);
+		setEnabled(latch != null);
+	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3459659905414411067L;
+	public StopContinueAction() {
+		super("Stop");
+		setEnabled(false);
+	}
+	public void setContinue(boolean value) {
+		if (value) putValue(NAME, "Continue");
+		else putValue(NAME, "Stop");
+	}
+	public void actionPerformed(ActionEvent e) {
+  		if (latch != null) try {
+  			latch.getLatch().setValue(latch.getValue());
+  		} finally {
+  			setEnabled(false);
+  		}
+		
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -77,6 +78,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 			results.setProperties(p);
 			results.setAnimate(true);
 			mainComponent = results;
+			contextListener.setFrame(mainComponent.getComponent());
 		} 
 		return mainComponent;
 	}

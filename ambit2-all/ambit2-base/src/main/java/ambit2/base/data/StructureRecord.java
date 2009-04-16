@@ -215,4 +215,18 @@ public class StructureRecord implements IStructureRecord {
 	public void setReference(LiteratureEntry reference) {
 		this.reference = reference;
 	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		StructureRecord record = new StructureRecord();
+		record.setContent(getContent());
+		record.setFormat(getFormat());
+		record.setFormula(getFormula());
+		record.setIdchemical(getIdchemical());
+		record.setIdstructure(getIdstructure());
+		record.setSmiles(getSmiles());
+		record.setInchi(getInchi());
+		for (Property p : getProperties()) 
+			record.setProperty(p,getProperty(p));
+		return record;
+	}	
 }	

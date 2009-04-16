@@ -37,7 +37,7 @@ public class DescriptorCalculationProcessor extends
 		try {
 				return descriptor.calculate(target);
 		} catch (Exception x) {
-				throw new AmbitException(x);
+				throw new AmbitException(getDescriptor().toString(),x);
 		
 		}
 	}

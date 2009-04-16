@@ -59,4 +59,6 @@ public interface IStructureRecord extends IChemical{
     String getWritableContent();
     LiteratureEntry getReference();
     void setReference(LiteratureEntry reference);
+    Object clone() throws CloneNotSupportedException ;
+    
 }

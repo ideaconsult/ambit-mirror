@@ -67,7 +67,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	protected static final String onduplicate_int = " on duplicate key update property_values.idvalue=property_int.idvalue";
 	
 	protected static final String insert_tuple_string = "insert into property_tuples select ?,id from property_values join property_string using(idvalue,idtype) where idproperty=? and idstructure=? and value=? and idtype=?";
-	protected static final String insert_tuple_number = "insert into property_tuples select ?,id from property_values join property_number using(idvalue,idtype) where idproperty=? and idstructure=?  and (abs(value-?)<1E-4) and idtype=?";
+	protected static final String insert_tuple_number = "insert into property_tuples select ?,id from property_values join property_number using(idvalue,idtype) where idproperty=? and idstructure=?  and (abs(value-(?))<1E-4) and idtype=?";
 	protected static final String insert_tuple_int = 	"insert into property_tuples select ?,id from property_values join property_int using(idvalue,idtype) where idproperty=? and idstructure=? and value=? and idtype=?";
 	
 	//protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";

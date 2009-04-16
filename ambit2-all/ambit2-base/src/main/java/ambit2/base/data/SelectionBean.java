@@ -82,6 +82,10 @@ public class SelectionBean<T> extends AmbitBean {
 	public void clear() {
 		options.clear();
 	}
+	@Override
+	public String toString() {
+		return options.toString();
+	}
 	
 	
 }

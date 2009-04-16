@@ -1,6 +1,6 @@
-/* ResultSetTableModel.java
+/* SearchSequence.java
  * Author: nina
- * Date: Feb 6, 2009
+ * Date: Apr 14, 2009
  * Revision: 0.1 
  * 
  * Copyright (C) 2005-2009  Ideaconsult Ltd.
@@ -27,57 +27,35 @@
  * 
  */
 
-package ambit2.db.results;
+package ambit2.workflow.library;
 
-import java.beans.PropertyChangeListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.workflow.DBWorkflowContext;
+import ambit2.workflow.ExecuteAndStoreQuery;
+import ambit2.workflow.QueryInteraction;
+import ambit2.workflow.UserInteraction;
 
-import javax.swing.table.AbstractTableModel;
+import com.microworkflow.process.Sequence;
 
-public abstract class ResultSetTableModel extends AbstractTableModel {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2273479288973954063L;
-	protected Connection connection = null;
-	protected ResultSet records = null;
-	protected int maxRecords = 0;
-	
-	public ResultSetTableModel() {
-		super();
-		maxRecords = 0;
-
-	}	
-	
-	protected ResultSet getResultSet() {
-		return records;
+/**
+ * Expects a query in getContext(DBWorkflowContext.QUERY) and tries to execute it.
+ * The result is into getContext(DBWorkflowContext.STOREDQUERY), which is displayed by QuerResultsPanel  
+ * @author nina
+ *
+ */
+public class QueryExecution extends Sequence {
+	public QueryExecution(AbstractStructureQuery query) {
+       
+        addStep(new QueryInteraction(query));
+    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
+        p1.setName("Search");           
+		addStep(p1);
+        UserInteraction<Boolean> browse = new UserInteraction<Boolean>(
+        		true,DBWorkflowContext.USERCONFIRMATION,"CONTINUE","Browse results");
+        addStep(browse);
 	}
-	protected void setResultSet(ResultSet resultSet) throws SQLException {
-		if (this.records!=null) 
-			this.records.close();
-			
-		this.records = resultSet;
-		maxRecords = 0;
-		/**
-		 * Count number of records
-		 */
-		if (resultSet != null) try {
-			maxRecords = getRecordsNumber();
-		
-		} catch (Exception x) {
-			maxRecords = 0;
-		}
-		fireTableStructureChanged();
-		
-	}
-
-
-	protected int getRecordsNumber() throws SQLException  {
-		this.records.last();
-		return records.getRow();
-
+	@Override
+	public String toString() {
+		return "Browse results";
 	}
 }

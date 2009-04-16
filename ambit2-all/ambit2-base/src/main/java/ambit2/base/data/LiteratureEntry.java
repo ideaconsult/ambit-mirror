@@ -36,6 +36,16 @@ public class LiteratureEntry extends AmbitBean {
 	public static synchronized LiteratureEntry getInstance(String name) {
 		return getInstance(name,"http://ambit.sourceforge.net");
 	}
+	public static synchronized LiteratureEntry getCASReference() {
+		return getInstance("CAS Registry Number","http://www.cas.org");
+	}
+	public static synchronized LiteratureEntry getIUPACReference() {
+		return getInstance("IUPAC name","http://www.iupac.org");
+	}	
+	
+	public static synchronized LiteratureEntry getEINECSReference() {
+		return getInstance("EINECS","http://ec.europa.eu/environment/chemicals/exist_subst/einecs.htm");
+	}		
 	public static synchronized LiteratureEntry getInstance(String name,String url) {
 		int index =  references.indexOf(name);
 		if (index < 0) {

@@ -51,17 +51,27 @@ public class WorkflowOptionsLauncher implements WorkflowContextListener {
     protected WorkflowContext context;
     protected boolean animate = false;
     protected Vector<String> properties;
+    protected String property_observed = DBWorkflowContext.USERINTERACTION;
     
+    public String getProperty_observed() {
+		return property_observed;
+	}
+
     public WorkflowOptionsLauncher(IWorkflowContextFactory wfcfactory) {
+		this(wfcfactory,DBWorkflowContext.USERINTERACTION);
+	}
+	
+	public WorkflowOptionsLauncher(IWorkflowContextFactory wfcfactory, String property_observed) {
+		this.property_observed = property_observed;
         properties = new Vector<String>();
-        properties.add(UserInteractionEvent.PROPERTYNAME);
+        properties.add(getProperty_observed());
         properties.add(DBWorkflowContext.ERROR);        
 		setWfcfactory(wfcfactory);
 	}
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(DBWorkflowContext.ERROR)) {
 			JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getFrame()), evt.getNewValue());
-		} else if (evt.getPropertyName().equals(DBWorkflowContext.USERINTERACTION)) {
+		} else if (evt.getPropertyName().equals(getProperty_observed())) {
 			//if (evt instanceof UserInteractionEvent) {
 			ValueLatchPair latch = null; 	
 			IAmbitEditor editor = null;
