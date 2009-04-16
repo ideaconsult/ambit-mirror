@@ -46,7 +46,9 @@ public abstract class QueryCombined<T>  implements IQueryRetrieval<T> {
 	public String getSQL() throws AmbitException {
 		if (queries.size() == 0)
 			throw new AmbitException("Undefined query");
-		if (combine_as_and)
+		else if (queries.size() == 1) 
+			return queries.get(0).getSQL();
+		else if (combine_as_and)
 			return getSQL_and();
 		else
 			return getSQL_or();

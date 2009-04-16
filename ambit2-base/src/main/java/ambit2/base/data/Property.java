@@ -44,6 +44,15 @@ public class Property  {
 	return getInstance(name,defaultReference);
 	}
 	*/
+	public static synchronized Property getNameInstance() {
+		return getInstance("Name", LiteratureEntry.getIUPACReference());
+	}	
+	public static synchronized Property getCASInstance() {
+		return getInstance("CAS", LiteratureEntry.getCASReference());
+	}		
+	public static synchronized Property getEINECSInstance() {
+		return getInstance("EC", LiteratureEntry.getEINECSReference());
+	}			
 	public static synchronized Property getInstance(String name,String reference) {
 		return getInstance(name, reference,"");
 	}

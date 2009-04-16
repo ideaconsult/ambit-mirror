@@ -74,7 +74,7 @@ public class PrefuseTest  {
         p.add(topContainer,BorderLayout.NORTH);
         p.add(new JButton(new ExportDisplayAction(prefuse)),BorderLayout.EAST);
         
-        WorkflowViewPanel panel = new WorkflowViewPanel(wf,null);
+        WorkflowViewPanel panel = new WorkflowViewPanel(wf,null,null);
         frame.getContentPane().add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,p,panel));
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -2,6 +2,7 @@ package ambit2.base.data;
 
 
 
+import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -14,6 +15,7 @@ import java.util.Iterator;
  *
  */
 public class Profile<P extends Property> {
+	PropertyChangeSupport ps = new PropertyChangeSupport(this);
 	protected Hashtable<String,P> container;
 	protected String name;
 
@@ -67,6 +69,7 @@ public class Profile<P extends Property> {
 		return container.get(query.getName());
 	}	
 	public void add(P property) {
+		ps.firePropertyChange("property",null,property);
 		container.put(property.getName(),property);
 	}
 
@@ -77,6 +80,7 @@ public class Profile<P extends Property> {
 		return container.values();
 	}
 	public void clear() {
+		ps.firePropertyChange("profile",this,null);		
 		container.clear();
 	}
 	public void add(Profile<P> profile, boolean enabled) {

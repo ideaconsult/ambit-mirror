@@ -55,12 +55,14 @@ public class DBWorkflowContext extends WorkflowContext {
     public static String USERINTERACTION = "ambit2.workflow.DBWorkflowContext.USERINTERACTION";
     public static String STRUCTURES = "ambit2.workflow.DBWorkflowContext.STRUCTURES";
     public static String RECORD = "ambit2.workflow.DBWorkflowContext.RECORD";
+    public static String RECORDS = "ambit2.workflow.DBWorkflowContext.RECORDS";
     public static String PROFILE = "ambit2.workflow.DBWorkflowContext.PROFILE";
     public static String TEMPLATES = "ambit2.workflow.DBWorkflowContext.TEMPLATES";
     public static String DESCRIPTORS = "ambit2.workflow.DBWorkflowContext.DESCRIPTORS";
     public static String ENDPOINTS = "ambit2.workflow.DBWorkflowContext.ENDPOINTS";
     public static String REPORT = "ambit2.workflow.DBWorkflowContext.REPORT";
-    public static String PARAMS = "ambit2.workflow.DBWorkflowContext.PARAMETERS";  
+    public static String PARAMS = "ambit2.workflow.DBWorkflowContext.PARAMETERS";
+    public static String USERCONFIRMATION = "ambit2.workflow.DBWorkflowContext.CONTINUE";  
     
     public void logout(String connectURI) throws AmbitException {
     	Object o = get(DBCONNECTION_URI);
@@ -174,6 +176,15 @@ public class DBWorkflowContext extends WorkflowContext {
     }    
     public int getPagesize() {
         return getInt(PAGESIZE,25);
+    }
+    @Override
+    public Object put(String arg0, Object arg1) {
+    	if (arg0.equals(RECORDS)) {
+	    	System.out.print(arg0);
+	    	System.out.print('=');
+	    	System.out.println(arg1);
+    	}
+    	return super.put(arg0, arg1);
     }
 
 }

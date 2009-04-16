@@ -165,7 +165,7 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 			props.add(DBWorkflowContext.DATASOURCE);
 			p.setProperties(props);		    
 			optionsComponent = new JComponent[] {
-					new WorkflowViewPanel(workflow,action),p};
+					new WorkflowViewPanel(workflow,action,getStopAction()),p};
 		} 
 		return optionsComponent;
 	}			

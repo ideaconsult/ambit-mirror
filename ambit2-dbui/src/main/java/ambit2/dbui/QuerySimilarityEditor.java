@@ -29,18 +29,13 @@
 
 package ambit2.dbui;
 
-import java.awt.Dimension;
 import java.text.NumberFormat;
-import java.util.Calendar;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.openscience.cdk.applications.jchempaint.JCPPropertyHandler;
-import org.openscience.cdk.applications.jchempaint.JChemPaintEditorPanel;
-import org.openscience.cdk.applications.jchempaint.JChemPaintModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 
 import ambit2.base.data.ClassHolder;
@@ -48,6 +43,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityStructure;
+import ambit2.ui.editors.StructureDiagramEditor;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
@@ -62,7 +58,7 @@ public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IMoleculeSet
 	 * 
 	 */
 	private static final long serialVersionUID = -7423741371866787902L;
-	protected JChemPaintModel jcpModel; 	
+	protected StructureDiagramEditor editor;
 	public QuerySimilarityEditor() {
 		super();
 	}
@@ -92,28 +88,13 @@ public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IMoleculeSet
 	     return panel.getPanel();
 	}			
 	protected JComponent createStructureComponent() {
-		jcpModel = new JChemPaintModel();
-
-		jcpModel.setTitle("JChemPaint structure diagram editor");
-		jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
-		Package jcpPackage = Package.getPackage("org.openscience.cdk.applications.jchempaint");
-		String version = jcpPackage.getImplementationVersion();
-		jcpModel.setSoftware("JChemPaint " + version);
-		jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
-		Dimension d = new Dimension(350,350);
-		JChemPaintEditorPanel jcpep = new JChemPaintEditorPanel(2,d,true,"stable");
-		jcpep.setShowStatusBar(false);
-		jcpep.setShowMenuBar(true);
-		jcpep.setShowInsertTextField(true);
-		jcpep.setPreferredSize(d);
-		jcpep.setMaximumSize(new Dimension(800,800));
-		jcpep.registerModel(jcpModel);
-		jcpep.setJChemPaintModel(jcpModel,d);		
-		return jcpep;
+		if (editor == null)
+			editor = new StructureDiagramEditor();
+		return editor.getJComponent();
 	}
 	@Override
 	public boolean confirm() {
-		getObject().setValue(jcpModel.getChemModel().getMoleculeSet());
+		getObject().setValue(editor.getObject());
 		return super.confirm();
 	}
 	@Override

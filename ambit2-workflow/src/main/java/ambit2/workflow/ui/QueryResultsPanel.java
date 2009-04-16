@@ -30,55 +30,34 @@
 package ambit2.workflow.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import nplugins.shell.INPluginUI;
-import nplugins.shell.INanoPlugin;
 import ambit2.base.data.Profile;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.results.StoredQueryTableModel;
 import ambit2.db.search.IStoredQuery;
-import ambit2.ui.QueryBrowser;
-import ambit2.ui.table.BrowsableTableModel;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
-import com.microworkflow.ui.WorkflowContextListenerPanel;
 
 
-public class QueryResultsPanel extends WorkflowContextListenerPanel  implements INPluginUI<INanoPlugin> {
+public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuery,StoredQueryTableModel> {
 
     /**
      * 
      */
     private static final long serialVersionUID = -779943857847100493L;
-    protected StoredQueryTableModel tableModel;
-    protected QueryBrowser<BrowsableTableModel> browser;
 
-    /*
-        StoredQueryTableModel model = new StoredQueryTableModel();
-        model.setConnection(datasource.getConnection());
-        model.setQuery(query);
-        assertTrue(model.getRowCount()>0);
-
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-        QueryBrowser<BrowsableTableModel> browser = new QueryBrowser<BrowsableTableModel>(
-                new BrowsableTableModel(model));
-     */
     public QueryResultsPanel(IWorkflowContextFactory wfcfactory,String controlsPosition,BrowserMode mode) {
-        super(wfcfactory);
-        addWidgets(controlsPosition,mode);
+        super(wfcfactory,controlsPosition,mode);
     }
     public QueryResultsPanel(IWorkflowContextFactory wfcfactory,BrowserMode mode) {
     	this(wfcfactory,BorderLayout.NORTH,mode);
@@ -87,31 +66,18 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
         this(wfcontext,BorderLayout.NORTH,mode);
     }
     public QueryResultsPanel(WorkflowContext wfcontext,String controlsPosition,BrowserMode mode) {
-        super(null);
-        setWorkflowContext(wfcontext);
-        addWidgets(controlsPosition,mode);
+        super(wfcontext,controlsPosition,mode);
     }    
-    protected void addWidgets(String controlsPosition,BrowserMode mode) {
-        setLayout(new BorderLayout());
-        setAnimate(true);
-        tableModel = new StoredQueryTableModel();
-        browser = new QueryBrowser<BrowsableTableModel>(
-                    new BrowsableTableModel(tableModel),
-                    new Dimension(100,100)) {
-        	@Override
-        	protected int setRecord(int row, int col) {
-        		int record = super.setRecord(row, col);
-//        		System.out.println("set record "+record + "("+row+","+col+")");        		
-
-      			IStructureRecord struc = new StructureRecord();
-        		tableModel.update(record, struc);
-        		getWorkflowContext().put(DBWorkflowContext.RECORD,null);
-        		getWorkflowContext().put(DBWorkflowContext.RECORD,struc);        		
-        		return record;
-        	}
-        };
-        browser.setMode(BrowserMode.Spreadsheet,BrowserMode.Columns);
-        add(browser,BorderLayout.CENTER);
+    @Override
+    protected StoredQueryTableModel createTableModel() {
+    	return new StoredQueryTableModel();
+    }
+    @Override
+    protected void processRecord(int record) {
+		IStructureRecord struc = new StructureRecord();
+		tableModel.update(record, struc);
+		getWorkflowContext().put(DBWorkflowContext.RECORD,null);
+		getWorkflowContext().put(DBWorkflowContext.RECORD,struc);        		
     }
     @Override
     protected void animate(PropertyChangeEvent arg0) {
@@ -140,31 +106,18 @@ public class QueryResultsPanel extends WorkflowContextListenerPanel  implements 
         
     }
 
-    @Override
-    public void clear() {
-        // TODO Auto-generated method stub
-        
-    }
-    public Component getComponent() {
-        return this;
-    }
-    public INanoPlugin getPlugin() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    public void setPlugin(INanoPlugin plugin) {
-        // TODO Auto-generated method stub
-        
-    };
     public synchronized IStoredQuery getQuery() {
         return tableModel.getQuery();
     }
-    public synchronized void setQuery(IStoredQuery query) throws AmbitException, SQLException {
-        Connection c = ((DataSource)getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
-        tableModel.setConnection(c);
-        tableModel.setQuery(query);
-        tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
-
+    public synchronized void setQuery(IStoredQuery query) throws AmbitException {
+    	try {
+	        Connection c = ((DataSource)getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
+	        tableModel.setConnection(c);
+	        tableModel.setQuery(query);
+	        tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+    	} catch (SQLException x) {
+    		throw new AmbitException(x);
+    	}
         
     }
     @Override

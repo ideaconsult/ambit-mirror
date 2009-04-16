@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import ambit2.base.data.IFilteredColumns;
 import ambit2.base.data.ISelectableRecords;
@@ -39,7 +40,7 @@ import ambit2.ui.Utils;
 
 public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator, ISelectableRecords, TableModelListener {
 	protected PropertyChangeSupport  ps;
-	protected AbstractTableModel dataModel;
+	protected TableModel dataModel;
 	protected int pageSize = 10;
 	protected int page = 0;
 	protected int record = 0;	
@@ -59,7 +60,7 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 		this(null);
 	}
 	
-	public BrowsableTableModel(AbstractTableModel dataModel) {
+	public BrowsableTableModel(TableModel dataModel) {
 		super();
 		ps = new PropertyChangeSupport(this);
 		setDataModel(dataModel);
@@ -255,11 +256,11 @@ public class BrowsableTableModel extends AbstractTableModel implements IPageNavi
 			icon = currentIcon;
 		return icon;		
 	}
-	public AbstractTableModel getDataModel() {
+	public TableModel getDataModel() {
 		return dataModel;
 	}
 
-	public void setDataModel(AbstractTableModel dataModel) {
+	public void setDataModel(TableModel dataModel) {
 	    if (this.dataModel != null)
 	        this.dataModel.removeTableModelListener(this);
 		this.dataModel = dataModel;

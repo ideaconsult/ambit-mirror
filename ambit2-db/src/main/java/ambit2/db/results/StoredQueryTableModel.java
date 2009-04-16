@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.results;
 
+import java.beans.PropertyChangeSupport;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,6 +59,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	/**
 	 * 
 	 */
+
 	private static final long serialVersionUID = -7273714299667490819L;
 	protected SELECTION_MODE selectionMode = SELECTION_MODE.NO_CHANGE;
 	protected QueryStoredResults storedResults;
@@ -463,4 +465,5 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     	throw new  UnsupportedOperationException();
     	
     }
+ 
 }
