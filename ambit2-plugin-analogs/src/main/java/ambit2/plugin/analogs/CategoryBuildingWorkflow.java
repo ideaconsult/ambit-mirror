@@ -1,12 +1,7 @@
 package ambit2.plugin.analogs;
 
-import ambit2.db.search.structure.QueryField;
-import ambit2.workflow.library.DefineProfile;
 import ambit2.workflow.library.DefineStructure;
-import ambit2.workflow.library.GenerateReport;
 import ambit2.workflow.library.LoginSequence;
-import ambit2.workflow.library.QueryExecution;
-import ambit2.workflow.library.QuerySelection;
 
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
@@ -52,7 +47,7 @@ public class CategoryBuildingWorkflow extends Workflow {
         seq.addStep(new RetrieveProfileData());
         seq.addStep(new CalculateProfileProperties());
         */
-        //seq.addStep(new FindSimilarSubstances());
+        seq.addStep(new FindSimilarSubstances());
         /*
         seq.addStep(new ProfileAnalysis());
         seq.addStep(new GenerateReport());

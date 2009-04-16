@@ -17,7 +17,7 @@ public class QueryCombinedEditorTest extends TestCase {
 		
 		QueryCombinedEditor q = new QueryCombinedEditor();
 		q.setObject(l);
-		JOptionPane.showMessageDialog(null,q);
+		JOptionPane.showMessageDialog(null,q.getJComponent());
 
 	}
 }
