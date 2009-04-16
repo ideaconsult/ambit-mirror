@@ -29,7 +29,8 @@
 
 package ambit2.workflow.library;
 
-import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ExecuteAndStoreQuery;
 import ambit2.workflow.QueryInteraction;
@@ -44,7 +45,7 @@ import com.microworkflow.process.Sequence;
  *
  */
 public class QueryExecution extends Sequence {
-	public QueryExecution(AbstractStructureQuery query) {
+	public QueryExecution(IQueryRetrieval<IStructureRecord> query) {
        
         addStep(new QueryInteraction(query));
     	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();

@@ -150,6 +150,7 @@ public class WizardPanel extends JPanel {
 
 		JPanel p = new JPanel(new BorderLayout());
 		p.add(createSeparator(subtitle),BorderLayout.NORTH);
+		if (main != null)
 		p.add(main,BorderLayout.CENTER);
 		return p;
 	}	

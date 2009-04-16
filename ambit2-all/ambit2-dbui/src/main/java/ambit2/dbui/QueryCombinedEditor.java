@@ -2,14 +2,20 @@ package ambit2.dbui;
 
 
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import java.util.List;
 
+import javax.swing.JComponent;
+
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.ui.editors.IAmbitEditor;
+import ambit2.ui.editors.ListEditor;
 
-public class QueryCombinedEditor extends JPanel implements IAmbitEditor<QueryCombinedStructure> {
-
+public class QueryCombinedEditor  implements IAmbitEditor<QueryCombinedStructure> {
+	protected JComponent component = null;
+	protected QueryCombinedStructure query;
+	protected ListEditor<List<IQueryRetrieval<IStructureRecord>>,IQueryRetrieval<IStructureRecord>> listEditor;
 	/**
 	 * 
 	 */
@@ -17,31 +23,31 @@ public class QueryCombinedEditor extends JPanel implements IAmbitEditor<QueryCom
 
 	public QueryCombinedEditor() {
 		//super(null,new String[] {"id","SQL"},"Queries","Query");
-		//ListEditor<QueryCombined<IQueryObject>,IQueryObject>
+		listEditor = new ListEditor<List<IQueryRetrieval<IStructureRecord>>,IQueryRetrieval<IStructureRecord>>(
+				null,new String[] {"name"},"Query","Query"
+				);
+		component = listEditor;
 	}
 
 	public JComponent getJComponent() {
-		// TODO Auto-generated method stub
-		return null;
+		return component;
 	}
 
 	public QueryCombinedStructure getObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return query;
 	}
 
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public void setEditable(boolean editable) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void setObject(QueryCombinedStructure object) {
-		// TODO Auto-generated method stub
+		this.query = object;
+		listEditor.setObject(object.getQueries());
+		
 		
 	}
 	public boolean confirm() {

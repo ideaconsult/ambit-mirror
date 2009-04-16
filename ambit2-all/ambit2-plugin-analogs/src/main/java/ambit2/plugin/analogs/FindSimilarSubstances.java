@@ -29,30 +29,24 @@
 
 package ambit2.plugin.analogs;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
-import ambit2.db.IDBProcessor;
-import ambit2.db.SourceDataset;
-import ambit2.db.processors.DBProcessorsChain;
-import ambit2.db.processors.ProcessorCreateQuery;
-import ambit2.db.processors.QueryInfo2Query;
-import ambit2.db.readers.IRetrieval;
-import ambit2.db.readers.RetrieveDatasets;
-import ambit2.db.search.IQueryObject;
-import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.QueryInfo;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.search.structure.QuerySimilarityStructure;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
-import ambit2.workflow.UserInteraction;
-import ambit2.workflow.library.QueryPerformer;
+import ambit2.workflow.ExecuteAndStoreQuery;
+import ambit2.workflow.library.QueryExecution;
 
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 
 /**
@@ -63,79 +57,51 @@ import com.microworkflow.process.Sequence;
 public class FindSimilarSubstances extends Sequence {
 	public FindSimilarSubstances() {
 		super();
-		Primitive<IQueryObject, QueryInfo> retrieve = new Primitive<IQueryObject, QueryInfo>(
-				DBWorkflowContext.STRUCTURES,
+		ActivityPrimitive<List<IStructureRecord>, IQueryRetrieval<IStructureRecord>> records2query = 
+					new ActivityPrimitive<List<IStructureRecord>, IQueryRetrieval<IStructureRecord>>(
+				DBWorkflowContext.RECORDS,
 				DBWorkflowContext.QUERY,
-				new QueryInitialization()
+				new Records2QueryProcessor()
 				) {
 			@Override
 			public synchronized String getName() {
 				return "Query initialization";
 			};		
 		};
-		
-        DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor> chain = new DBProcessorsChain<QueryInfo, IStoredQuery,IDBProcessor>();
-        chain.add(new QueryInfo2Query());
-        chain.add(new ProcessorCreateQuery());
-    	ActivityPrimitive<IQueryObject,IStoredQuery> p1 = new ActivityPrimitive<IQueryObject,IStoredQuery>( 
-    			DBWorkflowContext.QUERY,
-    			DBWorkflowContext.STOREDQUERY,
-    				  (IDBProcessor)chain);
-        p1.setName("Search");    
-
-        addStep(retrieve);
-        addStep(new UserInteraction<QueryInfo>(new QueryInfo(),DBWorkflowContext.QUERY,"Define query"));
-        addStep(p1);
+		addStep(records2query);
+		addStep(new QueryExecution(null));
+		/*
+        //addStep(new QuerySelection());
+		addStep(records2query);
+    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
+        p1.setName("Search");           
+		addStep(p1);
+		*/
 	}
+	
+	
 }
 
-class QueryInitialization extends QueryPerformer<IQueryObject, QueryInfo,SourceDataset> {
-	protected IQueryObject getTarget() {
-		return new RetrieveDatasets();
-	};
-	protected QueryInfo process(IQueryObject query,ResultSet rs) throws Exception {							
-		throw new Exception("Not implemented");
-	}
-	protected QueryInfo retrieve(IRetrieval<SourceDataset> query,
-			ResultSet rs) throws Exception {
-		QueryInfo q = null;
-		if (get(DBWorkflowContext.QUERY)==null) {
-			q = new QueryInfo();
-			q.setScope(QueryInfo.SCOPE_DATABASE);
-		} else {
-			q = (QueryInfo) get(DBWorkflowContext.QUERY); 
+class Records2QueryProcessor extends DefaultAmbitProcessor<List<IStructureRecord>, IQueryRetrieval<IStructureRecord>> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public IQueryRetrieval<IStructureRecord> process(List<IStructureRecord> target)
+			throws AmbitException {
+		QueryCombinedStructure q = new QueryCombinedStructure();
+		QuerySimilarityStructure similarity = new QuerySimilarityStructure();
+		IMoleculeSet molecules = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+		MoleculeReader reader = new MoleculeReader();
+		for (IStructureRecord record : target) {
+			molecules.addAtomContainer(reader.process(record));
 		}
-		q.setMethod(QueryInfo.METHOD_SIMILARITY);
-		Object structure = get(DBWorkflowContext.STRUCTURES);
-		if ((structure != null) && (structure instanceof IMolecule))
-			q.setMolecule((IMolecule)structure);
-		
-		
-		//datasets
-		ArrayList<SourceDataset> datasets = new ArrayList<SourceDataset>();
-        while (rs.next()) {
-        	datasets.add(query.getObject(rs));
-        };
-        if (datasets.size()>0) {
-	        SourceDataset[] ds = new SourceDataset[datasets.size()];
-	        QueryInfo.setDatasets(datasets.toArray(ds));
-        }
-        
-        //identifiers
-		
-        if (get(DBWorkflowContext.PROFILE) != null) {
-        	Profile profile = (Profile) get(DBWorkflowContext.PROFILE);
-            String[] fn = new String[profile.size()];
-            Iterator<Property> p = profile.values().iterator();
-            int i=0;
-            while (p.hasNext()) {
-            	fn[i] = p.next().getName();
-            	i++;
-            }
-            	
-            QueryInfo.setFieldnames(fn);
-        }
-        
-        return q;
-	};	
+		similarity.setValue(molecules);
+		similarity.setThreshold(0.5);
+		similarity.setName(similarity.toString());
+		q.add(similarity);
+		q.setScope(null);
+		return q;
+	}
 }

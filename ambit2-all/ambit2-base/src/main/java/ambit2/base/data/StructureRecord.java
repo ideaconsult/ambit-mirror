@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.base.data;
 
-import java.lang.ref.Reference;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,6 +43,9 @@ public class StructureRecord implements IStructureRecord {
 	protected LiteratureEntry reference = null;
 	protected Map<Property,Object> properties;
 	
+	public Map<Property,Object> getMap() {
+		return properties;
+	}
 	public String getFormula() {
 		return formula;
 	}
@@ -68,6 +70,7 @@ public class StructureRecord implements IStructureRecord {
 	public void setInchi(String inchi) {
 		this.inchi = inchi;
 	}
+	
 	
 	public StructureRecord() {
 		this(-1,-1,"","");
