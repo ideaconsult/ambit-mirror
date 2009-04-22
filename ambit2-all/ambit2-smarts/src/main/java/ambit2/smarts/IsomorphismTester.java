@@ -389,11 +389,11 @@ public class IsomorphismTester
 		//This case should be very rare (el.atoms.length >= 4)
 				
 		//a stack which is used for obtaining all
-		//posible mappings between el.atoms and targetAt
+		//possible mappings between el.atoms and targetAt
 		//The stack element is an array t[], where t[k] means that 
 		//el.atoms[k] is mapped against atom targetAt(t[k])
-		//t[t.lenght-1] is used as a work variable which describes how mamy 
-		//element of the t array are mapped
+		//t[t.length-1] is used as a work variable which describes how many 
+		//elements of the t array are mapped
 		Stack<int[]> st = new Stack<int[]>();
 				
 		//System.out.println("el.atoms.length = " + el.atoms.length );
@@ -415,12 +415,13 @@ public class IsomorphismTester
 		{
 			int t[] = st.pop();
 			int n = t[t.length-1];
-			if (n == t.length-1)
+			
+			if (n == t.length-1)  //This condition means all atoms are matched
 			{
-				//new node
+				//new node 
 				Node newNode = node.cloneNode();
 				for(int k = 0; k < t.length-1; k++)
-					newNode.atoms[el.atomNums[k]] = targetAt.get(k);				
+					newNode.atoms[el.atomNums[k]] = targetAt.get(t[k]);				
 				newNode.sequenceElNum = node.sequenceElNum+1;
 				stack.push(newNode);
 				if (newNode.sequenceElNum == sequence.size())
@@ -450,7 +451,6 @@ public class IsomorphismTester
 						tnew[n] = i;
 						tnew[t.length-1] = n+1;
 						st.push(tnew);
-						
 					}
 			}
 		}
