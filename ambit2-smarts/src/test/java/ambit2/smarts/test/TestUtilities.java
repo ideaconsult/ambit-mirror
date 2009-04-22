@@ -798,7 +798,7 @@ public class TestUtilities
 			return -1;
 		}
 		
-		int numRecords = 10000;
+		int numRecords = 5000;
 		boolean CDKRes, isoRes;
 		int numDiff = 0;
 		int numOfIso = 0;
@@ -847,7 +847,7 @@ public class TestUtilities
 			System.out.println(e.toString());
 		}
 		
-		System.out.println("numDiff = " + numDiff + "  numIso = " + numOfIso + "   " + smarts);
+		System.out.println("  numDiff = " + numDiff + "  numIso = " + numOfIso + "   " + smarts);
 		return (numDiff);
 	}
 	
@@ -857,6 +857,38 @@ public class TestUtilities
 		Vector<String> keys = smKeys.getKeys();
 		for (int i = 0; i < keys.size(); i++)
 			compareIsoTester (keys.get(i), null);
+	}
+	
+	
+	void compareIsoTesterMulti(String inputSmilesFile)
+	{
+		try
+		{	
+			File file = new File(inputSmilesFile);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+						
+			int n = 0;
+			int nFailedStr = 0;
+			while (f.getFilePointer() < length)
+			{	
+				String line = f.readLine().trim();
+				if (line.length() < 10)  //Only larger fragments are tested
+					continue;
+				n++;
+				System.out.println("  " + line);
+				int res = compareIsoTester (line, null);
+				if (res > 0)
+					nFailedStr++;
+				System.out.println("nFailedStr = " + nFailedStr + "    nTest = " + n);
+				System.out.println();
+			}
+			f.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
 	}
 	
 //-------------------------------------------------------------------------------
@@ -975,6 +1007,19 @@ public class TestUtilities
 		//tu.compareIsoTesterMulti();
 		//tu.compareIsoTester("C",null);
 		//tu.testIsomorphismTester("C", "CCCCC");
+		//tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
+		
+		//These were problematic cases, but now are OK
+		//tu.compareIsoTester("S(OC)(=O)(=O)O",null);  //OK
+		//tu.compareIsoTester("C1(CC)(C(O)(CCC1C(C)C)C)C",null);  //OK
+		//tu.compareIsoTester("C1(c(c)c)(C(CN(CC1)C)C)C(C(C)O)O",null);  //OK
+		//tu.compareIsoTester("S(c(c)c)(=O)(=O)N(C)C",null);  //OK
+		//tu.compareIsoTester("C1(C=C)(C(C(CC2C1C(O)CC3(C(C(CO)=O)(O)CCC23)C)F)=CC=O)C",null);  //OK
+		//tu.compareIsoTester("C(C)(O)(CC)C(CC)(C)C",null);  //OK
+		//tu.compareIsoTester("S(N)(=O)(=O)c(cc)c",null);  //OK
+		//tu.compareIsoTester("S(N)(=O)(=O)c(cc)c",null);  //OK
+		//tu.compareIsoTester("N(C)(C)(C)CC",null);  //OK
+		
 	}
 	
 }
