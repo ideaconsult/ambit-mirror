@@ -1,2 +1,2 @@
 Package: ambit2.pubchem
-Main-Class: ambit2.pubchem.EntrezSearchProcessor
+Main-Class: ambit2.pubchem.SearchApplication
