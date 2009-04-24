@@ -1,40 +1,8 @@
-/* EntrezSearchProcessor.java
- * Author: nina
- * Date: Mar 20, 2009
- * Revision: 0.1 
- * 
- * Copyright (C) 2005-2009  Ideaconsult Ltd.
- * 
- * Contact: nina
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- * All we ask is that proper credit is given for our work, which includes
- * - but is not limited to - adding the above copyright notice to the beginning
- * of your source code files, and to any copyright notice that you may distribute
- * with programs based on this work.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
- */
-
 package ambit2.pubchem;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
@@ -45,131 +13,93 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorException;
+import ambit2.pubchem.NCISearchProcessor.METHODS;
 
-/**
- * Searches PubChem for structures given search terms (via Entrez) and returns SDF files. 
- * @author nina
- *
- */
-public class EntrezSearchProcessor extends HTTPRequest<String, List<IStructureRecord>> {
-	
-	protected String entrezURL = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&maxret=1&term=%s";
-	//protected String term = "\"EINECS %s\"[All Fields] AND \"ChemIDplus\"[SourceName]";
-
-	protected final EntrezESearchParser parser = new EntrezESearchParser();
-	protected final PUGProcessor pug = new PUGProcessor();
-	protected boolean retrieve_sdf = true;
-	
-	public boolean isRetrieve_conformers() {
-		return pug.isRetrieveConformers();
-	}
-	public void setRetrieve_conformers(boolean retrieve_conformers) {
-		pug.setRetrieveConformers(retrieve_conformers);
-	}
-	public boolean isRetrieve_sdf() {
-		return retrieve_sdf;
-	}
-	/**
-	 * If true (default) retrieves SDF via two stage query (Entrez + PUG).
-	 * if false, retrieves only Pubchem CIDs by Entrez query. 
-	 * @param retrieve_sdf
-	 */
-	public void setRetrieve_sdf(boolean retrieve_sdf) {
-		this.retrieve_sdf = retrieve_sdf;
-	}
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8215370335359483817L;
-
-	@Override
-	protected List<IStructureRecord> parseInput(String target, InputStream in)
-			throws ProcessorException {
-		try {
-			 return parser.process(in);
-		} catch (AmbitException x) {
-			throw new ProcessorException(this,x);
-		}
-	}
-	@Override
-	protected void prepareOutput(String target, OutputStream out)
-			throws ProcessorException {
-		
-	}
-	public List<IStructureRecord>  process(String target) throws AmbitException {
-		try {
-			setUrl(String.format(entrezURL,URLEncoder.encode(target, "US-ASCII")));
-			List<IStructureRecord> records = super.process(target);
-			if ((records == null) || (records.size()==0))
-				throw new NotFoundException(target);
-			for (int i=records.size()-1;i>=0; i--)
-				if (!records.get(i).getFormat().equals(PUGProcessor.PUBCHEM_CID))
-					throw new ProcessorException(this,records.get(i).getFormat()+records.get(i).getContent());
-			if (retrieve_sdf)
-				return pug.process(records);
-			else return records;
-		} catch (Exception x) {
-			throw new ProcessorException(this,x);
-		}
-
-	}
-	protected String format(IStructureRecord record, String source, String einecs) {
-		String content = record.getContent();
-		String reportedsource = source;
-		StringBuilder b = new StringBuilder();
-		if ((source==null) || ("".equals(source)))
-			reportedsource = "PUBCHEM-Any";
-		if (retrieve_sdf) {
-			String replace =
-					"\n> <EINECS>\n"+
-					einecs+"\n"+
-					"\n"+
-					"> <ENTREZ_SOURCE>\n"+
-					reportedsource+"\n\n";
-			int index = content.indexOf("$$$$");
-			b.append(content.substring(0,index-1));
-			b.append(replace);
-			b.append(content.substring(index));
+public class SearchApplication {
+	public void processCactus(String file,String query,NCISearchProcessor.METHODS output,long wait,double random) {
+		NCISearchProcessor p = new NCISearchProcessor();
+		p.setRandom(random);
+		p.setWait_ms(wait);
+		if (file != null) {
+			BufferedReader reader=null;
+			try {
+				reader = new BufferedReader(new FileReader(new File(file)));
+				String line ="";
+                while((line = reader.readLine()) != null) {
+                	if ("".equals(line.trim())) continue;
+                	
+        			try {
+        				p.setOption(output);
+        				System.out.println(p.process(line));
+        			} catch (Exception x) {
+        				System.err.print(query);
+        				System.err.print(',');
+        				System.err.print(output);
+        				System.err.print(',');			
+        				System.err.print(x.getMessage());
+        				x.printStackTrace();
+        			}              	
+                }
+			} catch (Exception x) {
+				System.err.println(x.getMessage());				
+			} finally {
+				try {reader.close();} catch (Exception x) {}
+			}
+			Runtime.getRuntime().exit(0);	
 		} else {
-			b.append(content.toString());
-			b.append(',');
-			b.append(einecs);
-			b.append(',');
-			b.append(reportedsource);
-			b.append('\n');
+			try {
+				p.setOption(output);
+				System.out.println(p.process(query));
+			} catch (Exception x) {
+				System.err.print(query);
+				System.err.print(',');
+				System.err.print(output);
+				System.err.print(',');			
+				System.err.print(x.getMessage());
+				x.printStackTrace();
+			}
 		}
-		return b.toString();
 	}
-	/*
 	public static void main(String[] args) {
+		String query=null;
+		METHODS output=null;
 	    String source=null;
 	    String einecs=null;
 	    String file= null ;
+	    long wait = 0;
+	    double random = 1;
 	    boolean retrieve_sdf = true;
 	    boolean retrieve_conformers = true; 
 		Options cli = createOptions();
 		CommandLineParser parser = new PosixParser();
 		try {
 		    CommandLine line = parser.parse( cli, args,false );
+		    file = getFile(line);		    
+		    query = getQuery(line);
+		    output = getOutput(line);
+		    wait = getWait(line);
+		    random = getRandom(line);
+		    if (output!=null) {
+		    	SearchApplication app = new SearchApplication();
+		    	app.processCactus(file,query,output,wait,random);
+		    	Runtime.getRuntime().exit(0);	
+		    }
 		    source = getSource(line);
 		    einecs = getEinecs(line);
-		    file = getFile(line);
+
 		    retrieve_conformers = getRetrieveConformers(line);
 		    retrieve_sdf = getRetrieveSDF(line);
 		    if (line.hasOption("h") || (((file==null) && (einecs==null)))) {
 	    	    HelpFormatter formatter = new HelpFormatter();
-	    	    formatter.printHelp( EntrezSearchProcessor.class.getName(), cli );
+	    	    formatter.printHelp( SearchApplication.class.getName(), cli );
 	    	    Runtime.getRuntime().runFinalization();						 
 	    		Runtime.getRuntime().exit(0);
 		    }		    
 		} catch (Exception x ) {
 			System.err.println(x);
     	    HelpFormatter formatter = new HelpFormatter();
-    	    formatter.printHelp( EntrezSearchProcessor.class.getName(), cli );
+    	    formatter.printHelp( SearchApplication.class.getName(), cli );
     	    Runtime.getRuntime().runFinalization();						 
     		Runtime.getRuntime().exit(0);			
 		}
@@ -235,11 +165,35 @@ public class EntrezSearchProcessor extends HTTPRequest<String, List<IStructureRe
 	    	return line.getOptionValue( 'e' );
 	    else return null;
    }
+   protected static String getQuery(CommandLine line) {
+	    if( line.hasOption( 'q' ) ) 
+	    	return line.getOptionValue( 'q' );
+	    else return null;
+  }
+   protected static METHODS getOutput(CommandLine line) {
+	    if( line.hasOption( 'o' ) ) 
+	    	return METHODS.valueOf(line.getOptionValue( 'o' ).toLowerCase());
+	    else return null;
+ }   
    protected static String getFile(CommandLine line) {
 	    if( line.hasOption( 'f' ) ) 
 	    	return line.getOptionValue( 'f' );
 	    else return null;
   }   
+   protected static long getWait(CommandLine line) {
+	    if( line.hasOption( 'w' ) ) 
+	    	try {
+	    	return Long.parseLong(line.getOptionValue( 'w' ));
+	    	} catch (Exception x) {return 0;}
+	    else return 0;
+ }      
+   protected static double getRandom(CommandLine line) {
+	    if( line.hasOption( 'r' ) ) 
+	    	try {
+	    	return Double.parseDouble(line.getOptionValue( 'r' ));
+	    	} catch (Exception x) {return 1;}
+	    else return 0;
+}        
    protected static boolean getRetrieveSDF(CommandLine line) {
 	   return ! line.hasOption( 'c' ); 
    }     
@@ -248,11 +202,17 @@ public class EntrezSearchProcessor extends HTTPRequest<String, List<IStructureRe
   }        
 	protected static Options createOptions() {
     	Options options = new Options();
-        
+        /*
+    	Option repository   = OptionBuilder.withLongOpt("repository")
+        .hasArg()
+        .withArgName("repository")
+        .withDescription("pubchem or cactus.nci.nih.gov, default pubchem")
+        .create( "r" );
+    	*/
     	Option einecs   = OptionBuilder.withLongOpt("einecs")
         .hasArg()
         .withArgName("einecs")
-        .withDescription("The EINECS to be searched for.")
+        .withDescription("The EINECS to be searched for. (pubchem)")
         .create( "e" );
     	
     	Option source   = OptionBuilder
@@ -265,28 +225,59 @@ public class EntrezSearchProcessor extends HTTPRequest<String, List<IStructureRe
     	Option file   = OptionBuilder
         .hasArg()
         .withLongOpt("file")
-        .withArgName("txt file with EINECS numbers")
-        .withDescription("TXT file with EINECS numbers, one per row")        
+        .withArgName("txt file with results numbers")
+        .withDescription("TXT file with EINECS numbers (pubchem) or TXT file with query strings (e.g. CAS) for http://cactus.nci.nih.gov, one per row")        
         .create( "f" );    	
     	
     	Option cid   = OptionBuilder
         .hasArg()
         .withLongOpt("cidonly")
         .hasArg(false)
-        .withDescription("If true, retrieves Pubchem CIDs  only, otherwise retrieves SDFs")        
+        .withDescription("If true, retrieves Pubchem CIDs  only, otherwise retrieves SDFs (pubchem)")        
         .create( "c" );    	    	
     	
     	Option d3   = OptionBuilder
         .hasArg()
         .withLongOpt("d3")
         .hasArg(false)
-        .withDescription("Retrieve conformers")        
+        .withDescription("Retrieve conformers (pubchem)")        
         .create( "d" );  
+    	
+    	Option query   = OptionBuilder
+        .hasArg()
+        .withLongOpt("query")
+        .withArgName("Query string")
+        .withDescription("Query string (cas,smiles,inchi) to be submitted to http://cactus.nci.nih.gov")        
+        .create( "q" );     	
+    	
+    	StringBuilder b = new StringBuilder();
+    	String d = "";
+    	for (METHODS m : METHODS.values()) {
+    		b.append(d);
+    		b.append(m.toString());
+    		d = ",";
+    	}
+    	Option output   = OptionBuilder
+        .hasArg()
+        .withLongOpt("output")
+        .withArgName("type of data to be retrieved")
+        .withDescription(b.toString() + " (cactus.nci.nih.gov)")        
+        .create( "o" ); 
     	
     	Option help   = OptionBuilder
         .withLongOpt("help")
-        .withDescription("Search PubChem for EINECS numbers")              
-        .create( "h" );       	
+        .withDescription("Search PubChem for EINECS numbers or http://cactus.nci.nih.gov for smiles or inchi")              
+        .create( "h" );      
+    	
+    	Option wait   = OptionBuilder
+        .withLongOpt("wait interval, ms")
+        .withDescription("Waiting interval (ms) between subsequent queries (cactus.nci.nih.gov) default 0")              
+        .create( "w" );    
+    	
+    	Option random   = OptionBuilder
+        .withLongOpt("random")
+        .withDescription("Waiting interval coefficient (cactus.nci.nih.gov)")              
+        .create( "r" );       	
     	
      	options.addOption(help);
      	options.addOption(einecs);
@@ -294,8 +285,11 @@ public class EntrezSearchProcessor extends HTTPRequest<String, List<IStructureRe
      	options.addOption(file);
      	options.addOption(cid);
      	options.addOption(d3);
+     	options.addOption(query);
+     	options.addOption(output);
+     	options.addOption(wait);
+     	options.addOption(random);
 
     	return options;
     }	   
-    */
 }
