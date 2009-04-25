@@ -1007,7 +1007,7 @@ public class TestUtilities
 		//tu.compareIsoTesterMulti();
 		//tu.compareIsoTester("C",null);
 		//tu.testIsomorphismTester("C", "CCCCC");
-		//tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
+		tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
 		
 		//These were problematic cases, but now are OK
 		//tu.compareIsoTester("S(OC)(=O)(=O)O",null);  //OK

@@ -234,6 +234,31 @@ public class IsomorphismTester
 		return(isomorphismFound);
 	}
 	
+	public Vector<Integer> getIsomorphismPositions(IAtomContainer container)
+	{	
+		target = container;		
+		Vector<Integer> v = new Vector<Integer>(); 
+		if (query.getAtomCount() == 1)
+		{	
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			for (int i = 0; i < target.getAtomCount(); i++)
+			{	
+				if (qa.matches(target.getAtom(i)))
+					v.add(new Integer(i));
+			}	
+			return(v);
+		}	
+				
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{	
+			executeSequenceAtPos(i);
+			if (isomorphismFound)
+				v.add(new Integer(i));
+		}
+		executeSequence();
+		return(v);
+	}
 	
 	boolean singleAtomIsomorphism()
 	{	
@@ -270,6 +295,32 @@ public class IsomorphismTester
 				stack.push(node);
 			}	
 		}
+		
+		//Expanding the tree of all possible mappings 
+		while (!stack.isEmpty())
+		{
+			expandNode(stack.pop());
+			if (isomorphismFound)
+				break;
+		}
+	}
+	
+	void executeSequenceAtPos(int pos)
+	{	
+		isomorphismFound = false;
+		stack.clear();
+				
+		//Initial nodes
+		QuerySequenceElement el = sequence.get(0);
+		IAtom at = target.getAtom(pos);			
+		if(el.center.matches(at))
+		{	
+			Node node = new Node();
+			node.sequenceElNum = 0; 
+			node.nullifyAtoms(query.getAtomCount());
+			node.atoms[el.centerNum] = at;
+			stack.push(node);
+		}	
 		
 		//Expanding the tree of all possible mappings 
 		while (!stack.isEmpty())
