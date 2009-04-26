@@ -256,7 +256,6 @@ public class IsomorphismTester
 			if (isomorphismFound)
 				v.add(new Integer(i));
 		}
-		executeSequence();
 		return(v);
 	}
 	
@@ -310,7 +309,7 @@ public class IsomorphismTester
 		isomorphismFound = false;
 		stack.clear();
 				
-		//Initial nodes
+		//Initial node
 		QuerySequenceElement el = sequence.get(0);
 		IAtom at = target.getAtom(pos);			
 		if(el.center.matches(at))
@@ -338,7 +337,7 @@ public class IsomorphismTester
 		
 		if (el.center == null) //This node describers a bond that closes a ring
 		{
-			//Cheking whether this bond is present in the target
+			//Checking whether this bond is present in the target
 			IAtom tAt0 = node.atoms[query.getAtomNumber(el.atoms[0])]; 
 			IAtom tAt1 = node.atoms[query.getAtomNumber(el.atoms[1])];
 			IBond tBo = target.getBond(tAt0,tAt1);
