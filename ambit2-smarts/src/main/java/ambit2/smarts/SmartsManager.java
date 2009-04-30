@@ -64,7 +64,7 @@ public class SmartsManager
 	//The recursive atoms
 	Vector<SmartsAtomExpression> recAtoms = new Vector<SmartsAtomExpression>();	
 	
-	//Pointers to the new atoms that substitute the original recurvive atoms in the 
+	//Pointers to the new atoms that substitute the original recursive atoms in the 
 	//generated sub queries
 	IAtom newAtoms[];
 	
