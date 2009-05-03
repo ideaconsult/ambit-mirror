@@ -29,12 +29,8 @@ import javax.swing.table.TableColumnModel;
 import ambit2.base.io.MyIOUtilities;
 import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
-import ambit2.workflow.DBWorkflowContext;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Activity;
 import com.microworkflow.process.CompositeActivity;
@@ -117,7 +113,13 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         	@Override
         	public Object getValueAt(int row, int col) {
                 switch (col) {
+            	
                 case 0:
+                	if (selected == row)
+            				return ptr;
+                	else 
+                			return null;                
+                case 1:
                     return row+1;
                 case 3:
 	             		Activity a = getActivity(row);
@@ -133,12 +135,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 	               				return conditional;
 	               		} else
 	               			return null;
-	
-                case 1:
-                	if (selected == row)
-            				return ptr;
-                	else 
-                			return null;
+
                	
                 case 2: {
                     return super.getValueAt(row, 1);
@@ -166,7 +163,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 			cm.addColumn(newColumn);
 			if (columnSize[i] >0) 
 				newColumn.setMaxWidth(columnSize[i]);
-			newColumn.setCellRenderer(((i % 2) == 1)?renderer:clrRenderer);
+			newColumn.setCellRenderer(((i==0)||(i==3))?renderer:clrRenderer);
 		}
 		
         table = new JTable(wftm,cm) {
@@ -174,7 +171,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
 					TableColumnModel cm = getColumnModel();
 					for (int i = 0; i < cm.getColumnCount(); i++) {
 						TableColumn newColumn = cm.getColumn(i);
-						newColumn.setCellRenderer(((i % 2) == 1)?renderer:clrRenderer);
+						newColumn.setCellRenderer(((i==0)||(i==3))?renderer:clrRenderer);
 					}
 			};
 		};        
@@ -188,6 +185,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         table.getColumnModel().getColumn(1).setMaxWidth(32);
         table.getColumnModel().getColumn(3).setMaxWidth(32);        
         table.setShowVerticalLines(false);
+        table.setIntercellSpacing(new Dimension(0,0));
         
         table.addMouseListener(new MouseAdapter() {
         	  public void mousePressed(MouseEvent evt) {              
@@ -206,6 +204,7 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         	   }
         	 });
         JScrollPane pane = new JScrollPane(table);
+        pane.setBorder(null);
         pane.setPreferredSize(new Dimension(128,300));
        // pane.setMaximumSize(new Dimension(Integer.MAX_VALUE,200));
         

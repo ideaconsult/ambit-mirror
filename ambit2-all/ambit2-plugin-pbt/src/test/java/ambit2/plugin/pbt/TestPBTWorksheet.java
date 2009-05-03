@@ -84,25 +84,25 @@ public class TestPBTWorksheet {
 	public void testRTF() throws Exception {
 		setMolecule(MoleculeFactory.makeBenzene());
 		PBTExporter exporter = new PBTExporter();
-		exporter.setWorkbook(workbook);
-		File file = exporter.process(new FileOutputState(System.getProperty("user.home")+"/PBT.rtf"));
-		Assert.assertTrue(file.exists());
+		exporter.setOutput(new FileOutputState(System.getProperty("user.home")+"/PBT.rtf"));
+		FileOutputState file = exporter.process(workbook);
+		Assert.assertTrue(file.getFile().exists());
 	}
 	@Test
 	public void testPDF() throws Exception {
 		setMolecule(MoleculeFactory.makeBenzene());
 		PBTExporter exporter = new PBTExporter();
-		exporter.setWorkbook(workbook);
-		File file = exporter.process(new FileOutputState(System.getProperty("user.home")+"/PBT.pdf"));
-		Assert.assertTrue(file.exists());
+		exporter.setOutput(new FileOutputState(System.getProperty("user.home")+"/PBT.pdf"));
+		FileOutputState file = exporter.process(workbook);
+		Assert.assertTrue(file.getFile().exists());
 	}
 	@Test
 	public void testHTML() throws Exception {
 		setMolecule(MoleculeFactory.makeBenzene());
 		PBTExporter exporter = new PBTExporter();
-		exporter.setWorkbook(workbook);
-		File file = exporter.process(new FileOutputState(System.getProperty("user.home")+"/PBT.html"));
-		Assert.assertTrue(file.exists());
+		exporter.setOutput(new FileOutputState(System.getProperty("user.home")+"/PBT.html"));
+		FileOutputState file = exporter.process(workbook);
+		Assert.assertTrue(file.getFile().exists());
 	}	
 	@Test
 	public void testEvaluateSubstanceAntTSheet() throws Exception {

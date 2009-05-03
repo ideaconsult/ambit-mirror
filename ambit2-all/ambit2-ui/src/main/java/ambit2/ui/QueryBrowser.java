@@ -102,6 +102,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 		super(new BorderLayout());
 		browser_table = addWidgets(model);
 		JScrollPane p = new JScrollPane(browser_table);
+		p.setBorder(null);
 		p.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		browser_table.setPreferredScrollableViewportSize(new Dimension(600, 200));
 		add(p, BorderLayout.CENTER);

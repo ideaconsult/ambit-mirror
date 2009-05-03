@@ -35,7 +35,9 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		workflows.add(new ClassHolder("ambit2.plugin.search.SearchWorkflow","Search","Search by single property or identifier","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.search.AnalogsFinderWorkflow","Advanced search","Search by multiple criteria","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.search.ProfileWorkflow","Properties","Select properties to be displayed","images/database_statistics.png"));		
-//		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
+		workflows.add(new ClassHolder("ambit2.workflow.library.ExportWorkflow","Export results","Export results as PDF/RTF/HTML/SDF files","images/report.png"));
+		//workflows.add(new ClassHolder("ambit2.plugin.pbt.SavePBTWorkflow","Save","Save PBT assessment results into database","images/import.png"));
+
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
