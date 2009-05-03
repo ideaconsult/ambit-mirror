@@ -85,7 +85,9 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     private NanoPluginsManager pluginsManager;
     protected static Logger logger = Logger.getLogger("nplugins.shell.application.NPluginsApplication");
     
-    protected final SimpleInternalFrame rightPanel;
+    protected JSplitPane mainPane;
+    protected JSplitPane rightPane;
+    protected final SimpleInternalFrame mainPanel;
     protected final SimpleInternalFrame leftPanel;
     protected final SimpleInternalFrame detailsPanel;
     protected boolean exitConfirmed = true;
@@ -125,13 +127,13 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         leftPanel.setContent(leftComponent);
         
         Component rightComponent = buildMainRightPanel(pluginsManager);
-        rightPanel = new SimpleInternalFrame((rightComponent != null)?rightComponent.toString():"Main");
+        mainPanel = new SimpleInternalFrame((rightComponent != null)?rightComponent.toString():"Main");
         if (rightComponent!= null) {
-	        rightPanel.setPreferredSize(rightComponent.getPreferredSize());
-	        rightPanel.setMaximumSize(rightComponent.getMaximumSize());
-	        rightPanel.setMinimumSize(rightComponent.getMinimumSize());
+	        mainPanel.setPreferredSize(rightComponent.getPreferredSize());
+	        mainPanel.setMaximumSize(rightComponent.getMaximumSize());
+	        mainPanel.setMinimumSize(rightComponent.getMinimumSize());
         }
-        rightPanel.setContent(buildMainRightPanel(pluginsManager));
+        mainPanel.setContent(buildMainRightPanel(pluginsManager));
         
         JComponent detailsComponent = buildDetailsPanel(pluginsManager);
         detailsPanel = new SimpleInternalFrame((detailsComponent != null)?detailsComponent.toString():"Details");
@@ -224,24 +226,24 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
 	protected abstract void addPlugins(NanoPluginsManager manager) ;	
 
 	protected JComponent createMainPanel(Component parent) {
-        JSplitPane mainpane = UIFSplitPane.createStrippedSplitPane(
+        rightPane = UIFSplitPane.createStrippedSplitPane(
 
                 JSplitPane.VERTICAL_SPLIT,
-                rightPanel,
+                mainPanel,
                 detailsPanel
                 );
-        mainpane.setResizeWeight(0.8f);        	        
-        mainpane.setOpaque(false);
+        rightPane.setResizeWeight(0.8f);        	        
+        rightPane.setOpaque(false);
         
-        JSplitPane pane = UIFSplitPane.createStrippedSplitPane(
+        mainPane = UIFSplitPane.createStrippedSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
                 leftPanel,
-                mainpane
+                rightPane
                 );
-        pane.setResizeWeight(0.2f);        	        
-        pane.setOpaque(false);
+        mainPane.setResizeWeight(0.2f);        	        
+        mainPane.setOpaque(false);
         
-        return pane;
+        return mainPane;
 	}
 	
     protected JComponent buildMainLeftPanel(INanoPlugin plugin) {
@@ -508,14 +510,23 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
                 JComponent c = buildMainLeftPanel(p);
                 leftPanel.setContent(c);
                 leftPanel.setTitle(c.toString());
-                rightPanel.setContent(buildMainRightPanel(p));
+                mainPanel.setContent(buildMainRightPanel(p));
                 JComponent detail = buildDetailsPanel(p);
-                detailsPanel.setContent(detail);
-                detailsPanel.setVisible(detail!=null);
+                if (detail != null) { 
+                	detailsPanel.setContent(detail);
+                	rightPane.setLeftComponent(mainPanel);
+                	rightPane.setRightComponent(detailsPanel);
+                	mainPane.setLeftComponent(leftPanel);
+                	mainPane.setRightComponent(rightPane);
+                } else {
+                	mainPane.setLeftComponent(leftPanel);
+                	mainPane.setRightComponent(mainPanel);
+                }
+                detailsPanel.setVisible(detail!=null);                
                 String title = p.toString();
                 if (title == null) title = " ";
-                rightPanel.setTitle(title);
-                rightPanel.setFrameIcon(p.getIcon());
+                mainPanel.setTitle(title);
+                mainPanel.setFrameIcon(p.getIcon());
                 
                 
             }
