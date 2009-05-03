@@ -72,7 +72,9 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	        setBackground(Color.white);
 	        setPlugin(plugin);	        
 	        setObject(plugin.getWorkflows());
-	        add(new JScrollPane(objectList));
+	        JScrollPane pane = new JScrollPane(objectList);
+	        pane.setBorder(null);
+	        add(pane);
 	        setToolTipText("Double click to run the selected workflow");
 	        objectList.setToolTipText(getToolTipText());
 	}

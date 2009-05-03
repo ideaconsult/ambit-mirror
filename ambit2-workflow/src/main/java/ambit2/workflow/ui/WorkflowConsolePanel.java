@@ -28,7 +28,9 @@ public class WorkflowConsolePanel<T> extends AbstractEditor<T> implements Workfl
 		setAnimate(true);
 		
 		setEditable(false);
-		add(new JScrollPane(text),BorderLayout.CENTER);
+		JScrollPane pane = new JScrollPane(text);
+		pane.setBorder(null);
+		add(pane,BorderLayout.CENTER);
 		setPreferredSize(new Dimension(100,100));
 	}	
 	@Override
