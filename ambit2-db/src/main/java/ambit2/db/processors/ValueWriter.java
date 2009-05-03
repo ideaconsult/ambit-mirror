@@ -111,8 +111,11 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
      }
 
     protected boolean insertValue(String value, Property property, int idtuple, mode error) throws SQLException {
-    	if ((value != null) && (value.length()>255))
+    	if ((value != null) && (value.length()>255)) {
+    		logger.warn("Value truncated to 255 symbols "+value);
     		value = value.substring(0,255);
+    		
+    	}
     	if (structure == null) throw new SQLException("Undefined structure");    	
     	if (ps_insertstring == null)
     		ps_insertstring = connection.prepareStatement(insert_string);

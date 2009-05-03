@@ -6,11 +6,14 @@ import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;
+import ambit2.core.processors.Reporter;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.readers.IQueryRetrieval;
 
-public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output> extends AbstractDBProcessor<Q,Output> {
+public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output> 
+						extends AbstractDBProcessor<Q,Output>
+						implements Reporter<Q,Output> {
 
 	/**
 	 * 

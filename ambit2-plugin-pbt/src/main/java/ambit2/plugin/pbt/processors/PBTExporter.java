@@ -3,16 +3,16 @@ package ambit2.plugin.pbt.processors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.io.FileOutputState;
 import ambit2.core.io.MDLWriter;
-import ambit2.core.processors.structure.MoleculeWriter;
+import ambit2.core.processors.ProcessorFileExport;
 import ambit2.plugin.pbt.PBTWorkBook;
 
 import com.lowagie.text.Document;
@@ -27,61 +27,47 @@ import com.lowagie.text.rtf.RtfWriter2;
  * @author nina
  *
  */
-public class PBTExporter extends DefaultAmbitProcessor<FileOutputState, File> {
+public class PBTExporter extends ProcessorFileExport<PBTWorkBook> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5586011097281368056L;
-	protected PBTWorkBook workbook;
 
-	public PBTExporter() {
-		this(null);
+	@Override
+	protected void write(Document document, PBTWorkBook content)
+			throws DocumentException {
+		content.write(document);
+		
 	}
-	public PBTExporter(PBTWorkBook workbook) {
-		setWorkbook(workbook);
-	}	
-	public PBTWorkBook getWorkbook() {
-		return workbook;
+	@Override
+	protected void writeHTML(Document document, OutputStream out)
+			throws AmbitException {
+		HtmlWriter.getInstance(document, out); 
+	}
+	@Override
+	protected void writePDF(Document document, OutputStream out)
+			throws DocumentException {
+		PdfWriter.getInstance(document,out);
+	}
+	@Override
+	protected void writeRTF(Document document, OutputStream out)
+			throws AmbitException {
+		RtfWriter2.getInstance(document, out);
+	}
+	@Override
+	protected void writeSDF(PBTWorkBook content, OutputStream out)
+			throws AmbitException {
+	
+		IAtomContainer a = PBTProperties.getAtomContainer(content);
+		IChemObjectWriter writer = FileOutputState.getWriter( out,FileOutputState.extensions[FileOutputState.SDF_INDEX]);
+		try {
+			if (writer instanceof MDLWriter)
+				((MDLWriter)writer).setSdFields(a.getProperties());
+    		writer.write(a);
+    		writer.close();
+		} catch (Exception x) {
+			logger.warn(x);
+		}
 	}
 
-	public void setWorkbook(PBTWorkBook workbook) {
-		this.workbook = workbook;
-	}
-
-	public File process(FileOutputState target) throws AmbitException {
-		if (workbook == null) throw new AmbitException("Workbook not assigned!");
-        Document document = new Document(PageSize.A4.rotate());
-        try {
-        	File file = target.getFile();
-        	if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.SDF_INDEX])) {
-        		IAtomContainer a = PBTProperties.getAtomContainer(workbook);
-        		IChemObjectWriter writer = FileOutputState.getWriter( new FileOutputStream(file),FileOutputState.extensions[FileOutputState.SDF_INDEX]);
-        		try {
-        			if (writer instanceof MDLWriter)
-        				((MDLWriter)writer).setSdFields(a.getProperties());
-	        		writer.write(a);
-	        		writer.close();
-        		} catch (Exception x) {
-        			
-        		}
-        		return file;
-        	} else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.PDF_INDEX]))
-        		PdfWriter.getInstance(document, new FileOutputStream(file));
-        	else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.RTF_INDEX]))
-        		RtfWriter2.getInstance(document, new FileOutputStream(file));
-        	else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.HTML_INDEX]))
-        		HtmlWriter.getInstance(document, new FileOutputStream(file));        		
-            document.open();
-            workbook.write(document);
-            return file;
-        }
-        catch(FileNotFoundException e) {
-            throw new AmbitException(e);  
-        }
-        catch(DocumentException e) {
-            throw new AmbitException(e);
-        } finally {
-        	document.close();
-        }
-	}
 }
