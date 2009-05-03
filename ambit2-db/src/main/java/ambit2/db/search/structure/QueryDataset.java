@@ -19,7 +19,7 @@ public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,St
 	 */
 	private static final long serialVersionUID = -8329798753353233477L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,id_srcdataset from structure join struc_dataset using(idstructure) join src_dataset using (id_srcdataset) ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join struc_dataset using(idstructure) join src_dataset using (id_srcdataset) ";
 	public final static String where = " where src_dataset.name %s ?";
 	public QueryDataset() {
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
@@ -49,6 +49,11 @@ public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,St
 		else
 			params.add(new QueryParam<String>(String.class, getValue().getName()));
 		return params;
+	}
+	@Override
+	public String toString() {
+		if (getValue()==null) return "Datasets";
+		return super.toString();
 	}
 
 

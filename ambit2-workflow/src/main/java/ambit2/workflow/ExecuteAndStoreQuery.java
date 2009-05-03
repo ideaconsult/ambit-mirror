@@ -7,8 +7,11 @@ import ambit2.db.search.IStoredQuery;
 
 public class ExecuteAndStoreQuery extends ActivityPrimitive<IQueryObject,IStoredQuery> {
 	public ExecuteAndStoreQuery() {
+		this(DBWorkflowContext.STOREDQUERY);
+	}
+	public ExecuteAndStoreQuery(String resultTag) {
 		super(DBWorkflowContext.QUERY,
-			  DBWorkflowContext.STOREDQUERY,
+			  (resultTag==null)?DBWorkflowContext.STOREDQUERY:resultTag,
 			  new ProcessorCreateQuery());
 		setName("Query");
 	}

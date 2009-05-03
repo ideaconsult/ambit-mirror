@@ -35,12 +35,14 @@ import java.util.Hashtable;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellEditor;
@@ -203,14 +205,13 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 				  Object renderer = null;
 				  if (value !=null) { 
 					  renderer = defaultRenderersByColumnClass.get(value.getClass());
-		            if (renderer != null) {
-		                return (TableCellRenderer)renderer;
+		            if (renderer == null) {
+		            	renderer = getDefaultRenderer(value.getClass().getSuperclass());
 		            }
-		            else {
-		                return getDefaultRenderer(value.getClass().getSuperclass());
-		            }
-				  } else  
-				  return super.getCellRenderer(row,column);
+				  } else renderer = super.getCellRenderer(row,column);
+				  if (renderer instanceof JLabel)
+					  ((JLabel)renderer).setHorizontalAlignment(SwingConstants.RIGHT);
+				  return (TableCellRenderer)renderer;
 
 			}
 			

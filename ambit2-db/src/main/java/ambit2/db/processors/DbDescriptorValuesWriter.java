@@ -47,6 +47,7 @@ import ambit2.base.data.Property;
 import ambit2.core.data.IntArrayResult;
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.descriptors.processors.DescriptorValue2Property;
 
 
 /**
@@ -62,10 +63,12 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 	 */
 	private static final long serialVersionUID = 3453741433797677188L;
 	protected Dictionary descriptorDictionary;
+	protected DescriptorValue2Property helper;
 
 	public DbDescriptorValuesWriter() {
 		descriptorDictionary = new Dictionary();
 		descriptorDictionary.setParentTemplate("Descriptors");
+		helper = new DescriptorValue2Property();
 	}
 	@Override
     protected DescriptorValue transform(DescriptorValue target) {
@@ -78,6 +81,8 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 	}
 	@Override
 	protected Iterable<Property> getPropertyNames(DescriptorValue descriptor) {
+		return helper.getPropertyNames(descriptor);
+		/*
 		List<Property> p = new ArrayList<Property>();
 		for (String name: descriptor.getNames()) {
 			p.add(Property.getInstance(name,
@@ -85,16 +90,14 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 					));
 		}
 		return p;
+		*/
 	}
-	/*
-	@Override
-	protected LiteratureEntry getReference(DescriptorValue descriptor) {
-		return LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference());
-	}
-	*/
+
 
 	@Override
 	protected Object getValue(DescriptorValue descriptor,Property property, int propertyIndex) {
+		return helper.getValue(descriptor, property, propertyIndex);
+		/*
         IDescriptorResult result = descriptor.getValue();
         double value = Double.NaN;
         if (result instanceof VerboseDescriptorResult)
@@ -111,6 +114,7 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
         else if (result instanceof StringDescriptorResultType) 
             return descriptor.getValue().toString();
         return new Double(value);    
+        */
 	}
 	@Override
 	protected Dictionary getTemplate(DescriptorValue descriptor)

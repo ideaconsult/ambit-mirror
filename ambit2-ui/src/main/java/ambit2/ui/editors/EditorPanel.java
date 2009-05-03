@@ -27,7 +27,6 @@ package ambit2.ui.editors;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,7 +48,7 @@ public class EditorPanel extends JPanel {
     }
 
 	public EditorPanel(IAmbitEditor editor) {
-        super(new BorderLayout());
+        super();
         setEditor(editor);
         setFocusable(false);
         setPreferredSize(new Dimension(200,200));

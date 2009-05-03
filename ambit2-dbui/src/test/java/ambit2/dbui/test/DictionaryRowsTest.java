@@ -34,7 +34,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
+import ambit2.base.data.ProfileListModel;
 import ambit2.db.IDBProcessor;
 import ambit2.db.results.DictionaryRows;
 import ambit2.db.search.DictionaryObjectQuery;
@@ -43,6 +45,7 @@ import ambit2.db.search.DictionarySubjectQuery;
 import ambit2.dbui.dictionary.DictionaryQueryPanel;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.editors.IAmbitEditor;
+import ambit2.ui.editors.SelectFieldsPanel;
 
 public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 
@@ -61,6 +64,8 @@ public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 		panel.setObject(query);
 		JOptionPane.showMessageDialog(null,panel.getJComponent());
 		rows.close();
+		JOptionPane.showMessageDialog(null,new SelectFieldsPanel(
+				new ProfileListModel(panel.getProfile()),null));
 	}
 	/*
     public void xtestCachedRecordSet() throws Exception {
@@ -150,8 +155,10 @@ public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{
 		
 	}
 	protected void demo() {
+		 
 		DictionarySubjectQuery query = new DictionarySubjectQuery();
 		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
 			initDatasource();
 			Connection c = datasource.getConnection();
 			IAmbitEditor editor = EditorPreferences.getEditor(query);

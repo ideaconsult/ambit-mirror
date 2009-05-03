@@ -69,7 +69,12 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	public UserManagerPlugin() {
 		super();
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));		
-		workflows.add(new ClassHolder("ambit2.plugin.usermgr.UserManagerWorkflow","Add user","Add new user in AMBIT database","images/users.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.UserManagerWorkflow","Users","Manage AMBIT database users","images/users.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.DatasetsWorkflow","Datasets","Manage datasets","images/database_statistics.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.TemplatesWorkflow","Templates","Manage templates","images/database_statistics.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.PropertiesWorkflow","Properties","Manage properties","images/database_statistics.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.ReferencesWorkflow","References","Manage references","images/database_statistics.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.usermgr.SavedResultsWorkflow","Saved results","Manage saved results","images/database_statistics.png"));		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
 		props.add(UserInteractionEvent.PROPERTYNAME);
@@ -101,11 +106,14 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
+		return null;
+	}
+	/*
+	@Override
+	public JComponent[] createDetailsComponent() {
 		if (detailsComponent == null) {
 			JComponent[] c = super.createDetailsComponent();
-			/*
-			 * smt weird happen if passing workflow at constructor - workflows can't be run!
-			 */
+
 			WorkflowConsolePanel reports = new WorkflowConsolePanel();
 			//WorkflowConsolePanel reports = new WorkflowConsolePanel(getWorkflow());
 			reports.setWorkflowContext(getWorkflowContext());
@@ -119,7 +127,7 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 		}
 		return detailsComponent;
 	}	
-	
+	*/
 	public ImageIcon getIcon() {
 	    return Utils.createImageIcon("ambit2/plugin/usermgr/images/user_16.png");
 	}
@@ -165,7 +173,7 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 			props.add(DBWorkflowContext.DATASOURCE);
 			p.setProperties(props);		    
 			optionsComponent = new JComponent[] {
-					new WorkflowViewPanel(workflow,action,getStopAction()),p};
+					new WorkflowViewPanel(workflow,action,getStopAction()),p,createConsole()};
 		} 
 		return optionsComponent;
 	}			

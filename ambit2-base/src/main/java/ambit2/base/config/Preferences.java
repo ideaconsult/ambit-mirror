@@ -62,16 +62,18 @@ public class Preferences {
 
 	public static Object[][] default_values = {
 		//{tag, name, default value, class, hint, hidden}
-		{DEFAULT_DIR,"Default directory","",String.class,"Remembers the directory of the last opened/saved file",false},		
-		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",false},
-		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false},
-        {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false},
+		{DATABASE,"Default database schema","ambit2",String.class,"Default database schema",false},
+		{PORT,"Default database port","33060",String.class,"",false},
+		{USER,"Default user","guest",String.class,"Default user name",false},		
+		{HOST,"Host","localhost",String.class,"",false},
+		{SCHEME,"Scheme","jdbc:mysql",String.class,"",false},		
+	//	{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",false},
+		//{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false},
+       // {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false},
         {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"Report an error if an unknown atom type is encountered.",false},
+		{DEFAULT_DIR,"Default directory","",String.class,"Remembers the directory of the last opened/saved file",false},		
         
-		{DATABASE,"Default database schema","ambit2",String.class,"Default database schema"},
-		{PORT,"Default database port","33060",String.class,""},
-		{HOST,"Host","localhost",String.class,""},
-		{SCHEME,"Scheme","jdbc:mysql",String.class,""},
+
 		/*
         {OPENBABEL_WIN,"Path to OpenBabel (Windows)","helper/openbabel/win/babel.exe",String.class,"Where to find Openbabel in Windows",false},
         {OPENBABEL_LINUX,"Path to OpenBabel (Linux)","helper/openbabel/linux/babel",String.class,"Where to find OpenBabel in Linux",false},

@@ -28,6 +28,7 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
+import ambit2.base.config.Preferences;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.workflow.DBWorkflowContext;
@@ -90,10 +91,17 @@ public class LoginSequence extends Sequence {
 	                    }
                 	} else li = (LoginInfo)ol;
                 	
-                    if (li != null)
+                    if (li != null) {
+                    	Preferences.setProperty(Preferences.DATABASE, li.getDatabase());
+                    	Preferences.setProperty(Preferences.HOST, li.getHostname());
+                    	Preferences.setProperty(Preferences.PORT, li.getPort());
+                    	Preferences.setProperty(Preferences.USER, li.getUser());
+                    	Preferences.setProperty(Preferences.PASSWORD, "");
+                    	Preferences.saveProperties(getClass().getName());
                     	return DatasourceFactory.getConnectionURI(
                             li.getScheme(), li.getHostname(), li.getPort(), 
-                            li.getDatabase(), li.getUser(), li.getPassword());      
+                            li.getDatabase(), li.getUser(), li.getPassword());
+                    }
                     else throw new Exception("Cancelled");
                 } else return o;    
             }
@@ -107,11 +115,12 @@ public class LoginSequence extends Sequence {
                             Object o = context.get(DBWorkflowContext.DBCONNECTION_URI);
                             if (o != null) {
                             	DataSource datasource = DatasourceFactory.getDataSource(o.toString());
-                                
+                            	
                                 try {
                                 	Connection conn = datasource.getConnection();
                                 	context.put(DBWorkflowContext.DATASOURCE,datasource);
                                 	conn.close();
+                                	
                                     return  true;
                                 } catch (Exception x) {
                                     context.remove(DBWorkflowContext.DBCONNECTION_URI);

@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
 
+
 /**
 The general format of the URLS are
 
@@ -23,14 +24,7 @@ Methods are currently /smiles, /inchi, /inchikey, /names,/image, /ficus, /ficts,
 public class NCISearchProcessor extends HTTPRequest<String, String>  {
 	protected enum METHODS {all,smiles,inchi,inchikey,names,image,ficus,ficts,uuuuu};
 	protected long wait_ms = 0;
-	protected double random = 1;
-	
-	public double getRandom() {
-		return random;
-	}
-	public void setRandom(double random) {
-		this.random = random;
-	}
+
 	public long getWait_ms() {
 		return wait_ms;
 	}
@@ -38,8 +32,16 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 		this.wait_ms = wait_ms;
 	}
 
-	protected static final String nci_url = "http://cactus.nci.nih.gov/chemical/structure/%s/%s";
-		//e.g. http://cactus.nci.nih.gov/chemical/structure/50-00-0/smiles
+	protected String nci_url = "%s/chemical/structure/%s/%s";
+	protected String host = "http://cactus.nci.nih.gov";
+		public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	//e.g. http://cactus.nci.nih.gov/chemical/structure/50-00-0/smiles
 	/**
 	 * 
 	 */
@@ -74,7 +76,6 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 	@Override
 	public String process(String target) throws AmbitException {
 		METHODS method = getOption(); 
-		
 		StringBuilder b = new StringBuilder();
 		b.append(target);
 		b.append("\t");
@@ -84,14 +85,15 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 			else if ((method==null) || method.equals(METHODS.all) || method.equals(m)) {
 				setOption(m);
 				try {
-					setUrl(String.format(nci_url, URLEncoder.encode(target, "US-ASCII"),getOption()));
+					setUrl(String.format(nci_url, getHost(),URLEncoder.encode(target, "US-ASCII"),getOption()));
 					if (wait_ms > 0) {
-						double w = wait_ms*Math.random()*random;
+						double w = wait_ms * (0.5 + Math.random());
 						Thread.sleep((long)w);
 					}
 					b.append(super.process(target));
 				} catch (Exception x) {
 					b.append("");
+					//if (isCancelled())	throw new AmbitException(x);
 				} finally {
 				}
 				b.append("\t");

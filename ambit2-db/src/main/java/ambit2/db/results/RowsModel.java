@@ -31,10 +31,14 @@ package ambit2.db.results;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
 
 import javax.swing.AbstractListModel;
 
-public class RowsModel<T> extends AbstractListModel implements PropertyChangeListener {
+import ambit2.base.data.TypedListModel;
+import ambit2.base.exceptions.AmbitException;
+
+public class RowsModel<T> extends AbstractListModel implements TypedListModel<T>, PropertyChangeListener {
 	/**
 	 * 
 	 */
@@ -45,7 +49,7 @@ public class RowsModel<T> extends AbstractListModel implements PropertyChangeLis
 		rows.addPropertyChangeListener(this);
 	}
 
-	public Object getElementAt(int index) {
+	public T getElementAt(int index) {
 		try {
 	        rows.first();
 	        rows.relative(index);
@@ -64,6 +68,28 @@ public class RowsModel<T> extends AbstractListModel implements PropertyChangeLis
 			fireContentsChanged(this,0,rows.size());
 
 		}
+		
+	}
+
+	public boolean hasNext() {
+		try {
+			rows.next();
+			return !rows.isAfterLast();
+		} catch (SQLException x) {
+			return false;
+		}		 
+	}
+
+	public T next() {
+		try {
+			return rows.getObject();
+		} catch (AmbitException x) {
+			return null;
+		}
+	}
+
+	public void remove() {
+		// TODO Auto-generated method stub
 		
 	}
 

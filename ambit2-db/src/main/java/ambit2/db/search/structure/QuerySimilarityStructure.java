@@ -104,8 +104,10 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	public List<QueryParam> getParameters() throws AmbitException {
 		return query.getParameters();
 	}
+	
 	@Override
-	public void setThreshold(Double threshold) {
+	public void setThreshold(double threshold) {
+		super.setThreshold(threshold);
 		if (query instanceof QuerySimilarityBitset)
 			((QuerySimilarityBitset)query).setThreshold(threshold);
 	}
@@ -113,8 +115,9 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	public double getThreshold() {
 		if (query instanceof QuerySimilarityBitset)
 			return ((QuerySimilarityBitset)query).getThreshold();
-		return 0.75;		
+		return super.getThreshold();		
 	}
+	
 	@Override
 	public void setCondition(NumberCondition condition) {
 		query.setCondition(condition);
@@ -168,5 +171,10 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	@Override
 	public void setName(String name) {
 		query.setName(name);
+	}
+	@Override
+	public String toString() {
+		if (getFieldname() == null) return "Search for similar structures/substructures";
+		else return query.toString();
 	}
 }

@@ -24,7 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.results;
 
-import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,9 +38,10 @@ import ambit2.base.data.IFilteredColumns;
 import ambit2.base.data.ISelectableRecords;
 import ambit2.base.data.ISortableColumns;
 import ambit2.base.data.Profile;
-import ambit2.base.data.PropertiesTableModel;
+import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.data.TypedListModel;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.UpdateExecutor;
@@ -70,11 +72,12 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	
 	protected RetrieveAtomContainer retrieveMolecule = new RetrieveAtomContainer();
 	protected RetrieveField retrieveField = new RetrieveField();
-	protected PropertiesTableModel fields;
+	protected TypedListModel<Property> fields;
+	protected Hashtable<String,Profile<Property>> properties ;
 	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();
 	protected UpdateExecutor<IQueryUpdate> updateExecutor = new UpdateExecutor<IQueryUpdate>();
 	protected QueryExecutor<IQueryObject> queryExecutor;
-
+	protected PropertyChangeListener propertyListener;
 
 	
 	public StoredQueryTableModel() {
@@ -85,26 +88,15 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		storedResults = new QueryStoredResults();
 		queryExecutor = new QueryExecutor<IQueryObject>();
 		queryExecutor.setResultTypeConcurency(ResultSet.CONCUR_UPDATABLE);
+		properties = new Hashtable<String,Profile<Property>>();		
+		propertyListener = new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				fields = new ProfileListModel(properties,true);				
+				fireTableStructureChanged();
+			}
+		};
 	}
-	/*
-	@Override
-	protected int getRecordsNumber() throws SQLException {
-		return storedResults.getFieldname().getRows();
-	
-		if (countRecords == null) countRecords = getConnection().prepareStatement(countRecordsSQL);
-		countRecords.setInt(1,getQuery().getId());
-		ResultSet count = countRecords.executeQuery();
-		int mr = 0;
-		while (count.next()) {
-			mr = count.getInt(1);
-		}
-		count.close();
-		getResultSet().last();
-		System.out.println(getResultSet().getRow());
-		return mr;
-	
-	}
-	*/
+
 	public IStoredQuery getQuery() {
 		return storedResults.getFieldname();
 	}
@@ -114,16 +106,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	public void setConnection(Connection connection) throws SQLException, DbAmbitException {
 		this.connection = connection;
 		setResultSet(null);
-		/*
-		if (countRecords != null)
-			countRecords.close(); 
-		countRecords = null;
-		*/
-		/*
-		if (selectRecords != null)
-			selectRecords.close();
-		selectRecords = null;
-		*/
+
 		if (structureRecords != null)
 			structureRecords.close();
 		structureRecords = null;
@@ -146,19 +129,11 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		}
 	}		
 	public void setQuery(IStoredQuery query) throws SQLException, AmbitException {
-		if (getConnection() == null) throw new AmbitException("No connection!");
+		
 		storedResults.setFieldname(query);
 		query.setRows(0);
 		setResultSet(null);
-		
-		/**
-		
-		if (selectRecords == null) selectRecords = getConnection().prepareStatement(
-				selectRecordsSQL + (order.get(new Integer(2))?"asc":"desc"),
-				ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-		selectRecords.setInt(1,getQuery().getId());
-		 * Execute query
-		 */
+		if (getConnection() == null) throw new AmbitException("No connection!");
 		try {
 			setResultSet(queryExecutor.process(storedResults));
 			query.setRows(maxRecords);		
@@ -229,7 +204,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		}
 	}
 	public int getColumnCount() {
-		return ((fields==null)?3:(3+fields.getRowCount()));
+		return ((fields==null)?3:(3+fields.getSize()));
 	}
 
 	public int getRowCount() {
@@ -296,7 +271,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			case 2: return records.getFloat(AbstractStructureQuery.FIELD_NAMES.metric.toString());
 			default:
 				return (fields==null)?"":
-					getField(idstructure, ((Property)fields.getValueAt(columnIndex-3,0)).getName());
+					getField(idstructure, ((Property)fields.getElementAt(columnIndex-3)).getName());
 				//return records.getInt("idstructure");
 			}
 		} catch (Exception x) {
@@ -370,7 +345,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		case 2: return "Metric";
 		default: {
 			return (fields==null)?Integer.toString(column):
-				fields.getValueAt(column-3,1).toString();
+				fields.getElementAt(column-3).getName();
 		}
 		}
     }
@@ -379,9 +354,14 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     	return columnIndex==0;
     }
     
-    public void setProfile(Profile profile) {
-    	
-    	fields = (profile==null)?null:new PropertiesTableModel(profile,true,2);
+    public void setProfile(String key,Profile<Property> profile) {
+    	Profile<Property> oldProfile = properties.get(key);
+    	if (oldProfile != null) oldProfile.removePropertyChangeListener(Profile.profile_property_change,propertyListener);
+    	if (profile != null) {
+	    	properties.put(key, profile);
+	    	profile.addPropertyChangeListener(Profile.profile_property_change,propertyListener);
+    	}
+    	fields = new ProfileListModel(properties,true);
     	fireTableStructureChanged();
     }
     public void sort(int column, boolean ascending)

@@ -62,7 +62,7 @@ public class StoredQueryTableModelTest extends RepositoryTest {
 		prop.setEnabled(true);
 		
 		profile.add(prop);
-		queryModel.setProfile(profile);
+		queryModel.setProfile("test",profile);
 
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 

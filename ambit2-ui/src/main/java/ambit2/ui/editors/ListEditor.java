@@ -1,31 +1,30 @@
 package ambit2.ui.editors;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
-import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.text.JTextComponent;
+import javax.swing.ListModel;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.binding.list.IndirectListModel;
-import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.adapter.Bindings;
+import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEditor<L>{
+public abstract class ListEditor implements IAmbitEditor<ListModel> {
 	/**
 	 * 
 	 */
@@ -33,156 +32,144 @@ public class ListEditor<L extends List<V>,V> extends JPanel implements IAmbitEdi
 
 
     /**
-     * Holds the edited Album and vends ValueModels that adapt Album properties.
+     * 
      */
-    protected JComponent[] fields;
-    protected String[] columns = {"Name"};
-    protected String detailsCaption = "Details";	
-    protected PresentationModel<V> detailsModel;	
-    private IndirectListModel<V> listModel;
-    private JList       objectList;
-    protected String listCaption = "List";
-    protected boolean editable;
+    protected EditorPanel editor;
+    public EditorPanel getEditor() {
+		return editor;
+	}
+
+
+	protected JList list;
+    protected JToolBar bar;
+    protected SelectionInList selectionInList;
+    protected JComponent component;
+
+	protected boolean editable;
     
 	public boolean isEditable() {
 		return editable;
 	}
 
 	public ListEditor() {
-		this(null,null,"List","Details");
+		this(null);
 	}
-	public ListEditor(L list,final String[] columns,  String listCaption, String detailsCaption) {
-		this(list,columns,columns,listCaption,detailsCaption);
-	}
-	public ListEditor(L list,final String[] columns, final String[] captions, String listCaption, String detailsCaption) {
+	public ListEditor(ListModel listModel) {
 		super();
-		//setLayout(new BorderLayout());
-		setListCaption(listCaption);
-		setDetailsCaption(detailsCaption);
-		add(buildPanel(list, columns,captions));
+		createComponents();
+		component = buildPanel();
+		setObject(listModel);
 	}
-	protected PresentationModel createPresentationModel() {
-		return new PresentationModel<V>(new ValueHolder(null, true));
-	}	
-	protected void initComponents(L list,final String[] columns , final String[] captions) {
-		this.columns = columns;
-		setObject(list);		
-        detailsModel = new PresentationModel<V>(new ValueHolder(null, true));		
-		fields = new JTextComponent[columns.length];
-		for (int i=0; i < columns.length;i++) {
-		    JTextField t = BasicComponentFactory.createTextField(
-	                detailsModel.getModel(columns[i]));
-	        t.setEditable(false);
-	        fields[i] = t;
-		}
-	}
-	  public JComponent buildPanel(L list,final String[] columns, final String[] captions) {
-	        initComponents(list,columns,captions);
-
-	        FormLayout layout = new FormLayout(
-	                "right:pref, 3dlu, 150dlu:grow",
-	                "p, 1dlu, p, 9dlu, p, 1dlu, p, 3dlu, p, 3dlu, p, 3dlu, p, 9dlu, p");
-
-	        PanelBuilder builder = new PanelBuilder(layout);
-	        builder.setDefaultDialogBorder();
-	        CellConstraints cc = new CellConstraints();
-
-	        builder.addSeparator(listCaption,  cc.xyw(1,  1, 3));
-	        builder.add(new JScrollPane(
-	        		objectList),    cc.xy (3,  3));
-
-
-	        builder.addSeparator(detailsCaption, cc.xyw(1,  5, 3));
-	        int row = 7;
-	        for (int i=0; i < columns.length;i ++) {
-		        builder.addLabel(BeanEditor.capitalizeFirstLetter(captions[i]), cc.xy (1,  row));
-		        builder.add(fields[i],cc.xy (3,  row));
-		        row += 2;
-	        }
-		
-	        return builder.getPanel();
-	    }
-	  
 	
-    private void initEventHandling() {
-    	objectList.addListSelectionListener(new ListSelectionHandler());
-    }	
-    
-    private class ListSelectionHandler implements ListSelectionListener {
+	public JComponent getJComponent() {
+		return component;
+	}
+	public void setObject(ListModel object) {
+		if (object != null) {
+			list.setModel(object);
+			selectionInList.setListModel(object);
+		} 
 
-        public void valueChanged(ListSelectionEvent e) {
-            if (e.getValueIsAdjusting())
-                return;
-            detailsModel.setBean((V) objectList.getSelectedValue());
-        }
-    }    
-	public void setObject(L object) {
-		if (listModel == null)
-			listModel = new IndirectListModel<V>(object);
-		else {
-			listModel.setList(object);
-		}
-		if (objectList == null) {
-			objectList = new JList(listModel);
-			setLayoutOrientation(JList.HORIZONTAL_WRAP);
-			objectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			objectList.setCellRenderer(getListCellRenderer(columns));
-			initEventHandling();
-		}
+	}		
+	protected void createComponents() {
+        list = new JList();
+        list.setMaximumSize(new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE));      
+    	selectionInList = new SelectionInList();
+		selectionInList.addPropertyChangeListener("value",new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				try {
+					IAmbitEditor a = getEditor(evt.getNewValue());
+					if (a!=null)
+						a.getJComponent().setBorder(BorderFactory.createEtchedBorder());	
+					editor.setEditor(a);
+
+				} catch (Exception x) {
+					editor.setEditor(null);
+					x.printStackTrace();
+				}
+				
+			}
+		});        	
+        Bindings.bind(list, selectionInList);	
+
+        editor = new EditorPanel();    
+//        editor.setBorder(BorderFactory.createEtchedBorder());
+        editor.setPreferredSize(new Dimension(400,200));
+        editor.setMaximumSize(new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE));   
+        bar = new JToolBar();
+        bar.setFloatable(false);
+        configureToolBar(bar);
+	}
+	public JComponent buildPanel() {
+        FormLayout layout = new FormLayout(
+	            "left:170dlu:grow,left:170dlu:grow",
+				"24dlu,top:pref:grow,top:pref:grow"); 	        		
+        
+        PanelBuilder builder = new PanelBuilder(layout);
+        CellConstraints cc = new CellConstraints();
+        builder.add(new JScrollPane(list),cc.xywh(1,2,2,1));
+        builder.add(editor,cc.xywh(1,3,2,1));
+        builder.add(bar,cc.xywh(1,1,2,1));
+        return builder.getPanel();
+	}
+	
+	protected void configureToolBar(JToolBar bar) {
+		
+		bar.add(new JButton(new Navigate("|<",selectionInList) {
+			public void actionPerformed(ActionEvent e) {
+				list.setSelectionIndex(0);
+			}
+		}));
+		bar.add(new JButton(new Navigate("<",selectionInList) {
+			public void actionPerformed(ActionEvent e) {
+				if (list.getSelectionIndex()<1)
+					list.setSelectionIndex(0);
+				else
+					list.setSelectionIndex(list.getSelectionIndex()-1);
+			}
+		}));		
+		bar.add(new JButton(new Navigate(">",selectionInList) {
+			public void actionPerformed(ActionEvent e) {
+				if (list.getSelectionIndex()>=list.getSize())
+					list.setSelectionIndex(list.getSize()-1);
+				else
+					list.setSelectionIndex(list.getSelectionIndex()+1);
+			}
+		}));			
+		bar.add(new JButton(new Navigate(">|",selectionInList) {
+			public void actionPerformed(ActionEvent e) {
+				list.setSelectionIndex(list.getSize()-1);
+
+			}
+		}));	
+
+		bar.addSeparator();
 		
 
 	}
-
+	protected abstract IAmbitEditor getEditor(Object object);
+	
+    
 	protected ListCellRenderer getListCellRenderer(String[] columns) {
 		return new CustomListCellRenderer(columns);
 	}
-	public L getObject() {
-		return (L)listModel.getList();
-	}
 
-	public JComponent getJComponent() {
-		return this;
-	}
-
-	
-    public V getSelectedValue() {
-    	return (V)objectList.getSelectedValue();
-    }
-	public String getListCaption() {
-		return listCaption;
-	}
-	public void setListCaption(String listCaption) {
-		this.listCaption = listCaption;
-	}
-	public String getDetailsCaption() {
-		return detailsCaption;
-	}
-	public void setDetailsCaption(String detailsCaption) {
-		this.detailsCaption = detailsCaption;
-	}
-	public String[] getColumns() {
-		return columns;
-	}
-	public void setColumns(String[] columns) {
-		this.columns = columns;
-	}	
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-		for (JComponent field : fields)
-			if (field instanceof JTextField) ((JTextField) field).setEditable(editable);
-			else if (field instanceof JFormattedTextField) ((JFormattedTextField) field).setEditable(editable);
-	}
-    public void setLayoutOrientation(int layoutOrientation) {
-    	if (objectList != null)
-    		objectList.setLayoutOrientation(layoutOrientation);
-    }
-    public void setCellRenderer(ListCellRenderer cellRenderer) {
-    	if (objectList != null)
-    		objectList.setCellRenderer(cellRenderer);
-    }
 	public boolean confirm() {
 		return true;
 	}
+
+
+
+	public ListModel getObject() {
+		return list.getModel();
+	}
+
+	public void setEditable(boolean editable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }
 
 class CustomListCellRenderer<V> extends DefaultListCellRenderer {
@@ -217,4 +204,19 @@ class CustomListCellRenderer<V> extends DefaultListCellRenderer {
     }
 
 
+}
+
+abstract class Navigate extends AbstractAction {
+	protected SelectionInList list;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3522101652589080995L;
+	public Navigate(String caption,SelectionInList list) {
+		super();
+		putValue(NAME, caption);
+		this.list = list;
+	}
+
+	
 }

@@ -39,13 +39,11 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityStructure;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ExecuteAndStoreQuery;
-import ambit2.workflow.library.QueryExecution;
 
 import com.microworkflow.process.Sequence;
 
@@ -68,8 +66,13 @@ public class FindSimilarSubstances extends Sequence {
 				return "Query initialization";
 			};		
 		};
+		
+	
 		addStep(records2query);
-		addStep(new QueryExecution(null));
+    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
+        p1.setName("Search similar substances");           
+		addStep(p1);		
+		//addStep(new QueryExecution(null));
 		/*
         //addStep(new QuerySelection());
 		addStep(records2query);
@@ -94,14 +97,22 @@ class Records2QueryProcessor extends DefaultAmbitProcessor<List<IStructureRecord
 		QuerySimilarityStructure similarity = new QuerySimilarityStructure();
 		IMoleculeSet molecules = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
 		MoleculeReader reader = new MoleculeReader();
+		
 		for (IStructureRecord record : target) {
 			molecules.addAtomContainer(reader.process(record));
 		}
 		similarity.setValue(molecules);
 		similarity.setThreshold(0.5);
 		similarity.setName(similarity.toString());
+		
 		q.add(similarity);
+		
+		/*
+		QueryFieldNumeric fields = new QueryFieldNumeric();
+		q.add(fields);
 		q.setScope(null);
+		return q;
+		*/
 		return q;
 	}
 }

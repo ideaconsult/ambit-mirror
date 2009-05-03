@@ -37,7 +37,7 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.db.readers.IRetrieval;
 import ambit2.db.search.IQueryObject;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.search.property.TemplateQuery;
 import ambit2.workflow.DBWorkflowContext;
 
 public class QueryProperties extends QueryPerformer<IQueryObject, Profile,Property> {

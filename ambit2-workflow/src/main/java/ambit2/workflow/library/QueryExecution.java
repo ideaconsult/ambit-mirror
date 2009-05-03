@@ -46,14 +46,20 @@ import com.microworkflow.process.Sequence;
  */
 public class QueryExecution extends Sequence {
 	public QueryExecution(IQueryRetrieval<IStructureRecord> query) {
+		this(query,null);
+	}
+	public QueryExecution(IQueryRetrieval<IStructureRecord> query, String resultTag) {
        
         addStep(new QueryInteraction(query));
-    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery();
+        addStep(new ScopeSelection());
+    	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery(resultTag);
         p1.setName("Search");           
 		addStep(p1);
+		/*
         UserInteraction<Boolean> browse = new UserInteraction<Boolean>(
         		true,DBWorkflowContext.USERCONFIRMATION,"CONTINUE","Browse results");
         addStep(browse);
+	*/
 	}
 	@Override
 	public String toString() {

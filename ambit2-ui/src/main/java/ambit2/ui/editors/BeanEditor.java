@@ -27,7 +27,6 @@ package ambit2.ui.editors;
 
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
@@ -36,7 +35,6 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -46,7 +44,8 @@ import com.jgoodies.forms.layout.FormLayout;
  *
  * @param <L>
  */
-public class BeanEditor<L> extends JPanel implements IAmbitEditor<L>{
+public class BeanEditor<L>  implements IAmbitEditor<L>{
+	protected JComponent component;
     protected JComponent[] fields;
     protected String[] columns = {"Name"};
     protected String[] captions = {"Name"};
@@ -70,7 +69,7 @@ public class BeanEditor<L> extends JPanel implements IAmbitEditor<L>{
 	}
 
 	public JComponent getJComponent() {
-		return this;
+		return component;
 	}
 	public BeanEditor(L object,final String[] columns,  String detailsCaption) {
 		this(object,columns,columns,detailsCaption);
@@ -78,7 +77,7 @@ public class BeanEditor<L> extends JPanel implements IAmbitEditor<L>{
 	public BeanEditor(L object,final String[] columns,String[] captions, String detailsCaption) {
 		super();
 		setDetailsCaption(detailsCaption);
-		add(buildPanel(object, columns,captions));
+		component = buildPanel(object, columns,captions);
 	}
 	protected PresentationModel createPresentationModel() {
 		return new PresentationModel<L>(new ValueHolder(null, true));

@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.io.MolFileFilter;
 import ambit2.base.io.MyIOUtilities;
 import ambit2.core.io.FileState;
@@ -93,11 +94,19 @@ public class FileSelector extends JPanel implements IAmbitEditor<FileState>, Act
 	}
 	public void actionPerformed(ActionEvent e) {
 		File file = MyIOUtilities.selectFile(JOptionPane.getFrameForComponent(this), "Select file",
-				"", getObject().getSupportedExtensions(),
+				Preferences.getProperty(Preferences.DEFAULT_DIR),
+				getObject().getSupportedExtensions(),
 				getObject().getSupportedExtDescriptions(), 
 				getObject() instanceof IInputState);
 		if (file != null) {
 			getObject().setFile(file);
+			try {
+				if (file.getParent()!=null) {
+				Preferences.setProperty(Preferences.DEFAULT_DIR,file.getParent());					
+				Preferences.saveProperties(getClass().getName());
+				}
+			} catch (Exception x) {}
+	
 			filename.setText(getObject().getFilename());
 			filename.setToolTipText(getObject().getFilename());
 		}

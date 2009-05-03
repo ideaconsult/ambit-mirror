@@ -10,7 +10,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.search.property.TemplateQuery;
 
 /**
  * Reads set of fields and values given template name 
@@ -18,7 +18,13 @@ import ambit2.db.search.TemplateQuery;
  *
  */
 public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor<IStructureRecord,Result> {
-	protected TemplateQuery template;
+	protected IQueryRetrieval<Property> propertyQuery;
+	public IQueryRetrieval<Property> getPropertyQuery() {
+		return propertyQuery;
+	}
+	public void setPropertyQuery(IQueryRetrieval<Property> propertyQuery) {
+		this.propertyQuery = propertyQuery;
+	}
 	protected RetrieveField names;
 	protected QueryExecutor executort;
 	protected QueryExecutor executorn;
@@ -28,7 +34,6 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 	private static final long serialVersionUID = -8369720672395084533L;
 
 	public ValuesByTemplateReader() {
-		template= new TemplateQuery();
 		names = new RetrieveField();
 		executort = new QueryExecutor();
 		executorn = new QueryExecutor();
@@ -46,12 +51,11 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 			throw new AmbitException("Structure not defined!");
 		Result book = null;
 				
-		template.setValue(getTemplateName());
 		ResultSet rs=null;
 		try {
-			rs = executort.process(template);
+			rs = executort.process(propertyQuery);
 			while (rs.next()) {
-				Property p = template.getObject(rs);
+				Property p = propertyQuery.getObject(rs);
 				
 				names.setFieldname(p.getName());
 				names.setValue(target);
@@ -62,8 +66,8 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 					while (values.next()) {
 						Object value = names.getObject(values);
 						if (book == null)
-							book = createResult();
-						set(book,p.getName(), value);
+							book = createResult(target);
+						set(book,p, value);
 					}
 					
 				} catch (Exception x) {
@@ -80,9 +84,8 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 		}
 		return book;
 	}
-	protected abstract Result createResult() throws AmbitException ;
-	protected abstract String getTemplateName();
-	protected abstract void set(Result result, String fieldname, Object value) throws AmbitException;
+	protected abstract Result createResult(IStructureRecord target) throws AmbitException ;
+	protected abstract void set(Result result, Property fieldname, Object value) throws AmbitException;
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		

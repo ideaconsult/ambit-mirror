@@ -32,6 +32,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ambit2.base.data.Profile;
+import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
 import ambit2.ui.editors.SelectFieldsPanel;
 
@@ -71,7 +72,7 @@ public class SelectFieldsPanelTest {
     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());     
     	SelectFieldsPanel panel = new SelectFieldsPanel();
     	panel.setHelp(help);
-    	panel.setObject(props);
+    	panel.setObject(new ProfileListModel(props));
     	panel.setBorder(BorderFactory.createEtchedBorder());
     	
     	JOptionPane.showMessageDialog(null,panel,panel.getClass().getName(),JOptionPane.PLAIN_MESSAGE);

@@ -42,6 +42,8 @@ import nplugins.shell.application.TaskMonitor;
 import nplugins.workflow.ExecuteWorkflowTask;
 import nplugins.workflow.MWorkflowPlugin;
 import ambit2.base.data.ClassHolder;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
@@ -115,6 +117,15 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
         
         listener.setProperties(props);
         listener.setWorkflowContext(getWorkflowContext());
+        
+        Profile<Property> profile = new Profile<Property>();
+        Property p = Property.getNameInstance(); p.setEnabled(true);
+        profile.add(p);
+        p = Property.getCASInstance(); p.setEnabled(true);
+        profile.add(p);
+        p = Property.getEINECSInstance(); p.setEnabled(true);
+        profile.add(p);
+        getWorkflowContext().put(DBWorkflowContext.PROFILE, profile);
 	}
 	
 	@Override
@@ -163,8 +174,13 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 			getWorkflowContext().put(DBWorkflowContext.ERROR, "Unable to start '"+clazz.getTitle()+ "' workflow! \n'"+ getWorkflow() + "' workflow already running!");
 			return;
 		}
-		Object o = Introspection.loadCreateObject(clazz.getClazz());
-		if ( o instanceof Workflow) 
+		Object o = null;
+		try {
+			o = Introspection.loadCreateObject(clazz.getClazz());
+		} catch (Exception x) {
+			getWorkflowContext().put(DBWorkflowContext.ERROR,x);
+		}
+		if ((o!=null) && ( o instanceof Workflow)) 
 			if ( getWorkflow() instanceof MyWorkflow)
 				((MyWorkflow)getWorkflow()).setWorkflow((Workflow)o);			
 			else
@@ -215,34 +231,38 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 				optionsComponent =  new JComponent[] {
 						new WorkflowViewPanel(workflow,getAction(),getStopAction()),
 						mw,
-						p
+						p,
+						createConsole()
 				};
 			} else
 				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction(),getStopAction())};
 		}
 		return optionsComponent;
 	}	
+	protected JComponent createConsole() {
+		WorkflowConsolePanel reports = new WorkflowConsolePanel();
+		reports.setWorkflowContext(getWorkflowContext());
+		Vector<String> props = new Vector<String>();	
+		props.add(DBWorkflowContext.LOGININFO);
+		props.add(DBWorkflowContext.DATASET);
+		props.add(DBWorkflowContext.ERROR);
+		props.add(DBWorkflowContext.BATCHSTATS);
+        props.add(BatchProcessor.PROPERTY_BATCHSTATS);
+        props.add(DBWorkflowContext.RECORD);
+        props.add(DBWorkflowContext.RECORDS);	
+		reports.setProperties(props);
+		return reports;
+	}
 	@Override
 	public JComponent[] createDetailsComponent() {
+		return super.createDetailsComponent();
+		/*
 		if (detailsComponent == null) {
 			JComponent[] c = super.createDetailsComponent();
-			/*
-			 * smt weird happen if passing workflow at constructor - workflows can't be run!
-			 */
-			WorkflowConsolePanel reports = new WorkflowConsolePanel();
-			reports.setWorkflowContext(getWorkflowContext());
-			Vector<String> props = new Vector<String>();	
-			props.add(DBWorkflowContext.LOGININFO);
-			props.add(DBWorkflowContext.DATASET);
-			props.add(DBWorkflowContext.ERROR);
-			props.add(DBWorkflowContext.BATCHSTATS);
-	        props.add(BatchProcessor.PROPERTY_BATCHSTATS);
-	        props.add(DBWorkflowContext.RECORD);
-	        props.add(DBWorkflowContext.RECORDS);	
-			reports.setProperties(props);
-			detailsComponent =  new JComponent[] {reports};
+			detailsComponent =  new JComponent[] {createConsole()};
 		}
 		return detailsComponent;
+		*/
 	}	
 	public int compareTo(INanoPlugin o) {
 		return getOrder()-o.getOrder();

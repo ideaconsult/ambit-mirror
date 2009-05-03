@@ -37,7 +37,7 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 		//int bc = bitset.cardinality();
 		StringBuffer b = new StringBuffer();
 			//b.append("select cbits,bc,? as NA,round(cbits/(bc+?-cbits),2) as ");
-			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,round(cbits/(bc+?-cbits),2) as tanimoto from");
+			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,round(cbits/(bc+?-cbits),2) as metric from");
 			b.append("\n(select fp1024.idchemical,structure.idstructure,(");
 			for (int h=0; h < 16; h++) {
 				b.append("bit_count(? & fp");

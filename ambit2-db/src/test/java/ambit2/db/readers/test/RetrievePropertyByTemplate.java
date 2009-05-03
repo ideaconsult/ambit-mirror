@@ -37,7 +37,7 @@ import org.dbunit.dataset.ITable;
 import ambit2.base.data.Property;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.search.property.TemplateQuery;
 
 public class RetrievePropertyByTemplate  extends RetrieveTest<Property> {
 

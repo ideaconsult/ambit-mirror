@@ -36,11 +36,8 @@ import java.util.List;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.StringCondition;
 
 /**
  * Retrieve names of string properties if setValue(0) ; 
@@ -49,7 +46,7 @@ import ambit2.db.search.StringCondition;
  * @author nina
  *
  */
-public class RetrieveFieldNamesByType extends AbstractQuery<String, Integer, NumberCondition,Property> implements IQueryRetrieval<Property>{ 
+public class RetrieveFieldNamesByType extends AbstractPropertyRetrieval<String, Integer, NumberCondition>{ 
 	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
 	public static String where = " where idproperty in (select idproperty from property_values where idtype %s ?)";
 		/**

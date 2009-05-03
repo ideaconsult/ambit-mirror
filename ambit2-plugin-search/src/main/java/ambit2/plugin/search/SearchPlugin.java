@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import nplugins.shell.INPluginUI;
@@ -31,7 +32,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	protected WorkflowOptionsLauncher contextListener;
 	public SearchPlugin() {
 		super();
-		workflows.add(new ClassHolder("ambit2.plugin.search.SearchWorkflow","Simple search","Search by single property or identifier","images/search_256.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.search.SearchWorkflow","Search","Search by single property or identifier","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.search.AnalogsFinderWorkflow","Advanced search","Search by multiple criteria","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.search.ProfileWorkflow","Properties","Select properties to be displayed","images/database_statistics.png"));		
 //		workflows.add(new ClassHolder("ambit2.plugin.pbt.ExportWorkflow","Export results","Export results as PDF/RTF/HTML files","images/PDF_256.png"));
@@ -54,6 +55,12 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		getWorkflowContext().put(DBWorkflowContext.LOGININFO,li);
 		getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);			
 		
+		
+		
+	}
+	@Override
+	public JComponent[] createDetailsComponent() {
+		return null;
 	}
 	@Override
 	public void setWorkflowContext(WorkflowContext workflowContext) {

@@ -33,6 +33,7 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+import ambit2.base.data.Profile;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.ui.table.StructureRecordsTableModel;
@@ -57,7 +58,7 @@ public class RecordsBrowserPanel extends AbstractStructureBrowserPanel<List<IStr
 	}
 
 	@Override
-	protected List<IStructureRecord> getQuery() {
+	protected List<IStructureRecord> getObject() {
 		return tableModel.getRecords();
 	}
 
@@ -70,11 +71,15 @@ public class RecordsBrowserPanel extends AbstractStructureBrowserPanel<List<IStr
 	@Override
 	protected void setQuery(List<IStructureRecord> object) throws AmbitException {
 		tableModel.setRecords(object);
+        tableModel.setProfile(DBWorkflowContext.PROFILE,(Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+        //tableModel.setProfile(DBWorkflowContext.CALCULATED,(Profile)getWorkflowContext().get(DBWorkflowContext.CALCULATED));
+        tableModel.setProfile(DBWorkflowContext.ENDPOINTS,(Profile)getWorkflowContext().get(DBWorkflowContext.ENDPOINTS));	        
 		
 	}
 
 	@Override
 	protected void animate(PropertyChangeEvent arg0) {
+		System.out.println(getClass().getName() + " " +arg0);
 		  if (DBWorkflowContext.RECORDS.equals(arg0.getPropertyName())) {
 	            Object o = arg0.getNewValue();
                 try {
@@ -84,11 +89,11 @@ public class RecordsBrowserPanel extends AbstractStructureBrowserPanel<List<IStr
                 }
 	        } else if (DBWorkflowContext.RECORD.equals(arg0.getPropertyName())) {
 	                try {
-	                    setQuery(getQuery());
+	                    setQuery(getObject());
 	                } catch (Exception x) {
 	                    x.printStackTrace();
 	                }
-		     } 	        	
+        	
 		  /*else if (DBWorkflowContext.DBCONNECTION_URI.equals(arg0.getPropertyName())) {
 	            	if (arg0.getNewValue() == null) 
 	            	try {
@@ -101,7 +106,14 @@ public class RecordsBrowserPanel extends AbstractStructureBrowserPanel<List<IStr
 	        	tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
 	        }
 	        */
-	        
+	    } else   if (DBWorkflowContext.PROFILE.equals(arg0.getPropertyName())) {
+	    	tableModel.setProfile(DBWorkflowContext.PROFILE,
+	    			(Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+	    //} else   if (DBWorkflowContext.CALCULATED.equals(arg0.getPropertyName())) {
+	  //  	tableModel.setProfile(DBWorkflowContext.CALCULATED,(Profile)getWorkflowContext().get(DBWorkflowContext.CALCULATED));
+	    } else   if (DBWorkflowContext.ENDPOINTS.equals(arg0.getPropertyName())) {
+	    	tableModel.setProfile(DBWorkflowContext.ENDPOINTS,(Profile)getWorkflowContext().get(DBWorkflowContext.ENDPOINTS));
+	    }	        
 		
 	}
 }

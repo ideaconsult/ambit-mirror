@@ -19,7 +19,7 @@ import javax.swing.border.Border;
 import ambit2.base.data.ClassHolder;
 import ambit2.ui.Utils;
 
-public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder> {
+public class ClassHolderEditor  {
 	public static Color BorderColor = new Color(216,240,250);
 	
 	public static Color SelectedColor = new Color(244,250,253);
@@ -28,16 +28,7 @@ public class ClassHolderEditor extends ListEditor<List<ClassHolder>, ClassHolder
 	 */
 	private static final long serialVersionUID = 7682349265145859359L;
 
-	public ClassHolderEditor(String listCaption, String detailsCaption) {
-		super(null,new String[] {},listCaption,detailsCaption);
-		setLayoutOrientation(JList.HORIZONTAL_WRAP);		
-		setCellRenderer(createListCellRenderer());
-	}
-	@Override
-	public void setObject(List<ClassHolder> object) {
-		super.setObject(object);
-		setLayoutOrientation(JList.HORIZONTAL_WRAP);		
-	}
+
 	public static ListCellRenderer createListCellRenderer() {
 		return createListCellRenderer(48);
 	}

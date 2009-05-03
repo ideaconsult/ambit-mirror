@@ -24,13 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.dbtools;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.BitSet;
-import java.util.Iterator;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.qsar.DescriptorValue;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -43,23 +39,20 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.DbReader;
-import ambit2.db.SessionID;
-import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.processors.DbDescriptorValuesWriter;
+import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.db.processors.FP1024Writer;
+import ambit2.db.processors.ProcessorMissingDescriptorsQuery;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
-import ambit2.db.search.structure.QueryMissingDescriptor;
 import ambit2.descriptors.processors.DescriptorsFactory;
-import ambit2.descriptors.processors.PropertyCalculationProcessor;
 import ambit2.workflow.ActivityPrimitive;
+import ambit2.workflow.DBProcessorPerformer;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.QueryInteraction;
+import ambit2.workflow.UserInteraction;
 import ambit2.workflow.library.DatasetSelection;
 import ambit2.workflow.library.LoginSequence;
 
@@ -69,8 +62,9 @@ import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class DBUtilityWorkflow extends Workflow {
+	protected static final String DESCRIPTORS_NEWQUERY = "ambit2.plugin.dbtools.DBUtilityWorkflow.DESCRIPTORS_NEWQUERY";
 	public DBUtilityWorkflow() {
-
+		
 
     
         Sequence seq=new Sequence();
@@ -78,12 +72,28 @@ public class DBUtilityWorkflow extends Workflow {
         seq.addStep(new QueryInteraction(new MissingFingerprintsQuery()));
         seq.addStep(addCalculationFP());
         
-        seq.addStep(new Primitive("NEWQUERY","NEWQUERY",new Performer() {
+        //seq.addStep(new QueryInteraction(q));
+	    DescriptorsFactory factory = new DescriptorsFactory();
+	    Profile<Property> descriptors;
+	    try {
+	    	descriptors = factory.process(null);
+	    } catch (Exception x) {
+	    	x.printStackTrace();
+	    	descriptors = new Profile<Property>();
+	    }
+	    UserInteraction<Profile<Property>> defineDescriptors = new UserInteraction<Profile<Property>>(
+        		descriptors,
+        		DBWorkflowContext.DESCRIPTORS,
+        		"Select descriptor(s)");	
+	    seq.addStep(defineDescriptors);
+        Primitive q = new Primitive(DBWorkflowContext.DESCRIPTORS,DESCRIPTORS_NEWQUERY,new Performer() {
         	@Override
         	public Object execute() throws Exception {
                 //QueryDataset q = new QueryDataset("Default");
-                QueryMissingDescriptor q = new QueryMissingDescriptor();
-        		return q;
+        		ProcessorMissingDescriptorsQuery p = new ProcessorMissingDescriptorsQuery();
+        		//TODO set scope - dataset
+        		//scope - entire db, query, dataset!! to be used elsewhere
+        		return p.process((Profile)getTarget());
         	}
         	@Override
         	public String toString() {
@@ -91,9 +101,9 @@ public class DBUtilityWorkflow extends Workflow {
         		return "Select descriptors";
         	}
         	
-        }));
-
-        //seq.addStep(new QueryInteraction(q));
+        });
+        q.setName("Select descriptor(s)");
+        seq.addStep(q);	    
         seq.addStep(addCalculationD());        
         
 //        DbSrcDatasetWriter TODO
@@ -116,21 +126,32 @@ public class DBUtilityWorkflow extends Workflow {
 		    ap.setName("Fingerprint calculations");	
 		    return ap;
 	}	
-	protected ActivityPrimitive addCalculationD() {
+	//TODO extract in a class and reuse in other workflows
+	protected Primitive addCalculationD() {
 
-        
+		final DescriptorsCalculator calculator = new DescriptorsCalculator();
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 		p1.add(new ProcessorStructureRetrieval());		
-		p1.add(new Calculator());
+		p1.add(calculator);
 		
 		DbReader<IStructureRecord> batch1 = new DbReader<IStructureRecord>();
 		batch1.setProcessorChain(p1);
-		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap1 = 
-			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
-				"NEWQUERY",
+		
+		DBProcessorPerformer<IQueryRetrieval<IStructureRecord>,IBatchStatistics> performer = 
+			new DBProcessorPerformer<IQueryRetrieval<IStructureRecord>,IBatchStatistics>(batch1,false) {
+			public IBatchStatistics execute() throws Exception {
+				Object o = getContext().get(DBWorkflowContext.DESCRIPTORS);
+				calculator.setDescriptors((Profile)o);
+				return super.execute();
+			}
+		};	
+		
+		Primitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap1 = 
+			new Primitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DESCRIPTORS_NEWQUERY,
 				DBWorkflowContext.BATCHSTATS,
-				batch1,false);
+				performer);
 	    ap1.setName("Descriptor calculations");		
 	    return ap1;
 	}
@@ -164,61 +185,3 @@ class FPGenerator extends DefaultAmbitProcessor<IStructureRecord,IStructureRecor
 	
 }
 
-class Calculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2912324506031402660L;
-	MoleculeReader reader = new MoleculeReader();
-	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
-    DescriptorsFactory d = new DescriptorsFactory();
-    Profile descriptors = null;
-    DbDescriptorValuesWriter writer = new DbDescriptorValuesWriter();
-    protected PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
-    
-    public IStructureRecord process(IStructureRecord target)
-    		throws AmbitException {
-    	IAtomContainer a = reader.process(target);
-    	ha.process(a);
-    	writer.setStructure(target);
-    	if (descriptors==null)	descriptors = d.process(null);
-		Iterator<Property> i = descriptors.getProperties(true);
-		int count = 0;
-		int countValues = 0;
-		while (i.hasNext()) {
-			try {
-				Property p = i.next();
-				if (p.isEnabled()) {
-					calc.setProperty(i.next());
-					DescriptorValue value = calc.process(a);
-					writer.write(value);
-				}
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
-			
-		}    	
-    	
-    	return target;
-
-    }
-	public void open() throws DbAmbitException {
-		writer.open();
-	}
-	@Override
-	public void close() throws SQLException {
-		super.close();
-		writer.close();
-	}
-	@Override
-	public void setConnection(Connection connection) throws DbAmbitException {
-		super.setConnection(connection);
-		writer.setConnection(connection);
-	}
-	@Override
-	public void setSession(SessionID sessionID) {
-
-		super.setSession(sessionID);
-		writer.setSession(sessionID);
-	}
-}

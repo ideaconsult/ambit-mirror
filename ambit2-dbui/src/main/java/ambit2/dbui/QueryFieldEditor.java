@@ -65,7 +65,7 @@ public class QueryFieldEditor extends QueryEditor<Property,String, StringConditi
 				return super.getSize()+1;
 			}
 			@Override
-			public Object getElementAt(int index) {
+			public Property getElementAt(int index) {
 				if (index == 0) return null;
 				else
 					return super.getElementAt(index-1);

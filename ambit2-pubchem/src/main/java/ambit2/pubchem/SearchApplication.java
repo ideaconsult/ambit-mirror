@@ -17,9 +17,9 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
 
 public class SearchApplication {
-	public void processCactus(String file,String query,NCISearchProcessor.METHODS output,long wait,double random) {
+	public void processCactus(String file,String query,NCISearchProcessor.METHODS output,long wait,String host) {
 		NCISearchProcessor p = new NCISearchProcessor();
-		p.setRandom(random);
+		if (host != null) p.setHost(host);
 		p.setWait_ms(wait);
 		if (file != null) {
 			BufferedReader reader=null;
@@ -38,7 +38,7 @@ public class SearchApplication {
         				System.err.print(output);
         				System.err.print(',');			
         				System.err.print(x.getMessage());
-        				x.printStackTrace();
+        				if (p.isCancelled()) break;
         			}              	
                 }
 			} catch (Exception x) {
@@ -68,7 +68,6 @@ public class SearchApplication {
 	    String einecs=null;
 	    String file= null ;
 	    long wait = 0;
-	    double random = 1;
 	    boolean retrieve_sdf = true;
 	    boolean retrieve_conformers = true; 
 		Options cli = createOptions();
@@ -79,10 +78,9 @@ public class SearchApplication {
 		    query = getQuery(line);
 		    output = getOutput(line);
 		    wait = getWait(line);
-		    random = getRandom(line);
 		    if (output!=null) {
 		    	SearchApplication app = new SearchApplication();
-		    	app.processCactus(file,query,output,wait,random);
+		    	app.processCactus(file,query,output,wait,getHost(line));
 		    	Runtime.getRuntime().exit(0);	
 		    }
 		    source = getSource(line);
@@ -187,13 +185,13 @@ public class SearchApplication {
 	    	} catch (Exception x) {return 0;}
 	    else return 0;
  }      
-   protected static double getRandom(CommandLine line) {
-	    if( line.hasOption( 'r' ) ) 
+   protected static String getHost(CommandLine line) {
+	    if( line.hasOption( 'u' ) ) 
 	    	try {
-	    	return Double.parseDouble(line.getOptionValue( 'r' ));
-	    	} catch (Exception x) {return 1;}
-	    else return 0;
-}        
+	    	return line.getOptionValue( 'u' );
+	    	} catch (Exception x) {return null;}
+	    else return null;
+}         
    protected static boolean getRetrieveSDF(CommandLine line) {
 	   return ! line.hasOption( 'c' ); 
    }     
@@ -270,14 +268,18 @@ public class SearchApplication {
         .create( "h" );      
     	
     	Option wait   = OptionBuilder
+        .hasArg()    	
         .withLongOpt("wait interval, ms")
+        .withArgName("wait interval, ms")
         .withDescription("Waiting interval (ms) between subsequent queries (cactus.nci.nih.gov) default 0")              
         .create( "w" );    
     	
-    	Option random   = OptionBuilder
-        .withLongOpt("random")
-        .withDescription("Waiting interval coefficient (cactus.nci.nih.gov)")              
-        .create( "r" );       	
+
+    	
+    	Option host   = OptionBuilder
+        .withLongOpt("host")
+        .withDescription("Host (http://cactus.nci.nih.gov)")              
+        .create( "u" );       	
     	
      	options.addOption(help);
      	options.addOption(einecs);
@@ -288,7 +290,7 @@ public class SearchApplication {
      	options.addOption(query);
      	options.addOption(output);
      	options.addOption(wait);
-     	options.addOption(random);
+     	options.addOption(host);
 
     	return options;
     }	   

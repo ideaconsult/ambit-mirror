@@ -1,5 +1,6 @@
 package ambit2.plugin.analogs;
 
+import ambit2.workflow.library.DefineProfile;
 import ambit2.workflow.library.DefineStructure;
 import ambit2.workflow.library.LoginSequence;
 
@@ -37,15 +38,13 @@ public class CategoryBuildingWorkflow extends Workflow {
         Sequence seq=new Sequence();
         seq.setName("Category building");    	
         
-        
         seq.addStep(new DefineStructure());
-        //seq.addStep(new QuerySelection().addStep(new QueryExecution(new QueryField())));        
-        /*
-        seq.addStep(new EndpointSelection());
-        
         seq.addStep(new DefineProfile());
-        seq.addStep(new RetrieveProfileData());
-        seq.addStep(new CalculateProfileProperties());
+        seq.addStep(new RetrieveProfileData()); // for .RECORDS
+        seq.addStep(new StructureListDescriptorCalculator());
+        /*
+        seq.addStep(new RetrieveProfileData()); // for .RECORDS
+        seq.addStep(new CalculateProfileProperties()); for .RECORDS / DB
         */
         seq.addStep(new FindSimilarSubstances());
         /*
@@ -59,4 +58,35 @@ public class CategoryBuildingWorkflow extends Workflow {
 	public String toString() {
 		return "Category building";
 	}
+
+/*
+	protected Primitive<List<IStructureRecord>,IBatchStatistics> calcDescriptorsForRecords() {
+	
+		final DescriptorsCalculator calculator = new DescriptorsCalculator();
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p1.add(calculator);
+		
+		BatchStructuresListProcessor batch = new BatchStructuresListProcessor();
+		batch.setProcessorChain(p1);
+		
+		DBProcessorPerformer<List<IStructureRecord>,IBatchStatistics> performer = 
+			new DBProcessorPerformer<List<IStructureRecord>,IBatchStatistics>(batch) {
+			public IBatchStatistics execute() throws Exception {
+				Object o = getContext().get(DBWorkflowContext.DESCRIPTORS);
+				calculator.setDescriptors((Profile)o);
+				return super.execute();
+			}
+		};		
+		
+		Primitive<List<IStructureRecord>,IBatchStatistics> ap1 = 
+			new Primitive<List<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.RECORDS,
+				DBWorkflowContext.BATCHSTATS,
+				performer);
+			
+	    ap1.setName("Descriptor calculations");	
+	    return ap1;
+	}
+	*/
 }

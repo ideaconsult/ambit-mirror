@@ -76,5 +76,9 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 		String a3 = ((getFieldname()!=null)&&(getValue()!=null))?"and":"";
 		return String.format(sqlField,j,a1,a3,a2,order_descendant?"desc":"asc");
 	}
-
+	@Override
+	public String toString() {
+		if (fieldname == null) return "Previous search results";
+		return super.toString();
+	}
 }
