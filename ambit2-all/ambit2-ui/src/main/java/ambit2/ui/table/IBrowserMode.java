@@ -147,7 +147,7 @@ public interface IBrowserMode {
 	    
 	    },		
 	    Matrix {
-	    	protected int columns = 3;
+	    	protected int columns = 4;
 	    	protected int idcolumn = 2;
 	    	protected int contentcolumn = 1;
 	    	protected int cpr = 2;

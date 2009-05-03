@@ -1,5 +1,6 @@
 package ambit2.workflow.library;
 
+import ambit2.base.config.Preferences;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.FileState;
 import ambit2.workflow.UserInteraction;
@@ -37,7 +38,8 @@ public class InputFileSelection extends Sequence {
                     public boolean evaluate() {
                     	Object object = context.get(INPUTFILE);
                     	if ((object != null) && (object instanceof FileState)) {
-                    		return ((FileState)object).getFile().exists(); 
+                    		return ((FileState)object).getFile().exists();
+
                     	} 
                     	return false;
                     }

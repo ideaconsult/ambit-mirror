@@ -7,27 +7,32 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor;
 
-import ambit2.base.data.LiteratureEntry;
-import ambit2.db.search.structure.QueryMissingDescriptor;
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.processors.ProcessorMissingDescriptorsQuery;
+import ambit2.db.readers.IQueryRetrieval;
 
-public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor> {
+public class QueryMissingDescriptorTest extends QueryTest<IQueryRetrieval<IStructureRecord>> {
 	@Test
 	public void test() throws Exception {
 		Assert.assertEquals(
-		QueryMissingDescriptor.MISSING_DESCRIPTOR,
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure not in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where   title=?)",
 		query.getSQL());
 	}
 	@Override
-	protected QueryMissingDescriptor createQuery() throws Exception {
-		XLogPDescriptor d = new XLogPDescriptor();
-		QueryMissingDescriptor q = new QueryMissingDescriptor();
-		q.setValue("XLogP");
-		q.setFieldname(LiteratureEntry.getInstance(d.getSpecification().getImplementationIdentifier()));
-		return q;
+	protected IQueryRetrieval<IStructureRecord> createQuery() throws Exception {
+		ProcessorMissingDescriptorsQuery processor = new ProcessorMissingDescriptorsQuery();
+		Profile<Property> profile = new Profile<Property>();
+		Property property = Property.getInstance("","");
+		property.setClazz(XLogPDescriptor.class);
+		property.setEnabled(true);
+		profile.add(property);
+		return processor.process(profile);
 	}
 
 	@Override
-	protected void verify(QueryMissingDescriptor query, ResultSet rs) throws Exception {
+	protected void verify(IQueryRetrieval<IStructureRecord> query, ResultSet rs) throws Exception {
 		int count = 0;
 		while (rs.next()) {
 			count++;
@@ -36,3 +41,5 @@ public class QueryMissingDescriptorTest extends QueryTest<QueryMissingDescriptor
 		
 	}
 }
+
+

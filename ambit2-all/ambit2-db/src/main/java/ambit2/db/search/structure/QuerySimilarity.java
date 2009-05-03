@@ -21,7 +21,7 @@ public abstract class QuerySimilarity<F,T,C extends IQueryCondition> extends Abs
 
 
 	}
-	public void setThreshold(Double threshold) {
+	public void setThreshold(double threshold) {
 		this.threshold = threshold;
 	}
 	public double getThreshold() {

@@ -153,7 +153,7 @@ public class StatusPanel extends WorkflowContextListenerPanel {
 
 	@Override
 	public String toString() {
-		return "Status";
+		return "Connection status";
 	}
 
 	@Override

@@ -45,6 +45,7 @@ import ambit2.db.LoginInfo;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
+import ambit2.workflow.IMultiWorkflowsPlugin;
 import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
@@ -107,7 +108,10 @@ public class DBUtilityPlugin extends DBWorkflowPlugin {
 		getWorkflowContext().put(DBWorkflowContext.DBCONNECTION_URI,uri);		
 		
 	}
-
+	@Override
+	public JComponent[] createDetailsComponent() {
+		return new JComponent[] {createConsole()} ;
+	}
 
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {

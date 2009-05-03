@@ -41,7 +41,7 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 
 	
 	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure join chemicals using(idchemical) where (%s %s ?) or (%s %s ?)";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join chemicals using(idchemical) where (%s %s ?) or (%s %s ?)";
 	
 	public String getSQL() throws AmbitException {
 		return String.format(sqlSMILES,getFieldname(),getCondition().getSQL(),getFieldname(),getCondition().getSQL());
@@ -84,5 +84,10 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
+	}
+	@Override
+	public String toString() {
+		if (getValue()==null) return "Search structure by SMILES, Inchi, Formula";
+		return super.toString();
 	}
 }

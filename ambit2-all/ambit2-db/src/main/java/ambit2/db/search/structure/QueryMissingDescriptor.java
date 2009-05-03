@@ -5,38 +5,51 @@ import java.util.List;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.NumberCondition;
+import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.QueryParam;
 
 /**
- * reads structures, for each there are no descriptors with given name and reference title.
+ * reads structures, for each there are / or there are not (depending on getCondition) descriptors with given name and reference title.
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryMissingDescriptor extends AbstractStructureQuery<LiteratureEntry,String,NumberCondition> {
+public class QueryMissingDescriptor extends AbstractStructureQuery<LiteratureEntry,String,BooleanCondition> {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = -8610455060315105098L;
 	public static String MISSING_DESCRIPTOR = 
-        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure where idstructure not in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where name=? and title=?)";
+        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure %s in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where %s %s %s)";
 	public static String ALL = 
-        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure";
+        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure";
+	public static String WHERE_NAME = "name=?";
+	public static String WHERE_TITLE = "title=?";
 
+	public QueryMissingDescriptor() {
+		setCondition(BooleanCondition.getInstance(BooleanCondition.BOOLEAN_CONDITION.B_NO.toString()));
+	}
 	public String getSQL() throws AmbitException {
-		if ((getValue()!=null) && (getFieldname()!=null)) 
-			return MISSING_DESCRIPTOR;
-		else
+
+		if ((getValue()!=null) || (getFieldname()!=null))  {
+			String wname = (getValue()!=null)?WHERE_NAME:"";
+			String wtitle = (getFieldname()!=null)?WHERE_TITLE:"";
+			String wand = ((getValue()!=null)&&(getFieldname()!=null))?"and":"";			
+			return String.format(MISSING_DESCRIPTOR,
+					getCondition().equals(BooleanCondition.BOOLEAN_CONDITION.B_YES)?"":"not",
+					wname,wand,wtitle);
+		} else
 			return ALL;
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
-		if ((getValue()!=null) && (getFieldname()!=null)) {
+		if (getValue()!=null) {
 			params.add(new QueryParam<String>(String.class, getValue()));		
-			params.add(new QueryParam<String>(String.class, getFieldname().getTitle()));
 		}
+		if (getFieldname()!=null) {
+			params.add(new QueryParam<String>(String.class, getFieldname().getTitle()));
+		}		
 		return params;
 	}
 	@Override

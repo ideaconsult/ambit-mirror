@@ -35,8 +35,13 @@ import ambit2.db.search.QueryCombined;
 public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected String getScopeSQL() {
-		if (combine_as_and)
+		if (isCombine_as_and())
 			return "select Q1.idquery,s.idchemical,idstructure,Q1.selected as selected,Q1.metric as metric from structure as s";
 		else
 			return "select QSCOPE.idquery,s.idchemical,idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric from structure as s";

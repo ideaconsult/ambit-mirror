@@ -13,6 +13,7 @@ import org.openscience.cdk.io.listener.IWriterListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
 import ambit2.base.data.Profile;
+import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
 import ambit2.ui.editors.SelectFieldsPanel;
 
@@ -95,7 +96,7 @@ public class AmbitSettingsListener implements IReaderListener, IWriterListener{
     }
     
     protected void launchUI() {
-    	SelectFieldsPanel sp = new SelectFieldsPanel(properties,"All available fields that can be exported are listed in the left pane. Select those fields you want to be exported and click \">\" button to move them to right pane.");
+    	SelectFieldsPanel sp = new SelectFieldsPanel(new ProfileListModel(properties),"All available fields that can be exported are listed in the left pane. Select those fields you want to be exported and click \">\" button to move them to right pane.");
     	JOptionPane.showMessageDialog(null,sp,"",JOptionPane.PLAIN_MESSAGE);
     }
 

@@ -47,7 +47,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String,IMolecule
 	 */
 	private static final long serialVersionUID = -4140784963337312377L;
 	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metrics from structure join chemicals using(idchemical) where (smiles = ?)";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join chemicals using(idchemical) where (smiles = ?)";
 	protected SmilesKey smilesKey = new SmilesKey();
 
 	

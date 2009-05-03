@@ -67,7 +67,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 					String sql = target.getSQL();
 					if (maxRecords > 0)
 						sql = sql + " limit " + Integer.toString(maxRecords);					
-					sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());					
+					sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
 					QueryExecutor.setParameters(sresults, params);
 					logger.debug(sresults);
 					ResultSet rs = sresults.executeQuery();

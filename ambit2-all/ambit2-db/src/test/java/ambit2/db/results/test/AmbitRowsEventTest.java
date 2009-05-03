@@ -58,7 +58,7 @@ import ambit2.db.results.AmbitRows;
 import ambit2.db.results.QueryChangeEvent;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.DictionaryObjectQuery;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.search.property.TemplateQuery;
 import ambit2.db.search.structure.QueryField;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;

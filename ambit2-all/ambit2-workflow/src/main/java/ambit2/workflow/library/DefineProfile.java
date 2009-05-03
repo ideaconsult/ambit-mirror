@@ -29,77 +29,174 @@
 
 package ambit2.workflow.library;
 
-import java.sql.ResultSet;
-import java.util.List;
-
-import ambit2.base.data.Dictionary;
+import ambit2.base.data.Endpoints;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.db.readers.IRetrieval;
-import ambit2.db.search.IQueryObject;
-import ambit2.db.search.property.RetrieveFieldNames;
+import ambit2.base.data.SelectionBean;
+import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
-import com.microworkflow.process.Primitive;
+import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Sequence;
+import com.microworkflow.process.TestCondition;
+import com.microworkflow.process.While;
 
 /**
  * Encapsulates profile definition (what properties are of interest).
- * Retrieves available fields from AMBIT database (by {@link RetrieveFieldNames}).
  * @author nina
  *
  */
-public class DefineProfile extends Sequence {
+public class DefineProfile extends While {
+	protected final String SELECTION = "DefineProfile.SELECTION";
+	protected enum ADD_PROPERTY {
+		add_property {
+			@Override
+			public String toString() {
+				return "Add properties (retrieved from database)";
+			}
+		},
+		add_endpoint {
+			@Override
+			public String toString() {
+				return "Add endpoint(s) (retrieved from database)";
+			}
+		},
+		add_descriptor {
+			@Override
+			public String toString() {
+				return "Add descriptor(s) (calculated)";
+			}
+		},		
+		clear_start_over {
+			@Override
+			public String toString() {
+				return "Clear the profile and start again";
+			}
+		},				
+		no_more {
+			@Override
+			public String toString() {
+				return "Quit profile definition, it is complete";
+			}
+		},		
+	
+	};		
 	public DefineProfile() {
+		
+		SelectionBean<ADD_PROPERTY> more = new SelectionBean<ADD_PROPERTY>(
+				ADD_PROPERTY.values(),"Define profile"
+				);
 
-		Primitive<IQueryObject, List<Dictionary>> retrieveTemplates = new Primitive<IQueryObject, List<Dictionary>>(
-				DBWorkflowContext.QUERY,
-				DBWorkflowContext.DESCRIPTORS,
-				new QueryTemplates("einecs_structures_V13Apr07-EINECS-CID.csv")
-				) {
-			@Override
-			public synchronized String getName() {
-				return "Select available descriptors";
-			};
-		};		
-		Primitive<IQueryObject, Profile> retrieveFields = new Primitive<IQueryObject, Profile>(
-				DBWorkflowContext.QUERY,
-				DBWorkflowContext.PROFILE,
-				new QueryProperties(DBWorkflowContext.DESCRIPTORS)
-				) {
-			
-			@Override
-			public synchronized String getName() {
-				return "Retrieve available endpoints";
-			};
-		};
-		addStep(retrieveTemplates);
-		addStep(retrieveFields);
-	    addStep(new UserInteraction<Profile>(
-	        		new Profile(),
+        UserInteraction<SelectionBean<ADD_PROPERTY>> ui_more = new UserInteraction<SelectionBean<ADD_PROPERTY>>(
+        		more,
+        		SELECTION,"Define profile");
+        
+	    UserInteraction<Profile<Property>> defineProperty = new UserInteraction<Profile<Property>>(
+	        		new Profile<Property>(),
 	        		DBWorkflowContext.PROFILE,
-	        		"Define profile"));
+	        		"Select properties");
+	    
+	    UserInteraction<Profile<Property>> defineEndpoint = new UserInteraction<Profile<Property>>(
+        		new Endpoints(),
+        		DBWorkflowContext.ENDPOINTS,
+        		"Select endpoint(s)");	   
+	    
+	    DescriptorsFactory factory = new DescriptorsFactory();
+	    Profile<Property> descriptors;
+	    try {
+	    	descriptors = factory.process(null);
+	    } catch (Exception x) {
+	    	x.printStackTrace();
+	    	descriptors = new Profile<Property>();
+	    }
+	    UserInteraction<Profile<Property>> defineDescriptors = new UserInteraction<Profile<Property>>(
+        		descriptors,
+        		DBWorkflowContext.DESCRIPTORS,
+        		"Select descriptor(s)");	 	    
+	    
+
+        Conditional descriptorCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION);
+	    				if (o instanceof SelectionBean)
+	    					return ADD_PROPERTY.add_descriptor.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                defineDescriptors,
+                null);
+        
+        descriptorCondition.setName( ADD_PROPERTY.add_descriptor.toString());   
+        
+        Conditional propertyCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION);
+	    				if (o instanceof SelectionBean)
+	    					return ADD_PROPERTY.add_property.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                defineProperty,
+                descriptorCondition);
+        
+        propertyCondition.setName( ADD_PROPERTY.add_property.toString());   
+        
+        Conditional endpointCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION);
+	    				if (o instanceof SelectionBean)
+	    					return ADD_PROPERTY.add_endpoint.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                defineEndpoint,
+                propertyCondition);
+        endpointCondition.setName( ADD_PROPERTY.add_endpoint.toString());           
+        
+        Sequence body = new Sequence();
+        body.addStep(ui_more);
+        body.addStep(endpointCondition);
+        setBody(body);
+
+        setTestCondition(new TestCondition() {
+        	@Override
+        	public boolean evaluate() {
+    			Object o = getContext().get(SELECTION);
+    			if (o instanceof SelectionBean) 
+    		
+    				switch (((SelectionBean<ADD_PROPERTY>)o).getSelected()) {
+    				case add_property: {
+    					return true;}
+    				case add_descriptor: {
+    					return true;}   
+    				case add_endpoint: {
+    					return true;}      				
+    				case no_more: {
+    					return false;
+    					}
+    				case clear_start_over: {
+    					String[] s = new String[]{DBWorkflowContext.PROFILE,DBWorkflowContext.ENDPOINTS,DBWorkflowContext.DESCRIPTORS};
+    					for (String a:s)
+    					try {
+    						Object profile = getContext().get(a);
+    						if (profile != null) ((Profile)profile).clear();
+    						getContext().put(a,null);
+    					} catch (Exception x) {}  						
+    					
+    					return true;
+    				}
+    				default: return true;
+    				
+    				}
+    			else return true;
+        	}
+        });
+        
+        setName("Define profile");	    
 	}
 }
 
-
-class QueryProfile extends QueryPerformer<IQueryObject, Profile,Property> {
-	@Override
-	protected IQueryObject getTarget() {
-		return new RetrieveFieldNames();
-	};
-	protected Profile process(IQueryObject query,ResultSet rs) throws Exception {							
-		throw new Exception("Not implemented");
-	}
-	protected Profile retrieve(IRetrieval<Property> query,
-			ResultSet rs) throws Exception {
-		System.out.println(query.toString());
-		Profile profile = new Profile();
-        while (rs.next()) {
-        	Property value = query.getObject(rs);
-        	profile.add(value);
-        };
-        return profile;
-	};	
-}

@@ -35,13 +35,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
+import javax.swing.JComponent;
+
+import org.apache.poi.hslf.record.ExVideoContainer;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.IDBProcessor;
+import ambit2.db.SessionID;
+import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.results.StoredQueryTableModel;
 import ambit2.db.search.IStoredQuery;
+import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 
@@ -49,14 +56,24 @@ import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
 
 
-public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuery,StoredQueryTableModel> {
+public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuery,StoredQueryTableModel> 
+											implements IAmbitEditor<IStoredQuery>, IDBProcessor<IStoredQuery, IStoredQuery> {
 
     /**
      * 
      */
     private static final long serialVersionUID = -779943857847100493L;
-
-    public QueryResultsPanel(IWorkflowContextFactory wfcfactory,String controlsPosition,BrowserMode mode) {
+    protected boolean editable;
+    public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+	public QueryResultsPanel() {
+        super((IWorkflowContextFactory)null,BorderLayout.NORTH,BrowserMode.Matrix);
+    }	
+	public QueryResultsPanel(IWorkflowContextFactory wfcfactory,String controlsPosition,BrowserMode mode) {
         super(wfcfactory,controlsPosition,mode);
     }
     public QueryResultsPanel(IWorkflowContextFactory wfcfactory,BrowserMode mode) {
@@ -99,22 +116,36 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
             		x.printStackTrace();
             	}
         } else   if (DBWorkflowContext.PROFILE.equals(arg0.getPropertyName())) {
-        	tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+        	tableModel.setProfile(DBWorkflowContext.PROFILE,(Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+        //} else   if (DBWorkflowContext.CALCULATED.equals(arg0.getPropertyName())) {
+        //	tableModel.setProfile(DBWorkflowContext.CALCULATED,(Profile)getWorkflowContext().get(DBWorkflowContext.CALCULATED));
+        } else   if (DBWorkflowContext.ENDPOINTS.equals(arg0.getPropertyName())) {
+        	tableModel.setProfile(DBWorkflowContext.ENDPOINTS,(Profile)getWorkflowContext().get(DBWorkflowContext.ENDPOINTS));
         }
         
         
         
     }
 
-    public synchronized IStoredQuery getQuery() {
+    public synchronized IStoredQuery getObject() {
         return tableModel.getQuery();
+    }
+    public void setObject(IStoredQuery query) {
+    	try {
+    		tableModel.setQuery(query);
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    	}
+    	
     }
     public synchronized void setQuery(IStoredQuery query) throws AmbitException {
     	try {
 	        Connection c = ((DataSource)getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
 	        tableModel.setConnection(c);
-	        tableModel.setQuery(query);
-	        tableModel.setProfile((Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+	        setObject(query);
+	        tableModel.setProfile(DBWorkflowContext.PROFILE,(Profile)getWorkflowContext().get(DBWorkflowContext.PROFILE));
+	       // tableModel.setProfile(DBWorkflowContext.CALCULATED,(Profile)getWorkflowContext().get(DBWorkflowContext.CALCULATED));
+	        tableModel.setProfile(DBWorkflowContext.ENDPOINTS,(Profile)getWorkflowContext().get(DBWorkflowContext.ENDPOINTS));	        
     	} catch (SQLException x) {
     		throw new AmbitException(x);
     	}
@@ -124,4 +155,41 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     public String toString() {
     	return "Search results";
     }
+    public JComponent getJComponent() {
+    	return this;
+    }
+    public boolean confirm() {
+    	try { 	close(); } catch (Exception x) {}
+    	return true;
+    }
+    public Connection getConnection() {
+    	return tableModel.getConnection();
+    }
+    public void setConnection(Connection connection) throws DbAmbitException {
+    	try {
+    	tableModel.setConnection(connection);
+    	} catch (SQLException x) {
+    		throw new DbAmbitException(x);
+    	}
+    	
+    }
+    public IStoredQuery process(IStoredQuery target) throws AmbitException {
+    	return target;
+    }
+    public void close() throws SQLException {
+    	if (getConnection()!=null)
+    		getConnection().close(); 
+    	
+    }
+    public SessionID getSession() {
+
+    	return null;
+    }
+    public void setSession(SessionID session) {
+    	
+    }
+    public void open() throws DbAmbitException {
+    	setObject(getObject());
+    }
+    
 }

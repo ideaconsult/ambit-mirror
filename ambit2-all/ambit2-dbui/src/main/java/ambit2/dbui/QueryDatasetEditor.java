@@ -49,6 +49,9 @@ import ambit2.db.search.structure.QueryDataset;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringCondition,IStructureRecord,QueryDataset>  {
 
@@ -58,13 +61,28 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 	private static final long serialVersionUID = -3741781796086220256L;
 	protected AmbitRows<SourceDataset> datasets;
 	
-	@Override
 	public JComponent buildPanel() {
 		datasets = new AmbitRows<SourceDataset>();
-		return super.buildPanel();
+		FormLayout layout = new FormLayout(
+	            "75dlu,3dlu,125dlu,3dlu,125dlu",
+				"pref,pref");        
+	     PanelBuilder panel = new PanelBuilder(layout);
+	     panel.setDefaultDialogBorder();
+
+	     CellConstraints cc = new CellConstraints();   
+
+	     panel.addSeparator("Dataset name", cc.xywh(1,1,5,1));	     
+	        
+	     JComponent c  = createConditionComponent();
+	     if (c != null) panel.add(c, cc.xywh(1,2,1,1));
+	     c = createValueComponent();
+	     if (c != null) panel.add(c, cc.xywh(1,2,5,1));	  
+	     return panel.getPanel();
 	}		
 	@Override
 	protected JComponent createConditionComponent() {
+		return null;
+		/*
 		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<StringCondition>(
                 		new StringCondition[] {
@@ -75,8 +93,9 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
                 			StringCondition.getInstance(StringCondition.C_SOUNDSLIKE),
                 		},
                 		presentationModel.getModel("condition")));
-		AutoCompleteDecorator.decorate(box);
+		//AutoCompleteDecorator.decorate(box);
 		return box;
+		*/
 	}
 
 	@Override

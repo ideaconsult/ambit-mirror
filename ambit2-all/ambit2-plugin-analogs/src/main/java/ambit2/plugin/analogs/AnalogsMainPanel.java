@@ -30,12 +30,9 @@
 package ambit2.plugin.analogs;
 
 import java.awt.Component;
-import java.awt.image.BufferedImage;
 import java.util.Vector;
 
 import javax.swing.JTabbedPane;
-
-import com.microworkflow.process.WorkflowContext;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -43,6 +40,8 @@ import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.RecordsBrowserPanel;
+
+import com.microworkflow.process.WorkflowContext;
 
 public class AnalogsMainPanel implements INPluginUI<INanoPlugin> {
 	protected INanoPlugin plugin;
@@ -57,6 +56,8 @@ public class AnalogsMainPanel implements INPluginUI<INanoPlugin> {
 		p.add(DBWorkflowContext.RECORDS);
 		p.add(DBWorkflowContext.ERROR);
 		p.add(DBWorkflowContext.DBCONNECTION_URI);
+		p.add(DBWorkflowContext.PROFILE);
+		p.add(DBWorkflowContext.ENDPOINTS);
 		query.setProperties(p);
 		query.setAnimate(true);
 		
@@ -65,11 +66,14 @@ public class AnalogsMainPanel implements INPluginUI<INanoPlugin> {
 		p.add(DBWorkflowContext.STOREDQUERY);
 		p.add(DBWorkflowContext.ERROR);
 		p.add(DBWorkflowContext.DBCONNECTION_URI);
+		p.add(DBWorkflowContext.ENDPOINTS);
+
 		results.setProperties(p);
 		results.setAnimate(true);
 		
-		tabbedPane.addTab("Query", query);
-		tabbedPane.addTab("Query results", results);
+		tabbedPane.addTab("Target chemical(s)", query);		
+		tabbedPane.addTab("Source chemical(s)", results);
+
 		return tabbedPane;
 	}
 	public Component getComponent() {

@@ -12,6 +12,7 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.StructureRecordsAppender;
 import ambit2.core.io.IInputState;
 import ambit2.db.processors.BatchDBProcessor;
+import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.workflow.DBProcessorPerformer;
 import ambit2.workflow.DBWorkflowContext;
@@ -35,21 +36,22 @@ public class DefineStructure extends While {
 		another_structure {
 			@Override
 			public String toString() {
-				return "Define another structure to be included in query";
+				return "Define another target structure";
 			}
 		},
-		no_more {
-			@Override
-			public String toString() {
-				return "No, the set of query structures is complete";
-			}
-		},
+
 		clear_start_over {
 			@Override
 			public String toString() {
-				return "Remove query structure(s) and start again";
+				return "Remove target structure(s) and start again";
 			}
-		},			
+		},	
+		no_more {
+			@Override
+			public String toString() {
+				return "No, the set of target structures is complete";
+			}
+		},		
 	};	
 	protected enum DEFINE_MODE {
 		structure_find {
@@ -73,7 +75,7 @@ public class DefineStructure extends While {
 		do_nothing {
 			@Override
 			public String toString() {
-				return "Reuse current query structure(s)";
+				return "Reuse current target structure(s)";
 			}
 		}			
 	};
@@ -85,7 +87,7 @@ public class DefineStructure extends While {
 
         UserInteraction<SelectionBean<ADD_STRUCTURE>> ui_more = new UserInteraction<SelectionBean<ADD_STRUCTURE>>(
         		more,
-        		MORESTRUCTURES,"Add more query structures");
+        		MORESTRUCTURES,"Add more target structures");
         
 		Sequence load = getFileLoadSequence();
 		load.addStep(ui_more);
@@ -126,8 +128,11 @@ public class DefineStructure extends While {
         
         Sequence q = new Sequence();
         q.addStep(new QuerySelection());
-        q.addStep(new QueryExecution(new QueryField()));
-        q.addStep(new SequenceAppendQueryResults());
+        q.addStep(new QueryExecution(new QueryField(),DBWorkflowContext.QUERY_POPUP));
+        UserInteraction browse = new UserInteraction(
+        		true,DBWorkflowContext.USERINTERACTION,DBWorkflowContext.QUERY_POPUP,"Browse results");
+        q.addStep(browse);        
+        q.addStep(new SequenceAppendQueryResults(DBWorkflowContext.QUERY_POPUP));
         q.addStep(ui_more);
 		
         Conditional findCondition = new Conditional(
@@ -141,11 +146,11 @@ public class DefineStructure extends While {
                 }, 
                 q,
                 drawCondition);
-        findCondition.setName("Find structure in database?");        
+        findCondition.setName("Find target structure in database?");        
         
         //find, draw,load
 		SelectionBean<DEFINE_MODE> mode = new SelectionBean<DEFINE_MODE>(
-				DEFINE_MODE.values(),"Define structure"
+				DEFINE_MODE.values(),"Define target structure"
 				);
 
         UserInteraction<SelectionBean<DEFINE_MODE>> defineMode = new UserInteraction<SelectionBean<DEFINE_MODE>>(
@@ -187,7 +192,7 @@ public class DefineStructure extends While {
         	}
         });
         
-        setName("Define query structure(s)");
+        setName("Define target structure(s)");
 	}
 	
 	protected Sequence getFileLoadSequence() {

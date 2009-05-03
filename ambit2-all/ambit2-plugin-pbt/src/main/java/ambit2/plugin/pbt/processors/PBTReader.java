@@ -3,12 +3,14 @@ package ambit2.plugin.pbt.processors;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.ValuesByTemplateReader;
+import ambit2.db.search.property.TemplateQuery;
 import ambit2.plugin.pbt.PBTWorkBook;
 
 /**
@@ -25,6 +27,9 @@ public class PBTReader extends ValuesByTemplateReader<PBTWorkBook> {
 	private static final long serialVersionUID = -8438218671883237423L;
 	public PBTReader() {
 		reader = new ProcessorStructureRetrieval();
+		TemplateQuery query = new TemplateQuery();
+		query.setValue(PBTWorkBook.PBT_TITLE);
+		setPropertyQuery(query);	
 	}
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
@@ -44,7 +49,7 @@ public class PBTReader extends ValuesByTemplateReader<PBTWorkBook> {
 	}
 	
 	@Override
-	protected PBTWorkBook createResult()throws AmbitException{
+	protected PBTWorkBook createResult(IStructureRecord target) throws AmbitException{
 		try {
 		return new PBTWorkBook();
 		} catch (Exception x) {
@@ -52,15 +57,13 @@ public class PBTReader extends ValuesByTemplateReader<PBTWorkBook> {
 		}
 	}
 	@Override
-	protected void set(PBTWorkBook result, String fieldname, Object value)
+	protected void set(PBTWorkBook result, Property fieldname, Object value)
 			throws AmbitException {
-		result.set(fieldname, value);
+		result.set(fieldname.getName(), value);
 		
 	}
-	@Override
-	protected String getTemplateName() {
-		return PBTWorkBook.PBT_TITLE;
-	}
+
+
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		

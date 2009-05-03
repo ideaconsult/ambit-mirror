@@ -29,6 +29,19 @@
 
 package ambit2.plugin.analogs;
 
+import java.util.List;
+
+import ambit2.base.data.Profile;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorsChain;
+import ambit2.db.processors.BatchStructuresListProcessor;
+import ambit2.db.search.property.ValuesReader;
+import ambit2.workflow.DBProcessorPerformer;
+import ambit2.workflow.DBWorkflowContext;
+
+import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 
 /**
@@ -38,10 +51,35 @@ import com.microworkflow.process.Sequence;
  */
 public class RetrieveProfileData extends Sequence {
 	public RetrieveProfileData() {
-		//addStep(Primitive.makeNop(DBWorkflowContext.PROFILE, DBWorkflowContext.PROFILE));
+		
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		final ValuesReader reader = new ValuesReader();
+		p1.add(reader);
+		
+		BatchStructuresListProcessor batch = new BatchStructuresListProcessor();
+		batch.setProcessorChain(p1);
+		
+		DBProcessorPerformer<List<IStructureRecord>,IBatchStatistics> performer = 
+			new DBProcessorPerformer<List<IStructureRecord>,IBatchStatistics>(batch) {
+			public IBatchStatistics execute() throws Exception {
+				Object o = getContext().get(DBWorkflowContext.PROFILE);
+				reader.setProfile((Profile)o);
+				return super.execute();
+			}
+		};		
+		
+		Primitive<List<IStructureRecord>,IBatchStatistics> ap1 = 
+			new Primitive<List<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.RECORDS,
+				DBWorkflowContext.BATCHSTATS,
+				performer);
+			
+	    ap1.setName(getName());		
+	    addStep(ap1);
 	}
 	@Override
 	public synchronized String getName() {
-		return "Retrieve";
+		return "Retrieve profile data";
 	}
 }

@@ -38,15 +38,14 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
@@ -55,6 +54,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import ambit2.base.data.Dictionary;
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
@@ -64,12 +64,12 @@ import ambit2.db.results.RowsModel;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.search.property.TemplateQuery;
 import ambit2.dbui.QueryEditor;
 import ambit2.ui.Utils;
+import ambit2.ui.editors.SelectFieldsPanel;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -83,8 +83,23 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 	 */
 	private static final long serialVersionUID = 7515359779806114282L;
 	protected AmbitRows<Dictionary> parents;
-	protected AmbitRows details;
+	protected AmbitRows<Property> details;
 	protected List<Dictionary> path;
+	protected Profile<Property> profile = new Profile<Property>();
+	
+	public Profile<Property> getProfile() {
+		profile.setChanged();
+		return profile;
+	}
+	@Override
+	public boolean confirm() {
+		profile.setChanged();
+		return super.confirm();
+	}
+	public void setProfile(Profile<Property> profile) {
+		this.profile = profile;
+	}
+
 	public DictionaryQueryPanel() {
 		super();
 
@@ -103,14 +118,14 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 			}			
 		};
 		parents.setPropertyname("parents");
-		details = new AmbitRows();
+		details = new AmbitRows<Property>();
 	
 	}
 	public JComponent buildPanel() {
 		initRows();
 		FormLayout layout = new FormLayout(
 	            "331dlu",
-				"50dlu,50dlu");        
+				"24dlu,pref:grow");        
 	     PanelBuilder panel = new PanelBuilder(layout);
 	     panel.setDefaultDialogBorder();
 
@@ -118,13 +133,13 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 	     JComponent c = null;
 	     
 	     c = createNavigator(panel.getPanel(),path);
-	     c.setBackground(panel.getPanel().getBackground());
-	     c.setBorder(BorderFactory.createRaisedBevelBorder());
-	     panel.add(new JScrollPane(c), cc.xywh(1,1,1,1));
+	    // c.setBackground(panel.getPanel().getBackground());
+	    // c.setBorder(BorderFactory.createRaisedBevelBorder());
+	     panel.add(c, cc.xywh(1,1,1,1));
 	     panel.add(createValueComponent(), cc.xywh(1,2,1,1));	  	     
 	     return panel.getPanel();
 	}		
-	protected JTable createNavigator(final JComponent parent,List<Dictionary> path) {
+	protected JComponent createNavigator(final JComponent parent,List<Dictionary> path) {
 	
 		final PathComboBoxEditor editor = new PathComboBoxEditor((JComboBox)createFieldnameComponent());
 		final PathNavigationRenderer renderer = new PathNavigationRenderer();
@@ -142,7 +157,7 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 				return c;
 			}
 		};
-		JTable table = new JTable(new PathTableModel(path)) {
+		JTable table = new JTable(new PathTableModel(path,true)) {
 			
 			@Override
 			public Rectangle getCellRect(int row, int column,
@@ -216,7 +231,7 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 		table.setCellSelectionEnabled(true);
 		table.setRowHeight(24);
 		table.setTableHeader(null);
-	    return table;
+	    return new JScrollPane(table);
 
 	}
 	@Override
@@ -234,12 +249,29 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 	}
 	@Override
 	protected JComponent createValueComponent() {
-
-		ListModel fieldnames = new RowsModel(details);		
-        final JList jlist = new JList();
-        Bindings.bind(jlist, new SelectionInList<Property>(fieldnames));		
-		return new JScrollPane(jlist);			
-	}
+		final RowsModel<Property> properties = new RowsModel<Property>(details);
+		properties.addListDataListener(new ListDataListener() {
+			public void contentsChanged(ListDataEvent e) {
+				for (int i=0;i < properties.getSize(); i++) {
+					Property p = properties.getElementAt(i);
+					//System.out.println(p+" "+p.isEnabled());
+				}
+					
+				
+			}
+			public void intervalAdded(ListDataEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			public void intervalRemoved(ListDataEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		SelectFieldsPanel selectFields = new SelectFieldsPanel();
+		selectFields.setObject(properties);
+		return selectFields;
+			}
 	@Override
 	protected JComponent createFieldnameComponent() {
 		ValueHolder vh = new ValueHolder();
@@ -251,11 +283,16 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 
 					if (evt.getNewValue()!= null) {
 						tq.setCondition(StringCondition.getInstance(StringCondition.C_EQ));			
-						System.out.println(evt.getNewValue());
 						tq.setValue(((Dictionary)evt.getNewValue()).getTemplate());
 						details.setQuery(tq);
 						if (details.size()==0)
 							details.close();
+						else {
+							details.beforeFirst();
+							while (details.next()) {
+								profile.add(details.getObject());
+							}
+						}
 					}
 
 				} catch (Exception x) {
@@ -290,46 +327,62 @@ class PathTableModel extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = 2784257029846153380L;
 	protected List<Dictionary> path;
-	
+	protected boolean columns = true;
 	public PathTableModel() {
-		this (new ArrayList<Dictionary>());
+		this (new ArrayList<Dictionary>(),true);
 	}
 	
-	public PathTableModel(List<Dictionary> path) {
+	public PathTableModel(List<Dictionary> path, boolean columns) {
 		super();
 		this.path = path;
+		this.columns = columns;
 
 	}
 
 	public int getColumnCount() {
-		return path.size()*2;
+		if (columns) return path.size()*2;
+		else return 1;
 	}
 
 	public int getRowCount() {
-		return 1;
+		if (columns) return 1;
+		else return path.size()*2;
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if ((columnIndex%2)==0) {
-			return path.get(columnIndex/2);
+		int index = (columns)?(columnIndex%2):(rowIndex%2);
+		if (index==0) {
+			return path.get((columns)?(columnIndex/2):(rowIndex/2));
 		}
 		else return null;
 		
 	}
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return (columnIndex%2)==1;
+		return (columns)?(columnIndex%2)==1:(rowIndex%2)==1;
 	}
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		if ((columnIndex%2)==1) {
-			int index = (columnIndex-1)/2;
-			if (value != null) {
-				for (int i=path.size()-1; i>index;i--)
-					path.remove(i);				
-				path.add((Dictionary)value);
-				fireTableStructureChanged();
+		if (columns) {
+			if ((columnIndex%2)==1) {
+				int index = (columnIndex-1)/2;
+				if (value != null) {
+					for (int i=path.size()-1; i>index;i--)
+						path.remove(i);				
+					path.add((Dictionary)value);
+					fireTableStructureChanged();
+				}
 			}
+		} else {
+			if ((rowIndex%2)==1) {
+				int index = (rowIndex-1)/2;
+				if (value != null) {
+					for (int i=path.size()-1; i>index;i--)
+						path.remove(i);				
+					path.add((Dictionary)value);
+					fireTableStructureChanged();
+				}
+			}	
 		}
 	}
 }

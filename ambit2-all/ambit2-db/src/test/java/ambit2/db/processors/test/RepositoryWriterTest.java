@@ -43,6 +43,7 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -435,6 +436,7 @@ delete from struc_dataset where idstructure>3
 	@Test
 	public void testImportPropertiesBySMILES() throws Exception {
 		
+		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES, "false");
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
         IDatabaseConnection c = getConnection();
         
@@ -469,15 +471,15 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(2,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
-		Assert.assertEquals(8,property.getRowCount());
+		Assert.assertEquals(7,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(12,property_values.getRowCount());		
+		Assert.assertEquals(10,property_values.getRowCount());		
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
-		Assert.assertEquals(6,property_values.getRowCount());			
+		Assert.assertEquals(5,property_values.getRowCount());			
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(2,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
-		Assert.assertEquals(8,p_tuples.getRowCount());				
+		Assert.assertEquals(6,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties

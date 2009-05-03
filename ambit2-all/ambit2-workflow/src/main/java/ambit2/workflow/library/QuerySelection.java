@@ -32,12 +32,19 @@ package ambit2.workflow.library;
 import nplugins.core.Introspection;
 import ambit2.base.data.ClassHolder;
 import ambit2.base.data.SelectionBean;
+import ambit2.base.data.Template;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.AbstractDBProcessor;
+import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.ProcessorCreateProfileQuery;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
 import com.microworkflow.execution.Performer;
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 
 /**
@@ -57,6 +64,7 @@ public class QuerySelection extends Sequence {
 						new ClassHolder("ambit2.db.search.structure.QueryStructure","SMILES, Molecular formula, InChI","Search by SMILES, Inchi, Formula",""),
 						new ClassHolder("ambit2.db.search.structure.QuerySimilarityStructure","Similarity, substructure, exact structure","Search for similar structures",""),
 						new ClassHolder("ambit2.db.search.structure.QueryStoredResults","Previous search results","Display results from previous queries",""),						
+						new ClassHolder("ambit2.descriptors.FunctionalGroupDescriptor","Functional groups","Available functional groups",""),
 				},"Search by"
 				);
 
@@ -64,25 +72,53 @@ public class QuerySelection extends Sequence {
         		selection,SELECTION,"Select type of query")
         		);
        
-        Performer<SelectionBean<ClassHolder>,AbstractStructureQuery> performer = new Performer<SelectionBean<ClassHolder>,AbstractStructureQuery>() {
-    		public AbstractStructureQuery execute() throws Exception {
-    			
-    			ClassHolder ch = getTarget().getSelected();
-    			Object o = Introspection.loadCreateObject(ch.getClazz());
-    			if (o instanceof AbstractStructureQuery)
-    				return (AbstractStructureQuery)o;
-    			else throw new Exception(o.getClass().getName() + " not expected");
-    		}        	
-        };
-    	Primitive<SelectionBean<ClassHolder>,AbstractStructureQuery> p = 
-    		new Primitive<SelectionBean<ClassHolder>,AbstractStructureQuery>( 
+        
+    	ActivityPrimitive<SelectionBean<ClassHolder>,IQueryRetrieval<IStructureRecord>> p = 
+    		new ActivityPrimitive<SelectionBean<ClassHolder>,IQueryRetrieval<IStructureRecord>>( 
     			SELECTION,
-    			DBWorkflowContext.QUERY,performer);
+    			DBWorkflowContext.QUERY,new MyProcessor());
     	p.setName("Assign selected query type");
     	addStep(p);
 	}
 	@Override
 	public String toString() {
 		return "Select type of query";
+	}
+}
+
+class MyProcessor extends AbstractDBProcessor<SelectionBean<ClassHolder>,IQueryRetrieval<IStructureRecord>> {
+	protected ProcessorCreateProfileQuery profileQuery = null;
+	public void open() throws DbAmbitException {
+
+		
+	}
+	public IQueryRetrieval<IStructureRecord> process(SelectionBean<ClassHolder> target)
+			throws AmbitException {
+		ClassHolder ch = target.getSelected();
+		try {
+  			if (ch.getClazz().equals("ambit2.descriptors.FunctionalGroupDescriptor")) {
+  				Template t = new Template();
+  				t.setName(ch.getClazz());
+				profileQuery = new ProcessorCreateProfileQuery();
+				try {
+					profileQuery.setConnection(getConnection());
+					return profileQuery.process(t);
+				} finally {
+					try {profileQuery.close();} catch (Exception x) {}
+				}
+			} else {			
+				Object o = Introspection.loadCreateObject(ch.getClazz());
+				if (o instanceof AbstractStructureQuery)
+					return (AbstractStructureQuery)o;
+				else throw new AmbitException(o.getClass().getName() + " not expected");
+			}
+			
+		} catch (InstantiationException x) {
+			throw new AmbitException(x);
+		} catch (IllegalAccessException x) {
+			throw new AmbitException(x);
+		} catch (ClassNotFoundException x) {
+			throw new AmbitException(x);
+		}
 	}
 }

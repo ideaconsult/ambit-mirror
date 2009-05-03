@@ -35,15 +35,10 @@ import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
 import ambit2.base.data.ClassHolder;
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
-import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
-import ambit2.workflow.ui.QueryResultsPanel;
-import ambit2.workflow.ui.RecordsBrowserPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 
@@ -56,6 +51,10 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	public AnalogsFinderPlugin() {
 		super();
 		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryBuildingWorkflow","Category building","Category building",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_category_building.png")));
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryVerificationWorkflow","Category verification","Category verification",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_category_verification.png")));
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.EndpointValidationWorkflow","Endpoint validation","Endpoint validation",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_endpoint_validation.png")));
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.ReadAcrossWorkflow","Read across","Read across",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_read_across.png")));
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.ProfileWorkflow","Profile","Profile",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_profiling.png")));		
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
@@ -64,12 +63,15 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		props.add(DBWorkflowContext.LOGININFO);
 		props.add(DBWorkflowContext.DBCONNECTION_URI);
 		props.add(DBWorkflowContext.DATASOURCE);
-        props.add(DBWorkflowContext.DATASET);		
+        props.add(DBWorkflowContext.DATASET);
+        props.add(DBWorkflowContext.QUERY_POPUP);
+        
         props.add("PROFILE_PROPERTY");
         
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
+		/*
 	  	Profile profile = new Profile();
 	  	profile.add(Property.getInstance("CAS","CAS Registry Number", "http://www.cas.org"));
 	  	profile.add(Property.getInstance("CAS","CAS Registry Number", "http://www.cas.org"));
@@ -86,7 +88,7 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 	  	p.setLabel("EC3");
 	  	endpoints.add(p);
     	getWorkflowContext().put(DBWorkflowContext.ENDPOINTS, endpoints);    	
-    	
+    	*/
 		LoginInfo li = new LoginInfo();
 		li.setUser("guest");
 		li.setPassword(li.getUser());
@@ -128,10 +130,13 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		// TODO Auto-generated method stub
 
 	}
-
+	@Override
+	public JComponent[] createDetailsComponent() {
+		return null;
+	}
 
 	@Override
 	public String toString() {
-	    return "Find Analogs";
+	    return "Profile & Category";
 	}
 }

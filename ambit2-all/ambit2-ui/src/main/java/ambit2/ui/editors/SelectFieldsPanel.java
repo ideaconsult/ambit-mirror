@@ -28,26 +28,38 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.PropertiesTableModel;
+import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
+import ambit2.base.data.TypedListModel;
 
+import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.adapter.Bindings;
+import com.jgoodies.binding.beans.BeanAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitEditor<Profile> {
+public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitEditor<TypedListModel<Property>> {
 	protected enum MOVE {
 		MOVE_RIGHT {
 			@Override
@@ -62,6 +74,10 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			public int getTableIndex() {
 				return 0;
 			}
+			@Override
+			public boolean getTag() {
+				return true;
+			}			
 		},
 		MOVE_LEFT {
 			@Override
@@ -76,6 +92,10 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			public int getTableIndex() {
 				return 1;
 			}
+			@Override
+			public boolean getTag() {
+				return false;
+			}			
 			
 		},
 		MOVE_ALL_RIGHT {
@@ -90,7 +110,10 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			public int getTableIndex() {
 				return 0;
 			}
-			
+			@Override
+			public boolean getTag() {
+				return true;
+			}
 			
 		},
 		MOVE_ALL_LEFT {
@@ -105,33 +128,48 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			public int getTableIndex() {
 				return 1;
 			}
+			@Override
+			public boolean getTag() {
+				return false;
+			}
 			
 			
 		};
 		public abstract int getTableIndex();
 		public abstract String display();
 		public abstract boolean moveAll();
-		public void move(Profile fields, JTable[] table, PropertiesTableModel[] fieldsModel) {
-			int[] rows = table[getTableIndex()].getSelectedRows();
-			for (int row : rows) {
-				Object o = table[getTableIndex()].getValueAt(row,0);
-				if (o instanceof Property) {
-					((Property)o).setEnabled(!((Property)o).isEnabled());
+		public abstract boolean getTag();
+		
+		public void move(TypedListModel<Property> fields,JList[] table, TypedListModel<Property>[] fieldsModel) {
+			
+			if (moveAll()) {
+				for (int i=0; i < table[getTableIndex()].getModel().getSize();i++) {
+					Object o = table[getTableIndex()].getModel().getElementAt(i);
+					if (o instanceof Property) ((Property)o).setEnabled(getTag());
 				}
-				if (!moveAll()) break;
+			} else {
+				int[] rows = table[getTableIndex()].getSelectedIndices();//getSelectedRows();
+				for (int row : rows) {
+					if (row >= table[getTableIndex()].getModel().getSize()) continue;
+					Object o = table[getTableIndex()].getModel().getElementAt(row);
+					if (o instanceof Property) ((Property)o).setEnabled(!((Property)o).isEnabled());
+				}
+			}
+			if (fields instanceof AbstractListModel) {
+				ListDataEvent event = new ListDataEvent(fields,ListDataEvent.CONTENTS_CHANGED,0,fields.getSize()-1);
+				for (ListDataListener listener :((AbstractListModel)fields).getListDataListeners()) {
+					listener.contentsChanged(event);
+				}
 			}
 			
-			for (PropertiesTableModel model : fieldsModel)
-				model.setFields(fields);
-
 		}
 		};
 			
 	//protected JTextPane helpArea ;
 	protected List<JButton> buttons;
-	protected Profile fields;
-	protected PropertiesTableModel[] fieldsModel;
-	protected JTable[] tables;
+	protected TypedListModel<Property> fields;
+	protected TypedListModel<Property>[] fieldsModel;
+	protected JList[] tables;
 	protected String help;
 	
 	/**
@@ -143,42 +181,83 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 		this(null,"");
 	}		
 
-	public SelectFieldsPanel(Profile fields,String help) {
+	public SelectFieldsPanel(TypedListModel<Property> fields,String help) {
 		this(fields,
-			new PropertiesTableModel(fields,false,1),
-			new PropertiesTableModel(fields,true,2),
+			new ProfileListModel(fields,false),
+			new ProfileListModel(fields,true),
 			help);
 	}	
 	
-	protected SelectFieldsPanel(Profile fields,
-			PropertiesTableModel allFields, 
-			PropertiesTableModel selectedFields,String help) {
+	protected SelectFieldsPanel(TypedListModel<Property> fields,
+			TypedListModel<Property> allFields, 
+			TypedListModel<Property> selectedFields,String help) {
 		super();
 		this.help = help;
 		setObject(fields);
 	}
 	protected void buildPanel(String help) {
 		FormLayout layout = new FormLayout(
-	            "3dlu,fill:160dlu:grow,3dlu,32dlu, 3dlu, fill:160dlu:grow,3dlu",  //columns
-				"3dlu,12dlu,3dlu,top:[pref,36dlu], 24dlu,3dlu,24dlu,3dlu,24dlu,3dlu,24dlu,bottom:[pref,72dlu]:grow,1dlu,24dlu,1dlu");  //rows
+	            "3dlu,fill:40dlu:grow,fill:120dlu:grow,3dlu,32dlu, 3dlu, fill:40dlu:grow,fill:120dlu:grow,3dlu",  //columns
+				"3dlu,12dlu,3dlu,top:[pref,36dlu], 24dlu,3dlu,24dlu,3dlu,24dlu,3dlu,24dlu,bottom:[pref,72dlu]:grow,1dlu,pref,pref,pref,pref,pref");  //rows
 		setLayout(layout);
         CellConstraints cc = new CellConstraints();
 	    
-        add(createSeparator("Available"),cc.xywh(2,2,1,1));
-        add(createSeparator("Selected"),cc.xywh(6,2,1,1));
+        add(createSeparator("Available"),cc.xywh(2,2,2,1));
+        add(createSeparator("Selected"),cc.xywh(7,2,2,1));
         
-        tables = new JTable[fieldsModel.length];
+        tables = new JList[fieldsModel.length];
         for (int i=0; i < fieldsModel.length;i++) {
-        	tables[i] = new JTable(fieldsModel[i]);
+        	tables[i] = new JList(fieldsModel[i]);
+        	
+        	SelectionInList<Property> selectionInList = new SelectionInList<Property>(fieldsModel[i]);
+            Bindings.bind(tables[i], selectionInList);
         	JScrollPane p = new JScrollPane(tables[i]);
         	p.setBorder(BorderFactory.createEtchedBorder());
         	p.setPreferredSize(new Dimension(160,280));
-        	add(p,cc.xywh(2+i*4,4,1,9));
+        	int offset = 2+i*5;
+        	add(p,cc.xywh(offset,4,2,9));
+        	
+	        BeanAdapter beanAdapter = new BeanAdapter(selectionInList);
+	        
+	        String[][] config = {
+	        		{"name","Name"},
+	        		{"label","Alias"},
+	        		{"units","Units"},
+	        		{"title","url"},
+	        		{"url","WWW"}
+	        };
+	        for (int j=0; j < config.length;j++) {
+	        	String[] c = config[j];
+	        	ValueModel model = beanAdapter.getValueModel(c[0]);
+	        	add(BasicComponentFactory.createLabel(new ValueHolder(c[1])),cc.xywh(offset,j+14,1,1));
+	        	JTextField t = BasicComponentFactory.createTextField(model);
+	        	t.addMouseListener(new MouseAdapter() {
+	        		@Override
+	        		public void mouseEntered(MouseEvent e) {
+	        			super.mouseEntered(e);
+	        			((JTextField)e.getSource()).setToolTipText(((JTextField)e.getSource()).getText());
+	        		}
+	        	});
+	        	add(t,cc.xywh(offset+1,j+14,1,1));	   
+	        }
+	        /*
+	        ValueModel nameModel = beanAdapter.getValueModel("name");
+	        ValueModel commentsModel = beanAdapter.getValueModel("label");
+	        ValueModel titleModel = beanAdapter.getValueModel("title");
+	        ValueModel urlModel = beanAdapter.getValueModel("url");	        
+			//p.add(BasicComponentFactory.createTextField(parentModel));	      
+	        add(BasicComponentFactory.createLabel(new ValueHolder("Name")),cc.xywh(offset,14,1,1));
+			add(BasicComponentFactory.createTextField(nameModel),cc.xywh(offset+1,14,1,1));
+			add(BasicComponentFactory.createLabel(new ValueHolder("Alias")),cc.xywh(offset,15,1,1));
+			add(BasicComponentFactory.createTextField(commentsModel),cc.xywh(offset+1,15,1,1));
+			add(BasicComponentFactory.createLabel(new ValueHolder("Reference")),cc.xywh(offset,16,1,1));
+			add(BasicComponentFactory.createTextField(titleModel),cc.xywh(offset+1,16,1,1));			
+			add(BasicComponentFactory.createLabel(new ValueHolder("WWW")),cc.xywh(offset,17,1,1));
+			add(BasicComponentFactory.createTextField(urlModel),cc.xywh(offset+1,17,1,1));	  
+			*/      
         }
         
-        //p1.setPreferredSize(new Dimension(160,216));
-//        table2.setFillsViewportHeight(true);
-
+        
         
         buttons = new ArrayList<JButton>();
         int i=0;
@@ -186,12 +265,13 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
         	JButton button = new JButton(op.display());
         	button.setPreferredSize(new Dimension(24,24));
         	button.setMaximumSize(new Dimension(24,24));
-        	add(button,cc.xywh(4,5+(i*2),1,1));
+        	add(button,cc.xywh(5,5+(i*2),1,1));
         	button.addActionListener(this);
         	button.setActionCommand(op.toString());
         	i++;
         }
         
+        /*
         JToolBar toolBar[] = new JToolBar[2];
         toolBar[0] = new JToolBar();
         toolBar[0].add(new JButton("Find"));
@@ -209,6 +289,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
         toolBar[1].add(new JButton("Unselect all"));
         toolBar[1].setFloatable(false);
         add(toolBar[1],cc.xywh(6,14,1,1));
+        */
         /*
         helpArea = new JTextPane();
         helpArea.setText(help);
@@ -238,7 +319,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 		return this;
 	}
 
-	public Profile getObject() {
+	public TypedListModel<Property> getObject() {
 		return fields;
 	}
 
@@ -251,7 +332,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 		
 	}
 
-	public void setObject(Profile object) {
+	public void setObject(TypedListModel<Property> object) {
 		this.fields = object;
 		/*
 		Collections.sort(fields,new Comparator<Property>() {
@@ -263,9 +344,9 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 		for (int i=0; i < fields.size();i++)
 			fields.get(i).setOrder((i+1)*100);
 			*/
-		fieldsModel = new PropertiesTableModel[2];
-		this.fieldsModel[0] = new PropertiesTableModel(fields,false,1);
-		this.fieldsModel[1] = new PropertiesTableModel(fields,true,2);
+		fieldsModel = new ProfileListModel[2];
+		this.fieldsModel[0] = new ProfileListModel(object,false);
+		this.fieldsModel[1] = new ProfileListModel(object,true);
 		buildPanel(help);
 		
 		

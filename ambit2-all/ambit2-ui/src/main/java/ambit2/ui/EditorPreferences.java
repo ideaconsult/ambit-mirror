@@ -49,7 +49,10 @@ public class EditorPreferences {
 		{"ambit2.db.SourceDataset","ambit2.dbui.SourceDatasetEditor"},
 		{"ambit2.base.data.AmbitUser","ambit2.ui.editors.AmbitUserEditor"},
 		//{"java.lang.StringBuffer","ambit2.ui.query.DbStatusPanel"},
-		{"ambit2.core.data.experiment.StudyTemplate","ambit2.ui.editors.StudyTemplateEditor"},
+		{"ambit2.base.data.Template","ambit2.ui.editors.TemplateEditor"},
+		{"ambit2.base.data.Property","ambit2.ui.editors.PropertyEditor"},
+		
+
 		{"ambit2.core.data.experiment.Study","ambit2.ui.editors.StudyEditor"},
 		{"ambit2.core.data.experiment.Experiment","ambit2.ui.editors.ExperimentEditor"},
 		//{"toxTree.core.IDecisionMethod","ambit2.ui.editors.ToxTreeEditor"},
@@ -63,17 +66,23 @@ public class EditorPreferences {
 		{"ambit2.db.search.DictionaryObjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
 		{"ambit2.db.search.DictionaryQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
 		{"ambit2.db.search.structure.QueryStoredResults","ambit2.dbui.QueryStoredResultsEditor"},
+		{"ambit2.db.search.structure.QueryFunctionalGroups","ambit2.dbui.QueryFunctionalGroupsEditor"},
+		
+		{"ambit2.db.search.structure.ScopeQuery","ambit2.dbui.QueryScopeEditor"},
 		
 		{"ambit2.base.data.StructureRecord","ambit2.workflow.ui.StructureRecordEditor"},		
 		
-		
+		{"ambit2.db.search.StoredQuery","ambit2.workflow.ui.QueryResultsPanel"},
 		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},
 		{"ambit2.base.data.StringBean","ambit2.ui.editors.StringBeanEditor"},
 		{"ambit2.core.io.FileInputState","ambit2.ui.editors.FileSelector"},
 		{"ambit2.core.io.FileOutputState","ambit2.ui.editors.FileSelector"},
 		{"org.openscience.cdk.Molecule","ambit2.ui.editors.Panel2D"},		
 		{"org.openscience.cdk.AtomContainer","ambit2.ui.editors.Panel2D"},		
-		{"ambit2.base.data.Profile","ambit2.ui.editors.SelectFieldsPanel"},
+		{"ambit2.base.data.ProfileListModel","ambit2.ui.editors.SelectFieldsPanel"},
+		{"ambit2.base.data.Profile","ambit2.dbui.ProfileEditor"},
+		{"ambit2.base.data.Endpoints","ambit2.dbui.ProfileEditor"},		
+		
 		{"ambit2.base.data.SelectionBean","ambit2.workflow.ui.SingleSelectionEditor"}		
 		
 

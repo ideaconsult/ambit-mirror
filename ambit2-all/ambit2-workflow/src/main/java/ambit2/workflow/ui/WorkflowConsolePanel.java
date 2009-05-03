@@ -1,6 +1,7 @@
 package ambit2.workflow.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.JScrollPane;
@@ -28,6 +29,7 @@ public class WorkflowConsolePanel<T> extends AbstractEditor<T> implements Workfl
 		
 		setEditable(false);
 		add(new JScrollPane(text),BorderLayout.CENTER);
+		setPreferredSize(new Dimension(100,100));
 	}	
 	@Override
 	protected void animate(PropertyChangeEvent arg0) {
@@ -49,6 +51,10 @@ public class WorkflowConsolePanel<T> extends AbstractEditor<T> implements Workfl
 	public void setEditable(boolean editable) {
 		text.setEditable(editable);
 		
+	}
+	@Override
+	public String toString() {
+		return "Log";
 	}
 
 }

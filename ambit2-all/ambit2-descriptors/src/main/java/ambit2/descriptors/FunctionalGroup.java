@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

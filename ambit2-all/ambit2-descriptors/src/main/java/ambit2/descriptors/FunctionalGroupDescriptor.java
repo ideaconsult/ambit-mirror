@@ -32,6 +32,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
+import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
@@ -81,14 +82,15 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 			List explanation = new ArrayList();
 			List<String> realNames = new ArrayList<String>();
 			
-			for (int i=0; i < groups.size();i++) {
-				VerboseDescriptorResult<Object,IntegerResult> result = groups.get(i).process(target);
-				if (result.getResult().intValue()>0) {
-					results.add(result.getResult().intValue());
-					explanation.add(result.getExplanation());
-					realNames.add(groups.get(i).getName());
-				}
+			for (int i=0; i < groups.size();i++) { 
+					VerboseDescriptorResult<Object,IntegerResult> result = groups.get(i).process(target);
+					if (result.getResult().intValue()>0) {
+						results.add(result.getResult().intValue());
+						explanation.add(result.getExplanation());
+						realNames.add(groups.get(i).getName());
+					}
 			}
+
 			String[] n = new String[realNames.size()];
 			VerboseDescriptorResult<Object, IntegerArrayResult> result = new VerboseDescriptorResult<Object, IntegerArrayResult>(
 					results,

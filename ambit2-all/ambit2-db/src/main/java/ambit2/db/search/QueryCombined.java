@@ -7,6 +7,9 @@ import java.util.List;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.QueryStoredResults;
+
+import com.jgoodies.binding.beans.Model;
 
 /**
  * Set of {@link IQueryObject}, combined with logical "and or logical "or".
@@ -14,12 +17,79 @@ import ambit2.db.readers.IQueryRetrieval;
  *
  * @param <Q>
  */
-public abstract class QueryCombined<T>  implements IQueryRetrieval<T> {
+public abstract class QueryCombined<T> extends Model implements IQueryRetrieval<T> {
 	protected List<IQueryRetrieval<T>> queries;
+/*
+	public enum SCOPE {
+		scope_last_results {
+			@Override
+			public String toString() {
+				return "last results";
+			}
+			@Override
+			public IQueryRetrieval<IStructureRecord> createQuery() {
+				return new QueryStoredResults();
+			}
+		},
+		
+		scope_dataset {
+			@Override
+			public String toString() {
+				return "a dataset";
+			}
+			@Override
+			public IQueryRetrieval<IStructureRecord> createQuery() {
+				return new QueryDataset();
+			}
+		},
+		scope_previousresults {
+			@Override
+			public String toString() {
+				return "saved results";
+			}
+			@Override
+			public IQueryRetrieval<IStructureRecord> createQuery() {
+				return new QueryStoredResults();
+			}
+		},
+	
+		scope_entiredb {
+			@Override
+			public String toString() {
+				return "entire database";
+			}
+			@Override
+			public IQueryRetrieval<IStructureRecord> createQuery() {
+				return null;
+			}
+		};
+		public abstract IQueryRetrieval<IStructureRecord> createQuery();
+ 	};		
+ 	*/
+	public enum COMBINE  {
+			AND {
+				@Override
+				public String toString() {
+					return 	"All queries";
+				}
+			},
+			OR {
+				@Override
+				public String toString() {
+					return "Any query";
+				}
+			}
+	};
+	protected COMBINE combine_queries = COMBINE.AND;
+	public COMBINE getCombine_queries() {
+		return combine_queries;
+	}
+	public void setCombine_queries(COMBINE combine_queries) {
+		this.combine_queries = combine_queries;
+	}
 	public List<IQueryRetrieval<T>> getQueries() {
 		return queries;
 	}
-	protected boolean combine_as_and;
 	protected Integer id = null;
 	protected static final String union="\nunion\n";
 	protected static final String join="\njoin\n";
@@ -46,9 +116,9 @@ public abstract class QueryCombined<T>  implements IQueryRetrieval<T> {
 	public String getSQL() throws AmbitException {
 		if (queries.size() == 0)
 			throw new AmbitException("Undefined query");
-		else if (queries.size() == 1) 
+		else if ((scope==null) && (queries.size() == 1) )
 			return queries.get(0).getSQL();
-		else if (combine_as_and)
+		else if (isCombine_as_and())
 			return getSQL_and();
 		else
 			return getSQL_or();
@@ -155,11 +225,11 @@ using(idstructure)
 	}
 
 	public boolean isCombine_as_and() {
-		return combine_as_and;
+		return combine_queries.equals(COMBINE.AND);
 	}
 
 	public void setCombine_as_and(boolean combine_as_and) {
-		this.combine_as_and = combine_as_and;
+		combine_queries = (combine_as_and)?COMBINE.AND:COMBINE.OR;
 	}
 
 	public IQueryObject<T> getScope() {

@@ -32,9 +32,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import ambit2.base.exceptions.AmbitIOException;
 
+import com.jgoodies.binding.beans.Model;
 
 
-public class Property  {
+
+public class Property extends Model {
 	private static java.util.concurrent.CopyOnWriteArrayList<Property> properties = 
 		new CopyOnWriteArrayList<Property>();	
 	private static String defaultReference = "Default property reference";
@@ -162,6 +164,12 @@ public class Property  {
 		return name;
 	}
 
+	public String getTitle() {
+		return getReference().getTitle();
+	}
+	public String getUrl() {
+		return getReference().getURL();
+	}	
 	public int getOrder() {
 		return order;
 	}

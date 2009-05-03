@@ -102,6 +102,7 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 					    	 plugin.runWorkflow((ClassHolder)item);
 					     } catch (Exception x) {
 					    	 x.printStackTrace();
+
 					     }
 					     }
 
@@ -128,6 +129,6 @@ public class MultiWorkflowsPanel<P extends IMultiWorkflowsPlugin> extends JPanel
 	@Override
 	public String toString() {
 
-		return "Options";
+		return "Workflows";
 	}
 }

@@ -41,7 +41,7 @@ import ambit2.ui.Utils;
 public class BrowsableTableModel extends AbstractTableModel implements IPageNavigator, IRecordNavigator , IBrowserMode, ISortableColumns, IFilteredColumns, IFindNavigator, ISelectableRecords, TableModelListener {
 	protected PropertyChangeSupport  ps;
 	protected TableModel dataModel;
-	protected int pageSize = 10;
+	protected int pageSize = 12;
 	protected int page = 0;
 	protected int record = 0;	
 	protected int idColumn = 1;

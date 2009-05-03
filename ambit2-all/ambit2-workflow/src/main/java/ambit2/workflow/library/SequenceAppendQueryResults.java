@@ -53,7 +53,7 @@ import com.microworkflow.process.Sequence;
  *
  */
 public class SequenceAppendQueryResults extends Sequence {
-	public SequenceAppendQueryResults() {
+	public SequenceAppendQueryResults(String queryTag) {
 
 		QueryPerformer<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>, IStructureRecord> performer = 
 					new QueryPerformer<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>, IStructureRecord>() {
@@ -97,7 +97,8 @@ public class SequenceAppendQueryResults extends Sequence {
     			} finally {
     				try {q.close();c.close();} catch (Exception x) {}
     			}
-		        System.out.println(records.size());		        
+		        System.out.println(records.size());		 
+		        getContext().put(DBWorkflowContext.RECORD,null);
 		        return records;
 			}
 		};
@@ -116,7 +117,7 @@ public class SequenceAppendQueryResults extends Sequence {
 	 * Creates QueryStoredResults from a IStoredQuery
 	 */
 	Primitive<IStoredQuery, IQueryRetrieval<IStructureRecord>> query = new Primitive<IStoredQuery, IQueryRetrieval<IStructureRecord>>(
-			DBWorkflowContext.STOREDQUERY,
+			queryTag,
 			DBWorkflowContext.QUERY,
 			new Performer<IStoredQuery, IQueryRetrieval<IStructureRecord>>() {
 				@Override

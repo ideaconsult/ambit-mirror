@@ -24,22 +24,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.search;
 
-import ambit2.db.IDBProcessor;
-import ambit2.db.processors.DBProcessorsChain;
-import ambit2.db.processors.ProcessorCreateQuery;
-import ambit2.db.processors.QueryInfo2Query;
-import ambit2.db.search.IQueryObject;
-import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.QueryInfo;
-import ambit2.workflow.ActivityPrimitive;
-import ambit2.workflow.DBWorkflowContext;
-import ambit2.workflow.UserInteraction;
+import ambit2.db.search.structure.QueryField;
 import ambit2.workflow.library.LoginSequence;
+import ambit2.workflow.library.QueryExecution;
+import ambit2.workflow.library.QuerySelection;
 
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class AnalogsFinderWorkflow extends Workflow {
+	public AnalogsFinderWorkflow() {
+		Sequence seq = new Sequence();
+        seq.addStep(new QuerySelection());
+		seq.addStep(new QueryExecution(new QueryField()));
+		setDefinition(new LoginSequence(seq));
+	}
+	/*
 	public AnalogsFinderWorkflow() {
         Sequence seq=new Sequence();
         seq.setName("Advanced search");    	
@@ -62,5 +62,5 @@ public class AnalogsFinderWorkflow extends Workflow {
         seq.addStep(p1);
         setDefinition(new LoginSequence(seq));
 	}
-	
+	*/
 }

@@ -53,7 +53,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		return property;
 	}
 
-	protected IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
+	public IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
 		IMolecularDescriptor d = cache.get(className);
 		if (d == null) {
 			Object o = className.newInstance();

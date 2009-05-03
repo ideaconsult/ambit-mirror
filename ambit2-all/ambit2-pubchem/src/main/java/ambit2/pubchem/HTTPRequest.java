@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.pubchem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -78,6 +79,10 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	       	} catch (SocketTimeoutException x) {
 	    	   retry++;
 	    	   setCancelled(retry >= maxretry);
+	       	} catch (IOException x) {
+	       		if (x.getMessage().indexOf("Server returned HTTP response code: 4")>=0) 
+	       			setCancelled(true);
+	       		throw new ProcessorException(this,x);
 	        } catch (Exception x) {
 	            throw new ProcessorException(this,x);
 	        } finally {

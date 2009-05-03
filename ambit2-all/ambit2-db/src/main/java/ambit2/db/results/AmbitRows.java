@@ -69,7 +69,8 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 
-public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> implements CachedRowSet, PropertyChangeListener{
+public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> implements 
+									CachedRowSet, PropertyChangeListener{
 	/**
 	 * 
 	 */
@@ -137,7 +138,6 @@ public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> impleme
     		throw new DbAmbitException(x);
     	} finally {
     		setReady(true);
-    		System.out.println(size());
     	}
     	
     }

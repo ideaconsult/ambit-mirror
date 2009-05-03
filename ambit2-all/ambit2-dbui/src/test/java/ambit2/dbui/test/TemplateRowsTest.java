@@ -37,8 +37,12 @@ import javax.swing.JOptionPane;
 
 import junit.framework.Assert;
 import ambit2.db.results.PropertyRows;
-import ambit2.db.search.TemplateQuery;
+import ambit2.db.results.RowsModel;
+import ambit2.db.search.property.TemplateQuery;
 import ambit2.dbui.dictionary.TemplatePropertyPanel;
+import ambit2.ui.EditorPreferences;
+import ambit2.ui.editors.IAmbitEditor;
+import ambit2.ui.editors.ListEditor;
 
 public class TemplateRowsTest extends QueryTest<TemplateQuery>{
 
@@ -56,9 +60,20 @@ public class TemplateRowsTest extends QueryTest<TemplateQuery>{
 			rows.setConnection(c);
 			rows.setQuery(query);
 			Assert.assertTrue(rows.size()>0);
-			TemplatePropertyPanel panel = new TemplatePropertyPanel();
-			panel.setObject(rows);
-			JOptionPane.showMessageDialog(null,panel);
+			//TemplatePropertyPanel panel = new TemplatePropertyPanel();
+			ListEditor panel = new ListEditor(new RowsModel(rows)) {
+				@Override
+				protected IAmbitEditor getEditor(Object object) {
+					try {
+						return EditorPreferences.getEditor(object);
+					} catch (Exception x) {
+						x.printStackTrace();
+						return null;
+					}
+				}
+			};
+			//panel.setObject();
+			JOptionPane.showMessageDialog(null,panel.getJComponent());
 			rows.close();
 		};
 		@Override

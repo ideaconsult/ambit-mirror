@@ -1,9 +1,9 @@
 package ambit2.base.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class PropertiesTableModel extends AbstractTableModel {
 	protected List<Property> visibleFields;
 	protected boolean visibility=true;
 	protected int columns = 1;
-	public PropertiesTableModel(Profile fields,boolean visibility, int columns) {
+	public PropertiesTableModel(TypedListModel<Property> fields,boolean visibility, int columns) {
 		visibleFields = new ArrayList<Property>();
 		this.visibility = visibility;
 		this.columns = columns;
@@ -66,12 +66,12 @@ public class PropertiesTableModel extends AbstractTableModel {
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return columnIndex>0;
 	}
-	public void setFields(Profile fields) {
+	public void setFields(TypedListModel<Property> fields) {
 		visibleFields.clear();
 		if (fields != null) {
-			Iterator<Property> i = fields.values().iterator();
-			while (i.hasNext()) {
-				Property p = i.next();
+			System.out.println(fields);
+			for (int i=0; i < fields.getSize();i++) {
+				Property p = fields.getElementAt(i);
 				if (!(visibility ^ p.isEnabled())) {
 					visibleFields.add(p);
 				}

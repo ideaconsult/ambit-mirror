@@ -32,22 +32,26 @@ package ambit2.descriptors.processors;
 import java.io.InputStream;
 import java.util.List;
 
+import org.openscience.cdk.qsar.IMolecularDescriptor;
+
 import ambit2.base.data.ClassHolder;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 
-public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile> {
+public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Property>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 275242996048077139L;
 
-	public Profile process(String target)
+	public Profile<Property> process(String target)
 			throws AmbitException {
-		Profile p = new Profile();
+		Profile<Property> p = new Template();
 		if (target==null)
 			target="ambit2/descriptors/descriptors.txt";
 		InputStream in = DescriptorsFactory.class.getClassLoader().getResourceAsStream(target);
@@ -62,12 +66,24 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile> {
 				}
 				Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(name);
 				//if (o instanceof IMolecularDescriptor) {verify for interface
-					Property property = Property.getInstance(clazz.getName(),"Descriptors");
-					property.setLabel("Descriptors");
-					property.setOrder(i);
-					property.setClazz(clazz);
-					property.setEnabled(enabled);
-					p.add(property);
+				try {
+					Object o = clazz.newInstance();
+					if (o instanceof IMolecularDescriptor) {
+						IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
+						
+						Property property = Property.getInstance(clazz.getName().substring(clazz.getName().lastIndexOf('.')+1),
+								LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
+									);
+						property.setLabel(clazz.getName());
+						property.setOrder(i);
+						property.setClazz(clazz);
+						property.setEnabled(enabled);
+						p.add(property);						
+					}
+				} catch (Exception x) {
+					
+				}
+
 				//}
 ;
 			} catch (Exception x) {

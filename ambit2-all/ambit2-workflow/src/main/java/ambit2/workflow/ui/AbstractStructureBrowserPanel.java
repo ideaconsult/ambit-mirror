@@ -102,7 +102,8 @@ public abstract class AbstractStructureBrowserPanel<T, Table extends TableModel>
     public void setPlugin(INanoPlugin plugin) {
        
     };
-	protected abstract T getQuery();
+	protected abstract T getObject();
+	
 	protected abstract void setQuery(T object) throws AmbitException;
 	
 	

@@ -7,12 +7,10 @@ import java.util.List;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class RetrieveFieldNames extends AbstractQuery<String, Property, StringCondition,Property> implements IQueryRetrieval<Property>{
+public class RetrieveFieldNames extends AbstractPropertyRetrieval<String, Property, StringCondition>{
 	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
 	public static String where = " where %s %s ? and title %s ?";
 		/**

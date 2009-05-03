@@ -8,17 +8,23 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.prefs.BackingStoreException;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -38,11 +44,14 @@ import org.jdesktop.swingx.plaf.PainterUIResource;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneContainerUI;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
 
+import ambit2.base.config.Preferences;
 import ambit2.mopac.MopacShell;
+import ambit2.ui.editors.PreferencesPanel;
 
 public class AmbitXT extends NPluginsApplication {
 	protected AmbitSplitPane multiworkflowPanel;
-	protected JXTaskPaneContainer taskPane;
+	//protected JXTaskPaneContainer taskPane;
+	protected JTabbedPane taskPane;
 	public AmbitXT(String title, int width, int height, String[] args) {
 		super(title,width,height,args);
 		//this is a quick dirty hack to make the builder include mopac and name structure packages ...
@@ -58,9 +67,64 @@ public class AmbitXT extends NPluginsApplication {
 			x.printStackTrace();
 		}
 		leftPanel.setTitle("Workflow");
-		rightPanel.setTitle(" ");
-		detailsPanel.setTitle(" ");
+		mainPanel.setTitle(" ");
+		if (detailsPanel!= null)
+			detailsPanel.setTitle(" ");
+
 	}
+	@Override
+	protected JMenuBar createMenuBar() {
+		JMenuBar bar =  new JMenuBar();
+		bar.add(createFileMenu());
+		bar.add(createOptionsMenu());
+		bar.add(createAboutMenu());
+		return bar;
+	}
+	
+    public JMenu createOptionsMenu() {
+        final JMenu menu = new JMenu("Options");
+        menu.add(new AbstractAction("Settings") {
+        	/**
+             * 
+             */
+            private static final long serialVersionUID = 6596627117263052884L;
+
+            public void actionPerformed(ActionEvent arg0) {
+            	PreferencesPanel p = new PreferencesPanel();
+            	JOptionPane.showMessageDialog(mainPane, p.getJComponent(),"Settings",JOptionPane.PLAIN_MESSAGE);
+        	}
+        });
+        return menu;
+    }    	
+	@Override
+	protected JComponent buildMainLeftPanel(INanoPlugin plugin) {
+	       JComponent c = null;
+	        JComponent[] options = plugin.createOptionsComponent();
+	        if (options!= null) 
+	            if (options.length > 1) {
+	            	if  (multiworkflowPanel == null) {
+	            		multiworkflowPanel = new AmbitSplitPane();
+	            		if (taskPane == null) taskPane = new JTabbedPane();
+	            		multiworkflowPanel.setRightComponent(taskPane);
+	            	}
+	            	multiworkflowPanel.setLeftComponent(options[0]);
+	            	multiworkflowPanel.setTitle(plugin.toString() + " workflow");
+	            	taskPane.removeAll();            	
+	                for (int i=1; i < options.length; i++) {
+	  	    		  	//taskPane.add(addPane(options[i],taskPane));
+	                	taskPane.addTab(options[i].toString(),options[i]);
+	                }
+	                
+	                
+	                c = multiworkflowPanel;
+	                multiworkflowPanel.invalidate();
+	            } else c = options[0];
+	        else 
+	            c = new JLabel("No options");
+	        
+	        return c;
+	}
+	/*
 	@Override
     protected JComponent buildMainLeftPanel(INanoPlugin plugin) {
         JComponent c = null;
@@ -88,7 +152,7 @@ public class AmbitXT extends NPluginsApplication {
         
         return c;
     }	
-
+	*/
 	protected JXTaskPaneContainer createContainer() {
 		Hashtable<String , Object> oldValues = saveSettings(new String[] {
 				"TaskPaneContainer.border",JXTaskPaneContainer.uiClassID,"TaskPaneContainer.backgroundPainter","TaskPaneContainer.border"});
@@ -198,8 +262,9 @@ public class AmbitXT extends NPluginsApplication {
 	}
 	protected void repaint() {
 		leftPanel.invalidate();
-		rightPanel.invalidate();
-		detailsPanel.invalidate();
+		mainPanel.invalidate();
+		if (detailsPanel != null)
+			detailsPanel.invalidate();
 	}
 	@Override
 	protected Package getPackage() {
@@ -217,9 +282,9 @@ public class AmbitXT extends NPluginsApplication {
 	protected void addPlugins(NanoPluginsManager manager) {
 	    if (manager.size()==0)
 		try {
-			manager.addPackage("ambit2.plugin.search.SearchPlugin","Simple search",
+			manager.addPackage("ambit2.plugin.search.SearchPlugin","Search",
 			        createImageIcon("images/search_16.png"));
-			manager.addPackage("ambit2.plugin.analogs.AnalogsFinderPlugin","Find analogs",
+			manager.addPackage("ambit2.plugin.analogs.AnalogsFinderPlugin","Profile & Category",
 			        createImageIcon("images/analogue.png"));
 			manager.addPackage("ambit2.plugin.pbt.PBTCheckerPlugin","PBT Assessment",
 			        createImageIcon("images/pill_16.png"));

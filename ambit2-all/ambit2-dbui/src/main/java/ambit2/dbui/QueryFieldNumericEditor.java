@@ -36,6 +36,7 @@ import java.sql.Connection;
 import java.text.NumberFormat;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -158,7 +159,7 @@ public class QueryFieldNumericEditor  extends
 				return super.getSize()+1;
 			}
 			@Override
-			public Object getElementAt(int index) {
+			public Property getElementAt(int index) {
 				if (index == 0) return null;
 				else
 					return super.getElementAt(index-1);

@@ -33,7 +33,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.StructureRecordsAppender;
+import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.key.SmilesKey;
+import ambit2.db.processors.ProcessorStructureRetrieval;
+import ambit2.db.search.structure.QueryLookupStructure;
+import ambit2.db.search.structure.QueryStructure;
+import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ProcessorPerformer;
 
@@ -47,6 +54,13 @@ import com.microworkflow.process.Sequence;
  */
 public class SequenceAppendRecord extends Sequence {
 	public SequenceAppendRecord() {
+
+		
+		ActivityPrimitive<IStructureRecord, IStructureRecord> lookup = new ActivityPrimitive<IStructureRecord, IStructureRecord>(
+				DBWorkflowContext.RECORD,DBWorkflowContext.RECORD, new ProcessorStructureRetrieval(new QueryLookupStructure())
+				);		
+
+		addStep(lookup);
 		
         ProcessorPerformer<StructureRecordsAppender,IStructureRecord,List<IStructureRecord>> performer = 
         	new ProcessorPerformer<StructureRecordsAppender,IStructureRecord,List<IStructureRecord>>(
@@ -62,6 +76,7 @@ public class SequenceAppendRecord extends Sequence {
     			} else records = (List<IStructureRecord>)o;
     			processor.setRecords(records);
    				processor.process(ch);
+   				getContext().put(DBWorkflowContext.RECORD,null);
     			return records;
     		}        	
         };
