@@ -138,8 +138,8 @@ public class DBUtilityWorkflow extends Workflow {
 		DbReader<IStructureRecord> batch1 = new DbReader<IStructureRecord>();
 		batch1.setProcessorChain(p1);
 		
-		DBProcessorPerformer<IQueryRetrieval<IStructureRecord>,IBatchStatistics> performer = 
-			new DBProcessorPerformer<IQueryRetrieval<IStructureRecord>,IBatchStatistics>(batch1,false) {
+		DBProcessorPerformer<DbReader<IStructureRecord>,IQueryRetrieval<IStructureRecord>,IBatchStatistics> performer = 
+			new DBProcessorPerformer<DbReader<IStructureRecord>,IQueryRetrieval<IStructureRecord>,IBatchStatistics>(batch1,false) {
 			public IBatchStatistics execute() throws Exception {
 				Object o = getContext().get(DBWorkflowContext.DESCRIPTORS);
 				calculator.setDescriptors((Profile)o);

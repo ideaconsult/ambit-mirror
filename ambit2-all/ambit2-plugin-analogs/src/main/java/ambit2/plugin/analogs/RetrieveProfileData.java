@@ -60,8 +60,8 @@ public class RetrieveProfileData extends Sequence {
 		BatchStructuresListProcessor batch = new BatchStructuresListProcessor();
 		batch.setProcessorChain(p1);
 		
-		DBProcessorPerformer<List<IStructureRecord>,IBatchStatistics> performer = 
-			new DBProcessorPerformer<List<IStructureRecord>,IBatchStatistics>(batch) {
+		DBProcessorPerformer<BatchStructuresListProcessor,List<IStructureRecord>,IBatchStatistics> performer = 
+			new DBProcessorPerformer<BatchStructuresListProcessor,List<IStructureRecord>,IBatchStatistics>(batch) {
 			public IBatchStatistics execute() throws Exception {
 				Object o = getContext().get(DBWorkflowContext.PROFILE);
 				reader.setProfile((Profile)o);

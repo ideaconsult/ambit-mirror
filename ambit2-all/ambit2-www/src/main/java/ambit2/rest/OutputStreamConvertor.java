@@ -10,7 +10,6 @@ import org.restlet.resource.OutputRepresentation;
 import org.restlet.resource.Representation;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.exceptions.AmbitIOException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
@@ -22,8 +21,7 @@ public class OutputStreamConvertor<T,Q extends IQueryRetrieval<T>>  extends Repr
 	private static final long serialVersionUID = -7974532412944774457L;
 	
 	public OutputStreamConvertor(QueryReporter<T, Q, Writer> reporter,MediaType mediaType) {
-		super(reporter);
-		this.mediaType = mediaType;
+		super(reporter,mediaType);
 	}
 
 	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {

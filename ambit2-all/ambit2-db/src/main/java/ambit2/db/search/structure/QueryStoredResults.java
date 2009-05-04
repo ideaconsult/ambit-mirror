@@ -59,6 +59,10 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 	public QueryStoredResults() {
 		setCondition(EQCondition.getInstance());
 	}
+	public QueryStoredResults(IStoredQuery query) {
+		this();
+		setFieldname(query);
+	}	
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		if (getFieldname()!=null)

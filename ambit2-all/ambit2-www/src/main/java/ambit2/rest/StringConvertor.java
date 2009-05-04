@@ -28,8 +28,7 @@ public class StringConvertor<T,Q extends IQueryRetrieval<T>>  extends Representa
 			return new DomRepresentation(MediaType.TEXT_XML,doc);
 	}
 	public StringConvertor(QueryReporter<T, Q, Writer> reporter,MediaType mediaType) {
-		super(reporter);
-		this.mediaType = mediaType;
+		super(reporter,mediaType);
 	}
 	@Override
 	public Representation process(Q query) throws AmbitException {

@@ -2,6 +2,9 @@ package ambit2.db.reporters;
 
 import java.io.Writer;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -9,12 +12,12 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 
-public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Writer> {
+public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Document> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2931123688036795689L;
-	public SDFReporter() {
+	public PDFReporter() {
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
@@ -25,12 +28,13 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		});	
 	}
 
-
+	
 	@Override
-	protected void processItem(IStructureRecord item, Writer output) {
+	protected void processItem(IStructureRecord item, Document document) {
+
 		try {
-			output.write(item.getContent());
-			output.write("\n$$$$\n");
+			//TODO generate PDFcontent
+			document.add(new Paragraph(item.getContent()));			
 		} catch (Exception x) {
 			logger.error(x);
 		}

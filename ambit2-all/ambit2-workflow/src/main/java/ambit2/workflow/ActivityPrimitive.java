@@ -38,17 +38,17 @@ import com.microworkflow.process.Primitive;
 public class ActivityPrimitive<Target,Result> extends Primitive {
 
     public ActivityPrimitive(IDBProcessor<Target, Result> processor) {
-        super(new DBProcessorPerformer<Target, Result>(processor));
+        super(new DBProcessorPerformer<IDBProcessor<Target, Result>,Target, Result>(processor));
     }
     public ActivityPrimitive(String targetKey, IDBProcessor<Target, Result> processor) {
-        super(targetKey,new DBProcessorPerformer<Target, Result>(processor));
+        super(targetKey,new DBProcessorPerformer<IDBProcessor<Target, Result>,Target, Result>(processor));
     }
     
     public ActivityPrimitive(String targetKey, String resultKey, IDBProcessor<Target, Result> processor) {
-        super(targetKey,resultKey,new DBProcessorPerformer<Target, Result>(processor));
+        super(targetKey,resultKey,new DBProcessorPerformer<IDBProcessor<Target, Result>,Target, Result>(processor));
     }
     public ActivityPrimitive(String targetKey, String resultKey, IDBProcessor<Target, Result> processor, boolean skipSessions) {
-        super(targetKey,resultKey,new DBProcessorPerformer<Target, Result>(processor,skipSessions));
+        super(targetKey,resultKey,new DBProcessorPerformer<IDBProcessor<Target, Result>,Target, Result>(processor,skipSessions));
     }    
     public ActivityPrimitive(String targetKey, String resultKey, IProcessor<Target, Result> processor) {
         super(targetKey,resultKey,new ProcessorPerformer<IProcessor<Target, Result>,Target, Result>(processor));

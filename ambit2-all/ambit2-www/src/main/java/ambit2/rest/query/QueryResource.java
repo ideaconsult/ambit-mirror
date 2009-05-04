@@ -1,6 +1,5 @@
 package ambit2.rest.query;
 
-import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -41,7 +40,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Res
 	public abstract RepresentationConvertor createConvertor(Variant variant) throws AmbitException;
 
 	public Representation getRepresentation(Variant variant) {
-		System.out.println(variant.getMediaType());
 		try {
 	        if (query != null) {
 	        	RepresentationConvertor convertor = null;

@@ -1,9 +1,7 @@
 package ambit2.workflow.library;
 
-import java.io.File;
-
 import ambit2.core.io.FileOutputState;
-import ambit2.core.processors.ProcessorFileExport;
+import ambit2.core.processors.Reporter;
 import ambit2.workflow.ProcessorPerformer;
 
 import com.microworkflow.process.Primitive;
@@ -35,22 +33,22 @@ public abstract class ExportWorkflow<Content> extends Workflow {
         
 	}
 	
-	protected abstract ProcessorFileExport<Content> getProcessor() ;
+	protected abstract Reporter<Content,FileOutputState> getProcessor() ;
 	protected abstract String getContentTag();
 	protected abstract String getOutputTag();
 	
 
 }
 
-class Exporter<Content> extends ProcessorPerformer<ProcessorFileExport<Content>,Content,FileOutputState> {
+class Exporter<Content> extends ProcessorPerformer<Reporter<Content,FileOutputState>,Content,FileOutputState> {
 	protected String output_tag;
-	public Exporter(ProcessorFileExport<Content> processor,String output_tag) {
+	public Exporter(Reporter<Content,FileOutputState> processor,String output_tag) {
 		super(processor);
 		this.output_tag =output_tag;
 	}
 	@Override
 	public FileOutputState execute() throws Exception {
-		ProcessorFileExport<Content> exporter = getProcessor();
+		Reporter<Content,FileOutputState> exporter = getProcessor();
 		exporter.setOutput((FileOutputState)context.get(output_tag));
 		return super.execute();
 	}
