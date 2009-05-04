@@ -100,8 +100,10 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		if (mainComponent == null) 
+		if (mainComponent == null) {
 			mainComponent = new MultiWorkflowsPanel<UserManagerPlugin>(this);
+			contextListener.setFrame(mainComponent.getComponent());
+		}
 		return mainComponent;
 	}
 	@Override
