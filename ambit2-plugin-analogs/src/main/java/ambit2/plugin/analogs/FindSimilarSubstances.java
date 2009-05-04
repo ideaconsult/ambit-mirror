@@ -31,8 +31,8 @@ package ambit2.plugin.analogs;
 
 import java.util.List;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -95,7 +95,7 @@ class Records2QueryProcessor extends DefaultAmbitProcessor<List<IStructureRecord
 			throws AmbitException {
 		QueryCombinedStructure q = new QueryCombinedStructure();
 		QuerySimilarityStructure similarity = new QuerySimilarityStructure();
-		IMoleculeSet molecules = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+		IMoleculeSet molecules = NoNotificationChemObjectBuilder.getInstance().newMoleculeSet();
 		MoleculeReader reader = new MoleculeReader();
 		
 		for (IStructureRecord record : target) {

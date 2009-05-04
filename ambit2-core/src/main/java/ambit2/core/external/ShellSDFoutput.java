@@ -3,9 +3,9 @@ package ambit2.core.external;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
@@ -27,7 +27,7 @@ public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule
 		try {
 			if (isReadOutput()) {
 				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(path + File.separator + getOutputFile()));
-				IMolecule newmol = DefaultChemObjectBuilder.getInstance().newMolecule();
+				IMolecule newmol = NoNotificationChemObjectBuilder.getInstance().newMolecule();
 				reader.read(newmol);
 				reader.close();
 				return newmol;

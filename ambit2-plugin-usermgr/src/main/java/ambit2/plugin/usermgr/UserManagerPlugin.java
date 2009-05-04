@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.plugin.usermgr;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -47,7 +46,6 @@ import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
-import ambit2.workflow.ui.WorkflowConsolePanel;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
 import ambit2.workflow.ui.WorkflowViewPanel;
 
@@ -108,28 +106,9 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
-		return null;
+		return new JComponent[] {createConsole()} ;
 	}
-	/*
-	@Override
-	public JComponent[] createDetailsComponent() {
-		if (detailsComponent == null) {
-			JComponent[] c = super.createDetailsComponent();
 
-			WorkflowConsolePanel reports = new WorkflowConsolePanel();
-			//WorkflowConsolePanel reports = new WorkflowConsolePanel(getWorkflow());
-			reports.setWorkflowContext(getWorkflowContext());
-	
-			Vector<String> props = new Vector<String>();	
-			props.add(DBWorkflowContext.LOGININFO);
-			props.add(DBWorkflowContext.DATASET);
-			props.add(DBWorkflowContext.ERROR);
-			reports.setProperties(props);
-			detailsComponent = new JComponent[] {reports,c[0]};
-		}
-		return detailsComponent;
-	}	
-	*/
 	public ImageIcon getIcon() {
 	    return Utils.createImageIcon("ambit2/plugin/usermgr/images/user_16.png");
 	}
@@ -175,7 +154,7 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 			props.add(DBWorkflowContext.DATASOURCE);
 			p.setProperties(props);		    
 			optionsComponent = new JComponent[] {
-					new WorkflowViewPanel(workflow,action,getStopAction()),p,createConsole()};
+					new WorkflowViewPanel(workflow,action,getStopAction()),p};
 		} 
 		return optionsComponent;
 	}			

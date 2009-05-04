@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.HINReader;
 import org.openscience.cdk.io.INChIReader;
@@ -14,6 +13,7 @@ import org.openscience.cdk.io.PDBReader;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitIOException;
 
@@ -81,7 +81,7 @@ public class FileInputState extends FileState implements IInputState {
 	}
 	public static IIteratingChemObjectReader getReader(InputStream stream, String ext, IChemFormat format) throws AmbitIOException {
 		if (ext.endsWith(extensions[SDF_INDEX])) {
-			return new InteractiveIteratingMDLReader(stream,DefaultChemObjectBuilder.getInstance());
+			return new InteractiveIteratingMDLReader(stream,NoNotificationChemObjectBuilder.getInstance());
 		} else if (ext.endsWith(extensions[SMI_INDEX])) { 
 			return new IteratingSMILESReader(stream);
 		} else if (ext.endsWith(extensions[CSV_INDEX])) {

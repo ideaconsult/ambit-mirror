@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -70,7 +70,7 @@ public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> 
 			if (logfile.exists()) logfile.delete();
 			
 			FileWriter logwriter = new FileWriter(resultDir+getLogfile());
-			IMolecule m = DefaultChemObjectBuilder.getInstance().newMolecule();
+			IMolecule m = NoNotificationChemObjectBuilder.getInstance().newMolecule();
 			File dir = new File(dirname);
 
 		    
