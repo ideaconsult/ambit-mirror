@@ -206,7 +206,8 @@ public class DefineStructure extends While {
         final BatchDBProcessor batch = new BatchDBProcessor();
         batch.setProcessorChain(chain);
         
-        DBProcessorPerformer<IInputState,IBatchStatistics> performer = new DBProcessorPerformer<IInputState,IBatchStatistics>(batch,true) {
+        DBProcessorPerformer<BatchDBProcessor,IInputState,IBatchStatistics> performer = 
+        				new DBProcessorPerformer<BatchDBProcessor,IInputState,IBatchStatistics>(batch,true) {
         	@Override
         	public IBatchStatistics execute() throws Exception {
 	   			Object o = getContext().get(DBWorkflowContext.RECORDS);

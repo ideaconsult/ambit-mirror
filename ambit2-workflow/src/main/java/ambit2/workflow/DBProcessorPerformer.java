@@ -39,16 +39,20 @@ import ambit2.db.processors.ProcessorCreateSession;
  * @param <Target>
  * @param <Result>
  */
-public class DBProcessorPerformer<Target,Result> extends ProcessorPerformer<IDBProcessor<Target,Result>,Target,Result> {
+public class DBProcessorPerformer<P extends IDBProcessor<Target,Result>,Target,Result> extends ProcessorPerformer<P,Target,Result> {
 	protected boolean skipSession = false;
-	public DBProcessorPerformer(IDBProcessor<Target, Result> processor,boolean skipSession) {
+	public DBProcessorPerformer(P processor,boolean skipSession) {
 		super(processor);
 		this.skipSession = skipSession;
 	}
-    public DBProcessorPerformer(IDBProcessor<Target, Result> processor) {
+    public DBProcessorPerformer(P processor) {
 		this(processor,false);
 	}
 
+    @Override
+    public synchronized P getProcessor() {
+    	return super.getProcessor();
+    }
     @Override
     public Result execute() throws Exception {
         if (processor == null) return null;

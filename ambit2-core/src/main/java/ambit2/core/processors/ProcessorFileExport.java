@@ -13,6 +13,13 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
 
+/**
+ * TODO merge with representation convertor
+ * make use of http://jmimemagic.sourceforge.net/maven-reports.html  for mime recognition 
+ * @author nina
+ *
+ * @param <Content>
+ */
 public abstract class ProcessorFileExport<Content> extends DefaultAmbitProcessor<Content,FileOutputState>
 												implements Reporter<Content,FileOutputState>{
 
