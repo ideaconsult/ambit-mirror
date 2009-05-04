@@ -44,7 +44,7 @@ import ambit2.db.update.dictionary.TemplateAddProperty;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
-	protected enum mode  {OK, UNKNOWN,ERROR};
+	protected enum mode  {OK, UNKNOWN,ERROR,TRUNCATED};
 	protected TemplateAddProperty templateWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
