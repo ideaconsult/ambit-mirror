@@ -37,6 +37,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.data.StringBean;
 
 
@@ -81,6 +82,10 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
 	        for (String user : users)
 	        	st.addBatch(user);
 	        st.executeBatch();
+	        try {
+        	Preferences.setProperty(Preferences.DATABASE, database.toString());
+        	Preferences.saveProperties(getClass().getName());
+	        } catch (Exception x) {}
         } catch (SQLException x) {
         	logger.warn(x);
         }

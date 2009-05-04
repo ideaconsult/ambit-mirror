@@ -92,11 +92,14 @@ public class LoginSequence extends Sequence {
                 	} else li = (LoginInfo)ol;
                 	
                     if (li != null) {
-                    	Preferences.setProperty(Preferences.DATABASE, li.getDatabase());
-                    	Preferences.setProperty(Preferences.HOST, li.getHostname());
-                    	Preferences.setProperty(Preferences.PORT, li.getPort());
-                    	Preferences.setProperty(Preferences.USER, li.getUser());
-                    	Preferences.setProperty(Preferences.PASSWORD, "");
+                    	
+                    	if (!li.getDatabase().equals("mysql")) {
+	                    	Preferences.setProperty(Preferences.DATABASE, li.getDatabase());
+	                    	Preferences.setProperty(Preferences.HOST, li.getHostname());
+	                    	Preferences.setProperty(Preferences.PORT, li.getPort());
+	                    	Preferences.setProperty(Preferences.USER, li.getUser());
+	                    	Preferences.setProperty(Preferences.PASSWORD, "");
+                    	}
                     	Preferences.saveProperties(getClass().getName());
                     	return DatasourceFactory.getConnectionURI(
                             li.getScheme(), li.getHostname(), li.getPort(), 
