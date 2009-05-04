@@ -29,12 +29,12 @@
 
 package ambit2.core.processors.structure;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -42,7 +42,7 @@ import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 
 public class HydrogenAdderProcessor extends	AtomConfigurator {
-	protected CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
+	protected CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
 	protected boolean addEexplicitHydrogens = true;
 	public boolean isAddEexplicitHydrogens() {
 		return addEexplicitHydrogens;

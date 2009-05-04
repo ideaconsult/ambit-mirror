@@ -16,6 +16,7 @@ import nplugins.core.Introspection;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -143,7 +144,7 @@ public class PBTTableModel extends AbstractTableModel {
 			if (NODE_STRUCTURE.equals(node.getNodeName())) {
 					try {
 						Cell cell = new Cell(row,col,colspan);
-						table.put(cell,DefaultChemObjectBuilder.getInstance().newMolecule());
+						table.put(cell,NoNotificationChemObjectBuilder.getInstance().newMolecule());
 						cell.setMode(Cell.CELL_MODE.STRUCTURE);
 					} catch (NumberFormatException x) {
 						x.printStackTrace();

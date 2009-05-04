@@ -26,10 +26,10 @@ package ambit2.smarts.query;
 
 import java.util.List;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.mcss.RMap;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.smarts.SmartsManager;
 
@@ -70,7 +70,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
  */
 
 		//List<IAtom> atoms =sman.getAtomMappings(mol);
-		IAtomContainer c = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+		IAtomContainer c = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
 		
 		List<List<RMap>> bonds =sman.getBondMappings(mol);
 		

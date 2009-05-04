@@ -14,7 +14,6 @@ import java.util.BitSet;
 
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -29,6 +28,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer2D;
 import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.tools.HydrogenAdder;
@@ -230,7 +230,7 @@ public class MoleculeTools {
 		while (true) {}
 	}
 	public static IMolecule readMolfile(Reader molfile) throws Exception {
-		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(molfile,DefaultChemObjectBuilder.getInstance());
+		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(molfile,NoNotificationChemObjectBuilder.getInstance());
 		IMolecule molecule = null;
 		while (mReader.hasNext()) {
 			Object mol = mReader.next();
@@ -270,7 +270,7 @@ public class MoleculeTools {
          CMLReader reader = new CMLReader(cmlReader);
          IChemFile obj = null;
          
-            obj = (IChemFile) reader.read(DefaultChemObjectBuilder.getInstance().newChemFile());
+            obj = (IChemFile) reader.read(NoNotificationChemObjectBuilder.getInstance().newChemFile());
             int n = obj.getChemSequenceCount();
             if (n > 1)
                 System.out.println("> 1 sequence in a record");      

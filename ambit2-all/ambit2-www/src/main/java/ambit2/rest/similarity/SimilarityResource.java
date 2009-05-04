@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.data.Reference;
@@ -73,7 +74,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 		
 	}
 	public IMolecule getMolecule(String smiles) throws InvalidSmilesException {
-		SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 		//This is a workaround for a bug in CDK smiles parser
 
 		StringTokenizer t = new StringTokenizer(smiles,"[]",true);

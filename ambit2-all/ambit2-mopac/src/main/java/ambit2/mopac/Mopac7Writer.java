@@ -26,6 +26,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smi23d.ShellMengine;
@@ -62,7 +63,7 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
         nf.setMaximumFractionDigits(4);
         writer = new BufferedWriter(out);
         try {
-            isotopeFactory = IsotopeFactory.getInstance(DefaultChemObjectBuilder.getInstance());
+            isotopeFactory = IsotopeFactory.getInstance(NoNotificationChemObjectBuilder.getInstance());
         } catch (Exception exception) {
             logger.error("Failed to initiate isotope factory: ", exception.getMessage());
             logger.debug(exception);

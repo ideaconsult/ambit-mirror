@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -27,6 +26,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer2D;
 import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -98,7 +98,7 @@ public class CompoundImageTools {
     public synchronized BufferedImage getImage(String smiles) {
         ArrayList<String> m = null;
         try {
-            if (parser == null) parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+            if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
             return getImage(parser.parseSmiles(smiles));
         } catch (Exception x) {
             m = new ArrayList<String>();

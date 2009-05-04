@@ -24,29 +24,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
+import java.util.HashMap;
+import java.util.Vector;
+
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import java.util.Vector;
-import java.util.HashMap;
-//import java.util.TreeSet;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.io.SMILESWriter;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 public class SmartsHelper 
 {
-	static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	static SmilesParser smilesparser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 	int curIndex;
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();	
 	//Work container - list with the processed atom nodes
@@ -342,7 +339,7 @@ public class SmartsHelper
 	{	
 		IMolecule mol = null;
 		try {
-			SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());			
+			SmilesParser sp = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(smi);
 		}
 		catch (InvalidSmilesException e) {

@@ -3,10 +3,10 @@ package ambit2.core.smiles;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.config.Preferences;
@@ -43,7 +43,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 				return babel.runShell(smiles);
 			} catch (ShellException x) {
 				setParser(SMILES_PARSER.CDK);
-				if (cdkParser == null) cdkParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+				if (cdkParser == null) cdkParser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 				IMolecule mol = cdkParser.parseSmiles(smiles);
 				
 				try {
@@ -57,7 +57,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			}
 		}
 		default: {
-			if (cdkParser == null) cdkParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+			if (cdkParser == null) cdkParser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 			IMolecule mol = cdkParser.parseSmiles(smiles);
 			try {
 				return dbt.fixAromaticBondOrders(mol);

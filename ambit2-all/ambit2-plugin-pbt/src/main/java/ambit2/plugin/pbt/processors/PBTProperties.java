@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.StructureRecord;
@@ -38,7 +39,7 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 	
 	public static IAtomContainer getAtomContainer(PBTWorkBook target) throws AmbitException {
 		IAtomContainer a = target.getStructure();
-		if (a == null) a = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+		if (a == null) a = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
 		a.setProperties(new TreeMap());
 		
 		a.getProperties().clear();

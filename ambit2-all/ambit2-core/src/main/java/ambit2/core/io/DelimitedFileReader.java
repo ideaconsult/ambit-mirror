@@ -31,7 +31,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemFile;
@@ -43,6 +42,7 @@ import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.setting.IOSetting;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 /**
@@ -82,9 +82,9 @@ public class DelimitedFileReader extends DefaultChemObjectReader implements IChe
         if (object instanceof IMoleculeSet) {
             return (IChemObject)readSetOfMolecules();
         } else if (object instanceof IChemFile) {
-            IChemFile file = DefaultChemObjectBuilder.getInstance().newChemFile();
-            IChemSequence sequence = DefaultChemObjectBuilder.getInstance().newChemSequence();
-            IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newChemModel();
+            IChemFile file = NoNotificationChemObjectBuilder.getInstance().newChemFile();
+            IChemSequence sequence = NoNotificationChemObjectBuilder.getInstance().newChemSequence();
+            IChemModel chemModel = NoNotificationChemObjectBuilder.getInstance().newChemModel();
             chemModel.setMoleculeSet(readSetOfMolecules());
             sequence.addChemModel(chemModel);
             file.addChemSequence(sequence);
