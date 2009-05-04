@@ -147,8 +147,10 @@ public class DBUtilityPlugin extends DBWorkflowPlugin {
 	}
 	
 	public INPluginUI<INanoPlugin> createMainComponent() {
-		if (mainComponent == null)
+		if (mainComponent == null) {
 			mainComponent = new MultiWorkflowsPanel<DBUtilityPlugin>(this);
+			contextListener.setFrame(mainComponent.getComponent());			
+		}
 		return mainComponent;
 	}
 
