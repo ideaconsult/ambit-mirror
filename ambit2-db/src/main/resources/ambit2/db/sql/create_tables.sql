@@ -253,7 +253,8 @@ CREATE TABLE  `property_values` (
   `idvalue` int(10) unsigned NOT NULL,
   `idtype` int(10) unsigned NOT NULL,
   `user_name` varchar(16) collate utf8_bin NOT NULL,
-  `status` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN',
+  `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL default 'UNKNOWN',
+  `text` text collate utf8_bin,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `Index_2` USING BTREE (`idproperty`,`idstructure`,`idtype`),
   KEY `FK_property_values_1` (`user_name`),
@@ -513,7 +514,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,3,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,4,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- integer property values
@@ -537,7 +538,7 @@ FROM property_values join property_number using(idvalue,idtype);
 
 DROP VIEW IF EXISTS `values_string`;
 create view `values_string` as
-SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype
+SELECT id,idproperty,idstructure,if(status="TRUNCATED",text,value) as value,idvalue,status,user_name,idtype
 FROM property_values join property_string using(idvalue,idtype);
 
 -- -----------------------------------------------------

@@ -53,18 +53,18 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	 * 
 	 */
 	private static final long serialVersionUID = 8373222804070419878L;
-	protected static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue,status,user_name,idtype) ";
+	protected static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue,status,user_name,idtype,text) ";
 	protected static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
 	protected static final String insert_number = "INSERT IGNORE INTO property_number (value) VALUES (?)";
 	protected static final String insert_int = "INSERT IGNORE INTO property_int (value) VALUES (?)";
 	
-	protected static final String select_string = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_string where value=?";
-	protected static final String select_number = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_number where abs(value-?)<1E-4";
-	protected static final String select_int = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype from property_int where value=?";
+	protected static final String select_string = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype,? from property_string where value=?";
+	protected static final String select_number = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype,null from property_number where abs(value-?)<1E-4";
+	protected static final String select_int = "select null,?,?,idvalue,?,SUBSTRING_INDEX(user(),'@',1),idtype,null from property_int where value=?";
 	
-	protected static final String onduplicate_number = " on duplicate key update property_values.idvalue=property_number.idvalue";
-	protected static final String onduplicate_string = " on duplicate key update property_values.idvalue=property_string.idvalue";
-	protected static final String onduplicate_int = " on duplicate key update property_values.idvalue=property_int.idvalue";
+	protected static final String onduplicate_number = " on duplicate key update property_values.idvalue=property_number.idvalue, property_values.status=?";
+	protected static final String onduplicate_string = " on duplicate key update property_values.idvalue=property_string.idvalue, property_values.status=?, text=?";
+	protected static final String onduplicate_int = " on duplicate key update property_values.idvalue=property_int.idvalue, property_values.status=?";
 	
 	protected static final String insert_tuple_string = "insert into property_tuples select ?,id from property_values join property_string using(idvalue,idtype) where idproperty=? and idstructure=? and value=? and idtype=?";
 	protected static final String insert_tuple_number = "insert into property_tuples select ?,id from property_values join property_number using(idvalue,idtype) where idproperty=? and idstructure=?  and (abs(value-(?))<1E-4) and idtype=?";
@@ -111,10 +111,13 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
      }
 
     protected boolean insertValue(String value, Property property, int idtuple, mode error) throws SQLException {
+    	String longText = null;
     	if ((value != null) && (value.length()>255)) {
     		logger.warn("Value truncated to 255 symbols "+value);
+    		longText = value;    		
     		value = value.substring(0,255);
-    		
+    		error = mode.TRUNCATED;
+   		
     	}
     	if (structure == null) throw new SQLException("Undefined structure");    	
     	if (ps_insertstring == null)
@@ -131,10 +134,14 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_descriptorvalue_string.setInt(1,property.getId());
     	ps_descriptorvalue_string.setInt(2,structure.getIdstructure());
     	ps_descriptorvalue_string.setString(3, error.toString());
-    	if (value == null)
-    		ps_descriptorvalue_string.setNull(4,Types.VARCHAR);
-    	else 
-    		ps_descriptorvalue_string.setString(4, value);
+    	if (longText == null) ps_descriptorvalue_string.setNull(4,Types.VARCHAR);
+    	else ps_descriptorvalue_string.setString(4, longText);
+    	if (value == null) ps_descriptorvalue_string.setNull(5,Types.VARCHAR);
+    	else ps_descriptorvalue_string.setString(5, value);
+    	ps_descriptorvalue_string.setString(6, error.toString());
+    	
+    	if (longText == null) ps_descriptorvalue_string.setNull(7,Types.VARCHAR);
+    	else ps_descriptorvalue_string.setString(7, longText);
     	
     	if (ps_descriptorvalue_string.executeUpdate()>0) { 
     		if (idtuple >0 ) {
@@ -169,6 +176,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_descriptorvalue_int.setInt(2,structure.getIdstructure());
     	ps_descriptorvalue_int.setString(3, error.toString());
    		ps_descriptorvalue_int.setInt(4, value);
+   		ps_descriptorvalue_int.setString(5, error.toString());
    		
     	if (ps_descriptorvalue_int.executeUpdate()>0) { 
     		if (idtuple >0 ) {
@@ -204,6 +212,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	ps_descriptorvalue_number.setInt(2,structure.getIdstructure());
         ps_descriptorvalue_number.setString(3, error.toString());
         ps_descriptorvalue_number.setDouble(4, value);
+        ps_descriptorvalue_number.setString(5, error.toString());     
+        
         if (ps_descriptorvalue_number.executeUpdate()>0) {
         	if (idtuple >0 ) {
     	        	if (ps_inserttuplenumber == null) 

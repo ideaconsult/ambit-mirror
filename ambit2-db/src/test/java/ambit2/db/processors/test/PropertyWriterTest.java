@@ -63,13 +63,26 @@ public class PropertyWriterTest  extends DbUnitTest {
         PropertyValuesWriter writer = new PropertyValuesWriter();
 
 		StructureRecord record = new StructureRecord(7,100211,"","");
-		record.setProperty(Property.getInstance("Property1","Reference 1"), "Value1");
+		StringBuilder b = new StringBuilder();
+		for (int i=0; i < 255;i++) b.append(i % 10);
+		for (int i=0; i < 255;i++) b.append(i % 10);	
+		for (int i=0; i < 255;i++) b.append("c");
+		for (int i=0; i < 255;i++) b.append("b");		
+		record.setProperty(Property.getInstance("Property1","Reference 1"), b.toString());
 		record.setProperty(Property.getInstance("Property2","Reference 1"), 0.99);
 		
         writer.setConnection(c.getConnection());
         writer.open();
         writer.write(record);
         //second time to test how it behaves :)
+        
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string join properties using(idproperty) where idstructure=100211 and name='Property1'");
+		Assert.assertEquals(1,names.getRowCount());
+		Assert.assertEquals(b.toString(),names.getValue(0,"value"));
+		Assert.assertEquals("TRUNCATED",names.getValue(0,"status"));		
+	
+		record.setProperty(Property.getInstance("Property1","Reference 1"),"Value1");
+		
         writer.write(record);
         c.close();
         
@@ -77,9 +90,10 @@ public class PropertyWriterTest  extends DbUnitTest {
 		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM values_number where idstructure=100211");
 		Assert.assertEquals(1,names.getRowCount());
 
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM values_string join properties using(idproperty) where idstructure=100211 and name='Property1'");
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string join properties using(idproperty) where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals("Value1",names.getValue(0,"value"));
+		Assert.assertEquals("UNKNOWN",names.getValue(0,"status"));		
 	
 		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM values_number join properties using(idproperty) where idstructure=100211 and name='Property2'");
 		Assert.assertEquals(1,names.getRowCount());
