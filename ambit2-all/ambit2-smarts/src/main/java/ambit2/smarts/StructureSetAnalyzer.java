@@ -1,6 +1,7 @@
 package ambit2.smarts;
 
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import java.util.Vector;
 
@@ -9,22 +10,29 @@ public class StructureSetAnalyzer
 {
 	public class CharStructInfo 
 	{
+		public int atomCount;
+		public int bondCount;
 		public String smiles;		
 		public int frequency;
-		public double QI; 
+		public double SQI;   //Structure Quality Index
 	};
 	
 	
 	public Vector<IAtomContainer> structures = new Vector<IAtomContainer>();
 	public double factor = 0.50; //This is the weight of the frequency
 	public Vector<CharStructInfo> charStructInfo = new Vector<CharStructInfo>();
-	//public Vector<String> charStruct = new Vector<String>();
+	public int maxNumOfStructs = 500;
 	
-	
-	
-	public int maxStructSize;
-	
-	
+	//Utility objects
+	SmartsParser sp = new SmartsParser();
+	IsomorphismTester isoTester = new IsomorphismTester();
+	ChemObjectToSmiles cots = new ChemObjectToSmiles();
+	ChemObjectFactory cof = new ChemObjectFactory();
+	SmartsToChemObject stco = new SmartsToChemObject();
+		
+	int maxStructSize;
+	double minSQI;
+	int minSQIPos;
 	
 	void setMaxStructSize()
 	{
@@ -51,19 +59,148 @@ public class StructureSetAnalyzer
 	
 	public void stochasticAnalysis()
 	{	
+		minSQI = 0;
+		minSQIPos = -1;
 		charStructInfo.clear();
 		for (int i = 0; i < structures.size(); i++)
 			processStructureStochasticalty(structures.get(i));
 	}
 	
 	
-	void processStructureStochasticalty(IAtomContainer container)
+	void processStructureStochasticalty(IAtomContainer mol)
 	{
+		for (int k = 0; k < mol.getAtomCount(); k++)
+		{
+			cof.setAtomSequence(mol, mol.getAtom(k));
+			int n = cof.sequence.size();
+			
+			for (int i = 0; i < n; i++)
+			{
+				IAtomContainer struct = cof.getFragmentFromSequence(i);				
+				String smiles = cots.getSMILES(struct);
+				
+				if (!checkForDuplication(smiles))
+					registerNewStruct(struct,smiles);
+			}
+		}
+	}
+	
+	boolean checkForDuplication(String smarts)
+	{	
+		QueryAtomContainer query  = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		isoTester.setQuery(query);						
+				
+		for (int i = 0; i < charStructInfo.size(); i++)
+		{
+			CharStructInfo s = charStructInfo.get(i);
+			if (query.getAtomCount() == s.atomCount)
+				if (query.getBondCount() == s.bondCount)
+				{					
+					if (smarts.equals(s.smiles))
+						return(true);
+					
+					QueryAtomContainer q = sp.parse(s.smiles);
+					IAtomContainer ac = stco.extractAtomContainer(q,null);
+					
+					boolean isoRes = isoTester.hasIsomorphism(ac);
+					if (isoRes)
+						return(true);
+				}
+		}
 		
+		return(false);
 	}
 	
 	
+	void registerNewStruct(IAtomContainer struct, String smiles)
+	{
+		int freq = getFrequency(smiles);
+		double SQI = getSQI(freq, struct.getAtomCount());
+		
+		
+		if (charStructInfo.size() < maxNumOfStructs)
+		{
+			CharStructInfo csi = new CharStructInfo();
+			csi.atomCount = struct.getAtomCount();
+			csi.bondCount = struct.getBondCount();
+			csi.frequency = freq;
+			csi.smiles = smiles;
+			csi.SQI = SQI;
+			charStructInfo.add(csi);
+			
+			if (minSQIPos == -1)  //This is only for the first added struct.
+			{	
+				minSQIPos = 0;
+				minSQI = SQI;
+			}
+			else
+			{
+				if (minSQI > SQI)
+				{
+					minSQIPos = charStructInfo.size()-1;
+					minSQI = SQI;
+				}
+			}
+				
+		}
+		else  //Structure set is full. The worst SQI could be replaced.
+		{
+			if (minSQI < SQI)  
+			{	
+				//Removing the worst struct
+				charStructInfo.remove(minSQIPos);
+				
+				//Adding the new struct
+				CharStructInfo csi = new CharStructInfo();
+				csi.atomCount = struct.getAtomCount();
+				csi.bondCount = struct.getBondCount();
+				csi.frequency = freq;
+				csi.smiles = smiles;
+				csi.SQI = SQI;
+				charStructInfo.add(csi);
+				
+				setMinSQI();
+			}
+		}
+	}
 	
+	double getSQI(int frequency, int strSize)
+	{
+		return( factor*frequency/structures.size() + (1-factor)*strSize/maxStructSize);
+	}
+	
+	
+	int getFrequency(String smiles)
+	{
+		int freq = 0;
+		QueryAtomContainer query  = sp.parse(smiles);
+		sp.setNeededDataFlags();
+		isoTester.setQuery(query);
+		
+		for (int i = 0; i < structures.size(); i++)
+		{
+			IAtomContainer ac = structures.get(i); 
+			boolean isoRes = isoTester.hasIsomorphism(ac);
+			if (isoRes)
+				freq++;
+		}
+		
+		return (freq);
+	}
+	
+	
+	void setMinSQI()
+	{
+		minSQI = charStructInfo.get(0).SQI;
+		minSQIPos = 0;
+		for (int i = 1; i < charStructInfo.size(); i++)
+			if (minSQI > charStructInfo.get(i).SQI)
+			{
+				minSQI = charStructInfo.get(i).SQI;
+				minSQIPos = i;
+			}
+	}
 	
 	
 }
