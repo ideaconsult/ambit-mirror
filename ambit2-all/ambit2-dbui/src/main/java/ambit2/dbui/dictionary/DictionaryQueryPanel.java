@@ -30,8 +30,6 @@
 package ambit2.dbui.dictionary;
 
 import java.awt.Component;
-import java.awt.FontMetrics;
-import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
@@ -39,9 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListDataEvent;
@@ -125,7 +125,7 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 		initRows();
 		FormLayout layout = new FormLayout(
 	            "331dlu",
-				"24dlu,pref:grow");        
+				"pref,48dlu,pref:grow");        
 	     PanelBuilder panel = new PanelBuilder(layout);
 	     panel.setDefaultDialogBorder();
 
@@ -135,10 +135,95 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 	     c = createNavigator(panel.getPanel(),path);
 	    // c.setBackground(panel.getPanel().getBackground());
 	    // c.setBorder(BorderFactory.createRaisedBevelBorder());
-	     panel.add(c, cc.xywh(1,1,1,1));
-	     panel.add(createValueComponent(), cc.xywh(1,2,1,1));	  	     
+	     panel.addSeparator("Filter by templates", cc.xywh(1,1,1,1));
+	     panel.add(c, cc.xywh(1,2,1,1));
+	     panel.add(createValueComponent(), cc.xywh(1,3,1,1));	  	     
 	     return panel.getPanel();
-	}		
+	}
+	protected JComponent createNavigator(final JComponent parent,List<Dictionary> path) {
+		
+		final PathComboBoxEditor editor = new PathComboBoxEditor((JComboBox)createFieldnameComponent());
+		final PathNavigationRenderer renderer = new PathNavigationRenderer();
+		final TableCellRenderer textRenderer = new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table,
+					Object value, boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				if (column==0) return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+						row, column);
+				if (value != null)
+					((JLabel) c).setText(((Dictionary)value).getTemplate());
+				else 
+					((JLabel) c).setText("All");
+				return c;
+			}
+		};
+		JTable table = new JTable(new SimplePathTableModel(path,true)) {
+			/*
+			@Override
+			public Rectangle getCellRect(int row, int column,
+					boolean includeSpacing) {
+				if ((column %2) == 1) {
+					Rectangle r1 = super.getCellRect(row, column-1, includeSpacing);
+					Rectangle r2 = super.getCellRect(row, column, includeSpacing);
+					Rectangle r = new Rectangle(r2.x,r2.y,r1.width+r2.width,r2.height);
+					return r;
+				} else
+					return super.getCellRect(row, column, includeSpacing);
+			}
+			*/
+			@Override
+			public Component prepareEditor(TableCellEditor editor, int row,
+					int column) {
+				try {
+					Object o = getValueAt(row, column);
+					if (o == null)
+						parents.setQuery(new DictionaryObjectQuery());
+					else if (o instanceof Dictionary)
+						parents.setQuery(new DictionaryObjectQuery((Dictionary)o));
+					if (parents.size() == 0) return null;
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+				return super.prepareEditor(editor, row, column);
+			}
+			
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				return textRenderer;
+			}
+			@Override
+			public TableCellEditor getCellEditor(int row, int column) {
+				return editor;
+			}
+			@Override
+			public void createDefaultColumnsFromModel() {
+				TableColumnModel cm = getColumnModel();
+				
+				while (cm.getColumnCount() > 0) {
+					cm.removeColumn(cm.getColumn(0));
+				}
+				for (int i = 0; i < getModel().getColumnCount(); i++) {
+					TableColumn newColumn = new TableColumn();
+					newColumn.setModelIndex(i);
+					if (i==0) {
+						newColumn.setWidth(18);
+						newColumn.setMinWidth(18);
+						newColumn.setMaxWidth(48);
+					}
+					addColumn(newColumn);
+		        				    
+				}
+			}
+		};
+		table.setCellSelectionEnabled(true);
+		table.setTableHeader(null);
+		table.setShowVerticalLines(false);
+	    return new JScrollPane(table);
+
+	}
+	/*
 	protected JComponent createNavigator(final JComponent parent,List<Dictionary> path) {
 	
 		final PathComboBoxEditor editor = new PathComboBoxEditor((JComboBox)createFieldnameComponent());
@@ -234,6 +319,7 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 	    return new JScrollPane(table);
 
 	}
+	*/
 	@Override
 	protected JComponent createConditionComponent() {
 		return BasicComponentFactory.createComboBox(
@@ -272,6 +358,7 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 		selectFields.setObject(properties);
 		return selectFields;
 			}
+	/*
 	@Override
 	protected JComponent createFieldnameComponent() {
 		ValueHolder vh = new ValueHolder();
@@ -305,6 +392,54 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 		return BasicComponentFactory.createComboBox(fieldnames);
 
 	}
+	*/
+	protected JComponent createFieldnameComponent() {
+		ValueHolder vh = new ValueHolder();
+		SelectionInList<Dictionary> fieldnames = new SelectionInList<Dictionary>(
+					new RowsModel<Dictionary>(parents),vh);
+		fieldnames.addPropertyChangeListener("value",new PropertyChangeListener() {
+			final TemplateQuery tq = new TemplateQuery();
+			public void propertyChange(PropertyChangeEvent evt) {
+				try {
+
+					if (evt.getNewValue()!= null) {
+						tq.setCondition(StringCondition.getInstance(StringCondition.C_EQ));			
+						tq.setValue(((Dictionary)evt.getNewValue()).getTemplate());
+						details.setQuery(tq);
+						if (details.size()==0)
+							details.close();
+						else {
+							details.beforeFirst();
+							while (details.next()) {
+								profile.add(details.getObject());
+							}
+						}
+					}
+
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+				
+			}
+		});		
+	
+	
+		JComboBox box = BasicComponentFactory.createComboBox(fieldnames);
+		box.setRenderer(new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList list,
+					Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component c = super.getListCellRendererComponent(list, value, index, isSelected,
+						cellHasFocus);
+				if ((value != null) &&(c instanceof JLabel)) 
+					((JLabel)c).setText(((Dictionary)value).getTemplate());
+				return c;
+			}
+		});
+		return box;
+
+	}	
 	public void open() throws DbAmbitException {
 		try {
 			parents.setQuery(new DictionaryObjectQuery());
@@ -318,6 +453,64 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 		super.setConnection(connection);
 		parents.setConnection(connection);
 		details.setConnection(connection);
+	}
+}
+
+class SimplePathTableModel extends AbstractTableModel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2784257029846153380L;
+	protected String[] name = {"#","Templates (hierarchical)"};
+	protected List<Dictionary> path;
+	public SimplePathTableModel() {
+		this (new ArrayList<Dictionary>(),true);
+	}
+	
+	public SimplePathTableModel(List<Dictionary> path, boolean columns) {
+		super();
+		this.path = path;
+
+	}
+
+	public int getColumnCount() {
+		return 2;
+	}
+
+	public int getRowCount() {
+		return path.size();
+	}
+
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		switch (columnIndex) {
+		case 1: return path.get(rowIndex);
+		default: {
+			StringBuilder b = new StringBuilder();
+			for (int i=0; i < rowIndex;i++) b.append(">");
+			//return Integer.toString(rowIndex+1)+"."; 
+			return b.toString();
+		}
+		}
+		
+		
+	}
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return columnIndex==1;
+	}
+	@Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		if (value==null) return;
+		if (columnIndex == 1) {
+			for (int i=path.size()-1; i>rowIndex;i--)
+					path.remove(i);		
+				path.add((Dictionary)value);
+			fireTableStructureChanged();
+		}
+	}
+	@Override
+	public String getColumnName(int column) {
+		return name[column];
 	}
 }
 
