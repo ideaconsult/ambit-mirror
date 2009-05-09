@@ -57,9 +57,11 @@ public class WizardPanel extends JPanel {
 
         JButton backButton = new JButton("< Back");
         backButton.setEnabled(false);
+        backButton.setVisible(false);
         JButton nextButton = new JButton("Next >");
         JButton finishButton = new JButton("Finish");
         finishButton.setEnabled(false);
+        finishButton.setVisible(false);
         JButton helpButton = new JButton(new AbstractAction("Help") {
         	public void actionPerformed(ActionEvent e) {
         		JOptionPane.showMessageDialog(panel,help);

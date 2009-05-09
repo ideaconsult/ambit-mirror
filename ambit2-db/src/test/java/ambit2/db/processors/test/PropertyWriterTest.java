@@ -76,7 +76,7 @@ public class PropertyWriterTest  extends DbUnitTest {
         writer.write(record);
         //second time to test how it behaves :)
         
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string join properties using(idproperty) where idstructure=100211 and name='Property1'");
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals(b.toString(),names.getValue(0,"value"));
 		Assert.assertEquals("TRUNCATED",names.getValue(0,"status"));		
@@ -90,7 +90,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM values_number where idstructure=100211");
 		Assert.assertEquals(1,names.getRowCount());
 
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string join properties using(idproperty) where idstructure=100211 and name='Property1'");
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string  where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals("Value1",names.getValue(0,"value"));
 		Assert.assertEquals("UNKNOWN",names.getValue(0,"status"));		

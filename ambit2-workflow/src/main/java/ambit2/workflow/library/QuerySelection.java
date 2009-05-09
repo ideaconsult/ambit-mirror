@@ -40,6 +40,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorCreateProfileQuery;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
@@ -63,6 +64,7 @@ public class QuerySelection extends Sequence {
 						new ClassHolder("ambit2.db.search.structure.QueryDataset","Dataset","Retrieve all the compounds from a dataset",""),
 						new ClassHolder("ambit2.db.search.structure.QueryStructure","SMILES, Molecular formula, InChI","Search by SMILES, Inchi, Formula",""),
 						new ClassHolder("ambit2.db.search.structure.QuerySimilarityStructure","Similarity, substructure, exact structure","Search for similar structures",""),
+						new ClassHolder("ambit2.db.search.structure.QuerySMARTS","Substructure query by SMARTS","Search for substructure by SMARTS pattern",""),						
 						new ClassHolder("ambit2.db.search.structure.QueryStoredResults","Previous search results","Display results from previous queries",""),						
 						new ClassHolder("ambit2.descriptors.FunctionalGroupDescriptor","Functional groups","Available functional groups",""),
 				},"Search by"

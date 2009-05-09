@@ -23,8 +23,8 @@ import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.AbstractBatchProcessor;
+import ambit2.db.processors.AbstractRepositoryWriter;
 import ambit2.db.processors.PropertyImporter;
-import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
@@ -51,7 +51,7 @@ public class ImportPropertiesWorkflow extends Workflow  {
         		new ProcessorsChain<IAtomContainer, IBatchStatistics,IProcessor>();
         chain.add(writer);
         chain.setAbortOnError(true);
-        
+        /*
 		final SelectionBean<ClassHolder> selection = new SelectionBean<ClassHolder>(
 				new ClassHolder[] {
 						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
@@ -91,6 +91,7 @@ public class ImportPropertiesWorkflow extends Workflow  {
     			return selection.getTitle();
     		}
     	};
+    	*/
     	
         final BatchMolProcessor batch = new BatchMolProcessor();
         batch.setProcessorChain(chain);
@@ -120,15 +121,66 @@ public class ImportPropertiesWorkflow extends Workflow  {
         );
         p2.setName("Create new dataset");
         s1.addStep(p2);
-        s1.addStep(selectKey);
-        s1.addStep(match);        
+        s1.addStep(getMatchKeySequence(writer));
+        //s1.addStep(selectKey);
+        //s1.addStep(match);        
         s1.addStep(new DatasetSelection(p1,dataset));
 
 
         setDefinition(new LoginSequence(new InputFileSelection(s1)));
 
 	}
+	
+	public Sequence getMatchKeySequence(final PropertyImporter writer) {
+		Sequence seq = new Sequence();
+		final SelectionBean<ClassHolder> selection = new SelectionBean<ClassHolder>(
+				new ClassHolder[] {
+						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.EINECSKey","EINECS registry number","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.PubchemCID","PubChem Compound ID (PUBCHEM_COMPOUND_CID)","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","SSTox Chemical ID DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.DSSToxRID","DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files","",""),						
+						new ClassHolder("ambit2.core.processors.structure.key.InchiPropertyKey","InChi","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.SmilesKey","SMILES","",""),
+						//new ClassHolder("ambit2.core.processors.structure.key.PropertyKey","Other property - to be defined","",""),
+				},"Match chemical compounds from file and the database by:"
+				);
+
+        UserInteraction<SelectionBean<ClassHolder>> selectKey = new UserInteraction<SelectionBean<ClassHolder>>(
+        		selection,
+        		"SELECTION","??????");
+        selectKey.setName("Select how to match file and database entries");
+       
+        Performer<SelectionBean<ClassHolder>,IStructureKey> performer = new Performer<SelectionBean<ClassHolder>,IStructureKey>() {
+    		public IStructureKey execute() throws Exception {
+    			if (getTarget() instanceof IStructureKey) 
+    				return (IStructureKey) getTarget();
+    			ClassHolder ch = getTarget().getSelected();
+    			Object o = Introspection.loadCreateObject(ch.getClazz());
+    			if (o instanceof IStructureKey) {
+        			writer.setPropertyKey((IStructureKey)o);    				
+    				return (IStructureKey)o;
+    			}
+    			else throw new Exception(o.getClass().getName() + " not expected");
+    		}        	
+        };
+        
+    	Primitive<SelectionBean<ClassHolder>,IStructureKey> match = 
+    		new Primitive<SelectionBean<ClassHolder>,IStructureKey>( 
+    			"SELECTION",
+    			"KEY",performer) {
+    		@Override
+    		public synchronized String getName() {
+    			return selection.getTitle();
+    		}
+    	};		
+    	seq.addStep(selectKey);
+    	seq.addStep(match);    	
+    	return seq;
+	}
 }
+
+
 
 class BatchMolProcessor extends AbstractBatchProcessor<IInputState,IAtomContainer> 
 						{

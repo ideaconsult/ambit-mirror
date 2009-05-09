@@ -32,6 +32,8 @@ package ambit2.db.search.structure;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.batik.ext.awt.image.spi.ImageTagRegistry;
+
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -60,5 +62,11 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
+	public double calculateMetric(IStructureRecord object) {
+		return 1;
 	}
 }

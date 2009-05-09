@@ -65,7 +65,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 		return cache.get(sql);
 	}
 	protected void addStatementToCache(String sql,PreparedStatement p) {
-		cache.put(sql,p);
+		if (p != null) 	cache.put(sql,p);
 	}	
 	@Override
 	public void close() throws SQLException {

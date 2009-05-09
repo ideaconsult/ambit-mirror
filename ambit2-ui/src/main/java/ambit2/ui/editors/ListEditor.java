@@ -3,6 +3,9 @@ package ambit2.ui.editors;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
@@ -15,7 +18,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 
 import com.jgoodies.binding.adapter.Bindings;
@@ -41,7 +43,12 @@ public abstract class ListEditor implements IAmbitEditor<ListModel> {
 
 
 	protected JList list;
-    protected JToolBar bar;
+    public JList getList() {
+		return list;
+	}
+
+
+	protected JToolBar bar;
     protected SelectionInList selectionInList;
     protected JComponent component;
 
@@ -71,9 +78,23 @@ public abstract class ListEditor implements IAmbitEditor<ListModel> {
 		} 
 
 	}		
+	public void addMouseListener(MouseListener listener) {
+		list.addMouseListener(listener);
+	}
+	protected void handleDoubleClick(Object selection) {
+		
+	}
 	protected void createComponents() {
         list = new JList();
-        list.setMaximumSize(new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE));      
+
+        list.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseReleased(MouseEvent e) {
+        		if (e.getClickCount()==2)
+        			handleDoubleClick(selectionInList.getSelection());
+        	}
+        });
+        list.setMaximumSize(new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE));    
     	selectionInList = new SelectionInList();
 		selectionInList.addPropertyChangeListener("value",new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -103,14 +124,17 @@ public abstract class ListEditor implements IAmbitEditor<ListModel> {
 	public JComponent buildPanel() {
         FormLayout layout = new FormLayout(
 	            "left:170dlu:grow,left:170dlu:grow",
-				"24dlu,top:pref:grow,top:pref:grow"); 	        		
+				"top:pref:grow,24dlu,top:pref:grow"); 	        		
         
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
-        builder.add(new JScrollPane(list),cc.xywh(1,2,2,1));
+        builder.add(new JScrollPane(list),cc.xywh(1,1,2,1));
         builder.add(editor,cc.xywh(1,3,2,1));
-        builder.add(bar,cc.xywh(1,1,2,1));
+        builder.add(bar,cc.xywh(1,2,2,1));
         return builder.getPanel();
+	}
+	public Object getSelected() {
+		return selectionInList.getValue();
 	}
 	
 	protected void configureToolBar(JToolBar bar) {
@@ -149,11 +173,12 @@ public abstract class ListEditor implements IAmbitEditor<ListModel> {
 	}
 	protected abstract IAmbitEditor getEditor(Object object);
 	
-    
+    /*
 	protected ListCellRenderer getListCellRenderer(String[] columns) {
 		return new CustomListCellRenderer(columns);
 	}
-
+	*/
+	
 	public boolean confirm() {
 		return true;
 	}

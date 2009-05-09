@@ -128,7 +128,7 @@ public class DefineStructure extends While {
         
         Sequence q = new Sequence();
         q.addStep(new QuerySelection());
-        q.addStep(new QueryExecution(new QueryField(),DBWorkflowContext.QUERY_POPUP));
+        q.addStep(new QueryExecution(new QueryField(),DBWorkflowContext.QUERY_POPUP,null));
         UserInteraction browse = new UserInteraction(
         		true,DBWorkflowContext.USERINTERACTION,DBWorkflowContext.QUERY_POPUP,"Browse results");
         q.addStep(browse);        

@@ -8,7 +8,6 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -34,10 +33,12 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		super();
 		workflows.add(new ClassHolder("ambit2.plugin.search.SearchWorkflow","Search","Search by single property or identifier","images/search_256.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.search.AnalogsFinderWorkflow","Advanced search","Search by multiple criteria","images/search_256.png"));
-		workflows.add(new ClassHolder("ambit2.plugin.search.ProfileWorkflow","Properties","Select properties to be displayed","images/database_statistics.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.search.RefineSearchWorkflow","Refine search results","Search within last results","images/search_256.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.search.BrowseStoredWorkflow","Browse previous search results","Browse results from previous queries","images/search_256.png"));		
+		workflows.add(new ClassHolder("ambit2.plugin.search.ProfileWorkflow","Properties","Select properties to be displayed","images/database_profiling.png"));		
 		workflows.add(new ClassHolder("ambit2.workflow.library.StructuresExportWorkflow","Export results","Export results as PDF/RTF/HTML/SDF files","images/report.png"));
+		workflows.add(new ClassHolder("ambit2.workflow.library.QueryStatisticsWorkflow","Statistics","Generate search results statistics /see Log tab","images/database_statistics.png"));		
 		//workflows.add(new ClassHolder("ambit2.plugin.pbt.SavePBTWorkflow","Save","Save PBT assessment results into database","images/import.png"));
-
 		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		

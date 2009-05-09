@@ -35,7 +35,6 @@ import org.junit.Test;
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.core.io.FileInputState;
 import ambit2.db.LoginInfo;
-import ambit2.db.SourceDataset;
 import ambit2.plugin.dbtools.ImportWorkflow;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.library.InputFileSelection;
@@ -176,7 +175,7 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 		Assert.assertEquals(8, structures.getRowCount());	
 		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='sdf'");
 		Assert.assertEquals(38, templates.getRowCount());
-		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT name,value FROM values_string join properties using(idproperty) where name='CasRN' and value='110-51-0'");
+		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT name,value FROM values_string where name='CasRN' and value='110-51-0'");
 		Assert.assertEquals(1, templates.getRowCount());			
 		
 	}	

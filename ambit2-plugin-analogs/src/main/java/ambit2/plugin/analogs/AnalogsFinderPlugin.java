@@ -54,8 +54,9 @@ public class AnalogsFinderPlugin extends DBWorkflowPlugin {
 		workflows.add(new ClassHolder("ambit2.plugin.analogs.CategoryVerificationWorkflow","Category verification","Category verification",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_category_verification.png")));
 		workflows.add(new ClassHolder("ambit2.plugin.analogs.EndpointValidationWorkflow","Endpoint validation","Endpoint validation",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_endpoint_validation.png")));
 		workflows.add(new ClassHolder("ambit2.plugin.analogs.ReadAcrossWorkflow","Read across","Read across",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_read_across.png")));
-		workflows.add(new ClassHolder("ambit2.plugin.analogs.ProfileWorkflow","Profile","Profile",Utils.createImageIcon("ambit2/plugin/analogs/images/32x32_profiling.png")));		
+		workflows.add(new ClassHolder("ambit2.plugin.analogs.ProfileWorkflow","Profile","Profile",Utils.createImageIcon("images/database_profiling.png")));		
 		workflows.add(new ClassHolder("ambit2.workflow.library.StructuresExportWorkflow","Export results","Export results as PDF/RTF/HTML/SDF files","images/report.png"));
+		workflows.add(new ClassHolder("ambit2.workflow.library.QueryStatisticsWorkflow","Statistics","Generate search results statistics /see Log tab","images/database_statistics.png"));		
 		//workflows.add(new ClassHolder("ambit2.plugin.pbt.SavePBTWorkflow","Save","Save PBT assessment results into database","images/import.png"));
 		
 		contextListener = new WorkflowOptionsLauncher(null);

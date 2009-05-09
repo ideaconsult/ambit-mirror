@@ -100,5 +100,11 @@ public class PropertyStatsNumeric extends AbstractQuery<Property,String, StringC
 	public Class getValueType() {
 			return PropertyStats.class;
 	}
+	public double calculateMetric(PropertyStats object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 
 }

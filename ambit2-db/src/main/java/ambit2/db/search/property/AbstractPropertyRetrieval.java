@@ -41,5 +41,11 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 	 * 
 	 */
 	private static final long serialVersionUID = -6129319550824253087L;
-
+	public double calculateMetric(Property property) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
+	
 }

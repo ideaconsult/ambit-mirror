@@ -65,6 +65,12 @@ public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondi
 			throw new AmbitException(x);
 		}
 	}
+	public double calculateMetric(Object object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 	
-
+	
 }

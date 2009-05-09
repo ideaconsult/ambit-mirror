@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.search.structure.ScopeQuery;
 
 import com.jgoodies.binding.beans.Model;
 
@@ -205,6 +204,7 @@ using(idstructure)
 		ArrayList<QueryParam> param = new ArrayList<QueryParam>();
 		if (scope != null) {
 			List<QueryParam> p = scope.getParameters();
+			if (p!=null)
 			for (int j=0; j < p.size(); j++) {
 				QueryParam qp = p.get(j);
 				//System.out.println(qp);
@@ -238,7 +238,10 @@ using(idstructure)
 
 	public void setScope(IQueryObject<T> scope) {
 		if (scope instanceof QueryCombined) return;
-		this.scope = scope;
+		if (scope instanceof ScopeQuery) {
+			this.scope = (IQueryObject)((ScopeQuery)scope).getValue();
+		} else
+			this.scope = scope;
 	}
 	public void add(IQueryRetrieval<T> query) {
 		queries.add(query);
@@ -255,5 +258,21 @@ using(idstructure)
 		else
 			return null;
 	}
-
+	public boolean isPrescreen() {
+		return false;
+	}
+	public double calculateMetric(T object) { return 1;};
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		for (IQueryObject<T> q : queries) {
+			b.append(q.toString());
+			b.append(',');
+		}
+		if (scope != null) {
+			b.append(" within ");
+			b.append(scope.toString());
+		}
+		return super.toString();
+	}
 }

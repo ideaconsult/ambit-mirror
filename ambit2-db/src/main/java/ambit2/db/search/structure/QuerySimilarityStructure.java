@@ -35,11 +35,14 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.data.ClassHolder;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 
@@ -51,6 +54,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	private static final long serialVersionUID = -7669825969508301397L;
 	protected AbstractStructureQuery query;
 	protected FingerprintGenerator g;
+	protected MoleculeReader molReader = null;
 	public static ClassHolder[] methods = new ClassHolder[] {
 			new ClassHolder("ambit2.db.search.structure.QuerySimilarityBitset","Tanimoto [fingerprints]","",""),
 			new ClassHolder("ambit2.db.search.structure.QueryPrescreenBitSet","Substructure","",""),
@@ -176,5 +180,32 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	public String toString() {
 		if (getFieldname() == null) return "Search for similar structures/substructures";
 		else return query.toString();
+	}
+	@Override
+	public boolean isPrescreen() {
+		if (query==null) return super.isPrescreen();
+		else return query.isPrescreen();
+	}
+	@Override
+	public double calculateMetric(IStructureRecord object) {
+		try {
+			if (query==null) return super.calculateMetric(object);
+			else if (query instanceof QueryPrescreenBitSet) {
+				if (molReader == null) molReader = new MoleculeReader();
+				IAtomContainer target = molReader.process(object);
+				int match = 0;
+				for (int i=0; i < getValue().getAtomContainerCount();i++) {
+					IAtomContainer q = getValue().getAtomContainer(i);
+					if (q.getAtomCount()==0) continue;
+					if (!UniversalIsomorphismTester.isSubgraph(target, q)) {
+						System.out.println("not found " +q.getAtomCount());
+						return 0;
+					} else match++;
+				}
+				return match;
+			} else return 1;
+		} catch (Exception x) {
+			return -1;
+		}
 	}
 }

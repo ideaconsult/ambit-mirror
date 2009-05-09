@@ -84,10 +84,10 @@ public class StoredQuery implements IStoredQuery {
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
-	public IQueryObject getQuery() {
+	public IQueryObject<IStructureRecord> getQuery() {
 		return query;
 	}
-	public void setQuery(IQueryObject query) {
+	public void setQuery(IQueryObject<IStructureRecord> query) {
 		this.query = query;
 		query.setId(getId());
 	}

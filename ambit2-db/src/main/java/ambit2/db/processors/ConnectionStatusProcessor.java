@@ -1,5 +1,6 @@
 package ambit2.db.processors;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ambit2.base.exceptions.AmbitException;
@@ -7,17 +8,17 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 
 
-public class ConnectionStatusProcessor extends AbstractDBProcessor<String,StringBuffer> {
+public class ConnectionStatusProcessor<T> extends AbstractDBProcessor<T,StringBuffer> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3836666411270315603L;
 
-	public StringBuffer process(String target) throws AmbitException {
+	public StringBuffer process(T target) throws AmbitException {
 	    StringBuffer b = new StringBuffer();
 	    if (target != null)
-	    	b.append(target);
+	    	b.append(target.toString());
 	    b.append('\n');
 	    try {
 			java.sql.DatabaseMetaData db = connection.getMetaData();
@@ -48,5 +49,29 @@ public class ConnectionStatusProcessor extends AbstractDBProcessor<String,String
 
 	public void open() throws DbAmbitException {
 	}
-
+	protected StringBuffer print(ResultSet rs, StringBuffer b) throws SQLException {
+		if (rs.getMetaData().getColumnCount()==1) {
+    		while (rs.next()) {	
+	    		b.append(rs.getMetaData().getColumnLabel(1));
+		    	b.append('\t');
+		    	b.append(rs.getString(1));
+	    		b.append('\n');
+    		}	    				
+		} else {
+			b.append('\n');
+			for (int j=0; j < rs.getMetaData().getColumnCount();j++) {
+				b.append(rs.getMetaData().getColumnLabel(j+1));
+				b.append('\t');
+			}
+    		b.append('\n');	    				
+    		while (rs.next()) {	
+    			for (int j=0; j < rs.getMetaData().getColumnCount();j++) {
+		    		b.append(rs.getString(j+1));
+		    		b.append('\t');					    		
+    			}
+	    		b.append('\n');
+    		}
+		}		
+		return b;
+	}
 }

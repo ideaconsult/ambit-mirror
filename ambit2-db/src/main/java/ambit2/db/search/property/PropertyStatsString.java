@@ -85,5 +85,11 @@ public class PropertyStatsString extends AbstractQuery<Property,String, StringCo
 			throw new AmbitException(x);
 		}
 	}
+	public double calculateMetric(String object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 
 }

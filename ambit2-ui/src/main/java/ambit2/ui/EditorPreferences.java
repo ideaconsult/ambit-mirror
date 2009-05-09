@@ -51,8 +51,8 @@ public class EditorPreferences {
 		//{"java.lang.StringBuffer","ambit2.ui.query.DbStatusPanel"},
 		{"ambit2.base.data.Template","ambit2.ui.editors.TemplateEditor"},
 		{"ambit2.base.data.Property","ambit2.ui.editors.PropertyEditor"},
-		
-
+		{"ambit2.base.data.Dictionary","ambit2.ui.editors.DictionaryEditor"},
+		{"ambit2.db.search.property.QueryOntology","ambit2.dbui.dictionary.OntologyEditor"},
 		{"ambit2.core.data.experiment.Study","ambit2.ui.editors.StudyEditor"},
 		{"ambit2.core.data.experiment.Experiment","ambit2.ui.editors.ExperimentEditor"},
 		//{"toxTree.core.IDecisionMethod","ambit2.ui.editors.ToxTreeEditor"},
@@ -62,6 +62,8 @@ public class EditorPreferences {
 		{"ambit2.db.search.structure.QueryCombinedStructure","ambit2.dbui.QueryCombinedEditor"},
 		{"ambit2.db.search.structure.QueryStructure","ambit2.dbui.QueryChemicalEditor"},
 		{"ambit2.db.search.structure.QuerySimilarityStructure","ambit2.dbui.QuerySimilarityEditor"},
+		{"ambit2.db.search.structure.QuerySMARTS","ambit2.dbui.QuerySmartsEditor"},		
+		
 		{"ambit2.db.search.DictionarySubjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
 		{"ambit2.db.search.DictionaryObjectQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},
 		{"ambit2.db.search.DictionaryQuery","ambit2.dbui.dictionary.DictionaryQueryPanel"},

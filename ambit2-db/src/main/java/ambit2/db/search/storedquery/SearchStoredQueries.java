@@ -89,5 +89,11 @@ public class SearchStoredQueries  extends  AbstractQuery<SessionID, String, Stri
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
-	}	
+	}
+	public double calculateMetric(IStoredQuery object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 }

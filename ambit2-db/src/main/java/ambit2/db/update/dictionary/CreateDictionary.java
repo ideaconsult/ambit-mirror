@@ -55,12 +55,18 @@ public class CreateDictionary extends AbstractObjectUpdate<Dictionary>{
 		switch (index) {
 		case 0: {
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
-			params1.add(new QueryParam<String>(String.class, getObject().getTemplate()));
+			if (getObject()==null)
+				params1.add(new QueryParam<String>(String.class, null));
+			else
+				params1.add(new QueryParam<String>(String.class, getObject().getTemplate()));
 			return params1;
 		}
 		case 1:{
 			List<QueryParam> params2 = new ArrayList<QueryParam>();
-			params2.add(new QueryParam<String>(String.class, getObject().getParentTemplate()));
+			if (getObject()==null)
+				params2.add(new QueryParam<String>(String.class, null));
+			else
+				params2.add(new QueryParam<String>(String.class, getObject().getParentTemplate()));
 			return params2;
 		}
 		case 2:{

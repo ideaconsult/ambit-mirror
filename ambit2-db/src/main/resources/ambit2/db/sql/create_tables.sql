@@ -538,8 +538,8 @@ FROM property_values join property_number using(idvalue,idtype);
 
 DROP VIEW IF EXISTS `values_string`;
 create view `values_string` as
-SELECT id,idproperty,idstructure,if(status="TRUNCATED",text,value) as value,idvalue,status,user_name,idtype
-FROM property_values join property_string using(idvalue,idtype);
+SELECT id,idproperty,idstructure,if(status="TRUNCATED",text,value) as value,idvalue,status,user_name,idtype,name
+FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype);
 
 -- -----------------------------------------------------
 -- all property values
