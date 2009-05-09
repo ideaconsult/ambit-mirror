@@ -11,13 +11,14 @@ import ambit2.db.processors.ProcessorCreateQuery;
 import ambit2.db.processors.ProcessorCreateSession;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.QuerySMARTS;
+import ambit2.descriptors.FunctionalGroup;
 
 public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 
 	@Override
 	protected QuerySMARTS createQuery() throws Exception {
 		QuerySMARTS q = new QuerySMARTS();
-		q.setValue("Br");
+		q.setValue(new FunctionalGroup("Br","Br",""));
 		q.setId(999);
 		return q;
 	}

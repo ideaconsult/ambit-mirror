@@ -36,6 +36,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.search.structure.ScopeQuery;
 
 /**
  * Sets a scope to the {@link #query}
@@ -60,6 +61,9 @@ public class ProcessorSetQueryScope extends AbstractDBProcessor<IQueryRetrieval<
 	public IQueryRetrieval<IStructureRecord> process(
 			IQueryRetrieval<IStructureRecord> target) throws AmbitException {
 		if (query == null) return target;
+		if (target == null) return query;
+		if (target instanceof ScopeQuery)
+			target = ((ScopeQuery)target).getValue();
 		if (target == null) return query;
 		
 		if (query instanceof QueryCombinedStructure) {
