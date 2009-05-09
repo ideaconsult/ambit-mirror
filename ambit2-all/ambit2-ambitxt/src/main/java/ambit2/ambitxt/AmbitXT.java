@@ -62,9 +62,9 @@ public class AmbitXT extends NPluginsApplication {
 		try {
 			MopacShell mopac = new MopacShell();
 			//Name2StructureProcessor p = new Name2StructureProcessor();
-			//p.process("benzene");
+			mopac.process(null);
 		} catch (Throwable x) {
-			x.printStackTrace();
+			
 		}
 		leftPanel.setTitle("Workflow");
 		mainPanel.setTitle(" ");
