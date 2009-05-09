@@ -651,6 +651,7 @@ class ShowProperty extends MyAction<Object> {
 		if (show) {
 			JTextPane p = new JTextPane();
 			p.setText(value.toString());
+			p.setPreferredSize(new Dimension(400,600));
 			JOptionPane.showMessageDialog(parent,new JScrollPane(p));
 		}
 	    StringSelection stringSelection = new StringSelection( value.toString() );

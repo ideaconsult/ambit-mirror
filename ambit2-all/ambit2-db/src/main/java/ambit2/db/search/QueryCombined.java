@@ -259,9 +259,18 @@ using(idstructure)
 			return null;
 	}
 	public boolean isPrescreen() {
+		for (IQueryRetrieval q: queries)
+			if (q.isPrescreen()) return true;
 		return false;
 	}
-	public double calculateMetric(T object) { return 1;};
+	public double calculateMetric(T object) {
+		for (IQueryRetrieval q: queries)
+			if (q.isPrescreen()) {
+				double metric = q.calculateMetric(object);
+				if (metric>0) return metric;
+			}
+		return 0;
+	}
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
