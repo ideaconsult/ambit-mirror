@@ -104,6 +104,7 @@ class Records2QueryProcessor extends DefaultAmbitProcessor<List<IStructureRecord
 		similarity.setValue(molecules);
 		similarity.setThreshold(0.5);
 		similarity.setName(similarity.toString());
+
 		
 		q.add(similarity);
 		

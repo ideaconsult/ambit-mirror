@@ -37,8 +37,6 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import javax.swing.JComponent;
 
-import org.apache.poi.hslf.record.ExVideoContainer;
-
 import ambit2.base.data.Profile;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;

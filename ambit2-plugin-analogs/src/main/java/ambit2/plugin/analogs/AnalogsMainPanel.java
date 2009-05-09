@@ -71,8 +71,20 @@ public class AnalogsMainPanel implements INPluginUI<INanoPlugin> {
 		results.setProperties(p);
 		results.setAnimate(true);
 		
+		
+	    StatisticsPanel stats = new StatisticsPanel(context);
+		p = new Vector<String>();
+		p.add(DBWorkflowContext.STOREDQUERY);
+		p.add(DBWorkflowContext.ERROR);
+		p.add(DBWorkflowContext.DBCONNECTION_URI);
+		p.add(DBWorkflowContext.ENDPOINTS);
+
+		stats.setProperties(p);
+		stats.setAnimate(true);
+		
 		tabbedPane.addTab("Target chemical(s)", query);		
 		tabbedPane.addTab("Source chemical(s)", results);
+		tabbedPane.addTab("Source chemical(s) statistics", stats);
 
 		return tabbedPane;
 	}
