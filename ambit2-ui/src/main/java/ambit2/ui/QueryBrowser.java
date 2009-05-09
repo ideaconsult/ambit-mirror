@@ -26,20 +26,30 @@ package ambit2.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -60,7 +70,9 @@ import org.openscience.cdk.interfaces.IMolecule;
 import ambit2.base.data.IFilteredColumns;
 import ambit2.base.data.ISelectableRecords;
 import ambit2.base.data.ISortableColumns;
+import ambit2.mopac.MopacShell;
 import ambit2.ui.editors.IAmbitEditor;
+import ambit2.ui.jmol.Panel3D;
 import ambit2.ui.table.BrowserModeNavigator;
 import ambit2.ui.table.FindNavigator;
 import ambit2.ui.table.IBrowserMode;
@@ -290,6 +302,34 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 		table.setDefaultRenderer(Molecule.class, getImageRenderer(BrowserMode.Spreadsheet));
 		table.setDefaultRenderer(AtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));		
 		table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if (e.isPopupTrigger()) { //show 3d
+					int row = browser_table.rowAtPoint(e.getPoint());
+					int col = browser_table.columnAtPoint(e.getPoint());
+					Object value = browser_table.getValueAt(row, col);
+					JPopupMenu menu = new JPopupMenu();
+					
+					if (value instanceof IAtomContainer) {
+						menu.add(new Show3DAction(e.getComponent(),(IAtomContainer)value,false));
+						menu.add(new Show3DAction(e.getComponent(),(IAtomContainer)value,true));
+					} else {
+						menu.add(new ShowProperty(menu,value,false));
+						try {
+							Object o = browser_table.getModel().getValueAt(row, Integer.MAX_VALUE);
+							if (o !=null) menu.add(new ShowProperty(menu,o,true));
+						} catch (Exception x) {
+							x.printStackTrace();
+						}					
+					}
+					menu.show(e.getComponent(), e.getX(), e.getY());
+
+			
+				}
+			}
+		});
 
 		/*
 		table.setPreferredScrollableViewportSize(new Dimension(
@@ -590,3 +630,61 @@ class RowRenderer extends MultiCells<Integer,TableCellRenderer> implements Table
 	  
 	}
 	*/
+abstract class  MyAction<T> extends AbstractAction {
+	T value;
+	Component parent;
+	public MyAction(Component parent,T value) {
+		this.value = value;
+		this.parent = parent;
+	}
+}
+
+class ShowProperty extends MyAction<Object> {
+	boolean show = false;
+	public ShowProperty(Component parent,Object value, boolean show) {
+		super(parent,value);
+		if (show) putValue(NAME, "Show properties");
+		else putValue(NAME, value.toString());
+		this.show = show;
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (show) {
+			JTextPane p = new JTextPane();
+			p.setText(value.toString());
+			JOptionPane.showMessageDialog(parent,new JScrollPane(p));
+		}
+	    StringSelection stringSelection = new StringSelection( value.toString() );
+	    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+	    clipboard.setContents( stringSelection, null );
+	}
+}
+class Show3DAction extends MyAction<IAtomContainer> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5509865584561775405L;
+	protected boolean optimize = false;
+	public Show3DAction(Component parent,IAtomContainer value, boolean optimize) {
+		super(parent,value);
+		if (optimize)
+			putValue(NAME, "Generate and display 3D structure");
+		else
+			putValue(NAME, "Display 3D structure");
+		this.optimize = optimize;
+	}
+	public void actionPerformed(ActionEvent e) {
+		Panel3D panel3d = new Panel3D();
+		//panel3d.setObject((IAtomContainer)value);
+		try {
+			if (optimize) {
+				MopacShell shell = new MopacShell();
+				shell.setErrorIfDisconnected(false);
+				panel3d.setObject(shell.process((IAtomContainer)value));
+			} else panel3d.setObject((IAtomContainer)value);
+		} catch (Exception x) {
+			
+		}
+		JOptionPane.showMessageDialog(parent, panel3d,"",JOptionPane.PLAIN_MESSAGE);
+		
+	}	
+}

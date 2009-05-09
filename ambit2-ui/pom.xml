@@ -43,6 +43,16 @@
     	<artifactId>swingx</artifactId>
     	<version>0.9.5-2</version>
     </dependency>
+    <dependency>
+    	<groupId>jmol</groupId>
+    	<artifactId>jmol</artifactId>
+    	<version>0.1.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-mopac</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 <licenses>
   <license>

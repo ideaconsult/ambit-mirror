@@ -46,6 +46,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.StructureStatisticsProcessor;
 import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.readers.RetrieveField;
@@ -78,6 +79,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	protected UpdateExecutor<IQueryUpdate> updateExecutor = new UpdateExecutor<IQueryUpdate>();
 	protected QueryExecutor<IQueryObject> queryExecutor;
 	protected PropertyChangeListener propertyListener;
+	protected StructureStatisticsProcessor statsProcessor = new StructureStatisticsProcessor();
 
 	
 	public StoredQueryTableModel() {
@@ -107,6 +109,8 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		this.connection = connection;
 		setResultSet(null);
 
+		statsProcessor.setConnection(connection);
+		
 		if (structureRecords != null)
 			structureRecords.close();
 		structureRecords = null;
@@ -255,7 +259,15 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		
 
 	}
-	
+	public String getStatsAt(int idstructure) {
+		try {
+	        IStructureRecord record = new StructureRecord();
+	        record.setIdstructure(records.getInt(AbstractStructureQuery.FIELD_NAMES.idstructure.toString()));
+	        return statsProcessor.process(record).toString();
+		} catch (Exception x) {
+			return "";
+		}
+	}
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		try {
             records.first();
@@ -270,8 +282,10 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			case 1: return getAtomContainer(idstructure);
 			case 2: return records.getFloat(AbstractStructureQuery.FIELD_NAMES.metric.toString());
 			default:
-				return (fields==null)?"":
-					getField(idstructure, ((Property)fields.getElementAt(columnIndex-3)).getName());
+				if (columnIndex < getColumnCount()) {
+					return (fields==null)?"":
+						getField(idstructure, ((Property)fields.getElementAt(columnIndex-3)).getName());
+				} else return getStatsAt(idstructure);
 				//return records.getInt("idstructure");
 			}
 		} catch (Exception x) {

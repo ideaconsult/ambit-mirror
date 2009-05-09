@@ -29,14 +29,25 @@
 
 package ambit2.plugin.analogs;
 
-import com.microworkflow.process.Activity;
-import com.microworkflow.process.NullActivity;
+import ambit2.workflow.library.DefineProfile;
+import ambit2.workflow.library.DefineStructure;
+import ambit2.workflow.library.LoginSequence;
+
+import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
 public class ProfileWorkflow extends Workflow {
 	public ProfileWorkflow() {
-		Activity a = new NullActivity();
-		a.setName("Not implemented yet!");
-		setDefinition(a);
+		
+        Sequence seq=new Sequence();
+        seq.setName("Profile");    	
+        
+        seq.addStep(new DefineStructure());
+        seq.addStep(new DefineProfile());
+        seq.addStep(new RetrieveProfileData()); // for .RECORDS
+        seq.addStep(new StructureListDescriptorCalculator());
+
+        setDefinition(new LoginSequence(seq));
+       // setDefinition(seq);
 	}
 }
