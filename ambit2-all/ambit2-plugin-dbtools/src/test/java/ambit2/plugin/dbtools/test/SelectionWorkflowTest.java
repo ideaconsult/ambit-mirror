@@ -16,7 +16,6 @@ import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.SCOPE;
 import ambit2.db.search.structure.ScopeQuery;
 import ambit2.workflow.DBWorkflowContext;
-import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.library.ScopeSelection;
 import ambit2.workflow.ui.SilentWorkflowListener;
 import ambit2.workflow.ui.UserInteractionEvent;
@@ -146,7 +145,7 @@ public class SelectionWorkflowTest extends WorkflowTest {
 		
 		QueryStoredResults results = (QueryStoredResults) ((QueryCombinedStructure)q).getScope();
 		Assert.assertEquals(99,results.getFieldname().getId().intValue());
-		Assert.assertEquals(1,results.getParameters().size());
+		Assert.assertEquals(2,results.getParameters().size());
 		Assert.assertEquals(99,results.getParameters().get(0).getValue());
 		
 	}		

@@ -39,7 +39,6 @@ import junit.framework.Assert;
 import ambit2.db.results.PropertyRows;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.property.TemplateQuery;
-import ambit2.dbui.dictionary.TemplatePropertyPanel;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.ListEditor;

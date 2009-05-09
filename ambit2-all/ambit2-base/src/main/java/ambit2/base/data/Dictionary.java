@@ -76,11 +76,12 @@ public class Dictionary extends AmbitBean {
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
+		if (getParentTemplate()!=null) {
+			b.append(getParentTemplate());
+			b.append('.');
+		}
 		b.append(getTemplate());
-		b.append(' ');
-		b.append(getRelationship().replaceAll("_", " "));
-		b.append(' ');
-		b.append(getParentTemplate());
+		
 		return b.toString();
 	}
 	@Override

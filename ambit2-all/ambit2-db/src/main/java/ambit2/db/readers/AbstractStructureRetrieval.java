@@ -30,5 +30,9 @@ public abstract class AbstractStructureRetrieval<R> extends AbstractQuery<IStruc
 		params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
 		return params;		
 	}
+	public double calculateMetric(R object) {return 1;};
+	public boolean isPrescreen() {
+		return false;
+	}
 
 }

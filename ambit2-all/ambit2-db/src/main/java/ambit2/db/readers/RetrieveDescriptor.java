@@ -12,6 +12,7 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.SourceDataset;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
@@ -48,6 +49,12 @@ public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStru
 			throw new AmbitException(x);
 		}
 	}
+	public double calculateMetric(DescriptorValue object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}	
 
 
 }

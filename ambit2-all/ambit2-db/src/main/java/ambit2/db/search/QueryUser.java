@@ -89,4 +89,11 @@ public class QueryUser extends AbstractQuery<String,String,StringCondition, Ambi
 			throw new AmbitException(x);
 		}
 	}
+	public double calculateMetric(AmbitUser object) {
+		return 1;
+	
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 }

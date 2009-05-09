@@ -51,7 +51,7 @@ public class ImageCellRenderer extends DefaultTableCellRenderer implements
         setVerticalAlignment(JLabel.CENTER);
         setIcon(icon);
         imageTools = new CompoundImageTools(dimension);
-        imageTools.setBackground(new Color(253,253,253));
+        imageTools.setBackground(Color.white);//new Color(253,253,253));
     }
     
     public ImageCellRenderer() {

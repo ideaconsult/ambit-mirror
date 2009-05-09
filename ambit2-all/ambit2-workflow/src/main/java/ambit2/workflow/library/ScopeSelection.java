@@ -45,20 +45,31 @@ import com.microworkflow.process.Sequence;
 
 public class ScopeSelection extends Sequence {
 	//protected String SELECTION="QueryExecution.SELECTION";
-	public ScopeSelection() {
+	public ScopeSelection(SCOPE scope) {
+        if (scope == null) {
+	        UserInteraction<ScopeQuery> ui_scope = new UserInteraction<ScopeQuery>(
+	        		new ScopeQuery(),
+	        		DBWorkflowContext.SCOPE,"Search within");
+	        addStep(ui_scope);
+	        Primitive<ScopeQuery, IQueryRetrieval<IStructureRecord>> setScope = 
+	    		new Primitive<ScopeQuery, IQueryRetrieval<IStructureRecord>>(
+	    				DBWorkflowContext.SCOPE,DBWorkflowContext.QUERY,
+	    				new ScopeSetter());
+		    setScope.setName("Set query scope");
+		    addStep(setScope);	        
+        } else {
+	        Primitive<ScopeQuery, IQueryRetrieval<IStructureRecord>> setScope = 
+	    		new Primitive<ScopeQuery, IQueryRetrieval<IStructureRecord>>(
+	    				DBWorkflowContext.SCOPE,DBWorkflowContext.QUERY,
+	    				new ScopeSetter(scope));
+		    setScope.setName(scope.toString());
+		    addStep(setScope);        	
+        }
         
-        UserInteraction<ScopeQuery> ui_scope = new UserInteraction<ScopeQuery>(
-        		new ScopeQuery(),
-        		DBWorkflowContext.SCOPE,"Search within");
-        addStep(ui_scope);
-        Primitive<ScopeQuery, IQueryRetrieval<IStructureRecord>> setScope = 
-    		new Primitive<ScopeQuery, IQueryRetrieval<IStructureRecord>>(
-    				DBWorkflowContext.SCOPE,DBWorkflowContext.QUERY,
-    				new ScopeSetter());
-	    setScope.setName("Set query scope");
-	    addStep(setScope);        
 	}
-	
+	public ScopeSelection() {
+       this(null); 		
+	}
 	/*
 	
 	public ScopeSelection() {
@@ -111,10 +122,21 @@ public class ScopeSelection extends Sequence {
 
 class ScopeSetter extends Performer<ScopeQuery, IQueryRetrieval<IStructureRecord>> {
 	protected ProcessorSetQueryScope processor = new ProcessorSetQueryScope();
+	protected ScopeQuery defaultScope = null;
+	public ScopeSetter() {
+		this(null);
+	}
+	public ScopeSetter(SCOPE scope) {
+		if (scope != null) {
+			defaultScope = new ScopeQuery();
+			defaultScope.setFieldname(scope);
+		}
+	}
 	@Override
 	public IQueryRetrieval<IStructureRecord> execute() throws Exception {
 
-		ScopeQuery query = getTarget();
+		ScopeQuery query = (defaultScope!=null)?defaultScope:getTarget();
+
 		if (query.getFieldname().equals(SCOPE.scope_last_results)) 
 			try {
 				IStoredQuery q = (IStoredQuery)getContext().get(DBWorkflowContext.STOREDQUERY);
@@ -123,6 +145,7 @@ class ScopeSetter extends Performer<ScopeQuery, IQueryRetrieval<IStructureRecord
 					if (q.getId()>0) {
 						QueryStoredResults qr = new QueryStoredResults();
 						qr.setFieldname(q);
+						qr.setValue(true);
 						query.setValue(qr);
 					}  
 			} catch (Exception x) {
@@ -131,6 +154,6 @@ class ScopeSetter extends Performer<ScopeQuery, IQueryRetrieval<IStructureRecord
 		
 		processor.setQuery((IQueryRetrieval<IStructureRecord>)getContext().get(DBWorkflowContext.QUERY));
 		
-		return processor.process(getTarget().getValue());
+		return processor.process(query);
 	}
 }

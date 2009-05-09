@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.processors;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,9 +31,11 @@ import java.sql.Statement;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
@@ -50,7 +51,7 @@ import ambit2.db.search.structure.QueryStoredResults;
  * @author nina
 
  */
-public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,IStoredQuery> {
+public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStructureRecord>,IStoredQuery> {
 
 	/**
 	 * 
@@ -62,12 +63,12 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
         // TODO Auto-generated method stub
         
     }
-	public IStoredQuery process(IQueryObject target) throws AmbitException {
+	public IStoredQuery process(IQueryObject<IStructureRecord> target) throws AmbitException {
 		if (target == null) throw new AmbitException("Undefined query!");
 		if (target instanceof QueryStoredResults) {
 			return ((QueryStoredResults) target).getFieldname();
 		}
-		Connection c = getConnection();		
+
 		try {
 			StoredQuery result = new StoredQuery(-1);
 			result.setQuery(target);
@@ -75,7 +76,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 			
 			connection.setAutoCommit(false);	
 			
-			PreparedStatement s = c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement s = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			s.setInt(1,getSession().getId().intValue());
 			if (result.getName().length()>45)
 				s.setString(2,result.getName().substring(0,44));
@@ -88,16 +89,10 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 					result.setId(new Integer(rss.getInt(1)));
 				rss.close();
 			
-
-				PreparedStatement sresults = c.prepareStatement(result.getSQL());
-				//System.out.println(result.getSQL());
-				List<QueryParam> params = result.getParameters();
-				//System.out.println(params);				
-				QueryExecutor.setParameters(sresults, params);
-				System.out.println(sresults);								
-				int rows = sresults.executeUpdate();
-				result.setRows(rows);
-				sresults.close();
+				int rows = 0;
+				if ((result.getQuery() instanceof IQueryRetrieval) && ((IQueryRetrieval)result.getQuery()).isPrescreen())
+					rows = insertScreenedResults(result,(IQueryRetrieval<IStructureRecord>)result.getQuery());
+				else  rows = insertResults(result);
 				if (rows > 0)
 					connection.commit();
 				else 
@@ -108,12 +103,59 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject,ISto
 			return result;
 		} catch (Exception x) {
 			try {
-				c.rollback();
+				connection.rollback();
 			} catch (SQLException xx){
 				
 			}
 			throw new ProcessorException(this,x);
 		}
+	}
+
+	protected int insertScreenedResults(StoredQuery result, IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
+		PreparedStatement queryResults = connection.prepareStatement(query.getSQL());
+		List<QueryParam> params = result.getParameters();
+		QueryExecutor.setParameters(queryResults, params);
+		ResultSet rs = queryResults.executeQuery();
+		ProcessorStructureRetrieval retriever = new ProcessorStructureRetrieval();
+		PreparedStatement insertGoodResults = connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?)");
+				//= "insert ignore into query_results (idquery,idchemical,idstructure,selected,metric) ")
+		retriever.setConnection(connection);
+		try {
+			int rows = 0;
+			
+			while (rs.next()) {
+				IStructureRecord record = retriever.process(query.getObject(rs));
+				double metric = query.calculateMetric(record);
+
+				if (metric >0) {
+					System.out.println(metric);					
+					insertGoodResults.setInt(1,result.getId());
+					insertGoodResults.setInt(2,record.getIdchemical());
+					insertGoodResults.setInt(3,record.getIdstructure());
+					insertGoodResults.setDouble(4,metric);					
+					rows += insertGoodResults.executeUpdate();
+				}
+			}
+			return rows;
+		} catch (SQLException x) {
+			throw x;
+		} finally {
+			try {rs.close(); } catch (Exception x) {}
+			try {insertGoodResults.close(); } catch (Exception x) {}
+			try {queryResults.close();} catch (Exception x) {}
+		}
+		
+	}
+	
+	protected int insertResults(StoredQuery result) throws SQLException , AmbitException {
+		
+		PreparedStatement sresults = connection.prepareStatement(result.getSQL());
+		List<QueryParam> params = result.getParameters();
+		QueryExecutor.setParameters(sresults, params);
+		int rows = sresults.executeUpdate();
+		result.setRows(rows);
+		sresults.close();		
+		return rows;
 	}
 
 }

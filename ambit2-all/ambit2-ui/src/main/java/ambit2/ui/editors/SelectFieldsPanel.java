@@ -41,7 +41,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
@@ -60,7 +59,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitEditor<TypedListModel<Property>> {
-	protected enum MOVE {
+	public enum MOVE {
 		MOVE_RIGHT {
 			@Override
 			public String display() {

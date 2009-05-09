@@ -100,9 +100,11 @@ public class DefaultBatchStatistics extends Observable implements
 	            b.append(Long.toString(getRecords(stats)));
 	            b.append(' ');	            
             }
+            /*
             b.append(" records in ");
             b.append(Long.toString(t));
             b.append(" ms");
+            */
             if (getRecords(RECORDS_STATS.RECORDS_READ) > 0) {
                 b.append("(");
                 long s = t/getRecords(RECORDS_STATS.RECORDS_READ);

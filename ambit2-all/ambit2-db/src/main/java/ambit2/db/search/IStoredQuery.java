@@ -34,8 +34,8 @@ public interface IStoredQuery extends IQueryObject<IStructureRecord>{
 	String getName();
 	int getRows();
 	void setRows(int rows);
-	IQueryObject getQuery();
-	void setQuery(IQueryObject query);	
+	IQueryObject<IStructureRecord> getQuery();
+	void setQuery(IQueryObject<IStructureRecord> query);	
 }
 
 

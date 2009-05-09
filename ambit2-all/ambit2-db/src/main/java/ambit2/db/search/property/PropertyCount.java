@@ -89,4 +89,10 @@ public class PropertyCount extends	AbstractQuery<String, String, StringCondition
 			throw new AmbitException(x);
 		}
 	}
+	public double calculateMetric(PropertyTemplateStats object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 }

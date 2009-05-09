@@ -48,4 +48,10 @@ public class RetrieveDatasets extends AbstractQuery<String,SourceDataset,EQCondi
         	throw new AmbitException(x);
         }
     }
+	public double calculateMetric(SourceDataset object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 }

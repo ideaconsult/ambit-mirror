@@ -69,7 +69,6 @@ public class UserManagerPlugin extends DBWorkflowPlugin implements IMultiWorkflo
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.CreateDatabaseWorkflow","Create database","Create new AMBIT database","images/newdatabase.png"));		
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.UserManagerWorkflow","Users","Manage AMBIT database users","images/users.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.DatasetsWorkflow","Datasets","Manage datasets","images/database_statistics.png"));		
-		workflows.add(new ClassHolder("ambit2.plugin.usermgr.TemplatesWorkflow","Templates","Manage templates","images/database_statistics.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.PropertiesWorkflow","Properties","Manage properties","images/database_statistics.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.ReferencesWorkflow","References","Manage references","images/database_statistics.png"));		
 		workflows.add(new ClassHolder("ambit2.plugin.usermgr.SavedResultsWorkflow","Saved results","Manage saved results","images/database_statistics.png"));		

@@ -61,6 +61,7 @@ public class ProcessorSetQueryScope extends AbstractDBProcessor<IQueryRetrieval<
 			IQueryRetrieval<IStructureRecord> target) throws AmbitException {
 		if (query == null) return target;
 		if (target == null) return query;
+		
 		if (query instanceof QueryCombinedStructure) {
 			((QueryCombinedStructure) query).setScope(target);
 			return query;

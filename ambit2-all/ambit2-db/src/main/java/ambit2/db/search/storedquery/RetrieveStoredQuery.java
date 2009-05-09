@@ -55,5 +55,12 @@ public class RetrieveStoredQuery extends  AbstractQuery<SessionID, IStoredQuery,
 			throw new AmbitException(x);
 		}
 	}
+	
+	public double calculateMetric(IStoredQuery object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 
 }

@@ -110,5 +110,11 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
             throw new AmbitException(x);
         }
 	}
+	public double calculateMetric(IStructureRecord object) {
+		return 1;
+	}
+	public boolean isPrescreen() {
+		return false;
+	}
 
 }

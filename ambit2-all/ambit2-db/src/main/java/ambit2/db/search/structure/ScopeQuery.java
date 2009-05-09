@@ -37,6 +37,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
+import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
 
 /**
@@ -87,4 +88,11 @@ public class ScopeQuery extends AbstractQuery<SCOPE,IQueryRetrieval<IStructureRe
 			return getFieldname().toString();
 		else return "Scope";
 	}
+	public double calculateMetric(IStructureRecord object) {
+		return 1;
+	}
+
+	public boolean isPrescreen() {
+		return false;
+	}	
 }

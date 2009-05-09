@@ -31,10 +31,9 @@ package ambit2.workflow.library;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.workflow.DBWorkflowContext;
+import ambit2.db.search.structure.SCOPE;
 import ambit2.workflow.ExecuteAndStoreQuery;
 import ambit2.workflow.QueryInteraction;
-import ambit2.workflow.UserInteraction;
 
 import com.microworkflow.process.Sequence;
 
@@ -46,12 +45,12 @@ import com.microworkflow.process.Sequence;
  */
 public class QueryExecution extends Sequence {
 	public QueryExecution(IQueryRetrieval<IStructureRecord> query) {
-		this(query,null);
+		this(query,null,null);
 	}
-	public QueryExecution(IQueryRetrieval<IStructureRecord> query, String resultTag) {
+	public QueryExecution(IQueryRetrieval<IStructureRecord> query, String resultTag,SCOPE scope) {
        
         addStep(new QueryInteraction(query));
-        addStep(new ScopeSelection());
+        addStep(new ScopeSelection(scope));
     	ExecuteAndStoreQuery p1 = new ExecuteAndStoreQuery(resultTag);
         p1.setName("Search");           
 		addStep(p1);

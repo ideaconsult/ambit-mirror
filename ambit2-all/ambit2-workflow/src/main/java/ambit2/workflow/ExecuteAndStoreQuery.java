@@ -1,11 +1,12 @@
 package ambit2.workflow;
 
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.ProcessorCreateQuery;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 
 
-public class ExecuteAndStoreQuery extends ActivityPrimitive<IQueryObject,IStoredQuery> {
+public class ExecuteAndStoreQuery extends ActivityPrimitive<IQueryObject<IStructureRecord>,IStoredQuery> {
 	public ExecuteAndStoreQuery() {
 		this(DBWorkflowContext.STOREDQUERY);
 	}

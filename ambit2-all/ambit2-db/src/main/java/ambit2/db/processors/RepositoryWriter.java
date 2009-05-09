@@ -35,7 +35,7 @@ import javax.naming.OperationNotSupportedException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
-import ambit2.core.processors.structure.key.InchiPropertyKey;
+import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.SourceDataset;
@@ -61,7 +61,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
     private static final long serialVersionUID = 6530309499663693100L;
 	protected DbStructureWriter structureWriter;
 	protected SmilesKey smilesKey;
-	protected PropertyKey propertyKey;
+	protected IStructureKey propertyKey;
 	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
 	protected AbstractStructureQuery query_property;
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
@@ -81,10 +81,10 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	}
 	
 	
-	public PropertyKey getPropertyKey() {
+	public IStructureKey getPropertyKey() {
 		return propertyKey;
 	}
-	public void setPropertyKey(PropertyKey propertyKey) {
+	public void setPropertyKey(IStructureKey propertyKey) {
 		this.propertyKey = propertyKey;
 		if ((propertyKey.getType() == Number.class) || (propertyKey.getType() == Integer.class) ||(propertyKey.getType() == Double.class))
 			query_property = new QueryFieldNumeric();

@@ -354,7 +354,7 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(15,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
 		Assert.assertEquals(378,p_tuples.getRowCount());				
-		ITable p_cas = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,name,value FROM structure join values_string using(idstructure) join properties using(idproperty) where name=\"CasRN\"");
+		ITable p_cas = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,name,value FROM structure join values_string using(idstructure) where name=\"CasRN\"");
 		Assert.assertEquals(13,p_cas.getRowCount());
 	
 		c.close();
