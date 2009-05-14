@@ -137,6 +137,7 @@ public class TestUtilities
 		}						
 		
 		isoTester.setQuery(query);
+		sp.setSMARTSData(mol);
 		System.out.println("IsomorphismTester: " + smarts  + "  in  " + smiles + 
 				"   " + isoTester.hasIsomorphism(mol));
 		//boolean res = checkSequence(query,isoTester.getSequence());
@@ -1040,7 +1041,14 @@ public class TestUtilities
 		//tu.compareIsoTester("S(N)(=O)(=O)c(cc)c",null);  //OK
 		//tu.compareIsoTester("N(C)(C)(C)CC",null);  //OK
 				
-		tu.testIsomorphismPositions("C1(N)CCCC1", "C1CC(N)CC1NCCO");
+		//tu.testIsomorphismPositions("C1(N)CCCC1", "C1CC(N)CC1NCCO");
+		
+		//tu.testSmartsManagerBoolSearch("C1CC1", "CC(C)CCC");
+		//tu.testSmartsManagerBoolSearch("CC(C)C", "C1CC1");
+		
+		
+		
+		//tu.testSmartsManagerBoolSearch("[C;]", "CCC");   //----------> gives an Exception  at ambit2.smarts.SmartsLogicalExpression.doAND(SmartsLogicalExpression.java:71)
 	}
 	
 }
