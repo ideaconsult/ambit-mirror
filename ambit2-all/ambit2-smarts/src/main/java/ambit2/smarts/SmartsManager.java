@@ -697,7 +697,7 @@ public class SmartsManager
 	boolean recursiveSearchIn1(IAtomContainer target)
 	{
 		//Strategy 1:
-		//Each reursive SMARTS is mapped against the target
+		//Each recursive SMARTS is mapped against the target
 		//and all mappings are stored in the query itself.
 		//Afterwards this info is used by the main substructure search		
 		clearQueryRecMatches();
