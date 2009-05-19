@@ -87,7 +87,7 @@ public class PBTWriterTest extends DbUnitTest {
 		chain.process(pbt);
 		chain.close();
 		
-		int count=194;
+		int count=191;
 		
 		c = getConnection();
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
