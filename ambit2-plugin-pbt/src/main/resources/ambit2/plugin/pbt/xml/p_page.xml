@@ -27,7 +27,7 @@ other (see Remark / Reference)
 
 <list id="C6" row="6" col="3" colspan="1">
 	<item>	
-		DOC: &gt;70%
+		DOC: &gt; 70%
 	</item>
 	<item>	
 		DOC: &lt; 70%
@@ -65,7 +65,7 @@ other (see Remark / Reference)
 </list>
 <list id="C8" row="8" col="3" colspan="1">
 	<item>	
-		DOC: &gt;70%
+		DOC: &gt; 70%
 	</item>
 	<item>	
 		DOC: &lt; 70%
@@ -74,7 +74,7 @@ other (see Remark / Reference)
 		ThOD: &gt; 60%
 	</item>	
 	<item>	
-		ThOD: &gt; 60%
+		ThOD: &lt; 60%
 	</item>		
 	<item>	
 other:achieved (see Remark / Reference)
@@ -101,7 +101,7 @@ other (see Remark / Reference)
 
 <list id="C10" row="10" col="3" colspan="1">
 	<item>	
-		DOC: &gt;70% after 7d
+		DOC: &gt; 70% after 7d
 	</item>
 	<item>	
 		DOC: &lt; 70% after 7d
