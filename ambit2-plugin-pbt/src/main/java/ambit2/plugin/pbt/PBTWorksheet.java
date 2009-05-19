@@ -39,7 +39,7 @@ public class PBTWorksheet  extends AmbitBean  {
 
 	protected int maxRow = 22;
 	protected int maxCol = 6;
-	
+	protected int rowOffset = 0;
 
 
 	protected static HSSFWorkbook workbook;
@@ -60,12 +60,13 @@ public class PBTWorksheet  extends AmbitBean  {
 	 */
 	private static final long serialVersionUID = 5725226752787199270L;
 	public PBTWorksheet(HSSFWorkbook workbook, String sheetName) {
-		this(workbook,sheetName,28,8,null);
+		this(workbook,sheetName,28,8,0,null);
 	}
 	public PBTWorksheet(HSSFWorkbook workbook, String sheetName, int maxRow, int maxCol) {
-		this(workbook,sheetName,maxRow,maxCol,null);
+		this(workbook,sheetName,maxRow,maxCol,0,null);
 	}
-	public PBTWorksheet(HSSFWorkbook workbook, String sheetName, int maxRow, int maxCol, String xmlConfig) {
+	public PBTWorksheet(HSSFWorkbook workbook, String sheetName, int maxRow, int maxCol, int rowOffset,String xmlConfig) {
+		this.rowOffset = rowOffset;
 		PBTWorksheet.workbook = workbook;
 		sheet = workbook.getSheet(sheetName);
 		if (formulaEvaluator == null)

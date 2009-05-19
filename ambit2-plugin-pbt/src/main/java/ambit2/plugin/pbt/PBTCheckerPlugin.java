@@ -162,9 +162,13 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 
 	@Override
 	public String toString() {
-		return "PBT";
+		return "REACH PBT SCREENING TOOL FOR AMBIT XT";
 	}
 	@Override
+	public JComponent[] createDetailsComponent() {
+		return null;
+	}
+	/*
 	public JComponent[] createDetailsComponent() {
 		if (detailsComponent == null) {
 		    QueryResultsPanel results = new QueryResultsPanel(getWorkflowContext(),BorderLayout.NORTH,BrowserMode.Columns);
@@ -181,6 +185,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 			
 		return detailsComponent;
 	}
+	*/
 	
 	public JComponent[] createOptionsComponent() {
 		if (optionsComponent == null) {

@@ -31,16 +31,18 @@ public class PBTWorkBook {
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
 	final PBTWorksheet[] pbt_worksheets; 
-	public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
+	//public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
+	public static enum WORKSHEET_INDEX  {SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
 	protected IStructureRecord record  = null;
     protected static Object[][] defs = {
-    	{"TERMS & CONDITIONS",new Integer(27),new Integer(3),"ambit2/plugin/pbt/xml/welcome.xml"},   	
-    	{"SUBSTANCE",new Integer(28),new Integer(6),"ambit2/plugin/pbt/xml/substance_page.xml"},
+    	//{"TERMS & CONDITIONS",new Integer(27),new Integer(3),"ambit2/plugin/pbt/xml/welcome.xml"},
+    	
+    	{"SUBSTANCE",new Integer(28),new Integer(6),"ambit2/plugin/pbt/xml/substance_page.xml",-8}, //last number is row offset
 
-    	{"P-Sheet",new Integer(20),new Integer(6),"ambit2/plugin/pbt/xml/p_page.xml"},
-    	{"B-Sheet",new Integer(22),new Integer(6),"ambit2/plugin/pbt/xml/b_page.xml"},
-    	{"T-Sheet",new Integer(19),new Integer(6),"ambit2/plugin/pbt/xml/t_page.xml"},
-    	{"Result",new Integer(15),new Integer(5),"ambit2/plugin/pbt/xml/result_page.xml"}
+    	{"P-Sheet",new Integer(20),new Integer(6),"ambit2/plugin/pbt/xml/p_page.xml",-3},
+    	{"B-Sheet",new Integer(22),new Integer(6),"ambit2/plugin/pbt/xml/b_page.xml",-3},
+    	{"T-Sheet",new Integer(19),new Integer(6),"ambit2/plugin/pbt/xml/t_page.xml",-3},
+    	{"Result",new Integer(15),new Integer(5),"ambit2/plugin/pbt/xml/result_page.xml",-2}
     };
     public PBTWorkBook() throws Exception {
     	this(PBT_CLARIANT);
@@ -56,7 +58,7 @@ public class PBTWorkBook {
 			pbt_worksheets[i] = createSheet(workbook,i);
 	}
     public String getTitle(int index) {
-    	return workbook.getSheetName(index);
+    	return workbook.getSheetName(index+1);
     }    
     public PBTWorksheet getWorksheet(WORKSHEET_INDEX index) {
     	return getWorksheet(index.ordinal());
@@ -77,6 +79,7 @@ public class PBTWorkBook {
 					defs[index][0].toString(),
 					(Integer)defs[index][1],
 					(Integer)defs[index][2],
+					(Integer)defs[index][4],
 					defs[index][3].toString());
 			return ws;
 		} catch (Throwable x) {
@@ -126,19 +129,11 @@ public class PBTWorkBook {
         
     }
     public void write(Document document) throws DocumentException {
-    	int border = 0;
+    	int border = 1;
 		for (WORKSHEET_INDEX w : WORKSHEET_INDEX.values() ) {
 			PBTWorksheet ws = getWorksheet(w);
 			Table table = new Table(ws.getMaxCol(),ws.getMaxRow());
-			if (w == WORKSHEET_INDEX.WELCOME) {
-				float[] f = {2f, 1f, 20f};
-				table.setWidths(f);
-				border = 0;
-				table.setBorderWidth(1);
-			} else {
-				border = 1;
-				table.setBorderWidth(1);
-			}
+			table.setBorderWidth(1);
 			table.setAlignment(Element.ALIGN_LEFT);
 			table.setBorderColor(Color.black);			
 			table.setPadding(1);
@@ -163,7 +158,8 @@ public class PBTWorkBook {
 				}
 
 			}
-			if (w != WORKSHEET_INDEX.WELCOME) document.newPage();			
+			//if (w != WORKSHEET_INDEX.WELCOME) 
+			document.newPage();			
 			document.add(table);
 
 			document.add(new Paragraph(""));
@@ -174,7 +170,7 @@ public class PBTWorkBook {
     
     public boolean isCompleted(WORKSHEET_INDEX index) {
     	switch (index) {
-    	case WELCOME : return true;
+    	
     	case SUBSTANCE: {
     		PBTWorksheet ws = getWorksheet(index);
     		Object o = ws.getExtendedCell(10,5);

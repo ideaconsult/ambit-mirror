@@ -44,8 +44,7 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 		
 		a.getProperties().clear();
 		for (WORKSHEET_INDEX w : WORKSHEET_INDEX.values() ) 
-			if (w != WORKSHEET_INDEX.WELCOME)
-				addKeys(a,w.toString(),target.getWorksheet(w));
+			addKeys(a,w.toString(),target.getWorksheet(w));
 		
 		return a;
 	}	
