@@ -29,7 +29,7 @@
 
 package ambit2.descriptors.processors;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -49,9 +49,19 @@ import ambit2.base.processors.DefaultAmbitProcessor;
  */
 public class DescriptorResultFormatter extends
 		DefaultAmbitProcessor<DescriptorValue, String> {
-	protected DecimalFormat format = new DecimalFormat("#####.####");
+	protected NumberFormat format = NumberFormat.getNumberInstance(); //new DecimalFormat("#####.####");
 	//protected Locale locale = new Locale("us", "US");
 	protected int index = -1;
+	public DescriptorResultFormatter() {
+	}
+	public DescriptorResultFormatter(Locale locale) {
+		this();
+		setLocale(locale);
+	}
+	
+	public void setLocale(Locale locale) {
+		format = NumberFormat.getNumberInstance(locale);
+	}
 	/**
 	 * Index of the array, if the Descrptor value is of type DoubleArrayResult or IntegerArrayResult
 	 * @return
