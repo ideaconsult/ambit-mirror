@@ -100,11 +100,11 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 				for (int i=0; i < pbt_workbook.size();i++)  {
 					if (pbt_workbook.getWorksheet(i)!=null)
 					tabbedPane.add(pbt_workbook.getTitle(i),
-							new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i),1,1)));
+							new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i))));
 				}
 	
 		        
-				tabbedPane.setSelectedIndex(1);	      
+				tabbedPane.setSelectedIndex(0);	      
         	}
         } catch (Exception x) {
         	x.printStackTrace();

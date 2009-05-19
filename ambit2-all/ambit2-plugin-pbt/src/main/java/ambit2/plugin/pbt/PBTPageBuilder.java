@@ -152,11 +152,11 @@ public class PBTPageBuilder {
         return builder.getPanel();
     }    
 
-    public static JPanel buildPanel(PBTWorksheet worksheet, int rowOffset, int colOffset) {
-
+    public static JPanel buildPanel(PBTWorksheet worksheet) {
+    	int colOffset = 0;
         FormLayout layout = new FormLayout(
-                getLayoutString(worksheet.getMaxCol()+colOffset,"100dlu:grow"),
-                getLayoutString(worksheet.getMaxRow()+rowOffset,"pref:grow"));
+                getLayoutString(worksheet.getMaxCol()+1,"100dlu:grow"),
+                getLayoutString(worksheet.getMaxRow()+worksheet.rowOffset+1,"pref:grow"));
         
         
         PanelBuilder builder = new PanelBuilder(layout);
@@ -178,7 +178,7 @@ public class PBTPageBuilder {
 	        	JComponent c = null;				
 				HSSFCell cell = cells.next();
 				
-				if ((cell.getRowIndex()+ rowOffset) < 0) continue;
+				if ((cell.getRowIndex()+ worksheet.rowOffset) < 0) continue;
 				if ((cell.getColumnIndex()+ colOffset) < 0) continue;				
 				if (cell.getRowIndex()>= worksheet.getMaxRow()) continue;
 				if (cell.getColumnIndex()>= worksheet.getMaxCol()) continue;
@@ -228,7 +228,7 @@ public class PBTPageBuilder {
 				if ((colspan >= worksheet.getMaxCol()) && (cell.getRowIndex()>1)) { 
 					colspan = worksheet.getMaxCol()-cell.getColumnIndex();
 	        		JComponent separator = builder.addSeparator(cell.toString().trim(), 
-	        				cc.xywh(cell.getColumnIndex()+colOffset,cell.getRowIndex()+rowOffset,
+	        				cc.xywh(cell.getColumnIndex()+colOffset+1,cell.getRowIndex()+worksheet.rowOffset+1,
 	    	        				colspan,rowspan));
 	        		separator.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 	        		
@@ -304,7 +304,7 @@ public class PBTPageBuilder {
 	        		c.setAlignmentX(component_alignment);
 	        		if (colspan >= worksheet.getMaxCol())
 						colspan = worksheet.getMaxCol()-cell.getColumnIndex();
-	        		builder.add(c,cc.xywh(cell.getColumnIndex()+colOffset,cell.getRowIndex()+rowOffset,
+	        		builder.add(c,cc.xywh(cell.getColumnIndex()+colOffset+1,cell.getRowIndex()+worksheet.rowOffset+1,
 	        				colspan,rowspan));
 	        	}
 				
