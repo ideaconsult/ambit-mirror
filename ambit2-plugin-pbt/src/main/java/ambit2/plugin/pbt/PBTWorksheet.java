@@ -24,6 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -34,6 +37,7 @@ import org.apache.poi.ss.usermodel.CellValue;
 import ambit2.base.data.AmbitBean;
 
 public class PBTWorksheet  extends AmbitBean  {
+	protected NumberFormat format = NumberFormat.getInstance(Locale.US);
 	protected PBTTableModel moreInfo= null;
 	protected String oldValue[][] ;
 
@@ -66,6 +70,7 @@ public class PBTWorksheet  extends AmbitBean  {
 		this(workbook,sheetName,maxRow,maxCol,0,null);
 	}
 	public PBTWorksheet(HSSFWorkbook workbook, String sheetName, int maxRow, int maxCol, int rowOffset,String xmlConfig) {
+		format.setMaximumFractionDigits(4);
 		this.rowOffset = rowOffset;
 		PBTWorksheet.workbook = workbook;
 		sheet = workbook.getSheet(sheetName);
@@ -161,6 +166,12 @@ public class PBTWorksheet  extends AmbitBean  {
     	}
     	}
     }
+    
+    protected String format(Object value) {
+    	if (value instanceof Number)
+    		return format.format(value);
+    	else return value.toString();
+    }
 	public void set(int row,int col, Object value) {
 		for (int r=0; r < maxRow; r++)
 			for (int c=0; c < maxCol; c++) {
@@ -168,14 +179,14 @@ public class PBTWorksheet  extends AmbitBean  {
 				if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
 					Object o = get(r,c);
 					if (o != null)
-						oldValue[r][c] = o.toString();
+						oldValue[r][c] = format(o);
 					else 
 						oldValue[r][c] = "";
 				}
 			}
 		
     	HSSFCell cell = getCell(row, col);
-    	oldValue[row][col] = get(row,col).toString();    	
+    	oldValue[row][col] = format(get(row,col));    	
     	
     	switch (cell.getCellType()) {
     	case HSSFCell.CELL_TYPE_FORMULA: {
@@ -191,12 +202,12 @@ public class PBTWorksheet  extends AmbitBean  {
     	default: {
     		setModified(true);
     		if (value instanceof Number)
-    			cell.setCellValue(((Number)value).doubleValue());
+    			cell.setCellValue(format((Number)value));
     		else
     			try {
     				cell.setCellValue(Double.parseDouble(value.toString()));
     			} catch (Exception x) {
-    				cell.setCellValue(value.toString());
+    				cell.setCellValue(format(value));
     			}
     		formulaEvaluator.notifyUpdateCell(cell);
     		//formulaEvaluator.clearAllCachedResultValues();
@@ -221,7 +232,7 @@ public class PBTWorksheet  extends AmbitBean  {
 					HSSFCell cell = getCell(r,c);
 					
 					if ((cell !=null) && (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA))
-						firePropertyChange(getCellName(r, c).toLowerCase(), oldValue[r][c],  get(r,c).toString());
+						firePropertyChange(getCellName(r, c).toLowerCase(), oldValue[r][c],  format(get(r,c)));
 				}
 		
 						
