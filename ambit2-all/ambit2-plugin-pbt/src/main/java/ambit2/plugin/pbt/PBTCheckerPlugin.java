@@ -77,7 +77,8 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 		props.add(DBWorkflowContext.DBCONNECTION_URI);
 		props.add(DBWorkflowContext.DATASOURCE);
         props.add(DBWorkflowContext.DATASET);		
-        props.add(DBWorkflowContext.STOREDQUERY);	        
+        props.add(DBWorkflowContext.QUERY_POPUP);        
+       
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		/*
@@ -113,7 +114,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	}	
 	@Override
 	protected WorkflowContext createWorkflowContext() {
-		return new WorkflowContext();
+		return new DBWorkflowContext();
 	}
 
 	public INPluginUI<INanoPlugin> createMainComponent() {
@@ -122,9 +123,16 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 	
 			Vector<String> p = new Vector<String>();
 			p.add(PBTWorkBook.PBT_WORKBOOK);
+			p.add(UserInteractionEvent.PROPERTYNAME);
+			p.add(DBWorkflowContext.ERROR);
+			p.add(DBWorkflowContext.LOGININFO);
+			p.add(DBWorkflowContext.DBCONNECTION_URI);
+			p.add(DBWorkflowContext.DATASOURCE);
+	        p.add(DBWorkflowContext.DATASET);
+	        p.add(DBWorkflowContext.QUERY_POPUP);			
 			//p.add(DBWorkflowContext.STOREDQUERY);
 			//p.add(DBWorkflowContext.ERROR);
-			//p.add(DBWorkflowContext.RECORD);
+			p.add(DBWorkflowContext.RECORD);
 			//p.add(DBWorkflowContext.STRUCTURES);			
 			results.setProperties(p);
 			results.setAnimate(true);
@@ -133,6 +141,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 		Object pbt = getWorkflowContext().get(PBTWorkBook.PBT_WORKBOOK);
 		if (pbt != null)
 			((PBTMainPanel)mainComponent).setWorkbook((PBTWorkBook)pbt);
+		contextListener.setFrame(mainComponent.getComponent());		
 		return mainComponent;
 
 	}

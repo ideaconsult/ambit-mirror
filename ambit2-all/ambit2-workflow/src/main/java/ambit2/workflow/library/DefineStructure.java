@@ -132,7 +132,7 @@ public class DefineStructure extends While {
         UserInteraction browse = new UserInteraction(
         		true,DBWorkflowContext.USERINTERACTION,DBWorkflowContext.QUERY_POPUP,"Browse results");
         q.addStep(browse);        
-        q.addStep(new SequenceAppendQueryResults(DBWorkflowContext.QUERY_POPUP));
+        q.addStep(new SequenceAppendQueryResults(DBWorkflowContext.QUERY_POPUP,true));
         q.addStep(ui_more);
 		
         Conditional findCondition = new Conditional(

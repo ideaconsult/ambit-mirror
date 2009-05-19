@@ -91,8 +91,10 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     protected void processRecord(int record) {
 		IStructureRecord struc = new StructureRecord();
 		tableModel.update(record, struc);
-		getWorkflowContext().put(DBWorkflowContext.RECORD,null);
-		getWorkflowContext().put(DBWorkflowContext.RECORD,struc);        		
+		if(getWorkflowContext()!=null) {
+			getWorkflowContext().put(DBWorkflowContext.RECORD,null);
+			getWorkflowContext().put(DBWorkflowContext.RECORD,struc);
+		}
     }
     @Override
     protected void animate(PropertyChangeEvent arg0) {

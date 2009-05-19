@@ -53,89 +53,153 @@ import com.microworkflow.process.Sequence;
  *
  */
 public class SequenceAppendQueryResults extends Sequence {
-	public SequenceAppendQueryResults(String queryTag) {
+	public SequenceAppendQueryResults(String queryTag, boolean all) {
 
-		QueryPerformer<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>, IStructureRecord> performer = 
-					new QueryPerformer<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>, IStructureRecord>() {
-			
-			@Override
-			protected List<IStructureRecord> process(
-					IQueryRetrieval<IStructureRecord> query, ResultSet resultset)
-					throws Exception {
-							return null;
-			}
-			@Override
-			protected List<IStructureRecord> retrieve(
-					IRetrieval<IStructureRecord> query, ResultSet resultset)
-					throws Exception {
-	   			Object o = getContext().get(getResultKey());
-
-    			List<IStructureRecord> records = null;
-    			if ((o==null) || !(o instanceof List)) {
-    				records = new ArrayList<IStructureRecord>();
-    			} else records = (List<IStructureRecord>)o;
-    			
-    			RetrieveStructure struc = new RetrieveStructure();
-    			QueryExecutor<RetrieveStructure> q = new QueryExecutor<RetrieveStructure> ();
-    			Connection c = getConnection();
-    			try {
-	    			q.setConnection(c);
-	    			q.open();
-    			
-			        while (resultset.next()) 
-			        	try {
-			        		if (resultset.getBoolean("selected")) {
-				        		struc.setValue(query.getObject(resultset));
-				        		ResultSet rs = q.process(struc);
-				        		while (rs.next())
-				        			records.add((IStructureRecord)struc.getObject(rs).clone());
-				        		q.closeResults(rs);
-			        		}
-			        	} catch (Exception x) {
-			        		x.printStackTrace();
-			        	};
-    			} finally {
-    				try {q.close();c.close();} catch (Exception x) {}
-    			}
-		        System.out.println(records.size());		 
-		        getContext().put(DBWorkflowContext.RECORD,null);
-		        return records;
-			}
-		};
-	
-	Primitive<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>> retrieveStrucs = new Primitive<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>>(
-			DBWorkflowContext.QUERY,
-			DBWorkflowContext.RECORDS,
-			performer
-			) {
-		@Override
-		public synchronized String getName() {
-			return "Append records";
-		};
-	};
-	/*
-	 * Creates QueryStoredResults from a IStoredQuery
-	 */
-	Primitive<IStoredQuery, IQueryRetrieval<IStructureRecord>> query = new Primitive<IStoredQuery, IQueryRetrieval<IStructureRecord>>(
-			queryTag,
-			DBWorkflowContext.QUERY,
-			new Performer<IStoredQuery, IQueryRetrieval<IStructureRecord>>() {
-				@Override
-				public IQueryRetrieval<IStructureRecord> execute() throws Exception {
-					QueryStoredResults q = new QueryStoredResults();
-					q.setFieldname(getTarget());
-					return q;
+		/*
+		 * Creates QueryStoredResults from a IStoredQuery
+		 */
+		Primitive<IStoredQuery, IQueryRetrieval<IStructureRecord>> query = new Primitive<IStoredQuery, IQueryRetrieval<IStructureRecord>>(
+				queryTag,
+				DBWorkflowContext.QUERY,
+				new Performer<IStoredQuery, IQueryRetrieval<IStructureRecord>>() {
+					@Override
+					public IQueryRetrieval<IStructureRecord> execute() throws Exception {
+						QueryStoredResults q = new QueryStoredResults();
+						q.setFieldname(getTarget());
+						return q;
+					}
 				}
-			}
-			) {
-		@Override
-		public synchronized String getName() {
-			return "Append records";
-		};
-	};	
+				) {
+			@Override
+			public synchronized String getName() {
+				return "Append records";
+			};
+		};	
+		
+		addStep(query);
+		
+		if (all) {
+			QueryPerformer<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>, IStructureRecord> performer = 
+						new QueryPerformer<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>, IStructureRecord>() {
+				
+				@Override
+				protected List<IStructureRecord> process(
+						IQueryRetrieval<IStructureRecord> query, ResultSet resultset)
+						throws Exception {
+								return null;
+				}
+				@Override
+				protected List<IStructureRecord> retrieve(
+						IRetrieval<IStructureRecord> query, ResultSet resultset)
+						throws Exception {
+		   			Object o = getContext().get(getResultKey());
 	
-	addStep(query);
-	addStep(retrieveStrucs);
+	    			List<IStructureRecord> records = null;
+	    			if ((o==null) || !(o instanceof List)) {
+	    				records = new ArrayList<IStructureRecord>();
+	    			} else records = (List<IStructureRecord>)o;
+	    			
+	    			RetrieveStructure struc = new RetrieveStructure();
+	    			QueryExecutor<RetrieveStructure> q = new QueryExecutor<RetrieveStructure> ();
+	    			Connection c = getConnection();
+	    			try {
+		    			q.setConnection(c);
+		    			q.open();
+	    			
+				        while (resultset.next()) 
+				        	try {
+				        		if (resultset.getBoolean("selected")) {
+					        		struc.setValue(query.getObject(resultset));
+					        		ResultSet rs = q.process(struc);
+					        		while (rs.next())
+					        			records.add((IStructureRecord)struc.getObject(rs).clone());
+					        		q.closeResults(rs);
+				        		}
+				        	} catch (Exception x) {
+				        		x.printStackTrace();
+				        	};
+	    			} finally {
+	    				try {q.close();c.close();} catch (Exception x) {}
+	    			}
+			        System.out.println(records.size());		 
+			        getContext().put(DBWorkflowContext.RECORD,null);
+			        return records;
+				}
+			};
+			
+			Primitive<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>> retrieveStrucs = new Primitive<IQueryRetrieval<IStructureRecord>, List<IStructureRecord>>(
+					DBWorkflowContext.QUERY,
+					DBWorkflowContext.RECORDS,
+					performer
+					) {
+				@Override
+				public synchronized String getName() {
+					return "Append records";
+				};
+			};
+			
+			addStep(retrieveStrucs);
+		} else {
+			
+				QueryPerformer<IQueryRetrieval<IStructureRecord>, IStructureRecord, IStructureRecord> performer = 
+					new QueryPerformer<IQueryRetrieval<IStructureRecord>, IStructureRecord, IStructureRecord>() {
+			
+					@Override
+					protected IStructureRecord process(
+							IQueryRetrieval<IStructureRecord> query, ResultSet resultset)
+							throws Exception {
+									return null;
+					}
+					@Override
+					protected IStructureRecord retrieve(
+							IRetrieval<IStructureRecord> query, ResultSet resultset)
+							throws Exception {
+			   			Object o = getContext().get(getResultKey());
+						IStructureRecord record = null;
+						
+						RetrieveStructure struc = new RetrieveStructure();
+						QueryExecutor<RetrieveStructure> q = new QueryExecutor<RetrieveStructure> ();
+						Connection c = getConnection();
+						try {
+			    			q.setConnection(c);
+			    			q.open();
+						
+					        while (resultset.next()) 
+					        	try {
+					        		if (resultset.getBoolean("selected")) {
+						        		struc.setValue(query.getObject(resultset));
+						        		ResultSet rs = q.process(struc);
+						        		while (rs.next()) {
+						        			record = (IStructureRecord)struc.getObject(rs).clone();
+						        			break;
+						        		}
+						        		q.closeResults(rs);
+					        		}
+					        	} catch (Exception x) {
+					        		x.printStackTrace();
+					        	};
+						} finally {
+							try {q.close();c.close();} catch (Exception x) {}
+						}
+
+				        getContext().put(DBWorkflowContext.RECORD,null);
+				        return record;
+					}
+				};			
+			Primitive<IQueryRetrieval<IStructureRecord>, IStructureRecord> retrieveStrucs = new Primitive<IQueryRetrieval<IStructureRecord>, IStructureRecord>(
+					DBWorkflowContext.QUERY,
+					DBWorkflowContext.RECORD,
+					performer
+					) {
+				@Override
+				public synchronized String getName() {
+					return "Append records";
+				};
+			};			
+			addStep(retrieveStrucs);
+		}
+
+	
 	
 	}
 

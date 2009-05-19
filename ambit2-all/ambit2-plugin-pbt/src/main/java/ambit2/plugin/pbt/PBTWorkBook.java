@@ -208,7 +208,7 @@ public class PBTWorkBook {
     	return record;
     }
     public void setStructure(IAtomContainer structure) {
-    	getWorksheet(1).setExtendedCell(structure, 10,5);    	
+    	getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setExtendedCell(structure, 10,5);    	
     }
     public IAtomContainer getStructure() {
     	Object a = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCell(10,5);
