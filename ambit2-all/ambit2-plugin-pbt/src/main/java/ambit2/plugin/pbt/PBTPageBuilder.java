@@ -60,7 +60,6 @@ import ambit2.ui.editors.Panel2D;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -247,8 +246,15 @@ public class PBTPageBuilder {
 						c = createLabel(cell.toString(),(WorksheetAction)extCell);
 						//c.setBackground(background);		        		
 					} else {
-						c = createLabel(cell.toString(),null);
-						//c.setBackground(background);
+						if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
+							c = BasicComponentFactory.createLabel(model.getModel(propertyName));
+			        		c.setEnabled(true);
+			        		c.setForeground(Color.RED);
+			        		c.setBackground(builder.getPanel().getBackground());
+			        		c.setBorder(null);
+						} else 
+							c = createLabel(cell.toString(),null);
+						
 					}						
 				} else
 				switch (cell.getCellType()) {

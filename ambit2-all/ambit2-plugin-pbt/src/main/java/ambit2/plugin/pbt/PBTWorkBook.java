@@ -22,7 +22,7 @@ import com.lowagie.text.Table;
 
 
 public class PBTWorkBook {
-	
+	protected int COLUMN_STRUCTURE = 4;
 	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.0.0";
 
 	public static final String PBT_WORKBOOK = "ambit2.plugin.pbt.WORKBOOK";
@@ -173,7 +173,7 @@ public class PBTWorkBook {
     	
     	case SUBSTANCE: {
     		PBTWorksheet ws = getWorksheet(index);
-    		Object o = ws.getExtendedCell(10,5);
+    		Object o = ws.getExtendedCell(10,COLUMN_STRUCTURE);
     		if ((o != null) && (o instanceof IMolecule) && (((IMolecule)o).getAtomCount()>0)) 
     			return true;
     		else return (!"".equals(ws.getB10())) && (!"".equals(ws.getB11()));
@@ -208,10 +208,10 @@ public class PBTWorkBook {
     	return record;
     }
     public void setStructure(IAtomContainer structure) {
-    	getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setExtendedCell(structure, 10,5);    	
+    	getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setExtendedCell(structure, 10,COLUMN_STRUCTURE);    	
     }
     public IAtomContainer getStructure() {
-    	Object a = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCell(10,5);
+    	Object a = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCell(10,COLUMN_STRUCTURE);
     	if (a instanceof IAtomContainer)
     		return ((IAtomContainer)a);
     	else 
