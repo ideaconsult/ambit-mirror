@@ -7,6 +7,8 @@
 
 package com.microworkflow.process;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,14 +32,24 @@ import com.microworkflow.process.IWorkflowExceptionHandler.RETURN_MODE;
  * <a href="http://micro-workflow.com/PDF/wecfo.pdf">Workflow Enactment with
  * Continuation and Future Objects</a>.
  */
-public class Workflow extends ObjectWithPropertyChangeSupport {
+public class Workflow extends ObjectWithPropertyChangeSupport implements PropertyChangeListener {
 	protected Queue queue; 
 	protected Activity definition;
 	protected ArrayList<Continuation> additionalContinuations;
 	protected Scheduler scheduler;
 	protected Logger logger;
 	protected IWorkflowExceptionHandler exceptionHandler = null;
+	protected boolean interrupted = false;
 	
+	protected synchronized boolean isInterrupted() {
+		return interrupted;
+	}
+
+	protected synchronized void setInterrupted(boolean interrupted) {
+		this.interrupted = interrupted;
+		System.out.println("interrupted "+interrupted);
+	}
+
 	public Workflow () {
 		initialize();
 	}
@@ -46,16 +58,22 @@ public class Workflow extends ObjectWithPropertyChangeSupport {
 		queue=new Queue();
 		additionalContinuations=new ArrayList<Continuation>();
 		scheduler=new Scheduler();
-		logger=Logger.getLogger("com.microworklfow.process.workflow");
+		logger=Logger.getLogger("com.microworkflow.process.workflow");
 		psp = new PropertyChangeSupport(this);
 	}
 
 	public WorkflowContext executeWith(WorkflowContext context) {
+		setInterrupted(false);
         firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_START,null,context));
 		WorkflowContext currentContext = context;
 		Continuation continuation = firstContinuation();
 		while (continuation.getClass() != NullContinuation.class) {
 			try {
+				if (isInterrupted()) {
+					Exception x = new Exception("Interrupted");
+					exceptionHandler.processException(x,continuation,context);
+					firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_ABORTED,null,x));	
+				}				
 				continuation = bounce(continuation, currentContext);
 			} catch (Exception x) {
 				if (exceptionHandler == null)
@@ -136,5 +154,10 @@ public class Workflow extends ObjectWithPropertyChangeSupport {
     public void fireAnimateEvent(boolean enable) {
         firePropertyChange(new WorkflowEvent(this,WorkflowEvent.WF_ANIMATE,null,new Boolean(enable)));
     }    
+    public void propertyChange(PropertyChangeEvent evt) {
+    	if (evt.getPropertyName().equals(WorkflowEvent.WF_ABORTED))
+    		setInterrupted(true);
+    	
+    }
     
 }

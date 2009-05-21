@@ -30,11 +30,19 @@
 package com.microworkflow.process;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 public class ValueLatch<T> {
-    
-    private T value = null;
+    protected long timeout_seconds = 5;
+    public long getTimeout_seconds() {
+		return timeout_seconds;
+	}
+
+	public void setTimeout_seconds(long timeout_seconds) {
+		this.timeout_seconds = timeout_seconds;
+	}
+	private T value = null;
     private final CountDownLatch done = new CountDownLatch(1);
 
     public boolean isSet() {
@@ -50,7 +58,10 @@ public class ValueLatch<T> {
 
     public T getValue() throws InterruptedException {
         System.out.println("wait");
-        done.await();
+        if (getTimeout_seconds()<0)
+        	done.await();
+        else
+        	done.await(getTimeout_seconds(),TimeUnit.SECONDS);
         System.out.println("ready");        
         synchronized (this) {
             return value;
