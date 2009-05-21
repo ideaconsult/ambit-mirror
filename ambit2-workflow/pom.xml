@@ -20,7 +20,7 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>mworkflow</artifactId>
-    	<version>1.0.6</version>
+    	<version>1.0.7</version>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>

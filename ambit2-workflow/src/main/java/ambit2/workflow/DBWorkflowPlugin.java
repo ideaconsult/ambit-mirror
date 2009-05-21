@@ -68,7 +68,7 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 	private static final long serialVersionUID = 7190224146559024307L;
 	protected List<ClassHolder> workflows;	
 	protected NPluginsAction<WorkflowContext,Void> runAction = null;
-	protected StopContinueAction stopAction = null;
+	protected ContinueAction continueAction = null;
 	private boolean running = false;
 	protected WorkflowOptionsLauncher listener;
 	
@@ -107,8 +107,8 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
       	public void propertyChange(PropertyChangeEvent evt) {
       		
       		if (evt.getNewValue() instanceof ValueLatchPair) {
-      			stopAction.setContinue(true);
-      			stopAction.setLatch((ValueLatchPair) evt.getNewValue());
+      			continueAction.setContinue(true);
+      			continueAction.setLatch((ValueLatchPair) evt.getNewValue());
       		}
       	}
         };		
@@ -140,9 +140,12 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 		return workflows;
 	}	
 	
-	protected AbstractAction getStopAction() {
-		if (stopAction == null) stopAction = new StopContinueAction();
-		return stopAction;
+	protected AbstractAction getContinueAction() {
+		if (continueAction == null) {
+			continueAction = new ContinueAction();
+			continueAction.addPropertyChangeListener(getWorkflow());
+		}
+		return continueAction;
 	}
 	protected NPluginsAction<WorkflowContext,Void> getAction() {
 		if (runAction == null) {
@@ -229,13 +232,13 @@ public abstract class DBWorkflowPlugin extends MWorkflowPlugin implements IMulti
 				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,32);
 
 				optionsComponent =  new JComponent[] {
-						new WorkflowViewPanel(workflow,getAction(),getStopAction()),
+						new WorkflowViewPanel(workflow,getAction(),getContinueAction()),
 						mw,
 						p,
 						createConsole()
 				};
 			} else
-				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction(),getStopAction())};
+				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction(),getContinueAction())};
 		}
 		return optionsComponent;
 	}	
@@ -281,7 +284,8 @@ class MyWorkflow extends Workflow {
 	}
 }
 
-class StopContinueAction extends AbstractAction {
+class ContinueAction extends AbstractAction {
+	protected boolean continue_mode = false;
 	protected ValueLatchPair latch = null;
 	public ValueLatchPair getLatch() {
 		return latch;
@@ -295,21 +299,25 @@ class StopContinueAction extends AbstractAction {
 	 * 
 	 */
 	private static final long serialVersionUID = -3459659905414411067L;
-	public StopContinueAction() {
+	public ContinueAction() {
 		super("Stop");
 		setEnabled(false);
 	}
 	public void setContinue(boolean value) {
-		if (value) putValue(NAME, "Continue");
-		else putValue(NAME, "Stop");
+		continue_mode = value;
+		putValue(NAME, (continue_mode?"Continue":"Stop"));
 	}
 	public void actionPerformed(ActionEvent e) {
-  		if (latch != null) try {
-  			latch.getLatch().setValue(latch.getValue());
-  		} finally {
-  			setEnabled(false);
-  		}
-		
+		if (continue_mode) {
+	  		if (latch != null) try {
+	  			latch.getLatch().setValue(latch.getValue());
+	  		} finally {
+	  			setEnabled(false);
+	  		}
+		} else {
+			firePropertyChange(WorkflowEvent.WF_ABORTED, null, true);
+			setEnabled(false);
+		}
 	}
 	
 }

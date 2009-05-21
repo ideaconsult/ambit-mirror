@@ -213,12 +213,12 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 				MultiWorkflowsPanel mw = new MultiWorkflowsPanel((IMultiWorkflowsPlugin)this,32);
 
 				optionsComponent =  new JComponent[] {
-						new WorkflowViewPanel(workflow,getAction(),getStopAction()),
+						new WorkflowViewPanel(workflow,getAction(),getContinueAction()),
 						mw,
 						p
 				};
 			} else
-				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction(),getStopAction())};
+				optionsComponent =  new JComponent[] {new WorkflowViewPanel(workflow,getAction(),getContinueAction())};
 		}
 		return optionsComponent;
 	}		
