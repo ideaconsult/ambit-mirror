@@ -57,6 +57,8 @@ public class DescriptorResultFormatter extends
 	public DescriptorResultFormatter(Locale locale) {
 		this();
 		setLocale(locale);
+		format.setMinimumFractionDigits(0);
+		format.setMaximumFractionDigits(4);
 	}
 	
 	public void setLocale(Locale locale) {
