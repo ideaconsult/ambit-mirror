@@ -1,6 +1,8 @@
+
 package ambit2.plugin.search;
 
 
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -8,6 +10,7 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
@@ -87,7 +90,23 @@ public class SearchPlugin extends DBWorkflowPlugin {
 			p.add(DBWorkflowContext.DBCONNECTION_URI);			
 			results.setProperties(p);
 			results.setAnimate(true);
-			mainComponent = results;
+			
+			
+		    StatisticsPanel stats = new StatisticsPanel(getWorkflowContext());
+			p = new Vector<String>();
+			p.add(DBWorkflowContext.STOREDQUERY);
+			p.add(DBWorkflowContext.ERROR);
+			p.add(DBWorkflowContext.DBCONNECTION_URI);
+			p.add(DBWorkflowContext.ENDPOINTS);
+
+			stats.setProperties(p);
+			stats.setAnimate(true);
+			
+			MainPanel mp = new MainPanel();
+			mp.addTab("Results",results);
+			mp.addTab("Stats", stats);
+			
+			mainComponent = mp;
 			contextListener.setFrame(mainComponent.getComponent());
 		} 
 		return mainComponent;
@@ -127,4 +146,25 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		return "Simple Search";
 	}
 
+}
+
+class MainPanel extends JTabbedPane implements INPluginUI<INanoPlugin>  {
+	public MainPanel() {
+		
+	}
+	public Component getComponent() {
+		// TODO Auto-generated method stub
+		return this;
+	}
+
+	public INanoPlugin getPlugin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPlugin(INanoPlugin arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
