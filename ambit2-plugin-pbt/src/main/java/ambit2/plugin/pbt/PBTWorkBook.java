@@ -22,7 +22,7 @@ import com.lowagie.text.Table;
 
 
 public class PBTWorkBook {
-	protected int COLUMN_STRUCTURE = 4;
+	public static int COLUMN_STRUCTURE = 4;
 	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.0.0";
 
 	public static final String PBT_WORKBOOK = "ambit2.plugin.pbt.WORKBOOK";

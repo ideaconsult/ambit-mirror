@@ -41,7 +41,7 @@ org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor
-org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor
+ambit2.descriptors.MolecularWeight
 ;org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor
 org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
