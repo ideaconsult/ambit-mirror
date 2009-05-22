@@ -101,9 +101,10 @@ public class PreferencesPanel implements IAmbitEditor<Properties>  {
    					c = new JCheckBox(a);
    					((JCheckBox)c).setSelected(Boolean.parseBoolean(
    							Preferences.getProperty(Preferences.default_values[i][0].toString())));
+   					c.setToolTipText(Preferences.default_values[i][4].toString());   					
    				} else if (Preferences.default_values[i][3] == String.class) {	
    					c = new JFormattedTextField(Preferences.getProperty(Preferences.default_values[i][0].toString()));
-   					
+   					c.setToolTipText(Preferences.default_values[i][4].toString());
    					c.addPropertyChangeListener("value", new TextPropertyChangeListener(i));
 
 //   					c.setPreferredSize(d);
