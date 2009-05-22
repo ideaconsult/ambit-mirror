@@ -38,6 +38,7 @@ public class Preferences {
 	public static String SHOW_AROMATICITY="showAromaticity";
 	public static String GENERATE2D="generate2D";
 	public static String DEFAULT_DIR="defaultDir";
+	public static String START_MYSQL="startMySQL";
 	public static String SMILESPARSER="smilesParser";
     public static String STOP_AT_UNKNOWNATOMTYPES="atomtypes.stop";
     public static String MOPAC_DIR="mopac.dir";
@@ -62,17 +63,18 @@ public class Preferences {
 
 	public static Object[][] default_values = {
 		//{tag, name, default value, class, hint, hidden}
-		{DATABASE,"Default database schema","ambit2",String.class,"Default database schema",false},
-		{PORT,"Default database port","33060",String.class,"",false},
-		{USER,"Default user","guest",String.class,"Default user name",false},		
-		{HOST,"Host","localhost",String.class,"",false},
+		{DATABASE,"Default database schema","ambit2",String.class,"This is the default database schema AmbitXT will attempt to connect to when a database connection is required.",false},
+		{PORT,"Default database port","33060",String.class,"This is the default port AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this port.",false},
+		{USER,"Default user","guest",String.class,"This is the default user name AmbitXT will attempt to connect with when a database connection is required.",false},		
+		{HOST,"Host","localhost",String.class,"This is the default host AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this host.",false},
 		{SCHEME,"Scheme","jdbc:mysql",String.class,"",false},		
-	//	{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",false},
+		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false},
+
+		//	{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",false},
 		//{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false},
        // {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false},
-        {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"Report an error if an unknown atom type is encountered.",false},
-		{DEFAULT_DIR,"Default directory","",String.class,"Remembers the directory of the last opened/saved file",false},		
-        
+        {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"If checked, will report an error when an unknown atom type is encountered.",false},
+		{DEFAULT_DIR,"Default directory","",String.class,"This folder will appear as a default in the file open or file save dialogs",false},		
 
 		/*
         {OPENBABEL_WIN,"Path to OpenBabel (Windows)","helper/openbabel/win/babel.exe",String.class,"Where to find Openbabel in Windows",false},
