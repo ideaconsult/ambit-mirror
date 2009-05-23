@@ -113,8 +113,9 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		}
 		sman.setQuery(smarts);		
 		if (!sman.getErrors().equals("")) {
+			String errors = sman.getErrors();
 			sman = null;
-			throw new SMARTSException(sman.getErrors());
+			throw new SMARTSException(errors);
 		} 	
 	}
 	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
