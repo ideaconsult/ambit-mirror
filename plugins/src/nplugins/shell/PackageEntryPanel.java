@@ -69,8 +69,9 @@ public class PackageEntryPanel extends JScrollPane  implements PropertyChangeLis
         table.setColumnSelectionAllowed(false);
 
         setViewportView(table);
-        setPreferredSize(new Dimension(200,200));
-        setMaximumSize(new Dimension(200,200));
+        setPreferredSize(new Dimension(400,400));
+        setMaximumSize(new Dimension(400,400));
+        setMinimumSize(new Dimension(200,200));
     }
     @Override
     public String toString() {

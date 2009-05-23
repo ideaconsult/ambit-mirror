@@ -14,3 +14,4 @@ Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.acad.bg
 Image-icon: nplugins/shell/resources/busyicons/busy-icon.gif
+Module-Order: 1

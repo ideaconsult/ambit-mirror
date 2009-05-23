@@ -119,23 +119,25 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         	   }
       	   } ); 
 
-        JComponent leftComponent = buildMainLeftPanel(pluginsManager);
+        
+        INanoPlugin defaultPlugin = pluginsManager;
+        JComponent leftComponent = buildMainLeftPanel(defaultPlugin);
         leftPanel = new SimpleInternalFrame((leftComponent != null)?leftComponent.toString():"Options");
         leftPanel.setPreferredSize(leftComponent.getPreferredSize());
         leftPanel.setMaximumSize(leftComponent.getMaximumSize());
         leftPanel.setMinimumSize(leftComponent.getMinimumSize());
         leftPanel.setContent(leftComponent);
         
-        Component rightComponent = buildMainRightPanel(pluginsManager);
+        Component rightComponent = buildMainRightPanel(defaultPlugin);
         mainPanel = new SimpleInternalFrame((rightComponent != null)?rightComponent.toString():"Main");
         if (rightComponent!= null) {
 	        mainPanel.setPreferredSize(rightComponent.getPreferredSize());
 	        mainPanel.setMaximumSize(rightComponent.getMaximumSize());
 	        mainPanel.setMinimumSize(rightComponent.getMinimumSize());
         }
-        mainPanel.setContent(buildMainRightPanel(pluginsManager));
+        mainPanel.setContent(buildMainRightPanel(defaultPlugin));
         
-        JComponent detailsComponent = buildDetailsPanel(pluginsManager);
+        JComponent detailsComponent = buildDetailsPanel(defaultPlugin);
         detailsPanel = new SimpleInternalFrame((detailsComponent != null)?detailsComponent.toString():"Details");
        
         if (detailsComponent!= null) {
@@ -159,6 +161,14 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         int state = mainFrame.getExtendedState();
         state |= Frame.MAXIMIZED_BOTH;
         mainFrame.setExtendedState(state);        
+        
+    	for (int i=0; i < pluginsManager.size();i++)
+    		try {
+    			defaultPlugin = pluginsManager.setPlugin(pluginsManager.getPackage(i));
+    			break;
+	        } catch (Exception x) {
+	        	x.printStackTrace();
+	        }        
 		 
 	}
 	protected INPApplicationContext createApplicationContext() {
@@ -303,7 +313,26 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         return menu;
     }    
     public JMenu createAboutMenu() {
+    	final String help = "Welcome";
         JMenu menu = new JMenu("Help");
+        menu.add(new AbstractAction(help) {
+        	public void actionPerformed(ActionEvent e) {
+        		JOptionPane.showMessageDialog(mainPanel, pluginsManager.createOptionsComponent()[0],help,JOptionPane.PLAIN_MESSAGE,null);
+        	}
+        });
+        menu.addSeparator();
+        final String name= "Available modules"; 
+        menu.add(new AbstractAction(name) {
+        	public void actionPerformed(ActionEvent e) {
+        		JSplitPane p = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+        				pluginsManager.createMainComponent(),
+        				pluginsManager.createDetailsComponent()[0]
+        				);
+        		JOptionPane.showMessageDialog(mainPanel, p,name,JOptionPane.PLAIN_MESSAGE,null);
+        		
+        	}
+        });
+        menu.addSeparator();
         menu.add(new AbstractAction("About") {
         	/**
 			 * 
@@ -340,7 +369,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         		builder.append(vendor);
         		builder.append("</u></font></html>");
         		JLabel logo = new JLabel(builder.toString(),icon,SwingConstants.CENTER);
-        		logo.setToolTipText("Click here to go to ambit site");
+        		logo.setToolTipText("Click here to go to " + title +" site");
         		logo.addMouseListener(new MouseAdapter(){
         			@Override
 					public void mouseClicked(MouseEvent arg0) {
@@ -352,7 +381,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         		
         	}
         }) ;
- 
+
     	return menu;
         
     }

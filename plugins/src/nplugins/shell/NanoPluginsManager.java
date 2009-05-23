@@ -30,6 +30,8 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -99,6 +101,13 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 	        Introspection.setPref_key(pref_key);
 	    if (load)
 		packageEntries = Introspection.getAvailableTypes(getClass().getClassLoader(), "nplugins.shell.INanoPlugin");
+	    if (packageEntries!=null) {
+		    Collections.sort(packageEntries,new Comparator<PluginPackageEntry>() {
+		    	public int compare(PluginPackageEntry p1, PluginPackageEntry p2) {
+		    		return p1.getOrder() - p2.getOrder();
+		    	}
+		    });
+	    }
 	}
 	public void clear() {
 		if (packageEntries != null)
@@ -145,7 +154,7 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 			welcome.add(new JLabel(getLogo()),BorderLayout.NORTH);
 			welcome.add(new JScrollPane(textPane),BorderLayout.CENTER);
 			
-			welcome.setPreferredSize(new Dimension((logo.getIconWidth()<128?128:logo.getIconWidth()),Integer.MAX_VALUE));
+			welcome.setPreferredSize(new Dimension((logo.getIconWidth()<128?128:logo.getIconWidth()),500));
 			welcome.setMinimumSize(new Dimension(logo.getIconWidth(),Integer.MAX_VALUE));
 			welcome.setMaximumSize(welcome.getPreferredSize());
 			optionComponent = new JComponent[] {welcome};
@@ -173,12 +182,12 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
             } catch (Exception x) {
                 logger.severe(x.getMessage());
             }
-            
+        /*    
         Task<INanoPlugin,Void> task = new SetPluginTask(this,null);
-        NPluginsAction<INanoPlugin,Void> action =  new NPluginsAction<INanoPlugin,Void>(task,"Manager",getIcon(),group);
+        NPluginsAction<INanoPlugin,Void> action =  new NPluginsAction<INanoPlugin,Void>(task,"Modules",getIcon(),group);
         action.setActions(map);
-        map.put("Manager",action);
-        
+        map.put("Modules",action);
+        */
         return map;    
 	}
 
@@ -251,8 +260,23 @@ public class NanoPluginsManager extends Model implements INanoPlugin {
 		return getIcon();
 	}	
 	public java.net.URL getHelp() throws MalformedURLException {
-		return new URL("http://ambit.sourceforge.net");
+		return new URL("http://ambit.sourceforge.net/news.html");
 	}
+	public INanoPlugin setPlugin(PluginPackageEntry plugin) throws InstantiationException , IllegalAccessException, ClassNotFoundException {
+        Object thePlugin  = getStorage().restorePlugin(plugin);
+        if (thePlugin == null)
+        	thePlugin = plugin.createObject();
+        if (thePlugin instanceof INanoPlugin) {
+        	((INanoPlugin)thePlugin).setApplicationContext(getApplicationContext());
+            ((INanoPlugin)thePlugin).setParameters(plugin.getParameters());
+            setThePlugin((INanoPlugin)thePlugin);
+            return (INanoPlugin)thePlugin;
+        } else {
+            throw new ClassNotFoundException("Not of the expected type");
+            
+        }		
+	}
+	
     public synchronized INanoPlugin getThePlugin() {
         return thePlugin;
     }

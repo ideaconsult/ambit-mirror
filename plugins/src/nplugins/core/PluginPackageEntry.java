@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.Attributes.Name;
 
 import javax.swing.ImageIcon;
 
@@ -46,7 +47,21 @@ public class PluginPackageEntry {
     protected String[] parameters;
     protected String defaultTitle = null;
     protected ImageIcon defaultIcon = null;
+
+ 	protected static final Name ModuleOrder= new Name("Module-Order");
  	
+	public int getOrder() {
+		if (jar != null)
+			try {
+				Object o = jar.getAttributes().get(ModuleOrder);
+				if(o!=null) 
+					return Integer.parseInt(o.toString());
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+		
+		return Integer.MAX_VALUE;
+	}
 	public synchronized String getDefaultTitle() {
         return defaultTitle;
     }
@@ -64,6 +79,7 @@ public class PluginPackageEntry {
 		this.className = className;
 		this.packageName = packageName;
 		this.jar = jar;
+
 		/*
 		this.objectTitle = objectTitle;
 		if (objectTitle.equals("")) {
@@ -159,9 +175,9 @@ public class PluginPackageEntry {
             else return defaultTitle;
         }
         try {
-            String title = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_TITLE).toString();
-            String version = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_VERSION).toString();
-            return title + ' ' + version;
+            return jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_TITLE).toString();
+            //String version = jar.getAttributes().get(Attributes.Name.IMPLEMENTATION_VERSION).toString();
+            //return title + ' ' + version;
         } catch (Exception x) {
             return className;
         }
