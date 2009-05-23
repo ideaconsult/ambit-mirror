@@ -42,6 +42,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.Border;
@@ -259,10 +261,16 @@ public class PBTPageBuilder {
 				} else
 				switch (cell.getCellType()) {
 				case  HSSFCell.CELL_TYPE_BLANK: {
+					if (rowspan==1) {
 						c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
-		        		c.setBackground(background);
-		        		c.setEnabled(true);
-		        		c.setBorder(loweredBorder);						
+						c.setBackground(background);
+					} else {
+						JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
+						textArea.setBackground(background);
+						c = new JScrollPane(textArea);
+					}
+		        	c.setEnabled(true);
+		        	c.setBorder(loweredBorder);						
 	        		break;
 				}
 				case  HSSFCell.CELL_TYPE_BOOLEAN: {
@@ -280,8 +288,14 @@ public class PBTPageBuilder {
 				}			
 				case  HSSFCell.CELL_TYPE_NUMERIC: {
 	        		//c = new JFormattedTextField(cell.getNumericCellValue());
-	        		c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
-	        		c.setBackground(background);
+					if (rowspan==1) {
+						c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
+						c.setBackground(background);
+					} else {
+						JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
+						textArea.setBackground(background);
+						c = new JScrollPane(textArea);
+					}	        		
 	        		c.setEnabled(true);
 	        		c.setBorder(loweredBorder);
 					//c.setPreferredSize(d);       		
