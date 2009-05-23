@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.pbt;
 
-import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -38,13 +37,11 @@ import nplugins.shell.application.Utils;
 import ambit2.base.data.ClassHolder;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
-import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
 import ambit2.workflow.library.LogoutSequence;
 import ambit2.workflow.ui.MultiWorkflowsPanel;
-import ambit2.workflow.ui.QueryResultsPanel;
 import ambit2.workflow.ui.StatusPanel;
 import ambit2.workflow.ui.UserInteractionEvent;
 import ambit2.workflow.ui.WorkflowOptionsLauncher;
@@ -171,7 +168,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 
 	@Override
 	public String toString() {
-		return "REACH PBT SCREENING TOOL FOR AMBIT XT";
+		return "REACH PBT & vPvB Assessment";
 	}
 	@Override
 	public JComponent[] createDetailsComponent() {
