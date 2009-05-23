@@ -7,7 +7,7 @@ Specification-Vendor: Clariant
 Package-Title: ambit2.plugin.pbt
 Package-Version: 2.0
 Package-Vendor: http://ambit.sourceforge.net
-Implementation-Title: PBT Assessment
+Implementation-Title: REACH PBT Assessment
 Implementation-Version: 2.0
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
