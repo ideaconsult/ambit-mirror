@@ -13,3 +13,4 @@ Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net
 Image-icon: ambit2/plugin/dbtools/images/database_16.png
+Module-Order: 4
