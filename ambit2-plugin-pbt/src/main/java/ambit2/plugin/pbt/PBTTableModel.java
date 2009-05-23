@@ -226,6 +226,12 @@ public class PBTTableModel extends AbstractTableModel {
 		action.setResultExtended("extended".equals(node.getAttribute("result")));
 		action.setSourceExtended("extended".equals(node.getAttribute("source")));
 		action.putValue(Action.SHORT_DESCRIPTION, node.getAttribute("hint"));
+		int resultIndex;
+		try {
+			resultIndex = Integer.parseInt(node.getAttribute("index").toString());
+		} catch (Exception x) {
+			resultIndex = -1;
+		}
 		
 		ProcessorsChain<IAtomContainer, String, IProcessor> chain = new ProcessorsChain<IAtomContainer, String, IProcessor>();
 		chain.setAbortOnError(true);
@@ -247,7 +253,7 @@ public class PBTTableModel extends AbstractTableModel {
 				}
 				DescriptorCalculationProcessor descriptors = new DescriptorCalculationProcessor((IMolecularDescriptor)d);
 				chain.add(descriptors);
-				chain.add(new DescriptorResultFormatter(Locale.US));
+				chain.add(new DescriptorResultFormatter(Locale.US,resultIndex));
 			}
 		} else 	if (node.getAttribute("processor") != null) {
 			ProcessorProxy proxy = new ProcessorProxy();

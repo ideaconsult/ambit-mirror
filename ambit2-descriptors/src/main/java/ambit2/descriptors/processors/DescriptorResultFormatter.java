@@ -60,7 +60,10 @@ public class DescriptorResultFormatter extends
 		format.setMinimumFractionDigits(0);
 		format.setMaximumFractionDigits(4);
 	}
-	
+	public DescriptorResultFormatter(Locale locale, int index) {
+		this(locale);
+		setIndex(index);
+	}
 	public void setLocale(Locale locale) {
 		format = NumberFormat.getNumberInstance(locale);
 	}
