@@ -27,12 +27,16 @@ package ambit2.ui.jmol;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.jmol.api.JmolAdapter;
+import org.jmol.api.JmolStatusListener;
 import org.jmol.api.JmolViewer;
+import org.jmol.popup.JmolPopup;
 import org.jmol.viewer.Viewer;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
@@ -51,12 +55,13 @@ import ambit2.ui.editors.IAmbitEditor;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Sep 1, 2006
  */
-public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> {
+public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> ,PropertyChangeListener {
 	   /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JmolViewer viewer;
+	   JmolViewer viewer;
+	   JmolPopup jmolpopup;
 	   JmolAdapter adapter;
 	   IMoleculeSet moleculeSet;
        IChemModel model;
@@ -68,7 +73,9 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> {
          try {
 	     adapter = new CdkJmolAdapter(null);
 	     viewer = Viewer.allocateViewer(this, adapter);
-	     setPreferredSize(new Dimension(200,200));
+	     jmolpopup = JmolPopup.newJmolPopup(viewer,true);
+	     viewer.setJmolStatusListener(new StatusListener(jmolpopup));
+	     setPreferredSize(new Dimension(400,400));
 	     
 	     moleculeSet = new MoleculeSet();
 	     model = new ChemModel();
@@ -101,6 +108,7 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> {
     	     g.getClipBounds(rectClip);
     	     g.clearRect(rectClip.x, rectClip.y, rectClip.width,  rectClip.height);
     	     viewer.renderScreenImage(g, currentSize, rectClip);
+//    	     viewer.script("boundbox;axes;wireframe 0.01; spacefill 0;");
            } else {
              Rectangle rectClip = new Rectangle();
              g.getClipBounds(rectClip);
@@ -130,6 +138,8 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> {
 			 if (mol != null) moleculeSet.addAtomContainer(mol);
 			 try {
 				 viewer.openClientFile("","",chemFile);
+				 jmolpopup.updateComputedMenus();
+
 			 } catch (Exception x) {
 				 x.printStackTrace();
 			 }
@@ -144,7 +154,113 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> {
 		// TODO Auto-generated method stub
 		
 	}
-
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getNewValue() instanceof IAtomContainer)
+			setObject((IAtomContainer)evt.getNewValue());
+		
+	}
 }
 
+class StatusListener implements JmolStatusListener {
+	protected JmolPopup popup;
+	public StatusListener(JmolPopup popup) {
+		this.popup = popup;
+	}
+	public void createImage(String arg0, String arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	public String eval(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public float[][] functionXY(String arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void handlePopupMenu(int x, int y) {
+		popup.show(x,y);
+		
+	}
+
+	public void notifyAtomHovered(int arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyAtomPicked(int arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyFileLoaded(String arg0, String arg1, String arg2,
+			Object arg3, String arg4) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyFrameChanged(int arg0, int arg1, int arg2, int arg3,
+			int arg4) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyNewDefaultModeMeasurement(int arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyNewPickingModeMeasurement(int arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyResized(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyScriptStart(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyScriptTermination(String arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sendConsoleEcho(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sendConsoleMessage(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sendSyncScript(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setCallbackFunction(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void showConsole(boolean arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void showUrl(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
