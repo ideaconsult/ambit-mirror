@@ -85,12 +85,12 @@ public class IsotopeFactory
 
         InputStream ins;
         // ObjIn in = null;
-        String errorMessage = "There was a problem getting org.openscience.cdk." +
-                              "config.isotopes.xml as a stream";
+        String errorMessage = "There was a problem getting ambit2/descriptors/" +
+                              "isotopes.xml as a stream";
         try {
             String configFile = "ambit2/descriptors/isotopes.xml";  //"org/openscience/cdk/config/data/isotopes.xml";
             if (debug) logger.debug("Getting stream for ", configFile);
-            ins = this.getClass().getClassLoader().getResourceAsStream(configFile);
+            ins = IsotopeFactory.class.getClassLoader().getResourceAsStream(configFile);
         } catch (Exception exception) {
             logger.error(errorMessage);
             logger.debug(exception);
