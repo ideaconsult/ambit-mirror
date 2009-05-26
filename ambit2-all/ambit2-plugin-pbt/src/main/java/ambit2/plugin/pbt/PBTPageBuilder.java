@@ -32,6 +32,7 @@ package ambit2.plugin.pbt;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -43,9 +44,11 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -58,9 +61,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.ui.editors.Panel2D;
+import ambit2.ui.jmol.Panel3D;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -240,9 +245,17 @@ public class PBTPageBuilder {
 		        		c.setBackground(background);
 		        		c.setEnabled(true);
 		        	} else if (extCell instanceof IAtomContainer) {
-		        		c = new Panel2D();
-		        		((Panel2D)c).setAtomContainer((IAtomContainer)extCell,true);
-		        		worksheet.addPropertyChangeListener("E"+worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()).toLowerCase(),(Panel2D)c);
+		        		JTabbedPane tab = new JTabbedPane();
+		        		Panel2D p2d = new Panel2D();
+		        		p2d.setAtomContainer((IAtomContainer)extCell,true);
+		        		worksheet.addPropertyChangeListener("E"+worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()).toLowerCase(),p2d);
+		        		tab.addTab("Structure diagram", p2d);
+		        		
+		        		Panel3D p3d = new Panel3D();
+		        		p3d.setObject((IAtomContainer)extCell);
+		        		worksheet.addPropertyChangeListener("E"+worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()).toLowerCase(),p3d);
+		        		tab.addTab("3D", p3d);
+		        		c = tab;
 		        	} else if (extCell instanceof WorksheetAction) {
 		        		((WorksheetAction)extCell).setWorksheet(worksheet);
 						c = createLabel(cell.toString(),(WorksheetAction)extCell);
@@ -262,7 +275,16 @@ public class PBTPageBuilder {
 				switch (cell.getCellType()) {
 				case  HSSFCell.CELL_TYPE_BLANK: {
 					if (rowspan==1) {
-						c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
+				        JTextField textField = new JTextField() {
+				        	@Override
+				        	public String getToolTipText() {
+				        		if ("".equals(getText())) return "Enter text";
+				        		else return getText();
+				        	}
+				        };
+				        Bindings.bind(textField,model.getModel(propertyName),true);		
+				        ToolTipManager.sharedInstance().registerComponent(textField);				        
+						c = textField;
 						c.setBackground(background);
 					} else {
 						JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
@@ -289,7 +311,16 @@ public class PBTPageBuilder {
 				case  HSSFCell.CELL_TYPE_NUMERIC: {
 	        		//c = new JFormattedTextField(cell.getNumericCellValue());
 					if (rowspan==1) {
-						c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
+				        JTextField textField = new JTextField() {
+				        	@Override
+				        	public String getToolTipText() {
+				        		if ("".equals(getText())) return "Enter a number";
+				        		else return getText();
+				        	}
+				        };
+				        ToolTipManager.sharedInstance().registerComponent(textField);				        
+				        Bindings.bind(textField,model.getModel(propertyName),true);						
+						c = textField;						
 						c.setBackground(background);
 					} else {
 						JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
@@ -306,12 +337,20 @@ public class PBTPageBuilder {
 					break;
 				}				
 				case  HSSFCell.CELL_TYPE_FORMULA: {
-					
-					c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
+			        JTextField textField = new JTextField() {
+			        	@Override
+			        	public String getToolTipText() {
+			        		if ("".equals(getText()))
+			        			return "This is an automatically calculated value";
+			        		else return getText();
+			        	}
+			        };
+			        ToolTipManager.sharedInstance().registerComponent(textField);
+			        Bindings.bind(textField,model.getModel(propertyName),true);						
+					c = textField;					
 	        		c.setEnabled(false);
 	        		c.setBackground(background);
 	        		c.setBorder(BorderFactory.createEtchedBorder());
-	        		c.setToolTipText("This is an automatically calculated value");
 	        		break;					
 				}
 				default:
