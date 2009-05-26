@@ -173,10 +173,11 @@ public class MolecularWeight implements IMolecularDescriptor {
         }
         else if (elementName.equals("H")) {
             try {
-                IIsotope h=IsotopeFactory.getInstance(container.getBuilder()).getMajorIsotope("H");
+            	IsotopeFactory factory = ambit2.descriptors.IsotopeFactory.getInstance(container.getBuilder()); 
+                IIsotope h=	factory.getMajorIsotope("H");
                 for (int i = 0; i < container.getAtomCount(); i++) {
                     if (container.getAtom(i).getSymbol().equals(elementName)) {
-                        weight += IsotopeFactory.getInstance(container.getBuilder()).getMajorIsotope( container.getAtom(i).getSymbol() ).getExactMass();
+                        weight += factory.getMajorIsotope( container.getAtom(i).getSymbol() ).getExactMass();
                     }
                     else {
                         weight += (container.getAtom(i).getHydrogenCount() * h.getExactMass());
