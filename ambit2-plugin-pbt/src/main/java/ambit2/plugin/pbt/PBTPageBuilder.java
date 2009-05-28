@@ -33,6 +33,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +43,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -173,7 +176,7 @@ public class PBTPageBuilder {
         PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet) {
        
         };
- 
+
         Iterator<HSSFRow> rows = worksheet.getSheet().rowIterator();
 		while (rows.hasNext()) {
 			HSSFRow row = rows.next();
@@ -183,6 +186,8 @@ public class PBTPageBuilder {
 			while (cells.hasNext()) {
 	        	JComponent c = null;				
 				HSSFCell cell = cells.next();
+				
+				short dataFormat = cell.getCellStyle().getDataFormat();
 				
 				if ((cell.getRowIndex()+ worksheet.rowOffset) < 0) continue;
 				if ((cell.getColumnIndex()+ colOffset) < 0) continue;				
@@ -271,71 +276,12 @@ public class PBTPageBuilder {
 							c = createLabel(cell.toString(),null);
 						
 					}						
-				} else
+				} else 
 				switch (cell.getCellType()) {
-				case  HSSFCell.CELL_TYPE_BLANK: {
-					if (rowspan==1) {
-				        JTextField textField = new JTextField() {
-				        	@Override
-				        	public String getToolTipText() {
-				        		if ("".equals(getText())) return "Enter text";
-				        		else return getText();
-				        	}
-				        };
-				        Bindings.bind(textField,model.getModel(propertyName),true);		
-				        ToolTipManager.sharedInstance().registerComponent(textField);				        
-						c = textField;
-						c.setBackground(background);
-					} else {
-						JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
-						textArea.setBackground(background);
-						c = new JScrollPane(textArea);
-					}
-		        	c.setEnabled(true);
-		        	c.setBorder(loweredBorder);						
-	        		break;
-				}
-				case  HSSFCell.CELL_TYPE_BOOLEAN: {
-					c = BasicComponentFactory.createTextField(model.getModel(propertyName),true);
-	        		c.setBackground(inputColor);
-	        		c.setEnabled(true);
-	        		c.setBorder(loweredBorder);
-					//c.setPreferredSize(d);
-	        		break;
-				}		
 				case  HSSFCell.CELL_TYPE_STRING: {
 					c = createLabel(cell.toString(),null);
-					//c.setBackground(background);
 	        		break;	        		
-				}			
-				case  HSSFCell.CELL_TYPE_NUMERIC: {
-	        		//c = new JFormattedTextField(cell.getNumericCellValue());
-					if (rowspan==1) {
-				        JTextField textField = new JTextField() {
-				        	@Override
-				        	public String getToolTipText() {
-				        		if ("".equals(getText())) return "Enter a number";
-				        		else return getText();
-				        	}
-				        };
-				        ToolTipManager.sharedInstance().registerComponent(textField);				        
-				        Bindings.bind(textField,model.getModel(propertyName),true);						
-						c = textField;						
-						c.setBackground(background);
-					} else {
-						JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
-						textArea.setBackground(background);
-						c = new JScrollPane(textArea);
-					}	        		
-	        		c.setEnabled(true);
-	        		c.setBorder(loweredBorder);
-					//c.setPreferredSize(d);       		
-	        		break;
-				}				
-				case  HSSFCell.CELL_TYPE_ERROR: {
-					System.out.print("error");
-					break;
-				}				
+				}					
 				case  HSSFCell.CELL_TYPE_FORMULA: {
 			        JTextField textField = new JTextField() {
 			        	@Override
@@ -354,10 +300,39 @@ public class PBTPageBuilder {
 	        		break;					
 				}
 				default:
-					//System.out.print(cell.toString());
+					switch (dataFormat) {
+					//Text
+					case 0x31 : {
+					    c = createTextComponent(rowspan, model, propertyName,  background,"Enter text");
+					    break;
+
+					}
+					//General
+					case 0: {
+					    c = createTextComponent(rowspan, model, propertyName,  background, "Enter text");
+					    break;						
+					} 
+					//numeric "0.00E+00"
+					case 0xb: {
+					    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",2);
+					    break;								
+					}
+					//numeric "0.0"
+					case 0xb2: {
+					    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",1);
+					    break;											
+					}
+					//numeric "0.00"
+					case 0x2: {
+					    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",2);
+					    break;											
+					}					
+					default: {
+						System.out.println(dataFormat);
+					}
+					}
 				}
 	        	if (c != null) {
-	        		//System.out.println(cell.toString());
 	        		if (cell.getCellComment() != null)
 	        				c.setToolTipText(cell.getCellComment().getString().getString());
 	        		c.setAlignmentX(component_alignment);
@@ -369,59 +344,51 @@ public class PBTPageBuilder {
 				
 			}
 		}
-/*
-        	switch (cell.mode) {
-        	case SECTION: {
-        		builder.addSeparator(o.toString().trim(), 
-        				cc.xyw(cell.column+colOffset,cell.row+rowOffset,cell.colspan));
-        		break;
-        	}
-        	case TITLE: {
-        		c = new JLabel("<html>"+o.toString().replace("\\n", "<br>")+"</html>");
-        		c.setOpaque(true);
-        		//c.setBackground(labelColor);
-        		c.setBorder(risedBorder);
-        		break;
-        	}
-        	case ERROR: {
-        		JTextPane txtMyTextPane= new JTextPane();
-        		txtMyTextPane.setText("<html>"+o.toString().replace("\\n", "<br>")+"</html>");
-        		txtMyTextPane.setBackground(null);
-        		txtMyTextPane.setEditable(false);
-        		txtMyTextPane.setBorder(null);
-        		c = txtMyTextPane;
-        		break; 
-        		        	}        	
-        	case LIST: {
-        		c = BasicComponentFactory.createComboBox(new SelectionInList());
-        		c.setBackground(inputColor);
-        		break;
-        	}
-        	case FORMULA: {
-        		//c = BasicComponentFactory.createTextField(valueModel,true);
-        		c = new JTextField(o.toString());
-        		c.setEnabled(false);
-        		c.setBorder(BorderFactory.createEtchedBorder());
-        		c.setToolTipText("This is an automatically calculated value");
-        		break;
-        	}
-        	case INPUT: {
-        		//c = BasicComponentFactory.createTextField(valueModel,true);
-        		c = new JTextField(o.toString());
-        		c.setBackground(inputColor);
-        		c.setEnabled(true);
-        		c.setBorder(loweredBorder);
-        		break;
-        	}        	
-        	}
-        	if (c != null)
-        		builder.add(c,cc.xywh(cell.column+colOffset,cell.row+rowOffset,cell.colspan,cell.rowspan));
-        }
-*/        
         builder.setBorder(BorderFactory.createEtchedBorder());
         return builder.getPanel();
     }       
-    
+    protected static JComponent createTextComponent(int rowspan, PresentationModel<PBTWorksheet> model, String propertyName, Color background, final String tooltip) {
+    	JComponent c = null;
+		if (rowspan==1) {
+	        JTextField textField = new JTextField() {
+	        	@Override
+	        	public String getToolTipText() {
+	        		if ("".equals(getText())) return tooltip;
+	        		else return getText();
+	        	}
+	        };
+	        Bindings.bind(textField,model.getModel(propertyName),true);		
+	        ToolTipManager.sharedInstance().registerComponent(textField);				        
+			c = textField;
+			c.setBackground(background);
+		} else {
+			JTextArea textArea = BasicComponentFactory.createTextArea(model.getModel(propertyName),true);
+			textArea.setBackground(background);
+			c = new JScrollPane(textArea);
+		}
+    	c.setEnabled(true);
+    	c.setBorder(loweredBorder);
+    	return c;
+    }
+    protected static JComponent createNumberComponent(int rowspan, PresentationModel<PBTWorksheet> model, 
+    				String propertyName, Color background, final String tooltip, int fractionDigits) {
+    	NumberFormat format = DecimalFormat.getInstance();
+    	format.setMaximumFractionDigits(fractionDigits);
+        JFormattedTextField c = new JFormattedTextField(format) {
+	        	@Override
+	        	public String getToolTipText() {
+	        		if ("".equals(getText())) return tooltip;
+	        		else return getText();
+	        	}
+	        };
+	    Bindings.bind(c,model.getModel(propertyName),true);		
+	    ToolTipManager.sharedInstance().registerComponent(c);				        
+		c.setBackground(background);
+
+    	c.setEnabled(true);
+    	c.setBorder(loweredBorder);
+    	return c;
+    }    
     protected static JComponent createLabel(String string, WorksheetAction action) {
     	String t = "???";
     	if (string != null)
