@@ -63,6 +63,18 @@ public class IsomorphismTester
 		return(sequence);
 	}
 	
+	public void setSequence(Vector<QuerySequenceElement> externalSequence) 
+	{
+		sequence = externalSequence;
+	}
+	
+	public Vector<QuerySequenceElement> transferSequenceToOwner()
+	{
+		Vector<QuerySequenceElement> ownerSeq = sequence;
+		sequence = new Vector<QuerySequenceElement>();
+		return(ownerSeq);
+	}
+	
 	void setQueryAtomSequence(IQueryAtom firstAt)
 	{	
 		IQueryAtom firstAtom;

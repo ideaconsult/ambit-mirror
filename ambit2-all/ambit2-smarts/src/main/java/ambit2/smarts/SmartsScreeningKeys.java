@@ -8,9 +8,9 @@ import java.util.Vector;
 
 public class SmartsScreeningKeys 
 {
-	public static int nKeys = 1024;
-	static boolean mKeysLoaded = false;
-	static Vector<String> mSmartsKeys = new Vector<String>();
+	public int nKeys = 1024;
+	boolean mKeysLoaded = false;
+	Vector<String> mSmartsKeys = new Vector<String>();
 	
 	
 	public Vector<String> getKeys()
@@ -43,6 +43,5 @@ public class SmartsScreeningKeys
 		catch (Exception e){}
 		mKeysLoaded = true;
 	}
-	
 	
 }
