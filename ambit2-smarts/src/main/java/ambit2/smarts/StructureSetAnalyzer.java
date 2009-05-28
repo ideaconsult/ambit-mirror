@@ -18,10 +18,13 @@ public class StructureSetAnalyzer
 	};
 	
 	
+	
 	public Vector<IAtomContainer> structures = new Vector<IAtomContainer>();
 	public double factor = 0.50; //This is the weight of the frequency
 	public Vector<CharStructInfo> charStructInfo = new Vector<CharStructInfo>();
-	public int maxNumOfStructs = 500;
+	public int hitListSize = 100;
+	public int maxSizeOfSequence = 0; //by default no restriction
+	public int maxHitStructSize = 0;  //by default no restriction
 	
 	//Utility objects
 	SmartsParser sp = new SmartsParser();
@@ -63,20 +66,37 @@ public class StructureSetAnalyzer
 		minSQIPos = -1;
 		charStructInfo.clear();
 		for (int i = 0; i < structures.size(); i++)
+		{	
+			System.out.println("Processing str. " + (i+1) + 
+					"       nAtoms = " + structures.get(i).getAtomCount());
 			processStructureStochasticalty(structures.get(i));
+		}	
 	}
 	
 	
 	void processStructureStochasticalty(IAtomContainer mol)
-	{
+	{	
 		for (int k = 0; k < mol.getAtomCount(); k++)
-		{
+		{	
 			cof.setAtomSequence(mol, mol.getAtom(k));
 			int n = cof.sequence.size();
 			
+			if (maxSizeOfSequence > 0)  //Restriction according to the sequence size
+			{	
+				if (n > maxSizeOfSequence)
+					n = maxSizeOfSequence;
+			}	
+			
 			for (int i = 0; i < n; i++)
 			{
-				IAtomContainer struct = cof.getFragmentFromSequence(i);				
+				IAtomContainer struct = cof.getFragmentFromSequence(i);
+				
+				if(maxHitStructSize > 0) //Restriction according to the Hit Str. size
+				{
+					if (struct.getAtomCount() > maxHitStructSize)
+						break;
+				}
+				
 				String smiles = cots.getSMILES(struct);
 				
 				if (!checkForDuplication(smiles))
@@ -119,7 +139,7 @@ public class StructureSetAnalyzer
 		double SQI = getSQI(freq, struct.getAtomCount());
 		
 		
-		if (charStructInfo.size() < maxNumOfStructs)
+		if (charStructInfo.size() < hitListSize)
 		{
 			CharStructInfo csi = new CharStructInfo();
 			csi.atomCount = struct.getAtomCount();
