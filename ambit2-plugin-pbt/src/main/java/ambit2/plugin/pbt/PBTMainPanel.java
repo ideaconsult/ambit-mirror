@@ -32,6 +32,7 @@ package ambit2.plugin.pbt;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 
+import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -66,6 +67,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     public PBTMainPanel() {
     	
         tabbedPane = new JTabbedPane();
+        tabbedPane.setBorder(null);
         tabbedPane.addChangeListener(new ChangeListener(){
             public void stateChanged(ChangeEvent e) {
         		if (getWorkbook()!=null) {
@@ -97,10 +99,11 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         	tabbedPane.removeAll();
         	if (pbt_workbook !=null) {
         	
-				for (int i=0; i < pbt_workbook.size();i++)  {
-					if (pbt_workbook.getWorksheet(i)!=null)
-					tabbedPane.add(pbt_workbook.getTitle(i),
-							new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i))));
+				for (int i=0; i < pbt_workbook.size();i++)  
+					if (pbt_workbook.getWorksheet(i)!=null) {
+					JComponent p = 	new JScrollPane(PBTPageBuilder.buildPanel(pbt_workbook.getWorksheet(i)));
+					p.setBorder(null);
+					tabbedPane.add(pbt_workbook.getTitle(i),p);
 				}
 	
 		        
