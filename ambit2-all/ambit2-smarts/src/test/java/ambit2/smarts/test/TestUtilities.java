@@ -872,6 +872,50 @@ public class TestUtilities
 		return (numDiff);
 	}
 	
+	
+	Vector<IAtomContainer> getContainersFromMDL(String mdlFile)
+	{	
+		Vector<IAtomContainer> structures = new Vector<IAtomContainer>();
+		
+		try
+		{
+			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					structures.add(mol);
+				}
+			}	
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return (structures);
+	}
+	
+	void testStructureAnalysis(String mdlFile)
+	{	
+		StructureSetAnalyzer analyzer = new StructureSetAnalyzer();
+		analyzer.structures = getContainersFromMDL(mdlFile);
+		System.out.println("Loaded " + analyzer.structures.size() + " structures");
+		
+		analyzer.maxHitStructSize = 20;
+		analyzer.stochasticAnalysis();
+	}
+	
+	
+	
 	void compareIsoTesterMulti()
 	{
 		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
@@ -1049,6 +1093,9 @@ public class TestUtilities
 		
 		
 		//tu.testSmartsManagerBoolSearch("[C;]", "CCC");   //----------> gives an Exception  at ambit2.smarts.SmartsLogicalExpression.doAND(SmartsLogicalExpression.java:71)
+		
+		
+		tu.testStructureAnalysis("I:/Projects/Nina/TOXCST_v3a_320_12Feb2009.sdf");
 	}
 	
 }
