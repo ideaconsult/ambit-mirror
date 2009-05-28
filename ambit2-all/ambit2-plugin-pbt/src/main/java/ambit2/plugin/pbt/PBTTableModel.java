@@ -244,7 +244,7 @@ public class PBTTableModel extends AbstractTableModel {
 				if ((node.getAttribute("builder3d") != null) && (node.getAttribute("builder3d").equals("true"))) {
 					//add 3d builder
 					try {
-						ProcessorProxy proxy = new ProcessorProxy();
+						ProcessorProxy<IAtomContainer,IAtomContainer> proxy = new ProcessorProxy<IAtomContainer,IAtomContainer>();
 						proxy.setClassName("ambit2.mopac.MopacShell");
 						chain.add(proxy);
 					} catch (Throwable x) {
@@ -253,7 +253,7 @@ public class PBTTableModel extends AbstractTableModel {
 				}
 				DescriptorCalculationProcessor descriptors = new DescriptorCalculationProcessor((IMolecularDescriptor)d);
 				chain.add(descriptors);
-				chain.add(new DescriptorResultFormatter(Locale.US,resultIndex));
+				chain.add(new DescriptorResultFormatter(false,resultIndex));
 			}
 		} else 	if (node.getAttribute("processor") != null) {
 			ProcessorProxy proxy = new ProcessorProxy();

@@ -70,7 +70,7 @@ public class PBTWriterTest extends DbUnitTest {
 
 		PBTWorkBook pbt = new PBTWorkBook();
 		pbt.setStructure(MoleculeFactory.makeBenzene());
-		pbt.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setB12("72.2");
+		pbt.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setB12(72.2);
 	
 		SourceDataset dataset = new SourceDataset(PBTWorkBook.PBT_TITLE,
 				LiteratureEntry.getInstance(PBTWorkBook.PBT_TITLE,"by Clariant"));
@@ -87,7 +87,7 @@ public class PBTWriterTest extends DbUnitTest {
 		chain.process(pbt);
 		chain.close();
 		
-		int count=191;
+		int count=199;
 		
 		c = getConnection();
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");

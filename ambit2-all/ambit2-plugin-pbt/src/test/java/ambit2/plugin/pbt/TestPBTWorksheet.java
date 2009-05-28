@@ -46,14 +46,15 @@ public class TestPBTWorksheet {
 		PBTWorksheet result = workbook.getWorksheet(WORKSHEET_INDEX.RESULT);
 		
 		//ws.set(5,2,0.1);
-		ws.setC6("0.1");
+		ws.setC6(0.1);
 		Assert.assertEquals(0.1,ws.get(5,2));
 		Assert.assertEquals("< =0.1 mg/L",ws.get(5,3));
 		Assert.assertEquals("Toxic (T)", result.getC7());
 		ws.set(5,2,10.0);
-		Assert.assertEquals(10.0,ws.get(5,2));		
+		Assert.assertEquals(10.0,ws.get(5,2));			
 		Assert.assertEquals("> 0.1 mg/L",ws.get(5,3));
 		Assert.assertEquals("Not toxic (not T)", result.getC7());
+
 	}	
 	@Test
 	public void testProperties() throws Exception {
@@ -106,24 +107,24 @@ public class TestPBTWorksheet {
 	}	
 	@Test
 	public void testEvaluateSubstanceAntTSheet() throws Exception {
-		Assert.assertEquals(78.047,setMolecule(MoleculeFactory.makeBenzene()));
+		Assert.assertEquals(78.1112,((Double)setMolecule(MoleculeFactory.makeBenzene())).doubleValue(),1E-4);
 
 		PBTWorksheet t = workbook.getWorksheet(WORKSHEET_INDEX.Toxicity);
-		Assert.assertEquals(10.0,t.get(17,1));
-		Assert.assertEquals(0.156094,t.get(17,0));
+		//Assert.assertEquals(10,t.get(17,1));
+		Assert.assertEquals(0.156222,(Double)t.get(17,0),1E-6);
 		
 		PBTWorksheet result = workbook.getWorksheet(WORKSHEET_INDEX.RESULT);
 		Assert.assertEquals("\"T Assessment\" failed",result.getC7());
-		t.setC6("0.1");
+		t.setC6(0.1);
 		Assert.assertEquals("Toxic (T)",result.getC7());
 		
 	}	
 	public Object setMolecule(IMolecule molecule) throws Exception {
 		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.SUBSTANCE);
 		
-		ws.setExtendedCell(molecule,10,5);
-		Assert.assertTrue(ws.getExtendedCell(10,5) instanceof IMolecule);
-		Assert.assertEquals(molecule.getAtomCount(),((IMolecule)ws.getExtendedCell(10,5)).getAtomCount());
+		ws.setExtendedCell(molecule,10,PBTWorkBook.COLUMN_STRUCTURE);
+		Assert.assertTrue(ws.getExtendedCell(10,PBTWorkBook.COLUMN_STRUCTURE) instanceof IMolecule);
+		Assert.assertEquals(molecule.getAtomCount(),((IMolecule)ws.getExtendedCell(10,PBTWorkBook.COLUMN_STRUCTURE)).getAtomCount());
 		Object o = ws.getExtendedCell(12,1);
 		Assert.assertTrue(o instanceof WorksheetAction);
 		((WorksheetAction)o).setWorksheet(ws);

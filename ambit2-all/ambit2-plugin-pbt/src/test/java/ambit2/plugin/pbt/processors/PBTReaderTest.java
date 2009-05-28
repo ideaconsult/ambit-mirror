@@ -48,7 +48,7 @@ public class PBTReaderTest extends DbUnitTest {
 		PBTReader reader = new PBTReader();
 		reader.setConnection(c.getConnection());
 		PBTWorkBook book = reader.process(new StructureRecord(1,1,null,null));
-		Assert.assertEquals("72.2", book.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getB12());
+		Assert.assertEquals(72.2, (Double)book.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getB12(),1E-1);
 		reader.close();
 		
 

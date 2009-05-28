@@ -32,9 +32,9 @@ package ambit2.plugin.pbt;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -53,6 +53,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
+import javax.swing.text.NumberFormatter;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -373,17 +374,35 @@ public class PBTPageBuilder {
     protected static JComponent createNumberComponent(int rowspan, PresentationModel<PBTWorksheet> model, 
     				String propertyName, Color background, final String tooltip, int fractionDigits) {
     	NumberFormat format = DecimalFormat.getInstance();
+    	NumberFormatter nf = new NumberFormatter(format) {
+    	    public String valueToString(Object iv) throws ParseException {
+    	        if ((iv == null) || (iv.equals(Double.NaN))) {
+    	            return "";
+    	        }
+    	        else {
+    	            return super.valueToString(iv);
+    	        }
+    	    }
+    	    public Object stringToValue(String text) throws ParseException {
+    	        if ("".equals(text)) {
+    	            return null;
+    	        }
+    	        return super.stringToValue(text);
+    	    }
+    	};
+    	
     	format.setMaximumFractionDigits(fractionDigits);
-        JFormattedTextField c = new JFormattedTextField(format) {
+        JFormattedTextField c = new JFormattedTextField(nf) {
 	        	@Override
 	        	public String getToolTipText() {
 	        		if ("".equals(getText())) return tooltip;
 	        		else return getText();
 	        	}
+
 	        };
-	    Bindings.bind(c,model.getModel(propertyName),true);		
+	    Bindings.bind(c,model.getModel(propertyName));		
 	    ToolTipManager.sharedInstance().registerComponent(c);				        
-		c.setBackground(background);
+		c.setBackground(Color.orange);
 
     	c.setEnabled(true);
     	c.setBorder(loweredBorder);

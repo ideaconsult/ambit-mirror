@@ -21,7 +21,9 @@ public class MolecularWeightDescriptorTest {
 		
 		DescriptorValue value = mw.calculate(p.process(mol));
 		Assert.assertEquals(78.111f,((DoubleResult) value.getValue()).doubleValue(),1E-3);
-		DescriptorResultFormatter f = new DescriptorResultFormatter();
-		Assert.assertEquals("78.111", f.process(value));
+		DescriptorResultFormatter f = new DescriptorResultFormatter(false);
+		Assert.assertEquals(78.111, ((Double)f.process(value)).doubleValue(),1E-3);
+		f = new DescriptorResultFormatter(true);
+		Assert.assertEquals("78.111", f.process(value));		
 	}
 }

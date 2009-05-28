@@ -23,10 +23,10 @@ import com.lowagie.text.Table;
 
 public class PBTWorkBook {
 	public static int COLUMN_STRUCTURE = 4;
-	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.0.0";
+	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02";
 
 	public static final String PBT_WORKBOOK = "ambit2.plugin.pbt.WORKBOOK";
-	protected static final String PBT_CLARIANT="ambit2/plugin/pbt/xml/pbt_1_00.xls";
+	protected static final String PBT_CLARIANT="ambit2/plugin/pbt/xml/pbt_1_02.xls";
 	final protected HSSFWorkbook workbook; 
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
@@ -42,7 +42,7 @@ public class PBTWorkBook {
     	{"P-Sheet",new Integer(20),new Integer(6),"ambit2/plugin/pbt/xml/p_page.xml",-3},
     	{"B-Sheet",new Integer(22),new Integer(6),"ambit2/plugin/pbt/xml/b_page.xml",-3},
     	{"T-Sheet",new Integer(19),new Integer(6),"ambit2/plugin/pbt/xml/t_page.xml",-3},
-    	{"Result",new Integer(15),new Integer(5),"ambit2/plugin/pbt/xml/result_page.xml",-2}
+    	{"Result",new Integer(15),new Integer(4),"ambit2/plugin/pbt/xml/result_page.xml",-2}
     };
     public PBTWorkBook() throws Exception {
     	this(PBT_CLARIANT);
@@ -178,10 +178,10 @@ public class PBTWorkBook {
     			return true;
     		else return (!"".equals(ws.getB10())) && (!"".equals(ws.getB11()));
     	}
-    	case Persistence: return !getWorksheet(index).getE20().trim().equals("due to insufficient / conflicting data");
-    	case Bioaccumulation: return !getWorksheet(index).getD22().trim().equals("due to insufficient / conflicting data");
-    	case Toxicity: return !getWorksheet(index).getD19().trim().equals("due to insufficient / conflicting data");
-    	case RESULT: return !getWorksheet(index).getC9().trim().equals("PBT & vPvB Assessment failed");
+    	case Persistence: return !getWorksheet(index).getE20().toString().trim().equals("due to insufficient / conflicting data");
+    	case Bioaccumulation: return !getWorksheet(index).getD22().toString().trim().equals("due to insufficient / conflicting data");
+    	case Toxicity: return !getWorksheet(index).getD19().toString().trim().equals("due to insufficient / conflicting data");
+    	case RESULT: return !getWorksheet(index).getC9().toString().trim().equals("PBT & vPvB Assessment failed");
     	default: return false;
     	}
     }
@@ -225,7 +225,7 @@ public class PBTWorkBook {
     	WORKSHEET_INDEX sheet = WORKSHEET_INDEX.valueOf(fieldname.substring(0,i));
     	fieldname = fieldname.substring(i+1);
     	PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(getWorksheet(sheet));
-    	model.setValue(fieldname.toLowerCase(), value.toString().trim());
+    	model.setValue(fieldname.toLowerCase(), value);
     	
     }
 }

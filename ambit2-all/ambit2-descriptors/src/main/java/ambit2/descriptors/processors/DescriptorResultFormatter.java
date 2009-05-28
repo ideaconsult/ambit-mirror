@@ -48,14 +48,17 @@ import ambit2.base.processors.DefaultAmbitProcessor;
  *
  */
 public class DescriptorResultFormatter extends
-		DefaultAmbitProcessor<DescriptorValue, String> {
+		DefaultAmbitProcessor<DescriptorValue, Object> {
+	protected boolean convertToString = true;
+
 	protected NumberFormat format = NumberFormat.getNumberInstance(); //new DecimalFormat("#####.####");
 	//protected Locale locale = new Locale("us", "US");
 	protected int index = -1;
-	public DescriptorResultFormatter() {
+	public DescriptorResultFormatter(boolean convertToString) {
+		setConvertToString(convertToString);
 	}
 	public DescriptorResultFormatter(Locale locale) {
-		this();
+		this(true);
 		setLocale(locale);
 		format.setMinimumFractionDigits(0);
 		format.setMaximumFractionDigits(4);
@@ -64,6 +67,17 @@ public class DescriptorResultFormatter extends
 		this(locale);
 		setIndex(index);
 	}
+	public DescriptorResultFormatter(boolean convertToString, int index) {
+		this(convertToString);
+		setIndex(index);
+	}	
+	public boolean isConvertToString() {
+		return convertToString;
+	}
+	public void setConvertToString(boolean convertToString) {
+		this.convertToString = convertToString;
+	}
+	
 	public void setLocale(Locale locale) {
 		format = NumberFormat.getNumberInstance(locale);
 	}
@@ -84,25 +98,24 @@ public class DescriptorResultFormatter extends
 	 */
 	private static final long serialVersionUID = -8879440610070527255L;
 
-	public String process(DescriptorValue target) throws AmbitException {
+	public Object process(DescriptorValue target) throws AmbitException {
 		
 		IDescriptorResult result = target.getValue();
 		if (result instanceof DoubleResult)
-			return format.format(
-				((DoubleResult)(target.getValue())).doubleValue());
+			return isConvertToString()?format.format(((DoubleResult)(target.getValue())).doubleValue()):((DoubleResult)(target.getValue())).doubleValue();
 		else if (result instanceof IntegerResult)
-			return Integer.toString(((IntegerResult)(target.getValue())).intValue());
+			return isConvertToString()?Integer.toString(((IntegerResult)(target.getValue())).intValue()):((IntegerResult)(target.getValue())).intValue();
 		else if (result instanceof DoubleArrayResult) {
 			DoubleArrayResult array = (DoubleArrayResult) result;
 			if ((index >= 0) && (index<array.length()))
-				return format.format(array.get(index));
+				return isConvertToString()?format.format(array.get(index)):array.get(index);
 		} else if (result instanceof IntegerArrayResult) {
 			IntegerArrayResult array = (IntegerArrayResult) result;
 			if ((index >= 0) && (index<array.length()))
-				return format.format(array.get(index));
+				return isConvertToString()?format.format(array.get(index)):array.get(index);
 		}		
 		//catch all
-		return result.toString();
+		return isConvertToString()?result.toString():result;
 	}
 
 }
