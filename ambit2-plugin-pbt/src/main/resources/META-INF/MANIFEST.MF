@@ -2,13 +2,13 @@ Package: ambit2.plugin.pbt
 
 Name: ambit2/plugin/pbt/PBTCheckerPlugin.class
 Specification-Title: REACH PBT SCREENING TOOL FOR AMBIT XT
-Specification-Version: 1.0 2009-02-04
+Specification-Version: 1.2 2009-05-25
 Specification-Vendor: Clariant
 Package-Title: ambit2.plugin.pbt
 Package-Version: 2.0
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: REACH PBT Assessment
-Implementation-Version: 2.0
+Implementation-Version: 2.0.2
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net

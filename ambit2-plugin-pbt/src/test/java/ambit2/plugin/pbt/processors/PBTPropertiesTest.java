@@ -26,7 +26,7 @@ public class PBTPropertiesTest {
 		pbt.setStructure(MoleculeFactory.makeBenzene());
 		PBTProperties p = new PBTProperties();
 		IStructureRecord record = p.process(pbt);
-		Assert.assertEquals(190,record.getNumberOfProperties());
+		Assert.assertEquals(199,record.getNumberOfProperties());
 		System.out.println(record.getContent());
 		
 	}
