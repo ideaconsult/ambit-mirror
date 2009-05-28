@@ -9,11 +9,13 @@ import org.restlet.resource.Variant;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
+import ambit2.rest.ImageConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -27,7 +29,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		super(context,request,response);
 		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));	
 		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_SMILES));		
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));			
+		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));		
+		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));			
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -45,7 +48,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor<IStructureRecord, QueryStructureByID>(
 					new StructureURIReporter<QueryStructureByID>(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);			
-			
+		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
+					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);					
 		} else
 			return new DocumentConvertor(new QueryXMLReporter<Q>());
 	}

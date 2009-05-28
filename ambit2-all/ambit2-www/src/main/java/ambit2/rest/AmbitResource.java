@@ -10,14 +10,21 @@ import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
+import ambit2.rest.pubchem.PubchemResource;
+
 public class AmbitResource extends Resource {
 	protected String[][] uri = {
 			{AmbitApplication.datasets,"Datasets"},
-			{AmbitApplication.query,"Queries"},
+			{AmbitApplication.query,"Similarity search"},
 			{"/endpoints","Endpoints"},
 			{"/descriptors","Descriptors"},
 			{"/structure/100","Structures"},
-			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search"}
+			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search"},
+			{"/query/property/=/50-00-0","Search by property or an identifier (CAS, Name, etc.)"},
+			{"/pubchem/query/50-00-0","PubChem query"},
+			{"/cdk/depict/c1ccccc1","Structure diagram (based on CDK)"},
+			{"/daylight/depict/c1ccccc1","Structure diagram (based on Daylight depict"},
+			{"/build3d/smiles/c1ccccc1","Generate 3D structure"}
 	};
 	public AmbitResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -51,20 +58,48 @@ public class AmbitResource extends Resource {
 				}
 				return new StringRepresentation(xml.toString());				
 			} else { //if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-				StringBuilder xml = new StringBuilder();
-				xml.append("<html><title>Ambit REST</title>");
-				xml.append("<body>");
+				variant.setMediaType(MediaType.TEXT_HTML);
+				StringBuilder html = new StringBuilder();
+				html.append(
+					"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+				);
+				html.append("<html><head><title>Ambit REST</title></head>\n");
+				html.append("<body>\n");
+				html.append("<ul>");
 				for (String[] s:uri) {
-					xml.append("<a href=\"");
-					xml.append(getRequest().getRootRef());
-					xml.append(s[0]);
-					xml.append("\">");
-					xml.append(s[1]);
-					xml.append("</a>");
-					xml.append("<br>");
+					html.append("<li>");
+					html.append(s[1]);
+					html.append("&nbsp;<a href=\"");
+					html.append(getRequest().getRootRef());
+					html.append(s[0]);
+					html.append("\">");
+					html.append(s[0]);
+					html.append("</a>");
+					html.append("\n");
 				}
-				xml.append("</body>");
-				return new StringRepresentation(xml.toString());				
+				html.append("</ul>");
+				html.append("\n<table width='100%'>");
+				html.append("<td colspan=\"2\" align=\"right\">");
+				html.append("<font color='#D6DFF7'>");
+				html.append("Developed by Ideaconsult Ltd. (2005-2009)"); 
+				html.append("</font>");
+				html.append("</td>");
+				html.append("</tr>");
+				html.append("<tr>");
+				html.append("<td colspan=\"2\" align=\"right\">");
+				html.append("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
+				html.append("    <IMG SRC=\"images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+				html.append("  </A>&nbsp; ");
+
+				html.append("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
+				html.append("    <IMG SRC=\"images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+				html.append("  </A>");
+				html.append("</td>");
+				html.append("</tr>");
+				html.append("</table>");
+				html.append("</body>");
+				html.append("</html>");
+				return new StringRepresentation(html.toString(),MediaType.TEXT_HTML);				
 			}
 			
 		} catch (Exception x) {

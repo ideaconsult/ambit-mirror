@@ -75,7 +75,7 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="NA"/>
    <properties idproperty="1" idreference="8" name="Property 1" units="" comments="" islocal="false"/>
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
-  <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
+  <properties idproperty="3" idreference="8" name="CAS" units="" comments="" islocal="false"/>
   <template idtemplate="1" name="BCF"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
@@ -83,8 +83,8 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 
   <tuples/>
   <property_number/>
-  <property_string/>
-  <property_values/>
+  <property_string idvalue="1" value="1530-32-1"/>
+  <property_values idproperty="3" idstructure="100215" idvalue="1" idtype="0" user_name="guest"/>
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="2" name="Dataset 1" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="3" name="Dataset 2" user_name="guest" idreference="3"/>

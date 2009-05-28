@@ -19,6 +19,7 @@ import ambit2.db.LoginInfo;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.pubchem.PubchemResource;
+import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.StructureResource;
@@ -35,6 +36,7 @@ public class AmbitApplication extends Application {
 	public final static String fp_dataset = similarity + "/fp1024/distance/tanimoto/{threshold}" + dataset;
 	public final static String tanimoto = similarity + "/fp1024/distance/tanimoto";
 	public final static String fp =  tanimoto + "/{threshold}";
+	public final static String property =  query + "/property/{condition}" + "/{value}";
 	
 	protected String connectionURI;
 	protected DataSource datasource = null;
@@ -80,6 +82,7 @@ public class AmbitApplication extends Application {
 		router.attach("/cdk/depict/{smiles}",CDKDepict.class);	
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
+		router.attach(property,PropertyQueryResource.class);
 		
 		router.attach(query,QueryListResource.class);		
 
