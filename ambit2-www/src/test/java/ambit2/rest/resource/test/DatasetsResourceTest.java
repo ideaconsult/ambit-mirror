@@ -25,6 +25,7 @@ public class DatasetsResourceTest extends ResourceTest {
 	@Test
 	public void getDataset() throws Exception {
 		Client client = new Client(Protocol.HTTP);
+		
 		Response response =	client.get("http://localhost:8080"+AmbitApplication.datasets + "/Dataset 2");
 		String out = response.getEntity().getText();
 		System.out.println(out);

@@ -46,7 +46,7 @@ public class QueryListResource extends Resource {
 				return new StringRepresentation(xml.toString());				
 			} else { //if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 				StringBuilder xml = new StringBuilder();
-				xml.append("<html><title>Ambit REST</title>");
+				xml.append("<html><head><title>Ambit REST</title></head>");
 				xml.append("<body>");
 				for (String[] s:uri) {
 					xml.append("<a href=\"");
@@ -58,7 +58,7 @@ public class QueryListResource extends Resource {
 					xml.append("<br>");
 				}
 				xml.append("</body>");
-				return new StringRepresentation(xml.toString());				
+				return new StringRepresentation(xml.toString(),MediaType.TEXT_HTML);				
 			}
 			
 		} catch (Exception x) {
