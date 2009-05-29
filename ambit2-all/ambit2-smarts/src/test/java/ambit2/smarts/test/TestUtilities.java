@@ -956,6 +956,31 @@ public class TestUtilities
 		}
 	}
 	
+	void testScreeningKeys(String target, String queryString)
+	{		
+		Vector<String> myKeys = new Vector<String>(); 
+		myKeys.add("CCC");
+		myKeys.add("CCN");
+		myKeys.add("CCO");
+		//Screening screen = new Screening(myKeys);
+		Screening screen = new Screening();
+		
+		System.out.println("Query " + queryString);
+		QueryAtomContainer query = sp.parse(queryString);
+		screen.setQuery(query);
+		System.out.println(screen.queryKeysToString());
+		System.out.println();
+				
+		System.out.println("Target " + target);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(target);
+		ScreeningData sd = screen.getScreeningDataForTarget(mol);
+		System.out.println(screen.strKeysToString(sd.structureKeys));
+		
+		
+	}
+	
+	
+	
 //-------------------------------------------------------------------------------
 	
 	
@@ -1095,7 +1120,8 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[C;]", "CCC");   //----------> gives an Exception  at ambit2.smarts.SmartsLogicalExpression.doAND(SmartsLogicalExpression.java:71)
 		
 		
-		tu.testStructureAnalysis("I:/Projects/Nina/TOXCST_v3a_320_12Feb2009.sdf");
+		//tu.testStructureAnalysis("I:/Projects/Nina/TOXCST_v3a_320_12Feb2009.sdf");
+		tu.testScreeningKeys("c1ccccc1NCC","[N;++]CCCCC");
 	}
 	
 }
