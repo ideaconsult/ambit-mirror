@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <funcgroups>
 <group name="Hydroxyl in Alcohol" 	 smarts="[#6][OX2H]"/>
-<group name="Aldehyde" 	 smarts="[CX3h1](=O)[#6"/>
+<group name="Aldehyde" 	 smarts="[CX3h1](=O)[#6]"/>
 <group name="Alkyl aldehyde" 	 smarts="[CX4,CH,CH2,CH3][$([CX3H1](=O)[#6])]"/>
 <group name="Alkyl Aziridine"	 smarts="CNN"/>
 <group name="Alkyl Phosphonate" 	 smarts="[$(P(=[OX1])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)]),$([P+]([OX1-])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)])]"/>
