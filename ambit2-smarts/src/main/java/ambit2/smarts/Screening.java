@@ -18,11 +18,14 @@ public class Screening
 	
 	boolean FlagUseStrKeys = true;
 	int nKeys;
+	
 	Vector<String> smartsKeys;
 	Vector<QueryAtomContainer> smartsQueries = new Vector<QueryAtomContainer>();	
 	Vector<Vector<QuerySequenceElement>> sequences = new Vector<Vector<QuerySequenceElement>>(); 
 	
-	
+	/**
+	 * Screening by fingerprints and structural keys
+	 */
 	public Screening()	
 	{
 		FlagUseStrKeys = true;			
@@ -30,6 +33,10 @@ public class Screening
 		prepareKeySequences();
 	}
 	
+	/**
+	 * Fingerprints screening is on always
+	 * @param useStrKeys whether to screen by structural keys 
+	 */
 	public Screening(boolean useStrKeys)	
 	{
 		FlagUseStrKeys = useStrKeys;
@@ -40,6 +47,10 @@ public class Screening
 		}	
 	}
 	
+	/**
+	 * structural keys by external file
+	 * @param externalSmartsKeys
+	 */
 	public Screening(Vector<String> externalSmartsKeys)	
 	{
 		FlagUseStrKeys = true;
@@ -48,18 +59,22 @@ public class Screening
 		prepareKeySequences();
 	}
 	
+	/**
+	 * obtained by {@link SmartsParser} - might not work by other QueryAtomContainer
+	 * @param query  search for this query
+	 */
 	public void setQuery(QueryAtomContainer query)
 	{	
-		try
-		{
 			extractedQueryAC = convertor.extractAtomContainer(query);			
 			querySD = getScreeningDataForTarget(extractedQueryAC);
-		}
-		catch (Exception e)
-		{	
-		}
+
 	}
 	
+	/**
+	 * PreScreening - run this after the query is set
+	 * @param targetSD 
+	 * @return
+	 */
 	public boolean checkTarget(ScreeningData targetSD)
 	{		
 		if (!bitSetCheck(querySD.fingerprint, targetSD.fingerprint))
@@ -73,7 +88,13 @@ public class Screening
 		return true;
 	}
 	
-	
+	/**
+	 * Every bit set on in the query shouldbe present inthe target
+	 * but the target can have more bits set on compared to the query
+	 * @param query
+	 * @param target
+	 * @return
+	 */
 	boolean bitSetCheck(BitSet query, BitSet target)
 	{
 		for (int i = 0; i < query.size(); i++)
@@ -86,7 +107,12 @@ public class Screening
 		}	
 		return (true);
 	}
-		
+	
+	/**
+	 * The {@link ScreeningData} for the target structure 
+	 * @param ac
+	 * @return
+	 */
 	public ScreeningData getScreeningDataForTarget(IAtomContainer ac)
 	{
 		ScreeningData sd = new ScreeningData();

@@ -14,6 +14,10 @@ public class CMLUtilities
 	Vector<int[]> rd;
 	Vector<int[]> rd2;
 	
+	/**
+	 * Sets atom & bond attributes for every atom 
+	 * @param mol
+	 */
 	public void setCMLSMARTSProperties(IMolecule mol)
 	{	
 		SSSRFinder sssrf = new SSSRFinder(mol);
@@ -81,6 +85,10 @@ public class CMLUtilities
 		}
 	}
 	
+	/**
+	 * Retrieves properties (set by {@link setCMLSmartsProperties}
+	 * @param mol
+	 */
 	public void extractSMARTSProperties(IMolecule mol)
 	{
 		for (int i = 0; i < mol.getAtomCount(); i++)
