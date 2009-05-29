@@ -14,19 +14,39 @@ public class Screening
 	IAtomContainer extractedQueryAC;	
 	Fingerprinter fp = new Fingerprinter();
 	SmartsToChemObject convertor = new SmartsToChemObject();
-	SmartsScreeningKeys smartsScrKeys = new SmartsScreeningKeys(); 
-	Vector<Vector<QuerySequenceElement>> sequences = new Vector<Vector<QuerySequenceElement>>(); 
-	SmartsParser parser = new SmartsParser(); 
+	SmartsParser parser = new SmartsParser();
+	
 	boolean FlagUseStrKeys = true;
-		
+	int nKeys;
+	Vector<String> smartsKeys;
+	Vector<QueryAtomContainer> smartsQueries = new Vector<QueryAtomContainer>();	
+	Vector<Vector<QuerySequenceElement>> sequences = new Vector<Vector<QuerySequenceElement>>(); 
+	
+	
+	public Screening()	
+	{
+		FlagUseStrKeys = true;			
+		getStandardKeys();
+		prepareKeySequences();
+	}
 	
 	public Screening(boolean useStrKeys)	
 	{
 		FlagUseStrKeys = useStrKeys;
 		if (FlagUseStrKeys)
+		{	
+			getStandardKeys();
 			prepareKeySequences();
+		}	
 	}
 	
+	public Screening(Vector<String> externalSmartsKeys)	
+	{
+		FlagUseStrKeys = true;
+		smartsKeys = externalSmartsKeys;
+		nKeys = smartsKeys.size();
+		prepareKeySequences();
+	}
 	
 	public void setQuery(QueryAtomContainer query)
 	{	
@@ -84,32 +104,60 @@ public class Screening
 	
 	public BitSet getStructureKeyBits(IAtomContainer ac)
 	{
-		BitSet keys = new BitSet(smartsScrKeys.nKeys);
+		BitSet keys = new BitSet(nKeys);
 		boolean res;
-		for (int i = 0; i < smartsScrKeys.nKeys; i++) 
+		for (int i = 0; i < nKeys; i++) 
 		{
-			isoTester.setSequence(sequences.get(i));
+			isoTester.setSequence(smartsQueries.get(i), sequences.get(i));
 			res = isoTester.hasIsomorphism(ac);
 			keys.set(i, res);
+			//System.out.println(smartsKeys.get(i) + "  " + res);
 		}
-		
 		return(keys);
 	}
+	
+	 
+	void getStandardKeys()
+	{
+		SmartsScreeningKeys smartsScrKeys = new SmartsScreeningKeys(); 
+		smartsKeys = smartsScrKeys.getKeys();
+		nKeys = smartsScrKeys.nKeys;
+	}
+	
 	
 	void prepareKeySequences()
 	{
 		QueryAtomContainer query;
-		
 		sequences.clear();
-		Vector<String> smartsKeys = smartsScrKeys.getKeys();
 		
-		for (int i = 0; i < smartsScrKeys.nKeys; i++)
+		for (int i = 0; i < nKeys; i++)
 		{
-			query = parser.parse(smartsKeys.get(i));			
+			query = parser.parse(smartsKeys.get(i));
+			
 			//parser.setNeededDataFlags();       --> This should not be needed for the key smarts queries
 			isoTester.setQuery(query);
 			Vector<QuerySequenceElement> sequence = isoTester.transferSequenceToOwner();
 			sequences.add(sequence);
+			smartsQueries.add(query);
 		}
+	}
+	
+	public String strKeysToString(BitSet bs)
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < bs.size(); i++)
+			if (bs.get(i))
+				buf.append(smartsKeys.get(i)+ ", ");
+		return(buf.toString());
+	}
+	
+	public String queryKeysToString()
+	{
+		StringBuffer buf = new StringBuffer();
+		BitSet bs = querySD.structureKeys;
+		for(int i = 0; i < bs.size(); i++)
+			if (bs.get(i))
+				buf.append(smartsKeys.get(i)+ ", ");
+		return(buf.toString());
 	}
 }

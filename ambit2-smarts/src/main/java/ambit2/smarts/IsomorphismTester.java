@@ -63,8 +63,9 @@ public class IsomorphismTester
 		return(sequence);
 	}
 	
-	public void setSequence(Vector<QuerySequenceElement> externalSequence) 
+	public void setSequence(QueryAtomContainer queryContainer, Vector<QuerySequenceElement> externalSequence) 
 	{
+		query = queryContainer;
 		sequence = externalSequence;
 	}
 	
