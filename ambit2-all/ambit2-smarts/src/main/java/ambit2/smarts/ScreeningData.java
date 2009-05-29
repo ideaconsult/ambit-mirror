@@ -2,6 +2,11 @@ package ambit2.smarts;
 
 import java.util.BitSet;
 
+/**
+ * 
+ * @author nina
+ *
+ */
 public class ScreeningData 
 {
 	public BitSet structureKeys = null;
