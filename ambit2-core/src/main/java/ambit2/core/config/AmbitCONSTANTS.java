@@ -92,6 +92,10 @@ public class AmbitCONSTANTS {
 	 * Daylight - like hashed fingerprint
 	 */
 	public static final String Fingerprint = "org.openscience.cdk.fingerprint.Fingerprinter";
+	
+	public static final String StructuralKey = "ambit2.smarts.SmartsScreeningKeys.key";
+	public static final String StructuralKey_TIME = "ambit2.smarts.SmartsScreeningKeys.time";
+	public static final String StructuralKey_STATUS = "ambit2.smarts.SmartsScreeningKeys.status";
 	/**
 	 * Time to generate hashed fingerprint
 	 */

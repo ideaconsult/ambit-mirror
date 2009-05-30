@@ -2,7 +2,10 @@ package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
+import junit.framework.Assert;
+
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -35,9 +38,19 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 		q.setConnection(c.getConnection());
 		q.open();
 		q.setSession(id);
+
 		IStoredQuery sq = q.process(query);
 		p.close();
 		q.close();
+		c.close();
+
+		c = getConnection();
+		ITable fp = c.createQueryTable("EXPECTED_query","select * from query where idquery="+sq.getId());
+		Assert.assertEquals(1, fp.getRowCount());
+		fp = c.createQueryTable("EXPECTED_query","select idchemical,idstructure from query_results where idquery="+sq.getId());
+		Assert.assertEquals(1, fp.getRowCount());
+		Assert.assertEquals(11,fp.getValue(0,"idchemical"));
+		Assert.assertEquals(100215,fp.getValue(0,"idstructure"));
 		c.close();
 	}
 	
@@ -53,7 +66,7 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 			Assert.assertEquals(0.25,rs.getFloat("metric"),1E-4);
 			*/
 			IStructureRecord r = query.getObject(rs);
-			System.out.println(r.getContent());
+			System.out.println(r);
 		}
 		
 	}

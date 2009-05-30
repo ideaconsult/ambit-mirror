@@ -8,8 +8,8 @@ import ambit2.base.exceptions.AmbitException;
 
 public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<T> {
 	protected String[] sql = {
-			"Select concat(idmajor,'.',idminor) as 'Ambit database version' from version",
-			"Select concat(DATE(date),' ',time(date)) as 'Ambit database created on' from version",
+			"Select concat(idmajor,'.',idminor,' created on ',DATE(date),' ',time(date)) as 'Ambit database version' from version order by idmajor,idminor desc limit 1",
+			//"Select concat(DATE(date),' ',time(date)) as 'Ambit database created on' from version order by idmajor,idminor desc limit 1",
 			"Select count(*) as 'Chemicals' from chemicals",
 			"Select count(*) as 'Structures' from structure",
 			"Select count(*) as 'Datasets' from src_dataset",
@@ -21,6 +21,7 @@ public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<
 			"Select count(*) as 'Templates' from template",
 			"Select count(*) as 'Template definitions' from template_def",
 			"Select count(*) as 'Fingerprints' from fp1024",
+			"Select count(*) as 'Structural keys' from sk1024",
 			"Select count(*) as 'Users' from users",
 			"Select count(*) as 'Queries' from query",		
 			"select template.name as template,properties.name as property,count(*) as 'Number of entries' from template\n"+

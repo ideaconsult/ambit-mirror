@@ -21,7 +21,7 @@ public class ExtractData {
         Connection jdbcConnection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-        String ids = "(29142)";
+        String ids = "(10,11,29141)";
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
@@ -55,7 +55,8 @@ public class ExtractData {
         partialDataSet.addTable("sessions", "SELECT * FROM sessions");
         //BIGINT serializes to long and gives errors for 
         partialDataSet.addTable("fp1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
-        
+        partialDataSet.addTable("sk1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM sk1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
+                
         FlatDtdDataSet.write(partialDataSet, new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-dataset.dtd"));
         FlatXmlDataSet.write(partialDataSet, 
         		new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-dataset.xml"));

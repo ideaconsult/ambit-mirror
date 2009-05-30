@@ -24,27 +24,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.dbtools;
 
-import java.util.BitSet;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
+import ambit2.base.data.SelectionBean;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;
-import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.processors.structure.AtomConfigurator;
-import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.DbReader;
+import ambit2.db.processors.BitSetGenerator;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.ProcessorMissingDescriptorsQuery;
 import ambit2.db.processors.ProcessorStructureRetrieval;
+import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.descriptors.processors.DescriptorsFactory;
@@ -57,22 +50,53 @@ import ambit2.workflow.library.DatasetSelection;
 import ambit2.workflow.library.LoginSequence;
 
 import com.microworkflow.execution.Performer;
+import com.microworkflow.process.Activity;
+import com.microworkflow.process.Conditional;
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
+import com.microworkflow.process.TestCondition;
+import com.microworkflow.process.While;
 import com.microworkflow.process.Workflow;
 
 public class DBUtilityWorkflow extends Workflow {
+	protected static final String SELECTION_CALC="SELECTION";
 	protected static final String DESCRIPTORS_NEWQUERY = "ambit2.plugin.dbtools.DBUtilityWorkflow.DESCRIPTORS_NEWQUERY";
+	protected enum CALC_MODE {
+		Fingerprints {
+			@Override
+			public String toString() {
+				return "Fingerprints (1024 bit hashed fingerprints used for similarity search and prescreening)";
+			}
+		},
+		StructuralKeys {
+			@Override
+			public String toString() {
+				return "Structural keys (used to speed up SMARTS searching)";
+			}
+		},
+		Descriptors {
+			@Override
+			public String toString() {
+				return "Descriptors";
+			}
+			
+		},
+		Completed {
+			@Override
+			public String toString() {
+				return "Quit, calculations are completed.";
+			}		
+		}
+	};
 	public DBUtilityWorkflow() {
-		
+		//fingerprints
+		Sequence fingerprints = addCalculationFP();
 
-    
-        Sequence seq=new Sequence();
-        seq.setName("[Calculator]");    	
-        seq.addStep(new QueryInteraction(new MissingFingerprintsQuery()));
-        seq.addStep(addCalculationFP());
-        
-        //seq.addStep(new QueryInteraction(q));
+		//struc keys
+		Sequence strucKeys = addCalculationStructuralKeys();
+		
+		//descriptors
+		Sequence descriptorSequence = new Sequence();
 	    DescriptorsFactory factory = new DescriptorsFactory();
 	    Profile<Property> descriptors;
 	    try {
@@ -85,7 +109,7 @@ public class DBUtilityWorkflow extends Workflow {
         		descriptors,
         		DBWorkflowContext.DESCRIPTORS,
         		"Select descriptor(s)");	
-	    seq.addStep(defineDescriptors);
+	    descriptorSequence.addStep(defineDescriptors);
         Primitive q = new Primitive(DBWorkflowContext.DESCRIPTORS,DESCRIPTORS_NEWQUERY,new Performer() {
         	@Override
         	public Object execute() throws Exception {
@@ -103,18 +127,107 @@ public class DBUtilityWorkflow extends Workflow {
         	
         });
         q.setName("Select descriptor(s)");
-        seq.addStep(q);	    
-        seq.addStep(addCalculationD());        
+        descriptorSequence.addStep(q);	    
+        descriptorSequence.addStep(addCalculationD());        
         
-//        DbSrcDatasetWriter TODO
-        setDefinition(new LoginSequence(new DatasetSelection(seq)));
+        Sequence seq=new Sequence();
+        seq.setName("[Calculator]");    	
+        seq.addStep(getCalculationOptionsSequence(
+        		descriptorSequence,
+        		fingerprints,
+        		strucKeys
+        		));
+        
+        //setDefinition(new LoginSequence(new DatasetSelection(seq)));
+        setDefinition(new LoginSequence(seq));
+     
 
 	}
-	protected ActivityPrimitive addCalculationFP() {
+	public While getCalculationOptionsSequence(
+				Activity descriptors, 
+				Activity fingerprints, 
+				Activity struckeys) {
+		
+		
+		While loop = new While();
+		Sequence body = new Sequence();
+		final SelectionBean<CALC_MODE> selection = new SelectionBean<CALC_MODE>(
+				CALC_MODE.values(),
+				"Calculate");
+
+		UserInteraction<SelectionBean<CALC_MODE>> selectKey = new UserInteraction<SelectionBean<CALC_MODE>>(
+				selection, SELECTION_CALC, "??????");
+		selectKey.setName("Select what to calculate");
+
+        Conditional descriptorCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION_CALC);
+	    				if (o instanceof SelectionBean)
+	    					return CALC_MODE.Descriptors.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                descriptors,
+                null);
+        
+        Conditional skeysCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION_CALC);
+	    				if (o instanceof SelectionBean)
+	    					return CALC_MODE.StructuralKeys.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                struckeys,
+                descriptorCondition);
+        
+        Conditional fingerprintsCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION_CALC);
+	    				if (o instanceof SelectionBean)
+	    					return CALC_MODE.Fingerprints.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                fingerprints,
+                skeysCondition);
+        
+        loop.setTestCondition(new TestCondition() {
+        	@Override
+        	public boolean evaluate() {
+    			Object o = getContext().get(SELECTION_CALC);
+    			boolean result = (o instanceof SelectionBean)? 
+    				!CALC_MODE.Completed.equals(((SelectionBean<CALC_MODE>)o).getSelected())
+    				:false;
+    			
+    			getContext().put(SELECTION_CALC, null);
+    			return result;
+        	}
+        });
+        
+        loop.setName("Calculate");	            
+        body.addStep(selectKey);
+        body.addStep(fingerprintsCondition);
+        loop.setBody(body);
+		return loop;
+	}	
+	protected Sequence addCalculationFP() {
+			Sequence seq = new Sequence();
+			Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+					new Performer() {
+				@Override
+				public Object execute() throws Exception {
+					return new MissingFingerprintsQuery();
+				}
+			});
+			seq.addStep(query);
 			ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
 				new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 			p.add(new ProcessorStructureRetrieval());		
-			p.add(new FPGenerator());
+			p.add(new BitSetGenerator(FPTable.fp1024));
 			p.add(new FP1024Writer());
 			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
 			batch.setProcessorChain(p);
@@ -124,8 +237,35 @@ public class DBUtilityWorkflow extends Workflow {
 					DBWorkflowContext.BATCHSTATS,
 					batch,false);
 		    ap.setName("Fingerprint calculations");	
-		    return ap;
+		    seq.addStep(ap);
+		    return seq;
 	}	
+	protected Sequence addCalculationStructuralKeys() {
+		Sequence seq = new Sequence();
+		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+				new Performer() {
+			@Override
+			public Object execute() throws Exception {
+				return new MissingFingerprintsQuery(FPTable.sk1024);
+			}
+		});
+		seq.addStep(query);		
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p.add(new ProcessorStructureRetrieval());		
+		p.add(new BitSetGenerator(FPTable.sk1024));
+		p.add(new FP1024Writer(FPTable.sk1024));
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+		batch.setProcessorChain(p);
+		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
+			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.BATCHSTATS,
+				batch,false);
+	    ap.setName("Structural keys calculations");
+	    seq.addStep(ap);
+	    return seq;
+}		
 	//TODO extract in a class and reuse in other workflows
 	protected Primitive addCalculationD() {
 
@@ -155,33 +295,5 @@ public class DBUtilityWorkflow extends Workflow {
 	    ap1.setName("Descriptor calculations");		
 	    return ap1;
 	}
-}
-//this is a hack
-class FPGenerator extends DefaultAmbitProcessor<IStructureRecord,IStructureRecord> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2912324506031402660L;
-	MoleculeReader reader = new MoleculeReader();
-	AtomConfigurator c = new AtomConfigurator();
-    FingerprintGenerator fp = new FingerprintGenerator();
-
-    
-    public IStructureRecord process(IStructureRecord target)
-    		throws AmbitException {
-    	IAtomContainer a = reader.process(target);
-    	//CDKHueckelAromaticityDetector d = new CDKHueckelAromaticityDetector();
-    	try {
-    	//d.detectAromaticity(a);
-    	} catch (Exception x) {}
-    	long mark = System.currentTimeMillis();
-    	BitSet bitset = fp.process(a);
-    	target.setProperty(Property.getInstance(AmbitCONSTANTS.Fingerprint,AmbitCONSTANTS.Fingerprint),bitset);	
-    	target.setProperty(Property.getInstance(AmbitCONSTANTS.FingerprintTIME,AmbitCONSTANTS.Fingerprint),System.currentTimeMillis()-mark);
-
-    	return target;
-
-    }
-	
 }
 
