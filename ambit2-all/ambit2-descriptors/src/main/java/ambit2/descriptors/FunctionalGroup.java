@@ -53,6 +53,15 @@ public class FunctionalGroup extends AmbitBean implements
 	protected static final String t_family = "family";
 	protected Hashtable<String,String> properties;
 	protected ISmartsPattern<IAtomContainer> query = null;
+	public ISmartsPattern<IAtomContainer> getQuery() {
+		return query;
+	}
+	public void setQuery(ISmartsPattern<IAtomContainer> query) {
+		this.query = query;
+		try {
+		query.setSmarts(getSmarts());
+		} catch (Exception x) {x.printStackTrace();}
+	}
 	protected boolean enabled = true;
 	protected boolean verboseMatch = false;
 
@@ -136,6 +145,9 @@ public class FunctionalGroup extends AmbitBean implements
 				match = query.getMatchingStructure(target);
 				hits = (match.getAtomCount()>0) ?1:0;
 				return new VerboseDescriptorResult<IAtomContainer,IntegerResult>(new IntegerResult(hits),match);
+			} catch (UnsupportedOperationException x) {
+				hits = query.match(target);
+				return new VerboseDescriptorResult<String,IntegerResult>(new IntegerResult(hits),null);				
 			} catch (SMARTSException x) {
 				match = null;
 				hits = 0;

@@ -33,30 +33,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class MissingFingerprintsQuery extends AbstractStructureQuery<String, String, EQCondition> {
+public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, String, EQCondition> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8554160549010780854L;
+	
 	public final static String sqlField =
 		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric\n"+
 		"from structure join chemicals using(idchemical)\n"+
-		"left join fp1024 using(idchemical)\n"+
-		"where (fp1024.status is null)\n"+
+		"left join %s using(idchemical)\n"+
+		"where (%s.status is null)\n"+
 		"union\n"+
 		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,0 as metric\n"+
 		"from structure join chemicals using(idchemical)\n"+
-		"join fp1024 using(idchemical)\n"+
-		"where (fp1024.status != 'valid')\n";
-	public MissingFingerprintsQuery() {
+		"join %s using(idchemical)\n"+
+		"where (%s.status != 'valid')\n";
+	public MissingFingerprintsQuery(FPTable table) {
 		setCondition(EQCondition.getInstance());
+		setFieldname(table);
+	}	
+	public MissingFingerprintsQuery() {
+		this(FPTable.fp1024);
 	}
 	public String getSQL() throws AmbitException {
-		return sqlField;
+		String table = getFieldname().getTable();
+		return String.format(sqlField,table,table,table,table);
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
@@ -66,6 +73,6 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<String, Str
 	}
 	@Override
 	public String toString() {
-		return "Fingerprints to be calculated";
+		return (getFieldname()==null)?"Fingerprints to be calculated":getFieldname().toString();
 	}	
 }

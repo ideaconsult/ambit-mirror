@@ -1,7 +1,6 @@
 package ambit2.db.processors.test;
 
 import java.sql.ResultSet;
-import java.util.BitSet;
 
 import junit.framework.Assert;
 
@@ -9,35 +8,38 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.RepositoryReader;
+import ambit2.db.processors.BitSetGenerator;
 import ambit2.db.processors.FP1024Writer;
-import ambit2.db.readers.RetrieveAtomContainer;
+import ambit2.db.processors.FP1024Writer.FPTable;
+import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
 
 public class FP1024WriterTest extends DbUnitTest {
+	
+	protected FPTable getMode() {
+		return FPTable.fp1024;
+	}
 
 	@Test
 	public void testProcess() throws Exception {
+		BitSetGenerator generator = new BitSetGenerator(getMode());
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset_nofp.xml");
 		IDatabaseConnection dbConnection = getConnection();
 		String query = "SELECT idchemical,idstructure,uncompress(structure) as c,format FROM structure";
 		ITable chemicals = 	dbConnection.createQueryTable("EXPECTED_CHEMICALS",query);
-		ITable fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM fp1024 where status='valid'");
+		ITable fp = 	dbConnection.createQueryTable("EXPECTED_FP",
+					String.format("SELECT * FROM %s where status='valid'",generator.getFpmode().getTable()));
 		Assert.assertEquals(5, chemicals.getRowCount());
 		Assert.assertEquals(0, fp.getRowCount());
 		
         RepositoryReader reader = new RepositoryReader();
-        RetrieveAtomContainer molReader = new RetrieveAtomContainer();
+        RetrieveStructure molReader = new RetrieveStructure();
         reader.setConnection(dbConnection.getConnection());
-        FingerprintGenerator gen = new FingerprintGenerator();
-        FP1024Writer fpWriter = new FP1024Writer();
+        
+        FP1024Writer fpWriter = new FP1024Writer(generator.getFpmode());
         fpWriter.setConnection(dbConnection.getConnection());
         fpWriter.open();
         reader.open();
@@ -45,9 +47,9 @@ public class FP1024WriterTest extends DbUnitTest {
 		long now = System.currentTimeMillis();
 		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 		IStructureRecord o  ;
-		QueryExecutor<RetrieveAtomContainer> exec = new QueryExecutor<RetrieveAtomContainer>();
+		QueryExecutor<RetrieveStructure> exec = new QueryExecutor<RetrieveStructure>();
 		exec.setConnection(dbConnection.getConnection());
-		
+		int errors = 0;
 		while (reader.hasNext()) {
 			o = reader.next();
 			String content = reader.getStructure(o.getIdstructure());
@@ -56,18 +58,14 @@ public class FP1024WriterTest extends DbUnitTest {
 			
 			ResultSet rs = exec.process(molReader);
 			while (rs.next()) {
-				IAtomContainer mol = molReader.getObject(rs);
+				IStructureRecord record = molReader.getObject(rs);
 				long mark = System.currentTimeMillis();
-				BitSet bitset = null;
 				try {
-					bitset = gen.process((IMolecule)mol);
-					o.setProperty(Property.getInstance(AmbitCONSTANTS.Fingerprint,AmbitCONSTANTS.Fingerprint),bitset);					
+					record = generator.process(record);
+					fpWriter.write(record);
 				} catch (Exception x) {
-
+					errors++;
 				}
-	  			o.setProperty(Property.getInstance(AmbitCONSTANTS.FingerprintTIME,AmbitCONSTANTS.Fingerprint),System.currentTimeMillis()-mark);
-
-				fpWriter.write(o);	
 			}
 			rs.close();						
 			o.clear();
@@ -78,10 +76,12 @@ public class FP1024WriterTest extends DbUnitTest {
 		}
 		reader.close();
 		
-		fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM fp1024 where status = 'valid'");
-		Assert.assertEquals(4, fp.getRowCount());		
-		fp = 	dbConnection.createQueryTable("EXPECTED_FP","SELECT * FROM fp1024 where status = 'error'");
-		Assert.assertEquals(1, fp.getRowCount());				
+		fp = 	dbConnection.createQueryTable("EXPECTED_FP",
+					String.format("SELECT count(*) as c FROM %s where status = 'valid'",generator.getFpmode().getTable()));
+		Assert.assertEquals(4L, fp.getValue(0,"c"));		
+		fp = 	dbConnection.createQueryTable("EXPECTED_FP",
+				String.format("SELECT count(*) as c FROM %s where status = 'error'",generator.getFpmode().getTable()));
+		Assert.assertEquals(1L, fp.getValue(0,"c"));					
 		fpWriter.close();
 
 	}		

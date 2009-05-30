@@ -6,13 +6,22 @@ import java.util.List;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
+import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.search.QueryParam;
 
 public class QueryPrescreenBitSet extends QuerySimilarityBitset {
+	protected FPTable fptable = FPTable.fp1024;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4995229206173686206L;
+	public QueryPrescreenBitSet() {
+		this(FPTable.fp1024);
+	}
+	public QueryPrescreenBitSet(FPTable fptable) {
+		this.fptable = fptable;
+	}
+	
 	/**
 	 * select ? as idquery,idchemical,idstructure,1 as selected,cbits as substructure
 	 */
@@ -22,14 +31,14 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 		StringBuffer b = new StringBuffer();
 			//b.append("select cbits,bc,? as NA,round(cbits/(bc+?-cbits),2) as ");
 			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,cbits as metric from");
-			b.append("\n(select fp1024.idchemical,structure.idstructure,(");
+			b.append(String.format("\n(select %s.idchemical,structure.idstructure,(",fptable.getTable()));
 			for (int h=0; h < 16; h++) {
 				b.append("bit_count(? & fp");
 				b.append(Integer.toString(h+1));
 				b.append(")");
 				if (h<15) b.append(" + "); else b.append(") ");
 			}
-			b.append(" as cbits,bc from fp1024 join structure using(idchemical) ");
+			b.append(String.format(" as cbits,bc from %s join structure using(idchemical) ",fptable.getTable()));
 
 			b.append (") as L, chemicals ");
 			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical");
