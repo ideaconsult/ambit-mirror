@@ -16,8 +16,16 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 
-public class SmartsToChemObject 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.DefaultAmbitProcessor;
+
+public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContainer, IAtomContainer>
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5893878673124511317L;
+
 	//When this flag is true aromatic bonds are forced between any two aromatic atoms 
 	public boolean forceAromaticBondsAlways = false; 
 		
@@ -48,6 +56,7 @@ public class SmartsToChemObject
 	 */
 	public IAtomContainer extractAtomContainer(QueryAtomContainer query, IRingSet ringSet)
 	{
+		if (query == null) return null;
 		//Converting the atoms
 		Vector<IAtom> atoms = new Vector<IAtom>();
 		for (int i = 0; i < query.getAtomCount(); i++)
@@ -111,6 +120,10 @@ public class SmartsToChemObject
 		return(container);
 	}
 	
+	public IAtomContainer process(QueryAtomContainer target)
+			throws AmbitException {
+		return extractAtomContainer(target);
+	}
 	/** Version of the function when the Ring data is not supplied outside*/
 	public IAtomContainer extractAtomContainer(QueryAtomContainer query)
 	{
