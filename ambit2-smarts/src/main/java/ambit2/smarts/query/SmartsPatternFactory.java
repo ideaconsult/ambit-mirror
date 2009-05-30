@@ -34,7 +34,8 @@ public class SmartsPatternFactory implements ISmartsPatternFactory {
 	public static enum SmartsParser {
 			smarts_joelib,
 			smarts_cdk,
-			smarts_nk
+			smarts_nk,
+			smarts_fast
 	};
 	protected SmartsParser parserType;
 
@@ -50,6 +51,7 @@ public class SmartsPatternFactory implements ISmartsPatternFactory {
 		//System.out.println("createSmartsPattern "+parser);
 		switch (parser) {
 		case smarts_cdk: return new SmartsPatternCDK(smarts,negate);
+		case smarts_fast: return new FastSmartsMatcher(smarts,negate);
 		default: return new SmartsPatternAmbit(smarts,negate); 
 
 		}

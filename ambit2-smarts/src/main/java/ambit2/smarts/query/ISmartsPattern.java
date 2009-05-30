@@ -40,7 +40,7 @@ public interface ISmartsPattern<T> {
 	int hasSMARTSPattern(T object) throws SMARTSException;
 	T getObjectToVerify(IAtomContainer mol);
 	int match(IAtomContainer mol) throws SMARTSException;
-	IAtomContainer getMatchingStructure(IAtomContainer mol) throws SMARTSException;
+	IAtomContainer getMatchingStructure(IAtomContainer mol) throws UnsupportedOperationException,SMARTSException;
 	String getName();
 	void setName(String name);
 	String getHint();
