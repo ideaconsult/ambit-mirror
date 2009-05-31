@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -36,11 +37,13 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -71,7 +74,10 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 			throw new AmbitIOException(x);
 		}
 	}
-	
+	@Override
+	protected LiteratureEntry getReference() {
+		return LiteratureEntry.getInstance(workbook.getSheetName(workbook.getSheetIndex(sheet)),getClass().getName());
+	}
 	public void processHeader() {
 		iterator = sheet.rowIterator();
 		//process first header line
@@ -103,31 +109,30 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 			return false;
 		}
 	}
-
+	protected void processRow(IAtomContainer mol) {
+		
+	}
 	public Object next() {
 		IMolecule mol = null;
+		Map properties = new Hashtable();
 		try {
 			HSSFRow row = (HSSFRow) iterator.next();
-			Iterator cols = row.cellIterator();
-			Hashtable properties = new Hashtable();
-	
-			while (cols.hasNext()) {
-				HSSFCell cell = (HSSFCell) cols.next();
+			
+			for (int col = 0; col < getNumberOfColumns(); col++ ) {
+				HSSFCell cell = row.getCell(col);
+				if (cell == null) continue;
 				
-				Object value = cell.toString();
-				if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
-					/*
-					try {
-					HSSFFormulaEvaluator.CellValue cellValue = evaluator.evaluate(cell);
-					switch (cellValue.getCellType()) {
+				Object value = null;
+				
+				switch (cell.getCellType()) {
 					case HSSFCell.CELL_TYPE_BOOLEAN:
-				    	value = cellValue.getBooleanValue();
+				    	value = cell.getBooleanCellValue();
 				    	break;
 					case HSSFCell.CELL_TYPE_NUMERIC:
-				    	value = cellValue.getNumberValue();
+				    	value = cell.getNumericCellValue();
 				    	break;
 					case HSSFCell.CELL_TYPE_STRING:
-				    	value = cellValue.toString();
+				    	value = cell.getStringCellValue();
 				    	break;
 					case HSSFCell.CELL_TYPE_BLANK:
 						value = "";
@@ -135,31 +140,39 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 					case HSSFCell.CELL_TYPE_ERROR:
 						value = "";
 				    	break;
-
-					// CELL_TYPE_FORMULA will never happen
 					case HSSFCell.CELL_TYPE_FORMULA: 
-				    	break;
+						try {
+							value = cell.getStringCellValue();
+					    	break;
+						} catch (Exception x) {
+							try {
+								value = cell.getNumericCellValue();
+							} catch (Exception z) {	
+								x.printStackTrace(); 
+							}
+						}
 					}
-					} catch (Exception x) {
-						x.printStackTrace();
-						value = "";
-					}
-					*/
-				}	
-				
-				if (smilesIndex == cell.getCellNum()) {
-					try {
-						mol = sp.parseSmiles(value.toString());
-						properties.put(AmbitCONSTANTS.SMILES, value.toString());
-					} catch (InvalidSmilesException x) {
-						logger.warn("Invalid SMILES!\t"+value);
-						properties.put(AmbitCONSTANTS.SMILES, "Invalid SMILES");
-					}						
-				} else properties.put(getHeaderColumn(cell.getCellNum()), value);
+				try {
+					if (smilesIndex == cell.getColumnIndex()) {
+						try {
+							mol = sp.parseSmiles(value.toString());
+							properties.put(AmbitCONSTANTS.SMILES, value.toString());
+						} catch (InvalidSmilesException x) {
+							logger.warn("Invalid SMILES!\t"+value);
+							properties.put(AmbitCONSTANTS.SMILES, "Invalid SMILES");
+						}						
+					} 
+					else 
+						if (cell.getColumnIndex()< getNumberOfColumns())
+							properties.put(getHeaderColumn(cell.getColumnIndex()), value);
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 	
 			}
 			if (mol == null) mol = new Molecule();
 			mol.setProperties(properties);
+			processRow(mol);
 		} catch (Exception x) {
 			logger.error(x);
 		}
@@ -174,14 +187,10 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 			while (cols.hasNext()) {
 				HSSFCell cell = (HSSFCell) cols.next();
 				String value = cell.getStringCellValue();
-				/*
-				System.out.print(cell.getCellNum());
-				System.out.print("\t");
-				System.out.println(value);
-				*/
+
 				if (value.equals(defaultSMILESHeader))
-					smilesIndex = cell.getCellNum();
-				columns.put(new Integer(cell.getCellNum()), value);
+					smilesIndex = cell.getColumnIndex();
+				columns.put(new Integer(cell.getColumnIndex()), value);
 			}
 			Iterator i = columns.keySet().iterator();
 			while (i.hasNext()) {
