@@ -247,7 +247,7 @@ public class PBTPageBuilder {
 	        		separator.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 	        		
 				} else if (extCell != null) {
-					System.out.println(worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()));
+
 					switch (extCell.getMode()) {
 					case NODE_LIST: {
 						SelectionInList sList = new SelectionInList(((List)extCell.getObject()),model.getModel(propertyName));
@@ -330,7 +330,6 @@ public class PBTPageBuilder {
 	        		break;					
 				}
 				default: {
-					System.out.println(propertyName);
 					c = createComponentByCellType(cell,model,propertyName,background,rowspan);
 				}
 				}
@@ -412,7 +411,6 @@ public class PBTPageBuilder {
 		    break;											
 		}					
 		default: {
-			System.out.println(dataFormat);
 		}
 		}
 		return c;

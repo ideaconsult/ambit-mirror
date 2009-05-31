@@ -23,11 +23,9 @@ public class UserInteraction<T> extends Primitive {
             	
             		
 	            if (o == null) {
-	            	System.out.println(getClass().getName()+" " +ol);
+
 	                ValueLatchPair<T> latch = new ValueLatchPair<T>((T)ol);
-	                System.out.println("block " +ol);
 	                context.put(getTargetKey(),latch);
-	                //System.out.println("Unblock " +ol);
 	                
 	                T li = null;
 	                try {

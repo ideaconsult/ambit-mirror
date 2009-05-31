@@ -79,7 +79,6 @@ public class RecordsBrowserPanel extends AbstractStructureBrowserPanel<List<IStr
 
 	@Override
 	protected void animate(PropertyChangeEvent arg0) {
-		System.out.println(getClass().getName() + " " +arg0);
 		  if (DBWorkflowContext.RECORDS.equals(arg0.getPropertyName())) {
 	            Object o = arg0.getNewValue();
                 try {

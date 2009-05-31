@@ -59,7 +59,7 @@ import com.microworkflow.process.While;
 import com.microworkflow.process.Workflow;
 
 public class DBUtilityWorkflow extends Workflow {
-	protected static final String SELECTION_CALC="SELECTION";
+	protected static final String SELECTION_CALC="SELECTION_CALC";
 	protected static final String DESCRIPTORS_NEWQUERY = "ambit2.plugin.dbtools.DBUtilityWorkflow.DESCRIPTORS_NEWQUERY";
 	protected enum CALC_MODE {
 		Fingerprints {

@@ -90,7 +90,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 			p.add(DBWorkflowContext.DBCONNECTION_URI);			
 			results.setProperties(p);
 			results.setAnimate(true);
-			
+			/*
 			
 		    StatisticsPanel stats = new StatisticsPanel(getWorkflowContext());
 			p = new Vector<String>();
@@ -101,10 +101,10 @@ public class SearchPlugin extends DBWorkflowPlugin {
 
 			stats.setProperties(p);
 			stats.setAnimate(true);
-			
+			*/
 			MainPanel mp = new MainPanel();
 			mp.addTab("Results",results);
-			mp.addTab("Stats", stats);
+			//mp.addTab("Stats", stats);
 			
 			mainComponent = mp;
 			contextListener.setFrame(mainComponent.getComponent());

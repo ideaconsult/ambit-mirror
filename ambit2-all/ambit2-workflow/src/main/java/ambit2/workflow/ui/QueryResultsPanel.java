@@ -134,7 +134,7 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     	try {
     		tableModel.setQuery(query);
     	} catch (Exception x) {
-    		x.printStackTrace();
+    		//x.printStackTrace();
     	}
     	
     }

@@ -86,7 +86,6 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	}
 	public void propertyChange(PropertyChangeEvent evt) {
 		try {
-			System.out.println(evt);
 			setParser(
 					"true".equals(Preferences.getProperty(Preferences.SMILESPARSER).toLowerCase()) ? SMILES_PARSER.OPENBABEL : SMILES_PARSER.CDK
 					);

@@ -103,9 +103,7 @@ public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {
             } else
                 st.addBatch("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON "+ connection.getCatalog() + ".* TO  '"+user.getName()+"'@'%' IDENTIFIED BY '"+user.getPassword()+"'");
             st.addBatch("flush privileges");
-            //System.out.println(st.getWarnings());
             st.executeBatch();
-            //System.out.println(st.getWarnings());
         } catch (Exception x) {
             throw new SQLException(x.getMessage());
         }

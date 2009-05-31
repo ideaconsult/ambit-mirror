@@ -182,9 +182,6 @@ public class DBWorkflowContext extends WorkflowContext {
     @Override
     public Object put(String arg0, Object arg1) {
     	if (arg0.equals(RECORD)) {
-	    	System.out.print(arg0);
-	    	System.out.print('=');
-	    	System.out.println(arg1);
     	}
     	return super.put(arg0, arg1);
     }

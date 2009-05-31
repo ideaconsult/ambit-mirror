@@ -128,7 +128,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 				double metric = query.calculateMetric(record);
 
 				if (metric >0) {
-					System.out.println(metric);					
+		
 					insertGoodResults.setInt(1,result.getId());
 					insertGoodResults.setInt(2,record.getIdchemical());
 					insertGoodResults.setInt(3,record.getIdstructure());

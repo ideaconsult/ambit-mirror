@@ -198,7 +198,6 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 					IAtomContainer q = getValue().getAtomContainer(i);
 					if (q.getAtomCount()==0) continue;
 					if (!UniversalIsomorphismTester.isSubgraph(target, q)) {
-						System.out.println("not found " +q.getAtomCount());
 						return 0;
 					} else match++;
 				}

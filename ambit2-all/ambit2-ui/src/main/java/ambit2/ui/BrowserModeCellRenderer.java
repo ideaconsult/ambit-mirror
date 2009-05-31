@@ -48,9 +48,6 @@ public class BrowserModeCellRenderer extends DefaultTableCellRenderer {
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		//c.setBackground(mode.getCellColor(row, column));
-		System.out.print(row);
-		System.out.print(c.getClass().getName());
-		System.out.println();
 		c.setBackground(Color.orange);
 		return c;
 	}	

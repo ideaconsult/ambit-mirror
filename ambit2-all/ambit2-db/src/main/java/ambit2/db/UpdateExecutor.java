@@ -109,7 +109,6 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 		                }
 					};
 			} catch (SQLException x) {
-				System.err.println(statement);
 				throw x;
 			} finally {
 				if (target.returnKeys(i))
