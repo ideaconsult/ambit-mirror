@@ -1,6 +1,11 @@
 package ambit2.plugin.pbt.processors;
 
 
+import java.awt.Dimension;
+
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -11,6 +16,7 @@ import org.junit.Test;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.plugin.pbt.DbUnitTest;
+import ambit2.plugin.pbt.PBTMainPanel;
 import ambit2.plugin.pbt.PBTWorkBook;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
 
@@ -30,13 +36,13 @@ public class PBTReaderTest extends DbUnitTest {
 		IDatabaseConnection c = getConnection();
 		ITable structures = c.createQueryTable("EXPECTED_STRUCTURES","SELECT uncompress(structure) as s FROM structure");
 		Assert.assertEquals(1, structures.getRowCount());
-		System.out.println(structures.getValue(0, "s"));
+		//System.out.println(structures.getValue(0, "s"));
 		ITable names = c.createQueryTable("EXPECTED_NAMES",
 				"SELECT * FROM properties");
-		Assert.assertEquals(194, names.getRowCount());
+		Assert.assertEquals(72, names.getRowCount());
 		ITable values = c.createQueryTable("EXPECTED_VALUES",
 				"SELECT * FROM property_values");
-		Assert.assertEquals(194, values.getRowCount());
+		Assert.assertEquals(72, values.getRowCount());
 		ITable templates = c.createQueryTable("EXPECTED_TEMPLATES",
 				"SELECT * FROM template where name='"+PBTWorkBook.PBT_TITLE+"'");
 		Assert.assertEquals(1, templates.getRowCount());
@@ -53,6 +59,17 @@ public class PBTReaderTest extends DbUnitTest {
 		
 
 		c.close();
+		/*
+		try {
+	  	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		
+			PBTMainPanel pbtPanel = new PBTMainPanel();
+			pbtPanel.setWorkbook(book);
+			pbtPanel.setPreferredSize(new Dimension(800,600));
+			JOptionPane.showMessageDialog(null,pbtPanel,pbtPanel.toString(),JOptionPane.OK_OPTION);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}		
+		*/
 		
 	}
 	

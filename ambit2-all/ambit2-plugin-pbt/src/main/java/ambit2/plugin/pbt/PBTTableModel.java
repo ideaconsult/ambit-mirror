@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.table.AbstractTableModel;
@@ -43,19 +44,73 @@ public class PBTTableModel extends AbstractTableModel {
 	public static final String ATTRIBUTE_ROW="row";
 	public static final String ATTRIBUTE_COL="col";
 	public static final String ATTRIBUTE_COLSPAN="colspan";
+	public static final String ATTRIBUTE_LIST="list";
+	public static final String ATTRIBUTE_TYPE="type";
 	public static final String ATTRIBUTE_VALUE="value";
 	
-	public static final String NODE_STRUCTURE="structure";
-	public static final String NODE_TITLE="title";
-	public static final String NODE_ACTION="action";	
-	public static final String NODE_SECTION="section";
-	public static final String NODE_LIST="list";
-	public static final String NODE_FORMULA="formula";
-	public static final String NODE_INPUT="input";
-	public static final String NODE_ERROR="error";
+	public enum NODES {
+		NODE_STRUCTURE {
+			@Override
+			public String getName() {
+				return "structure";
+			}
+		},
+		NODE_TITLE {
+			@Override
+			public String getName() {
+				return "title";
+			}
+			
+		},
+		NODE_ACTION {
+			@Override
+			public String getName() {
+				return "action";
+			}
+			
+		},
+		NODE_SECTION {
+			@Override
+			public String getName() {
+				return "section";
+			}
+		},
+		NODE_LIST {
+			@Override
+			public String getName() {
+				return "list";
+			}
+		},		
+		NODE_FORMULA {
+			@Override
+			public String getName() {
+				return "formula";
+			}
+		},		
+		NODE_INPUT {
+			@Override
+			public String getName() {
+				return "input";
+			}			
+		},		
+		NODE_ERROR {
+			@Override
+			public String getName() {
+				return "error";
+			}			
+		};
+		protected Object object = null;
+		public abstract String getName();
+		public Object getObject() {
+			return object;
+		}
+		public void setObject(Object object) {
+			this.object = object;
+		}
+	}
 	
-	protected Hashtable<Cell, Object> table;
-	public Hashtable<Cell, Object> getTable() {
+	protected List<Cell> table;
+	public List<Cell> getTable() {
 		return table;
 	}
 
@@ -65,7 +120,7 @@ public class PBTTableModel extends AbstractTableModel {
 	
 	public PBTTableModel() {
 		super();
-		table = new Hashtable<Cell, Object>();
+		table = new ArrayList<Cell>();
 	}
 	public int getColumnCount() {
 		return columns;
@@ -86,17 +141,26 @@ public class PBTTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		query.setRow(rowIndex);
 		query.setColumn(columnIndex);
-		Object value;
-		if ((value = table.get(query)) != null) 
-			return value;
-		return null;
+		int index = table.indexOf(query);
+		if (index >= 0) return table.get(index);
+		else return null;
 	}
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		
-		Cell cell = new Cell(rowIndex,columnIndex);
-		if (value == null) table.remove(cell);
-		else table.put(cell,value);	
+		query.setRow(rowIndex);
+		query.setColumn(columnIndex);		
+		int index = Collections.binarySearch(table,query,new Comparator<Cell>() {
+			public int compare(Cell o1, Cell o2) {
+				return o1.compareTo(o2);
+			}
+		});
+		Cell oldValue = (index>=0)?table.get(index):null;
+		if (oldValue == null) {
+			Cell cell = new Cell(rowIndex,columnIndex);
+			cell.setObject(value);
+			table.add(cell);
+			Collections.sort(table);
+		} else ((Cell)oldValue).setObject(value);
 		fireTableDataChanged();
 	}
 	public void setDefinition(String definition) throws IOException, ParserConfigurationException, SAXException {
@@ -117,91 +181,120 @@ public class PBTTableModel extends AbstractTableModel {
 	
 	public void addNode(Element node) {
 		try {
-			int row = Integer.parseInt(node.getAttribute(ATTRIBUTE_ROW));
-			int col = Integer.parseInt(node.getAttribute(ATTRIBUTE_COL));
+			int row = Integer.parseInt(node.getAttribute(ATTRIBUTE_ROW))-1;
+			int col = Integer.parseInt(node.getAttribute(ATTRIBUTE_COL))-1;
 			int colspan = Integer.parseInt(node.getAttribute(ATTRIBUTE_COLSPAN));
 			
-			if (NODE_TITLE.equals(node.getNodeName())) {
+			NODES type = null;
+			for (NODES nodeType: NODES.values())
+				if (nodeType.getName().equals(node.getNodeName())) {
+					type = nodeType;
+					break;
+				}
+			if (type == null) return;
+			
+			switch (type) {
+			case NODE_TITLE: 
 				try {
-					Cell cell = new Cell(row,col,colspan);
-					table.put(cell,node.getTextContent().trim());
+					table.add(new Cell<String>(row,col,colspan,node.getTextContent().trim()));
+					Collections.sort(table);
+					break;
 				} catch (NumberFormatException x) {
 					x.printStackTrace();
+					break;
 				}
-			} else
-			if (NODE_ACTION.equals(node.getNodeName())) {
-					Cell cell = new Cell(row,col,colspan);
+			case NODE_ACTION: {
+					
 					try {
-						table.put(cell,node.getTextContent().trim());
-						table.put(cell,createAction(node));
-						cell.setMode(Cell.CELL_MODE.ACTION);						
-						
-					} catch (NumberFormatException x) {
-						x.printStackTrace();
-						table.put(cell,node.getTextContent().trim());
-					}
-			} else						
-			if (NODE_STRUCTURE.equals(node.getNodeName())) {
-					try {
-						Cell cell = new Cell(row,col,colspan);
-						table.put(cell,NoNotificationChemObjectBuilder.getInstance().newMolecule());
-						cell.setMode(Cell.CELL_MODE.STRUCTURE);
+						Cell<WorksheetAction> cell = new Cell<WorksheetAction>(row,col,colspan,createAction(node));
+						cell.setMode(type);	
+						table.add(cell);
+						Collections.sort(table);
 					} catch (NumberFormatException x) {
 						x.printStackTrace();
 					}
-			} else				
-			if (NODE_ERROR.equals(node.getNodeName())) {
+					break;
+			} 
+			case NODE_STRUCTURE: {
+					try {
+						Cell<IAtomContainer> cell = new Cell<IAtomContainer>(row,col,colspan,NoNotificationChemObjectBuilder.getInstance().newMolecule());
+						cell.setMode(type);
+						table.add(cell);
+						Collections.sort(table);
+						break;
+					} catch (NumberFormatException x) {
+						x.printStackTrace();
+						break;
+					} 
+			} 
+			case NODE_ERROR: {
 				try {
-					Cell cell = new Cell(row,col,colspan);
-					table.put(cell,node.getTextContent().trim());
-					cell.setMode(Cell.CELL_MODE.ERROR);
+					Cell<String> cell = new Cell<String>(row,col,colspan,node.getTextContent().trim());
+					table.add(cell);
+					Collections.sort(table);
+					cell.setMode(type);
+					break;
 				} catch (NumberFormatException x) {
 					x.printStackTrace();
+					break;
 				}
-			} else				
-			if (NODE_LIST.equals(node.getNodeName())) {
+			}
+			case NODE_LIST: {
 					try {
-						Cell cell = new Cell(row,col,colspan);
-						cell.setMode(Cell.CELL_MODE.LIST);
+
 						NodeList items = node.getChildNodes();
 						ArrayList<String> pickup = new ArrayList<String>();
 						for (int i=0; i < items.getLength();i++) {
 							if (items.item(i).getNodeType() == Node.ELEMENT_NODE)
 								pickup.add(items.item(i).getTextContent().trim());
 						}
-						//table.put(cell,node.getTextContent().trim());
-						table.put(cell,pickup);
+						Cell cell = new Cell(row,col,colspan,pickup);
+						cell.setMode(type);
+						table.add(cell);
+						Collections.sort(table);
+						break;
 					} catch (NumberFormatException x) {
 						x.printStackTrace();
+						break;
 					}
-			} else		
-			if (NODE_FORMULA.equals(node.getNodeName())) {
+			} 
+			case NODE_FORMULA: {
 				try {
-					Cell cell = new Cell(row,col,colspan);
-					cell.setMode(Cell.CELL_MODE.FORMULA);
-					table.put(cell,node.getTextContent().trim());
+					Cell<String> cell = new Cell<String>(row,col,colspan,node.getTextContent().trim());
+					cell.setMode(type);
+					table.add(cell);
+					Collections.sort(table);
+					break;					
 				} catch (NumberFormatException x) {
 					x.printStackTrace();
+					break;
 				}
-			} else
-			if (NODE_INPUT.equals(node.getNodeName())) {
+			} 
+			case NODE_INPUT:
 				try {
 					Cell cell = new Cell(row,col,colspan);
-					cell.setMode(Cell.CELL_MODE.INPUT);
-					table.put(cell,node.getTextContent().trim());
+					cell.setMode(type);
+					if ("true".equals(node.getAttribute(ATTRIBUTE_LIST))) {
+						cell.setObject(new ArrayList<String>());
+					} 
+					table.add(cell);
+					Collections.sort(table);
+					break;					
 				} catch (NumberFormatException x) {
 					x.printStackTrace();
+					break;
 				}
-			} else
-				if (NODE_SECTION.equals(node.getNodeName())) {
-					try {
-						Cell cell = new Cell(row,col,colspan);
-						cell.setMode(Cell.CELL_MODE.SECTION);
+			case NODE_SECTION:
+				 try {
+						Cell<String> cell = new Cell<String>(row,col,colspan,node.getAttribute(ATTRIBUTE_VALUE).trim());
+						cell.setMode(type);
 						
-						table.put(cell,node.getAttribute(ATTRIBUTE_VALUE).trim());
-					} catch (NumberFormatException x) {
-						x.printStackTrace();
-					}				
+						table.add(cell);
+						Collections.sort(table);
+						break;						
+				} catch (NumberFormatException x) {
+					x.printStackTrace();
+					break; }				
 				
 		}
 		} catch (Exception x) {
@@ -217,12 +310,12 @@ public class PBTTableModel extends AbstractTableModel {
 	
 	protected WorksheetAction createAction(Element node) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
 		final WorksheetAction<IAtomContainer, String> action = new WorksheetAction<IAtomContainer, String>(node.getTextContent());
-		action.setResultRow(Integer.parseInt(node.getAttribute("resultrow")));
-		action.setResultCol(Integer.parseInt(node.getAttribute("resultcol")));
-		action.setTargetRow(Integer.parseInt(node.getAttribute("sourcerow")));
-		action.setTargetCol(Integer.parseInt(node.getAttribute("sourcecol")));
-		action.setErrorRow(Integer.parseInt(node.getAttribute("errorRow")));
-		action.setErrorCol(Integer.parseInt(node.getAttribute("errorCol")));		
+		action.setResultRow(Integer.parseInt(node.getAttribute("resultrow"))-1);
+		action.setResultCol(Integer.parseInt(node.getAttribute("resultcol"))-1);
+		action.setTargetRow(Integer.parseInt(node.getAttribute("sourcerow"))-1);
+		action.setTargetCol(Integer.parseInt(node.getAttribute("sourcecol"))-1);
+		action.setErrorRow(Integer.parseInt(node.getAttribute("errorRow"))-1);
+		action.setErrorCol(Integer.parseInt(node.getAttribute("errorCol"))-1);		
 		action.setResultExtended("extended".equals(node.getAttribute("result")));
 		action.setSourceExtended("extended".equals(node.getAttribute("source")));
 		action.putValue(Action.SHORT_DESCRIPTION, node.getAttribute("hint"));
@@ -270,81 +363,3 @@ public class PBTTableModel extends AbstractTableModel {
 	}	
 }
 
-class Cell implements Comparable<Cell> {
-	public enum CELL_MODE {
-		SECTION,TITLE,FORMULA,LIST,INPUT,ERROR,STRUCTURE,ACTION
-	};
-	protected CELL_MODE mode;
-	int row;
-	int column;
-	int colspan = 0;
-	int rowspan=1;
-	
-	public int getRowspan() {
-		return rowspan;
-	}
-	public void setRowspan(int rowspan) {
-		this.rowspan = rowspan;
-	}
-	public int getColspan() {
-		return colspan;
-	}
-	public void setColspan(int colspan) {
-		this.colspan = colspan;
-	}
-	public CELL_MODE getMode() {
-		return mode;
-	}
-	public void setMode(CELL_MODE mode) {
-		this.mode = mode;
-	}
-	public Cell(int row,int col) {
-		this(row,col,1);
-	}
-	public Cell(int row,int col, int colspan) {
-		setRow(row);
-		setColumn(col);
-		setColspan(colspan);
-		setMode(CELL_MODE.TITLE);
-	}	
-	public int getRow() {
-		return row;
-	}
-	public void setRow(int row) {
-		this.row = row;
-	}
-	public int getColumn() {
-		return column;
-	}
-	public void setColumn(int column) {
-		this.column = column;
-	}
-	@Override
-	public String toString() {
-		return Integer.toString(row) + "," + Integer.toString(column);
-	}
-	@Override
-	public int hashCode() {
-	    	int hash = 7;
-	    	int var_code = row;
-	    	hash = 31 * hash + var_code; 
-	    	var_code = column;
-	    	hash = 31 * hash + var_code; 
-	
-	    	return hash;
-	}
-	public int compareTo(Cell o) {
-		int r = row -o.row;
-		if (r == 0)
-			return column - o.column;
-		else return r;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Cell) {
-			return (row ==((Cell)obj).row) && 
-			(column == ((Cell)obj).column);
-		} else return false;
-	}
-
-}

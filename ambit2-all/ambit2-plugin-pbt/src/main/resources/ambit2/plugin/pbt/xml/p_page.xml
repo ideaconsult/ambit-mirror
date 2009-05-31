@@ -191,4 +191,23 @@ other (see Remark / Reference)
 	Hydrolysis: t 1/2 &gt; 40d
 	</item>
 </list>
+
+<input id="B6" row="6" col="2" colspan="1" type="text" />
+<input id="F6" row="6" col="6" colspan="1" type="text" />
+
+<input id="B8" row="8" col="2" colspan="1" type="text" />
+<input id="F8" row="8" col="6" colspan="1" type="text" />
+
+<input id="B10" row="10" col="2" colspan="1" type="text" />
+<input id="F10" row="10" col="6" colspan="1" type="text" />
+
+<input id="C12" row="12" col="3" colspan="1" type="text" />
+<input id="F12" row="12" col="6" colspan="1" type="text" />
+
+<input id="F14" row="14" col="6" colspan="1" type="text" />
+
+<input id="A16" row="16" col="1" colspan="3" type="text" />
+<input id="F16" row="16" col="6" colspan="1" type="text" />
+
+<input id="F19" row="19" col="6" colspan="1" type="text" />
 </page>

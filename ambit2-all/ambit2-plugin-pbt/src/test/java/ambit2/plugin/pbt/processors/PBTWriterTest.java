@@ -71,6 +71,8 @@ public class PBTWriterTest extends DbUnitTest {
 		PBTWorkBook pbt = new PBTWorkBook();
 		pbt.setStructure(MoleculeFactory.makeBenzene());
 		pbt.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setB12(72.2);
+		pbt.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setB13(100);
+		pbt.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setB10("Benzene");
 	
 		SourceDataset dataset = new SourceDataset(PBTWorkBook.PBT_TITLE,
 				LiteratureEntry.getInstance(PBTWorkBook.PBT_TITLE,"by Clariant"));
@@ -87,11 +89,28 @@ public class PBTWriterTest extends DbUnitTest {
 		chain.process(pbt);
 		chain.close();
 		
-		int count=199;
+		int count=72;
 		
 		c = getConnection();
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
-		Assert.assertEquals(1, structures.getRowCount());	
+		Assert.assertEquals(1, structures.getRowCount());
+		
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^SUBSTANCE_' order by name");
+		Assert.assertEquals(8, templates.getRowCount());
+
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^Persistence_' order by name");
+		Assert.assertEquals(25, templates.getRowCount());
+
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^Bioaccumulation_' order by name");
+		Assert.assertEquals(19, templates.getRowCount());
+		
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^Toxicity_' order by name");
+		Assert.assertEquals(19, templates.getRowCount());
+
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^RESULT_' order by name");
+		Assert.assertEquals(1, templates.getRowCount());
+		
+		
 		templates = c.createQueryTable("EXPECTED_PROPERTIES",	"SELECT * FROM properties");
 		Assert.assertEquals(count, templates.getRowCount());	
 		templates = c.createQueryTable("EXPECTED_VALUES",	"SELECT * FROM property_values");

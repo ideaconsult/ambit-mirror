@@ -61,15 +61,15 @@ public class WorksheetAction<Target,Result> extends AbstractAction {
 		setEnabled(false);
 		Object o = null;
 		if (isSourceExtended())
-			o = worksheet.getExtendedCell(targetRow,targetCol);
+			o = worksheet.getExtendedCellValue(targetRow,targetCol);
 		else
-			o = worksheet.get(targetRow-1,targetCol-1);
+			o = worksheet.get(targetRow,targetCol);
 		try {
 			Result result = processor.process((Target)o);
 			if (isResultExtended())
 				worksheet.setExtendedCell(result,resultRow,resultCol);
 			else
-				worksheet.set(resultRow-1,resultCol-1,result);
+				worksheet.set(resultRow,resultCol,result);
 		} catch (Exception x) {
 			Throwable error = x;
 			while (error.getCause()!=null) 

@@ -35,6 +35,9 @@ public class PBTUpdater implements WorkflowContextListener {
 		} else 	if (DBWorkflowContext.RECORD.equals(event.getPropertyName())) {
 			 if (event.getNewValue() instanceof IStructureRecord) 
 				 update((IStructureRecord)event.getNewValue());
+		} else 	if (PBTWorkBook.PBT_WORKBOOK.equals(event.getPropertyName())) {
+			 if (event.getNewValue() instanceof PBTWorkBook) 
+				 update((IStructureRecord)null);
 		}
 
     }
@@ -50,7 +53,10 @@ public class PBTUpdater implements WorkflowContextListener {
 		datasource = ds;
 	}
 	protected void update(IStructureRecord newrecord) {
-		if (newrecord == null) return;
+		if (newrecord == null) {
+			record = newrecord;
+			return;
+		}
 		if (record != null) {
 			if ((record.getIdchemical()==newrecord.getIdchemical()) && 
 					(record.getIdstructure()==newrecord.getIdstructure()))

@@ -4,772 +4,242 @@
   <roles role_name="ambit_admin"/>
   <roles role_name="ambit_guest"/>
   <user_roles user_name="guest" role_name="ambit_guest"/>
-  <catalog_references idreference="3" title="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.0.0" url="by Clariant"/>
-  <catalog_references idreference="4" title="Structure properties" url=""/>
-  <chemicals idchemical="1" smiles="C=1C=CC=CC=1" hashcode="-9165446309995996439"/>
-  <structure idstructure="1" idchemical="1" structure="OygAAHic7Vptb9s4Ev4eoP9h0A9dB5smdhLH9WJRQC90LVS2vJKctvelUGTGEWpLXklOmvtH9y9v
-SEkWZYlyfM3dp1sEaVamSM7MM888Q/oEQNM/A/53eXH54aI7POvd/HE9ODkBuOE/3caf4XAIt5fd
-bveEvdo9x7+6jX9pIJtC/Hnz/2n+F9P0MMr8t/AJe44Pr/jvvef48LppPD7sN43vc8TUx98US1ee
-TwDIVH9z8hH+tIkzN93v+s3HNyeLLYU0giBMtvf3gR/QMIUL8KPwfhX4aRAuYeGl3psT/qIaRJ7v
-b9fblZcGUfid9D7gFOpvkM0IoCoO0cGawuQLvAPH+AeRvKn22OKWn3phtIIkWm3vzqGzXl6Yp/kb
-bvQTt5M+f9d71zhUsw2X2IYCo7k5MkyT6JKZtT6OnhDFmdu4FXUyglvFnMv2oVwxAwxL0bT5ZG4q
-roGb18ZE+5y/MKNxEiQpDX2K5rK5ZztzM2uZuTZRdFA023KchveUHr6GQ7QxzFQXHM0mZGpMP4Fr
-WSaMLBuUiWq48NWFzi2+dw49xNoZYMYP33cv33eva04ZcafYZKLYnzFeNhkRm0w10rC61mM2/uUo
-NuyciFsxyC2ZkKm7PzP3iGt9NTTD/VZxxW4Id7FLHLdwhNkhp1q/Kw0gs9/9rVweFMexNENxd1HM
-IakMGSpuia2YpuCn7FMHQBJFfZjBsLRvf/7aG/3yDaP5lUoE+1kE9W/A7HagM4pp8vDkpTQ+lUFr
-UAGiNtoz9RI//hdo1uybbXwaI5rQ26aCW9nFpLIDFm+HaBygCFidfLIVneN139+kN8j8XctKTVVr
-4T68jd1YlQdSRz6A9HlDJXaPON6k0CzMZ4PqEX6Hf2nWBIGZ2ebI4nd5+avkpfYYasJzr8nbh73i
-zFXHVdAuTG82eoI89kSD5UMKneUF/t/pHzu8VtORceZYMUfvTWNE2nKycNWr0UfFRGa9MR2z4LgZ
-qqUB7bUFtEbAfLgZLUGL/PT8QuNZ0srCKmczDMW5NNxdvgV9rjHG3SNsaXW6kVSnMg8qHmGQnBHb
-MRwX7auSnxhuthdne5dg8fIphN6alqEWkmVwoMLVvXBZ9UK5JmHBclx7rrnIJrUcFrkB02fH3mU5
-LmgIswqRNtUxjogbXhQw8sYEea+pco04WG0ys2y3tcgoGaq/6bZlfkMHyjiRh0SLgzTwvRWo0eIZ
-1G28oCF0MCinICkhnH8Vbe4SUP6aY9A10U4pED/ki9E4aMpyPbcuQ8fItiZQs6Bq5EBwtIIoZBtp
-Y+KhhIgLn8t2PhRLB7Bc+hw9taZQYctRGaJwFi3qrQpKktAkWTMatWmyXaVVIuJFE2VwvcAPjyXj
-CsgGx9BLBew7H1kljnVAhExdw0XLb8lLPVHxeOHwRgzs1FQHJ1nQZewt+BzStGZeKzdHvs4sp0zi
-amnoVUpDZ1FLBCIr7YzAmyRrVbE2ji8n7x+evKhJnFpFwMQiYEoWHL5AMaiDQk+CPrfbKb0noXSJ
-/RovHG9nwk7fwr0XrOiiiRCGVWErA8t+i9EwVWnTnkmFA/nnUgfWiZOX6wSQNn32kC4guOcZBd4j
-2uPdrSh0EkphVzXgSxT/SB4oTZvqvzqUbLAkXQ71ItXG84mCv4liumM4wLyEe70pTOMxOOl2EdCk
-vhoLrTa2rSmSagPLZ9UqihuaLbE4v5ZWqkfgvzZz5q3q0yy093G0hom3XnurwAshqbiu5vX+cbmR
-RemXNLQ+ONhG1a3lcX6g/g/wNps42mBxTumebUKj21odKnVkeFQdEYg85/umNDkgfivsMWhkDwGc
-x7V8ev/QfNwEbDUoo4QYkuCfFPS19xM6SrhMUgRPo/LnJjnG7ryjTfwfuedRv81b5dY5PaKAjlNA
-XKN9xAVjOpu7MGGZDRtkw4SBzxkbI/d3zbXN37XaOcSew2FqEa2qIAvlMvj1brFbFedVkLSaXaHd
-jOasyUyxXaHXq8PzQz2279i5WougVXrFOUXOj3snBaApDjrpHPc4VSYErJFIpkLlqMeL1XsjRPpd
-YC+HXtRMgpnDZOPMJreGNXfy+PEOIwhh42FBeqarFeoozmVBuNmm4OOTpElYEQ7mJqnCcrTxhd5h
-bVNt6ruC2p1J1W6JL849rIvlPdyfQt9YgwdntZYOdsQ7HylEhDUZi7115YKlNnPeGx/MuUxeqpRF
-hMYxVtI1ruAtaQJeTGEZPGIbdo+PNR4jbEdZoNVenymNlP5MWfEN6RKXfaR5OJ+8hCUUjdPd/kR+
-4g0YwheLVwp68BgkuGNs/KBsnzXU0HUtwHDsrzzkgPsApY7vxX4QRksaBj50fC/F6sp2c3l6Butt
-6uUfaMIH7HfKJuQmxRQrzWKLaX5eDMPSzMZcnTahUc8ziSOLd4btquOGJ+uCQnQPis/iUg9sT+gD
-GqhKsP5G0F0ohMyilzGmuqEprmU7XHDsqTBhPxnWSlJlSdmUQsMjugOpoi1r9VGNnF5oefmpbUXJ
-7/Tq4RMzfkDdJvoFYmPtpI6LxMHdlgsvxHz6EMQLZLA4RUWC2Pl7G8QsS5YxpZwv7p6hgLWsheet
-9VtVvod8r1y1/VJpys4fX7U32CkPaax1zo2mMTFYU7uHxBLKg3ZNX0uSoZgjjdcKdet7+617wdj5
-0WM9v1jMs36mvOgoQFW6yGhIdE7z5ZAM7HXNetyBKSdwM1gHLHKMk6YWzDep9wPp5A659VHO/fmp
-z6Gq0i6NyxTvS1K8nrtXh3JXZMf+/klosMLlGpUa761n0r64ytFXO45uWJQF+Qs/epYtKY4eiJUK
-EbTeeOEzCq6iaMkC8DLHvl7zKOx5WIGiQPGiXVxtMtUXnZeH1AVNZp+irSuKHViu0iChvIDB0wNF
-WeCVkcjoCwX74gJBiuyUen4K9OcGy7+sJx0c7knr57Y3MtklWMZ523Bc21DnvFDy9kR6X5TLr9bj
-0aq6/HCcuiwvRVvqU809w//APfv3ipVz4d2dUXkJ10lOcQFTyYg6X4s9rDv1KnMqNnjGhNjVKckr
-fF3g6rgTCmXwce/a1aFe5dJVKORs7nnCFRjW7wS3ieDBfxHJz9E2hugphDhIfpztSjcsIqzqYYQ9
-qO/TDWtFn2EVeDlX4IvbhJ5BtE39aE0hw7y/2ib8fCb2nmoiLzumK1oMcKU9hpiiwx032F64pM3X
-hvkleu00oAjO0Q2uIEz5VwlgNrYxHA5MCHEZNRUwrtk4bLuLaTmlK6vRi7vll90lazcHpFapWvIT
-7pZvItQY/sWb5TE4wBjFjrnwxkrwDh5nj5Vz9NZerzy0lQuzwZ6J0u9a5CpFvG7HYpvpR4RRuT2Z
-Z158Mlce1LzoGyhZMT76klAfHgxu4f7BgR5b+C7FteROpEiYjiNTptkXbzTF1OYZ+ebHjPU1epI1
-xGvCfwOM4/Wh" format="SDF" updated="2009-02-28 16:47:06.0" user_name="guest" type_structure="NA"/>
-  <properties idproperty="1" idreference="4" name="RESULT_D6" units="" comments="RESULT_D6" islocal="false"/>
-  <properties idproperty="2" idreference="4" name="Bioaccumulation_E18" units="" comments="Bioaccumulation_E18" islocal="false"/>
-  <properties idproperty="3" idreference="4" name="Bioaccumulation_B16" units="" comments="Bioaccumulation_B16" islocal="false"/>
-  <properties idproperty="4" idreference="4" name="Toxicity_D14" units="" comments="Toxicity_D14" islocal="false"/>
-  <properties idproperty="5" idreference="4" name="Bioaccumulation_C5" units="" comments="Bioaccumulation_C5" islocal="false"/>
-  <properties idproperty="6" idreference="4" name="Bioaccumulation_A3" units="" comments="Bioaccumulation_A3" islocal="false"/>
-  <properties idproperty="7" idreference="4" name="Persistence_E15" units="" comments="Persistence_E15" islocal="false"/>
-  <properties idproperty="8" idreference="4" name="Persistence_A1" units="" comments="Persistence_A1" islocal="false"/>
-  <properties idproperty="9" idreference="4" name="Toxicity_F14" units="" comments="Toxicity_F14" islocal="false"/>
-  <properties idproperty="10" idreference="4" name="Persistence_C13" units="" comments="Persistence_C13" islocal="false"/>
-  <properties idproperty="11" idreference="4" name="Toxicity_A3" units="" comments="Toxicity_A3" islocal="false"/>
-  <properties idproperty="12" idreference="4" name="Toxicity_C5" units="" comments="Toxicity_C5" islocal="false"/>
-  <properties idproperty="13" idreference="4" name="RESULT_A9" units="" comments="RESULT_A9" islocal="false"/>
-  <properties idproperty="14" idreference="4" name="Toxicity_D11" units="" comments="Toxicity_D11" islocal="false"/>
-  <properties idproperty="15" idreference="4" name="Bioaccumulation_D9" units="" comments="Bioaccumulation_D9" islocal="false"/>
-  <properties idproperty="16" idreference="4" name="Bioaccumulation_D5" units="" comments="Bioaccumulation_D5" islocal="false"/>
-  <properties idproperty="17" idreference="4" name="Persistence_A5" units="" comments="Persistence_A5" islocal="false"/>
-  <properties idproperty="18" idreference="4" name="Bioaccumulation_A7" units="" comments="Bioaccumulation_A7" islocal="false"/>
-  <properties idproperty="19" idreference="4" name="RESULT_A2" units="" comments="RESULT_A2" islocal="false"/>
-  <properties idproperty="20" idreference="4" name="Toxicity_E17" units="" comments="Toxicity_E17" islocal="false"/>
-  <properties idproperty="21" idreference="4" name="Persistence_A4" units="" comments="Persistence_A4" islocal="false"/>
-  <properties idproperty="22" idreference="4" name="Toxicity_B11" units="" comments="Toxicity_B11" islocal="false"/>
-  <properties idproperty="23" idreference="4" name="Toxicity_A2" units="" comments="Toxicity_A2" islocal="false"/>
-  <properties idproperty="24" idreference="4" name="Bioaccumulation_F13" units="" comments="Bioaccumulation_F13" islocal="false"/>
-  <properties idproperty="25" idreference="4" name="RESULT_A3" units="" comments="RESULT_A3" islocal="false"/>
-  <properties idproperty="26" idreference="4" name="Bioaccumulation_D22" units="" comments="Bioaccumulation_D22" islocal="false"/>
-  <properties idproperty="27" idreference="4" name="Bioaccumulation_B19" units="" comments="Bioaccumulation_B19" islocal="false"/>
-  <properties idproperty="28" idreference="4" name="Persistence_A2" units="" comments="Persistence_A2" islocal="false"/>
-  <properties idproperty="29" idreference="4" name="SUBSTANCE_A12" units="" comments="SUBSTANCE_A12" islocal="false"/>
-  <properties idproperty="30" idreference="4" name="Persistence_C18" units="" comments="Persistence_C18" islocal="false"/>
-  <properties idproperty="31" idreference="4" name="RESULT_A1" units="" comments="RESULT_A1" islocal="false"/>
-  <properties idproperty="32" idreference="4" name="Persistence_A9" units="" comments="Persistence_A9" islocal="false"/>
-  <properties idproperty="33" idreference="4" name="Bioaccumulation_F11" units="" comments="Bioaccumulation_F11" islocal="false"/>
-  <properties idproperty="34" idreference="4" name="Bioaccumulation_C11" units="" comments="Bioaccumulation_C11" islocal="false"/>
-  <properties idproperty="35" idreference="4" name="Bioaccumulation_B14" units="" comments="Bioaccumulation_B14" islocal="false"/>
-  <properties idproperty="36" idreference="4" name="Bioaccumulation_D20" units="" comments="Bioaccumulation_D20" islocal="false"/>
-  <properties idproperty="37" idreference="4" name="Bioaccumulation_E16" units="" comments="Bioaccumulation_E16" islocal="false"/>
-  <properties idproperty="38" idreference="4" name="Persistence_A3" units="" comments="Persistence_A3" islocal="false"/>
-  <properties idproperty="39" idreference="4" name="SUBSTANCE_A10" units="" comments="SUBSTANCE_A10" islocal="false"/>
-  <properties idproperty="40" idreference="4" name="Toxicity_B17" units="" comments="Toxicity_B17" islocal="false"/>
-  <properties idproperty="41" idreference="4" name="Bioaccumulation_B12" units="" comments="Bioaccumulation_B12" islocal="false"/>
-  <properties idproperty="42" idreference="4" name="SUBSTANCE_E9" units="" comments="SUBSTANCE_E9" islocal="false"/>
-  <properties idproperty="43" idreference="4" name="Toxicity_A4" units="" comments="Toxicity_A4" islocal="false"/>
-  <properties idproperty="44" idreference="4" name="Persistence_F18" units="" comments="Persistence_F18" islocal="false"/>
-  <properties idproperty="45" idreference="4" name="Persistence_A18" units="" comments="Persistence_A18" islocal="false"/>
-  <properties idproperty="46" idreference="4" name="Bioaccumulation_A16" units="" comments="Bioaccumulation_A16" islocal="false"/>
-  <properties idproperty="47" idreference="4" name="Toxicity_A5" units="" comments="Toxicity_A5" islocal="false"/>
-  <properties idproperty="48" idreference="4" name="Bioaccumulation_C18" units="" comments="Bioaccumulation_C18" islocal="false"/>
-  <properties idproperty="49" idreference="4" name="Persistence_A17" units="" comments="Persistence_A17" islocal="false"/>
-  <properties idproperty="50" idreference="4" name="Persistence_D18" units="" comments="Persistence_D18" islocal="false"/>
-  <properties idproperty="51" idreference="4" name="Toxicity_E9" units="" comments="Toxicity_E9" islocal="false"/>
-  <properties idproperty="52" idreference="4" name="Bioaccumulation_D18" units="" comments="Bioaccumulation_D18" islocal="false"/>
-  <properties idproperty="53" idreference="4" name="Bioaccumulation_C9" units="" comments="Bioaccumulation_C9" islocal="false"/>
-  <properties idproperty="54" idreference="4" name="RESULT_D5" units="" comments="RESULT_D5" islocal="false"/>
-  <properties idproperty="55" idreference="4" name="Bioaccumulation_A22" units="" comments="Bioaccumulation_A22" islocal="false"/>
-  <properties idproperty="56" idreference="4" name="Toxicity_D19" units="" comments="Toxicity_D19" islocal="false"/>
-  <properties idproperty="57" idreference="4" name="Persistence_F7" units="" comments="Persistence_F7" islocal="false"/>
-  <properties idproperty="58" idreference="4" name="Bioaccumulation_A4" units="" comments="Bioaccumulation_A4" islocal="false"/>
-  <properties idproperty="59" idreference="4" name="Persistence_A13" units="" comments="Persistence_A13" islocal="false"/>
-  <properties idproperty="60" idreference="4" name="Bioaccumulation_A9" units="" comments="Bioaccumulation_A9" islocal="false"/>
-  <properties idproperty="61" idreference="4" name="Persistence_C11" units="" comments="Persistence_C11" islocal="false"/>
-  <properties idproperty="62" idreference="4" name="Bioaccumulation_B5" units="" comments="Bioaccumulation_B5" islocal="false"/>
-  <properties idproperty="63" idreference="4" name="Toxicity_E7" units="" comments="Toxicity_E7" islocal="false"/>
-  <properties idproperty="64" idreference="4" name="Toxicity_E5" units="" comments="Toxicity_E5" islocal="false"/>
-  <properties idproperty="65" idreference="4" name="Persistence_E5" units="" comments="Persistence_E5" islocal="false"/>
-  <properties idproperty="66" idreference="4" name="RESULT_A6" units="" comments="RESULT_A6" islocal="false"/>
-  <properties idproperty="67" idreference="4" name="Toxicity_B9" units="" comments="Toxicity_B9" islocal="false"/>
-  <properties idproperty="68" idreference="4" name="Bioaccumulation_B7" units="" comments="Bioaccumulation_B7" islocal="false"/>
-  <properties idproperty="69" idreference="4" name="Persistence_D9" units="" comments="Persistence_D9" islocal="false"/>
-  <properties idproperty="70" idreference="4" name="Persistence_C20" units="" comments="Persistence_C20" islocal="false"/>
-  <properties idproperty="71" idreference="4" name="Bioaccumulation_E11" units="" comments="Bioaccumulation_E11" islocal="false"/>
-  <properties idproperty="72" idreference="4" name="Bioaccumulation_A5" units="" comments="Bioaccumulation_A5" islocal="false"/>
-  <properties idproperty="73" idreference="4" name="RESULT_A7" units="" comments="RESULT_A7" islocal="false"/>
-  <properties idproperty="74" idreference="4" name="Persistence_B7" units="" comments="Persistence_B7" islocal="false"/>
-  <properties idproperty="75" idreference="4" name="Bioaccumulation_A19" units="" comments="Bioaccumulation_A19" islocal="false"/>
-  <properties idproperty="76" idreference="4" name="Toxicity_A13" units="" comments="Toxicity_A13" islocal="false"/>
-  <properties idproperty="77" idreference="4" name="Persistence_B9" units="" comments="Persistence_B9" islocal="false"/>
-  <properties idproperty="78" idreference="4" name="Bioaccumulation_E20" units="" comments="Bioaccumulation_E20" islocal="false"/>
-  <properties idproperty="79" idreference="4" name="Toxicity_A11" units="" comments="Toxicity_A11" islocal="false"/>
-  <properties idproperty="80" idreference="4" name="SUBSTANCE_A1" units="" comments="SUBSTANCE_A1" islocal="false"/>
-  <properties idproperty="81" idreference="4" name="Bioaccumulation_A1" units="" comments="Bioaccumulation_A1" islocal="false"/>
-  <properties idproperty="82" idreference="4" name="Bioaccumulation_A20" units="" comments="Bioaccumulation_A20" islocal="false"/>
-  <properties idproperty="83" idreference="4" name="Persistence_E20" units="" comments="Persistence_E20" islocal="false"/>
-  <properties idproperty="84" idreference="4" name="Bioaccumulation_E5" units="" comments="Bioaccumulation_E5" islocal="false"/>
-  <properties idproperty="85" idreference="4" name="Bioaccumulation_D7" units="" comments="Bioaccumulation_D7" islocal="false"/>
-  <properties idproperty="86" idreference="4" name="Bioaccumulation_A21" units="" comments="Bioaccumulation_A21" islocal="false"/>
-  <properties idproperty="87" idreference="4" name="Toxicity_F17" units="" comments="Toxicity_F17" islocal="false"/>
-  <properties idproperty="88" idreference="4" name="Persistence_F9" units="" comments="Persistence_F9" islocal="false"/>
-  <properties idproperty="89" idreference="4" name="Bioaccumulation_A13" units="" comments="Bioaccumulation_A13" islocal="false"/>
-  <properties idproperty="90" idreference="4" name="Persistence_D7" units="" comments="Persistence_D7" islocal="false"/>
-  <properties idproperty="91" idreference="4" name="Persistence_F11" units="" comments="Persistence_F11" islocal="false"/>
-  <properties idproperty="92" idreference="4" name="Persistence_D5" units="" comments="Persistence_D5" islocal="false"/>
-  <properties idproperty="93" idreference="4" name="SUBSTANCE_A2" units="" comments="SUBSTANCE_A2" islocal="false"/>
-  <properties idproperty="94" idreference="4" name="SUBSTANCE_A13" units="" comments="SUBSTANCE_A13" islocal="false"/>
-  <properties idproperty="95" idreference="4" name="Persistence_A11" units="" comments="Persistence_A11" islocal="false"/>
-  <properties idproperty="96" idreference="4" name="Bioaccumulation_A2" units="" comments="Bioaccumulation_A2" islocal="false"/>
-  <properties idproperty="97" idreference="4" name="Persistence_F5" units="" comments="Persistence_F5" islocal="false"/>
-  <properties idproperty="98" idreference="4" name="SUBSTANCE_B7" units="" comments="SUBSTANCE_B7" islocal="false"/>
-  <properties idproperty="99" idreference="4" name="Toxicity_C7" units="" comments="Toxicity_C7" islocal="false"/>
-  <properties idproperty="100" idreference="4" name="RESULT_D7" units="" comments="RESULT_D7" islocal="false"/>
-  <properties idproperty="101" idreference="4" name="Bioaccumulation_B10" units="" comments="Bioaccumulation_B10" islocal="false"/>
-  <properties idproperty="102" idreference="4" name="Persistence_F15" units="" comments="Persistence_F15" islocal="false"/>
-  <properties idproperty="103" idreference="4" name="Persistence_B11" units="" comments="Persistence_B11" islocal="false"/>
-  <properties idproperty="104" idreference="4" name="Bioaccumulation_A18" units="" comments="Bioaccumulation_A18" islocal="false"/>
-  <properties idproperty="105" idreference="4" name="Persistence_A15" units="" comments="Persistence_A15" islocal="false"/>
-  <properties idproperty="106" idreference="4" name="SUBSTANCE_B6" units="" comments="SUBSTANCE_B6" islocal="false"/>
-  <properties idproperty="107" idreference="4" name="Persistence_E13" units="" comments="Persistence_E13" islocal="false"/>
-  <properties idproperty="108" idreference="4" name="Persistence_E11" units="" comments="Persistence_E11" islocal="false"/>
-  <properties idproperty="109" idreference="4" name="Persistence_A20" units="" comments="Persistence_A20" islocal="false"/>
-  <properties idproperty="110" idreference="4" name="Toxicity_C17" units="" comments="Toxicity_C17" islocal="false"/>
-  <properties idproperty="111" idreference="4" name="Bioaccumulation_B21" units="" comments="Bioaccumulation_B21" islocal="false"/>
-  <properties idproperty="112" idreference="4" name="Bioaccumulation_F16" units="" comments="Bioaccumulation_F16" islocal="false"/>
-  <properties idproperty="113" idreference="4" name="Toxicity_C19" units="" comments="Toxicity_C19" islocal="false"/>
-  <properties idproperty="114" idreference="4" name="Bioaccumulation_F20" units="" comments="Bioaccumulation_F20" islocal="false"/>
-  <properties idproperty="115" idreference="4" name="SUBSTANCE_C11" units="" comments="SUBSTANCE_C11" islocal="false"/>
-  <properties idproperty="116" idreference="4" name="SUBSTANCE_A18" units="" comments="SUBSTANCE_A18" islocal="false"/>
-  <properties idproperty="117" idreference="4" name="Toxicity_A15" units="" comments="Toxicity_A15" islocal="false"/>
-  <properties idproperty="118" idreference="4" name="Persistence_D15" units="" comments="Persistence_D15" islocal="false"/>
-  <properties idproperty="119" idreference="4" name="SUBSTANCE_A16" units="" comments="SUBSTANCE_A16" islocal="false"/>
-  <properties idproperty="120" idreference="4" name="Toxicity_C11" units="" comments="Toxicity_C11" islocal="false"/>
-  <properties idproperty="121" idreference="4" name="Toxicity_A16" units="" comments="Toxicity_A16" islocal="false"/>
-  <properties idproperty="122" idreference="4" name="SUBSTANCE_A6" units="" comments="SUBSTANCE_A6" islocal="false"/>
-  <properties idproperty="123" idreference="4" name="Persistence_E9" units="" comments="Persistence_E9" islocal="false"/>
-  <properties idproperty="124" idreference="4" name="Toxicity_B7" units="" comments="Toxicity_B7" islocal="false"/>
-  <properties idproperty="125" idreference="4" name="Toxicity_F7" units="" comments="Toxicity_F7" islocal="false"/>
-  <properties idproperty="126" idreference="4" name="Bioaccumulation_D11" units="" comments="Bioaccumulation_D11" islocal="false"/>
-  <properties idproperty="127" idreference="4" name="Persistence_C9" units="" comments="Persistence_C9" islocal="false"/>
-  <properties idproperty="128" idreference="4" name="RESULT_C5" units="" comments="RESULT_C5" islocal="false"/>
-  <properties idproperty="129" idreference="4" name="SUBSTANCE_B4" units="" comments="SUBSTANCE_B4" islocal="false"/>
-  <properties idproperty="130" idreference="4" name="Bioaccumulation_C22" units="" comments="Bioaccumulation_C22" islocal="false"/>
-  <properties idproperty="131" idreference="4" name="RESULT_E5" units="" comments="RESULT_E5" islocal="false"/>
-  <properties idproperty="132" idreference="4" name="Bioaccumulation_A12" units="" comments="Bioaccumulation_A12" islocal="false"/>
-  <properties idproperty="133" idreference="4" name="Persistence_B5" units="" comments="Persistence_B5" islocal="false"/>
-  <properties idproperty="134" idreference="4" name="Toxicity_D17" units="" comments="Toxicity_D17" islocal="false"/>
-  <properties idproperty="135" idreference="4" name="Toxicity_A7" units="" comments="Toxicity_A7" islocal="false"/>
-  <properties idproperty="136" idreference="4" name="Toxicity_C9" units="" comments="Toxicity_C9" islocal="false"/>
-  <properties idproperty="137" idreference="4" name="Bioaccumulation_A11" units="" comments="Bioaccumulation_A11" islocal="false"/>
-  <properties idproperty="138" idreference="4" name="Toxicity_A14" units="" comments="Toxicity_A14" islocal="false"/>
-  <properties idproperty="139" idreference="4" name="SUBSTANCE_A21" units="" comments="SUBSTANCE_A21" islocal="false"/>
-  <properties idproperty="140" idreference="4" name="Toxicity_F11" units="" comments="Toxicity_F11" islocal="false"/>
-  <properties idproperty="141" idreference="4" name="Bioaccumulation_C20" units="" comments="Bioaccumulation_C20" islocal="false"/>
-  <properties idproperty="142" idreference="4" name="Bioaccumulation_F18" units="" comments="Bioaccumulation_F18" islocal="false"/>
-  <properties idproperty="143" idreference="4" name="Toxicity_F9" units="" comments="Toxicity_F9" islocal="false"/>
-  <properties idproperty="144" idreference="4" name="Toxicity_B5" units="" comments="Toxicity_B5" islocal="false"/>
-  <properties idproperty="145" idreference="4" name="Bioaccumulation_D13" units="" comments="Bioaccumulation_D13" islocal="false"/>
-  <properties idproperty="146" idreference="4" name="SUBSTANCE_A15" units="" comments="SUBSTANCE_A15" islocal="false"/>
-  <properties idproperty="147" idreference="4" name="RESULT_A5" units="" comments="RESULT_A5" islocal="false"/>
-  <properties idproperty="148" idreference="4" name="Persistence_D13" units="" comments="Persistence_D13" islocal="false"/>
-  <properties idproperty="149" idreference="4" name="SUBSTANCE_A14" units="" comments="SUBSTANCE_A14" islocal="false"/>
-  <properties idproperty="150" idreference="4" name="SUBSTANCE_A17" units="" comments="SUBSTANCE_A17" islocal="false"/>
-  <properties idproperty="151" idreference="4" name="Bioaccumulation_F9" units="" comments="Bioaccumulation_F9" islocal="false"/>
-  <properties idproperty="152" idreference="4" name="Toxicity_A1" units="" comments="Toxicity_A1" islocal="false"/>
-  <properties idproperty="153" idreference="4" name="SUBSTANCE_A9" units="" comments="SUBSTANCE_A9" islocal="false"/>
-  <properties idproperty="154" idreference="4" name="SUBSTANCE_A11" units="" comments="SUBSTANCE_A11" islocal="false"/>
-  <properties idproperty="155" idreference="4" name="RESULT_C11" units="" comments="RESULT_C11" islocal="false"/>
-  <properties idproperty="156" idreference="4" name="Bioaccumulation_E7" units="" comments="Bioaccumulation_E7" islocal="false"/>
-  <properties idproperty="157" idreference="4" name="Bioaccumulation_C16" units="" comments="Bioaccumulation_C16" islocal="false"/>
-  <properties idproperty="158" idreference="4" name="SUBSTANCE_A4" units="" comments="SUBSTANCE_A4" islocal="false"/>
-  <properties idproperty="159" idreference="4" name="Bioaccumulation_D16" units="" comments="Bioaccumulation_D16" islocal="false"/>
-  <properties idproperty="160" idreference="4" name="Persistence_E18" units="" comments="Persistence_E18" islocal="false"/>
-  <properties idproperty="161" idreference="4" name="Persistence_C5" units="" comments="Persistence_C5" islocal="false"/>
-  <properties idproperty="162" idreference="4" name="Bioaccumulation_E9" units="" comments="Bioaccumulation_E9" islocal="false"/>
-  <properties idproperty="163" idreference="4" name="Bioaccumulation_C7" units="" comments="Bioaccumulation_C7" islocal="false"/>
-  <properties idproperty="164" idreference="4" name="RESULT_A13" units="" comments="RESULT_A13" islocal="false"/>
-  <properties idproperty="165" idreference="4" name="SUBSTANCE_A3" units="" comments="SUBSTANCE_A3" islocal="false"/>
-  <properties idproperty="166" idreference="4" name="RESULT_E6" units="" comments="RESULT_E6" islocal="false"/>
-  <properties idproperty="167" idreference="4" name="Bioaccumulation_E13" units="" comments="Bioaccumulation_E13" islocal="false"/>
-  <properties idproperty="168" idreference="4" name="Persistence_A7" units="" comments="Persistence_A7" islocal="false"/>
-  <properties idproperty="169" idreference="4" name="SUBSTANCE_B3" units="" comments="SUBSTANCE_B3" islocal="false"/>
-  <properties idproperty="170" idreference="4" name="Toxicity_A19" units="" comments="Toxicity_A19" islocal="false"/>
-  <properties idproperty="171" idreference="4" name="SUBSTANCE_A19" units="" comments="SUBSTANCE_A19" islocal="false"/>
-  <properties idproperty="172" idreference="4" name="Persistence_D11" units="" comments="Persistence_D11" islocal="false"/>
-  <properties idproperty="173" idreference="4" name="RESULT_E7" units="" comments="RESULT_E7" islocal="false"/>
-  <properties idproperty="174" idreference="4" name="Toxicity_C14" units="" comments="Toxicity_C14" islocal="false"/>
-  <properties idproperty="175" idreference="4" name="Toxicity_A9" units="" comments="Toxicity_A9" islocal="false"/>
-  <properties idproperty="176" idreference="4" name="Toxicity_F5" units="" comments="Toxicity_F5" islocal="false"/>
-  <properties idproperty="177" idreference="4" name="Persistence_F13" units="" comments="Persistence_F13" islocal="false"/>
-  <properties idproperty="178" idreference="4" name="RESULT_C6" units="" comments="RESULT_C6" islocal="false"/>
-  <properties idproperty="179" idreference="4" name="Toxicity_D5" units="" comments="Toxicity_D5" islocal="false"/>
-  <properties idproperty="180" idreference="4" name="Bioaccumulation_F5" units="" comments="Bioaccumulation_F5" islocal="false"/>
-  <properties idproperty="181" idreference="4" name="Persistence_E7" units="" comments="Persistence_E7" islocal="false"/>
-  <properties idproperty="182" idreference="4" name="RESULT_C9" units="" comments="RESULT_C9" islocal="false"/>
-  <properties idproperty="183" idreference="4" name="Bioaccumulation_B9" units="" comments="Bioaccumulation_B9" islocal="false"/>
-  <properties idproperty="184" idreference="4" name="Toxicity_D7" units="" comments="Toxicity_D7" islocal="false"/>
-  <properties idproperty="185" idreference="4" name="RESULT_A11" units="" comments="RESULT_A11" islocal="false"/>
-  <properties idproperty="186" idreference="4" name="Bioaccumulation_F7" units="" comments="Bioaccumulation_F7" islocal="false"/>
-  <properties idproperty="187" idreference="4" name="Persistence_C7" units="" comments="Persistence_C7" islocal="false"/>
-  <properties idproperty="188" idreference="4" name="Toxicity_A17" units="" comments="Toxicity_A17" islocal="false"/>
-  <properties idproperty="189" idreference="4" name="Toxicity_D9" units="" comments="Toxicity_D9" islocal="false"/>
-  <properties idproperty="190" idreference="4" name="RESULT_C7" units="" comments="RESULT_C7" islocal="false"/>
-  <properties idproperty="191" idreference="4" name="Toxicity_E14" units="" comments="Toxicity_E14" islocal="false"/>
-  <properties idproperty="192" idreference="4" name="Bioaccumulation_C13" units="" comments="Bioaccumulation_C13" islocal="false"/>
-  <properties idproperty="193" idreference="4" name="Toxicity_E11" units="" comments="Toxicity_E11" islocal="false"/>
-  <properties idproperty="194" idreference="4" name="SUBSTANCE_B12" units="" comments="SUBSTANCE_B12" islocal="false"/>  
-  <template idtemplate="84" name="All"/>
-  <template idtemplate="93" name="Dataset"/>
-  <template idtemplate="85" name="Endpoints"/>
-  <template idtemplate="92" name="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02"/>
-  
-  <template_def idtemplate="92" idproperty="1" />
-  <template_def idtemplate="92" idproperty="2" />
-  <template_def idtemplate="92" idproperty="3" />
-  <template_def idtemplate="92" idproperty="4" />
-  <template_def idtemplate="92" idproperty="5" />
-  <template_def idtemplate="92" idproperty="6" />
-  <template_def idtemplate="92" idproperty="7" />
-  <template_def idtemplate="92" idproperty="8" />
-  <template_def idtemplate="92" idproperty="9" />
-  <template_def idtemplate="92" idproperty="10" />
-  <template_def idtemplate="92" idproperty="11" />
-  <template_def idtemplate="92" idproperty="12" />
-  <template_def idtemplate="92" idproperty="13" />
-  <template_def idtemplate="92" idproperty="14" />
-  <template_def idtemplate="92" idproperty="15" />
-  <template_def idtemplate="92" idproperty="16" />
-  <template_def idtemplate="92" idproperty="17" />
-  <template_def idtemplate="92" idproperty="18" />
-  <template_def idtemplate="92" idproperty="19" />
-  <template_def idtemplate="92" idproperty="20" />
-  <template_def idtemplate="92" idproperty="21" />
-  <template_def idtemplate="92" idproperty="22"/>
-  <template_def idtemplate="92" idproperty="23" />
-  <template_def idtemplate="92" idproperty="24" />
-  <template_def idtemplate="92" idproperty="25" />
-  <template_def idtemplate="92" idproperty="26" />
-  <template_def idtemplate="92" idproperty="27" />
-  <template_def idtemplate="92" idproperty="28" />
-  <template_def idtemplate="92" idproperty="29" />
-  <template_def idtemplate="92" idproperty="30" />
-  <template_def idtemplate="92" idproperty="31" />
-  <template_def idtemplate="92" idproperty="32" />
-  <template_def idtemplate="92" idproperty="33" />
-  <template_def idtemplate="92" idproperty="34" />
-  <template_def idtemplate="92" idproperty="35" />
-  <template_def idtemplate="92" idproperty="36" />
-  <template_def idtemplate="92" idproperty="37" />
-  <template_def idtemplate="92" idproperty="38" />
-  <template_def idtemplate="92" idproperty="39" />
-  <template_def idtemplate="92" idproperty="40" />
-  <template_def idtemplate="92" idproperty="41" />
-  <template_def idtemplate="92" idproperty="42" />
-  <template_def idtemplate="92" idproperty="43" />
-  <template_def idtemplate="92" idproperty="44" />
-  <template_def idtemplate="92" idproperty="45" />
-  <template_def idtemplate="92" idproperty="46" />
-  <template_def idtemplate="92" idproperty="47" />
-  <template_def idtemplate="92" idproperty="48" />
-  <template_def idtemplate="92" idproperty="49" />
-  <template_def idtemplate="92" idproperty="50" />
-  <template_def idtemplate="92" idproperty="51" />
-  <template_def idtemplate="92" idproperty="52" />
-  <template_def idtemplate="92" idproperty="53" />
-  <template_def idtemplate="92" idproperty="54" />
-  <template_def idtemplate="92" idproperty="55" />
-  <template_def idtemplate="92" idproperty="56" />
-  <template_def idtemplate="92" idproperty="57" />
-  <template_def idtemplate="92" idproperty="58" />
-  <template_def idtemplate="92" idproperty="59" />
-  <template_def idtemplate="92" idproperty="60" />
-  <template_def idtemplate="92" idproperty="61" />
-  <template_def idtemplate="92" idproperty="62" />
-  <template_def idtemplate="92" idproperty="63" />
-  <template_def idtemplate="92" idproperty="64" />
-  <template_def idtemplate="92" idproperty="65" />
-  <template_def idtemplate="92" idproperty="66" />
-  <template_def idtemplate="92" idproperty="67" />
-  <template_def idtemplate="92" idproperty="68" />
-  <template_def idtemplate="92" idproperty="69" />
-  <template_def idtemplate="92" idproperty="70" />
-  <template_def idtemplate="92" idproperty="71" />
-  <template_def idtemplate="92" idproperty="72" />
-  <template_def idtemplate="92" idproperty="73" />
-  <template_def idtemplate="92" idproperty="74" />
-  <template_def idtemplate="92" idproperty="75" />
-  <template_def idtemplate="92" idproperty="76" />
-  <template_def idtemplate="92" idproperty="77" />
-  <template_def idtemplate="92" idproperty="78" />
-  <template_def idtemplate="92" idproperty="79" />
-  <template_def idtemplate="92" idproperty="80" />
-  <template_def idtemplate="92" idproperty="81" />
-  <template_def idtemplate="92" idproperty="82" />
-  <template_def idtemplate="92" idproperty="83" />
-  <template_def idtemplate="92" idproperty="84" />
-  <template_def idtemplate="92" idproperty="85" />
-  <template_def idtemplate="92" idproperty="86" />
-  <template_def idtemplate="92" idproperty="87" />
-  <template_def idtemplate="92" idproperty="88" />
-  <template_def idtemplate="92" idproperty="89" />
-  <template_def idtemplate="92" idproperty="90" />
-  <template_def idtemplate="92" idproperty="91" />
-  <template_def idtemplate="92" idproperty="92" />
-  <template_def idtemplate="92" idproperty="93" />
-  <template_def idtemplate="92" idproperty="94" />
-  <template_def idtemplate="92" idproperty="95" />
-  <template_def idtemplate="92" idproperty="96" />
-  <template_def idtemplate="92" idproperty="97" />
-  <template_def idtemplate="92" idproperty="98" />
-  <template_def idtemplate="92" idproperty="99" />
-  <template_def idtemplate="92" idproperty="100" />
-  <template_def idtemplate="92" idproperty="101" />
-  <template_def idtemplate="92" idproperty="102" />
-  <template_def idtemplate="92" idproperty="103" />
-  <template_def idtemplate="92" idproperty="104" />
-  <template_def idtemplate="92" idproperty="105" />
-  <template_def idtemplate="92" idproperty="106" />
-  <template_def idtemplate="92" idproperty="107" />
-  <template_def idtemplate="92" idproperty="108" />
-  <template_def idtemplate="92" idproperty="109" />
-  <template_def idtemplate="92" idproperty="110" />
-  <template_def idtemplate="92" idproperty="111" />
-  <template_def idtemplate="92" idproperty="112" />
-  <template_def idtemplate="92" idproperty="113" />
-  <template_def idtemplate="92" idproperty="114" />
-  <template_def idtemplate="92" idproperty="115" />
-  <template_def idtemplate="92" idproperty="116" />
-  <template_def idtemplate="92" idproperty="117" />
-  <template_def idtemplate="92" idproperty="118" />
-  <template_def idtemplate="92" idproperty="119" />
-  <template_def idtemplate="92" idproperty="120" />
-  <template_def idtemplate="92" idproperty="121" />
-  <template_def idtemplate="92" idproperty="122" />
-  <template_def idtemplate="92" idproperty="123" />
-  <template_def idtemplate="92" idproperty="124" />
-  <template_def idtemplate="92" idproperty="125" />
-  <template_def idtemplate="92" idproperty="126" />
-  <template_def idtemplate="92" idproperty="127" />
-  <template_def idtemplate="92" idproperty="128" />
-  <template_def idtemplate="92" idproperty="129" />
-  <template_def idtemplate="92" idproperty="130" />
-  <template_def idtemplate="92" idproperty="131" />
-  <template_def idtemplate="92" idproperty="132" />
-  <template_def idtemplate="92" idproperty="133" />
-  <template_def idtemplate="92" idproperty="134" />
-  <template_def idtemplate="92" idproperty="135" />
-  <template_def idtemplate="92" idproperty="136" />
-  <template_def idtemplate="92" idproperty="137" />
-  <template_def idtemplate="92" idproperty="138" />
-  <template_def idtemplate="92" idproperty="139" />
-  <template_def idtemplate="92" idproperty="140" />
-  <template_def idtemplate="92" idproperty="141" />
-  <template_def idtemplate="92" idproperty="142" />
-  <template_def idtemplate="92" idproperty="143" />
-  <template_def idtemplate="92" idproperty="144" />
-  <template_def idtemplate="92" idproperty="145" />
-  <template_def idtemplate="92" idproperty="146" />
-  <template_def idtemplate="92" idproperty="147" />
-  <template_def idtemplate="92" idproperty="148" />
-  <template_def idtemplate="92" idproperty="149" />
-  <template_def idtemplate="92" idproperty="150" />
-  <template_def idtemplate="92" idproperty="151" />
-  <template_def idtemplate="92" idproperty="152" />
-  <template_def idtemplate="92" idproperty="153" />
-  <template_def idtemplate="92" idproperty="154" />
-  <template_def idtemplate="92" idproperty="155" />
-  <template_def idtemplate="92" idproperty="156" />
-  <template_def idtemplate="92" idproperty="157" />
-  <template_def idtemplate="92" idproperty="158"/>
-  <template_def idtemplate="92" idproperty="159" />
-  <template_def idtemplate="92" idproperty="160" />
-  <template_def idtemplate="92" idproperty="161" />
-  <template_def idtemplate="92" idproperty="162" />
-  <template_def idtemplate="92" idproperty="163" />
-  <template_def idtemplate="92" idproperty="164" />
-  <template_def idtemplate="92" idproperty="165" />
-  <template_def idtemplate="92" idproperty="166" />
-  <template_def idtemplate="92" idproperty="167" />
-  <template_def idtemplate="92" idproperty="168" />
-  <template_def idtemplate="92" idproperty="169" />
-  <template_def idtemplate="92" idproperty="170" />
-  <template_def idtemplate="92" idproperty="171" />
-  <template_def idtemplate="92" idproperty="172" />
-  <template_def idtemplate="92" idproperty="173" />
-  <template_def idtemplate="92" idproperty="174" />
-  <template_def idtemplate="92" idproperty="175" />
-  <template_def idtemplate="92" idproperty="176" />
-  <template_def idtemplate="92" idproperty="177" />
-  <template_def idtemplate="92" idproperty="178" />
-  <template_def idtemplate="92" idproperty="179" />
-  <template_def idtemplate="92" idproperty="180" />
-  <template_def idtemplate="92" idproperty="181" />
-  <template_def idtemplate="92" idproperty="182" />
-  <template_def idtemplate="92" idproperty="183" />
-  <template_def idtemplate="92" idproperty="184" />
-  <template_def idtemplate="92" idproperty="185" />
-  <template_def idtemplate="92" idproperty="186" />
-  <template_def idtemplate="92" idproperty="187" />
-  <template_def idtemplate="92" idproperty="188" />
-  <template_def idtemplate="92" idproperty="189" />
-  <template_def idtemplate="92" idproperty="190" />
-  <template_def idtemplate="92" idproperty="191" />
-  <template_def idtemplate="92" idproperty="192" />
-  <template_def idtemplate="92" idproperty="193" />
-  <template_def idtemplate="92" idproperty="194" />
-  <dictionary idsubject="92" relationship="is_a" idobject="93"/>
-  
-  
-  <property_number idvalue="1" idtype="1" value="0.0"/>
-  <property_number idvalue="2" idtype="1" value="72.2"/>
-  
-  <property_string idvalue="1" idtype="0" value="due to insufficient / conflicting data"/>
-  <property_string idvalue="2" idtype="0" value="B&apos; RESULT  BASED ON MW &amp; SIZE"/>
-  <property_string idvalue="3" idtype="0" value="Octanol solub. (mg/L)"/>
-  <property_string idvalue="4" idtype="0" value="CRITERIA FULFILLED"/>
-  <property_string idvalue="5" idtype="0" value="MEASURED BMF VALUE"/>
-  <property_string idvalue="6" idtype="0" value="BIOACCUMULATION CHECK"/>
-  <property_string idvalue="7" idtype="0" value="P&apos; RESULT BASED  ON READ ACROSS"/>
-  <property_string idvalue="8" idtype="0" value="REACH PBT SCREENING TOOL FOR AMBIT XT (Vers. 1.00, 2009-02-04)"/>
-  <property_string idvalue="9" idtype="0" value="REMARK / REFERENCE"/>
-  <property_string idvalue="10" idtype="0" value="QSAR CRITERIA ACHIEVEMENT"/>
-  <property_string idvalue="11" idtype="0" value="TOXICITY CHECK"/>
-  <property_string idvalue="12" idtype="0" value="TEST RESULT L(E)C50 (mg/L)"/>
-  <property_string idvalue="13" idtype="0" value="OVERALL SCREENING RESULTS  "/>
-  <property_string idvalue="14" idtype="0" value="T&apos; CRITERIA  ASSOCIATED"/>
-  <property_string idvalue="15" idtype="0" value="B&apos; CRITERIA ASSOCIATED"/>
-  <property_string idvalue="16" idtype="0" value="B&apos; CRITIERIA ASSOCIATED"/>
-  <property_string idvalue="17" idtype="0" value="READY TESTS (Freshwater)"/>
-  <property_string idvalue="18" idtype="0" value="MEASURED BCF"/>
-  <property_string idvalue="19" idtype="0" value="© COPYRIGHT BY CLARIANT"/>
-  <property_string idvalue="20" idtype="0" value="T&apos; RESULT  BASED ON CBB"/>
-  <property_string idvalue="21" idtype="0" value="SECTION BIODEGRADATION"/>
-  <property_string idvalue="22" idtype="0" value="Data type"/>
-  <property_string idvalue="23" idtype="0" value="SCREENING RESULTS &amp; RECOMMENDATIONS"/>
-  <property_string idvalue="24" idtype="0" value="n.a"/>
-  <property_string idvalue="25" idtype="0" value="Mol weight (g/Mol):  "/>
-  <property_string idvalue="26" idtype="0" value="HALF-LIFE CRITERIA ACHIEVEMENT"/>
-  <property_string idvalue="27" idtype="0" value="INHERENT TESTS"/>
-  <property_string idvalue="28" idtype="0" value="Log Coct./Cwater VALUE"/>
-  <property_string idvalue="29" idtype="0" value="n.a."/>
-  <property_string idvalue="30" idtype="0" value="REDUCED  BIOACCUMULATION"/>
-  <property_string idvalue="31" idtype="0" value="B&apos; RESULT  BASED ON CBB"/>
-  <property_string idvalue="32" idtype="0" value="PERSISTENCY CHECK"/>
-  <property_string idvalue="33" idtype="0" value="Substance name:  "/>
-  <property_string idvalue="34" idtype="0" value="STRUCTURE"/>
-  <property_string idvalue="35" idtype="0" value="SECTION ECOTOXICITY BASED ON MEASURED DATA AND / OR QSAR ESTIMATES"/>
-  <property_string idvalue="36" idtype="0" value="REPORT REFERENCE"/>
-  <property_string idvalue="37" idtype="0" value="HYDROLYSIS"/>
-  <property_string idvalue="38" idtype="0" value="Critical Body Burden (CBB)  (mg/L)"/>
-  <property_string idvalue="39" idtype="0" value="ACUTE AQUATIC ECOTOXICITY"/>
-  <property_string idvalue="40" idtype="0" value="Criteria"/>
-  <property_string idvalue="41" idtype="0" value="SECTION ABIOTIC DEGRADATION"/>
-  <property_string idvalue="42" idtype="0" value="RESULT  FROM HYDROLYSIS"/>
-  <property_string idvalue="43" idtype="0" value="T&apos; RESULT  BASED ON ESTIMATE"/>
-  <property_string idvalue="44" idtype="0" value="MEASURED  Log Kow VALUE"/>
-  <property_string idvalue="45" idtype="0" value="OVERALL B Assessment Result"/>
-  <property_string idvalue="46" idtype="0" value="SECTION MEASURED OR ESTIMATED QUANTITATIVE BIOACCUMULATION"/>
-  <property_string idvalue="47" idtype="0" value="QSAR (Biodegradation)"/>
-  <property_string idvalue="48" idtype="0" value="MEASURED Log Kow "/>
-  <property_string idvalue="49" idtype="0" value="HALF-LIFE (d)"/>
-  <property_string idvalue="50" idtype="0" value="ESTIMATED EXPOSURE"/>
-  <property_string idvalue="51" idtype="0" value="T&apos; RESULT  BASED ON TEST"/>
-  <property_string idvalue="52" idtype="0" value="P&apos; RESULT  BASED ON TEST"/>
-  <property_string idvalue="53" idtype="0" value="B Assessment result"/>
-  <property_string idvalue="54" idtype="0" value="TEST  DURATION"/>
-  <property_string idvalue="55" idtype="0" value="TEST RESULT"/>
-  <property_string idvalue="56" idtype="0" value="&quot;P Assessment&quot; failed"/>
-  <property_string idvalue="57" idtype="0" value="B&apos; RESULT  BASED ON TEST"/>
-  <property_string idvalue="58" idtype="0" value="MEASURED BMF"/>
-  <property_string idvalue="59" idtype="0" value="T Assessment result"/>
-  <property_string idvalue="60" idtype="0" value="TEST DURATION"/>
-  <property_string idvalue="61" idtype="0" value="Is calculated if data available (see SUBSTANCE Worksheet)"/>
-  <property_string idvalue="62" idtype="0" value="SECTION HUMAN HEALTH TOXICITY"/>
-  <property_string idvalue="63" idtype="0" value="B&apos; RESULT  BASED ON HH Studies"/>
-  <property_string idvalue="64" idtype="0" value="CHRONIC AQUATIC ECOTOXICITY QSAR or READ ACROSS"/>
-  <property_string idvalue="65" idtype="0" value="Bioaccumulation data from Mammalian studies"/>
-  <property_string idvalue="66" idtype="0" value="Check appropriate studies"/>
-  <property_string idvalue="67" idtype="0" value="QSAR (Log Kow)"/>
-  <property_string idvalue="68" idtype="0" value="Molecular size Dmax (Angstrom)"/>
-  <property_string idvalue="69" idtype="0" value="SIMULATION TESTS"/>
-  <property_string idvalue="70" idtype="0" value="start an RESET INPUT MACRO pressing SHIFT+CTRL+C"/>
-  <property_string idvalue="71" idtype="0" value="TEST RESULT NOEC (mg/L)"/>
-  <property_string idvalue="72" idtype="0" value="COMPARTMENT"/>
-  <property_string idvalue="73" idtype="0" value="Molecular size &amp; MW Criteria"/>
-  <property_string idvalue="74" idtype="0" value="READ ACROSS BIODEGRADATION CAS NO. / NAME OF READ ACROSS SUBSTANCE "/>
-  <property_string idvalue="75" idtype="0" value="In order to CLEAR ALL PREVIOUS INPUT DATA in pale yellow data input cells "/>
-  <property_string idvalue="76" idtype="0" value="P&apos; RESULT  BASED ON QSAR"/>
-  <property_string idvalue="77" idtype="0" value="OVERALL P Assessment Result"/>
-  <property_string idvalue="78" idtype="0" value="Coctanol &lt; CBB"/>
-  <property_string idvalue="79" idtype="0" value="&quot;T Assessment&quot; failed"/>
-  <property_string idvalue="80" idtype="0" value="Below error messages are given for Cells B12 to B15 if text or negative input was inserted"/>
-  <property_string idvalue="81" idtype="0" value="Clariant Divisional  Substance Code"/>
-  <property_string idvalue="82" idtype="0" value="classified carcinogenic (cat. 1 or 2), mutagenic (Cat. 1 or 2) or toxic for reproducti. (Cat. 1, 2 or 3) "/>
-  <property_string idvalue="83" idtype="0" value="RESULT FROM READ ACROSS"/>
-  <property_string idvalue="84" idtype="0" value="Mode of Action"/>
-  <property_string idvalue="85" idtype="0" value="ESTIMATE NOEC (mg/L)"/>
-  <property_string idvalue="86" idtype="0" value="SECTION QUALITATIVE INDICATORS FOR TOXICITY"/>
-  <property_string idvalue="87" idtype="0" value="RESET INPUT DATA"/>
-  <property_string idvalue="88" idtype="0" value="TEST CRITERIA ACHIEVEMENT"/>
-  <property_string idvalue="89" idtype="0" value="Distribution to third parties requires agreement by Clariant"/>
-  <property_string idvalue="90" idtype="0" value="&quot;B Assessment&quot; failed"/>
-  <property_string idvalue="91" idtype="0" value="LIMITED TOXICITY"/>
-  <property_string idvalue="92" idtype="0" value="CHRONIC AQUATIC ECOTOXICITY"/>
-  <property_string idvalue="93" idtype="0" value="ESTIMATE L(E)C50 (mg/L)"/>
-  <property_string idvalue="94" idtype="0" value="MEASURED Log Coctanol/Cwater"/>
-  <property_string idvalue="95" idtype="0" value="HUMAN TOXICITY CRITERIA SUBSTANCE IS"/>
-  <property_string idvalue="96" idtype="0" value="SUBSTANCE REMARK"/>
-  <property_string idvalue="97" idtype="0" value="Limited  or NO Uptake observed"/>
-  <property_string idvalue="98" idtype="0" value="Octanol solubility (mg/L)"/>
-  <property_string idvalue="99" idtype="0" value="P Assessment result"/>
-  <property_string idvalue="100" idtype="0" value="RESULT"/>
-  <property_string idvalue="101" idtype="0" value="Water solubility (mg/L)"/>
-  <property_string idvalue="102" idtype="0" value="Clariant  Company &amp; Division"/>
-  <property_string idvalue="103" idtype="0" value="SUBSTANCE DATA"/>
-  <property_string idvalue="104" idtype="0" value="CAS No.:  "/>
-  <property_string idvalue="105" idtype="0" value="Complete data in section where assessment failed and/or contact expert"/>
-  <property_string idvalue="106" idtype="0" value="DISTRIBUTION RIGHTS"/>
-  <property_string idvalue="107" idtype="0" value="MEASURED BCF VALUE"/>
-  <property_string idvalue="108" idtype="0" value="REMARK(s) RELATED TO RESULT(s) "/>
-  <property_string idvalue="109" idtype="0" value="DISCLAIMER"/>
-  <property_string idvalue="110" idtype="0" value="READY TESTS (Seawater)"/>
-  <property_string idvalue="111" idtype="0" value="Use of this tool is on your own risk, Clariant does not accept any liability on use, outcome or conclusion drawn"/>
-  <property_string idvalue="112" idtype="0" value="OVERALL  T Assessment Result"/>
-  <property_string idvalue="113" idtype="0" value="REACH Range:  "/>
-  <property_string idvalue="114" idtype="0" value="R PHRASES MEETING CRITERIA"/>
-  <property_string idvalue="115" idtype="0" value="ACUTE AQUATIC ECOTOXICITY QSAR or READ ACROSS"/>
-  <property_string idvalue="116" idtype="0" value="PBT &amp; vPvB Assessment failed"/>
-  <property_string idvalue="117" idtype="0" value="T&apos; CRITERIA ASSOCIATED"/>
-  <property_string idvalue="118" idtype="0" value="RECOMMENDATION related to PBT &amp; vPvB"/>
-  <property_string idvalue="119" idtype="0" value="T&apos; RESULT  BASED ON R PHRASE(S)"/>
-  <property_string idvalue="120" idtype="0" value="CALCULATED Log Kow"/>
+  <catalog_references idreference="3" title="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02" url="by Clariant"/>
+  <catalog_references idreference="4" title="Default property reference" url="http://ambit.sourceforge.net"/>
+  <chemicals idchemical="1" smiles="c1ccccc1" formula="C6" hashcode="-3676696093352162140" label="UNKNOWN"/>
+  <structure idstructure="1" idchemical="1" structure="gQIAAHic41JQcHbxVgACU31jQ30DSx1DEysTCy4uBQUzMDLAiiwtLRXCjAwMDLhAWg30gCwDrCxn
+BVxGICPeUWPoYYyhgoIRmESSAYkDBY3BJJo4UNAEm3qgoCk29abgFIOp3gxmNYq4r4KCq58LAPvt
+YBo=" format="SDF" updated="2009-05-31 14:48:34.0" user_name="guest" type_structure="NA"/>
+  <properties idproperty="1" idreference="4" name="Bioaccumulation_F12" units="" comments="Bioaccumulation_F12" islocal="false"/>
+  <properties idproperty="2" idreference="4" name="Toxicity_F10" units="" comments="Toxicity_F10" islocal="false"/>
+  <properties idproperty="3" idreference="4" name="Persistence_F8" units="" comments="Persistence_F8" islocal="false"/>
+  <properties idproperty="4" idreference="4" name="SUBSTANCE_B11" units="" comments="SUBSTANCE_B11" islocal="false"/>
+  <properties idproperty="5" idreference="4" name="Bioaccumulation_C6" units="" comments="Bioaccumulation_C6" islocal="false"/>
+  <properties idproperty="6" idreference="4" name="Persistence_F19" units="" comments="Persistence_F19" islocal="false"/>
+  <properties idproperty="7" idreference="4" name="Persistence_A12" units="" comments="Persistence_A12" islocal="false"/>
+  <properties idproperty="8" idreference="4" name="Bioaccumulation_B6" units="" comments="Bioaccumulation_B6" islocal="false"/>
+  <properties idproperty="9" idreference="4" name="Bioaccumulation_C21" units="" comments="Bioaccumulation_C21" islocal="false"/>
+  <properties idproperty="10" idreference="4" name="Persistence_B12" units="" comments="Persistence_B12" islocal="false"/>
+  <properties idproperty="11" idreference="4" name="Bioaccumulation_A6" units="" comments="Bioaccumulation_A6" islocal="false"/>
+  <properties idproperty="12" idreference="4" name="Persistence_C12" units="" comments="Persistence_C12" islocal="false"/>
+  <properties idproperty="13" idreference="4" name="Persistence_C8" units="" comments="Persistence_C8" islocal="false"/>
+  <properties idproperty="14" idreference="4" name="Toxicity_C15" units="" comments="Toxicity_C15" islocal="false"/>
+  <properties idproperty="15" idreference="4" name="Toxicity_F8" units="" comments="Toxicity_F8" islocal="false"/>
+  <properties idproperty="16" idreference="4" name="Bioaccumulation_F21" units="" comments="Bioaccumulation_F21" islocal="false"/>
+  <properties idproperty="17" idreference="4" name="Persistence_B8" units="" comments="Persistence_B8" islocal="false"/>
+  <properties idproperty="18" idreference="4" name="Persistence_A8" units="" comments="Persistence_A8" islocal="false"/>
+  <properties idproperty="19" idreference="4" name="Persistence_F12" units="" comments="Persistence_F12" islocal="false"/>
+  <properties idproperty="20" idreference="4" name="SUBSTANCE_B10" units="" comments="SUBSTANCE_B10" islocal="false"/>
+  <properties idproperty="21" idreference="4" name="Bioaccumulation_F17" units="" comments="Bioaccumulation_F17" islocal="false"/>
+  <properties idproperty="22" idreference="4" name="Bioaccumulation_A10" units="" comments="Bioaccumulation_A10" islocal="false"/>
+  <properties idproperty="23" idreference="4" name="Toxicity_F15" units="" comments="Toxicity_F15" islocal="false"/>
+  <properties idproperty="24" idreference="4" name="SUBSTANCE_B16" units="" comments="SUBSTANCE_B16" islocal="false"/>
+  <properties idproperty="25" idreference="4" name="Toxicity_C8" units="" comments="Toxicity_C8" islocal="false"/>
+  <properties idproperty="26" idreference="4" name="Toxicity_B8" units="" comments="Toxicity_B8" islocal="false"/>
+  <properties idproperty="27" idreference="4" name="Bioaccumulation_C10" units="" comments="Bioaccumulation_C10" islocal="false"/>
+  <properties idproperty="28" idreference="4" name="Toxicity_A8" units="" comments="Toxicity_A8" islocal="false"/>
+  <properties idproperty="29" idreference="4" name="Bioaccumulation_F10" units="" comments="Bioaccumulation_F10" islocal="false"/>
+  <properties idproperty="30" idreference="4" name="Persistence_F6" units="" comments="Persistence_F6" islocal="false"/>
+  <properties idproperty="31" idreference="4" name="Persistence_A10" units="" comments="Persistence_A10" islocal="false"/>
+  <properties idproperty="32" idreference="4" name="SUBSTANCE_B15" units="" comments="SUBSTANCE_B15" islocal="false"/>
+  <properties idproperty="33" idreference="4" name="Persistence_B10" units="" comments="Persistence_B10" islocal="false"/>
+  <properties idproperty="34" idreference="4" name="Persistence_A16" units="" comments="Persistence_A16" islocal="false"/>
+  <properties idproperty="35" idreference="4" name="Persistence_C10" units="" comments="Persistence_C10" islocal="false"/>
+  <properties idproperty="36" idreference="4" name="Persistence_C6" units="" comments="Persistence_C6" islocal="false"/>
+  <properties idproperty="37" idreference="4" name="Toxicity_F6" units="" comments="Toxicity_F6" islocal="false"/>
+  <properties idproperty="38" idreference="4" name="Persistence_B6" units="" comments="Persistence_B6" islocal="false"/>
+  <properties idproperty="39" idreference="4" name="Persistence_D16" units="" comments="Persistence_D16" islocal="false"/>
+  <properties idproperty="40" idreference="4" name="Persistence_A6" units="" comments="Persistence_A6" islocal="false"/>
+  <properties idproperty="41" idreference="4" name="Persistence_F10" units="" comments="Persistence_F10" islocal="false"/>
+  <properties idproperty="42" idreference="4" name="Persistence_F16" units="" comments="Persistence_F16" islocal="false"/>
+  <properties idproperty="43" idreference="4" name="SUBSTANCE_B14" units="" comments="SUBSTANCE_B14" islocal="false"/>
+  <properties idproperty="44" idreference="4" name="Toxicity_C6" units="" comments="Toxicity_C6" islocal="false"/>
+  <properties idproperty="45" idreference="4" name="Bioaccumulation_A14" units="" comments="Bioaccumulation_A14" islocal="false"/>
+  <properties idproperty="46" idreference="4" name="Toxicity_A12" units="" comments="Toxicity_A12" islocal="false"/>
+  <properties idproperty="47" idreference="4" name="RESULT_C13" units="" comments="RESULT_C13" islocal="false"/>
+  <properties idproperty="48" idreference="4" name="Toxicity_B6" units="" comments="Toxicity_B6" islocal="false"/>
+  <properties idproperty="49" idreference="4" name="Toxicity_B12" units="" comments="Toxicity_B12" islocal="false"/>
+  <properties idproperty="50" idreference="4" name="Bioaccumulation_F8" units="" comments="Bioaccumulation_F8" islocal="false"/>
+  <properties idproperty="51" idreference="4" name="Toxicity_A6" units="" comments="Toxicity_A6" islocal="false"/>
+  <properties idproperty="52" idreference="4" name="Bioaccumulation_C14" units="" comments="Bioaccumulation_C14" islocal="false"/>
+  <properties idproperty="53" idreference="4" name="Toxicity_C12" units="" comments="Toxicity_C12" islocal="false"/>
+  <properties idproperty="54" idreference="4" name="Bioaccumulation_F14" units="" comments="Bioaccumulation_F14" islocal="false"/>
+  <properties idproperty="55" idreference="4" name="Toxicity_F12" units="" comments="Toxicity_F12" islocal="false"/>
+  <properties idproperty="56" idreference="4" name="SUBSTANCE_B13" units="" comments="SUBSTANCE_B13" islocal="false"/>
+  <properties idproperty="57" idreference="4" name="Bioaccumulation_C8" units="" comments="Bioaccumulation_C8" islocal="false"/>
+  <properties idproperty="58" idreference="4" name="Toxicity_F18" units="" comments="Toxicity_F18" islocal="false"/>
+  <properties idproperty="59" idreference="4" name="Persistence_A14" units="" comments="Persistence_A14" islocal="false"/>
+  <properties idproperty="60" idreference="4" name="SUBSTANCE_B19" units="" comments="SUBSTANCE_B19" islocal="false"/>
+  <properties idproperty="61" idreference="4" name="Bioaccumulation_B8" units="" comments="Bioaccumulation_B8" islocal="false"/>
+  <properties idproperty="62" idreference="4" name="Bioaccumulation_A8" units="" comments="Bioaccumulation_A8" islocal="false"/>
+  <properties idproperty="63" idreference="4" name="Persistence_C14" units="" comments="Persistence_C14" islocal="false"/>
+  <properties idproperty="64" idreference="4" name="Persistence_F14" units="" comments="Persistence_F14" islocal="false"/>
+  <properties idproperty="65" idreference="4" name="SUBSTANCE_B12" units="" comments="SUBSTANCE_B12" islocal="false"/>
+  <properties idproperty="66" idreference="4" name="Bioaccumulation_F19" units="" comments="Bioaccumulation_F19" islocal="false"/>
+  <properties idproperty="67" idreference="4" name="Toxicity_A10" units="" comments="Toxicity_A10" islocal="false"/>
+  <properties idproperty="68" idreference="4" name="Toxicity_B10" units="" comments="Toxicity_B10" islocal="false"/>
+  <properties idproperty="69" idreference="4" name="Persistence_A19" units="" comments="Persistence_A19" islocal="false"/>
+  <properties idproperty="70" idreference="4" name="Bioaccumulation_F6" units="" comments="Bioaccumulation_F6" islocal="false"/>
+  <properties idproperty="71" idreference="4" name="Toxicity_C10" units="" comments="Toxicity_C10" islocal="false"/>
+  <properties idproperty="72" idreference="4" name="Persistence_C19" units="" comments="Persistence_C19" islocal="false"/>
 
-  <src_dataset id_srcdataset="1" name="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.0.0" user_name="guest" idreference="3"/>
-  <tuples idtuple="1" id_srcdataset="1"/>  
-  <property_values id="1" idproperty="1" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="2" idproperty="2" idstructure="1" idvalue="2" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="3" idproperty="3" idstructure="1" idvalue="3" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="4" idproperty="4" idstructure="1" idvalue="4" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="5" idproperty="5" idstructure="1" idvalue="5" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="6" idproperty="6" idstructure="1" idvalue="6" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="7" idproperty="7" idstructure="1" idvalue="7" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="8" idproperty="8" idstructure="1" idvalue="8" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="9" idproperty="9" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="10" idproperty="10" idstructure="1" idvalue="10" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="11" idproperty="11" idstructure="1" idvalue="11" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="12" idproperty="12" idstructure="1" idvalue="12" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="13" idproperty="13" idstructure="1" idvalue="13" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="14" idproperty="14" idstructure="1" idvalue="14" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="15" idproperty="15" idstructure="1" idvalue="15" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="16" idproperty="16" idstructure="1" idvalue="16" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="17" idproperty="17" idstructure="1" idvalue="17" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="18" idproperty="18" idstructure="1" idvalue="18" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="19" idproperty="19" idstructure="1" idvalue="19" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="20" idproperty="20" idstructure="1" idvalue="20" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="21" idproperty="21" idstructure="1" idvalue="21" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="22" idproperty="22" idstructure="1" idvalue="22" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="23" idproperty="23" idstructure="1" idvalue="19" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="24" idproperty="24" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="25" idproperty="25" idstructure="1" idvalue="23" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="26" idproperty="26" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="27" idproperty="27" idstructure="1" idvalue="24" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="28" idproperty="28" idstructure="1" idvalue="19" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="29" idproperty="29" idstructure="1" idvalue="25" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="30" idproperty="30" idstructure="1" idvalue="26" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="31" idproperty="31" idstructure="1" idvalue="8" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="32" idproperty="32" idstructure="1" idvalue="27" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="33" idproperty="33" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="34" idproperty="34" idstructure="1" idvalue="28" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="35" idproperty="35" idstructure="1" idvalue="29" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="36" idproperty="36" idstructure="1" idvalue="30" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="37" idproperty="37" idstructure="1" idvalue="31" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="38" idproperty="38" idstructure="1" idvalue="32" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="39" idproperty="39" idstructure="1" idvalue="33" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="40" idproperty="40" idstructure="1" idvalue="3" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="41" idproperty="41" idstructure="1" idvalue="29" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="42" idproperty="42" idstructure="1" idvalue="34" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="43" idproperty="43" idstructure="1" idvalue="35" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="44" idproperty="44" idstructure="1" idvalue="36" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="45" idproperty="45" idstructure="1" idvalue="37" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="46" idproperty="46" idstructure="1" idvalue="38" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="47" idproperty="47" idstructure="1" idvalue="39" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="48" idproperty="48" idstructure="1" idvalue="40" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="49" idproperty="49" idstructure="1" idvalue="41" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="50" idproperty="50" idstructure="1" idvalue="42" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="51" idproperty="51" idstructure="1" idvalue="43" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="52" idproperty="52" idstructure="1" idvalue="30" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="53" idproperty="53" idstructure="1" idvalue="44" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="54" idproperty="54" idstructure="1" idvalue="1" idtype="1" status="OK" user_name="guest"/>
-  <property_values id="55" idproperty="55" idstructure="1" idvalue="45" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="56" idproperty="56" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="57" idproperty="57" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="58" idproperty="58" idstructure="1" idvalue="46" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="59" idproperty="59" idstructure="1" idvalue="47" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="60" idproperty="60" idstructure="1" idvalue="48" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="61" idproperty="61" idstructure="1" idvalue="49" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="62" idproperty="62" idstructure="1" idvalue="50" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="63" idproperty="63" idstructure="1" idvalue="51" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="64" idproperty="64" idstructure="1" idvalue="51" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="65" idproperty="65" idstructure="1" idvalue="52" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="66" idproperty="66" idstructure="1" idvalue="53" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="67" idproperty="67" idstructure="1" idvalue="22" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="68" idproperty="68" idstructure="1" idvalue="54" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="69" idproperty="69" idstructure="1" idvalue="55" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="70" idproperty="70" idstructure="1" idvalue="56" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="71" idproperty="71" idstructure="1" idvalue="57" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="72" idproperty="72" idstructure="1" idvalue="58" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="73" idproperty="73" idstructure="1" idvalue="59" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="74" idproperty="74" idstructure="1" idvalue="60" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="75" idproperty="75" idstructure="1" idvalue="61" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="76" idproperty="76" idstructure="1" idvalue="62" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="77" idproperty="77" idstructure="1" idvalue="60" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="78" idproperty="78" idstructure="1" idvalue="63" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="79" idproperty="79" idstructure="1" idvalue="64" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="80" idproperty="80" idstructure="1" idvalue="8" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="81" idproperty="81" idstructure="1" idvalue="8" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="82" idproperty="82" idstructure="1" idvalue="65" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="83" idproperty="83" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="84" idproperty="84" idstructure="1" idvalue="57" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="85" idproperty="85" idstructure="1" idvalue="16" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="86" idproperty="86" idstructure="1" idvalue="66" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="87" idproperty="87" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="88" idproperty="88" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="89" idproperty="89" idstructure="1" idvalue="67" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="90" idproperty="90" idstructure="1" idvalue="55" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="91" idproperty="91" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="92" idproperty="92" idstructure="1" idvalue="55" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="93" idproperty="93" idstructure="1" idvalue="19" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="94" idproperty="94" idstructure="1" idvalue="68" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="95" idproperty="95" idstructure="1" idvalue="69" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="96" idproperty="96" idstructure="1" idvalue="19" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="97" idproperty="97" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="98" idproperty="98" idstructure="1" idvalue="70" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="99" idproperty="99" idstructure="1" idvalue="71" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="100" idproperty="100" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="101" idproperty="101" idstructure="1" idvalue="29" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="102" idproperty="102" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="103" idproperty="103" idstructure="1" idvalue="72" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="104" idproperty="104" idstructure="1" idvalue="73" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="105" idproperty="105" idstructure="1" idvalue="74" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="106" idproperty="106" idstructure="1" idvalue="75" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="107" idproperty="107" idstructure="1" idvalue="76" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="108" idproperty="108" idstructure="1" idvalue="52" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="109" idproperty="109" idstructure="1" idvalue="77" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="110" idproperty="110" idstructure="1" idvalue="78" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="111" idproperty="111" idstructure="1" idvalue="29" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="112" idproperty="112" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="113" idproperty="113" idstructure="1" idvalue="79" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="114" idproperty="114" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="115" idproperty="115" idstructure="1" idvalue="80" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="116" idproperty="116" idstructure="1" idvalue="81" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="117" idproperty="117" idstructure="1" idvalue="82" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="118" idproperty="118" idstructure="1" idvalue="83" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="119" idproperty="119" idstructure="1" idvalue="84" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="120" idproperty="120" idstructure="1" idvalue="85" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="121" idproperty="121" idstructure="1" idvalue="86" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="122" idproperty="122" idstructure="1" idvalue="87" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="123" idproperty="123" idstructure="1" idvalue="52" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="124" idproperty="124" idstructure="1" idvalue="60" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="125" idproperty="125" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="126" idproperty="126" idstructure="1" idvalue="15" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="127" idproperty="127" idstructure="1" idvalue="88" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="128" idproperty="128" idstructure="1" idvalue="56" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="129" idproperty="129" idstructure="1" idvalue="89" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="130" idproperty="130" idstructure="1" idvalue="90" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="131" idproperty="131" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="132" idproperty="132" idstructure="1" idvalue="61" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="133" idproperty="133" idstructure="1" idvalue="54" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="134" idproperty="134" idstructure="1" idvalue="91" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="135" idproperty="135" idstructure="1" idvalue="92" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="136" idproperty="136" idstructure="1" idvalue="93" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="137" idproperty="137" idstructure="1" idvalue="94" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="138" idproperty="138" idstructure="1" idvalue="95" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="139" idproperty="139" idstructure="1" idvalue="96" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="140" idproperty="140" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="141" idproperty="141" idstructure="1" idvalue="97" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="142" idproperty="142" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="143" idproperty="143" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="144" idproperty="144" idstructure="1" idvalue="60" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="145" idproperty="145" idstructure="1" idvalue="15" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="146" idproperty="146" idstructure="1" idvalue="98" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="147" idproperty="147" idstructure="1" idvalue="99" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="148" idproperty="148" idstructure="1" idvalue="100" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="149" idproperty="149" idstructure="1" idvalue="101" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="150" idproperty="150" idstructure="1" idvalue="102" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="151" idproperty="151" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="152" idproperty="152" idstructure="1" idvalue="8" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="153" idproperty="153" idstructure="1" idvalue="103" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="154" idproperty="154" idstructure="1" idvalue="104" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="155" idproperty="155" idstructure="1" idvalue="105" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="156" idproperty="156" idstructure="1" idvalue="57" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="157" idproperty="157" idstructure="1" idvalue="78" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="158" idproperty="158" idstructure="1" idvalue="106" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="159" idproperty="159" idstructure="1" idvalue="30" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="160" idproperty="160" idstructure="1" idvalue="52" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="161" idproperty="161" idstructure="1" idvalue="88" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="162" idproperty="162" idstructure="1" idvalue="57" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="163" idproperty="163" idstructure="1" idvalue="107" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="164" idproperty="164" idstructure="1" idvalue="108" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="165" idproperty="165" idstructure="1" idvalue="109" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="166" idproperty="166" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="167" idproperty="167" idstructure="1" idvalue="57" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="168" idproperty="168" idstructure="1" idvalue="110" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="169" idproperty="169" idstructure="1" idvalue="111" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="170" idproperty="170" idstructure="1" idvalue="112" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="171" idproperty="171" idstructure="1" idvalue="113" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="172" idproperty="172" idstructure="1" idvalue="55" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="173" idproperty="173" idstructure="1" idvalue="1" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="174" idproperty="174" idstructure="1" idvalue="114" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="175" idproperty="175" idstructure="1" idvalue="115" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="176" idproperty="176" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="177" idproperty="177" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="178" idproperty="178" idstructure="1" idvalue="90" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="179" idproperty="179" idstructure="1" idvalue="14" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="180" idproperty="180" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="181" idproperty="181" idstructure="1" idvalue="52" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="182" idproperty="182" idstructure="1" idvalue="116" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="183" idproperty="183" idstructure="1" idvalue="54" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="184" idproperty="184" idstructure="1" idvalue="117" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="185" idproperty="185" idstructure="1" idvalue="118" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="186" idproperty="186" idstructure="1" idvalue="9" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="187" idproperty="187" idstructure="1" idvalue="88" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="188" idproperty="188" idstructure="1" idvalue="38" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="189" idproperty="189" idstructure="1" idvalue="14" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="190" idproperty="190" idstructure="1" idvalue="79" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="191" idproperty="191" idstructure="1" idvalue="119" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="192" idproperty="192" idstructure="1" idvalue="120" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="193" idproperty="193" idstructure="1" idvalue="43" idtype="0" status="OK" user_name="guest"/>
-  <property_values id="194" idproperty="194" idstructure="1" idvalue="2" idtype="1" status="OK" user_name="guest"/>
-  
+  <template idtemplate="94" name="Dataset"/>
+  <template idtemplate="85" name="Endpoints"/>
+  <template idtemplate="93" name="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02"/>
+  <template idtemplate="84"/>  
+  <template_def idtemplate="93" idproperty="1"/>
+  <template_def idtemplate="93" idproperty="2"/>
+  <template_def idtemplate="93" idproperty="3"/>
+  <template_def idtemplate="93" idproperty="4"/>
+  <template_def idtemplate="93" idproperty="5"/>
+  <template_def idtemplate="93" idproperty="6"/>
+  <template_def idtemplate="93" idproperty="7"/>
+  <template_def idtemplate="93" idproperty="8"/>
+  <template_def idtemplate="93" idproperty="9"/>
+  <template_def idtemplate="93" idproperty="10"/>
+  <template_def idtemplate="93" idproperty="11"/>
+  <template_def idtemplate="93" idproperty="12"/>
+  <template_def idtemplate="93" idproperty="13"/>
+  <template_def idtemplate="93" idproperty="14"/>
+  <template_def idtemplate="93" idproperty="15"/>
+  <template_def idtemplate="93" idproperty="16"/>
+  <template_def idtemplate="93" idproperty="17"/>
+  <template_def idtemplate="93" idproperty="18"/>
+  <template_def idtemplate="93" idproperty="19"/>
+  <template_def idtemplate="93" idproperty="20"/>
+  <template_def idtemplate="93" idproperty="21"/>
+  <template_def idtemplate="93" idproperty="22"/>
+  <template_def idtemplate="93" idproperty="23"/>
+  <template_def idtemplate="93" idproperty="24"/>
+  <template_def idtemplate="93" idproperty="25"/>
+  <template_def idtemplate="93" idproperty="26"/>
+  <template_def idtemplate="93" idproperty="27"/>
+  <template_def idtemplate="93" idproperty="28"/>
+  <template_def idtemplate="93" idproperty="29"/>
+  <template_def idtemplate="93" idproperty="30"/>
+  <template_def idtemplate="93" idproperty="31"/>
+  <template_def idtemplate="93" idproperty="32"/>
+  <template_def idtemplate="93" idproperty="33"/>
+  <template_def idtemplate="93" idproperty="34"/>
+  <template_def idtemplate="93" idproperty="35"/>
+  <template_def idtemplate="93" idproperty="36"/>
+  <template_def idtemplate="93" idproperty="37"/>
+  <template_def idtemplate="93" idproperty="38"/>
+  <template_def idtemplate="93" idproperty="39"/>
+  <template_def idtemplate="93" idproperty="40"/>
+  <template_def idtemplate="93" idproperty="41"/>
+  <template_def idtemplate="93" idproperty="42"/>
+  <template_def idtemplate="93" idproperty="43"/>
+  <template_def idtemplate="93" idproperty="44"/>
+  <template_def idtemplate="93" idproperty="45"/>
+  <template_def idtemplate="93" idproperty="46"/>
+  <template_def idtemplate="93" idproperty="47"/>
+  <template_def idtemplate="93" idproperty="48"/>
+  <template_def idtemplate="93" idproperty="49"/>
+  <template_def idtemplate="93" idproperty="50"/>
+  <template_def idtemplate="93" idproperty="51"/>
+  <template_def idtemplate="93" idproperty="52"/>
+  <template_def idtemplate="93" idproperty="53"/>
+  <template_def idtemplate="93" idproperty="54"/>
+  <template_def idtemplate="93" idproperty="55"/>
+  <template_def idtemplate="93" idproperty="56"/>
+  <template_def idtemplate="93" idproperty="57"/>
+  <template_def idtemplate="93" idproperty="58"/>
+  <template_def idtemplate="93" idproperty="59"/>
+  <template_def idtemplate="93" idproperty="60"/>
+  <template_def idtemplate="93" idproperty="61"/>
+  <template_def idtemplate="93" idproperty="62"/>
+  <template_def idtemplate="93" idproperty="63"/>
+  <template_def idtemplate="93" idproperty="64"/>
+  <template_def idtemplate="93" idproperty="65"/>
+  <template_def idtemplate="93" idproperty="66"/>
+  <template_def idtemplate="93" idproperty="67"/>
+  <template_def idtemplate="93" idproperty="68"/>
+  <template_def idtemplate="93" idproperty="69"/>
+  <template_def idtemplate="93" idproperty="70"/>
+  <template_def idtemplate="93" idproperty="71"/>
+  <template_def idtemplate="93" idproperty="72"/>
+  <dictionary idsubject="93" relationship="is_a" idobject="94"/>
+  <src_dataset id_srcdataset="1" name="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02" user_name="guest" idreference="3" created="2009-05-31 14:48:34.0"/>
+  <tuples idtuple="1" id_srcdataset="1"/>
+  <property_number idvalue="1" idtype="1" value="100.0"/>
+  <property_number idvalue="2" idtype="1" value="72.2"/>
+  <property_string idvalue="1" idtype="0" value=""/>
+  <property_string idvalue="2" idtype="0" value="NaN"/>
+  <property_string idvalue="3" idtype="0" value="Benzene"/>
+  <property_int/>
+  <property_values id="1" idproperty="1" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="2" idproperty="2" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="3" idproperty="3" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="4" idproperty="4" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="5" idproperty="5" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="6" idproperty="6" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="7" idproperty="7" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="8" idproperty="8" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="9" idproperty="9" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="10" idproperty="10" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="11" idproperty="11" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="12" idproperty="12" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="13" idproperty="13" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="14" idproperty="14" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="15" idproperty="15" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="16" idproperty="16" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="17" idproperty="17" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="18" idproperty="18" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="19" idproperty="19" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="20" idproperty="20" idstructure="1" idvalue="3" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="21" idproperty="21" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="22" idproperty="22" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="23" idproperty="23" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="24" idproperty="24" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="25" idproperty="25" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="26" idproperty="26" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="27" idproperty="27" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="28" idproperty="28" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="29" idproperty="29" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="30" idproperty="30" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="31" idproperty="31" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="32" idproperty="32" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="33" idproperty="33" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="34" idproperty="34" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="35" idproperty="35" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="36" idproperty="36" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="37" idproperty="37" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="38" idproperty="38" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="39" idproperty="39" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="40" idproperty="40" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="41" idproperty="41" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="42" idproperty="42" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="43" idproperty="43" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="44" idproperty="44" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="45" idproperty="45" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="46" idproperty="46" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="47" idproperty="47" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="48" idproperty="48" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="49" idproperty="49" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="50" idproperty="50" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="51" idproperty="51" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="52" idproperty="52" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="53" idproperty="53" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="54" idproperty="54" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="55" idproperty="55" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="56" idproperty="56" idstructure="1" idvalue="1" idtype="1" status="UNKNOWN" user_name="guest"/>
+  <property_values id="57" idproperty="57" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="58" idproperty="58" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="59" idproperty="59" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="60" idproperty="60" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="61" idproperty="61" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="62" idproperty="62" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="63" idproperty="63" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="64" idproperty="64" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="65" idproperty="65" idstructure="1" idvalue="2" idtype="1" status="UNKNOWN" user_name="guest"/>
+  <property_values id="66" idproperty="66" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="67" idproperty="67" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="68" idproperty="68" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="69" idproperty="69" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="70" idproperty="70" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
+  <property_values id="71" idproperty="71" idstructure="1" idvalue="2" idtype="0" status="ERROR" user_name="guest"/>
+  <property_values id="72" idproperty="72" idstructure="1" idvalue="1" idtype="0" status="UNKNOWN" user_name="guest"/>
   <property_tuples idtuple="1" id="1"/>
   <property_tuples idtuple="1" id="2"/>
   <property_tuples idtuple="1" id="3"/>
@@ -842,129 +312,10 @@ xGvCfwOM4/Wh" format="SDF" updated="2009-02-28 16:47:06.0" user_name="guest" typ
   <property_tuples idtuple="1" id="70"/>
   <property_tuples idtuple="1" id="71"/>
   <property_tuples idtuple="1" id="72"/>
-  <property_tuples idtuple="1" id="73"/>
-  <property_tuples idtuple="1" id="74"/>
-  <property_tuples idtuple="1" id="75"/>
-  <property_tuples idtuple="1" id="76"/>
-  <property_tuples idtuple="1" id="77"/>
-  <property_tuples idtuple="1" id="78"/>
-  <property_tuples idtuple="1" id="79"/>
-  <property_tuples idtuple="1" id="80"/>
-  <property_tuples idtuple="1" id="81"/>
-  <property_tuples idtuple="1" id="82"/>
-  <property_tuples idtuple="1" id="83"/>
-  <property_tuples idtuple="1" id="84"/>
-  <property_tuples idtuple="1" id="85"/>
-  <property_tuples idtuple="1" id="86"/>
-  <property_tuples idtuple="1" id="87"/>
-  <property_tuples idtuple="1" id="88"/>
-  <property_tuples idtuple="1" id="89"/>
-  <property_tuples idtuple="1" id="90"/>
-  <property_tuples idtuple="1" id="91"/>
-  <property_tuples idtuple="1" id="92"/>
-  <property_tuples idtuple="1" id="93"/>
-  <property_tuples idtuple="1" id="94"/>
-  <property_tuples idtuple="1" id="95"/>
-  <property_tuples idtuple="1" id="96"/>
-  <property_tuples idtuple="1" id="97"/>
-  <property_tuples idtuple="1" id="98"/>
-  <property_tuples idtuple="1" id="99"/>
-  <property_tuples idtuple="1" id="100"/>
-  <property_tuples idtuple="1" id="101"/>
-  <property_tuples idtuple="1" id="102"/>
-  <property_tuples idtuple="1" id="103"/>
-  <property_tuples idtuple="1" id="104"/>
-  <property_tuples idtuple="1" id="105"/>
-  <property_tuples idtuple="1" id="106"/>
-  <property_tuples idtuple="1" id="107"/>
-  <property_tuples idtuple="1" id="108"/>
-  <property_tuples idtuple="1" id="109"/>
-  <property_tuples idtuple="1" id="110"/>
-  <property_tuples idtuple="1" id="111"/>
-  <property_tuples idtuple="1" id="112"/>
-  <property_tuples idtuple="1" id="113"/>
-  <property_tuples idtuple="1" id="114"/>
-  <property_tuples idtuple="1" id="115"/>
-  <property_tuples idtuple="1" id="116"/>
-  <property_tuples idtuple="1" id="117"/>
-  <property_tuples idtuple="1" id="118"/>
-  <property_tuples idtuple="1" id="119"/>
-  <property_tuples idtuple="1" id="120"/>
-  <property_tuples idtuple="1" id="121"/>
-  <property_tuples idtuple="1" id="122"/>
-  <property_tuples idtuple="1" id="123"/>
-  <property_tuples idtuple="1" id="124"/>
-  <property_tuples idtuple="1" id="125"/>
-  <property_tuples idtuple="1" id="126"/>
-  <property_tuples idtuple="1" id="127"/>
-  <property_tuples idtuple="1" id="128"/>
-  <property_tuples idtuple="1" id="129"/>
-  <property_tuples idtuple="1" id="130"/>
-  <property_tuples idtuple="1" id="131"/>
-  <property_tuples idtuple="1" id="132"/>
-  <property_tuples idtuple="1" id="133"/>
-  <property_tuples idtuple="1" id="134"/>
-  <property_tuples idtuple="1" id="135"/>
-  <property_tuples idtuple="1" id="136"/>
-  <property_tuples idtuple="1" id="137"/>
-  <property_tuples idtuple="1" id="138"/>
-  <property_tuples idtuple="1" id="139"/>
-  <property_tuples idtuple="1" id="140"/>
-  <property_tuples idtuple="1" id="141"/>
-  <property_tuples idtuple="1" id="142"/>
-  <property_tuples idtuple="1" id="143"/>
-  <property_tuples idtuple="1" id="144"/>
-  <property_tuples idtuple="1" id="145"/>
-  <property_tuples idtuple="1" id="146"/>
-  <property_tuples idtuple="1" id="147"/>
-  <property_tuples idtuple="1" id="148"/>
-  <property_tuples idtuple="1" id="149"/>
-  <property_tuples idtuple="1" id="150"/>
-  <property_tuples idtuple="1" id="151"/>
-  <property_tuples idtuple="1" id="152"/>
-  <property_tuples idtuple="1" id="153"/>
-  <property_tuples idtuple="1" id="154"/>
-  <property_tuples idtuple="1" id="155"/>
-  <property_tuples idtuple="1" id="156"/>
-  <property_tuples idtuple="1" id="157"/>
-  <property_tuples idtuple="1" id="158"/>
-  <property_tuples idtuple="1" id="159"/>
-  <property_tuples idtuple="1" id="160"/>
-  <property_tuples idtuple="1" id="161"/>
-  <property_tuples idtuple="1" id="162"/>
-  <property_tuples idtuple="1" id="163"/>
-  <property_tuples idtuple="1" id="164"/>
-  <property_tuples idtuple="1" id="165"/>
-  <property_tuples idtuple="1" id="166"/>
-  <property_tuples idtuple="1" id="167"/>
-  <property_tuples idtuple="1" id="168"/>
-  <property_tuples idtuple="1" id="169"/>
-  <property_tuples idtuple="1" id="170"/>
-  <property_tuples idtuple="1" id="171"/>
-  <property_tuples idtuple="1" id="172"/>
-  <property_tuples idtuple="1" id="173"/>
-  <property_tuples idtuple="1" id="174"/>
-  <property_tuples idtuple="1" id="175"/>
-  <property_tuples idtuple="1" id="176"/>
-  <property_tuples idtuple="1" id="177"/>
-  <property_tuples idtuple="1" id="178"/>
-  <property_tuples idtuple="1" id="179"/>
-  <property_tuples idtuple="1" id="180"/>
-  <property_tuples idtuple="1" id="181"/>
-  <property_tuples idtuple="1" id="182"/>
-  <property_tuples idtuple="1" id="183"/>
-  <property_tuples idtuple="1" id="184"/>
-  <property_tuples idtuple="1" id="185"/>
-  <property_tuples idtuple="1" id="186"/>
-  <property_tuples idtuple="1" id="187"/>
-  <property_tuples idtuple="1" id="188"/>
-  <property_tuples idtuple="1" id="189"/>
-  <property_tuples idtuple="1" id="190"/>
-  <property_tuples idtuple="1" id="191"/>
-  <property_tuples idtuple="1" id="192"/>
-  <property_tuples idtuple="1" id="193"/>
-  <property_tuples idtuple="1" id="194"/>
-  <struc_dataset idstructure="1" id_srcdataset="1"/>
-
+  <struc_dataset idstructure="1" id_srcdataset="1" created="2009-05-31 14:48:34.0"/>
+  <query/>
+  <query_results/>
+  <sessions/>
   <fp1024/>
+  <sk1024/>
 </dataset>

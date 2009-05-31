@@ -41,6 +41,7 @@ import javax.swing.event.ChangeListener;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 
+import org.apache.poi.hssf.model.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 
 import com.microworkflow.process.WorkflowContext;
@@ -73,10 +74,12 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
         		if (getWorkbook()!=null) {
         			int index = ((JTabbedPane)e.getSource()).getSelectedIndex();
         			if (index >=0) {
-	        			HSSFFormulaEvaluator.evaluateAllFormulaCells(getWorkbook().workbook);
-	        			//for (int i=0; i < getWorkbook().size();i++)
-	        			if (getWorkbook()!=null && (getWorkbook().getWorksheet(index)!=null))
-	        				getWorkbook().getWorksheet(index).notifyCells(-1,-1);
+        				//if (getWorkbook().isNotify()) {
+        					//HSSFFormulaEvaluator.evaluateAllFormulaCells(getWorkbook().workbook);
+		        			//for (int i=0; i < getWorkbook().size();i++)
+		        			if (getWorkbook()!=null && (getWorkbook().getWorksheet(index)!=null))
+		        				getWorkbook().getWorksheet(index).notifyCells(-1,-1);
+        				//}
 	        			tabbedPane.getComponentAt(index).repaint();
         			}
         			
@@ -91,7 +94,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     protected PBTWorkBook getWorkbook() {
     	return pbt_workbook;
     }
-    protected void setWorkbook(PBTWorkBook pbt_workbook) {
+    public void setWorkbook(PBTWorkBook pbt_workbook) {
     	this.pbt_workbook = pbt_workbook;
         try {
         	//hack = true;
@@ -105,14 +108,21 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
 					p.setBorder(null);
 					tabbedPane.add(pbt_workbook.getTitle(i),p);
 				}
-	
-		        
-				tabbedPane.setSelectedIndex(0);	      
+				tabbedPane.setSelectedIndex(0);	    
+
+				//if (pbt_workbook.isNotify())
+					HSSFFormulaEvaluator.evaluateAllFormulaCells(pbt_workbook.workbook);
+	        	//pbt_workbook.setNotify(true);	    		
         	}
+
+        	
+        	
         } catch (Exception x) {
         	x.printStackTrace();
         } finally {
         	//hack = false;
+        	if (pbt_workbook!= null)
+        	pbt_workbook.setModified(false);
         }
     }
 
@@ -122,6 +132,7 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     }
     @Override
     protected void animate(PropertyChangeEvent event) {
+    	System.out.println(event);
         if (event.getPropertyName().equals(PBTWorkBook.PBT_WORKBOOK)) {   
         	if (event.getNewValue() instanceof PBTWorkBook) {
         		setWorkbook((PBTWorkBook) event.getNewValue() );

@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.plugin.pbt;
 
 import java.text.NumberFormat;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -36,6 +37,8 @@ import org.apache.poi.ss.usermodel.CellValue;
 
 import ambit2.base.data.AmbitBean;
 
+import com.jgoodies.binding.PresentationModel;
+
 public class PBTWorksheet  extends AmbitBean  {
 	protected NumberFormat format = NumberFormat.getInstance(Locale.US);
 	protected PBTTableModel moreInfo= null;
@@ -44,7 +47,14 @@ public class PBTWorksheet  extends AmbitBean  {
 	protected int maxRow = 22;
 	protected int maxCol = 6;
 	protected int rowOffset = 0;
+	protected PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(this);
 
+	public PresentationModel<PBTWorksheet> getModel() {
+		return model;
+	}
+	public void setModel(PresentationModel<PBTWorksheet> model) {
+		this.model = model;
+	}
 
 	protected static HSSFWorkbook workbook;
 	protected HSSFSheet sheet;
@@ -89,6 +99,35 @@ public class PBTWorksheet  extends AmbitBean  {
 		}
 	
 	}
+	public void clear() {
+        //System.out.println("clear");
+        Iterator<HSSFRow> rows = getSheet().rowIterator();
+        
+		while (rows.hasNext()) {
+			HSSFRow row = rows.next();
+			
+			int rowNum = row.getRowNum();
+			Iterator<HSSFCell> cells = row.cellIterator();
+			while (cells.hasNext()) {
+				HSSFCell cell = cells.next();
+				String propertyName = PBTWorksheet.getCellName(cell.getRowIndex(),cell.getColumnIndex()).toLowerCase();				
+				Cell extCell = getExtendedCell(cell.getRowIndex(),cell.getColumnIndex());
+				if (extCell == null) continue;
+				switch (extCell.getMode()) {
+				case NODE_LIST: {
+					cell.setCellValue("");
+					break;
+				}
+				case NODE_INPUT: {
+					model.setValue(propertyName, null);
+					break;
+				}
+				
+				}
+			}
+		}
+		model.notifyAll();
+	}
 	public CellValue evaluate(HSSFCell cell) {
 		if (formulaEvaluator!=null)
 			return formulaEvaluator.evaluate(cell);
@@ -118,16 +157,21 @@ public class PBTWorksheet  extends AmbitBean  {
 		oldValue = new Object[maxRow][maxCol];
 	}
 	
-	public Object getExtendedCell(int row, int col) {
+	public Cell getExtendedCell(int row, int col) {
 		if (moreInfo != null)
-			return moreInfo.getValueAt(row, col);
+			return (Cell)moreInfo.getValueAt(row, col);
 		else return null;
 	}
+	public Object getExtendedCellValue(int row, int col) {
+		Cell cell = getExtendedCell(row, col);
+		if (cell != null) return cell.getObject();
+		else return null;
+	}	
 	public void setExtendedCell(Object value,int row, int col) {
 		if (moreInfo != null) {
 			setModified(true);
 			moreInfo.setValueAt(value, row, col);
-	    	firePropertyChange("E"+getCellName(row-1, col-1).toLowerCase(), null, value);
+	    	firePropertyChange("E"+getCellName(row, col).toLowerCase(), null, value);
 		}
 
 	}	
@@ -189,16 +233,19 @@ public class PBTWorksheet  extends AmbitBean  {
     }
     
     protected void setValue(HSSFCell cell, Object value) {
+    		
     		setModified(true);
 			switch (cell.getCellStyle().getDataFormat()) {
 			//Text
 			case 0x31 : {
-				cell.setCellValue(value.toString());
+				if ((value != null) && !value.equals("")) cell.setCellValue(value.toString());
+				else cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
 				break;
 			}
 			//General
 			case 0: {
-				cell.setCellValue(value.toString());
+				if ((value != null) && !value.equals("")) cell.setCellValue(value.toString());
+				else cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
 				break;				
 			} 
 			//numeric "0.00E+00"
@@ -207,9 +254,9 @@ public class PBTWorksheet  extends AmbitBean  {
     				cell.setCellValue(((Number)value).doubleValue());
     			} catch (Exception x) {
     				try {
-    				cell.setCellValue(Double.parseDouble(value.toString()));
+    					Double d = Double.parseDouble(value.toString());
+    					if (d.equals(Double.NaN)) cell.setCellType(HSSFCell.CELL_TYPE_BLANK); else cell.setCellValue(d);
     				} catch (Exception xx) { 
-    					cell.setCellValue(Double.NaN);
     					cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
     				}
     			}
@@ -221,9 +268,9 @@ public class PBTWorksheet  extends AmbitBean  {
     				cell.setCellValue(((Number)value).doubleValue());
     			} catch (Exception x) {
     				try {
-    				cell.setCellValue(Double.parseDouble(value.toString()));
+    					Double d = Double.parseDouble(value.toString());
+    					if (d.equals(Double.NaN)) cell.setCellType(HSSFCell.CELL_TYPE_BLANK); else cell.setCellValue(d);
     				} catch (Exception xx) {
-    					cell.setCellValue(Double.NaN);
     					cell.setCellType(HSSFCell.CELL_TYPE_BLANK); }
     			}				
 				break;				
@@ -234,65 +281,53 @@ public class PBTWorksheet  extends AmbitBean  {
     				cell.setCellValue(((Number)value).doubleValue());
     			} catch (Exception x) {
     				try {
-    				cell.setCellValue(Double.parseDouble(value.toString()));
+    					Double d = Double.parseDouble(value.toString());
+    					if (d.equals(Double.NaN)) cell.setCellType(HSSFCell.CELL_TYPE_BLANK); else cell.setCellValue(d);
     				} catch (Exception xx) { 
-    					cell.setCellValue(Double.NaN);
     					cell.setCellType(HSSFCell.CELL_TYPE_BLANK);}
     			}
 				break;				
 			}					
 			default: {
-				cell.setCellValue(value.toString());
+				if ((value != null) && !value.equals("")) cell.setCellValue(value.toString());
+				else cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
 				break;				
 			}
 			}
-		
-/*    		
-    		if (value instanceof Number)
-    			//cell.setCellValue(format((Number)value));
-    			cell.setCellValue(((Number)value).doubleValue());
-    		else
-    			cell.setCellValue(value.toString());
-    			*/
-    		/*
-    			try {
-    				cell.setCellValue(Double.parseDouble(value.toString()));
-    			} catch (Exception x) {
-    				cell.setCellValue(format(value));
-    			}
-    			*/
-    		formulaEvaluator.notifyUpdateCell(cell);
-    		//formulaEvaluator.clearAllCachedResultValues();
 
-    		HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
     		    		
  
     }
-	public void set(int row,int col, Object value) {
+    public void set(int row,int col, Object value) {
+    	//System.out.println("set"+getCellName(row, col) + "='" + value + "' "+value.getClass().getName());
 		HSSFCell theCell = getCell(row, col);
 		if (theCell == null) return;
     	if (theCell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) return ;
     	
-    	
-		for (int r=0; r < maxRow; r++)
-			for (int c=0; c < maxCol; c++) {
-				HSSFCell cell = getCell(row, col);
-				if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
-					Object o = get(r,c);
-					if (o != null)
-						oldValue[r][c] = o;
-					else 
-						oldValue[r][c] = "";
+
+			for (int r=0; r < maxRow; r++)
+				for (int c=0; c < maxCol; c++) {
+					HSSFCell cell = getCell(row, col);
+					if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
+						Object o = get(r,c);
+						if (o != null)
+							oldValue[r][c] = o;
+						else 
+							oldValue[r][c] = "";
+					}
 				}
-			}
-		
-    	
-    	oldValue[row][col] = get(row,col);    	
+	    	oldValue[row][col] = get(row,col);    	
     	
     	setValue(theCell, value);
-    	firePropertyChange(getCellName(row, col).toLowerCase(), oldValue[row][col], get(row,col));
-    	notifyCells(row, col);
+    	
+   		firePropertyChange(getCellName(row, col).toLowerCase(), oldValue[row][col], get(row,col));
+   		//if (notify) {
 
+    		formulaEvaluator.notifyUpdateCell(theCell);
+    		notifyCells(row, col);    		
+    		//formulaEvaluator.clearAllCachedResultValues();
+    		HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
+		//}
     	
 	}
 
