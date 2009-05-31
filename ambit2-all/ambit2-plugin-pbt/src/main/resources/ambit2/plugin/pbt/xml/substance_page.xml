@@ -20,9 +20,9 @@
 
 <!-- 
 <action row="11" col="1" colspan="1" processor="findbycas" sourcerow="10" sourcecol="4" resultrow="11" resultcol="2" errorRow="11" errorCol="2" hint="Finds structure by CAS number"/>
- -->
- <action row="10" col="1" colspan="1" processor="ambit2.namestructure.Name2StructureProcessor" sourcerow="10" sourcecol="2" resultrow="10" resultcol="4" result="extended" errorRow="10" errorCol="2" hint="Generates structure by chemical name"/>
  
+ <action row="10" col="1" colspan="1" processor="ambit2.namestructure.Name2StructureProcessor" sourcerow="10" sourcecol="2" resultrow="10" resultcol="4" result="extended" errorRow="10" errorCol="2" hint="Generates structure by chemical name"/>
+ -->
 <action row="12" col="1" colspan="1" descriptor="ambit2.descriptors.MolecularWeight" sourcerow="10" sourcecol="4" source="extended" resultrow="12" resultcol="2" errorRow="12" errorCol="2" hint="Calculates molecular weight"/>
 <action row="13" col="1" colspan="1" descriptor="ambit2.descriptors.SizeDescriptor" index="0" builder3d="true" sourcerow="10" sourcecol="4" source="extended" resultrow="13" resultcol="2" errorRow="13" errorCol="2" hint="Calculates crossectional diameter. If no 3D available,launches MOPAC to obtain 3D structure"/>
 <action row="14" col="1" colspan="1" descriptor="WaterSol" sourcerow="10" sourcecol="4" resultrow="14" resultcol="2" errorRow="14" errorCol="2"/>
