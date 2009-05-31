@@ -114,7 +114,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		structureWriter.setDataset(dataset);
 	}
 	protected void findChemical(AbstractStructureQuery query, Object key,Object value, IStructureRecord record) throws SQLException, AmbitException {
-		//System.out.println(query.getClass().getName() + " key=" + key + " value="+value);
 		if (value == null) return;
 		ResultSet rs = null;
 		try {
@@ -124,7 +123,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			rs = queryexec.process(query);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(2));
-				//System.out.println("found "+record);
 /*
 				ps_seekdataset.clearParameters();
 				ps_seekdataset.setString(1,getDataset().getName());

@@ -441,7 +441,6 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     	r.setObject(mode);
     	r.setGroup(getQuery());
     	int updated = updateExecutor.process(r);
-    	System.out.println(mode + " Records updated "+updated);
     	if (updated > 0)
     		setQuery(getQuery());    	
     }

@@ -108,6 +108,7 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> ,Pro
     	     g.getClipBounds(rectClip);
     	     g.clearRect(rectClip.x, rectClip.y, rectClip.width,  rectClip.height);
     	     viewer.renderScreenImage(g, currentSize, rectClip);
+    	     viewer.script("autobond=false");
 //    	     viewer.script("boundbox;axes;wireframe 0.01; spacefill 0;");
            } else {
              Rectangle rectClip = new Rectangle();

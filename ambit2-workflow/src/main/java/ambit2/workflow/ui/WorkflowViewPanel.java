@@ -31,6 +31,7 @@ import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Activity;
 import com.microworkflow.process.CompositeActivity;
@@ -223,7 +224,9 @@ public class WorkflowViewPanel extends JPanel implements IWorkflowListenerUI {
         		new JButton[] {}),
         		BorderLayout.SOUTH
         		);
-    
+
+        //add(new JScrollPane(status,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),BorderLayout.NORTH);
+	        
     }
     protected JPopupMenu createPopupMenu() {
     	JPopupMenu menu = new JPopupMenu();

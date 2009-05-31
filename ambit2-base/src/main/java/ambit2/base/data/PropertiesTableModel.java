@@ -69,7 +69,6 @@ public class PropertiesTableModel extends AbstractTableModel {
 	public void setFields(TypedListModel<Property> fields) {
 		visibleFields.clear();
 		if (fields != null) {
-			System.out.println(fields);
 			for (int i=0; i < fields.getSize();i++) {
 				Property p = fields.getElementAt(i);
 				if (!(visibility ^ p.isEnabled())) {

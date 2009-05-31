@@ -59,7 +59,6 @@ public class LoginInfo extends Model {
         setHostname(u1.getHost());
         setPort(Integer.toString(u1.getPort()));
         setDatabase(u1.getPath().substring(1));
-        //System.out.println(u1.getQuery());
     }
     public void setURI(Connection connection) throws Exception {
         setURI(new URI(connection.getMetaData().getURL()));

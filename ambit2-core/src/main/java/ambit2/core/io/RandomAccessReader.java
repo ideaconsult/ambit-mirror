@@ -123,13 +123,6 @@ public abstract class RandomAccessReader extends DefaultIteratingChemObjectReade
         }
         fireFrameRead();
 
-        /*
-        System.out.print(record);
-        System.out.print('\t');
-        System.out.print(index[record][0]);
-        System.out.print('\t');
-        System.out.println(index[record][1]);
-        */
         raFile.seek(index[record][0]);
         int length = (int)index[record][1];
         raFile.read(b,0,length);

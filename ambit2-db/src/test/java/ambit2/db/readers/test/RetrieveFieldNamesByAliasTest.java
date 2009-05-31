@@ -23,15 +23,6 @@ public class RetrieveFieldNamesByAliasTest extends RetrieveTest<Property> {
 		RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias();
 		return q;
 	}
-	@Test
-	public void testGetParameters() throws Exception {
-		Assert.assertNull(((IQueryObject)query).getParameters());
-	}
-
-	@Test
-	public void testGetSQL() throws Exception {
-		Assert.assertEquals(RetrieveFieldNamesByAlias.sql, ((IQueryObject)query).getSQL());
-	}
 
 	@Override
 	protected String getTestDatabase() {
@@ -56,7 +47,7 @@ public class RetrieveFieldNamesByAliasTest extends RetrieveTest<Property> {
 			Assert.assertEquals(1,names.getRowCount());
 			count++;
 		}
-		Assert.assertEquals(4,count);
+		Assert.assertEquals(2,count);
 		rs.close();
 		qe.close();
 		c.close();
@@ -116,7 +107,7 @@ public class RetrieveFieldNamesByAliasTest extends RetrieveTest<Property> {
 	protected void verifyRows(AmbitRows<Property> rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
-		Assert.assertEquals(4,rows.size());
+		Assert.assertEquals(2,rows.size());
 		while (rows.next()) {
 			Property p = rows.getObject();
 			ITable table = 	c.createQueryTable("EXPECTED",

@@ -132,7 +132,6 @@ public class PBTMainPanel extends WorkflowContextListenerPanel implements INPlug
     }
     @Override
     protected void animate(PropertyChangeEvent event) {
-    	System.out.println(event);
         if (event.getPropertyName().equals(PBTWorkBook.PBT_WORKBOOK)) {   
         	if (event.getNewValue() instanceof PBTWorkBook) {
         		setWorkbook((PBTWorkBook) event.getNewValue() );

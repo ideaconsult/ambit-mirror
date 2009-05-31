@@ -121,7 +121,6 @@ public class SequenceAppendQueryResults extends Sequence {
 	    			} finally {
 	    				try {q.close();c.close();} catch (Exception x) {}
 	    			}
-			        System.out.println(records.size());		 
 			        getContext().put(DBWorkflowContext.RECORD,null);
 			        return records;
 				}
