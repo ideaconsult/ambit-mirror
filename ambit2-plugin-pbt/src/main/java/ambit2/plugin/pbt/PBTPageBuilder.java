@@ -35,13 +35,13 @@ import java.awt.Insets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -50,7 +50,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.text.NumberFormatter;
@@ -70,6 +69,7 @@ import ambit2.ui.jmol.Panel3D;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.adapter.Bindings;
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -91,9 +91,12 @@ public class PBTPageBuilder {
     	}
     	return b.toString();
     }
+    /*
     public static JPanel buildPanel(PBTTableModel model) {
     	return buildPanel(model,0,0);
     }
+    */
+    /*
     public static JPanel buildPanel(PBTTableModel model, int rowOffset, int colOffset) {
         FormLayout layout = new FormLayout(
                 getLayoutString(model.getColumnCount()+colOffset,"10dlu"),
@@ -124,7 +127,7 @@ public class PBTPageBuilder {
         		break;
         	}
         	case ERROR: {
-        		/*wrappable labels*/
+      
         		JTextPane txtMyTextPane= new JTextPane();
         		txtMyTextPane.setText("<html>"+o.toString().replace("\\n", "<br>")+"</html>");
         		txtMyTextPane.setBackground(null);
@@ -161,7 +164,7 @@ public class PBTPageBuilder {
         builder.setBorder(BorderFactory.createEtchedBorder());
         return builder.getPanel();
     }    
-
+*/
     public static JPanel buildPanel(PBTWorksheet worksheet) {
     	int colOffset = 0;
         FormLayout layout = new FormLayout(
@@ -174,10 +177,9 @@ public class PBTPageBuilder {
         cc.insets = new Insets(1,1,1,1);
         cc.hAlign = CellConstraints.DEFAULT;
 
-        PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(worksheet) {
-       
-        };
-
+        PresentationModel<PBTWorksheet> model = worksheet.getModel();
+        
+        
         Iterator<HSSFRow> rows = worksheet.getSheet().rowIterator();
 		while (rows.hasNext()) {
 			HSSFRow row = rows.next();
@@ -188,7 +190,7 @@ public class PBTPageBuilder {
 	        	JComponent c = null;				
 				HSSFCell cell = cells.next();
 				
-				short dataFormat = cell.getCellStyle().getDataFormat();
+				
 				
 				if ((cell.getRowIndex()+ worksheet.rowOffset) < 0) continue;
 				if ((cell.getColumnIndex()+ colOffset) < 0) continue;				
@@ -233,7 +235,7 @@ public class PBTPageBuilder {
 				default: 
 					component_alignment = JComponent.LEFT_ALIGNMENT;
 				}
-				Object extCell = worksheet.getExtendedCell(cell.getRowIndex()+1,cell.getColumnIndex()+1);
+				Cell extCell = worksheet.getExtendedCell(cell.getRowIndex(),cell.getColumnIndex());
 				String propertyName = PBTWorksheet.getCellName(cell.getRowIndex(),cell.getColumnIndex()).toLowerCase();
 				//if (cell.getRowIndex()!=5) propertyName = "dummy";
 				//Dimension d = new Dimension(140,20);	
@@ -245,37 +247,64 @@ public class PBTPageBuilder {
 	        		separator.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 	        		
 				} else if (extCell != null) {
-					if (extCell instanceof List) { 
-						c = BasicComponentFactory.createComboBox(new SelectionInList(((List)extCell),model.getModel(propertyName)));
+					System.out.println(worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()));
+					switch (extCell.getMode()) {
+					case NODE_LIST: {
+						SelectionInList sList = new SelectionInList(((List)extCell.getObject()),model.getModel(propertyName));
+						c = BasicComponentFactory.createComboBox(sList);
+						sList.setSelection(cell.getStringCellValue());		
 						//c.setPreferredSize(d);	
 		        		c.setBackground(background);
 		        		c.setEnabled(true);
-		        	} else if (extCell instanceof IAtomContainer) {
+		        		((JComboBox)c).setEditable(false);	
+		        		break;
+					} 
+					case NODE_STRUCTURE: {
 		        		JTabbedPane tab = new JTabbedPane();
 		        		Panel2D p2d = new Panel2D();
-		        		p2d.setAtomContainer((IAtomContainer)extCell,true);
+		        		p2d.setAtomContainer((IAtomContainer)extCell.getObject(),true);
 		        		worksheet.addPropertyChangeListener("E"+worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()).toLowerCase(),p2d);
 		        		tab.addTab("Structure diagram", p2d);
 		        		
 		        		Panel3D p3d = new Panel3D();
-		        		p3d.setObject((IAtomContainer)extCell);
+		        		p3d.setObject((IAtomContainer)extCell.getObject());
 		        		worksheet.addPropertyChangeListener("E"+worksheet.getCellName(cell.getRowIndex(), cell.getColumnIndex()).toLowerCase(),p3d);
 		        		tab.addTab("3D", p3d);
-		        		c = tab;
-		        	} else if (extCell instanceof WorksheetAction) {
-		        		((WorksheetAction)extCell).setWorksheet(worksheet);
-						c = createLabel(cell.toString(),(WorksheetAction)extCell);
-						//c.setBackground(background);		        		
-					} else {
-						if (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) {
-							c = BasicComponentFactory.createLabel(model.getModel(propertyName));
-			        		c.setEnabled(true);
-			        		c.setForeground(Color.RED);
-			        		c.setBackground(builder.getPanel().getBackground());
-			        		c.setBorder(null);
-						} else 
-							c = createLabel(cell.toString(),null);
-						
+		        		c = tab;		
+		        		break;
+					}
+					case NODE_ACTION: {
+		        		((WorksheetAction)extCell.getObject()).setWorksheet(worksheet);
+						c = createLabel(cell.toString(),(WorksheetAction)extCell.getObject());	
+						break;
+					}
+					case NODE_INPUT: {
+						if (extCell.getObject() instanceof List) {
+						    ComboBoxAdapter comboBoxAdapter = new ComboBoxAdapter((List)extCell.getObject(), model.getModel(propertyName));
+						    comboBoxAdapter.setSelectedItem(cell.getStringCellValue());
+						    JComboBox comboBox = new JComboBox();
+						    comboBox.setModel(comboBoxAdapter);
+							comboBox.setEditable(true);
+							c = comboBox;
+			        		c.setBackground(background);
+						} else {
+							c = createComponentByDataFormat(cell, model, propertyName, background, rowspan);
+						}
+		        		c.setEnabled(true);
+		        		//((JComboBox)c).setEditable(true);	
+		        		break;
+					}
+					case NODE_FORMULA: {
+						c = BasicComponentFactory.createLabel(model.getModel(propertyName));
+		        		c.setEnabled(true);
+		        		c.setForeground(Color.RED);
+		        		c.setBackground(builder.getPanel().getBackground());
+		        		c.setBorder(null);	
+		        		break;
+					} 
+					default: {
+						c = createLabel(cell.toString(),null);
+					}
 					}						
 				} else 
 				switch (cell.getCellType()) {
@@ -300,38 +329,10 @@ public class PBTPageBuilder {
 	        		c.setBorder(BorderFactory.createEtchedBorder());
 	        		break;					
 				}
-				default:
-					switch (dataFormat) {
-					//Text
-					case 0x31 : {
-					    c = createTextComponent(rowspan, model, propertyName,  background,"Enter text");
-					    break;
-
-					}
-					//General
-					case 0: {
-					    c = createTextComponent(rowspan, model, propertyName,  background, "Enter text");
-					    break;						
-					} 
-					//numeric "0.00E+00"
-					case 0xb: {
-					    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",2);
-					    break;								
-					}
-					//numeric "0.0"
-					case 0xb2: {
-					    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",1);
-					    break;											
-					}
-					//numeric "0.00"
-					case 0x2: {
-					    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",2);
-					    break;											
-					}					
-					default: {
-						System.out.println(dataFormat);
-					}
-					}
+				default: {
+					System.out.println(propertyName);
+					c = createComponentByCellType(cell,model,propertyName,background,rowspan);
+				}
 				}
 	        	if (c != null) {
 	        		if (cell.getCellComment() != null)
@@ -348,6 +349,74 @@ public class PBTPageBuilder {
         builder.setBorder(BorderFactory.createEtchedBorder());
         return builder.getPanel();
     }       
+    protected static JComponent createComponentByCellType(HSSFCell cell,PresentationModel<PBTWorksheet> model,
+    			String propertyName,Color background, int rowspan) {
+    	short dataFormat = cell.getCellStyle().getDataFormat();
+    	JComponent c = null;
+		switch (cell.getCellType()) {
+		case  HSSFCell.CELL_TYPE_STRING: {
+			c = createLabel(cell.toString(),null);
+    		break;	        		
+		}					
+		case  HSSFCell.CELL_TYPE_FORMULA: {
+	        JTextField textField = new JTextField() {
+	        	@Override
+	        	public String getToolTipText() {
+	        		if ("".equals(getText()))
+	        			return "This is an automatically calculated value";
+	        		else return getText();
+	        	}
+	        };
+	        ToolTipManager.sharedInstance().registerComponent(textField);
+	        Bindings.bind(textField,model.getModel(propertyName),true);						
+			c = textField;					
+    		c.setEnabled(false);
+    		c.setBackground(background);
+    		c.setBorder(BorderFactory.createEtchedBorder());
+    		break;					
+		}
+		default:
+			c = createComponentByDataFormat(cell, model, propertyName, background, rowspan);
+		}
+		return c;
+    }
+    
+    protected static JComponent createComponentByDataFormat(HSSFCell cell,PresentationModel<PBTWorksheet> model,
+			String propertyName,Color background, int rowspan) {
+	short dataFormat = cell.getCellStyle().getDataFormat();
+	JComponent c = null;
+		switch (dataFormat) {
+		//Text
+		case 0x31 : {
+		    c = createTextComponent(rowspan, model, propertyName,  background,"Enter text");
+		    break;
+		}
+		//General
+		case 0: {
+		    c = createTextComponent(rowspan, model, propertyName,  background, "Enter text");
+		    break;						
+		} 
+		//numeric "0.00E+00"
+		case 0xb: {
+		    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",2);
+		    break;								
+		}
+		//numeric "0.0"
+		case 0xb2: {
+		    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",1);
+		    break;											
+		}
+		//numeric "0.00"
+		case 0x2: {
+		    c = createNumberComponent(rowspan, model, propertyName,  background, "Enter number",2);
+		    break;											
+		}					
+		default: {
+			System.out.println(dataFormat);
+		}
+		}
+		return c;
+    }    
     protected static JComponent createTextComponent(int rowspan, PresentationModel<PBTWorksheet> model, String propertyName, Color background, final String tooltip) {
     	JComponent c = null;
 		if (rowspan==1) {
@@ -375,6 +444,7 @@ public class PBTPageBuilder {
     				String propertyName, Color background, final String tooltip, int fractionDigits) {
     	NumberFormat format = DecimalFormat.getInstance();
     	NumberFormatter nf = new NumberFormatter(format) {
+
     	    public String valueToString(Object iv) throws ParseException {
     	        if ((iv == null) || (iv.equals(Double.NaN))) {
     	            return "";
@@ -389,6 +459,7 @@ public class PBTPageBuilder {
     	        }
     	        return super.stringToValue(text);
     	    }
+
     	};
     	
     	format.setMaximumFractionDigits(fractionDigits);

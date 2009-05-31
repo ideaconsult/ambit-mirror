@@ -92,4 +92,24 @@ R 62 (Cat. 3)
 R 63 (Cat. 3)
 	</item>
 </list>
+
+<input id="B6" row="6" col="2" colspan="1" type="text" />
+<input id="C6" row="6" col="3" colspan="1" type="text" />
+<input id="F6" row="6" col="6" colspan="1" type="text" />
+
+<input id="B8" row="8" col="2" colspan="1" type="text" />
+<input id="C8" row="8" col="3" colspan="1" type="text" />
+<input id="F8" row="8" col="6" colspan="1" type="text" />
+
+<input id="A10" row="10" col="1" colspan="1" type="text" />
+<input id="C10" row="10" col="3" colspan="1" type="text" />
+<input id="F10" row="10" col="6" colspan="1" type="text" />
+
+<input id="A12" row="12" col="1" colspan="1" type="text" />
+<input id="C12" row="12" col="3" colspan="1" type="text" />
+<input id="F12" row="12" col="6" colspan="1" type="text" />
+
+<input id="F15" row="15" col="6" colspan="1" type="text" />
+<input id="F18" row="18" col="6" colspan="1" type="text" />
+
 </page>

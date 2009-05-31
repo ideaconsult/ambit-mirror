@@ -3,6 +3,7 @@ package ambit2.plugin.pbt;
 import java.awt.Color;
 import java.io.InputStream;
 
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -22,7 +23,8 @@ import com.lowagie.text.Table;
 
 
 public class PBTWorkBook {
-	public static int COLUMN_STRUCTURE = 4;
+	public static int COLUMN_STRUCTURE = 3;
+	public static int ROW_STRUCTURE = 9;
 	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02";
 
 	public static final String PBT_WORKBOOK = "ambit2.plugin.pbt.WORKBOOK";
@@ -30,7 +32,18 @@ public class PBTWorkBook {
 	final protected HSSFWorkbook workbook; 
 	final protected InputStream workbook_stream;
 	final protected POIFSFileSystem poifsFileSystem;
-	final PBTWorksheet[] pbt_worksheets; 
+	final PBTWorksheet[] pbt_worksheets;
+	/*
+	protected boolean notify = true;
+	public boolean isNotify() {
+		return notify;
+	}
+	public void setNotify(boolean notify) {
+		this.notify = notify;
+		for (PBTWorksheet ws: pbt_worksheets)
+			ws.setNotify(notify);
+	}
+	*/
 	//public static enum WORKSHEET_INDEX  {WELCOME,SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
 	public static enum WORKSHEET_INDEX  {SUBSTANCE,Persistence,Bioaccumulation,Toxicity,RESULT};
 	protected IStructureRecord record  = null;
@@ -71,7 +84,14 @@ public class PBTWorkBook {
     public int size() {
     	return pbt_worksheets.length;
     }
-    
+    public void clear() {
+    	//setNotify(false);
+    	for (PBTWorksheet ws : pbt_worksheets)
+    		ws.clear();
+    	//setNotify(true);
+    	HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
+    	setModified(false);
+    }
     protected PBTWorksheet createSheet(HSSFWorkbook workbook,int index) {
 		try {
 	
@@ -173,10 +193,13 @@ public class PBTWorkBook {
     	
     	case SUBSTANCE: {
     		PBTWorksheet ws = getWorksheet(index);
-    		Object o = ws.getExtendedCell(10,COLUMN_STRUCTURE);
-    		if ((o != null) && (o instanceof IMolecule) && (((IMolecule)o).getAtomCount()>0)) 
-    			return true;
-    		else return (!"".equals(ws.getB10())) && (!"".equals(ws.getB11()));
+    		Cell cell = ws.getExtendedCell(ROW_STRUCTURE,COLUMN_STRUCTURE);
+    		if (cell != null) {
+    			Object o = cell.getObject();
+    			if ((o != null) && (o instanceof IMolecule) && (((IMolecule)o).getAtomCount()>0)) 
+        			return true;
+    		}
+    		return (!"".equals(ws.getB10())) && (!"".equals(ws.getB11()));
     	}
     	case Persistence: return !getWorksheet(index).getE20().toString().trim().equals("due to insufficient / conflicting data");
     	case Bioaccumulation: return !getWorksheet(index).getD22().toString().trim().equals("due to insufficient / conflicting data");
@@ -208,10 +231,10 @@ public class PBTWorkBook {
     	return record;
     }
     public void setStructure(IAtomContainer structure) {
-    	getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setExtendedCell(structure, 10,COLUMN_STRUCTURE);    	
+    	getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setExtendedCell(structure, ROW_STRUCTURE,COLUMN_STRUCTURE);    	
     }
     public IAtomContainer getStructure() {
-    	Object a = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCell(10,COLUMN_STRUCTURE);
+    	Object a = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCellValue(ROW_STRUCTURE,COLUMN_STRUCTURE);
     	if (a instanceof IAtomContainer)
     		return ((IAtomContainer)a);
     	else 
@@ -224,8 +247,7 @@ public class PBTWorkBook {
     	
     	WORKSHEET_INDEX sheet = WORKSHEET_INDEX.valueOf(fieldname.substring(0,i));
     	fieldname = fieldname.substring(i+1);
-    	PresentationModel<PBTWorksheet> model = new PresentationModel<PBTWorksheet>(getWorksheet(sheet));
-    	model.setValue(fieldname.toLowerCase(), value);
+    	getWorksheet(sheet).getModel().setValue(fieldname.toLowerCase(), value);
     	
     }
 }

@@ -39,8 +39,19 @@ public class PBTCreator extends Workflow {
 				new Performer<PBTWorkBook, PBTWorkBook>() {
 					@Override
 					public PBTWorkBook execute() throws Exception {
-
-						return new PBTWorkBook();
+						PBTWorkBook book = new PBTWorkBook();
+						book.setRecord(null);
+						book.setModified(false);
+						return book;
+						/*
+						Object o = getContext().get(PBTWorkBook.PBT_WORKBOOK);
+						if ((o==null)|| !(o instanceof PBTWorkBook))
+							return new PBTWorkBook();
+						else {
+							((PBTWorkBook)o).clear();
+							return ((PBTWorkBook)o);
+						}
+						*/
 					}
 				}
 				);

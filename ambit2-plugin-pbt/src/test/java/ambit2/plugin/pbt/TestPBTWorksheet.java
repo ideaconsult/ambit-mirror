@@ -12,6 +12,7 @@ import org.apache.poi.hssf.record.DVRecord;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.After;
@@ -109,9 +110,12 @@ public class TestPBTWorksheet {
 	public void testEvaluateSubstanceAntTSheet() throws Exception {
 		Assert.assertEquals(78.1112,((Double)setMolecule(MoleculeFactory.makeBenzene())).doubleValue(),1E-4);
 
+		PBTWorksheet s = workbook.getWorksheet(WORKSHEET_INDEX.SUBSTANCE);
+		Assert.assertEquals("narcotic",s.get(15,1));
 		PBTWorksheet t = workbook.getWorksheet(WORKSHEET_INDEX.Toxicity);
-		//Assert.assertEquals(10,t.get(17,1));
+		//Assert.assertEquals(10,t.get(17,1));//Critical body burden
 		Assert.assertEquals(0.156222,(Double)t.get(17,0),1E-6);
+	
 		
 		PBTWorksheet result = workbook.getWorksheet(WORKSHEET_INDEX.RESULT);
 		Assert.assertEquals("\"T Assessment\" failed",result.getC7());
@@ -122,19 +126,19 @@ public class TestPBTWorksheet {
 	public Object setMolecule(IMolecule molecule) throws Exception {
 		PBTWorksheet ws = workbook.getWorksheet(WORKSHEET_INDEX.SUBSTANCE);
 		
-		ws.setExtendedCell(molecule,10,PBTWorkBook.COLUMN_STRUCTURE);
-		Assert.assertTrue(ws.getExtendedCell(10,PBTWorkBook.COLUMN_STRUCTURE) instanceof IMolecule);
-		Assert.assertEquals(molecule.getAtomCount(),((IMolecule)ws.getExtendedCell(10,PBTWorkBook.COLUMN_STRUCTURE)).getAtomCount());
-		Object o = ws.getExtendedCell(12,1);
+		ws.setExtendedCell(molecule,PBTWorkBook.ROW_STRUCTURE,PBTWorkBook.COLUMN_STRUCTURE);
+		Assert.assertTrue(ws.getExtendedCellValue(PBTWorkBook.ROW_STRUCTURE,PBTWorkBook.COLUMN_STRUCTURE) instanceof IMolecule);
+		Assert.assertEquals(molecule.getAtomCount(),((IMolecule)ws.getExtendedCellValue(PBTWorkBook.ROW_STRUCTURE,PBTWorkBook.COLUMN_STRUCTURE)).getAtomCount());
+		Object o = ws.getExtendedCellValue(11,0);
 		Assert.assertTrue(o instanceof WorksheetAction);
 		((WorksheetAction)o).setWorksheet(ws);
 		((WorksheetAction)o).actionPerformed(null);
 		int targetRow = ((WorksheetAction)o).getResultRow();
 		int targetCol = ((WorksheetAction)o).getResultCol();
-		ws.set(targetRow+1,targetCol-1,100);
-		ws.set(targetRow+2,targetCol-1,10);
-		ws.set(targetRow+3,targetCol-1,"narcotic");
-		return ws.get(targetRow-1,targetCol-1);
+		ws.set(targetRow+2,targetCol,100);
+		ws.set(targetRow+3,targetCol,10);
+		ws.set(targetRow+4,targetCol,"narcotic");
+		return ws.get(targetRow,targetCol);
 		
 	}		
 	@Test
@@ -230,6 +234,9 @@ Data validation is not yet supported.  plan to include it in 3.5-final
 		Assert.assertEquals("Z100",PBTWorksheet.getCellName(99,25));
 		Assert.assertEquals("AA100",PBTWorksheet.getCellName(99,26));
 		Assert.assertEquals("BA100",PBTWorksheet.getCellName(99,52));
+		
+		Assert.assertEquals("B12",PBTWorksheet.getCellName(11,1));
+		Assert.assertEquals("B10",PBTWorksheet.getCellName(9,1));
 		Assert.assertNull(PBTWorksheet.getCellName(-1,52));
 	
 		for (int row=0; row < 28; row++) 

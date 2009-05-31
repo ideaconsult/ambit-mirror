@@ -35,16 +35,7 @@ BMF (field data)
 other (see Remark / Reference)
 	</item>	
 </list>
-<!-- 
-<input id="B5" row="5" col="2" colspan="1">
-</input>
-<input id="C5" row="5" col="3" colspan="1">
-</input>
-<formula id="D5" row="5" col="4" colspan="1">
-</formula>
-<formula id="E5" row="5" col="5" colspan="1">
-</formula>
- -->
+
 
 <list id="A8" row="8" col="1" colspan="1">
 	<item>	
@@ -90,6 +81,29 @@ other (see Remark / Reference)
 	no
 	</item>
 </list>
+
+
+<input id="B6" row="6" col="2" colspan="1" type="text" />
+<input id="C6" row="6" col="3" colspan="1" type="text" />
+<input id="F6" row="6" col="6" colspan="1" type="text" />
+
+<input id="B8" row="8" col="2" colspan="1" type="text" />
+<input id="C8" row="8" col="3" colspan="1" type="text" />
+<input id="F8" row="8" col="6" colspan="1" type="text" />
+
+<input id="C10" row="10" col="3" colspan="1" type="text" />
+<input id="F10" row="10" col="6" colspan="1" type="text" />
+
+<input id="F12" row="12" col="6" colspan="1" type="text" />
+
+<input id="C14" row="14" col="3" colspan="1" type="text" />
+<input id="F14" row="14" col="6" colspan="1" type="text" />
+
+<input id="F17" row="17" col="6" colspan="1" type="text" />
+
+<input id="F19" row="19" col="6" colspan="1" type="text" />
+
+<input id="F21" row="21" col="6" colspan="1" type="text" />
 
 <title row="11" col="2" colspan="1"/>
 <title row="13" col="2" colspan="1"/>
