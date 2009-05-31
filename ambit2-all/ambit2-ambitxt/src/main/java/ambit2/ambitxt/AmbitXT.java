@@ -56,9 +56,6 @@ public class AmbitXT extends NPluginsApplication {
 		super(title,width,height,args);
 		//this is a quick dirty hack to make the builder include mopac and name structure packages ...
 		Package pkg = getClass().getPackage();
-		System.out.println(pkg);
-		System.out.println(pkg.getImplementationTitle());
-		System.out.println(pkg.getImplementationVendor());
 		try {
 			MopacShell mopac = new MopacShell();
 			//Name2StructureProcessor p = new Name2StructureProcessor();
@@ -286,7 +283,7 @@ public class AmbitXT extends NPluginsApplication {
 			        createImageIcon("images/search_16.png"));
 			manager.addPackage("ambit2.plugin.analogs.AnalogsFinderPlugin","Profile & Category",
 			        createImageIcon("images/analogue.png"));
-			manager.addPackage("ambit2.plugin.pbt.PBTCheckerPlugin","PBT Assessment",
+			manager.addPackage("ambit2.plugin.pbt.PBTCheckerPlugin","REACH PBT Assessment",
 			        createImageIcon("images/pill_16.png"));
 			manager.addPackage("ambit2.plugin.dbtools.DBUtilityPlugin","Database tools",
 			        createImageIcon("images/database_16.png"));
