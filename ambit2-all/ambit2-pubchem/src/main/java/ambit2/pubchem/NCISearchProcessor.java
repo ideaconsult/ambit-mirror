@@ -66,6 +66,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 			String line = null;
 			while ((line = reader.readLine())!=null) {
 				builder.append(line);
+				builder.append('\t');
 			}
 			return builder.toString();
 		} catch (Exception x) {
@@ -79,7 +80,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 		StringBuilder b = new StringBuilder();
 		b.append(target);
 		b.append("\t");
-		METHODS[] methods = new METHODS[]{METHODS.smiles,METHODS.inchi,METHODS.inchikey};
+		METHODS[] methods = new METHODS[]{METHODS.smiles,METHODS.inchi,METHODS.inchikey,METHODS.names};
 		for (METHODS m : methods) 
 			if (METHODS.all.equals(m)) continue;
 			else if ((method==null) || method.equals(METHODS.all) || method.equals(m)) {
@@ -96,9 +97,8 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 					//if (isCancelled())	throw new AmbitException(x);
 				} finally {
 				}
-				b.append("\t");
 			} else {
-				b.append("\t");b.append("\t");
+				b.append("\t");
 			}
 		setOption(method);
 		return b.toString();
