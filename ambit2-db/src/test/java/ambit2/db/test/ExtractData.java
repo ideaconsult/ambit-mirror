@@ -21,7 +21,7 @@ public class ExtractData {
         Connection jdbcConnection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-        String ids = "(10,11,29141)";
+        String ids = "(1)";
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
@@ -37,7 +37,7 @@ public class ExtractData {
         partialDataSet.addTable("properties", "SELECT * FROM properties");         
   
         partialDataSet.addTable("template","select * from template");
-        partialDataSet.addTable("template_def","select * from template_def");       
+        partialDataSet.addTable("template_def","select idtemplate,idproperty from template_def");       
         
         partialDataSet.addTable("dictionary", "SELECT * FROM dictionary");        
             
