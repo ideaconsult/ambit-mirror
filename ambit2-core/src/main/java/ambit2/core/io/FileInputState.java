@@ -16,6 +16,7 @@ import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitIOException;
+import ambit2.core.io.bcf.EurasBCFReader;
 
 /**
  * Use {@link #getReader(InputStream, String)} to get a reader of the right type.
@@ -35,8 +36,9 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int HIN_INDEX = 8;
 	public transient static final int PDB_INDEX = 9;
 	public transient static final int XLS_INDEX = 10;	
+	public transient static final int EURAS_INDEX = 11;	
 	
-	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls"};
+	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -48,7 +50,9 @@ public class FileInputState extends FileState implements IInputState {
 		"Chemical Markup Language files (*.cml)",
 		"HIN files (*.hin)",
 		"PDB files (*.pdb)",
-		"Microsoft Office Excel file (*.xls)"};	
+		"Microsoft Office Excel file (*.xls)",
+		"EURAS Excel file with BCF data (*.xls)",
+		};	
 	public FileInputState() {
 		super();
 		setSupportedExtDescriptions(extensionDescription);
@@ -107,6 +111,8 @@ public class FileInputState extends FileState implements IInputState {
 			return new IteratingChemObjectReaderWrapper(new HINReader(stream));
 		} else if (ext.endsWith(extensions[PDB_INDEX])) {
 			return new IteratingChemObjectReaderWrapper(new PDBReader(stream));
+		} else if ((ext.toLowerCase().indexOf("euras")>=0) && (ext.endsWith(extensions[XLS_INDEX]))) {
+			return new EurasBCFReader(stream,0);			
 		} else if (ext.endsWith(extensions[XLS_INDEX])) {
 			return new IteratingXLSReader(stream,0);
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    

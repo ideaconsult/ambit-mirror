@@ -34,6 +34,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.core.smiles.SmilesParserWrapper;
 
@@ -46,7 +47,7 @@ public abstract class IteratingFilesWithHeaderReader extends
 	protected SmilesParserWrapper sp = null;
 	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);	
 	public static String defaultSMILESHeader = "SMILES";
-	private ArrayList<String> header;
+	private ArrayList<Property> header;
 	protected int smilesIndex = -1;
 	protected long timeout = 60000; //ms
 	protected int numberOfHeaderLines = 1;
@@ -71,17 +72,18 @@ public abstract class IteratingFilesWithHeaderReader extends
 	public void setNumberOfHeaderLines(int numberOfHeaderLines) {
 		this.numberOfHeaderLines = numberOfHeaderLines;
 	}
+	protected abstract LiteratureEntry getReference();
 	protected void addHeaderColumn(String name) {
-		header.add(name);
+		header.add(Property.getInstance(name,getReference()));
 		fireIOSettingQuestion(new StringIOSetting(name,IOSetting.MEDIUM,Property.IO_QUESTION.IO_TRANSLATE_NAME.toString(),name));
 	}
 	protected void setHeaderColumn(int index,String name) {
 		header.ensureCapacity(index);
-		while (index >= header.size())
-			header.add("");
+		while (index > header.size())
+			header.add(Property.getInstance("",getReference()));
 		addHeaderColumn(name);
 	}	
-	protected String getHeaderColumn(int index) {
+	protected Property getHeaderColumn(int index) {
 		return header.get(index);
 	}
 	protected int getNumberOfColumns() {
@@ -89,7 +91,7 @@ public abstract class IteratingFilesWithHeaderReader extends
 	}
 	protected boolean isHeaderEmpty() {
 		boolean ok = header==null;
-		if (ok) header = new ArrayList<String>();
+		if (ok) header = new ArrayList<Property>();
 		return ok;
 	}
 }
