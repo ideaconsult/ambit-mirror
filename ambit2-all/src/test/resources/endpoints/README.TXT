@@ -9,3 +9,6 @@ endpoints/skin_irritation
 
 endpoints/ecetoc/auqatic_toxicity
 	ECETOC Aquatic Toxicity (EAT) Database. Supplement to ECETOC. 2003. Aquatic Hazard Assessment II. Technical Report No. 91. European Centre for Ecotoxicology and Toxicology of Chemicals, Brussels, Belgium
+
+catalogs.xml 
+	catalogs of algorithms, softwares, descriptors and endpoints, as defined and used in the QMRF schema  
