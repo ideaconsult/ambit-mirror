@@ -44,12 +44,15 @@ public class IsomorphismTester
 	QueryAtomContainer query;
 	IAtomContainer target;
 	boolean isomorphismFound;
+	boolean FlagStoreIsomorphismNode = false;
+	Vector<Node> isomorphismNodes = new Vector<Node>(); 
 	Stack<Node> stack = new Stack<Node>();
 	Vector<IAtom> targetAt = new Vector<IAtom>(); //a work container
 	Vector<QuerySequenceElement> sequence = new Vector<QuerySequenceElement>();
 	Vector<IQueryAtom> sequencedAtoms = new Vector<IQueryAtom>();
 	Vector<IQueryAtom> sequencedBondAt1 = new Vector<IQueryAtom>();
 	Vector<IQueryAtom> sequencedBondAt2 = new Vector<IQueryAtom>();
+	
 	
 	public void setQuery(QueryAtomContainer container)
 	{
@@ -238,7 +241,10 @@ public class IsomorphismTester
 	
 	public boolean hasIsomorphism(IAtomContainer container)
 	{	
-		target = container;		
+		target = container;	
+		FlagStoreIsomorphismNode = false;
+		isomorphismNodes.clear();
+		
 		if (query.getAtomCount() == 1)
 			return(singleAtomIsomorphism());
 		
@@ -249,7 +255,10 @@ public class IsomorphismTester
 	
 	public Vector<Integer> getIsomorphismPositions(IAtomContainer container)
 	{	
-		target = container;		
+		target = container;	
+		FlagStoreIsomorphismNode = false;
+		isomorphismNodes.clear();
+		
 		Vector<Integer> v = new Vector<Integer>(); 
 		if (query.getAtomCount() == 1)
 		{	
@@ -270,6 +279,50 @@ public class IsomorphismTester
 				v.add(new Integer(i));
 		}
 		return(v);
+	}
+	
+	/**
+	 * This function returns null if no isomorphism is found
+	 * @param container
+	 * @return
+	 */
+	public Vector<IAtom> getIsomorphismMapping(IAtomContainer container)
+	{
+		target = container;	
+		FlagStoreIsomorphismNode = true;
+		isomorphismNodes.clear();
+		
+		if (query.getAtomCount() == 1)
+		{	
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			for (int i = 0; i < target.getAtomCount(); i++)
+			{	
+				if (qa.matches(target.getAtom(i)))
+				{	
+					Vector<IAtom> v = new Vector<IAtom>();
+					v.add(target.getAtom(i));
+					return(v);
+				}	
+			}
+			return null;
+		}	
+				
+		
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		executeSequence();
+		
+		if (isomorphismFound)
+		{	
+			//Getting the data from the Node
+			Node node = isomorphismNodes.get(0);
+			Vector<IAtom> v = new Vector<IAtom>();
+			for (int i = 0; i < node.atoms.length; i++)
+				v.add(node.atoms[i]);
+			
+			return (v);
+		}
+		else
+			return (null);
 	}
 	
 	boolean singleAtomIsomorphism()
@@ -360,7 +413,11 @@ public class IsomorphismTester
 					node.sequenceElNum++;
 					stack.push(node);
 					if (node.sequenceElNum == sequence.size())
+					{	
 						isomorphismFound = true;
+						if (FlagStoreIsomorphismNode)
+							isomorphismNodes.add(node);
+					}	
 				}	
 		}
 		else
@@ -396,7 +453,11 @@ public class IsomorphismTester
 					newNode.sequenceElNum = node.sequenceElNum+1;
 					stack.push(newNode);
 					if (newNode.sequenceElNum == sequence.size())
+					{	
 						isomorphismFound = true;
+						if (FlagStoreIsomorphismNode)
+							isomorphismNodes.add(newNode);
+					}	
 				}
 			}
 			return;
@@ -418,7 +479,11 @@ public class IsomorphismTester
 								newNode.sequenceElNum = node.sequenceElNum+1;
 								stack.push(newNode);
 								if (newNode.sequenceElNum == sequence.size())
+								{	
 									isomorphismFound = true;
+									if (FlagStoreIsomorphismNode)
+										isomorphismNodes.add(newNode);
+								}	
 							}					
 			return;
 		}
@@ -444,7 +509,11 @@ public class IsomorphismTester
 											newNode.sequenceElNum = node.sequenceElNum+1;
 											stack.push(newNode);
 											if (newNode.sequenceElNum == sequence.size())
+											{	
 												isomorphismFound = true;
+												if (FlagStoreIsomorphismNode)
+													isomorphismNodes.add(newNode);
+											}	
 										}
 			return;
 		}
@@ -488,7 +557,11 @@ public class IsomorphismTester
 				newNode.sequenceElNum = node.sequenceElNum+1;
 				stack.push(newNode);
 				if (newNode.sequenceElNum == sequence.size())
+				{	
 					isomorphismFound = true;
+					if (FlagStoreIsomorphismNode)
+						isomorphismNodes.add(newNode);
+				}	
 				continue;
 			}
 			
