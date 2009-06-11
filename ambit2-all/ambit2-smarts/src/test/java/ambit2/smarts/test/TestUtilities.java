@@ -163,6 +163,31 @@ public class TestUtilities
 		System.out.println("Isomorphism Positions: " + smarts  + "  in  " + smiles);
 		for (int i = 0; i < pos.size(); i++)
 			System.out.print("  " + pos.get(i).intValue());
+		System.out.println();
+	}
+	
+	public void testIsomorphismMapping(String smarts, String smiles)
+	{	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		QueryAtomContainer query  = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return;
+		}						
+		
+		isoTester.setQuery(query);
+		Vector<IAtom> map = isoTester.getIsomorphismMapping(mol);
+		System.out.println("Isomorphism Mapping: " + smarts  + "  in  " + smiles);
+		for (int i = 0; i < map.size(); i++)
+		{	
+			IAtom a = map.get(i);
+			int n = mol.getAtomNumber(a);
+			System.out.print("  " + n);
+		}
+		System.out.println();
 	}
 	
 	
@@ -1097,7 +1122,7 @@ public class TestUtilities
 		//tu.compareIsoTesterMulti();
 		//tu.compareIsoTester("C",null);
 		//tu.testIsomorphismTester("C", "CCCCC");
-		tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
+		//tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
 		
 		//These were problematic cases, but now are OK
 		//tu.compareIsoTester("S(OC)(=O)(=O)O",null);  //OK
@@ -1111,6 +1136,8 @@ public class TestUtilities
 		//tu.compareIsoTester("N(C)(C)(C)CC",null);  //OK
 				
 		//tu.testIsomorphismPositions("C1(N)CCCC1", "C1CC(N)CC1NCCO");
+		tu.testIsomorphismMapping("C1CCC1", "CCCCNC1CCC1");
+		tu.testIsomorphismMapping("CCN", "CCCCN");
 		
 		//tu.testSmartsManagerBoolSearch("C1CC1", "CC(C)CCC");
 		//tu.testSmartsManagerBoolSearch("CC(C)C", "C1CC1");
