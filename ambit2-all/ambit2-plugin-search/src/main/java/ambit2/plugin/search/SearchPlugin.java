@@ -68,6 +68,28 @@ public class SearchPlugin extends DBWorkflowPlugin {
 	public JComponent[] createDetailsComponent() {
 		return null;
 	}
+
+	@Override
+	public JComponent[] createOptionsComponent() {
+		JComponent[] c = super.createOptionsComponent();
+		
+	    StatisticsPanel stats = new StatisticsPanel(getWorkflowContext());
+	    Vector<String> p = new Vector<String>();
+		p.add(DBWorkflowContext.STOREDQUERY);
+		p.add(DBWorkflowContext.ERROR);
+		p.add(DBWorkflowContext.DBCONNECTION_URI);
+		p.add(DBWorkflowContext.ENDPOINTS);
+
+		stats.setProperties(p);
+		stats.setAnimate(true);
+		JComponent[] newc = new JComponent[c.length+1];
+		for (int i=0; i< c.length;i++) newc[i] = c[i];
+		newc[c.length] = stats;
+		return newc;
+
+		
+		
+	}
 	@Override
 	public void setWorkflowContext(WorkflowContext workflowContext) {
 		super.setWorkflowContext(workflowContext);
@@ -90,23 +112,12 @@ public class SearchPlugin extends DBWorkflowPlugin {
 			p.add(DBWorkflowContext.DBCONNECTION_URI);			
 			results.setProperties(p);
 			results.setAnimate(true);
-			/*
 			
-		    StatisticsPanel stats = new StatisticsPanel(getWorkflowContext());
-			p = new Vector<String>();
-			p.add(DBWorkflowContext.STOREDQUERY);
-			p.add(DBWorkflowContext.ERROR);
-			p.add(DBWorkflowContext.DBCONNECTION_URI);
-			p.add(DBWorkflowContext.ENDPOINTS);
-
-			stats.setProperties(p);
-			stats.setAnimate(true);
-			*/
-			MainPanel mp = new MainPanel();
-			mp.addTab("Results",results);
-			//mp.addTab("Stats", stats);
+			//MainPanel mp = new MainPanel();
+			//mp.addTab("Results",results);
+//			mp.addTab("Stats", stats);
 			
-			mainComponent = mp;
+			mainComponent = results;
 			contextListener.setFrame(mainComponent.getComponent());
 		} 
 		return mainComponent;
