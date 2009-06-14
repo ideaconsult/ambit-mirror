@@ -1,10 +1,7 @@
 package ambit2.plugin.pbt.processors;
 
 
-import java.awt.Dimension;
-
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import java.sql.Statement;
 
 import junit.framework.Assert;
 
@@ -16,9 +13,9 @@ import org.junit.Test;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.plugin.pbt.DbUnitTest;
-import ambit2.plugin.pbt.PBTMainPanel;
 import ambit2.plugin.pbt.PBTWorkBook;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
+
 
 public class PBTReaderTest extends DbUnitTest {
 
@@ -50,11 +47,17 @@ public class PBTReaderTest extends DbUnitTest {
 				"SELECT * FROM dictionary");
 		Assert.assertEquals(1, dictionary.getRowCount());
 
+		Statement t = c.getConnection().createStatement();
+		t.executeUpdate("update property_values set value_num=72.2 where idproperty=65 and id=65 and idstructure=1");
+		t.close();
+		templates = c.createQueryTable("EXPECTED_VALUES",	"SELECT name,value_num FROM property_values join properties using(idproperty) where name=\"SUBSTANCE_B12\" and (value_num - 72.2) <= 1E-4");
+		Assert.assertEquals(1, templates.getRowCount());
+		
 		
 		PBTReader reader = new PBTReader();
 		reader.setConnection(c.getConnection());
 		PBTWorkBook book = reader.process(new StructureRecord(1,1,null,null));
-		Assert.assertEquals(72.2, (Double)book.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getB12(),1E-1);
+		Assert.assertEquals(72.2, (Double)book.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getB12(),1E-4);
 		reader.close();
 		
 
