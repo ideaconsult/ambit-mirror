@@ -84,7 +84,7 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <tuples/>
   <property_number/>
   <property_string idvalue="1" value="1530-32-1"/>
-  <property_values idproperty="3" idstructure="100215" idvalue="1" idtype="0" user_name="guest"/>
+  <property_values idproperty="3" idstructure="100215" idvalue_string="1" user_name="guest"/>
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="2" name="Dataset 1" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="3" name="Dataset 2" user_name="guest" idreference="3"/>
