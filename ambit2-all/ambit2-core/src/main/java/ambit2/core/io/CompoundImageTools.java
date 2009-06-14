@@ -15,6 +15,7 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -22,6 +23,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -160,7 +162,7 @@ public class CompoundImageTools {
         if (molecule != null) {
             if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
                 generateCoordinates=false;
-            else if (GeometryTools.has2DCoordinates(molecule))   
+            else if (has2DCoordinates(molecule)>0)   
                generateCoordinates=false;
             else generateCoordinates = true;
             
@@ -196,6 +198,43 @@ public class CompoundImageTools {
         } else 
         	molecules.removeAllAtomContainers();
     }
+	public static int has2DCoordinates(IAtomContainer container) {
+		if (container == null) return 0;
+		Point2d minC = null;
+		Point2d maxC = null;
+		
+		boolean no2d=false;
+		boolean with2d=false;
+		Iterator<IAtom> atoms = container.atoms();
+        while (atoms.hasNext()) {
+        	IAtom atom = atoms.next();
+        	Point2d p = atom.getPoint2d();
+            if (p == null) {
+                no2d = true;
+            } else {
+            	if (minC == null) { minC = new Point2d(); minC.set(p.x,p.y);}
+            	else {
+            		if (p.x < minC.x) minC.x = p.x;
+            		if (p.y < minC.y) minC.y = p.y;
+            	}
+            	if (maxC == null) { maxC = new Point2d(); maxC.set(p.x,p.y); }
+            	else {
+            		if (p.x > maxC.x) maxC.x = p.x;
+            		if (p.y > maxC.y) maxC.y = p.y;
+            	}
+                with2d = true;
+            }
+        }
+        with2d = (((minC.x-maxC.x)==0) && ((minC.y-maxC.y)==0))?false:with2d;
+		if(!no2d && with2d){
+			return 2;
+		} else if(no2d && with2d){
+			return 1;
+		} else{
+			return 0;
+		}
+	}
+
 	
 	public synchronized void paint(Renderer2D renderer, 
     		IMoleculeSet molecules,
