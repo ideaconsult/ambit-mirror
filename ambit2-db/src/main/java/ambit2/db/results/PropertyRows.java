@@ -34,6 +34,11 @@ import java.sql.SQLException;
 import ambit2.base.data.Property;
 
 public class PropertyRows extends AmbitRows<Property> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9120339076353090040L;
+
 	public PropertyRows() throws SQLException {
 		super();
 	}

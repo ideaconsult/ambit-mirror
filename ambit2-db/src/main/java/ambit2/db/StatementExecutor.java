@@ -32,6 +32,8 @@ package ambit2.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.xindice.core.objects.Types;
@@ -47,7 +49,35 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6014775151480425590L;
+	private static final long serialVersionUID = -9188531629150175036L;
+	/**
+	 * 
+	 */
+
+	protected Hashtable<String,PreparedStatement> cache = new Hashtable<String,PreparedStatement>();
+	/**
+	 * 
+	 */
+
+	@Override
+	public void setConnection(Connection connection) throws DbAmbitException {
+		Iterator<PreparedStatement> p = cache.values().iterator();
+		while (p.hasNext())
+			try {
+			p.next().close();
+			} catch (Exception x) {
+				
+			}
+		cache.clear();
+		super.setConnection(connection);
+	}
+	protected PreparedStatement getCachedStatement(String sql) {
+		return cache.get(sql);
+	}
+	protected void addStatementToCache(String sql,PreparedStatement p) {
+		if (p != null) 	cache.put(sql,p);
+	}	
+	
 	public static void setParameters(PreparedStatement ps, List<QueryParam> params) throws SQLException {
 		if (params != null)
 			for (int i=0; i < params.size(); i++) {
@@ -108,6 +138,14 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 	}
 	@Override
 	public void close() throws SQLException {
+		Iterator<PreparedStatement> p = cache.values().iterator();
+		while (p.hasNext())
+			try {
+			p.next().close();
+			} catch (Exception x) {
+				
+			}
+		cache.clear();		
 		closeResults(null);		
 		super.close();
 	}

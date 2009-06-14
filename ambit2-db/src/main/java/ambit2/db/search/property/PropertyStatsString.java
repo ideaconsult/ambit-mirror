@@ -48,7 +48,7 @@ public class PropertyStatsString extends AbstractQuery<Property,String, StringCo
 	 */
 	private static final long serialVersionUID = 6364182865662239013L;
 	public static String sql = 
-		"select distinct(value)  from property_values join property_string as f using (idvalue,idtype)\n"+
+		"select distinct(value)  from property_values join property_string as f using (idvalue_string)\n"+
 		"join properties using(idproperty) where %s %s %s limit 25";
 	public static String where_name = "name=? ";
 	public static String where_value = "value %s ? ";	

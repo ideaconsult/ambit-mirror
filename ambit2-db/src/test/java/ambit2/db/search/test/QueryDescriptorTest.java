@@ -28,16 +28,13 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 		qf.setMaxValue(20.2);
 		qf.setCondition(NumberCondition.getInstance("between"));
 		qf.setId(1);
-		System.out.println(qf.getSQL());
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype) join structure using(idstructure) where value between ?  and ? and name=?\n"+
-				"union\n"+
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype) join structure using(idstructure) where value between ?  and ? and name=?",
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num between ?  and ? and name=? \n", 
 				qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
-		Assert.assertEquals(8,params.size());
-		for (int i=0; i < 2;i++) {
+		Assert.assertEquals(4,params.size());
+		for (int i=0; i < 1;i++) {
 			Assert.assertEquals(Integer.class,params.get(i*4).getType());
 			Assert.assertEquals(Double.class,params.get(i*4+1).getType());
 			Assert.assertEquals(Double.class,params.get(i*4+2).getType());
@@ -51,29 +48,22 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 
 		
 		qf.setCondition(NumberCondition.getInstance("="));
-		System.out.println(qf.getSQL());
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype) join structure using(idstructure) where value = ?  and name=?\n"+
-				"union\n"+
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype) join structure using(idstructure) where value = ?  and name=?"
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and abs(value_num - ?) <= 1E-4 and name=?\n",
 
-				, qf.getSQL());
+				qf.getSQL());
 		params = qf.getParameters();
 		Assert.assertNotNull(params);
-		Assert.assertEquals(6,params.size());		
+		Assert.assertEquals(3,params.size());		
 		
 		qf.setFieldname(null);
 		qf.setCondition(NumberCondition.getInstance(">"));
-		System.out.println(qf.getSQL());
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype) join structure using(idstructure) where value > ?  \n"+
-				"union\n"+
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype) join structure using(idstructure) where value > ?  "
-
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num > ?   \n"
 				, qf.getSQL());
 		params = qf.getParameters();
 		Assert.assertNotNull(params);
-		Assert.assertEquals(4,params.size());		
+		Assert.assertEquals(2,params.size());		
 	}
 
 	@Override

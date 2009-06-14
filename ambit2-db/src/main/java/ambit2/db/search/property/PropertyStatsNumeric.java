@@ -46,12 +46,8 @@ public class PropertyStatsNumeric extends AbstractQuery<Property,String, StringC
 													implements IQueryRetrieval<PropertyStats>{
 
 	public static String sql = 
-		"select sum(m1),sum(m2),sum(m3) from\n"+
-		"(\n" +
-		"SELECT ifnull(min(value),0) as m1,ifnull(max(value),0) as m2,ifnull(avg(value),0) as m3 FROM `property_number` join property_values using(idvalue,idtype) join properties using(idproperty) where name=?\n"+
-		"union\n"+
-		"SELECT ifnull(min(value),0) as m1,ifnull(max(value),0) as m2,ifnull(avg(value),0) as m3 FROM `property_int` join property_values using(idvalue,idtype) join properties using(idproperty) where name=?\n"+
-		") as L";
+		"SELECT min(value_num) as m1,max(value_num) as m2,avg(value_num) as m3 from property_values join properties using(idproperty) where name=? and value_num is not null\n"
+		;
 
 		
 		/**
@@ -66,7 +62,7 @@ public class PropertyStatsNumeric extends AbstractQuery<Property,String, StringC
 			if (getFieldname()!=null) {
 				List<QueryParam> params = new ArrayList<QueryParam>();
 				params.add(new QueryParam<String>(String.class, getFieldname().getName()));				
-				params.add(new QueryParam<String>(String.class, getFieldname().getName()));				
+
 				return params;
 			} else throw new AmbitException("Property not specified!");
 			

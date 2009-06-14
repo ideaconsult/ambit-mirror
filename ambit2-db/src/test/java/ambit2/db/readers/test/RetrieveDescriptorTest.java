@@ -58,7 +58,7 @@ public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue>{
 
 		IDatabaseConnection c = getConnection();
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM values_number");		
-		Assert.assertEquals(3,names.getRowCount());
+		Assert.assertEquals(4,names.getRowCount());
 
 		QueryExecutor<RetrieveDescriptor> qe = new QueryExecutor<RetrieveDescriptor>();		
 		qe.setConnection(c.getConnection());
@@ -101,7 +101,7 @@ public class RetrieveDescriptorTest extends RetrieveTest<DescriptorValue>{
 			DescriptorValue value = rows.getObject();
 			Assert.assertEquals(1,value.getNames().length);
 			ITable table = 	c.createQueryTable("EXPECTED",
-					"SELECT idproperty,title,url,name,value,user_name FROM values_int_float join catalog_references using(idreference) where idstructure=100215 and name='"+value.getNames()[0]+"'");			
+					"SELECT idproperty,title,url,name,value_num as value,user_name FROM property_values join properties using(idproperty) join catalog_references using(idreference) where idstructure=100215 and name='"+value.getNames()[0]+"' and value_num is not null");			
 			Assert.assertEquals(1,table.getRowCount());		
 			
 			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {

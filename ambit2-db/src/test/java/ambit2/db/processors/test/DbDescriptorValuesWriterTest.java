@@ -299,7 +299,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		now = System.currentTimeMillis() - now;
 		
 		c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_number");
+		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values where value_num is not null");
 		Assert.assertEquals(2,names.getRowCount());		
 		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values  where idstructure in (105095,109287)");
 		Assert.assertEquals(2,names.getRowCount());

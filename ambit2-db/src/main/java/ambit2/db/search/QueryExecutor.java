@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Hashtable;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
@@ -13,6 +14,7 @@ import ambit2.db.StatementExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 
 public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,ResultSet> {
+	
 	/**
 	 * 
 	 */
@@ -20,6 +22,14 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	protected PreparedStatement sresults=null;
 	protected Statement statement=null;
 	protected int maxRecords = 0;
+	protected boolean cache = false;
+	public boolean isCache() {
+		return cache;
+	}
+
+	public void setCache(boolean cache) {
+		this.cache = cache;
+	}
 	//ResultSet.TYPE_FORWARD_ONLY, ResultSet.TYPE_SCROLL_INSENSITIVE
 	protected int resultType = ResultSet.TYPE_SCROLL_INSENSITIVE;
 	public int getResultType() {
@@ -66,8 +76,16 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 				} else {
 					String sql = target.getSQL();
 					if (maxRecords > 0)
-						sql = sql + " limit " + Integer.toString(maxRecords);					
-					sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
+						sql = sql + " limit " + Integer.toString(maxRecords);			
+					
+					sresults = getCachedStatement(sql);
+					if (sresults == null) {
+						sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
+						if (cache)	addStatementToCache(sql,sresults);		
+					} else {
+						sresults.clearParameters();
+					}					
+					
 					QueryExecutor.setParameters(sresults, params);
 					logger.debug(sresults);
 					ResultSet rs = sresults.executeQuery();
@@ -78,6 +96,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 			throw new ProcessorException(this,x);
 		}
 	}
+	
 	@Override
 	protected ResultSet execute(Connection c,Q target) throws SQLException, AmbitException {
 		String sql = getSQL(target); 
@@ -103,7 +122,10 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	@Override
 	public void closeResults(ResultSet rs) throws SQLException {
 		if (rs != null) rs.close();
-		if (sresults != null) sresults.close(); sresults = null;
+		if (sresults != null) {
+			if (!cache)	sresults.close(); 
+			sresults = null;
+		}
 		if (statement != null) statement.close();statement = null;		
 	}
 

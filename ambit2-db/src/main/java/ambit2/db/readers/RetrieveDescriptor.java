@@ -12,7 +12,6 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.SourceDataset;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
@@ -22,7 +21,7 @@ public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStru
 	 * 
 	 */
 	private static final long serialVersionUID = -2275940362173809147L;
-	public static final String sql = "SELECT idproperty,title,url,name,value,user_name FROM values_int_float join catalog_references using(idreference) where idstructure=?";
+	public static final String sql = "SELECT idproperty,title,url,name,value_num,user_name FROM property_values join properties using(idproperty) join catalog_references using(idreference) where idstructure=? and value_num is not null";
 	public String getSQL() throws AmbitException {
 		return sql;
 	}
@@ -40,7 +39,7 @@ public class RetrieveDescriptor extends AbstractQuery<IMolecularDescriptor,IStru
 					new DescriptorSpecification(null,null,rs.getString("title"),null),
 					new String[] {},
 					new Object[] {},
-					new DoubleResult(rs.getDouble("value")),
+					new DoubleResult(rs.getDouble("value_num")),
 					new String[] {rs.getString("name")}
 					);
 

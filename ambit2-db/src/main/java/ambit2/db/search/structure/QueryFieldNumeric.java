@@ -44,9 +44,9 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	private static final long serialVersionUID = 1096544914170183549L;
 
 	public final static String sqlField = 
-		"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype) join structure using(idstructure) where value %s ? %s %s\n"+
-		"union\n"+
-		"SELECT ? as idquery,idchemical,idstructure,1 as selected,value as metric FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype) join structure using(idstructure) where value %s ? %s %s";
+		"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) ";
+	public final String where_all = "where value_num is not null and value_num %s ? %s %s \n";
+	public final String where_equal = "where value_num is not null and abs(value_num - ?) <= 1E-4 %s\n";
 
 	protected Number maxValue;
 	public Number getMaxValue() {
@@ -62,12 +62,14 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	}
 
 	public String getSQL() throws AmbitException {
-		return String.format(sqlField,getCondition().getSQL(),
+//where value_num %s ? %s %s and value_num is not null\n";
+//where abs(value_num - ?) < 1E-4 %s and value_num is not null\n";
+		return NumberCondition.getInstance("=").equals(getCondition())?
+					String.format(sqlField+where_equal,(isAnyField()?"":"and name=?"))
+				:
+					String.format(sqlField+where_all,getCondition().getSQL(),
 					(NumberCondition.getInstance(NumberCondition.between).equals(getCondition()))?" and ?":"",
-					(isAnyField()?"":"and name=?"),							
-					getCondition().getSQL(),
-					(NumberCondition.getInstance(NumberCondition.between).equals(getCondition()))?" and ?":"",
-				    (isAnyField()?"":"and name=?")							
+					(isAnyField()?"":"and name=?")					
 					);
 	}
 	
@@ -83,14 +85,13 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");
 		List<QueryParam> params = new ArrayList<QueryParam>();
 
-		for (int i =0; i < 2;i++) {
+
 			params.add(new QueryParam<Integer>(Integer.class, getId()));
 			params.add(new QueryParam<Number>(Double.class, getValue()));
 			if (NumberCondition.between.equals(getCondition().getSQL()))
 				params.add(new QueryParam<Number>(Double.class, getMaxValue()));
 			if ((getFieldname() !=null) && ! "".equals(getFieldname().getName()))
 				params.add(new QueryParam<String>(String.class, getFieldname().getName()));
-		}
 
 		
 		

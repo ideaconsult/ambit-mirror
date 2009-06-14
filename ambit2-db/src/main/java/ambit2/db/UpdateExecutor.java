@@ -34,39 +34,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.IQueryUpdate;
 
+@SuppressWarnings("unchecked")
 public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q, Integer> {
-	protected Hashtable<String,PreparedStatement> cache = new Hashtable<String,PreparedStatement>();
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7041631840539957442L;
-	@Override
-	public void setConnection(Connection connection) throws DbAmbitException {
-		Iterator<PreparedStatement> p = cache.values().iterator();
-		while (p.hasNext())
-			try {
-			p.next().close();
-			} catch (Exception x) {
-				
-			}
-		cache.clear();
-		super.setConnection(connection);
-	}
-	protected PreparedStatement getCachedStatement(String sql) {
-		return cache.get(sql);
-	}
-	protected void addStatementToCache(String sql,PreparedStatement p) {
-		if (p != null) 	cache.put(sql,p);
-	}	
+	private static final long serialVersionUID = -4621464032598050969L;
 	@Override
 	public void close() throws SQLException {
 		super.close();

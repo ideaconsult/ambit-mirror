@@ -36,8 +36,9 @@ import java.util.List;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.NumberCondition;
+import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.db.search.StringCondition;
 
 /**
  * Retrieve names of string properties if setValue(0) ; 
@@ -46,40 +47,28 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class RetrieveFieldNamesByType extends AbstractPropertyRetrieval<String, Integer, NumberCondition>{ 
-	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
-	public static String where = " where idproperty in (select idproperty from property_values where idtype %s ?  group by idtype,idproperty)";
+public class RetrieveFieldNamesByType extends AbstractPropertyRetrieval<String, Boolean, EQCondition>{ 
+	public static String sql = "select idproperty,name,units,title,url,idreference,comments from ( select idproperty,idtype from property_values group by idproperty,idtype) as L join properties using (idproperty) join catalog_references using(idreference) where idtype=?";
 		/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8369867048140756850L;
 	public RetrieveFieldNamesByType(boolean stringproperties) {
 		super();
-		if (stringproperties) {
-			setCondition(NumberCondition.getInstance("="));
-			setFieldname("idtype");
-			setValue(0);
-		} else {
-			setCondition(NumberCondition.getInstance(">"));
-			setFieldname("idtype");
-			setValue(0);			
-		}
+		setCondition(EQCondition.getInstance());
+		setFieldname("idtype");
+		setValue(stringproperties);
 	}	
 	public RetrieveFieldNamesByType() {
 		this(true);
 	}
 		public List<QueryParam> getParameters() throws AmbitException {
-			if (getValue()!=null) {
-				List<QueryParam> params = new ArrayList<QueryParam>();
-				params.add(new QueryParam<Integer>(Integer.class, getValue()));				
-				return params;
-			} else return null;
-			
+			List<QueryParam> param = new ArrayList<QueryParam>();
+			param.add(new QueryParam<String>(String.class,getValue()?"STRING":"NUMERIC"));
+			return param;
+		
 		}
 		public String getSQL() throws AmbitException {
-			if (getValue()!=null) {
-				return sql + String.format(where,getCondition().getSQL(),getCondition().getSQL());
-			}
 			return sql;
 		}
 		@Override

@@ -541,9 +541,9 @@ delete from struc_dataset where idstructure>3
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
 		Assert.assertEquals(2,property_values.getRowCount());			
 		tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(3,tuples.getRowCount());			
+		Assert.assertEquals(5,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
-		Assert.assertEquals(66,p_tuples.getRowCount());				
+		Assert.assertEquals(115,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties

@@ -45,19 +45,21 @@ public class TemplateQuery extends AbstractPropertyRetrieval<String, String, Str
 	private static final long serialVersionUID = 6746077496508519227L;
 	public static final String SQL = 
 			"SELECT properties.name,properties.units,properties.comments,title,url from template join template_def using(idtemplate) "+
-			"join properties using(idproperty) join catalog_references using(idreference) " +
-			"where template.name=?";
+			"join properties using(idproperty) join catalog_references using(idreference) %s" 
+			;
+	public static final String SQL_WHERE = "where template.name=?"; 
 	public TemplateQuery() {
 		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
+		if (getValue()==null) return null;
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getValue()));
 		return params;
 	}
 
 	public String getSQL() throws AmbitException {
-		return SQL;
+		return String.format(SQL,getValue()==null?"":SQL_WHERE);
 	}
 	@Override
 	public String getFieldname() {
