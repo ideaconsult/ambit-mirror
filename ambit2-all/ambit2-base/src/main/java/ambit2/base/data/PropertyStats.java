@@ -1,35 +1,38 @@
 package ambit2.base.data;
 
+import java.text.NumberFormat;
+
 import com.jgoodies.binding.beans.Model;
 
-public class PropertyStats extends Model{
+public class PropertyStats<T extends Comparable<T>> extends Model{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8407181000179501113L;
-	public double getMin() {
-		return min;
+	protected Range<T> range = new Range<T>();
+	protected T avg = null;
+	protected long count;
+	
+	public T getMin() {
+		return range.getMinValue();
 	}
-	public void setMin(double min) {
-		this.min = min;
+	public void setMin(T min) {
+		range.setMinValue(min);
 	}
-	public double getMax() {
-		return max;
+	public T getMax() {
+		return range.getMaxValue();
 	}
-	public void setMax(double max) {
-		this.max = max;
+	public void setMax(T max) {
+		range.setMaxValue(max);
 	}
-	public double getAvg() {
+	public T getAvg() {
 		return avg;
 	}
-	public void setAvg(double avg) {
+	public void setAvg(T avg) {
 		this.avg = avg;
 	}
-	protected double min;
-	protected double max;
-	protected double avg;
-	protected long count;
+
 	public long getCount() {
 		return count;
 	}
@@ -38,6 +41,13 @@ public class PropertyStats extends Model{
 	}
 	@Override
 	public String toString() {
-		return getMin() + "," + getMax();
+		StringBuilder b = new StringBuilder();
+		b.append(getCount());
+		if (getAvg() != null) {
+			b.append(" [");
+			b.append(NumberFormat.getInstance().format(getAvg()));
+			b.append("]");
+		}
+		return b.toString();
 	}
 }

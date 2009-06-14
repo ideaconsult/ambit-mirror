@@ -37,6 +37,10 @@ import com.jgoodies.binding.beans.Model;
 
 
 public class Property extends Model {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6813235410505542235L;
 	private static java.util.concurrent.CopyOnWriteArrayList<Property> properties = 
 		new CopyOnWriteArrayList<Property>();	
 	private static String defaultReference = "Default property reference";
