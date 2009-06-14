@@ -81,13 +81,10 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
   <tuples/>
-  <property_number idvalue="1" idtype="1" value="10.5"/>
-  <property_number idvalue="2" idtype="1" value="12.0"/>
-  <property_number idvalue="3" idtype="1" value="13.0"/>
   <property_string/>
-  <property_values id="1" idproperty="1" idstructure="100215" idvalue="2" idtype="1" status="OK" user_name="guest"/>
-  <property_values id="2" idproperty="2" idstructure="100215" idvalue="2" idtype="1"  status="OK" user_name="guest"/>
-  <property_values id="3" idproperty="1" idstructure="100211" idvalue="3" idtype="1"  status="OK" user_name="guest"/>  
+  <property_values id="1" idproperty="1" idstructure="100215" value_num="12.0"  status="OK" user_name="guest"/>
+  <property_values id="2" idproperty="2" idstructure="100215" value_num="12.0"  status="OK" user_name="guest"/>
+  <property_values id="3" idproperty="1" idstructure="100211" value_num="13.0" status="OK" user_name="guest"/>  
   <property_tuples/>
   <src_dataset/>
   <struc_dataset/>
