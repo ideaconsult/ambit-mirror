@@ -104,7 +104,7 @@ CREATE TABLE  `structure` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DELIMITER $
-CREATE TRIGGER copy_history BEFORE UPDATE ON STRUCTURE
+CREATE TRIGGER copy_history BEFORE UPDATE ON structure
   FOR EACH ROW BEGIN
    INSERT INTO HISTORY (idstructure,structure,format,updated,user_name,type_structure,label)
         SELECT idstructure,structure,format,updated,user_name,type_structure,label FROM structure
@@ -134,39 +134,12 @@ CREATE TABLE  `properties` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_string`;
 CREATE TABLE  `property_string` (
-  `idvalue` int(10) unsigned NOT NULL auto_increment,
-  `idtype` int(10) unsigned NOT NULL default '0',
+  `idvalue_string` int(10) unsigned NOT NULL auto_increment,
   `value` varchar(255) collate utf8_bin NOT NULL,
-  PRIMARY KEY  (`idvalue`),
-  UNIQUE KEY `Index_3` (`value`),
-  UNIQUE KEY `Index_2` (`idvalue`,`idtype`)
+  PRIMARY KEY  (`idvalue_string`),
+  UNIQUE KEY `Index_3` (`value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- -----------------------------------------------------
--- Table `property_number` numeric values
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `property_number`;
-CREATE TABLE  `property_number` (
-  `idvalue` int(10) unsigned NOT NULL auto_increment,
-  `idtype` int(10) unsigned NOT NULL default '1',
-  `value` float(10,4) NOT NULL,
-  PRIMARY KEY  (`idvalue`),
-  UNIQUE KEY `Index_3` (`value`),
-  UNIQUE KEY `Index_2` (`idvalue`,`idtype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- -----------------------------------------------------
--- Table `property_int` numeric values
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `property_int`;
-CREATE TABLE  `property_int` (
-  `idvalue` int(10) unsigned NOT NULL auto_increment,
-  `idtype` int(10) unsigned NOT NULL default '2',
-  `value` int(10) NOT NULL,
-  PRIMARY KEY  (`idvalue`),
-  UNIQUE KEY `Index_3` (`value`),
-  UNIQUE KEY `Index_2` (`idvalue`,`idtype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `template` defines templates
@@ -250,20 +223,24 @@ CREATE TABLE  `property_values` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `idproperty` int(10) unsigned NOT NULL,
   `idstructure` int(10) unsigned NOT NULL,
-  `idvalue` int(10) unsigned NOT NULL,
-  `idtype` int(10) unsigned NOT NULL,
   `user_name` varchar(16) collate utf8_bin NOT NULL,
   `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL default 'UNKNOWN',
   `text` text collate utf8_bin,
+  `idvalue_string` int(10) unsigned default NULL,
+  `value_num` double(14,4) default NULL,
+  `idtype` enum('STRING','NUMERIC') collate utf8_bin NOT NULL default 'STRING',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `Index_2` USING BTREE (`idproperty`,`idstructure`,`idtype`),
+  UNIQUE KEY `Index_1` USING BTREE (`idproperty`,`idstructure`),
   KEY `FK_property_values_1` (`user_name`),
   KEY `FK_property_values_2` (`idstructure`),
-  KEY `Index_5` (`idvalue`,`idtype`),
-  KEY `Index_6` (`idtype`,`idproperty`),
+  KEY `Index_2` (`value_num`),
+  KEY `FK_property_values_5` (`idvalue_string`),
+  KEY `Index_3` USING BTREE (`idproperty`,`idtype`),
+  KEY `Index_8` (`idproperty`,`idvalue_string`),
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_property_values_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -546,23 +523,15 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,5,"AMBIT2 schema");
-
--- -----------------------------------------------------
--- integer property values
--- -----------------------------------------------------
-DROP VIEW IF EXISTS `values_int`;
-create view `values_int` as
-SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype
-FROM property_values join property_int using(idvalue,idtype);
+insert into version (idmajor,idminor,comment) values (2,6,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- numeric property values
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `values_number`;
 create view `values_number` as
-SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype
-FROM property_values join property_number using(idvalue,idtype);
+SELECT id,idproperty,idstructure,value_num as value,status,user_name
+FROM property_values where value_num is not null;
 
 -- -----------------------------------------------------
 -- string property values
@@ -570,28 +539,20 @@ FROM property_values join property_number using(idvalue,idtype);
 
 DROP VIEW IF EXISTS `values_string`;
 create view `values_string` as
-SELECT id,idproperty,idstructure,if(status="TRUNCATED",text,value) as value,idvalue,status,user_name,idtype,name
-FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype);
+SELECT id,idproperty,idstructure,if(status="TRUNCATED",text,value) as value,status,user_name,name
+FROM properties join property_values using(idproperty) join property_string using(idvalue_string)
+where idvalue_string is not null;
 
 -- -----------------------------------------------------
 -- all property values
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `values_all`;
 create view values_all as
-SELECT idstructure,idproperty,name,null as value_string,value as value_number,idreference FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
+SELECT idstructure,idproperty,name,null as value_string,value_num as value_number,idreference FROM properties join property_values using(idproperty) 
+where value_num is not null 
 union
-SELECT idstructure,idproperty,name,value as value_string,null as value_number,idreference FROM properties join property_values using(idproperty) join property_string using(idvalue,idtype)
-union
-SELECT idstructure,idproperty,name,null as value_string,value as value_number,idreference FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype);
-
--- -----------------------------------------------------
--- numeric property values
--- -----------------------------------------------------
-DROP VIEW IF EXISTS `values_int_float`;
-create view values_int_float as
-SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype,idreference,name FROM properties join property_values using(idproperty) join property_number using(idvalue,idtype)
-union
-SELECT id,idproperty,idstructure,value,idvalue,status,user_name,idtype,idreference,name FROM properties join property_values using(idproperty) join property_int using(idvalue,idtype);
+SELECT idstructure,idproperty,name,value as value_string,null as value_number,idreference FROM properties join property_values using(idproperty) join property_string using(idvalue_string)
+where idvalue_string is not null;
 
 -- -----------------------------------------------------
 -- ontology

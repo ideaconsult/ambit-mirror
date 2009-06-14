@@ -10,7 +10,9 @@ public class StringCondition implements IQueryCondition {
 	public static final String C_NOTLIKE="not like";
 	public static final String C_SOUNDSLIKE="sounds like";
 	public static final String C_REGEXP="regexp";
-	public static final String C_STARTS_WITH="regexp ^";	
+	public static final String C_STARTS_WITH="regexp ^";
+	public static final String C_ISNULL="is null";
+	public static final String C_ISNOTNULL="is not null";	
 	
 	public enum STRING_CONDITION {
 		S_EQ {
@@ -81,7 +83,22 @@ public class StringCondition implements IQueryCondition {
 			public String getName() {
 				return StringCondition.C_STARTS_WITH;
 			}
+		},
+		S_ISNOTNULL {
+			@Override
+			public String getSQL() {
+				return StringCondition.C_ISNOTNULL;
+			}
+
+		},	
+		S_ISNULL {
+			@Override
+			public String getSQL() {
+				return StringCondition.C_ISNULL;
+			}
+
 		};		
+		
 		public String getName() {
 			return getSQL();
 		}

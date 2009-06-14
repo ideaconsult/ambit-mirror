@@ -21,7 +21,7 @@ public class ExtractData {
         Connection jdbcConnection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-        String ids = "(1)";
+        String ids = "(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)";
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
@@ -43,19 +43,19 @@ public class ExtractData {
             
         partialDataSet.addTable("src_dataset", "SELECT * FROM src_dataset");
         partialDataSet.addTable("tuples","select * from tuples"); 
-        partialDataSet.addTable("property_number", "SELECT * FROM property_number");        
+ 
         partialDataSet.addTable("property_string", "SELECT * FROM property_string");
-        partialDataSet.addTable("property_int", "SELECT * FROM property_int");            
-        partialDataSet.addTable("property_values", "SELECT id,idproperty,idstructure,idvalue,idtype,status,property_values.user_name FROM property_values join structure using(idstructure) where idchemical in "+ids);     
-        partialDataSet.addTable("property_tuples", "SELECT * FROM property_tuples");          
-        partialDataSet.addTable("struc_dataset", "SELECT * FROM struc_dataset");        
+        partialDataSet.addTable("property_values", "SELECT id,idproperty,idstructure,idvalue_string,value_num,status,property_values.user_name FROM property_values join structure using(idstructure) where idchemical in "+ids);     
+        partialDataSet.addTable("property_tuples", "SELECT idtuple,id FROM property_tuples join property_values using(id) where idstructure in (select idstructure from structure where idchemical in "+ids+")");          
+        partialDataSet.addTable("struc_dataset", "SELECT * FROM struc_dataset  where idstructure in (select idstructure from structure where idchemical in "+ids+")");        
         
-        partialDataSet.addTable("query", "SELECT * FROM query where idquery<5");
-        partialDataSet.addTable("query_results", "SELECT * FROM query_results where idquery<5");
-        partialDataSet.addTable("sessions", "SELECT * FROM sessions");
+        partialDataSet.addTable("sessions", "SELECT idsessions,user_name FROM sessions");        
+        partialDataSet.addTable("query", "SELECT * FROM query");
+        partialDataSet.addTable("query_results", "SELECT * FROM query_results where idstructure in (select idstructure from structure where idchemical in "+ ids+")");
+
         //BIGINT serializes to long and gives errors for 
-        partialDataSet.addTable("fp1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
-        partialDataSet.addTable("sk1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM sk1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
+        //partialDataSet.addTable("fp1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM fp1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
+        //partialDataSet.addTable("sk1024", "SELECT idchemical,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16,time,bc,status FROM sk1024 join chemicals using(idchemical) WHERE idchemical in "+ids);
                 
         FlatDtdDataSet.write(partialDataSet, new FileOutputStream("src/test/resources/ambit2/db/processors/test/partial-dataset.dtd"));
         FlatXmlDataSet.write(partialDataSet, 

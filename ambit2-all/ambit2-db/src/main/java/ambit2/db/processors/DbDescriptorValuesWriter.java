@@ -129,12 +129,7 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 			throws SQLException {
 		return super.insertValue(value, property, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
 	}
-	@Override
-	protected boolean insertValue(int value, Property property, int idtuple,
-			ambit2.db.processors.AbstractPropertyWriter.mode error)
-			throws SQLException {
-		return super.insertValue(value, property, idtuple, (error==mode.ERROR)?AbstractPropertyWriter.mode.ERROR:AbstractPropertyWriter.mode.OK);
-	}
+
 	@Override
 	protected boolean insertValue(String value, Property property, int idtuple,
 			ambit2.db.processors.AbstractPropertyWriter.mode error)

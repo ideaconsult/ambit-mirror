@@ -33,6 +33,7 @@ import java.sql.ResultSet;
 
 import junit.framework.Assert;
 import ambit2.base.data.Property;
+import ambit2.base.data.Range;
 import ambit2.db.search.property.PropertyStatsString;
 
 public class PropertyStatsStringTest  extends QueryTest<PropertyStatsString>  {

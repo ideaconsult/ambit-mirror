@@ -5,6 +5,7 @@ import java.util.BitSet;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.Range;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.AbstractDBProcessor;
@@ -13,7 +14,6 @@ import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.storedquery.RetrieveStoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryField;

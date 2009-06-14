@@ -46,11 +46,11 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	private static final long serialVersionUID = -5810564793012596407L;
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure\n"+
-		"join property_values using(idstructure) join property_string as f using (idvalue,idtype)"+
+		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
 		"join properties using(idproperty) where\n"+
 		"name=? and value %s ?";
 	public final static String sqlAnyField = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join property_values using(idstructure) join property_string as f using (idvalue,idtype) where value %s ?";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join property_values using(idstructure) join property_string as f using (idvalue_string) where value %s ?";
 	public QueryField() {
 		setFieldname(null);
 		setCondition(StringCondition.getInstance("="));

@@ -39,23 +39,14 @@ public class QueryStatisticsProcessor extends ConnectionStatisticsProcessor<ISto
 		
 		"select properties.name as Property,count(distinct(value)) as 'Distinct values' from properties\n"+
 		"join property_values using(idproperty)\n"+
-		"join property_string using(idvalue,idtype)\n"+
+		"join property_string using(idvalue_string)\n"+
 		"join\n"+
 		"(SELECT idstructure FROM query_results where idquery=%s) as s\n"+
 		"using(idstructure)\n"+
 		"group by properties.idproperty\n",
 		
-		"select idproperty,properties.name as property,min(value) as \"Min\",avg(value) as \"Average\",max(value) as \"Max\",count(idstructure) as \"#\" from properties\n"+
+		"select idproperty,properties.name as property,min(value_num) as \"Min\",avg(value_num) as \"Average\",max(value_num) as \"Max\",count(idstructure) as \"#\" from properties\n"+
 		"join property_values using(idproperty)\n"+
-		"join property_int using(idvalue,idtype)\n"+
-		"join\n"+
-		"(SELECT idstructure FROM query_results where idquery=%s) as s\n"+
-		"using(idstructure)\n"+
-		"group by properties.idproperty\n"+
-		"union\n"+
-		"select idproperty,properties.name as property,min(value) As \"Min\",avg(value) as \"Average\",max(value) as \"Max\",count(idstructure) as \"#\" from properties\n"+
-		"join property_values using(idproperty)\n"+
-		"join property_number using(idvalue,idtype)\n"+
 		"join\n"+
 		"(SELECT idstructure FROM query_results where idquery=%s) as s\n"+
 		"using(idstructure)\n"+
