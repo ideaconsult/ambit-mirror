@@ -1,5 +1,4 @@
 /*
-Copyright (C) 2005-2008  
 
 Contact: nina@acad.bg
 
@@ -95,19 +94,19 @@ public class PBTWriterTest extends DbUnitTest {
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
 		Assert.assertEquals(1, structures.getRowCount());
 		
-		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^SUBSTANCE_' order by name");
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue_string,value_num FROM properties join property_values using(idproperty) where name regexp '^SUBSTANCE_' order by name");
 		Assert.assertEquals(8, templates.getRowCount());
 
-		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^Persistence_' order by name");
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue_string,value_num FROM properties join property_values using(idproperty) where name regexp '^Persistence_' order by name");
 		Assert.assertEquals(25, templates.getRowCount());
 
-		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^Bioaccumulation_' order by name");
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue_string,value_num FROM properties join property_values using(idproperty) where name regexp '^Bioaccumulation_' order by name");
 		Assert.assertEquals(19, templates.getRowCount());
 		
-		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^Toxicity_' order by name");
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue_string,value_num FROM properties join property_values using(idproperty) where name regexp '^Toxicity_' order by name");
 		Assert.assertEquals(19, templates.getRowCount());
 
-		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue,idtype FROM properties join property_values using(idproperty) where name regexp '^RESULT_' order by name");
+		templates = c.createQueryTable("substance_sheet","SELECT name,idvalue_string,value_num FROM properties join property_values using(idproperty) where name regexp '^RESULT_' order by name");
 		Assert.assertEquals(1, templates.getRowCount());
 		
 		
@@ -115,6 +114,11 @@ public class PBTWriterTest extends DbUnitTest {
 		Assert.assertEquals(count, templates.getRowCount());	
 		templates = c.createQueryTable("EXPECTED_VALUES",	"SELECT * FROM property_values");
 		Assert.assertEquals(count, templates.getRowCount());			
+		
+		templates = c.createQueryTable("EXPECTED_VALUES",	"SELECT name,value_num FROM property_values join properties using(idproperty) where name=\"SUBSTANCE_B12\" and (value_num - 72.2) <= 1E-4");
+		Assert.assertEquals(1, templates.getRowCount());			
+		
+		 
 		c.close();
 		
 	}
