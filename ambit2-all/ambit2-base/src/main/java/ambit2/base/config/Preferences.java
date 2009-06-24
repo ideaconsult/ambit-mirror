@@ -60,23 +60,25 @@ public class Preferences {
 	
 	protected final static String filename="ambit2.pref";
 	protected static Properties props = null;
+	public enum VTAGS { General, Structure,Conversion3D,Database };
+	public enum VINDEX { NAME,TITLE,VALUE,CLASS,HINT,HIDDEN,TAG };
 
 	public static Object[][] default_values = {
-		//{tag, name, default value, class, hint, hidden}
-		{DATABASE,"Default database schema","ambit2",String.class,"This is the default database schema AmbitXT will attempt to connect to when a database connection is required.",false},
-		{PORT,"Default database port","33060",String.class,"This is the default port AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this port.",false},
-		{USER,"Default user","guest",String.class,"This is the default user name AmbitXT will attempt to connect with when a database connection is required.",false},		
-		{HOST,"Host","localhost",String.class,"This is the default host AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this host.",false},
-		{SCHEME,"Scheme","jdbc:mysql",String.class,"",false},		
-		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false},
+		//{tag, name, default value, class, hint, hidden,tag}
+		{DATABASE,"Default database schema","ambit2",String.class,"This is the default database schema AmbitXT will attempt to connect to when a database connection is required.",false,VTAGS.Database},
+		{PORT,"Default database port","33060",String.class,"This is the default port AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this port.",false,VTAGS.Database},
+		{USER,"Default user","guest",String.class,"This is the default user name AmbitXT will attempt to connect with when a database connection is required.",false,VTAGS.Database},		
+		{HOST,"Host","localhost",String.class,"This is the default host AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this host.",false,VTAGS.Database},
+		{SCHEME,"Scheme","jdbc:mysql",String.class,"",true,VTAGS.Database},		
+		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false,VTAGS.Database},
 
-		//	{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",false},
-		//{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false},
-       // {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false},
-        {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"If checked, will report an error when an unknown atom type is encountered.",false},
-		{DEFAULT_DIR,"Default directory","",String.class,"This folder will appear as a default in the file open or file save dialogs",false},		
+		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",true,VTAGS.Structure},
+		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false,VTAGS.Structure},
+        {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false,VTAGS.Structure},
+        {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"If checked, will report an error when an unknown atom type is encountered.",false,VTAGS.Structure},
+		{DEFAULT_DIR,"Default directory","",String.class,"This folder will appear as a default in the file open or file save dialogs",false,VTAGS.General},		
 
-		{SMILES_GEN,"Generate the smiles submitted to smi2sdf","true",Boolean.class,"Generate the smiles , submitted to smi2sdf, or use the one in the file",true}
+		{SMILES_GEN,"Generate the smiles submitted to smi2sdf","true",Boolean.class,"Generate the smiles , submitted to smi2sdf, or use the one in the file",true,VTAGS.Conversion3D}
 		/*
         {OPENBABEL_WIN,"Path to OpenBabel (Windows)","helper/openbabel/win/babel.exe",String.class,"Where to find Openbabel in Windows",false},
         {OPENBABEL_LINUX,"Path to OpenBabel (Linux)","helper/openbabel/linux/babel",String.class,"Where to find OpenBabel in Linux",false},
