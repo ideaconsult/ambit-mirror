@@ -33,7 +33,7 @@ public class MySQLStart extends CommandShell<MySQLCommand, MySQLCommand> {
 	protected void initialize() throws ShellException {
 	}
 	@Override
-	public String getExecutable(String osname) {
+	public String getExecutable(String osname) throws Exception {
 		return executables.get(osname).getExe();
 	}
 

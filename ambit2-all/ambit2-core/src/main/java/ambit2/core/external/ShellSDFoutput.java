@@ -11,6 +11,10 @@ import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 
 public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8770974107691241294L;
 	protected boolean readOutput;
 	
 	public ShellSDFoutput()  throws ShellException {

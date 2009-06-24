@@ -7,11 +7,14 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
 public class OpenBabelShell extends ShellSDFoutput<String> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -89551999366481056L;
 	protected static String[] libFiles = {
 			"bin/openbabel/win/iconv.dll",
 				"bin/openbabel/win/libinchi.dll",
@@ -23,7 +26,7 @@ public class OpenBabelShell extends ShellSDFoutput<String> {
 	}
 	protected void initialize() throws ShellException {
 		super.initialize();
-		addExecutable(CommandShell.os_WINDOWS, "bin/openbabel/win/babel.exe",libFiles);
+		addExecutableWin("bin/openbabel/win/babel.exe",libFiles);
 		setInputFile("obabel.smi");
 		setOutputFile("obabel.sdf");		
 		setReadOutput(true);

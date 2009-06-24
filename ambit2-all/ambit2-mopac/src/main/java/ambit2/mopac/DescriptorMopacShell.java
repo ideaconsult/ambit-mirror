@@ -56,7 +56,6 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
 	public static final String EHOMO = "EHOMO";
 	public static final String ELUMO = "ELUMO";
     protected String force_field = MopacShell.defaultparams[2]; 
-    
     protected MopacShell mopac_shell;
     /**
      * 
@@ -370,5 +369,11 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
     protected void debug(String message) {
     	logger.info(message);
     }
+	public boolean isErrorIfDisconnected() {
+		return mopac_shell.isErrorIfDisconnected();
+	}
+	public void setErrorIfDisconnected(boolean errorIfDisconnected) {
+		mopac_shell.setErrorIfDisconnected(errorIfDisconnected);
+	}
 
 }

@@ -32,14 +32,28 @@ import java.util.List;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.tools.MFAnalyser;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
 public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7647984144381286155L;
 
-	protected SmilesGenerator gen = new SmilesGenerator();
+	protected boolean dropHydrogens = true;
+	    
+	public boolean isDropHydrogens() {
+		return dropHydrogens;
+	}
+	public void setDropHydrogens(boolean dropHydrogens) {
+		this.dropHydrogens = dropHydrogens;
+	}
+	protected transient SmilesGenerator gen = new SmilesGenerator();
 	public ShellSmi2SDF() throws ShellException {
 		super();
 	}
@@ -55,19 +69,34 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 		setOutputFile("rough.sdf");		
 		setReadOutput(false);
 	}
+	
+
 	protected List<String> prepareInput(String path, IMolecule mol) throws ShellException {
 		try {
 			//Object smiles = mol.getProperty("SMILES"); 
 			//if (smiles == null) 
-			String smiles = gen.createSMILES(mol);
-			System.out.println(smiles);
+			Object smiles = mol.getProperty(Preferences.getProperty(Preferences.SMILES_FIELD)); 
+			if (isGenerateSmiles() || (smiles == null)) {
+                logger.debug("Generate smiles\t");
+                IMolecule c = mol;
+                if (dropHydrogens) {
+                    c = (IMolecule) mol.clone();
+                    MFAnalyser mf = new MFAnalyser(c);
+                    c = (IMolecule) mf.removeHydrogensPreserveMultiplyBonded();
+                }
+                
+			    smiles = gen.createSMILES(c);
+            } else logger.debug("Use smiles from file\t"+smiles);
+			
 			FileWriter writer = new FileWriter(path + File.separator + getInputFile());
 			writer.write(smiles.toString());
+			/* with long string for title , mengine crashes ...
 			Object title = mol.getProperty(CDKConstants.TITLE);
 			if (title != null) {
 				writer.write('\t');
 				writer.write(title.toString());
 			}
+			*/
 			writer.write('\n');
 			writer.flush();
 			writer.close();
@@ -94,7 +123,15 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 	protected IMolecule transform(IMolecule mol) {
 		return mol;
 	}
-
+    public synchronized boolean isGenerateSmiles() {
+        return  Preferences.getProperty(Preferences.SMILES_GEN).equals("true");
+    }
+    public synchronized void setGenerateSmiles(boolean generateSmiles) {
+        if (generateSmiles)
+        Preferences.setProperty(Preferences.SMILES_GEN,"true");
+        else
+            Preferences.setProperty(Preferences.SMILES_GEN,"false");
+    }
 }
 
 
