@@ -44,7 +44,6 @@ import org.openscience.cdk.tools.MFAnalyser;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.smi23d.ShellMengine;
 import ambit2.smi23d.ShellSmi2SDF;
 
@@ -55,6 +54,10 @@ import ambit2.smi23d.ShellSmi2SDF;
  *
  */
 public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5948332340539224507L;
 	protected int maxHeavyAtoms = 60;
 	protected int maxAllAtoms = 120;
 	public static String[] defaultparams = {"PM3 NOINTER NOMM BONDS MULLIK PRECISE GNORM=0.0","bin/mopac/MOPAC_7.1.exe",""}; //mmff94

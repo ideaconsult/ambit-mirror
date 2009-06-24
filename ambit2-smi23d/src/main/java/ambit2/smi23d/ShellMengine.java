@@ -33,7 +33,16 @@ import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
+/**
+ * A wrapper for Mengine
+ * @author nina
+ *
+ */
 public class ShellMengine extends ShellSDFoutput<IMolecule> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9089097054499846056L;
 	public ShellMengine() throws ShellException {
 		super();
 	}

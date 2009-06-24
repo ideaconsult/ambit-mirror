@@ -76,6 +76,7 @@ public class Preferences {
         {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"If checked, will report an error when an unknown atom type is encountered.",false},
 		{DEFAULT_DIR,"Default directory","",String.class,"This folder will appear as a default in the file open or file save dialogs",false},		
 
+		{SMILES_GEN,"Generate the smiles submitted to smi2sdf","true",Boolean.class,"Generate the smiles , submitted to smi2sdf, or use the one in the file",true}
 		/*
         {OPENBABEL_WIN,"Path to OpenBabel (Windows)","helper/openbabel/win/babel.exe",String.class,"Where to find Openbabel in Windows",false},
         {OPENBABEL_LINUX,"Path to OpenBabel (Linux)","helper/openbabel/linux/babel",String.class,"Where to find OpenBabel in Linux",false},

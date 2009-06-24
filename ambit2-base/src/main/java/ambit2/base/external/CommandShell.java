@@ -53,6 +53,10 @@ import ambit2.base.log.AmbitLogger;
  *
  */
 public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUTPUT> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5771392099125415099L;
 	protected String prefix = "ambit2/";
 	public static final String os_MAC = "Mac OS";
 	public static final String os_WINDOWS = "Windows";
@@ -66,6 +70,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	protected boolean runAsync = false;
 	
 	protected boolean enabled=true;
+	protected int exitCode = 0;
 	
 	public boolean isEnabled() {
 		return enabled;
@@ -77,6 +82,12 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 		executables = new Hashtable<String, Command>();
 		initialize();
 	}
+	public synchronized int getExitCode() {
+	        return exitCode;
+	}
+	public synchronized void setExitCode(int exitCode) {
+	        this.exitCode = exitCode;
+	}	
 	protected void initialize() throws ShellException  {
 		
 	}
@@ -99,7 +110,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public String addExecutableLinux(String executable, String[] morefiles) throws ShellException  {
 		return addExecutable(os_LINUX,executable,morefiles);
 	}			
-	public String getExecutable(String osname) {
+	public String getExecutable(String osname) throws Exception {
 		
 		//ambit2/
 		Command command = executables.get(osname);
@@ -111,26 +122,15 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 			file = new File(homeDir,exe);
 			if (!file.exists()) {
 				logger.info("Writing "+exe + " to "+ file);
-				try {
-					DownloadTool.download(prefix+exe, file);
-					System.out.println(file.getAbsolutePath());
-					command.setExe(file.getAbsolutePath());
-				} catch (IOException x) {
-					x.printStackTrace();
-					return null;
-				}
+				DownloadTool.download(prefix+exe, file);
+				command.setExe(file.getAbsolutePath());
 			}
 			if (command.getAdditionalFiles()!=null)
-				try {
 				for (String lib: command.getAdditionalFiles()) {
 					File newfile = new File(homeDir,lib);
 					if (!newfile.exists())
 					DownloadTool.download(prefix+lib, newfile);
 				}			
-				} catch (Exception x) {
-					x.printStackTrace();
-					return null;					
-				}
 			command.setExe(file.getAbsolutePath());
 			
 
@@ -147,10 +147,15 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
         Enumeration<String> oss = executables.keys();
         while (oss.hasMoreElements()) {
         	String os = oss.nextElement();
-        	if (osName.startsWith(os)) {
+        	if (osName.startsWith(os)) 
+        	try {
         		String exeString = getExecutable(os);
         		if (exeString != null) 
         			return exeString;
+        	} catch (IOException x) {
+        		throw new ShellException(this,"Not found");
+        	} catch (Exception x ) {
+        		throw new ShellException(this,"Not supported for "+osName);		
         	}
         }
         throw new ShellException(this,"Not supported for "+osName);		
@@ -196,6 +201,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 
     protected OUTPUT runShell(INPUT input,String execString) throws ShellException {
     	try {
+    		    setExitCode(0);
     			File file = new File(execString);
     			String path = getPath(file);
     			
@@ -210,14 +216,15 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 
                 ProcessBuilder builder = new ProcessBuilder(command);
                 //If the value is set to true, the standard error is merged with the standard output
-                
                 Map<String, String> environ = builder.environment();
                 builder.directory(new File(path));
-                
                 
                 if (!runAsync) {
                     builder.redirectErrorStream(true);
                     logger.info("<" + toString() + " filename=\""+execString+"\">");
+                    logger.debug("<environ>");
+                    logger.debug(environ);
+                    logger.debug("</environ>");                        
                     long now=System.currentTimeMillis();    
                     final Process process = builder.start();
                     InputStream is = process.getInputStream();
@@ -233,15 +240,14 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                 	
 	                logger.info("<wait process=\""+execString+"\">");
 	
-	                int exitVal = process.waitFor();
-
+	                setExitCode(process.waitFor());
 	                logger.info("</wait>");
-	                logger.info("<exitcode value=\""+Integer.toString(exitVal)+"\">");
+	                logger.info("<exitcode value=\""+Integer.toString(getExitCode())+"\">");
 	                logger.info("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
 	                logger.info("</" + toString() + ">");
 	                
 	                OUTPUT newmol = null;
-	                if (exitCodeOK(exitVal)) {
+	                if (exitCodeOK(getExitCode())) {
 	                	logger.info("<parse>");
 	                	newmol = parseOutput(path, mol);
 	                	logger.info("</parse>");
