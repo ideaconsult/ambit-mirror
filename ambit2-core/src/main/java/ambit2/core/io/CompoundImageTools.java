@@ -225,7 +225,8 @@ public class CompoundImageTools {
                 with2d = true;
             }
         }
-        with2d = (((minC.x-maxC.x)==0) && ((minC.y-maxC.y)==0))?false:with2d;
+        if ((minC != null) && (maxC!=null))
+        	with2d = (((minC.x-maxC.x)==0) && ((minC.y-maxC.y)==0))?false:with2d;
 		if(!no2d && with2d){
 			return 2;
 		} else if(no2d && with2d){
