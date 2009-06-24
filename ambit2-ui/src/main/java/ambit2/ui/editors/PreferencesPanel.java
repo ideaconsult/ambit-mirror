@@ -36,8 +36,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 
 import ambit2.base.config.Preferences;
+import ambit2.base.config.Preferences.VINDEX;
+import ambit2.base.config.Preferences.VTAGS;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -49,9 +52,15 @@ public class PreferencesPanel implements IAmbitEditor<Properties>  {
 	 */
 	protected JComponent component;
 	private static final long serialVersionUID = -5074505644698297727L;
+	
 	public PreferencesPanel() {
+		this(VTAGS.values());
+	}
+	public PreferencesPanel(VTAGS[] tags) {
 		setObject(Preferences.getProperties());
-		component = addWidgets();
+		JTabbedPane tp = new JTabbedPane();
+		for (VTAGS tag:tags)  tp.addTab(tag.toString(), addWidgets(tag));
+		component = tp;
 	}
 	public boolean isEditable() {
 		return true;
@@ -71,23 +80,27 @@ public class PreferencesPanel implements IAmbitEditor<Properties>  {
 		
 		
 	}
-	protected JComponent addWidgets() {
+	protected JComponent addWidgets(VTAGS tag) {
 			int rows = 0;
 			
 			StringBuilder layout = new StringBuilder();
 			String d = "";
-			for (int i=0; i < Preferences.default_values.length; i++) 
-				if (!(Boolean)Preferences.default_values[i][5]) {
-					layout.append(d);
-					layout.append("pref");
-					d = ",";
-				}
+			for (int i=0; i < Preferences.default_values.length; i++)  
+				if (!tag.equals(Preferences.default_values[i][VINDEX.TAG.ordinal()])) continue;
+				else
+					if (!(Boolean)Preferences.default_values[i][VINDEX.HIDDEN.ordinal()]) {
+						layout.append(d);
+						layout.append("pref");
+						d = ",";
+					}
+			
 	        FormLayout formlayout = new FormLayout(
 	                "right:pref, 3dlu, 150dlu:grow",
 	                layout.toString());
 	        CellConstraints cc = new CellConstraints();
 	        PanelBuilder builder = new PanelBuilder(formlayout);
    			for (int i=0; i < Preferences.default_values.length; i++) {
+				if (!tag.equals(Preferences.default_values[i][VINDEX.TAG.ordinal()])) continue;
    				if ((Boolean)Preferences.default_values[i][5]) continue;//hidden
    				rows++;
    				JLabel l = new JLabel(Preferences.default_values[i][1].toString());
