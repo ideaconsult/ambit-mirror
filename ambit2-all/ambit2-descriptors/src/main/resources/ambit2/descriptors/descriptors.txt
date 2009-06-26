@@ -3,6 +3,14 @@ ambit2.descriptors.PKASmartsDescriptor
 ;ambit2.descriptors.SizeDescriptor
 ;ambit2.descriptors.SpherosityDescriptor
 ;ambit2.mopac.DescriptorMopacShell
+;toxTree.tree.cramer.CramerRules
+;verhaar.VerhaarScheme
+;cramer2.CramerRulesWithExtensions
+;eye.EyeIrritationRules
+;mic.MICRules
+;michaelacceptors.MichaelAcceptorRules
+;mutant.BB_CarcMutRules
+;sicret.SicretRules
 ;org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor

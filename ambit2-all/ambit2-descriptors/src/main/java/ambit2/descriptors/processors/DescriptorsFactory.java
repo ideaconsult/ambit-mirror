@@ -29,6 +29,7 @@
 
 package ambit2.descriptors.processors;
 
+import java.beans.IntrospectionException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 						p.add(property);						
 					}
 				} catch (Exception x) {
-					
+					x.printStackTrace();
 				}
 
 				//}

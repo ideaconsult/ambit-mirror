@@ -64,7 +64,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 
 		return getDocument(new File(filename));
 	}
-	public static Document getDocument(File file) throws Exception {
+	public static synchronized Document getDocument(File file) throws Exception {
 		logger.debug("Trying to load from file "+file.getAbsolutePath());		
 		FileReader filereader = new FileReader(file);
 		try {
@@ -76,7 +76,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 		}
 		
 	}	
-	public static Document getDocument(InputStream stream) throws Exception {
+	public static synchronized Document getDocument(InputStream stream) throws Exception {
 		logger.debug("Trying to load from as a resource stream ");		
 		try {
 			return  getDocument(new InputSource(stream));
@@ -88,11 +88,12 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 	}	
 	public static Document getDocument() throws Exception {
 		logger.debug("Trying to load the default ambit2/data/descriptors/funcgroups.xml");		
-		return  getDocument(
-				FuncGroupsDescriptorFactory.class
-				.getClassLoader().getResourceAsStream(
-						"ambit2/descriptors/funcgroups.xml")
-				);
+		ClassLoader c = FuncGroupsDescriptorFactory.class.getClassLoader();
+		java.net.URL url = c.getResource("ambit2/descriptors/funcgroups.xml");
+		logger.debug("PATH: resolved name = " + url);
+		InputStream is = url.openStream();
+		return  getDocument(is);
+
 	}	
 	
 	public static Document getDocument(InputSource source) throws Exception {
