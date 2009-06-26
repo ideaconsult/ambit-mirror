@@ -56,6 +56,7 @@ import java.util.Stack;
 public class SmartsManager 
 {
 	int recursiveStrategy = 1; //0 - subqueries, 1 - recursive substructure search (default one)
+	boolean FlagSetSmartsDataForTarget = true;
 	SmartsParser parser = new SmartsParser();
 	String querySmarts;
 	String errorMsg = "";
@@ -152,6 +153,11 @@ public class SmartsManager
 	public QueryAtomContainer getQueryContaner()
 	{
 		return(query);
+	}	
+		
+	public void setSmartsDataForTarget(boolean flag)
+	{
+		FlagSetSmartsDataForTarget  = flag;
 	}
 	
 	public void supportMOEExtension(boolean support)
@@ -190,7 +196,8 @@ public class SmartsManager
 		if (query == null)
 			return(false);		
 		
-		parser.setSMARTSData(target);
+		if (FlagSetSmartsDataForTarget)
+			parser.setSMARTSData(target);
 		
 		if (parser.numFragments > 1)
 			return(fragmentSearchIn(target));
@@ -709,8 +716,9 @@ public class SmartsManager
 	{				
 		if (query == null)
 			return(null);		
+		if (FlagSetSmartsDataForTarget)
+			parser.setSMARTSData(target);
 		
-		parser.setSMARTSData(target);
 		if (parser.hasRecursiveSmarts)
 		{	
 			clearQueryRecMatches();
@@ -724,7 +732,9 @@ public class SmartsManager
 		if (query == null)
 			return(null);		
 		
-		parser.setSMARTSData(target);
+		if (FlagSetSmartsDataForTarget)
+			parser.setSMARTSData(target);
+		
 		if (parser.hasRecursiveSmarts)
 		{	
 			clearQueryRecMatches();
