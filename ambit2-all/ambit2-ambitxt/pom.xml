@@ -51,6 +51,18 @@
 				</executions>
 			</plugin>
   	</plugins>
+
+  	<pluginManagement>
+  		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+				<skip>false</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</pluginManagement>  	
   </build>
   <dependencies>
     <dependency>
@@ -108,6 +120,69 @@
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-cramer</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-cramer</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+            <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-cramer2</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-verhaar</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+            <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-eye</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-sicret</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<scope>compile</scope>
+    	<type>jar</type>
+    </dependency>    
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-mutant</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>    
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-michaelacceptors</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+   		<scope>compile</scope>
+    	<type>jar</type>
+    </dependency>    
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-mic</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+   		<scope>compile</scope>
+    	<type>jar</type>
+    </dependency>    
   </dependencies>
   
 </project>
