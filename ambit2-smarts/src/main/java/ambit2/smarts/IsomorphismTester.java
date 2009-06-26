@@ -288,6 +288,7 @@ public class IsomorphismTester
 	 */
 	public Vector<IAtom> getIsomorphismMapping(IAtomContainer container)
 	{
+		if (query == null) return null;
 		target = container;	
 		FlagStoreIsomorphismNode = true;
 		isomorphismNodes.clear();
