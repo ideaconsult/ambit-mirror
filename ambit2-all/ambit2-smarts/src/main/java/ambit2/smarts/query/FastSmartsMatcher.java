@@ -1,7 +1,13 @@
 package ambit2.smarts.query;
 
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
@@ -33,7 +39,25 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 
 	public IAtomContainer getMatchingStructure(IAtomContainer mol)
 			throws SMARTSException {
-		throw new UnsupportedOperationException("Not implemented");
+		if (query == null) return null;
+		isoTester.setQuery(query);
+		Vector<IAtom> index = isoTester.getIsomorphismMapping(mol);
+		if (index ==null) return null;
+		IAtomContainer match = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		
+		for (IAtom i: index) match.addAtom(i);
+		
+		for (int b=0; b < mol.getBondCount();b++) {
+			
+			IBond bond = mol.getBond(b);
+			int count = 0;
+			for (int a=0; a < bond.getAtomCount();a++)
+				if (index.indexOf(bond.getAtom(a))>=0) count++;
+				else break;
+			if (count == bond.getAtomCount()) 
+				match.addBond(bond);
+		}
+		return match;
 	}
 
 	public IAtomContainer getObjectToVerify(IAtomContainer mol) {
