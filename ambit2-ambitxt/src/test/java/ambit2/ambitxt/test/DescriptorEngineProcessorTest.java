@@ -63,9 +63,9 @@ public class DescriptorEngineProcessorTest {
 
 	@Test
 	public void testProcess() {
-		fail("Not yet implemented");
+		
 	}
-	@Test
+	
 	public void testEngine() throws Exception {
 		DescriptorEngineProcessor p = new DescriptorEngineProcessor();
 		/*
@@ -89,7 +89,7 @@ public class DescriptorEngineProcessorTest {
 		for (Object s : list)
 			System.out.println(s);				
 	}
-	@Test
+	
 	public void testExternalClasses() throws Exception {
 		
 	}
