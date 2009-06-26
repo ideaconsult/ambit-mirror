@@ -29,6 +29,8 @@
 
 package ambit2.db.processors.test;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -129,6 +131,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         writer.setConnection(c.getConnection());
         writer.open();
         FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
+        Assert.assertEquals(113,((List)d.getParameters()[0]).size());
 
         DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
         //for (String name: v.getNames())      	System.out.println(name);

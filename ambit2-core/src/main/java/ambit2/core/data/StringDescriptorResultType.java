@@ -37,7 +37,7 @@ public class StringDescriptorResultType implements IDescriptorResult {
 		this.value = value;
 	}
 	public int length() {
-		return 0;
+		return 1;
 	}
 	@Override
 	public String toString() {

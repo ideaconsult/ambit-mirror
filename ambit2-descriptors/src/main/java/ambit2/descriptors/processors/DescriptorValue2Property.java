@@ -32,7 +32,6 @@ package ambit2.descriptors.processors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hssf.util.HSSFColor.YELLOW;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -47,7 +46,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.data.IntArrayResult;
+import ambit2.core.data.ArrayResult;
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.descriptors.VerboseDescriptorResult;
 
@@ -100,8 +99,8 @@ public class DescriptorValue2Property extends DefaultAmbitProcessor<DescriptorVa
         else if (result instanceof BooleanResult) {
             value = (((BooleanResult) result).booleanValue())?answer.YES.toString():answer.NO.toString();
         }
+        else if (result instanceof ArrayResult) value = ((ArrayResult) result).get(propertyIndex);
         else if (result instanceof IntegerArrayResult) value = ((IntegerArrayResult) result).get(propertyIndex);
-        else if (result instanceof IntArrayResult) value = ((IntArrayResult) result).get(propertyIndex);
         else if (result instanceof DoubleArrayResult) value = ((DoubleArrayResult) result).get(propertyIndex);
         else if (result instanceof StringDescriptorResultType) 
             return descriptor.getValue().toString();

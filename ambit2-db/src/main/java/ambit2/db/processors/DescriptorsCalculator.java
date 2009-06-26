@@ -81,29 +81,38 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     public IStructureRecord process(IStructureRecord target)
     		throws AmbitException {
     	IAtomContainer a = reader.process(target);
+    	if (a==null) throw new AmbitException("Empty molecule"); 
     	if (a.getAtomCount()==0) throw new AmbitException("Empty molecule");
-    	ha.process(a);
+    	
     	writer.setStructure(target);
     	selfwriter.setStructure(target);
-    	if (descriptors==null)	descriptors = d.process(null);
-		Iterator<Property> i = descriptors.getProperties(true);
-		while (i.hasNext()) {
-			try {
-				Property p = i.next();
-				if (p.isEnabled()) {
-					calc.setProperty(i.next());
-					DescriptorValue value = calc.process(a);
-					if (isAssignProperties() || target.getIdstructure()<=0)
-						selfwriter.process(value);
-					if (target.getIdstructure()>0)
-						writer.write(value);
+    	try {
+    		ha.process(a);
+      	} catch (Exception x) {
+			x.printStackTrace();
+    	}    		
+        	if (descriptors==null)	descriptors = d.process(null);
+    		Iterator<Property> i = descriptors.getProperties(true);
+    		while (i.hasNext()) {
+    			try {
+    				Property p = i.next();
+    				if (p.isEnabled()) {
+    					calc.setProperty(i.next());
+    					DescriptorValue value = calc.process(a);
+    					if (isAssignProperties() || target.getIdstructure()<=0)
+    						selfwriter.process(value);
+    					if (target.getIdstructure()>0)
+    						writer.write(value);
 
-				}
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
-			
-		}    	
+    				}
+    			} catch (Exception x) {
+    				x.printStackTrace();
+    	
+    			}
+    			
+    		}    	    		
+  
+
     	
     	return target;
 
@@ -128,3 +137,4 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 		writer.setSession(sessionID);
 	}
 }
+
