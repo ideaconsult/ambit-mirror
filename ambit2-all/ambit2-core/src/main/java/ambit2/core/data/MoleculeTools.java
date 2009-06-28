@@ -10,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.Reader;
 import java.io.StringReader;
+import java.math.BigInteger;
+import java.math.BigInteger;
 import java.util.BitSet;
 
 import javax.vecmath.Vector2d;
@@ -86,22 +88,30 @@ public class MoleculeTools {
 		return h;
 	}
 	
-	public static void bitset2Long16(BitSet bs,int size,long[] h16) {
+	public static void bitset2bigint16(BitSet bs,int size,BigInteger[] h16) {
+		
 		
 		int L = h16.length;
 		for (int j = 0; j < L; j++) {
-			long h = 0;
-			for (int i = (size-1); i >=0; i-- ) {
-				h = h << 1;	
-				if (bs.get(j*size+i)) {
-					h |= 1;
-					//System.out.println("j="+j+"\ti="+i+"\t"+(j*size+i));
-				}
-			}
-			h16[j] = h;
-			//System.out.println("0x"+Long.toHexString(h));
+			StringBuilder b = new StringBuilder();
+			for (int i = (size-1); i >=0; i-- ) 
+				b.append(bs.get(j*size+i)?"1":"0");
+			
+			h16[j] = new BigInteger(b.toString(),2);
 		}	
 	}
+	/*
+    protected static byte[] toByteArray(BitSet bits) {
+        byte[] bytes = new byte[bits.length()/8+1];
+        for (int i=0; i<bits.length(); i++) {
+            if (bits.get(i)) {
+                bytes[bytes.length-i/8-1] |= 1<<(i%8);
+            }
+        }
+        return bytes;
+    }
+    */
+
 	protected static BufferedImage generateImageFromSmiles(String smiles, int width,
 			int height, Color background) {
 		BufferedImage buffer = new BufferedImage(width, height,

@@ -32,7 +32,8 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 	protected Fingerprinter fingerprinter;
     protected boolean hydrogens = false;
     protected HydrogenAdder hAdder = null;
-
+	protected AtomConfigurator config = new AtomConfigurator();
+	
     public FingerprintGenerator() {
 		this(1024);
 	}
