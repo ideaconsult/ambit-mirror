@@ -532,7 +532,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,6,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,7,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- numeric property values

@@ -6,6 +6,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
+import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.db.update.IQueryUpdate;
@@ -13,12 +14,19 @@ import ambit2.db.update.qlabel.CreateValueQLabel;
 import ambit2.db.update.qlabel.DeleteValueQLabel;
 
 public class ValueQLabel_crud_test extends CRUDTest<Integer,QLabel> {
-
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/qdescriptors-datasets.xml";	
+	}
 	@Override
 	protected IQueryUpdate<Integer, QLabel> createQuery() throws Exception {
 		CreateValueQLabel q = new CreateValueQLabel();
 		q.setGroup(1);
-		q.setObject(new QLabel(QUALITY.ProbablyOK));
+		QLabel label = new QLabel(QUALITY.ProbablyOK);
+		label.setText("");
+		label.setUser(new AmbitUser("guest"));
+		q.setObject(label);
 		return q;
 	}
 
