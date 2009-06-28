@@ -64,7 +64,6 @@ public class DefaultBatchStatistics extends Observable implements
     public long getTimeElapsed() {
         return time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_READ.ordinal()]+
         time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_PROCESSED.ordinal()]+
-        time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_WRITTEN.ordinal()]+
         time_elapsed[IBatchStatistics.RECORDS_STATS.RECORDS_ERROR.ordinal()];
 
     }
