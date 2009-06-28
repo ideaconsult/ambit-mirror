@@ -56,6 +56,9 @@ public class FunctionalGroup extends AmbitBean implements
 	public ISmartsPattern<IAtomContainer> getQuery() {
 		return query;
 	}
+	public long getID() {
+		return 0;
+	}
 	public void setQuery(ISmartsPattern<IAtomContainer> query) {
 		this.query = query;
 		try {

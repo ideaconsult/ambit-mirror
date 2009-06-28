@@ -157,11 +157,11 @@ public class PKASmartsDescriptorTest {
 	    		a.setProperty(value.getNames()[0], result.getResult().doubleValue());
 	    		a.setProperty(value.getNames()[0]+"-trace", result.getExplanation());
 	    		
-	    		Double d = Double.valueOf(a.getProperty("SMARTS pKa").toString());
+	    		Double d = Double.valueOf(a.getProperty("pKa-SMARTS").toString());
 	    		if (!d.equals(result.getResult().doubleValue())) {
 	        		System.out.print(result.getResult().doubleValue());
 	        		System.out.print('\t');
-	        		System.out.print(a.getProperty("SMARTS pKa"));
+	        		System.out.print(a.getProperty("pKa-SMARTS"));
 	        		System.out.print('\t');
 	        		System.out.println(a.getProperty("SMILES"));
 	    			
