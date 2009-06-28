@@ -261,7 +261,7 @@ delete from struc_dataset where idstructure>3
             IStructureRecord record = reader.nextRecord();
 			writer.write(record);
 			records ++;
-			System.out.println(record);
+
 		}
 		reader.close();
 		writer.close();
