@@ -29,6 +29,7 @@
 
 package ambit2.db;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -95,6 +96,12 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 					else					
 						ps.setLong(i+1, ((Number)params.get(i).getValue()).longValue());
 				} else
+				if (BigInteger.class.equals(clazz)) {
+						if (params.get(i).getValue()==null)
+							ps.setNull(i+1, Types.LONG);
+						else					
+							ps.setObject(i+1, params.get(i).getValue());
+				} else					
 				if (Double.class.equals(clazz)) {
 					if (params.get(i).getValue()==null)
 						ps.setNull(i+1, Types.DOUBLE);
