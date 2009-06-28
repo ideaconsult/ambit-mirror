@@ -87,6 +87,10 @@ public abstract  class DefaultAmbitProcessor<Target,Result> implements IProcesso
   {
   	    propertyChangeSupport.removePropertyChangeListener( listener);
   }
+  
+	  public long getID() {
+	  	return serialVersionUID;
+	  }
 
 
 }

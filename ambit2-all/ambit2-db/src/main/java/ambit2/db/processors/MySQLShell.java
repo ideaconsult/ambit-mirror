@@ -67,6 +67,10 @@ public class MySQLShell  implements IProcessor<MySQLCommand,MySQLCommand> {
         super();
         
     }
+    public long getID() {
+
+    	return 0;
+    }
     protected void startMySQL(MySQLCommand cmd)  {
         if (cmd.getProcess() != null) {
         	cmd.setException(new AmbitException(cmd + " is already running"));

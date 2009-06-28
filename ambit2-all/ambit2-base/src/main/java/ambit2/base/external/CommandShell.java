@@ -72,6 +72,10 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	protected boolean enabled=true;
 	protected int exitCode = 0;
 	
+	public long getID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	public boolean isEnabled() {
 		return enabled;
 	}

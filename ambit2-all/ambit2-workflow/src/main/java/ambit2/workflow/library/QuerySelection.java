@@ -65,7 +65,9 @@ public class QuerySelection extends Sequence {
 						new ClassHolder("ambit2.db.search.structure.QueryStructure","SMILES, Molecular formula, InChI","Search by SMILES, Inchi, Formula",""),
 						new ClassHolder("ambit2.db.search.structure.QuerySimilarityStructure","Similarity, substructure, exact structure","Search for similar structures",""),
 						new ClassHolder("ambit2.db.search.structure.QuerySMARTS","Substructure query by SMARTS","Search for substructure by SMARTS pattern",""),						
-						new ClassHolder("ambit2.db.search.structure.QueryStoredResults","Previous search results","Display results from previous queries",""),						
+						new ClassHolder("ambit2.db.search.structure.QueryStoredResults","Previous search results","Display results from previous queries",""),
+						new ClassHolder("ambit2.db.search.structure.QueryStructureByQuality","Search by Quality Label","Retrieve structures with specified quality label",""),
+						
 						new ClassHolder("ambit2.descriptors.FunctionalGroupDescriptor","Functional groups","Available functional groups",""),
 				},"Search by"
 				);

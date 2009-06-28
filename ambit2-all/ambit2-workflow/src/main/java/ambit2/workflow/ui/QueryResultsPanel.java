@@ -191,5 +191,8 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     public void open() throws DbAmbitException {
     	setObject(getObject());
     }
+    public long getID() {
+    	return 0;
+    }
     
 }

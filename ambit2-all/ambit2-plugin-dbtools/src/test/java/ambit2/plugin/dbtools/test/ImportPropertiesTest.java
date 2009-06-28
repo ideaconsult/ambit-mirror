@@ -92,7 +92,6 @@ public class ImportPropertiesTest extends WorkflowTest<ImportPropertiesWorkflow>
 		Assert.assertEquals(7,stats.getRecords(RECORDS_STATS.RECORDS_READ));
 		Assert.assertEquals(7,stats.getRecords(RECORDS_STATS.RECORDS_ERROR));
 		Assert.assertEquals(0,stats.getRecords(RECORDS_STATS.RECORDS_PROCESSED));
-		Assert.assertEquals(0,stats.getRecords(RECORDS_STATS.RECORDS_WRITTEN));
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT * FROM structure");
 		Assert.assertEquals(4, structures.getRowCount());	
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='test.sdf'");

@@ -1,5 +1,6 @@
 package ambit2.db.search.structure;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -57,14 +58,14 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue()==null) throw new AmbitException("Fingerprint not defined!");
-		long[] h16 = new long[16];
-		MoleculeTools.bitset2Long16(getValue(),64,h16);
+		BigInteger[] h16 = new BigInteger[16];
+		MoleculeTools.bitset2bigint16(getValue(),64,h16);
 		int bc = getValue().cardinality();
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
 		params.add(new QueryParam<Integer>(Integer.class, bc));
 		for (int h=0; h < 16; h++)
-			params.add(new QueryParam<Long>(Long.class, h16[h]));
+			params.add(new QueryParam<BigInteger>(BigInteger.class, h16[h]));
 		params.add(new QueryParam<Integer>(Integer.class, bc));
 		params.add(new QueryParam<Double>(Double.class, getThreshold()));		
 		return params;
