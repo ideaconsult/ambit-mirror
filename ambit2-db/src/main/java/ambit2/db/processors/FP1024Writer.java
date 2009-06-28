@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.math.BigInteger;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -115,7 +116,7 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 	}	
 
 	public enum FP1024_status {invalid,valid,error};
-	protected long[] h16 = new long[16];	
+	protected BigInteger[] h16 = new BigInteger[16];	
 	/**
 	 * 
 	 */
@@ -158,13 +159,12 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 		int o = 5+16;
 
 		if (bs == null)
-			for (int i=0; i < h16.length; i++) h16[i] = 0;
+			for (int i=0; i < h16.length; i++) h16[i] = new BigInteger("0");
 		else 
-			MoleculeTools.bitset2Long16(bs,64,h16);		
+			MoleculeTools.bitset2bigint16(bs,64,h16);		
 		for (int i=0; i < h16.length; i++) {
-			BigInteger ff= new BigInteger(Long.toHexString(h16[i]),16);
-			ps_bitset.setObject(i+5,ff);
-			ps_bitset.setObject(i+o+3,ff);
+			ps_bitset.setObject(i+5,h16[i]);
+			ps_bitset.setObject(i+o+3,h16[i]);
 		}
 		
 		ps_bitset.setLong(o,fp_time);

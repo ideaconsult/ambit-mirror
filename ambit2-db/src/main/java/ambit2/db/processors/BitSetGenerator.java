@@ -9,7 +9,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.FP1024Writer.FPTable;
 
@@ -25,7 +24,6 @@ public class BitSetGenerator extends DefaultAmbitProcessor<IStructureRecord,IStr
 	private static final long serialVersionUID = -1046795418089401843L;
 	protected IProcessor<IAtomContainer,BitSet> processor;
 	protected MoleculeReader reader = new MoleculeReader();
-	protected AtomConfigurator c = new AtomConfigurator();
 	protected FPTable fpmode = FPTable.fp1024;
 	
 	public FPTable getFpmode() {
