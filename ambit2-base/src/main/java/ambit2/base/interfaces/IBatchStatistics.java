@@ -22,12 +22,6 @@ public interface IBatchStatistics extends Serializable {
 				return "processed";
 			}
 		},
-		RECORDS_WRITTEN {
-			@Override
-			public String toString() {
-				return "written";
-			}
-		},
 		RECORDS_ERROR {
 			@Override
 			public String toString() {
