@@ -118,4 +118,5 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   
   <query_results idquery="2" idchemical="10" idstructure="100214" selected="1" metric="0"/>
   <query_results idquery="2" idchemical="29141" idstructure="129345" selected="1" metric="0"/>  
+  <quality_structure idstructure="100214" label="OK" user_name="guest" />
 </dataset>

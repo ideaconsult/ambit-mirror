@@ -57,11 +57,14 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 			record.setIdchemical(rs.getInt(2));
 			record.setIdstructure(rs.getInt(3));
 			//metric
-			record.setProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), rs.getFloat(5));
+			record.setProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
+	}
+	protected Object retrieveValue(ResultSet rs) throws SQLException {
+		return rs.getFloat(5);
 	}
 	public boolean isPrescreen() {
 		return false;
