@@ -66,10 +66,14 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         	String[] users = {
         	"insert into roles (role_name) values (\"ambit_guest\");",
         	"insert into roles (role_name) values (\"ambit_admin\");",
-        	"insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"guest\",\"084e0343a0486ff05530df6c705c8bb4\",\"guest\",\"Default guest user\",now(),\"confirmed\",\"guest\",\"http://ambit.acad.bg\");",
-        	"insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"admin\",\"21232f297a57a5a743894a0e4a801fc3\",\"admin\",\"Default admin user\",now(),\"confirmed\",\"admin\",\"http://ambit.acad.bg\");",
+        	"insert into roles (role_name) values (\"ambit_quality\");",
+        	"insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"guest\",\"084e0343a0486ff05530df6c705c8bb4\",\"guest\",\"Default guest user\",now(),\"confirmed\",\"guest\",\"http://ambit.sourceforge.net\");",
+        	"insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"admin\",\"21232f297a57a5a743894a0e4a801fc3\",\"admin\",\"Default admin user\",now(),\"confirmed\",\"admin\",\"http://ambit.sourceforge.net\");",
+        	"insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"quality\",\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
         	"insert into user_roles (user_name,role_name) values (\"guest\",\"ambit_guest\");",
         	"insert into user_roles (user_name,role_name) values (\"admin\",\"ambit_admin\");",
+        	"insert into user_roles (user_name,role_name) values (\"quality\",\"ambit_quality\");",
+        	
         	"REVOKE ALL PRIVILEGES ON `"+database+"`.* FROM 'admin'@'localhost';",
         	"REVOKE ALL PRIVILEGES ON `"+database+"`.* FROM 'guest'@'localhost';",
 

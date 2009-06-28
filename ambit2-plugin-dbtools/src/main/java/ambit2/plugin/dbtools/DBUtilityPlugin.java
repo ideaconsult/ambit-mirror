@@ -76,6 +76,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin {
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportWorkflow","Import structures","Import chemical structures into database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.ImportPropertiesWorkflow","Import properties","Import properties for structures available in the database","images/import.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBUtilityWorkflow","Calculate","Calculate fingerprints and descriptors for structures in database","images/calculate.png"));
+		workflows.add(new ClassHolder("ambit2.plugin.dbtools.StructureQualityWorkflow","Quality check","Verify consistency of structures in database","images/calculate.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MysqlServerLauncher","MySQL start","Start local MySQL database server","images/mysql_start.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.MySQLServerStop","MySQL stop","Stop local MySQL database server","images/mysql_stop.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBStatisticsWorkflow","DB statistics","Displays database statistics","images/database_statistics.png"));

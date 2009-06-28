@@ -93,6 +93,9 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
     public void removePropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
     	//TODO
     }
+    public long getID() {
+    	return 0;
+    }
 
 }
 

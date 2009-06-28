@@ -46,4 +46,5 @@ public interface IProcessor<Target,Result> extends Serializable{
 	 * @param value
 	 */
 	public void setEnabled(boolean value);    
+	long getID();
 }

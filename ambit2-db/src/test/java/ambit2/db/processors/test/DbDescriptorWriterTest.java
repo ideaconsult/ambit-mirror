@@ -135,7 +135,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 
         DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
         //for (String name: v.getNames())      	System.out.println(name);
-        Assert.assertEquals(4,v.getNames().length);
+        Assert.assertEquals(5,v.getNames().length);
         writer.write(v);
         c.close();
         

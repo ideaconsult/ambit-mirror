@@ -12,6 +12,7 @@ public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<
 			//"Select concat(DATE(date),' ',time(date)) as 'Ambit database created on' from version order by idmajor,idminor desc limit 1",
 			"Select count(*) as 'Chemicals' from chemicals",
 			"Select count(*) as 'Structures' from structure",
+			"Select label as \"Quality Label\",count(*) as 'Number of structures' from quality_structure group by label",
 			"Select count(*) as 'Datasets' from src_dataset",
 			"select concat('\tDataset\t','Reference\t','\tURL') as 'Datasets list'",
 			"select concat('\t',name,'\t',title,'\t',URL,'\n') as 'Dataset' from src_dataset join catalog_references using(idreference)",

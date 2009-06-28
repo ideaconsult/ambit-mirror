@@ -104,6 +104,9 @@ public class BatchDBProcessorTest {
 			public boolean isEnabled() {return true;}
 
 			public void setEnabled(boolean value) {}
+			public long getID() {
+				return 0;
+			}
 
 		});
 		batch.setProcessorChain(p);

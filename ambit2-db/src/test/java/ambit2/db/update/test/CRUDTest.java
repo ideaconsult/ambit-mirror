@@ -70,8 +70,8 @@ public abstract class CRUDTest<G,T> extends DbUnitTest {
 
 	@Test
 	public void testCreate() throws Exception {
-		IQueryUpdate<G,T> query = createQuery();
 		setUpDatabase(dbFile);
+		IQueryUpdate<G,T> query = createQuery();		
 		IDatabaseConnection c = getConnection();
 		executor.setConnection(c.getConnection());
 		executor.open();

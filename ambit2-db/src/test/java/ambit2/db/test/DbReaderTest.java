@@ -108,6 +108,9 @@ public class DbReaderTest extends DbUnitTest {
 			}
 			public void setEnabled(boolean value) {
 			}
+			public long getID() {
+				return 0;
+			}
 		});
 				
 		p.add(new MoleculeReader());
@@ -122,6 +125,9 @@ public class DbReaderTest extends DbUnitTest {
 			public boolean isEnabled() {return true;}
 
 			public void setEnabled(boolean value) {}
+			public long getID() {
+				return 0;
+			}
 
 		});
 		
