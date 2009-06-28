@@ -99,6 +99,7 @@ CREATE TABLE  `structure` (
   KEY `FK_structure_2` (`user_name`),
   KEY `idchemical` USING BTREE (`idchemical`),
   KEY `Index_4` (`label`),
+  KEY `Index_5` (`idstructure`,`user_name`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -250,7 +251,9 @@ DROP TABLE IF EXISTS `quality_labels`;
 CREATE TABLE  `quality_labels` (
   `id` int(10) unsigned NOT NULL,
   `user_name` varchar(16) collate utf8_bin NOT NULL,
-  `label` enum('OK','Probably OK','Unknown','Probably ERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
+  `label` enum('OK','ProbablyOK','Unknown','ProbablyERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
+  `text` text collate utf8_bin,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,  
   PRIMARY KEY  USING BTREE (`id`,`user_name`),
   KEY `FK_quality_labels_2` (`user_name`),
   KEY `FK_quality_labels_3` (`label`),
@@ -265,7 +268,9 @@ DROP TABLE IF EXISTS `quality_structure`;
 CREATE TABLE  `quality_structure` (
   `idstructure` int(10) unsigned NOT NULL,
   `user_name` varchar(16) collate utf8_bin NOT NULL,
-  `label` enum('OK','Probably OK','Unknown','Probably ERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
+  `label` enum('OK','ProbablyOK','Unknown','ProbablyERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
+  `text` text collate utf8_bin,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  USING BTREE (`idstructure`,`user_name`),
   KEY `FK_quality_struc_2` (`user_name`),
   KEY `FK_quality_struc_3` (`label`),
@@ -381,12 +386,14 @@ CREATE TABLE  `query_results` (
   `idchemical` int(10) unsigned NOT NULL,
   `idstructure` int(11) unsigned NOT NULL,
   `selected` tinyint(1) NOT NULL default '1',
-  `metric` float(10,6) NOT NULL default '1.000000',
+  `metric` float(10,6) default NULL,
+  `text` varchar(200) collate utf8_bin default NULL,
   PRIMARY KEY  (`idquery`,`idchemical`,`idstructure`),
   KEY `FK_query_results_2` (`idstructure`),
   KEY `FK_query_results_3` (`idchemical`),
   KEY `Index_4` USING BTREE (`idquery`,`metric`),
   KEY `Index_5` (`idquery`),
+  KEY `Index_6` (`idquery`,`text`),
   CONSTRAINT `FK_query_results_1` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_results_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_results_3` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -445,6 +452,8 @@ CREATE TABLE  `fp1024` (
   `time` int(10) unsigned default '0',
   `bc` int(6) NOT NULL default '0',
   `status` enum('invalid','valid','error') collate utf8_bin NOT NULL default 'invalid',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `version` int(10) unsigned zerofill NOT NULL default '0000000000',
   PRIMARY KEY  (`idchemical`),
   KEY `fpall` (`fp1`,`fp2`,`fp3`,`fp4`,`fp5`,`fp6`,`fp7`,`fp8`,`fp9`,`fp10`,`fp11`,`fp12`,`fp13`,`fp14`,`fp15`,`fp16`),
   KEY `time` (`time`),
@@ -574,6 +583,7 @@ SELECT idtemplate,template.name as template,idproperty,properties.name as proper
 
 -- insert into roles (role_name) values ("ambit_guest");
 -- insert into roles (role_name) values ("ambit_admin");
+-- insert into roles (role_name) values ("quality");
 -- insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values ("guest","084e0343a0486ff05530df6c705c8bb4","guest","Default guest user",now(),"confirmed","guest","http://ambit.acad.bg");
 -- insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values ("admin","21232f297a57a5a743894a0e4a801fc3","admin","Default admin user",now(),"confirmed","admin","http://ambit.acad.bg");
 -- insert into user_roles (user_name,role_name) values ("guest","ambit_guest");

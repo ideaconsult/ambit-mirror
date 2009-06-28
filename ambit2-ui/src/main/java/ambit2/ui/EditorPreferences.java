@@ -70,6 +70,9 @@ public class EditorPreferences {
 		{"ambit2.db.search.structure.QueryStoredResults","ambit2.dbui.QueryStoredResultsEditor"},
 		{"ambit2.db.search.structure.QueryFunctionalGroups","ambit2.dbui.QueryFunctionalGroupsEditor"},
 		
+		{"ambit2.db.search.structure.QueryStructureByQuality","ambit2.dbui.QueryStructureByQualityEditor"},
+		
+		
 		{"ambit2.db.search.structure.ScopeQuery","ambit2.dbui.QueryScopeEditor"},
 		
 		{"ambit2.base.data.StructureRecord","ambit2.workflow.ui.StructureRecordEditor"},		
