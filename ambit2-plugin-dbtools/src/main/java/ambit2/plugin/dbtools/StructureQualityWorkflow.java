@@ -7,9 +7,11 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.processors.QualityLabelWriter;
+import ambit2.db.processors.quality.QualityLabelWriter;
+import ambit2.db.processors.quality.QualityValueWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryStructureByQuality;
+import ambit2.db.search.structure.QueryStructureByValueQuality;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
@@ -31,10 +33,15 @@ public class StructureQualityWorkflow extends Workflow {
 		Fingerprints {
 			@Override
 			public String toString() {
-				return "Fingerprints consistency";
+				return "Structures consistency";
 			}
 		},
-	
+		CAS {
+			@Override
+			public String toString() {
+				return "CAS numbers consistency";
+			}
+		},	
 		Completed {
 			@Override
 			public String toString() {
@@ -46,7 +53,8 @@ public class StructureQualityWorkflow extends Workflow {
         Sequence seq=new Sequence();
         seq.setName("[Quality]");    	
         seq.addStep(getCalculationOptionsSequence(
-        		addCalculationFP()
+        		addStructureQualityVerifier(),
+        		addValueQualityVerifier()
         		));
         
         //setDefinition(new LoginSequence(new DatasetSelection(seq)));
@@ -55,7 +63,8 @@ public class StructureQualityWorkflow extends Workflow {
 
 	}
 	public While getCalculationOptionsSequence(
-				Activity fingerprints 
+				Activity structure,
+				Activity values
 				) {
 		
 		
@@ -69,7 +78,20 @@ public class StructureQualityWorkflow extends Workflow {
 				selection, SELECTION_QUALITY, "??????");
 		selectKey.setName("Select quality verification method");
 
-        Conditional fingerprintsCondition = new Conditional(
+        
+        Conditional valuesCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION_QUALITY);
+	    				if (o instanceof SelectionBean)
+	    					return QUALITY_MODE.CAS.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                values,
+                null);        
+        
+        Conditional strucCondition = new Conditional(
                 new TestCondition() {
                     public boolean evaluate() {
 	    				Object o = getContext().get(SELECTION_QUALITY);
@@ -78,8 +100,8 @@ public class StructureQualityWorkflow extends Workflow {
 	    				else return false;
                     }
                 }, 
-                fingerprints,
-                null);
+                structure,
+                valuesCondition);
         
         loop.setTestCondition(new TestCondition() {
         	@Override
@@ -96,11 +118,11 @@ public class StructureQualityWorkflow extends Workflow {
         
         loop.setName("Calculate");	            
         body.addStep(selectKey);
-        body.addStep(fingerprintsCondition);
+        body.addStep(strucCondition);
         loop.setBody(body);
 		return loop;
 	}	
-	protected Sequence addCalculationFP() {
+	protected Sequence addStructureQualityVerifier() {
 			Sequence seq = new Sequence();
 			Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
 					new Performer() {
@@ -122,9 +144,34 @@ public class StructureQualityWorkflow extends Workflow {
 					DBWorkflowContext.QUERY,
 					DBWorkflowContext.BATCHSTATS,
 					batch,false);
-		    ap.setName("Fingerprint calculations");	
+		    ap.setName("Structure quality verifier");	
 		    seq.addStep(ap);
 		    return seq;
 	}	
 
+	protected Sequence addValueQualityVerifier() {
+		Sequence seq = new Sequence();
+		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+				new Performer() {
+			@Override
+			public Object execute() throws Exception {
+				return new QueryStructureByValueQuality();  //without quality labels
+			}
+		});
+		seq.addStep(query);
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p.add(new QualityValueWriter());
+		
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+		batch.setProcessorChain(p);
+		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
+			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.BATCHSTATS,
+				batch,false);
+	    ap.setName("CAS quality verifier");	
+	    seq.addStep(ap);
+	    return seq;
+}	
 }

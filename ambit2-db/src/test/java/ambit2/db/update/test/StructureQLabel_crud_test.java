@@ -14,7 +14,11 @@ import ambit2.db.update.qlabel.CreateStructureQLabel;
 import ambit2.db.update.qlabel.DeleteStructureQLabel;
 
 public class StructureQLabel_crud_test extends CRUDTest<IStructureRecord,QLabel> {
-
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/qdescriptors-datasets.xml";	
+	}
 	@Override
 	protected IQueryUpdate<IStructureRecord, QLabel> createQuery()
 			throws Exception {

@@ -16,7 +16,11 @@ import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.qlabel.CreateQLabelFingerprints;
 
 public class QLabelFingerprintsTest extends CRUDTest<IStructureRecord, BitSet> {
-
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/qdescriptors-datasets.xml";	
+	}
 	@Override
 	protected IQueryUpdate<IStructureRecord, BitSet> createQuery()
 			throws Exception {

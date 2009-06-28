@@ -71,6 +71,7 @@ public class EditorPreferences {
 		{"ambit2.db.search.structure.QueryFunctionalGroups","ambit2.dbui.QueryFunctionalGroupsEditor"},
 		
 		{"ambit2.db.search.structure.QueryStructureByQuality","ambit2.dbui.QueryStructureByQualityEditor"},
+		{"ambit2.db.search.structure.QueryStructureByValueQuality","ambit2.dbui.QueryStructureByValueQualityEditor"},
 		
 		
 		{"ambit2.db.search.structure.ScopeQuery","ambit2.dbui.QueryScopeEditor"},

@@ -1,4 +1,4 @@
-package ambit2.db.processors;
+package ambit2.db.processors.quality;
 
 import java.sql.SQLException;
 
@@ -8,6 +8,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.db.processors.AbstractRepositoryWriter;
 import ambit2.db.update.qlabel.CreateQLabelFingerprints;
 
 public class QualityLabelWriter extends AbstractRepositoryWriter<IStructureRecord, IStructureRecord> {
