@@ -11,7 +11,7 @@ import ambit2.db.update.AbstractUpdate;
 public class CreateValueQLabel extends AbstractUpdate<Integer,QLabel> {
 
 	protected String[] sql = {
-			"insert into quality_labels (id,user_name,`label`,`text`) values (?,?,?,?) on duplicate key update `label`=?,`text`=?"
+			"insert into quality_labels (id,user_name,`label`,`text`) values (?,?,?,?) on duplicate key update `label`=values(`label`),text=values(text)"
 	};
 	protected String[] sql_defaultuser = {
 			"insert into quality_labels (id,user_name,`label`,`text`) values (?,SUBSTRING_INDEX(user(),'@',1),?,?) on duplicate key update `label`=values(`label`),`text`=values(`text`)"

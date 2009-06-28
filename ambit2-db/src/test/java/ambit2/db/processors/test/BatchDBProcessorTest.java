@@ -98,7 +98,7 @@ public class BatchDBProcessorTest {
 		p.add(new FunctionalGroup("Test","N","Test"));
 		p.add(new IProcessor<VerboseDescriptorResult,String>() {
 			public String process(VerboseDescriptorResult target) throws AmbitException {
-				Assert.assertEquals("8",target.getResult().toString());
+				Assert.assertEquals("1",target.getResult().toString());
 				return target.toString();
 			}
 			public boolean isEnabled() {return true;}
