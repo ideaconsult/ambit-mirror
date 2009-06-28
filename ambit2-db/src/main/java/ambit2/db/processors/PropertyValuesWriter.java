@@ -89,8 +89,10 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 		propertyDictionary.setRelationship("is_a");
 		propertyDictionary.setParentTemplate("Identifiers");
 		if (n.startsWith("cas")) propertyDictionary.setTemplate(CDKConstants.CASRN);
+		else if (n.contains("species")) propertyDictionary.setTemplate("Species");
+		else if (n.contains("iupac")) propertyDictionary.setTemplate("IUPAC Name");		
 		else if (n.contains("name")) propertyDictionary.setTemplate(CDKConstants.NAMES);
-		else if (n.contains("iupac")) propertyDictionary.setTemplate("IUPAC Name");
+		else if (n.contains("title")) propertyDictionary.setTemplate(CDKConstants.NAMES);
 		else if (n.contains("inchi")) propertyDictionary.setTemplate(CDKConstants.INCHI);
 		else if (n.contains("smiles")) propertyDictionary.setTemplate(CDKConstants.SMILES);
 		else return null;
