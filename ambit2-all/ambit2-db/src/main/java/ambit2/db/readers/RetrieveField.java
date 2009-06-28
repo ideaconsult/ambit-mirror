@@ -16,6 +16,14 @@ public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondi
 	 * 
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
+	protected boolean searchByAlias = false;
+	public boolean isSearchByAlias() {
+		return searchByAlias;
+	}
+
+	public void setSearchByAlias(boolean searchByAlias) {
+		this.searchByAlias = searchByAlias;
+	}
 	protected final String sql = 
 					"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
 					"(\n"+
@@ -23,14 +31,15 @@ public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondi
 					"union\n"+
 					"select idstructure,idproperty,value as value_string,null,0 as idtype from property_values join property_string using(idvalue_string) where idvalue_string is not null and idstructure=?\n"+
 					") as L using (idproperty)\n";
-	protected final String where = "where name=?";
+	protected final String where = "where %s=?";
+
 	
 	public String getSQL() throws AmbitException {
 		if ("".equals(getFieldname()))
 			return sql
 ;
 		else
-			return sql + where;	
+			return sql + String.format(where,searchByAlias?"comments":"name");	
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {

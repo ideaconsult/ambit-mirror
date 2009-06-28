@@ -9,33 +9,29 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
-/**
- * Deletes quality label given a structure
- * @author nina
- *
- */
-public class DeleteStructureQLabel extends	AbstractUpdate<IStructureRecord, QLabel> {
+public class DeleteValueQLabel extends AbstractUpdate<Integer, QLabel> {
 
-	protected String sql = "delete FROM quality_structure where ";
+
+	protected String sql = "delete FROM quality_labels where ";
 	
-	protected String sql_defaultuser = "delete FROM quality_structure where user_name = SUBSTRING_INDEX(user(),'@',1) and ";
+	protected String sql_defaultuser = "delete FROM quality_labels where user_name = SUBSTRING_INDEX(user(),'@',1) and ";
 	
-	protected String whereStructure = "idstructure=?";
+	protected String whereValue = "id=?";
 	protected String whereUser = "user_name=?";
 	protected String whereLabel = "label=?";
 	
-	public DeleteStructureQLabel(IStructureRecord record, QLabel label) {
+	public DeleteValueQLabel(Integer record, QLabel label) {
 		setGroup(record);
 		setObject(label);
 	}
-	public DeleteStructureQLabel() {
+	public DeleteValueQLabel() {
 		this(null,null);
 	}	
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		
-		if ((getGroup()!=null) && (getGroup().getIdstructure()>0))	
-			params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdstructure()));
+		if ((getGroup()!=null) && (getGroup()>0))	
+			params1.add(new QueryParam<Integer>(Integer.class, getGroup()));
 		
 		if (getObject()!=null) {
 			params1.add(new QueryParam<String>(String.class, getObject().getLabel().toString()));
@@ -50,9 +46,9 @@ public class DeleteStructureQLabel extends	AbstractUpdate<IStructureRecord, QLab
 		StringBuilder b = new StringBuilder();
 		b.append(((getObject()==null) || (getObject().getUser()==null))?sql_defaultuser:sql);
 		boolean first = true;
-		if ((getGroup()!=null) && (getGroup().getIdstructure()>0))	{
+		if ((getGroup()!=null) && (getGroup()>0))	{
 			b.append(first?"":" and ");	first = false;
-			b.append(whereStructure);
+			b.append(whereValue);
 		}
 		if (getObject()!=null) {
 			b.append(first?"":" and ");	first = false;
@@ -69,6 +65,4 @@ public class DeleteStructureQLabel extends	AbstractUpdate<IStructureRecord, QLab
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }
