@@ -54,10 +54,14 @@ public class Property extends Model {
 		return getInstance("Name", LiteratureEntry.getIUPACReference());
 	}	
 	public static synchronized Property getCASInstance() {
-		return getInstance("CAS", LiteratureEntry.getCASReference());
+		Property p = getInstance("CAS", LiteratureEntry.getCASReference());
+		p.setLabel("CasRN");
+		return p;
 	}		
 	public static synchronized Property getEINECSInstance() {
-		return getInstance("EC", LiteratureEntry.getEINECSReference());
+		Property p =  getInstance("EC", LiteratureEntry.getEINECSReference());
+		p.setLabel("EC");
+		return p;
 	}			
 	public static synchronized Property getInstance(String name,String reference) {
 		return getInstance(name, reference,"");
