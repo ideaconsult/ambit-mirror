@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -40,7 +41,9 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
 import ambit2.core.io.RawIteratingFolderReader;
+import ambit2.core.io.RawIteratingMOLReader;
 import ambit2.core.io.RawIteratingSDFReader;
+import ambit2.core.io.RawIteratingWrapper;
 
 /**
  * Reads file 
@@ -74,10 +77,24 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 					};					
 					return new RawIteratingFolderReader(file.listFiles(filter));
 				} else {
-					RawIteratingSDFReader reader = new RawIteratingSDFReader(
-							new FileReader(file));
-					reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
-					return reader;
+					if (file.getName().endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
+						RawIteratingSDFReader reader = new RawIteratingSDFReader(
+								new FileReader(file));
+						reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						return reader;
+					} else if (file.getName().endsWith(FileInputState.extensions[FileInputState.MOL_INDEX])) {
+						RawIteratingMOLReader reader = new RawIteratingMOLReader(new FileReader(file));
+						reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						return reader;
+					} else {
+						IIteratingChemObjectReader ir = FileInputState.getReader(new FileInputStream(file), file.getName());
+						if (ir == null) throw new AmbitException("Unsupported format "+file.getName());
+						else {
+							RawIteratingWrapper reader = new RawIteratingWrapper(ir);
+							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+							return reader;
+						}
+					} 
 				}
 			} catch (IOException x) {
 				throw new AmbitIOException(x);
