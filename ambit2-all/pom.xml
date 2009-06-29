@@ -383,6 +383,15 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
         <artifactId>maven-changelog-plugin</artifactId>
       </plugin>
  	 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+ 	 
     </plugins>
 
     

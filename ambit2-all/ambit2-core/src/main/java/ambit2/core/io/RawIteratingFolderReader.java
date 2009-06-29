@@ -38,12 +38,13 @@ import org.openscience.cdk.index.CASNumber;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.CASProcessor;
 
 /*
  * Raw reader for multiple files in a folder
  */
 public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRecord,IRawReader<IStructureRecord>> implements IRawReader<IStructureRecord> {
-
+	protected CASProcessor casTransformer = new CASProcessor();
 	public RawIteratingFolderReader(File[] files) {
 		super(files);
 	}
@@ -71,13 +72,25 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			String cas = files[index].getName().substring(0,dot);
 			if (CASNumber.isValid(cas)) {
 				record.setProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN), cas);
+			} else 
+			try {
+				cas = casTransformer.process(cas);
+				if (CASNumber.isValid(cas)) 
+					record.setProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN), cas);
+			} catch (Exception x) {
+				
 			}
 		}		
 	}
+	
 	protected IRawReader<IStructureRecord> getItemReader(int index) throws Exception {
 		String name = files[index].getName().toLowerCase();
 		if (name.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
 			RawIteratingSDFReader r = new RawIteratingSDFReader(new FileReader(files[index]));
+			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
+			return (IRawReader<IStructureRecord>) r;
+		} else if (name.endsWith(FileInputState.extensions[FileInputState.MOL_INDEX])) {
+			RawIteratingMOLReader r = new RawIteratingMOLReader(new FileReader(files[index]));
 			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
 			return (IRawReader<IStructureRecord>) r;
 		}
