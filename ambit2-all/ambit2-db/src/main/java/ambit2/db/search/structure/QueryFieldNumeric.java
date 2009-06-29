@@ -46,7 +46,7 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	public final static String sqlField = 
 		"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) ";
 	public final String where_all = "where value_num is not null and value_num %s ? %s %s \n";
-	public final String where_equal = "where value_num is not null and abs(value_num - ?) <= 1E-4 %s\n";
+	public final String where_equal = "where value_num is not null and value_num = ? %s\n";
 
 	protected Number maxValue;
 	public Number getMaxValue() {

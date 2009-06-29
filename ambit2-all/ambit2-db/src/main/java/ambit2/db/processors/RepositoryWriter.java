@@ -77,7 +77,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
 		query_chemicals.setFieldname(smilesKey.getKey().toString());
-
+		queryexec.setCache(true);
 	}
 	
 	

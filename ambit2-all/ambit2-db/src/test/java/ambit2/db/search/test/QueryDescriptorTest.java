@@ -49,7 +49,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 		
 		qf.setCondition(NumberCondition.getInstance("="));
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and abs(value_num - ?) <= 1E-4 and name=?\n",
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num = ? and name=?\n",
 
 				qf.getSQL());
 		params = qf.getParameters();
