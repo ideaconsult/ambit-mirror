@@ -33,7 +33,7 @@ import org.openscience.cdk.tools.DataFeatures;
  * <b>Modified</b> 2005-9-5
  */
 public class DelimitedFileFormat implements IChemFormatMatcher {
-	protected char fieldDelimiter = ',';
+	protected String fieldDelimiter = ",";
 	protected char textDelimiter = '"';
 	/**
 	 * Default field delimiter ','
@@ -47,7 +47,7 @@ public class DelimitedFileFormat implements IChemFormatMatcher {
 	 * @param fieldDelimiter  , default ','
 	 * @param textDelimiter , default '"'
 	 */
-	public DelimitedFileFormat(char fieldDelimiter, char textDelimiter) {
+	public DelimitedFileFormat(String fieldDelimiter, char textDelimiter) {
 		super();
 		this.fieldDelimiter = fieldDelimiter;
 		this.textDelimiter = textDelimiter;
@@ -65,9 +65,9 @@ public class DelimitedFileFormat implements IChemFormatMatcher {
 	 * @see org.openscience.cdk.io.extensions.ChemFormat#getFormatName()
 	 */
 	public String getFormatName() {
-		if (fieldDelimiter == ',') 	return "CSV";
-		else if (fieldDelimiter == ' ') 	return "TXT";
-		else if (fieldDelimiter == '\t') 	return "TXT";
+		if (fieldDelimiter.indexOf(',')>=0) 	return "CSV";
+		else if (fieldDelimiter.indexOf(' ')>=0) 	return "TXT";
+		else if (fieldDelimiter.indexOf('\t')>=0) 	return "TXT";
 		else return "Unknown";
 	}
 
@@ -75,21 +75,21 @@ public class DelimitedFileFormat implements IChemFormatMatcher {
 	 * @see org.openscience.cdk.io.extensions.ChemFormat#getReaderClassName()
 	 */
 	public String getReaderClassName() {
-		return "toxTree.io.DelimitedFileReader";
+		return "ambit2.io.DelimitedFileReader";
 	}
 
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.io.extensions.ChemFormat#getWriterClassName()
 	 */
 	public String getWriterClassName() {
-		return "toxTree.io.DelimitedFileWriter";
+		return "ambit2.io.DelimitedFileWriter";
 		
 	}
 
 	/**
 	 * @return Returns the fieldDelimiter.
 	 */
-	public synchronized char getFieldDelimiter() {
+	public synchronized String getFieldDelimiter() {
 		return fieldDelimiter;
 	}
 	/**

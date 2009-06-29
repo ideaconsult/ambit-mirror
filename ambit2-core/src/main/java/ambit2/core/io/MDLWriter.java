@@ -279,7 +279,8 @@ public class MDLWriter extends DefaultChemObjectWriter {
         }
         // write header block
         // lines get shortened to 80 chars, that's in the spec
-        String title = (String)container.getProperty(CDKConstants.TITLE);
+        Object t = container.getProperty(CDKConstants.TITLE);
+        String title = (t==null)?"":t.toString();
         if (title == null) title = "";
         if(title.length()>80)
           title=title.substring(0,80);
@@ -301,7 +302,8 @@ public class MDLWriter extends DefaultChemObjectWriter {
         );
         writer.write('\n');
         
-        String comment = (String)container.getProperty(CDKConstants.REMARK);
+        Object o = container.getProperty(CDKConstants.REMARK);
+        String comment = o==null?"":o.toString();
         if (comment == null) comment = "";
         if(comment.length()>80)
           comment=comment.substring(0,80);
@@ -425,7 +427,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
           Iterator iterator = set.iterator();
           while (iterator.hasNext()) {
             Object element = iterator.next();
-            writer.write("> <"+(String)element+">");
+            writer.write("> <"+element.toString()+">");
             writer.newLine();
             writer.write(sdFields.get(element).toString());
             writer.newLine();

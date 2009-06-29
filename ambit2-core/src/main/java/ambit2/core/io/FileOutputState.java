@@ -98,7 +98,7 @@ public class FileOutputState extends FileState implements IOutputState {
 				writer = new DelimitedFileWriter(stream);
 			else if ((fname.endsWith(extensions[TXT_INDEX]))) 
 				writer = new DelimitedFileWriter(stream,
-						new DelimitedFileFormat('\t','"'));
+						new DelimitedFileFormat("\t",'"'));
 			else if ((fname.endsWith(extensions[SMI_INDEX]))) 
 				writer = new SMILESWriter(stream);
 			/*
