@@ -58,7 +58,8 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	public IStructureRecord process(IStructureRecord structure)
 			throws AmbitException {
 		IAtomContainer molecule = molReader.process(structure);
-		structure.addProperties(molecule.getProperties());
+		if ((molecule != null) && (molecule.getProperties()!=null))
+			structure.addProperties(molecule.getProperties());
 		
 		try {
 			structure.setHash(hashcode.process(molecule));
