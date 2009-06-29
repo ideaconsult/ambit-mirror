@@ -18,7 +18,9 @@ public class SmilesUniquenessCheck extends AbstractUpdate<IStructureRecord, Stri
 		"insert into quality_structure (idstructure,user_name,`label`,`text`)\n"+
 		"select idstructure,'quality_smiles',Q,'Same SMILES for different chemicals' from\n"+
 		"(\n"+
-		"select ? as chem,? as struc,min(idchemical),max(idchemical),if(min(idchemical)=max(idchemical),'ProbablyOK','ProbablyERROR') as Q\n"+
+		"select ? as chem,? as struc,min(idchemical),max(idchemical),\n"+
+		"CASE when min(idchemical) is null THEN 'ProbablyOK'\n"+
+		"WHEN min(idchemical)=max(idchemical) THEN 'ProbablyOK' ELSE 'ProbablyERROR' END as Q\n"+
 		"from  chemicals where smiles=?\n"+
 		") as L\n"+
 		"join structure s on s.idstructure=L.struc\n"+
