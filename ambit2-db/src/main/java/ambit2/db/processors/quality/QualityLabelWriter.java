@@ -4,17 +4,23 @@ import java.sql.SQLException;
 
 import javax.naming.OperationNotSupportedException;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.processors.AbstractRepositoryWriter;
 import ambit2.db.update.qlabel.CreateQLabelFingerprints;
+import ambit2.db.update.qlabel.SmilesUniquenessCheck;
 
 public class QualityLabelWriter extends AbstractRepositoryWriter<IStructureRecord, IStructureRecord> {
 	protected CreateQLabelFingerprints query = new CreateQLabelFingerprints();
+	protected SmilesUniquenessCheck querySmiles = new SmilesUniquenessCheck();
 	protected MoleculeReader molReader = new MoleculeReader();
 	protected FingerprintGenerator g = new FingerprintGenerator();
+	protected SmilesKey smilesKey = new SmilesKey();
 	/**
 	 * 
 	 */
@@ -22,9 +28,24 @@ public class QualityLabelWriter extends AbstractRepositoryWriter<IStructureRecor
 	@Override
 	public IStructureRecord create(IStructureRecord record) throws SQLException,
 			OperationNotSupportedException, AmbitException {
-		query.setObject(g.process(molReader.process(record)));
-		query.setGroup(record);
-		exec.process(query);
+		IAtomContainer a = molReader.process(record);
+		if ((a==null) || (a.getAtomCount()==0)) {
+			query.setObject(null);
+			query.setGroup(record);
+			exec.process(query);
+			
+			querySmiles.setObject(null);
+			querySmiles.setGroup(record);
+			exec.process(querySmiles);
+		} else {
+			query.setObject(g.process(a));
+			query.setGroup(record);
+			exec.process(query);
+			
+			querySmiles.setObject(smilesKey.process(a));
+			querySmiles.setGroup(record);
+			exec.process(querySmiles);
+		}
 		return record;
 	}
 }

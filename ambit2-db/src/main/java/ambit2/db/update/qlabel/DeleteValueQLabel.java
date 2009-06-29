@@ -34,7 +34,8 @@ public class DeleteValueQLabel extends AbstractUpdate<Integer, QLabel> {
 			params1.add(new QueryParam<Integer>(Integer.class, getGroup()));
 		
 		if (getObject()!=null) {
-			params1.add(new QueryParam<String>(String.class, getObject().getLabel().toString()));
+			if (getObject().getLabel()!= null) 
+				params1.add(new QueryParam<String>(String.class, getObject().getLabel().toString()));
 			if (getObject().getUser()!=null) 
 				params1.add(new QueryParam<String>(String.class, getObject().getUser().getName()));
 			
@@ -51,8 +52,10 @@ public class DeleteValueQLabel extends AbstractUpdate<Integer, QLabel> {
 			b.append(whereValue);
 		}
 		if (getObject()!=null) {
-			b.append(first?"":" and ");	first = false;
-			b.append(whereLabel);
+			if (getObject().getLabel()!= null) {
+				b.append(first?"":" and ");	first = false;
+				b.append(whereLabel);
+			}
 			if (getObject().getUser()!=null) {
 				b.append(first?"":" and ");	first = false;
 				b.append(whereUser);

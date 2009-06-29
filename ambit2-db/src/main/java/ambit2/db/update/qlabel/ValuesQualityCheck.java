@@ -1,13 +1,11 @@
 package ambit2.db.update.qlabel;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.data.MoleculeTools;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 

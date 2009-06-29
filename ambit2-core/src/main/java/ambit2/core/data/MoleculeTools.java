@@ -89,16 +89,18 @@ public class MoleculeTools {
 	}
 	
 	public static void bitset2bigint16(BitSet bs,int size,BigInteger[] h16) {
-		
-		
-		int L = h16.length;
-		for (int j = 0; j < L; j++) {
-			StringBuilder b = new StringBuilder();
-			for (int i = (size-1); i >=0; i-- ) 
-				b.append(bs.get(j*size+i)?"1":"0");
-			
-			h16[j] = new BigInteger(b.toString(),2);
-		}	
+		if (bs == null) 
+			for (int i=0; i <h16.length;i++) h16[i] = BigInteger.ZERO;
+		else {
+			int L = h16.length;
+			for (int j = 0; j < L; j++) {
+				StringBuilder b = new StringBuilder();
+				for (int i = (size-1); i >=0; i-- ) 
+					b.append(bs.get(j*size+i)?"1":"0");
+				
+				h16[j] = new BigInteger(b.toString(),2);
+			}
+		}
 	}
 	/*
     protected static byte[] toByteArray(BitSet bits) {
