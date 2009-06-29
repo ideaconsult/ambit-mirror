@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -219,35 +220,17 @@ public class IteratingDelimitedFileReader extends
 	*/
 	protected void processHeader(BufferedReader in) {
 		try {
-			char delimiter = format.getFieldDelimiter();
-			char textDelimiter = format.getTextDelimiter();
+			
 			String line = in.readLine();
 
-			int fieldIndex = 0;
-			int start = 0;
-			int quote = 0;
-			for (int i = 0; i < line.length(); i++) {
-				if (line.charAt(i) == textDelimiter) {
-					quote = (quote + 1) % 2;
-					continue;
-				}
-
-				if ((quote==0) && (line.charAt(i) == delimiter)) {
-
-					String key = line.substring(start, i);
-					String val = removeStringDelimiters(key);
-					addHeaderColumn(val);
-					if (val.equals(defaultSMILESHeader))
-						smilesIndex = fieldIndex;
-					start = i + 1;
-					fieldIndex++;
-				}
+			StringTokenizer st = new StringTokenizer(line,new String(format.getFieldDelimiter()));
+			while (st.hasMoreTokens()) {
+				addHeaderColumn(st.nextToken().trim());	
 			}
-			String key = line.substring(start, line.length());
-			String val = removeStringDelimiters(key);
-			if (val.equals(defaultSMILESHeader))
-				smilesIndex = fieldIndex;
-			addHeaderColumn(val);
+			for (int i=0; i < getNumberOfColumns(); i++)
+				if (getHeaderColumn(i).toString().equals(defaultSMILESHeader)) {
+					smilesIndex = i; break;
+				}
 			values = new Object[getNumberOfColumns()];
 			
 			
@@ -274,36 +257,17 @@ public class IteratingDelimitedFileReader extends
 	 * Extract values from a line
 	 */
 	public void extractRowKeyAndData(String line) {
-			char delimiter = format.getFieldDelimiter();
-			char textDelimiter = format.getTextDelimiter();
-			int quote = 0;
+		
+			StringTokenizer st = new StringTokenizer(line,format.getFieldDelimiter());
 			int fieldIndex = 0;
-			int start = 0;
-			for (int i = 0; i < values.length; i++)
-				values[i] = "";
-			for (int i = 0; i < line.length(); i++) {
-				if (line.charAt(i) == textDelimiter) {
-					quote = (quote + 1) % 2;
-					continue;
-				}
-				if ((quote == 0) && ((line.charAt(i) == delimiter))) {
-					if ((start) == i)
-						values[fieldIndex] = ""; // empty field
-					else
-						values[fieldIndex] = removeStringDelimiters(line.substring(
-								start, i));
-					start = i + 1;
-					fieldIndex++;
-					if (fieldIndex >= values.length) break;
-				}
+			while (st.hasMoreTokens()) {
+				if (fieldIndex>=values.length) break;
+				String next = st.nextToken();
+				if (next != null)
+					values[fieldIndex] = removeStringDelimiters(next);
+				else values[fieldIndex] = "";
+				fieldIndex ++;
 			}
-			if (fieldIndex < values.length)
-				values[fieldIndex] = removeStringDelimiters(line.substring(start,
-						line.length()));
-			else
-				logger.error("Field number\t" + fieldIndex + "\tout of\t"
-						+ values.length + "\t"
-						+ line.substring(start, line.length()));
 
 	}
     @Override

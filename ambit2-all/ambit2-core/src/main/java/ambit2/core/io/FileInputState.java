@@ -92,12 +92,12 @@ public class FileInputState extends FileState implements IInputState {
 			if ((format != null) && (format instanceof DelimitedFileFormat))
 			return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
 			else
-				return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(',','"'));
+				return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(",",'"'));
 		} else if (ext.endsWith(extensions[TXT_INDEX])) {
 			if ((format != null) && (format instanceof DelimitedFileFormat))
 				return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
 				else
-					return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat('\t','"'));			
+					return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(" \t",'"'));			
 					//new DelimitedFileFormat('\t','"'));		
 		} else if (ext.endsWith(extensions[MOL_INDEX])) {
 			//return new IteratingChemObjectReaderWrapper(new FilteredMDLReader(stream));

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.StringTokenizer;
 
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.MoleculeSet;
@@ -119,7 +120,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 		}
 	}
 	protected void writeHeader() throws IOException {
-        char fieldDelimiter = format.getFieldDelimiter();
+        String fieldDelimiter =  format.getFieldDelimiter().substring(0,1);
         char textDelimiter = format.getTextDelimiter();		
 		for (int i=0;i<header.size();i++) {
 			String h = header.get(i).toString();
@@ -135,7 +136,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 	}
     public void writeMolecule(IMolecule molecule) {
         
-        char fieldDelimiter = format.getFieldDelimiter();
+    	String fieldDelimiter =  format.getFieldDelimiter().substring(0,1);
         char textDelimiter = format.getTextDelimiter();
         Object value;    	
 
