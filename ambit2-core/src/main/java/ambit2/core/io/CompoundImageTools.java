@@ -32,6 +32,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer2D;
 import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.MFAnalyser;
 
 
 /**
@@ -168,7 +169,9 @@ public class CompoundImageTools {
             
             molecules.removeAllAtomContainers();
             if (!generateCoordinates) {
-            	molecules.addAtomContainer(molecule);
+                MFAnalyser mfa = new MFAnalyser(molecule);
+                IAtomContainer c = mfa.removeHydrogensPreserveMultiplyBonded();             	
+            	molecules.addAtomContainer(c);
             	return;
             }            
             try
@@ -176,14 +179,18 @@ public class CompoundImageTools {
             	IMoleculeSet mset =  ConnectivityChecker.partitionIntoMolecules(molecule);
                 StructureDiagramGenerator sdg = new StructureDiagramGenerator();
                 IMolecule m = null;
-                for (int i=0; i < mset.getAtomContainerCount();i++) { 
+                for (int i=0; i < mset.getAtomContainerCount();i++) {
+                    MFAnalyser mfa = new MFAnalyser(mset.getAtomContainer(i));
+                    IAtomContainer c = mfa.removeHydrogensPreserveMultiplyBonded();                	
                     if (generateCoordinates) {
-                        sdg.setMolecule((IMolecule)mset.getAtomContainer(i),false);
+                        sdg.setMolecule((IMolecule)c,false);
                         m = null;
                         sdg.generateCoordinates(new Vector2d(0,1));
                         m = sdg.getMolecule();
                         
-                    } else m = mset.getMolecule(i);
+                    } else {
+                    	m = (IMolecule)c;//mset.getMolecule(i);
+                    }
                     molecules.addMolecule(m);
                 }
                 mset.removeAllAtomContainers();
