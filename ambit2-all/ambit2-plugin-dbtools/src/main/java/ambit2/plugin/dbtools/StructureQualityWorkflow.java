@@ -1,17 +1,23 @@
 package ambit2.plugin.dbtools;
 
+import ambit2.base.data.AmbitUser;
+import ambit2.base.data.QLabel;
 import ambit2.base.data.SelectionBean;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReader;
+import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
+import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.quality.QualityLabelWriter;
 import ambit2.db.processors.quality.QualityValueWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.db.search.structure.QueryStructureByValueQuality;
+import ambit2.db.update.qlabel.DeleteStructureQLabel;
+import ambit2.db.update.qlabel.DeleteValueQLabel;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
@@ -29,43 +35,71 @@ import com.microworkflow.process.Workflow;
 public class StructureQualityWorkflow extends Workflow {
 	protected static final String SELECTION_QUALITY="SELECTION_QUALITY";
 	protected static final String DESCRIPTORS_NEWQUERY = "ambit2.plugin.dbtools.StructureQualityWorkflow.DESCRIPTORS_NEWQUERY";
-	protected enum QUALITY_MODE {
-		Fingerprints {
+	public enum QUALITY_MODE {
+		Structures {
 			@Override
 			public String toString() {
 				return "Structures consistency";
 			}
+			@Override
+			public Activity getActivity() {
+				return addStructureQualityVerifier();
+			}
 		},
+		Remove_StructuresLabel {
+			@Override
+			public String toString() {
+				return "Remove quality labels for structures";
+			}
+			@Override
+			public Activity getActivity() {
+				return addStructureLabelRemover();
+			}
+		},
+
 		CAS {
 			@Override
 			public String toString() {
 				return "CAS numbers consistency";
 			}
+			@Override
+			public Activity getActivity() {
+				return addValueQualityVerifier();
+			}
 		},	
+
+		Remove_ValuesLabel {
+			@Override
+			public String toString() {
+				return "Remove quality labels for properties";
+			}
+			@Override
+			public Activity getActivity() {
+				return addValueLabelRemover();
+			}
+		},			
+
 		Completed {
 			@Override
 			public String toString() {
 				return "Quit, calculations are completed.";
 			}		
+		};
+		public  Activity getActivity() {
+			return null;
 		}
 	};
 	public StructureQualityWorkflow() {
         Sequence seq=new Sequence();
         seq.setName("[Quality]");    	
-        seq.addStep(getCalculationOptionsSequence(
-        		addStructureQualityVerifier(),
-        		addValueQualityVerifier()
-        		));
+        seq.addStep(getCalculationOptionsSequence());
         
         //setDefinition(new LoginSequence(new DatasetSelection(seq)));
         setDefinition(new LoginSequence(seq));
      
 
 	}
-	public While getCalculationOptionsSequence(
-				Activity structure,
-				Activity values
-				) {
+	public While getCalculationOptionsSequence() {
 		
 		
 		While loop = new While();
@@ -78,30 +112,18 @@ public class StructureQualityWorkflow extends Workflow {
 				selection, SELECTION_QUALITY, "??????");
 		selectKey.setName("Select quality verification method");
 
+		Activity prevActivity = null;
+		Activity start = null; 
+        for (QUALITY_MODE m : QUALITY_MODE.values()) {
+        	Activity activity = m.getActivity();
+            Conditional condition = new Conditional(
+                    new ModeCondition(m), 
+                    activity,
+                    prevActivity);
+            prevActivity = condition;
+            start = condition;
+        }
         
-        Conditional valuesCondition = new Conditional(
-                new TestCondition() {
-                    public boolean evaluate() {
-	    				Object o = getContext().get(SELECTION_QUALITY);
-	    				if (o instanceof SelectionBean)
-	    					return QUALITY_MODE.CAS.equals(((SelectionBean)o).getSelected());
-	    				else return false;
-                    }
-                }, 
-                values,
-                null);        
-        
-        Conditional strucCondition = new Conditional(
-                new TestCondition() {
-                    public boolean evaluate() {
-	    				Object o = getContext().get(SELECTION_QUALITY);
-	    				if (o instanceof SelectionBean)
-	    					return QUALITY_MODE.Fingerprints.equals(((SelectionBean)o).getSelected());
-	    				else return false;
-                    }
-                }, 
-                structure,
-                valuesCondition);
         
         loop.setTestCondition(new TestCondition() {
         	@Override
@@ -116,13 +138,13 @@ public class StructureQualityWorkflow extends Workflow {
         	}
         });
         
-        loop.setName("Calculate");	            
+        loop.setName("Process");	            
         body.addStep(selectKey);
-        body.addStep(strucCondition);
+        body.addStep(start);
         loop.setBody(body);
 		return loop;
 	}	
-	protected Sequence addStructureQualityVerifier() {
+	protected static Sequence addStructureQualityVerifier() {
 			Sequence seq = new Sequence();
 			Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
 					new Performer() {
@@ -149,7 +171,7 @@ public class StructureQualityWorkflow extends Workflow {
 		    return seq;
 	}	
 
-	protected Sequence addValueQualityVerifier() {
+	protected static Sequence addValueQualityVerifier() {
 		Sequence seq = new Sequence();
 		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
 				new Performer() {
@@ -173,5 +195,55 @@ public class StructureQualityWorkflow extends Workflow {
 	    ap.setName("CAS quality verifier");	
 	    seq.addStep(ap);
 	    return seq;
-}	
+	}	
+	protected static Sequence addValueLabelRemover() {
+		Sequence seq = new Sequence();
+		
+		QLabel label = new QLabel(null);
+		label.setUser(new AmbitUser("quality"));
+		DeleteValueQLabel query = new DeleteValueQLabel();
+		query.setGroup(null);
+		query.setObject(label);
+		AbstractUpdateProcessor<Integer, QLabel> processor = new AbstractUpdateProcessor<Integer,QLabel>();
+		processor.setQueryDelete(query);
+		processor.setOperation(OP.DELETE);
+		
+		seq.addStep(new ActivityPrimitive<Integer, QLabel>(processor));
+//		ap.setName("Remove property quality labels");	
+
+	    return seq;
+	}	
+	protected static Sequence addStructureLabelRemover() {
+		Sequence seq = new Sequence();
+		
+		QLabel label = new QLabel(null);
+		label.setUser(new AmbitUser("quality"));
+		DeleteStructureQLabel query = new DeleteStructureQLabel();
+		query.setGroup(null);
+		query.setObject(label);
+		AbstractUpdateProcessor<IStructureRecord, QLabel> processor = new AbstractUpdateProcessor<IStructureRecord,QLabel>();
+		processor.setQueryDelete(query);
+		processor.setOperation(OP.DELETE);
+		
+		seq.addStep(new ActivityPrimitive<IStructureRecord, QLabel>(processor));
+//		ap.setName("Remove property quality labels");	
+
+	    return seq;
+	}
+
 }
+class ModeCondition extends TestCondition {
+	StructureQualityWorkflow.QUALITY_MODE mode;
+	public ModeCondition(StructureQualityWorkflow.QUALITY_MODE mode) {
+		this.mode = mode;
+	}
+	@Override
+	public boolean evaluate() {
+			Object o = getContext().get(StructureQualityWorkflow.SELECTION_QUALITY);
+			if (o instanceof SelectionBean)
+				return mode.equals(((SelectionBean)o).getSelected());
+			else return false;
+	}
+	
+}
+

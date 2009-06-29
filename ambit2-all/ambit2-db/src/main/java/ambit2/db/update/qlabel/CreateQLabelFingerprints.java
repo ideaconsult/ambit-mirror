@@ -42,6 +42,7 @@ public class CreateQLabelFingerprints extends AbstractUpdate<IStructureRecord, B
 			
 			if (index==4) {
 				StringBuilder b = new StringBuilder();
+				b.append("Different fingerprints for the same chemical\t");
 				for (int i=0; i <16;i++) {b.append( h16[i]); b.append('\t');}
 				params.add(new QueryParam<String>(String.class, b.toString()));
 			} else
