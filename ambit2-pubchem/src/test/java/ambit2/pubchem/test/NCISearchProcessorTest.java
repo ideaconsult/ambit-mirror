@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.pubchem.SearchApplication;
+import ambit2.pubchem.NCISearchProcessor.METHODS;
 
 public class NCISearchProcessorTest {
 	protected NCISearchProcessor processor;
@@ -23,7 +24,11 @@ public class NCISearchProcessorTest {
 	public void tearDown() throws Exception {
 		processor = null;
 	}
-	
+	@Test
+	public void testSDF() throws Exception {
+		processor.setOption(METHODS.sdf);
+		System.out.println(processor.process("50-00-0"));
+	}
 	@Test	
 	public void test() throws Exception {
 		List<String> ids = new ArrayList<String>();
