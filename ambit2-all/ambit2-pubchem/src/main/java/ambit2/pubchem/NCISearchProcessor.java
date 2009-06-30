@@ -22,7 +22,7 @@ Methods are currently /smiles, /inchi, /inchikey, /names,/image, /ficus, /ficts,
  *
  */
 public class NCISearchProcessor extends HTTPRequest<String, String>  {
-	protected enum METHODS {all,smiles,inchi,inchikey,names,image,ficus,ficts,uuuuu};
+	public enum METHODS {all,smiles,inchi,inchikey,names,image,ficus,ficts,uuuuu,sdf};
 	protected long wait_ms = 0;
 
 	public long getWait_ms() {
@@ -66,7 +66,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 			String line = null;
 			while ((line = reader.readLine())!=null) {
 				builder.append(line);
-				builder.append('\t');
+				builder.append((getOption().equals(METHODS.sdf))?'\n':'\t');
 			}
 			return builder.toString();
 		} catch (Exception x) {
@@ -77,32 +77,49 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 	@Override
 	public String process(String target) throws AmbitException {
 		METHODS method = getOption(); 
-		StringBuilder b = new StringBuilder();
-		b.append(target);
-		b.append("\t");
-		METHODS[] methods = new METHODS[]{METHODS.smiles,METHODS.inchi,METHODS.inchikey,METHODS.names};
-		for (METHODS m : methods) 
-			if (METHODS.all.equals(m)) continue;
-			else if ((method==null) || method.equals(METHODS.all) || method.equals(m)) {
-				setOption(m);
-				try {
-					setUrl(String.format(nci_url, getHost(),URLEncoder.encode(target, "US-ASCII"),getOption()));
-					if (wait_ms > 0) {
-						double w = wait_ms * (0.5 + Math.random());
-						Thread.sleep((long)w);
-					}
-					b.append(super.process(target));
-				} catch (Exception x) {
-					b.append("");
-					//if (isCancelled())	throw new AmbitException(x);
-				} finally {
+		//retrieve SDF file
+		if (METHODS.sdf.equals(method)) {
+			setOption(method);
+			try {
+				setUrl(String.format(nci_url, getHost(),URLEncoder.encode(target, "US-ASCII"),getOption()));
+				if (wait_ms > 0) {
+					double w = wait_ms * (0.5 + Math.random());
+					Thread.sleep((long)w);
 				}
-			} else {
-				b.append("\t");
-			}
-		setOption(method);
-		return b.toString();
+				StringBuilder b = new StringBuilder();
+				b.append(super.process(target));	
+				return b.toString().replace("$$$$",String.format("\n<CAS>\n%s\n\n$$$$",target));
 
+			} catch (Exception x) {
+				throw new AmbitException(x);
+			}
+		} else {  //anything else
+			StringBuilder b = new StringBuilder();
+			b.append(target);
+			b.append("\t");
+			METHODS[] methods = new METHODS[]{METHODS.smiles,METHODS.inchi,METHODS.inchikey,METHODS.names};
+			for (METHODS m : methods) 
+				if (METHODS.all.equals(m)) continue;
+				else if ((method==null) || method.equals(METHODS.all) || method.equals(m)) {
+					setOption(m);
+					try {
+						setUrl(String.format(nci_url, getHost(),URLEncoder.encode(target, "US-ASCII"),getOption()));
+						if (wait_ms > 0) {
+							double w = wait_ms * (0.5 + Math.random());
+							Thread.sleep((long)w);
+						}
+						b.append(super.process(target));
+					} catch (Exception x) {
+						b.append("");
+						//if (isCancelled())	throw new AmbitException(x);
+					} finally {
+					}
+				} else {
+					b.append("\t");
+				}
+			setOption(method);
+			return b.toString();			
+		}
 	}
 	@Override
 	protected void prepareOutput(String target, OutputStream out)
