@@ -5,14 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
 import java.util.List;
 
+import org.jaxen.function.StringFunction;
+
+import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.StatementExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 
+/**
+ * Executes arbitrary {@link IQueryObject}
+ * @author nina
+ *
+ * @param <Q>
+ */
 public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,ResultSet> {
 	
 	/**
@@ -23,6 +31,11 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	protected Statement statement=null;
 	protected int maxRecords = 0;
 	protected boolean cache = false;
+	protected String limit = "%s limit %d";
+	protected String LIMIT = "limit";
+	public QueryExecutor() {
+
+	}
 	public boolean isCache() {
 		return cache;
 	}
@@ -55,29 +68,35 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	}
 
 	public void setMaxRecords(int maxRecords) {
-		this.maxRecords = maxRecords;
+		if (maxRecords < 0) this.maxRecords = 0;
+		else this.maxRecords = maxRecords;
 	}
 
 	public void open() throws DbAmbitException {
 	}
 
+	
 	public ResultSet process(Q target) throws AmbitException {
+		long now = System.currentTimeMillis();
 		Connection c = getConnection();		
 		if (c == null) throw new AmbitException("no connection");
+		try {
+			setMaxRecords(Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS)));
+		} catch (Exception x) {
+			setMaxRecords(2000);
+		}		
+		
+		ResultSet rs = null;
 		try {
 				List<QueryParam> params = target.getParameters();
 				if (params == null) {
 					statement = c.createStatement(getResultType(),getResultTypeConcurency());
-					String sql = target.getSQL();
-					if (maxRecords > 0)
-						sql = sql + " limit " + Integer.toString(maxRecords);
-					ResultSet rs = statement.executeQuery(sql);
-					return rs;
+					String sql = getSQL(target);
+
+					rs = statement.executeQuery(sql);
+
 				} else {
-					String sql = target.getSQL();
-					if (maxRecords > 0)
-						sql = sql + " limit " + Integer.toString(maxRecords);			
-					
+					String sql = getSQL(target);
 					sresults = getCachedStatement(sql);
 					if (sresults == null) {
 						sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
@@ -88,13 +107,17 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 					
 					QueryExecutor.setParameters(sresults, params);
 					logger.debug(sresults);
-					ResultSet rs = sresults.executeQuery();
-					return rs;
+					rs = sresults.executeQuery();
+					
 				}
 		} catch (Exception x) {
-			x.printStackTrace();
+
 			throw new ProcessorException(this,x);
+		} 
+		finally {
+			System.out.println(System.currentTimeMillis()-now + "\t"+ (sresults==null?statement:sresults));
 		}
+		return rs;
 	}
 	
 	@Override
@@ -115,9 +138,8 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	}
 	protected String getSQL(Q target) throws AmbitException {
 		String sql = target.getSQL();
-		if (maxRecords > 0)
-			sql = sql + " limit " + Integer.toString(maxRecords);
-		return sql;
+		if (sql.indexOf(LIMIT)>=0) return sql;
+		else return (maxRecords>0?String.format(limit,sql,maxRecords):sql);
 	}
 	@Override
 	public void closeResults(ResultSet rs) throws SQLException {
