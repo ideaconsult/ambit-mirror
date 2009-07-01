@@ -21,7 +21,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	public enum SMILES_PARSER {
 	    CDK, OPENBABEL 
 	}
-	protected SMILES_PARSER parser = SMILES_PARSER.CDK;
+	protected SMILES_PARSER parser = SMILES_PARSER.OPENBABEL;
 	
 	protected SmilesParserWrapper() {
 		this((Preferences.getProperty(Preferences.SMILESPARSER) == "true") ? SMILES_PARSER.OPENBABEL : SMILES_PARSER.CDK);
@@ -35,7 +35,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
 	public IMolecule parseSmiles(String smiles) throws InvalidSmilesException {
-		//System.out.println(smiles + " " + parser);
+		System.out.println(smiles + " " + parser);
 		switch (parser) {
 		case OPENBABEL: {
 			try {
@@ -60,6 +60,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			if (cdkParser == null) cdkParser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 			IMolecule mol = cdkParser.parseSmiles(smiles);
 			try {
+
 				return dbt.fixAromaticBondOrders(mol);
 			} catch (CDKException xx) {
 				xx.printStackTrace();
