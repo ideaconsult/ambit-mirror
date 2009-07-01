@@ -249,7 +249,7 @@ public class IsomorphismTester
 			return(singleAtomIsomorphism());
 		
 		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
-		executeSequence();
+		executeSequence(true);
 		return(isomorphismFound);
 	}
 	
@@ -310,7 +310,7 @@ public class IsomorphismTester
 				
 		
 		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
-		executeSequence();
+		executeSequence(true);
 		
 		if (isomorphismFound)
 		{	
@@ -325,6 +325,57 @@ public class IsomorphismTester
 		else
 			return (null);
 	}
+	
+	
+	/**
+	 * If no isomorphism is found the result is empty vector
+	 * @param container
+	 * @return
+	 */
+	public Vector<Vector<IAtom>> getAllIsomorphismMappings(IAtomContainer container)
+	{
+		if (query == null) return null;
+		target = container;	
+		FlagStoreIsomorphismNode = true;
+		isomorphismNodes.clear();
+		Vector<Vector<IAtom>> result = new Vector<Vector<IAtom>>(); 
+		
+		
+		if (query.getAtomCount() == 1)
+		{	
+			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			for (int i = 0; i < target.getAtomCount(); i++)
+			{	
+				if (qa.matches(target.getAtom(i)))
+				{	
+					Vector<IAtom> v = new Vector<IAtom>();
+					v.add(target.getAtom(i));
+					result.add(v);
+				}	
+			}
+			return result;
+		}	
+				
+		
+		TopLayer.setAtomTopLayers(target, TopLayer.TLProp);
+		executeSequence(false);
+		
+		if (isomorphismFound)
+		{	
+			//Getting the data from the all stored Nodes
+			for (int k = 0; k < isomorphismNodes.size(); k++)
+			{	
+				Node node = isomorphismNodes.get(k);
+				Vector<IAtom> v = new Vector<IAtom>();
+				for (int i = 0; i < node.atoms.length; i++)
+					v.add(node.atoms[i]);
+				result.add(v);
+			}
+		}
+		return result;
+		
+	}
+	
 	
 	boolean singleAtomIsomorphism()
 	{	
@@ -342,7 +393,7 @@ public class IsomorphismTester
 	}
 	
 	
-	void executeSequence()
+	void executeSequence(boolean stopAtFirstMapping)
 	{	
 		isomorphismFound = false;
 		stack.clear();
@@ -362,13 +413,22 @@ public class IsomorphismTester
 			}	
 		}
 		
-		//Expanding the tree of all possible mappings 
-		while (!stack.isEmpty())
-		{
-			expandNode(stack.pop());
-			if (isomorphismFound)
-				break;
+		//Expanding the tree of all possible mappings
+		if (stopAtFirstMapping)
+		{	 
+			while (!stack.isEmpty())
+			{
+				expandNode(stack.pop());
+				if (isomorphismFound)
+					break;
+			}
 		}
+		else
+		{	 
+			while (!stack.isEmpty())
+				expandNode(stack.pop());
+		}
+		
 	}
 	
 	void executeSequenceAtPos(int pos)
@@ -412,13 +472,16 @@ public class IsomorphismTester
 				if (el.bonds[0].matches(tBo))
 				{
 					node.sequenceElNum++;
-					stack.push(node);
+					//stack.push(node); 
 					if (node.sequenceElNum == sequence.size())
 					{	
+						//The node is not added in the stack if the end of the sequence is reached
 						isomorphismFound = true;
 						if (FlagStoreIsomorphismNode)
 							isomorphismNodes.add(node);
-					}	
+					}
+					else
+						stack.push(node); 
 				}	
 		}
 		else
@@ -452,13 +515,16 @@ public class IsomorphismTester
 					Node newNode = node.cloneNode();
 					newNode.atoms[el.atomNums[0]] = targetAt.get(i);
 					newNode.sequenceElNum = node.sequenceElNum+1;
-					stack.push(newNode);
+					//stack.push(newNode);
 					if (newNode.sequenceElNum == sequence.size())
 					{	
+						//The node is not added in the stack if the end of the sequence is reached
 						isomorphismFound = true;
 						if (FlagStoreIsomorphismNode)
 							isomorphismNodes.add(newNode);
-					}	
+					}
+					else
+						stack.push(newNode);
 				}
 			}
 			return;
@@ -478,13 +544,16 @@ public class IsomorphismTester
 								newNode.atoms[el.atomNums[0]] = targetAt.get(i);
 								newNode.atoms[el.atomNums[1]] = targetAt.get(j);
 								newNode.sequenceElNum = node.sequenceElNum+1;
-								stack.push(newNode);
+								//stack.push(newNode);
 								if (newNode.sequenceElNum == sequence.size())
 								{	
+									//The node is not added in the stack if the end of the sequence is reached
 									isomorphismFound = true;
 									if (FlagStoreIsomorphismNode)
 										isomorphismNodes.add(newNode);
-								}	
+								}
+								else
+									stack.push(newNode);
 							}					
 			return;
 		}
@@ -508,13 +577,16 @@ public class IsomorphismTester
 											newNode.atoms[el.atomNums[1]] = targetAt.get(j);
 											newNode.atoms[el.atomNums[2]] = targetAt.get(k);
 											newNode.sequenceElNum = node.sequenceElNum+1;
-											stack.push(newNode);
+											//stack.push(newNode);
 											if (newNode.sequenceElNum == sequence.size())
 											{	
+												//The node is not added in the stack if the end of the sequence is reached
 												isomorphismFound = true;
 												if (FlagStoreIsomorphismNode)
 													isomorphismNodes.add(newNode);
 											}	
+											else
+												stack.push(newNode);
 										}
 			return;
 		}
@@ -556,13 +628,16 @@ public class IsomorphismTester
 				for(int k = 0; k < t.length-1; k++)
 					newNode.atoms[el.atomNums[k]] = targetAt.get(t[k]);				
 				newNode.sequenceElNum = node.sequenceElNum+1;
-				stack.push(newNode);
+				//stack.push(newNode);
 				if (newNode.sequenceElNum == sequence.size())
 				{	
+					//The node is not added in the stack if the end of the sequence is reached
 					isomorphismFound = true;
 					if (FlagStoreIsomorphismNode)
 						isomorphismNodes.add(newNode);
-				}	
+				}
+				else
+					stack.push(newNode);
 				continue;
 			}
 			

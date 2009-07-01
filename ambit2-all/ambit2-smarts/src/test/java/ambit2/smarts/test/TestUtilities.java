@@ -190,6 +190,34 @@ public class TestUtilities
 		System.out.println();
 	}
 	
+	public void testIsomorphismAllMappings(String smarts, String smiles)
+	{	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		QueryAtomContainer query  = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return;
+		}						
+		
+		isoTester.setQuery(query);
+		Vector<Vector<IAtom>> allmaps = isoTester.getAllIsomorphismMappings(mol);
+		System.out.println("Isomorphism Mapping: " + smarts  + "  in  " + smiles);
+		for (int i = 0; i < allmaps.size(); i++)
+		{	
+			Vector<IAtom> map = allmaps.get(i);
+			for (int j = 0; j < map.size(); j++)
+			{	
+				IAtom a = map.get(j);
+				int n = mol.getAtomNumber(a);
+				System.out.print("  " + n);
+			}
+			System.out.println();
+		}
+	}
+	
 	
 	public void testAtomSequencingFromFile(String fname)
 	{
@@ -1122,7 +1150,9 @@ public class TestUtilities
 		//tu.compareIsoTesterMulti();
 		//tu.compareIsoTester("C",null);
 		//tu.testIsomorphismTester("C", "CCCCC");
-		//tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
+		
+		//!!!  essential IsomorphismTest test
+		tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
 		
 		//These were problematic cases, but now are OK
 		//tu.compareIsoTester("S(OC)(=O)(=O)O",null);  //OK
@@ -1136,8 +1166,12 @@ public class TestUtilities
 		//tu.compareIsoTester("N(C)(C)(C)CC",null);  //OK
 				
 		//tu.testIsomorphismPositions("C1(N)CCCC1", "C1CC(N)CC1NCCO");
-		tu.testIsomorphismMapping("C1CCC1", "CCCCNC1CCC1");
-		tu.testIsomorphismMapping("CCN", "CCCCN");
+		//tu.testIsomorphismMapping("C1CCC1", "CCCCNC1CCC1");
+		//tu.testIsomorphismMapping("CCN", "CCCCN");
+		
+		//tu.testIsomorphismAllMappings("CCN", "CCCCNCC");
+		//tu.testIsomorphismAllMappings("C1CCC1", "C1CCC1N");
+		//tu.testIsomorphismAllMappings("C1CCC1N", "C1CCC1N");
 		
 		//tu.testSmartsManagerBoolSearch("C1CC1", "CC(C)CCC");
 		//tu.testSmartsManagerBoolSearch("CC(C)C", "C1CC1");
