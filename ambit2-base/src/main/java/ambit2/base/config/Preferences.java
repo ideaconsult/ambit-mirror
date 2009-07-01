@@ -39,6 +39,7 @@ public class Preferences {
 	public static String GENERATE2D="generate2D";
 	public static String DEFAULT_DIR="defaultDir";
 	public static String START_MYSQL="startMySQL";
+	public static String MAXRECORDS="MAXRECORDS";
 	public static String SMILESPARSER="smilesParser";
     public static String STOP_AT_UNKNOWNATOMTYPES="atomtypes.stop";
     public static String MOPAC_DIR="mopac.dir";
@@ -71,6 +72,7 @@ public class Preferences {
 		{HOST,"Host","localhost",String.class,"This is the default host AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this host.",false,VTAGS.Database},
 		{SCHEME,"Scheme","jdbc:mysql",String.class,"",true,VTAGS.Database},		
 		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false,VTAGS.Database},
+		{MAXRECORDS,"Maximum number of records",2000,String.class,"Maximum number of records to be returned by a search query",false,VTAGS.Database},
 
 		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",true,VTAGS.Structure},
 		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false,VTAGS.Structure},
