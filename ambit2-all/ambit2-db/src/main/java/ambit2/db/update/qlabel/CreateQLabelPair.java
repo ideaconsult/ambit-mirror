@@ -39,13 +39,17 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		
 		"delete from quality_chemicals",
 		
-		"insert into quality_chemicals (idchemical,num_sources,label,num_structures)\n"+
-		"SELECT idchemical,count(text) c,'Consensus',1 FROM quality_pair\n"+
+		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
+		"SELECT idchemical,count(text) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
 		"group by idchemical,text\n"+
 		"on duplicate key update\n"+
 		"num_structures = num_structures+1,\n"+
-		"`label`=CASE 1 WHEN values(num_sources)=num_sources THEN 'Ambiguous'  WHEN values(num_sources)<num_sources THEN 'Majority' ELSE label END\n"
+		"`label`=CASE 1 WHEN values(num_sources)=num_sources THEN 'Ambiguous'  WHEN values(num_sources)<num_sources THEN 'Majority' ELSE 'Majority' END,\n"+
+		"`text`=concat_ws(',',`text`,values(`text`))\n",
+		
+		"update quality_chemicals set text=replace(sortString(text),',',':')\n",
 
+		
 	};
 		
 /*
@@ -104,6 +108,7 @@ WHEN values(num_sources)<num_sources THEN "Majority" ELSE label END
 	}
 
 	public String[] getSQL() throws AmbitException {
+		for (String s: sql) System.out.println(s);
 		return sql;
 	}
 
