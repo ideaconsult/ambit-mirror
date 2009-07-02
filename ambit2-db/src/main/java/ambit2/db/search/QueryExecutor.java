@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import org.jaxen.function.StringFunction;
-
-import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.StatementExecutor;
@@ -29,7 +26,6 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	private static final long serialVersionUID = 5821244671560506456L;
 	protected PreparedStatement sresults=null;
 	protected Statement statement=null;
-	protected int maxRecords = 0;
 	protected boolean cache = false;
 	protected String limit = "%s limit %d";
 	protected String LIMIT = "limit";
@@ -63,14 +59,6 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	//one of ResultSet.CONCUR_READ_ONLY or ResultSet.CONCUR_UPDATABLE
 	protected int resultTypeConcurency = ResultSet.CONCUR_READ_ONLY;
 
-	public int getMaxRecords() {
-		return maxRecords;
-	}
-
-	public void setMaxRecords(int maxRecords) {
-		if (maxRecords < 0) this.maxRecords = 0;
-		else this.maxRecords = maxRecords;
-	}
 
 	public void open() throws DbAmbitException {
 	}
@@ -80,12 +68,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 		long now = System.currentTimeMillis();
 		Connection c = getConnection();		
 		if (c == null) throw new AmbitException("no connection");
-		try {
-			setMaxRecords(Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS)));
-		} catch (Exception x) {
-			setMaxRecords(2000);
-		}		
-		
+
 		ResultSet rs = null;
 		try {
 				List<QueryParam> params = target.getParameters();
@@ -115,7 +98,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 			throw new ProcessorException(this,x);
 		} 
 		finally {
-			System.out.println(System.currentTimeMillis()-now + "\t"+ (sresults==null?statement:sresults));
+			//System.out.println(System.currentTimeMillis()-now + "\t"+ (sresults==null?statement:sresults));
 		}
 		return rs;
 	}
@@ -139,7 +122,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	protected String getSQL(Q target) throws AmbitException {
 		String sql = target.getSQL();
 		if (sql.indexOf(LIMIT)>=0) return sql;
-		else return (maxRecords>0?String.format(limit,sql,maxRecords):sql);
+		else return (target.getMaxRecords()>0?String.format(limit,sql,target.getMaxRecords()):sql);
 	}
 	@Override
 	public void closeResults(ResultSet rs) throws SQLException {

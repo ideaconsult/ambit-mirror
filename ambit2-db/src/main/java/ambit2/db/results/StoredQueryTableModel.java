@@ -86,6 +86,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		super();
 		retrieveMolecule.setValue(new StructureRecord());
 		retrieveField.setValue(new StructureRecord());
+		//retrieveField.setSearchByAlias(true);
 		order.put(new Integer(2), Boolean.FALSE);
 		storedResults = new QueryStoredResults();
 		queryExecutor = new QueryExecutor<IQueryObject>();

@@ -74,6 +74,33 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 				}
 				
 			},
+			fp1024_struc {
+				@Override
+				public String getProperty() {
+					return AmbitCONSTANTS.Fingerprint;
+				}
+				@Override
+				public String getStatusProperty() {
+					return AmbitCONSTANTS.FingerprintSTATUS;
+				}
+				@Override
+				public String getTimeProperty() {
+					return AmbitCONSTANTS.FingerprintTIME;
+				}
+				@Override
+				public IProcessor<IAtomContainer, BitSet> getGenerator() {
+					return new FingerprintGenerator();
+				}
+				@Override
+				public String getTable() {
+					return "fp1024_struc";
+				}
+				@Override
+				public String toString() {
+					return "Fingerprints (hashed 1024 fingerprnts used for similarity search and prescreening)";
+				}
+				
+			},			
 			sk1024 {
 				@Override
 				public String getProperty() {

@@ -49,4 +49,6 @@ public interface IQueryObject<ResultType> extends IStatement {
 	Integer getId();
 	void setId(Integer id);	
 	List<QueryParam> getParameters() throws AmbitException;	
+	long getMaxRecords();
+	void setMaxRecords(long records);
 }

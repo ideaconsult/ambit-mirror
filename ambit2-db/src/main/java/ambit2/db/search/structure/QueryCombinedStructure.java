@@ -47,5 +47,10 @@ public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 			return "select QSCOPE.idquery,s.idchemical,idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric from structure as s";
 	
 	}
-
+	public long getMaxRecords() {
+		return 0;
+	}
+	public void setMaxRecords(long records) {
+		
+	}
 }

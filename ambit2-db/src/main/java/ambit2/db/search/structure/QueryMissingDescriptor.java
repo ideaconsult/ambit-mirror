@@ -64,4 +64,12 @@ public class QueryMissingDescriptor extends AbstractStructureQuery<LiteratureEnt
 		}
 		return b.toString();
 	}
+	@Override
+	public long getMaxRecords() {
+		return 0;
+	}
+	@Override
+	public void setMaxRecords(long records) {
+	
+	}
 }
