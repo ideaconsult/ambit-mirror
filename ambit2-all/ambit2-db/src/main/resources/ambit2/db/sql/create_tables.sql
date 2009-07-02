@@ -95,6 +95,7 @@ CREATE TABLE  `structure` (
   `user_name` varchar(16) collate utf8_bin default NULL,
   `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
   `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
+  `atomproperties` blob,
   PRIMARY KEY  (`idstructure`),
   KEY `FK_structure_2` (`user_name`),
   KEY `idchemical` USING BTREE (`idchemical`),
@@ -260,6 +261,38 @@ CREATE TABLE  `quality_labels` (
   CONSTRAINT `FK_quality_labels_1` FOREIGN KEY (`id`) REFERENCES `property_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_quality_labels_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- Table `quality_pair` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `quality_pair`;
+CREATE TABLE  `quality_pair` (
+  `idchemical` int(10) unsigned NOT NULL auto_increment,
+  `idstructure` int(10) unsigned NOT NULL,
+  `rel` int(10) unsigned NOT NULL default '0' COMMENT 'number of same structures',
+  `user_name` varchar(16) collate utf8_bin NOT NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `TEXT` text collate utf8_bin,
+  PRIMARY KEY  (`idchemical`,`idstructure`),
+  KEY `FK_qpair_1` (`user_name`),
+  KEY `FK_qpair_3` (`idstructure`),
+  KEY `Index_4` (`TEXT`(255)),
+  CONSTRAINT `FK_qpair_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_qpair_2` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_qpair_3` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -----------------------------------------------------
+-- Table `quality_structure` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `quality_chemicals`;
+CREATE TABLE  `quality_chemicals` (
+  `idchemical` int(10) unsigned NOT NULL auto_increment,
+  `num_sources` int(10) unsigned NOT NULL,
+  `label` enum('Consensus','Majority','Unconfirmed','Ambiguous','Unknown') collate utf8_bin NOT NULL default 'Unknown',
+  `num_structures` varchar(45) collate utf8_bin NOT NULL default '0',
+  PRIMARY KEY  (`idchemical`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `quality_structure` 
@@ -461,6 +494,45 @@ CREATE TABLE  `fp1024` (
   CONSTRAINT `fp1024_ibfk_1` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+-- -----------------------------------------------------
+-- Table `fp1024_struc` 1024 length hashed fingerprints
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `fp1024_struc`;
+CREATE TABLE  `fp1024_struc` (
+  `idchemical` int(10) unsigned NOT NULL default '0',
+  `idstructure` int(10) unsigned NOT NULL default '0',
+  `fp1` bigint(20) unsigned NOT NULL default '0',
+  `fp2` bigint(20) unsigned NOT NULL default '0',
+  `fp3` bigint(20) unsigned NOT NULL default '0',
+  `fp4` bigint(20) unsigned NOT NULL default '0',
+  `fp5` bigint(20) unsigned NOT NULL default '0',
+  `fp6` bigint(20) unsigned NOT NULL default '0',
+  `fp7` bigint(20) unsigned NOT NULL default '0',
+  `fp8` bigint(20) unsigned NOT NULL default '0',
+  `fp9` bigint(20) unsigned NOT NULL default '0',
+  `fp10` bigint(20) unsigned NOT NULL default '0',
+  `fp11` bigint(20) unsigned NOT NULL default '0',
+  `fp12` bigint(20) unsigned NOT NULL default '0',
+  `fp13` bigint(20) unsigned NOT NULL default '0',
+  `fp14` bigint(20) unsigned NOT NULL default '0',
+  `fp15` bigint(20) unsigned NOT NULL default '0',
+  `fp16` bigint(20) unsigned NOT NULL default '0',
+  `time` int(10) unsigned default '0',
+  `bc` int(6) NOT NULL default '0',
+  `status` enum('invalid','valid','error') collate utf8_bin NOT NULL default 'invalid',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `version` int(10) unsigned zerofill NOT NULL default '0000000000',
+  PRIMARY KEY  USING BTREE (`idchemical`,`idstructure`),
+  KEY `fpall` (`fp1`,`fp2`,`fp3`,`fp4`,`fp5`,`fp6`,`fp7`,`fp8`,`fp9`,`fp10`,`fp11`,`fp12`,`fp13`,`fp14`,`fp15`,`fp16`),
+  KEY `time` (`time`),
+  KEY `status` (`status`),
+  KEY `fp1024struc_ibfk_2` (`idstructure`),
+  CONSTRAINT `fp1024struc_ibfk_1` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fp1024struc_ibfk_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 -- -----------------------------------------------------
 -- Table `sk1024` 1024 structural keys
 -- -----------------------------------------------------
@@ -484,6 +556,7 @@ CREATE TABLE  `sk1024` (
   `fp15` bigint(20) unsigned NOT NULL default '0',
   `fp16` bigint(20) unsigned NOT NULL default '0',
   `time` int(10) unsigned default '0',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,  
   `bc` int(6) NOT NULL default '0',
   `status` enum('invalid','valid','error') collate utf8_bin NOT NULL default 'invalid',
   PRIMARY KEY  (`idchemical`),
@@ -532,7 +605,50 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,7,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,8,"AMBIT2 schema");
+
+-- -----------------------------------------------------
+-- Sorts comma seperated strings
+-- -----------------------------------------------------
+DROP FUNCTION IF EXISTS `sortString`;
+
+DELIMITER $
+CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT
+BEGIN
+  DECLARE delim CHAR(1) DEFAULT ',';
+  DECLARE strings INT DEFAULT 0;     -- number of substrings
+  DECLARE forward INT DEFAULT 1;     -- index for traverse forward thru substrings
+  DECLARE backward INT;   -- index for traverse backward thru substrings, position in calc. substrings
+  DECLARE remain TEXT;               -- work area for calc. no of substrings
+  DECLARE swap1 TEXT;                 -- left substring to swap
+  DECLARE swap2 TEXT;                 -- right substring to swap
+  SET remain = inString;
+  SET backward = LOCATE(delim, remain);
+  WHILE backward != 0 DO
+    SET strings = strings + 1;
+    SET backward = LOCATE(delim, remain);
+    SET remain = SUBSTRING(remain, backward+1);
+  END WHILE;
+  IF strings < 2 THEN RETURN inString; END IF;
+  REPEAT
+    SET backward = strings;
+    REPEAT
+      SET swap1 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward-1),delim,-1);
+      SET swap2 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward),delim,-1);
+      IF  swap1 > swap2 THEN
+        SET inString = TRIM(BOTH delim FROM CONCAT_WS(delim
+        ,SUBSTRING_INDEX(inString,delim,backward-2)
+        ,swap2,swap1
+        ,SUBSTRING_INDEX(inString,delim,(backward-strings))));
+      END IF;
+      SET backward = backward - 1;
+    UNTIL backward < 2 END REPEAT;
+    SET forward = forward +1;
+  UNTIL forward + 1 > strings
+  END REPEAT;
+RETURN inString;
+END $
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- numeric property values
