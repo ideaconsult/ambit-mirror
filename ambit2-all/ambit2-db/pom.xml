@@ -21,7 +21,7 @@ The database can be searched by identifiers, attribute value or range, experimen
     <dependency>
     	<groupId>mysql</groupId>
     	<artifactId>mysql-connector-java</artifactId>
-    	<version>5.1.6</version>
+    	<version>5.1.7</version>
     	<scope>runtime</scope>
     </dependency>
     <dependency>
