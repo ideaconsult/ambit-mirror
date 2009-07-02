@@ -100,8 +100,10 @@ public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {
             if (user.getType().equals(USER_TYPE.Admin)) {
                 st.addBatch("GRANT USAGE ON "+ connection.getCatalog() + ".* TO  '"+user.getName()+"'@'%' IDENTIFIED BY '"+user.getPassword()+"'");
                 st.addBatch("GRANT ALL PRIVILEGES ON "+ connection.getCatalog() + ".* TO  '"+user.getName()+"'@'%' WITH GRANT OPTION");
-            } else
+            } else {
                 st.addBatch("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON "+ connection.getCatalog() + ".* TO  '"+user.getName()+"'@'%' IDENTIFIED BY '"+user.getPassword()+"'");
+                st.addBatch(String.format("GRANT EXECUTE FUNCTION sortString ON `%s`.* TO '%s'@'%';",connection.getCatalog(),user.getName()));
+            }
             st.addBatch("flush privileges");
             st.executeBatch();
         } catch (Exception x) {
