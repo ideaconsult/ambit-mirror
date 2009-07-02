@@ -1,5 +1,6 @@
 package ambit2.db.search;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 
 import com.jgoodies.binding.beans.Model;
@@ -89,6 +90,21 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 		if (getValue() != null) 
 			b.append(getValue());
 		return b.toString();
+	}
+	public void setMaxRecords(long records) {
+		try {
+			Preferences.setProperty(Preferences.MAXRECORDS,Long.toString(records));
+		} catch (Exception x) {
+			Preferences.setProperty(Preferences.MAXRECORDS,"2000");
+		}
+		
+	}
+	public long getMaxRecords() {
+		try {
+			return Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS));
+		} catch (Exception x) {
+			return 2000;
+		}		
 	}
 
 }

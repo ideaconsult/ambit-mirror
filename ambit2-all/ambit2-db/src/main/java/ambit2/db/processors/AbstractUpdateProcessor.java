@@ -20,7 +20,19 @@ public class AbstractUpdateProcessor<Group,Target> extends AbstractRepositoryWri
 	protected IQueryUpdate<Group,Target> queryDelete;
 	protected IQueryUpdate<Group,Target> queryUpdate;
 	
-
+	public AbstractUpdateProcessor() {
+		
+	}
+	public AbstractUpdateProcessor(OP operation,IQueryUpdate<Group,Target> query) {
+		super();
+		setOperation(operation);
+		switch (getOperation()) {
+		case CREATE: { setQueryCreate(query); break; }
+		case DELETE: { setQueryDelete(query); break; }
+		case UPDATE: { setQueryUpdate(query); break; }
+		default: ;
+		}
+	}
 	public IQueryUpdate<Group, Target> getQueryCreate() {
 		return queryCreate;
 	}

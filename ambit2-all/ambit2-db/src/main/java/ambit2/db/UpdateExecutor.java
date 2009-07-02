@@ -57,6 +57,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 	@Override
 	protected Integer execute(Connection c, Q target) throws SQLException, AmbitException {
 		int count = 0;
+		if (target == null) throw new AmbitException();
 		String[] sql = target.getSQL();
 		if (sql == null) return 0;
 		for (int i=0; i < sql.length;i++) {

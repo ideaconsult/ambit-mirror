@@ -103,7 +103,13 @@ public class StoredQuery implements IStoredQuery {
 			return getName() + "["+rows+"]";
 		return getName();
 	}
+	public long getMaxRecords() {
+		return 0;
+	}
+	public void setMaxRecords(long records) {
 	
+		
+	}
 }
 
 

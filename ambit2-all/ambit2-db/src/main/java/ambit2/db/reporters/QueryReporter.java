@@ -63,7 +63,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		output = getOutput();
 		DbReader<T> batch = new DbReader<T>();
 		try {
-			batch.setMaxRecords(maxRecords);
+			//batch.setMaxRecords(maxRecords);
 			batch.setProcessorChain(processors);
 			batch.setConnection(connection);			
 			IBatchStatistics stats = batch.process(query);

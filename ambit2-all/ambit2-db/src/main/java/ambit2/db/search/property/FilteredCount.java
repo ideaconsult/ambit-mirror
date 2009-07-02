@@ -98,4 +98,10 @@ public abstract class FilteredCount<T extends Comparable<T>> extends Model
 	public boolean isPrescreen() {
 		return false;
 	}
+	public long getMaxRecords() {
+		return 0;
+	}
+	public void setMaxRecords(long records) {
+		
+	}
 }

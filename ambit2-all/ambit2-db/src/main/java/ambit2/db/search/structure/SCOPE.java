@@ -74,6 +74,27 @@ public enum SCOPE {
 			return new QueryDataset();
 		}
 	
-	};
+	},
+	scope_structure_error {
+		@Override
+		public String toString() {
+			return "Structure quality labels";
+		}
+		@Override
+		public IQueryRetrieval<IStructureRecord> createQuery() {
+			return new QueryStructureByQuality() ;
+		}
+	},
+	scope_values_error {
+		@Override
+		public String toString() {
+			return "Property quality labels";
+		}
+		@Override
+		public IQueryRetrieval<IStructureRecord> createQuery() {
+			return new QueryStructureByValueQuality() ;
+		}
+	}	
+	;
 	public abstract IQueryRetrieval<IStructureRecord> createQuery();
 }
