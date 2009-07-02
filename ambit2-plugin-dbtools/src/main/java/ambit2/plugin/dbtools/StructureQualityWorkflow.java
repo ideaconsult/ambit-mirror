@@ -3,6 +3,7 @@ package ambit2.plugin.dbtools;
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.SelectionBean;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
@@ -11,11 +12,15 @@ import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
+import ambit2.db.processors.FP1024Writer.FPTable;
+import ambit2.db.processors.quality.FPStructureWriter;
 import ambit2.db.processors.quality.QualityLabelWriter;
 import ambit2.db.processors.quality.QualityValueWriter;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.db.search.structure.QueryStructureByValueQuality;
+import ambit2.db.update.qlabel.CreateQLabelPair;
 import ambit2.db.update.qlabel.DeleteStructureQLabel;
 import ambit2.db.update.qlabel.DeleteValueQLabel;
 import ambit2.workflow.ActivityPrimitive;
@@ -36,6 +41,17 @@ public class StructureQualityWorkflow extends Workflow {
 	protected static final String SELECTION_QUALITY="SELECTION_QUALITY";
 	protected static final String DESCRIPTORS_NEWQUERY = "ambit2.plugin.dbtools.StructureQualityWorkflow.DESCRIPTORS_NEWQUERY";
 	public enum QUALITY_MODE {
+		Structure_Fingerprints {
+			@Override
+			public String toString() {
+				return "Assign quality labels for pair of structures";
+			}
+			@Override
+			public Activity getActivity() {
+				return addStructureFingerprints();
+			}
+		},		
+		/*
 		Structures {
 			@Override
 			public String toString() {
@@ -78,7 +94,7 @@ public class StructureQualityWorkflow extends Workflow {
 				return addValueLabelRemover();
 			}
 		},			
-
+	*/
 		Completed {
 			@Override
 			public String toString() {
@@ -144,6 +160,59 @@ public class StructureQualityWorkflow extends Workflow {
         loop.setBody(body);
 		return loop;
 	}	
+	protected static Sequence addStructureFingerprints() {
+		Sequence seq = new Sequence();
+		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+				new Performer() {
+			@Override
+			public Object execute() throws Exception {
+				return new MissingFingerprintsQuery(FPTable.fp1024_struc);  //without quality labels
+			}
+		});
+		seq.addStep(query);
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p.add(new ProcessorStructureRetrieval());		
+		p.add(new FPStructureWriter());
+		
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+		batch.setProcessorChain(p);
+		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
+			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.BATCHSTATS,
+				batch,false);
+	    ap.setName("Generate Structure Fingerprints");	
+	    seq.addStep(ap);
+	    
+	    
+	    ActivityPrimitive<AmbitUser, String> q = new ActivityPrimitive<AmbitUser, String>(
+	    		new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE,new CreateQLabelPair())
+	    		);
+	    q.setName("Generate quality labels for pairs of structures");
+	    seq.addStep(q);
+	    
+	    ActivityPrimitive m = new ActivityPrimitive(DBWorkflowContext.BATCHSTATS,DBWorkflowContext.BATCHSTATS,
+	    		new IProcessor() {
+	    	public Object process(Object target) throws AmbitException {
+	    		return "DONE";
+	    	}
+	    	public long getID() {
+	    				// TODO Auto-generated method stub
+	    				return 0;
+	    			}
+	    	public boolean isEnabled() {
+	    				// TODO Auto-generated method stub
+	    				return true;
+	    			}
+	    	public void setEnabled(boolean value) {
+	    				// TODO Auto-generated method stub
+	    				
+	    			}
+	    });
+	    seq.addStep(m);
+	    return seq;
+}		
 	protected static Sequence addStructureQualityVerifier() {
 			Sequence seq = new Sequence();
 			Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
