@@ -7,6 +7,7 @@ import java.sql.Statement;
 import ambit2.base.exceptions.AmbitException;
 
 public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<T> {
+	protected boolean metadata = true;
 	protected String[] sql = {
 			"Select concat(idmajor,'.',idminor,' created on ',DATE(date),' ',time(date)) as 'Ambit database version' from version order by idmajor,idminor desc limit 1",
 			//"Select concat(DATE(date),' ',time(date)) as 'Ambit database created on' from version order by idmajor,idminor desc limit 1",
@@ -44,6 +45,7 @@ public class ConnectionStatisticsProcessor<T> extends ConnectionStatusProcessor<
 	@Override
 	public StringBuffer process(T target) throws AmbitException {
 		StringBuffer b = new StringBuffer();
+		if (metadata)
 		b.append(super.process(target));
 		b.append('\n');
 		try {

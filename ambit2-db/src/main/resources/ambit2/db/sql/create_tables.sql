@@ -291,9 +291,11 @@ CREATE TABLE  `quality_chemicals` (
   `num_sources` int(10) unsigned NOT NULL,
   `label` enum('Consensus','Majority','Unconfirmed','Ambiguous','Unknown') collate utf8_bin NOT NULL default 'Unknown',
   `num_structures` varchar(45) collate utf8_bin NOT NULL default '0',
-  PRIMARY KEY  (`idchemical`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
+  `text` varchar(255) collate utf8_bin NOT NULL,
+  PRIMARY KEY  (`idchemical`),
+  KEY `Index_4` (`num_structures`),
+  KEY `Index_2` USING BTREE (`label`,`text`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- -----------------------------------------------------
 -- Table `quality_structure` 
 -- -----------------------------------------------------
