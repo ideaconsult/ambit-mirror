@@ -82,6 +82,8 @@ public class DBUtilityPlugin extends DBWorkflowPlugin {
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.DBStatisticsWorkflow","DB statistics","Displays database statistics","images/database_statistics.png"));
 		workflows.add(new ClassHolder("ambit2.plugin.dbtools.TemplatesWorkflow","Templates","Manage templates and properties","images/database_statistics.png"));
 		
+		//workflows.add(new ClassHolder("ambit2.plugin.dbtools.LookupWorkflow","LookupWorkflow","LookupWorkflow","images/database_statistics.png"));
+		
 		contextListener = new WorkflowOptionsLauncher(null);
 		Vector<String> props = new Vector<String>();		
 		props.add(UserInteractionEvent.PROPERTYNAME);

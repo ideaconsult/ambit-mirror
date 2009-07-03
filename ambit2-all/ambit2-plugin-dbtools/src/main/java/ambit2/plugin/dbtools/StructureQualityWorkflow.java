@@ -11,6 +11,7 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
+import ambit2.db.processors.QualityStatisticsProcessor;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.processors.quality.FPStructureWriter;
@@ -51,6 +52,16 @@ public class StructureQualityWorkflow extends Workflow {
 				return addStructureFingerprints();
 			}
 		},		
+		ConsensusReport {
+			@Override
+			public String toString() {
+				return "Report Consensus labels summary ";
+			}
+			@Override
+			public Activity getActivity() {
+				return printReport();
+			}
+		},			
 		/*
 		Structures {
 			@Override
@@ -160,6 +171,15 @@ public class StructureQualityWorkflow extends Workflow {
         loop.setBody(body);
 		return loop;
 	}	
+	
+	protected static Activity printReport() {
+
+	    return new ActivityPrimitive(DBWorkflowContext.BATCHSTATS,DBWorkflowContext.BATCHSTATS,
+	    		new QualityStatisticsProcessor()
+	    );
+
+	}		
+	
 	protected static Sequence addStructureFingerprints() {
 		Sequence seq = new Sequence();
 		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
@@ -193,23 +213,8 @@ public class StructureQualityWorkflow extends Workflow {
 	    seq.addStep(q);
 	    
 	    ActivityPrimitive m = new ActivityPrimitive(DBWorkflowContext.BATCHSTATS,DBWorkflowContext.BATCHSTATS,
-	    		new IProcessor() {
-	    	public Object process(Object target) throws AmbitException {
-	    		return "DONE";
-	    	}
-	    	public long getID() {
-	    				// TODO Auto-generated method stub
-	    				return 0;
-	    			}
-	    	public boolean isEnabled() {
-	    				// TODO Auto-generated method stub
-	    				return true;
-	    			}
-	    	public void setEnabled(boolean value) {
-	    				// TODO Auto-generated method stub
-	    				
-	    			}
-	    });
+	    		new QualityStatisticsProcessor()
+	    );
 	    seq.addStep(m);
 	    return seq;
 }		
@@ -299,7 +304,10 @@ public class StructureQualityWorkflow extends Workflow {
 
 	    return seq;
 	}
-
+	@Override
+	public String toString() {
+		return "Structure quality";
+	}
 }
 class ModeCondition extends TestCondition {
 	StructureQualityWorkflow.QUALITY_MODE mode;

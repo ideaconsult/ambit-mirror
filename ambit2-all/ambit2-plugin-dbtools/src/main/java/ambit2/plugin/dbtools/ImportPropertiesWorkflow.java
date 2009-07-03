@@ -232,6 +232,10 @@ class BatchMolProcessor extends AbstractBatchProcessor<IInputState,IAtomContaine
 		}
 		
 	}
+	@Override
+	public String toString() {
+		return "Import properties";
+	}
 	
 }
 
