@@ -119,7 +119,7 @@ public class AmbitRowsEventTest extends DbUnitTest {
 						"Property 2".equals(target.getName()) ||
 						"Property 3".equals(target.getName()));
 				RetrieveField q = new RetrieveField();
-				q.setFieldname(target.getName());
+				q.setFieldname(target);
 				q.setValue(new StructureRecord(-1,100215,null,null));
 				/*
 				RetrieveFieldNames q = new RetrieveFieldNames();
