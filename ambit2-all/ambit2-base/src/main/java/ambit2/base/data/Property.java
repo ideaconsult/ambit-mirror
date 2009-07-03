@@ -51,7 +51,7 @@ public class Property extends Model {
 	}
 	*/
 	public static synchronized Property getNameInstance() {
-		return getInstance("Name", LiteratureEntry.getIUPACReference());
+		return getInstance("Names", LiteratureEntry.getIUPACReference());
 	}	
 	public static synchronized Property getCASInstance() {
 		Property p = getInstance("CAS", LiteratureEntry.getCASReference());
@@ -78,6 +78,7 @@ public class Property extends Model {
 			return p;
 		}
 		Property p = new Property(name,LiteratureEntry.getInstance(reference,url));
+		p.setLabel(name);
 		properties.add(p);
 		return p;
 	}		
