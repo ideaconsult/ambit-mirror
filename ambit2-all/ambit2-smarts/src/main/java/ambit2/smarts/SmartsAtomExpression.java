@@ -141,7 +141,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     		if (hci != null)
     			totalH = hci.intValue();    		
     		
-    		Integer explicitH = (Integer)atom.getProperty("ExplicitH");
+    		Integer explicitH = (Integer)atom.getProperty(CMLUtilities.ExplicitH);
     		if (explicitH != null)
     			totalH+=explicitH.intValue();
     		if (tok.param == totalH)
@@ -150,11 +150,11 @@ public class SmartsAtomExpression extends SMARTSAtom
     			return(false);	
     	}	
     	case SmartsConst.AP_R:    		 
-    		int atomRings[] = (int[])atom.getProperty("RingData");
+    		int atomRings[] = (int[])atom.getProperty(CMLUtilities.RingData);
     		return(match_R(atomRings, tok.param, atom));
     	
     	case SmartsConst.AP_r:    		 
-    		int atomRings2[] = (int[])atom.getProperty("RingData");    		
+    		int atomRings2[] = (int[])atom.getProperty(CMLUtilities.RingData);    		
     		return(match_r(atomRings2, tok.param, atom));
     		
     	case SmartsConst.AP_Mass:    		
@@ -382,7 +382,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     
     public boolean match_x(int param, IAtom atom)
     {
-    	int atomRings[] = (int[])atom.getProperty("RingData2");
+    	int atomRings[] = (int[])atom.getProperty(CMLUtilities.RingData2);
     	if (atomRings == null)
 			return(false);
 		
@@ -394,7 +394,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     	int rbonds = 0;
     	for (int i = 0; i < ca.size(); i++)
     	{
-    		int atrings[] = (int[])((IAtom)ca.get(i)).getProperty("RingData2");
+    		int atrings[] = (int[])((IAtom)ca.get(i)).getProperty(CMLUtilities.RingData2);
     		if (atrings == null)
     			continue;
     		//System.out.print("neigbour ("+i+")atom rings: ");

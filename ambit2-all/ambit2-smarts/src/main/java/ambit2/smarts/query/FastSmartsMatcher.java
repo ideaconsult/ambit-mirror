@@ -76,9 +76,8 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 	}
 
 	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
-		System.out.println(getClass().getName());
 		isoTester.setQuery(query);
-		sp.setSMARTSData(mol);
+		sp.setSMARTSData(mol); // remove this statement if properties are read from DB !
 		return isoTester.hasIsomorphism(mol)?1:0;
 	}
 
