@@ -33,7 +33,7 @@ public class QualityValueWriter extends	AbstractRepositoryWriter<IStructureRecor
 		super();
 		field.setSearchByAlias(true);
 		setProperty(Property.getCASInstance());
-		field.setFieldname(getProperty().getLabel());
+		field.setFieldname(getProperty());
 	}
 
 	@Override

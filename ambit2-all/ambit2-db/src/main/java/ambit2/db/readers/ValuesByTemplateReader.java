@@ -57,7 +57,7 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 			while (rs.next()) {
 				Property p = propertyQuery.getObject(rs);
 				
-				names.setFieldname(p.getName());
+				names.setFieldname(p);
 				names.setValue(target);
 
 				ResultSet values = null;

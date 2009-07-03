@@ -37,6 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveField;
@@ -49,7 +50,7 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 	protected IQueryRetrieval<Object> createQuery() {
 		RetrieveField q = new RetrieveField();
 		q.setValue(new StructureRecord(-1,100215,null,null));
-		q.setFieldname("Property 1");
+		q.setFieldname(Property.getInstance("Property 1",""));
 		return q;
 	}
 

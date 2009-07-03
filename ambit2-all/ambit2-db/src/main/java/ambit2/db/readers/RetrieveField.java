@@ -5,13 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondition,Object> implements IQueryRetrieval<Object> {
+public class RetrieveField extends AbstractQuery<Property,IStructureRecord,EQCondition,Object> implements IQueryRetrieval<Object> {
 	/**
 	 * 
 	 */
@@ -48,7 +49,7 @@ public class RetrieveField extends AbstractQuery<String,IStructureRecord,EQCondi
 			params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
 		}
 		if (!"".equals(getFieldname()))
-			params.add(new QueryParam<String>(String.class, getFieldname()));		
+			params.add(new QueryParam<String>(String.class, searchByAlias?getFieldname().getLabel():getFieldname().getName()));		
 		return params;		
 	}
 
