@@ -277,6 +277,7 @@ CREATE TABLE  `quality_pair` (
   KEY `FK_qpair_1` (`user_name`),
   KEY `FK_qpair_3` (`idstructure`),
   KEY `Index_4` (`TEXT`(255)),
+  KEY `Index_5` USING BTREE (`idchemical`,`rel`),
   CONSTRAINT `FK_qpair_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_qpair_2` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_qpair_3` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -723,7 +724,8 @@ insert into catalog_references (idreference,title,url) values (2,"IUPAC name","h
 -- GRANT USAGE ON ambit2.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';
 -- GRANT ALL PRIVILEGES ON ambit2.* TO 'admin'@'localhost' WITH GRANT OPTION;
 -- GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON ambit2.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
--- GRANT EXECUTE FUNCTION sortString ON ambit2.* TO 'guest'@'localhost'
+-- GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost'
+--- GRANT CREATE TEMPORARY TABLEs on ambit2.* to 'guest'@'%'
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
