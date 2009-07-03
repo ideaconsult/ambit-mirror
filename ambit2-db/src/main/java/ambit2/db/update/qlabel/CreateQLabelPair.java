@@ -14,6 +14,27 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (?,\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
 		"insert ignore into user_roles (user_name,role_name) values (?,\"ambit_quality\");",
 		
+/*
+ * 	can't make it work ..
+		"CREATE TEMPORARY TABLE  `quality_pair` (\n"+
+		"  `idchemical` int(10) unsigned NOT NULL auto_increment,\n"+
+		"  `idstructure` int(10) unsigned NOT NULL,\n"+
+		"  `rel` int(10) unsigned NOT NULL default '0' COMMENT 'number of same structures',\n"+
+		"  `user_name` varchar(16) collate utf8_bin NOT NULL,\n"+
+		"  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,\n"+
+		"  `TEXT` text collate utf8_bin,\n"+
+		"  PRIMARY KEY  (`idchemical`,`idstructure`),\n"+
+		"  KEY `FK_qpair_1` (`user_name`),\n"+
+		"  KEY `FK_qpair_3` (`idstructure`),\n"+
+		"  KEY `Index_4` (`TEXT`(255)),\n"+
+		"  KEY `Index_5` USING BTREE (`idchemical`,`rel`),\n"+
+		"  CONSTRAINT `FK_qpair_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,\n"+
+		"  CONSTRAINT `FK_qpair_2` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,\n"+
+		"  CONSTRAINT `FK_qpair_3` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE\n"+
+		") ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;\n",
+*/		
+		//"LOCK TABLES quality_pair WRITE , quality_chemicals WRITE, fp1024_struc READ \n",
+		
 		"delete from quality_pair\n",
 		
 		"insert into quality_pair (idchemical,idstructure,rel,user_name,updated,`text`)\n"+
@@ -45,9 +66,15 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"on duplicate key update\n"+
 		"num_structures = num_structures+1,\n"+
 		"`label`=CASE 1 WHEN values(num_sources)=num_sources THEN 'Ambiguous'  WHEN values(num_sources)<num_sources THEN 'Majority' ELSE 'Majority' END,\n"+
-		"`text`=concat_ws(',',`text`,values(`text`))\n",
+		"`text`=concat_ws(',',`text`,values(`text`)),\n"+
+		"num_sources=CASE 1 WHEN num_sources<=values(num_sources) THEN values(num_sources) ELSE num_sources END\n",
+		
+		//"DROP TEMPORARY TABLE 'quality_pair'\n",
+		"delete from quality_pair\n",
 		
 		"update quality_chemicals set text=replace(sortString(text),',',':')\n",
+		
+		//"UNLOCK TABLES"
 
 		
 	};
@@ -108,7 +135,7 @@ WHEN values(num_sources)<num_sources THEN "Majority" ELSE label END
 	}
 
 	public String[] getSQL() throws AmbitException {
-		for (String s: sql) System.out.println(s);
+		//for (String s: sql) System.out.println(s);
 		return sql;
 	}
 
