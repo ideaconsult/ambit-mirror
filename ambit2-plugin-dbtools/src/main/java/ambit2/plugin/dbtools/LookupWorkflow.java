@@ -1,23 +1,30 @@
 package ambit2.plugin.dbtools;
 
+import java.io.OutputStreamWriter;
+import java.sql.SQLException;
+
 import nplugins.core.Introspection;
 import ambit2.base.data.ClassHolder;
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SelectionBean;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;
-import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
+import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.IDBProcessor;
-import ambit2.db.SourceDataset;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
+import ambit2.db.processors.StructureNormalizer;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.SDFReporter;
+import ambit2.db.search.structure.QueryField;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
-import ambit2.workflow.library.DatasetSelection;
 import ambit2.workflow.library.InputFileSelection;
 import ambit2.workflow.library.LoginSequence;
 
@@ -26,19 +33,23 @@ import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
 
-public class ImportWorkflow extends Workflow {
+public class LookupWorkflow extends Workflow {
 
-	public ImportWorkflow() {
-		SourceDataset dataset = new SourceDataset("Default");
 
+	public LookupWorkflow() {
+		final QueryField query = new QueryField();  
 		Sequence seq = new Sequence();
-		seq.setName("[Import chemical structures]");
+		seq.setName("[Lookup chemical structures]");
 
-		final RepositoryWriter writer = new RepositoryWriter();
-		writer.setDataset(dataset);
 		final ProcessorsChain<String, IBatchStatistics, IProcessor> chain = new ProcessorsChain<String, IBatchStatistics, IProcessor>();
-		// chain.add(processor);
-		chain.add(writer);
+		
+		SDFReporter<IQueryRetrieval<IStructureRecord>> reporter = new SDFReporter<IQueryRetrieval<IStructureRecord>>() ;
+		try {
+		reporter.setOutput(new OutputStreamWriter(System.out));
+		} catch (Exception x) {}
+		chain.add(new StructureNormalizer());
+		chain.add(new Key2Query());
+		chain.add(reporter);
 
 		final BatchDBProcessor batch = new BatchDBProcessor();
 		batch.setProcessorChain(chain);
@@ -47,28 +58,11 @@ public class ImportWorkflow extends Workflow {
 				(IDBProcessor) batch, false) {
 
 		};
-		p1.setName("Read file and import structures");
-		Sequence action = getMatchKeySequence(writer);
-		action.addStep(p1);
+		p1.setName("Read file and lookup structures");
+		//Sequence action = getMatchKeySequence(writer);
+		//action.addStep(p1);
 
-		Sequence s1 = new Sequence();
-		Primitive<FileInputState, SourceDataset> p2 = new Primitive<FileInputState, SourceDataset>(
-				InputFileSelection.INPUTFILE, DBWorkflowContext.DATASET,
-				new Performer<FileInputState, SourceDataset>() {
-					public SourceDataset execute() throws Exception {
-						SourceDataset dataset = new SourceDataset(getTarget()
-								.getFile().getName(), LiteratureEntry
-								.getInstance(getTarget().getFilename(), "file"));
-						writer.setDataset(dataset);
-						return dataset;
-					};
-				});
-		p2.setName("Create new dataset");
-		s1.addStep(p2);
-
-		s1.addStep(new DatasetSelection(action, dataset));
-
-		setDefinition(new LoginSequence(new InputFileSelection(s1)));
+		setDefinition(new LoginSequence(new InputFileSelection(p1)));
 
 	}
 
@@ -134,9 +128,26 @@ public class ImportWorkflow extends Workflow {
 		seq.addStep(match);
 		return seq;
 	}
-	@Override
-	public String toString() {
-		return "Import chemical structures";
-	}
+}
 
+class Key2Query extends DefaultAmbitProcessor<IStructureRecord , QueryField> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4578807414141445662L;
+	protected IStructureKey<IStructureRecord,String> key;
+	protected QueryField query;
+	public Key2Query() {
+		query = new QueryField();
+		key = new CASKey();
+	}
+	public QueryField process(IStructureRecord target) throws AmbitException {
+		try {
+			String value = key.process(target);
+			query.setValue(value);
+			return query;
+		} catch (Exception x) {
+			return null;
+		}
+	}
 }

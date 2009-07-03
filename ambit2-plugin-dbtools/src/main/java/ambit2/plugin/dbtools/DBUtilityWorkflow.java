@@ -295,5 +295,9 @@ public class DBUtilityWorkflow extends Workflow {
 	    ap1.setName("Descriptor calculations");		
 	    return ap1;
 	}
+	@Override
+	public String toString() {
+	return "Database utility";
+	}
 }
 
