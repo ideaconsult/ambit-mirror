@@ -6,6 +6,7 @@ import java.util.Map;
 public class StringCondition implements IQueryCondition {
 	private static Map<String,StringCondition> instances = null;
 	public static final String C_EQ="=";
+	public static final String C_NOTEQ="!=";
 	public static final String C_LIKE="like";
 	public static final String C_NOTLIKE="not like";
 	public static final String C_SOUNDSLIKE="sounds like";
@@ -25,6 +26,16 @@ public class StringCondition implements IQueryCondition {
 				return StringCondition.C_EQ;
 			}
 		},
+		S_NOTEQ {
+			@Override
+			public String toString() {
+				return StringCondition.C_NOTEQ;
+			}
+			@Override
+			public String getSQL() {
+				return StringCondition.C_NOTEQ;
+			}
+		},		
 		S_LIKE {
 			@Override
 			public String toString() {
