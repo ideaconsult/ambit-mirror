@@ -7,15 +7,34 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 
+/**
+ * SMARTSProp is a per atom property & 
+ * 
+ * hvnNrrrrrrrrRRRRRRRR
+extractSMARTSProperties(IMolecule mol)
+setCMLSMARTSProperties(IMolecule mol)
+mol.getAtom(i).setProperty("SMARTSProp", prop);
+
+if already set, 
+
+
+ * @author nina
+ *
+ */
 public class CMLUtilities 
 {
+	public static final String SMARTSProp = "SMARTSProp";
+	public static final String RingData = "RingData";
+	public static final String RingData2 = "RingData2";
+	public static final String ExplicitH = "ExplicitH";
 	public static final int MAXRINGS = 4;  //The maximal number of rings	
 	int expH[];
 	Vector<int[]> rd;
 	Vector<int[]> rd2;
 	
 	/**
-	 * Sets atom & bond attributes for every atom 
+	 * Generates attributes and sets atom & bond attributes for every atom as atom properties 
+	 * 
 	 * @param mol
 	 */
 	public void setCMLSMARTSProperties(IMolecule mol)
@@ -31,7 +50,7 @@ public class CMLUtilities
 		for (int i = 0; i < mol.getAtomCount(); i++)
 		{	
 			String prop = getAtomCMLSMARTSProperty(i, mol); 
-			mol.getAtom(i).setProperty("SMARTSProp", prop);
+			mol.getAtom(i).setProperty(SMARTSProp, prop);
 		}	
 	}
 	
@@ -87,6 +106,7 @@ public class CMLUtilities
 	
 	/**
 	 * Retrieves properties (set by {@link setCMLSmartsProperties}
+	 * Expects SMARTSProp to be set for each atom  !
 	 * @param mol
 	 */
 	public void extractSMARTSProperties(IMolecule mol)
@@ -94,19 +114,23 @@ public class CMLUtilities
 		for (int i = 0; i < mol.getAtomCount(); i++)
 		{
 			IAtom atom = mol.getAtom(i);
-			Object o = atom.getProperty("SMARTSProp");
+			Object o = atom.getProperty(SMARTSProp);
 			if (o != null)
 				extractCMLAtomProperties(atom, o.toString());
 		}
 	}
-	
+	/**
+	 * Converts per-atom string property into internal structure
+	 * @param atom
+	 * @param CMLProperty
+	 */
 	public void extractCMLAtomProperties(IAtom atom, String CMLProperty)
 	{
 		//hvnNrrrrrrrrRRRRRRRR
 		if (CMLProperty.length() < 4)
 			return;
 		
-		atom.setProperty("ExplicitH", new Integer(extractInteger(CMLProperty,0,1)));
+		atom.setProperty(CMLUtilities.ExplicitH, new Integer(extractInteger(CMLProperty,0,1)));
 		atom.setValency(extractInteger(CMLProperty,1,1));
 		atom.setFormalNeighbourCount(extractInteger(CMLProperty,2,1));
 		int numRings = extractInteger(CMLProperty,3,1);
@@ -125,8 +149,8 @@ public class CMLUtilities
 			r2[i] = extractInteger(CMLProperty,pos,2);
 			pos+=2;
 		}
-		atom.setProperty("RingData", r);
-		atom.setProperty("RingData2", r2);
+		atom.setProperty(CMLUtilities.RingData, r);
+		atom.setProperty(CMLUtilities.RingData2, r2);
 	}
 	
 	

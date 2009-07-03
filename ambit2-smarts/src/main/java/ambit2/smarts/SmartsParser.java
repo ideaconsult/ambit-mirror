@@ -1962,20 +1962,20 @@ public class SmartsParser
 			if (bo.getAtom(0).getSymbol().equals("H"))
 			{
 				IAtom at = bo.getAtom(1);
-				Integer ha = (Integer)at.getProperty("ExplicitH");
+				Integer ha = (Integer)at.getProperty(CMLUtilities.ExplicitH);
 				if (ha == null)
-					at.setProperty("ExplicitH", new Integer(1));
+					at.setProperty(CMLUtilities.ExplicitH, new Integer(1));
 				else
-					at.setProperty("ExplicitH", new Integer(1+ha.intValue()));
+					at.setProperty(CMLUtilities.ExplicitH, new Integer(1+ha.intValue()));
 			}
 			if (bo.getAtom(1).getSymbol().equals("H"))
 			{
 				IAtom at = bo.getAtom(0);
-				Integer ha = (Integer)at.getProperty("ExplicitH");
+				Integer ha = (Integer)at.getProperty(CMLUtilities.ExplicitH);
 				if (ha == null)
-					at.setProperty("ExplicitH", new Integer(1));
+					at.setProperty(CMLUtilities.ExplicitH, new Integer(1));
 				else
-					at.setProperty("ExplicitH", new Integer(1+ha.intValue()));
+					at.setProperty(CMLUtilities.ExplicitH, new Integer(1+ha.intValue()));
 			}
 		}
 	}
@@ -2024,7 +2024,7 @@ public class SmartsParser
 					{	
 						ringData[k] = atomRings.getAtomContainer(k).getAtomCount();
 					}	
-					atom.setProperty("RingData", ringData);				
+					atom.setProperty(CMLUtilities.RingData, ringData);				
 				}	
 			}
 		} //end of ringData
@@ -2043,7 +2043,7 @@ public class SmartsParser
 					{	
 						ringData2[k] = getRingNumberInRingSet(atomRings.getAtomContainer(k), ringSet);
 					}	
-					atom.setProperty("RingData2", ringData2);				
+					atom.setProperty(CMLUtilities.RingData2, ringData2);				
 				}	
 			}
 		} //end of ringData2

@@ -94,7 +94,7 @@ public class SmartsHelper
 		{	
 			IAtom at = container.getAtom(i); 
 			sb.append(at.getSymbol());
-			Integer explHInt = (Integer)at.getProperty("ExplicitH");
+			Integer explHInt = (Integer)at.getProperty(CMLUtilities.ExplicitH);
 			int explHAt = 0;
 			if (explHInt != null)
 				explHAt = explHInt.intValue();
@@ -397,7 +397,7 @@ public class SmartsHelper
 		Object keys[] = atom.getProperties().keySet().toArray();
 		for (int i = 0; i < keys.length; i++)
 		{				
-			if (keys[i].toString().toString().equals("RingData") || keys[i].toString().toString().equals("RingData2"))
+			if (keys[i].toString().toString().equals(CMLUtilities.RingData) || keys[i].toString().toString().equals(CMLUtilities.RingData2))
 				sb.append(keys[i].toString()+" = "+ toString((int[])atom.getProperties().get(keys[i]))+"\n");	
 			else
 				sb.append(keys[i].toString()+" = "+ atom.getProperties().get(keys[i])+"\n");

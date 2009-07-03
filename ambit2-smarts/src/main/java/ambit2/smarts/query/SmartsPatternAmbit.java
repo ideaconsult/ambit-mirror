@@ -87,6 +87,9 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	}
 
 	public int hasSMARTSPattern(IAtomContainer object) throws SMARTSException {
+		/*
+		 * setSmartsDataForTarget(false)   if properties are read from db
+		 */
 		if (sman == null) {
 			throw new SMARTSException("Smarts parser not initialized!");
 		}
