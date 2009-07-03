@@ -21,12 +21,15 @@ public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,St
 	public final static String sql = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join struc_dataset using(idstructure) join src_dataset using (id_srcdataset) ";
 	public final static String where = " where src_dataset.name %s ?";
-	public QueryDataset() {
+	public QueryDataset(SourceDataset dataset) {
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+		setDataset(dataset);
+	}
+	public QueryDataset() {
+		this((SourceDataset)null);
 	}
 	public QueryDataset(String name) {
-		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
-		setValue(new SourceDataset(name));
+		this(new SourceDataset(name));
 	}	
 	public String getSQL() throws AmbitException {
 		if ((getValue()==null) || "".equals(getValue().getName()))
