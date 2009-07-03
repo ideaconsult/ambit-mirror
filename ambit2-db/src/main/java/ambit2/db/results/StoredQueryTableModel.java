@@ -30,6 +30,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -48,11 +49,14 @@ import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.StructureStatisticsProcessor;
 import ambit2.db.readers.AbstractStructureRetrieval;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
+import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.readers.RetrieveField;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
+import ambit2.db.search.qlabel.QueryConsensus;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.update.IQueryUpdate;
@@ -62,7 +66,53 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	/**
 	 * 
 	 */
+	protected enum FIELDS {
+		CONSENSUSLABEL {
+			@Override
+			public int getOffset() {
+				return 1;
+			}
+			@Override
+			protected IQueryRetrieval getQuery() {
+				IQueryRetrieval q =  new QueryConsensus(new StructureRecord(),null);
+				return q;
+			}
+			@Override
+			protected void setParameters(IQueryRetrieval q,int arg0, int arg1) {
+				((QueryConsensus)q).getFieldname().setIdchemical(arg0);
+				((QueryConsensus)q).getFieldname().setIdstructure(arg1);
+			}
+			@Override
+			public String toString() {
+				return "Consensus label";
+			}
+		},
+		DATASET {
+			@Override
+			public int getOffset() {
+				return 1;
+			}
+			@Override
+			protected IQueryRetrieval getQuery() {
+				IQueryRetrieval q =  new RetrieveDatasets(new StructureRecord(),null);
+				return q;
+			}
+			@Override
+			protected void setParameters(IQueryRetrieval q,int arg0, int arg1) {
+				((RetrieveDatasets)q).getFieldname().setIdstructure(arg1);
+				
+			}
+			@Override
+			public String toString() {
+				return "Source";
+			}
+			
+		};
+		public abstract int getOffset();
+		protected abstract IQueryRetrieval getQuery();
+		protected abstract void setParameters(IQueryRetrieval q,int idchemical,int idstructure);
 
+	}
 	private static final long serialVersionUID = -7273714299667490819L;
 	protected SELECTION_MODE selectionMode = SELECTION_MODE.NO_CHANGE;
 	protected QueryStoredResults storedResults;
@@ -80,13 +130,14 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	protected QueryExecutor<IQueryObject> queryExecutor;
 	protected PropertyChangeListener propertyListener;
 	protected StructureStatisticsProcessor statsProcessor = new StructureStatisticsProcessor();
+	protected IQueryRetrieval[] queryFields = new IQueryRetrieval[] { FIELDS.CONSENSUSLABEL.getQuery(), FIELDS.DATASET.getQuery() };
 
 	
 	public StoredQueryTableModel() {
 		super();
 		retrieveMolecule.setValue(new StructureRecord());
 		retrieveField.setValue(new StructureRecord());
-		//retrieveField.setSearchByAlias(true);
+		retrieveField.setSearchByAlias(true);
 		order.put(new Integer(2), Boolean.FALSE);
 		storedResults = new QueryStoredResults();
 		queryExecutor = new QueryExecutor<IQueryObject>();
@@ -151,7 +202,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	
 	
 
-	protected Object getField(int idstructure,String fieldname) throws SQLException, AmbitException {
+	protected Object getField(int idstructure,Property fieldname) throws SQLException, AmbitException {
 		if (getConnection() == null) return null;
 		if (structureField == null) structureField = 
 			getConnection().prepareStatement(retrieveField.getSQL());
@@ -163,18 +214,27 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		
 		try {
 			ResultSet rs = structureField.executeQuery();
+			ArrayList list = new ArrayList();
 			Object value = null;
 			while (rs.next()) {
 				try {
 	    			value = retrieveField.getObject(rs);
-	    			if (value != null)
+	    			if (value != null) {
+	    				if (list.indexOf(value)<0)
+	    					list.add(value);
 	    			    break;
+	    			}
 				} catch (Exception x) {
 					value = null;
 				}
 		    }
 			rs.close();
-			return value;
+			if (list.size()<=1) return value;
+			else {
+				StringBuilder b = new StringBuilder();
+				for (Object item:list) {b.append(item.toString()); b.append(","); }
+				return b.toString();
+			}
 		} catch (Exception x) {
 			x.printStackTrace();
 			return null;
@@ -209,7 +269,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		}
 	}
 	public int getColumnCount() {
-		return ((fields==null)?3:(3+fields.getSize()));
+		return ((fields==null)?3+FIELDS.values().length:(4+fields.getSize()+FIELDS.values().length));
 	}
 
 	public int getRowCount() {
@@ -282,15 +342,42 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			case 0: return records.getBoolean(AbstractStructureQuery.FIELD_NAMES.selected.toString()); 
 			case 1: return getAtomContainer(idstructure);
 			case 2: return records.getFloat(AbstractStructureQuery.FIELD_NAMES.metric.toString());
-			default:
-				if (columnIndex < getColumnCount()) {
+			default: {
+				int offset = getColumnCount()-FIELDS.values().length;
+				if (columnIndex >= offset) {
+					int idchemical = records.getInt(AbstractStructureQuery.FIELD_NAMES.idchemical.toString());
+					return getLabel(idchemical,idstructure,columnIndex-offset);
+				} else if (columnIndex < (getColumnCount()-1)) {
 					return (fields==null)?"":
-						getField(idstructure, ((Property)fields.getElementAt(columnIndex-3)).getName());
+						getField(idstructure, ((Property)fields.getElementAt(columnIndex-3)));
 				} else return getStatsAt(idstructure);
 				//return records.getInt("idstructure");
 			}
+			}
 		} catch (Exception x) {
 			return x.getMessage();
+		}
+	}
+	protected String getLabel(int idchemical,int idstructure,int offset) {
+		ResultSet rs = null;
+		try {
+			IQueryRetrieval q = queryFields[offset];
+			FIELDS field = FIELDS.values()[offset];
+			field.setParameters(q, idchemical, idstructure);
+			rs = queryExecutor.process(q);
+			StringBuilder b = new StringBuilder();
+			String delimiter = "";
+			while (rs.next()) {
+				b.append(q.getObject(rs).toString());
+				b.append(delimiter);
+				delimiter = ",";
+			}
+			return b.toString();
+		} catch (Exception x) {
+			x.printStackTrace();
+			return "Unknown";
+		} finally {
+			try {queryExecutor.closeResults(rs);} catch (Exception xx) {}			
 		}
 	}
 /*
@@ -359,7 +446,11 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		case 1: return "Structure";
 		case 2: return "Metric";
 		default: {
-			return (fields==null)?Integer.toString(column):
+			int offset = getColumnCount()-FIELDS.values().length;
+			if (column >= offset) 
+				return FIELDS.values()[column-offset].toString();
+			else
+				return (fields==null)?Integer.toString(column):
 				fields.getElementAt(column-3).getName();
 		}
 		}

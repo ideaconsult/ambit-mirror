@@ -40,7 +40,6 @@ import org.junit.Test;
 import ambit2.db.SourceDataset;
 import ambit2.db.SourceDatasetRows;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.search.IQueryObject;
@@ -48,10 +47,6 @@ import ambit2.db.search.QueryExecutor;
 
 public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 
-	@Test
-	public void testGetSQL() throws Exception {
-		Assert.assertEquals(RetrieveDatasets.select_datasets,((IQueryObject)query).getSQL());
-	}
 
 	@Test
 	public void testGetParameters() throws Exception {
