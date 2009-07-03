@@ -89,7 +89,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 				StringBuilder b = new StringBuilder();
 				b.append(super.process(target));
 				
-				return b.toString().replace("$$$$",String.format("\n<CAS>\n%s\n\n$$$$",target)).trim();
+				return b.toString().replace("$$$$",String.format("\n> <CAS>\n%s\n\n$$$$",target)).trim();
 				
 
 			} catch (Exception x) {
