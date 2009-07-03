@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
-import java.math.BigInteger;
 import java.util.BitSet;
 
 import javax.vecmath.Vector2d;
@@ -270,7 +269,6 @@ public class MoleculeTools {
             strReader.close();
             return mol;
         } catch (Exception e) {
-            e.printStackTrace();
             return mol;
         }
 

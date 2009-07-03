@@ -35,7 +35,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
 	public IMolecule parseSmiles(String smiles) throws InvalidSmilesException {
-		System.out.println(smiles + " " + parser);
+		//System.out.println(smiles + " " + parser);
 		switch (parser) {
 		case OPENBABEL: {
 			try {
