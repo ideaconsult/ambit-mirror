@@ -121,7 +121,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         	"GRANT USAGE ON `"+database+"`.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';",
         	"GRANT ALL PRIVILEGES ON `"+database+"`.* TO 'admin'@'localhost' WITH GRANT OPTION;",
         	"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `"+database+"`.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';",
-        	"GRANT EXECUTE FUNCTION sortString ON `"+database+"`.* TO 'guest'@'localhost';"
+        	"GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';"
 
         	};
 	        Statement st = connection.createStatement();
