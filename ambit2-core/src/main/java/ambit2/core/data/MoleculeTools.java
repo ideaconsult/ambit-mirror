@@ -4,22 +4,13 @@
  */
 package ambit2.core.data;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.BitSet;
 
-import javax.vecmath.Vector2d;
-
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
-import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -28,15 +19,13 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.renderer.Renderer2D;
-import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.MFAnalyser;
 
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.smiles.SmilesParserWrapper;
 
 
@@ -57,6 +46,7 @@ public class MoleculeTools {
 	public static final int substTypeInorganic = 2;
 	public static final int substTypeMixture = 3;
 	public static final int substTypeMetallic = 4;	
+	protected static StructureTypeProcessor sp = new StructureTypeProcessor();
 	/**
 	 * 
 	 */
@@ -113,67 +103,7 @@ public class MoleculeTools {
     }
     */
 
-	protected static BufferedImage generateImageFromSmiles(String smiles, int width,
-			int height, Color background) {
-		BufferedImage buffer = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = buffer.createGraphics();
-		g.setColor(background);
-		g.fillRect(0, 0, width, height);
-		try {
-			SmilesParserWrapper p = SmilesParserWrapper.getInstance();
-			IMolecule mol = p.parseSmiles(smiles);
 
-			// SetOfMolecules molecules =
-			// ConnectivityChecker.partitionIntoMolecules(mol);
-			StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-			/*
-			 * if (molecules.getAtomContainerCount() > 1) { for (int i=0; i<
-			 * molecules.getAtomContainerCount();i++) { Molecule a =
-			 * molecules.getMolecule(i); if (!GeometryTools.has2DCoordinates(a)) {
-			 * sdg.setMolecule((Molecule)a,false); sdg.generateCoordinates(new
-			 * Vector2d(0,1)); } } mol =
-			 * (Molecule)SetOfMoleculesManipulator.getAllInOneContainer(molecules);
-			 * molecules = null; } else {
-			 */
-			sdg.setMolecule(mol, false);
-			sdg.generateCoordinates(new Vector2d(0, 1));
-			mol = sdg.getMolecule();
-
-			sdg = null;
-
-			Renderer2DModel r2dm = new Renderer2DModel();
-			Renderer2D renderer = new Renderer2D(r2dm);
-			Dimension imageSize = new Dimension(width, height);
-
-			r2dm.setBackgroundDimension(imageSize);
-			r2dm.setBackColor(background);
-			r2dm.setForeColor(Color.BLACK);
-			r2dm.setDrawNumbers(false);
-			r2dm.setUseAntiAliasing(true);
-			r2dm.setColorAtomsByType(false);
-			r2dm.setShowImplicitHydrogens(false);
-			r2dm.setShowAromaticity(true);
-
-			GeometryTools.translateAllPositive(mol,r2dm.getRenderingCoordinates());
-			GeometryTools.scaleMolecule(mol, imageSize, 0.8,r2dm.getRenderingCoordinates());
-			GeometryTools.center(mol, imageSize,r2dm.getRenderingCoordinates());
-			
-			renderer.paintMolecule(mol, g,true,false);
-
-			renderer = null;
-			r2dm = null;
-			imageSize = null;
-			p = null;
-
-		} catch (InvalidSmilesException x) {
-
-		} catch (Exception x) {
-
-		}
-		return buffer;
-	}
-	
 	public static boolean analyzeSubstance(IAtomContainer molecule) {
 		if ((molecule == null) || (molecule.getAtomCount()==0)) return false;
 		int noH = 0;
@@ -199,31 +129,13 @@ public class MoleculeTools {
 		molecule.setProperty(AmbitCONSTANTS.FORMULA,formula);
 		double mass = mfa.getMass();
 		molecule.setProperty(AmbitCONSTANTS.MOLWEIGHT,new Double(mass));
-
-		int structureType = getStrucType(molecule,noH);		
-		molecule.setProperty(AmbitCONSTANTS.STRUCTURETYPE,new StructureType(structureType));
-		
+		try {
+		molecule.setProperty(AmbitCONSTANTS.STRUCTURETYPE,sp.process(molecule));
+		} catch (Exception x) {};
 		molecule.setProperty(AmbitCONSTANTS.SUBSTANCETYPE,getSubstanceType(formula));
 		return true;
 	}
-	public static int getStrucType(IAtomContainer molecule, int noH) {
-	    int structureType = StructureType.strucType3DH;
-		if (molecule.getAtomCount() > 0) {
-			int has3D = 0;
-			int has2D = 0;		
-			for (int i = 0 ; i < molecule.getAtomCount(); i++) {
-				IAtom a = molecule.getAtom(i);
-				if (a.getPoint3d() != null) has3D++;
-				if (a.getPoint2d() != null) has2D++;			
-			}
-			if (molecule.getAtomCount() == has3D) 
-				structureType = StructureType.strucType3DH - noH;
-			else if (molecule.getAtomCount() == has2D) 
-				structureType = StructureType.strucType2DH - noH;
-			else structureType = StructureType.strucTypeSmiles;
-		} else structureType = StructureType.strucTypeSmiles;
-		return structureType;
-	}
+	
 	protected static int getSubstanceType(String formula) {
 		//TODO add mixture/organometallic recognition
 		if (formula.equals("")) return substTypeOrganic;
@@ -232,14 +144,7 @@ public class MoleculeTools {
 		else return substTypeInorganic;		
 	}
 	
-	public static void  main(String[] args) {
-		for (int i=0; i < 10;i++) {
-			BufferedImage b = generateImageFromSmiles("c1cc(CCCCC)ccc1CCCCCCC"
-					,100,100,Color.white);
-			System.out.println((i+1));
-		}	
-		while (true) {}
-	}
+
 	public static IMolecule readMolfile(Reader molfile) throws Exception {
 		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(molfile,NoNotificationChemObjectBuilder.getInstance());
 		IMolecule molecule = null;
