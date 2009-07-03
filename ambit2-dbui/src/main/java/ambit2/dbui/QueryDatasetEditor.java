@@ -76,17 +76,18 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 	     JComponent c  = createConditionComponent();
 	     if (c != null) panel.add(c, cc.xywh(1,2,1,1));
 	     c = createValueComponent();
-	     if (c != null) panel.add(c, cc.xywh(1,2,5,1));	  
+	     if (c != null) panel.add(c, cc.xywh(3,2,3,1));	  
 	     return panel.getPanel();
 	}		
+	
 	@Override
 	protected JComponent createConditionComponent() {
-		return null;
-		/*
+
 		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<StringCondition>(
                 		new StringCondition[] {
                 			StringCondition.getInstance(StringCondition.C_EQ),
+                			StringCondition.getInstance(StringCondition.C_NOTEQ),                			
                 			StringCondition.getInstance(StringCondition.C_LIKE),
                 			StringCondition.getInstance(StringCondition.C_NOTLIKE),
                 			StringCondition.getInstance(StringCondition.C_REGEXP),
@@ -95,7 +96,6 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
                 		presentationModel.getModel("condition")));
 		//AutoCompleteDecorator.decorate(box);
 		return box;
-		*/
 	}
 
 	@Override
