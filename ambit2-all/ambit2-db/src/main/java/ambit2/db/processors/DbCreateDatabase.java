@@ -103,7 +103,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         createDatabase(database.toString());
         createTables(database.toString());
         
-        try {
+        
         	String[] users = {
         	"insert into roles (role_name) values (\"ambit_guest\");",
         	"insert into roles (role_name) values (\"ambit_admin\");",
@@ -128,15 +128,19 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
 	        for (String user : users)
 	        	st.addBatch(user);
 	        st.executeBatch();
+	        st.close();
 	        try {
         	Preferences.setProperty(Preferences.DATABASE, database.toString());
         	Preferences.saveProperties(getClass().getName());
 	        } catch (Exception x) {}
-        } catch (SQLException x) {
-        	logger.warn(x);
-        }
+
+
         try {
         	createFunctions();
+	        st = connection.createStatement();
+	        st.executeQuery("GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';");
+	        st.close();        	
+        	
         } catch (Exception x) {
         	logger.warn(x);
         }
