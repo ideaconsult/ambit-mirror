@@ -23,9 +23,16 @@ public class QueryQLabel extends AbstractQuery<AmbitUser, IStructureRecord, Numb
 	private static final long serialVersionUID = -6574002693997936309L;
 	protected static String sql = "select idstructure,quality_structure.user_name,quality_structure.label,text from structure left join quality_structure using(idstructure) where idstructure %s ? %s";
 	protected static String sql_where = "and quality_structure.user_name = ?";
-	public QueryQLabel() {
-		setFieldname(null);
+	
+
+	public QueryQLabel(AmbitUser user, IStructureRecord record) {
+		setFieldname(user);
 		setCondition(NumberCondition.getInstance("="));
+		setValue(record);
+	}
+	
+	public QueryQLabel() {
+		this(null,null);
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if ((getValue()==null) || (getValue().getIdstructure()<=0)) throw new AmbitException("Structure not defined");
