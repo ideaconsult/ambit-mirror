@@ -40,13 +40,13 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.descriptors.processors.DescriptorsFactory;
+import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBProcessorPerformer;
 import ambit2.workflow.DBWorkflowContext;
-import ambit2.workflow.QueryInteraction;
 import ambit2.workflow.UserInteraction;
-import ambit2.workflow.library.DatasetSelection;
 import ambit2.workflow.library.LoginSequence;
 
 import com.microworkflow.execution.Performer;
@@ -74,6 +74,12 @@ public class DBUtilityWorkflow extends Workflow {
 				return "Structural keys (used to speed up SMARTS searching)";
 			}
 		},
+		SMARTSAccelerator {
+			@Override
+			public String toString() {
+				return "SMARTS accelerator data";
+			}
+		},	
 		Descriptors {
 			@Override
 			public String toString() {
@@ -81,6 +87,7 @@ public class DBUtilityWorkflow extends Workflow {
 			}
 			
 		},
+
 		Completed {
 			@Override
 			public String toString() {
@@ -94,6 +101,7 @@ public class DBUtilityWorkflow extends Workflow {
 
 		//struc keys
 		Sequence strucKeys = addCalculationStructuralKeys();
+		Sequence smartsAccelerator = addCalculationSMARTSData();
 		
 		//descriptors
 		Sequence descriptorSequence = new Sequence();
@@ -135,7 +143,8 @@ public class DBUtilityWorkflow extends Workflow {
         seq.addStep(getCalculationOptionsSequence(
         		descriptorSequence,
         		fingerprints,
-        		strucKeys
+        		strucKeys,
+        		smartsAccelerator
         		));
         
         //setDefinition(new LoginSequence(new DatasetSelection(seq)));
@@ -146,7 +155,8 @@ public class DBUtilityWorkflow extends Workflow {
 	public While getCalculationOptionsSequence(
 				Activity descriptors, 
 				Activity fingerprints, 
-				Activity struckeys) {
+				Activity struckeys,
+				Activity smartsAccelerator) {
 		
 		
 		While loop = new While();
@@ -159,6 +169,18 @@ public class DBUtilityWorkflow extends Workflow {
 				selection, SELECTION_CALC, "??????");
 		selectKey.setName("Select what to calculate");
 
+        Conditional smartsCondition = new Conditional(
+                new TestCondition() {
+                    public boolean evaluate() {
+	    				Object o = getContext().get(SELECTION_CALC);
+	    				if (o instanceof SelectionBean)
+	    					return CALC_MODE.SMARTSAccelerator.equals(((SelectionBean)o).getSelected());
+	    				else return false;
+                    }
+                }, 
+                smartsAccelerator,
+                null);
+        
         Conditional descriptorCondition = new Conditional(
                 new TestCondition() {
                     public boolean evaluate() {
@@ -169,7 +191,7 @@ public class DBUtilityWorkflow extends Workflow {
                     }
                 }, 
                 descriptors,
-                null);
+                smartsCondition);
         
         Conditional skeysCondition = new Conditional(
                 new TestCondition() {
@@ -263,6 +285,33 @@ public class DBUtilityWorkflow extends Workflow {
 				DBWorkflowContext.BATCHSTATS,
 				batch,false);
 	    ap.setName("Structural keys calculations");
+	    seq.addStep(ap);
+	    return seq;
+}		
+	
+	protected Sequence addCalculationSMARTSData() {
+		Sequence seq = new Sequence();
+		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+				new Performer() {
+			@Override
+			public Object execute() throws Exception {
+				return new MissingFingerprintsQuery(FPTable.smarts_accelerator);
+			}
+		});
+		seq.addStep(query);		
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p.add(new ProcessorStructureRetrieval());		
+		p.add(new SMARTSPropertiesGenerator());
+		p.add(new SMARTSAcceleratorWriter());
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+		batch.setProcessorChain(p);
+		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
+			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.BATCHSTATS,
+				batch,false);
+	    ap.setName("SMARTS properties");
 	    seq.addStep(ap);
 	    return seq;
 }		
