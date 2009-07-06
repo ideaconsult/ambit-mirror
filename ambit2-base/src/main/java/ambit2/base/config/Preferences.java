@@ -35,6 +35,7 @@ import java.util.Properties;
 
 public class Preferences {
 	protected static PropertyChangeSupport propertyChangeSupport;
+	public static String FASTSMARTS="FASTSMARTS";
 	public static String SHOW_AROMATICITY="showAromaticity";
 	public static String GENERATE2D="generate2D";
 	public static String DEFAULT_DIR="defaultDir";
@@ -74,6 +75,8 @@ public class Preferences {
 		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false,VTAGS.Database},
 		{MAXRECORDS,"Maximum number of records",2000,String.class,"Maximum number of records to be returned by a search query",false,VTAGS.Database},
 
+		
+		{FASTSMARTS,"Use SMARTS accelerator","true",Boolean.class,"Accelerate SMARTS search",false,VTAGS.Structure},
 		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",true,VTAGS.Structure},
 		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false,VTAGS.Structure},
         {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false,VTAGS.Structure},

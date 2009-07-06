@@ -134,6 +134,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 					insertGoodResults.setInt(3,record.getIdstructure());
 					insertGoodResults.setDouble(4,metric);					
 					rows += insertGoodResults.executeUpdate();
+					if (rows >= query.getMaxRecords()) break;
 				}
 			}
 			return rows;
