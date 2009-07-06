@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -42,6 +43,9 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 	protected AtomConfigurator configurator = new AtomConfigurator();
 	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	
+	public QuerySMARTS() {
+		setMaxRecords(1000);
+	}
 	public String getSQL() throws AmbitException {
 		return screening.getSQL();
 	}
@@ -77,11 +81,13 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 				//empty or markush
 				if ((mol==null) || (mol.getAtomCount()==0) || (mol instanceof SuppleAtomContainer)) return 0;
 				
- 				Object smartsdata = object.getProperty(smartsProperty);
-				
-				if (smartsdata!= null) {
-					mol.setProperty(CMLUtilities.SMARTSProp, smartsdata);
-
+				if ("true".equals(Preferences.getProperty(Preferences.FASTSMARTS))) { 
+	 				Object smartsdata = object.getProperty(smartsProperty);
+					
+					if (smartsdata!= null) {
+						mol.setProperty(CMLUtilities.SMARTSProp, smartsdata);
+	
+					} else mol.removeProperty(CMLUtilities.SMARTSProp);
 				} else mol.removeProperty(CMLUtilities.SMARTSProp);
 				
 				

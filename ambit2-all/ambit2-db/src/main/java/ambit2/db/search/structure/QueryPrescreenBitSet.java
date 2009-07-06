@@ -52,7 +52,8 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 	public List<QueryParam> getParameters() throws AmbitException {
 		BigInteger[] h16 = new BigInteger[16];
 		MoleculeTools.bitset2bigint16(getValue(),64,h16);
-		int bc = getValue().cardinality();
+		
+		int bc = (getValue()==null)?0:getValue().cardinality();
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
 		for (int h=0; h < 16; h++)
