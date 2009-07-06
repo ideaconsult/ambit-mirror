@@ -70,6 +70,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import ambit2.base.data.IFilteredColumns;
 import ambit2.base.data.ISelectableRecords;
 import ambit2.base.data.ISortableColumns;
+import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.mopac.MopacShell;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.jmol.Panel3D;
@@ -302,6 +303,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 		table.setDefaultRenderer(Molecule.class, getImageRenderer(BrowserMode.Spreadsheet));
 		table.setDefaultRenderer(AtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));		
 		table.setDefaultRenderer(IAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
+		table.setDefaultRenderer(SuppleAtomContainer.class, getImageRenderer(BrowserMode.Spreadsheet));
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
