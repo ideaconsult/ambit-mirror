@@ -7,8 +7,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
@@ -16,6 +18,7 @@ import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.processors.StructureKeysBitSetGenerator;
 import ambit2.smarts.query.FastSmartsMatcher;
@@ -34,9 +37,10 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 	protected StructureKeysBitSetGenerator skGenerator = null;
 	protected FingerprintGenerator fpGenerator = new FingerprintGenerator();
 	protected QueryPrescreenBitSet screening = new QueryPrescreenBitSet();
-
+	//protected CMLUtilities util = new CMLUtilities();
 	protected MoleculeReader reader = new MoleculeReader();
 	protected AtomConfigurator configurator = new AtomConfigurator();
+	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	
 	public String getSQL() throws AmbitException {
 		return screening.getSQL();
@@ -69,7 +73,20 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 		try {
 			if (getValue() != null) {
 				getValue().setVerboseMatch(false);
-				IAtomContainer mol = configurator.process(reader.process(object));
+				IAtomContainer mol = reader.process(object);
+				//empty or markush
+				if ((mol==null) || (mol.getAtomCount()==0) || (mol instanceof SuppleAtomContainer)) return 0;
+				
+ 				Object smartsdata = object.getProperty(smartsProperty);
+				
+				if (smartsdata!= null) {
+					mol.setProperty(CMLUtilities.SMARTSProp, smartsdata);
+
+				} else mol.removeProperty(CMLUtilities.SMARTSProp);
+				
+				
+				mol = configurator.process(mol);
+				
 				CDKHueckelAromaticityDetector.detectAromaticity(mol);
 				VerboseDescriptorResult<String,IntegerResult> result = getValue().process(mol);
 				return result.getResult().intValue();

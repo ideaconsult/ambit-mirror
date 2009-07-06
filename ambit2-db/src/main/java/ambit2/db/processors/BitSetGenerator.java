@@ -8,8 +8,7 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.AbstractPropertyGenerator;
 import ambit2.db.processors.FP1024Writer.FPTable;
 
 /**
@@ -17,13 +16,12 @@ import ambit2.db.processors.FP1024Writer.FPTable;
  * @author nina
  *
  */
-public class BitSetGenerator extends DefaultAmbitProcessor<IStructureRecord,IStructureRecord> {
+public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1046795418089401843L;
 	protected IProcessor<IAtomContainer,BitSet> processor;
-	protected MoleculeReader reader = new MoleculeReader();
 	protected FPTable fpmode = FPTable.fp1024;
 	
 	public FPTable getFpmode() {
@@ -40,23 +38,18 @@ public class BitSetGenerator extends DefaultAmbitProcessor<IStructureRecord,IStr
 		this.fpmode = fpmode;
 		processor = fpmode.getGenerator();
 	}
-    public IStructureRecord process(IStructureRecord target)
-    		throws AmbitException {
-    	IAtomContainer a = reader.process(target);
-    	//CDKHueckelAromaticityDetector d = new CDKHueckelAromaticityDetector();
-    	long mark = System.currentTimeMillis();    	
-    	try {
-    	//d.detectAromaticity(a);
-        	BitSet bitset = processor.process(a);
-        	target.setProperty(Property.getInstance(fpmode.getProperty(),fpmode.getProperty()),bitset);	
-    	} catch (Exception x) {
-        	target.setProperty(Property.getInstance(fpmode.getProperty(),fpmode.getProperty()),null);	
-    	} finally {
-        	target.setProperty(Property.getInstance(fpmode.getTimeProperty(),fpmode.getProperty()),System.currentTimeMillis()-mark);
-    	}
-
-    	return target;
-
-    }	
-
+	
+    @Override
+    protected Property getProperty() {
+    	return Property.getInstance(fpmode.getProperty(),fpmode.getProperty());
+    }
+    @Override
+    protected Property getTimeProperty() {
+    	return Property.getInstance(fpmode.getTimeProperty(),fpmode.getTimeProperty());
+    }
+	@Override
+	protected BitSet generateProperty(IAtomContainer atomContainer)
+			throws AmbitException {
+		return processor.process(atomContainer);
+	}
 }
