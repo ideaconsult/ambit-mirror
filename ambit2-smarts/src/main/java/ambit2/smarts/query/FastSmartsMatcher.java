@@ -6,9 +6,12 @@ import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.xmlcml.cml.element.CMLParameter;
 
+import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
 
@@ -21,6 +24,7 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 	protected IsomorphismTester isoTester = new IsomorphismTester();
 	protected SmartsParser sp = new SmartsParser();
 	protected QueryAtomContainer query = null;
+	protected CMLUtilities util = null;
 	
 	public FastSmartsMatcher() {
 
@@ -77,7 +81,19 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 
 	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
 		isoTester.setQuery(query);
-		sp.setSMARTSData(mol); // remove this statement if properties are read from DB !
+		try {
+		if (mol.getProperty(CMLUtilities.SMARTSProp)!= null) {
+			
+			String[] atomprops = mol.getProperty(CMLUtilities.SMARTSProp).toString().split(",");
+			for (int i=0; i < atomprops.length;i++)
+				mol.getAtom(i).setProperty(CMLUtilities.SMARTSProp,atomprops[i]);
+			if (util == null) util = new CMLUtilities();
+			util.extractSMARTSProperties((IMolecule)mol);
+			 
+		} else sp.setSMARTSData(mol); // remove this statement if properties are read from DB !
+		} catch (Exception x) {
+			sp.setSMARTSData(mol);
+		}
 		return isoTester.hasIsomorphism(mol)?1:0;
 	}
 
