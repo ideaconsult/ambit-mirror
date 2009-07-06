@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.math.BigInteger;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -38,6 +37,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.processors.StructureKeysBitSetGenerator;
 
 /**
@@ -126,7 +126,34 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 				public String toString() {
 					return "Structural keys (1024 structural fragments used to speed up SMARTS search)";
 				}				
-			};
+			},
+			smarts_accelerator {
+				@Override
+				public String getProperty() {
+					return CMLUtilities.SMARTSProp;
+				}
+				@Override
+				public String getStatusProperty() {
+					return null;
+				}
+				@Override
+				public String getTimeProperty() {
+					return null;
+				}
+				@Override
+				public IProcessor<IAtomContainer, BitSet> getGenerator() {
+					return null;
+				}
+				@Override
+				public String getTable() {
+					return "structure";
+				}
+				@Override
+				public String toString() {
+					return "SMARTS data";
+				}
+				
+			};						
 			abstract public String getProperty();
 			abstract public String getTimeProperty();
 			abstract public String getStatusProperty();

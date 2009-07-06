@@ -49,11 +49,12 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"from structure join chemicals using(idchemical)\n"+
 		"left join %s using(idchemical)\n"+
 		"where (%s.status is null)\n"+
+		"or (structure.updated > %s.updated)\n"+
 		"union\n"+
 		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,0 as metric\n"+
 		"from structure join chemicals using(idchemical)\n"+
 		"join %s using(idchemical)\n"+
-		"where (%s.status != 'valid')\n";
+		"where (%s.status = 'invalid')\n";
 	
 	public final static String sqlFieldStruc =
 		
@@ -66,6 +67,14 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"select ? as idquery, idchemical,idstructure,1 as selected,0 as metric\n"+
 		"from %s where (%s.status = 'invalid')";
 	
+	public final static String sqlSMARTS =
+		
+		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric\n"+
+		"from structure\n"+
+		"where atomproperties is null";
+		
+
+	
 	public MissingFingerprintsQuery(FPTable table) {
 		setCondition(EQCondition.getInstance());
 		setFieldname(table);
@@ -75,6 +84,8 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 	}
 	public String getSQL() throws AmbitException {
 		String table = getFieldname().getTable();
+		if (FPTable.smarts_accelerator.equals(getFieldname())) return sqlSMARTS;
+		else
 		return String.format(
 				getFieldname().equals(FPTable.fp1024_struc)?sqlFieldStruc:sqlField
 				,table,table,table,table,table);
@@ -82,6 +93,7 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
+		if (FPTable.smarts_accelerator.equals(getFieldname())) return params;
 		params.add(new QueryParam<Integer>(Integer.class, getId()));		
 		return params;
 	}
