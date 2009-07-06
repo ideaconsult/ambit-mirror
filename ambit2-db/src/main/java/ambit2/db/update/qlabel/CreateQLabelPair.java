@@ -8,31 +8,21 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
+/**
+ * Find minority  per source
+ * SELECT idchemical,idstructure,if(q.label!="Majority","",if(num_sources=(rel+1),"Majority","Minority")),
+rel,num_sources,label,q.text,p.text FROM quality_chemicals q
+join quality_pair p using(idchemical)
+order by idchemical
+ * @author nina
+ *
+ */
 public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	protected static String[] sql = {
 		"insert ignore into roles (role_name) values (\"ambit_quality\");",
 		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (?,\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
 		"insert ignore into user_roles (user_name,role_name) values (?,\"ambit_quality\");",
-		
-/*
- * 	can't make it work ..
-		"CREATE TEMPORARY TABLE  `quality_pair` (\n"+
-		"  `idchemical` int(10) unsigned NOT NULL auto_increment,\n"+
-		"  `idstructure` int(10) unsigned NOT NULL,\n"+
-		"  `rel` int(10) unsigned NOT NULL default '0' COMMENT 'number of same structures',\n"+
-		"  `user_name` varchar(16) collate utf8_bin NOT NULL,\n"+
-		"  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,\n"+
-		"  `TEXT` text collate utf8_bin,\n"+
-		"  PRIMARY KEY  (`idchemical`,`idstructure`),\n"+
-		"  KEY `FK_qpair_1` (`user_name`),\n"+
-		"  KEY `FK_qpair_3` (`idstructure`),\n"+
-		"  KEY `Index_4` (`TEXT`(255)),\n"+
-		"  KEY `Index_5` USING BTREE (`idchemical`,`rel`),\n"+
-		"  CONSTRAINT `FK_qpair_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,\n"+
-		"  CONSTRAINT `FK_qpair_2` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,\n"+
-		"  CONSTRAINT `FK_qpair_3` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE\n"+
-		") ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;\n",
-*/		
+
 		//"LOCK TABLES quality_pair WRITE , quality_chemicals WRITE, fp1024_struc READ \n",
 		
 		"delete from quality_pair\n",
@@ -56,10 +46,24 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"updated=CURRENT_TIMESTAMP(),\n"+
 		"`text`=CASE 1 WHEN values(rel)=0 THEN `text`  ELSE concat_WS(',',`text`,cast(s2.idstructure as char)) END",
 		
+		/*
+		DbCreateDatabase.func[0],
+		DbCreateDatabase.func[1],
+		*/
 		"update quality_pair set text=sortString(text)\n",
 		
 		"delete from quality_chemicals",
 		
+		
+		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
+		"select idchemical,1,'Unconfirmed',1,'1' from\n"+
+		"(\n"+
+		"SELECT count(distinct(id_srcdataset)) c ,idchemical FROM structure\n"+
+		"join struc_dataset using(idstructure)\n"+
+		"group by idchemical\n"+
+		") A where c=1\n",
+		
+
 		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
 		"SELECT idchemical,count(text) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
 		"group by idchemical,text\n"+
@@ -69,14 +73,40 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"`text`=concat_ws(',',`text`,values(`text`)),\n"+
 		"num_sources=CASE 1 WHEN num_sources<=values(num_sources) THEN values(num_sources) ELSE num_sources END\n",
 		
+		
+		
 		//"DROP TEMPORARY TABLE 'quality_pair'\n",
-		"delete from quality_pair\n",
+		//"delete from quality_pair\n",
+		
+		"insert ignore into roles (role_name) values (\"ambit_quality\");",
+		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"comparison\",\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic comparisong between sources\",now(),\"confirmed\",\"comparison\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into user_roles (user_name,role_name) values (\"comparison\",\"ambit_quality\");",
 		
 		"update quality_chemicals set text=replace(sortString(text),',',':')\n",
 		
+		"delete from quality_structure where user_name='comparison'\n",
+		
+		"insert into quality_structure (idstructure,user_name,label,text,updated)\n"+
+		"SELECT idstructure,'comparison',\n"+
+		"if (q.label='Consensus','OK',\n"+
+		"  if (q.label='Majority',if ((num_sources=(rel+1)),'ProbablyOK','ProbablyERROR'),'Unknown')\n"+
+		"),\n"+
+		"\'Comparison between different sources',current_timestamp()\n"+
+		" FROM quality_chemicals q\n"+
+		"join quality_pair p using(idchemical)\n",
+		
+		"insert ignore into quality_structure (idstructure,user_name,label,text,updated)\n"+
+		"select idstructure,'comparison','Unknown','single source',current_timestamp() from structure\n"+
+		"join\n"+
+		"(\n"+
+		"SELECT idchemical,count(distinct(id_srcdataset)) c FROM structure\n"+
+		"join struc_dataset using(idstructure) group by idchemical\n"+
+		") as SS\n"+
+		"using(idchemical)\n"+
+		"where c=1\n",
 		//"UNLOCK TABLES"
 
-		
+		"delete from quality_pair"
 	};
 		
 /*

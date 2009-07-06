@@ -35,6 +35,7 @@ import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.data.AmbitUser;
 import ambit2.base.data.IFilteredColumns;
 import ambit2.base.data.ISelectableRecords;
 import ambit2.base.data.ISortableColumns;
@@ -57,6 +58,7 @@ import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.qlabel.QueryConsensus;
+import ambit2.db.search.qlabel.QueryQLabel;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.update.IQueryUpdate;
@@ -67,11 +69,11 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	 * 
 	 */
 	protected enum FIELDS {
+		
+	
+		
 		CONSENSUSLABEL {
-			@Override
-			public int getOffset() {
-				return 1;
-			}
+	
 			@Override
 			protected IQueryRetrieval getQuery() {
 				IQueryRetrieval q =  new QueryConsensus(new StructureRecord(),null);
@@ -88,10 +90,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			}
 		},
 		DATASET {
-			@Override
-			public int getOffset() {
-				return 1;
-			}
+			
 			@Override
 			protected IQueryRetrieval getQuery() {
 				IQueryRetrieval q =  new RetrieveDatasets(new StructureRecord(),null);
@@ -107,8 +106,24 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 				return "Source";
 			}
 			
+		},
+		STRUCTURELABEL {
+			
+			@Override
+			protected IQueryRetrieval getQuery() {
+				IQueryRetrieval q =  new QueryQLabel(new AmbitUser("comparison"),new StructureRecord());
+				return q;
+			}
+			@Override
+			protected void setParameters(IQueryRetrieval q,int idchemical, int idstructure) {
+				((QueryQLabel)q).getValue().setIdstructure(idstructure);
+			}
+			@Override
+			public String toString() {
+				return "Quality label";
+			}			
 		};
-		public abstract int getOffset();
+	//	public abstract int getOffset();
 		protected abstract IQueryRetrieval getQuery();
 		protected abstract void setParameters(IQueryRetrieval q,int idchemical,int idstructure);
 
@@ -130,7 +145,8 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	protected QueryExecutor<IQueryObject> queryExecutor;
 	protected PropertyChangeListener propertyListener;
 	protected StructureStatisticsProcessor statsProcessor = new StructureStatisticsProcessor();
-	protected IQueryRetrieval[] queryFields = new IQueryRetrieval[] { FIELDS.CONSENSUSLABEL.getQuery(), FIELDS.DATASET.getQuery() };
+	protected IQueryRetrieval[] queryFields = new IQueryRetrieval[] { 
+			FIELDS.CONSENSUSLABEL.getQuery(), FIELDS.DATASET.getQuery(), FIELDS.STRUCTURELABEL.getQuery() };
 
 	
 	public StoredQueryTableModel() {
@@ -358,6 +374,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			return x.getMessage();
 		}
 	}
+
 	protected String getLabel(int idchemical,int idstructure,int offset) {
 		ResultSet rs = null;
 		try {
