@@ -39,6 +39,9 @@ import java.sql.Statement;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.StringBean;
+import ambit2.db.UpdateExecutor;
+import ambit2.db.update.property.UpdateProperty;
+import ambit2.db.update.user.CreateUser;
 
 /*
  cant' execute it via jdbc ...
@@ -84,12 +87,50 @@ DELIMITER ;
  */
 
 public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String> {
-	
+   	public static String[] func = {
+   	    	"DROP FUNCTION IF EXISTS `sortString`",
+   	    	
+   	    	"CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT\n"+
+   	    	"BEGIN\n"+
+   	    	"  DECLARE delim CHAR(1) DEFAULT ','; -- delimiter\n"+ 
+   	    	"  DECLARE strings INT DEFAULT 0;     -- number of substrings\n"+
+   	    	"  DECLARE forward INT DEFAULT 1;     -- index for traverse forward thru substrings\n"+
+   	    	"  DECLARE backward INT;   -- index for traverse backward thru substrings, position in calc. substrings\n"+
+   	    	"  DECLARE remain TEXT;               -- work area for calc. no of substrings\n"+
+   	    	"  DECLARE swap1 TEXT;                 -- left substring to swap\n"+
+   	    	"  DECLARE swap2 TEXT;                 -- right substring to swap\n"+
+   	    	"  SET remain = inString;\n"+
+   	    	"  SET backward = LOCATE(delim, remain);\n"+
+   	    	"  WHILE backward != 0 DO\n"+
+   	    	"    SET strings = strings + 1;\n"+
+   	    	"    SET backward = LOCATE(delim, remain);\n"+
+   	    	"    SET remain = SUBSTRING(remain, backward+1);\n"+
+   	    	"  END WHILE;\n"+
+   	    	"  IF strings < 2 THEN RETURN inString; END IF;\n"+
+   	    	"  REPEAT\n"+
+   	    	"    SET backward = strings;\n"+
+   	    	"    REPEAT\n"+
+   	    	"      SET swap1 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward-1),delim,-1);\n"+
+   	    	"      SET swap2 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward),delim,-1);\n"+
+   	    	"      IF  swap1 > swap2 THEN\n"+
+   	    	"        SET inString = TRIM(BOTH delim FROM CONCAT_WS(delim\n"+
+   	    	"        ,SUBSTRING_INDEX(inString,delim,backward-2)\n"+
+   	    	"        ,swap2,swap1\n"+
+   	    	"        ,SUBSTRING_INDEX(inString,delim,(backward-strings))));\n"+
+   	    	"      END IF;\n"+
+   	    	"      SET backward = backward - 1;\n"+
+   	    	"    UNTIL backward < 2 END REPEAT;\n"+
+   	    	"    SET forward = forward +1;\n"+
+   	    	"  UNTIL forward + 1 > strings\n"+
+   	    	"  END REPEAT;\n"+
+   	    	"RETURN inString;\n"+
+   	    	"END\n"};
     /**
 	 */
 	private static final long serialVersionUID = -335737998721944578L;
 	protected String SQLFile = "ambit2/db/sql/create_tables.sql";
-
+	protected CreateUser creatUser = new CreateUser();
+	
 	public DbCreateDatabase() {
 		setOperation(OP.CREATE);
 	}
@@ -98,10 +139,12 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         // TODO Auto-generated method stub
 
     }
+    
     @Override
     public String create(StringBean database) throws SQLException {
         createDatabase(database.toString());
         createTables(database.toString());
+        
         
         
         	String[] users = {
@@ -121,13 +164,18 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         	"GRANT USAGE ON `"+database+"`.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';",
         	"GRANT ALL PRIVILEGES ON `"+database+"`.* TO 'admin'@'localhost' WITH GRANT OPTION;",
         	"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `"+database+"`.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';",
-        	"GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';"
+        	//"GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';"
 
         	};
 	        Statement st = connection.createStatement();
-	        for (String user : users)
-	        	st.addBatch(user);
-	        st.executeBatch();
+	        
+	        for (String user : users) try {
+	        	st.executeUpdate(user);
+	        } catch (Exception x) {
+	        	logger.warn(x);
+	        }
+	        	
+	        
 	        st.close();
 	        try {
         	Preferences.setProperty(Preferences.DATABASE, database.toString());
@@ -229,44 +277,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         }
     }
     public void createFunctions() throws SQLException {
-    	String[] func = {
-    	"DROP FUNCTION IF EXISTS `sortString`",
-    	
-    	"CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT\n"+
-    	"BEGIN\n"+
-    	"  DECLARE delim CHAR(1) DEFAULT ','; -- delimiter\n"+ 
-    	"  DECLARE strings INT DEFAULT 0;     -- number of substrings\n"+
-    	"  DECLARE forward INT DEFAULT 1;     -- index for traverse forward thru substrings\n"+
-    	"  DECLARE backward INT;   -- index for traverse backward thru substrings, position in calc. substrings\n"+
-    	"  DECLARE remain TEXT;               -- work area for calc. no of substrings\n"+
-    	"  DECLARE swap1 TEXT;                 -- left substring to swap\n"+
-    	"  DECLARE swap2 TEXT;                 -- right substring to swap\n"+
-    	"  SET remain = inString;\n"+
-    	"  SET backward = LOCATE(delim, remain);\n"+
-    	"  WHILE backward != 0 DO\n"+
-    	"    SET strings = strings + 1;\n"+
-    	"    SET backward = LOCATE(delim, remain);\n"+
-    	"    SET remain = SUBSTRING(remain, backward+1);\n"+
-    	"  END WHILE;\n"+
-    	"  IF strings < 2 THEN RETURN inString; END IF;\n"+
-    	"  REPEAT\n"+
-    	"    SET backward = strings;\n"+
-    	"    REPEAT\n"+
-    	"      SET swap1 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward-1),delim,-1);\n"+
-    	"      SET swap2 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward),delim,-1);\n"+
-    	"      IF  swap1 > swap2 THEN\n"+
-    	"        SET inString = TRIM(BOTH delim FROM CONCAT_WS(delim\n"+
-    	"        ,SUBSTRING_INDEX(inString,delim,backward-2)\n"+
-    	"        ,swap2,swap1\n"+
-    	"        ,SUBSTRING_INDEX(inString,delim,(backward-strings))));\n"+
-    	"      END IF;\n"+
-    	"      SET backward = backward - 1;\n"+
-    	"    UNTIL backward < 2 END REPEAT;\n"+
-    	"    SET forward = forward +1;\n"+
-    	"  UNTIL forward + 1 > strings\n"+
-    	"  END REPEAT;\n"+
-    	"RETURN inString;\n"+
-    	"END\n"};
+ 
     	
     	
     	for (String f: func) {
