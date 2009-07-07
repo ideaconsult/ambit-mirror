@@ -3,14 +3,93 @@
  -----
  Download
  -----
- 
+ June 2009
 
 Download
 
-  AMBIT2 is currently under development. 
-  
-  For the planned releases see {{{intro.html}Introduction}}.
-  
+*AMBIT XT
+~~~~~~
+
+** AmbitXT v 2.1.0
+ 
+    * June 2009 : Download {{{http://ambit.acad.bg/downloads/ambit2/30062009/AmbitXT-v2.1.0-setup.exe} AmbitXT 2.1.0 release}} 
+    
+    	* Windows setup with an embeded MySQL database
+    	
+     	* integrated   Toxtree  (Toxtree  modules  available  from  the  Descriptor calculation interface);
+
+   		* included  chemical  structure data,  gathered  from  several  independent sources;
+
+		* added new  functionality for consistency  verification of structures  and identifiers;
+		
+		* Fast SMARTS database searching
+
+    	* database schema modified for better performance;
+    	
+    	* {{{http://ambit.acad.bg/downloads/ambit2/30062009/AmbitXT v2.1.0 User Manual.pdf}User Manual}}
+    	
+    	* {{{http://ambit.acad.bg/downloads/ambit2/30062009/AmbitXT v2.1.0 PBT Assessment Manual.pdf}Manual for PBT assessment module}} 
+    	
+    	* The included  database encompasses  substances  from the following sources:
+
+    -- {{{http://ecb.jrc.ec.europa.eu/esis/index.php?PGM=ein}EINECS list }}
+
+    -- {{{http://www.euras.be/eng/project.asp?ProjectId=92}Bioconcentration factor (BCF) Gold Standard Database}}
+
+    -- ECETOC  Aquatic Toxicity  (EAT)  Database Supplement  to  ECETOC. 2003. Aquatic Hazard Assessment II. Technical Report No. 91. European Centre  for Ecotoxicology and Toxicology of Chemicals, Brussels, Belgium
+    
+    -- Compilation of historical local lymph node assay data for the evaluation of  skin  sensitization  alternatives. Gerberick  GF,  Ryan  CA,  Kern  PS, Schlatter  H, Dearman  RJ, Kimber  I, Patlewicz  G,  Basketter  DA. (2005). Dermatitis 16(4): 157-202.
+
+    -- Skin irritation and corrosion Reference Chemicals data base (1995) ECETOC Technical Report No. 66 	
+    	
+** Previous releases
+
+    * May 2009  AmbitXT v2.0.2
+    	
+    	* Download {{{http://ambit.acad.bg/downloads/ambit2/31052009/AmbitXT-v2.0.2-setup.exe} Windows setup}} with an embeded MySQL database, containing 100204 EINECS chemicals with calculated properties
+    	
+    	* PBT module bug fixes and enhancements 
+    
+    	* Initial implementation of fast SMARTS database searching 
+    	
+    * May 2009  AmbitXT v2.0.1
+    	
+    	* Download {{{http://ambit.acad.bg/downloads/ambit2/10052009/AmbitXT-v2.0.1-setup-einecs-database.exe} Windows setup}} with an embeded MySQL database, containing 100204 EINECS chemicals with calculated properties.
+    	
+    	* Download {{{http://ambit.acad.bg/downloads/ambit2/10052009/AmbitXT-v2.0.1-setup-empty-database.exe} Windows setup}} with an embeded MySQL database, no chemicals imported. 
+    
+    	* {{{http://ambit.acad.bg/downloads/ambit2/10052009/Quick%20Guides%20Main.pdf}Quick Guides}} for first time users 
+    	
+    	* {{{http://ambit.acad.bg/downloads/ambit2/10052009/User%20Manual%20Main.pdf}User Manual}}
+    	
+    	* Improved user interface
+    	
+    	* Flexible search workflows
+    	
+    	* Initial implementation of category building workflow
+    	
+    	* Updated workflow for PBT assessment, following REACH guidance. 
+    	 
+    * Feb 2009  AmbitXT v2.0.0
+    
+    	* Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.0.0-setup.exe} AmbitXT Initial release}} Beta version of the software.
+    
+    	* Updated database schema
+    	
+    	* Workflow support
+    	
+    	* Example workflow for identifiers, substructure and similarity search. 
+    	
+    	* Workflow for PBT assessment, following REACH guidance. 
+    	
+    	* The database distributed contains the original EINECS list.
+    	
+    * Oct 2008 
+    
+    	* Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed contains the original EINECS list.
+    	
+
+    	
   For older AMBIT releases, please visit {{{http://ambit.acad.bg}AMBIT site}}
 
 

@@ -6,8 +6,8 @@
   <packaging>pom</packaging>
   <version>2.0.0-SNAPSHOT</version>
   <name>ambit2-all</name>
-  <description>A software for chemoinformatic data management, chemical grouping and (Q)SAR support.
-AMBIT2 is a complete redesign of AMBIT software, featuring improved user interface, support for workflows, plugins and reporting for user actions.</description>
+  <description>AmbitXT is a set of  flexible high  performance user-friendly  open  source
+ applications,  which are  able to  store information  about  chemical compounds and efficiently  search large databases  of  chemicals by  various criteria.</description>
   <url>http://ambit.sourceforge.net</url>
   <repositories>
   	<repository>
@@ -320,6 +320,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
 	        </configuration>
           
          </plugin>
+         <!-- 
 		<plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-project-info-reports-plugin</artifactId>
@@ -327,7 +328,8 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
 		    <configuration>
 		      <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 		    </configuration>
-		  </plugin>          
+		  </plugin>
+		   -->          
          <!-- 
           <plugin>
           	<groupId>org.apache.maven.plugins</groupId>
@@ -346,6 +348,8 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
 			</configuration>          	
           </plugin>
            -->
+           
+          <!-- 
           <plugin>
           	<groupId>org.codehaus.mojo</groupId>
           	<artifactId>taglist-maven-plugin</artifactId>
@@ -358,6 +362,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
 				</tags>
 			</configuration>          	
           </plugin>
+          -->
           <plugin>
           	<groupId>org.codehaus.mojo</groupId>
           	<artifactId>jdepend-maven-plugin</artifactId>
@@ -382,7 +387,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
       </plugin>
- 	 -->
+ 	
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -391,7 +396,7 @@ AMBIT2 is a complete redesign of AMBIT software, featuring improved user interfa
           <aggregate>true</aggregate>
         </configuration>
       </plugin>
- 	 
+ 	  -->
     </plugins>
 
     

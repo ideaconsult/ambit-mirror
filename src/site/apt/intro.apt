@@ -5,27 +5,20 @@
  -----
  Sep 2008
 
-Introduction
+Welcome
+
+  {{{http://ambit.sourceforge.net/Ideaconsult-CDKWorkshop-Apr2009-short.ppt}Overview of Toxtree, Toxmatch and Ambit}}
 
 *AMBIT
 ~~~~~~
-  AMBIT, a software for chemoinformatic data management, is an outcome of the LRI project: 
+  AMBIT, a software for chemoinformatic data management, was an outcome of a CEFIC LRI project: 
   <<Building blocks for a future (Q)SAR ((Quantitative) Structure Activity Relationship) decision support system>>. 
   
-  The objective of the software is to support decisions, including chemical grouping and QSAR applicability domain appraisal.
-  The name AMBIT was chosen meaning 'an area in which something acts or operates or has power or control'. 
-  
-  The AMBIT software is available online and as a stand-alone application for beta testing at {{{http://ambit.acad.bg}AMBIT}}.
+  The AMBIT software is available online and as a stand-alone application at {{{http://ambit.acad.bg}AMBIT}}.
 
   The AMBIT system consists of a database and functional modules allowing a variety of flexible searches and mining of the data stored in the database. 
   The AMBIT database stores chemical structures, their identifiers such as CAS, Einecs, Inchi numbers; attributes such as molecular descriptors, experimental data together with test descriptions, literature references. The database can also store QSAR models. In addition the software can generate a suite of 2D and 3D molecular descriptors. 
-
-  The database can be searched by identifiers, attribute value or range, experimental data value or range, user defined fragments. 
-  AMBIT makes it easy to perform chemical grouping and assess the applicability domain of a QSAR offering a variety of methods including: statistical approaches that rely on "descriptor space"; 
-  approaches based on mechanistic understanding; and approaches based on structural similarity. 
-  Structural similarity functionality is particularly well developed and offers pairwise similarity assessments that can be helpful for read-across as well as similarity assessments (some of them novel) to a set of compounds more suitable for grouping to support category formation.
-  
-
+	
 *AMBIT2
 ~~~~~~~  
   AMBIT2 is a complete redesign of {{{http://ambit.acad.bg}AMBIT}} software, featuring improved user interface, support for workflows, plugins and reporting for user actions.
@@ -34,35 +27,34 @@ Introduction
   
 ** AMBIT XT 
 	
-	A stand alone application, including modules for Analog identification, Category building, Category verification, Endpoints validation, PBT assessment, etc.
+	AmbitXT is a set of  flexible high  performance user-friendly  open  source (LGPL) applications,  which are  able to  store information  about chemical compounds and efficiently  search large databases  of chemicals by  various criteria.
 
-*** Timeline
-
-**** Prototype 
-
-	* Oct 2008 : Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed contains the original EINECS list.
-
-**** Initial release
- 
-    * Feb 2009 : Download {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.0.0-setup.exe} AmbitXT Initial release}} Beta version of the software.
+    The application supports exact structure / substructure searching, as  well as  fingerprint  based  similar  structure  searching,  search  by  set  of descriptors and search by experimental data.
     
-    	* Updated database schema
-    	
-    	* Workflow support
-    	
-    	* Example workflow for identifiers, substructure and similarity search. 
-    	
-    	* Workflow for PBT assessment, following REACH guidance. 
-    	
-    	* The database distributed contains the original EINECS list.
-    	  	
-**** Final release
+    AmbitXT includes modules for PBT assessment, Analogue identification and Category building. Modules for Category verification, Endpoints validation are under development.
+    
+	The included  database encompasses  substances  from the following sources:
 
- 		* June 2009
+    -- {{{http://ecb.jrc.ec.europa.eu/esis/index.php?PGM=ein}EINECS list }}
 
-** AMBIT REST Web services
+    -- {{{http://www.euras.be/eng/project.asp?ProjectId=92}Bioconcentration factor (BCF) Gold Standard Database}}
+
+    -- ECETOC  Aquatic Toxicity  (EAT)  Database Supplement  to  ECETOC. 2003. Aquatic Hazard Assessment II. Technical Report No. 91. European Centre  for Ecotoxicology and Toxicology of Chemicals, Brussels, Belgium
+    
+    -- Compilation of historical local lymph node assay data for the evaluation of  skin  sensitization  alternatives. Gerberick  GF,  Ryan  CA,  Kern  PS, Schlatter  H, Dearman  RJ, Kimber  I, Patlewicz  G,  Basketter  DA. (2005). Dermatitis 16(4): 157-202.
+
+    -- Skin irritation and corrosion Reference Chemicals data base (1995) ECETOC Technical Report No. 66
+
+    AmbitXT is suitable for a standalone PC. It has been designed with flexible capabilities for future extensions in mind.
+    
+	{{{downloads.html}Download}}
+
+
+**AMBIT REST Web services
 	
 	Allows to query AMBIT database by REST style web services. 
 	
 	The prototype {{{http://nina.acad.bg/ambit2/}service}} and {{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/ambit-rest-client/}client}} are available.
+
+
 
