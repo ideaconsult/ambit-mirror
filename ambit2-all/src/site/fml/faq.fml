@@ -2,20 +2,52 @@
 <faqs title="Frequently Asked Questions">
   <part id="General">
     <faq id="A1">
-      <question>Q1. When AMBIT2 will be available?</question>
+      <question>Q1. Latest AMBIT version?</question>
       <answer>
         <p>
-          See Introduction.
+          Ambit XT v.2.1.0 is the latest release.
         </p>
       </answer>
     </faq>
     <faq id="A2">
-      <question>Q2. Can I have access to AMBIT2 code before release time?</question>
+      <question>Q2. Can I have access to AMBIT2 code ?</question>
       <answer>
         <p>
           Yes, the code is available in the source repository.
         </p>
       </answer>
     </faq>
+    <faq id="A3">
+      <question>Q3. How are the substructure and similarity search performed?</question>
+      <answer>
+        <p>
+          The core substructure search functionality (graph isomorphism) is provided either by the Thje CDK cheminformatics library http://cdk.sourceforge.net
+          or by a faster algorithm, developed for AMBIT.  
+          
+          Substructure search is an NP-hard problem, which means that the complexity of the algorithm increases rapidly with the size of the molecule. 
+          To speed-up substructure searching in large datasets, one usually uses precalculated fingerprints to identify structures, 
+          potentially containing the substructure. 
+          
+          The AMBIT database and software combines this technique with fast relational database queries, which results in very fast substructure searching in huge datasets. 
+
+          In addition, fingerprints are a standard tool for assessing similarity by calculating Tanimoto coefficient between fingerprints of two compounds.
+          
+          AMBIT also allows querying the database by SMARTS, accelerated by several precalculated data.
+          
+        </p>
+      </answer>
+    </faq>    
+    <faq id="A2">
+      <question>Q4. Which descriptors can be calculated in AMBIT ?</question>
+      <answer>
+        <p>
+          The CDK library based descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/index.xhtml 
+          AMBIT Descriptors: 
+          Functional Groups, PKASmartsDescriptor, Molecule Size (3D) ,Electronic descriptors, calculated by Open Mopac  (e.g. eHOMO, eLumo)
+		  ToxTree:  
+		  Cramer rules,  Extended Cramer rules, Verhaar scheme, Eye irritation rules, Skin irritation rules, Benigni/Bossa rulebase for mutagenicity and carcinogenicity, Structural rules for Michael acceptors,Structure Alerts for the in vivo micronucleus assay in rodents
+        </p>
+      </answer>
+    </faq>    
   </part>
 </faqs>
