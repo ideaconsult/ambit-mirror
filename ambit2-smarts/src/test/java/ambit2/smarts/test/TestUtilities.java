@@ -18,6 +18,7 @@ import ambit2.smarts.*;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.CDKConstants;
@@ -30,6 +31,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -1032,6 +1034,24 @@ public class TestUtilities
 		
 	}
 	
+	public void printSSSR(String smiles)
+	{	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		SSSRFinder sssrf = new SSSRFinder(mol);
+		IRingSet ringSet = sssrf.findSSSR();
+		
+		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
+		{
+			System.out.print("  Ring:");
+			IAtomContainer ring =  ringSet.getAtomContainer(i);
+			for (int k = 0; k < ring.getAtomCount(); k++)
+			{
+				IAtom a = ring.getAtom(k);
+				System.out.print(" "+ mol.getAtomNumber(a));
+			}
+		}	
+		System.out.println();
+	}	
 	
 	
 //-------------------------------------------------------------------------------
@@ -1152,7 +1172,14 @@ public class TestUtilities
 		//tu.testIsomorphismTester("C", "CCCCC");
 		
 		//!!!  essential IsomorphismTest test
-		tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
+		//tu.compareIsoTesterMulti("/Projects/Nina/java_random_frags.txt");
+		
+		
+		//Testing SSSR algorithm wether it gives exactly the same numbering of the rings
+		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
 		
 		//These were problematic cases, but now are OK
 		//tu.compareIsoTester("S(OC)(=O)(=O)O",null);  //OK
