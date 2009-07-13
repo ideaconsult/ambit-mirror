@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
-	<description>Ambit XT plugin for analogues identification</description>
+	<description>Ambit XT plugin, implementing workflows for category building, verification, etc.</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -9,7 +9,7 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-plugin-analogs</artifactId>
   <packaging>jar</packaging>      
-  <name>ambit2-plugin-analogs</name>
+  <name>AmbitXT plugin: Category building</name>
   <version>2.0.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
