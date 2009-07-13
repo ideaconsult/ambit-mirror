@@ -5,7 +5,7 @@
   <artifactId>ambit2-all</artifactId>
   <packaging>pom</packaging>
   <version>2.0.0-SNAPSHOT</version>
-  <name>ambit2-all</name>
+  <name>Ambit 2</name>
   <description>AmbitXT is a set of  flexible high  performance user-friendly  open  source
  applications,  which are  able to  store information  about  chemical compounds and efficiently  search large databases  of  chemicals by  various criteria.</description>
   <url>http://ambit.sourceforge.net</url>
