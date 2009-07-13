@@ -42,7 +42,7 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 			b.append(String.format(" as cbits,bc from %s join structure using(idchemical) ",fptable.getTable()));
 
 			b.append (") as L, chemicals ");
-			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical");
+			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical and label != 'ERROR'");
 
 	
 		return b.toString();

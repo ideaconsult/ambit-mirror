@@ -85,15 +85,15 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 	 				Object smartsdata = object.getProperty(smartsProperty);
 					
 					if (smartsdata!= null) {
-						mol.setProperty(CMLUtilities.SMARTSProp, smartsdata);
+						mol.setProperty(smartsProperty, smartsdata);
 	
-					} else mol.removeProperty(CMLUtilities.SMARTSProp);
-				} else mol.removeProperty(CMLUtilities.SMARTSProp);
+					} else mol.removeProperty(smartsProperty);
+				} else mol.removeProperty(smartsProperty);
 				
 				
-				mol = configurator.process(mol);
+				//mol = configurator.process(mol);
 				
-				CDKHueckelAromaticityDetector.detectAromaticity(mol);
+				//CDKHueckelAromaticityDetector.detectAromaticity(mol);
 				VerboseDescriptorResult<String,IntegerResult> result = getValue().process(mol);
 				return result.getResult().intValue();
 			} else return 0;
