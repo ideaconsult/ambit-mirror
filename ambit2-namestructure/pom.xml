@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
-	<description>Chemical name to structure convertor, based on OPSIN package</description>
+	<description>Chemical name to structure convertor, based on OPSIN package
+http://sourceforge.net/projects/oscar3-chem/files/</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
