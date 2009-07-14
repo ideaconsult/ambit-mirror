@@ -9,7 +9,7 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-plugin-dbtools</artifactId>
   <packaging>jar</packaging>        
-  <name>Database tools</name>
+  <name>AmbitXT plugin: Database tools</name>
   <version>2.0.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
