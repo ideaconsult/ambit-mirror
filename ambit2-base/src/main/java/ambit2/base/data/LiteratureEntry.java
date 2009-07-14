@@ -65,8 +65,8 @@ public class LiteratureEntry extends AmbitBean {
 		return URL;
 	}
 	private LiteratureEntry(String title, String url) {
-		this.title = title;
-		this.URL = url;
+		this.title = (title.length()>255)?title.substring(1,255):title;
+		this.URL = (url.length()>255)?url.substring(1,255):url;
 	}
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
