@@ -1,7 +1,6 @@
 package ambit2.rest.dataset;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.SQLException;
 

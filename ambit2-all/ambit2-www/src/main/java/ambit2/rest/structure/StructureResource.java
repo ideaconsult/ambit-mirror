@@ -31,7 +31,7 @@ public class StructureResource extends StructureQueryResource<QueryStructureByID
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) 
-			return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter());
+			return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter(getRequest().getRootRef()));
 		else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);

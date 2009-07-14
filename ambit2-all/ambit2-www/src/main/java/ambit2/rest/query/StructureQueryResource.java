@@ -52,7 +52,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);					
 		} else
-			return new DocumentConvertor(new QueryXMLReporter<Q>());
+			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest().getRootRef()));
 	}
 	
 }

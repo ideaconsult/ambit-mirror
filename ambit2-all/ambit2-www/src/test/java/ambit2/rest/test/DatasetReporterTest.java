@@ -6,6 +6,7 @@ import org.dbunit.dataset.ITable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.restlet.data.Reference;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.RetrieveDatasets;
@@ -27,7 +28,7 @@ public class DatasetReporterTest extends DbUnitTest {
 		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET");		
 		Assert.assertEquals(3,names.getRowCount());		
 		c.close();
-		reporter = new DatasetReporter();
+		reporter = new DatasetReporter(new Reference());
 	}
 
 	@After

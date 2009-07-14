@@ -29,7 +29,7 @@ public class DatasetResource extends QueryResource<IQueryRetrieval<SourceDataset
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
-		return new DocumentConvertor(new DatasetReporter());
+		return new DocumentConvertor(new DatasetReporter(getRequest().getRootRef()));
 	}
 
 
