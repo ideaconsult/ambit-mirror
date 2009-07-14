@@ -84,7 +84,10 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 			r.setIdstructure(-1);
 			r.setFormat("SDF");
 			r.setContent(writer.process((IAtomContainer)o));
-			r.setReference(getReference());
+			Object ref = ((IAtomContainer)o).getProperty("REFERENCE");
+			if (ref instanceof LiteratureEntry)
+				r.setReference((LiteratureEntry)ref);
+			else r.setReference(getReference());
 			return r;  
 		} catch (Exception x) {
 			r.setIdchemical(-1);
