@@ -81,11 +81,12 @@ public class EurasBCFReader extends IteratingXLSReader {
 	}	
 	@Override
 	public void processHeader() {
+		
 		iterator = sheet.rowIterator();
 		//process first header line
 		processHeader((HSSFRow)iterator.next());
 		//skip rest of header lines
-		HSSFRow row = sheet.getRow(1);
+		HSSFRow row = (HSSFRow)iterator.next();
 		for (int i=0; i < getNumberOfColumns(); i++) {
 			HSSFCell cell = row.getCell(i);
 			if (cell == null) continue;
@@ -96,8 +97,14 @@ public class EurasBCFReader extends IteratingXLSReader {
 	}
 	@Override
 	protected void processRow(IAtomContainer mol) {
-		Double index = (Double)mol.getProperty(Property.getInstance("ref",getReference()));
-		mol.setProperty(Property.getInstance("REFERENCE", getClass().getName()), references.get(index));
+		Object o = mol.getProperty(Property.getInstance("ref",getReference()));
+		try {
+			Double index = (Double) o;
+			mol.setProperty("REFERENCE", references.get(index));
+		} catch (Exception x) {
+			mol.setProperty("REFERENCE", LiteratureEntry.getInstance(o.toString(),o.toString()));
+		}
+		
 	}
 
 }

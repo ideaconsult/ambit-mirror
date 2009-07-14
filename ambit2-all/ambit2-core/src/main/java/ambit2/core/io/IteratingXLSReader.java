@@ -120,10 +120,8 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 			
 			for (int col = 0; col < getNumberOfColumns(); col++ ) {
 				HSSFCell cell = row.getCell(col);
-				if (cell == null) continue;
-				
 				Object value = null;
-				
+				if (cell != null)				
 				switch (cell.getCellType()) {
 					case HSSFCell.CELL_TYPE_BOOLEAN:
 				    	value = cell.getBooleanCellValue();
@@ -152,8 +150,10 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 							}
 						}
 					}
+				else 
+					value = "";
 				try {
-					if (smilesIndex == cell.getColumnIndex()) {
+					if (smilesIndex == col) {
 						try {
 							mol = sp.parseSmiles(value.toString());
 							properties.put(AmbitCONSTANTS.SMILES, value.toString());
@@ -163,8 +163,8 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 						}						
 					} 
 					else 
-						if (cell.getColumnIndex()< getNumberOfColumns())
-							properties.put(getHeaderColumn(cell.getColumnIndex()), value);
+						if (col< getNumberOfColumns())
+							properties.put(getHeaderColumn(col), value);
 				} catch (Exception x) {
 					x.printStackTrace();
 				}
