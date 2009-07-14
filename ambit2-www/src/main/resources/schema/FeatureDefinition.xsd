@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://opentox.org/1.0"
+	xmlns:tns="http://opentox.org/1.0" elementFormDefault="qualified">
+
+	<complexType name="FeatureDefinition">
+   		<attribute name="link" type="anyURI"></attribute>
+		<attribute name="ID" type="string"></attribute>
+		<attribute name="Name" type="string"></attribute>
+		<attribute name="Reference" type="anyURI"></attribute>
+		<attribute name="FeatureType" type="string"></attribute>
+	</complexType>
+
+</schema>

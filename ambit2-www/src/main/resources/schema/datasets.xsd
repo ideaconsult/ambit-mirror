@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://opentox.org/1.0/" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" 
+				xmlns:ot="http://opentox.org/1.0/">
+    
+    <include schemaLocation="dataset.xsd"></include>
+    
+    <element name="datasets" >
+       <annotation>
+      <documentation>
+       Links to datasets
+      </documentation>
+      </annotation>
+      <complexType>
+	      <sequence>
+	      	<element name="link" type="ot:Link" />
+	      </sequence>
+      </complexType>  
+    </element>
+    
+</schema>

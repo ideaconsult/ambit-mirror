@@ -17,16 +17,21 @@ import org.w3c.dom.Document;
 
 public class XMLTags {
 	private static final long serialVersionUID = -3235018056866994267L;
-	public final static String ns_ambit = "http://ambit.sourceforge.net/ambit/rest/v2";
+	public final static String ns_opentox = "http://opentox.org/1.0";
 	public final static String node_ambit = "ambit";
 	public final static String node_dataset = "dataset";
 	public final static String node_datasets = "datasets";
+	public final static String node_structures = "structures";
+	public final static String node_structure = "structure";
+	public final static String node_features = "features";
+	public final static String node_feature = "feature";
 	public final static String node_reference = "reference";
-	public final static String node_www = "url";
-	public final static String node_uri = "uri";
+	public final static String attr_href = "href";
+	public final static String node_link = "link";
 	public final static String attr_id = "id";
 	public final static String attr_name = "name";
 	public final static String slash = "/";
+	public final static String version = "1.0";
 	
 	protected XMLTags() {
 		

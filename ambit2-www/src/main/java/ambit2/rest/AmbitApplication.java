@@ -17,6 +17,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.rest.dataset.DatasetResource;
+import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
@@ -27,10 +28,16 @@ import ambit2.rest.structure.build3d.Build3DResource;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 
-
+/**
+ * http://opentox.org/wiki/1/Dataset
+ * @author nina
+ *
+ */
 public class AmbitApplication extends Application {
 	public final static String datasets = "/dataset";		
 	public final static String dataset = datasets+"/{dataset_id}";
+	public final static String dataset_structures = datasets+"/{dataset_id}/structure";
+	public final static String dataset_structure = datasets+"/{dataset_id}/structure/{idstructure}";
 	public final static String query = "/query";	
 	public final static String similarity = query + "/similarity/method";		
 	public final static String fp_dataset = similarity + "/fp1024/distance/tanimoto/{threshold}" + dataset;
@@ -68,6 +75,9 @@ public class AmbitApplication extends Application {
 		
 		router.attach(datasets, DatasetsResource.class);
 		router.attach(dataset, DatasetResource.class);
+		router.attach(dataset_structure, StructureResource.class);
+		router.attach(dataset_structures, DatasetStructuresResource.class);
+		
 		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
 		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
 		router.attach(fp+"/smiles/{smiles}",SimilarityResource.class);

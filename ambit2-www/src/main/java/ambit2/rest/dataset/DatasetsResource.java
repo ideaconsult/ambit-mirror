@@ -15,6 +15,13 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
+/**
+ * http://opentox.org/wiki/1/Dataset
+ * 
+
+ * @author nina
+ *
+ */
 public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
 	
 	public DatasetsResource(Context context, Request request, Response response) {
@@ -31,11 +38,12 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
-		
+		/*
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(new DatasetHTMLReporter());	
 		} else // (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new DatasetReporter());			
+		*/
+		return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));			
 		
 	}
 }
