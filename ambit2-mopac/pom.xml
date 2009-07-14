@@ -10,7 +10,7 @@
   <artifactId>ambit2-mopac</artifactId>
   <name>ambit2-mopac</name>
   <version>2.0.0-SNAPSHOT</version>
-  <description>wrapper for OpenMopac</description>
+  <description>A wrapper for OpenMopac http://openmopac.net/</description>
   <packaging>jar</packaging>  
   <url></url>
  <build>
