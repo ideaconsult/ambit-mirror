@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
+	<description>Hashcodes</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
