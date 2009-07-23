@@ -69,13 +69,22 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 	public void testSelect() throws Exception {
 		setUpDatabase(dbFile);
 		IDatabaseConnection c = getConnection();
-		testTable(c);
+		testTable(c,false);
 		c.close();
 	}	
 	
-	public void testTable(IDatabaseConnection connection) throws Exception {
+	@Test
+	public void testSelectChemicals() throws Exception {
+		setUpDatabase(dbFile);
+		IDatabaseConnection c = getConnection();
+		testTable(c,true);
+		c.close();
+	}	
+		
+	public void testTable(IDatabaseConnection connection,boolean chemicalsOnly) throws Exception {
 
 		StoredQueryTableModel queryModel = new StoredQueryTableModel();
+		queryModel.setChemicalsOnly(chemicalsOnly);
 		/*
 		Profile profile = new Profile();
 		Property prop = Property.getInstance("CAS","CAS");
@@ -88,7 +97,8 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 		queryModel.setConnection(connection.getConnection());
 		queryModel.setQuery(query.getFieldname());
 		queryModel.setValueAt(false,0,0);
-		Assert.assertFalse((Boolean)queryModel.getValueAt(0,0));		
+		Assert.assertFalse((Boolean)queryModel.getValueAt(0,0));
+		/*
 		for (int r=0;r< queryModel.getRowCount();r++)
 			for (int c=0;c< queryModel.getColumnCount();c++) {
 				System.out.print(r);
@@ -97,6 +107,7 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 				System.out.print(':');
 					System.out.println(queryModel.getValueAt(r,c));
 			}
+			*/
 		queryModel.setValueAt(true,1,0);
 		Assert.assertTrue((Boolean)queryModel.getValueAt(1,0));		
 		/*
