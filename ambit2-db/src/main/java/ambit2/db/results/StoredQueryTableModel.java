@@ -27,7 +27,6 @@ package ambit2.db.results;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.StructureStatisticsProcessor;
-import ambit2.db.readers.AbstractStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
 import ambit2.db.readers.RetrieveDatasets;
@@ -62,6 +60,7 @@ import ambit2.db.search.qlabel.QueryQLabel;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.update.IQueryUpdate;
+import ambit2.db.update.storedquery.SelectStoredQuery;
 import ambit2.db.update.storedquery.UpdateSelectedRecords;
 
 public class StoredQueryTableModel extends ResultSetTableModel implements ISelectableRecords, ISortableColumns, IFilteredColumns{
@@ -133,8 +132,8 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	protected QueryStoredResults storedResults;
 	
 	
-	protected PreparedStatement structureRecords = null;
-	protected PreparedStatement structureField = null;	
+	//protected PreparedStatement structureRecords = null;
+	//protected PreparedStatement structureField = null;	
 	
 	protected RetrieveAtomContainer retrieveMolecule = new RetrieveAtomContainer();
 	protected RetrieveField retrieveField = new RetrieveField();
@@ -142,22 +141,32 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	protected Hashtable<String,Profile<Property>> properties ;
 	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();
 	protected UpdateExecutor<IQueryUpdate> updateExecutor = new UpdateExecutor<IQueryUpdate>();
+	protected QueryExecutor<RetrieveAtomContainer> queryMolecule;
 	protected QueryExecutor<IQueryObject> queryExecutor;
+	protected QueryExecutor<RetrieveField> queryFieldExecutor;
 	protected PropertyChangeListener propertyListener;
 	protected StructureStatisticsProcessor statsProcessor = new StructureStatisticsProcessor();
 	protected IQueryRetrieval[] queryFields = new IQueryRetrieval[] { 
 			FIELDS.CONSENSUSLABEL.getQuery(), FIELDS.DATASET.getQuery(), FIELDS.STRUCTURELABEL.getQuery() };
-
+	protected StructureRecord workingRecord;
 	
 	public StoredQueryTableModel() {
+		this(true);
+	}
+	public StoredQueryTableModel(boolean chemicalsOnly) {
 		super();
+		queryMolecule = new QueryExecutor<RetrieveAtomContainer>();
+		queryMolecule.setCache(true);
+		queryFieldExecutor = new QueryExecutor<RetrieveField>();
+		queryFieldExecutor.setCache(true);
 		retrieveMolecule.setValue(new StructureRecord());
 		retrieveField.setValue(new StructureRecord());
 		retrieveField.setSearchByAlias(true);
 		order.put(new Integer(2), Boolean.FALSE);
 		storedResults = new QueryStoredResults();
+		storedResults.setChemicalsOnly(chemicalsOnly);
 		queryExecutor = new QueryExecutor<IQueryObject>();
-		queryExecutor.setResultTypeConcurency(ResultSet.CONCUR_UPDATABLE);
+		queryExecutor.setResultTypeConcurency(ResultSet.CONCUR_READ_ONLY | ResultSet.TYPE_SCROLL_INSENSITIVE);
 		properties = new Hashtable<String,Profile<Property>>();		
 		propertyListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -166,7 +175,12 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			}
 		};
 	}
-
+	public void setChemicalsOnly(boolean value) {
+		storedResults.setChemicalsOnly(value);
+	}
+	public boolean isChemicalsOnly() {
+		return storedResults.isChemicalsOnly();
+	}
 	public IStoredQuery getQuery() {
 		return storedResults.getFieldname();
 	}
@@ -174,18 +188,27 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		return connection;
 	}
 	public void setConnection(Connection connection) throws SQLException, DbAmbitException {
-		this.connection = connection;
+
 		setResultSet(null);
 
 		statsProcessor.setConnection(connection);
 		
-		if (structureRecords != null)
-			structureRecords.close();
-		structureRecords = null;
+		try {
+			queryMolecule.closeResults(getResultSet());
+			queryMolecule.close();
+			queryMolecule.setConnection(connection);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 
-		if (structureField != null)
-			structureField.close();
-		structureField = null;
+		try {
+			queryFieldExecutor.closeResults(getResultSet());
+			queryFieldExecutor.close();
+			queryFieldExecutor.setConnection(connection);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		
 		try {
 			queryExecutor.closeResults(getResultSet());
 			queryExecutor.close();
@@ -198,6 +221,14 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			updateExecutor.setConnection(connection);
 		} catch (Exception x) {
 			x.printStackTrace();
+		}
+		try {
+			if (this.connection != null) this.connection.close();
+
+		} catch (Exception x) {
+			//x.printStackTrace();
+		} finally {
+			this.connection = connection;
 		}
 	}		
 	public void setQuery(IStoredQuery query) throws SQLException, AmbitException {
@@ -218,18 +249,16 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	
 	
 
-	protected Object getField(int idstructure,Property fieldname) throws SQLException, AmbitException {
+	protected Object getField(IStructureRecord record,Property fieldname) throws SQLException, AmbitException {
 		if (getConnection() == null) return null;
-		if (structureField == null) structureField = 
-			getConnection().prepareStatement(retrieveField.getSQL());
 		
 		retrieveField.setFieldname(fieldname);
-		retrieveField.getValue().setIdstructure(idstructure);
-		structureField.clearParameters();
-		QueryExecutor.setParameters(structureField, retrieveField.getParameters());
-		
+		retrieveField.getValue().setIdchemical(record.getIdchemical());
+		retrieveField.getValue().setIdstructure(record.getIdstructure());
+		ResultSet rs = null;
 		try {
-			ResultSet rs = structureField.executeQuery();
+			retrieveField.setChemicalsOnly(storedResults.isChemicalsOnly());
+			rs = queryFieldExecutor.process(retrieveField);
 			ArrayList list = new ArrayList();
 			Object value = null;
 			while (rs.next()) {
@@ -238,33 +267,31 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	    			if (value != null) {
 	    				if (list.indexOf(value)<0)
 	    					list.add(value);
-	    			    break;
+	    			    
 	    			}
 				} catch (Exception x) {
 					value = null;
 				}
 		    }
-			rs.close();
 			if (list.size()<=1) return value;
 			else {
 				StringBuilder b = new StringBuilder();
-				for (Object item:list) {b.append(item.toString()); b.append(","); }
+				for (Object item:list) {b.append(item.toString()); b.append("; "); }
 				return b.toString();
 			}
 		} catch (Exception x) {
 			x.printStackTrace();
 			return null;
 		} finally {
-				
+		    try {rs.close();} catch (Exception xx) {}
 		}
 	}	
-	public IAtomContainer getAtomContainer(int idstructure) throws SQLException, AmbitException {
-		if (structureRecords == null) structureRecords = 
-			getConnection().prepareStatement(AbstractStructureRetrieval.sql);
-		structureRecords.clearParameters();
-		structureRecords.setInt(1,idstructure);
+	public IAtomContainer getAtomContainer(IStructureRecord record) throws SQLException, AmbitException {
+
 		try {
-			ResultSet rs = structureRecords.executeQuery();
+			retrieveMolecule.setFieldname(isChemicalsOnly());
+			retrieveMolecule.setValue(record);
+			ResultSet rs = queryMolecule.process(retrieveMolecule);
 			IAtomContainer ac = null;
 			while (rs.next()) {
 				try {
@@ -319,8 +346,12 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	        		switch (columnIndex) {
 	        		case 0: {
 	        			try {
-	        				records.updateBoolean("selected", (Boolean)value);
-	        				records.updateRow();
+	        				StructureRecord r = new StructureRecord();
+	        				r.setIdstructure(records.getInt(AbstractStructureQuery.FIELD_NAMES.idstructure.toString()));
+	        				r.setIdchemical(records.getInt(AbstractStructureQuery.FIELD_NAMES.idchemical.toString()));
+	        				selectRecords(r,(Boolean)value);
+	        				//records.updateBoolean("selected", (Boolean)value);
+	        				//records.updateRow();
 	        				break;
 	        			} catch (Exception x) {
 	        				x.printStackTrace();
@@ -336,13 +367,21 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		
 
 	}
-	public String getStatsAt(int idstructure) {
+	public String getStatsAt(IStructureRecord record) {
 		try {
-	        IStructureRecord record = new StructureRecord();
-	        record.setIdstructure(records.getInt(AbstractStructureQuery.FIELD_NAMES.idstructure.toString()));
 	        return statsProcessor.process(record).toString();
 		} catch (Exception x) {
 			return "";
+		}
+	}
+	public IStructureRecord getRecord(int rowIndex, int columnIndex) {
+		try {
+			if (workingRecord == null) workingRecord = new StructureRecord(-1,-1,null,null);
+			workingRecord.setIdstructure(records.getInt(AbstractStructureQuery.FIELD_NAMES.idstructure.toString()));
+			workingRecord.setIdchemical(records.getInt(AbstractStructureQuery.FIELD_NAMES.idchemical.toString()));
+			return workingRecord;
+		} catch (Exception x) {
+			return null;
 		}
 	}
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -351,22 +390,22 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
             records.relative(rowIndex);			
             if (records.isAfterLast()) return "";
             
-            int idstructure = records.getInt(AbstractStructureQuery.FIELD_NAMES.idstructure.toString());
+            IStructureRecord record = getRecord(rowIndex, columnIndex);
+            if (record == null) return null;
             //System.out.println("idstruc" +idstructure);
 			switch (columnIndex) {
 			//selected
 			case 0: return records.getBoolean(AbstractStructureQuery.FIELD_NAMES.selected.toString()); 
-			case 1: return getAtomContainer(idstructure);
+			case 1: return getAtomContainer(record);
 			case 2: return records.getFloat(AbstractStructureQuery.FIELD_NAMES.metric.toString());
 			default: {
 				int offset = getColumnCount()-FIELDS.values().length;
 				if (columnIndex >= offset) {
-					int idchemical = records.getInt(AbstractStructureQuery.FIELD_NAMES.idchemical.toString());
-					return getLabel(idchemical,idstructure,columnIndex-offset);
+					return getLabel(record,columnIndex-offset);
 				} else if (columnIndex < (getColumnCount()-1)) {
 					return (fields==null)?"":
-						getField(idstructure, ((Property)fields.getElementAt(columnIndex-3)));
-				} else return getStatsAt(idstructure);
+						getField(record, ((Property)fields.getElementAt(columnIndex-3)));
+				} else return getStatsAt(record);
 				//return records.getInt("idstructure");
 			}
 			}
@@ -375,12 +414,13 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		}
 	}
 
-	protected String getLabel(int idchemical,int idstructure,int offset) {
+	protected String getLabel(IStructureRecord record,int offset) {
 		ResultSet rs = null;
 		try {
+			
 			IQueryRetrieval q = queryFields[offset];
 			FIELDS field = FIELDS.values()[offset];
-			field.setParameters(q, idchemical, idstructure);
+			field.setParameters(q, record.getIdchemical(),record.getIdstructure());
 			rs = queryExecutor.process(q);
 			StringBuilder b = new StringBuilder();
 			String delimiter = "";
@@ -544,6 +584,16 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 
     	}
     }
+    protected void selectRecords(IStructureRecord record,boolean value) throws AmbitException,SQLException {
+    	if (storedResults.getFieldname()==null) return;
+    	SelectStoredQuery r = new SelectStoredQuery(value);
+    	r.setObject(record);
+    	r.setGroup(getQuery());
+    	int updated = updateExecutor.process(r);
+    	if (updated > 0)
+    		setQuery(getQuery());    	
+    }
+    
     protected void selectRecords(SELECTION_MODE mode) throws AmbitException,SQLException {
     	if (storedResults.getFieldname()==null) return;
     	UpdateSelectedRecords r = new UpdateSelectedRecords();
@@ -567,5 +617,5 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     	throw new  UnsupportedOperationException();
     	
     }
- 
+    
 }

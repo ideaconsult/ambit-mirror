@@ -44,8 +44,23 @@ import ambit2.db.update.AbstractUpdate;
  *
  */
 public class SelectStoredQuery  extends AbstractUpdate<IStoredQuery,IStructureRecord> {
+	protected boolean selected = true;
+	public SelectStoredQuery() {
+		this(true);
+	}
+	public SelectStoredQuery(boolean selected) {
+		this.selected = selected;
+	}	
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
 	public static final String[] select_sql = {
-		"update query_results,query, sessions set selected= not selected\n"+
+		"update query_results,query, sessions set selected= ?\n"+
 		"where query_results.idquery=? and idstructure=? and query_results.idquery=query.idquery\n"+
 		"and query.idsessions=sessions.idsessions and user_name=SUBSTRING_INDEX(user(),'@',1)"
 	};
@@ -53,8 +68,10 @@ public class SelectStoredQuery  extends AbstractUpdate<IStoredQuery,IStructureRe
 		if (getGroup()==null) throw new AmbitException("Query not defined");
 		if (getObject()==null) throw new AmbitException("Structure not defined");
 		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<Boolean>(Boolean.class, isSelected()));
 		params.add(new QueryParam<Integer>(Integer.class, getGroup().getId()));
 		params.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));	
+		
 		return params;
 	}
 
