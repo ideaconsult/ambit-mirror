@@ -44,6 +44,30 @@ public class DescriptorMopacShellTest {
 		Assert.assertEquals(78.113,r.get(6),1E-2); //Molecular weight
 		Assert.assertEquals(97.85217,r.get(2),1E-2); //FINAL HEAT OF FORMATION
 	}
+	
+	@Test
+	public void testCalculate2() throws Exception {
+		DescriptorMopacShell d = new DescriptorMopacShell();
+
+		String smiles = "[O-][N+](=O)C1=CC(Cl)=C(Cl)C=C1Cl";
+		//"[H]C1=C([H])C([H])=C([H])C([H])=C1([H])";
+		//todo add hydrogens
+		IAtomContainer ac = parser.parseSmiles(smiles);
+		DescriptorValue v = (DescriptorValue) d.calculate(ac);
+		Assert.assertEquals(Mopac7Reader.parameters.length,v.getNames().length);
+		Assert.assertEquals(DescriptorMopacShell.EHOMO,v.getNames()[7]);
+		Assert.assertEquals(DescriptorMopacShell.ELUMO,v.getNames()[8]);
+		
+		DoubleArrayResult r = (DoubleArrayResult) v.getValue();
+		System.out.println(r.get(7));
+		System.out.println(r.get(8));
+
+		Assert.assertEquals(-9.70887,r.get(7),1E-2); //ehomo
+		Assert.assertEquals(-3.54057,r.get(8),1E-2); //elumo
+	//	Assert.assertEquals(78.113,r.get(6),1E-2); //Molecular weight
+	//	Assert.assertEquals(97.85217,r.get(2),1E-2); //FINAL HEAT OF FORMATION
+	}
+	
 
 	@Test
 	public void testCalculateUnsupportedAtom() throws Exception {
