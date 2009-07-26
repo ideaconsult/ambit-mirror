@@ -12,7 +12,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -28,6 +27,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		super(context,request,response);
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
 	}
+
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws AmbitException {
@@ -43,6 +43,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			return new StringConvertor(new DatasetHTMLReporter());	
 		} else // (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 		*/
+
 		return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));			
 		
 	}

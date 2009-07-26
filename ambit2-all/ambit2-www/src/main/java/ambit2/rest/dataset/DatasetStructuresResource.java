@@ -16,6 +16,7 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 		super(context,request,response);
 		
 	}
+
 	@Override
 	protected QueryDataset createQuery(Context context, Request request,
 			Response response) throws AmbitException {
