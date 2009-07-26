@@ -33,7 +33,7 @@ public class StructureReporter extends QueryXMLReporter<QueryStructureByID> {
 		
 	}
 	@Override
-	protected void processItem(IStructureRecord record, Document output) {
+	public void processItem(IStructureRecord record, Document output) {
 		Element e_record = output.createElementNS(XMLTags.ns_opentox,node_structure);
         e_record.setAttribute(attr_idchemical,Integer.toString(record.getIdchemical()));
         e_record.setAttribute(attr_idstructure,Integer.toString(record.getIdstructure()));        
