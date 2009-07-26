@@ -32,22 +32,24 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		this.reference = reference;
 	}
 	@Override
-	protected void processItem(IStructureRecord record, Document output) {
+	public void processItem(IStructureRecord record, Document output) {
 		Element e_record = toURI(reference,output, record);
-        
+        /*
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_structures);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
         		parent.item(i).appendChild(e_record);
         		break;
         	}
+        */
+		output.appendChild(e_record);
 	}
 	@Override
 	public Document getOutput() throws AmbitException{
 		try {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			Element node = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_dataset);
-			node.appendChild(doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_structures));
+			node.appendChild(doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_features));
 			doc.appendChild(node);
 			return doc;
 		} catch (ParserConfigurationException x) {
@@ -60,9 +62,8 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 	}
 	public static Element toURI(Reference reference, Document doc, IStructureRecord record) {
-		Element e_uri = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_link);
-		Reference ref = new Reference(reference,XMLTags.node_structure+XMLTags.slash+record.getIdstructure());
-        e_uri.setAttribute(XMLTags.attr_href,ref.getTargetRef().toString());
+		Element e_uri = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_compound);
+        e_uri.setAttribute(XMLTags.attr_href,String.format("%s/%s/%d", (reference==null)?"":reference.toString(),XMLTags.node_compound,record.getIdchemical()));
         return e_uri;
 	}		
 

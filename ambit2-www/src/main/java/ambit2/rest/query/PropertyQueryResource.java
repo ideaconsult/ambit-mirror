@@ -5,7 +5,6 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
-import ambit2.base.data.Range;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
@@ -22,6 +21,7 @@ public class PropertyQueryResource extends StructureQueryResource<QueryField> {
 		}
 
 	}	
+
 	@Override
 	protected QueryField createQuery(Context context, Request request,
 			Response response) throws AmbitException {
