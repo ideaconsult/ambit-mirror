@@ -43,6 +43,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 		}
 
 	}
+
 	@Override
 	protected QuerySimilarityBitset createQuery(Context context,
 			Request request, Response response) throws AmbitException {
