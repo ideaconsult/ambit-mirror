@@ -27,7 +27,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 
 	@Override
-	protected void processItem(IStructureRecord item, Writer output) {
+	public void processItem(IStructureRecord item, Writer output) {
 		try {
 			output.write(item.getContent());
 			output.write("\n$$$$\n");

@@ -28,7 +28,7 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	
 	@Override
-	protected void processItem(IStructureRecord item, Document document) {
+	public void processItem(IStructureRecord item, Document document) {
 
 		try {
 			//TODO generate PDFcontent

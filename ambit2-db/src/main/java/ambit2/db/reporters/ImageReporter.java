@@ -36,7 +36,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		return super.getOutput();
 	}
 	@Override
-	protected void processItem(IStructureRecord item, OutputStream output) {
+	public void processItem(IStructureRecord item, OutputStream output) {
 		try {
 			ImageIO.write(depict.getImage(reader.process(item)),"png",output);
 			

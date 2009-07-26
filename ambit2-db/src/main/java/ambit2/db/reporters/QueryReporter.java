@@ -78,5 +78,5 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 			try {batch.close();} catch (Exception x) {}
 		}
 	}	
-	protected abstract void processItem(T item, Output output);
+	public abstract void processItem(T item, Output output);
 }

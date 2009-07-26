@@ -9,8 +9,6 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 
-import com.lowagie.text.Paragraph;
-
 public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Writer> {
 	/**
 	 * 
@@ -29,7 +27,7 @@ public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends 
 
 	
 	@Override
-	protected void processItem(IStructureRecord item, Writer writer) {
+	public void processItem(IStructureRecord item, Writer writer) {
 
 		try {
 			//TODO generate PDFcontent
