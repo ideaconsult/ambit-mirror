@@ -32,15 +32,21 @@ package ambit2.workflow.ui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.JPopupMenu;
 import javax.swing.table.TableModel;
 
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.SessionID;
+import ambit2.db.results.StoredQueryTableModel;
 import ambit2.ui.QueryBrowser;
 import ambit2.ui.table.BrowsableTableModel;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
+import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
@@ -84,6 +90,33 @@ public abstract class AbstractStructureBrowserPanel<T, Table extends TableModel>
         		int record = super.setRecord(row, col);
         		processRecord(record);
         		return record;
+        	}
+        	@Override
+        	protected void buildPopupMenu(Component component,
+        				Object value, final int row, final int col, JPopupMenu menu) {
+       			super.buildPopupMenu(component, value, row, col, menu);
+       			menu.add(new AbstractAction("Show all structures/Show only one structure per chemical") {
+       				public void actionPerformed(ActionEvent e) {
+       					// TODO Auto-generated method stub
+       					((StoredQueryTableModel)tableModel).setChemicalsOnly(
+       	       					!((StoredQueryTableModel)tableModel).isChemicalsOnly());
+       					putValue(NAME,((StoredQueryTableModel)tableModel).isChemicalsOnly()?"Structures":"Chemicals");
+       				}
+       			});
+       			/*the processor closes conneciton and everything then fails
+       			menu.add(new AbstractAction("Find similar structures") {
+       				public void actionPerformed(ActionEvent e) {
+       					try {
+       						
+       						SessionID session = (SessionID) getWorkflowContext().get(DBWorkflowContext.SESSION);
+       						((StoredQueryTableModel)tableModel).findSimilar( session, row,  col);
+       					} catch (Exception x) {
+       						x.printStackTrace();
+       					}
+       				}
+       			});       			
+       			*/
+       			
         	}
         };
         browser.setMode(BrowserMode.Spreadsheet,BrowserMode.Columns);
