@@ -41,9 +41,12 @@ public class DatasetReporter extends QueryReporter<SourceDataset, IQueryRetrieva
 	 */
 	private static final long serialVersionUID = -1402969311380709143L;
 	public static Element toURI(Reference reference, Document doc, SourceDataset dataset) {
+
 		Element e_uri = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_link);
-		Reference ref = new Reference(reference,XMLTags.node_dataset+XMLTags.slash+Reference.encode(dataset.getName()));
-        e_uri.setAttribute(XMLTags.attr_href,ref.getTargetRef().toString());
+		e_uri.setAttribute(XMLTags.attr_href,
+				String.format("%s/%s/%s", 
+						reference.toString(),XMLTags.node_dataset,Reference.encode(dataset.getName()) )
+						);
         return e_uri;
 	}		
 	public DatasetReporter(Reference reference) {
@@ -79,7 +82,7 @@ public class DatasetReporter extends QueryReporter<SourceDataset, IQueryRetrieva
 		
 	}
 	@Override
-	protected void processItem(SourceDataset dataset, Document doc) {
+	public void processItem(SourceDataset dataset, Document doc) {
 		
 		Element e_dataset = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_dataset);
         e_dataset.setAttribute(XMLTags.attr_id,Integer.toString(dataset.getId()));

@@ -18,6 +18,7 @@ public class DatasetResource extends QueryResource<IQueryRetrieval<SourceDataset
 	public DatasetResource(Context context, Request request, Response response) {
 		super(context,request,response);
 	}
+
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws AmbitException {
@@ -29,6 +30,7 @@ public class DatasetResource extends QueryResource<IQueryRetrieval<SourceDataset
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
+		
 		return new DocumentConvertor(new DatasetReporter(getRequest().getRootRef()));
 	}
 

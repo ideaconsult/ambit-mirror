@@ -18,7 +18,7 @@ public class DatasetHTMLReporter extends QueryReporter<SourceDataset, IQueryRetr
 	private static final long serialVersionUID = -7959033048710547839L;
 
 	@Override
-	protected void processItem(SourceDataset item, Writer output) {
+	public void processItem(SourceDataset item, Writer output) {
 		try {
 		output.write("<a href='");
 		output.write("/dataset/");

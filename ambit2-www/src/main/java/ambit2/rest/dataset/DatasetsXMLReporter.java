@@ -51,8 +51,8 @@ public class DatasetsXMLReporter extends QueryReporter<SourceDataset, IQueryRetr
 	}
 
 	@Override
-	protected void processItem(SourceDataset dataset, Document doc) {
-        Element e_dataset = DatasetReporter.toURI(reference,doc, dataset);
+	public void processItem(SourceDataset dataset, Document doc) {
+        Element e_dataset = DatasetReporter.toURI(reference ,doc, dataset);
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_datasets);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
