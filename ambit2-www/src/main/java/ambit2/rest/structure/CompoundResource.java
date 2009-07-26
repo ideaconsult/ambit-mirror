@@ -45,10 +45,6 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 	}
 	
 	@Override
-	public Variant getPreferredVariant() {
-		return new Variant(ChemicalMediaType.CHEMICAL_MDLSDF);
-	}
-	@Override
 	public String[] URI_to_handle() {
 		return new String[] {compoundID,compoundID_media};
 	}
