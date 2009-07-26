@@ -32,7 +32,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.IFilteredColumns;
@@ -45,8 +47,10 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.TypedListModel;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.ProcessorCreateQuery;
 import ambit2.db.processors.StructureStatisticsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveAtomContainer;
@@ -58,6 +62,7 @@ import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.qlabel.QueryConsensus;
 import ambit2.db.search.qlabel.QueryQLabel;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QuerySimilarityStructure;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.SelectStoredQuery;
@@ -129,7 +134,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	}
 	private static final long serialVersionUID = -7273714299667490819L;
 	protected SELECTION_MODE selectionMode = SELECTION_MODE.NO_CHANGE;
-	protected QueryStoredResults storedResults;
+	protected AbstractStructureQuery storedResults;
 	
 	
 	//protected PreparedStatement structureRecords = null;
@@ -175,14 +180,36 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			}
 		};
 	}
+	public void findSimilar(SessionID session, int row, int col) throws AmbitException {
+
+		ProcessorCreateQuery p = new ProcessorCreateQuery();
+		try {
+			p.setSession(session);
+			IMoleculeSet set = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+			IStructureRecord record =  getRecord(row, col);
+			set.addAtomContainer(getAtomContainer(record));		
+			QuerySimilarityStructure q = new QuerySimilarityStructure();
+			q.setValue(set);			
+			p.setConnection(getConnection());
+			IStoredQuery newQuery = p.process(q);
+			setQuery(q);
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		} finally {
+			try {	p.close(); } catch (Exception x) {}
+		}
+	}
 	public void setChemicalsOnly(boolean value) {
 		storedResults.setChemicalsOnly(value);
+		try {
+		setQuery(getQuery());
+		} catch (Exception x) {}
 	}
 	public boolean isChemicalsOnly() {
 		return storedResults.isChemicalsOnly();
 	}
-	public IStoredQuery getQuery() {
-		return storedResults.getFieldname();
+	public AbstractStructureQuery getQuery() {
+		return storedResults;
 	}
 	public Connection getConnection() {
 		return connection;
@@ -231,15 +258,15 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 			this.connection = connection;
 		}
 	}		
-	public void setQuery(IStoredQuery query) throws SQLException, AmbitException {
+	public void setQuery(AbstractStructureQuery query) throws SQLException, AmbitException {
 		
-		storedResults.setFieldname(query);
-		query.setRows(0);
+		storedResults = query;
 		setResultSet(null);
 		if (getConnection() == null) throw new AmbitException("No connection!");
 		try {
+			storedResults.setMaxRecords(maxRecords);
 			setResultSet(queryExecutor.process(storedResults));
-			query.setRows(maxRecords);		
+			
 		} catch (SQLException x) {
 			setResultSet(null);
 			throw new AmbitException(x);
@@ -415,6 +442,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	}
 
 	protected String getLabel(IStructureRecord record,int offset) {
+		if (offset>=queryFields.length) return "";
 		ResultSet rs = null;
 		try {
 			
@@ -537,7 +565,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     		queryExecutor.closeResults(getResultSet());
     		setResultSet(null);
     		storedResults.setOrder_descendant(!ascending);
-    		setQuery(storedResults.getFieldname());
+    		setQuery(storedResults);
     	} catch (Exception x) {
     		throw new UnsupportedOperationException(x);
     	}
@@ -564,17 +592,17 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
         	} 
         	case HIDE_SELECTIONS: {
         		storedResults.setValue(false);
-        		setQuery(storedResults.getFieldname());
+        		setQuery(storedResults);
         		break;
         	}
         	case SHOW_ALL: {
         		storedResults.setValue(null);
-        		setQuery(storedResults.getFieldname());
+        		setQuery(storedResults);
         		break;        		
         	}
         	case SHOW_SELECTIONS: {
         		storedResults.setValue(true);
-        		setQuery(storedResults.getFieldname());
+        		setQuery(storedResults);
         		break;        		
         	}
         	}
@@ -585,28 +613,43 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
     	}
     }
     protected void selectRecords(IStructureRecord record,boolean value) throws AmbitException,SQLException {
-    	if (storedResults.getFieldname()==null) return;
+    	IStoredQuery query = null;
+    	if (storedResults==null) return;
+    	if (storedResults instanceof QueryStoredResults) query = ((QueryStoredResults)storedResults).getFieldname();
+    	else if (storedResults instanceof IStoredQuery) query = (IStoredQuery) storedResults;
+    	else return;
     	SelectStoredQuery r = new SelectStoredQuery(value);
     	r.setObject(record);
-    	r.setGroup(getQuery());
+    	r.setGroup(query);
     	int updated = updateExecutor.process(r);
     	if (updated > 0)
     		setQuery(getQuery());    	
     }
     
     protected void selectRecords(SELECTION_MODE mode) throws AmbitException,SQLException {
-    	if (storedResults.getFieldname()==null) return;
+    	IStoredQuery query = null;
+    	if (storedResults==null) return;
+    	if (storedResults instanceof QueryStoredResults) query = ((QueryStoredResults)storedResults).getFieldname();
+    	else if (storedResults instanceof IStoredQuery) query = (IStoredQuery) storedResults;
+    	else return;
+    	
     	UpdateSelectedRecords r = new UpdateSelectedRecords();
     	r.setObject(mode);
-    	r.setGroup(getQuery());
+    	r.setGroup(query);
     	int updated = updateExecutor.process(r);
     	if (updated > 0)
     		setQuery(getQuery());    	
     }
     public void dropFilter(int column) throws UnsupportedOperationException {
     	try {
-    		storedResults.setValue(null);
-    		setQuery(storedResults.getFieldname());
+        	IStoredQuery query = null;
+        	if (storedResults==null) return;
+        	if (storedResults instanceof QueryStoredResults) query = ((QueryStoredResults)storedResults).getFieldname();
+        	else if (storedResults instanceof IStoredQuery) query = (IStoredQuery) storedResults;
+        	else return;
+        	
+        	//((IStoredQuery)storedResults).getQuery().setValue(null);
+    //		setQuery(storedResults);
     	} catch (Exception x) {
     		throw new UnsupportedOperationException(x);
     	}

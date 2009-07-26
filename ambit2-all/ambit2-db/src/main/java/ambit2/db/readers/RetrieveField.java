@@ -18,6 +18,16 @@ public class RetrieveField extends AbstractQuery<Property,IStructureRecord,EQCon
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
 	protected boolean searchByAlias = false;
+	protected boolean chemicalsOnly = false; 
+	
+	public boolean isChemicalsOnly() {
+		return chemicalsOnly;
+	}
+
+	public void setChemicalsOnly(boolean chemicalsOnly) {
+		this.chemicalsOnly = chemicalsOnly;
+	}
+
 	public boolean isSearchByAlias() {
 		return searchByAlias;
 	}
@@ -26,27 +36,33 @@ public class RetrieveField extends AbstractQuery<Property,IStructureRecord,EQCon
 		this.searchByAlias = searchByAlias;
 	}
 	protected final String sql = 
-					"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
-					"(\n"+
-					"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values where idstructure=? and value_num is not null\n"+
-					"union\n"+
-					"select idstructure,idproperty,value as value_string,null,0 as idtype from property_values join property_string using(idvalue_string) where idvalue_string is not null and idstructure=?\n"+
-					") as L using (idproperty)\n";
+		"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
+		"(\n"+
+		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values where idstructure=? and value_num is not null\n"+
+		"union\n"+
+		"select idstructure,idproperty,value as value_string,null,0 as idtype from property_values join property_string using(idvalue_string) where idvalue_string is not null and idstructure=?\n"+
+		") as L using (idproperty)\n";
+	protected final String sql_chemical = 
+		"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
+		"(\n"+
+		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values join structure using(idstructure) where idchemical=? and value_num is not null\n"+
+		"union\n"+
+		"select idstructure,idproperty,value as value_string,null,0 as idtype from structure join property_values using(idstructure) join property_string using(idvalue_string) where idvalue_string is not null and idchemical=?\n"+
+		") as L using (idproperty)\n";	
 	protected final String where = "where %s=?";
 
 	
 	public String getSQL() throws AmbitException {
 		if ("".equals(getFieldname()))
-			return sql
-;
+			return isChemicalsOnly()?sql_chemical:sql;
 		else
-			return sql + String.format(where,searchByAlias?"comments":"name");	
+			return (isChemicalsOnly()?sql_chemical:sql) + String.format(where,searchByAlias?"comments":"name");	
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		for (int i=0; i < 2; i++) {
-			params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
+			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 		}
 		if (!"".equals(getFieldname()))
 			params.add(new QueryParam<String>(String.class, searchByAlias?getFieldname().getLabel():getFieldname().getName()));		

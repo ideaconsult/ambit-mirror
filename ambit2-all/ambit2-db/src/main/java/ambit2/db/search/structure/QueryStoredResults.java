@@ -42,26 +42,12 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 	 * 
 	 */
 	private static final long serialVersionUID = 4597129739347497000L;
-	public static final String sqlField="select idquery,idchemical,idstructure,selected, metric from query_results %s where %s %s %s %s order by metric %s";
+	public static final String sqlField="select idquery,idchemical,idstructure,selected, %s from query_results %s where %s %s %s %s order by metric %s";
 	//public static final String join="join query using(idquery)";
 	public static final String join="";
 	public static final String where_query = "idquery=?";
 	public static final String where_name = "selected = ?";
-	protected boolean order_descendant=true;
-	protected boolean chemicalsOnly = false;
 
-	public boolean isChemicalsOnly() {
-		return chemicalsOnly;
-	}
-	public void setChemicalsOnly(boolean chemicalsOnly) {
-		this.chemicalsOnly = chemicalsOnly;
-	}
-	public boolean isOrder_descendant() {
-		return order_descendant;
-	}
-	public void setOrder_descendant(boolean order_descendant) {
-		this.order_descendant = order_descendant;
-	}
 	public QueryStoredResults() {
 		setCondition(EQCondition.getInstance());
 	}
@@ -84,7 +70,9 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 		String a2 = (getValue()==null)?"":where_name;
 		String j = (getValue()==null)?"":join;
 		String a3 = ((getFieldname()!=null)&&(getValue()!=null))?"and":"";
-		return String.format(sqlField,j,a1,a3,a2,
+		return String.format(sqlField,
+				chemicalsOnly?"max(metric) as metric":"metric",
+				j,a1,a3,a2,
 				chemicalsOnly?"group by idchemical":"",
 				order_descendant?"desc":"asc");
 	}
