@@ -37,11 +37,7 @@ import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 import javax.vecmath.Vector2d;
 
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRTableModelDataSource;
-import net.sf.jasperreports.view.JasperViewer;
+
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -94,12 +90,14 @@ public class QueryBrowserTest {
 	}
 	
 	public static void main(String[] args) throws Exception {
+		/*
 		String file = JasperCompileManager.compileReportToFile("src/test/resources/query.jrxml");
 		JasperPrint jasperPrint = JasperFillManager.fillReport(file, 
 				new HashMap(),
 				new JRTableModelDataSource(new TestTableModel()));
 		JasperViewer jasperViewer = new JasperViewer(jasperPrint);
 		jasperViewer.setVisible(true);		
+		*/
 	}
 }
 
