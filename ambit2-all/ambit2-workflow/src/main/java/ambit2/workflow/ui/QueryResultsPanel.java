@@ -46,6 +46,8 @@ import ambit2.db.SessionID;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.results.StoredQueryTableModel;
 import ambit2.db.search.IStoredQuery;
+import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
@@ -54,8 +56,9 @@ import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;
 
 
-public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuery,StoredQueryTableModel> 
-											implements IAmbitEditor<IStoredQuery>, IDBProcessor<IStoredQuery, IStoredQuery> {
+public class QueryResultsPanel extends AbstractStructureBrowserPanel<AbstractStructureQuery,StoredQueryTableModel> 
+											implements IAmbitEditor<AbstractStructureQuery>, 
+														IDBProcessor<IStoredQuery, AbstractStructureQuery> {
 
     /**
      * 
@@ -100,10 +103,12 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     protected void animate(PropertyChangeEvent arg0) {
         if (DBWorkflowContext.STOREDQUERY.equals(arg0.getPropertyName())) {
             Object o = arg0.getNewValue();
- 
             if (o instanceof IStoredQuery) {
+            	o = new QueryStoredResults((IStoredQuery)o);
+            }
+            if (o instanceof AbstractStructureQuery) {
                 try {
-                    setQuery((IStoredQuery)o);
+                    setQuery((AbstractStructureQuery)o);
                 } catch (Exception x) {
                     x.printStackTrace();
                 }
@@ -127,10 +132,10 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
         
     }
 
-    public synchronized IStoredQuery getObject() {
+    public synchronized AbstractStructureQuery getObject() {
         return tableModel.getQuery();
     }
-    public void setObject(IStoredQuery query) {
+    public void setObject(AbstractStructureQuery query) {
     	try {
     		tableModel.setQuery(query);
     	} catch (Exception x) {
@@ -138,7 +143,7 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     	}
     	
     }
-    public synchronized void setQuery(IStoredQuery query) throws AmbitException {
+    public synchronized void setQuery(AbstractStructureQuery query) throws AmbitException {
     	try {
 	        Connection c = ((DataSource)getWorkflowContext().get(DBWorkflowContext.DATASOURCE)).getConnection();
 	        tableModel.setConnection(c);
@@ -173,8 +178,8 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<IStoredQuer
     	}
     	
     }
-    public IStoredQuery process(IStoredQuery target) throws AmbitException {
-    	return target;
+    public AbstractStructureQuery process(IStoredQuery target) throws AmbitException {
+    	return (AbstractStructureQuery)target.getQuery();
     }
     public void close() throws SQLException {
     	if (getConnection()!=null)
