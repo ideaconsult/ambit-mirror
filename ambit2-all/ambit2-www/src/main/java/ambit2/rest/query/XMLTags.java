@@ -21,8 +21,8 @@ public class XMLTags {
 	public final static String node_ambit = "ambit";
 	public final static String node_dataset = "dataset";
 	public final static String node_datasets = "datasets";
-	public final static String node_structures = "structures";
-	public final static String node_structure = "structure";
+	public final static String node_compound = "compound";
+	public final static String node_conformer = "conformer";
 	public final static String node_features = "features";
 	public final static String node_feature = "feature";
 	public final static String node_reference = "reference";

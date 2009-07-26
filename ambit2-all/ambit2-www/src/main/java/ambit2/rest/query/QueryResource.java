@@ -9,18 +9,18 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
-import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.RepresentationConvertor;
 
 
-public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Resource {
+public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource {
 	protected Q query;
 	protected AmbitException error = null;	
 	
@@ -40,6 +40,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Res
 	public abstract RepresentationConvertor createConvertor(Variant variant) throws AmbitException;
 
 	public Representation getRepresentation(Variant variant) {
+
 		try {
 	        if (query != null) {
 	        	RepresentationConvertor convertor = null;
@@ -94,5 +95,4 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Res
 		}
 	}		
 		
-
 }
