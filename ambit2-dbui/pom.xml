@@ -21,12 +21,19 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-db</artifactId>
-    	<version>${project.version}</version>
+    	<version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-ui</artifactId>
-    	<version>${project.version}</version>
+    	<version>2.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+    	<groupId>jfree</groupId>
+    	<artifactId>jfreechart</artifactId>
+    	<version>1.0.12</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
     </dependency>
   </dependencies>
 <licenses>
