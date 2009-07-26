@@ -19,7 +19,7 @@ public class DocumentConvertor<T,Q extends IQueryRetrieval<T>>  extends Represen
 	 */
 	private static final long serialVersionUID = 6126693410309179856L;
 	
-	public org.restlet.resource.Representation process(Document doc) throws AmbitException {
+	public Representation process(Document doc) throws AmbitException {
 			return new DomRepresentation(MediaType.TEXT_XML,doc);
 	}
 

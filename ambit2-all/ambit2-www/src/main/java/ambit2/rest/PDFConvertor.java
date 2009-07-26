@@ -7,31 +7,40 @@ import org.restlet.data.MediaType;
 import org.restlet.resource.OutputRepresentation;
 import org.restlet.resource.Representation;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
-public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends RepresentationConvertor<T,Q,OutputStream> {
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfWriter;
+
+
+public class PDFConvertor<T,Q extends IQueryRetrieval<T>>  extends RepresentationConvertor<T,Q,Document> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7974532412944774457L;
 	
-	public ImageConvertor(QueryReporter<T, Q, OutputStream> reporter,MediaType mediaType) {
-		super(reporter,mediaType);
+	public PDFConvertor(QueryReporter<T, Q, Document> reporter) {
+		super(reporter);
 	}
 
 	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {
-		 return new OutputRepresentation(mediaType) {
+		 return new OutputRepresentation(MediaType.APPLICATION_PDF) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {
+	            	Document document = null;   
+	            	PdfWriter pdfWriter = null;
 	            	try {
-	            		getReporter().setOutput(stream);
+	            		document = new Document(PageSize.A4, 80, 50, 30, 65);
+	            		pdfWriter = PdfWriter.getInstance(document, stream);
+	                    //writer.setViewerPreferences(PdfWriter.HideMenubar| PdfWriter.HideToolbar);
+	                    pdfWriter.setViewerPreferences(PdfWriter.PageModeUseThumbs | PdfWriter.PageModeUseOutlines);
+	            		getReporter().setOutput(document);
 	            		getReporter().process(query);
-	            		//writer.flush();
-	            		//stream.flush();
-	            	} catch (AmbitException x) {
+	            		
+	            	} catch (Exception x) {
 	            		Throwable ex = x;
 	            		while (ex!=null) {
 	            			if (ex instanceof IOException) 
@@ -40,7 +49,9 @@ public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends Representat
 	            		}
 	            		x.printStackTrace();
 	            	} finally {
+	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
+	            		pdfWriter.close();
 	            	}
 	            }
 	        };		

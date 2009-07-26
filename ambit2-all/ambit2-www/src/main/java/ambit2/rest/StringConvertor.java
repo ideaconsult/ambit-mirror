@@ -24,7 +24,7 @@ public class StringConvertor<T,Q extends IQueryRetrieval<T>>  extends Representa
 	 */
 	private static final long serialVersionUID = 6126693410309179856L;
 	
-	public org.restlet.resource.Representation process(Document doc) throws AmbitException {
+	public Representation process(Document doc) throws AmbitException {
 			return new DomRepresentation(MediaType.TEXT_XML,doc);
 	}
 	public StringConvertor(QueryReporter<T, Q, Writer> reporter,MediaType mediaType) {

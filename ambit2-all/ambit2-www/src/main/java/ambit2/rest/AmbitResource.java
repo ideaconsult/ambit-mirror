@@ -1,16 +1,11 @@
 package ambit2.rest;
 
-import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
-
-import ambit2.rest.pubchem.PubchemResource;
 
 public class AmbitResource extends Resource {
 	protected String[][] uri = {
@@ -26,8 +21,8 @@ public class AmbitResource extends Resource {
 			{"/daylight/depict/c1ccccc1","Structure diagram (based on Daylight depict"},
 			{"/build3d/smiles/c1ccccc1","Generate 3D structure"}
 	};
-	public AmbitResource(Context context, Request request, Response response) {
-		super(context,request,response);
+	public AmbitResource() {
+		super();
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
@@ -35,8 +30,12 @@ public class AmbitResource extends Resource {
 		//consumer = new DatasetConsumer();
 
 	}
+	
+
+	
 	@Override
 	public Representation getRepresentation(Variant variant) {
+	    System.out.println(getRequest().getAttributes());    
 		try {
 			if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 				StringBuilder xml = new StringBuilder();
@@ -108,8 +107,5 @@ public class AmbitResource extends Resource {
 			MediaType.TEXT_PLAIN);			
 		}
 	}
-	@Override
-	public boolean allowPost() {
-		return false;
-	}	
+
 }
