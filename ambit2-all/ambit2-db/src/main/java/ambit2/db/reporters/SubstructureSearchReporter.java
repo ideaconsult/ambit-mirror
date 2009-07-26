@@ -22,7 +22,7 @@ public abstract class SubstructureSearchReporter<Output> extends QueryReporter<I
 			};
 		});	
 	}
-	protected void processItem(IStructureRecord item, Output output) {
+	public void processItem(IStructureRecord item, Output output) {
 		
 	};
 }

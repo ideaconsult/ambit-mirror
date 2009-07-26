@@ -31,7 +31,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		});	
 	}
 	@Override
-	protected void processItem(IStructureRecord item, Writer output) {
+	public void processItem(IStructureRecord item, Writer output) {
 		try {
 			Object smiles = item.getProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
 			if (smiles == null)
