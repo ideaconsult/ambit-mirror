@@ -78,7 +78,7 @@ public class EditorPreferences {
 		
 		{"ambit2.base.data.StructureRecord","ambit2.workflow.ui.StructureRecordEditor"},		
 		
-		{"ambit2.db.search.StoredQuery","ambit2.workflow.ui.QueryResultsPanel"},
+		{"ambit2.db.search.StoredQuery","ambit2.workflow.ui.StoredQueryResultsPanel"},
 		{"ambit2.db.search.QueryInfo","ambit2.dbui.QueryInfoEditor"},
 		{"ambit2.base.data.StringBean","ambit2.ui.editors.StringBeanEditor"},
 		{"ambit2.core.io.FileInputState","ambit2.ui.editors.FileSelector"},

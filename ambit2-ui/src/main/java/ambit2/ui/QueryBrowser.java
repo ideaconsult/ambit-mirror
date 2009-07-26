@@ -29,6 +29,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Menu;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -313,19 +314,7 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 					int col = browser_table.columnAtPoint(e.getPoint());
 					Object value = browser_table.getValueAt(row, col);
 					JPopupMenu menu = new JPopupMenu();
-					
-					if (value instanceof IAtomContainer) {
-						menu.add(new Show3DAction(e.getComponent(),(IAtomContainer)value,false));
-						menu.add(new Show3DAction(e.getComponent(),(IAtomContainer)value,true));
-					} else {
-						menu.add(new ShowProperty(menu,value,false));
-						try {
-							Object o = browser_table.getModel().getValueAt(row, Integer.MAX_VALUE);
-							if (o !=null) menu.add(new ShowProperty(menu,o,true));
-						} catch (Exception x) {
-							x.printStackTrace();
-						}					
-					}
+					buildPopupMenu(e.getComponent(), value, row, col, menu);
 					menu.show(e.getComponent(), e.getX(), e.getY());
 
 			
@@ -366,6 +355,21 @@ public class QueryBrowser<T extends TableModel> extends JPanel implements Proper
 	    setCellSize( table);
 		return table;
 	}	
+	protected void buildPopupMenu(Component component,Object value, int row, int col, JPopupMenu menu) {
+		if (value instanceof IAtomContainer) {
+			menu.add(new Show3DAction(component,(IAtomContainer)value,false));
+			menu.add(new Show3DAction(component,(IAtomContainer)value,true));
+		} else {
+			menu.add(new ShowProperty(menu,value,false));
+			
+			try {
+				Object o = browser_table.getModel().getValueAt(row, Integer.MAX_VALUE);
+				if (o !=null) menu.add(new ShowProperty(menu,o,true));
+			} catch (Exception x) {
+				x.printStackTrace();
+			}					
+		}		
+	}
 	protected int setRecord(int row, int col) {
 
 		int record = row;
@@ -661,6 +665,7 @@ class ShowProperty extends MyAction<Object> {
 	    clipboard.setContents( stringSelection, null );
 	}
 }
+
 class Show3DAction extends MyAction<IAtomContainer> {
 	/**
 	 * 
