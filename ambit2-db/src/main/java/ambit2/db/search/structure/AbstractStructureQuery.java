@@ -32,8 +32,6 @@ package ambit2.db.search.structure;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.batik.ext.awt.image.spi.ImageTagRegistry;
-
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -51,6 +49,9 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 	 */
 	private static final long serialVersionUID = 3149398052063483705L;
 	public static enum FIELD_NAMES  {idquery, idchemical,idstructure,selected,metric};
+	protected boolean order_descendant=true;
+	protected boolean chemicalsOnly = false;
+	
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = new StructureRecord();
@@ -72,4 +73,16 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 	public double calculateMetric(IStructureRecord object) {
 		return 1;
 	}
+	public boolean isChemicalsOnly() {
+		return chemicalsOnly;
+	}
+	public void setChemicalsOnly(boolean chemicalsOnly) {
+		this.chemicalsOnly = chemicalsOnly;
+	}
+	public boolean isOrder_descendant() {
+		return order_descendant;
+	}
+	public void setOrder_descendant(boolean order_descendant) {
+		this.order_descendant = order_descendant;
+	}	
 }

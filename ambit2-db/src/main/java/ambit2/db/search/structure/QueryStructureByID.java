@@ -20,9 +20,18 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
      */
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
-	public static final String sqlField="select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure ";
+	public static final String sqlField="select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where %s %s %s";
+	protected long maxRecords = -1;
 	public QueryStructureByID() {
 		setCondition(NumberCondition.getInstance("="));
+	}
+	@Override
+	public long getMaxRecords() {
+		return maxRecords;
+	}
+	@Override
+	public void setMaxRecords(long records) {
+		this.maxRecords = records;
 	}
 	public IStructureRecord getMaxValue() {
 		return maxValue;
@@ -45,21 +54,28 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 		setCondition(NumberCondition.getInstance(NumberCondition.between));
 	}		
 	public String getSQL() throws AmbitException {
-		if (NumberCondition.between.equals(getCondition().getSQL())) {
-			return sqlField + getCondition() + " ? and ?";
-		}
-		else return sqlField + getCondition() + " ?";
+		
+		return String.format(sqlField, 
+					isChemicalsOnly()?"idchemical":"idstructure",
+					getCondition(),
+					NumberCondition.between.equals(getCondition().getSQL())?" ? and ?":"?"
+					  );
+		
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
 
-		params.add(new QueryParam<Integer>(Integer.class, getValue().getIdstructure()));
+		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 		if (NumberCondition.between.equals(getCondition().getSQL())) 
-			params.add(new QueryParam<Integer>(Integer.class, getMaxValue().getIdstructure()));
+			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getMaxValue().getIdchemical():getMaxValue().getIdstructure()));
 		return params;
 	}
 
+	@Override
+	public String toString() {
+		return isChemicalsOnly()?String.format("idcompound=%d",getValue().getIdchemical()):String.format("idconformer=%d",getValue().getIdstructure());
+	}
 
 }

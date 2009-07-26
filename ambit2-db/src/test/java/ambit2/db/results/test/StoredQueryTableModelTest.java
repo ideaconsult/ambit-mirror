@@ -32,15 +32,11 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.data.ISelectableRecords.SELECTION_MODE;
-import ambit2.db.UpdateExecutor;
 import ambit2.db.results.StoredQueryTableModel;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.test.QueryTest;
-import ambit2.db.update.storedquery.SelectStoredQuery;
-import ambit2.db.update.storedquery.UpdateStoredQuery;
 
 public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 	/*
@@ -95,7 +91,7 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 		queryModel.setProfile(profile);
 		*/
 		queryModel.setConnection(connection.getConnection());
-		queryModel.setQuery(query.getFieldname());
+		queryModel.setQuery(query);
 		queryModel.setValueAt(false,0,0);
 		Assert.assertFalse((Boolean)queryModel.getValueAt(0,0));
 		/*
