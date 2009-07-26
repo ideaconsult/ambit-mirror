@@ -13,17 +13,28 @@
   	<repository>
         <id>website_ambit</id>
   		<url>http://ambit.sourceforge.net/jars</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
   	</repository>
+
   	<repository>
   		<id>mvnrepository</id>
   		<name>mvnrepository</name>
   		<url>http://mvnrepository.com/</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
   	</repository>
-  	<!-- jgoodies libs are here  -->
+
+	<!-- jgoodies libs are here  -->
   	<repository>
   		<id>repo1.maven.org</id>
   		<name>repo1.maven.org</name>
   		<url>http://repo1.maven.org/maven2</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
   	</repository>
   	<!-- 
   	<repository>
@@ -366,6 +377,7 @@
           <plugin>
           	<groupId>org.codehaus.mojo</groupId>
           	<artifactId>jdepend-maven-plugin</artifactId>
+          	<version>2.0-beta-2</version>
           </plugin>
           <!-- 
           <plugin>
