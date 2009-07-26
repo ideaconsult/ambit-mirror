@@ -4,7 +4,6 @@ import org.restlet.data.MediaType;
 import org.restlet.resource.Representation;
 
 import ambit2.core.processors.AbstractRepresentationConvertor;
-import ambit2.core.processors.Reporter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
