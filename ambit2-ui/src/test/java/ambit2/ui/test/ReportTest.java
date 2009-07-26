@@ -6,11 +6,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import junit.framework.Assert;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.view.JasperViewer;
+
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,14 +29,16 @@ public class ReportTest {
 		v.show();		
 		io.close();
 		*/
-		
+		/*
 		io = getClass().getClassLoader().getResourceAsStream("FirstReport.jrprint");
 		JasperViewer v = new JasperViewer(io,false);
 		v.show();
-		io.close();		
+		io.close();
+		*/		
 	}
 	@Test
 	public void test() throws Exception {
+		/*
 		String file = "src/test/resources/test.jasper";
 		JasperCompileManager.compileReportToFile("src/test/resources/test.jrxml",file);
 		Assert.assertTrue(new File(file).exists());
@@ -49,7 +47,7 @@ public class ReportTest {
 		String pdf = "src/test/resources/test.pdf";
 		JasperRunManager.runReportToPdfFile(file,pdf,
 				 new HashMap(), new JREmptyDataSource());
-
+*/
 
 	}
 	public static void main(String[] args) throws Exception {
