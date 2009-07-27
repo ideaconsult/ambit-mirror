@@ -50,7 +50,7 @@ public abstract class DbUnitTest {
 		return "ambit-test";
 	}
 	protected String getPort() {
-		return "33060";
+		return "3306";
 	}
 	protected String getUser() {
 		return"guest";

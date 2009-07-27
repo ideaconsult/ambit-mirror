@@ -81,7 +81,7 @@ public class MySQLCommand implements ICommand, Serializable {
         	}        	
     	} catch (Exception x) {
         	info.setHostname("localhost");
-        	info.setPort("33060");
+        	info.setPort("3306");
         	info.setUser("root");
         	info.setPassword("");    		
     	}

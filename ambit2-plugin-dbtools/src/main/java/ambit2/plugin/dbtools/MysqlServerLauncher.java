@@ -52,7 +52,7 @@ public class MysqlServerLauncher extends Workflow {
                 new TestCondition() {
                     public boolean evaluate() {
 	    				LoginInfo li = new LoginInfo();
-	    				li.setPort("33060");
+	    				li.setPort("3306");
 	    				li.setUser("guest");
 	    				li.setPassword("guest");
                         return DatasourceFactory.ping(li);

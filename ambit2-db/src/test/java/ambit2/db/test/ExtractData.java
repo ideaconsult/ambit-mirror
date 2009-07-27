@@ -19,7 +19,7 @@ public class ExtractData {
         // database connection
         Class driverClass = Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:33060/ambit-test", "guest", "guest");
+                "jdbc:mysql://localhost:3306/ambit-test", "guest", "guest");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
         String ids = "(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)";
         // partial database export
