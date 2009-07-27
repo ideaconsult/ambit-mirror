@@ -31,7 +31,6 @@ package ambit2.db;
 
 import java.sql.SQLException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.results.AmbitRows;
 
 public class SourceDatasetRows extends AmbitRows<SourceDataset> {
@@ -43,9 +42,5 @@ public class SourceDatasetRows extends AmbitRows<SourceDataset> {
     public SourceDatasetRows() throws SQLException {
         super();
     }
-    @Override
-    public SourceDataset getObject() throws AmbitException {
-        return query.getObject(this);
 
-    }
 }
