@@ -69,7 +69,7 @@ public class AmbitRowsPanel<T, Rows extends AmbitRows<T>>
     }
     public void setObject(Rows object) {
     	try { getObject().close(); } catch (Exception x) {};
-  		srtm.setRecords(object);
+  		srtm.setRecords(object.getRowSet());
   		browser.setObject(new BrowsableTableModel(srtm));
     }
     

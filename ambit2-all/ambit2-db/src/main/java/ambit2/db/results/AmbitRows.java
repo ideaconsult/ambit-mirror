@@ -70,7 +70,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 
 public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> implements 
-									CachedRowSet, PropertyChangeListener{
+									 PropertyChangeListener{
 	/**
 	 * 
 	 */
@@ -80,10 +80,15 @@ public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> impleme
 	protected QueryExecutor<IQueryRetrieval<T>> executor = new QueryExecutor<IQueryRetrieval<T>>();
 	protected String propertyname = getClass().getName();
 	protected boolean ready = false;
-    public synchronized boolean isReady() {
+    
+	public CachedRowSet getRowSet() {
+		return rowset;
+	}
+	public synchronized boolean isReady() {
 		return ready;
 	}
 
+    
 	public synchronized void setReady(boolean ready) {
 		boolean status = this.ready;
 		this.ready = ready;
@@ -111,12 +116,15 @@ public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> impleme
     	propertyChangeSupport.firePropertyChange(new QueryChangeEvent(this,getPropertyname(),null,q));
     	return q;
     };
+    
 	public synchronized T getObject() throws AmbitException {
-		return getQuery().getObject(this);
+		//return getQuery().getObject(this);
+		return getQuery().getObject(rowset);
 	}
 	public synchronized void setObject(T object) throws AmbitException {
 		//throw new AmbitException("N/A");
 	}
+	
 	public synchronized void open() throws DbAmbitException {
     	if (query == null) throw new DbAmbitException("Query not defined!");
     	setReady(false);
