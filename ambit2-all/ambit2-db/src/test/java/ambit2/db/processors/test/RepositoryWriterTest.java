@@ -171,7 +171,7 @@ delete from struc_dataset where idstructure>3
 		property = 	c.createQueryTable("EXPECTED","SELECT name,count(idreference) as c FROM properties  group by name");
 		Assert.assertEquals(37,property.getRowCount());
 		for (int i=0; i < 37;i++) {
-			System.out.println(property.getValue(i,"name"));
+			//System.out.println(property.getValue(i,"name"));
 			Assert.assertEquals(14L,property.getValue(i, "c"));
 		}
 		

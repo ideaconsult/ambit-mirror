@@ -31,10 +31,10 @@ public class MySQLCommandTest {
 	@Test
 	public void testGetInfo() {
 		Preferences.setProperty(Preferences.USER, "root");
-		Preferences.setProperty(Preferences.PORT, "33060");
+		Preferences.setProperty(Preferences.PORT, "3306");
 
 		MySQLCommand command = new MySQLCommand();
-		Assert.assertEquals("33060",command.getInfo().getPort());
+		Assert.assertEquals("3306",command.getInfo().getPort());
 		Assert.assertEquals("root",command.getInfo().getUser());
 		Assert.assertEquals("/data/ambit.err",command.getErrFile());
 	}

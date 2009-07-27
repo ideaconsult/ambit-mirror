@@ -16,7 +16,7 @@ Introduction
 		
 		** Descriptor calculations
 		
-		** Establishing database connection. When a database connection is necessary, the system attempts to connect to the default database “ambit2”, assuming  the mysql server is running on localhost, port 33060. The log in attempt uses the default user guest, password guest . Only if the connection is unsuccessful, the login window will appear.
+		** Establishing database connection. When a database connection is necessary, the system attempts to connect to the default database “ambit2”, assuming  the mysql server is running on localhost, port 3306. The log in attempt uses the default user guest, password guest . Only if the connection is unsuccessful, the login window will appear.
 		
 		** Database statistics
  

@@ -45,10 +45,10 @@ public class LoginInfotest extends TestCase {
     }
     public void test() throws Exception {
         LoginInfo li = new LoginInfo();
-        li.setURI(new URI("jdbc:mysql://1.1.1.1:33060/ambit3?user=guest&password=guest"));
+        li.setURI(new URI("jdbc:mysql://1.1.1.1:3306/ambit3?user=guest&password=guest"));
         assertEquals("jdbc:mysql", li.getScheme());
         assertEquals("1.1.1.1", li.getHostname());
-        assertEquals("33060", li.getPort());
+        assertEquals("3306", li.getPort());
         assertEquals("ambit3", li.getDatabase());
     }
 

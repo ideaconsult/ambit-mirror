@@ -58,7 +58,7 @@ public class testHash extends DbUnitTest{
 	    datasource = DatasourceFactory.getDataSource(
 				DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "33060", "ambit2", "guest","guest" ));
+						"localhost", "3306", "ambit2", "guest","guest" ));
         Connection connection = datasource.getConnection();
         RepositoryReader reader = new RepositoryReader();
         reader.setConnection(connection);        
@@ -100,7 +100,7 @@ public static void testGetHashFomDB() throws Exception {
 	    datasource = DatasourceFactory.getDataSource(
 				DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "33060", "ambit2", "guest","guest" ));
+						"localhost", "3306", "ambit2", "guest","guest" ));
         Connection connection = datasource.getConnection();
         RepositoryReader reader = new RepositoryReader();
         reader.setConnection(connection);        

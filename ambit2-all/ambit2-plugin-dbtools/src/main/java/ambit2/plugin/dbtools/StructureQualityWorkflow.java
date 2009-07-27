@@ -8,7 +8,9 @@ import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
+import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.db.DbReader;
+import ambit2.db.SourceDataset;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.QualityStatisticsProcessor;
@@ -19,6 +21,8 @@ import ambit2.db.processors.quality.QualityLabelWriter;
 import ambit2.db.processors.quality.QualityValueWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.db.search.structure.QueryDataset;
+import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.db.search.structure.QueryStructureByValueQuality;
 import ambit2.db.update.qlabel.CreateQLabelPair;
@@ -61,8 +65,19 @@ public class StructureQualityWorkflow extends Workflow {
 			public Activity getActivity() {
 				return printReport();
 			}
-		},			
+		},		
 		/*
+		StructureType {
+			@Override
+			public String toString() {
+				return "Assigns structure type (1D, 2D, 3D, Markush)";
+			}
+			@Override
+			public Activity getActivity() {
+				return addStructureType();
+			}
+		},		
+		
 		Structures {
 			@Override
 			public String toString() {
@@ -218,6 +233,8 @@ public class StructureQualityWorkflow extends Workflow {
 	    seq.addStep(m);
 	    return seq;
 }		
+	
+	
 	protected static Sequence addStructureQualityVerifier() {
 			Sequence seq = new Sequence();
 			Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
@@ -244,7 +261,35 @@ public class StructureQualityWorkflow extends Workflow {
 		    seq.addStep(ap);
 		    return seq;
 	}	
-
+/*
+ * TODO
+	protected static Sequence addStructureType() {
+		Sequence seq = new Sequence();
+		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+				new Performer() {
+			@Override
+			public Object execute() throws Exception {
+				return new QueryDataset((SourceDataset)null);  //without quality labels
+			}
+		});
+		seq.addStep(query);
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p.add(new ProcessorStructureRetrieval());		
+		p.add(new StructureTypeProcessor());
+		
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+		batch.setProcessorChain(p);
+		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
+			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.BATCHSTATS,
+				batch,false);
+	    ap.setName("Structure type");	
+	    seq.addStep(ap);
+	    return seq;
+   }	
+   */
 	protected static Sequence addValueQualityVerifier() {
 		Sequence seq = new Sequence();
 		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,

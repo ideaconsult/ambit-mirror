@@ -77,7 +77,7 @@ public class MySQLShellTest  {
 		DataSource datasource = DatasourceFactory.getDataSource(
 		DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "33060", "mysql", "root","" ));
+						"localhost", "3306", "mysql", "root","" ));
 		//will fail if not running
 		Connection c = datasource.getConnection();
 		Assert.assertNotNull(c);
@@ -105,7 +105,7 @@ public class MySQLShellTest  {
 		DataSource datasource = DatasourceFactory.getDataSource(
 		DatasourceFactory.getConnectionURI(
 						"jdbc:mysql", 
-						"localhost", "33060", "mysql", "root","" ));
+						"localhost", "3306", "mysql", "root","" ));
 		//will fail if not running
 		Connection c = datasource.getConnection();
 		Assert.assertNotNull(c);

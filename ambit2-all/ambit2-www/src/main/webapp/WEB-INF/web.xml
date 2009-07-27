@@ -25,7 +25,7 @@
 		</init-param>
 		<init-param>
 			<param-name>Port</param-name>
-			<param-value>33060</param-value>
+			<param-value>3306</param-value>
 		</init-param>
 		<init-param>
 			<param-name>User</param-name>

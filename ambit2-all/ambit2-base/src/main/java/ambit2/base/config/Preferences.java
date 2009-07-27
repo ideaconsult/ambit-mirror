@@ -68,7 +68,7 @@ public class Preferences {
 	public static Object[][] default_values = {
 		//{tag, name, default value, class, hint, hidden,tag}
 		{DATABASE,"Default database schema","ambit2",String.class,"This is the default database schema AmbitXT will attempt to connect to when a database connection is required.",false,VTAGS.Database},
-		{PORT,"Default database port","33060",String.class,"This is the default port AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this port.",false,VTAGS.Database},
+		{PORT,"Default database port","3306",String.class,"This is the default port AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this port.",false,VTAGS.Database},
 		{USER,"Default user","guest",String.class,"This is the default user name AmbitXT will attempt to connect with when a database connection is required.",false,VTAGS.Database},		
 		{HOST,"Host","localhost",String.class,"This is the default host AmbitXT will attempt to connect with when a database connection is required. It is assumed MySQL server runs on this host.",false,VTAGS.Database},
 		{SCHEME,"Scheme","jdbc:mysql",String.class,"",true,VTAGS.Database},		
