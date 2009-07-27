@@ -2,9 +2,6 @@ package ambit2.rest.structure;
 
 import org.restlet.data.Reference;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -12,8 +9,23 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.query.QueryXMLReporter;
-import ambit2.rest.query.XMLTags;
 
+/**
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<ot:dataset id="" name="" xmlns:ot="http://opentox.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://opentox.org/1.0/ dataset.xsd ">
+  <ot:link href="http://tempuri.org" id="1" order="1"/>
+  <ot:features>
+    <ot:link href="http://tempuri.org" id="1" order="1"/>
+  </ot:features>
+  <ot:compound href="http://tempuri.org" id="1" order="1">
+    <ot:conformer href="http://tempuri.org" id="1" order="1"/>
+  </ot:compound>
+</ot:dataset>
+</pre>
+ * @author nina
+ *
+ */
 public class StructureReporter extends QueryXMLReporter<QueryStructureByID> {
 
 	/**
@@ -34,6 +46,7 @@ public class StructureReporter extends QueryXMLReporter<QueryStructureByID> {
 	}
 	@Override
 	public void processItem(IStructureRecord record, Document output) {
+		/*
 		Element e_record = output.createElementNS(XMLTags.ns_opentox,node_structure);
         e_record.setAttribute(attr_idchemical,Integer.toString(record.getIdchemical()));
         e_record.setAttribute(attr_idstructure,Integer.toString(record.getIdstructure()));        
@@ -46,6 +59,7 @@ public class StructureReporter extends QueryXMLReporter<QueryStructureByID> {
         		parent.item(i).appendChild(e_record);
         		break;
         	}
+        	*/
 	}				
 }
 

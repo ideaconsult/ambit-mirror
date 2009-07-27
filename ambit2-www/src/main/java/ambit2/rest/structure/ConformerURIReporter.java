@@ -21,6 +21,9 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 */
 	private static final long serialVersionUID = -3240656616658257198L;
 
+	public ConformerURIReporter() {
+		this(null);
+	}	
 	public ConformerURIReporter(Reference baseRef) {
 		super(baseRef);
 	}

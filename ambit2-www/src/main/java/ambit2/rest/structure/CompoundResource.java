@@ -1,6 +1,5 @@
 package ambit2.rest.structure;
 
-import org.apache.poi.hssf.record.formula.AddPtg;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -15,19 +14,22 @@ import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.HTMLReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
+import ambit2.db.reporters.QueryReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 
 /**
- * Handles /compound/{idchemical}  && /dataset/{datasetid}/compound/{idchemical}
+	/{datasetid}/compound/{idchemical}
  * @author nina
  *
  */
@@ -39,9 +41,7 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 	
 	public CompoundResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		this.getVariants().remove(new Variant(MediaType.TEXT_XML));
-		this.getVariants().remove(new Variant(MediaType.TEXT_URI_LIST));	
-		
+	
 	}
 	
 	@Override
@@ -51,6 +51,7 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
+
 		if ("png".equals(media)) variant.setMediaType(MediaType.IMAGE_PNG);
 		if ("pdf".equals(media)) variant.setMediaType(MediaType.APPLICATION_PDF);
 		
@@ -72,11 +73,18 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 					new PDFReporter<QueryStructureByID>());				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(new HTMLReporter());				
+		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
+			return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
+		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+			return new StringConvertor<IStructureRecord, QueryStructureByID>(
+					getURIReporter(),MediaType.TEXT_URI_LIST);
+						
 		} else
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);			
-			
-
+	}
+	protected QueryReporter getURIReporter() {
+		return new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef());
 	}
 
 	@Override
