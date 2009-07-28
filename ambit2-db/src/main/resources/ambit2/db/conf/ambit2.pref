@@ -1,0 +1,21 @@
+#ambit2.db.processors.DbCreateDatabase
+#Mon Jul 27 22:48:08 EEST 2009
+generate2D=true
+smi2sdf.smiles.generate=true
+Host=localhost
+showAromaticity=true
+FASTSMARTS=true
+Scheme=jdbc\:mysql
+smilesParser=true
+Port=3306
+Database=ambit-test
+defaultDir=
+MAXRECORDS=0
+atomtypes.stop=false
+User=root
+startMySQL=true
+database.test=ambit-test
+database.test.port=3306
+database.user.test=${ambit.db.user.test}
+database.user.root.password=${ambit.db.user.root.password}
+database.user.test.password=${ambit.db.user.test.password}

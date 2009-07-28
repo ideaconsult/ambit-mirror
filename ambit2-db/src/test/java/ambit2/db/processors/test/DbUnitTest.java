@@ -30,8 +30,10 @@
 package ambit2.db.processors.test;
 
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -45,28 +47,51 @@ import ambit2.db.processors.DbCreateDatabase;
 
 
 public abstract class DbUnitTest {
-	//TODO make use of properties
+	protected Properties properties;
+	
+	protected void loadProperties()  {
+		try {
+		if (properties == null) {
+			properties = new Properties();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/conf/ambit2.pref");
+			properties.load(in);
+			in.close();		
+		}
+		} catch (Exception x) {
+			properties = null;
+		}
+	}
+
 	protected String getDatabase() {
-		return "ambit-test";
+		loadProperties();
+		String p = properties.getProperty("database.test");
+		return p==null?"ambit-test":p;
 	}
 	protected String getPort() {
-		return "3306";
+		loadProperties();
+		String p = properties.getProperty("database.test.port");
+		return p==null?"3306":p;		
 	}
 	protected String getUser() {
-		return"guest";
+		loadProperties();
+		String p = properties.getProperty("database.user.test");
+		return p==null?"guest":p;			
 	}
 	protected String getPWD() {
-		return "guest";
+		loadProperties();
+		String p = properties.getProperty("database.user.test.password");
+		return p==null?"guest":p;	
 	}
 	protected String getAdminUser() {
 		return "root";
 	}
 	protected String getAdminPWD() {
-		return "";
+		loadProperties();
+		String p = properties.getProperty("database.user.root.password");
+		return p==null?"":p;	
 	}	
 	@Before
 	public void setUp() throws Exception {
-		
 		IDatabaseConnection c = getConnection("mysql",getPort(),getAdminUser(),getAdminPWD());
 		try {
 			DbCreateDatabase db = new DbCreateDatabase();

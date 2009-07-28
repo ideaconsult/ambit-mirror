@@ -1,9 +1,0 @@
-<project name="ambit">
-<property name="Directory" value=${directory}/>
-<property name="StartMySQL" value="True"/>
-<property name="Host" value=${host}/>
-<property name="Templates" value="data/templates"/>
-<property name="Database" value=${database}/>
-<property name="Port" value=${port}/>
-<property name="User" value=${user}/>
-</project>
