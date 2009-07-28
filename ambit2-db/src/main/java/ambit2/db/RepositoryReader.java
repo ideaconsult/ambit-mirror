@@ -44,8 +44,8 @@ public class RepositoryReader<Target > extends AbstractDBProcessor<Target, Struc
 	 * 
 	 */
 	private static final long serialVersionUID = -7461302566335753091L;
-	protected static final String read_structures = "SELECT idstructure,idchemical,format FROM STRUCTURE";
-	protected static final String read_structurebyid = "SELECT uncompress(structure) FROM STRUCTURE where idstructure=?";
+	protected static final String read_structures = "SELECT idstructure,idchemical,format FROM structure";
+	protected static final String read_structurebyid = "SELECT uncompress(structure) FROM structure where idstructure=?";
 	protected PreparedStatement ps_structures;
 	protected PreparedStatement ps_structurebyid;	
 	protected ResultSet rs;

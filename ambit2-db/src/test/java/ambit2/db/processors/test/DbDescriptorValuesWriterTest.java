@@ -168,7 +168,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         c.close();
         
         c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
 		Assert.assertEquals(5,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT value FROM values_number WHERE idstructure=100214");	
 		Assert.assertEquals(1,values.getRowCount());

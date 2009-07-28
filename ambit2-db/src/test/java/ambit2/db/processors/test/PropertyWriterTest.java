@@ -58,7 +58,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
         IDatabaseConnection c = getConnection();
         
-		ITable names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values where idstructure=100211");
+		ITable names = 	c.createQueryTable("expected_fields","SELECT * FROM property_values where idstructure=100211");
 		Assert.assertEquals(0,names.getRowCount());
         PropertyValuesWriter writer = new PropertyValuesWriter();
 
@@ -76,7 +76,7 @@ public class PropertyWriterTest  extends DbUnitTest {
         writer.write(record);
         //second time to test how it behaves :)
         
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string where idstructure=100211 and name='Property1'");
+		names = 	c.createQueryTable("expected_fields","SELECT name,value,status FROM values_string where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals(b.toString(),names.getValue(0,"value"));
 		Assert.assertEquals("TRUNCATED",names.getValue(0,"status"));		
@@ -87,15 +87,15 @@ public class PropertyWriterTest  extends DbUnitTest {
         c.close();
         
         c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM values_number where idstructure=100211");
+		names = 	c.createQueryTable("expected_fields","SELECT * FROM values_number where idstructure=100211");
 		Assert.assertEquals(1,names.getRowCount());
 
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value,status FROM values_string  where idstructure=100211 and name='Property1'");
+		names = 	c.createQueryTable("expected_fields","SELECT name,value,status FROM values_string  where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals("Value1",names.getValue(0,"value"));
 		Assert.assertEquals("UNKNOWN",names.getValue(0,"status"));		
 	
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT name,value FROM values_number join properties using(idproperty) where idstructure=100211 and name='Property2'");
+		names = 	c.createQueryTable("expected_fields","SELECT name,value FROM values_number join properties using(idproperty) where idstructure=100211 and name='Property2'");
 		Assert.assertEquals(1,names.getRowCount());
 		Assert.assertEquals(0.99,Double.parseDouble(names.getValue(0,"value").toString()));
 		
@@ -107,7 +107,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 	public void testReadWriteProperty() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/experiments-datasets.xml");
         IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values");
+		ITable names = 	c.createQueryTable("expected_fields","SELECT * FROM property_values");
 		Assert.assertEquals(0,names.getRowCount());
 		
 	
@@ -146,7 +146,7 @@ public class PropertyWriterTest  extends DbUnitTest {
 		now = System.currentTimeMillis() - now;
 		
 		c = getConnection();
-		names = 	c.createQueryTable("EXPECTED_FIELDS","SELECT * FROM property_values  where idstructure in (105095,109287)");
+		names = 	c.createQueryTable("expected_fields","SELECT * FROM property_values  where idstructure in (105095,109287)");
 		Assert.assertEquals(26,names.getRowCount());
 		c.close();
 		
