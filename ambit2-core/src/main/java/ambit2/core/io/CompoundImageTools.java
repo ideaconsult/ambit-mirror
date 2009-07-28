@@ -269,7 +269,7 @@ public class CompoundImageTools {
 	            GeometryTools.translateAllPositive(mol,r2dm.getRenderingCoordinates());
 	            GeometryTools.scaleMolecule(mol, d, 0.8,r2dm.getRenderingCoordinates());
 	            GeometryTools.center(mol, d,r2dm.getRenderingCoordinates());
-	            //GeometryTools.translate2DCentreOfMassTo(mol,center,r2dm.getRenderingCoordinates());
+	            GeometryTools.translate2DCenterTo(mol,center,r2dm.getRenderingCoordinates());
 
 	    		if (highlighted != null) {
 	    			r2dm.setSelectedPart(highlighted);
