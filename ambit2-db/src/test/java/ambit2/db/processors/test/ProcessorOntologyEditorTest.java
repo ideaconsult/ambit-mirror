@@ -18,31 +18,31 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	public void testMoveProperty() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED","SELECT template FROM template_properties where property=\"Property 1\"");
+		ITable names = 	c.createQueryTable("expected","SELECT template.name FROM template join template_def using(idtemplate) join properties using(idproperty) where properties.name=\"Property 1\"");
 		Assert.assertEquals(1,names.getRowCount());
-		Assert.assertEquals("BCF",names.getValue(0,"template"));
+		Assert.assertEquals("BCF",names.getValue(0,"name"));
 		editor.setConnection(c.getConnection());
 		editor.setOperation(OP.MOVE);
 		editor.setTemplate(new Dictionary("BCF",null),SIDE.LEFT);
 		editor.setTemplate(new Dictionary("Endpoints",null),SIDE.RIGHT);
 		editor.process(Property.getInstance("Property 1","Dummy reference"));
-		names = 	c.createQueryTable("EXPECTED","SELECT template FROM template_properties where property=\"Property 1\"");
+		names = 	c.createQueryTable("expected","SELECT template.name FROM template join template_def using(idtemplate) join properties using(idproperty) where properties.name=\"Property 1\"");
 		Assert.assertEquals(1,names.getRowCount());
-		Assert.assertEquals("Endpoints",names.getValue(0,"template"));		
+		Assert.assertEquals("Endpoints",names.getValue(0,"name"));		
 		c.close();
 	}
 	@Test
 	public void testMoveTemplate() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED","SELECT * FROM ontology where subject=\"BCF\" and object=\"Endpoints\"");
+		ITable names = 	c.createQueryTable("expected","SELECT * FROM ontology where subject=\"BCF\" and object=\"Endpoints\"");
 		Assert.assertEquals(0,names.getRowCount());	
 		editor.setConnection(c.getConnection());
 		editor.setOperation(OP.MOVE);
 		editor.setTemplate(new Dictionary(null,null),SIDE.LEFT);
 		editor.setTemplate(new Dictionary("Endpoints",null),SIDE.RIGHT);
 		editor.process(new Dictionary("BCF",null));
-		names = 	c.createQueryTable("EXPECTED","SELECT * FROM ontology where subject=\"BCF\" and object=\"Endpoints\"");
+		names = 	c.createQueryTable("expected","SELECT * FROM ontology where subject=\"BCF\" and object=\"Endpoints\"");
 		Assert.assertEquals(1,names.getRowCount());	
 		c.close();
 	}	
@@ -50,7 +50,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	public void testCreateTemplate() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED","SELECT * FROM ontology where subject=\"Skin irritation\" and object=\"Endpoints\"");
+		ITable names = 	c.createQueryTable("expected","SELECT * FROM ontology where subject=\"Skin irritation\" and object=\"Endpoints\"");
 		Assert.assertEquals(0,names.getRowCount());	
 		editor.setConnection(c.getConnection());
 		editor.setOperation(OP.CREATE);
@@ -59,7 +59,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 		editor.setCurrentSide(SIDE.RIGHT);
 		editor.process(new Dictionary("Skin irritation",null));
 		
-		names = 	c.createQueryTable("EXPECTED","SELECT * FROM ontology where subject=\"Skin irritation\" and object=\"Endpoints\"");
+		names = 	c.createQueryTable("expected","SELECT * FROM ontology where subject=\"Skin irritation\" and object=\"Endpoints\"");
 		Assert.assertEquals(1,names.getRowCount());	
 		c.close();
 	}		
@@ -68,7 +68,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 	public void testCreateProperty() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED","SELECT * FROM template_properties where template=\"Physicochemical effects\" and property=\"Boling point\"");
+		ITable names = 	c.createQueryTable("expected","SELECT * FROM template_properties where template=\"Physicochemical effects\" and property=\"Boling point\"");
 		Assert.assertEquals(0,names.getRowCount());	
 		editor.setConnection(c.getConnection());
 		editor.setOperation(OP.CREATE);
@@ -77,7 +77,7 @@ public class ProcessorOntologyEditorTest extends DbUnitTest {
 		editor.setCurrentSide(SIDE.RIGHT);
 		editor.process( Property.getInstance("Boiling point","My new reference"));
 		
-		names = 	c.createQueryTable("EXPECTED","SELECT * FROM template_properties where template=\"Physicochemical effects\" and property=\"Boiling point\"");
+		names = 	c.createQueryTable("expected","SELECT * FROM template_properties where template=\"Physicochemical effects\" and property=\"Boiling point\"");
 		Assert.assertEquals(1,names.getRowCount());	
 		c.close();
 	}		

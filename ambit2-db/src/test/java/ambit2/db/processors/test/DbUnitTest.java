@@ -35,6 +35,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -117,6 +118,8 @@ public abstract class DbUnitTest {
         IDatabaseConnection connection = getConnection();
         IDataSet dataSet = new FlatXmlDataSet(new File(xmlfile));
         try {
+        	DatabaseConfig config = connection.getConfig();
+        	config.setFeature(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
             DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
         } finally {
             connection.close();
