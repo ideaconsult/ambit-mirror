@@ -40,7 +40,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
@@ -87,7 +86,7 @@ public class PropertyWriterTest  extends DbUnitTest {
         c.close();
         
         c = getConnection();
-		names = 	c.createQueryTable("expected_fields","SELECT * FROM values_number where idstructure=100211");
+		names = 	c.createQueryTable("expected_fields","SELECT * FROM property_values where idstructure=100211 and value_num is not null");
 		Assert.assertEquals(1,names.getRowCount());
 
 		names = 	c.createQueryTable("expected_fields","SELECT name,value,status FROM values_string  where idstructure=100211 and name='Property1'");
@@ -95,9 +94,9 @@ public class PropertyWriterTest  extends DbUnitTest {
 		Assert.assertEquals("Value1",names.getValue(0,"value"));
 		Assert.assertEquals("UNKNOWN",names.getValue(0,"status"));		
 	
-		names = 	c.createQueryTable("expected_fields","SELECT name,value FROM values_number join properties using(idproperty) where idstructure=100211 and name='Property2'");
+		names = 	c.createQueryTable("expected_fields","SELECT name,value_num FROM property_values join properties using(idproperty) where idstructure=100211 and name='Property2'");
 		Assert.assertEquals(1,names.getRowCount());
-		Assert.assertEquals(0.99,Double.parseDouble(names.getValue(0,"value").toString()));
+		Assert.assertEquals(0.99,Double.parseDouble(names.getValue(0,"value_num").toString()));
 		
 		c.close();
 	}
