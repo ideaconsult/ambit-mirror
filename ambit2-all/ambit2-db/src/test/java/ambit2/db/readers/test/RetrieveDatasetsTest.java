@@ -62,7 +62,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET");		
+		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset");		
 		Assert.assertEquals(3,names.getRowCount());
 
 		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();		
@@ -71,7 +71,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		
 		while (rs.next()) {
 			SourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
+			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
 			Assert.assertEquals(1,names.getRowCount());
 		}
 		rs.close();
@@ -84,7 +84,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		setUpDatabase(getTestDatabase());
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET where name='Dataset 1'");		
+		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where name='Dataset 1'");		
 		Assert.assertEquals(1,names.getRowCount());
 
 		QueryExecutor<RetrieveDatasets> qe = new QueryExecutor<RetrieveDatasets>();		
@@ -94,7 +94,7 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		
 		while (rs.next()) {
 			SourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
+			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
 			Assert.assertEquals(1,names.getRowCount());
 		}
 		rs.close();

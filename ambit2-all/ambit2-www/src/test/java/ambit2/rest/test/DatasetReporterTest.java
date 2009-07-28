@@ -25,7 +25,7 @@ public class DatasetReporterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/src-datasets.xml");
 
 		IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM SRC_DATASET");		
+		ITable names = 	c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset");		
 		Assert.assertEquals(3,names.getRowCount());		
 		c.close();
 		reporter = new DatasetReporter(new Reference());

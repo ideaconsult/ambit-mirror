@@ -93,7 +93,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
 		Assert.assertEquals(3,names.getRowCount());
 		
 		
@@ -124,7 +124,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");			
         DbDescriptorWriter writer = new DbDescriptorWriter();
         IDatabaseConnection c = getConnection();
-		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM PROPERTIES");	
+		ITable names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
 		Assert.assertEquals(3,names.getRowCount());
 		
 		

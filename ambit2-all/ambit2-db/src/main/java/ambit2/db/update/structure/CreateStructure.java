@@ -42,7 +42,7 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 	protected CreateChemical chemical;
 	
 	public static final String create_sql = 
-		"INSERT INTO STRUCTURE (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))"
+		"INSERT INTO structure (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))"
 	;
 
 	public CreateStructure(IStructureRecord structure) {
