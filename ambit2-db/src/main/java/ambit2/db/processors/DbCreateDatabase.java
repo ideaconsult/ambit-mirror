@@ -48,7 +48,7 @@ import ambit2.db.update.user.CreateUser;
 DROP FUNCTION IF EXISTS `sortString`;
 
 DELIMITER $
-CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT
+CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT deterministic
 BEGIN
   DECLARE delim CHAR(1) DEFAULT ','; -- delimiter 
   DECLARE strings INT DEFAULT 0;     -- number of substrings
@@ -90,7 +90,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
    	public static String[] func = {
    	    	"DROP FUNCTION IF EXISTS `sortString`",
    	    	
-   	    	"CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT\n"+
+   	    	"CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT deterministic\n"+
    	    	"BEGIN\n"+
    	    	"  DECLARE delim CHAR(1) DEFAULT ','; -- delimiter\n"+ 
    	    	"  DECLARE strings INT DEFAULT 0;     -- number of substrings\n"+
