@@ -616,7 +616,7 @@ insert into version (idmajor,idminor,comment) values (2,8,"AMBIT2 schema");
 DROP FUNCTION IF EXISTS `sortString`;
 
 DELIMITER $
-CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT
+CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT deterministic
 BEGIN
   DECLARE delim CHAR(1) DEFAULT ',';
   DECLARE strings INT DEFAULT 0;     -- number of substrings
