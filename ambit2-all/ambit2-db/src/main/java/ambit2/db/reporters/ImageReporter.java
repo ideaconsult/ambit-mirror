@@ -1,5 +1,6 @@
 package ambit2.db.reporters;
 
+import java.awt.Dimension;
 import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,12 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	 * 
 	 */
 	private static final long serialVersionUID = 2931123688036795689L;
+	
 	public ImageReporter() {
+		this(new Dimension(250,250));
+	}
+	public ImageReporter(Dimension dimension) {
+		depict.setImageSize(dimension);
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
@@ -45,7 +51,8 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		}
 		
 	}
-
+	public void footer(OutputStream output, Q query) {};
+	public void header(OutputStream output, Q query) {};
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		

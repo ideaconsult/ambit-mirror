@@ -9,6 +9,12 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 
+/**
+ * Very simple html reporter
+ * @author nina
+ *
+ * @param <Q>
+ */
 public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Writer> {
 	/**
 	 * 
@@ -43,5 +49,20 @@ public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends 
 		// TODO Auto-generated method stub
 		
 	}
+	public void footer(Writer output, Q query) {
+		try {
+		output.write(String.format("<html><head><title>%s</title><body>",query.toString()));
+		} catch (Exception x) {
+			
+		}
+	};
+	public void header(Writer output, Q query) {
+		try {
+			output.write("</body></html>");
+			output.flush();
+		} catch (Exception x) {
+			
+		}
+	};
 
 }

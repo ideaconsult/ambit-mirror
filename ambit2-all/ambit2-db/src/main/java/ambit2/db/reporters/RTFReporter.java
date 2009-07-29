@@ -43,5 +43,6 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		// TODO Auto-generated method stub
 		
 	}
-
+	public void footer(Document output, Q query) {};
+	public void header(Document output, Q query) {};
 }

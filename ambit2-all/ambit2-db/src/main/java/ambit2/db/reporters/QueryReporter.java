@@ -59,8 +59,12 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		});
 		
 	}
+	public abstract void header(Output output, Q query);
+	public abstract void footer(Output output, Q query);
+	
 	public Output process(Q query) throws AmbitException {
 		output = getOutput();
+		header(output,query);
 		DbReader<T> batch = new DbReader<T>();
 		try {
 			//batch.setMaxRecords(maxRecords);
@@ -75,6 +79,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		} catch (Exception x ) {
 			throw new AmbitException(x);
 		} finally {
+			footer(output, query);
 			try {batch.close();} catch (Exception x) {}
 		}
 	}	
