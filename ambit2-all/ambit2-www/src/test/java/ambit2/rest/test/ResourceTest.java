@@ -89,6 +89,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	}		
 	public boolean verifyResponseURI(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
+	}	
+	public boolean verifyResponseTXT(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
 	}		
 	public boolean verifyResponse(String uri, MediaType media,InputStream in) throws Exception {
 		if (MediaType.APPLICATION_PDF.equals(media))
@@ -99,6 +102,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseXML(uri, media, in);
 		else if (MediaType.TEXT_URI_LIST.equals(media))
 			return verifyResponseURI(uri, media, in);		
+		else if (MediaType.TEXT_PLAIN.equals(media))
+			return verifyResponseTXT(uri, media, in);			
 		else if (MediaType.IMAGE_PNG.equals(media))
 			return verifyResponsePNG(uri, media, in);
 		else if (ChemicalMediaType.CHEMICAL_MDLMOL.equals(media))
