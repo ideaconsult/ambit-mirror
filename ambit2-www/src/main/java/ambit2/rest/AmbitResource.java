@@ -7,15 +7,25 @@ import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
+import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.structure.ConformerResource;
+
 public class AmbitResource extends Resource {
 	protected String[][] uri = {
-			{AmbitApplication.datasets,"Datasets"},
+			{DatasetsResource.datasets,"Datasets"},
 			{AmbitApplication.query,"Similarity search"},
+			/*
 			{"/endpoints","Endpoints"},
 			{"/descriptors","Descriptors"},
-			{"/structure/100","Structures"},
+			*/
+			{String.format("%s/%d",CompoundResource.compound,100),"Chemical compounds"},
+			{String.format("%s/%d%s/%s",CompoundResource.compound,100,ConformerResource.conformerKey,"all"),"All conformer of a compound"},
+			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Conformer of a compound"},
 			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search"},
+			{"/query/property/like/benzene","Search by name"},
 			{"/query/property/=/50-00-0","Search by property or an identifier (CAS, Name, etc.)"},
+			{"/query/smarts/[NX3][CX3](=[OX1])[#6]","Search by SMARTS"},
 			{"/pubchem/query/50-00-0","PubChem query"},
 			{"/cdk/depict/c1ccccc1","Structure diagram (based on CDK)"},
 			{"/daylight/depict/c1ccccc1","Structure diagram (based on Daylight depict"},
@@ -78,7 +88,7 @@ public class AmbitResource extends Resource {
 				}
 				html.append("</ul>");
 				html.append("\n<table width='100%'>");
-				html.append("<td colspan=\"2\" align=\"right\">");
+				html.append("<tr><td colspan=\"2\" align=\"right\">");
 				html.append("<font color='#D6DFF7'>");
 				html.append("Developed by Ideaconsult Ltd. (2005-2009)"); 
 				html.append("</font>");
@@ -107,5 +117,5 @@ public class AmbitResource extends Resource {
 			MediaType.TEXT_PLAIN);			
 		}
 	}
-
+	
 }

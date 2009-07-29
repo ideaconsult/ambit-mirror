@@ -19,15 +19,16 @@ import ambit2.rest.query.XMLTags;
  * http://opentox.org/wiki/1/Dataset
  * <pre>
 <?xml version="1.0" encoding="UTF-8"?>
-<ot:dataset id="" name="NAME" id="ID" xmlns:ot="http://opentox.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://opentox.org/1.0/dataset.xsd ">
-  <ot:link href="http://tempuri.org" />
+<ot:dataset id="" name="" xmlns:ot="http://opentox.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://opentox.org/1.0/ datasets.xsd ">
+  <ot:link href="http://tempuri.org" id="1" order="1"/>
   <ot:features>
-    <ot:link href="http://tempuri.org" order="1"/>
+    <ot:link href="http://tempuri.org" id="1" order="1"/>
   </ot:features>
-  <ot:structures>
-    <ot:link href="http://tempuri.org" order="1"/>
-  </ot:structures>
+  <ot:compound href="http://tempuri.org" id="1" order="1">
+    <ot:conformer href="http://tempuri.org" id="1" order="1"/>
+  </ot:compound>
 </ot:dataset>
+
 
 </pre>
  * @author nina
@@ -92,5 +93,14 @@ public class DatasetReporter extends QueryReporter<SourceDataset, IQueryRetrieva
         e_dataset.appendChild(toURI(reference,doc, dataset));
         doc.appendChild(e_dataset);
 	}
-    
+    @Override
+    public void footer(Document output, IQueryRetrieval<SourceDataset> query) {
+    	// TODO Auto-generated method stub
+    	
+    }
+    @Override
+    public void header(Document output, IQueryRetrieval<SourceDataset> query) {
+    	// TODO Auto-generated method stub
+    	
+    }
 }

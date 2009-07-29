@@ -1,5 +1,6 @@
 package ambit2.rest.structure.diagram;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 import org.restlet.Context;
@@ -20,6 +21,7 @@ public class CDKDepict extends AbstractDepict {
 	protected CompoundImageTools depict = new CompoundImageTools();
 	public CDKDepict(Context context, Request request, Response response) {
 		super(context,request,response);
+		depict.setImageSize(new Dimension(600,300));
 	}
 	@Override
 	protected BufferedImage getImage(String smiles) throws AmbitException {

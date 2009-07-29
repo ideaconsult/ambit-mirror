@@ -15,7 +15,12 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.restlet.Client;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Protocol;
+import org.restlet.data.Request;
+import org.restlet.data.Response;
 
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
@@ -30,6 +35,22 @@ public class CompoundResourceTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d/compound/10", port);
 	}
+	@Test
+	public void testHTML() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_HTML);
+	}
+	@Override
+	public boolean verifyResponseHTML(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			count++;
+		}
+		return count ==1;
+	}	
 	@Test
 	public void testCML() throws Exception {
 		testGet(getTestURI(),ChemicalMediaType.CHEMICAL_CML);
@@ -94,6 +115,32 @@ public class CompoundResourceTest extends ResourceTest {
 		file.delete();
 		return true;
 	}
+	
+	@Test
+	public void testPNGMedia() throws Exception {
+		Request request = new Request();
+		Client client = new Client(Protocol.HTTP);
+		request.setResourceRef(getTestURI()+"/png");
+		request.setMethod(Method.GET);
+		Response response = client.handle(request);
+		Assert.assertEquals(200,response.getStatus().getCode());
+		Assert.assertTrue(response.isEntityAvailable());
+		InputStream in = response.getEntity().getStream();
+		Assert.assertTrue(verifyResponsePNGMedia(in));
+		in.close();	
+	}	
+	
+	public boolean verifyResponsePNGMedia( InputStream in)
+			throws Exception {
+		File file = new File("temp.png");
+		file.delete();
+		DownloadTool.download(in, file);
+		Assert.assertTrue(file.exists());
+		Image image = ImageIO.read(file);
+		Assert.assertNotNull(image);
+		file.delete();
+		return true;
+	}	
 	@Test
 	public void testPDF() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_PDF);

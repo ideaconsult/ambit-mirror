@@ -42,14 +42,21 @@ public class DatasetsXMLReporter extends QueryReporter<SourceDataset, IQueryRetr
 	public Document getOutput() throws AmbitException {
 		try {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			doc.appendChild(doc.createElementNS(XMLTags.ns_opentox,
-					XMLTags.node_datasets));
 			return doc;
 		} catch (ParserConfigurationException x) {
 			throw new AmbitException(x);
 		}
 	}
-
+	@Override
+	public void header(Document doc, IQueryRetrieval<SourceDataset> query) {
+		doc.appendChild(doc.createElementNS(XMLTags.ns_opentox,
+				XMLTags.node_datasets));
+		
+	}
+	@Override
+	public void footer(Document output, IQueryRetrieval<SourceDataset> query) {
+		
+	}
 	@Override
 	public void processItem(SourceDataset dataset, Document doc) {
         Element e_dataset = DatasetReporter.toURI(reference ,doc, dataset);

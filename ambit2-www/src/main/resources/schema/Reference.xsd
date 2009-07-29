@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://opentox.org/Reference"
-	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:otref="http://opentox.org/Reference"
-	xmlns:otalg="http://opentox.org/Algorithm">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentox.org/Reference/1.0"
+	xmlns:tns="http://www.opentox.org/Reference/1.0" elementFormDefault="qualified">
 
 	<complexType name="Reference">
-		<attribute name="link" type="anyURI"></attribute>	
-		<attribute name="ID" type="string"></attribute>
-		<attribute name="Name" type="string"></attribute>
-        <attribute name="AlgorithmID" type="anyURI"></attribute>
-		<attribute name="Parameters" type="string"></attribute>
-		<attribute name="ExperimentalProtocol" type="string"></attribute>
+		<attribute name="ID" type="string"  use="required"></attribute>
+		<attribute name="Name" type="string"  use="required"></attribute>
+		<attribute name="AlgorithmID" type="string"  use="optional"></attribute>
+		<attribute name="Parameters" type="string" use="optional"></attribute>
+		<attribute name="ExperimentalProtocol" type="string" use="optional"></attribute>
 	</complexType>
 
 </schema>

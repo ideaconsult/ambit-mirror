@@ -14,6 +14,17 @@ import ambit2.db.search.structure.QueryStructureByID;
 /**
  * Handles /compound/{idchemical}/conformer/{idconformer}  
  * && /dataset/{datasetid}/compound/{idchemical}/conformer/{idconformer} 
+ * <br>
+ * Supports Content-Type:
+<pre>
+application/pdf
+text/xml
+chemical/x-cml
+chemical/x-mdl-molfile
+chemical/x-mdl-sdfile
+chemical/x-daylight-smiles
+image/png
+</pre>
  * @author nina
  *
  */

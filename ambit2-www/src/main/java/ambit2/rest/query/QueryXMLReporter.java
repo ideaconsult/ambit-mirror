@@ -79,7 +79,17 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			throw new AmbitException(x);
 		}
 	}
+	public void header(Document doc, Q query) {
+		try {
+			Element node = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_dataset);
+			node.appendChild(doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_features));
+			node.appendChild(doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_compounds));
+			doc.appendChild(node);
+		} catch (Exception x) {
 
+		}		
+	};
+	public void footer(Document output, Q query) {};
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		

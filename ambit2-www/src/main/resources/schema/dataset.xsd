@@ -5,14 +5,19 @@
     <complexType name="Link">
     	<attribute name="href" type="anyURI" ></attribute>
 		<attribute name="order" type="int" default="1" use="optional"></attribute>
+		<attribute name="id" type="int" default="1" use="optional"></attribute>
     </complexType>
-         
-    <complexType name="Structures">
-    	<sequence>
-			<element name="link" type="ot:Link" minOccurs="0" maxOccurs="unbounded">
+      
+    <complexType name="Compound">
+    	<sequence minOccurs="0" maxOccurs="1">
+			<element name="conformer" type="ot:Link" minOccurs="0" maxOccurs="unbounded">
   			</element>    
-        </sequence>
-    </complexType>
+        </sequence>		
+    	<attribute name="href" type="anyURI" ></attribute>
+		<attribute name="order" type="int" default="1" use="optional"></attribute>  
+		<attribute name="id" type="int" default="1" use="optional"></attribute>
+    </complexType>      
+
         
     <complexType name="Features">
     	<sequence>
@@ -39,15 +44,16 @@
 		      </documentation>
 		     </annotation>            
             </element>
-            <element name="structures" type="ot:Structures"  minOccurs="0" maxOccurs="1">
-		     <annotation>
-		      <documentation>
-		       Structures element contains arbitrary number of URI to Structure resource.
-		       TODO: define specific URI type for Structure resource via restricted simpleType and pattern http://host:port/structure/{id}
-		      </documentation>
-		     </annotation>               
-            </element>
-
+            <sequence>
+	            <element name="compound" type="ot:Compound"  minOccurs="0" maxOccurs="unbounded">
+			     <annotation>
+			      <documentation>
+			       Structures element contains arbitrary number of URI to Structure resource.
+			       TODO: define specific URI type for Structure resource via restricted simpleType and pattern http://host:port/structure/{id}
+			      </documentation>
+			     </annotation>               
+	            </element>
+			</sequence>
         </sequence>
    	
     	<attribute name="name" type="string"></attribute>
