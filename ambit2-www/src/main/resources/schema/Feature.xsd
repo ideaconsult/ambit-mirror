@@ -8,5 +8,9 @@
 		<attribute name="Value" type="string"  use="required"></attribute>
 		<attribute name="ConformerID" type="string"  use="optional"></attribute>
 	</complexType>
-
+<!-- 
+include url
+value type - how to represent numbers; decimal separators, etc.
+units - use xml schema for units
+ -->
 </schema>

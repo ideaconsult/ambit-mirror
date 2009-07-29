@@ -19,6 +19,7 @@ import ambit2.db.LoginInfo;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QueryListResource;
@@ -114,6 +115,8 @@ public class AmbitApplication extends Application {
 		router.attach(ConformerResource.conformerID,ConformerResource.class);
 		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
 
+		router.attach(PropertyResource.compoundFeatureName,PropertyResource.class);
+		router.attach(PropertyResource.conformerFeatureName,PropertyResource.class);
 		
 		router.attach("/pubchem/query/{term}",PubchemResource.class);
 		
