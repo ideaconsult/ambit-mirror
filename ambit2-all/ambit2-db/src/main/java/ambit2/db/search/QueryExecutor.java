@@ -64,7 +64,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	}
 
 	
-	public ResultSet process(Q target) throws AmbitException {
+	public synchronized ResultSet process(Q target) throws AmbitException {
 		long now = System.currentTimeMillis();
 		Connection c = getConnection();		
 		if (c == null) throw new AmbitException("no connection");
@@ -104,7 +104,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	}
 	
 	@Override
-	protected ResultSet execute(Connection c,Q target) throws SQLException, AmbitException {
+	protected synchronized ResultSet execute(Connection c,Q target) throws SQLException, AmbitException {
 		String sql = getSQL(target); 
 		List<QueryParam> params = target.getParameters();		
 		if (params == null) {
