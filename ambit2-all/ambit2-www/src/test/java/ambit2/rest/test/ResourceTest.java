@@ -109,6 +109,7 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseSDF(uri, media, in);
 		else if (ChemicalMediaType.CHEMICAL_CML.equals(media))
 			return verifyResponseCML(uri, media, in);
+
 		else throw new Exception("Unknown format "+media);
 	}
 }

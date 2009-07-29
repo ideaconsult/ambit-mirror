@@ -23,6 +23,8 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 		try {
 			QueryDataset query = new QueryDataset();
 			query.setValue(new SourceDataset(Reference.decode(request.getAttributes().get("dataset_id").toString())));
+			
+			query.setMaxRecords(100);
 			return query;
 		} catch (Exception x) {
 			throw new AmbitException(x);

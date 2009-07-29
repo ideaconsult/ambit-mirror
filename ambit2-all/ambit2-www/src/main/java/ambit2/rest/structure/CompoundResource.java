@@ -30,8 +30,17 @@ import ambit2.rest.query.StructureQueryResource;
 
 /**
 	/{datasetid}/compound/{idchemical}
+ * Supports Content-Type:
+<pre>
+application/pdf
+text/xml
+chemical/x-cml
+chemical/x-mdl-molfile
+chemical/x-mdl-sdfile
+chemical/x-daylight-smiles
+image/png
+</pre>
  * @author nina
- *
  */
 public class CompoundResource extends StructureQueryResource<QueryStructureByID> {
 	public final static String compound = "/compound";
@@ -54,6 +63,12 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 
 		if ("png".equals(media)) variant.setMediaType(MediaType.IMAGE_PNG);
 		if ("pdf".equals(media)) variant.setMediaType(MediaType.APPLICATION_PDF);
+		if ("sdf".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_MDLSDF);
+		if ("cml".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_CML);
+		if ("smiles".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_SMILES);
+		if ("xml".equals(media)) variant.setMediaType(MediaType.TEXT_XML);
+		if ("html".equals(media)) variant.setMediaType(MediaType.TEXT_HTML);
+		if ("uri".equals(media)) variant.setMediaType(MediaType.TEXT_URI_LIST);
 		
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
 			//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
@@ -71,10 +86,12 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID>(
 					new PDFReporter<QueryStructureByID>());				
-		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(new HTMLReporter());				
+	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
+		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+					new QueryHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor<IStructureRecord, QueryStructureByID>(
 					getURIReporter(),MediaType.TEXT_URI_LIST);

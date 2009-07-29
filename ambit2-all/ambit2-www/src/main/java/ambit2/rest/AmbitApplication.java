@@ -22,6 +22,7 @@ import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QueryListResource;
+import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -36,20 +37,21 @@ import ambit2.rest.structure.diagram.DaylightDepict;
  */
 public class AmbitApplication extends Application {
 	
-	public final static String datasets = "/dataset";		
-	public final static String datasetID =  String.format("%s%s",datasets,"/{dataset_id}");
 	
-	public final static String dataset_structures = String.format("%s%s",datasetID,CompoundResource.compound);
+
 	
-	public final static String datasetID_structure = String.format("%s%s",datasetID,CompoundResource.compoundID);
-	public final static String datasetID_structure_media = String.format("%s%s",datasetID,CompoundResource.compoundID_media);
+	public final static String dataset_structures = String.format("%s%s",DatasetResource.datasetID,CompoundResource.compound);
+	
+	public final static String datasetID_structure = String.format("%s%s",DatasetResource.datasetID,CompoundResource.compoundID);
+	public final static String datasetID_structure_media = String.format("%s%s",DatasetResource.datasetID,CompoundResource.compoundID_media);
 
 	public final static String query = "/query";	
 	public final static String similarity = String.format("%s%s",query ,"/similarity/method");		
-	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",datasetID);
+	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",DatasetResource.datasetID);
 	public final static String tanimoto = similarity + "/fp1024/distance/tanimoto";
 	public final static String fp =  tanimoto + "/{threshold}";
 	public final static String property =  query + "/property/{condition}" + "/{value}";
+	public final static String smarts =  query + "/smarts/{smarts}";
 	
 	protected String connectionURI;
 	protected DataSource datasource = null;
@@ -90,8 +92,8 @@ public class AmbitApplication extends Application {
 		Router router = new Router(this.getContext());
 		router.attach("/", AmbitResource.class);
 		
-		router.attach(datasets, DatasetsResource.class);
-		router.attach(datasetID, DatasetResource.class);
+		router.attach(DatasetsResource.datasets, DatasetsResource.class);
+		router.attach(DatasetResource.datasetID, DatasetResource.class);
 		router.attach(datasetID_structure, CompoundResource.class);
 		router.attach(datasetID_structure_media, CompoundResource.class);
 		
@@ -120,6 +122,7 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(property,PropertyQueryResource.class);
+		router.attach(smarts,SmartsQueryResource.class);
 		
 		router.attach(query,QueryListResource.class);		
 

@@ -11,7 +11,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CMLReporter;
-import ambit2.db.reporters.HTMLReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
@@ -25,11 +24,12 @@ import ambit2.rest.PDFConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.structure.CompoundURIReporter;
+import ambit2.rest.structure.QueryHTMLReporter;
 
 public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructureRecord>>  
 									extends QueryResource<Q,IStructureRecord> {
 
-	protected String media = null;
+	protected String media;
 	public StructureQueryResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));	
@@ -37,7 +37,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_CML));			
 		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));		
 		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
-		this.getVariants().add(new Variant(MediaType.APPLICATION_PDF));		
+		this.getVariants().add(new Variant(MediaType.APPLICATION_PDF));
+		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -65,7 +66,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-				return new StringConvertor(new HTMLReporter<Q>());	
+			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+					new QueryHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
 		} else
 			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()==null?null:getRequest().getRootRef()));
 	}
