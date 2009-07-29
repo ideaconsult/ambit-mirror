@@ -78,29 +78,28 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
     	super.close();
     	
     }
-	public Document process(Q query) throws AmbitException {
-		getOutput().addCreationDate();
-        getOutput().addCreator(getClass().getName());
-        getOutput().addSubject("");
-        getOutput().addAuthor("http://ambit.sourceforge.net");
-        getOutput().addTitle(query.toString());
-        getOutput().addKeywords(query.toString());        
-        getOutput().open();		
+    public void header(Document output, Q query) {
+		output.addCreationDate();
+        output.addCreator(getClass().getName());
+        output.addSubject("");
+        output.addAuthor("http://ambit.sourceforge.net");
+        output.addTitle(query.toString());
+        output.addKeywords(query.toString());        
+        output.open();		
         
         table = new PdfPTable(new float[]{3f,5f});
         table.setWidthPercentage(100);      
         
         writeHeader();
-
-		Document doc =  super.process(query);
-		
+    	
+    };
+    public void footer(Document output, Q query) {
         try {
         	getOutput().add(table);
         } catch (Exception x) {
-        	throw new AmbitException(x);
+
         }	
-        return doc;
-	};
+    };
 	
 	@Override
 	public void processItem(IStructureRecord item, Document document) {

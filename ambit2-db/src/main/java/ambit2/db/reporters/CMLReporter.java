@@ -56,5 +56,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		// TODO Auto-generated method stub
 		
 	}
+	public void footer(Writer output, Q query) {};
+	public void header(Writer output, Q query) {};
 
 }

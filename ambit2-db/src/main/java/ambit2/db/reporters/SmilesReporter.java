@@ -65,5 +65,6 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		
 	}
 
-
+	public void footer(Writer output, Q query) {};
+	public void header(Writer output, Q query) {};
 }

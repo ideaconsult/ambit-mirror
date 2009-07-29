@@ -69,4 +69,11 @@ public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDatas
 	public boolean isPrescreen() {
 		return false;
 	}
+	@Override
+	public String toString() {
+		return
+		(getFieldname()!=null)
+		?"Datasets per compound"
+		:(getValue()!=null?getValue().getName():"Datasets");
+	}
 }
