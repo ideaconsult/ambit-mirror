@@ -45,15 +45,21 @@ public class LiteratureEntry extends AmbitBean {
 	
 	public static synchronized LiteratureEntry getEINECSReference() {
 		return getInstance("EINECS","http://ec.europa.eu/environment/chemicals/exist_subst/einecs.htm");
-	}		
+	}
 	public static synchronized LiteratureEntry getInstance(String name,String url) {
+		return getInstance(name,url,-1);
+	}
+	public static synchronized LiteratureEntry getInstance(String name,String url, int id) {
 		int index =  references.indexOf(name);
 		if (index < 0) {
 			LiteratureEntry et = new LiteratureEntry(name,url);
+			et.setId(id);
 			references.add(et);
 			return et;
 		} else {
-			return references.get(index);
+			LiteratureEntry et =  references.get(index);
+			et.setId(id);
+			return et;
 		}
 
 	}	    
