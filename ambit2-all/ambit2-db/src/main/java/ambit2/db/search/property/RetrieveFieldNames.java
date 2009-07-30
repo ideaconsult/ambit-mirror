@@ -1,7 +1,5 @@
 package ambit2.db.search.property;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class RetrieveFieldNames extends AbstractPropertyRetrieval<String, Property, StringCondition>{
-	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
+
 	public static String where = " where %s %s ? and title %s ?";
 		/**
 	 * 
@@ -32,13 +30,12 @@ public class RetrieveFieldNames extends AbstractPropertyRetrieval<String, Proper
 		}
 		public String getSQL() throws AmbitException {
 			if ((getFieldname()!=null) && (getValue()!=null)) {
-				return sql + String.format(where,getFieldname(),getCondition().getSQL(),getCondition().getSQL());
+				return base_sql + String.format(where,getFieldname(),getCondition().getSQL(),getCondition().getSQL());
 			}
-			return sql;
+			return base_sql;
 		}
-		/**
-		 * returns field name
-		 */
+		/*
+		 
 		public Property getObject(ResultSet rs) throws AmbitException {
 			try {
 				Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
@@ -51,6 +48,8 @@ public class RetrieveFieldNames extends AbstractPropertyRetrieval<String, Proper
 				throw new AmbitException(x);
 			}
 		}
+
+		*/
 		public String getFieldID() {
 			return "idproperty";
 		}

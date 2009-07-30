@@ -75,9 +75,7 @@ public class RetrieveFieldNamesByType extends AbstractPropertyRetrieval<String, 
 		public void setFieldname(String fieldname) {
 			super.setFieldname("idtype");
 		}
-		/**
-		 * returns field name
-		 */
+		/*
 		public Property getObject(ResultSet rs) throws AmbitException {
 			try {
 				Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
@@ -90,6 +88,7 @@ public class RetrieveFieldNamesByType extends AbstractPropertyRetrieval<String, 
 				throw new AmbitException(x);
 			}
 		}
+		*/
 		public String getFieldID() {
 			return "idproperty";
 		}

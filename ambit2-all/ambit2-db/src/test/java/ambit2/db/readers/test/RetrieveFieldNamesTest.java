@@ -63,7 +63,7 @@ public class RetrieveFieldNamesTest extends RetrieveTest<Property> {
 
 	@Test
 	public void testGetSQL() throws Exception {
-		Assert.assertEquals(RetrieveFieldNames.sql, ((IQueryObject)query).getSQL());
+		Assert.assertEquals(RetrieveFieldNames.base_sql, ((IQueryObject)query).getSQL());
 	}
 
 	@Override
