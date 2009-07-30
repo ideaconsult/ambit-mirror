@@ -44,9 +44,8 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<String,
 			}
 			return sql;
 		}
-		/**
-		 * returns field name
-		 */
+		/*
+
 		public Property getObject(ResultSet rs) throws AmbitException {
 			try {
 				Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
@@ -59,6 +58,7 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<String,
 				throw new AmbitException(x);
 			}
 		}
+		*/
 		public String getFieldID() {
 			return "idproperty";
 		}

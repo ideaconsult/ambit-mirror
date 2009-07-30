@@ -29,14 +29,18 @@
 
 package ambit2.db.search.property;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.IQueryCondition;
 
 public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition> extends AbstractQuery<F, T, C, Property> 
 											implements IQueryRetrieval<Property> {
-
+	public static String base_sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
 	/**
 	 * 
 	 */
@@ -47,5 +51,16 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 	public boolean isPrescreen() {
 		return false;
 	}
-	
+	public Property getObject(ResultSet rs) throws AmbitException {
+		try {
+			Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
+			p.setId(rs.getInt(1));
+			p.setUnits(rs.getString(3));
+			p.setLabel(rs.getString(7));
+			p.getReference().setId(rs.getInt(6));
+			return p;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+	}
 }

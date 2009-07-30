@@ -12,14 +12,15 @@ import ambit2.db.SourceDataset;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.db.update.dataset.ReadDataset;
 
 public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDataset,EQCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
-    public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url FROM src_dataset join catalog_references using(idreference) %s order by name";
+    
     public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,user_name,idreference,title,url FROM struc_dataset join src_dataset using(id_srcdataset) join catalog_references using(idreference) where idstructure=? %s order by name";
     
     public static final String select_WHERE = "where name=?";
     public static final String select_AND = "and name=?";
-
+    protected ReadDataset readDataset = new ReadDataset();
 	/**
 	 * 
 	 */
@@ -37,7 +38,7 @@ public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDatas
 		return 
 		(getFieldname()!=null)
 				?String.format(select_datasets_bystruc,(getValue()==null)?"":select_AND)
-				:String.format(select_datasets,(getValue()==null)?"":select_WHERE);
+				:String.format(ReadDataset.select_datasets,(getValue()==null)?"":select_WHERE);
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -51,17 +52,7 @@ public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDatas
 	}
 
 	public SourceDataset getObject(ResultSet rs) throws AmbitException {
-		try {
-			
-	        LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(5),rs.getString(6));
-	        le.setId(rs.getInt(4));
-	        SourceDataset d = new SourceDataset(rs.getString(2),le);
-	        d.setUsername(rs.getString(3));
-	        d.setId(rs.getInt(1));
-	        return d;
-        } catch (SQLException x) {
-        	throw new AmbitException(x);
-        }
+		return readDataset.getObject(rs);
     }
 	public double calculateMetric(SourceDataset object) {
 		return 1;
