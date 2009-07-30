@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
@@ -12,6 +13,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
@@ -29,6 +31,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	
 	
 	public final static String datasets = "/dataset";	
+	public final static String datasetID =  String.format("%s%s",DatasetsResource.datasets,"/{dataset_id}");
+	
 	public DatasetsResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
@@ -37,8 +41,17 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws AmbitException {
-		RetrieveDatasets query = new RetrieveDatasets();
-		query.setValue(null);
+		ReadDataset query = new ReadDataset();
+		
+		Object id = request.getAttributes().get("dataset_id");
+		if (id != null) try {
+			SourceDataset dataset = new SourceDataset();
+			dataset.setId(new Integer(Reference.decode(id.toString())));
+			query.setValue(dataset);
+		} catch (Exception x) {
+			query.setValue(null);
+		}
+
 		return query;
 	}
 	@Override

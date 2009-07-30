@@ -18,7 +18,7 @@ import ambit2.rest.test.ResourceTest;
 public class DatasetReporterTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/dataset/Dataset+1", port);
+		return String.format("http://localhost:%d/dataset/1", port);
 	}
 	@Test
 	public void testURI() throws Exception {
@@ -32,7 +32,7 @@ public class DatasetReporterTest extends ResourceTest {
 		int count=0;
 		while ((line = reader.readLine())!=null) {
 			System.out.println(line);
-			Assert.assertEquals("http://localhost:8181/dataset/Dataset+1", line);
+			Assert.assertEquals("http://localhost:8181/dataset/1", line);
 			count++;
 		}
 		return count ==1;

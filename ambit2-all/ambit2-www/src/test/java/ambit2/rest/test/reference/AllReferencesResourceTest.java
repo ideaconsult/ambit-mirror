@@ -1,4 +1,4 @@
-package ambit2.rest.test.property;
+package ambit2.rest.test.reference;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -9,20 +9,13 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 
-import ambit2.rest.property.PropertyResource;
 import ambit2.rest.test.ResourceTest;
 
-/**
- * test for {@link PropertyResource}
- * @author nina
- *
- */
-public class PropertyResourceTest extends ResourceTest {
+public class AllReferencesResourceTest  extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef);
+		return String.format("http://localhost:%d/reference", port);
 	}
-	
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
@@ -39,26 +32,6 @@ public class PropertyResourceTest extends ResourceTest {
 		}
 		return count>0;
 	}	
-	
-	@Test
-	public void testHTML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_HTML);
-	}
-	@Override
-	public boolean verifyResponseHTML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count = 0;
-		while ((line = r.readLine())!= null) {
-			//Assert.assertEquals("1530-32-1 ", line);
-			System.out.println(line);
-			count++;
-		}
-		return count>1;
-	}
-	
-	
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
@@ -70,9 +43,26 @@ public class PropertyResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/feature_definition/1", line);
+			count++;
+		}
+		return count==8;
+	}
+	/*
+	@Test
+	public void testTXT() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_PLAIN);
+	}
+	@Override
+	public boolean verifyResponseTXT(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count = 0;
+		while ((line = r.readLine())!= null) {
+			Assert.assertEquals("1530-32-1 ", line);
 			count++;
 		}
 		return count==1;
-	}	
+	}
+	*/
 }

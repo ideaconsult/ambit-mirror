@@ -36,6 +36,22 @@ public class CompoundResourceTest extends ResourceTest {
 		return String.format("http://localhost:%d/compound/10", port);
 	}
 	@Test
+	public void testURI() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+	}
+	@Override
+	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			count++;
+		}
+		return count ==1;
+	}		
+	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);
 	}

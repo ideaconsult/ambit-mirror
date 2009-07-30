@@ -21,11 +21,21 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 	protected QueryDataset createQuery(Context context, Request request,
 			Response response) throws AmbitException {
 		try {
-			QueryDataset query = new QueryDataset();
-			query.setValue(new SourceDataset(Reference.decode(request.getAttributes().get("dataset_id").toString())));
+			Object id = request.getAttributes().get("dataset_id");
 			
-			query.setMaxRecords(100);
-			return query;
+			
+			if (id != null)  try {
+				SourceDataset dataset = new SourceDataset();
+				dataset.setId(new Integer(Reference.decode(id.toString())));
+				QueryDataset query = new QueryDataset();
+				query.setValue(dataset);
+				query.setMaxRecords(100);
+				return query;
+			} catch (Exception x) {
+				throw new AmbitException("Invalid dataset id "+id);
+			}
+			else throw new AmbitException("Invalid dataset id");
+			
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}		

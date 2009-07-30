@@ -16,14 +16,16 @@ import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
-import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.dataset.QueryDatasetResource;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.SmartsQueryResource;
+import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -41,14 +43,14 @@ public class AmbitApplication extends Application {
 	
 
 	
-	public final static String dataset_structures = String.format("%s%s",DatasetResource.datasetID,CompoundResource.compound);
+	public final static String dataset_structures = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
 	
-	public final static String datasetID_structure = String.format("%s%s",DatasetResource.datasetID,CompoundResource.compoundID);
-	public final static String datasetID_structure_media = String.format("%s%s",DatasetResource.datasetID,CompoundResource.compoundID_media);
+	public final static String datasetID_structure = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
+	public final static String datasetID_structure_media = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID_media);
 
 	public final static String query = "/query";	
 	public final static String similarity = String.format("%s%s",query ,"/similarity/method");		
-	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",DatasetResource.datasetID);
+	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",DatasetsResource.datasetID);
 	public final static String tanimoto = similarity + "/fp1024/distance/tanimoto";
 	public final static String fp =  tanimoto + "/{threshold}";
 	public final static String property =  query + "/property/{condition}" + "/{value}";
@@ -92,9 +94,11 @@ public class AmbitApplication extends Application {
 	public Restlet createRoot() {
 		Router router = new Router(this.getContext());
 		router.attach("/", AmbitResource.class);
+		router.attach("", AmbitResource.class);
 		
 		router.attach(DatasetsResource.datasets, DatasetsResource.class);
-		router.attach(DatasetResource.datasetID, DatasetResource.class);
+		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
+		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
 		router.attach(datasetID_structure, CompoundResource.class);
 		router.attach(datasetID_structure_media, CompoundResource.class);
 		
@@ -115,8 +119,14 @@ public class AmbitApplication extends Application {
 		router.attach(ConformerResource.conformerID,ConformerResource.class);
 		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
 
-		router.attach(PropertyResource.compoundFeatureName,PropertyResource.class);
-		router.attach(PropertyResource.conformerFeatureName,PropertyResource.class);
+		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
+		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
+		
+		router.attach(ReferenceResource.referenceID,ReferenceResource.class);
+		router.attach(ReferenceResource.reference,ReferenceResource.class);
+
+		router.attach(PropertyResource.featuredef,PropertyResource.class);
+		router.attach(PropertyResource.featuredefID,PropertyResource.class);
 		
 		router.attach("/pubchem/query/{term}",PubchemResource.class);
 		

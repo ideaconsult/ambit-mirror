@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ot:dataset id="" name="" xmlns:ot="http://opentox.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://opentox.org/1.0/ dataset.xsd ">
+  <ot:link href="http://tempuri.org" id="1" order="1"/>
+  <ot:features>
+    <ot:link href="http://tempuri.org" id="1" order="1"/>
+  </ot:features>
+  <ot:compound href="http://tempuri.org" id="1" order="1">
+    <ot:conformer href="http://tempuri.org" id="1" order="1"/>
+  </ot:compound>
+</ot:dataset>

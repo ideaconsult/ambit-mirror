@@ -70,10 +70,6 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public Document getOutput() throws AmbitException{
 		try {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			Element node = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_dataset);
-			node.appendChild(doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_features));
-			node.appendChild(doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_compounds));
-			doc.appendChild(node);
 			return doc;
 		} catch (ParserConfigurationException x) {
 			throw new AmbitException(x);
