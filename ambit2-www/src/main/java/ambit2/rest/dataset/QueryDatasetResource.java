@@ -19,9 +19,9 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
-public class DatasetResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
-	public final static String datasetID =  String.format("%s%s",DatasetsResource.datasets,"/{dataset_id}");
-	public DatasetResource(Context context, Request request, Response response) {
+public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
+	public final static String datasetName =  String.format("%s%s",DatasetsResource.datasets,"/query/{dataset_name}");
+	public QueryDatasetResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
 	}
@@ -30,11 +30,10 @@ public class DatasetResource extends QueryResource<IQueryRetrieval<SourceDataset
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws AmbitException {
 		RetrieveDatasets query = new RetrieveDatasets();
-		
-		query.setValue(new SourceDataset(Reference.decode(
-				request.getAttributes().get("dataset_id").toString())));
-		System.out.println(Reference.decode(
-				request.getAttributes().get("dataset_id").toString()));
+		Object name = request.getAttributes().get("dataset_name");
+		if (name != null)
+			query.setValue(new SourceDataset(Reference.decode(name.toString())));
+
 		return query;
 	}
 	@Override

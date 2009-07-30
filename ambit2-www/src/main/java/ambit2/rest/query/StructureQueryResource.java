@@ -24,7 +24,7 @@ import ambit2.rest.PDFConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.structure.CompoundURIReporter;
-import ambit2.rest.structure.QueryHTMLReporter;
+import ambit2.rest.structure.CompoundHTMLReporter;
 
 public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructureRecord>>  
 									extends QueryResource<Q,IStructureRecord> {
@@ -38,7 +38,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));		
 		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
 		this.getVariants().add(new Variant(MediaType.APPLICATION_PDF));
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
+//		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -67,7 +67,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new QueryHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
 		} else
 			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()==null?null:getRequest().getRootRef()));
 	}

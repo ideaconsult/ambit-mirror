@@ -1,19 +1,15 @@
 package ambit2.rest.dataset;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.restlet.data.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.rest.QueryDOMReporter;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.XMLTags;
 
 /**
@@ -28,24 +24,20 @@ import ambit2.rest.query.XMLTags;
  * @author nina
  *
  */
-public class DatasetsXMLReporter extends QueryReporter<SourceDataset, IQueryRetrieval<SourceDataset>, Document> {
+public class DatasetsXMLReporter extends QueryDOMReporter<SourceDataset, IQueryRetrieval<SourceDataset>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7889958961008530806L;
-	protected Reference reference ;
+
 	public DatasetsXMLReporter(Reference reference) {
-		this.reference = reference;
+		super(reference);
 	}
+
 	@Override
-	public Document getOutput() throws AmbitException {
-		try {
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			return doc;
-		} catch (ParserConfigurationException x) {
-			throw new AmbitException(x);
-		}
+	protected QueryURIReporter createURIReporter(Reference reference) {
+		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
 	}
 	@Override
 	public void header(Document doc, IQueryRetrieval<SourceDataset> query) {
@@ -59,18 +51,19 @@ public class DatasetsXMLReporter extends QueryReporter<SourceDataset, IQueryRetr
 	}
 	@Override
 	public void processItem(SourceDataset dataset, Document doc) {
-        Element e_dataset = DatasetReporter.toURI(reference ,doc, dataset);
+
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_datasets);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
-        		parent.item(i).appendChild(e_dataset);
+        		parent.item(i).appendChild(getItemElement(doc, dataset));
         		break;
         	}		
 	}	
-
-	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
-		
+	@Override
+	public Element getItemElement(Document doc, SourceDataset dataset) {
+		return getURIElement(doc, dataset);
 	}
+
+
 
 }

@@ -11,7 +11,6 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.reporters.CMLReporter;
-import ambit2.db.reporters.HTMLReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.QueryReporter;
@@ -91,7 +90,7 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 			return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new QueryHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor<IStructureRecord, QueryStructureByID>(
 					getURIReporter(),MediaType.TEXT_URI_LIST);

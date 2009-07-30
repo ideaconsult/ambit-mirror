@@ -18,6 +18,7 @@ import org.w3c.dom.Document;
 public class XMLTags {
 	private static final long serialVersionUID = -3235018056866994267L;
 	public final static String ns_opentox = "http://opentox.org/1.0";
+	public final static String ns_opentox_feature = "http://opentox.org/Feature/1.0";
 	public final static String node_ambit = "ambit";
 	public final static String node_dataset = "dataset";
 	public final static String node_datasets = "datasets";
@@ -27,10 +28,15 @@ public class XMLTags {
 	public final static String node_features = "features";
 	public final static String node_feature = "feature";
 	public final static String node_reference = "reference";
+	public final static String node_references = "references";
+	public final static String node_featuredefs = "FeatureDefinitions";
+	public final static String node_featuredef = "FeatureDefinition";
 	public final static String attr_href = "href";
 	public final static String node_link = "link";
 	public final static String attr_id = "id";
+	public final static String attr_value = "value";
 	public final static String attr_name = "name";
+	public final static String attr_type = "type";
 	public final static String slash = "/";
 	public final static String version = "1.0";
 	

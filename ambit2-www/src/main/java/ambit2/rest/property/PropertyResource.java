@@ -1,97 +1,74 @@
 package ambit2.rest.property;
 
+import java.io.Writer;
+
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveField;
+import ambit2.db.update.property.ReadProperty;
+import ambit2.rest.DocumentConvertor;
+import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
-public class PropertyResource extends QueryResource<IQueryRetrieval<Object>, Object> {
-	public static final String featureKey = "/feature";
-	public static final String compoundFeatureName = String.format("%s/feature/{name}",CompoundResource.compoundID);
-	public static final String conformerFeatureName =  String.format("%s/feature/{name}",ConformerResource.conformerID);
+/**
+ * Feature definition resource
+ * @author nina
+ *
+ */
+public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, Property> {
+	public final static String featuredef = "/feature_definition";
+	public final static String idfeaturedef = "id_feature_definition";
+	public final static String featuredefID = String.format("%s/{%s}",featuredef,idfeaturedef);
 	
 	public PropertyResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		try {
-			query = createQuery(context, request, response);
-			error = null;
-		} catch (AmbitException x) {
-			query = null;
-			error = x;
-		}
+		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));	
 	}
+	
 	
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
-//		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-	
-		return new StringConvertor<Object, IQueryRetrieval<Object>>(
-				new PropertyReporter<IQueryRetrieval<Object>>()
-				);
-		/*
-		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
-		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);			
+		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
+			return new DocumentConvertor(new PropertyDOMReporter(getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest().getRootRef()) {
-				@Override
-				public void processItem(SourceDataset dataset, Writer output) {
-					super.processItem(dataset, output);
-					try {
-					output.write('\n');
-					} catch (Exception x) {}
-				}
-			},MediaType.TEXT_URI_LIST);
+				return new StringConvertor(	new PropertyURIReporter(getRequest().getRootRef()) {
+					@Override
+					public void processItem(Property dataset, Writer output) {
+						super.processItem(dataset, output);
+						try {
+						output.write('\n');
+						} catch (Exception x) {}
+					}
+				},MediaType.TEXT_URI_LIST);
+				
 		} else 
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
-					*/
-	}		
+					new PropertyHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+	}
+
 	@Override
-	protected IQueryRetrieval<Object> createQuery(Context context,
+	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws AmbitException {
-		RetrieveField field = new RetrieveField();
-		field.setSearchByAlias(true);
 		
-		IStructureRecord record = new StructureRecord();
-		record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
+		Object o = request.getAttributes().get(idfeaturedef);
 		try {
-			record.setIdstructure(Integer.parseInt(Reference.decode(request.getAttributes().get(ConformerResource.idconformer).toString())));
-			field.setChemicalsOnly(false);
+			if (o==null) return new ReadProperty();
+			else return new ReadProperty(new Integer(o.toString()));
 		} catch (Exception x) {
-			field.setChemicalsOnly(true);
+			return new ReadProperty();
 		} finally {
-			field.setValue(record);
 		}
-		try {
-			Object name = Reference.decode(request.getAttributes().get("name").toString());
-			
-			field.setFieldname(Property.getInstance(name.toString(),LiteratureEntry.getInstance()));
-		} catch (Exception x) {
-			field.setFieldname(null);
-		}
-		return field;
 	}
 
 }
