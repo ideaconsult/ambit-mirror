@@ -282,6 +282,6 @@ using(idstructure)
 			b.append(" within ");
 			b.append(scope.toString());
 		}
-		return super.toString();
+		return b.toString();
 	}
 }
