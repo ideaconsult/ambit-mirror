@@ -34,13 +34,14 @@ import ambit2.db.readers.IQueryRetrieval;
 
 public enum SCOPE {
 	scope_entiredb {
+		protected IQueryRetrieval<IStructureRecord> query = null;
 		@Override
 		public String toString() {
 			return "Entire database";
 		}
 		@Override
 		public IQueryRetrieval<IStructureRecord> createQuery() {
-			return null;
+			return query;
 		}
 	},
 	scope_last_results {
@@ -55,44 +56,52 @@ public enum SCOPE {
 	},
 
 	scope_previousresults {
+		protected IQueryRetrieval<IStructureRecord> query = null;
 		@Override
 		public String toString() {
 			return "Saved results";
 		}
 		@Override
 		public IQueryRetrieval<IStructureRecord> createQuery() {
-			return new QueryStoredResults();
+			if (query == null) query = new QueryStoredResults();
+			return query;			
 		}
 	},
 	scope_dataset {
+		protected IQueryRetrieval<IStructureRecord> query = null;
 		@Override
 		public String toString() {
 			return "A dataset";
 		}
 		@Override
 		public IQueryRetrieval<IStructureRecord> createQuery() {
-			return new QueryDataset();
+			if (query == null) query = new QueryDataset();
+			return query;
 		}
 	
 	},
 	scope_structure_error {
+		protected IQueryRetrieval<IStructureRecord> query = null;
 		@Override
 		public String toString() {
 			return "Structure quality labels";
 		}
 		@Override
 		public IQueryRetrieval<IStructureRecord> createQuery() {
-			return new QueryStructureByQuality() ;
+			if (query == null) query = new QueryStructureByQuality();
+			return query;				
 		}
 	},
 	scope_values_error {
+		protected IQueryRetrieval<IStructureRecord> query = null;
 		@Override
 		public String toString() {
 			return "Property quality labels";
 		}
 		@Override
 		public IQueryRetrieval<IStructureRecord> createQuery() {
-			return new QueryStructureByValueQuality() ;
+			if (query == null) query = new QueryStructureByValueQuality();
+			return query;				
 		}
 	}	
 	;
