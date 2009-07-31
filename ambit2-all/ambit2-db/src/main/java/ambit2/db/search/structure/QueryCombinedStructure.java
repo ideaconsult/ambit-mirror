@@ -29,6 +29,7 @@
 
 package ambit2.db.search.structure;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryCombined;
 
@@ -47,10 +48,19 @@ public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 			return "select QSCOPE.idquery,s.idchemical,idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric from structure as s";
 	
 	}
-	public long getMaxRecords() {
-		return 0;
-	}
 	public void setMaxRecords(long records) {
+		try {
+			Preferences.setProperty(Preferences.MAXRECORDS,Long.toString(records));
+		} catch (Exception x) {
+			Preferences.setProperty(Preferences.MAXRECORDS,"2000");
+		}
 		
+	}
+	public long getMaxRecords() {
+		try {
+			return Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS));
+		} catch (Exception x) {
+			return 2000;
+		}		
 	}
 }
