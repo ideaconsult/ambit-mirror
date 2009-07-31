@@ -1,0 +1,45 @@
+package ambit2.db.search.structure;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.SourceDataset;
+import ambit2.db.search.NumberCondition;
+import ambit2.db.search.QueryParam;
+
+public class QueryDatasetByID extends AbstractStructureQuery<String,Integer,NumberCondition> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8329798753353233477L;
+	public final static String sql = 
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join struc_dataset using(idstructure) where id_srcdataset %s %s";
+	public QueryDatasetByID(SourceDataset dataset) {
+		this(dataset.getId());
+	}
+	public QueryDatasetByID() {
+		this((SourceDataset)null);
+	}
+	public QueryDatasetByID(Integer id) {
+		super();
+		setValue(id);
+		setCondition(NumberCondition.getInstance("="));
+	}	
+	public String getSQL() throws AmbitException {
+		return 	String.format(sql,getCondition().getSQL(),getValue()==null?"":"?");
+	}
+	public List<QueryParam> getParameters() throws AmbitException {
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<Integer>(Integer.class, getId()));
+		if (getValue()!=null)
+			params.add(new QueryParam<Integer>(Integer.class,getValue()));
+		return params;
+	}
+	@Override
+	public String toString() {
+		if (getValue()==null) return "Datasets";
+		return String.format("Dataset %s %s",getCondition().toString(),getValue()==null?"":getValue());
+	}
+
+}
