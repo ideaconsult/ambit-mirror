@@ -26,12 +26,15 @@ package ambit2.smarts.query;
 
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.smarts.SmartsManager;
+import ambit2.smarts.processors.SMARTSPropertiesReader;
 
 /**
  * Encapsulates Ambit SMARTS parser.
@@ -40,6 +43,7 @@ import ambit2.smarts.SmartsManager;
  */
 public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	protected SmartsManager sman;
+	protected SMARTSPropertiesReader reader = new SMARTSPropertiesReader();
 	/**
 	 * 
 	 */
@@ -58,6 +62,9 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		setNegate(negate);
 
 	}	
+	public QueryAtomContainer getQuery() {
+		return sman.getQueryContaner();
+	}
 	public IAtomContainer getObjectToVerify(IAtomContainer mol) {
 		return mol;
 	}
@@ -86,14 +93,24 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		return c;
 	}
 
-	public int hasSMARTSPattern(IAtomContainer object) throws SMARTSException {
+	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
 		/*
 		 * setSmartsDataForTarget(false)   if properties are read from db
 		 */
+		
+		try {
+			
+			sman.setSmartsDataForTarget(reader.process((IAtomContainer)mol) == null);
+		} catch (Exception x) {
+			x.printStackTrace();
+			sman.setSmartsDataForTarget(true);
+		}
+		
 		if (sman == null) {
 			throw new SMARTSException("Smarts parser not initialized!");
 		}
-		if (sman.searchIn(object)) {
+
+		if (sman.searchIn(mol)) {
 			return 1; 
 		} else {
 			return 0;
