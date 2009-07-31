@@ -56,7 +56,7 @@ public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,St
 	@Override
 	public String toString() {
 		if (getValue()==null) return "Datasets";
-		return super.toString();
+		return String.format("Dataset %s %s",getCondition(),getValue().getName());
 	}
 
 
