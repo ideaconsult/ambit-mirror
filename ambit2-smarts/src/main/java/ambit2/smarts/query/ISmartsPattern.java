@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.smarts.query;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 /**
  * Generic interface for a SMARTS pattern.
@@ -46,6 +47,7 @@ public interface ISmartsPattern<T> {
 	String getHint();
 	void setHint(String hint);	
 	void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException;
+	QueryAtomContainer getQuery();
 }
 
 
