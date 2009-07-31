@@ -18,9 +18,15 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityBitset;
+import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 
 public class SimilarityResource extends StructureQueryResource<QuerySimilarityBitset> {
+	public final static String similarity = String.format("%s%s",QueryResource.query_resource ,"/similarity/method");		
+	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",DatasetsResource.datasetID);
+	public final static String tanimoto = SimilarityResource.similarity + "/fp1024/distance/tanimoto";	
+	public final static String fp =  tanimoto + "/{threshold}";
 	protected String dataset_id;
 	protected static String delim = null;
 	protected static String bracketLeft="[";

@@ -12,7 +12,6 @@ import org.restlet.resource.Variant;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;

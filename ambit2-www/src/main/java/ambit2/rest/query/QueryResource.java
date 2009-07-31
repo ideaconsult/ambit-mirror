@@ -21,6 +21,7 @@ import ambit2.rest.RepresentationConvertor;
 
 
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource {
+	public final static String query_resource = "/query";	
 	protected Q query;
 	protected AmbitException error = null;	
 	
