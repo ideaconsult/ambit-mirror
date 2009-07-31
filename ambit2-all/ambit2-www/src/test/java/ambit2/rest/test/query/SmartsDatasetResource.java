@@ -11,10 +11,11 @@ import org.restlet.data.MediaType;
 
 import ambit2.rest.test.ResourceTest;
 
-public class SmartsResourceTest extends ResourceTest {
+public class SmartsDatasetResource extends ResourceTest {
+
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/query/smarts/C=O", port);
+		return String.format("http://localhost:%d/dataset/1/query/smarts/C=O", port);
 	}
 	@Test
 	public void testURI() throws Exception {

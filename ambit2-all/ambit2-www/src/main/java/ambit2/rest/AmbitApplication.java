@@ -24,6 +24,7 @@ import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QueryListResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
@@ -48,13 +49,8 @@ public class AmbitApplication extends Application {
 	public final static String datasetID_structure = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 	public final static String datasetID_structure_media = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID_media);
 
-	public final static String query = "/query";	
-	public final static String similarity = String.format("%s%s",query ,"/similarity/method");		
-	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",DatasetsResource.datasetID);
-	public final static String tanimoto = similarity + "/fp1024/distance/tanimoto";
-	public final static String fp =  tanimoto + "/{threshold}";
-	public final static String property =  query + "/property/{condition}" + "/{value}";
-	public final static String smarts =  query + "/smarts/{smarts}";
+	public final static String property =  QueryResource.query_resource + "/property/{condition}" + "/{value}";
+	
 	
 	protected String connectionURI;
 	protected DataSource datasource = null;
@@ -107,8 +103,8 @@ public class AmbitApplication extends Application {
 		
 		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
 		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
-		router.attach(fp+"/smiles/{smiles}",SimilarityResource.class);
-		router.attach(fp_dataset+"/smiles/{smiles}",SimilarityResource.class);		
+		router.attach(SimilarityResource.fp+"/smiles/{smiles}",SimilarityResource.class);
+		router.attach(SimilarityResource.fp_dataset+"/smiles/{smiles}",SimilarityResource.class);		
 		
 		//router.attach("/cas/{cas}"+fp,SimilarityResource.class);
 		//router.attach("/name/{name}"+fp,SimilarityResource.class);		
@@ -135,12 +131,10 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(property,PropertyQueryResource.class);
-		router.attach(smarts,SmartsQueryResource.class);
+		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
+		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
 		
-		router.attach(query,QueryListResource.class);		
-
-		
-		 
+		router.attach(QueryResource.query_resource,QueryListResource.class);		
 		 
 		return router;
 	}

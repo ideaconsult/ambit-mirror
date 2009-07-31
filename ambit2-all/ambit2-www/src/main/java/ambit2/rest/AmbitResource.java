@@ -9,6 +9,7 @@ import org.restlet.resource.Variant;
 
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -18,7 +19,7 @@ public class AmbitResource extends Resource {
 			{DatasetsResource.datasets,"Datasets"},
 			{ReferenceResource.reference,"References"},
 			{PropertyResource.featuredef,"Feature definitions"},
-			{AmbitApplication.query,"Similarity search"},
+			{QueryResource.query_resource,"Similarity search"},
 			/*
 			{"/endpoints","Endpoints"},
 			{"/descriptors","Descriptors"},

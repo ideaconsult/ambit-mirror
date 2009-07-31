@@ -9,6 +9,8 @@ import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.query.QueryResource;
+import ambit2.rest.query.XMLTags;
 import ambit2.rest.structure.CompoundResource;
 
 /**Generates html page for {@link QueryDatasetResource}
@@ -44,7 +46,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			output.write(String.format(
 					"<a href=\"%s%s\">compounds</a>",
 					w.toString(),
-					CompoundResource.compound));			
+					CompoundResource.compound));	
+			
+			output.write("&nbsp;");
+			output.write(String.format(
+					"<a href=\"%s%s\">query</a>",
+					w.toString(),
+					QueryResource.query_resource));	
 		
 		} catch (Exception x) {
 			
