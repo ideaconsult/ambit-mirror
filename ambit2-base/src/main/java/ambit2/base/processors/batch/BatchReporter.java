@@ -1,0 +1,83 @@
+package ambit2.base.processors.batch;
+
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.ProcessorsChain;
+import ambit2.base.processors.Reporter;
+
+/**
+ * Batch reporter
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ * @param <Output>
+ */
+public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitProcessor<ItemList,Output>
+												implements Reporter<ItemList,Output> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3398613304724941241L;
+	protected Output output = null;	
+	protected BatchProcessor<ItemList, Item> batch;	
+	
+	public Output getOutput() throws AmbitException {
+		return output;
+	}
+	public void setOutput(Output output) throws AmbitException {
+		this.output = output;
+	}
+	
+	protected ProcessorsChain<Item,IBatchStatistics,IProcessor> processors;
+	public ProcessorsChain<Item, IBatchStatistics, IProcessor> getProcessors() {
+		return processors;
+	}
+	public void setProcessors(
+			ProcessorsChain<Item, IBatchStatistics, IProcessor> processors) {
+		this.processors = processors;
+	}
+
+	public BatchReporter() {
+		super();
+		processors = new ProcessorsChain<Item,IBatchStatistics,IProcessor>();
+		processors.add(new DefaultAmbitProcessor<Item,Item>() {
+			public Item process(Item target) throws AmbitException {
+				processItem(target,output);
+				return target;
+			};
+		});
+		
+	}
+	public abstract void header(Output output, ItemList query);
+	public abstract void footer(Output output, ItemList query);
+	
+	public Output process(ItemList query) throws AmbitException {
+		output = getOutput();
+		header(output,query);
+
+		batch = createBatch();
+		try {
+			//batch.setMaxRecords(maxRecords);
+			batch.setProcessorChain(processors);
+
+			IBatchStatistics stats = batch.process(query);
+			if (stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ)==0)
+				throw new NotFoundException(query.toString());
+			return output;
+		} catch (AmbitException x) {
+			throw x;
+		} catch (Exception x ) {
+			throw new AmbitException(x);
+		} finally {
+			footer(output, query);
+
+		}
+	}	
+	protected abstract BatchProcessor<ItemList, Item> createBatch();
+	
+	public abstract void processItem(Item item, Output output);	
+}
