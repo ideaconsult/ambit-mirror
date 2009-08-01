@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.base.processors.Reporter;
 import ambit2.core.io.FileOutputState;
 
 import com.lowagie.text.Document;
