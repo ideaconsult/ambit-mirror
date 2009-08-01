@@ -14,16 +14,19 @@ import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.Reporter;
+import ambit2.db.IDBProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.RepresentationConvertor;
 
 
-public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource {
+public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
 	protected Q query;
-	protected AmbitException error = null;	
+	
 	
 	public QueryResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -39,13 +42,12 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
 	}
 	protected  abstract Q createQuery(Context context, Request request, Response response) throws AmbitException;
-	public abstract RepresentationConvertor createConvertor(Variant variant) throws AmbitException;
 
 	public Representation getRepresentation(Variant variant) {
 
 		try {
 	        if (query != null) {
-	        	RepresentationConvertor convertor = null;
+	        	IProcessor<Q, Representation>  convertor = null;
 	        	Connection connection = null;
 	        	int retry=0;
 	        	while (retry <2) {
@@ -53,7 +55,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		        		convertor = createConvertor(variant);
 		        		connection = ((AmbitApplication)getApplication()).getConnection();
 		        		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
-			        	convertor.getReporter().setConnection(connection);
+			        	Reporter reporter = ((RepresentationConvertor)convertor).getReporter();
+			        	if (reporter instanceof IDBProcessor)
+			        		((IDBProcessor)reporter).setConnection(connection);
 			        	Representation r = convertor.process(query);
 			        	return r;
 		        	} catch (NotFoundException x) {
