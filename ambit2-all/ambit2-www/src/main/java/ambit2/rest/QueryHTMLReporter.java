@@ -41,8 +41,22 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 					"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 				);
 			w.write(String.format("<html><head><title>%s</title></head>\n",query.toString()));
-			w.write("<body>\n");
 
+			w.write("<body>\n");
+			w.write("<div style=\"background: #516373\">&nbsp;</div><p>");
+			w.write(String.format("<a href='%s/compound'>Chemical compounds</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/query/similarity'>Similar structures</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/query/smarts'>SMARTS patterns</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/query/endpoints'>Endpoints</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",uriReporter.baseReference));
+			w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",uriReporter.baseReference));
+			w.write("<p>");
+			w.write("<form action='' method='post'>\n");
+			w.write("<input name='search' size='80'></input>\n");
+			w.write("<input type='submit' value='Submit' />\n");
+			w.write("</form>\n");
 			w.write("<p>");
 			} catch (IOException x) {}
 	}
