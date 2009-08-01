@@ -1,4 +1,4 @@
-package ambit2.rest.algorithm;
+package ambit2.rest.algorithm.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
