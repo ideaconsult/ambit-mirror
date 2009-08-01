@@ -83,16 +83,16 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
-			return new PDFConvertor<IStructureRecord, QueryStructureByID>(
+			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>());				
 	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
+			return new DocumentConvertor(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor<IStructureRecord, QueryStructureByID>(
+			return new StringConvertor(
 					getURIReporter(),MediaType.TEXT_URI_LIST);
 						
 		} else
