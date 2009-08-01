@@ -11,7 +11,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
-public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends RepresentationConvertor<T,Q,OutputStream> {
+public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepresentationConvertor<T,Q,OutputStream> {
 
 	/**
 	 * 

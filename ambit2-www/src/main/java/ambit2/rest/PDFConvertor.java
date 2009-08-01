@@ -7,6 +7,7 @@ import org.restlet.data.MediaType;
 import org.restlet.resource.OutputRepresentation;
 import org.restlet.resource.Representation;
 
+import ambit2.base.processors.Reporter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
@@ -15,14 +16,15 @@ import com.lowagie.text.PageSize;
 import com.lowagie.text.pdf.PdfWriter;
 
 
-public class PDFConvertor<T,Q extends IQueryRetrieval<T>>  extends RepresentationConvertor<T,Q,Document> {
+public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Document>>  extends 
+				RepresentationConvertor<T,Q,Document,R> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7974532412944774457L;
 	
-	public PDFConvertor(QueryReporter<T, Q, Document> reporter) {
+	public PDFConvertor(R reporter) {
 		super(reporter);
 	}
 

@@ -11,11 +11,10 @@ import org.restlet.resource.StringRepresentation;
 import org.w3c.dom.Document;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.base.processors.Reporter;
 
-public class StringConvertor<T,Q extends IQueryRetrieval<T>>  extends RepresentationConvertor<T,Q,Writer> {
-	public StringConvertor(QueryReporter<T, Q, Writer> reporter) {
+public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends RepresentationConvertor<T,Q,Writer,R> {
+	public StringConvertor(R reporter) {
 		super(reporter);
 	}
 
@@ -27,7 +26,7 @@ public class StringConvertor<T,Q extends IQueryRetrieval<T>>  extends Representa
 	public Representation process(Document doc) throws AmbitException {
 			return new DomRepresentation(MediaType.TEXT_XML,doc);
 	}
-	public StringConvertor(QueryReporter<T, Q, Writer> reporter,MediaType mediaType) {
+	public StringConvertor(R reporter,MediaType mediaType) {
 		super(reporter,mediaType);
 	}
 	@Override
