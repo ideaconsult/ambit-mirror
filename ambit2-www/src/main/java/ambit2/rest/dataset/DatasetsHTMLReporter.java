@@ -44,13 +44,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						dataset.getName()));
 			output.write("&nbsp;");
 			output.write(String.format(
-					"<a href=\"%s%s\">compounds</a>",
+					"<a href=\"%s%s\"><img src=\"/images/structures.gif\" alt=\"compounds\" title=\"Browse compounds\"/></a>",
 					w.toString(),
 					CompoundResource.compound));	
 			
 			output.write("&nbsp;");
 			output.write(String.format(
-					"<a href=\"%s%s\">query</a>",
+					"<a href=\"%s%s\"><img src=\"/images/search.png\" alt=\"query\" title=\"Search compounds\"/></a>",
 					w.toString(),
 					QueryResource.query_resource));	
 		
@@ -58,13 +58,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			
 		}
 	}
-	@Override
-	public void header(Writer w, IQueryRetrieval<SourceDataset> query) {
-		try {
-			output.write(query.toString());
-		} catch (Exception x) {
-			
-		}
-	}
+
 
 }
