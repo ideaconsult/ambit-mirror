@@ -1,40 +1,33 @@
 package ambit2.rest;
 
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.restlet.data.MediaType;
 import org.restlet.resource.Representation;
 
+import ambit2.base.processors.Reporter;
 import ambit2.core.processors.AbstractRepresentationConvertor;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
-public abstract class RepresentationConvertor<T,Q extends IQueryRetrieval<T>,Output> 
-						extends AbstractRepresentationConvertor<T,Q,Output,Representation,MediaType,QueryReporter<T,Q,Output>> {
+/**
+ * 
+ * @author nina
+ *
+ * @param <Item>
+ * @param <ItemList>
+ * @param <Output>
+ */
+public abstract class RepresentationConvertor<Item,Content,Output,R extends Reporter<Content,Output>> 
+	extends AbstractRepresentationConvertor<T,Content,Output,Representation,MediaType,R> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2458607015810762273L;
+	private static final long serialVersionUID = 50107090954200157L;
 
-
-	public RepresentationConvertor(QueryReporter<T,Q,Output> reporter) {
-		this(reporter,MediaType.TEXT_PLAIN);
-		if (this.reporter != null) ((QueryReporter<T,Q,Output>)this.reporter).setMaxRecords(5000);
+	public RepresentationConvertor(R reporter) {
+		super(reporter);
 	}
-	public RepresentationConvertor(QueryReporter<T,Q,Output> reporter,MediaType media) {
-		super(reporter,media);
+	public RepresentationConvertor(R reporter, MediaType media) {
+		super(reporter);
 	}
-	
-
-	@Override
-	public abstract Representation process(Q query) throws ambit2.base.exceptions.AmbitException;
-	
-	@Override
-	public QueryReporter<T, Q, Output> getReporter() {
-		return super.getReporter();
-	}
-	
-	
-	
-
 	
 }

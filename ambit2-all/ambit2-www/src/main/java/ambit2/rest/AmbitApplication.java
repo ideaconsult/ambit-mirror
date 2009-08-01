@@ -16,6 +16,9 @@ import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
+import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
+import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
@@ -30,7 +33,6 @@ import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
-import ambit2.rest.structure.build3d.Build3DResource;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 
@@ -134,7 +136,10 @@ public class AmbitApplication extends Application {
 		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
 		
-		router.attach(QueryResource.query_resource,QueryListResource.class);		
+		router.attach(QueryResource.query_resource,QueryListResource.class);
+		
+		router.attach(AlgorithmResource.algorithm,AlgorithmResource.class);
+		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmDescriptorResource.descriptorcalculation),AlgorithmDescriptorResource.class);
 		 
 		return router;
 	}

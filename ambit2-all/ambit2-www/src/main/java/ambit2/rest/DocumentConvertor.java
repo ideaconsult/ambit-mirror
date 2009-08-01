@@ -6,11 +6,20 @@ import org.restlet.resource.Representation;
 import org.w3c.dom.Document;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.Reporter;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
-public class DocumentConvertor<T,Q extends IQueryRetrieval<T>>  extends RepresentationConvertor<T,Q,Document> {
-	public DocumentConvertor(QueryReporter<T, Q, Document> reporter) {
+/**
+ * Converts resource to DOM representation
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ * @param <R>
+ */
+public class DocumentConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Document>>  
+					extends RepresentationConvertor<T,Q,Document,R>  {
+	public DocumentConvertor(R reporter) {
 		super(reporter);
 	}
 
