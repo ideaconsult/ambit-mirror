@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
+import org.restlet.Directory;
 import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.Protocol;
@@ -17,11 +18,12 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.rest.algorithm.AlgorithmResource;
-import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
+import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
+import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -137,14 +139,34 @@ public class AmbitApplication extends Application {
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
 		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
+		router.attach(SmartsQueryResource.smartsID,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
 		
 		router.attach(QueryResource.query_resource,QueryListResource.class);
 		
 		router.attach(AlgorithmResource.algorithm,AlgorithmResource.class);
-		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.alsgorithmtypes.descriptorcalculation.toString()),
-						AlgorithmDescriptorResource.class);
+		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.algorithmtypes.descriptorcalculation.toString()),
+						AlgorithmDescriptorTypesResource.class);
+		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
+			router.attach(String.format("%s/%s/%s/{%s}",
+					AlgorithmResource.algorithm,
+					AlgorithmResource.algorithmtypes.descriptorcalculation.toString(),
+					o.toString(),
+					AlgorithmDescriptorTypesResource.iddescriptor),
+					
+					AlgorithmDescriptorTypesResource.class);
+		
+		router.attach(ModelResource.model,ModelResource.class);
+		router.attach(String.format("%s/{%s}",ModelResource.model,ModelResource.modelID),
+				ModelResource.class);		
 		 
+		 Directory imgDir = new Directory(getContext(), "war:///images");
+		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
+		 Directory styleDir = new Directory(getContext(), "war:///style");
+
+		 router.attach("/images/", imgDir);
+		 router.attach("/jmol/", jmolDir);
+		 router.attach("/style/", styleDir);
 		return router;
 	}
 	
