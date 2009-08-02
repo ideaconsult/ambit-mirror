@@ -4,6 +4,7 @@ import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -20,7 +21,9 @@ import ambit2.rest.dataset.DatasetsResource;
  *
  */
 public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
-	public final static String smarts_resource =  String.format("%s%s",query_resource,"/smarts/{smarts}");
+	public final static String smartsKey =  "smarts";
+	public final static String smarts_resource =  String.format("%s/%s/{%s}",query_resource,smartsKey,smartsKey);
+	public final static String smartsID =  String.format("%s/%s",query_resource,smartsKey);
 	public final static String dataset_smarts_resource =  String.format("%s%s%s",DatasetsResource.datasetID,query_resource,"/smarts/{smarts}");
 	
 	public SmartsQueryResource(Context context, Request request,
@@ -32,8 +35,11 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws AmbitException {
 		try {
-//			System.out.println(request.getAttributes().get("org.restlet.http.headers"));
-			String smarts = Reference.decode(request.getAttributes().get("smarts").toString());
+			Object key = request.getAttributes().get(smartsKey);
+			if (key==null) {
+				throw new AmbitException("Empty smarts");
+			}
+			String smarts = Reference.decode(key.toString());
 			QuerySMARTS query = new QuerySMARTS();
 			query.setChemicalsOnly(true);
 			query.setValue(new FunctionalGroup(smarts,smarts,smarts));
@@ -56,5 +62,8 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			throw new AmbitException(x);
 		}
 	}		
-
+	@Override
+	public boolean allowPost() {
+		return true;
+	}
 }

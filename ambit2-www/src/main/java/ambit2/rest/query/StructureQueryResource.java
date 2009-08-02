@@ -67,7 +67,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef(),true),MediaType.TEXT_HTML);
 		} else
 			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()==null?null:getRequest().getRootRef()));
 	}
