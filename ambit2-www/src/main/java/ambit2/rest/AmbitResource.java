@@ -109,9 +109,16 @@ public class AmbitResource extends Resource {
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
 		w.write(String.format("<html><head><title>%s</title></head>\n",title));
-
+		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
 		w.write("<body>\n");
-		w.write("<div style=\"background: #516373\">&nbsp;</div><p>");
+		w.write("<div style= \"width: 100%; background-color: #516373;\"");
+		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
+		w.write("<div class=\"spacer\"></div>");
+
+		w.write("	<div class=\"row\"><span class=\"left\">Home</span>");
+		w.write("	<span class=\"right\">Login</span></div>");
+		w.write("	<div class=\"spacer\"></div>");
+		w.write("</div>");		
 		w.write(String.format("<a href='%s/compound'>Chemical compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/similarity'>Similar structures</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
@@ -119,25 +126,38 @@ public class AmbitResource extends Resource {
 		w.write(String.format("<a href='%s/query/endpoints'>Endpoints</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
+		w.write(String.format("<a href='%s%s'>Feature definitions</a>&nbsp;",baseReference,PropertyResource.featuredef));
 		w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",baseReference));
-		w.write("<p>");
+		w.write("</div>");
+		w.write("<table width='100%' bgcolor='#ffffff'>");
+		w.write("<tr>");
+		w.write("<td align='left'>");
+		w.write(String.format("<img src='%s/images/ambit-logo.png' alt='%s' title='%s' border='0'/>\n",baseReference,"AMBIT",baseReference));
+		w.write("</td>");
+		w.write("<td align='right'>");
+
 		w.write("<form action='' method='post'>\n");
 		w.write("<input name='search' size='80'></input>\n");
-		w.write("<input type='submit' value='Submit' />\n");
+		w.write("<input type='submit' value='Search' /><br>");
+		w.write(baseReference.toString());
+
 		w.write("</form>\n");
-		w.write("<p>");		
+		w.write("</td");
+		w.write("</tr></table>");		
+		
+		
+		
+		w.write("<hr>");
 		
 	}
 	public static void writeHTMLFooter(Writer output,String title,Reference baseReference) throws IOException {
-		output.write("\n<table width='100%'>");
-		output.write("<td colspan=\"2\" align=\"right\">");
+		output.write("<div align=\"right\">");
 		output.write("<font color='#D6DFF7'>");
 		output.write("Developed by Ideaconsult Ltd. (2005-2009)"); 
 		output.write("</font>");
-		output.write("</td>");
-		output.write("</tr>");
-		output.write("<tr>");
-		output.write("<td colspan=\"2\" align=\"right\">");
+		output.write("</div>");		
+		output.write("<div align=\"right\">");
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write("    <IMG SRC=\"images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
 		output.write("  </A>&nbsp; ");
@@ -145,9 +165,7 @@ public class AmbitResource extends Resource {
 		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
 		output.write("    <IMG SRC=\"images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
 		output.write("  </A>");
-		output.write("</td>");
-		output.write("</tr>");
-		output.write("</table>");
+		output.write("</div>");
 		output.write("</body>");
 		output.write("</html>");
 
