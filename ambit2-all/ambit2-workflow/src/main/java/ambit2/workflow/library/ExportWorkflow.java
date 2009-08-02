@@ -1,7 +1,7 @@
 package ambit2.workflow.library;
 
+import ambit2.base.processors.Reporter;
 import ambit2.core.io.FileOutputState;
-import ambit2.core.processors.Reporter;
 import ambit2.workflow.ProcessorPerformer;
 
 import com.microworkflow.process.Primitive;
