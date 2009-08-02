@@ -1,15 +1,11 @@
 package ambit2.plugin.pbt.processors;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.io.FileOutputState;
 import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.ProcessorFileExport;
@@ -17,7 +13,6 @@ import ambit2.plugin.pbt.PBTWorkBook;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.PageSize;
 import com.lowagie.text.html.HtmlWriter;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.rtf.RtfWriter2;
@@ -69,5 +64,8 @@ public class PBTExporter extends ProcessorFileExport<PBTWorkBook> {
 			logger.warn(x);
 		}
 	}
-
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
