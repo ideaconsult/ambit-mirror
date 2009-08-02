@@ -27,7 +27,7 @@ public abstract class RepresentationConvertor<Item,Content,Output,R extends Repo
 		super(reporter);
 	}
 	public RepresentationConvertor(R reporter, MediaType media) {
-		super(reporter);
+		super(reporter,media);
 	}
 	
 }
