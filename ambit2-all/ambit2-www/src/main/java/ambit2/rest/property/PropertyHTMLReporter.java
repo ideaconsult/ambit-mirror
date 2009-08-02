@@ -25,7 +25,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new PropertyURIReporter();
+		return new PropertyURIReporter(reference);
 	}
 
 	@Override
