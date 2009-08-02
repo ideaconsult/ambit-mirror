@@ -15,6 +15,7 @@ import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
@@ -61,6 +62,15 @@ public abstract class ResourceTest extends DbUnitTest {
 		in.close();	
 	}
 	
+	public Status testHandleError(String uri, MediaType media) throws Exception {
+		Request request = new Request();
+		Client client = new Client(Protocol.HTTP);
+		request.setResourceRef(uri);
+		request.setMethod(Method.GET);
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
+		Response response = client.handle(request);
+		return response.getStatus();
+	}	
 	public String getTestURI() { return null; }
 	
 	public boolean verifyResponsePDF(String uri, MediaType media,InputStream in) throws Exception {

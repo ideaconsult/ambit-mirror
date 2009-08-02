@@ -44,7 +44,7 @@ public class StructureTest extends ResourceTest {
 	public void testGetSDF() throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		request.setResourceRef("http://localhost:8080/structure/100214");
+		request.setResourceRef("http://localhost:8181/structure/100214");
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().
 		add(new Preference(ChemicalMediaType.CHEMICAL_MDLSDF));
@@ -63,7 +63,7 @@ public class StructureTest extends ResourceTest {
 	public void testGetPNG() throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		request.setResourceRef("http://localhost:8080/structure/100214");
+		request.setResourceRef("http://localhost:8181/structure/100214");
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().
 		add(new Preference(MediaType.IMAGE_PNG));
@@ -84,7 +84,7 @@ public class StructureTest extends ResourceTest {
 	public void testGetSmiles() throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		request.setResourceRef("http://localhost:8080/structure/100214");
+		request.setResourceRef("http://localhost:8181/structure/100214");
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().
 		add(new Preference(ChemicalMediaType.CHEMICAL_SMILES));
