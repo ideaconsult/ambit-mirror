@@ -51,7 +51,7 @@ public class AmbitApplication extends Application {
 	public final static String datasetID_structure = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 	public final static String datasetID_structure_media = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID_media);
 
-	public final static String property =  QueryResource.query_resource + "/property/{condition}" + "/{value}";
+
 	
 	
 	protected String connectionURI;
@@ -85,7 +85,10 @@ public class AmbitApplication extends Application {
 			connectionURI = null;
 			
 		}
+		
+		setStatusService(new AmbitStatusService());
 	}
+	
 	
 	
 	@Override
@@ -132,19 +135,21 @@ public class AmbitApplication extends Application {
 		router.attach("/cdk/depict/{smiles}",CDKDepict.class);	
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
-		router.attach(property,PropertyQueryResource.class);
+		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
 		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
 		
 		router.attach(QueryResource.query_resource,QueryListResource.class);
 		
 		router.attach(AlgorithmResource.algorithm,AlgorithmResource.class);
-		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmDescriptorResource.descriptorcalculation),AlgorithmDescriptorResource.class);
+		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.alsgorithmtypes.descriptorcalculation.toString()),
+						AlgorithmDescriptorResource.class);
 		 
 		return router;
 	}
 	
 	public Connection getConnection() throws AmbitException , SQLException{
+		SQLException error = null;
 		for (int retry=0; retry< 2; retry++)
 		try {
 			Connection c = DatasourceFactory.getDataSource(connectionURI).getConnection();
@@ -153,12 +158,14 @@ public class AmbitApplication extends Application {
 			t.close();
 			return c;
 		} catch (SQLException x) {
+			error = x;
+			x.printStackTrace();
 			if (retry >= 2)
 				throw x;
 		} finally {
 			
 		}
-		throw new SQLException("Can't establish connection!");
+		if (error != null) throw error; else throw new SQLException("Can't establish connection "+connectionURI);
 	}
 	
 	/**

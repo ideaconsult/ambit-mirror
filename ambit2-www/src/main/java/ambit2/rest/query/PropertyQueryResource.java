@@ -10,7 +10,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
 
 public class PropertyQueryResource extends StructureQueryResource<QueryField> {
-
+	public final static String property =  QueryResource.query_resource + "/property/{condition}" + "/{value}";
 	protected String dataset_id;
 	public PropertyQueryResource(Context context, Request request, Response response) {
 		super(context,request,response);

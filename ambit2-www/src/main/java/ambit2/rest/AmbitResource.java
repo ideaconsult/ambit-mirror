@@ -1,6 +1,11 @@
 package ambit2.rest;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Resource;
@@ -73,54 +78,78 @@ public class AmbitResource extends Resource {
 				return new StringRepresentation(xml.toString());				
 			} else { //if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 				variant.setMediaType(MediaType.TEXT_HTML);
-				StringBuilder html = new StringBuilder();
-				html.append(
-					"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
-				);
-				html.append("<html><head><title>Ambit REST</title></head>\n");
-				html.append("<body>\n");
-				html.append("<ul>");
-				for (String[] s:uri) {
-					html.append("<li>");
-					html.append(s[1]);
-					html.append("&nbsp;<a href=\"");
-					html.append(getRequest().getRootRef());
-					html.append(s[0]);
-					html.append("\">");
-					html.append(s[0]);
-					html.append("</a>");
-					html.append("\n");
-				}
-				html.append("</ul>");
-				html.append("\n<table width='100%'>");
-				html.append("<tr><td colspan=\"2\" align=\"right\">");
-				html.append("<font color='#D6DFF7'>");
-				html.append("Developed by Ideaconsult Ltd. (2005-2009)"); 
-				html.append("</font>");
-				html.append("</td>");
-				html.append("</tr>");
-				html.append("<tr>");
-				html.append("<td colspan=\"2\" align=\"right\">");
-				html.append("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
-				html.append("    <IMG SRC=\"images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
-				html.append("  </A>&nbsp; ");
+				StringWriter writer = new StringWriter();
+				writeHTMLHeader(writer, "AMBIT", getRequest().getRootRef());
 
-				html.append("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
-				html.append("    <IMG SRC=\"images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
-				html.append("  </A>");
-				html.append("</td>");
-				html.append("</tr>");
-				html.append("</table>");
-				html.append("</body>");
-				html.append("</html>");
-				return new StringRepresentation(html.toString(),MediaType.TEXT_HTML);				
+				writer.write("<ul>");
+				for (String[] s:uri) {
+					writer.write("<li>");
+					writer.write(s[1]);
+					writer.write("&nbsp;<a href=\"");
+					writer.write(getRequest().getRootRef().toString());
+					writer.write(s[0]);
+					writer.write("\">");
+					writer.write(s[0]);
+					writer.write("</a>");
+					writer.write("\n");
+				}
+				writer.write("</ul>");
+				writeHTMLFooter(writer, "AMBIT", getRequest().getRootRef());
+				return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
 			}
 			
 		} catch (Exception x) {
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-			return new StringRepresentation("An error retrieving the dataset "+x.getMessage(),
-			MediaType.TEXT_PLAIN);			
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+			return null;
 		}
 	}
 	
+	public static void writeHTMLHeader(Writer w,String title,Reference baseReference) throws IOException {
+		w.write(
+				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
+			);
+		w.write(String.format("<html><head><title>%s</title></head>\n",title));
+
+		w.write("<body>\n");
+		w.write("<div style=\"background: #516373\">&nbsp;</div><p>");
+		w.write(String.format("<a href='%s/compound'>Chemical compounds</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/similarity'>Similar structures</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/smarts'>SMARTS patterns</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/endpoints'>Endpoints</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",baseReference));
+		w.write("<p>");
+		w.write("<form action='' method='post'>\n");
+		w.write("<input name='search' size='80'></input>\n");
+		w.write("<input type='submit' value='Submit' />\n");
+		w.write("</form>\n");
+		w.write("<p>");		
+		
+	}
+	public static void writeHTMLFooter(Writer output,String title,Reference baseReference) throws IOException {
+		output.write("\n<table width='100%'>");
+		output.write("<td colspan=\"2\" align=\"right\">");
+		output.write("<font color='#D6DFF7'>");
+		output.write("Developed by Ideaconsult Ltd. (2005-2009)"); 
+		output.write("</font>");
+		output.write("</td>");
+		output.write("</tr>");
+		output.write("<tr>");
+		output.write("<td colspan=\"2\" align=\"right\">");
+		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
+		output.write("    <IMG SRC=\"images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+		output.write("  </A>&nbsp; ");
+
+		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
+		output.write("    <IMG SRC=\"images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+		output.write("  </A>");
+		output.write("</td>");
+		output.write("</tr>");
+		output.write("</table>");
+		output.write("</body>");
+		output.write("</html>");
+
+	}	
 }

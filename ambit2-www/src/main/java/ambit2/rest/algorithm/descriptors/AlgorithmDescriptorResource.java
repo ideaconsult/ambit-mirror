@@ -12,17 +12,17 @@ import ambit2.rest.algorithm.AlgorithmResource;
  *
  */
 public class AlgorithmDescriptorResource extends AlgorithmResource {
-	public static final String descriptorcalculation="descriptorcalculation";
+	public enum descriptortypes  {
+		quantumchemical,physicochemical,patternmining,pharmacophore,simdist
+	};
 	public AlgorithmDescriptorResource(Context context, Request request,
 			Response response) {
 		super(context, request, response);
+		setCategory(AlgorithmResource.alsgorithmtypes.descriptorcalculation.toString());
 		query.clear();
-		query.add("quantumchemical");
-		query.add("physicochemical");
-		query.add("patternmining");
-		query.add("pharmacopore");
-		query.add("simdist");
-		setCategory(descriptorcalculation);
+		for (descriptortypes d : descriptortypes.values())
+			query.add(String.format("algorithm/%s/%s",getCategory(),d.toString()));
+
 	}
 
 }
