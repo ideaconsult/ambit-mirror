@@ -6,9 +6,10 @@ import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;
-import ambit2.core.processors.Reporter;
+import ambit2.base.processors.Reporter;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.DbReader;
+import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 
 public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output> 
@@ -21,6 +22,8 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 
 	protected Output output = null;	
 	protected int maxRecords = 0;
+	protected AbstractBatchProcessor batch;
+	
 	public int getMaxRecords() {
 		return maxRecords;
 	}
@@ -65,7 +68,8 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	public Output process(Q query) throws AmbitException {
 		output = getOutput();
 		header(output,query);
-		DbReader<T> batch = new DbReader<T>();
+
+		batch = createBatch();
 		try {
 			//batch.setMaxRecords(maxRecords);
 			batch.setProcessorChain(processors);
@@ -84,5 +88,10 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 			try {connection.close();} catch (Exception x) {}
 		}
 	}	
+	protected AbstractBatchProcessor<IQueryRetrieval<T>, T> createBatch() {
+		return new DbReader<T>();
+	}
 	public abstract void processItem(T item, Output output);
+	
+	
 }
