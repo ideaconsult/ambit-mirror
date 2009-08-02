@@ -60,7 +60,8 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 				},MediaType.TEXT_URI_LIST);
 			} else 
 				return new OutputStreamConvertor(
-						new ReferenceHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+						new ReferenceHTMLReporter(getRequest().getRootRef(),query.getValue()==null),
+						MediaType.TEXT_HTML);
 	}
 
 	@Override
