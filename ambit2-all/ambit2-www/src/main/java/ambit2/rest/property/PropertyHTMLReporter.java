@@ -20,8 +20,8 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	 * 
 	 */
 	private static final long serialVersionUID = 3196496706491834527L;
-	public PropertyHTMLReporter(Reference ref) {
-		super(ref);
+	public PropertyHTMLReporter(Reference ref,boolean collapsed) {
+		super(ref,collapsed);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Reference reference) {
@@ -35,10 +35,17 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 						"<a href=\"%s\">%s</a><br>",
 						uriReporter.getURI(item),
 						item.getName()));
-				
+			if (!collapsed) {
+				output.write(String.format("<a href='%s'>%s</a>",item.getReference().getURL(),item.getReference().getName()));
+			}
 		} catch (Exception x) {
 			x.printStackTrace();
 		}		
+	}
+	@Override
+	public void header(Writer w, IQueryRetrieval<Property> query) {
+		super.header(w, query);
+		try {w.write(collapsed?"<h3>Feature definitions</h3>":"<h3>Feature definition</h3>");} catch (Exception x) {}
 	}
 
 }
