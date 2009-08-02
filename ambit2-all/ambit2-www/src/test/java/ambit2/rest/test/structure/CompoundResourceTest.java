@@ -65,7 +65,7 @@ public class CompoundResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count ==1;
+		return count >0;
 	}	
 	@Test
 	public void testCML() throws Exception {

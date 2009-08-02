@@ -41,7 +41,8 @@ public class SimilarityResourceTest extends ResourceTest {
 	
 	@Test
 	public void testNoResults() throws Exception {
-		runQuery(ChemicalMediaType.CHEMICAL_SMILES,"http://localhost:8080/query/similarity/method/fp1024/distance/tanimoto/0.1/smiles/[I]");
+		runQuery(ChemicalMediaType.CHEMICAL_SMILES,
+				String.format("http://localhost:%d/query/similarity/method/fp1024/distance/tanimoto/0.1/smiles/[I]",port));
 	}		
 	@Test
 	public void testSmiles() throws Exception {
@@ -105,10 +106,7 @@ public class SimilarityResourceTest extends ResourceTest {
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference(mediaType));
-		System.out.println(request.getClientInfo().getAcceptedMediaTypes());
 		Response response = client.handle(request);
-		
-		System.out.println(response.getStatus());
 		if (response.getStatus().equals(org.restlet.data.Status.SUCCESS_OK)) {
 			Assert.assertTrue(response.isEntityAvailable());
 			InputStream in = response.getEntity().getStream();
