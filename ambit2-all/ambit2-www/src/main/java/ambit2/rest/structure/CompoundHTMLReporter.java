@@ -7,6 +7,7 @@ import org.restlet.data.Reference;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 
@@ -25,8 +26,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	private static final long serialVersionUID = -7776155843790521467L;
 
 
-	public CompoundHTMLReporter(Reference reference) {
-		super(reference);
+	public CompoundHTMLReporter(Reference reference,boolean collapsed) {
+		super(reference,collapsed);
 		conformerURI = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(reference);		
 	}
 	@Override
@@ -38,13 +39,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 		try {
 			writer.write(toURI(record));
+			if (!collapsed) writer.write("more");
 		} catch (Exception x) {
 			logger.error(x);
 		}
 	}
 	public void header(Writer output, Q query) {
 		try {
-			getOutput().write(String.format("<html><head><title>%s</title></head><body>","test"));
+			AmbitResource.writeHTMLHeader(output,
+					collapsed?"Chemical compounds":"Chemical compound"
+					,
+					uriReporter.getBaseReference()
+					);
+
 		} catch (Exception x) {}		
 	};
 	public void footer(Writer output, Q query) {
