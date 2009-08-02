@@ -21,10 +21,10 @@ public class DatasetHTMLReporter extends DatasetsHTMLReporter {
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
 	public DatasetHTMLReporter() {
-		this(null);
+		this(null,true);
 	}
-	public DatasetHTMLReporter(Reference baseRef) {
-		super(baseRef);
+	public DatasetHTMLReporter(Reference baseRef,boolean collapsed) {
+		super(baseRef,collapsed);
 	}
 	@Override
 	public void processItem(SourceDataset dataset, Writer output) {
@@ -63,13 +63,9 @@ public class DatasetHTMLReporter extends DatasetsHTMLReporter {
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<SourceDataset> query) {
+		super.header(w, query);
 		try {
-			w.write(
-					"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
-				);
-			w.write(String.format("<html><head><title>%s</title></head>\n",query.toString()));
-			w.write("<body>\n");
-			w.write("<p>");
+			w.write(collapsed?"<h3>Datasets</h3>":"<h3>Dataset</h3>");
 			} catch (IOException x) {}
 	}	
 
