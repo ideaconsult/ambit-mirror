@@ -43,7 +43,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);			
+					new DatasetHTMLReporter(getRequest().getRootRef(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest().getRootRef()) {
 				@Override
@@ -56,7 +56,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 			},MediaType.TEXT_URI_LIST);
 		} else 
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new DatasetHTMLReporter(getRequest().getRootRef(),true),MediaType.TEXT_HTML);
 	}		
 		//return new DocumentConvertor(new DatasetReporter(getRequest().getRootRef()));
 

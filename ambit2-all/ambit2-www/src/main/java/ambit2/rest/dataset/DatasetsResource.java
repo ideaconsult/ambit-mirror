@@ -9,6 +9,8 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
+import prefuse.action.layout.CollapsedStackLayout;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
@@ -32,7 +34,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	
 	public final static String datasets = "/dataset";	
 	public final static String datasetID =  String.format("%s%s",DatasetsResource.datasets,"/{dataset_id}");
-	
+	protected boolean collapsed;
 	public DatasetsResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
@@ -44,10 +46,12 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		ReadDataset query = new ReadDataset();
 		
 		Object id = request.getAttributes().get("dataset_id");
+		collapsed = true;
 		if (id != null) try {
 			SourceDataset dataset = new SourceDataset();
 			dataset.setId(new Integer(Reference.decode(id.toString())));
 			query.setValue(dataset);
+			collapsed = false;
 		} catch (NumberFormatException x) {
 			error = new InvalidResourceIDException(id);
 			query=null;
@@ -65,7 +69,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputStreamConvertor(
-				new DatasetsHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest().getRootRef()) {
 			@Override
@@ -78,6 +82,6 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
 		return new OutputStreamConvertor(
-				new DatasetHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+				new DatasetHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
 	}
 }
