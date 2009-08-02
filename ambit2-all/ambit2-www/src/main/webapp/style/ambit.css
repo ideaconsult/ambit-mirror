@@ -1,0 +1,101 @@
+div.row span.left {
+  float: left;
+  text-align: left;
+  font-weight: bold;
+  background-color: #516373;
+  color: #A1D005;
+  FONT-FAMILY: Verdana, Arial;
+  width: 50%;
+  }
+
+div.row span.right {
+  float: right;
+  text-align: right;
+  font-weight: bold;
+  background-color: #516373;
+  color: #A1D005;
+  FONT-FAMILY: Verdana, Arial;
+  width: 50%;
+  }
+
+body { 
+
+  margin: 0; 
+}
+
+table
+{
+	COLOR: #516373;
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+}
+
+p
+{
+    COLOR: #516373;
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+    
+}
+ul
+{
+    COLOR: #516373;
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+    
+}
+br
+{
+    COLOR: #516373;
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+    
+}
+A:link
+{
+    FONT-SIZE: 10pt;
+    COLOR: #A1D005;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:visited
+{
+    FONT-SIZE: 10pt;
+    COLOR: #A1D005;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:active
+{
+    FONT-SIZE: 10pt;
+    COLOR: #ECB42C;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:hover
+{
+    FONT-SIZE: 10pt;
+    COLOR: #516373;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
