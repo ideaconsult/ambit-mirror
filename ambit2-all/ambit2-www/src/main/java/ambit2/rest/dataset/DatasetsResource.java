@@ -17,6 +17,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -47,6 +48,9 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			SourceDataset dataset = new SourceDataset();
 			dataset.setId(new Integer(Reference.decode(id.toString())));
 			query.setValue(dataset);
+		} catch (NumberFormatException x) {
+			error = new InvalidResourceIDException(id);
+			query=null;
 		} catch (Exception x) {
 			query.setValue(null);
 		}

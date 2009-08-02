@@ -10,6 +10,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.rest.error.InvalidResourceIDException;
 
 /**
  * Handles /compound/{idchemical}/conformer/{idconformer}  
@@ -52,14 +53,18 @@ public class ConformerResource extends CompoundResource {
 		try {
 			//System.out.println(request.getAttributes().get("org.restlet.http.headers"));
 			IStructureRecord record = new StructureRecord();
-			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));
+			try {
+				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));
+			} catch (NumberFormatException x) {
+				throw new InvalidResourceIDException(request.getAttributes().get(idcompound));
+			}
 			QueryStructureByID query = new QueryStructureByID();			
 			query.setMaxRecords(-1);
 			Object idconformer = request.getAttributes().get(ConformerResource.idconformer);
-			if (idconformer!= null) {
+			try {
 				record.setIdstructure(Integer.parseInt(Reference.decode(idconformer.toString())));
 				query.setChemicalsOnly(false);
-			} else {
+			} catch (Exception x) {
 				query.setChemicalsOnly(true);
 				query.setValue(record);
 			}

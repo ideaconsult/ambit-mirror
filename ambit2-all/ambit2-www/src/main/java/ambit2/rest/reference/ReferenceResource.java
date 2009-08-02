@@ -17,6 +17,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
 
@@ -65,13 +66,12 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 	@Override
 	protected ReadReference createQuery(Context context, Request request, Response response)
 			throws AmbitException {
-		
+		Object idref = request.getAttributes().get(idreference);
 		try {
-			Object idref = request.getAttributes().get(idreference);
 			if (idref == null) return new ReadReference();
 			else return new ReadReference(new Integer(Reference.decode(idref.toString())));
 		} catch (Exception x) {
-			throw new AmbitException(x);
+			throw new InvalidResourceIDException(idref);
 		}
 	} 
 

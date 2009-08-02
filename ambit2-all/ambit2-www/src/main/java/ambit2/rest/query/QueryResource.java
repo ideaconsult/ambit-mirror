@@ -61,11 +61,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			        	Representation r = convertor.process(query);
 			        	return r;
 		        	} catch (NotFoundException x) {
-		        		x.printStackTrace();
-		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-		    			return new StringRepresentation("<error>Query returns no results! "+x.getMessage()+"</error>",
-		    					variant.getMediaType());	
-		    			
+		        		//x.printStackTrace();
+		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
+		    			return null;
 		        	} catch (SQLException x) {
 		        		x.printStackTrace();
 		        		if (retry <2) {
@@ -73,15 +71,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		        			continue;
 		        		}
 		        		else {
-			    			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
-			    			return new StringRepresentation("<error>Error connecting to database "+x.getMessage()+"</error>",
-			    					variant.getMediaType());
+			    			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x);
+			    			return null;
 		        		}
 		        	} catch (Exception x) {
 		        		x.printStackTrace();
-		    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-		    			return new StringRepresentation("<error>there was an error retrieving the data "+x.getMessage()+"</error>",
-		    					variant.getMediaType());		        		
+		    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+		    			return null;	        		
 		        	} finally {
 		        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
 		        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
@@ -91,13 +87,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
     					variant.getMediaType());	
 	        	
 	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	        	return new StringRepresentation(error.getMessage(),variant.getMediaType());	        	
+	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,error);
+	        	return null;
+    	
 	        }
 		} catch (Exception x) {
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-			return new StringRepresentation("there was an error retrieving the data "+x.getMessage(),
-					variant.getMediaType());			
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+			return null;	
 		}
 	}		
 		

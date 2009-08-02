@@ -62,9 +62,8 @@ public class QueryListResource extends Resource {
 			}
 			
 		} catch (Exception x) {
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-			return new StringRepresentation("An error retrieving the dataset "+x.getMessage(),
-			MediaType.TEXT_PLAIN);			
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+			return null;
 		}
 	}	
 }

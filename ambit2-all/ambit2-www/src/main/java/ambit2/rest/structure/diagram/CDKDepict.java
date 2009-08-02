@@ -25,7 +25,9 @@ public class CDKDepict extends AbstractDepict {
 	}
 	@Override
 	protected BufferedImage getImage(String smiles) throws AmbitException {
-		return depict.getImage(smiles);
+		try {
+			return depict.generateImage(smiles);
+		} catch (Exception x) { throw new AmbitException(x); }
 	}
 
 }

@@ -24,6 +24,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -116,6 +117,8 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 			query.setChemicalsOnly(true);
 			query.setValue(record);
 			return query;
+		} catch (NumberFormatException x) {
+			throw new InvalidResourceIDException(request.getAttributes().get(idcompound));
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}

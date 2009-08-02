@@ -33,6 +33,7 @@ public class Name2StructureResource extends Resource {
 			this.name = Reference.decode(request.getAttributes().get("name").toString());
 		} catch (Exception x) {
 			this.name = null;
+
 		}		
 	}
 
@@ -57,12 +58,12 @@ public class Name2StructureResource extends Resource {
 	        		}
 	        	};
 	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	        	return new StringRepresentation("Undefined query",variant.getMediaType());	        	
+	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,"Undefined query");
+	        	return null;	        	
 	        }
 		} catch (Exception x) {
-			getResponse().setStatus(Status.SERVER_ERROR_NOT_IMPLEMENTED);
-			return new StringRepresentation(x.getMessage(),MediaType.TEXT_PLAIN);	
+			getResponse().setStatus(Status.SERVER_ERROR_NOT_IMPLEMENTED,x);
+			return null;	
 		
 		}
 	}		

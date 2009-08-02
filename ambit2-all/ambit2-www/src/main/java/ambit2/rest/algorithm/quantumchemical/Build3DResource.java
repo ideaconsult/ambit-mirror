@@ -19,13 +19,13 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.OutputRepresentation;
 import org.restlet.resource.Representation;
-import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
 import ambit2.core.io.MDLWriter;
 import ambit2.mopac.MopacShell;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.error.EmptyMoleculeException;
 
 public class Build3DResource extends AlgorithmResource {
 	
@@ -45,11 +45,7 @@ public class Build3DResource extends AlgorithmResource {
 			shell = null;
 		}
 		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));	
-		try {
-			this.smiles = Reference.decode(request.getAttributes().get("smiles").toString());
-		} catch (Exception x) {
-			this.smiles = null;
-		}		
+
 		if (delim == null) {
 			StringBuilder d = new StringBuilder();
 			d.append("-=#+-()/\\.@");
@@ -61,11 +57,18 @@ public class Build3DResource extends AlgorithmResource {
 	public Representation getRepresentation(Variant variant) {
 		
 		try {
+			try {
+				this.smiles = Reference.decode(getRequest().getAttributes().get("smiles").toString());
+			} catch (Exception x) {
+				getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, x);
+				return null;
+			}		
+			
 	        if (smiles != null) {
 	        	IAtomContainer mol = getMolecule(smiles);
 	        	if ((mol ==  null) || (mol.getAtomCount()==0)) {
-		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	        		return new StringRepresentation("No image",variant.getMediaType());	   
+		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, new EmptyMoleculeException());
+		        	return null;
 	        	}
 	        	final IAtomContainer newmol = shell.process(mol);	        	
 	        	return new OutputRepresentation(ChemicalMediaType.CHEMICAL_MDLSDF) {
@@ -84,13 +87,12 @@ public class Build3DResource extends AlgorithmResource {
 	        		}
 	        	};
 	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	        	return new StringRepresentation("Undefined query",variant.getMediaType());	        	
+	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,"Undefined query");
+	        	return null;        	
 	        }
 		} catch (Exception x) {
-			x.printStackTrace();
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return new StringRepresentation("No results for query "+smiles,variant.getMediaType());	
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			return null;
 		
 		}
 	}			

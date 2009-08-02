@@ -74,19 +74,18 @@ public class PubchemResource extends Resource {
 	            	 return new StringRepresentation(b.toString());
 			     }
 	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-	        	return new StringRepresentation("Undefined query",variant.getMediaType());	        	
+	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,"Undefined query");
+	        	return null;	        	
 	        }
 		} catch (NotFoundException x) {
-			x.printStackTrace();
-			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return new StringRepresentation("No results for query "+term,variant.getMediaType());	
+
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,"No results for query "+term);
+			return null;	
         
 		} catch (Exception x) {
-			x.printStackTrace();
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-			return new StringRepresentation("there was an error retrieving the data "+x.getMessage(),
-					variant.getMediaType());			
+
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+			return null;
 		}
 	}		
 			

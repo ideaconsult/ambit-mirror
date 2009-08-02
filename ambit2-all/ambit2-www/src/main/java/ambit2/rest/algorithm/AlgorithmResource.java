@@ -1,6 +1,7 @@
 package ambit2.rest.algorithm;
 
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restlet.Context;
@@ -15,6 +16,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
+import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource.descriptortypes;
 
 /**
  * Algorithms as per http://opentox.org/wiki/opentox/Algorithm
@@ -24,16 +26,17 @@ import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
 public class AlgorithmResource extends AbstractResource<List<String>,String,IProcessor<List<String>, Representation>> {
 	public final static String algorithm = "/algorithm";	
 	public final static String algorithmKey =  "algorithm_id";
-			
+
+	public enum alsgorithmtypes  {
+		util,preprocessing,clustering,descriptorcalculation,learning
+	};
 	
 	protected String category = "";
 	public AlgorithmResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		query.add("util");
-		query.add("preprocessing");
-		query.add("clustering");
-		query.add(AlgorithmDescriptorResource.descriptorcalculation);
-		query.add("learning");
+		query = new ArrayList<String>();
+		for (alsgorithmtypes d : alsgorithmtypes.values())
+			query.add(String.format("%s",d.toString()));		
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		

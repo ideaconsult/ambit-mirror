@@ -8,6 +8,7 @@ import org.restlet.data.Response;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.search.structure.QueryDataset;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
 
 public class DatasetStructuresResource extends StructureQueryResource<QueryDataset> {
@@ -31,10 +32,12 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 				query.setValue(dataset);
 				query.setMaxRecords(100);
 				return query;
+			} catch (NumberFormatException x) {
+				throw new InvalidResourceIDException(id);
 			} catch (Exception x) {
-				throw new AmbitException("Invalid dataset id "+id);
+				throw new InvalidResourceIDException(id);
 			}
-			else throw new AmbitException("Invalid dataset id");
+			else throw new InvalidResourceIDException("");
 			
 		} catch (Exception x) {
 			throw new AmbitException(x);

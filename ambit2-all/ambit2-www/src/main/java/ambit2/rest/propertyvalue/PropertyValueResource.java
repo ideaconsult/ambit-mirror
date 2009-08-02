@@ -17,6 +17,7 @@ import ambit2.db.readers.RetrieveField;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -73,10 +74,15 @@ public class PropertyValueResource extends QueryResource<IQueryRetrieval<Object>
 		field.setSearchByAlias(true);
 		
 		IStructureRecord record = new StructureRecord();
-		record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
+		try {
+			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
+		} catch (NumberFormatException x) {
+			throw new InvalidResourceIDException(request.getAttributes().get(CompoundResource.idcompound));
+		}
 		try {
 			record.setIdstructure(Integer.parseInt(Reference.decode(request.getAttributes().get(ConformerResource.idconformer).toString())));
 			field.setChemicalsOnly(false);
+		
 		} catch (Exception x) {
 			field.setChemicalsOnly(true);
 		} finally {
