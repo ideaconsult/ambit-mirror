@@ -28,6 +28,6 @@ public class AlgorithmDescriptorsResource extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 5;
+		return count == 8;
 	}	
 }
