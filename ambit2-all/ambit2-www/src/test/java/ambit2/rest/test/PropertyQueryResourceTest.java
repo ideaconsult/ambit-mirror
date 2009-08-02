@@ -1,24 +1,40 @@
 package ambit2.rest.test;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
-import org.restlet.Client;
-import org.restlet.data.Protocol;
-import org.restlet.data.Response;
+import org.restlet.data.MediaType;
 
+import ambit2.rest.query.PropertyQueryResource;
+
+/**
+ * Test for {@link PropertyQueryResource}
+ * @author nina
+ *
+ */
 public class PropertyQueryResourceTest extends ResourceTest {
-	protected static String URI = "http://localhost:8080/query/property/like/1530-32-1";
-
+	@Override
+	public String getTestURI() {
+		return String.format("http://localhost:%d/query/property/like/1530-32-1", port);
+	}
 	@Test
-	public void testGet() throws Exception {
-		Client client = new Client(Protocol.HTTP);
-		Response response =	client.get(URI);
-		String out = response.getEntity().getText();
-		System.out.println(out);
-		/*
-		Diff diff = new Diff(new FileReader(
-			new File("./etc/control-xml/control-web-races.xml")),
-			new StringReader(response.getEntity().getText()));
-		assertTrue(diff.toString(), diff.identical());
-		*/
+	public void testURI() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+	}
+	@Override
+	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count = 0;
+		while ((line = r.readLine())!= null) {
+			Assert.assertEquals(String.format("http://localhost:8181/compound/11",port), line);
+			count++;
+		}
+		return count==1;
 	}
 }

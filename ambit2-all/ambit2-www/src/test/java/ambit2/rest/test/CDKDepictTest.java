@@ -1,22 +1,45 @@
 package ambit2.rest.test;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.InputStream;
 
+import javax.imageio.ImageIO;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
-import org.restlet.Client;
-import org.restlet.data.Protocol;
-import org.restlet.data.Response;
+import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 
 import ambit2.base.io.DownloadTool;
 
 public class CDKDepictTest extends ResourceTest {
-	protected static String URI = "http://localhost:8080/cdk/depict/c1ccccc1";
+	
+	@Override
+	public String getTestURI() {
+		return String.format("http://localhost:%d/cdk/depict/c1ccccc1", port);
+	}	
 	@Test
-	public void testGet() throws Exception {
-		Client client = new Client(Protocol.HTTP);
-		Response response =	client.get(URI);
-		InputStream in = response.getEntity().getStream();
-		DownloadTool.download(in, new File("test.png"));
+	public void testPNG() throws Exception {
+		testGet(getTestURI(),MediaType.IMAGE_PNG);
+	}	
+	@Override
+	public boolean verifyResponsePNG(String uri, MediaType media, InputStream in)
+			throws Exception {
+		File file = new File("temp.png");
+		file.delete();
+		DownloadTool.download(in, file);
+		Assert.assertTrue(file.exists());
+		Image image = ImageIO.read(file);
+		Assert.assertNotNull(image);
+		file.delete();
+		return true;
 	}
+	
+	@Test
+	public void testInvalidSmiles() throws Exception {
+		Status status = testHandleError(String.format("http://localhost:%d/cdk/depict/AAA", port),MediaType.IMAGE_PNG);
+		System.out.println(status);
+	}	
 }

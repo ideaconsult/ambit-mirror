@@ -12,7 +12,7 @@ import org.restlet.data.MediaType;
 import ambit2.rest.ChemicalMediaType;
 
 public class HttpConnectionTest extends ResourceTest {
-	protected static String URI = "http://localhost:8080/query/similarity/method/fp1024/distance/tanimoto/0.1/smiles/C";
+	protected String URI = String.format("http://localhost:%d/query/similarity/method/fp1024/distance/tanimoto/0.1/smiles/C",port);
 
 	@Test
 	public void testConnectSmiles() throws Exception {
