@@ -8,6 +8,8 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
+import prefuse.action.layout.CollapsedStackLayout;
+
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -27,6 +29,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	public final static String featuredef = "/feature_definition";
 	public final static String idfeaturedef = "id_feature_definition";
 	public final static String featuredefID = String.format("%s/{%s}",featuredef,idfeaturedef);
+	protected boolean collapsed ;
 	
 	public PropertyResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -54,7 +57,8 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				
 		} else 
 			return new OutputStreamConvertor(
-					new PropertyHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new PropertyHTMLReporter(getRequest().getRootRef(),collapsed)
+					,MediaType.TEXT_HTML);
 	}
 
 	@Override
@@ -63,9 +67,11 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		
 		Object o = request.getAttributes().get(idfeaturedef);
 		try {
+			collapsed = o==null;
 			if (o==null) return new ReadProperty();
 			else return new ReadProperty(new Integer(o.toString()));
 		} catch (Exception x) {
+			collapsed = true;
 			return new ReadProperty();
 		} finally {
 		}
