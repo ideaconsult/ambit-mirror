@@ -15,8 +15,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
-import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource.descriptortypes;
 
 /**
  * Algorithms as per http://opentox.org/wiki/opentox/Algorithm
@@ -27,7 +25,7 @@ public class AlgorithmResource extends AbstractResource<List<String>,String,IPro
 	public final static String algorithm = "/algorithm";	
 	public final static String algorithmKey =  "algorithm_id";
 
-	public enum alsgorithmtypes  {
+	public enum algorithmtypes  {
 		util,preprocessing,clustering,descriptorcalculation,learning
 	};
 	
@@ -35,8 +33,8 @@ public class AlgorithmResource extends AbstractResource<List<String>,String,IPro
 	public AlgorithmResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		query = new ArrayList<String>();
-		for (alsgorithmtypes d : alsgorithmtypes.values())
-			query.add(String.format("%s",d.toString()));		
+		for (algorithmtypes d : algorithmtypes.values())
+			query.add(String.format("%s/%s","algorithm",d.toString()));		
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
@@ -57,11 +55,12 @@ public class AlgorithmResource extends AbstractResource<List<String>,String,IPro
 		/*
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
-		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor(
-					new DatasetsHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+			*/
+		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+			return new StringConvertor(
+					new AlgorithmHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		*/
+		
 			return new StringConvertor(	new AlgorithmURIReporter(getRequest().getRootRef()) {
 				@Override
 				public void processItem(Object src, Writer output) {
@@ -71,11 +70,11 @@ public class AlgorithmResource extends AbstractResource<List<String>,String,IPro
 					} catch (Exception x) {}
 				}
 			},MediaType.TEXT_URI_LIST);
-			/*
+			
 		} else //html 	
-			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
-					*/
+			return new StringConvertor(
+					new AlgorithmHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+		
 	}
 	
 }
