@@ -15,6 +15,9 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	 */
 	private static final long serialVersionUID = -4566136103208284105L;
 	protected Reference baseReference;
+	public Reference getBaseReference() {
+		return baseReference;
+	}
 	public QueryURIReporter(Reference baseRef) {
 		this.baseReference = baseRef;
 	}
