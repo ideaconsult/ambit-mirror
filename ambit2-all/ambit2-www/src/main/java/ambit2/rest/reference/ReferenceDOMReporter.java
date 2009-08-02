@@ -70,6 +70,7 @@ public class ReferenceDOMReporter extends QueryDOMReporter<LiteratureEntry, Read
 		Element e = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_reference);
         e.setAttribute(XMLTags.attr_id,Integer.toString(item.getId()));
         e.setAttribute(XMLTags.attr_name,item.getName());
+        e.setAttribute("AlgorithmID", item.getURL());
         e.appendChild(getURIElement(doc, item));
         return e;
 	}
