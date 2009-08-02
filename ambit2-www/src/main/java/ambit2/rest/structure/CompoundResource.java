@@ -91,7 +91,7 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 			return new DocumentConvertor(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef(),false),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(
 					getURIReporter(),MediaType.TEXT_URI_LIST);
