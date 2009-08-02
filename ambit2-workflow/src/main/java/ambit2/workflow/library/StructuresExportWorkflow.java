@@ -35,8 +35,8 @@ import java.sql.SQLException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.Reporter;
 import ambit2.core.io.FileOutputState;
-import ambit2.core.processors.Reporter;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
