@@ -15,15 +15,14 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -100,11 +99,14 @@ public class CompoundImageTools {
         else return defaultImage;
     }
 
+    public synchronized BufferedImage generateImage(String smiles) throws CDKException {
+        if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+        return getImage(parser.parseSmiles(smiles));
+    }    
     public synchronized BufferedImage getImage(String smiles) {
         ArrayList<String> m = null;
         try {
-            if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-            return getImage(parser.parseSmiles(smiles));
+            return generateImage(smiles);
         } catch (Exception x) {
             m = new ArrayList<String>();
             m.add(x.getMessage());
