@@ -37,8 +37,8 @@ public class AmbitResource extends Resource {
 			{"/query/property/=/50-00-0","Search by property or an identifier (CAS, Name, etc.)"},
 			{"/query/smarts/[NX3][CX3](=[OX1])[#6]","Search by SMARTS"},
 			{"/pubchem/query/50-00-0","PubChem query"},
-			{"/cdk/depict/c1ccccc1","Structure diagram (based on CDK)"},
-			{"/daylight/depict/c1ccccc1","Structure diagram (based on Daylight depict"},
+			{"/algorithm/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)"},
+			{"/algorithm/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict"},
 			{"/build3d/smiles/c1ccccc1","Generate 3D structure"}
 	};
 	public AmbitResource() {

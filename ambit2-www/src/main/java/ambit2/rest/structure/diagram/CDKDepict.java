@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 import org.restlet.Context;
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
@@ -21,7 +22,7 @@ public class CDKDepict extends AbstractDepict {
 	protected CompoundImageTools depict = new CompoundImageTools();
 	public CDKDepict(Context context, Request request, Response response) {
 		super(context,request,response);
-		depict.setImageSize(new Dimension(600,300));
+		depict.setImageSize(new Dimension(410,210));
 	}
 	@Override
 	protected BufferedImage getImage(String smiles) throws AmbitException {
@@ -29,5 +30,8 @@ public class CDKDepict extends AbstractDepict {
 			return depict.generateImage(smiles);
 		} catch (Exception x) { throw new AmbitException(x); }
 	}
-
+	@Override
+	protected String getTitle(Reference ref, String smiles) {
+		return String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>", smiles,ref,smiles,smiles);
+	}
 }
