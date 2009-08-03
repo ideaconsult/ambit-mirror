@@ -51,6 +51,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					,
 					uriReporter.getBaseReference()
 					);
+			output.write(String.format("<h4>%s</h4>",query.toString()));
 
 		} catch (Exception x) {}		
 	};

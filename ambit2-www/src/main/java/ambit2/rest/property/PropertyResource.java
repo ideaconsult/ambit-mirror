@@ -3,16 +3,18 @@ package ambit2.rest.property;
 import java.io.Writer;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
-import prefuse.action.layout.CollapsedStackLayout;
-
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
@@ -68,7 +70,15 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		Object o = request.getAttributes().get(idfeaturedef);
 		try {
 			collapsed = o==null;
-			if (o==null) return new ReadProperty();
+			if (o==null) {
+				Form form = request.getResourceRef().getQueryAsForm();
+				Object key = form.getFirstValue("search");
+				if (key != null) {
+					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+					q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+					return q;
+				} else return new ReadProperty();
+			}
 			else return new ReadProperty(new Integer(o.toString()));
 		} catch (Exception x) {
 			collapsed = true;

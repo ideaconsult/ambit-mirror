@@ -1,22 +1,34 @@
 package ambit2.rest.structure;
 
+import java.io.Writer;
+
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
+import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.AbstractReporter;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
+import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
@@ -42,12 +54,12 @@ image/png
 </pre>
  * @author nina
  */
-public class CompoundResource extends StructureQueryResource<QueryStructureByID> {
+public class CompoundResource extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	public final static String compound = "/compound";
 	public final static String idcompound = "idcompound";
 	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
 	public final static String compoundID_media = String.format("%s%s",compoundID,"/{media}");	
-	
+	protected boolean collapsed = false;
 	public CompoundResource(Context context, Request request, Response response) {
 		super(context,request,response);
 	
@@ -58,9 +70,34 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 		return new String[] {compoundID,compoundID_media};
 	}
 	@Override
+	public Representation getRepresentation(Variant variant) {
+		if (query == null) try {
+			IProcessor<Object, Representation>  convertor = createConvertor(variant);
+			Representation r = convertor.process(null);
+        	return r;			
+		} catch (Exception x) { getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x); return null;}
+		else return super.getRepresentation(variant);
+	}
+	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException {
+		if (query == null) {
+			if (variant.getMediaType().equals(MediaType.TEXT_HTML)) 
+				return new StringConvertor(new AbstractReporter<Object,Writer>() {
+					
+					public Writer process(Object target) throws AmbitException {
+						try {
+							AmbitResource.writeHTMLHeader(getOutput(), "Compound", getRequest().getRootRef());
+							getOutput().write("<div>No search criteria specified</div>");
+							AmbitResource.writeHTMLFooter(getOutput(), "Compound", getRequest().getRootRef());
+						} catch (Exception x) {}
+						return getOutput();
+					}
+					public void close() throws Exception {}
 
+				},MediaType.TEXT_HTML);
+			else throw new NotFoundException();
+		}
 		if ("png".equals(media)) variant.setMediaType(MediaType.IMAGE_PNG);
 		if ("pdf".equals(media)) variant.setMediaType(MediaType.APPLICATION_PDF);
 		if ("sdf".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_MDLSDF);
@@ -91,7 +128,7 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 			return new DocumentConvertor(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef(),false),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(
 					getURIReporter(),MediaType.TEXT_URI_LIST);
@@ -105,18 +142,42 @@ public class CompoundResource extends StructureQueryResource<QueryStructureByID>
 	}
 
 	@Override
-	protected QueryStructureByID createQuery(Context context, Request request,
+	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws AmbitException {
 		media = getMediaParameter(request);
 		try {
 //			System.out.println(request.getAttributes().get("org.restlet.http.headers"));
-			IStructureRecord record = new StructureRecord();
-			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));
-			QueryStructureByID query = new QueryStructureByID();
-			query.setMaxRecords(1);
-			query.setChemicalsOnly(true);
-			query.setValue(record);
-			return query;
+			Object key = request.getAttributes().get(idcompound);
+			if (key==null) {
+				Form form = request.getResourceRef().getQueryAsForm();
+				key = form.getFirstValue("search");
+				if (key != null) {
+					collapsed = true;
+					QueryField q_by_name =  new QueryField();
+			        try {
+			        	q_by_name.setValue(Reference.decode(key.toString()));
+			        } catch (Exception x) {
+			        	throw new AmbitException(x);
+			        }			
+			        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
+			        try {
+			        	condition = StringCondition.getInstance(Reference.decode(request.getAttributes().get("condition").toString()));
+			        } catch (Exception x) {
+			        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
+			        } finally {
+			        	q_by_name.setCondition(condition);
+			        }
+			        return q_by_name;
+				} else return null;			
+			} else {
+				IStructureRecord record = new StructureRecord();
+				record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
+				QueryStructureByID query = new QueryStructureByID();
+				query.setMaxRecords(1);
+				query.setChemicalsOnly(true);
+				query.setValue(record);
+				return query;
+			}
 		} catch (NumberFormatException x) {
 			throw new InvalidResourceIDException(request.getAttributes().get(idcompound));
 		} catch (Exception x) {
