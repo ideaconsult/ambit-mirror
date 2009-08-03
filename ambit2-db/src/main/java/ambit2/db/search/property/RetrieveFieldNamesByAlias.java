@@ -1,23 +1,23 @@
 package ambit2.db.search.property;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
+/**
+ * Finds properties by alias
+ * @author nina
+ *
+ */
 public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<String, String, StringCondition> {
 
 	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
-	public static String where = " where comments %s ?";
+	public static String where = " where comments %s ?"; // COLLATE utf8_general_ci for case insensitive
 		/**
 	 * 
 	 */
@@ -70,5 +70,10 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<String,
 		}
 		public Class getValueType() {
 			return String.class;
+		}
+		@Override
+		public String toString() {
+
+			return String.format("Property %s %s", getCondition()==null?"":getCondition(),getValue()==null?"":getValue());
 		}
 }
