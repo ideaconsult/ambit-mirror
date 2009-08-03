@@ -39,6 +39,9 @@ public class ReadProperty extends AbstractPropertyRetrieval<String, Integer, EQC
 	public String getSQL() throws AmbitException {
 		return getValue()==null?base_sql:String.format("%s where idproperty=?", base_sql);
 	}
-
+	@Override
+	public String toString() {
+		return getValue()==null?"Properties":String.format("Property id=%s",getValue());
+	}
 
 }
