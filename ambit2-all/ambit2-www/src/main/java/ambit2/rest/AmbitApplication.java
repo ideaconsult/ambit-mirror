@@ -20,6 +20,7 @@ import ambit2.db.LoginInfo;
 import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
+import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
@@ -35,6 +36,7 @@ import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 
@@ -134,8 +136,9 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/pubchem/query/{term}",PubchemResource.class);
 		
-		router.attach("/daylight/depict/{smiles}",DaylightDepict.class);
-		router.attach("/cdk/depict/{smiles}",CDKDepict.class);	
+		router.attach("/algorithm/util/depict/daylight",DaylightDepict.class);
+		router.attach("/algorithm/util/depict/cdk",CDKDepict.class);
+		router.attach("/algorithm/util/depict",AbstractDepict.class);	
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
@@ -149,14 +152,25 @@ public class AmbitApplication extends Application {
 		router.attach(AlgorithmResource.algorithm,AlgorithmResource.class);
 		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.algorithmtypes.descriptorcalculation.toString()),
 						AlgorithmDescriptorTypesResource.class);
+		
+		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,"util"),
+				AlgorithmUtilTypesResource.class);
+		
+		for (AlgorithmUtilTypesResource.utiltypes o : AlgorithmUtilTypesResource.utiltypes.values())
+			router.attach(String.format("%s/%s/%s",
+					AlgorithmResource.algorithm,
+					"util",
+					o.toString()
+					),
+					AlgorithmUtilTypesResource.class);
+		
 		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
 			router.attach(String.format("%s/%s/%s/{%s}",
 					AlgorithmResource.algorithm,
 					AlgorithmResource.algorithmtypes.descriptorcalculation.toString(),
 					o.toString(),
 					AlgorithmDescriptorTypesResource.iddescriptor),
-					
-					AlgorithmDescriptorTypesResource.class);
+					AlgorithmDescriptorTypesResource.class);		
 		
 		router.attach(ModelResource.model,ModelResource.class);
 		router.attach(String.format("%s/{%s}",ModelResource.model,ModelResource.modelID),
