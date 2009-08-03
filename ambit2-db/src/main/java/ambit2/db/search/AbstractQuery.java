@@ -82,10 +82,10 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	public String toString() {
 		if ((getFieldname()==null) && (getValue()==null)) return getClass().getName();
 		StringBuilder b = new StringBuilder();
-		if (getFieldname()==null) b.append("Any property");
+		if (getFieldname()==null) b.append("Property");
 		else b.append(getFieldname());
 		b.append(' ');
-		b.append(getCondition());
+		b.append(getCondition()==null?"":getCondition());
 		b.append(' ');
 		if (getValue() != null) 
 			b.append(getValue());
