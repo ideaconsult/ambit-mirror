@@ -3,17 +3,18 @@ package ambit2.rest.dataset;
 import java.io.Writer;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
-import prefuse.action.layout.CollapsedStackLayout;
-
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
@@ -58,7 +59,15 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		} catch (Exception x) {
 			query.setValue(null);
 		}
-
+		else {
+			Form form = request.getResourceRef().getQueryAsForm();
+			Object key = form.getFirstValue("search");
+			if (key != null) {
+				RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
+				query_by_name.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+				return query_by_name;
+			} 
+		}
 		return query;
 	}
 	@Override

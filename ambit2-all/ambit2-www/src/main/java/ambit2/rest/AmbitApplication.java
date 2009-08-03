@@ -115,6 +115,7 @@ public class AmbitApplication extends Application {
 		
 		//router.attach("/cas/{cas}"+fp,SimilarityResource.class);
 		//router.attach("/name/{name}"+fp,SimilarityResource.class);		
+		router.attach(CompoundResource.compound,CompoundResource.class);
 		router.attach(CompoundResource.compoundID,CompoundResource.class);
 		router.attach(CompoundResource.compoundID_media, CompoundResource.class);		
 		
@@ -141,6 +142,7 @@ public class AmbitApplication extends Application {
 		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.smartsID,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
+		router.attach(SmartsQueryResource.dataset_smarts_resource_id,SmartsQueryResource.class);
 		
 		router.attach(QueryResource.query_resource,QueryListResource.class);
 		
@@ -201,7 +203,8 @@ public class AmbitApplication extends Application {
         Component component = new Component();
         component.getServers().add(Protocol.HTTP, 8080);
        
-        AmbitApplication application = new AmbitApplication(component.getContext());
+        AmbitApplication application = new AmbitApplication(component.getContext().createChildContext());
+
 
         // Attach the application to the component and start it
         component.getDefaultHost().attach(application);

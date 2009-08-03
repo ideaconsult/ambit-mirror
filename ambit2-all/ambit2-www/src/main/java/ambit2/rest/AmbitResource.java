@@ -137,7 +137,7 @@ public class AmbitResource extends Resource {
 		w.write("</td>");
 		w.write("<td align='right'>");
 
-		w.write("<form action='' method='post'>\n");
+		w.write("<form action='' method='get'>\n");
 		w.write("<input name='search' size='80'></input>\n");
 		w.write("<input type='submit' value='Search' /><br>");
 		w.write(baseReference.toString());

@@ -3,6 +3,7 @@ package ambit2.rest.reference;
 import java.io.Writer;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -12,6 +13,9 @@ import org.restlet.resource.Variant;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.RetrieveFieldNamesByAlias;
+import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
@@ -69,7 +73,18 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 			throws AmbitException {
 		Object idref = request.getAttributes().get(idreference);
 		try {
-			if (idref == null) return new ReadReference();
+			if (idref==null) {
+				/*
+				Form form = request.getResourceRef().getQueryAsForm();
+				Object key = form.getFirstValue("search");
+				if (key != null) {
+					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+					q.setCondition(StringCondition.getInstance(StringCondition.C_SOUNDSLIKE));
+					return q;
+				} else 
+				*/
+					return new ReadReference();
+			}			
 			else return new ReadReference(new Integer(Reference.decode(idref.toString())));
 		} catch (Exception x) {
 			throw new InvalidResourceIDException(idref);

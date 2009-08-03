@@ -9,7 +9,7 @@ import org.restlet.data.MediaType;
 import org.restlet.resource.OutputRepresentation;
 import org.restlet.resource.Representation;
 
-import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
@@ -35,13 +35,16 @@ public class OutputStreamConvertor<T,Q extends IQueryRetrieval<T>>  extends Quer
 	            		getReporter().process(query);
 	            		//writer.flush();
 	            		//stream.flush();
-	            	} catch (AmbitException x) {
+	            	} catch (NotFoundException x) {
+	            		;
+	            	} catch (Exception x) {
 	            		Throwable ex = x;
 	            		while (ex!=null) {
 	            			if (ex instanceof IOException) 
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
+	            		logger.warn(x);
 	            		x.printStackTrace();
 	            	} finally {
 	            		try {if (writer !=null) writer.flush(); } catch (Exception x) { x.printStackTrace();}

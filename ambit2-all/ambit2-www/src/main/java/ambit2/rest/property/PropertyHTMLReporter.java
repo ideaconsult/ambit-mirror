@@ -32,12 +32,13 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	public void processItem(Property item, Writer output) {
 		try {
 			output.write(String.format(
-						"<a href=\"%s\">%s</a><br>",
+						"<a href=\"%s\">%s</a>&nbsp",
 						uriReporter.getURI(item),
 						item.getName()));
 			if (!collapsed) {
 				output.write(String.format("<a href='%s'>%s</a>",item.getReference().getURL(),item.getReference().getName()));
 			}
+			output.write("<br>");
 		} catch (Exception x) {
 			x.printStackTrace();
 		}		
