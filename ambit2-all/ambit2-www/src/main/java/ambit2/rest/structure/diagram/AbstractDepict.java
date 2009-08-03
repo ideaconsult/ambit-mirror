@@ -34,7 +34,7 @@ public class AbstractDepict extends Resource {
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 	
 	}
-	protected BufferedImage getImage(String smiles) throws AmbitException {
+	protected BufferedImage getImage(String smiles,int width,int height) throws AmbitException {
 		return null;
 	}
 	protected String getTitle(Reference ref, String smiles) {
@@ -54,6 +54,9 @@ public class AbstractDepict extends Resource {
 
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
+			int w = 400; int h = 200;
+			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
+			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
 			smiles = form.getFirstValue("search");		
         	
 	    		if(variant.getMediaType().equals(MediaType.TEXT_HTML)) {
@@ -70,9 +73,9 @@ public class AbstractDepict extends Resource {
 	    			});
 	    			return convertor.process(getTitle(getRequest().getOriginalRef(),smiles));
 	    		}
-	    		
+					    		
 	    	if (smiles != null) {
-	        	final BufferedImage image = getImage(smiles);
+	        	final BufferedImage image = getImage(smiles,w,h);
 	        	if (image ==  null) {
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid smiles %s",smiles));
 	        		return null;

@@ -25,8 +25,9 @@ public class CDKDepict extends AbstractDepict {
 		depict.setImageSize(new Dimension(410,210));
 	}
 	@Override
-	protected BufferedImage getImage(String smiles) throws AmbitException {
+	protected BufferedImage getImage(String smiles,int w, int h) throws AmbitException {
 		try {
+			depict.setImageSize(new Dimension(w,h));
 			return depict.generateImage(smiles);
 		} catch (Exception x) { throw new AmbitException(x); }
 	}

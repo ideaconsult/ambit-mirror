@@ -23,7 +23,7 @@ public class DaylightDepict extends AbstractDepict {
 
 	}
 	@Override
-	protected BufferedImage getImage(String smiles) throws AmbitException {
+	protected BufferedImage getImage(String smiles,int w, int h) throws AmbitException {
 		return depict.process(smiles);
 	}
 	protected String getTitle(Reference ref, String smiles) {
