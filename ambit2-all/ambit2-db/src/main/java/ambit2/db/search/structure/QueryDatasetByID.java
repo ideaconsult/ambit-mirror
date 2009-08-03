@@ -16,7 +16,7 @@ public class QueryDatasetByID extends AbstractStructureQuery<String,Integer,Numb
 	public final static String sql = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join struc_dataset using(idstructure) where id_srcdataset %s %s";
 	public QueryDatasetByID(SourceDataset dataset) {
-		this(dataset.getId());
+		this(dataset==null?null:dataset.getId());
 	}
 	public QueryDatasetByID() {
 		this((SourceDataset)null);
