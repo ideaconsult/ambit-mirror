@@ -43,7 +43,22 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 		try {
 			writer.write(toURI(record));
-			if (!collapsed) writer.write("more");
+			if (!collapsed) {
+/*
+				String[] more = new String[] {
+						"conformer/all",
+						/*
+						"feature/",
+						"query/similar/",
+						"query/smarts/",
+						"model/",
+						"dataset/"
+						*/
+						};
+				for (String m:more)
+					output.write(String.format("<a href='%s'>%s</a>&nbsp;",m,m));
+*/
+			}
 		} catch (Exception x) {
 			logger.error(x);
 		}
@@ -74,7 +89,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		String w = uriReporter.getURI(record);
 
 		return String.format(
-				"<a href=\"%s\"><img src=\"%s\" alt=\"%s\" title=\"%d\"/></a>&nbsp;", 
+				"<a href=\"%s\"><img src=\"%s/png\" alt=\"%s\" title=\"%d\"/></a>&nbsp;", 
 				w, w, w, record.getIdchemical());
 
 		
