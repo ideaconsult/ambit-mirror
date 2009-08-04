@@ -47,13 +47,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 /*
 				String[] more = new String[] {
 						"conformer/all",
-						/*
+						
 						"feature/",
 						"query/similar/",
 						"query/smarts/",
 						"model/",
 						"dataset/"
-						*/
+						
 						};
 				for (String m:more)
 					output.write(String.format("<a href='%s'>%s</a>&nbsp;",m,m));
