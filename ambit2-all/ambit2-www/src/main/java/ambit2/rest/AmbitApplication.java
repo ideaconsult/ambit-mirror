@@ -21,6 +21,7 @@ import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
+import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
@@ -29,6 +30,7 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
+import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
@@ -47,15 +49,9 @@ import ambit2.rest.structure.diagram.DaylightDepict;
  */
 public class AmbitApplication extends Application {
 	
-	
-
-	
 	public final static String dataset_structures = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
-	
 	public final static String datasetID_structure = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 	public final static String datasetID_structure_media = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID_media);
-
-
 	
 	
 	protected String connectionURI;
@@ -120,7 +116,6 @@ public class AmbitApplication extends Application {
 		router.attach(CompoundResource.compound,CompoundResource.class);
 		router.attach(CompoundResource.compoundID,CompoundResource.class);
 		router.attach(CompoundResource.compoundID_media, CompoundResource.class);		
-		
 		router.attach(ConformerResource.conformers,ConformerResource.class);
 		router.attach(ConformerResource.conformerID,ConformerResource.class);
 		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
@@ -138,10 +133,15 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/algorithm/util/depict/daylight",DaylightDepict.class);
 		router.attach("/algorithm/util/depict/cdk",CDKDepict.class);
-		router.attach("/algorithm/util/depict",AbstractDepict.class);	
+		router.attach("/algorithm/util/depict",AbstractDepict.class);
+		router.attach("/algorithm/util/name2structure",Name2StructureResource.class);	
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
+		
+		router.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
+		router.attach(String.format("%s%s%s",DatasetsResource.datasetID,QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
+				
 		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.smartsID,SmartsQueryResource.class);
 		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
