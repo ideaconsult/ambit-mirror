@@ -27,19 +27,10 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	public ConformerURIReporter(Reference baseRef) {
 		super(baseRef);
 	}
-	@Override
-	public void processItem(IStructureRecord item, Writer output) {
-		try {
-			String ref = baseReference.toString();
-			if (ref.endsWith("/")) ref = ref.substring(0,ref.length()-1);
-			output.write(String.format("%s%s/%d%s/%d",
-					ref,
-					CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure())
-			);
-			output.flush();
-		} catch (IOException x) {
-			x.printStackTrace();
-		}
-		
-	}
+
+	public String getURI(String ref, IStructureRecord item) {
+		return String.format("%s%s/%d%s/%d",
+				ref,
+				CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure());
+	}	
 }

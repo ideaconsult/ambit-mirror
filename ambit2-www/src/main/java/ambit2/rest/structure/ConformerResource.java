@@ -8,8 +8,8 @@ import org.restlet.data.Response;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.error.InvalidResourceIDException;
 
 /**
@@ -33,9 +33,9 @@ public class ConformerResource extends CompoundResource {
 
 	public final static String conformerKey = "/conformer";
 	public final static String conformer = String.format("%s%s",compoundID,conformerKey);
-	public final static String conformers = String.format("%s%s/all",compoundID,conformerKey);
-	public final static String idconformer = "/{idconformer}";
-	public final static String conformerID = String.format("%s%s%s",compoundID,conformerKey,idconformer);
+	public final static String idconformer = "idconformer";
+	public final static String conformers = String.format("%s%s",compoundID,conformerKey);
+	public final static String conformerID = String.format("%s%s/{%s}",compoundID,conformerKey,idconformer);
 	public final static String conformerID_media = String.format("%s%s",conformerID,"/{media}");
 	
 	public ConformerResource(Context context, Request request, Response response) {
@@ -65,7 +65,9 @@ public class ConformerResource extends CompoundResource {
 				record.setIdstructure(Integer.parseInt(Reference.decode(idconformer.toString())));
 				query.setChemicalsOnly(false);
 			} catch (Exception x) {
+				record.setIdstructure(-1);
 				query.setChemicalsOnly(true);
+				query.setMaxRecords(-1);
 				query.setValue(record);
 			}
 			query.setValue(record);
@@ -74,7 +76,7 @@ public class ConformerResource extends CompoundResource {
 			throw new AmbitException(x);
 		}
 	}	
-	protected QueryReporter getURIReporter() {
+	protected QueryURIReporter getURIReporter() {
 		return new ConformerURIReporter<QueryStructureByID>(getRequest().getRootRef());
 	}
 }

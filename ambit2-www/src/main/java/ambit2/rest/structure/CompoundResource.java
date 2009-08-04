@@ -22,7 +22,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.search.StringCondition;
@@ -34,6 +33,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.PDFConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
@@ -128,7 +128,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new DocumentConvertor(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(
+							(getRequest()==null)?null:getRequest().getRootRef(),
+							collapsed,
+							getURIReporter()),
+					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(
 					getURIReporter(),MediaType.TEXT_URI_LIST);
@@ -137,7 +141,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);			
 	}
-	protected QueryReporter getURIReporter() {
+	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef());
 	}
 
