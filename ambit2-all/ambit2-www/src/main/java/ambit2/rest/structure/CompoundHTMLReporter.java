@@ -7,6 +7,7 @@ import org.restlet.data.Reference;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -19,16 +20,19 @@ Generates HTML file with links to structures . TODO - make use of a template eng
  */
 public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> 
 			extends QueryHTMLReporter<IStructureRecord,Q> {
-	protected ConformerURIReporter<IQueryRetrieval<IStructureRecord>> conformerURI;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7776155843790521467L;
 
+	public CompoundHTMLReporter(Reference reference,boolean collapsed,QueryURIReporter urireporter) {
+		super(reference,collapsed);
+		this.uriReporter = urireporter;
 
+	}
 	public CompoundHTMLReporter(Reference reference,boolean collapsed) {
 		super(reference,collapsed);
-		conformerURI = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(reference);		
+
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Reference reference) {

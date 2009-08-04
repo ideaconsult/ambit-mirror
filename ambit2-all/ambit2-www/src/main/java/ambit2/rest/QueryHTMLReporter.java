@@ -18,6 +18,13 @@ import ambit2.db.reporters.QueryReporter;
  */
 public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends QueryReporter<T,Q,Writer>  {
 	protected QueryURIReporter uriReporter;
+	public QueryURIReporter getUriReporter() {
+		return uriReporter;
+	}
+	public void setUriReporter(QueryURIReporter uriReporter) {
+		this.uriReporter = uriReporter;
+	}
+
 	protected boolean collapsed = true;
 	/**
 	 * 
