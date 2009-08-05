@@ -1,18 +1,19 @@
 <?php
 include 'nocache.php';
 ?>
-<html><link href=""styles/nstyle.css" rel="stylesheet" type="text/css">
+<html>
 <head>
 <meta name="description" content="AMBIT Project : Building blocks for a future QSAR Decision support system">
-<meta name="keywords" content="ambit,qsar, applicability domain, decision support,structure diagram,editor,aquire">
+<meta name="keywords" content="ambit,ambitxt,toxicity, bioconcentration factor,database,ambit2,rest,cas,chemical,molecular,qsar, applicability domain, decision support,structure diagram,editor,aquire">
 <meta name="robots"content="index,nofollow">
-<META NAME="GOOGLEBOT" CONTENT="index,NOFOLLOW">
+<META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
 <meta name="copyright" content="Copyright 2005. Nina Jeliazkova nina@acad.bg">
 <meta name="author" content="Nina Jeliazkova">
 <meta name="language" content="English">
 <meta name="revisit-after" content="7">
 <title>Ambit project - QSAR DSS building blocks</title>
 </head>
+<link href="styles/ambit.css" rel="stylesheet" type="text/css">
 <body >
 <?php 
 echo "<p>";
@@ -186,10 +187,18 @@ if ($maxpages < 0) $maxpages=0;
 //echo $query;
 
 
-echo "<form method=POST action=''>";
-echo "<table width='99%' bgcolor='#DDDDDD' >";
-echo "<CAPTION><EM>Search <a href='http://www.euras.be/bcf' target='_blank'>EURAS bioconcentration factor (BCF) Gold Standard Database</a> !</EM></CAPTION>";
 
+echo "<form method=POST action=''>";
+echo "<table border='0' width='99%' bgcolor='#FFFFFF' >";
+echo "<tr bgcolor='#FFFFFF'><td align='left'>";
+echo "<a href='http://ambit.sourceforge.net/intro.html'><img src='images/ambit-logo.png' alt='ambit.sourceforge.net' title='AMBIT new web site is at http://ambit.sourceforge.net' border='0'/></a>";
+
+echo "</td><td align='right'>";
+//search
+echo "<table width='99%' bgcolor='#DDDDDD' >";
+echo "<tr><td colspan='3'>";
+echo "Search <a href='http://www.euras.be/bcf' target='_blank'>EURAS bioconcentration factor (BCF) Gold Standard Database</a>";
+echo "</td></tr>";
 echo "<tr><td>";
 echo 'CAS Registry number </td><td> <input type="text" name="cas" value=' . $cas . '>';
 echo "</td><td><font color='#888888'>Enter CAS registry number (hyphenated) or click on the CAS field in the result list</font></td><tr><td>";
@@ -206,11 +215,14 @@ echo "</td><td><font color='#888888'>All criteria are combined with <i>'logical 
 
 echo "</table>";
 
+//end search
+
+echo "</td</tr></table>";
+
+
 echo "</form>";
 
 //End Display Form
-
-echo "<h3><a href='http://www.euras.be/bcf' target=_blank>EURAS</a> bioconcentration factor database search results </h3>   <p>";
 
 echo "<table width=100% bgcolor=#EEEEEE><tr><td>";
 echo $display;
@@ -243,8 +255,8 @@ echo "<table border=0>";
 echo "<tr bgcolor='#DDDDDD'>";
 
 $header = array(
-  "Substance common name",
   "CAS",
+  "Substance common name",
   "Reliability score",
   "Species",
   "Species sex,M/F/MF/nd",
