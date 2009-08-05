@@ -1,0 +1,104 @@
+.bartitleover
+{
+    font-weight: bold;  
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 10pt;
+    COLOR: #428EFF;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify;
+    MARGIN-TOP: 0pt;
+    MARGIN-LEFT: 2pt;
+    MARGIN-BOTTOM: 0pt;
+    MARGIN-RIGHT: 0pt
+}
+
+.bartitle
+{
+    font-weight: bold;  
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 10pt;
+    COLOR: #215DC6;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify;
+    MARGIN-TOP: 0pt;
+    MARGIN-LEFT: 2pt;
+    MARGIN-BOTTOM: 0pt;
+    MARGIN-RIGHT: 0pt
+}
+
+.bartext
+{
+    FONT-SIZE: 10pt;
+    COLOR: #215DC6;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify;
+    MARGIN-TOP: 0pt;
+    MARGIN-LEFT: 2pt;
+    MARGIN-BOTTOM: 0pt;
+    MARGIN-RIGHT: 0pt
+}
+
+table
+{
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+}
+
+p
+{
+    FONT-SIZE: 10pt;
+    MARGIN-TOP: 7px;
+    MARGIN-LEFT: 7px;
+    MARGIN-RIGHT: 7px;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: justify
+}
+A:link
+{
+    FONT-SIZE: 10pt;
+    COLOR: #428EFF;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:visited
+{
+    FONT-SIZE: 10pt;
+    COLOR: #4444FF;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:active
+{
+    FONT-SIZE: 10pt;
+    COLOR: #265BCC;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+A:hover
+{
+    FONT-SIZE: 10pt;
+    COLOR: #ECB42C;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+.bartitlecenter
+{
+    font-weight: bold;  
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 10pt;
+    COLOR: #215DC6;
+    FONT-FAMILY: Verdana, Arial;
+    TEXT-ALIGN: center;
+    MARGIN-TOP: 0pt;
+    MARGIN-LEFT: 2pt;
+    MARGIN-BOTTOM: 0pt;
+    MARGIN-RIGHT: 0pt
+}
