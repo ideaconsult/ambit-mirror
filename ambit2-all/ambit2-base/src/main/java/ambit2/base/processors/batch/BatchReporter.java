@@ -57,7 +57,7 @@ public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitP
 	
 	public Output process(ItemList query) throws AmbitException {
 		output = getOutput();
-		header(output,query);
+		header(output,null);
 
 		batch = createBatch();
 		try {
@@ -65,15 +65,19 @@ public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitP
 			batch.setProcessorChain(processors);
 
 			IBatchStatistics stats = batch.process(query);
+			/*
 			if (stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ)==0)
 				throw new NotFoundException(query.toString());
+				*/
 			return output;
 		} catch (AmbitException x) {
+			
 			throw x;
 		} catch (Exception x ) {
+		
 			throw new AmbitException(x);
 		} finally {
-			footer(output, query);
+			footer(output, null);
 
 		}
 	}	
