@@ -4,9 +4,15 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.data.MediaType;
 
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
 public class DatasetStructuresResourceTest extends ResourceTest {
@@ -17,7 +23,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 		}
 		@Test
 		public void testXML() throws Exception {
-			testGet("http://194.141.0.136:8080/ambit2-www/dataset/5/compound",MediaType.TEXT_XML);
+			testGet(getTestURI(),MediaType.TEXT_XML);
 		}
 		@Override
 		public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
@@ -30,5 +36,24 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 				count++;
 			}
 			return count ==1;
+		}	
+		@Test
+		public void testSDF() throws Exception {
+			testGet(getTestURI(),ChemicalMediaType.CHEMICAL_MDLSDF);
+		}
+		@Override
+		public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
+				throws Exception {
+			IteratingMDLReader reader = new IteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
+			int count = 0;
+			while (reader.hasNext()) {
+				Object o = reader.next();
+				Assert.assertTrue(o instanceof IAtomContainer);
+				IAtomContainer mol = (IAtomContainer)o;
+				Assert.assertEquals(21,mol.getAtomCount());
+				Assert.assertEquals(18,mol.getBondCount());
+				count++;
+			}
+			return count==1;
 		}		
 }

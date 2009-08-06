@@ -39,7 +39,9 @@ public class CDKDepictTest extends ResourceTest {
 	
 	@Test
 	public void testInvalidSmiles() throws Exception {
-		Status status = testHandleError(String.format("http://localhost:%d/cdk/depict/AAA", port),MediaType.IMAGE_PNG);
-		System.out.println(status);
+		Status status = testHandleError(
+				String.format("http://localhost:%d/algorithm/util/depict/cdk?search=AAAAA", port),
+				MediaType.IMAGE_PNG);
+		Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,status);
 	}	
 }
