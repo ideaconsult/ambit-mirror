@@ -108,17 +108,19 @@ public class AmbitResource extends Resource {
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
-		w.write(String.format("<html><head><title>%s</title></head>\n",title));
+		w.write(String.format("<html><head><title>%s</title>\n",title));
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
+		w.write("</head>\n");
 		w.write("<body>\n");
-		w.write("<div style= \"width: 100%; background-color: #516373;\"");
+		w.write("<div style= \"width: 100%; background-color: #516373;");
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
 		w.write("<div class=\"spacer\"></div>");
 
 		w.write("	<div class=\"row\"><span class=\"left\">Home</span>");
 		w.write("	<span class=\"right\">Login</span></div>");
 		w.write("	<div class=\"spacer\"></div>");
-		w.write("</div>");		
+		w.write("</div>");
+		w.write("<div>");		
 		w.write(String.format("<a href='%s/compound'>Chemical compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/similarity'>Similar structures</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
@@ -133,17 +135,17 @@ public class AmbitResource extends Resource {
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
 		w.write("<td align='left'>");
-		w.write(String.format("<img src='%s/images/ambit-logo.png' alt='%s' title='%s' border='0'/>\n",baseReference,"AMBIT",baseReference));
+		w.write(String.format("<img src='%s/images/ambit-logo.png' alt='%s' title='%s' border='0'>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("<td align='right'>");
 
 		w.write("<form action='' method='get'>\n");
-		w.write("<input name='search' size='80'></input>\n");
-		w.write("<input type='submit' value='Search' /><br>");
+		w.write("<input name='search' size='80'>\n");
+		w.write("<input type='submit' value='Search'><br>");
 		w.write(baseReference.toString());
 
 		w.write("</form>\n");
-		w.write("</td");
+		w.write("</td>");
 		w.write("</tr></table>");		
 		
 		
