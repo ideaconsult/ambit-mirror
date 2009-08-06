@@ -5,6 +5,7 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -13,6 +14,7 @@ import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.descriptors.FunctionalGroup;
+import ambit2.rest.StatusException;
 import ambit2.rest.dataset.DatasetsResource;
 
 /**
@@ -34,7 +36,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
-			Response response) throws AmbitException {
+			Response response) throws StatusException {
 		try {
 			Form form = request.getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue("search");
@@ -56,13 +58,21 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 				combined.add(query);
 				combined.setScope(scope);
 				return combined;
+			} catch (NumberFormatException x) {
+				throw new StatusException(
+						new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",id))
+						);				
 			} catch (Exception x) {
-				return query;
+				throw new StatusException(
+						new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
+						);
 			}
 			return query;
 
 		} catch (Exception x) {
-			throw new AmbitException(x);
+			throw new StatusException(
+					new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
+					);
 		}
 	}		
 	@Override

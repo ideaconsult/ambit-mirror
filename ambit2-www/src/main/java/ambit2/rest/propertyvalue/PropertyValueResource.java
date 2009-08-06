@@ -5,6 +5,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
@@ -16,6 +17,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveField;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
@@ -69,7 +71,7 @@ public class PropertyValueResource extends QueryResource<IQueryRetrieval<Object>
 	}		
 	@Override
 	protected IQueryRetrieval<Object> createQuery(Context context,
-			Request request, Response response) throws AmbitException {
+			Request request, Response response) throws StatusException {
 		RetrieveField field = new RetrieveField();
 		field.setSearchByAlias(true);
 		
@@ -77,7 +79,9 @@ public class PropertyValueResource extends QueryResource<IQueryRetrieval<Object>
 		try {
 			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
 		} catch (NumberFormatException x) {
-			throw new InvalidResourceIDException(request.getAttributes().get(CompoundResource.idcompound));
+			throw new StatusException(
+					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)))
+					);
 		}
 		try {
 			record.setIdstructure(Integer.parseInt(Reference.decode(request.getAttributes().get(ConformerResource.idconformer).toString())));

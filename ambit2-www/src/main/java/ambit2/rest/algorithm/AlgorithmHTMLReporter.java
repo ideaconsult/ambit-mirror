@@ -1,7 +1,7 @@
 package ambit2.rest.algorithm;
 
 import java.io.Writer;
-import java.util.List;
+import java.util.Iterator;
 
 import org.restlet.data.Reference;
 
@@ -23,9 +23,9 @@ public class AlgorithmHTMLReporter<T> extends AlgorithmURIReporter<T> {
 		super(ref);
 	}
 	@Override
-	public void header(Writer output, List<T> query) {
+	public void header(Writer output, Iterator<T> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, AlgorithmResource.algorithm, baseReference);
+			AmbitResource.writeHTMLHeader(output, "AMBIT", baseReference);
 		} catch (Exception x) {
 			
 		}
@@ -39,7 +39,7 @@ public class AlgorithmHTMLReporter<T> extends AlgorithmURIReporter<T> {
 		}
 	};
 	@Override
-	public void footer(Writer output, List<T> query) {
+	public void footer(Writer output, Iterator<T> query) {
 		try {
 			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, baseReference);
 			output.flush();

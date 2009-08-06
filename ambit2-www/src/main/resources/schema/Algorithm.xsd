@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://opentox.org/Algorithm"
-	xmlns:otalg="http://opentox.org/Algorithm" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://opentox.org/Algorithm"
+	xmlns:otalg="http://opentox.org/Algorithm"
+	elementFormDefault="qualified" xmlns:ot="http://opentox.org/1.0/">
 
+	<import namespace="http://opentox.org/1.0/" schemaLocation="dataset.xsd"></import>
+	
 	<complexType name="Algorithm">
+		<sequence minOccurs="1" maxOccurs="1">
+			<element name="AlgorithmType" type="string" minOccurs="1"
+				maxOccurs="1">
+			</element>
+			<element name="link" type="ot:Link" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+			<element name="Parameters">
+				<complexType>
+					<sequence>
+						<element name="param" type="string">
+							<attribute name="type" type="string" use="required"></attribute>
+							<attribute name="defaultvalue" type="string" use="required"></attribute>
+						</element>
+					</sequence>
+				</complexType>
+			</element>   	
+			<element name="statisticsSupported">
+				<complexType>
+					<sequence>
+						<element name="statistic" type="string"></element>
+					</sequence>
+				</complexType>
+			</element>			
+		</sequence>
 		<attribute name="link" type="anyURI"></attribute>
 		<attribute name="ID" type="string"></attribute>
 		<attribute name="Name" type="string"></attribute>
-		<attribute name="AlgorithmType" type="string"></attribute>
-		<attribute name="Parameters" type="string"></attribute>
-		<attribute name="statisticsSupported" type="string"></attribute>
+
+
 	</complexType>
 
+
+    <element name="algorithm" type="otalg:Algorithm"></element>
 </schema>

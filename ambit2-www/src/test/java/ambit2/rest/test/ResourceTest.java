@@ -6,6 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.restlet.Application;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -23,6 +24,7 @@ import ambit2.rest.ChemicalMediaType;
 
 public abstract class ResourceTest extends DbUnitTest {
 	protected Component component=null;
+	protected Application app;
 	protected int port = 8181;
 	@Before
 	public void setUp() throws Exception {
@@ -38,8 +40,13 @@ public abstract class ResourceTest extends DbUnitTest {
         context.getParameters().add(Preferences.PASSWORD, getPWD());
         context.getParameters().add(Preferences.PORT, getPort());
         context.getParameters().add(Preferences.HOST, getHost());
-        component.getDefaultHost().attach(new AmbitApplication(context));
+        app = createApplication(context);
+        component.getDefaultHost().attach(app);
         component.start();        
+	}
+	
+	protected Application createApplication(Context context) {
+		return new AmbitApplication(context);		
 	}
 
 	@After
@@ -47,19 +54,24 @@ public abstract class ResourceTest extends DbUnitTest {
 		if (component != null)
 			component.stop();
 	}
-	
 	public void testGet(String uri, MediaType media) throws Exception {
+		testGet(uri, media,Status.SUCCESS_OK);
+	}
+	public Response testGet(String uri, MediaType media, Status status) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		Response response = client.handle(request);
-		Assert.assertEquals(200,response.getStatus().getCode());
-		Assert.assertTrue(response.isEntityAvailable());
-		InputStream in = response.getEntity().getStream();
-		Assert.assertTrue(verifyResponse(uri,media,in));
-		in.close();	
+		Assert.assertEquals(status.getCode(),response.getStatus().getCode());
+		if (status.equals(Status.SUCCESS_OK)) {
+			Assert.assertTrue(response.isEntityAvailable());
+			InputStream in = response.getEntity().getStream();
+			Assert.assertTrue(verifyResponse(uri,media,in));
+			in.close();	
+		}
+		return response;
 	}
 	
 	public Status testHandleError(String uri, MediaType media) throws Exception {

@@ -1,6 +1,6 @@
 package ambit2.rest.algorithm.descriptors;
 
-import java.util.List;
+import java.util.Iterator;
 
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.w3c.dom.Document;
@@ -19,13 +19,13 @@ public class DescriptorDOMReporter extends ListReporter<IMolecularDescriptor, Do
 	private static final long serialVersionUID = -5295250216607367845L;
 
 	@Override
-	public void footer(Document output, List<IMolecularDescriptor> query) {
+	public void footer(Document output, Iterator<IMolecularDescriptor> query) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void header(Document output, List<IMolecularDescriptor> query) {
+	public void header(Document output, Iterator<IMolecularDescriptor> query) {
 		// TODO Auto-generated method stub
 		
 	}

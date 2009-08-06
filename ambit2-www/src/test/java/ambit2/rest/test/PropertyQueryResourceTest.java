@@ -19,7 +19,7 @@ import ambit2.rest.query.PropertyQueryResource;
 public class PropertyQueryResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/query/property/like/1530-32-1", port);
+		return String.format("http://localhost:%d/query/feature/like/1530-32-1", port);
 	}
 	@Test
 	public void testURI() throws Exception {

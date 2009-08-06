@@ -35,6 +35,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryXMLReporter;
@@ -147,7 +148,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
-			Response response) throws AmbitException {
+			Response response) throws StatusException {
 		media = getMediaParameter(request);
 		try {
 //			System.out.println(request.getAttributes().get("org.restlet.http.headers"));
@@ -183,9 +184,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				return query;
 			}
 		} catch (NumberFormatException x) {
-			throw new InvalidResourceIDException(request.getAttributes().get(idcompound));
+			throw new StatusException(
+					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(idcompound)))
+					);
 		} catch (Exception x) {
-			throw new AmbitException(x);
+			throw new StatusException(
+					new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
+					);
 		}
 		
 

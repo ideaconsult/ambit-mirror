@@ -1,5 +1,8 @@
 package ambit2.rest.algorithm.descriptors;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor;
@@ -20,6 +23,7 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 
 import ambit2.descriptors.PKASmartsDescriptor;
+import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmResource;
 
 public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResource {
@@ -117,9 +121,16 @@ public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResourc
 			Response response) {
 		super(context, request, response);
 		setCategory(AlgorithmResource.algorithmtypes.descriptorcalculation.toString());
-		query.clear();
+		
+
+	}
+	@Override
+	protected Iterator<String> createQuery(Context context, Request request,
+			Response response) throws StatusException {
+		ArrayList<String> q = new ArrayList<String>();
 		for (descriptors d : descriptors.values())
-			query.add(String.format("%s/%s",request.getOriginalRef(),d.toString()));
+			q.add(String.format("%s/%s",request.getOriginalRef(),d.toString()));
+		return q.iterator();
 
 	}
 	@Override

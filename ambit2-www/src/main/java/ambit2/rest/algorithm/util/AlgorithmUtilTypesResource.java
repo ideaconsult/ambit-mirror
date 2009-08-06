@@ -1,9 +1,13 @@
 package ambit2.rest.algorithm.util;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
+import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmResource;
 
 /**
@@ -19,10 +23,16 @@ public class AlgorithmUtilTypesResource extends AlgorithmResource {
 			Response response) {
 		super(context, request, response);
 		setCategory("util");
-		query.clear();
-		for (utiltypes d : utiltypes.values())
-			query.add(String.format("algorithm/%s/%s",getCategory(),d.toString()));
 
+
+	}
+	@Override
+	protected Iterator<String> createQuery(Context context, Request request,
+			Response response) throws StatusException {
+		ArrayList<String> q = new ArrayList<String>();
+ 		for (utiltypes d : utiltypes.values())
+			q.add(String.format("algorithm/%s/%s",getCategory(),d.toString()));
+ 		return q.iterator();
 	}
 
 }

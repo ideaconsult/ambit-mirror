@@ -19,6 +19,7 @@ import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
@@ -43,7 +44,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
-			Request request, Response response) throws AmbitException {
+			Request request, Response response) throws StatusException {
 		ReadDataset query = new ReadDataset();
 		
 		Object id = request.getAttributes().get("dataset_id");

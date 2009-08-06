@@ -15,14 +15,26 @@ import ambit2.base.interfaces.IProcessor;
 public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representation>> extends Resource {
 	protected Q query;
 	protected Exception error = null;	
+	protected Status status = Status.SUCCESS_OK;
 	
 	public String[] URI_to_handle() {
 		return null;
 	}
 	public AbstractResource(Context context, Request request, Response response) {
 		super(context,request,response);
+		try {
+			status = Status.SUCCESS_OK;
+			query = createQuery(context, request, response);
+			error = null;
+		} catch (StatusException x) {
+			query = null;
+			error = x;
+			status = x.getStatus();
+		}		
 	}
 	public abstract P createConvertor(Variant variant) throws AmbitException;
+	
+	protected  abstract Q createQuery(Context context, Request request, Response response) throws StatusException;
 	
 	public Representation getRepresentation(Variant variant) {
 
@@ -31,6 +43,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	        	IProcessor<Q, Representation> convertor = null;
 
 		        	try {
+		        		getResponse().setStatus(status);
 		        		convertor = createConvertor(variant);
 			        	Representation r = convertor.process(query);
 			        	return r;
@@ -38,7 +51,9 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 
 		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, new NotFoundException(x.getMessage()));
 		    			return null;
-		    			
+		        	} catch (StatusException x) {
+		    			getResponse().setStatus(x.getStatus());
+		    			return null;
 		        	} catch (Exception x) {
 
 		    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
@@ -49,7 +64,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 
 	        	
 	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,error);
+	        	getResponse().setStatus(status==null?Status.CLIENT_ERROR_BAD_REQUEST:status,error);
 	        	return null;	        	
 	        }
 		} catch (Exception x) {

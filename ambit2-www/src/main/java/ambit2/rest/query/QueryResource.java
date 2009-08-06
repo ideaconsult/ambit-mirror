@@ -21,36 +21,31 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 
 
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
-	protected Q query;
 	
 	
 	public QueryResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		try {
-			query = createQuery(context, request, response);
-			error = null;
-		} catch (AmbitException x) {
-			query = null;
-			error = x;
-		}
+
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
 	}
-	protected  abstract Q createQuery(Context context, Request request, Response response) throws AmbitException;
+	
 
 	public Representation getRepresentation(Variant variant) {
 
 		try {
+			int maxRetry=3;
 	        if (query != null) {
 	        	IProcessor<Q, Representation>  convertor = null;
 	        	Connection connection = null;
 	        	int retry=0;
-	        	while (retry <2) {
+	        	while (retry <maxRetry) {
 		        	try {
 		        		convertor = createConvertor(variant);
 		        		connection = ((AmbitApplication)getApplication()).getConnection();
@@ -60,13 +55,16 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			        		((IDBProcessor)reporter).setConnection(connection);
 			        	Representation r = convertor.process(query);
 			        	return r;
+		        	} catch (StatusException x) {
+		    			getResponse().setStatus(x.getStatus());
+		    			return null;			        	
 		        	} catch (NotFoundException x) {
 		        		//x.printStackTrace();
 		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
 		    			return null;
 		        	} catch (SQLException x) {
 		        		x.printStackTrace();
-		        		if (retry <2) {
+		        		if (retry <maxRetry) {
 		        			retry++;
 		        			continue;
 		        		}

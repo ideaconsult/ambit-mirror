@@ -4,12 +4,14 @@ import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.StatusException;
 import ambit2.rest.error.InvalidResourceIDException;
 
 /**
@@ -48,7 +50,7 @@ public class ConformerResource extends CompoundResource {
 	}	
 	@Override
 	protected QueryStructureByID createQuery(Context context, Request request,
-			Response response) throws AmbitException {
+			Response response) throws StatusException {
 		media = getMediaParameter(request);
 		try {
 			//System.out.println(request.getAttributes().get("org.restlet.http.headers"));
@@ -56,7 +58,9 @@ public class ConformerResource extends CompoundResource {
 			try {
 				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));
 			} catch (NumberFormatException x) {
-				throw new InvalidResourceIDException(request.getAttributes().get(idcompound));
+				throw new StatusException(
+						new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(idcompound)))
+						);				
 			}
 			QueryStructureByID query = new QueryStructureByID();			
 			query.setMaxRecords(-1);
@@ -73,7 +77,9 @@ public class ConformerResource extends CompoundResource {
 			query.setValue(record);
 			return query;
 		} catch (Exception x) {
-			throw new AmbitException(x);
+			throw new StatusException(
+					new Status(Status.SERVER_ERROR_INTERNAL,x,String.format("Invalid resource id %d",request.getAttributes().get(idcompound)))
+					);
 		}
 	}	
 	protected QueryURIReporter getURIReporter() {

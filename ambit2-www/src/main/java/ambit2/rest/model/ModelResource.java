@@ -2,7 +2,7 @@ package ambit2.rest.model;
 
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
@@ -14,6 +14,7 @@ import org.restlet.resource.Variant;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.AlgorithmHTMLReporter;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
@@ -23,7 +24,7 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
  * @author nina
  *
  */
-public class ModelResource extends AbstractResource<List<String>,String,IProcessor<List<String>, Representation>> {
+public class ModelResource extends AbstractResource<Iterator<String>,String,IProcessor<Iterator<String>, Representation>> {
 
 	public final static String model = "/model";	
 	public final static String modelID =  "model_id";
@@ -35,13 +36,19 @@ public class ModelResource extends AbstractResource<List<String>,String,IProcess
 	protected String category = "";
 	public ModelResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		query = new ArrayList<String>();
-		for (modeltypes d : modeltypes.values())
-			query.add(String.format("%s/%s","model",d.toString()));		
+
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
 
+	}
+	@Override
+	protected Iterator<String> createQuery(Context context, Request request,
+			Response response) throws StatusException {
+		ArrayList<String> q = new ArrayList<String>();
+		for (modeltypes d : modeltypes.values())
+			q.add(String.format("%s/%s","model",d.toString()));		
+		return q.iterator();
 	}
 	public String getCategory() {
 		return category;
@@ -53,7 +60,7 @@ public class ModelResource extends AbstractResource<List<String>,String,IProcess
 		return String.format("%s%s/{%s}",model,category,modelID);
 	}
 	@Override
-	public IProcessor<List<String>, Representation> createConvertor(
+	public IProcessor<Iterator<String>, Representation> createConvertor(
 			Variant variant) throws AmbitException {
 		/*
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
