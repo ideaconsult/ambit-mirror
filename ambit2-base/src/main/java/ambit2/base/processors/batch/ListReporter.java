@@ -6,7 +6,7 @@ import java.util.List;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 
-public abstract class ListReporter<Item,Output> extends BatchReporter<Item, List<Item>, Output> {
+public abstract class ListReporter<Item,Output> extends BatchReporter<Item, Iterator<Item>, Output> {
 
 	/**
 	 * 
@@ -14,19 +14,19 @@ public abstract class ListReporter<Item,Output> extends BatchReporter<Item, List
 	private static final long serialVersionUID = 3018737752170422730L;
 
 	@Override
-	protected BatchProcessor<List<Item>, Item> createBatch() {
+	protected BatchProcessor<Iterator<Item>, Item> createBatch() {
 
-		return new BatchProcessor<List<Item>, Item>() {
-			public Iterator<Item> getIterator(List<Item> target)
+		return new BatchProcessor<Iterator<Item>, Item>() {
+			public Iterator<Item> getIterator(Iterator<Item> target)
 					throws AmbitException {
-				return target.iterator();
+				return target;
 			};
-			public void afterProcessing(List<Item> target,
+			public void afterProcessing(Iterator<Item> target,
 					Iterator<Item> iterator) throws AmbitException {
 				footer(output, target);
 				
 			}
-			public void beforeProcessing(List<Item> target)
+			public void beforeProcessing(Iterator<Item> target)
 					throws AmbitException {
 				header(output, target);
 				
@@ -45,7 +45,7 @@ public abstract class ListReporter<Item,Output> extends BatchReporter<Item, List
 					throws AmbitException {
 				
 			}
-			public IBatchStatistics getResult(List<Item> target) {
+			public IBatchStatistics getResult(Iterator<Item> target) {
 
 				return null;
 			}
