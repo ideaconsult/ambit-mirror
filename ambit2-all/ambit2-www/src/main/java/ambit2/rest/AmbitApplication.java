@@ -2,6 +2,12 @@ package ambit2.rest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.FutureTask;
 
 import javax.sql.DataSource;
 
@@ -12,6 +18,7 @@ import org.restlet.Directory;
 import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.Protocol;
+import org.restlet.data.Reference;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -26,6 +33,7 @@ import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
 import ambit2.rest.model.ModelResource;
+import ambit2.rest.model.ModelResource_pka;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -41,14 +49,21 @@ import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
+import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskResource;
 
 /**
  * http://opentox.org/wiki/1/Dataset
  * @author nina
+ * 
+ * http://www.slideshare.net/guest7d0e11/creating-a-web-of-data-with-restlet-presentation
+ * http://stackoverflow.com/questions/810171/how-to-read-context-parameters-from-a-restlet
  *
  */
 public class AmbitApplication extends Application {
-	
+	protected ConcurrentMap<UUID,Task<Reference>> tasks;
+
+
 	public final static String dataset_structures = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
 	public final static String datasetID_structure = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 	public final static String datasetID_structure_media = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID_media);
@@ -58,6 +73,7 @@ public class AmbitApplication extends Application {
 	protected DataSource datasource = null;
 	public AmbitApplication(Context context) {
 		super(context);
+		tasks = new ConcurrentHashMap<UUID,Task<Reference>>();
 		/*
 		String tmpDir = System.getProperty("java.io.tmpdir");
         File logFile = new File(tmpDir,"ambit2-www.log");		
@@ -87,6 +103,7 @@ public class AmbitApplication extends Application {
 		}
 		
 		setStatusService(new AmbitStatusService());
+		getTaskService().setEnabled(true);
 	}
 	
 	
@@ -173,8 +190,12 @@ public class AmbitApplication extends Application {
 					AlgorithmDescriptorTypesResource.class);		
 		
 		router.attach(ModelResource.model,ModelResource.class);
+		router.attach(ModelResource.model+"/pka",ModelResource_pka.class);
 		router.attach(String.format("%s/{%s}",ModelResource.model,ModelResource.modelID),
 				ModelResource.class);		
+		
+		router.attach("/"+TaskResource.resource, TaskResource.class);
+		router.attach(TaskResource.resourceID, TaskResource.class);
 		 
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
@@ -206,6 +227,44 @@ public class AmbitApplication extends Application {
 		if (error != null) throw error; else throw new SQLException("Can't establish connection "+connectionURI);
 	}
 	
+	public Iterator<Task<Reference>> getTasks() {
+		return tasks.values().iterator();
+	}
+	public Task<Reference> findTask(String id) {
+		return tasks.get(UUID.fromString(id));
+	}
+
+	public synchronized Reference addTask(Callable<Reference> callable, Reference baseReference) {
+		if (callable == null) return null;
+		FutureTask<Reference> futureTask = new FutureTask<Reference>(callable) {
+			@Override
+			protected void done() {
+				super.done();
+				//((AmbitApplication)getApplication()).getTasks().remove(this);
+			}
+		};		
+		UUID uuid = UUID.randomUUID();
+		Task<Reference> task = new Task<Reference>(futureTask);
+		Reference ref =	new Reference(
+				String.format("%s/%s/%s", baseReference.toString(),TaskResource.resource,Reference.encode(uuid.toString())));
+		task.setUri(ref);
+		tasks.put(uuid,task);
+		getTaskService().submit(futureTask);	
+		return ref;
+	}
+	public void cancelTasks() {
+		Iterator<Task<Reference>> i = getTasks();
+		while (i.hasNext()) {
+			Task<Reference> task = i.next();
+			try {
+			if (!task.isDone()) task.cancel(true);
+			} catch (Exception x) {getLogger().warning(x.getMessage());}
+		}
+	}
+	public void removeTasks() {
+		cancelTasks();
+		tasks.clear();
+	}	
 	/**
 	 * Standalone, for testing mainly
 	 * @param args
@@ -226,4 +285,5 @@ public class AmbitApplication extends Application {
 
     }
     	
+    
 }

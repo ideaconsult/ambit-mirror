@@ -8,6 +8,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
@@ -20,10 +21,12 @@ import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.CompoundResource;
 
 /**
  * Retrieves {@link LiteratureEntry}
@@ -70,7 +73,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 
 	@Override
 	protected ReadReference createQuery(Context context, Request request, Response response)
-			throws AmbitException {
+			throws StatusException {
 		Object idref = request.getAttributes().get(idreference);
 		try {
 			if (idref==null) {
@@ -87,7 +90,9 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 			}			
 			else return new ReadReference(new Integer(Reference.decode(idref.toString())));
 		} catch (Exception x) {
-			throw new InvalidResourceIDException(idref);
+			throw new StatusException(
+					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",idref))
+					);
 		}
 	} 
 

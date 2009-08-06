@@ -54,7 +54,7 @@ public class Build3DResource extends AlgorithmResource {
 			delim = d.toString();
 		}		
 	}
-	public Representation getRepresentation(Variant variant) {
+	public Representation getreRepresentation(Variant variant) {
 		
 		try {
 			try {

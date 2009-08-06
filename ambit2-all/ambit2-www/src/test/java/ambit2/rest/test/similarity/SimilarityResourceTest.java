@@ -16,6 +16,7 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.test.ResourceTest;
@@ -62,34 +63,37 @@ public class SimilarityResourceTest extends ResourceTest {
 		runQuery(MediaType.TEXT_URI_LIST);
 	}		
 	@Test
+	public void testXMLList() throws Exception {
+		runQuery(MediaType.TEXT_XML);
+	}		
+	@Test
 	public void testGetSmiles() {
-		SimilarityResource resource = new SimilarityResource(null,null,null);
 		try {
-			resource.getMolecule("NC1=CC=C(N)C=C");
+			MoleculeTools.getMolecule("NC1=CC=C(N)C=C");
 			Assert.assertTrue(false);
 		} catch (InvalidSmilesException x) {
 			Assert.assertTrue(true);
 		}
 		try {
-			resource.getMolecule("[13CH4]");			
+			MoleculeTools.getMolecule("[13CH4]");			
 			Assert.assertTrue(true);
 		} catch (InvalidSmilesException x) {
 			Assert.assertTrue(false);
 		}
 		try {
-			resource.getMolecule("C1CC[13CH4]CCC11");			
+			MoleculeTools.getMolecule("C1CC[13CH4]CCC11");			
 			Assert.assertTrue(false);
 		} catch (InvalidSmilesException x) {
 			Assert.assertTrue(true);
 		}		
 		try {
-			resource.getMolecule("c1cccc11");			
+			MoleculeTools.getMolecule("c1cccc11");			
 			Assert.assertTrue(false);
 		} catch (InvalidSmilesException x) {
 			Assert.assertTrue(true);
 		}			
 		try {
-			resource.getMolecule("c2cccc2c1ccccc1");			
+			MoleculeTools.getMolecule("c2cccc2c1ccccc1");			
 			Assert.assertTrue(true);
 		} catch (InvalidSmilesException x) {
 			Assert.assertTrue(false);

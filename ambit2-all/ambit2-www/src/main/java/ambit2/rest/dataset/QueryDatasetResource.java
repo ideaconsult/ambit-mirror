@@ -16,11 +16,12 @@ import ambit2.db.readers.RetrieveDatasets;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
 public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
-	public final static String datasetName =  String.format("%s%s",DatasetsResource.datasets,"/query/{dataset_name}");
+	public final static String datasetName =  String.format("/query%s/{dataset_name}",DatasetsResource.datasets);
 	public QueryDatasetResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
@@ -28,7 +29,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 	
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
-			Request request, Response response) throws AmbitException {
+			Request request, Response response) throws StatusException {
 		RetrieveDatasets query = new RetrieveDatasets();
 		Object name = request.getAttributes().get("dataset_name");
 		if (name != null)

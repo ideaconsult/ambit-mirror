@@ -2,7 +2,7 @@ package ambit2.rest.algorithm;
 
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
@@ -14,6 +14,7 @@ import org.restlet.resource.Variant;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 
 /**
@@ -21,7 +22,7 @@ import ambit2.rest.StringConvertor;
  * @author nina
  *
  */
-public class AlgorithmResource extends AbstractResource<List<String>,String,IProcessor<List<String>, Representation>> {
+public class AlgorithmResource extends AbstractResource<Iterator<String>,String,IProcessor<Iterator<String>, Representation>> {
 	public final static String algorithm = "/algorithm";	
 	public final static String algorithmKey =  "algorithm_id";
 
@@ -32,13 +33,18 @@ public class AlgorithmResource extends AbstractResource<List<String>,String,IPro
 	protected String category = "";
 	public AlgorithmResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		query = new ArrayList<String>();
-		for (algorithmtypes d : algorithmtypes.values())
-			query.add(String.format("%s/%s","algorithm",d.toString()));		
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(MediaType.TEXT_XML));
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
 
+	}
+	@Override
+	protected Iterator<String> createQuery(Context context, Request request,
+			Response response) throws StatusException {
+		ArrayList<String> q = new ArrayList<String>();
+		for (algorithmtypes d : algorithmtypes.values())
+			q.add(String.format("%s/%s","algorithm",d.toString()));	
+		return q.iterator();
 	}
 	public String getCategory() {
 		return category;
@@ -50,7 +56,7 @@ public class AlgorithmResource extends AbstractResource<List<String>,String,IPro
 		return String.format("%s%s/{%s}",algorithm,category,algorithmKey);
 	}
 	@Override
-	public IProcessor<List<String>, Representation> createConvertor(
+	public IProcessor<Iterator<String>, Representation> createConvertor(
 			Variant variant) throws AmbitException {
 		/*
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {

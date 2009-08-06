@@ -19,6 +19,7 @@ import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
@@ -65,7 +66,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
-			Request request, Response response) throws AmbitException {
+			Request request, Response response) throws StatusException {
 		
 		Object o = request.getAttributes().get(idfeaturedef);
 		try {

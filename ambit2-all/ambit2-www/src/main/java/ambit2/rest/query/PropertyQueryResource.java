@@ -4,13 +4,14 @@ import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
+import ambit2.rest.StatusException;
 
 public class PropertyQueryResource extends StructureQueryResource<QueryField> {
-	public final static String property =  QueryResource.query_resource + "/property/{condition}" + "/{value}";
+	public final static String property =  QueryResource.query_resource + "/feature/{condition}" + "/{value}";
 	protected String dataset_id;
 	public PropertyQueryResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -24,13 +25,22 @@ public class PropertyQueryResource extends StructureQueryResource<QueryField> {
 
 	@Override
 	protected QueryField createQuery(Context context, Request request,
-			Response response) throws AmbitException {
+			Response response) throws StatusException {
 		QueryField q =  new QueryField();
+		q.setChemicalsOnly(true);
         try {
-        	q.setValue(Reference.decode(request.getAttributes().get("value").toString()));
+        	Object value = request.getAttributes().get("value");
+        	if (value == null)
+    			throw new StatusException(
+    					new Status(Status.SERVER_ERROR_INTERNAL,"Invalid search criteria")
+    					);
+        	else
+        		q.setValue(Reference.decode(value.toString()));
 
         } catch (Exception x) {
-        	throw new AmbitException(x);
+			throw new StatusException(
+					new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
+					);
         }			
         StringCondition condition = StringCondition.getInstance(StringCondition.C_EQ);
         try {

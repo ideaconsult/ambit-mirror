@@ -1,10 +1,14 @@
 package ambit2.rest.algorithm.descriptors;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
+import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmResource;
 
 /**
@@ -22,10 +26,16 @@ public class AlgorithmDescriptorTypesResource extends AlgorithmResource {
 			Response response) {
 		super(context, request, response);
 		setCategory(AlgorithmResource.algorithmtypes.descriptorcalculation.toString());
-		query.clear();
-		for (descriptortypes d : descriptortypes.values())
-			query.add(String.format("algorithm/%s/%s",getCategory(),d.toString()));
 
+
+	}
+	@Override
+	protected Iterator<String> createQuery(Context context, Request request,
+			Response response) throws StatusException {
+		ArrayList<String> q = new ArrayList<String>();
+		for (descriptortypes d : descriptortypes.values())
+			q.add(String.format("algorithm/%s/%s",getCategory(),d.toString()));
+		return q.iterator();
 	}
 
 }

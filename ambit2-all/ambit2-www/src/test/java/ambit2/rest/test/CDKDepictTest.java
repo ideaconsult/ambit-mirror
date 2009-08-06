@@ -18,7 +18,7 @@ public class CDKDepictTest extends ResourceTest {
 	
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/cdk/depict/c1ccccc1", port);
+		return String.format("http://localhost:%d/algorithm/util/depict/cdk?search=c1ccccc1", port);
 	}	
 	@Test
 	public void testPNG() throws Exception {

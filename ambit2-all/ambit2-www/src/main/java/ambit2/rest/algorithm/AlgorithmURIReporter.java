@@ -2,7 +2,7 @@ package ambit2.rest.algorithm;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
+import java.util.Iterator;
 
 import org.restlet.data.Reference;
 
@@ -42,11 +42,11 @@ public class AlgorithmURIReporter<T> extends ListReporter<T, Writer> {
 	public void close() throws Exception {
 	}
 	@Override
-	public void footer(Writer output, List<T> query) {
+	public void footer(Writer output, Iterator<T> query) {
 		
 	}
 	@Override
-	public void header(Writer output, List<T> query) {
+	public void header(Writer output, Iterator<T> query) {
 		
 	}
 
