@@ -10,6 +10,7 @@ import org.restlet.Application;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Preference;
@@ -57,15 +58,25 @@ public abstract class ResourceTest extends DbUnitTest {
 	public void testGet(String uri, MediaType media) throws Exception {
 		testGet(uri, media,Status.SUCCESS_OK);
 	}
-	public Response testGet(String uri, MediaType media, Status status) throws Exception {
+	public Response testPost(String uri, MediaType media, Form headers) throws Exception {
+		Request request = new Request();
+		Client client = new Client(Protocol.HTTP);
+		request.setResourceRef(uri);
+		request.setMethod(Method.POST);
+		request.getAttributes().put("org.restlet.http.headers", headers);		
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
+		return client.handle(request);
+	}
+	
+	public Response testGet(String uri, MediaType media, Status expectedStatus) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		Response response = client.handle(request);
-		Assert.assertEquals(status.getCode(),response.getStatus().getCode());
-		if (status.equals(Status.SUCCESS_OK)) {
+		Assert.assertEquals(expectedStatus.getCode(),response.getStatus().getCode());
+		if (expectedStatus.equals(Status.SUCCESS_OK)) {
 			Assert.assertTrue(response.isEntityAvailable());
 			InputStream in = response.getEntity().getStream();
 			Assert.assertTrue(verifyResponse(uri,media,in));
