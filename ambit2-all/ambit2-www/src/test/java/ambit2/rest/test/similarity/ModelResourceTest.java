@@ -4,8 +4,18 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
+import org.restlet.Client;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Preference;
+import org.restlet.data.Protocol;
+import org.restlet.data.Request;
+import org.restlet.data.Response;
+import org.restlet.data.Status;
 
 import ambit2.rest.test.ResourceTest;
 
@@ -13,14 +23,32 @@ public class ModelResourceTest extends ResourceTest {
 
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/task/1", port);
+		return String.format("http://localhost:%d/model/pka", port);
 	}
 	@Test
-	public void testURI() throws Exception {
-		testGet(String.format("http://localhost:%d/model/pka", port),MediaType.TEXT_URI_LIST);
-		while (true)
-			testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+	public void testPost() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset-id", "1");
+		Response response  =  testPost(getTestURI(),MediaType.TEXT_URI_LIST,headers);
+		Status status = response.getStatus();
+		Assert.assertEquals(Status.SUCCESS_CREATED,status);
 		
+		
+		Request request = new Request();
+		Client client = new Client(Protocol.HTTP);
+		request.setResourceRef(response.getLocationRef());
+		request.setMethod(Method.GET);
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(MediaType.TEXT_URI_LIST));
+		while (status.equals(Status.SUCCESS_CREATED)) {
+			System.out.println("poll");
+			Response response1 = client.handle(request);
+			if (response1.getStatus().equals(Status.REDIRECTION_SEE_OTHER)) {
+				Assert.assertEquals(String.format("http://localhost:%d/dataset/1", port),response1.getLocationRef());
+				return;
+			}
+			status = response1.getStatus();
+			
+		}
 	}
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)

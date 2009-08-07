@@ -12,7 +12,6 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
@@ -36,7 +35,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
 	}
 	
-
 	public Representation getRepresentation(Variant variant) {
 
 		try {

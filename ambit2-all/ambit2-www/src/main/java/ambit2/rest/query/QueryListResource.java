@@ -21,12 +21,13 @@ public class QueryListResource extends AlgorithmResource {
 	};
 	public QueryListResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		setCategory("query");
+
 	
 	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {
+		setCategory("query");
 		ArrayList<String> q = new ArrayList<String>();
 		for (querytypes d : querytypes.values())
 			q.add(String.format("%s/%s",getCategory(),d.toString()));	
