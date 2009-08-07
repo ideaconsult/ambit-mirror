@@ -6,14 +6,12 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.SourceDataset;
-import ambit2.db.search.structure.QueryDataset;
+import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.rest.StatusException;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
 
-public class DatasetStructuresResource extends StructureQueryResource<QueryDataset> {
+public class DatasetStructuresResource extends StructureQueryResource<QueryDatasetByID> {
 	
 	public DatasetStructuresResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -21,18 +19,16 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 	}
 
 	@Override
-	protected QueryDataset createQuery(Context context, Request request,
+	protected QueryDatasetByID createQuery(Context context, Request request,
 			Response response) throws StatusException {
 		try {
 			Object id = request.getAttributes().get("dataset_id");
 			
 			
 			if (id != null)  try {
-				SourceDataset dataset = new SourceDataset();
-				dataset.setId(new Integer(Reference.decode(id.toString())));
-				QueryDataset query = new QueryDataset();
-				query.setValue(dataset);
-				query.setMaxRecords(100);
+				QueryDatasetByID query = new QueryDatasetByID();
+				query.setValue(new Integer(Reference.decode(id.toString())));
+				query.setMaxRecords(1000);
 				return query;
 			} catch (NumberFormatException x) {
 				throw new InvalidResourceIDException(id);
