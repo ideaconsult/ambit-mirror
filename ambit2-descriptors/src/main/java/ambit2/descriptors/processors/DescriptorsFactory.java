@@ -29,7 +29,6 @@
 
 package ambit2.descriptors.processors;
 
-import java.beans.IntrospectionException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -65,28 +64,18 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 					name = classes.get(i).getClazz().substring(1);
 					enabled = false;
 				}
-				Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(name);
-				//if (o instanceof IMolecularDescriptor) {verify for interface
 				try {
-					Object o = clazz.newInstance();
-					if (o instanceof IMolecularDescriptor) {
-						IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
-						
-						Property property = Property.getInstance(clazz.getName().substring(clazz.getName().lastIndexOf('.')+1),
-								LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
-									);
-						property.setLabel(clazz.getName());
-						property.setOrder(i);
-						property.setClazz(clazz);
+					Property property = createDescriptor2Property(name);
+					if (property != null) {
 						property.setEnabled(enabled);
-						p.add(property);						
+						property.setOrder(i);
+						p.add(property);
 					}
+
 				} catch (Exception x) {
 					x.printStackTrace();
 				}
 
-				//}
-;
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
@@ -94,4 +83,19 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 		return p;
 	}
 
+	public static Property createDescriptor2Property(String className) throws Exception  {
+		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
+		//if (o instanceof IMolecularDescriptor) {verify for interface
+			Object o = clazz.newInstance();
+			if (o instanceof IMolecularDescriptor) {
+				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
+				
+				Property property = Property.getInstance(clazz.getName().substring(clazz.getName().lastIndexOf('.')+1),
+						LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
+							);
+				property.setLabel(clazz.getName());
+				property.setClazz(clazz);
+				return property;				
+			} else return null;
+	}
 }
