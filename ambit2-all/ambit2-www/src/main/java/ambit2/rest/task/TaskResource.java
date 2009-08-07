@@ -25,11 +25,13 @@ import ambit2.rest.algorithm.AlgorithmHTMLReporter;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 
 /**
+ * http://opentox.org/wiki/opentox/Asynchronous_jobs
  * Provide (read)access to running tasks  under URL http://host/application/task. 
  * Provide (read)access to a single task  under URL http://host/application/task/{taskid}. 
  * Task identifiers are unique, generated via {@link UUID} class. 
  * <br>
  * An URL with a task identifier is returned when an asynchronous job is submitted via {@link AsyncJobResource}
+ * If accepted, the status code is 201 and the URI of the task resource in the Location header /task/{id} 
  * <br>
  * If a list of tasks has been requested, returns list of URLs of the tasks TODO - introduce Guards for protecting sensitive resources
  * <br>
