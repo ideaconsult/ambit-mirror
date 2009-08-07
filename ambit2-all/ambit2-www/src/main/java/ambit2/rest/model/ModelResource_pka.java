@@ -1,22 +1,40 @@
 package ambit2.rest.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
 import org.restlet.resource.Representation;
-import org.restlet.resource.StringRepresentation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorsChain;
+import ambit2.db.DbReader;
+import ambit2.db.SourceDataset;
+import ambit2.db.processors.DescriptorsCalculator;
+import ambit2.db.processors.ProcessorMissingDescriptorsQuery;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.search.structure.QueryDatasetByID;
+import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StatusException;
+import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -36,119 +54,96 @@ public class ModelResource_pka<Q extends IQueryRetrieval<IStructureRecord>> exte
 		return true;
 	}
 	@Override
-	protected Q createQuery(Context context, Request request, Response response)
-			throws StatusException {
-
-		return null;
-	}
-	@Override
 	public IProcessor<Q, Representation> createConvertor(Variant variant)
 			throws AmbitException {
 		return null;
 	}
-	@Override
-	public Representation getRepresentation(Variant variant)  {
-		Callable<Reference> c = new Callable<Reference>() {
-			public Reference call() throws Exception {
-				long now = System.currentTimeMillis();
-				for(int i=0; i < 10000;i++) {
-					System.out.print(i);
-				}
-				return new Reference("new uri" + (System.currentTimeMillis()-now));
-			}
-		};
 
-		synchronized (this) {
-			Reference ref =  ((AmbitApplication)getApplication()).addTask(c,	getRequest().getRootRef());		
-			return new 	StringRepresentation(
-					ref.toString(),
-					MediaType.TEXT_PLAIN);	
-		}
-	}
-	/*
 	@Override
 	protected Q createQuery(Context context, Request request, Response response)
-			throws AmbitException {
-		SourceDataset dataset = new SourceDataset();
-		dataset.setId(new Integer(Reference.decode(id.toString())));
-		QueryDataset query = new QueryDataset();
-		query.setValue(dataset);
-		query.setMaxRecords(100);
+			throws StatusException {
+		return null;
 	}
+	@Override
+	public boolean allowGet() {
+		return false;
+	}
+	
 	@Override
 	public void acceptRepresentation(Representation entity)
 			throws ResourceException {
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		String id = requestHeaders.getFirstValue("dataset-id");  
-		System.out.println(id);
 		//retrieve dataset; calculate value, assign to feature, return uri to feature
-		//redirect 
-		DatasetURIReporter reporter = new DatasetURIReporter(getRequest().getRootRef());
-		SourceDataset dataset = new SourceDataset();
-		dataset.setId(Integer.parseInt(id));
-		getResponse().setLocationRef(new Reference(reporter.getURI(dataset)));
-		getResponse().setStatus(Status.SUCCESS_CREATED);
-		
-		 try {
-			 
-		  if (entity.getMediaType().equals(MediaType.APPLICATION_WWW_FORM,true)) {
-		   Form form = new Form(entity);
-		  // User u = new User();
-		   //u.setName(form.getFirstValue("user[name]"));
-		   u.setName(form.getFirstValue("search"));
-		   // :TODO {save the new user to the database}
-		   getResponse().setStatus(Status.SUCCESS_OK);
-		   // We are setting the representation in the example always to
-		   // JSON.
-		   // You could support multiple representation by using a
-		   // parameter
-		   // in the request like "?response_format=xml"
-		  // Representation rep = new JsonRepresentation(u.toJSON());
-		  // getResponse().setEntity(rep);
-		  } else {
-		   getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		  }
-		 } catch (Exception e) {
-		  getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-		 }
-		 
+
+		synchronized (this) {
+			try {
+				Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+				String id = requestHeaders.getFirstValue("dataset-id");  				
+				QueryDatasetByID q = new QueryDatasetByID();
+				q.setValue(Integer.parseInt(id));				
+				Reference ref =  ((AmbitApplication)getApplication()).addTask(process(q),	getRequest().getRootRef());		
+				getResponse().setLocationRef(ref);
+				getResponse().setStatus(Status.SUCCESS_CREATED);
+			} catch (AmbitException x) {
+				getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
+				
+			}
+		}
 	}	
 	
-	protected void process() throws AmbitException {
-		final DescriptorsCalculator calculator = new DescriptorsCalculator();
-		calculator.setDescriptors((Profile)o);		
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		p1.add(new ProcessorStructureRetrieval());		
-		p1.add(calculator);
-		
-		DbReader<IStructureRecord> batch1 = new DbReader<IStructureRecord>();
-		batch1.setProcessorChain(p1);
-		
-		QueryReporter batch = new QueryReporter() {
-			@Override
-			public void close() throws SQLException {
-				// TODO Auto-generated method stub
-				super.close();
-			}
-			@Override
-			public void footer(Object output, IQueryRetrieval query) {
-				// TODO Auto-generated method stub
-				
-			}
-			@Override
-			public void header(Object output, IQueryRetrieval query) {
-				// TODO Auto-generated method stub
-				
-			}
+	protected Callable<Reference> process(final QueryDatasetByID query) throws AmbitException {
+		Callable<Reference> callable = new Callable<Reference>() {
 			
-			@Override
-			public long getID() {
-				// TODO Auto-generated method stub
-				return super.getID();
-			
-		}
-		
+			public Reference call() throws Exception {
+
+				Connection connection = null;
+				try {
+					Profile<Property> p = new Profile<Property>();
+					Property property = DescriptorsFactory.createDescriptor2Property("ambit2.descriptors.PKASmartsDescriptor");
+					property.setEnabled(true);
+					p.add(property);
+					
+					DescriptorsCalculator calculator = new DescriptorsCalculator();
+					calculator.setDescriptors(p);		
+					ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
+						new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+					p1.add(new ProcessorStructureRetrieval());		
+					p1.add(calculator);
+					p1.setAbortOnError(true);
+					
+					DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+					batch.setProcessorChain(p1);
+					
+	        		connection = ((AmbitApplication)getApplication()).getConnection();
+	        		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
+	        		batch.setConnection(connection);
+	        		
+					batch.addPropertyChangeListener(new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent evt) {
+							System.out.println(evt.getNewValue());
+							
+						}
+					});
+					
+	        		ProcessorMissingDescriptorsQuery mq = new ProcessorMissingDescriptorsQuery();
+	        		QueryCombinedStructure q = (QueryCombinedStructure)mq.process(p);
+	        		q.setScope(query);
+	        		q.setId(1);
+	        		IBatchStatistics stats = batch.process(q);
+				
+					SourceDataset dataset = new SourceDataset();
+					dataset.setId(query.getValue());					
+					DatasetURIReporter reporter = new DatasetURIReporter(getRequest().getRootRef());
+					return new Reference("/dataset/"+query.getId() + " " + stats);
+				} catch (Exception x) {
+					x.printStackTrace();
+					getLogger().severe(x.getMessage());
+					return new Reference(x.getMessage());
+				} finally {
+					try { connection.close(); } catch (Exception x) {}
+				}
+			}
+		};
+		return callable;
 	}
-		*/
+		
 }
