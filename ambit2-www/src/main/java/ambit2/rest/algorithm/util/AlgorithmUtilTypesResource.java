@@ -22,13 +22,11 @@ public class AlgorithmUtilTypesResource extends AlgorithmResource {
 	public AlgorithmUtilTypesResource(Context context, Request request,
 			Response response) {
 		super(context, request, response);
-		setCategory("util");
-
-
 	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {
+		setCategory("util");
 		ArrayList<String> q = new ArrayList<String>();
  		for (utiltypes d : utiltypes.values())
 			q.add(String.format("algorithm/%s/%s",getCategory(),d.toString()));
