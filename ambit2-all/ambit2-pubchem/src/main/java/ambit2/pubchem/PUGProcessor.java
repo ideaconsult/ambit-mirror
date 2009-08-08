@@ -427,8 +427,8 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
         Transformer xformer = TransformerFactory.newInstance().newTransformer();
         //xformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, dtdSchema);
         //xformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "qmrf.dtd");
-        xformer.setOutputProperty(OutputKeys.INDENT,"Yes");
-        xformer.setOutputProperty(OutputKeys.STANDALONE,"Yes");
+        xformer.setOutputProperty(OutputKeys.INDENT,"yes");
+        xformer.setOutputProperty(OutputKeys.STANDALONE,"yes");
         
         //Writer out = new StringWriter();
         xformer.transform(new DOMSource(doc), new StreamResult(out));
