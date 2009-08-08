@@ -18,6 +18,7 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.template.OntologyResource;
 
 public class AmbitResource extends Resource {
 	protected String[][] uri = {
@@ -125,7 +126,7 @@ public class AmbitResource extends Resource {
 		w.write(String.format("<a href='%s/query/similarity'>Similar structures</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/smarts'>SMARTS patterns</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/endpoints'>Endpoints</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s%s/Endpoints'>Endpoints</a>&nbsp;",baseReference,OntologyResource.resource));
 		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
@@ -161,11 +162,11 @@ public class AmbitResource extends Resource {
 		output.write("</div>");		
 		output.write("<div align=\"right\">");
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
-		output.write("    <IMG SRC=\"images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+		output.write("    <IMG SRC=\"/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
 		output.write("  </A>&nbsp; ");
 
 		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
-		output.write("    <IMG SRC=\"images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+		output.write("    <IMG SRC=\"/images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
 		output.write("  </A>");
 		output.write("</div>");
 		output.write("</body>");

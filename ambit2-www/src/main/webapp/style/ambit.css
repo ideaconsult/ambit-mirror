@@ -67,6 +67,25 @@ br
     TEXT-ALIGN: justify
     
 }
+
+h3
+{
+    FONT-SIZE: 12pt;
+    COLOR: #A1D005;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+
+h4
+{
+    FONT-SIZE: 10pt;
+    COLOR: #A1D005;
+    FONT-WEIGHT: bolder;
+    font-weight: bold;  
+    FONT-FAMILY: Verdana, Arial
+}
+
 A:link
 {
     FONT-SIZE: 10pt;

@@ -76,7 +76,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	};
 	public void footer(Writer output, Q query) {
 		try {
-			getOutput().write("</body></html>");
+			AmbitResource.writeHTMLFooter(output,
+					"",
+					uriReporter.getBaseReference()
+					);
 			getOutput().flush();			
 		} catch (Exception x) {}		
 	};
@@ -89,7 +92,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		String w = uriReporter.getURI(record);
 
 		return String.format(
-				"<a href=\"%s\"><img src=\"%s/png\" alt=\"%s\" title=\"%d\"/></a>&nbsp;", 
+				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>&nbsp;", 
 				w, w, w, record.getIdchemical());
 
 		
