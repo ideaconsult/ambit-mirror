@@ -19,7 +19,6 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -28,6 +27,9 @@ public class PropertyValueResource extends QueryResource<IQueryRetrieval<Object>
 	public static final String featureKey = "/feature";
 	public static final String compoundFeatureName = String.format("%s/feature/{name}",CompoundResource.compoundID);
 	public static final String conformerFeatureName =  String.format("%s/feature/{name}",ConformerResource.conformerID);
+	
+	public static final String FeatureNameConformer =  String.format("/feature/{name}%s",ConformerResource.conformerID);
+	public static final String FeatureNameCompound = String.format("/feature/{name}%s",CompoundResource.compoundID);
 	
 	public PropertyValueResource(Context context, Request request, Response response) {
 		super(context,request,response);

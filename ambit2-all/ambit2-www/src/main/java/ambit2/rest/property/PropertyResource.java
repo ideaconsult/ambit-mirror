@@ -11,7 +11,9 @@ import org.restlet.data.Response;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
@@ -22,6 +24,8 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.structure.ConformerResource;
 
 /**
  * Feature definition resource
@@ -32,6 +36,11 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	public final static String featuredef = "/feature_definition";
 	public final static String idfeaturedef = "id_feature_definition";
 	public final static String featuredefID = String.format("%s/{%s}",featuredef,idfeaturedef);
+	public final static String CompoundFeaturedefID = String.format("%s%s/{%s}",CompoundResource.compoundID,featuredef,idfeaturedef);
+	public final static String ConformerFeaturedefID = String.format("%s%s/{%s}",ConformerResource.conformerID,featuredef,idfeaturedef);
+	public final static String ConformerFeaturedef = String.format("%s%s",ConformerResource.conformerID,featuredef);
+	public final static String CompoundFeaturedef = String.format("%s%s",CompoundResource.compoundID,featuredef);
+	
 	protected boolean collapsed ;
 	
 	public PropertyResource(Context context, Request request, Response response) {
@@ -68,17 +77,39 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		
+		IStructureRecord record = null;
+		boolean chemicalsOnly = true;
+		Object key = request.getAttributes().get(CompoundResource.idcompound);		
+		if (key != null) try {
+			record = new StructureRecord();
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
+		} catch (Exception x) { record = null;}
+		
+		key = request.getAttributes().get(ConformerResource.idconformer);		
+		if (key != null) try {
+			if (record ==null) record = new StructureRecord();
+			record.setIdstructure(Integer.parseInt(Reference.decode(key.toString())));
+			chemicalsOnly = false;
+		} catch (Exception x) { }
+		
 		Object o = request.getAttributes().get(idfeaturedef);
 		try {
 			collapsed = o==null;
 			if (o==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
-				Object key = form.getFirstValue("search");
+				key = form.getFirstValue("search");
 				if (key != null) {
 					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+					q.setFieldname(record);
+					q.setChemicalsOnly(chemicalsOnly);
 					q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
 					return q;
-				} else return new ReadProperty();
+				} else {
+					ReadProperty property = new ReadProperty();
+					property.setFieldname(record);
+					property.setChemicalsOnly(chemicalsOnly);					
+					return property;
+				}
 			}
 			else return new ReadProperty(new Integer(o.toString()));
 		} catch (Exception x) {
