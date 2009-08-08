@@ -72,7 +72,7 @@ public class PUGProcessorTest {
         sids.add(new StructureRecord(-1,-1,"992",PUGProcessor.PUBCHEM_CID));
         List<IStructureRecord> results = pug.process(sids);
         for (IStructureRecord record: results) {
-        	Assert.assertEquals("sdf",record.getFormat());
+        	Assert.assertEquals("SDF",record.getFormat());
         	System.out.println(record.getContent());
         }
         Assert.assertEquals(2,results.size());        
