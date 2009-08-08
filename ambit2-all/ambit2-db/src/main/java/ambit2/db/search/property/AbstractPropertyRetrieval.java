@@ -45,6 +45,13 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 	 * 
 	 */
 	private static final long serialVersionUID = -6129319550824253087L;
+	protected boolean chemicalsOnly = false;
+	public boolean isChemicalsOnly() {
+	return chemicalsOnly;
+	}
+	public void setChemicalsOnly(boolean chemicalsOnly) {
+		this.chemicalsOnly = chemicalsOnly;
+	}	
 	public double calculateMetric(Property property) {
 		return 1;
 	}

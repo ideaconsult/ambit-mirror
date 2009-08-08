@@ -6,18 +6,23 @@ import java.util.List;
 import org.openscience.cdk.CDKConstants;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.update.property.ReadProperty;
 
 /**
  * Finds properties by alias
  * @author nina
  *
  */
-public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<String, String, StringCondition> {
+public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStructureRecord, String, StringCondition> {
 
+
+	
 	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
-	public static String where = " where comments %s ?"; // COLLATE utf8_general_ci for case insensitive
+	public static String where = " %s comments %s ?"; // COLLATE utf8_general_ci for case insensitive
+
 		/**
 	 * 
 	 */
@@ -31,18 +36,25 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<String,
 		setValue(alias);
 	}
 		public List<QueryParam> getParameters() throws AmbitException {
+			List<QueryParam> params = new ArrayList<QueryParam>();
+			if (getFieldname() != null)
+				params.add(new QueryParam<Integer>(Integer.class, 
+						isChemicalsOnly()?getFieldname().getIdchemical():getFieldname().getIdstructure()));				
+
 			if (getValue()!=null) {
-				List<QueryParam> params = new ArrayList<QueryParam>();
 				params.add(new QueryParam<String>(String.class, getValue()));				
 				return params;
-			} else return null;
+			} 
+			return (params.size()==0)?null:params;
 			
 		}
 		public String getSQL() throws AmbitException {
-			if (getValue()!=null) {
-				return sql + String.format(where,getCondition().getSQL());
-			}
-			return sql;
+			if (getFieldname() == null)
+				return getValue()==null?sql:sql + String.format(where,"where",getCondition().getSQL());
+			else {
+				String sql = isChemicalsOnly()?ReadProperty.sqlPerChemical:ReadProperty.sqlPerStructure;
+				return getValue()==null?sql:(sql + String.format(where,"and",getCondition().getSQL()));
+			}	
 		}
 		/*
 
