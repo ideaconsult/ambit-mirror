@@ -94,4 +94,9 @@ public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCon
 		}
 	}
 
+	@Override
+	public String toString() {
+		return getValue()==null?"Directory":
+			String.format("%s",getFieldname()?getValue().getTemplate():getValue().getParentTemplate());
+	}
 }
