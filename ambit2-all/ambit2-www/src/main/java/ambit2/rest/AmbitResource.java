@@ -6,6 +6,7 @@ import java.io.Writer;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Resource;
@@ -22,6 +23,7 @@ import ambit2.rest.template.OntologyResource;
 
 public class AmbitResource extends Resource {
 	protected String[][] uri = {
+			
 			{DatasetsResource.datasets,"Datasets"},
 			{ReferenceResource.reference,"References"},
 			{PropertyResource.featuredef,"Feature definitions"},
@@ -36,14 +38,16 @@ public class AmbitResource extends Resource {
 			
 			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All features, available for a compound"},
 			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All features, available for a conformer"},
-						
+			
+			
 			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search"},
 			{"/query/feature/like/benzene","Search by name"},
 			{"/query/feature/=/50-00-0","Search by property or an identifier (CAS, Name, etc.)"},
 			{String.format("/query/smarts?search=%s",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels"},
+			{"/query/results/1","Display previous search results"},
 			
-			{"/pubchem/query/50-00-0","PubChem query"},
+			{"/query/pubchem","PubChem query"},
 			{"/algorithm/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)"},
 			{"/algorithm/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict"},
 			{"/build3d/smiles/c1ccccc1","Generate 3D structure"}
@@ -87,7 +91,8 @@ public class AmbitResource extends Resource {
 				variant.setMediaType(MediaType.TEXT_HTML);
 				StringWriter writer = new StringWriter();
 				writeHTMLHeader(writer, "AMBIT", getRequest().getRootRef());
-
+				writer.write("<h2>AMBIT REST services site is under development!</h2>");
+				writer.write("<p>API is under development at <a href=\"http://opentox.org\" target=\"blank\">http://opentox.org</a><p>URL of some services: ");
 				writer.write("<ul>");
 				for (String[] s:uri) {
 					writer.write("<li>");
@@ -110,8 +115,8 @@ public class AmbitResource extends Resource {
 			return null;
 		}
 	}
-	
 	public static void writeHTMLHeader(Writer w,String title,Reference baseReference) throws IOException {
+
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
@@ -149,7 +154,7 @@ public class AmbitResource extends Resource {
 		w.write("<form action='' method='get'>\n");
 		w.write("<input name='search' size='80'>\n");
 		w.write("<input type='submit' value='Search'><br>");
-		w.write(baseReference.toString());
+		//w.write(baseReference.toString());
 
 		w.write("</form>\n");
 		w.write("</td>");
@@ -168,11 +173,11 @@ public class AmbitResource extends Resource {
 		output.write("</div>");		
 		output.write("<div align=\"right\">");
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
-		output.write("    <IMG SRC=\"/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");
 
 		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
-		output.write("    <IMG SRC=\"/images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">");
+		output.write(String.format("    <IMG SRC=\"%s/images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>");
 		output.write("</div>");
 		output.write("</body>");
