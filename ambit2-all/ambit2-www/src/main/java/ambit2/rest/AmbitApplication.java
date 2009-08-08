@@ -19,6 +19,7 @@ import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
+import org.restlet.util.Template;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -51,6 +52,7 @@ import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
+import ambit2.rest.template.OntologyResource;
 
 /**
  * http://opentox.org/wiki/1/Dataset
@@ -114,6 +116,9 @@ public class AmbitApplication extends Application {
 		router.attach("/", AmbitResource.class);
 		router.attach("", AmbitResource.class);
 		
+		router.attach(OntologyResource.resource, OntologyResource.class);
+		router.attach(OntologyResource.resourceID, OntologyResource.class);
+		
 		router.attach(DatasetsResource.datasets, DatasetsResource.class);
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
 		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
@@ -139,12 +144,20 @@ public class AmbitApplication extends Application {
 
 		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
 		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
+
+		router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
+		router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
+
 		
 		router.attach(ReferenceResource.referenceID,ReferenceResource.class);
 		router.attach(ReferenceResource.reference,ReferenceResource.class);
 
 		router.attach(PropertyResource.featuredef,PropertyResource.class);
 		router.attach(PropertyResource.featuredefID,PropertyResource.class);
+		router.attach(PropertyResource.CompoundFeaturedef+"s",PropertyResource.class);
+		router.attach(PropertyResource.ConformerFeaturedef+"s",PropertyResource.class);
+		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
+		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
 		
 		router.attach("/pubchem/query/{term}",PubchemResource.class);
 		
@@ -204,6 +217,8 @@ public class AmbitApplication extends Application {
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/style/", styleDir);
+		 
+
 		return router;
 	}
 	
@@ -217,6 +232,7 @@ public class AmbitApplication extends Application {
 			t.close();
 			return c;
 		} catch (SQLException x) {
+			//TODO reinitialize the connection pool
 			error = x;
 			x.printStackTrace();
 			if (retry >= 2)

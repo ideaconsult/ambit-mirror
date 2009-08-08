@@ -38,7 +38,7 @@ public class ConformerResource extends CompoundResource {
 	public final static String idconformer = "idconformer";
 	public final static String conformers = String.format("%s%s",compoundID,conformerKey);
 	public final static String conformerID = String.format("%s%s/{%s}",compoundID,conformerKey,idconformer);
-	public final static String conformerID_media = String.format("%s%s",conformerID,"/{media}");
+	public final static String conformerID_media = String.format("%s%s",conformerID,"/diagram/{media}");
 	
 	public ConformerResource(Context context, Request request, Response response) {
 		super(context,request,response);

@@ -37,7 +37,6 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -59,7 +58,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String compound = "/compound";
 	public final static String idcompound = "idcompound";
 	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
-	public final static String compoundID_media = String.format("%s%s",compoundID,"/{media}");	
+	public final static String compoundID_media = String.format("%s%s",compoundID,"/diagram/{media}");	
 	protected boolean collapsed = false;
 	public CompoundResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -145,7 +144,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef());
 	}
-
+	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws StatusException {
