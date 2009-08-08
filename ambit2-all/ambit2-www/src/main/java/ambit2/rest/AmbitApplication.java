@@ -154,8 +154,8 @@ public class AmbitApplication extends Application {
 
 		router.attach(PropertyResource.featuredef,PropertyResource.class);
 		router.attach(PropertyResource.featuredefID,PropertyResource.class);
-		router.attach(PropertyResource.CompoundFeaturedef+"s",PropertyResource.class);
-		router.attach(PropertyResource.ConformerFeaturedef+"s",PropertyResource.class);
+		router.attach(PropertyResource.CompoundFeaturedef,PropertyResource.class);
+		router.attach(PropertyResource.ConformerFeaturedef,PropertyResource.class);
 		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
 		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
 		

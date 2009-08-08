@@ -33,10 +33,16 @@ public class AmbitResource extends Resource {
 			{String.format("%s/%d",CompoundResource.compound,100),"Chemical compounds"},
 			{String.format("%s/%d%s/%s",CompoundResource.compound,100,ConformerResource.conformerKey,"all"),"All conformer of a compound"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Conformer of a compound"},
+			
+			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All features, available for a compound"},
+			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All features, available for a conformer"},
+						
 			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search"},
 			{"/query/feature/like/benzene","Search by name"},
 			{"/query/feature/=/50-00-0","Search by property or an identifier (CAS, Name, etc.)"},
-			{"/query/smarts/[NX3][CX3](=[OX1])[#6]","Search by SMARTS"},
+			{String.format("/query/smarts?search=%s",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]"},
+			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels"},
+			
 			{"/pubchem/query/50-00-0","PubChem query"},
 			{"/algorithm/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)"},
 			{"/algorithm/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict"},
@@ -117,7 +123,7 @@ public class AmbitResource extends Resource {
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
 		w.write("<div class=\"spacer\"></div>");
 
-		w.write("	<div class=\"row\"><span class=\"left\">Home</span>");
+		w.write("<div class=\"row\"><span class=\"left\">Home</span>");
 		w.write("	<span class=\"right\">Login</span></div>");
 		w.write("	<div class=\"spacer\"></div>");
 		w.write("</div>");
