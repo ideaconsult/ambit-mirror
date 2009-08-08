@@ -19,7 +19,6 @@ import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.util.Template;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -43,6 +42,7 @@ import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
+import ambit2.rest.queryresults.QueryResultsResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
@@ -159,7 +159,10 @@ public class AmbitApplication extends Application {
 		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
 		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
 		
-		router.attach("/pubchem/query/{term}",PubchemResource.class);
+		router.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
+		
+		router.attach(PubchemResource.resourceID,PubchemResource.class);
+		router.attach(PubchemResource.resource,PubchemResource.class);
 		
 		router.attach("/algorithm/util/depict/daylight",DaylightDepict.class);
 		router.attach("/algorithm/util/depict/cdk",CDKDepict.class);
