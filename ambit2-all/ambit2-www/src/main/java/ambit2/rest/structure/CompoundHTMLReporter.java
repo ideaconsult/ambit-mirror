@@ -11,6 +11,7 @@ import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import org.openscience.cdk.CDKConstants;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -71,11 +72,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					uriReporter.getBaseReference()
 					);
 			output.write(String.format("<h4>%s</h4>",query.toString()));
+			output.write("<div id=\"div-1\">");
 
 		} catch (Exception x) {}		
 	};
 	public void footer(Writer output, Q query) {
 		try {
+			output.write("</div>");
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getBaseReference()
@@ -90,12 +93,23 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}
 	public String toURI(IStructureRecord record) {
 		String w = uriReporter.getURI(record);
-
-		return String.format(
-				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>&nbsp;", 
-				w, w, w, record.getIdchemical());
-
+		StringBuilder b = new StringBuilder();
+		b.append("<div id=\"div-1a\"><div id=\"div-1b1\">");
 		
+		b.append(String.format(
+				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>", 
+				w, w, w, record.getIdchemical()));
+		b.append("<div id=\"div-1d\">");
+		String[][] s = new String[][] {
+			{"feature",CDKConstants.CASRN},
+			{"feature",CDKConstants.NAMES},
+			{"feature_definition",null}
+			};
+		for (String[] n:s)
+		b.append(String.format("%s <a href=\"%s/%s/%s\" target=\"_blank\">%s<a><br>",n[0],w,n[0],n[1]==null?"":n[1],n[1]==null?"All available":n[1]));
+		b.append("</div>");
+		b.append("</div></div>");
+		return b.toString();
 	}		
 
 }

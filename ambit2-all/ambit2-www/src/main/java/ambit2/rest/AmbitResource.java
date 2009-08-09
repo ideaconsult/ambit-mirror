@@ -166,12 +166,12 @@ public class AmbitResource extends Resource {
 		
 	}
 	public static void writeHTMLFooter(Writer output,String title,Reference baseReference) throws IOException {
-		output.write("<div align=\"right\">");
+		output.write("<div class=\"footer\"><span class=\"right\">");
 		output.write("<font color='#D6DFF7'>");
 		output.write("Developed by Ideaconsult Ltd. (2005-2009)"); 
 		output.write("</font>");
-		output.write("</div>");		
-		output.write("<div align=\"right\">");
+		output.write("</span></div>");		
+		output.write("<div class=\"footer\"><span class=\"right\">");
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");
@@ -179,7 +179,7 @@ public class AmbitResource extends Resource {
 		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>");
-		output.write("</div>");
+		output.write("</span></div>");
 		output.write("</body>");
 		output.write("</html>");
 
