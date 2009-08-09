@@ -17,6 +17,16 @@ div.row span.right {
   FONT-FAMILY: Verdana, Arial;
   width: 50%;
   }
+  
+div.footer span.right {
+  float: right;
+  text-align: right;
+  FONT-SIZE: 8pt;
+  background-color: #FFFFFF;
+  color: #516373;
+  FONT-FAMILY: Verdana, Arial;
+  width: 100%;
+  }
 
 body { 
 
@@ -127,3 +137,32 @@ A:hover
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
 }
+#div-1a {
+ float:left;
+ width:320px;
+ z-index:99;
+}
+
+#div-1 {
+ position:relative;
+ //position:static;
+ top:0px;
+ left:0px;
+ width:100%;
+}
+
+#div-1b1 {
+	 float:left;
+	 width:30px;
+	 height: 350px;
+}
+
+#div-1d {
+	position:relative;
+	width:250px;
+	padding: 10px;
+  	color: #516373;
+  	FONT-SIZE: 10pt;
+	FONT-FAMILY: Verdana, Arial;	
+}
+
