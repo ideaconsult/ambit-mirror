@@ -204,6 +204,30 @@ INSERT INTO `dictionary` VALUES (11,'is_a',1),(35,'is_a',1),(36,'is_a',1),(37,'i
 /*!40000 ALTER TABLE `dictionary` ENABLE KEYS */;
 UNLOCK TABLES;
 
+insert into template values (null,"Models");
+insert into dictionary (idsubject,relationship,idobject)
+SELECT t1.idtemplate,"is_a",t2.idtemplate FROM template t1
+join template t2
+where t1.name = "Models" and t2.name is null;
+
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `models`;
+CREATE TABLE  `models` (
+  `idmodel` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) collate utf8_bin NOT NULL,
+  `idquery` int(10) unsigned default NULL COMMENT 'dataset',
+  `predictors` int(10) unsigned NOT NULL COMMENT 'template for predictors',
+  `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
+  `content` blob NOT NULL,
+  PRIMARY KEY  (`idmodel`),
+  UNIQUE KEY `Index_5` USING BTREE (`name`),
+  KEY `FK_models_predictors` (`predictors`),
+  KEY `FK_models_dataset` (`idquery`),
+  KEY `FK_models_dependent` (`dependent`),
+  CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_models_predictors` FOREIGN KEY (`predictors`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `tuples` for non-scalar values
