@@ -20,10 +20,10 @@ import org.restlet.data.Status;
 import ambit2.rest.test.ResourceTest;
 
 public class ModelResourceTest extends ResourceTest {
-
+	//calculates pka
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/model/pka", port);
+		return String.format("http://localhost:%d/model/2", port);
 	}
 	@Test
 	public void testPost() throws Exception {
@@ -33,22 +33,26 @@ public class ModelResourceTest extends ResourceTest {
 		Status status = response.getStatus();
 		Assert.assertEquals(Status.SUCCESS_CREATED,status);
 		
-		
+		System.out.println(response.getLocationRef());
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		request.setResourceRef(response.getLocationRef());
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(MediaType.TEXT_URI_LIST));
 		while (status.equals(Status.SUCCESS_CREATED)) {
+			System.out.println(status);
 			System.out.println("poll");
 			Response response1 = client.handle(request);
 			if (response1.getStatus().equals(Status.REDIRECTION_SEE_OTHER)) {
-				Assert.assertEquals(String.format("http://localhost:%d/dataset/1", port),response1.getLocationRef());
+				Assert.assertEquals(String.format("http://localhost:%d/template/1", port),response1.getLocationRef());
+				System.out.println(status);
 				return;
-			}
+			} 
+
 			status = response1.getStatus();
 			
 		}
+		System.out.println(status);
 	}
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
