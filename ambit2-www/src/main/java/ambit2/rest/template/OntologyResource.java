@@ -58,7 +58,7 @@ public class OntologyResource extends QueryResource<QueryOntology, Object> {
 	@Override
 	protected QueryOntology createQuery(Context context, Request request,
 			Response response) throws StatusException {
-		Object key = request.getAttributes().get("topnode");
+		Object key = request.getAttributes().get(resourceKey);
 		QueryOntology q = new QueryOntology();
 		q.setValue(key==null?null:new Dictionary(Reference.decode(key.toString()),null));
 		return q;

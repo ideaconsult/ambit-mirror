@@ -33,7 +33,6 @@ import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
 import ambit2.rest.model.ModelResource;
-import ambit2.rest.model.ModelResource_pka;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -205,10 +204,9 @@ public class AmbitApplication extends Application {
 					AlgorithmDescriptorTypesResource.iddescriptor),
 					AlgorithmDescriptorTypesResource.class);		
 		
-		router.attach(ModelResource.model,ModelResource.class);
-		router.attach(ModelResource.model+"/pka",ModelResource_pka.class);
-		router.attach(String.format("%s/{%s}",ModelResource.model,ModelResource.modelID),
-				ModelResource.class);		
+		router.attach(ModelResource.resource,ModelResource.class);
+		router.attach(ModelResource.resourceID,ModelResource.class);
+
 		
 		router.attach("/"+TaskResource.resource, TaskResource.class);
 		router.attach(TaskResource.resourceID, TaskResource.class);
