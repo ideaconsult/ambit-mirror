@@ -1,4 +1,4 @@
-package ambit2.rest.algorithm;
+package ambit2.rest.task;
 
 import java.io.Writer;
 import java.util.Iterator;
@@ -6,40 +6,36 @@ import java.util.Iterator;
 import org.restlet.data.Reference;
 
 import ambit2.rest.AmbitResource;
+import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmURIReporter;
 
-/**
- * HTML reporter for {@link AlgorithmResource}
- * @author nina
- *
- * @param <T>
- */
-public class AlgorithmHTMLReporter<T> extends AlgorithmURIReporter<T> {
+public class TaskHTMLReporter extends AlgorithmURIReporter<Task<Reference>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7644836050657868159L;
-	public AlgorithmHTMLReporter(Reference ref) {
+	public TaskHTMLReporter(Reference ref) {
 		super(ref);
 	}
 	@Override
-	public void header(Writer output, Iterator<T> query) {
+	public void header(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", baseReference);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 		} catch (Exception x) {
 			
 		}
 	}
-	public void processItem(T item, Writer output) {
+	public void processItem(Task<Reference> item, Writer output) {
 		try {
-			String t = super.getURI(item);
-			output.write(String.format("<a href='%s'>%s</a><br>", t,t));
+			String t = item.getReference().toString();
+			output.write(String.format("<a href='%s'>%s</a>&nbsp;%s<br>", t,t,item.isDone()?"Completed":"Running"));
 		} catch (Exception x) {
 			
 		}
 	};
 	@Override
-	public void footer(Writer output, Iterator<T> query) {
+	public void footer(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, baseReference);
 			output.flush();

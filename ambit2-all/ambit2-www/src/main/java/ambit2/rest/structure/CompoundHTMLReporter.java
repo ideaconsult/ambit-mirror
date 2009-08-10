@@ -2,16 +2,15 @@ package ambit2.rest.structure;
 
 import java.io.Writer;
 
+import org.openscience.cdk.CDKConstants;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import org.openscience.cdk.CDKConstants;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -96,9 +95,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		StringBuilder b = new StringBuilder();
 		b.append("<div id=\"div-1a\"><div id=\"div-1b1\">");
 		
+		
 		b.append(String.format(
 				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>", 
-				w, w, w, record.getIdchemical()));
+				w, w, 
+				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
 		String[][] s = new String[][] {
 			{"feature",CDKConstants.CASRN},

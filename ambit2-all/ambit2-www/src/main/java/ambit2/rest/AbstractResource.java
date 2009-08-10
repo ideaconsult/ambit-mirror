@@ -34,9 +34,9 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	}
 	public abstract P createConvertor(Variant variant) throws AmbitException;
 	
-	protected  abstract Q createQuery(Context context, Request request, Response response) throws StatusException;
+	protected   abstract  Q createQuery(Context context, Request request, Response response) throws StatusException;
 	
-	public Representation getRepresentation(Variant variant) {
+	public synchronized Representation getRepresentation(Variant variant) {
 
 		try {
 	        if (query != null) {
