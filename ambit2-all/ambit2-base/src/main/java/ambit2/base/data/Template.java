@@ -65,7 +65,15 @@ public class Template extends Profile<Property> {
      */
     private static final long serialVersionUID = -9152728910421949089L;
     protected int id;
-    /**
+    public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
      * 
      */
     public Template() {
