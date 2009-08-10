@@ -55,40 +55,50 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));			
 	}
+
 	@Override
-	public Representation getRepresentation(Variant variant) {
-		return super.getRepresentation(variant);
-	}
-	@Override
-	protected Iterator<Task<Reference>> createQuery(Context context, Request request,
+	protected synchronized Iterator<Task<Reference>> createQuery(Context context, Request request,
 			Response response) throws StatusException {
+		
 		Object id = request.getAttributes().get(resourceKey);
+
 		try {
 			ArrayList<Task<Reference>> list = new ArrayList<Task<Reference>>();
 			if (id == null) {
 				status = Status.SUCCESS_OK;
 				return ((AmbitApplication)getApplication()).getTasks();
 			} else {
+
 				Task<Reference> task = ((AmbitApplication)getApplication()).findTask(Reference.decode(id.toString()));
 				if (task==null) throw new StatusException(Status.CLIENT_ERROR_NOT_FOUND);
+				
+				Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");  
+				if (responseHeaders == null) {
+					responseHeaders = new Form();  
+					getResponse().getAttributes().put("org.restlet.http.headers", responseHeaders);  
+				} 
+								
 				if (task.isDone()) {
 					status = Status.REDIRECTION_SEE_OTHER;
 					getResponse().setStatus(status);
-					Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");  
-					if (responseHeaders == null) {
-						responseHeaders = new Form();  
-						getResponse().getAttributes().put("org.restlet.http.headers", responseHeaders);  
-					}  					
 					getResponse().setLocationRef(task.getReference());
  					
 				} else {
 					status = Status.SUCCESS_ACCEPTED;
+					
+					responseHeaders.add("Cache-Control", "no-store, no-cache, must-revalidate"); //HTTP 1.1
+					responseHeaders.add("Cache-Control", "post-check=0, pre-check=0");
+					responseHeaders.add("Pragma", "no-cache"); //HTTP 1.0
+					responseHeaders.add("Expires", "0"); //prevents caching at the proxy server
+					responseHeaders.add("Refresh",String.format("1; url=%s",task.getReference()));
+					
 				}
-				
+
 				if (task != null) list.add(task);
 				return list.iterator();
 			}
 		} catch (Exception x) {
+
 			throw new StatusException(
 					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid task id %d",id))
 					);
@@ -97,14 +107,14 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 	}
 	
 	@Override
-	public IProcessor<Iterator<Task<Reference>>, Representation> createConvertor(
+	public synchronized IProcessor<Iterator<Task<Reference>>, Representation> createConvertor(
 			Variant variant) throws AmbitException {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new AlgorithmHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new TaskHTMLReporter(getRequest().getRootRef()) ,MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		
-			return new StringConvertor(	new AlgorithmURIReporter(getRequest().getRootRef()) {
+			return new StringConvertor(	new AlgorithmURIReporter(null) {
 				@Override
 				public void processItem(Object src, Writer output) {
 					super.processItem(src,output);
@@ -114,7 +124,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 			
 		} else //html 	
 			return new StringConvertor(
-					new AlgorithmHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new TaskHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
 	}
 
 }

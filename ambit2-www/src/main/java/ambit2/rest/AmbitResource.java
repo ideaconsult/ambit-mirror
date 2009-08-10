@@ -115,12 +115,16 @@ public class AmbitResource extends Resource {
 			return null;
 		}
 	}
+	
 	public static void writeHTMLHeader(Writer w,String title,Reference baseReference) throws IOException {
+		writeHTMLHeader(w, title, baseReference,"");
+	}
+	public static void writeHTMLHeader(Writer w,String title,Reference baseReference,String meta) throws IOException {
 
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
-		w.write(String.format("<html><head><title>%s</title>\n",title));
+		w.write(String.format("<html><head><title>%s</title>%s\n",title,meta));
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
 		w.write("</head>\n");
 		w.write("<body>\n");
@@ -146,10 +150,10 @@ public class AmbitResource extends Resource {
 		w.write("</div>");
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
-		w.write("<td align='left'>");
-		w.write(String.format("<img src='%s/images/ambit-logo.png' alt='%s' title='%s' border='0'>\n",baseReference,"AMBIT",baseReference));
+		w.write("<td align='left' width='256px'>");
+		w.write(String.format("<a href=\"http://ambit.sourceforge.net\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
-		w.write("<td align='right'>");
+		w.write("<td align='center'>");
 
 		w.write("<form action='' method='get'>\n");
 		w.write("<input name='search' size='80'>\n");
@@ -157,6 +161,9 @@ public class AmbitResource extends Resource {
 		//w.write(baseReference.toString());
 
 		w.write("</form>\n");
+		w.write("</td>");
+		w.write("<td align='right' width='256px'>");
+		w.write(String.format("<a href=\"http://opentox.org\"><img src='%s/images/logo.png' width='256' alt='%s' title='%s' border='0' alt='OpenTox' title='OpenTox'></a>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("</tr></table>");		
 		
@@ -169,9 +176,7 @@ public class AmbitResource extends Resource {
 		output.write("<div class=\"footer\"><span class=\"right\">");
 		output.write("<font color='#D6DFF7'>");
 		output.write("Developed by Ideaconsult Ltd. (2005-2009)"); 
-		output.write("</font>");
-		output.write("</span></div>");		
-		output.write("<div class=\"footer\"><span class=\"right\">");
+		output.write("</font><br>");
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");

@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Test;
 import org.restlet.Application;
 import org.restlet.Context;
@@ -31,6 +32,10 @@ public class TaskResourceTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d/task", port);
 	}
+	@After
+	public void cleanup() {
+		((AmbitApplication)app).removeTasks();
+	}
 
 	@Test
 	public void testURI() throws Exception {
@@ -42,7 +47,7 @@ public class TaskResourceTest extends ResourceTest {
 		((AmbitApplication)app).addTask(c,new Reference(String.format("http://localhost:%d", port)));
 				
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
-		((AmbitApplication)app).removeTasks();
+		
 	}
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
@@ -72,7 +77,7 @@ public class TaskResourceTest extends ResourceTest {
 		Assert.assertEquals(
 					String.format("http://localhost:%d/task/quickTaskURI",port),
 					response.getLocationRef().toString());
-		((AmbitApplication)app).removeTasks();
+		//((AmbitApplication)app).removeTasks();
 
 	}
 	@Test
@@ -89,6 +94,6 @@ public class TaskResourceTest extends ResourceTest {
 		String longTaskURI = ((AmbitApplication)app).addTask(c,new Reference(String.format("http://localhost:%d", port))).toString();
 			
 		Response response = testGet(longTaskURI,MediaType.TEXT_URI_LIST,Status.SUCCESS_ACCEPTED);
-		((AmbitApplication)app).removeTasks();
+		//((AmbitApplication)app).removeTasks();
 	}	
 }

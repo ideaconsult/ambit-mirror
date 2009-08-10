@@ -1,13 +1,24 @@
 package ambit2.rest.dataset;
 
+import java.io.File;
 import java.io.Writer;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
+import org.restlet.ext.fileupload.RestletFileUpload;
+import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
+import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
@@ -16,6 +27,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.ReadDataset;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
@@ -23,6 +35,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.task.CallableFileUpload;
 
 /**
  * http://opentox.org/wiki/1/Dataset
@@ -35,7 +48,9 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	
 	
 	public final static String datasets = "/dataset";	
-	public final static String datasetID =  String.format("%s%s",DatasetsResource.datasets,"/{dataset_id}");
+	public final static String datasetKey = "dataset_id";	
+	public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
+	
 	protected boolean collapsed;
 	public DatasetsResource(Context context, Request request, Response response) {
 		super(context,request,response);
@@ -47,7 +62,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			Request request, Response response) throws StatusException {
 		ReadDataset query = new ReadDataset();
 		
-		Object id = request.getAttributes().get("dataset_id");
+		Object id = request.getAttributes().get(datasetKey);
 		collapsed = true;
 		if (id != null) try {
 			SourceDataset dataset = new SourceDataset();
@@ -93,5 +108,85 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	} else //html 	
 		return new OutputStreamConvertor(
 				new DatasetHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+	}
+	
+	@Override
+	public boolean allowPost() {
+		return getRequest().getAttributes().get(datasetKey)==null;
+	}
+	
+	@Override
+	public void acceptRepresentation(Representation entity)
+			throws ResourceException {
+		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
+			  DiskFileItemFactory factory = new DiskFileItemFactory();
+              factory.setSizeThreshold(100);
+	          RestletFileUpload upload = new RestletFileUpload(factory);
+	          try {
+	              List<FileItem> items = upload.parseRequest(getRequest());
+				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
+						new CallableFileUpload(items,DatasetHTMLReporter.fileUploadField) {
+							@Override
+							public Reference createReference() {
+								return getRequest().getOriginalRef();
+							}
+						},	
+						getRequest().getRootRef());		
+				  getResponse().setLocationRef(ref);
+				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+				  getResponse().setEntity(null);
+				  System.out.println(ref);
+	          } catch (Exception x) {
+	        	  getResponse().setStatus(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage()));
+	        	  getResponse().setEntity(null);
+	          }
+		} else  {
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+		}
+		/*
+		if (entity != null) 
+            if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
+                // 1/ Create a factory for disk-based file items
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                factory.setSizeThreshold(1000240);
+                // 2/ Create a new file upload handler based on the Restlet
+                // FileUpload extension that will parse Restlet requests and
+                // generates FileItems.
+                RestletFileUpload upload = new RestletFileUpload(factory);
+                List<FileItem> items;
+                try {
+                    // 3/ Request is parsed by the handler which generates a
+                    // list of FileItems
+                    items = upload.parseRequest(getRequest());
+
+                    // Process only the uploaded item called "fileToUpload" and
+                    // save it on disk
+                    boolean found = false;
+                    for (final Iterator<FileItem> it = items.iterator(); 
+                    		it.hasNext()
+                            && !found;) {
+                        FileItem fi = it.next();
+                        if (fi.getFieldName().equals(DatasetsHTMLReporter.fileUploadField)) {
+                        	fi.getContentType();
+                            found = true;
+                            File file = new File(System.getProperty("java.io.tmpdir")+fi.getName());
+                            fi.write(file);
+                        }
+                    }    
+                    
+                    getResponse().setStatus(Status.REDIRECTION_FOUND);
+                    getResponse().setLocationRef(getRequest().getOriginalRef());
+                    getResponse().setEntity(null);
+                    return;
+                 } catch (Exception e) {
+                	 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,e.getMessage()));
+                 } finally {
+                	 
+                 }
+            }
+         getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+         */
+            
 	}
 }

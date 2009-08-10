@@ -1,5 +1,6 @@
 package ambit2.rest.structure;
 
+import java.awt.Dimension;
 import java.io.Writer;
 
 import org.restlet.Context;
@@ -118,8 +119,17 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+			Dimension d = new Dimension(250,250);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			try {
+				
+				d.width = Integer.parseInt(form.getFirstValue("w").toString());
+			} catch (Exception x) {}
+			try {
+				d.height = Integer.parseInt(form.getFirstValue("h").toString());
+			} catch (Exception x) {}			
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
+					new ImageReporter<QueryStructureByID>(d),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>());				

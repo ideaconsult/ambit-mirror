@@ -15,10 +15,13 @@ import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Directory;
+import org.restlet.Guard;
 import org.restlet.Restlet;
 import org.restlet.Router;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -117,8 +120,23 @@ public class AmbitApplication extends Application {
 		
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
+
+		Guard guard = new Guard(getContext(),ChallengeScheme.HTTP_BASIC, "Tutorial") {
+			@Override
+			public int authenticate(Request request) {
+				if (request.getMethod().equals(org.restlet.data.Method.GET)) return AUTHENTICATION_VALID;
+				return super.authenticate(request);
+			}
+			@Override
+			public boolean authorize(Request request) {
+				if (request.getMethod().equals(org.restlet.data.Method.GET)) return true;
+				return super.authorize(request);
+			}
+		};
+		guard.getSecrets().put("guest", "guest".toCharArray());  
+		guard.setNext(DatasetsResource.class);  
 		
-		router.attach(DatasetsResource.datasets, DatasetsResource.class);
+		router.attach(DatasetsResource.datasets, guard);
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
 		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
 		router.attach(datasetID_structure, CompoundResource.class);
@@ -247,8 +265,13 @@ public class AmbitApplication extends Application {
 	public Iterator<Task<Reference>> getTasks() {
 		return tasks.values().iterator();
 	}
-	public Task<Reference> findTask(String id) {
+	public synchronized Task<Reference> findTask(String id) {
+		try {
 		return tasks.get(UUID.fromString(id));
+		} catch (Exception x) {
+			System.out.println(x);
+			return null;
+		}
 	}
 
 	public synchronized Reference addTask(Callable<Reference> callable, Reference baseReference) {
@@ -259,6 +282,8 @@ public class AmbitApplication extends Application {
 				super.done();
 				//((AmbitApplication)getApplication()).getTasks().remove(this);
 			}
+			
+			
 		};		
 		UUID uuid = UUID.randomUUID();
 		Task<Reference> task = new Task<Reference>(futureTask);
@@ -269,6 +294,7 @@ public class AmbitApplication extends Application {
 		getTaskService().submit(futureTask);	
 		return ref;
 	}
+
 	public void cancelTasks() {
 		Iterator<Task<Reference>> i = getTasks();
 		while (i.hasNext()) {
