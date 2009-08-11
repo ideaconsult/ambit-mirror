@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -13,6 +14,9 @@ import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.QueryField;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
@@ -62,10 +66,24 @@ public class AmbitResource extends Resource {
 
 	}
 	
-
+	protected String getSearchString() {
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Object key = form.getFirstValue("search");
+		if (key != null) {
+	        return Reference.decode(key.toString());
+		} else return null;		
+	}
 	
 	@Override
 	public Representation getRepresentation(Variant variant) {
+		try {
+			String search = getSearchString();
+			if (search != null) {
+				getResponse().setLocationRef(String.format("%s/compound?search=%s",getRequest().getRootRef(),Reference.encode(search)));
+				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+				return null;
+			}
+		} catch (Exception x) {}
 	    System.out.println(getRequest().getAttributes());    
 		try {
 			if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
@@ -163,7 +181,7 @@ public class AmbitResource extends Resource {
 		w.write("</form>\n");
 		w.write("</td>");
 		w.write("<td align='right' width='256px'>");
-		w.write(String.format("<a href=\"http://opentox.org\"><img src='%s/images/logo.png' width='256' alt='%s' title='%s' border='0' alt='OpenTox' title='OpenTox'></a>\n",baseReference,"AMBIT",baseReference));
+		w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("</tr></table>");		
 		
