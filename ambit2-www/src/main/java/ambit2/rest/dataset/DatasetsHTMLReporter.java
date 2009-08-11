@@ -77,11 +77,17 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query\" title=\"Search compounds\" border=\"0\"/></a>",
+						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/smarts\" title=\"Search compounds with smarts\" border=\"0\"/></a>",
 						w.toString(),
-						QueryResource.query_resource,
+						QueryResource.query_resource+"/smarts",
 						uriReporter.getBaseReference().toString()));
 				
+				output.write("&nbsp;");
+				output.write(String.format(
+						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/feature/like/\" title=\"Search compounds with smarts\" border=\"0\"/></a>",
+						w.toString(),
+						QueryResource.query_resource+"/feature/like/",
+						uriReporter.getBaseReference().toString()));				
 			
 			} else {
 			
