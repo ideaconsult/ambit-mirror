@@ -4,6 +4,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -21,7 +23,6 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.algorithm.AlgorithmHTMLReporter;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 
 /**
@@ -79,9 +80,21 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 				} 
 								
 				if (task.isDone()) {
-					status = Status.REDIRECTION_SEE_OTHER;
-					getResponse().setStatus(status);
-					getResponse().setLocationRef(task.getReference());
+
+					try {
+						getResponse().setLocationRef(task.getReference());
+						status = Status.REDIRECTION_SEE_OTHER;
+						getResponse().setStatus(status);						
+					} catch (ExecutionException x) {
+						status = new Status(Status.CLIENT_ERROR_REQUEST_ENTITY_TOO_LARGE,x.getMessage());
+						getResponse().setStatus(status);						
+					} catch (InterruptedException x) {
+						status = new Status(Status.CLIENT_ERROR_PRECONDITION_FAILED,x.getMessage());
+						getResponse().setStatus(status);							
+					} catch (CancellationException x) {
+						status = new Status(Status.CLIENT_ERROR_PRECONDITION_FAILED,x.getMessage());
+						getResponse().setStatus(status);							
+					}
  					
 				} else {
 					status = Status.SUCCESS_ACCEPTED;
@@ -97,6 +110,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 				if (task != null) list.add(task);
 				return list.iterator();
 			}
+
 		} catch (Exception x) {
 
 			throw new StatusException(

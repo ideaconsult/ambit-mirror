@@ -120,11 +120,12 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			throws ResourceException {
 		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
-              factory.setSizeThreshold(100);
+              //factory.setSizeThreshold(100);
 	          RestletFileUpload upload = new RestletFileUpload(factory);
 	          try {
 	              List<FileItem> items = upload.parseRequest(getRequest());
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
+						 "File upload",
 						new CallableFileUpload(items,DatasetHTMLReporter.fileUploadField) {
 							@Override
 							public Reference createReference() {

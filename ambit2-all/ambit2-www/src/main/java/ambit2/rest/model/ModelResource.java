@@ -132,6 +132,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 							q.setValue(Integer.parseInt(id));				
 							model.setTestInstances(q);
 							Reference ref =  ((AmbitApplication)getApplication()).addTask(
+									String.format("Apply model %s to %s",model.toString(),q.toString()),
 									runModel(model),	
 									getRequest().getRootRef());		
 							getResponse().setLocationRef(ref);

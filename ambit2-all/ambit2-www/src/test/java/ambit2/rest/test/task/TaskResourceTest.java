@@ -44,7 +44,7 @@ public class TaskResourceTest extends ResourceTest {
 				return new Reference("quickTaskURI");
 			}
 		};
-		((AmbitApplication)app).addTask(c,new Reference(String.format("http://localhost:%d", port)));
+		((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port)));
 				
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
 		
@@ -71,7 +71,7 @@ public class TaskResourceTest extends ResourceTest {
 				return new Reference("quickTaskURI");
 			}
 		};
-		Reference completedTaskURI = ((AmbitApplication)app).addTask(c,new Reference(String.format("http://localhost:%d", port)));
+		Reference completedTaskURI = ((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port)));
 				
 		Response response = testGet(completedTaskURI.toString(),MediaType.TEXT_URI_LIST,Status.REDIRECTION_SEE_OTHER);
 		Assert.assertEquals(
@@ -91,7 +91,7 @@ public class TaskResourceTest extends ResourceTest {
 				return new Reference("newURI");
 			}
 		};
-		String longTaskURI = ((AmbitApplication)app).addTask(c,new Reference(String.format("http://localhost:%d", port))).toString();
+		String longTaskURI = ((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port))).toString();
 			
 		Response response = testGet(longTaskURI,MediaType.TEXT_URI_LIST,Status.SUCCESS_ACCEPTED);
 		//((AmbitApplication)app).removeTasks();

@@ -17,6 +17,7 @@ import org.restlet.Context;
 import org.restlet.Directory;
 import org.restlet.Guard;
 import org.restlet.Restlet;
+import org.restlet.Route;
 import org.restlet.Router;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
@@ -121,7 +122,7 @@ public class AmbitApplication extends Application {
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 
-		Guard guard = new Guard(getContext(),ChallengeScheme.HTTP_BASIC, "Tutorial") {
+		Guard guard = new Guard(getContext(),ChallengeScheme.HTTP_BASIC, "AMBIT file upload") {
 			@Override
 			public int authenticate(Request request) {
 				if (request.getMethod().equals(org.restlet.data.Method.GET)) return AUTHENTICATION_VALID;
@@ -133,7 +134,7 @@ public class AmbitApplication extends Application {
 				return super.authorize(request);
 			}
 		};
-		guard.getSecrets().put("guest", "guest".toCharArray());  
+		guard.getSecrets().put("opentox", "opentox".toCharArray());  
 		guard.setNext(DatasetsResource.class);  
 		
 		router.attach(DatasetsResource.datasets, guard);
@@ -274,7 +275,7 @@ public class AmbitApplication extends Application {
 		}
 	}
 
-	public synchronized Reference addTask(Callable<Reference> callable, Reference baseReference) {
+	public synchronized Reference addTask(String taskName, Callable<Reference> callable, Reference baseReference) {
 		if (callable == null) return null;
 		FutureTask<Reference> futureTask = new FutureTask<Reference>(callable) {
 			@Override
@@ -287,6 +288,7 @@ public class AmbitApplication extends Application {
 		};		
 		UUID uuid = UUID.randomUUID();
 		Task<Reference> task = new Task<Reference>(futureTask);
+		task.setName(taskName);
 		Reference ref =	new Reference(
 				String.format("%s/%s/%s", baseReference.toString(),TaskResource.resource,Reference.encode(uuid.toString())));
 		task.setUri(ref);
