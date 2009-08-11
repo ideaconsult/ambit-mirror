@@ -18,6 +18,8 @@ import org.restlet.resource.ResourceException;
 public abstract class CallableFileUpload implements Callable<Reference> {
 	protected List<FileItem> items;
 	protected String fileUploadField;
+	protected long maxSize = 1000000;
+	
 	public CallableFileUpload(List<FileItem> items, String fileUploadField) {
 		this.items = items;
 		this.fileUploadField = fileUploadField;
@@ -31,6 +33,10 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                     		it.hasNext()
                             && !found;) {
                         FileItem fi = it.next();
+                        if (fi.getSize()>maxSize) {
+                        	throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,String.format("File size %d > max allowed size %d",fi.getSize(),maxSize)));
+                        }
+                        	
                         if (fi.getFieldName().equals(fileUploadField)) {
                         	fi.getContentType();
                             found = true;
@@ -40,7 +46,10 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                     }    
 
                     return createReference();
+				 } catch (ResourceException x) {
+					 throw x;
                  } catch (Exception e) {
+                	 e.printStackTrace();
                 	 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,e.getMessage()));
                  } finally {
                 	 

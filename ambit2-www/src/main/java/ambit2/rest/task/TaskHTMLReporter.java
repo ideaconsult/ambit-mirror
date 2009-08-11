@@ -27,11 +27,16 @@ public class TaskHTMLReporter extends AlgorithmURIReporter<Task<Reference>> {
 		}
 	}
 	public void processItem(Task<Reference> item, Writer output) {
+		String t = "";
+		String status = item.isDone()?"Completed":"Running";
 		try {
-			String t = item.getReference().toString();
-			output.write(String.format("<a href='%s'>%s</a>&nbsp;%s<br>", t,t,item.isDone()?"Completed":"Running"));
-		} catch (Exception x) {
+			t = item.getReference().toString();
 			
+		} catch (Exception x) {
+			status = "Error";
+			t = x.getMessage();
+		} finally {
+			try {output.write(String.format("%s&nbsp;<a href='%s'>%s</a>&nbsp;%s<br>", item.getName(),t,t,status)); } catch (Exception x) {}
 		}
 	};
 	@Override
