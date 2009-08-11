@@ -47,7 +47,7 @@ public class RetrieveField extends AbstractQuery<Property,IStructureRecord,EQCon
 		"(\n"+
 		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values join structure using(idstructure) where idchemical=? and value_num is not null\n"+
 		"union\n"+
-		"select idstructure,idproperty,value as value_string,null,0 as idtype from structure join property_values using(idstructure) join property_string using(idvalue_string) where idvalue_string is not null and idchemical=?\n"+
+		"select idstructure,idproperty,ifnull(text,value) as value_string,null,0 as idtype from structure join property_values using(idstructure) join property_string using(idvalue_string) where idvalue_string is not null and idchemical=?\n"+
 		") as L using (idproperty)\n";	
 	protected final String where = "where %s=?";
 
