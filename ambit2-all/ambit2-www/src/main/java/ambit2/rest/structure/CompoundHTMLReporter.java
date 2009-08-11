@@ -70,8 +70,23 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					,
 					uriReporter.getBaseReference()
 					);
-			output.write(String.format("<h4>%s</h4>",query.toString()));
+			output.write("<h4><div class=\"actions\"><span class=\"right\">");
+			output.write(String.format("<form method=\"post\" action=\"%s/query/results\">",uriReporter.getBaseReference()));
+			output.write(String.format("%s","Query name:&nbsp;"));
+			output.write(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
+			output.write("<input type=\"submit\" value='Save search results'>&nbsp;");
+			//output.write("</form>");
+			//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
+			output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
+			//output.write("</form>");	
+			//output.write(String.format("<form method=\"post\" action=\"%s/algorithm\">",uriReporter.getBaseReference()));
+			output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
+			output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
+			output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
+			output.write("</form>");			
+			output.write("</span></div></h4>\n");	
 			output.write("<div id=\"div-1\">");
+			
 
 		} catch (Exception x) {}		
 	};
@@ -93,8 +108,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public String toURI(IStructureRecord record) {
 		String w = uriReporter.getURI(record);
 		StringBuilder b = new StringBuilder();
-		b.append("<div id=\"div-1a\"><div id=\"div-1b1\">");
+		b.append("<div id=\"div-1a\">");
 		
+		b.append("<div id=\"div-1b1\"><input type=checkbox name=\"structure\"></div>");
 		
 		b.append(String.format(
 				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>", 
@@ -107,8 +123,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			{"feature_definition",null}
 			};
 		for (String[] n:s)
-		b.append(String.format("%s <a href=\"%s/%s/%s\" target=\"_blank\">%s<a><br>",n[0],w,n[0],n[1]==null?"":n[1],n[1]==null?"All available":n[1]));
-		b.append("</div>");
+		b.append(String.format("%s <a href=\"%s/%s/%s\" target=\"_blank\">%s</a><br>",n[0],w,n[0],n[1]==null?"":n[1],n[1]==null?"All available":n[1]));
+		//b.append("</div>");
 		b.append("</div></div>");
 		return b.toString();
 	}		

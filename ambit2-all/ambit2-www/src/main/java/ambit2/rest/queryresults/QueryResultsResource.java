@@ -5,6 +5,8 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.db.search.StoredQuery;
@@ -49,5 +51,13 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 		}
 		throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
-
+	@Override
+	public boolean allowPost() {
+		return true;
+	}
+	@Override
+	public void acceptRepresentation(Representation entity)
+			throws ResourceException {
+		throw new ResourceException(new Status(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Not implemented yet!"));
+	}
 }
