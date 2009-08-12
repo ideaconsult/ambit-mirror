@@ -6,9 +6,18 @@ import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Response;
+import org.restlet.data.Status;
+import org.w3c.dom.Document;
 
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -27,6 +36,27 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
+	/*
+<?xml version="1.0" encoding="UTF-8"?><FeatureDefinitions xmlns="http://opentox.org/1.0"><FeatureDefinition ID="1" Name="Property 1" Reference="8" type="TODO"><link href="http://localhost:8181/feature_definition/1"/><Reference xmlns="http://www.opentox.org/Reference/1.0" AlgorithmID="NA" ID="8" Name="Dummy"/></FeatureDefinition></FeatureDefinitions>
+	 */
+	
+	@Override
+	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
+			throws Exception {
+
+		Document doc = createDOM(in);
+        PropertyDOMParser parser = new PropertyDOMParser() {
+        	@Override
+        	public void processItem(Property entry) throws AmbitException {
+        		Assert.assertEquals(1,entry.getId());
+        		Assert.assertEquals("Property 1",entry.getName());
+        		Assert.assertEquals(8,entry.getReference().getId());
+        	}
+        };
+        parser.parse(doc);
+        return true;
+	}	
+	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -39,7 +69,7 @@ public class PropertyResourceTest extends ResourceTest {
 		}
 		return count>0;
 	}	
-	
+	 */
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);
@@ -75,4 +105,23 @@ public class PropertyResourceTest extends ResourceTest {
 		}
 		return count==1;
 	}	
+	
+	@Test
+	public void testCreateEntry() throws Exception {
+		Form headers = new Form();  
+		headers.add(PropertyResource.headers.name.toString(),"cas");
+		headers.add(PropertyResource.headers.reference_id.toString(),"4");
+		Response response =  testPost(
+					String.format("http://localhost:%d/feature_definition", port),
+					MediaType.TEXT_XML,
+					headers);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where name='cas' and comments='CasRN' and idreference=4");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+	}	
+	
+
 }

@@ -17,7 +17,7 @@ import ambit2.rest.algorithm.AlgorithmResource;
  */
 public class AlgorithmUtilTypesResource extends AlgorithmResource {
 	public static enum utiltypes  {
-		depict,name2structure,build3d
+		name2structure,build3d
 	};
 	public AlgorithmUtilTypesResource(Context context, Request request,
 			Response response) {

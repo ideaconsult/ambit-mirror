@@ -8,7 +8,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.restlet.data.MediaType;
+import org.w3c.dom.Document;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.readers.PropertyValue;
+import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -29,6 +33,23 @@ public class PropertyValueResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
+
+		Document doc = createDOM(in);
+        PropertyValueDOMParser parser = new PropertyValueDOMParser() {
+        	@Override
+        	public void processItem(PropertyValue entry) throws AmbitException {
+        		Assert.assertEquals(1,entry.getProperty().getId());
+        		Assert.assertEquals("CAS",entry.getProperty().getName());
+        		Assert.assertEquals("1530-32-1",entry.getValue());
+        	}
+        };
+        parser.parse(doc);
+        return true;
+	}	
+	/*
+	@Override
+	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
+			throws Exception {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int count = 0;
@@ -38,6 +59,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 		}
 		return count>0;
 	}	
+	*/
 	@Test
 	public void testTXT() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_PLAIN);
@@ -49,7 +71,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("1530-32-1 ", line);
+			Assert.assertEquals("CAS = 1530-32-1", line);
 			count++;
 		}
 		return count==1;

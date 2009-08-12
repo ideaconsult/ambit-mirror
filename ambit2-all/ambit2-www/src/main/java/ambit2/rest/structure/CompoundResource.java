@@ -160,7 +160,6 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			Response response) throws StatusException {
 		media = getMediaParameter(request);
 		try {
-//			System.out.println(request.getAttributes().get("org.restlet.http.headers"));
 			Object key = request.getAttributes().get(idcompound);
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();

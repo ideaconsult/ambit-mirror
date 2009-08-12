@@ -81,10 +81,10 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
 
-  <tuples/>
+
 
   <property_string idvalue_string="1" value="1530-32-1"/>
-  <property_values idproperty="3" idstructure="100215" idvalue_string="1" user_name="guest"/>
+  <property_values id="1" idproperty="3" idstructure="100215" idvalue_string="1" user_name="guest"/>
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="2" name="Dataset 1" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="3" name="Dataset 2" user_name="guest" idreference="3"/>
@@ -105,5 +105,6 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <query_results idquery="1" idstructure="100211" idchemical="7"  selected="1" metric="1" />
   <models idmodel="1" name="Toxtree: Cramer rules" idquery="1" predictors="1" dependent="1" content="dG94VHJlZS50cmVlLmNyYW1lci5DcmFtZXJSdWxlcw=="/>
   <models idmodel="2" name="pKa" idquery="1" predictors="1" dependent="1" content="YW1iaXQyLmRlc2NyaXB0b3JzLlBLQVNtYXJ0c0Rlc2NyaXB0b3I="/>
-
+  <tuples idtuple="1" id_srcdataset="2"/>
+  <property_tuples idtuple="1" id="1"/>
 </dataset>

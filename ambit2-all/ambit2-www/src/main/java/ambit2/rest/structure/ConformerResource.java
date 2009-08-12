@@ -53,7 +53,6 @@ public class ConformerResource extends CompoundResource {
 			Response response) throws StatusException {
 		media = getMediaParameter(request);
 		try {
-			//System.out.println(request.getAttributes().get("org.restlet.http.headers"));
 			IStructureRecord record = new StructureRecord();
 			try {
 				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));

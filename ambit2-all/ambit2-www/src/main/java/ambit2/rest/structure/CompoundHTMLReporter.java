@@ -120,7 +120,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		String[][] s = new String[][] {
 			{"feature",CDKConstants.CASRN},
 			{"feature",CDKConstants.NAMES},
-			{"feature_definition",null}
+			{"feature_definition",null},
+			{"tuple",null}
 			};
 		for (String[] n:s)
 		b.append(String.format("%s <a href=\"%s/%s/%s\" target=\"_blank\">%s</a><br>",n[0],w,n[0],n[1]==null?"":n[1],n[1]==null?"All available":n[1]));

@@ -20,7 +20,7 @@ public class DepictTest extends ResourceTest {
 	
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/algorithm/util/depict/daylight?search=c1ccccc1", port);
+		return String.format("http://localhost:%d/depict/daylight?search=c1ccccc1", port);
 	}	
 	@Test
 	public void testPNG() throws Exception {
