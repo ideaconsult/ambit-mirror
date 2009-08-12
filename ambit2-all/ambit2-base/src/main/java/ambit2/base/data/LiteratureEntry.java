@@ -70,7 +70,12 @@ public class LiteratureEntry extends AmbitBean {
 	public String getURL() {
 		return URL;
 	}
-	private LiteratureEntry(String title, String url) {
+	/**
+	 * We need separate instances for web services
+	 * @param title
+	 * @param url
+	 */
+	public LiteratureEntry(String title, String url) {
 		this.title = (title.length()>255)?title.substring(1,255):title;
 		this.URL = (url.length()>255)?url.substring(1,255):url;
 	}
