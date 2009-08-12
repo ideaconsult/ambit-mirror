@@ -120,11 +120,24 @@ public class Property extends Model {
 	private Property() {
 		
 	}
-
-	private Property(String name) {
+	/**
+	 * public constructors for web services
+	 * @param name
+	 */
+	public static String guessLabel(String n) {
+		if (n.startsWith("cas")) return "CasRN";
+		else if (n.contains("species")) return "Species";
+		else if (n.contains("iupac")) return "IUPAC Name";		
+		else if (n.contains("name")) return "Names";
+		else if (n.contains("title")) return "Names";
+		else if (n.contains("inchi")) return "InChI";
+		else if (n.contains("smiles")) return "SMILES";
+		return null;
+	}
+	public Property(String name) {
 		this(name,name);
 	}
-	private Property(String name, LiteratureEntry reference) {
+	public Property(String name, LiteratureEntry reference) {
 		this(name,name);
 		this.reference = reference;
 	}	
