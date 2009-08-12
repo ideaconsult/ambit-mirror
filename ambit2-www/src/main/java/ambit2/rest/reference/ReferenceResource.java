@@ -9,32 +9,53 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.StringCondition;
-import ambit2.db.search.property.RetrieveFieldNamesByAlias;
-import ambit2.db.update.property.ReadProperty;
+import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundResource;
 
 /**
- * Retrieves {@link LiteratureEntry}
+ * Retrieves {@link LiteratureEntry} according to  http://opentox.org/wiki/opentox/Feature
+ * <br>
+ * Implemented methods: GET, POST
  * @author nina
  *
  * @param <Q>
  */
 public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEntry> {
+	/**
+	 * Parameters, expected in http headers
+	 * @author nina
+	 *
+	 */
+	public enum headers  {
+			name {
+				@Override
+				public boolean isMandatory() {
+					return true;
+				}
+			},
+			algorithm_id,
+			parameters,
+			experimental_protocol; 
+			public boolean isMandatory() {
+				return false;
+			}
+	};
 	public final static String reference = "/reference";
 	public final static String idreference = "idreference";
 	public final static String referenceID = String.format("%s/{%s}",reference,idreference);
@@ -95,5 +116,54 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 					);
 		}
 	} 
-
+	@Override
+	public void acceptRepresentation(Representation entity)
+			throws ResourceException {
+		if (getRequest().getAttributes().get(idreference)==null)
+			createNewObject(entity);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	}
+	@Override
+	protected QueryURIReporter<LiteratureEntry, ReadReference> getURUReporter(
+			Reference baseReference) throws ResourceException {
+		return new ReferenceURIReporter<ReadReference>(baseReference);
+	}
+	/**
+<pre<
+Description  	Method  	URI  	Parameters  	Result  	Status codes
+create a new reference  	 POST  	 /reference  	 name:String, algorithm_id:String, parameters:String, experimental_protocol:String  	 URI of new reference  	200,400,404,503
+</pre>
+	 */
+	protected LiteratureEntry createObjectFromHeaders(Form requestHeaders) throws ResourceException {
+		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
+		String url = getParameter(requestHeaders,headers.algorithm_id.toString(),headers.algorithm_id.isMandatory());  	
+		return LiteratureEntry.getInstance(name, url);
+	}
+	@Override
+	protected AbstractObjectUpdate<LiteratureEntry> createUpdateObject(
+			LiteratureEntry entry) throws ResourceException {
+		return new CreateReference(entry);
+	}
+	
+	@Override
+	public boolean allowPost() {
+		return true;
+	}
+	/*
+	if (MediaType.TEXT_XML.equals(entity.getMediaType())) {
+		ReferenceDOMParser parser = new ReferenceDOMParser() {
+			@Override
+			public void processItem(LiteratureEntry item)
+					throws AmbitException {
+				System.out.println(item);
+				
+			}
+		};
+		try {
+			parser.parse(entity.getReader());
+		} catch (Exception x) {
+			throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x));
+		}
+	}
+	*/
 }

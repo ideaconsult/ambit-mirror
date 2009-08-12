@@ -11,8 +11,12 @@ import org.w3c.dom.NodeList;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.PropertyValue;
 import ambit2.db.readers.RetrieveField;
+import ambit2.db.search.AbstractQuery;
+import ambit2.db.search.IQueryObject;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.XMLTags;
@@ -30,14 +34,13 @@ import ambit2.rest.query.XMLTags;
  *
  * @param <Q>
  */
-public class PropertyValueXMLReporter extends QueryDOMReporter<Object,RetrieveField>{
+public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrieval<T>>{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8615960185043692493L;
-	protected Property property;
 	protected String feature_uri;
-	
+	protected IStructureRecord record;
 	public PropertyValueXMLReporter(Reference baseRef) {
 		super(baseRef);
 	}	
@@ -58,7 +61,7 @@ public class PropertyValueXMLReporter extends QueryDOMReporter<Object,RetrieveFi
 		}
 	}	
 
-	public void header(Document doc, RetrieveField query) { 
+	public void header(Document doc, IQueryRetrieval<T> query) { 
 		
 		/* needs IStructureRecord 
 		StringWriter w = new StringWriter();
@@ -66,12 +69,18 @@ public class PropertyValueXMLReporter extends QueryDOMReporter<Object,RetrieveFi
 		feature_uri = w.toString();
 		*/
 		doc.appendChild(doc.createElementNS(XMLTags.ns_opentox_feature,
-				XMLTags.node_features));		
-		property = query.getFieldname();
+				XMLTags.node_features));	
+		//a hack
+		if (query instanceof AbstractQuery) {
+			AbstractQuery qo = (AbstractQuery)query;
+			if (qo.getValue() instanceof IStructureRecord)
+				record = (IStructureRecord)qo.getValue();
+		}
+		
 		
 	}
 	@Override
-	public void processItem(Object item, Document doc) {
+	public void processItem(T item, Document doc) {
 
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_feature, XMLTags.node_features);
         for (int i=0; i < parent.getLength();i++)
@@ -87,15 +96,58 @@ public class PropertyValueXMLReporter extends QueryDOMReporter<Object,RetrieveFi
         		break;
         	}	
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see ambit2.rest.QueryDOMReporter#getItemElement(org.w3c.dom.Document, java.lang.Object)
+	 */
 	@Override
-	public Element getItemElement(Document doc, Object item) {
-		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
-		e_feature.setAttribute(XMLTags.attr_name,property.getName());
-		e_feature.setAttribute(XMLTags.attr_value,item.toString());
-		return e_feature;
+	public Element getItemElement(Document doc, T item) {
+		if (item instanceof PropertyValue) 
+			return getItemElement(doc, (PropertyValue) item);
+		else if (item instanceof IStructureRecord) 
+			return getItemElement(doc, (IStructureRecord) item);
+		else {
+	Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
+	e_feature.setAttribute(XMLTags.attr_value,item.toString());
+	return e_feature;
+		}
 	}
+	public Element getItemElement(Document doc, PropertyValue item) {
+		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
+		if (record != null) {
+			e_feature.setAttribute("CompoundID",Integer.toString(record.getIdchemical()));
+			if (record.getIdstructure()>0)
+				e_feature.setAttribute("ConformerID",Integer.toString(record.getIdstructure()));
+		}
+		e_feature.setAttribute("ID",Integer.toString(item.getId()));		
+		e_feature.setAttribute(XMLTags.attr_name,item.getProperty().getName());
+		e_feature.setAttribute(XMLTags.attr_value,item.getValue().toString());
+		return e_feature;
+	}	
+	/*
+	<complexType name="Feature">
+		<attribute name="ID" type="string"  use="required"></attribute>
+		<attribute name="CompoundID" type="string"  use="required"></attribute>
+		<attribute name="Value" type="string"  use="required"></attribute>
+		<attribute name="ConformerID" type="string"  use="optional"></attribute>
+	</complexType>
+ */	
+	public Element getItemElement(Document doc, IStructureRecord record) {
+		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
+		
+		if (record != null) {
+			e_feature.setAttribute("CompoundID",Integer.toString(record.getIdchemical()));
+			if (record.getIdstructure()>0)
+				e_feature.setAttribute("ConformerID",Integer.toString(record.getIdstructure()));
+		}		
+		for (Property p : record.getProperties())  {
+			e_feature.setAttribute(XMLTags.attr_value,record.getProperty(p).toString());
+		}
+		return e_feature;
+	}	
 	@Override
-	public void footer(Document output, RetrieveField query) {
+	public void footer(Document output, IQueryRetrieval<T> query) {
 		
 	}
 }

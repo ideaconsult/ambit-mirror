@@ -14,9 +14,20 @@ import ambit2.rest.query.XMLTags;
 import ambit2.rest.reference.ReferenceDOMReporter;
 
 /**
- * Generates xml for {@link PropertyResource} resource
+ * Generates xml for {@link PropertyResource} resource. http://opentox.org/wiki/opentox/Feature
  * @author nina
- *
+ * 
+ <pre>
+ <?xml version="1.0" encoding="UTF-8" ?> 
+ <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentox.org/FeatureDefinition/1.0" xmlns:tns="http://www.opentox.org/FeatureDefinition/1.0" elementFormDefault="qualified">
+ <complexType name="FeatureDefinition">
+  <attribute name="ID" type="string" use="required" /> 
+  <attribute name="Name" type="string" use="required" /> 
+  <attribute name="Reference" type="string" use="required" /> 
+  <attribute name="Type" type="string" use="required" /> 
+  </complexType>
+  </schema>
+</pre>
  * @param <Q>
  */
 public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends QueryDOMReporter<Property, Q> {
@@ -61,6 +72,7 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
         e.setAttribute(XMLTags.attr_id,Integer.toString(item.getId()));
         e.setAttribute(XMLTags.attr_name,item.getName());
         e.setAttribute(XMLTags.attr_type,"TODO");
+        e.setAttribute("Reference", Integer.toString(item.getReference().getId()));
         e.appendChild(getURIElement(doc, item));
         e.appendChild(referenceReporter.getItemElement(doc, item.getReference()));
         return e;

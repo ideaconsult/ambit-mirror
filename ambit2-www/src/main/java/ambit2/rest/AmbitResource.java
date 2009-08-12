@@ -7,16 +7,12 @@ import java.io.Writer;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
 import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.search.StringCondition;
-import ambit2.db.search.structure.QueryField;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
@@ -52,8 +48,8 @@ public class AmbitResource extends Resource {
 			{"/query/results/1","Display previous search results"},
 			
 			{"/query/pubchem","PubChem query"},
-			{"/algorithm/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)"},
-			{"/algorithm/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict"},
+			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)"},
+			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict"},
 			{"/build3d/smiles/c1ccccc1","Generate 3D structure"}
 	};
 	public AmbitResource() {

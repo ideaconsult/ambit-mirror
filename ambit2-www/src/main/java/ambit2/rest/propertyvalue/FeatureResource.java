@@ -3,14 +3,15 @@ package ambit2.rest.propertyvalue;
 import java.io.Writer;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -19,22 +20,37 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
 
-public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
-	public static final String featureKey = "/feature";
-	public static final String compoundFeatureName = String.format("%s/feature/{name}",CompoundResource.compoundID);
-	public static final String conformerFeatureName =  String.format("%s/feature/{name}",ConformerResource.conformerID);
-	
-	public static final String FeatureNameConformer =  String.format("/feature/{name}%s",ConformerResource.conformerID);
-	public static final String FeatureNameCompound = String.format("/feature/{name}%s",CompoundResource.compoundID);
-	
-	public PropertyValueResource(Context context, Request request, Response response) {
+/**
+ * http://opentox.org/wiki/opentox/Feature
+ * @author nina
+ *
+ */
+public class FeatureResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
+	/**
+	 * Parameters, expected in http headers
+	 * @author nina
+	 *
+	 */
+	public enum headers  {
+			compound_id {
+				@Override
+				public boolean isMandatory() {	return true;}
+			},
+			conformer_id,
+			value;
+			public boolean isMandatory() {
+				return false;
+			}			
+	};		
+	public static final String featureID = "idfeature";
+	public static final String resource = String.format("%s/{%s}",PropertyValueResource.featureKey,featureID);
+	public FeatureResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		try {
 			query = createQuery(context, request, response);
@@ -75,21 +91,31 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 					
 	}		
 	@Override
+	protected QueryURIReporter<T, IQueryRetrieval<T>> getURUReporter(
+			Reference baseReference) throws ResourceException {
+		return new PropertyValueURIReporter(baseReference);
+	}
+	@Override
 	protected IQueryRetrieval<T> createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		RetrieveFieldPropertyValue  field = new RetrieveFieldPropertyValue();
-		field.setSearchByAlias(true);
+		field.setSearchByID(true);
 		
 		IStructureRecord record = new StructureRecord();
+		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+		String id  = null;
 		try {
-			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
-		} catch (NumberFormatException x) {
+			id = getParameter(requestHeaders,headers.compound_id.toString(),headers.compound_id.isMandatory());
+			record.setIdchemical(Integer.parseInt(id));
+			field.setChemicalsOnly(true);
+		} catch (Exception x) {
 			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)))
+					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %s",id))
 					);
 		}
 		try {
-			record.setIdstructure(Integer.parseInt(Reference.decode(request.getAttributes().get(ConformerResource.idconformer).toString())));
+			id = getParameter(requestHeaders,headers.conformer_id.toString(),headers.conformer_id.isMandatory());
+			record.setIdstructure(Integer.parseInt(id));
 			field.setChemicalsOnly(false);
 		
 		} catch (Exception x) {
@@ -98,13 +124,39 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 			field.setValue(record);
 		}
 		try {
-			Object name = Reference.decode(request.getAttributes().get("name").toString());
-			
-			field.setFieldname(Property.getInstance(name.toString(),LiteratureEntry.getInstance()));
+			Property p = new Property("");
+			p.setId(Integer.parseInt(Reference.decode(request.getAttributes().get(featureID).toString())));
+			field.setFieldname(p);
 		} catch (Exception x) {
-			field.setFieldname(null);
+			throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		return (IQueryRetrieval) field;
 	}
 
+	@Override
+	public boolean allowPost() {
+		return true;
+	}
+	/*
+	@Override
+	protected T createObjectFromHeaders(Form requestHeaders)
+			throws ResourceException {
+		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
+		String refid = getParameter(requestHeaders,headers.reference_id.toString(),headers.reference_id.isMandatory());
+		String type = getParameter(requestHeaders,headers.type.toString(),headers.type.isMandatory());
+		LiteratureEntry entry =  new LiteratureEntry("","");
+		try {
+			entry.setId(Integer.parseInt(refid));
+			Property p = new Property(name, entry);
+			p.setLabel(Property.guessLabel(name));
+			return p;
+		} catch (NumberFormatException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+		}
+	}
+	
+	protected ambit2.db.update.AbstractObjectUpdate<T> createUpdateObject(T entry) throws ResourceException {
+		
+	};
+	*/
 }

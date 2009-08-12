@@ -1,5 +1,6 @@
 package ambit2.rest;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
@@ -17,7 +18,6 @@ import org.restlet.Context;
 import org.restlet.Directory;
 import org.restlet.Guard;
 import org.restlet.Restlet;
-import org.restlet.Route;
 import org.restlet.Router;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
@@ -38,6 +38,7 @@ import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
@@ -56,6 +57,8 @@ import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.template.OntologyResource;
+import ambit2.rest.tuple.TuplePropertyValueResource;
+import ambit2.rest.tuple.TupleResource;
 
 /**
  * http://opentox.org/wiki/1/Dataset
@@ -160,11 +163,17 @@ public class AmbitApplication extends Application {
 		router.attach(ConformerResource.conformerID,ConformerResource.class);
 		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
 
+		router.attach(FeatureResource.resource,FeatureResource.class);
 		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
 		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
 
 		router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
 		router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
+
+		router.attach(TupleResource.resource,TupleResource.class);
+		router.attach(TuplePropertyValueResource.resourceCompoundID,TuplePropertyValueResource.class);
+		router.attach(TuplePropertyValueResource.resourceConformerID,TuplePropertyValueResource.class);
+		router.attach(TupleResource.resourceDataset,TupleResource.class);
 
 		
 		router.attach(ReferenceResource.referenceID,ReferenceResource.class);
@@ -182,10 +191,10 @@ public class AmbitApplication extends Application {
 		router.attach(PubchemResource.resourceID,PubchemResource.class);
 		router.attach(PubchemResource.resource,PubchemResource.class);
 		
-		router.attach("/algorithm/util/depict/daylight",DaylightDepict.class);
-		router.attach("/algorithm/util/depict/cdk",CDKDepict.class);
-		router.attach("/algorithm/util/depict",AbstractDepict.class);
-		router.attach("/algorithm/util/name2structure",Name2StructureResource.class);	
+		router.attach("/depict/daylight",DaylightDepict.class);
+		router.attach("/depict/cdk",CDKDepict.class);
+		router.attach("/depict",AbstractDepict.class);
+		router.attach("/name2structure",Name2StructureResource.class);	
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
@@ -237,26 +246,44 @@ public class AmbitApplication extends Application {
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/style/", styleDir);
+		 router.attach("/favicon.ico", FavIconResource.class);
+		 router.attach("/favicon.png", FavIconResource.class);
 		 
 
 		return router;
 	}
 	
+	/*
+      at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1936)
+        at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2060)
+        at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2536)
+        at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2465)
+        at com.mysql.jdbc.StatementImpl.execute(StatementImpl.java:734)
+        at org.apache.commons.dbcp.DelegatingStatement.execute(DelegatingStatement.java:264)
+        at ambit2.rest.AmbitApplication.getConnection(AmbitApplication.java:251)
+        at ambit2.rest.query.QueryResource.getRepresentation(QueryResource.java:49)
+        at org.restlet.resource.Resource.handleGet(Resource.java:464)
+
+	 */
 	public Connection getConnection() throws AmbitException , SQLException{
 		SQLException error = null;
-		for (int retry=0; retry< 2; retry++)
+		Connection c = null;
+		for (int retry=0; retry< 3; retry++)
 		try {
-			Connection c = DatasourceFactory.getDataSource(connectionURI).getConnection();
+			c = DatasourceFactory.getDataSource(connectionURI).getConnection();
 			Statement t = c.createStatement();
-			t.execute("SELECT 1");
+			ResultSet rs = t.executeQuery("SELECT 1");
+			while (rs.next()) {rs.getInt(1);}
+			rs.close();
 			t.close();
+			error= null;
 			return c;
 		} catch (SQLException x) {
 			//TODO reinitialize the connection pool
 			error = x;
 			x.printStackTrace();
-			if (retry >= 2)
-				throw x;
+			//remove the connection from the pool
+			try {if (c != null) c.close();} catch (Exception e) {}
 		} finally {
 			
 		}

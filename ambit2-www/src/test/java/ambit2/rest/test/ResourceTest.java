@@ -1,6 +1,10 @@
 package ambit2.rest.test;
 
 import java.io.InputStream;
+import java.io.Reader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Assert;
 
@@ -18,6 +22,8 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
@@ -149,5 +155,17 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseCML(uri, media, in);
 
 		else throw new Exception("Unknown format "+media);
+	}
+	protected Document createDOM(InputSource in) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(in);     
+        return doc;
+	}
+	protected Document createDOM(InputStream in) throws Exception {
+        return createDOM(new InputSource(in));     
+	}
+	protected Document createDOM(Reader reader) throws Exception {
+        return createDOM(new InputSource(reader));
 	}
 }

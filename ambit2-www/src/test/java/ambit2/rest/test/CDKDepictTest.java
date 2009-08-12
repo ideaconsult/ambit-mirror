@@ -18,7 +18,7 @@ public class CDKDepictTest extends ResourceTest {
 	
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/algorithm/util/depict/cdk?search=c1ccccc1", port);
+		return String.format("http://localhost:%d/depict/cdk?search=c1ccccc1", port);
 	}	
 	@Test
 	public void testPNG() throws Exception {
@@ -40,7 +40,7 @@ public class CDKDepictTest extends ResourceTest {
 	@Test
 	public void testInvalidSmiles() throws Exception {
 		Status status = testHandleError(
-				String.format("http://localhost:%d/algorithm/util/depict/cdk?search=AAAAA", port),
+				String.format("http://localhost:%d/depict/cdk?search=AAAAA", port),
 				MediaType.IMAGE_PNG);
 		Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,status);
 	}	

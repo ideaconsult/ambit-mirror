@@ -8,8 +8,12 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.data.Status;
+import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -17,9 +21,12 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
+import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
@@ -28,11 +35,36 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 /**
- * Feature definition resource
+ * Feature definition resource http://opentox.org/wiki/opentox/Feature
+ * <br>
+ * Implemented methods: GET, POST
  * @author nina
  *
  */
 public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, Property> {
+	/**
+	 * Parameters, expected in http headers
+	 * @author nina
+	 *
+	 */
+	public enum headers  {
+			name {
+				@Override
+				public boolean isMandatory() {
+					return true;
+				}
+			},
+			reference_id {
+				@Override
+				public boolean isMandatory() {
+					return true;
+				}
+			},
+			type;
+			public boolean isMandatory() {
+				return false;
+			}
+	};	
 	public final static String featuredef = "/feature_definition";
 	public final static String idfeaturedef = "id_feature_definition";
 	public final static String featuredefID = String.format("%s/{%s}",featuredef,idfeaturedef);
@@ -119,4 +151,50 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		}
 	}
 
+	
+	@Override
+	public void acceptRepresentation(Representation entity)
+			throws ResourceException {
+		if (getRequest().getAttributes().get(idfeaturedef)==null)
+			createNewObject(entity);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	}
+	
+	/**
+<pre>
+Description  	Method  	URI  	Parameters  	Result  	Status codes
+create a new feature definition  	 POST  	 /feature_definition  	 name: String, reference_id: String, type: String  	 URI of new feature definition  	200,400,404,503
+</pre>
+	 */
+	@Override
+	protected Property createObjectFromHeaders(Form requestHeaders)
+			throws ResourceException {
+		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
+		String refid = getParameter(requestHeaders,headers.reference_id.toString(),headers.reference_id.isMandatory());
+		String type = getParameter(requestHeaders,headers.type.toString(),headers.type.isMandatory());
+		LiteratureEntry entry =  new LiteratureEntry("","");
+		try {
+			entry.setId(Integer.parseInt(refid));
+			Property p = new Property(name, entry);
+			p.setLabel(Property.guessLabel(name));
+			return p;
+		} catch (NumberFormatException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+		}
+	}
+	@Override
+	protected AbstractObjectUpdate<Property> createUpdateObject(Property entry)
+			throws ResourceException {
+		return new CreatePropertyReferenceID(entry);
+	}
+	
+	@Override
+	public boolean allowPost() {
+		return true;
+	}
+	@Override
+	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
+			Reference baseReference) throws ResourceException {
+		return new PropertyURIReporter(baseReference);
+	}
 }
