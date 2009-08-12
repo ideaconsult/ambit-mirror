@@ -141,7 +141,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	//protected PreparedStatement structureField = null;	
 	
 	protected RetrieveAtomContainer retrieveMolecule = new RetrieveAtomContainer();
-	protected RetrieveField retrieveField = new RetrieveField();
+	protected RetrieveField<Object> retrieveField = new RetrieveField<Object>();
 	protected TypedListModel<Property> fields;
 	protected Hashtable<String,Profile<Property>> properties ;
 	protected Hashtable<Integer,Boolean> order = new Hashtable<Integer, Boolean>();

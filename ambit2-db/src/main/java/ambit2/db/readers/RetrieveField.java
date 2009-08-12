@@ -12,12 +12,32 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveField extends AbstractQuery<Property,IStructureRecord,EQCondition,Object> implements IQueryRetrieval<Object> {
+public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructureRecord,EQCondition,ResultType> implements IQueryRetrieval<ResultType> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
-	protected boolean searchByAlias = false;
+	protected enum SearchMode {
+		name,
+		alias {
+			@Override
+			public String getSQL() {
+				return "comments";
+			}
+		},
+		id;
+		public String getSQL() {
+			return toString();
+		}
+	}
+	protected SearchMode searchMode = SearchMode.name;
+	public SearchMode getSearchMode() {
+		return searchMode;
+	}
+
+	public void setSearchMode(SearchMode searchMode) {
+		this.searchMode = searchMode;
+	}
 	protected boolean chemicalsOnly = false; 
 	
 	public boolean isChemicalsOnly() {
@@ -29,61 +49,85 @@ public class RetrieveField extends AbstractQuery<Property,IStructureRecord,EQCon
 	}
 
 	public boolean isSearchByAlias() {
-		return searchByAlias;
+		return searchMode==SearchMode.alias;
 	}
 
-	public void setSearchByAlias(boolean searchByAlias) {
-		this.searchByAlias = searchByAlias;
+	public void setSearchByAlias(boolean value) {
+		searchMode = value?SearchMode.alias:SearchMode.name;
 	}
-	protected final String sql = 
+
+	public boolean isSearchByID() {
+		return searchMode==SearchMode.id;
+	}
+
+	public void setSearchByID(boolean value) {
+		searchMode = value?SearchMode.id:SearchMode.name;
+	}	
+	protected final String sql_structure = 
+		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id from property_values \n"+
+		"left join property_string using(idvalue_string) \n"+
+		"join properties using(idproperty) join catalog_references using(idreference) \n"+
+		"where idstructure=? %s";
+			/*
 		"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
 		"(\n"+
 		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values where idstructure=? and value_num is not null\n"+
 		"union\n"+
-		"select idstructure,idproperty,value as value_string,null,0 as idtype from property_values join property_string using(idvalue_string) where idvalue_string is not null and idstructure=?\n"+
+		"select idstructure,idproperty,ifnull(text,value) as value_string,null,0 as idtype from property_values join property_string using(idvalue_string) where idvalue_string is not null and idstructure=?\n"+
 		") as L using (idproperty)\n";
+		*/
 	protected final String sql_chemical = 
+		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id from property_values \n"+
+		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
+		"join properties using(idproperty) join catalog_references using(idreference) \n"+
+		"where idchemical=? %s ";
+				
+	/*
+		"select idstructure,idproperty,ifnull(text,value) as value_string,value_num,1,name as idtype from property_values join structure using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty) where idchemical=7435 and comments="Names"
 		"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
 		"(\n"+
 		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values join structure using(idstructure) where idchemical=? and value_num is not null\n"+
 		"union\n"+
 		"select idstructure,idproperty,ifnull(text,value) as value_string,null,0 as idtype from structure join property_values using(idstructure) join property_string using(idvalue_string) where idvalue_string is not null and idchemical=?\n"+
 		") as L using (idproperty)\n";	
-	protected final String where = "where %s=?";
+		*/
+	protected final String where = "and %s=?";
 
 	
 	public String getSQL() throws AmbitException {
-		if ("".equals(getFieldname()))
-			return isChemicalsOnly()?sql_chemical:sql;
-		else
-			return (isChemicalsOnly()?sql_chemical:sql) + String.format(where,searchByAlias?"comments":"name");	
+		return String.format(
+				isChemicalsOnly()?sql_chemical:sql_structure,
+				"".equals(getFieldname())?"":String.format(where,searchMode.getSQL())		
+				);
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		for (int i=0; i < 2; i++) {
-			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
+		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
+
+		switch (searchMode) {
+		case alias: {
+			params.add(new QueryParam<String>(String.class, getFieldname().getLabel()));	
+			break;
 		}
-		if (!"".equals(getFieldname()))
-			params.add(new QueryParam<String>(String.class, searchByAlias?getFieldname().getLabel():getFieldname().getName()));		
+		case name: {
+			params.add(new QueryParam<String>(String.class, getFieldname().getName()));
+			break;
+		}
+		case id: {
+			params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));
+			break;
+		}
+		}
+
 		return params;		
 	}
 
-	public Object getObject(ResultSet rs) throws AmbitException {
+	public ResultType getObject(ResultSet rs) throws AmbitException {
 		try {
-			switch(rs.getInt(7)) {
-			case 0: { return rs.getString(5);}
-			case 1: { return rs.getFloat(6);}
-			default: {
-				return rs.getString(5);
-			}
-			}
-			/*
-			Object o = rs.getString(5);
-			if (o != null)
-				return o.toString();
-			else return rs.getString(6);
-			*/
+			Object value = rs.getObject(5);
+			if (value == null) value = rs.getFloat(6);
+			return (ResultType)value;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

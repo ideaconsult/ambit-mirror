@@ -61,11 +61,18 @@ public abstract class RetrieveTest<T> extends DbUnitTest {
 		setUpDatabase(getTestDatabase());
 		IDatabaseConnection c = getConnection();
 		AmbitRows<T> rows = createRows();
-		rows.setConnection(c.getConnection());		
-		rows.setQuery(createQuery());
-		verifyRows(rows);
-		rows.close();
-		c.close();
+		try {
+			
+			rows.setConnection(c.getConnection());		
+			rows.setQuery(createQuery());
+			verifyRows(rows);
+			rows.close();
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			rows.close();
+			c.close();
+		}
 	}
 	protected void verifyRows(AmbitRows<T> rows) throws Exception {
 		throw new Exception("Not implemented");
