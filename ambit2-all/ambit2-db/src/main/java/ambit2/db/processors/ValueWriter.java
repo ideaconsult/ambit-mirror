@@ -30,16 +30,14 @@
 package ambit2.db.processors;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.SourceDataset;
-import ambit2.db.update.dataset.DatasetAddTuple;
+import ambit2.db.update.tuple.DatasetAddTuple;
 
 /**
  * Writes values into property tables

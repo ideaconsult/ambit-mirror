@@ -1,0 +1,40 @@
+package ambit2.db.readers;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+
+/**
+ * Retrieve property value pairs and assign to a structure record
+ * @author nina
+ *
+ */
+public class RetrieveFieldStructure extends RetrieveField<IStructureRecord> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8144364027565901933L;
+	@Override
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		try {
+			IStructureRecord record = new StructureRecord();
+			record.setIdstructure(4);
+			record.setIdchemical(9);
+			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
+			Property p = Property.getInstance(rs.getString(1),le); 
+			Object value = rs.getObject(5);
+			if (value == null) record.setProperty(p,rs.getFloat(6));
+			else record.setProperty(p,rs.getString(5));	
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+		
+	}
+}
