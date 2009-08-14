@@ -22,7 +22,7 @@ import ambit2.base.processors.Reporter;
 import ambit2.db.IDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.QueryURIReporter;
@@ -133,7 +133,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 	protected QueryURIReporter<T, Q>  getURUReporter(Reference baseReference) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
-	protected  AbstractObjectUpdate<T> createUpdateObject(T entry) throws ResourceException {
+	protected  AbstractUpdate createUpdateObject(T entry) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
 	
