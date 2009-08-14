@@ -165,7 +165,7 @@ public class AmbitResource extends Resource {
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
 		w.write("<td align='left' width='256px'>");
-		w.write(String.format("<a href=\"http://ambit.sourceforge.net\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+		w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("<td align='center'>");
 

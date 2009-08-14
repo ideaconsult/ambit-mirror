@@ -82,7 +82,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 /*
 	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 		return new DocumentConvertor(new ModelXMLReporter(getRequest().getRootRef()));	

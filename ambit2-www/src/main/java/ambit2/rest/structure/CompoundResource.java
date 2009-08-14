@@ -11,6 +11,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.StructureRecord;
@@ -81,7 +82,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 		if (query == null) {
 			if (variant.getMediaType().equals(MediaType.TEXT_HTML)) 
 				return new StringConvertor(new AbstractReporter<Object,Writer>() {

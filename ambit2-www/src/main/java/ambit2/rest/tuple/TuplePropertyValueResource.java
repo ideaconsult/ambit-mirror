@@ -8,6 +8,7 @@ import org.restlet.data.Status;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.PropertiesTuple;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveTuplePropertyValue;
 import ambit2.rest.StatusException;
@@ -20,7 +21,7 @@ import ambit2.rest.structure.ConformerResource;
  * @author nina
  *
  */
-public class TuplePropertyValueResource<T> extends PropertyValueResource<T> {
+public class TuplePropertyValueResource<PropertyValue> extends PropertyValueResource<PropertyValue> {
 	public static String resourceCompoundID = String.format("%s/%s/{%s}",CompoundResource.compoundID,TupleResource.resourceTag,TupleResource.resourceKey);
 	public static String resourceConformerID = String.format("%s/%s/{%s}",ConformerResource.conformerID,TupleResource.resourceTag,TupleResource.resourceKey);
 	
@@ -30,7 +31,7 @@ public class TuplePropertyValueResource<T> extends PropertyValueResource<T> {
 	
 
 	@Override
-	protected IQueryRetrieval<T> createQuery(Context context,
+	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		RetrieveTuplePropertyValue field = new RetrieveTuplePropertyValue();
 		//RetrieveTupleStructure field = new RetrieveTupleStructure();
@@ -53,7 +54,7 @@ public class TuplePropertyValueResource<T> extends PropertyValueResource<T> {
 		}
 		try {
 			Object idtuple = Reference.decode(request.getAttributes().get(TupleResource.resourceKey).toString());
-			field.setFieldname(new Integer(idtuple.toString()));
+			field.setFieldname(new PropertiesTuple(new Integer(idtuple.toString()),null));
 
 		} catch (Exception x) {
 			field.setFieldname(null);

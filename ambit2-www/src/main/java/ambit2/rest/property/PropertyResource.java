@@ -85,7 +85,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new PropertyDOMReporter(getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {

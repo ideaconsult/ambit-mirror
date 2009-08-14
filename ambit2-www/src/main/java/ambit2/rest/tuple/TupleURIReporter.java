@@ -3,6 +3,7 @@ package ambit2.rest.tuple;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.PropertiesTuple;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.tuple.QueryTuple;
 import ambit2.rest.QueryURIReporter;
@@ -13,7 +14,7 @@ import ambit2.rest.structure.CompoundURIReporter;
  * @author nina
  *
  */
-public class TupleURIReporter extends QueryURIReporter<Integer, QueryTuple> {
+public class TupleURIReporter extends QueryURIReporter<PropertiesTuple, QueryTuple> {
 
 	/**
 	 * 
@@ -33,8 +34,8 @@ public class TupleURIReporter extends QueryURIReporter<Integer, QueryTuple> {
 		this.record = record;
 	}
 	@Override
-	public String getURI(String ref, Integer item) {
-		return String.format("%s/%s/%d", reporter.getURI(record),TupleResource.resourceTag,item);
+	public String getURI(String ref, PropertiesTuple item) {
+		return String.format("%s/%s/%d", reporter.getURI(record),TupleResource.resourceTag,item.getId());
 	}
 
 }

@@ -71,7 +71,7 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		Element e = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_featuredef);
         e.setAttribute(XMLTags.attr_id,Integer.toString(item.getId()));
         e.setAttribute(XMLTags.attr_name,item.getName());
-        e.setAttribute(XMLTags.attr_type,"TODO");
+        e.setAttribute(XMLTags.attr_type,item.getLabel());
         e.setAttribute("Reference", Integer.toString(item.getReference().getId()));
         e.appendChild(getURIElement(doc, item));
         e.appendChild(referenceReporter.getItemElement(doc, item.getReference()));

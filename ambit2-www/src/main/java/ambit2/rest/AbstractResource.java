@@ -34,7 +34,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 			status = x.getStatus();
 		}		
 	}
-	public abstract P createConvertor(Variant variant) throws AmbitException;
+	public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
 	
 	protected   abstract  Q createQuery(Context context, Request request, Response response) throws StatusException;
 	

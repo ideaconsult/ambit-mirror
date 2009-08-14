@@ -15,6 +15,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
@@ -122,7 +123,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 	
 	@Override
 	public synchronized IProcessor<Iterator<Task<Reference>>, Representation> createConvertor(
-			Variant variant) throws AmbitException {
+			Variant variant) throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
 					new TaskHTMLReporter(getRequest().getRootRef()) ,MediaType.TEXT_HTML);

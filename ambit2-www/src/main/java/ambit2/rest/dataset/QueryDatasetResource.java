@@ -7,6 +7,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
@@ -39,7 +40,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {

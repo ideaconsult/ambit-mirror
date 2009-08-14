@@ -1,11 +1,14 @@
 package ambit2.rest.property;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.reference.AbstractDOMParser;
+import ambit2.rest.reference.ReferenceDOMParser;
 
 /**
  * http://opentox.org/wiki/opentox/Feature
@@ -27,10 +30,16 @@ import ambit2.rest.reference.AbstractDOMParser;
  *
  */
 public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
+	protected ReferenceDOMParser referenceParser;
 	public PropertyDOMParser() {
 		super();
 		setNameSpace(XMLTags.ns_opentox_feature_definition);
 		setNodeTag(XMLTags.node_featuredef);
+		referenceParser = new ReferenceDOMParser() {
+			@Override
+			public void processItem(LiteratureEntry item) throws AmbitException {
+			}
+		};
 	}
 
 	
@@ -40,8 +49,25 @@ public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
 			if ("".equals(name)) throw new AmbitException("Empty name");
 			Property p = new Property(name);
 			String label = Property.guessLabel(name);
-			p.setLabel(label==null?name:label);
+			if (element.getAttribute(XMLTags.attr_id)!=null)
+				p.setLabel(element.getAttribute(XMLTags.attr_type));
+			else
+				p.setLabel(label==null?name:label);
 			p.setId(Integer.parseInt(element.getAttribute(XMLTags.attr_id)));
+			
+			LiteratureEntry le = null;
+			NodeList nrefs = element.getElementsByTagName(XMLTags.node_reference);
+			for (int i=0; i < nrefs.getLength();i++) 
+				if (nrefs.item(i)instanceof Element) {
+					le = referenceParser.parse((Element)nrefs.item(i));
+					break;
+				}
+			if (le ==null) {
+				String idref = element.getAttribute(XMLTags.node_reference);
+				le = new LiteratureEntry("","");
+				le.setId(Integer.parseInt(idref));
+			}
+			p.setReference(le);
 			return p;
 		} catch (AmbitException x) {
 			throw x;

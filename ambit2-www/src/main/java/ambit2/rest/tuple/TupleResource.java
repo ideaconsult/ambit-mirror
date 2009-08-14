@@ -7,12 +7,14 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.PropertiesTuple;
 import ambit2.db.SourceDataset;
 import ambit2.db.update.tuple.QueryTuple;
 import ambit2.rest.StatusException;
@@ -27,7 +29,7 @@ import ambit2.rest.structure.ConformerResource;
  * @author nina
  *
  */
-public class TupleResource extends QueryResource<QueryTuple, Integer> {
+public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 	public static String resourceKey = "idtuple";
 	public static String resourceTag = "tuple";
 	public static String resource = String.format("%s/%s",CompoundResource.compoundID,resourceTag);
@@ -35,12 +37,11 @@ public class TupleResource extends QueryResource<QueryTuple, Integer> {
 	public static String resourceDataset = String.format("%s%s/%s}",DatasetsResource.datasetID,CompoundResource.compoundID,resourceTag);
 	public TupleResource(Context context, Request request, Response response) {
 		super(context, request, response);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public IProcessor<QueryTuple, Representation> createConvertor(
-			Variant variant) throws AmbitException {
+			Variant variant) throws AmbitException, ResourceException {
 		/*
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
@@ -52,7 +53,7 @@ public class TupleResource extends QueryResource<QueryTuple, Integer> {
 		
 			return new StringConvertor(	new TupleURIReporter(getRequest().getRootRef(),query.getFieldname()) {
 				@Override
-				public void processItem(Integer src, Writer output) {
+				public void processItem(PropertiesTuple src, Writer output) {
 					super.processItem(src, output);
 					try {
 					output.write("\n");
