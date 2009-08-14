@@ -14,9 +14,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
-import ambit2.db.readers.RetrieveField;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.IQueryObject;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.XMLTags;
@@ -50,7 +48,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 	}	
 	@Override
 	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new PropertyValueURIReporter<IQueryRetrieval<Property>>(reference);
+		return new PropertyValueURIReporter(reference);
 	}
 	public Document getOutput() throws AmbitException {
 		try {

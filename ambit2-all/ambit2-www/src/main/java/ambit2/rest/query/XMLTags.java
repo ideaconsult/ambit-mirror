@@ -36,9 +36,10 @@ public class XMLTags {
 	public final static String attr_href = "href";
 	public final static String node_link = "link";
 	public final static String attr_id = "ID";
+	public final static String attr_algorithm = "AlgorithmID";
 	public final static String attr_value = "Value";
 	public final static String attr_name = "Name";
-	public final static String attr_type = "type";
+	public final static String attr_type = "Type";
 	public final static String slash = "/";
 	public final static String version = "1.0";
 	

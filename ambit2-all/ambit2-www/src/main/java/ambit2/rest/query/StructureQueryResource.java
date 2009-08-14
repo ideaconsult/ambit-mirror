@@ -5,6 +5,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
@@ -42,7 +43,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(

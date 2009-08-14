@@ -1,13 +1,12 @@
 package ambit2.rest.propertyvalue;
 
-import java.io.Writer;
-
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
@@ -17,8 +16,10 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
+import ambit2.db.search.AbstractQuery;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
@@ -50,7 +51,7 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 	
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
 		return new StringConvertor(new PropertyValueReporter());
@@ -61,19 +62,22 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 			return new OutputStreamConvertor(
 					new PropertyValueHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new PropertyValueURIReporter(getRequest().getRootRef()) {
-				@Override
-				public void processItem(Object dataset, Writer output) {
-					super.processItem(dataset, output);
-					try {
-					output.write('\n');
-					} catch (Exception x) {}
-				}
-			},MediaType.TEXT_URI_LIST);
+			return new StringConvertor(	getURUReporter(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
 			
 		} else return new StringConvertor(new PropertyValueReporter());
 					
 	}		
+	@Override
+	protected QueryURIReporter<T, IQueryRetrieval<T>> getURUReporter(
+			Reference baseReference) throws ResourceException {
+		PropertyValueURIReporter reporter = new PropertyValueURIReporter<T, IQueryRetrieval<T>>(baseReference);
+		if (query instanceof AbstractQuery) {
+			if (((AbstractQuery)query).getValue() instanceof IStructureRecord)
+			reporter.setRecord((IStructureRecord)((AbstractQuery)query).getValue());
+		}
+		return reporter;
+		
+	}
 	@Override
 	protected IQueryRetrieval<T> createQuery(Context context,
 			Request request, Response response) throws StatusException {

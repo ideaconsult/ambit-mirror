@@ -88,7 +88,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 
 	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 		return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	

@@ -66,7 +66,7 @@ public class FeatureResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
 	
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException {
+			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
 		return new StringConvertor(new PropertyValueReporter());

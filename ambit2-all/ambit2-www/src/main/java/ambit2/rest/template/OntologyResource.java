@@ -8,6 +8,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Representation;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
 import ambit2.base.data.Dictionary;
@@ -37,7 +38,7 @@ public class OntologyResource extends QueryResource<QueryOntology, Object> {
 
 	@Override
 	public IProcessor<QueryOntology, Representation> createConvertor(
-			Variant variant) throws AmbitException {
+			Variant variant) throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new OntologyURIReporter(getRequest().getRootRef()) {
 					@Override

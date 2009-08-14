@@ -10,6 +10,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.structure.CompoundHTMLReporter;
 
 /**
  * Generates html out of proeprty/value pairs
@@ -23,13 +24,17 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	 * 
 	 */
 	private static final long serialVersionUID = -1971719947783649465L;
+	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
+	
 	public PropertyValueHTMLReporter(Reference baseRef) {
 		super(baseRef,true);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,true);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Reference reference) {
 		return new PropertyValueURIReporter(reference);
 	}
+	
 
 	@Override
 	public void processItem(T item, Writer output) {
@@ -52,6 +57,8 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	public void header(Writer w, IQueryRetrieval<T> query) {
 		super.header(w, query);
 		try {
+			
+			//cmp_reporter.processItem(query.getFieldname(),w);
 			w.write("<table>");
 		} catch (Exception x) {}
 	}

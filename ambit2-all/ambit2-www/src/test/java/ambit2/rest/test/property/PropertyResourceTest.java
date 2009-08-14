@@ -3,6 +3,9 @@ package ambit2.rest.test.property;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -19,6 +22,7 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.query.XMLTags;
 import ambit2.rest.test.ResourceTest;
 
 /**
@@ -39,7 +43,7 @@ public class PropertyResourceTest extends ResourceTest {
 	/*
 <?xml version="1.0" encoding="UTF-8"?><FeatureDefinitions xmlns="http://opentox.org/1.0"><FeatureDefinition ID="1" Name="Property 1" Reference="8" type="TODO"><link href="http://localhost:8181/feature_definition/1"/><Reference xmlns="http://www.opentox.org/Reference/1.0" AlgorithmID="NA" ID="8" Name="Dummy"/></FeatureDefinition></FeatureDefinitions>
 	 */
-	
+	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -56,7 +60,7 @@ public class PropertyResourceTest extends ResourceTest {
         parser.parse(doc);
         return true;
 	}	
-	/*
+	*/
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -69,7 +73,7 @@ public class PropertyResourceTest extends ResourceTest {
 		}
 		return count>0;
 	}	
-	 */
+	 
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);
@@ -123,5 +127,69 @@ public class PropertyResourceTest extends ResourceTest {
 		c.close();
 	}	
 	
+	
+	@Test
+	public void testParserReferenceChild() throws Exception {
+		String xml = String.format( 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><FeatureDefinitions xmlns=\"http://opentox.org/1.0\">" +
+			"<%s ID=\"1\" %s=\"Property 1\" %s=\"8\" %s=\"Property\">" +
+			"<link href=\"http://localhost:8181/feature_definition/1\"/>" +
+			"<Reference xmlns=\"http://www.opentox.org/Reference/1.0\" AlgorithmID=\"NA\" ID=\"8\" Name=\"Dummy\"/>" +
+			"</%s></FeatureDefinitions>",
+			XMLTags.node_featuredef,
+			XMLTags.attr_name,
+			XMLTags.node_reference,
+			XMLTags.attr_type,
+			XMLTags.node_featuredef,
+			
+			port,
+			XMLTags.node_reference);
+			
+		final List<Property> le = new ArrayList<Property>();
+		Document doc = createDOM(new StringReader(xml));
+		PropertyDOMParser parser = new PropertyDOMParser() {
+        	@Override
+        	public void processItem(Property entry) throws AmbitException {
+        		le.add(entry);
 
+        	}
+        };
+        parser.parse(doc);
+        Assert.assertEquals(1,le.size());
+        Assert.assertEquals("Property 1",le.get(0).getName());
+        Assert.assertEquals("Property",le.get(0).getLabel());
+        Assert.assertEquals(8,le.get(0).getReference().getId());
+	}
+	
+	@Test
+	public void testParser() throws Exception {
+		String xml = String.format( 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><FeatureDefinitions xmlns=\"http://opentox.org/1.0\">" +
+			"<%s ID=\"1\" %s=\"Property 1\" %s=\"8\" %s=\"Property\">" +
+			"<link href=\"http://localhost:8181/feature_definition/1\"/>" +
+			"</%s></FeatureDefinitions>",
+			XMLTags.node_featuredef,
+			XMLTags.attr_name,
+			XMLTags.node_reference,
+			XMLTags.attr_type,
+			XMLTags.node_featuredef,
+			
+			port,
+			XMLTags.node_reference);
+			
+		final List<Property> le = new ArrayList<Property>();
+		Document doc = createDOM(new StringReader(xml));
+		PropertyDOMParser parser = new PropertyDOMParser() {
+        	@Override
+        	public void processItem(Property entry) throws AmbitException {
+        		le.add(entry);
+
+        	}
+        };
+        parser.parse(doc);
+        Assert.assertEquals(1,le.size());
+        Assert.assertEquals("Property 1",le.get(0).getName());
+        Assert.assertEquals("Property",le.get(0).getLabel());
+        Assert.assertEquals(8,le.get(0).getReference().getId());
+	}	
 }
