@@ -40,8 +40,12 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                         if (fi.getFieldName().equals(fileUploadField)) {
                         	fi.getContentType();
                             found = true;
-                            File file = new File(System.getProperty("java.io.tmpdir")+fi.getName());
+                            File file = new File(
+                            		String.format("%s/%s",
+                            				System.getProperty("java.io.tmpdir"),
+                            				fi.getName()));
                             fi.write(file);
+                            processFile(file);
                         }
                     }    
 
@@ -56,7 +60,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                  }
 
 	}
-	
+	protected void processFile(File file) throws Exception { };
 	public abstract Reference createReference() ;
 	
 
