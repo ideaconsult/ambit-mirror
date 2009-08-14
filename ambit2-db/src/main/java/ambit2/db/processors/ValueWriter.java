@@ -51,14 +51,14 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	 * 
 	 */
 	private static final long serialVersionUID = 8373222804070419878L;
-	protected static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";
-	protected static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
+	public static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";
+	public static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
 	
-	protected static final String select_string = "select null,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
-	protected static final String select_number = "values (null,?,?,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC')";
+	public static final String select_string = "select null,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
+	public static final String select_number = "values (null,?,?,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC')";
 	
-	protected static final String onduplicate_number = " on duplicate key update value_num=?, status=?, idvalue_string=null,text=null,idtype='NUMERIC'";
-	protected static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING'";
+	public static final String onduplicate_number = " on duplicate key update value_num=?, status=?, idvalue_string=null,text=null,idtype='NUMERIC'";
+	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING'";
 	
 	protected static final String insert_tuple = "insert into property_tuples select ?,id from property_values where idproperty=? and idstructure=?";
 	
