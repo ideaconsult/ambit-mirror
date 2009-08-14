@@ -188,6 +188,11 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			throws ResourceException {
 		createNewObject(entity);
 	}
+	@Override
+	public void storeRepresentation(Representation entity)
+			throws ResourceException {
+		createNewObject(entity);
+	}
 	/*
 	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
 
