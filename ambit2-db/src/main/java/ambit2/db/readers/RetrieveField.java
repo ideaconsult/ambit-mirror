@@ -25,7 +25,7 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 				return "comments";
 			}
 		},
-		id;
+		idproperty;
 		public String getSQL() {
 			return toString();
 		}
@@ -57,11 +57,11 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	}
 
 	public boolean isSearchByID() {
-		return searchMode==SearchMode.id;
+		return searchMode==SearchMode.idproperty;
 	}
 
 	public void setSearchByID(boolean value) {
-		searchMode = value?SearchMode.id:SearchMode.name;
+		searchMode = value?SearchMode.idproperty:SearchMode.name;
 	}	
 	protected final String sql_structure = 
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id from property_values \n"+
@@ -114,7 +114,7 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 			params.add(new QueryParam<String>(String.class, getFieldname().getName()));
 			break;
 		}
-		case id: {
+		case idproperty: {
 			params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));
 			break;
 		}
