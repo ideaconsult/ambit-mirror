@@ -18,7 +18,8 @@ public class RetrieveTuplePropertyValue extends RetrieveTuple<PropertyValue> {
 		try {
 			//"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url from property_values \n"+
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
-			Property p = Property.getInstance(rs.getString(1),le); 
+			Property p = Property.getInstance(rs.getString(1),le);
+			p.setId(rs.getInt(3));
 			Object value = rs.getObject(5);
 			PropertyValue pv ;
 			if (value == null) pv = new PropertyValue<Float>(p,rs.getFloat(6));
