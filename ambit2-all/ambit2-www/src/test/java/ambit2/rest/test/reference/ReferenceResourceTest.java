@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.rest.query.XMLTags;
 import ambit2.rest.reference.ReferenceDOMParser;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.test.ResourceTest;
@@ -68,6 +69,7 @@ public class ReferenceResourceTest extends ResourceTest {
         return true;
 
 	}	
+	
 	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
@@ -118,8 +120,19 @@ public class ReferenceResourceTest extends ResourceTest {
 	*/
 	@Test
 	public void testParser() throws Exception {
-		String xml = 
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><References xmlns=\"http://www.opentox.org/Reference/1.0\"><Reference AlgorithmID=\"http://www.cas.org\" ID=\"1\" name=\"CAS Registry Number\"><link xmlns=\"http://opentox.org/1.0\" href=\"http://localhost:8181/reference/1\"/></Reference></References>";
+		String xml = String.format( 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><References xmlns=\"http://www.opentox.org/Reference/1.0\">"+
+			"<%s %s=\"http://www.cas.org\" %s=\"1\" %s=\"CAS Registry Number\">"+
+			"<link xmlns=\"http://opentox.org/1.0\" %s=\"http://localhost:%d/reference/1\"/>" +
+			"</%s>" +
+			"</References>",
+			XMLTags.node_reference,
+			XMLTags.attr_algorithm,
+			XMLTags.attr_id,
+			XMLTags.attr_name,
+			XMLTags.attr_href,
+			port,
+			XMLTags.node_reference);
 			
 		final List<LiteratureEntry> le = new ArrayList<LiteratureEntry>();
 		Document doc = createDOM(new StringReader(xml));
