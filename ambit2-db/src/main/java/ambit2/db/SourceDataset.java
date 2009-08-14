@@ -65,7 +65,7 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
      * @see ambit2.data.AmbitObject#toString()
      */
     public String toString() {
-        return getName();
+        return getName()==null?Integer.toString(getId()):getName();
     }
     public int getId() {
         return id;
