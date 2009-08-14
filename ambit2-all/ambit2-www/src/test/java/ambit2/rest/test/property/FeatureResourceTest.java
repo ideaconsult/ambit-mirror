@@ -23,6 +23,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.PropertyValue;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.XMLTags;
@@ -134,20 +135,38 @@ public class FeatureResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntry() throws Exception {
 		Form headers = new Form();  
-		headers.add(PropertyResource.headers.name.toString(),"cas");
-		headers.add(PropertyResource.headers.reference_id.toString(),"4");
+		headers.add(FeatureResource.headers.value.toString(),"XXXXXX");
+		
 		Response response =  testPost(
-					String.format("http://localhost:%d/feature_definition", port),
+					String.format("http://localhost:%d/feature/compound/7/conformer/100211/feature_definition/2", port),
 					MediaType.TEXT_XML,
 					headers);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where name='cas' and comments='CasRN' and idreference=4");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT value FROM property_values join property_string using(idvalue_string) where idstructure=100211 and idproperty=2");
 		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("XXXXXX",table.getValue(0,"value"));
 		c.close();
 	}	
 	
+	@Test
+	public void testCreateEntryNum() throws Exception {
+		Form headers = new Form();  
+		headers.add(FeatureResource.headers.value.toString(),"3.14");
+		
+		Response response =  testPost(
+					String.format("http://localhost:%d/feature/compound/7/conformer/100211/feature_definition/2", port),
+					MediaType.TEXT_XML,
+					headers);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT value_num FROM property_values where idstructure=100211 and idproperty=2");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3.14,table.getValue(0,"value_num"));
+		c.close();
+	}		
 	
 	@Test
 	public void testParserReferenceChild() throws Exception {

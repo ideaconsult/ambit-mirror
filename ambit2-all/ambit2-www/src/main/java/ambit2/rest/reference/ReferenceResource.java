@@ -16,7 +16,7 @@ import org.restlet.resource.Variant;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.DocumentConvertor;
@@ -140,7 +140,7 @@ create a new reference  	 POST  	 /reference  	 name:String, algorithm_id:String
 		return LiteratureEntry.getInstance(name, url);
 	}
 	@Override
-	protected AbstractObjectUpdate<LiteratureEntry> createUpdateObject(
+	protected AbstractUpdate createUpdateObject(
 			LiteratureEntry entry) throws ResourceException {
 		return new CreateReference(entry);
 	}

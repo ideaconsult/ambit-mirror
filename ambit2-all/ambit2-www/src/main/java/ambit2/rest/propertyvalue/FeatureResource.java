@@ -1,13 +1,13 @@
 package ambit2.rest.propertyvalue;
 
-import java.io.Writer;
-
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
@@ -16,8 +16,12 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.PropertyValue;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.db.search.AbstractQuery;
+import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
+import ambit2.db.update.value.UpdateStructurePropertyIDString;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -47,7 +51,7 @@ delete a feature 	DELETE 	/feature/compound/{cid}/feature_definition/{f_def_id} 
  * @author nina
  *
  */
-public class FeatureResource<PropertyValue> extends QueryResource<IQueryRetrieval<PropertyValue>, PropertyValue> {
+public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue>, PropertyValue> {
 	public final static String CompoundFeaturedefID = String.format("%s%s%s/{%s}",
 			PropertyValueResource.featureKey,CompoundResource.compoundID,PropertyResource.featuredef,PropertyResource.idfeaturedef);
 	public final static String ConformerFeaturedefID = String.format("%s%s%s/{%s}",
@@ -107,41 +111,117 @@ public class FeatureResource<PropertyValue> extends QueryResource<IQueryRetrieva
 		}
 		return reporter;		
 	}
+	//TODO refactor to throw ResourceException
 	@Override
 	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		RetrieveFieldPropertyValue  field = new RetrieveFieldPropertyValue();
 		field.setSearchByID(true);
 		field.setChemicalsOnly(true);
+		IStructureRecord record = getRecordByParameters();
+		field.setChemicalsOnly(record.getIdstructure()<=0);
+		field.setValue(record);
+		try {field.setFieldname(getPropertyByParameters()); } catch (ResourceException x) {throw new StatusException(x.getStatus());}
+		return (IQueryRetrieval) field;
+	}
+	protected Property getPropertyByParameters() throws ResourceException {
+		try {
+			Property p = new Property("");
+			p.setId(Integer.parseInt(Reference.decode(getRequest().getAttributes().get(PropertyResource.idfeaturedef).toString())));
+			return p;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}		
+	}
+	protected IStructureRecord getRecordByParameters() {
 		IStructureRecord record = new StructureRecord();
-		Object key = request.getAttributes().get(CompoundResource.idcompound);		
+		Object key = getRequest().getAttributes().get(CompoundResource.idcompound);		
 		if (key != null) try {
 			record = new StructureRecord();
 			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
-			field.setChemicalsOnly(true);
+			
 		} catch (Exception x) { record = null;}
 		
-		key = request.getAttributes().get(ConformerResource.idconformer);		
+		key = getRequest().getAttributes().get(ConformerResource.idconformer);		
 		if (key != null) try {
 			if (record ==null) record = new StructureRecord();
 			record.setIdstructure(Integer.parseInt(Reference.decode(key.toString())));
-			field.setChemicalsOnly(false);
-		} catch (Exception x) { }
-		field.setValue(record);
-		try {
-			Property p = new Property("");
-			p.setId(Integer.parseInt(Reference.decode(request.getAttributes().get(PropertyResource.idfeaturedef).toString())));
-			field.setFieldname(p);
-		} catch (Exception x) {
-			throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-		return (IQueryRetrieval) field;
+			return record;
+		} catch (Exception x) {  }	
+		return record;
 	}
-
 	@Override
 	public boolean allowPost() {
 		return true;
 	}
+
+	@Override
+	protected PropertyValue createObjectFromHeaders(Form requestHeaders)
+			throws ResourceException {
+		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.isMandatory());
+
+		Property p = getPropertyByParameters();
+		try {
+			return new PropertyValue<Double>(p,Double.parseDouble(value.toString()));
+		} catch (Exception x) {
+			return new PropertyValue<String>(p,value.toString());
+		}
+	}
+	protected AbstractUpdate createUpdateObject(PropertyValue entry) throws ResourceException {
+		IStructureRecord record = getRecordByParameters();
+		boolean chemOnly = record.getIdstructure()<=0;
+		
+		if (entry.getValue() instanceof Number) {
+			UpdateStructurePropertyIDNumber u = new UpdateStructurePropertyIDNumber();
+			u.setGroup(record);
+			u.setObject(entry);
+			return u;
+		} else  {
+			UpdateStructurePropertyIDString u = new UpdateStructurePropertyIDString();
+			u.setGroup(record);
+			u.setObject(entry);
+			return u;
+		}
+	};
+	@Override
+	public void acceptRepresentation(Representation entity)
+			throws ResourceException {
+		createNewObject(entity);
+	}
+	/*
+	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
+
+	public void createNewObject(Representation entity) throws ResourceException {
+		
+		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+		
+		StructureRecord record = new StructureRecord();	
+		boolean chemicalsOnly = getRecordByParameters(record);
+		
+		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.isMandatory());
+		Property key = getPropertyByParameters();
+		record.setProperty(key, value);
+		
+		PropertyValuesWriter valuesWriter = new PropertyValuesWriter();
+		valuesWriter.setDataset(new SourceDataset("Unknown",LiteratureEntry.getInstance("Unknown", "Unknown")));
+		Connection c = null;
+		try {
+			valuesWriter.setConnection(getConnection());
+			valuesWriter.process(record);
+			PropertyURIReporter uriReporter = new PropertyURIReporter(getRequest().getRootRef());
+			getResponse().setLocationRef(uriReporter.getURI(key));
+			getResponse().setStatus(Status.SUCCESS_OK);
+			getResponse().setEntity(null);
+		} catch (Exception x) {
+			x.printStackTrace();
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);			
+			getResponse().setEntity(null);
+		} finally {
+			try {valuesWriter.close();} catch (Exception x) {}
+			try {if(c != null) c.close();} catch (Exception x) {}
+		}
+	}	
+	*/
 	/*
 	@Override
 	protected T createObjectFromHeaders(Form requestHeaders)

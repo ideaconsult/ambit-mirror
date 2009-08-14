@@ -21,7 +21,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
-import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.DocumentConvertor;
@@ -184,7 +184,7 @@ create a new feature definition  	 POST  	 /feature_definition  	 name: String, 
 		}
 	}
 	@Override
-	protected AbstractObjectUpdate<Property> createUpdateObject(Property entry)
+	protected AbstractUpdate createUpdateObject(Property entry)
 			throws ResourceException {
 		return new CreatePropertyReferenceID(entry);
 	}
