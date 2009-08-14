@@ -35,7 +35,6 @@ import java.sql.SQLException;
 import javax.naming.OperationNotSupportedException;
 
 import ambit2.base.data.Dictionary;
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
@@ -44,7 +43,7 @@ import ambit2.db.update.dictionary.TemplateAddProperty;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
-	protected enum mode  {OK, UNKNOWN,ERROR,TRUNCATED};
+	public enum mode  {OK, UNKNOWN,ERROR,TRUNCATED};
 	protected TemplateAddProperty templateWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
