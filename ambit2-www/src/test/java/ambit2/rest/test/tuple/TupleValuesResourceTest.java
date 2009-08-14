@@ -4,9 +4,15 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.restlet.data.MediaType;
+import org.w3c.dom.Document;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.readers.PropertyValue;
+import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.test.ResourceTest;
 
 public class TupleValuesResourceTest extends ResourceTest {
@@ -52,6 +58,7 @@ public class TupleValuesResourceTest extends ResourceTest {
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
+	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -65,4 +72,22 @@ public class TupleValuesResourceTest extends ResourceTest {
 		//<?xml version="1.0" encoding="UTF-8"?><features xmlns="http://opentox.org/Feature/1.0"><feature CompoundID="11" ConformerID="100215" value="1530-32-1"/></features>
 		throw new Exception("TODO: Parse XML and verify values");
 	}		
+	*/
+	@Override
+	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
+			throws Exception {
+
+		Document doc = createDOM(in);
+		PropertyValueDOMParser parser = new PropertyValueDOMParser() {
+        	@Override
+        	public void processItem(PropertyValue entry) throws AmbitException {
+        		Assert.assertEquals(3,entry.getProperty().getId());
+        		Assert.assertEquals("CAS",entry.getProperty().getName());
+        		Assert.assertEquals("1530-32-1",entry.getValue());
+        	}
+        };
+        parser.parse(doc);
+        return true;
+	}	
+	
 }

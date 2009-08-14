@@ -20,28 +20,32 @@ import org.w3c.dom.Document;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.readers.PropertyValue;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.propertyvalue.PropertyValueDOMParser;
+import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.XMLTags;
+import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.test.ResourceTest;
 
-/**
- * test for {@link PropertyResource}
- * @author nina
- *
- */
-public class PropertyResourceTest extends ResourceTest {
+public class FeatureResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef);
+		return String.format("http://localhost:%d%s%s/%d%s/%d", port,
+				PropertyValueResource.featureKey,
+				CompoundResource.compound,
+				11,
+				PropertyResource.featuredef,
+				3);
 	}
-	
+	///feature/compound/{idcompound}/feature_definition/{id_feature_definition}
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
 	/*
-<?xml version="1.0" encoding="UTF-8"?><FeatureDefinitions xmlns="http://opentox.org/1.0"><FeatureDefinition ID="1" Name="Property 1" Reference="8" type="TODO"><link href="http://localhost:8181/feature_definition/1"/><Reference xmlns="http://www.opentox.org/Reference/1.0" AlgorithmID="NA" ID="8" Name="Dummy"/></FeatureDefinition></FeatureDefinitions>
+<?xml version="1.0" encoding="UTF-8"?><Features xmlns="http://opentox.org/Feature/1.0"><Feature CompoundID="11" ID="1" Name="CAS" Value="1530-32-1"/></Features>
 	 */
 	
 	@Override
@@ -49,12 +53,12 @@ public class PropertyResourceTest extends ResourceTest {
 			throws Exception {
 
 		Document doc = createDOM(in);
-        PropertyDOMParser parser = new PropertyDOMParser() {
+		PropertyValueDOMParser parser = new PropertyValueDOMParser() {
         	@Override
-        	public void processItem(Property entry) throws AmbitException {
-        		Assert.assertEquals(1,entry.getId());
-        		Assert.assertEquals("Property 1",entry.getName());
-        		Assert.assertEquals(8,entry.getReference().getId());
+        	public void processItem(PropertyValue entry) throws AmbitException {
+        		Assert.assertEquals(3,entry.getProperty().getId());
+        		Assert.assertEquals("CAS",entry.getProperty().getName());
+        		Assert.assertEquals("1530-32-1",entry.getValue());
         	}
         };
         parser.parse(doc);
@@ -104,7 +108,24 @@ public class PropertyResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/feature_definition/1", line);
+			Assert.assertEquals("http://localhost:8181/feature/compound/11/feature_definition/3", line);
+			count++;
+		}
+		return count==1;
+	}	
+	
+	@Test
+	public void testTXT() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+	}
+	@Override
+	public boolean verifyResponseTXT(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count = 0;
+		while ((line = r.readLine())!= null) {
+			Assert.assertEquals("1530-32-1", line);
 			count++;
 		}
 		return count==1;
@@ -128,13 +149,13 @@ public class PropertyResourceTest extends ResourceTest {
 	}	
 	
 	
-	
 	@Test
-	public void testParser() throws Exception {
+	public void testParserReferenceChild() throws Exception {
 		String xml = String.format( 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><FeatureDefinitions xmlns=\"http://opentox.org/1.0\">" +
 			"<%s ID=\"1\" %s=\"Property 1\" %s=\"8\" %s=\"Property\">" +
 			"<link href=\"http://localhost:8181/feature_definition/1\"/>" +
+			"<Reference xmlns=\"http://www.opentox.org/Reference/1.0\" AlgorithmID=\"NA\" ID=\"8\" Name=\"Dummy\"/>" +
 			"</%s></FeatureDefinitions>",
 			XMLTags.node_featuredef,
 			XMLTags.attr_name,
@@ -159,5 +180,6 @@ public class PropertyResourceTest extends ResourceTest {
         Assert.assertEquals("Property 1",le.get(0).getName());
         Assert.assertEquals("Property",le.get(0).getLabel());
         Assert.assertEquals(8,le.get(0).getReference().getId());
-	}	
+	}
+	
 }

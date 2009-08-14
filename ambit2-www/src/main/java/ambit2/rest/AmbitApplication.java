@@ -163,7 +163,8 @@ public class AmbitApplication extends Application {
 		router.attach(ConformerResource.conformerID,ConformerResource.class);
 		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
 
-		router.attach(FeatureResource.resource,FeatureResource.class);
+		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
+		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
 		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
 		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
 

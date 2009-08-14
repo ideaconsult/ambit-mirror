@@ -42,7 +42,7 @@ public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends Qu
 	}
 	public String generateURI(String ref, Object item) {
 		if (item instanceof Property)
-			return String.format("%s%s/%d%s/%s",
+			return String.format("%s%s/%d%s/%s\n",
 						ref,
 						CompoundResource.compound,
 						getRecord().getIdchemical(),

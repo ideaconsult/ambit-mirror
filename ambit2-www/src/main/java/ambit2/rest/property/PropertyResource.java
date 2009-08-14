@@ -38,6 +38,7 @@ import ambit2.rest.structure.ConformerResource;
  * Feature definition resource http://opentox.org/wiki/opentox/Feature
  * <br>
  * Implemented methods: GET, POST
+
  * @author nina
  *
  */
