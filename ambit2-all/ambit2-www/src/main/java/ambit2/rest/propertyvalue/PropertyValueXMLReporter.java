@@ -118,7 +118,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 			if (record.getIdstructure()>0)
 				e_feature.setAttribute("ConformerID",Integer.toString(record.getIdstructure()));
 		}
-		e_feature.setAttribute("ID",Integer.toString(item.getId()));		
+		e_feature.setAttribute(XMLTags.attr_id,Integer.toString(item.getProperty().getId()));		
 		e_feature.setAttribute(XMLTags.attr_name,item.getProperty().getName());
 		e_feature.setAttribute(XMLTags.attr_value,item.getValue().toString());
 		return e_feature;

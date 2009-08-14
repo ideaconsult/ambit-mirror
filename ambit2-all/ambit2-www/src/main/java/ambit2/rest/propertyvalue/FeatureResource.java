@@ -3,7 +3,6 @@ package ambit2.rest.propertyvalue;
 import java.io.Writer;
 
 import org.restlet.Context;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -18,31 +17,48 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
+import ambit2.db.search.AbstractQuery;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.structure.ConformerResource;
 
 /**
  * http://opentox.org/wiki/opentox/Feature
+<pre>
+REST operations¶
+Description 	Method 	URI 	Parameters 	Result 	Status codes
+get the value for a specific feature 	GET 	/feature/compound/{cid}/feature_definition/{f_def_id} 	- 	text/xml -> xml representation of feature; text/plain -> text value of the feature 	200,404,503
+get the value for a all features 	GET 	/feature/compound/{cid} 	- 	xml representation of all features 	200,404,503
+get the value for a all feature values for a given feature definition in a dataset 	GET 	/feature/dataset/{did}/feature_definition/{fid} 	- 	xml representation of all features 	200,404,503
+get the value for a all feature values for a given feature definition 	GET 	/feature/feature_definition/{fid} 	- 	xml representation of all features 	200,404,503
+update the value for a specific feature 	PUT 	/feature/compound/{cid}/feature_definition/{f_def_id} 	value 	- 	200,400,404,503
+update the value for a specific feature 	PUT 	/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id} 	value 	- 	200,400,404,503
+save a new feature per compound 	POST 	/feature/compound/{cid}/feature_definition/{f_def_id} 	value 	URI of feature representation 	200,404,503
+save a new feature per conformer 	POST 	/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id} 	value 	URI of feature representation 	200,404,503
+delete a feature 	DELETE 	/feature/compound/{cid}/feature_definition/{f_def_id} 	- 	- 	200,404,503 
+</pre>
  * @author nina
  *
  */
-public class FeatureResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
+public class FeatureResource<PropertyValue> extends QueryResource<IQueryRetrieval<PropertyValue>, PropertyValue> {
+	public final static String CompoundFeaturedefID = String.format("%s%s%s/{%s}",
+			PropertyValueResource.featureKey,CompoundResource.compoundID,PropertyResource.featuredef,PropertyResource.idfeaturedef);
+	public final static String ConformerFeaturedefID = String.format("%s%s%s/{%s}",
+			PropertyValueResource.featureKey,ConformerResource.conformerID,PropertyResource.featuredef,PropertyResource.idfeaturedef);
+	
 	/**
 	 * Parameters, expected in http headers
 	 * @author nina
 	 *
 	 */
 	public enum headers  {
-			compound_id {
-				@Override
-				public boolean isMandatory() {	return true;}
-			},
-			conformer_id,
 			value;
 			public boolean isMandatory() {
 				return false;
@@ -77,55 +93,44 @@ public class FeatureResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
 			return new OutputStreamConvertor(
 					new PropertyValueHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new PropertyValueURIReporter(getRequest().getRootRef()) {
-				@Override
-				public void processItem(Object dataset, Writer output) {
-					super.processItem(dataset, output);
-					try {
-					output.write('\n');
-					} catch (Exception x) {}
-				}
-			},MediaType.TEXT_URI_LIST);
-			
+			return new StringConvertor(	getURUReporter(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
 		} else return new StringConvertor(new PropertyValueReporter());
 					
 	}		
 	@Override
-	protected QueryURIReporter<T, IQueryRetrieval<T>> getURUReporter(
+	protected QueryURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>> getURUReporter(
 			Reference baseReference) throws ResourceException {
-		return new PropertyValueURIReporter(baseReference);
+		PropertyValueURIReporter reporter = new PropertyValueURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>>(baseReference);
+		if (query instanceof AbstractQuery) {
+			if (((AbstractQuery)query).getValue() instanceof IStructureRecord)
+			reporter.setRecord((IStructureRecord)((AbstractQuery)query).getValue());
+		}
+		return reporter;		
 	}
 	@Override
-	protected IQueryRetrieval<T> createQuery(Context context,
+	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		RetrieveFieldPropertyValue  field = new RetrieveFieldPropertyValue();
 		field.setSearchByID(true);
-		
+		field.setChemicalsOnly(true);
 		IStructureRecord record = new StructureRecord();
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		String id  = null;
-		try {
-			id = getParameter(requestHeaders,headers.compound_id.toString(),headers.compound_id.isMandatory());
-			record.setIdchemical(Integer.parseInt(id));
+		Object key = request.getAttributes().get(CompoundResource.idcompound);		
+		if (key != null) try {
+			record = new StructureRecord();
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
 			field.setChemicalsOnly(true);
-		} catch (Exception x) {
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %s",id))
-					);
-		}
-		try {
-			id = getParameter(requestHeaders,headers.conformer_id.toString(),headers.conformer_id.isMandatory());
-			record.setIdstructure(Integer.parseInt(id));
-			field.setChemicalsOnly(false);
+		} catch (Exception x) { record = null;}
 		
-		} catch (Exception x) {
-			field.setChemicalsOnly(true);
-		} finally {
-			field.setValue(record);
-		}
+		key = request.getAttributes().get(ConformerResource.idconformer);		
+		if (key != null) try {
+			if (record ==null) record = new StructureRecord();
+			record.setIdstructure(Integer.parseInt(Reference.decode(key.toString())));
+			field.setChemicalsOnly(false);
+		} catch (Exception x) { }
+		field.setValue(record);
 		try {
 			Property p = new Property("");
-			p.setId(Integer.parseInt(Reference.decode(request.getAttributes().get(featureID).toString())));
+			p.setId(Integer.parseInt(Reference.decode(request.getAttributes().get(PropertyResource.idfeaturedef).toString())));
 			field.setFieldname(p);
 		} catch (Exception x) {
 			throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);

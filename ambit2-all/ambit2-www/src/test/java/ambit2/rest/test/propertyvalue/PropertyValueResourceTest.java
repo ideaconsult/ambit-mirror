@@ -38,7 +38,7 @@ public class PropertyValueResourceTest extends ResourceTest {
         PropertyValueDOMParser parser = new PropertyValueDOMParser() {
         	@Override
         	public void processItem(PropertyValue entry) throws AmbitException {
-        		Assert.assertEquals(1,entry.getProperty().getId());
+        		Assert.assertEquals(3,entry.getProperty().getId());
         		Assert.assertEquals("CAS",entry.getProperty().getName());
         		Assert.assertEquals("1530-32-1",entry.getValue());
         	}
