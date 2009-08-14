@@ -116,7 +116,9 @@ public class Property extends Model {
 		return reference;
 	}
 
-
+	public  void setReference(LiteratureEntry reference) {
+		this.reference = reference;
+	}
 	private Property() {
 		
 	}
