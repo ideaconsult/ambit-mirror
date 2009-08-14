@@ -6,15 +6,16 @@ import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.PropertiesTuple;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class QueryTuple  extends AbstractQuery<IStructureRecord, SourceDataset, StringCondition, Integer>  implements IQueryRetrieval<Integer> {
-	protected static String sql_chemicals = "select idtuple from structure join property_values using(idstructure) join property_tuples using(id) join tuples using(idtuple) where idchemical=? %s group by idtuple";
-	protected static String sql_structure = "select idtuple from property_values join property_tuples using(id) join tuples using(idtuple) where idstructure = ? %s group by idtuple";
+public class QueryTuple  extends AbstractQuery<IStructureRecord, SourceDataset, StringCondition, PropertiesTuple>  implements IQueryRetrieval<PropertiesTuple> {
+	protected static String sql_chemicals = "select idtuple,id_srcdataset,src_dataset.name,idreference from structure join property_values using(idstructure) join property_tuples using(id) join tuples using(idtuple) join src_dataset using(id_srcdataset) where idchemical=? %s group by idtuple";
+	protected static String sql_structure = "select idtuple,id_srcdataset,src_dataset.name,idreference from property_values join property_tuples using(id) join tuples using(idtuple) join src_dataset using(id_srcdataset)  where idstructure = ? %s group by idtuple";
 	protected static String where_dataset = "and id_srcdataset=?";
 	protected boolean chemicalsOnly = true;
 	public boolean isChemicalsOnly() {
@@ -36,7 +37,7 @@ public class QueryTuple  extends AbstractQuery<IStructureRecord, SourceDataset, 
 		this(null);
 	}
 		
-	public double calculateMetric(Integer object) {
+	public double calculateMetric(PropertiesTuple object) {
 		return 1;
 	}
 
@@ -59,10 +60,18 @@ public class QueryTuple  extends AbstractQuery<IStructureRecord, SourceDataset, 
 		return String.format(isChemicalsOnly()?sql_chemicals:sql_structure,getValue()==null?"":where_dataset);
 	}
 
-	public Integer getObject(ResultSet rs) throws AmbitException {
+	public PropertiesTuple getObject(ResultSet rs) throws AmbitException {
 		try {
-			return rs.getInt(1);
+			if ((getValue()!=null) && (getValue().getId()>0))
+				return new PropertiesTuple(rs.getInt(1),getValue());
+			else {
+				SourceDataset ds = new SourceDataset();
+				ds.setId(rs.getInt(2));
+				ds.setName(rs.getString(3));
+				return new PropertiesTuple(rs.getInt(1),ds);
+			}
 		} catch (Exception x) {
+			x.printStackTrace();
 			return null;
 		}
 	}

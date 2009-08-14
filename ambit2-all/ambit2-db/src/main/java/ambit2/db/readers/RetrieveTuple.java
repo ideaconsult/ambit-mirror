@@ -7,11 +7,13 @@ import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.PropertiesTuple;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class RetrieveTuple<ResultType> extends AbstractQuery<Integer,IStructureRecord,EQCondition,ResultType> implements IQueryRetrieval<ResultType> {
+public class RetrieveTuple<ResultType> extends AbstractQuery<PropertiesTuple,IStructureRecord,EQCondition,ResultType> 
+											implements IQueryRetrieval<ResultType> {
 
 	/**
 	 * 
@@ -57,7 +59,7 @@ public class RetrieveTuple<ResultType> extends AbstractQuery<Integer,IStructureR
 		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 
 		if (getFieldname()!=null)
-			params.add(new QueryParam<Integer>(Integer.class, getFieldname()));		
+			params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));		
 		return params;	
 	}
 
