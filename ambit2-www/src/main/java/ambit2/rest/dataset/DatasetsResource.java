@@ -1,9 +1,6 @@
 package ambit2.rest.dataset;
 
-import java.io.File;
 import java.io.Writer;
-import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -18,7 +15,6 @@ import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.resource.Representation;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
@@ -35,7 +31,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.task.CallableFileUpload;
+import ambit2.rest.task.CallableFileImport;
 
 /**
  * http://opentox.org/wiki/1/Dataset
@@ -125,13 +121,16 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	          try {
 	              List<FileItem> items = upload.parseRequest(getRequest());
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
-						 "File upload",
-						new CallableFileUpload(items,DatasetHTMLReporter.fileUploadField) {
-							@Override
+						 "File import",
+						new CallableFileImport(items,DatasetHTMLReporter.fileUploadField,getConnection()),
+						 /*
+						 new CallableFileUpload(items,DatasetHTMLReporter.fileUploadField) {
+							 @Override
 							public Reference createReference() {
 								return getRequest().getOriginalRef();
 							}
-						},	
+						 },
+						 */
 						getRequest().getRootRef());		
 				  getResponse().setLocationRef(ref);
 				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
