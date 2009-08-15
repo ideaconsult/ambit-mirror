@@ -19,7 +19,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 
 /**
- * Algorithms as per http://opentox.org/wiki/opentox/Algorithm
+ * Algorithms as per http://opentox.org/development/wiki/Algorithms
  * @author nina
  *
  */

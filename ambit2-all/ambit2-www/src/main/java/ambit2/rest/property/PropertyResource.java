@@ -35,9 +35,13 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 /**
- * Feature definition resource http://opentox.org/wiki/opentox/Feature
+ * Feature definition resource http://opentox.org/development/wiki/feature
  * <br>
- * Implemented methods: GET, POST
+ * Supported REST operations:
+ * <ul>
+ * <li>GET 	 /feature_definition/{id}  returns text/uri-list or text/xml or text/html
+ * <li>POST 	POST 	 /feature_definition (as specified)
+ * </ul>
 
  * @author nina
  *

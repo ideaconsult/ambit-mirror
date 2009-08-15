@@ -61,9 +61,12 @@ import ambit2.rest.tuple.TuplePropertyValueResource;
 import ambit2.rest.tuple.TupleResource;
 
 /**
+ * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
  * http://opentox.org/wiki/1/Dataset
  * @author nina
- * 
+ */
+
+ /* 
  * http://www.slideshare.net/guest7d0e11/creating-a-web-of-data-with-restlet-presentation
  * http://stackoverflow.com/questions/810171/how-to-read-context-parameters-from-a-restlet
  *
@@ -125,6 +128,7 @@ public class AmbitApplication extends Application {
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 
+		
 		Guard guard = new Guard(getContext(),ChallengeScheme.HTTP_BASIC, "AMBIT file upload") {
 			@Override
 			public int authenticate(Request request) {
@@ -141,6 +145,8 @@ public class AmbitApplication extends Application {
 		guard.setNext(DatasetsResource.class);  
 		
 		router.attach(DatasetsResource.datasets, guard);
+		
+		//router.attach(DatasetsResource.datasets, DatasetsResource.class);
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
 		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
 		router.attach(datasetID_structure, CompoundResource.class);

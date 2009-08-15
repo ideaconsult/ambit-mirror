@@ -15,6 +15,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.query.StructureQueryResource;
 
 /**
+ * Makes available previousy stored search results as Datasets http://opentox.org/development/wiki/dataset
  * Resource wrapper for {@link QueryStoredResults}
  * @author nina
  *

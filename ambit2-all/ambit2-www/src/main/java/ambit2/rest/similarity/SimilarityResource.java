@@ -20,6 +20,11 @@ import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 
+/**
+ * Retrieve similar compounds, given a smiles
+ * @author nina
+ *
+ */
 public class SimilarityResource extends StructureQueryResource<QuerySimilarityBitset> {
 	public final static String similarity = String.format("%s%s",QueryResource.query_resource ,"/similarity/method");		
 	public final static String fp_dataset = String.format("%s%s%s",similarity,"/fp1024/distance/tanimoto/{threshold}",DatasetsResource.datasetID);

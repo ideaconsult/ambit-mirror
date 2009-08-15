@@ -13,6 +13,12 @@ import org.restlet.resource.Variant;
 import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmResource;
 
+/**
+ * Descriptor calculation 
+ * Under development
+ * @author nina
+ *
+ */
 public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResource {
 
 	protected IMolecularDescriptor descriptor = null;

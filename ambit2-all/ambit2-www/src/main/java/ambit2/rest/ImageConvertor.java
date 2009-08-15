@@ -8,9 +8,17 @@ import org.restlet.resource.OutputRepresentation;
 import org.restlet.resource.Representation;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
+/**
+ * An IProcessor} , converting between arbitrary Content and restlet Representation.
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ */
 public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepresentationConvertor<T,Q,OutputStream> {
 
 	/**

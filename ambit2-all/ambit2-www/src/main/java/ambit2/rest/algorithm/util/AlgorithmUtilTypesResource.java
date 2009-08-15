@@ -11,7 +11,8 @@ import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmResource;
 
 /**
- * Descriptor calculation resources
+ * Descriptor calculation resources  http://opentox.org/development/wiki/Algorithms
+ * Utility algorithms 
  * @author nina
  *
  */

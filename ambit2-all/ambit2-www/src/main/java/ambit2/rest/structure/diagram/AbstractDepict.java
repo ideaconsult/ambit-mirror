@@ -25,6 +25,11 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.EmptyMoleculeException;
 
+/**
+ * Returns PNG given a smiles
+ * @author nina
+ *
+ */
 public class AbstractDepict extends Resource {
 
 	protected String smiles = null;

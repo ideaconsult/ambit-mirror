@@ -1,8 +1,5 @@
 package ambit2.rest.structure;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;

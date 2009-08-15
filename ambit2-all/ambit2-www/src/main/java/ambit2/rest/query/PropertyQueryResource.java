@@ -10,6 +10,11 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
 import ambit2.rest.StatusException;
 
+/**
+ * Search for structures, given a property value
+ * @author nina
+ *
+ */
 public class PropertyQueryResource extends StructureQueryResource<QueryField> {
 	public final static String property =  QueryResource.query_resource + "/feature/{condition}" + "/{value}";
 	public final static String propertyDataset =  QueryResource.query_resource + "/feature/{condition}" + "/{value}";

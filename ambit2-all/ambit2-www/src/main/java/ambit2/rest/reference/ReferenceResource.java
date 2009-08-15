@@ -29,9 +29,14 @@ import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
 
 /**
- * Retrieves {@link LiteratureEntry} according to  http://opentox.org/wiki/opentox/Feature
+ * Reference resource, according to  http://opentox.org/development/wiki/feature. 
  * <br>
- * Implemented methods: GET, POST
+ * Supported operations:
+ * <ul>
+ * <li>GET 	 /reference/{id} 	 returns returns text/uri-list or text/xml or text/html
+ * <li>POST 	 /reference (as specified)
+ * <li>PUT not yet supported
+ * </ul>
  * @author nina
  *
  * @param <Q>

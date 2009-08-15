@@ -14,6 +14,14 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 
+/**
+ * Abstract class for resources
+ * @author nina
+ *
+ * @param <Q>
+ * @param <T>
+ * @param <P>
+ */
 public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representation>> extends Resource {
 	protected Q query;
 	protected Exception error = null;	
