@@ -54,7 +54,7 @@ Welcome
 	
 	Allows to query AMBIT database by REST style web services. 
 	
-	The prototype {{{http://nina.acad.bg/ambit2/}service}} and {{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/ambit-rest-client/}client}} are available.
+	The prototype {{{http://ambit.uni-plovdiv.bg:8080/ambit2/}service}}, following {{{http://opentox.org}OpenTox REST API}} and {{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/ambit-rest-client/}client}} are available.
 
 
 
