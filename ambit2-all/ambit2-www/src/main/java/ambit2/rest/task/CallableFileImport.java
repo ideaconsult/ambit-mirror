@@ -1,6 +1,7 @@
 package ambit2.rest.task;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.resource.InputRepresentation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.LiteratureEntry;
@@ -42,7 +44,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 	}
 	
 	public CallableFileImport(List<FileItem> items, String fileUploadField, Connection connection) {
-		this(null,connection);
+		this((File)null,connection);
 		upload = new CallableFileUpload(items,fileUploadField) {
 			@Override
 			public Reference createReference() {
@@ -54,9 +56,30 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			}
 		};
 	}	
+	public CallableFileImport(InputRepresentation input,  Connection connection) {
+		this((File)null,connection);
+		try {
+			File file = null;
+			if (input.getDownloadName()==null) {
+		       file = File.createTempFile("ambit2_", ".sdf");
+		       file.deleteOnExit();
+			} else file = new File(
+	        		String.format("%s/%s",
+	        				System.getProperty("java.io.tmpdir"),
+	        				input.getDownloadName()));
+	        FileOutputStream out = new FileOutputStream(file);
+	        input.write(out);		
+	        out.flush();
+	        out.close();
+	        setFile(file);
+		} catch (Exception x) {
+			setFile(null);
+		}
+		
+	}		
 	public Reference call() throws Exception {
 		try {
-			if (file == null) upload.call();
+			if (file == null) if (upload != null) upload.call(); else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			if (file != null) return importFile(file);
 			else throw new Exception("No file");
 		} catch (Exception x) {

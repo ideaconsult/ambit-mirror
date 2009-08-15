@@ -13,6 +13,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
+import org.restlet.resource.InputRepresentation;
 import org.restlet.resource.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
@@ -24,6 +25,7 @@ import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
@@ -34,9 +36,11 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableFileImport;
 
 /**
- * http://opentox.org/wiki/1/Dataset
+ * Dataset resource - A set of chemical compounds and assigned features
  * 
-
+ * http://opentox.org/development/wiki/dataset
+ * 
+ * 
  * @author nina
  *
  */
@@ -123,14 +127,6 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 						 "File import",
 						new CallableFileImport(items,DatasetHTMLReporter.fileUploadField,getConnection()),
-						 /*
-						 new CallableFileUpload(items,DatasetHTMLReporter.fileUploadField) {
-							 @Override
-							public Reference createReference() {
-								return getRequest().getOriginalRef();
-							}
-						 },
-						 */
 						getRequest().getRootRef());		
 				  getResponse().setLocationRef(ref);
 				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
@@ -141,7 +137,20 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	        	  getResponse().setEntity(null);
 	          }
 		} else  {
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			if ((entity != null) && (entity.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF))) {
+				try {
+				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
+							 "File import"+entity.getDownloadName(),
+							new CallableFileImport((InputRepresentation)entity,getConnection()),
+							getRequest().getRootRef());		
+					  getResponse().setLocationRef(ref);
+					  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+					  getResponse().setEntity(null);
+				} catch (Exception x) {
+					getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+				}
+			} else
+				getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			
 		}
 		/*

@@ -105,7 +105,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 					responseHeaders.add("Pragma", "no-cache"); //HTTP 1.0
 					responseHeaders.add("Expires", "0"); //prevents caching at the proxy server
 					responseHeaders.add("Refresh",String.format("1; url=%s",task.getReference()));
-					
+					response.setLocationRef(task.getReference());
 				}
 
 				if (task != null) list.add(task);
