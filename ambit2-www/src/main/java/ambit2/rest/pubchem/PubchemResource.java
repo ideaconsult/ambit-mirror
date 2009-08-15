@@ -26,6 +26,14 @@ import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 
+/**
+ * Retrieves structure in SDF format from pubchem
+ * <br>URI /query/pubchem/{query_term}
+ * <br>
+ * REST Operation: GET  ; returns text/plain or chemical/x-mdl-sdfile
+ * @author nina
+ *
+ */
 public class PubchemResource extends Resource {
 	public static final String resource = "/query/pubchem";
 	public static final String resourceKey = "term";

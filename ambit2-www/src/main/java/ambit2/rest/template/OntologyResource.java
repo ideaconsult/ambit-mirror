@@ -21,6 +21,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
 /**
+ * 
  * A resource wrapper fot {@link QueryOntology}
  * @author nina
  *

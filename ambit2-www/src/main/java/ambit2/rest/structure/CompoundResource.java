@@ -43,8 +43,13 @@ import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 
 /**
-	/{datasetid}/compound/{idchemical}
- * Supports Content-Type:
+ * Chemical compound resource as in http://opentox.org/development/wiki/structure
+ * REST Operations:
+ * <ul>
+ * <li>GET 	 /compound/{id}
+ * </li>
+ * </ul>
+ *Content-Type:
 <pre>
 application/pdf
 text/xml
@@ -168,6 +173,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				if (key != null) {
 					collapsed = true;
 					QueryField q_by_name =  new QueryField();
+					q_by_name.setChemicalsOnly(true);
 			        try {
 			        	q_by_name.setValue(Reference.decode(key.toString()));
 			        } catch (Exception x) {

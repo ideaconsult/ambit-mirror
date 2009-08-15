@@ -9,6 +9,13 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
+/**
+ * Reports query results in text/uri-list 
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ */
 public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends QueryReporter<T,Q,Writer>  {
 	/**
 	 * 

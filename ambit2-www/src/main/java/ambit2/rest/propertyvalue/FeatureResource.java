@@ -34,7 +34,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 /**
- * http://opentox.org/wiki/opentox/Feature
+ * http://opentox.org/development/wiki/feature
 <pre>
 REST operations¶
 Description 	Method 	URI 	Parameters 	Result 	Status codes
@@ -46,7 +46,7 @@ update the value for a specific feature 	PUT 	/feature/compound/{cid}/feature_de
 update the value for a specific feature 	PUT 	/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id} 	value 	- 	200,400,404,503
 save a new feature per compound 	POST 	/feature/compound/{cid}/feature_definition/{f_def_id} 	value 	URI of feature representation 	200,404,503
 save a new feature per conformer 	POST 	/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id} 	value 	URI of feature representation 	200,404,503
-delete a feature 	DELETE 	/feature/compound/{cid}/feature_definition/{f_def_id} 	- 	- 	200,404,503 
+Not supported yet: delete a feature 	DELETE 	/feature/compound/{cid}/feature_definition/{f_def_id} 	- 	- 	200,404,503 
 </pre>
  * @author nina
  *

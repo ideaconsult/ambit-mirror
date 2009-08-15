@@ -27,6 +27,12 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 
+/**
+ * Abstract parent class for all resources that retrieve compounds/conformers from database
+ * @author nina
+ *
+ * @param <Q>
+ */
 public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructureRecord>>  
 									extends QueryResource<Q,IStructureRecord> {
 

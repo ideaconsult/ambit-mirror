@@ -29,7 +29,13 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 
-
+/**
+ * Abstract parent class for all resources , which retrieves something from the database
+ * @author nina
+ *
+ * @param <Q>
+ * @param <T>
+ */
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
 	

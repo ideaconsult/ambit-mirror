@@ -9,13 +9,19 @@ import org.restlet.resource.Representation;
 
 import ambit2.base.processors.Reporter;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.pdf.PdfWriter;
 
-
+/**
+ * Converts query results to PDF
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ * @param <R>
+ */
 public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Document>>  extends 
 				RepresentationConvertor<T,Q,Document,R> {
 

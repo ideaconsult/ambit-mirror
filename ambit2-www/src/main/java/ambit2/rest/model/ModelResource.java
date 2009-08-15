@@ -30,7 +30,10 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
 /**
- * Model as in http://opentox.org/wiki/opentox/Model
+ * Model as in http://opentox.org/development/wiki/Model
+ * Supported REST operation:
+ * GET 	 /model<br>
+ * GET 	 /model/{id}
  * @author nina
  *
  */

@@ -12,6 +12,11 @@ import org.restlet.resource.Variant;
 
 import ambit2.base.io.DownloadTool;
 
+/**
+ * favicon.ico support
+ * @author nina
+ *
+ */
 public class FavIconResource extends Resource {
 	@Override
 	public Representation represent(Variant variant) throws ResourceException {

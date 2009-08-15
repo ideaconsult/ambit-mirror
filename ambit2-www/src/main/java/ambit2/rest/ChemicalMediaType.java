@@ -3,6 +3,7 @@ package ambit2.rest;
 import org.restlet.data.MediaType;
 
 /**
+ * Chemical Media type
  * http://www.ch.ic.ac.uk/chemime/
  * @author nina
  *

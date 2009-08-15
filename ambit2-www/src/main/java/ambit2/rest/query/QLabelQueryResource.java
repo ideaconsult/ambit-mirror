@@ -19,6 +19,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.structure.CompoundResource;
 
 /**
+ * Retrieves Dataset ofcompounds, given a quality label. 
  * Resource wrapper for {@link QueryStructureByQuality}
  * @author nina
  *

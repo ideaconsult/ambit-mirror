@@ -21,6 +21,11 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.error.EmptyMoleculeException;
 
+/**
+ * Under development
+ * @author nina
+ *
+ */
 public class Build3DResource extends AlgorithmResource {
 	
 

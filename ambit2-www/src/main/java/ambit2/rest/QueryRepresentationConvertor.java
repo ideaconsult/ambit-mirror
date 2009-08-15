@@ -3,9 +3,18 @@ package ambit2.rest;
 import org.restlet.data.MediaType;
 import org.restlet.resource.Representation;
 
+import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
+/**
+ * An abstract {@link IProcessor} , converting between a query results {@link IQueryRetrieval} and restlet Representation.
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ * @param <Output>
+ */
 public abstract class QueryRepresentationConvertor<T,Q extends IQueryRetrieval<T>,Output> 
 						extends RepresentationConvertor<T,Q,Output,QueryReporter<T,Q,Output>> {
 

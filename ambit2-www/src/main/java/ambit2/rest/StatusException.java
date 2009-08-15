@@ -5,7 +5,7 @@ import org.restlet.data.Status;
 import ambit2.base.exceptions.AmbitException;
 
 /**
- * An exception, storing HTTP status code
+ * An exception, storing HTTP status code. TODO - replace by ResourceException
  * @author nina
  *
  */

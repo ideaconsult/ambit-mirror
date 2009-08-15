@@ -18,7 +18,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.dataset.DatasetsResource;
 
 /**
- * Query by smarts
+ * SMARTS search in database
  * @author nina
  *
  */

@@ -7,18 +7,20 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StatusException;
-import ambit2.rest.error.InvalidResourceIDException;
 
 /**
- * Handles /compound/{idchemical}/conformer/{idconformer}  
- * && /dataset/{datasetid}/compound/{idchemical}/conformer/{idconformer} 
- * <br>
- * Supports Content-Type:
+ * Conformer resource as in http://opentox.org/development/wiki/structure
+ * REST Operations:
+ * <ul>
+ * <li>GET /compound/{id1}/conformer/all  returns all available conformres per comound 
+ * <li>GET /compound/{id1}/conformer/{id2}  returns a single conformer
+ * </li>
+ * </ul>
+ *Content-Type:
 <pre>
 application/pdf
 text/xml

@@ -40,6 +40,13 @@ import ambit2.rest.task.CallableFileImport;
  * 
  * http://opentox.org/development/wiki/dataset
  * 
+ * Supported operations:
+ * <ul>
+ * <li>GET /dataset  ; returns text/uri-list or text/xml or text/html
+ * <li>POST /dataset ; accepts chemical/x-mdl-sdfile or multipart/form-data (SDF,mol, txt, csv, xls,all formats supported in Ambit)
+ * <li>GET 	 /dataset/{id}  ; returns text/uri-list or text/xml
+ * <li>PUT and DELETE not yet supported
+ * </ul>
  * 
  * @author nina
  *

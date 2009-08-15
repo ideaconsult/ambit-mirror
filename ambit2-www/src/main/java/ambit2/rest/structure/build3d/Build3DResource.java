@@ -27,6 +27,11 @@ import ambit2.core.io.MDLWriter;
 import ambit2.mopac.MopacShell;
 import ambit2.rest.ChemicalMediaType;
 
+/**
+ * Builds 3d representation, given a smiles; doesn't yet work on unix
+ * @author nina
+ *
+ */
 public class Build3DResource extends Resource {
 	protected static String delim = null;	
 	protected String smiles = null;

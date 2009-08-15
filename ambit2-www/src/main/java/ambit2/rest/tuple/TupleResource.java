@@ -26,6 +26,7 @@ import ambit2.rest.structure.ConformerResource;
 
 /**
  * Returns available tuples id for a given compound and dataset 
+ * GET /compound/{id}/tuple  returns uri-list
  * @author nina
  *
  */
