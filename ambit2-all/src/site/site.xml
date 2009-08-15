@@ -33,10 +33,12 @@
 
 
   </body>
-  <publishDate position="navigation-bottom" format="MM-dd-yy"/>
   <poweredBy>
-    <logo name="Maven" href="http://maven.apache.org/"
-          img="http://maven.apache.org/images/logos/maven-feather.png"/>
+    <logo name="SourceForge" href="http://sourceforge.net/projects/ambit"
+          img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12"/>
   </poweredBy>
+    
+  <publishDate position="navigation-bottom" format="MM-dd-yy"/>
+
 
 </project>
