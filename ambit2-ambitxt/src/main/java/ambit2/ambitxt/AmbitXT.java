@@ -45,6 +45,7 @@ import org.jdesktop.swingx.plaf.basic.BasicTaskPaneContainerUI;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
 
 import ambit2.base.config.Preferences;
+import ambit2.core.smiles.OpenBabelShell;
 import ambit2.mopac.MopacShell;
 import ambit2.ui.editors.PreferencesPanel;
 
@@ -60,7 +61,14 @@ public class AmbitXT extends NPluginsApplication {
 			MopacShell mopac = new MopacShell();
 			//Name2StructureProcessor p = new Name2StructureProcessor();
 			mopac.process(null);
+
 		} catch (Throwable x) {
+			
+		}
+		try {
+			OpenBabelShell b = new OpenBabelShell();
+			b.process("C");
+		} catch (Exception x) {
 			
 		}
 		leftPanel.setTitle("Workflow");
