@@ -45,6 +45,11 @@
     	<type>jar</type>
 
     </dependency>
+    <dependency>
+    	<groupId>com.sun.xml.stream</groupId>
+    	<artifactId>sjsxp</artifactId>
+    	<version>1.0.1</version>
+    </dependency>
   </dependencies>
 <licenses>
   <license>

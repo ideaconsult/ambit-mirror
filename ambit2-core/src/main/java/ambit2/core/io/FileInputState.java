@@ -36,9 +36,11 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int HIN_INDEX = 8;
 	public transient static final int PDB_INDEX = 9;
 	public transient static final int XLS_INDEX = 10;	
-	public transient static final int EURAS_INDEX = 11;	
+	public transient static final int EURAS_INDEX = 11;
+	public transient static final int ECHAXML_INDEX = 12;	
 	
-	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls"};
+	//TODO support for .xlsx 
+	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls",".xml"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -52,6 +54,7 @@ public class FileInputState extends FileState implements IInputState {
 		"PDB files (*.pdb)",
 		"Microsoft Office Excel file (*.xls)",
 		"EURAS Excel file with BCF data (*.xls)",
+		"ECHA preregistration list XML format (*.xml)"
 		};	
 	public FileInputState() {
 		super();
@@ -115,6 +118,8 @@ public class FileInputState extends FileState implements IInputState {
 			return new EurasBCFReader(stream,0);			
 		} else if (ext.endsWith(extensions[XLS_INDEX])) {
 			return new IteratingXLSReader(stream,0);
+		} else if (ext.endsWith(extensions[ECHAXML_INDEX])) {
+			return new ECHAPreregistrationListReader(stream);			
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
 	

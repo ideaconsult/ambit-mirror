@@ -30,6 +30,7 @@
 package ambit2.core.processors.structure;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -48,7 +49,9 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
     private static final long serialVersionUID = 1811923574213153916L;
 
     public IAtomContainer process(IStructureRecord target) throws AmbitException {
-
+    		if (target.getContent()==null) return null;
+    		if (target.getFormat()==null)
+    			throw new AmbitException("Unknown format "+target.getFormat());
             switch (MOL_TYPE.valueOf(target.getFormat())) {
             case SDF: {
             	try {
