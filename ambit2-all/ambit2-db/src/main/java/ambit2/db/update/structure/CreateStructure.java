@@ -60,9 +60,11 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 			if (getObject().getIdchemical()>0)
 				params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 			else
-				params1.add(new QueryParam<Integer>(Integer.class, null));		
-			params1.add(new QueryParam<String>(String.class, getObject().getWritableContent()));		
-			params1.add(new QueryParam<String>(String.class, getObject().getFormat()));
+				params1.add(new QueryParam<Integer>(Integer.class, null));	
+			String content = getObject().getWritableContent();
+			params1.add(new QueryParam<String>(String.class, content==null?"":content));	
+			String format = getObject().getFormat();
+			params1.add(new QueryParam<String>(String.class, format==null?"SDF":format));
 			return params1;
 		}
 		
