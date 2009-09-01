@@ -106,8 +106,9 @@ public abstract class DbUnitTest {
 		  
         Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:"+port +"/"+db, user,pass);
-	        
+                String.format("jdbc:mysql://localhost:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8",port,db)
+                , user,pass);
+//SET NAMES utf8	        
 	   return new DatabaseConnection(jdbcConnection);
 	}	
 	protected IDatabaseConnection getConnection() throws Exception {
