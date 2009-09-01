@@ -21,6 +21,13 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	 * 
 	 */
 	private static final long serialVersionUID = -4566136103208284105L;
+	protected String delimiter = "";
+	public String getDelimiter() {
+		return delimiter;
+	}
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}	
 	protected Reference baseReference;
 	public Reference getBaseReference() {
 		return baseReference;

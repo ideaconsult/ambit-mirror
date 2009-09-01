@@ -131,7 +131,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(11,table.getRowCount());
+		Assert.assertEquals(12,table.getRowCount());
 		c.close();
 		
 	}	

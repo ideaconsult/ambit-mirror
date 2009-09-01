@@ -74,11 +74,23 @@ public class CompoundResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseCML(String uri, MediaType media, InputStream in)
 			throws Exception {
+		/*
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			count++;
+		}
+		return count ==2;
+		*/
+
 		IMolecule mol = MoleculeTools.readCMLMolecule(new InputStreamReader(in));
 		Assert.assertNotNull(mol);
 		Assert.assertEquals(3,mol.getAtomCount());
 		Assert.assertEquals(0,mol.getBondCount());
 		return true;
+
 	}
 	@Test
 	public void testSDF() throws Exception {

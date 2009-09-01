@@ -150,8 +150,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 							getURIReporter()),
 					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+			QueryURIReporter r = (QueryURIReporter)getURIReporter();
+			r.setDelimiter("\n");
 			return new StringConvertor(
-					getURIReporter(),MediaType.TEXT_URI_LIST);
+					r,MediaType.TEXT_URI_LIST);
 						
 		} else
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(

@@ -1,8 +1,5 @@
 package ambit2.rest.structure;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
@@ -37,6 +34,6 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	@Override
 	public String getURI(String ref, IStructureRecord item) {
 	
-		return String.format("%s%s/%d",ref,CompoundResource.compound,item.getIdchemical());
+		return String.format("%s%s/%d%s",ref,CompoundResource.compound,item.getIdchemical(),delimiter);
 	}
 }	
