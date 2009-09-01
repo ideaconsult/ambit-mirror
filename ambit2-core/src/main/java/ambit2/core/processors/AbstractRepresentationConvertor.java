@@ -1,8 +1,20 @@
 package ambit2.core.processors;
 
+import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.Reporter;
 
+/**
+ * An abstract {@link IProcessor} , converting between arbitrary Content and arbitrary Representation.
+ * @author nina
+ *
+ * @param <Item>
+ * @param <Content>
+ * @param <Output>
+ * @param <R>
+ * @param <Media>
+ * @param <ItemReporter>
+ */
 public abstract class AbstractRepresentationConvertor<Item,Content,Output,R,Media,ItemReporter extends Reporter<Content,Output>> 
 														extends DefaultAmbitProcessor<Content,R> {
 
