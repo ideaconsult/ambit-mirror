@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.restlet.data.CharacterSet;
+import org.restlet.data.Language;
 import org.restlet.data.MediaType;
 import org.restlet.resource.Representation;
 import org.restlet.resource.StringRepresentation;
@@ -39,7 +41,8 @@ public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends Repres
 			reporter.setOutput(new StringWriter());
 			Writer writer = reporter.process(query);
 			writer.flush();
-			return new StringRepresentation(writer.toString(),getMediaType());
+			return new StringRepresentation(writer.toString(),getMediaType(),
+					Language.ENGLISH,CharacterSet.UTF_8);
 		} catch (IOException x) {
 			throw new AmbitException(x);
 		}

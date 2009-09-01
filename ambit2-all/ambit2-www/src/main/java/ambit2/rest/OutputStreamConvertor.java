@@ -30,7 +30,7 @@ public class OutputStreamConvertor<T,Q extends IQueryRetrieval<T>>  extends Quer
 	            public void write(OutputStream stream) throws IOException {
             		OutputStreamWriter writer = null;          	
 	            	try {
-	            		writer = new OutputStreamWriter(stream);	  
+	            		writer = new OutputStreamWriter(stream,"UTF-8");	  
 	            		getReporter().setOutput(writer);
 	            		getReporter().process(query);
 	            		//writer.flush();

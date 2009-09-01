@@ -17,7 +17,6 @@ import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.structure.CompoundResource;
@@ -29,13 +28,13 @@ public class AmbitResource extends Resource {
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
 	protected String[][] uri = {
 			
-			{"http://opentox.org/development/wiki/structure","Chemical compounds",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/structure","Chemical compounds",formatHeader,null,"Implemented"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s",CompoundResource.compound),"create a new chemical compound",format,"POST","No"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Update the representation of chemical compound",format,"PUT","No"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Remove chemical compound",format,"DELETE","No"},
 
-			{"http://opentox.org/development/wiki/structure","Conformers",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/structure","Conformers",formatHeader,null,"Implemented"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"update the representation of a structure",format,"PUT","No"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100)," Remove structure",format,"DELETE","No"},
@@ -43,17 +42,17 @@ public class AmbitResource extends Resource {
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"create a new structure",format,"POST","No"},
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"Remove conformers",format,"DELETE","No"},
 
-			{"http://opentox.org/development/wiki/feature","Feature definitions",formatHeader,null},
+			{"http://opentox.org/dev/apis/feature","Feature definitions",formatHeader,null},
 			{PropertyResource.featuredef,"Retrieve all feature definitions",format,"GET","Yes"},
 			{PropertyResource.featuredef+"/12142","Get description of a specific feature definition",format,"GET","Yes"},
 			{PropertyResource.featuredef,"Create a new feature definition",format,"POST","Yes"},
 			
-			{"http://opentox.org/development/wiki/structure","Feature definitions per compound/conformer",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/structure","Feature definitions per compound/conformer",formatHeader,null,"Implemented"},
 			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All feature definitions, available for a compound",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
 			
-			{"http://opentox.org/development/wiki/dataset","Dataset",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/dataset","Dataset",formatHeader,null,"Implemented"},
 			{DatasetsResource.datasets,"get list of datasets available",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/8","get dataset",format,"GET","Yes"},
 			{DatasetsResource.datasets,"create a new dataset",format,"POST","Yes"},
@@ -61,7 +60,7 @@ public class AmbitResource extends Resource {
 			{"/dataset/{id}","remove dataset",format,"DELETE","No"},
 			
 			
-			{"http://opentox.org/development/wiki/dataset","Chemical compounds in a dataset",formatHeader,null,"Implemented"},			
+			{"http://opentox.org/dev/apis/dataset","Chemical compounds in a dataset",formatHeader,null,"Implemented"},			
 			{DatasetsResource.datasets+"/8/compound","get compounds",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/8/compound/413","get compound",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/{id}/compound","add compound",format,"POST","No"},
@@ -69,7 +68,7 @@ public class AmbitResource extends Resource {
 			{DatasetsResource.datasets+"/{id}/compound/{cid}","remove compound from a dataset",format,"DELETE","No"},
 			{DatasetsResource.datasets+"/{id}/compound","remove all compounds in a dataset",format,"DELETE","No"},
 
-			{"http://opentox.org/development/wiki/dataset","Conformers in a dataset",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/dataset","Conformers in a dataset",formatHeader,null,"Implemented"},
 			{DatasetsResource.datasets+"/8/compound/413/conformer/all","get conformers",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/8/compound/413/conformer/100617","get conformer",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/{id}/compound/{cid}","add conformer",format,"POST","No"},
@@ -84,16 +83,16 @@ public class AmbitResource extends Resource {
 			{DatasetsResource.datasets+"/{id}/feature_definition/{fdid}","update feature definition",format,"PUT","No"},
 			{DatasetsResource.datasets+"/{id}/feature_definition/{fdid}","remove feature_definition",format,"DELETE","No"},
 
-			{"http://opentox.org/development/wiki/dataset","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/dataset","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
 			{"?","?",format,"?","No"},
 
-			{"http://opentox.org/development/wiki/feature","References",formatHeader,null},
+			{"http://opentox.org/dev/apis/feature","References",formatHeader,null},
 			{ReferenceResource.reference,"read all references",format,"GET","Yes"},
 			{ReferenceResource.reference+"/11845","read information on a specific reference",format,"GET","Yes"},
 			{ReferenceResource.reference,"create a new referenc",format,"POST","Yes"},
 			{ReferenceResource.reference+"/11845","update information on a specific reference",format,"PUT","No"},
 			
-			{"http://opentox.org/development/wiki/feature","Features",formatHeader,null},
+			{"http://opentox.org/dev/apis/feature","Features",formatHeader,null},
 			{"/feature/compound/1/feature_definition/1","get the value for a specific feature",format,"GET","Yes"},
 			{"/feature/compound/1/feature_definition","get values for all features ",format,"GET","No"},
 			{"/feature/dataset/1/feature_definition/1","get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
@@ -112,7 +111,7 @@ public class AmbitResource extends Resource {
 			{"/compound/1/tuple/264168","Specific feature tuple",format,"GET","Yes"},
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
 			
-			{"http://opentox.org/development/wiki/Algorithms","Algorithms",formatHeader,null},
+			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
 			{AlgorithmResource.algorithm,"All types of algorithms",format,"GET","Yes"},
 			{String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.algorithmtypes.descriptorcalculation.toString()),"Descriptor calculation algorithms",format,"GET","Under development"},
 			{String.format("%s/%s",AlgorithmResource.algorithm,"preprocessing"),"Feature preprocessing",format,"GET","Under development"},
@@ -120,14 +119,14 @@ public class AmbitResource extends Resource {
 			{String.format("%s/%s",AlgorithmResource.algorithm,"clustering"),"Clustering algorithms",format,"GET","Under development"},
 			{String.format("%s/%s",AlgorithmResource.algorithm,"util"),"Utility algorithms",format,"GET","Under development"},
 			
-			{"http://opentox.org/development/wiki/Models","Models",formatHeader,null},
+			{"http://opentox.org/dev/apis/Models","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
 			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Test implementation only"},
 					
 
-			{"http://opentox.org/development/wiki/feature-ontology","Feature ontology (PROPOSAL)",formatHeader,null},
+			{"http://opentox.org/dev/apis/feature-ontology","Feature ontology (PROPOSAL)",formatHeader,null},
 			{"/template/Endpoints","Hierarchical view of endpoints",format,"GET","Yes"},
 			{"/template/Descriptors","Hierarchical view of descriptors",format,"GET","Yes"},
 			{"/template/Dataset","Hierarchical view of features in datasets",format,"GET","Yes"},
@@ -149,7 +148,7 @@ public class AmbitResource extends Resource {
 			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search, to be refactored",format,"GET","Yes"},
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			
-			{"http://opentox.org/development/wiki/dataset","Search results as datasets; remap into Datasets",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/dataset","Search results as datasets; remap into Datasets",formatHeader,null,"Implemented"},
 			{"/query/results/1","Display previous search results",format,"GET","Yes"},
 			{"/query/results","Save a search result",format,"POST","Under development"},
 			{"/query/results/{id}","Delete a search result",format,"DELETE","Under development"},
@@ -232,7 +231,7 @@ public class AmbitResource extends Resource {
 				writeHTMLHeader(writer, "AMBIT", getRequest().getRootRef());
 				writer.write("<table border='0'>");
 				writer.write(String.format("<tr align='center'><th colspan='4'>%s</th></tr>",
-						"Services listed below are an initial implementation of <a href=\"http://opentox.org/development/wiki\" target=\"blank\">OpenTox REST API</a>"+
+						"Services listed below are an initial implementation of <a href=\"http://opentox.org/dev/apis\" target=\"blank\">OpenTox REST API</a>"+
 						"<h6>All services support MIME types text/xml, text/html, text/uri-list on GET; services providing chemical structures support Chemical MIME types as well</h6>"));
 				
 				for (String[] s:uri) {
@@ -282,6 +281,8 @@ public class AmbitResource extends Resource {
 			);
 		w.write(String.format("<html><head><title>%s</title>%s\n",title,meta));
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
+		w.write("<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,FOLLOW\">");
+		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		w.write("</head>\n");
 		w.write("<body>\n");
 		w.write("<div style= \"width: 100%; background-color: #516373;");

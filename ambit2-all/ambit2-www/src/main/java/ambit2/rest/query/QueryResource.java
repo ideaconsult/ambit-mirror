@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.restlet.Context;
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -68,6 +69,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			        	if (reporter instanceof IDBProcessor)
 			        		((IDBProcessor)reporter).setConnection(connection);
 			        	Representation r = convertor.process(query);
+			        	r.setCharacterSet(CharacterSet.UTF_8);
 			        	return r;
 		        	} catch (StatusException x) {
 		    			getResponse().setStatus(x.getStatus());
