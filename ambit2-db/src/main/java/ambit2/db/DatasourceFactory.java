@@ -150,6 +150,7 @@ public class DatasourceFactory {
             b.append("password").append(eqmark).append(password);
         }
         b.append(amark);
+        b.append("&useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8");
        // b.append("[validationQuery]=[SELECT 1]");
         return b.toString();
     }
@@ -200,7 +201,7 @@ class DataSourceAndPool {
 	public ObjectPool getPool() {
 		return poolableConnectionFactory.getPool();
 	}
-	
+
 	public DataSourceAndPool(String connectURI)  throws Exception {
         Class.forName("com.mysql.jdbc.Driver");
         //
@@ -233,7 +234,12 @@ class DataSourceAndPool {
         jdbcProperties.setProperty("removeAbandoned", "true");
         jdbcProperties.setProperty("removeAbandonedTimeout", "300");
         jdbcProperties.setProperty("logAbandoned", "true");
-
+        /*
+        If you enable "useUsageAdvisor=true", the driver will log where in your application
+        results and statements were created that were never closed once the connection closes (as
+        long as you haven't enabled "dontTrackOpenResources", that is).
+        */
+        //jdbcProperties.setProperty("useUsageAdvisor", "true");
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(connectURI,jdbcProperties);		
         //
         // Now we'll create the PoolableConnectionFactory, which wraps
