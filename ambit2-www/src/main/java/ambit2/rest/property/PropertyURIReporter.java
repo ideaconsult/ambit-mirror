@@ -27,7 +27,7 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	
 	@Override
 	public String getURI(String ref, Property item) {
-		return String.format("%s%s/%d",ref,PropertyResource.featuredef,item.getId());
+		return String.format("%s%s/%d%s",ref,PropertyResource.featuredef,item.getId(),getDelimiter());
 	}
 
 }
