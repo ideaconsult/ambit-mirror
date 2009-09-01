@@ -12,6 +12,14 @@ import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 
+/**
+ * Executes a query {@link IQueryRetrieval} and reports the results via {@link Reporter} interface
+ * @author nina
+ *
+ * @param <T>
+ * @param <Q>
+ * @param <Output>
+ */
 public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output> 
 						extends AbstractDBProcessor<Q,Output>
 						implements Reporter<Q,Output> {
