@@ -80,7 +80,7 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id from property_values \n"+
 		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where idchemical=? %s ";
+		"where idchemical=? %s order by label limit 1";
 				
 	/*
 		"select idstructure,idproperty,ifnull(text,value) as value_string,value_num,1,name as idtype from property_values join structure using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty) where idchemical=7435 and comments="Names"
