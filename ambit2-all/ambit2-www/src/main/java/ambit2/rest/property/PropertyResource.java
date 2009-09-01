@@ -94,15 +94,9 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new PropertyDOMReporter(getRequest().getRootRef()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new PropertyURIReporter(getRequest().getRootRef()) {
-					@Override
-					public void processItem(Property dataset, Writer output) {
-						super.processItem(dataset, output);
-						try {
-						output.write('\n');
-						} catch (Exception x) {}
-					}
-				},MediaType.TEXT_URI_LIST);
+				PropertyURIReporter r = new PropertyURIReporter(getRequest().getRootRef());
+				r.setDelimiter("\n");
+				return new StringConvertor(r,MediaType.TEXT_URI_LIST);
 				
 		} else 
 			return new OutputStreamConvertor(
