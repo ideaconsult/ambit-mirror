@@ -26,8 +26,8 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	}
 
 	public String getURI(String ref, IStructureRecord item) {
-		return String.format("%s%s/%d%s/%d",
+		return String.format("%s%s/%d%s/%d%s",
 				ref,
-				CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure());
+				CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure(),getDelimiter());
 	}	
 }
