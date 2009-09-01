@@ -12,13 +12,14 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.db.search.StringCondition;
 
 /**
  * Retrieve {@link SourceDataset} by id
  * @author nina
  *
  */
-public class ReadDataset extends AbstractQuery<String,SourceDataset,EQCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
+public class ReadDataset extends AbstractQuery<String,SourceDataset,StringCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
 	public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url FROM src_dataset join catalog_references using(idreference) %s order by name";
 	/**
 	 * 
@@ -36,12 +37,18 @@ public class ReadDataset extends AbstractQuery<String,SourceDataset,EQCondition,
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue()==null) return null;	
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class,getValue().getId()));
+		if (getValue().getId()>0)
+			params.add(new QueryParam<Integer>(Integer.class,getValue().getId()));
+		else
+			params.add(new QueryParam<String>(String.class,getValue().getName()));
 		return params;
 	}
 
 	public String getSQL() throws AmbitException {
-		return String.format(select_datasets,getValue()==null?"":"where id_srcdataset=?");
+		return String.format(select_datasets,
+				getValue()==null?
+					"":
+					getValue().getId()>0?"where id_srcdataset=?":"where name=?");
 	}
 
 	public SourceDataset getObject(ResultSet rs) throws AmbitException {
