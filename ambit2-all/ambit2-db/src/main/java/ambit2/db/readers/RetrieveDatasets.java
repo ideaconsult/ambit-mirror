@@ -10,7 +10,6 @@ import ambit2.db.SourceDataset;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.StringCondition.STRING_CONDITION;
 import ambit2.db.update.dataset.ReadDataset;
 
 public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDataset,StringCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
