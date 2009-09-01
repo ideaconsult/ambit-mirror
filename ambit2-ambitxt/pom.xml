@@ -196,6 +196,13 @@ AMBIT XT introduces the concept of workflows, allowing guiding the users step by
     	<version>2.0.0-SNAPSHOT</version>
     	<scope>compile</scope>
     	<type>jar</type>
+    </dependency>
+    <dependency>
+    	<groupId>toxtree</groupId>
+    	<artifactId>toxtree-kroes</artifactId>
+    	<version>2.0.0-SNAPSHOT</version>
+    	<scope>compile</scope>
+    	<type>jar</type>    	
     </dependency>    
   </dependencies>
   
