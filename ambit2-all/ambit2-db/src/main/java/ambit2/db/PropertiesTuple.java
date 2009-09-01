@@ -24,4 +24,10 @@ public class PropertiesTuple {
 	public void setDataset(SourceDataset dataset) {
 		this.dataset = dataset;
 	}
+	
+	@Override
+	public String toString() {
+		//return dataset!=null?dataset.toString():Integer.toString(getId());
+		return String.format("Tuple %d", getId());
+	}
 }
