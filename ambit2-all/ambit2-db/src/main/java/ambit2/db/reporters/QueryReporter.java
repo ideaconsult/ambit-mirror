@@ -31,7 +31,21 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	protected Output output = null;	
 	protected int maxRecords = 0;
 	protected AbstractBatchProcessor batch;
-	
+	protected boolean showHeader = true;
+	public boolean isShowHeader() {
+		return showHeader;
+	}
+	public void setShowHeader(boolean showHeader) {
+		this.showHeader = showHeader;
+	}
+	public boolean isShowFooter() {
+		return showFooter;
+	}
+	public void setShowFooter(boolean showFooter) {
+		this.showFooter = showFooter;
+	}
+
+	protected boolean showFooter = true;
 	public int getMaxRecords() {
 		return maxRecords;
 	}
@@ -75,7 +89,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	
 	public Output process(Q query) throws AmbitException {
 		output = getOutput();
-		header(output,query);
+		if (isShowHeader()) header(output,query);
 
 		batch = createBatch();
 		try {
@@ -91,7 +105,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		} catch (Exception x ) {
 			throw new AmbitException(x);
 		} finally {
-			footer(output, query);
+			if (isShowFooter()) footer(output, query);
 			try {batch.close();} catch (Exception x) {}
 			try {connection.close();} catch (Exception x) {}
 		}
