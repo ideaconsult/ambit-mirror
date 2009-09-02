@@ -5,14 +5,11 @@ import java.io.Writer;
 
 import org.restlet.data.Reference;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
-import ambit2.db.search.property.ValuesReader;
 
 /**
  * Generates HTML representation of a resource
