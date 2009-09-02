@@ -5,11 +5,11 @@
           schema_version CDATA  #FIXED "1.0"
           version CDATA  #FIXED "1.2"
           name CDATA #FIXED "(Q)SAR Model Reporting Format"
-          author CDATA #FIXED "European Chemicals Bureau"
+          author CDATA #FIXED "Joint Research Centre, European Commission"
           date CDATA #FIXED "July 2007"
           contact CDATA #FIXED "Joint Research Centre, European Commission"
           email CDATA #FIXED "qsardb@jrc.it"
-          url CDATA #FIXED "http://ecb.jrc.it/QSAR/"
+          url CDATA #FIXED "http://ecb.jrc.ec.europa.eu/qsar/"
           >
 
 
