@@ -91,7 +91,10 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 				
 				return b.toString().replace("$$$$",String.format("\n> <CAS>\n%s\n\n$$$$",target)).trim();
 				
-
+			} catch (FileNotFoundException x) {
+				throw x;
+			} catch (AmbitException x) {
+				throw x;
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}
