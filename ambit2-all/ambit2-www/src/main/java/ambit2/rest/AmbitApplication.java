@@ -33,6 +33,7 @@ import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
+import ambit2.rest.app.SimplePredictionApp;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
@@ -122,8 +123,10 @@ public class AmbitApplication extends Application {
 	@Override
 	public Restlet createRoot() {
 		Router router = new Router(this.getContext());
+		router.attach("/help", AmbitResource.class);
 		router.attach("/", AmbitResource.class);
-		router.attach("", AmbitResource.class);
+		router.attach("", AmbitResource.class);	
+		router.attach("/demo", SimplePredictionApp.class);
 		
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
@@ -171,6 +174,8 @@ public class AmbitApplication extends Application {
 
 		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
 		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
+		
+		router.attach(PropertyValueResource.compoundFeature,PropertyValueResource.class);
 		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
 		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
 
