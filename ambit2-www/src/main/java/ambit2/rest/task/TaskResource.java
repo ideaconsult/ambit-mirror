@@ -54,8 +54,8 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 	
 	public TaskResource(Context context, Request request, Response response) {
 		super(context, request, response);
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));			
+		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
+		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
 	}
 
 	@Override
