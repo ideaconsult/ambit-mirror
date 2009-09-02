@@ -80,7 +80,7 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id from property_values \n"+
 		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where idchemical=? %s order by label limit 1";
+		"where idchemical=? %s group by comments,idvalue_string";
 				
 	/*
 		"select idstructure,idproperty,ifnull(text,value) as value_string,value_num,1,name as idtype from property_values join structure using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty) where idchemical=7435 and comments="Names"
@@ -97,14 +97,15 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	public String getSQL() throws AmbitException {
 		return String.format(
 				isChemicalsOnly()?sql_chemical:sql_structure,
-				"".equals(getFieldname())?"":String.format(where,searchMode.getSQL())		
+				(getFieldname()==null || "".equals(getFieldname()))
+				?"":String.format(where,searchMode.getSQL())		
 				);
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
-
+		if (getFieldname()!=null)
 		switch (searchMode) {
 		case alias: {
 			params.add(new QueryParam<String>(String.class, getFieldname().getLabel()));	
