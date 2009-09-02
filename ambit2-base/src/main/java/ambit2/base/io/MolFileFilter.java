@@ -41,14 +41,14 @@ import javax.swing.filechooser.FileFilter;
 public class MolFileFilter extends FileFilter {
     public final static String[] supported_extensions={
 		".sdf",".csv",".txt",".mol",".mol2",
-		".smi",".cml",".hin",".ichi",".inchi",".pdb",".xyz",".xls",".xls" };
+		".smi",".cml",".hin",".ichi",".inchi",".pdb",".xyz",".xls",".xls",".xml" };
     public final static String[] supported_exts_description={
 		"SDF files (*.sdf)","Comma delimited (*.csv)","Text files (*.txt)",
 		"MOL files (*.mol)","MOL2 files (*.mol2)",
 		"SMILES files (*.smi)","CML files (*.cml)","HIN files (*.hin)",
 		"ICHI files (*.ichi)","INChI files (*.inchi)","PDB files (*.pdb)","XYZ files (*.xyz)" ,
 		"Microsoft Office Excel file (*.xls)",
-		"EURAS Excel file with BCF data (*.xls)"};
+		"EURAS Excel file with BCF data (*.xls)","ECHA preregistration list XML format (*.xml)"};
     /*
     public final static String[] toxTree_ext={".tree",".tresult",".rules"};
     public final static String[] toxTree_ext_descr={"Decision tree files (*.tree)","ToxTree result files (*.tresult)","ToxTree rules (*.rules)"};
