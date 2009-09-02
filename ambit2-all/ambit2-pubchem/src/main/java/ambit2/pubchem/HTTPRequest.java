@@ -41,6 +41,13 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	 * 
 	 */
 	private static final long serialVersionUID = -3444405772335211466L;
+	protected int timeout = 60000;
+	public int getTimeout() {
+		return timeout;
+	}
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
 	protected int maxretry = 6;
 	protected String url;
 	protected String httpMethod = "POST";
@@ -67,8 +74,11 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	                HttpURLConnection hc = ((HttpURLConnection)connection);
 	                //System.out.println(hc.getConnectTimeout());
 	                //System.out.println(hc.getReadTimeout());
+	                hc.setReadTimeout(timeout);
+	                hc.setConnectTimeout(timeout);
 	                hc.setRequestMethod(httpMethod);
 	                hc.setDoOutput(true);
+	                
 	                prepareOutput(target, hc.getOutputStream());
 	                InputStream in = hc.getInputStream();
 	                Result result =  parseInput(target, hc.getInputStream());

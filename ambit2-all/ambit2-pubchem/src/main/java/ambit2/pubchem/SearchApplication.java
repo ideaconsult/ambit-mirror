@@ -17,8 +17,13 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
 
 public class SearchApplication {
+	protected int timeout=60000;
+	public void setTimeout(int ms) {
+		timeout = ms;
+	}
 	public void processCactus(String file,String query,NCISearchProcessor.METHODS output,long wait,String host) {
 		NCISearchProcessor p = new NCISearchProcessor();
+		p.setTimeout(timeout);
 		if (host != null) p.setHost(host);
 		p.setWait_ms(wait);
 		if (file != null) {
@@ -67,6 +72,7 @@ public class SearchApplication {
 	    String source=null;
 	    String einecs=null;
 	    String file= null ;
+	    int timeout = 0;
 	    long wait = 0;
 	    boolean retrieve_sdf = true;
 	    boolean retrieve_conformers = true; 
@@ -74,12 +80,14 @@ public class SearchApplication {
 		CommandLineParser parser = new PosixParser();
 		try {
 		    CommandLine line = parser.parse( cli, args,false );
+		    timeout = getTimeout(line);
 		    file = getFile(line);		    
 		    query = getQuery(line);
 		    output = getOutput(line);
 		    wait = getWait(line);
 		    if (output!=null) {
 		    	SearchApplication app = new SearchApplication();
+		    	app.setTimeout(timeout);
 		    	app.processCactus(file,query,output,wait,getHost(line));
 		    	Runtime.getRuntime().exit(0);	
 		    }
@@ -113,6 +121,7 @@ public class SearchApplication {
                 	options.setTerm(einecs.trim(),source);
         			try {
         				EntrezSearchProcessor test = new EntrezSearchProcessor();
+        				test.setTimeout(timeout);
         				test.setRetrieve_sdf(retrieve_sdf);
         				test.setRetrieve_conformers(retrieve_conformers);
         				List<IStructureRecord> records = test.process(options.getTerm());
@@ -136,6 +145,7 @@ public class SearchApplication {
 			options.setTerm(einecs,source);
 			try {
 				EntrezSearchProcessor test = new EntrezSearchProcessor();
+				test.setTimeout(timeout);
 				test.setRetrieve_sdf(retrieve_sdf);
 				test.setRetrieve_conformers(retrieve_conformers);
 				List<IStructureRecord> records = test.process(options.getTerm());
@@ -185,6 +195,13 @@ public class SearchApplication {
 	    	} catch (Exception x) {return 0;}
 	    else return 0;
  }      
+   protected static int getTimeout(CommandLine line) {
+	    if( line.hasOption( 't' ) ) 
+	    	try {
+	    	return Integer.parseInt(line.getOptionValue( 't' ));
+	    	} catch (Exception x) {return 0;}
+	    else return 60000;
+}  
    protected static String getHost(CommandLine line) {
 	    if( line.hasOption( 'u' ) ) 
 	    	try {
@@ -274,6 +291,12 @@ public class SearchApplication {
         .withDescription("Waiting interval (ms) between subsequent queries (cactus.nci.nih.gov) default 0")              
         .create( "w" );    
     	
+    	Option timeout   = OptionBuilder
+        .hasArg()    	
+        .withLongOpt("timeout, ms")
+        .withArgName("timeout, ms")
+        .withDescription("HTTP connection timeout, ms")              
+        .create( "t" );        	
 
     	
     	Option host   = OptionBuilder
@@ -291,6 +314,7 @@ public class SearchApplication {
      	options.addOption(output);
      	options.addOption(wait);
      	options.addOption(host);
+     	options.addOption(timeout);
 
     	return options;
     }	   
