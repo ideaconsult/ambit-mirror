@@ -3,10 +3,13 @@ package ambit2.pubchem.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ambit2.pubchem.FileNotFoundException;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.pubchem.SearchApplication;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
@@ -29,6 +32,17 @@ public class NCISearchProcessorTest {
 		processor.setOption(METHODS.sdf);
 		System.out.println(processor.process("50-00-0"));
 	}
+	
+	@Test
+	public void testSDFNotAvailable() throws Exception {
+		try {
+			processor.setOption(METHODS.sdf);
+			System.out.println(processor.process("20827-47-8"));
+			Assert.assertTrue(false);
+		} catch (FileNotFoundException x) {
+			Assert.assertTrue(true);
+		}
+	}	
 	@Test	
 	public void test() throws Exception {
 		List<String> ids = new ArrayList<String>();
