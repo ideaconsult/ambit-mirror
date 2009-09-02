@@ -131,24 +131,28 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	          RestletFileUpload upload = new RestletFileUpload(factory);
 	          try {
 	              List<FileItem> items = upload.parseRequest(getRequest());
+	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
+	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest().getRootRef());
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 						 "File import",
-						new CallableFileImport(items,DatasetHTMLReporter.fileUploadField,getConnection()),
+						new CallableFileImport(items,DatasetHTMLReporter.fileUploadField,getConnection(),reporter),
 						getRequest().getRootRef());		
 				  getResponse().setLocationRef(ref);
 				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 				  getResponse().setEntity(null);
-				  System.out.println(ref);
+				  
 	          } catch (Exception x) {
 	        	  getResponse().setStatus(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage()));
 	        	  getResponse().setEntity(null);
 	          }
 		} else  {
-			if ((entity != null) && (entity.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF))) {
+			if ((entity != null) && (ChemicalMediaType.CHEMICAL_MDLSDF.equals(entity.getMediaType()))) {
 				try {
+		          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
+		            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest().getRootRef());					
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 							 "File import"+entity.getDownloadName(),
-							new CallableFileImport((InputRepresentation)entity,getConnection()),
+							new CallableFileImport((InputRepresentation)entity,getConnection(),reporter),
 							getRequest().getRootRef());		
 					  getResponse().setLocationRef(ref);
 					  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
@@ -157,7 +161,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 					getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
 				}
 			} else
-				getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			
 		}
 		/*
