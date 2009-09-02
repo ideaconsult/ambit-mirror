@@ -29,6 +29,7 @@ import ambit2.rest.structure.ConformerResource;
 
 public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
 	public static final String featureKey = "/feature";
+	public static final String compoundFeature = String.format("%s/feature",CompoundResource.compoundID);
 	public static final String compoundFeatureName = String.format("%s/feature/{name}",CompoundResource.compoundID);
 	public static final String conformerFeatureName =  String.format("%s/feature/{name}",ConformerResource.conformerID);
 	
@@ -102,9 +103,12 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 			field.setValue(record);
 		}
 		try {
-			Object name = Reference.decode(request.getAttributes().get("name").toString());
-			
-			field.setFieldname(Property.getInstance(name.toString(),LiteratureEntry.getInstance()));
+			field.setFieldname(null);
+			Object name = request.getAttributes().get("name");
+			if (name != null) {
+				name = Reference.decode(name.toString());
+				field.setFieldname(Property.getInstance(name.toString(),LiteratureEntry.getInstance()));
+			} 
 		} catch (Exception x) {
 			field.setFieldname(null);
 		}

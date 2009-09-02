@@ -1,16 +1,23 @@
 package ambit2.rest.structure;
 
+import java.io.StringWriter;
 import java.io.Writer;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.openscience.cdk.CDKConstants;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.propertyvalue.PropertyValueHTMLReporter;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -24,14 +31,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	 * 
 	 */
 	private static final long serialVersionUID = -7776155843790521467L;
-
+	protected PropertyValueHTMLReporter valueReporter;
+	protected RetrieveFieldPropertyValue fieldQuery;
+	
 	public CompoundHTMLReporter(Reference reference,boolean collapsed,QueryURIReporter urireporter) {
 		super(reference,collapsed);
-		this.uriReporter = urireporter;
-
+		if (urireporter != null) this.uriReporter = urireporter;
+		valueReporter = null;
+		fieldQuery = null;
 	}
 	public CompoundHTMLReporter(Reference reference,boolean collapsed) {
-		super(reference,collapsed);
+		this(reference,collapsed,null);
 
 	}
 	@Override
@@ -117,17 +127,55 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w, w, 
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
+
+		if (getConnection()!= null) {
+			if (fieldQuery==null) {
+				fieldQuery = new RetrieveFieldPropertyValue();
+				fieldQuery.setSearchByAlias(true);
+			}
+			fieldQuery.setValue(record);
+			try {
+				String[] features = new String[] {CDKConstants.CASRN};
+				for (String feature: features) {
+					StringWriter writer = new StringWriter();
+					fieldQuery.setFieldname(Property.getInstance(feature,LiteratureEntry.getInstance()));
+					valueReporter = new PropertyValueHTMLReporter(getUriReporter().getBaseReference()) ;
+					valueReporter.setShowFooter(false);
+					valueReporter.setShowHeader(false);				
+					valueReporter.setOutput(writer);
+					valueReporter.setConnection(getConnection());
+					valueReporter.process(fieldQuery);
+					b.append("<table>");
+					b.append(writer.toString());
+					b.append("</table>");
+				}
+			} catch (Exception x) {
+				x.printStackTrace();
+			} finally {
+				try {valueReporter.setConnection(null); } catch (Exception x) {}
+			}
+		}
 		String[][] s = new String[][] {
-			{"feature",CDKConstants.CASRN},
-			{"feature",CDKConstants.NAMES},
-			{"feature_definition",null},
-			{"tuple",null}
-			};
-		for (String[] n:s)
-		b.append(String.format("%s <a href=\"%s/%s/%s\" target=\"_blank\">%s</a><br>",n[0],w,n[0],n[1]==null?"":n[1],n[1]==null?"All available":n[1]));
-		//b.append("</div>");
-		b.append("</div></div>");
+				{"feature",CDKConstants.NAMES,"Chemical name(s)"},
+				{"feature",null,"All available feature values"},
+				{"tuple",null,"Feature values by groups"},
+				{"feature_definition",null,"Feature definitions"}
+				
+		};
+			for (String[] n:s)
+			b.append(String.format("<a href=\"%s/%s/%s\" target=\"_blank\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
+			//b.append("</div>");
+			b.append("</div></div>");		
 		return b.toString();
 	}		
 
+	@Override
+	public void close() throws SQLException {
+		valueReporter.close();
+		super.close();
+	}
+	@Override
+	public void setConnection(Connection connection) throws DbAmbitException {
+		super.setConnection(connection);
+	}
 }
