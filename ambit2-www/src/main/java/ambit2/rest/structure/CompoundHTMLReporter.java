@@ -128,6 +128,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
 
+		/*
 		if (getConnection()!= null) {
 			if (fieldQuery==null) {
 				fieldQuery = new RetrieveFieldPropertyValue();
@@ -155,7 +156,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				try {valueReporter.setConnection(null); } catch (Exception x) {}
 			}
 		}
+		*/
 		String[][] s = new String[][] {
+				{"feature",CDKConstants.CASRN,"CAS RN"},
+				{"feature","EC","EINECS"},
 				{"feature",CDKConstants.NAMES,"Chemical name(s)"},
 				{"feature",null,"All available feature values"},
 				{"tuple",null,"Feature values by groups"},
