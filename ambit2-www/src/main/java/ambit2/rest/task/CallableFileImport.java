@@ -37,14 +37,26 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 
 	protected Connection connection;
 	protected CallableFileUpload upload;
-	public CallableFileImport(File file, Connection connection) {
+	
+	protected DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter;
+	public DatasetURIReporter<IQueryRetrieval<SourceDataset>> getReporter() {
+		return reporter;
+	}
+
+	public void setReporter(
+			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+		this.reporter = reporter;
+	}
+
+	public CallableFileImport(File file, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
 		this.file = file;
 		this.connection = connection;
 		upload = null;
+		this.reporter = reporter;
 	}
 	
-	public CallableFileImport(List<FileItem> items, String fileUploadField, Connection connection) {
-		this((File)null,connection);
+	public CallableFileImport(List<FileItem> items, String fileUploadField, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+		this((File)null,connection,reporter);
 		upload = new CallableFileUpload(items,fileUploadField) {
 			@Override
 			public Reference createReference() {
@@ -56,8 +68,8 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			}
 		};
 	}	
-	public CallableFileImport(InputRepresentation input,  Connection connection) {
-		this((File)null,connection);
+	public CallableFileImport(InputRepresentation input,  Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+		this((File)null,connection,reporter);
 		try {
 			File file = null;
 			if (input.getDownloadName()==null) {
@@ -116,7 +128,8 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			x.closeResults(rs);
 			x.setConnection(null);
 			if (dataset== null) throw new ResourceException(Status.SUCCESS_NO_CONTENT);
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>();
+			if (reporter == null)
+				reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>();
 			return new Reference(reporter.getURI(dataset));
 
 		} catch (Exception x) {

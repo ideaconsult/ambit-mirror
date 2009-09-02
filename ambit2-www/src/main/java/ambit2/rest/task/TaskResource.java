@@ -137,9 +137,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 				}
 			},MediaType.TEXT_URI_LIST);
 			
-		} else //html 	
-			return new StringConvertor(
-					new TaskHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
 }
