@@ -1,7 +1,5 @@
 package ambit2.core.data.model;
 
-import org.apache.poi.hssf.record.formula.functions.T;
-
 import ambit2.base.data.Template;
 
 
