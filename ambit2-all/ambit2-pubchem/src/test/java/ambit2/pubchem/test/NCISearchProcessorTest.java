@@ -59,4 +59,10 @@ public class NCISearchProcessorTest {
 
 		app.processCactus("src/test/resources/ambit2/pubchem"+filename,"",null,10000,null);
 	}
+	
+	public static void main(String args[]) {
+		SearchApplication app = new SearchApplication();
+		app.main(args);
+		
+	}
 }
