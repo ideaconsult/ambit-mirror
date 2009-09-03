@@ -36,9 +36,9 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	public void setObject(ModelQueryResults object) {
 		super.setObject(object);
 		if (object != null) {
-			dictPredictors = new Dictionary("Predictors",object.getPredictors().getName());
+			dictPredictors = new Dictionary(object.getPredictors().getName(),"Predictors");
 			templatePredictors = processTemplate(dictPredictors, object.getPredictors());
-			dictDependent = new Dictionary("Models",object.getDependent().getName());
+			dictDependent = new Dictionary(object.getDependent().getName(),"Models");
 			templateDependent = processTemplate(dictDependent, object.getDependent());
 		}
 	}
