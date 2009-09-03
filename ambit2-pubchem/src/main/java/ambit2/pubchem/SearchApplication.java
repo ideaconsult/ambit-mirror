@@ -36,18 +36,25 @@ public class SearchApplication {
                 	
         			try {
         				p.setOption(output);
-        				System.out.println(p.process(line));
+        				String result = p.process(line);
+        				System.out.println(result);
         			} catch (FileNotFoundException x) {
         				//ignore
+        				//skip
+        				System.err.print(line);
+        				System.err.print(',');
+        				System.err.println(x.getMessage());		        				
         			} catch (Exception x) {
-        				System.err.println(line);
+        				System.err.print(line);
+        				System.err.print(',');
+        				System.err.println(x.getMessage());
+        				
         				/*
         				System.err.print(',');
         				System.err.print(output);
         				System.err.print(',');			
         				System.err.print(x.getMessage());
         				*/
-        				if (p.isCancelled()) break;
         			}              	
                 }
 			
@@ -63,8 +70,14 @@ public class SearchApplication {
 				System.out.println(p.process(query));
 			} catch (FileNotFoundException x) {
 				//skip
+				System.err.print(query);
+				System.err.print(',');
+				System.err.println(x.getMessage());						
 			} catch (Exception x) {
-				System.err.println(query);
+
+				System.err.print(query);
+				System.err.print(',');
+				System.err.println(x.getMessage());				
 				/*
 				System.err.print(',');
 				System.err.print(output);

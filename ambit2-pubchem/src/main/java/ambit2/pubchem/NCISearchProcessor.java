@@ -56,6 +56,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 	private static final long serialVersionUID = 1503961338542812463L;
 	public NCISearchProcessor() {
 		super();
+		maxretry = 1;
 	}
 	@Override
 	protected String parseInput(String target, InputStream in)

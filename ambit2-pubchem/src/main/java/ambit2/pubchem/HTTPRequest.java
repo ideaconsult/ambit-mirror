@@ -67,6 +67,8 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	}
 	public Result process(Target target) throws AmbitException {
 		int retry = 0;
+		int status = 200;
+		setCancelled(false);
 		while (!isCancelled()) {
 	       try {
 	            URL url = new URL(getUrl());
@@ -84,12 +86,29 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	                InputStream in = hc.getInputStream();
 	                Result result =  parseInput(target, hc.getInputStream());
 	                in.close();
-	                return result;
+	                status = hc.getResponseCode();
+	                switch (status) {
+	                case 200: return result;
+	                case 404: return null;
+	                case 500:  {
+	                	retry++;
+	     	    	    setCancelled(retry >= 10);
+	                }
+	                default: {
+	                	throw new ProcessorException(this,String.format("STATUS: %d", status));
+	                }
+	                }
+
 	            } else
 	            	return null;
 	       	} catch (SocketTimeoutException x) {
 	    	   retry++;
 	    	   setCancelled(retry >= maxretry);
+	    	   if (isCancelled())
+	    		   if (maxretry >1) 
+	    			   throw new ProcessorException(this,"Maximum retry count reached "+maxretry);
+	    		   else
+	    			   throw new ProcessorException(this,x);
 	       	} catch (FileNotFoundException x) {
 	       		throw new ambit2.pubchem.FileNotFoundException(this,x);
 	       	} catch (IOException x) {
@@ -103,7 +122,11 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 
 	        }
 		}    
-		throw new ProcessorException(this,"Maximum retry count reached "+maxretry);
+		if (isCancelled())
+			throw new ProcessorException(this,"Maximum retry count reached "+maxretry);
+		else
+			throw new ProcessorException(this,"STATUS: "+status);
+
 	}
 	protected abstract void prepareOutput(Target target, OutputStream out) throws ProcessorException;
 	protected abstract Result parseInput(Target target, InputStream in)  throws ProcessorException;
