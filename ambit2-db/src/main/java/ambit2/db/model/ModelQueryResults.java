@@ -9,7 +9,10 @@ public class ModelQueryResults extends ModelWrapper<
 			IQueryRetrieval<IStructureRecord>,
 			QueryStoredResults,
 			IQueryRetrieval<IStructureRecord>,String> {
-	
+	@Override
+	public String toString() {
+		return String.format("Model %d",getId());
+	}
 
 
 
