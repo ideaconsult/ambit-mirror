@@ -61,6 +61,8 @@ public class SearchApplication {
 			try {
 				p.setOption(output);
 				System.out.println(p.process(query));
+			} catch (FileNotFoundException x) {
+				//skip
 			} catch (Exception x) {
 				System.err.println(query);
 				/*

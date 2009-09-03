@@ -32,6 +32,11 @@ public class NCISearchProcessorTest {
 		processor.setOption(METHODS.sdf);
 		System.out.println(processor.process("50-00-0"));
 	}
+	@Test
+	public void testSDF_404() throws Exception {
+		processor.setOption(METHODS.sdf);
+		System.out.println(processor.process("102242-50-2"));
+	}
 	
 	@Test
 	public void testSDFNotAvailable() throws Exception {
