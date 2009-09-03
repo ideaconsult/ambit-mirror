@@ -24,7 +24,7 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.algorithm.AlgorithmURIReporter;
+import ambit2.rest.algorithm.CatalogURIReporter;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -129,7 +129,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 					new TaskHTMLReporter(getRequest().getRootRef()) ,MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		
-			return new StringConvertor(	new AlgorithmURIReporter(null) {
+			return new StringConvertor(	new CatalogURIReporter(null) {
 				@Override
 				public void processItem(Object src, Writer output) {
 					super.processItem(src,output);

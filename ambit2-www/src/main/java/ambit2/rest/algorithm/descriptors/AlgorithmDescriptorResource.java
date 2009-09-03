@@ -11,7 +11,7 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.Variant;
 
 import ambit2.rest.StatusException;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
  * Descriptor calculation 
@@ -32,7 +32,7 @@ public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResourc
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {
-		setCategory(AlgorithmResource.algorithmtypes.descriptorcalculation.toString());
+		setCategory(AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString());
 		/*
 		ArrayList<String> q = new ArrayList<String>();
 		for (descriptors d : descriptors.values())

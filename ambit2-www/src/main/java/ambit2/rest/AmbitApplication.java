@@ -20,14 +20,17 @@ import org.restlet.Guard;
 import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
+import org.restlet.resource.StringRepresentation;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
@@ -221,16 +224,16 @@ public class AmbitApplication extends Application {
 		
 		router.attach(QueryResource.query_resource,QueryListResource.class);
 		
-		router.attach(AlgorithmResource.algorithm,AlgorithmResource.class);
-		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.algorithmtypes.descriptorcalculation.toString()),
+		router.attach(AlgorithmCatalogResource.algorithm,AlgorithmCatalogResource.class);
+		router.attach(String.format("%s/%s",AlgorithmCatalogResource.algorithm,AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
 						AlgorithmDescriptorTypesResource.class);
 		
-		router.attach(String.format("%s/%s",AlgorithmResource.algorithm,"util"),
+		router.attach(String.format("%s/%s",AlgorithmCatalogResource.algorithm,"util"),
 				AlgorithmUtilTypesResource.class);
 		
 		for (AlgorithmUtilTypesResource.utiltypes o : AlgorithmUtilTypesResource.utiltypes.values())
 			router.attach(String.format("%s/%s/%s",
-					AlgorithmResource.algorithm,
+					AlgorithmCatalogResource.algorithm,
 					"util",
 					o.toString()
 					),
@@ -238,11 +241,14 @@ public class AmbitApplication extends Application {
 		
 		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
 			router.attach(String.format("%s/%s/%s/{%s}",
-					AlgorithmResource.algorithm,
-					AlgorithmResource.algorithmtypes.descriptorcalculation.toString(),
+					AlgorithmCatalogResource.algorithm,
+					AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString(),
 					o.toString(),
 					AlgorithmDescriptorTypesResource.iddescriptor),
 					AlgorithmDescriptorTypesResource.class);		
+		
+		router.attach(String.format("%s/rules/{%s}",AlgorithmCatalogResource.algorithm,AlgorithmResource.idalgorithm),AlgorithmResource.class);
+		router.attach(String.format("%s/rules",AlgorithmCatalogResource.algorithm),AlgorithmResource.class);
 		
 		router.attach(ModelResource.resource,ModelResource.class);
 		router.attach(ModelResource.resourceID,ModelResource.class);

@@ -6,10 +6,10 @@ import java.util.Iterator;
 import org.restlet.data.Reference;
 
 import ambit2.rest.AmbitResource;
-import ambit2.rest.algorithm.AlgorithmResource;
-import ambit2.rest.algorithm.AlgorithmURIReporter;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import ambit2.rest.algorithm.CatalogURIReporter;
 
-public class TaskHTMLReporter extends AlgorithmURIReporter<Task<Reference>> {
+public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class TaskHTMLReporter extends AlgorithmURIReporter<Task<Reference>> {
 	@Override
 	public void footer(Writer output, Iterator<Task<Reference>> query) {
 		try {
-			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, baseReference);
+			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm, baseReference);
 			output.flush();
 		} catch (Exception x) {
 			

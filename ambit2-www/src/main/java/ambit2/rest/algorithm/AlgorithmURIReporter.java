@@ -1,53 +1,21 @@
 package ambit2.rest.algorithm;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Iterator;
-
 import org.restlet.data.Reference;
 
-import ambit2.base.processors.batch.ListReporter;
+import ambit2.core.data.model.Algorithm;
 
-public class AlgorithmURIReporter<T> extends ListReporter<T, Writer> {
+public class AlgorithmURIReporter extends CatalogURIReporter<Algorithm> {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2871865183499748866L;
-	
-	protected Reference baseReference;
-	public AlgorithmURIReporter(Reference baseRef) {
-		this.baseReference = baseRef;
-	}
+	private static final long serialVersionUID = 4802490674242368703L;
 	public AlgorithmURIReporter() {
-	}	
-	@Override
-	public void processItem(T item, Writer output) {
-		try {
-			output.write(getURI(item));
-			output.flush();
-		} catch (IOException x) {
-			x.printStackTrace();
-		}
-	}	
-	public String getURI(String ref, T item) {
-		return String.format("%s%s%s",ref,"".equals(ref)?"":"/",item.toString());
 	}
-	
-	public String getURI(T item) {
-		String ref = baseReference==null?"":baseReference.toString();
-		if (ref.endsWith("/")) ref = ref.substring(0,ref.length()-1);	
-		return getURI(ref,item);
+	public AlgorithmURIReporter(Reference baseRef) {
+		super(baseRef);
 	}
-
-	public void close() throws Exception {
+	public String getURI(String ref, Algorithm item) {
+		return String.format("%s%salgorithm/rules/%s",ref,"".equals(ref)?"":"/",item.toString());
 	}
-	@Override
-	public void footer(Writer output, Iterator<T> query) {
-		
-	}
-	@Override
-	public void header(Writer output, Iterator<T> query) {
-		
-	}
-
 }

@@ -18,7 +18,7 @@ import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MDLWriter;
 import ambit2.mopac.MopacShell;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.error.EmptyMoleculeException;
 
 /**
@@ -26,7 +26,7 @@ import ambit2.rest.error.EmptyMoleculeException;
  * @author nina
  *
  */
-public class Build3DResource extends AlgorithmResource {
+public class Build3DResource extends AlgorithmCatalogResource {
 	
 
 	protected String smiles = null;

@@ -13,14 +13,14 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 
 import ambit2.rest.StatusException;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
  * Descriptor calculation resources
  * @author nina
  *
  */
-public class AlgorithmDescriptorTypesResource extends AlgorithmResource {
+public class AlgorithmDescriptorTypesResource extends AlgorithmCatalogResource {
 	public static final String iddescriptor = "iddescriptor";
 	protected IMolecularDescriptor descriptor = null;
 	public enum descriptortypes  {
@@ -35,7 +35,7 @@ public class AlgorithmDescriptorTypesResource extends AlgorithmResource {
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {
-		setCategory(AlgorithmResource.algorithmtypes.descriptorcalculation.toString());
+		setCategory(AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString());
 
 		ArrayList<String> q = new ArrayList<String>();
 		for (descriptortypes d : descriptortypes.values())
