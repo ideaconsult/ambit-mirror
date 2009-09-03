@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.update.IQueryUpdate;
@@ -19,7 +20,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		ModelQueryResults q = new ModelQueryResults();
 		q.setName("Test model");
 		q.setContent("Nothing");
-		q.setPredictors(new Template("Octanol-water partition coefficient (Kow)"));
+		q.setPredictors(new Template("New template"));
 		q.setDependent(new Template("BCF"));
 		return new CreateModel(q);
 	}
@@ -72,18 +73,37 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 	@Override
 	protected IQueryUpdate<Object, ModelQueryResults> createQueryNew()
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ModelQueryResults q = new ModelQueryResults();
+		q.setName("Test model");
+		q.setContent("Nothing");
+		Template t1 = new Template("Predictors template");
+		t1.add(new Property("New predictor 1"));
+		t1.add(new Property("New predictor 2"));
+		q.setPredictors(t1);
+		Template t2 = new Template("Dependent template");
+		t2.add(new Property("New dependent"));
+		q.setDependent(t2);
+		return new CreateModel(q);
 	}
 
 	@Override
 	protected void createVerifyNew(IQueryUpdate<Object, ModelQueryResults> query)
 			throws Exception {
-		// TODO Auto-generated method stub
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","select * c from models where name=\"Test model\" and content=\"Nothing\"");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","select * from template where name=\"Predictors template\"");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","select * from template where name=\"Dependent template\"");
+		Assert.assertEquals(1,table.getRowCount());	
+		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New predictor 1\"");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New predictor 2\"");
+		Assert.assertEquals(1,table.getRowCount());				
+		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New dependent\"");
+		Assert.assertEquals(1,table.getRowCount());						
+		c.close();
 		
-	}
-	@Override
-	public void testCreateNew() throws Exception {
 	}
 
 }
