@@ -13,7 +13,7 @@ import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
 
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
@@ -112,14 +112,14 @@ public class AmbitResource extends Resource {
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
 			
 			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
-			{AlgorithmResource.algorithm,"All types of algorithms",format,"GET","Yes"},
-			{String.format("%s/%s",AlgorithmResource.algorithm,AlgorithmResource.algorithmtypes.descriptorcalculation.toString()),"Descriptor calculation algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmResource.algorithm,"preprocessing"),"Feature preprocessing",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmResource.algorithm,"Learinng algorithms"),"Learning algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmResource.algorithm,"clustering"),"Clustering algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmResource.algorithm,"util"),"Utility algorithms",format,"GET","Under development"},
+			{AlgorithmCatalogResource.algorithm,"All types of algorithms",format,"GET","Yes"},
+			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),"Descriptor calculation algorithms",format,"GET","Under development"},
+			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"preprocessing"),"Feature preprocessing",format,"GET","Under development"},
+			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"Learinng algorithms"),"Learning algorithms",format,"GET","Under development"},
+			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"clustering"),"Clustering algorithms",format,"GET","Under development"},
+			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"util"),"Utility algorithms",format,"GET","Under development"},
 			
-			{"http://opentox.org/dev/apis/Models","Models",formatHeader,null},
+			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},

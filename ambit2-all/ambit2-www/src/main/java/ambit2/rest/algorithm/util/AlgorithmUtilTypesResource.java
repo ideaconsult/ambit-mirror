@@ -8,7 +8,7 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 
 import ambit2.rest.StatusException;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
  * Descriptor calculation resources  http://opentox.org/development/wiki/Algorithms
@@ -16,7 +16,7 @@ import ambit2.rest.algorithm.AlgorithmResource;
  * @author nina
  *
  */
-public class AlgorithmUtilTypesResource extends AlgorithmResource {
+public class AlgorithmUtilTypesResource extends AlgorithmCatalogResource {
 	public static enum utiltypes  {
 		name2structure,build3d
 	};

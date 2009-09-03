@@ -8,14 +8,14 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 
 import ambit2.rest.StatusException;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
  * Query types
  * @author nina
  *
  */
-public class QueryListResource extends AlgorithmResource {
+public class QueryListResource extends AlgorithmCatalogResource {
 	public enum querytypes  {
 		feature,smarts,smiles,substructure,inchi,similarity,dataset,endpoints
 	};

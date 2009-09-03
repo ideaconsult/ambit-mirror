@@ -128,7 +128,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest().getRootRef());
 			getResponse().setLocationRef(uriReporter.getURI(entry));
 			getResponse().setStatus(Status.SUCCESS_OK);
-			getResponse().setEntity(null);
+			getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
+			
+			
 		} catch (Exception x) {
 			x.printStackTrace();
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);			
