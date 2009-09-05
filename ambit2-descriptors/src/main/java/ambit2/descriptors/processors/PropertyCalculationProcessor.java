@@ -57,6 +57,16 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		IMolecularDescriptor d = cache.get(className);
 		if (d == null) {
 			Object o = className.newInstance();
+			//this is to remove swing listeners from toxtree rules
+			try {
+				o.getClass().getMethod(
+		                "removeListener",
+		                new Class[] {}).
+		        invoke(o, new Object[] { });					
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+			
 			if (o instanceof IMolecularDescriptor) {
 				d = (IMolecularDescriptor) o;
 				cache.put(className,d);
