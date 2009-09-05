@@ -30,9 +30,12 @@
 package ambit2.descriptors.processors;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
+import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.ClassHolder;
 import ambit2.base.data.LiteratureEntry;
@@ -83,6 +86,27 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 		return p;
 	}
 
+	public static List<Property> createDescriptor2Properties(String className) throws Exception  {
+		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
+		//if (o instanceof IMolecularDescriptor) {verify for interface
+			Object o = clazz.newInstance();
+			if (o instanceof IMolecularDescriptor) {
+				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
+				List<Property> p = new ArrayList<Property>();
+				
+				DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
+				for (String name : value.getNames()) {
+					Property property = new Property(name,
+							LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
+								);
+					property.setLabel(name);
+					property.setClazz(clazz);
+					p.add(property);
+				}
+				return p;				
+			} else return null;
+	}
+	
 	public static Property createDescriptor2Property(String className) throws Exception  {
 		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
 		//if (o instanceof IMolecularDescriptor) {verify for interface
@@ -90,6 +114,14 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 			if (o instanceof IMolecularDescriptor) {
 				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
 				
+				try {
+					o.getClass().getMethod(
+			                "removeListener",
+			                new Class[] {}).
+			        invoke(o, new Object[] { });					
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 				Property property = Property.getInstance(clazz.getName().substring(clazz.getName().lastIndexOf('.')+1),
 						LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
 							);
