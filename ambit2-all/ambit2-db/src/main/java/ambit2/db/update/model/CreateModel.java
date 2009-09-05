@@ -121,7 +121,7 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 				for (String s:sql) sqls.add(s);
 	 		}	
 		sqls.add(create_sql);
-		for (String s:sqls) System.out.println(s);
+		//for (String s:sqls) System.out.println(s);
 		return sqls.toArray(new String[sqls.size()]);
 	}
 	public void setID(int index, int id) {
