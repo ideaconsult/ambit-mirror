@@ -8,6 +8,7 @@ import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
+import ambit2.db.search.AbstractQuery;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
@@ -57,8 +58,10 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	public void header(Writer w, IQueryRetrieval<T> query) {
 		super.header(w, query);
 		try {
-			
-			//cmp_reporter.processItem(query.getFieldname(),w);
+			if (query instanceof AbstractQuery) {
+				if (((AbstractQuery)query).getValue() instanceof IStructureRecord)
+					cmp_reporter.processItem((IStructureRecord)((AbstractQuery)query).getValue(),w);
+			}			
 			w.write("<table>");
 		} catch (Exception x) {}
 	}

@@ -3,7 +3,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -21,12 +20,9 @@ import org.restlet.Guard;
 import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.ChallengeScheme;
-import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
-import org.restlet.data.Response;
-import org.restlet.resource.StringRepresentation;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -46,6 +42,7 @@ import ambit2.rest.fastox.FastToxStep2;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
+import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
@@ -190,6 +187,13 @@ public class AmbitApplication extends Application {
 		router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
 		router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
 
+		router.attach(PropertyTemplateResource.compoundTemplate,PropertyTemplateResource.class);
+		router.attach(PropertyTemplateResource.compoundTemplateID,PropertyTemplateResource.class);
+		router.attach(PropertyTemplateResource.conformerTemplateID,PropertyTemplateResource.class);
+
+		router.attach(PropertyTemplateResource.TemplateIDCompound,PropertyTemplateResource.class);
+		router.attach(PropertyTemplateResource.TemplateIDConformer,PropertyTemplateResource.class);
+		
 		router.attach(TupleResource.resource,TupleResource.class);
 		router.attach(TuplePropertyValueResource.resourceCompoundID,TuplePropertyValueResource.class);
 		router.attach(TuplePropertyValueResource.resourceConformerID,TuplePropertyValueResource.class);
