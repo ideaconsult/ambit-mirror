@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -24,6 +25,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
+import org.restlet.data.Response;
 import org.restlet.resource.StringRepresentation;
 
 import ambit2.base.config.Preferences;
@@ -36,10 +38,11 @@ import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
-import ambit2.rest.app.SimplePredictionApp;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
+import ambit2.rest.fastox.FastToxStep1;
+import ambit2.rest.fastox.FastToxStep2;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
@@ -127,9 +130,11 @@ public class AmbitApplication extends Application {
 	public Restlet createRoot() {
 		Router router = new Router(this.getContext());
 		router.attach("/help", AmbitResource.class);
+		
 		router.attach("/", AmbitResource.class);
 		router.attach("", AmbitResource.class);	
-		router.attach("/demo", SimplePredictionApp.class);
+		router.attach(FastToxStep1.resource, FastToxStep1.class);
+		router.attach(FastToxStep2.resource, FastToxStep2.class);
 		
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
@@ -202,6 +207,7 @@ public class AmbitApplication extends Application {
 		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
 		
 		router.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
+		router.attach(QueryResultsResource.resource,QueryResultsResource.class);
 		
 		router.attach(PubchemResource.resourceID,PubchemResource.class);
 		router.attach(PubchemResource.resource,PubchemResource.class);

@@ -52,7 +52,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public void processItem(IStructureRecord record, Writer writer) {
 
 		try {
+			writer.write("<div id=\"div-1a\">");
 			writer.write(toURI(record));
+			writer.write("</div>");		
+
 			if (!collapsed) {
 /*
 				String[] more = new String[] {
@@ -81,19 +84,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					uriReporter.getBaseReference()
 					);
 			output.write("<h4><div class=\"actions\"><span class=\"right\">");
-			output.write(String.format("<form method=\"post\" action=\"%s/query/results\">",uriReporter.getBaseReference()));
+			output.write(String.format("<form method=\"post\" action=\"\">",""));
 			output.write(String.format("%s","Query name:&nbsp;"));
 			output.write(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
 			output.write("<input type=\"submit\" value='Save search results'>&nbsp;");
 			//output.write("</form>");
 			//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
 			output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
-			//output.write("</form>");	
+			
 			//output.write(String.format("<form method=\"post\" action=\"%s/algorithm\">",uriReporter.getBaseReference()));
 			output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
 			output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
 			output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
-			output.write("</form>");			
+			output.write("</form>");	
 			output.write("</span></div></h4>\n");	
 			output.write("<div id=\"div-1\">");
 			
@@ -103,6 +106,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public void footer(Writer output, Q query) {
 		try {
 			output.write("</div>");
+			//output.write("</form>");			
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getBaseReference()
@@ -115,12 +119,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		// TODO Auto-generated method stub
 		
 	}
+	
 	public String toURI(IStructureRecord record) {
 		String w = uriReporter.getURI(record);
 		StringBuilder b = new StringBuilder();
-		b.append("<div id=\"div-1a\">");
 		
-		b.append("<div id=\"div-1b1\"><input type=checkbox name=\"structure\"></div>");
+		
+		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
 				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>", 
@@ -169,7 +174,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			for (String[] n:s)
 			b.append(String.format("<a href=\"%s/%s/%s\" target=\"_blank\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
 			//b.append("</div>");
-			b.append("</div></div>");		
+			b.append("</div>");		
+	
 		return b.toString();
 	}		
 
