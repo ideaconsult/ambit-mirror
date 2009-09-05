@@ -82,14 +82,14 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 					"<td><img src=\"%s/images/feature.png\" alt=\"Features\" title=\"Browse features\" border=\"0\"/>&nbsp;<a href=\"%s/template/%s\">%s</a></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getBaseReference(),
-					model.getPredictors()==null?"":model.getPredictors().getName(),
+					model.getPredictors()==null?"":Reference.encode(model.getPredictors().getName()),
 					model.getPredictors()==null?"":model.getPredictors().getName()		
 			));
 			output.write(String.format(
 					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Dependent variable(s)\" title=\"Dependent variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s/template/%s\">%s</a></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getBaseReference(),
-					model.getDependent()==null?"":model.getDependent().getName(),
+					model.getDependent()==null?"":Reference.encode(model.getDependent().getName()),
 					model.getDependent()==null?"":model.getDependent().getName()		
 			));			
 			/*
