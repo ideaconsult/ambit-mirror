@@ -39,22 +39,12 @@ public class SearchApplication {
         				String result = p.process(line);
         				System.out.println(result);
         			} catch (FileNotFoundException x) {
-        				//ignore
         				//skip
-        				System.err.print(line);
-        				System.err.print(',');
-        				System.err.println(x.getMessage());		        				
         			} catch (Exception x) {
         				System.err.print(line);
         				System.err.print(',');
         				System.err.println(x.getMessage());
-        				
-        				/*
-        				System.err.print(',');
-        				System.err.print(output);
-        				System.err.print(',');			
-        				System.err.print(x.getMessage());
-        				*/
+
         			}              	
                 }
 			
