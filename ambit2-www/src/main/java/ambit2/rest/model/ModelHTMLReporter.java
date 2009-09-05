@@ -36,7 +36,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 		super.header(w, query);
 		try { 
 			output.write("<table width=\"90%\" >");
-			output.write("<tr>\n");
+			output.write("<tr align=\"left\">\n");
 			output.write("<th>Model name</th>\n");
 			output.write("<th>Dataset</th>\n");
 			output.write("<th>Predictors</th>\n");
