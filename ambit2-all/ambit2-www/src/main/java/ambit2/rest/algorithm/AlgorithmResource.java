@@ -46,8 +46,13 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 			//id,class,name
 			{"pKa","ambit2.descriptors.PKASmartsDescriptor",null},
 			{"ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
-			{"ToxTree: Verhaar","verhaar.VerhaarScheme",null},
+			{"ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
+			{"ToxTree: Eye irritation","eye.EyeIrritationRules",null},
+			{"ToxTree: Skin irritation","sicret.SicretRules",null},
+			{"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
+			{"ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
 			{"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
+			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property("DailyIntake","\u00B5g/day", new LiteratureEntry("User input","http://toxtree.sourceforge.net"))},
 	};
@@ -148,9 +153,11 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 	@Override
 	public void acceptRepresentation(Representation entity)
 			throws ResourceException {
-		if (getRequest().getAttributes().get(idalgorithm)!=null)
+		if (getRequest().getAttributes().get(idalgorithm)!=null) {
 			createNewObject(entity);
-		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+			getResponse().setEntity(null);
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	@Override
 	protected ModelQueryResults createObjectFromHeaders(Form requestHeaders)
@@ -193,17 +200,6 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid id "+key);
 		
 
-/*
- * get properties from dataset
- * SELECT * FROM properties
-where idproperty in
-(
-SELECT idproperty FROM property_values join
-property_tuples using(id)
-join tuples using(idtuple)
-where id_srcdataset=19
-);
- */
 	}
 	@Override
 	protected AbstractUpdate createUpdateObject(ModelQueryResults entry)
