@@ -46,7 +46,9 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 					output.write(String.format("%s = %s<br>",p,v.getProperty(p)));
 			} else if (item instanceof PropertyValue) {
 				PropertyValue v = (PropertyValue) item;
-				output.write(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>",v.getProperty().getLabel(),v.getValue()));
+				output.write(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>",
+						v.getProperty().getLabel(),
+						v.getValue().toString().replace("\n", "<br>")));
 			} else	output.write(item.toString());
 			
 		} catch (Exception x) {
