@@ -28,7 +28,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	}
 	public void processItem(Task<Reference> item, Writer output) {
 		String t = "";
-		String status = item.isDone()?"Completed":"Running";
+		String status = item.isDone()?"Completed":"Running, Please wait ...";
 		try {
 			t = item.getReference().toString();
 			

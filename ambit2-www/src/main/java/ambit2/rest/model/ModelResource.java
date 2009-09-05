@@ -32,6 +32,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.CompoundURIReporter;
 
 /**
  * Model as in http://opentox.org/development/wiki/Model
@@ -130,20 +131,29 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		synchronized (this) {
 			Connection conn = null;
 			try {
+				final String resultRef ;
 				final IQueryRetrieval<IStructureRecord> query;
 				Integer idmodel = getModelID();
+				ModelQueryResults model = new ModelQueryResults();
 				if ((entity != null) && MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType(),true)) {
 					Form form = new Form(entity);
 					if (idmodel == null) idmodel = Integer.parseInt(form.getFirstValue("idmodel"));
-
-					query = new QueryStructureByID(Integer.parseInt(form.getFirstValue("idstructure")));
+					model.setId(idmodel);
+					IStructureRecord record = new StructureRecord(
+							Integer.parseInt(form.getFirstValue("idchemical")),
+							Integer.parseInt(form.getFirstValue("idstructure")),null,null);
+					query = new QueryStructureByID(record);
+					CompoundURIReporter<IQueryRetrieval<IStructureRecord>> r = 
+							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest().getRootRef());
+					resultRef = String.format("%s/model/%d",r.getURI(record),idmodel);
 				} else {
 					if (idmodel == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					model.setId(idmodel);
 					Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
 					String id = requestHeaders.getFirstValue("dataset-id");  				
 					query = new QueryDatasetByID();
 					((QueryDatasetByID)query).setValue(Integer.parseInt(id));						
-					
+					resultRef = getURUReporter(getRequest().getRootRef()).getURI(model);
 				}
 				
 				QueryReporter<ModelQueryResults,ReadModel,Object> r = new QueryReporter<ModelQueryResults,ReadModel,Object>() {
@@ -157,7 +167,9 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 									runModel(model),	
 									getRequest().getRootRef());		
 							getResponse().setLocationRef(ref);
-							getResponse().setStatus(Status.SUCCESS_CREATED);
+							//getResponse().setStatus(Status.SUCCESS_CREATED);
+							getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+							getResponse().setEntity(null);
 						} catch (StatusException x) {
 							getResponse().setStatus(x.getStatus());
 						} catch (AmbitException x) {
@@ -178,6 +190,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 								Connection connection = null;
 								try {
 									DescriptorModelExecutor modelExecutor = new DescriptorModelExecutor();
+									modelExecutor.setReference(new Reference(resultRef));
 					        		connection = ((AmbitApplication)getApplication()).getConnection();
 					        		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
 					        		modelExecutor.setConnection(connection);
@@ -199,13 +212,11 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
         		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection();
         		r.setConnection(conn);
 				r.process(new ReadModel(idmodel));
-				
-				
-				ModelQueryResults model = new ModelQueryResults();
-				model.setId(idmodel);
-				getResponse().setLocationRef(getURUReporter(getRequest().getRootRef()).getURI(model));
+				/*
+				getResponse().setLocationRef(resultRef);
 				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 				getResponse().setEntity(null);
+				*/
 			} catch (StatusException x) {
 				throw new ResourceException(x.getStatus());
 			} catch (Exception x) {
