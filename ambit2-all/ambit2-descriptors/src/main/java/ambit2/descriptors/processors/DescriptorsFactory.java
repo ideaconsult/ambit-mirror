@@ -93,7 +93,15 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 			if (o instanceof IMolecularDescriptor) {
 				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
 				List<Property> p = new ArrayList<Property>();
-				
+				//this is to remove swing listeners from toxtree rules
+				try {
+					o.getClass().getMethod(
+			                "removeListener",
+			                new Class[] {}).
+			        invoke(o, new Object[] { });					
+				} catch (Exception x) {
+					x.printStackTrace();
+				}				
 				DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
 				for (String name : value.getNames()) {
 					Property property = new Property(name,
