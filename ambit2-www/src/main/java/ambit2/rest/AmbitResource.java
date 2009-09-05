@@ -294,6 +294,7 @@ public class AmbitResource extends Resource {
 		w.write("	<div class=\"spacer\"></div>");
 		w.write("</div>");
 		w.write("<div>");		
+		w.write(String.format("<a href='%s/fasttox'>FastTox</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/similarity'>Similar&nbsp;structures</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
