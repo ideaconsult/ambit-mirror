@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.jdbc.JDBCPieDataset;
 import org.jfree.data.jdbc.JDBCXYDataset;
 
 import ambit2.base.data.Property;

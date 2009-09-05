@@ -46,7 +46,7 @@ public class FuncGroupsChartGenerator extends ChartGenerator<IStoredQuery> {
 	            ChartFactory.createBarChart(target.toString(),"Functional groups","Number of chemicals",
 	            					 // chart title
 	                                         pieDataset,
-	                                         PlotOrientation.HORIZONTAL,
+	                                         PlotOrientation.VERTICAL,
 	                                         true,      // legend displayed
 	                                         true,      // tooltips displayed
 	                                         false );   // no URLs
