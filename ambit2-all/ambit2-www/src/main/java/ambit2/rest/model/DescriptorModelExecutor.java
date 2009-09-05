@@ -37,6 +37,14 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
 	 * 
 	 */
 	private static final long serialVersionUID = -4602261055183051841L;
+	protected Reference reference = null;
+	public Reference getReference() {
+		return reference;
+	}
+
+	public void setReference(Reference reference) {
+		this.reference = reference;
+	}
 
 	public Reference process(ModelQueryResults model)
 			throws AmbitException {
@@ -73,8 +81,9 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
     		q.setId(1);
     		IBatchStatistics stats = batch.process(q);
     		System.out.println(stats);
-
-			return new Reference(String.format("/template/%s",model.getDependent().getName()));
+    		if (reference ==null)	
+    			return new Reference(String.format("/template/%s",model.getDependent().getName()));
+    		else return reference;
 		} catch (Exception x) {
 			x.printStackTrace();
 			throw new StatusException(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));

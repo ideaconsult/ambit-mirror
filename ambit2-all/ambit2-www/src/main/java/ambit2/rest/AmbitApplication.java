@@ -42,6 +42,7 @@ import ambit2.rest.fastox.FastToxStep2;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
+import ambit2.rest.propertyvalue.PropertyModelResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -193,6 +194,10 @@ public class AmbitApplication extends Application {
 
 		router.attach(PropertyTemplateResource.TemplateIDCompound,PropertyTemplateResource.class);
 		router.attach(PropertyTemplateResource.TemplateIDConformer,PropertyTemplateResource.class);
+		
+		router.attach(PropertyModelResource.compoundModel,PropertyModelResource.class);
+		router.attach(PropertyModelResource.compoundModelID,PropertyModelResource.class);
+		router.attach(PropertyModelResource.conformerModelID,PropertyModelResource.class);
 		
 		router.attach(TupleResource.resource,TupleResource.class);
 		router.attach(TuplePropertyValueResource.resourceCompoundID,TuplePropertyValueResource.class);
