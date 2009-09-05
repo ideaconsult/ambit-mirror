@@ -90,18 +90,19 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 	protected void createVerifyNew(IQueryUpdate<Object, ModelQueryResults> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","select * c from models where name=\"Test model\" and content=\"Nothing\"");
+		ITable table = 	c.createQueryTable("EXPECTED","select * from models where name=\"Test model\" and content=\"Nothing\"");
 		Assert.assertEquals(1,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","select * from template where name=\"Predictors template\"");
 		Assert.assertEquals(1,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","select * from template where name=\"Dependent template\"");
 		Assert.assertEquals(1,table.getRowCount());	
+		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New dependent\"");
+		Assert.assertEquals(1,table.getRowCount());				
 		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New predictor 1\"");
 		Assert.assertEquals(1,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New predictor 2\"");
 		Assert.assertEquals(1,table.getRowCount());				
-		table = 	c.createQueryTable("EXPECTED","select * from properties where name=\"New dependent\"");
-		Assert.assertEquals(1,table.getRowCount());						
+				
 		c.close();
 		
 	}

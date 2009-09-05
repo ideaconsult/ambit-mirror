@@ -53,7 +53,8 @@ public abstract class CRUDTest<G,T> extends DbUnitTest {
 	}
 	@After
 	public void tearDown() throws Exception {
-		executor.close();
+		if (executor!=null)
+			executor.close();
 	}
 	
 	@Test
