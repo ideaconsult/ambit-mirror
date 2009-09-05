@@ -107,10 +107,10 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
 
     public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-                "pKa Prediction of Monoprotic Small Molecules the SMARTS Way, Lee, Adam C., Yu, Jing-yu, and Crippen, Gordon M.,J. Chem. Inf. Model., 2008,  10.1021/ci8001815",
-                this.getClass().getName(),
+        		"http://pubs.acs.org/doi/abs/10.1021/ci8001815",
+                "Adam C. Lee, Jing-yu Yu and Gordon M. Crippen, J. Chem. Inf. Model., 2008, 48 (10), pp 2042–2053",
                 "$Id: PKASmartsDescriptor.java,v 0.1 2008/10/03 21:20:00 Nina Jeliazkova Exp $",
-                "ambit.sourceforge.net");
+                "http://ambit.sourceforge.net/ambit2-descriptors");
     }
 
     public void setParameters(Object[] arg0) throws CDKException {
