@@ -212,4 +212,25 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 
 	}	
+	@Override
+	public boolean allowPost() {
+		return true;
+	}
+	
+	@Override
+	public void acceptRepresentation(Representation entity)
+			throws ResourceException {
+
+		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+		Form form = new Form(entity);
+		form.getFirstValue("compound[]");
+		try {
+			IQueryRetrieval<IStructureRecord> q = createQuery(getContext(),getRequest(),getResponse());
+			//ProcessorCreateQuery
+			System.out.println(q);
+		} catch (Exception x) {
+			
+		}		
+		throw new ResourceException(new Status(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Not implemented yet!"));
+	}
 }

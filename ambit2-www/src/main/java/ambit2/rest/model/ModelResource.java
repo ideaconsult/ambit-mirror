@@ -15,15 +15,19 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
+import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.structure.QueryDatasetByID;
+import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
@@ -42,7 +46,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	public final static String resource = "/model";	
 	public final static String resourceKey =  "idmodel";
 	public final static String resourceID =  String.format("%s/{%s}",resource,resourceKey);
-	boolean collapsed = true;
+	protected boolean collapsed = true;
 	
 	public enum modeltypes  {
 		pka,toxtree
@@ -110,6 +114,11 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	}
 	
 	@Override
+	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> getURUReporter(
+			Reference baseReference) throws ResourceException {
+		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest().getRootRef());
+	}
+	@Override
 	public boolean allowPost() {
 		return true;
 	}
@@ -121,21 +130,30 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		synchronized (this) {
 			Connection conn = null;
 			try {
-				
+				final IQueryRetrieval<IStructureRecord> query;
 				Integer idmodel = getModelID();
-				if (idmodel == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				if ((entity != null) && MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType(),true)) {
+					Form form = new Form(entity);
+					if (idmodel == null) idmodel = Integer.parseInt(form.getFirstValue("idmodel"));
+
+					query = new QueryStructureByID(Integer.parseInt(form.getFirstValue("idstructure")));
+				} else {
+					if (idmodel == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+					String id = requestHeaders.getFirstValue("dataset-id");  				
+					query = new QueryDatasetByID();
+					((QueryDatasetByID)query).setValue(Integer.parseInt(id));						
+					
+				}
 				
 				QueryReporter<ModelQueryResults,ReadModel,Object> r = new QueryReporter<ModelQueryResults,ReadModel,Object>() {
 					@Override
 					public void processItem(ModelQueryResults model, Object output) {
 						try {
-							Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-							String id = requestHeaders.getFirstValue("dataset-id");  				
-							QueryDatasetByID q = new QueryDatasetByID();
-							q.setValue(Integer.parseInt(id));				
-							model.setTestInstances(q);
+			
+							model.setTestInstances(query);
 							Reference ref =  ((AmbitApplication)getApplication()).addTask(
-									String.format("Apply model %s to %s",model.toString(),q.toString()),
+									String.format("Apply model %s to %s",model.toString(),query.toString()),
 									runModel(model),	
 									getRequest().getRootRef());		
 							getResponse().setLocationRef(ref);
@@ -181,7 +199,13 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
         		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection();
         		r.setConnection(conn);
 				r.process(new ReadModel(idmodel));
-
+				
+				
+				ModelQueryResults model = new ModelQueryResults();
+				model.setId(idmodel);
+				getResponse().setLocationRef(getURUReporter(getRequest().getRootRef()).getURI(model));
+				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+				getResponse().setEntity(null);
 			} catch (StatusException x) {
 				throw new ResourceException(x.getStatus());
 			} catch (Exception x) {

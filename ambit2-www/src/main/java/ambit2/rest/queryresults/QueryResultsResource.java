@@ -1,6 +1,7 @@
 package ambit2.rest.queryresults;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -59,6 +60,9 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 	@Override
 	public void acceptRepresentation(Representation entity)
 			throws ResourceException {
+		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+		Form form = new Form(entity);
+		form.getFirstValue("compound[]");
 		throw new ResourceException(new Status(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Not implemented yet!"));
 	}
 }

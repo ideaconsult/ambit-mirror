@@ -5,10 +5,12 @@ import java.io.Writer;
 
 import org.restlet.data.Reference;
 
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.template.OntologyURIReporter;
 
 public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> {
@@ -17,6 +19,9 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
 	protected OntologyURIReporter templateReporter ;
+	//only necessary if applying the model
+	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
+	
 	public ModelHTMLReporter() {
 		this(null,true);
 	}
@@ -26,6 +31,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public ModelHTMLReporter(Reference baseRef,Reference originalRef,boolean collapsed) {
 		super(baseRef,collapsed);
 		templateReporter = new OntologyURIReporter(baseRef);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,true);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Reference reference) {
@@ -49,6 +55,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 		try { output.write("</table>");} catch (Exception x) {}
 		super.footer(output, query);
 	}
+	
 	@Override
 	public void processItem(ModelQueryResults model, Writer output) {
 		try {
@@ -102,11 +109,13 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 						uriReporter.getBaseReference().toString()));	
 			}
 			*/
+			writeMoreColumns( model,output);
 			output.write("</tr>\n");
 		} catch (Exception x) {
 			
 		}
 	}
-
+	protected void writeMoreColumns(ModelQueryResults model, Writer output) {
+	}
 
 }
