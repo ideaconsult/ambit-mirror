@@ -68,11 +68,12 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
 			
     		ProcessorMissingDescriptorsQuery mq = new ProcessorMissingDescriptorsQuery();
     		QueryCombinedStructure q = (QueryCombinedStructure)mq.process(p);
+    		q.setCombine_as_and(true);
     		q.setScope(model.getTestInstances());
     		q.setId(1);
     		IBatchStatistics stats = batch.process(q);
     		System.out.println(stats);
-    		for(int i=0; i < 10000000; i++) System.out.print(i);
+
 			return new Reference(String.format("/template/%s",model.getDependent().getName()));
 		} catch (Exception x) {
 			x.printStackTrace();
