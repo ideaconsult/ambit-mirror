@@ -1,9 +1,11 @@
 package ambit2.rest.algorithm;
 
 import java.io.Writer;
+import java.net.URLEncoder;
 import java.util.Iterator;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Response;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitResource;
@@ -28,6 +30,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void header(Writer output, Iterator<Algorithm> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", baseReference);//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			output.write("<table>");
 		} catch (Exception x) {
 			
 		}
@@ -36,11 +39,11 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 		try {
 			String t = super.getURI(item);
 			if (collapsed)
-				output.write(String.format("<a href='%s'>%s</a><br>", t,t));
+				output.write(String.format("<tr><th align=\"left\"><a href='%s'>%s</a></th><td></td></tr>", t,item.getName()));
 			else
 				output.write(String.format(
-					"<form action=\"\" method=\"POST\"><a href='%s'>%s</a><input type=\"submit\" value=\"Create model\"></form>",
-					t,t));
+					"<tr><form action=\"\" method=\"POST\"><tr><th><a href='%s'>%s</a></th><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
+					t,item.getName()));
 		} catch (Exception x) {
 			
 		}
@@ -48,6 +51,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	@Override
 	public void footer(Writer output, Iterator<Algorithm> query) {
 		try {
+			output.write("</table>");
 			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm+"/rules", baseReference);
 			output.flush();
 		} catch (Exception x) {

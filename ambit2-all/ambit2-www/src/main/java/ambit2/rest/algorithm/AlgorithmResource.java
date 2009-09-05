@@ -3,6 +3,7 @@ package ambit2.rest.algorithm;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -25,6 +26,7 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.model.CreateModel;
+import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
@@ -39,11 +41,17 @@ import ambit2.rest.query.QueryResource;
  */
 public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
 	protected AlgorithmCatalogResource<Algorithm> catalog;
-	protected String[][] algorithms = new String[][] {
+
+	protected Object[][] algorithms = new Object[][] {
 			//id,class,name
-			{"pka","ambit2.descriptors.PKASmartsDescriptor","pKa-SMARTS","pKa Prediction of Monoprotic Small Molecules the SMARTS Way, Lee, Adam C., Yu, Jing-yu, and Crippen, Gordon M.,J. Chem. Inf. Model., 2008,  10.1021/ci8001815"},
-			{"toxtree-cramer","toxTree.tree.cramer.CramerRules","Cramer rules","http://toxtree.sourceforge.net"}
+			{"pKa","ambit2.descriptors.PKASmartsDescriptor",null},
+			{"ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
+			{"ToxTree: Verhaar","verhaar.VerhaarScheme",null},
+			{"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
+			{"ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
+				new Property("DailyIntake","\u00B5g/day", new LiteratureEntry("User input","http://toxtree.sourceforge.net"))},
 	};
+
 	public final static String idalgorithm = "idalgorithm";
 	public enum headers  {
 		dataset_id {
@@ -65,18 +73,22 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 					Request request, Response response) throws StatusException {
 				ArrayList<Algorithm> q = new ArrayList<Algorithm>();
 				Object key = getRequest().getAttributes().get(idalgorithm);
+				
 				if (key==null)
-					for (String[] d : algorithms) q.add(new Algorithm(d[0]));
-				else
-					for (String[] d : algorithms)
+					for (Object[] d : algorithms) q.add(new Algorithm(d[0].toString()));
+				else { 
+					key = Reference.decode(key.toString());
+					for (Object[] d : algorithms)
 						if (d[0].equals(key)) {
-							q.add(new Algorithm(d[0]));
+							q.add(new Algorithm(d[0].toString()));
 							break;
 						}
+				}
 				if (q.size()==0) {
 					getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 					return null;
 				} else	return q.iterator();
+				
 			}
 			@Override
 			public IProcessor<Iterator<Algorithm>, Representation> createConvertor(
@@ -146,21 +158,36 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		
 		Object key = getRequest().getAttributes().get(idalgorithm);
 		if (key==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Algorithm not defined");
-		for (String[] keys : algorithms) 
-			if (keys[0].equals(key)) { //ok, create object
-				String dataset_uri = getParameter(requestHeaders,headers.dataset_id.toString(),headers.dataset_id.isMandatory());
-				String params = getParameter(requestHeaders,headers.algorithm_parameters.toString(),headers.algorithm_parameters.isMandatory());  	
-				ModelQueryResults mr = new ModelQueryResults();
-				mr.setName(keys[2]);
-				mr.setContent(keys[1]);
-				mr.setPredictors(new Template("Empty"));
-				
-				Template dependent = new Template();
-				dependent.setName(keys[1]);
-				dependent.add(new Property(keys[1],new LiteratureEntry(keys[2],keys[3])));
+		key = Reference.decode(key.toString());
+		for (Object[] keys : algorithms) if (keys[0].equals(key)) //ok, create object
+			try {
+					List<Property> p = DescriptorsFactory.createDescriptor2Properties(keys[1].toString());
+					if ((p == null)||(p.size()==0)) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"Can't create "+key);
 
-				mr.setDependent(dependent);
-				return mr;				
+					String dataset_uri = getParameter(requestHeaders,headers.dataset_id.toString(),headers.dataset_id.isMandatory());
+					String params = getParameter(requestHeaders,headers.algorithm_parameters.toString(),headers.algorithm_parameters.isMandatory());  	
+					ModelQueryResults mr = new ModelQueryResults();
+					mr.setName(keys[0].toString());
+					mr.setContent(keys[1].toString());
+					
+					if (keys[2]==null)
+						mr.setPredictors(new Template("Empty"));
+					else {
+						Template predictors = new Template(String.format("Predictors-%s",keys[0]));
+						predictors.add((Property)keys[2]);
+						mr.setPredictors(predictors);
+					}
+
+					Template dependent = new Template();
+					dependent.setName(String.format("Model-%s",keys[0]));		
+					mr.setDependent(dependent);
+					
+					for (Property property:p) dependent.add(property);
+
+					return mr;			
+				
+			} catch (Exception x) {
+					 throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 			}
 		
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid id "+key);
