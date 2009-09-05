@@ -33,7 +33,7 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	public void processItem(T item, Writer output) {
 		try {
 			String t = super.getURI(item);
-			output.write(String.format("<a href='%s'>%s</a><br>", t,t));
+			output.write(String.format("<a href='%s'>%s</a><br>", t,item));
 		} catch (Exception x) {
 			
 		}
