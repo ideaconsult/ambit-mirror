@@ -139,14 +139,22 @@ public class Property extends Model {
 	public Property(String name) {
 		this(name,name);
 	}
+	
 	public Property(String name, LiteratureEntry reference) {
-		this(name,name);
-		this.reference = reference;
+		this(name,"",reference);
 	}	
+	public Property(String name, String units, LiteratureEntry reference) {
+		this(name,name);
+		setUnits(units);
+		this.reference = reference;
+	}		
 	private Property(String name,String label) {
 		this(name,label,0);
 	}
-	
+	public Property(String name,String label,String units) {
+		this(name,label);
+		setUnits(units);
+	}	
 	private Property(String name,String label,int order) {
 		this(name,label,order,java.lang.String.class);
 	}
