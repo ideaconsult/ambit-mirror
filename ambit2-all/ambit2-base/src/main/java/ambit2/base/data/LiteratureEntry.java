@@ -50,8 +50,10 @@ public class LiteratureEntry extends AmbitBean {
 		return getInstance(name,url,-1);
 	}
 	public static synchronized LiteratureEntry getInstance(String name,String url, int id) {
+		if (name.length()>255) name = name.substring(0,255);
 		int index =  references.indexOf(name);
 		if (index < 0) {
+			
 			LiteratureEntry et = new LiteratureEntry(name,url);
 			et.setId(id);
 			references.add(et);
