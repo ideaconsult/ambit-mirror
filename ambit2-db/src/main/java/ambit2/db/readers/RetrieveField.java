@@ -17,6 +17,14 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	 * 
 	 */
 	private static final long serialVersionUID = -7818288709974026824L;
+	protected boolean addNew = false;
+	public boolean isAddNew() {
+		return addNew;
+	}
+
+	public void setAddNew(boolean addNew) {
+		this.addNew = addNew;
+	}
 	protected enum SearchMode {
 		name,
 		alias {
@@ -68,19 +76,22 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 		"left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
 		"where idstructure=? %s";
-			/*
-		"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
-		"(\n"+
-		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values where idstructure=? and value_num is not null\n"+
-		"union\n"+
-		"select idstructure,idproperty,ifnull(text,value) as value_string,null,0 as idtype from property_values join property_string using(idvalue_string) where idvalue_string is not null and idstructure=?\n"+
-		") as L using (idproperty)\n";
-		*/
+	
+	protected final String sql_structure_novalue = 
+		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
+		"join  properties join catalog_references using(idreference)\n"+
+		"where idstructure=? %s";
+	
 	protected final String sql_chemical = 
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units from property_values \n"+
 		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
 		"where idchemical=? %s group by comments,idvalue_string";
+	
+	protected final String sql_chemical_novalue = 
+		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
+		"join  properties join catalog_references using(idreference)\n"+
+		"where idchemical=? %s order by idstructure limit 1";
 				
 	/*
 		"select idstructure,idproperty,ifnull(text,value) as value_string,value_num,1,name as idtype from property_values join structure using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty) where idchemical=7435 and comments="Names"
@@ -93,10 +104,14 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 		*/
 	protected final String where = "and %s=?";
 
-	
+	protected String sql() {
+		return isChemicalsOnly()?
+				(addNew?sql_chemical_novalue:sql_chemical):
+				(addNew?sql_structure_novalue:sql_structure);
+	}
 	public String getSQL() throws AmbitException {
 		return String.format(
-				isChemicalsOnly()?sql_chemical:sql_structure,
+				sql(),
 				(getFieldname()==null || "".equals(getFieldname()))
 				?"":String.format(where,searchMode.getSQL())		
 				);
