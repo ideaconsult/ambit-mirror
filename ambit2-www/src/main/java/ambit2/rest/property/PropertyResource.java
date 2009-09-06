@@ -166,7 +166,7 @@ create a new feature definition  	 POST  	 /feature_definition  	 name: String, 
 </pre>
 	 */
 	@Override
-	protected Property createObjectFromHeaders(Form requestHeaders)
+	protected Property createObjectFromHeaders(Form requestHeaders, Representation entity)
 			throws ResourceException {
 		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
 		String refid = getParameter(requestHeaders,headers.reference_id.toString(),headers.reference_id.isMandatory());

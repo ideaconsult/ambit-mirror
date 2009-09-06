@@ -20,6 +20,8 @@ import ambit2.db.readers.PropertyValue;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.value.UpdateCompoundPropertyValueNumber;
+import ambit2.db.update.value.UpdateCompoundPropertyValueString;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 import ambit2.rest.DocumentConvertor;
@@ -95,7 +97,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor(
-					new PropertyValueHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);			
+					new PropertyValueHTMLReporter(getRequest().getRootRef(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
 		} else return new StringConvertor(new PropertyValueReporter());
@@ -156,10 +158,14 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	}
 
 	@Override
-	protected PropertyValue createObjectFromHeaders(Form requestHeaders)
+	protected PropertyValue createObjectFromHeaders(Form requestHeaders, Representation entity)
 			throws ResourceException {
 		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.isMandatory());
-
+		if (value == null) { //www form most probably
+			Form form = new Form(entity);
+			value = form.getFirstValue(headers.value.toString());
+		}
+		if (value == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Value not defined");
 		Property p = getPropertyByParameters();
 		try {
 			return new PropertyValue<Double>(p,Double.parseDouble(value.toString()));
@@ -169,24 +175,39 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	}
 	protected AbstractUpdate createUpdateObject(PropertyValue entry) throws ResourceException {
 		IStructureRecord record = getRecordByParameters();
-		boolean chemOnly = record.getIdstructure()<=0;
 		
-		if (entry.getValue() instanceof Number) {
-			UpdateStructurePropertyIDNumber u = new UpdateStructurePropertyIDNumber();
-			u.setGroup(record);
-			u.setObject(entry);
-			return u;
-		} else  {
-			UpdateStructurePropertyIDString u = new UpdateStructurePropertyIDString();
-			u.setGroup(record);
-			u.setObject(entry);
-			return u;
-		}
+		if (record.getIdstructure()>0) 
+			if (entry.getValue() instanceof Number) {
+				UpdateStructurePropertyIDNumber u = new UpdateStructurePropertyIDNumber();
+				u.setGroup(record);
+				u.setObject(entry);
+				return u;
+			} else  {
+				UpdateStructurePropertyIDString u = new UpdateStructurePropertyIDString();
+				u.setGroup(record);
+				u.setObject(entry);
+				return u;
+			}
+		else
+			if (entry.getValue() instanceof Number) {
+				UpdateCompoundPropertyValueNumber u = new UpdateCompoundPropertyValueNumber();
+				u.setGroup(record);
+				u.setObject(entry);
+				return u;
+			} else  {
+				UpdateCompoundPropertyValueString u = new UpdateCompoundPropertyValueString();
+				u.setGroup(record);
+				u.setObject(entry);
+				return u;
+			}			
 	};
 	@Override
 	public void acceptRepresentation(Representation entity)
 			throws ResourceException {
 		createNewObject(entity);
+		getResponse().setLocationRef(getRequest().getOriginalRef());
+		getResponse().setStatus(Status.SUCCESS_OK);
+		getResponse().setEntity(getRepresentation(new Variant(MediaType.TEXT_HTML)));
 	}
 	@Override
 	public void storeRepresentation(Representation entity)

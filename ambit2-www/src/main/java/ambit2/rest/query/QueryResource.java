@@ -116,7 +116,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 	 */
 	public void createNewObject(Representation entity) throws ResourceException {
 		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		T entry = createObjectFromHeaders(requestHeaders);
+		T entry = createObjectFromHeaders(requestHeaders, entity);
 		Connection c = null;
 		//TODO it is inefficient to instantiate executor in all classes
 		UpdateExecutor executor = new UpdateExecutor();
@@ -147,7 +147,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
 	
-	protected T createObjectFromHeaders(Form requestHeaders) throws ResourceException {
+	protected T createObjectFromHeaders(Form requestHeaders, Representation entity) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
 	

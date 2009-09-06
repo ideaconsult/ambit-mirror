@@ -139,7 +139,7 @@ Description  	Method  	URI  	Parameters  	Result  	Status codes
 create a new reference  	 POST  	 /reference  	 name:String, algorithm_id:String, parameters:String, experimental_protocol:String  	 URI of new reference  	200,400,404,503
 </pre>
 	 */
-	protected LiteratureEntry createObjectFromHeaders(Form requestHeaders) throws ResourceException {
+	protected LiteratureEntry createObjectFromHeaders(Form requestHeaders, Representation entity) throws ResourceException {
 		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
 		String url = getParameter(requestHeaders,headers.algorithm_id.toString(),headers.algorithm_id.isMandatory());  	
 		return LiteratureEntry.getInstance(name, url);

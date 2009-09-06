@@ -69,7 +69,7 @@ public class AmbitResource extends Resource {
 			{DatasetsResource.datasets+"/{id}/compound","remove all compounds in a dataset",format,"DELETE","No"},
 
 			{"http://opentox.org/dev/apis/dataset","Conformers in a dataset",formatHeader,null,"Implemented"},
-			{DatasetsResource.datasets+"/8/compound/413/conformer/all","get conformers",format,"GET","Yes"},
+			{DatasetsResource.datasets+"/8/compound/413/conformer","get conformers",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/8/compound/413/conformer/100617","get conformer",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/{id}/compound/{cid}","add conformer",format,"POST","No"},
 			{DatasetsResource.datasets+"/{id}/compound/{cid}/conformer/{id}","update conformer",format,"PUT","No"},
@@ -98,9 +98,9 @@ public class AmbitResource extends Resource {
 			{"/feature/dataset/1/feature_definition/1","get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
 			{"/feature/feature_definition/{fid}","get the value for a all compounds for a given feature definition",format,"GET","No"},
 			
-			{"/feature/compound/{cid}/feature_definition/{f_def_id}","update the value for a specific feature",format,"PUT","No"},
+			{"/feature/compound/{cid}/feature_definition/{f_def_id}","update the value for a specific feature",format,"PUT","Yes"},
 			{"/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id}","update the value for a specific feature",format,"PUT","Yes"},
-			{"/feature/compound/{cid}/feature_definition/{f_def_id}","save the value for a given feature per compound",format,"POST","No"},
+			{"/feature/compound/{cid}/feature_definition/{f_def_id}","save the value for a given feature per compound",format,"POST","Yes"},
 			{"/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id}","save the value for a given feature per conformer",format,"POST","Yes"},
 			{"/feature/compound/{cid}/feature_definition","save the value for a new feature per compound",format,"POST","No"},
 			{"/feature/compound/{cid}/conformer/{cid}/feature_definition","save the value for a given feature per conformer",format,"POST","No"},
@@ -110,6 +110,10 @@ public class AmbitResource extends Resource {
 			{"/compound/1/tuple","All available feature tuples",format,"GET","Yes"},
 			{"/compound/1/tuple/264168","Specific feature tuple",format,"GET","Yes"},
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
+
+			{"(to be discussed)","Model predictions (PROPOSAL)",formatHeader,null},
+			{"/compound/1/model","All available model predictions",format,"GET","Yes"},
+			{"/compound/1/model/3","Specific model prediction",format,"GET","Yes"},
 			
 			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
 			{AlgorithmCatalogResource.algorithm,"All types of algorithms",format,"GET","Yes"},
@@ -118,12 +122,18 @@ public class AmbitResource extends Resource {
 			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"Learinng algorithms"),"Learning algorithms",format,"GET","Under development"},
 			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"clustering"),"Clustering algorithms",format,"GET","Under development"},
 			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"util"),"Utility algorithms",format,"GET","Under development"},
+			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"rules"),"Rules",format,"GET","Yes"},
 			
+
+			{String.format("%s/rules",AlgorithmCatalogResource.algorithm),"get a list of all available models",format,"GET","Yes"},
+			{String.format("%s/rules/1",AlgorithmCatalogResource.algorithm),"get the representation of an algorthm",format,"GET","Yes"},
+			{String.format("%s/rules/{id}",AlgorithmCatalogResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
+					
 			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
-			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Test implementation only"},
+			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
 					
 
 			{"http://opentox.org/dev/apis/feature-ontology","Feature ontology (PROPOSAL)",formatHeader,null},
@@ -295,22 +305,28 @@ public class AmbitResource extends Resource {
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
 		w.write("<div class=\"spacer\"></div>");
 
-		w.write(String.format("<div class=\"row\"><span class=\"left\"><a href=\"%s\">Home</a></span>",baseReference.toString()));
-		w.write("	<span class=\"right\"><a href=''>Login</a></span></div>");
+		w.write(String.format("<div class=\"row\"><span class=\"left\"><a href=\"%s\">Home</a>",baseReference.toString()));
+		w.write("</span>");
+		w.write("	<span class=\"right\"><a href=''>Login</a>");
+		//w.write(String.format("&nbsp;<a href=\"%s/help\">Help</a>",baseReference.toString()));
+		w.write("</span></div>");
 		w.write("	<div class=\"spacer\"></div>");
 		w.write("</div>");
 		w.write("<div>");		
 		w.write(String.format("<a href='%s/fasttox'>FastTox</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/ttc'>TTC</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/depict?search=c1ccccc1'>Depiction</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/similarity'>Similar&nbsp;structures</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/smarts'>SMARTS&nbsp;patterns</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s%s/Endpoints'>Endpoints</a>&nbsp;",baseReference,OntologyResource.resource));
-		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
 		w.write(String.format("<a href='%s%s'>Feature definitions</a>&nbsp;",baseReference,PropertyResource.featuredef));
 		w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/help'>Help</a>&nbsp;",baseReference));
 		w.write("</div>");
 
 	
