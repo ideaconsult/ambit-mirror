@@ -28,6 +28,7 @@ public class RetrieveFieldStructure extends RetrieveField<IStructureRecord> {
 			record.setIdchemical(9);
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = Property.getInstance(rs.getString(1),le); 
+			p.setUnits(rs.getString(11));
 			Object value = rs.getObject(5);
 			if (value == null) record.setProperty(p,rs.getFloat(6));
 			else record.setProperty(p,rs.getString(5));	
