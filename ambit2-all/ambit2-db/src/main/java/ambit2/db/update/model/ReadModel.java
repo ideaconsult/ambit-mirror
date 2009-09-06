@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jaxen.function.StringFunction;
+
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.model.ModelQueryResults;
@@ -12,6 +14,7 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
+import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStoredResults;
 
 /**
@@ -19,11 +22,12 @@ import ambit2.db.search.structure.QueryStoredResults;
  * @author nina
  *
  */
-public class ReadModel  extends AbstractQuery<String, Integer, EQCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {
+public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {
 	protected static String sql = 
 		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,content\n"+
 		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors %s";
-	protected static String where = "where idmodel = ?";
+	protected static String whereID = " idmodel = ? ";
+	protected static String whereName = " m.name %s ?";
 	/**
 	 * 
 	 */
@@ -32,6 +36,7 @@ public class ReadModel  extends AbstractQuery<String, Integer, EQCondition, Mode
 	public ReadModel(Integer id) {
 		super();
 		setValue(id);
+		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
 	}
 	public ReadModel() {
 		this(null);
@@ -46,16 +51,31 @@ public class ReadModel  extends AbstractQuery<String, Integer, EQCondition, Mode
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
-		List<QueryParam> params = null;
-		if (getValue()!=null) {
-			params = new ArrayList<QueryParam>();
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		if (getFieldname() != null) 
+			params.add(new QueryParam<String>(String.class, getFieldname()));
+		
+		if (getValue()!=null) 
 			params.add(new QueryParam<Integer>(Integer.class, getValue()));
-		}
-		return params;
+
+		return params.size()==0?null:params;
 	}
 
 	public String getSQL() throws AmbitException {
-		return String.format(sql,getValue()==null?"":where);
+		String where = "where";
+		StringBuilder b = new StringBuilder();
+		
+		if (getFieldname()!= null) {
+			b.append(where);
+			b.append(String.format(whereName,getCondition()));
+			where = " or ";
+		}
+		if (getValue()!= null) {
+			b.append(where);
+			b.append(whereID);
+			where = " or ";
+		}
+		return String.format(sql,b.toString());
 	}
 
 	public ModelQueryResults getObject(ResultSet rs) throws AmbitException {
