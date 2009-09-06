@@ -35,7 +35,7 @@ public class RetrieveModelTemplates<ResultType> extends AbstractQuery<ModelQuery
 	}
 
 	protected String sql_chemicals = 
-		"select properties.name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,avg(value_num) as value_num,title,url,idchemical,id,idtemplate from property_values \n"+
+		"select properties.name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,avg(value_num) as value_num,title,url,idchemical,id,units,idtemplate from property_values \n"+
 		"left join property_string using(idvalue_string)\n"+
 		"join properties using(idproperty)\n"+
 		"join template_def using(idproperty)\n"+
@@ -45,7 +45,7 @@ public class RetrieveModelTemplates<ResultType> extends AbstractQuery<ModelQuery
 		"join catalog_references using(idreference)\n"+
 		"where idchemical=? %s group by idproperty";
 	protected String sql_structure = 
-		"select properties.name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,idtemplate from property_values \n"+
+		"select properties.name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units,idtemplate from property_values \n"+
 		"left join property_string using(idvalue_string)\n"+
 		"join template_def using(idproperty)\n"+
 		"join template using(idtemplate)\n"+		
