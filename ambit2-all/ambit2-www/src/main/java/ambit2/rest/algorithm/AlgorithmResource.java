@@ -44,16 +44,16 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 
 	protected Object[][] algorithms = new Object[][] {
 			//id,class,name
-			{"pKa","ambit2.descriptors.PKASmartsDescriptor",null},
-			{"ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
-			{"ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
-			{"ToxTree: Eye irritation","eye.EyeIrritationRules",null},
-			{"ToxTree: Skin irritation","sicret.SicretRules",null},
-			{"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
-			{"ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
-			{"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
+			{"1","pKa","ambit2.descriptors.PKASmartsDescriptor",null},
+			{"2","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
+			{"3","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
+			{"4","ToxTree: Eye irritation","eye.EyeIrritationRules",null},
+			{"5","ToxTree: Skin irritation","sicret.SicretRules",null},
+			{"6","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
+			{"7","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
+			{"8","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
-			{"ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
+			{"9","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property("DailyIntake","\u00B5g/day", new LiteratureEntry("User input","http://toxtree.sourceforge.net"))},
 	};
 
@@ -76,24 +76,34 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 			@Override
 			protected Iterator<Algorithm> createQuery(Context context,
 					Request request, Response response) throws StatusException {
-				ArrayList<Algorithm> q = new ArrayList<Algorithm>();
-				Object key = getRequest().getAttributes().get(idalgorithm);
-				
-				if (key==null)
-					for (Object[] d : algorithms) q.add(new Algorithm(d[0].toString()));
-				else { 
-					key = Reference.decode(key.toString());
-					for (Object[] d : algorithms)
-						if (d[0].equals(key)) {
-							q.add(new Algorithm(d[0].toString()));
-							break;
+				try {
+					ArrayList<Algorithm> q = new ArrayList<Algorithm>();
+					Object key = getRequest().getAttributes().get(idalgorithm);
+					
+					if (key==null)
+						for (Object[] d : algorithms) {
+							Algorithm alg = new Algorithm(d[1].toString());
+							alg.setId(Integer.parseInt(d[0].toString()));
+							q.add(alg);
 						}
+					else { 
+						key = Reference.decode(key.toString());
+						
+						for (Object[] d : algorithms)
+							if (d[0].equals(key)) {
+								Algorithm alg = new Algorithm(d[1].toString());
+								alg.setId(Integer.parseInt(d[0].toString()));
+								q.add(alg);
+								break;
+							}
+					}
+					if (q.size()==0) {
+						getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+						return null;
+					} else	return q.iterator();
+				} catch (Exception x) {
+					throw new StatusException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage()));
 				}
-				if (q.size()==0) {
-					getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-					return null;
-				} else	return q.iterator();
-				
 			}
 			@Override
 			public IProcessor<Iterator<Algorithm>, Representation> createConvertor(
@@ -168,25 +178,25 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		key = Reference.decode(key.toString());
 		for (Object[] keys : algorithms) if (keys[0].equals(key)) //ok, create object
 			try {
-					List<Property> p = DescriptorsFactory.createDescriptor2Properties(keys[1].toString());
+					List<Property> p = DescriptorsFactory.createDescriptor2Properties(keys[2].toString());
 					if ((p == null)||(p.size()==0)) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"Can't create "+key);
 
 					String dataset_uri = getParameter(requestHeaders,headers.dataset_id.toString(),headers.dataset_id.isMandatory());
 					String params = getParameter(requestHeaders,headers.algorithm_parameters.toString(),headers.algorithm_parameters.isMandatory());  	
 					ModelQueryResults mr = new ModelQueryResults();
-					mr.setName(keys[0].toString());
-					mr.setContent(keys[1].toString());
+					mr.setName(keys[1].toString());
+					mr.setContent(keys[2].toString());
 					
-					if (keys[2]==null)
+					if (keys[3]==null)
 						mr.setPredictors(new Template("Empty"));
 					else {
-						Template predictors = new Template(String.format("Predictors-%s",keys[0]));
-						predictors.add((Property)keys[2]);
+						Template predictors = new Template(String.format("Predictors-%s",keys[1]));
+						predictors.add((Property)keys[3]);
 						mr.setPredictors(predictors);
 					}
 
 					Template dependent = new Template();
-					dependent.setName(String.format("Model-%s",keys[0]));		
+					dependent.setName(String.format("Model-%s",keys[1]));		
 					mr.setDependent(dependent);
 					
 					for (Property property:p) dependent.add(property);

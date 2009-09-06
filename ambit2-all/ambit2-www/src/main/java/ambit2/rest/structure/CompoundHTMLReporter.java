@@ -167,8 +167,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				{"feature","EC","EINECS"},
 				{"feature",CDKConstants.NAMES,"Chemical name(s)"},
 				{"feature",null,"All available feature values"},
-				{"tuple",null,"Feature values by groups"},
-				{"feature_definition",null,"Feature definitions"}
+				{"template",null,"Feature values by groups"},
+				{"tuple",null,"Feature values by dataset"},
+				//{"feature_definition",null,"Feature definitions"},
+				{"model",null,"Model predictions"},
 				
 		};
 			for (String[] n:s)
