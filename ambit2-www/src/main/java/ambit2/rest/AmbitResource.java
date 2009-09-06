@@ -276,6 +276,12 @@ public class AmbitResource extends Resource {
 	}
 	public static void writeHTMLHeader(Writer w,String title,Reference baseReference,String meta) throws IOException {
 
+		writeTopHeader(w, title, baseReference, meta);
+		writeSearchForm(w, title, baseReference, meta);
+		
+	}
+	public static void writeTopHeader(Writer w,String title,Reference baseReference,String meta) throws IOException {
+
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
@@ -306,6 +312,12 @@ public class AmbitResource extends Resource {
 		w.write(String.format("<a href='%s%s'>Feature definitions</a>&nbsp;",baseReference,PropertyResource.featuredef));
 		w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",baseReference));
 		w.write("</div>");
+
+	
+	}
+	
+	public static void writeSearchForm(Writer w,String title,Reference baseReference,String meta) throws IOException {
+
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
 		w.write("<td align='left' width='256px'>");
@@ -331,7 +343,7 @@ public class AmbitResource extends Resource {
 		
 		w.write("<hr>");
 		
-	}
+	}	
 	public static void writeHTMLFooter(Writer output,String title,Reference baseReference) throws IOException {
 		output.write("<div class=\"footer\"><span class=\"right\">");
 		output.write("<font color='#D6DFF7'>");

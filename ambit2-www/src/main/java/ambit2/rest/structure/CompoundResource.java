@@ -14,6 +14,7 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.Variant;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -26,8 +27,11 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
+import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
+import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
@@ -172,24 +176,62 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
 				key = form.getFirstValue("search");
+				String property = form.getFirstValue("property");
+				if (property!=null) property = Reference.decode(property.trim());
+				
 				if (key != null) {
 					collapsed = true;
-					QueryField q_by_name =  new QueryField();
-					q_by_name.setChemicalsOnly(true);
+					
+					AbstractStructureQuery query;
+					
 			        try {
+			        	key = Reference.decode(key.toString().trim());
+			        	String[] keys = key.toString().split(" .. ");
+			        	Double d1=null;
+			        	Double d2=null;
+			        	NumberCondition condition = NumberCondition.getInstance(NumberCondition.between);
+			        	if (keys.length==2) try {
+			        		d1 = Double.parseDouble(keys[0].toString()); //number
+			        		d2 = Double.parseDouble(keys[1].toString()); //number
+			        	} catch (Exception x) {
+			        		d1 = Double.parseDouble(key.toString()); 
+			        	}
+			        	else {
+			        		d1 = Double.parseDouble(key.toString());
+			        	}
+
+			        	QueryFieldNumeric q = new QueryFieldNumeric();
+			        	q.setChemicalsOnly(true);
+			        	if (property != null) q.setFieldname(new Property(property,null));
+				        try {
+				        	condition = NumberCondition.getInstance(Reference.decode(request.getAttributes().get("condition").toString()));
+				        	q.setValue(d1);
+				        	q.setMaxValue(d2==null?(d1+1E-10):d2);
+				        } catch (Exception x) {
+				        	condition = NumberCondition.getInstance(NumberCondition.between);
+				        	q.setValue(d1);
+				        	q.setMaxValue(d2==null?(d1+1E-10):d2);
+				        } finally {
+				        	q.setCondition(condition);
+				        }
+				        query= q;
+			        } catch (Exception x) {
+			        	QueryField q_by_name =  new QueryField();
+			        	if (property != null) q_by_name.setFieldname(new Property(property,null));
 			        	q_by_name.setValue(Reference.decode(key.toString()));
-			        } catch (Exception x) {
-			        	throw new AmbitException(x);
+			        	q_by_name.setChemicalsOnly(true);
+				        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
+				        try {
+				        	condition = StringCondition.getInstance(Reference.decode(request.getAttributes().get("condition").toString()));
+				        } catch (Exception xx) {
+				        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
+				        } finally {
+				        	q_by_name.setCondition(condition);
+				        }
+				        query = q_by_name;
 			        }			
-			        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
-			        try {
-			        	condition = StringCondition.getInstance(Reference.decode(request.getAttributes().get("condition").toString()));
-			        } catch (Exception x) {
-			        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
-			        } finally {
-			        	q_by_name.setCondition(condition);
-			        }
-			        return q_by_name;
+
+			        return query;
 				} else return null;			
 			} else {
 				IStructureRecord record = new StructureRecord();

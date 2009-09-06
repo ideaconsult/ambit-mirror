@@ -1,15 +1,13 @@
 package ambit2.rest.structure;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.openscience.cdk.CDKConstants;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -76,28 +74,75 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			logger.error(x);
 		}
 	}
-	public void header(Writer output, Q query) {
+	public void header(Writer w, Q query) {
 		try {
-			AmbitResource.writeHTMLHeader(output,
+			String property = "";
+			String search="";
+			Reference baseReference = uriReporter.getBaseReference();
+			
+			AmbitResource.writeTopHeader(w,
 					collapsed?"Chemical compounds":"Chemical compound"
 					,
-					uriReporter.getBaseReference()
+					uriReporter.getBaseReference(),
+					""
 					);
+			
+			w.write("<table width='100%' bgcolor='#ffffff'>");
+		
+			w.write("<tr>");
+			w.write("<td align='left' width='256px'>");
+			w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+			w.write("</td>");
+			w.write("<td align='center'>");
+
+			w.write("<form action='' method='get'>\n");
+			w.write(String.format("<input name='property' size='20' value='%s'>\n",property));
+			w.write("&nbsp;");
+			w.write(String.format("<input name='search' size='60' value='%s'>\n",search));
+			w.write("<input type='submit' value='Search'><br>");
+			//w.write(baseReference.toString());
+
+			w.write("</form>\n");
+			w.write("Search by property or identifier name (optional) and value");		
+			w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
+			w.write("</td>");
+			w.write("<td align='right' width='256px'>");
+			w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+
+			w.write("</td></tr>");
+			w.write("</table>");		
+			
+			
+			
+			w.write("<hr>");
+			/*
+			AmbitResource.writeSearchForm(w,
+					collapsed?"Chemical compounds":"Chemical compound"
+					,
+					uriReporter.getBaseReference(),
+					""
+					);
+			
+			*/
 			output.write("<h4><div class=\"actions\"><span class=\"right\">");
 			output.write(String.format("<form method=\"post\" action=\"\">",""));
 			output.write(String.format("%s","Query name:&nbsp;"));
+
 			output.write(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
 			output.write("<input type=\"submit\" value='Save search results'>&nbsp;");
 			//output.write("</form>");
 			//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
-			output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
+			//output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
 			
 			//output.write(String.format("<form method=\"post\" action=\"%s/algorithm\">",uriReporter.getBaseReference()));
-			output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
-			output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
-			output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
+			//output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
+			//output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
+			//output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
+			
 			output.write("</form>");	
 			output.write("</span></div></h4>\n");	
+			
+			
 			output.write("<div id=\"div-1\">");
 			
 
@@ -174,7 +219,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				
 		};
 			for (String[] n:s)
-			b.append(String.format("<a href=\"%s/%s/%s\" target=\"_blank\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
+			b.append(String.format("<a href=\"%s/%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
 			//b.append("</div>");
 			b.append("</div>");		
 	
