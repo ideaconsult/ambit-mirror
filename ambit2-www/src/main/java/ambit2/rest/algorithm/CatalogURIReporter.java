@@ -30,7 +30,7 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 		}
 	}	
 	public String getURI(String ref, T item) {
-		return String.format("%s%s%s",ref,"".equals(ref)?"":"/",Reference.encode(item.toString()));
+		return String.format("%s%s%s",ref,"".equals(ref)?"":"/",item.toString());
 	}
 	
 	public String getURI(T item) {
