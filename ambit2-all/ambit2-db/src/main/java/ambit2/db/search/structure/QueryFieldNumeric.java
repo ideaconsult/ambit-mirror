@@ -64,13 +64,15 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	public String getSQL() throws AmbitException {
 //where value_num %s ? %s %s and value_num is not null\n";
 //where abs(value_num - ?) < 1E-4 %s and value_num is not null\n";
-		return NumberCondition.getInstance("=").equals(getCondition())?
+		String sql = NumberCondition.getInstance("=").equals(getCondition())?
 					String.format(sqlField+where_equal,(isAnyField()?"":"and name=?"))
 				:
 					String.format(sqlField+where_all,getCondition().getSQL(),
 					(NumberCondition.getInstance(NumberCondition.between).equals(getCondition()))?" and ?":"",
 					(isAnyField()?"":"and name=?")					
 					);
+		if (isChemicalsOnly()) return sql + " group by idchemical"; else return sql;
+					
 	}
 	
 	protected boolean isAnyField() {
@@ -101,19 +103,19 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	public void setValue(Number value) {
 		super.setValue(value);
 	}
+	
 	@Override
 	public String toString() {
 		if ((getFieldname()==null) && (getValue()==null)) return "Search by numeric properties";
-		StringBuilder b = new StringBuilder();
-		b.append(getFieldname());
-		b.append(' ');
-		b.append(getCondition());		
-		b.append(' ');
-		b.append(getValue());
-		if (NumberCondition.between.equals(getCondition().toString())) {
-			b.append(" and ");
-			b.append(getMaxValue());			
-		}
-		return b.toString();
+		
+		return 
+		String.format("%s %s %s %s %s",
+				getFieldname()==null?"Any property":getFieldname(),
+				getCondition(),
+				getValue(),
+				(NumberCondition.between.equals(getCondition().toString())?"and":""),
+				NumberCondition.between.equals(getCondition().toString())?String.format("%10.4f",getMaxValue()):""
+						);
+
 	}
 }
