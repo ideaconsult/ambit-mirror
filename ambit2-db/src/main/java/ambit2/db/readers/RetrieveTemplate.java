@@ -30,7 +30,7 @@ public class RetrieveTemplate<ResultType> extends AbstractQuery<Template,IStruct
 	}
 
 	protected String sql_chemicals = 
-		"select properties.name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,avg(value_num) as value_num,title,url,idchemical,id,idtemplate from property_values \n"+
+		"select properties.name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,avg(value_num) as value_num,title,url,idchemical,id,units,idtemplate from property_values \n"+
 		"left join property_string using(idvalue_string)\n"+
 		"join properties using(idproperty)\n"+
 		"join template_def using(idproperty)\n"+
