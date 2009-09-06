@@ -75,7 +75,8 @@ public class KroesInput extends FeatureResource {
 								b.append(String.format("<input name=\"idstructure\" value=\"%d\" type=\"hidden\">",record.getIdstructure()));
 								b.append(String.format("<input name=\"idchemical\" value=\"%d\" type=\"hidden\">",record.getIdchemical()));
 								b.append("<h3>ToxTree: ILSI/Kroes decision tree for Threshold for Toxicological Concern (TTC) estimation</h3>");
-								b.append("<ol><li>Substance would not be expected to be a safety concern<li>Negligible risk (low probability of a life-time cancer risk greater than 1 in 10^6<li>Risk assessment requires compound-specific toxicity data</ol>");
+								b.append("<p>Classifies the compound into one of three classes:");
+								b.append("<h4><ol><li>Substance would not be expected to be a safety concern<li>Negligible risk (low probability of a life-time cancer risk greater than 1 in 10^6<li>Risk assessment requires compound-specific toxicity data</ol></h4>");
 								b.append("<ul><li>Daily Intake value is necessary for an accurate TTC assessment.<li>Please enter Daily Intake value and press Update.  <li>Press Apply to apply TTC decision tree.</ul>");
 								b.append("<input type=\"submit\" name='kroes' value=\"Apply ToxTree: ILSI/Kroes decision tree for TTC\">");
 								b.append("</form></span></div>");
