@@ -39,6 +39,9 @@ import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
 import ambit2.rest.fastox.FastToxStep1;
 import ambit2.rest.fastox.FastToxStep2;
+import ambit2.rest.fastox.KroesInput;
+import ambit2.rest.fastox.KroesStep1;
+import ambit2.rest.fastox.KroesStep2;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
@@ -133,6 +136,11 @@ public class AmbitApplication extends Application {
 		router.attach("", AmbitResource.class);	
 		router.attach(FastToxStep1.resource, FastToxStep1.class);
 		router.attach(FastToxStep2.resource, FastToxStep2.class);
+
+		router.attach("/ttc", KroesStep1.class);
+		router.attach("/ttc/step2", KroesStep2.class);
+		router.attach("/ttc/input", KroesInput.class);
+		
 		
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);

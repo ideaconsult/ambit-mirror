@@ -8,6 +8,7 @@ import org.restlet.data.Status;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -18,9 +19,9 @@ import ambit2.db.DbReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
-import ambit2.db.processors.ProcessorMissingDescriptorsQuery;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.search.QueryExecutor;
+import ambit2.db.search.property.ValuesReader;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.StatusException;
 import ambit2.rest.task.TaskResource;
@@ -58,7 +59,19 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
 			calculator.setDescriptors(p);		
 			ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
 				new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-			p1.add(new ProcessorStructureRetrieval());		
+			//p1.add(new ProcessorStructureRetrieval());	
+			
+			ValuesReader readProfile = new ValuesReader();
+			Template template = new Template();
+			template.setName("DailyIntake");
+			Property di = new Property("DailyIntake");
+			di.setEnabled(true);
+			template.add(di); // this is a hack for TTC application, TODO make it generic!!!
+			readProfile.setProfile(template);
+			
+			p1.add(readProfile);
+			
+			//p1.add(new ValuesByTemplateReader());todo read predictor values
 			p1.add(calculator);
 			p1.setAbortOnError(true);
 			
@@ -74,12 +87,15 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
 				}
 			});
 			
+			//TODO this is to reflect values entered by user which will affect calculation result. Think of more efficient way.
+			/*
     		ProcessorMissingDescriptorsQuery mq = new ProcessorMissingDescriptorsQuery();
     		QueryCombinedStructure q = (QueryCombinedStructure)mq.process(p);
     		q.setCombine_as_and(true);
     		q.setScope(model.getTestInstances());
     		q.setId(1);
-    		IBatchStatistics stats = batch.process(q);
+    		*/
+    		IBatchStatistics stats = batch.process(model.getTestInstances());
     		System.out.println(stats);
     		if (reference ==null)	
     			return new Reference(String.format("/template/%s",model.getDependent().getName()));

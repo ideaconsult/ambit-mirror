@@ -170,7 +170,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	@Override
-	protected ModelQueryResults createObjectFromHeaders(Form requestHeaders)
+	protected ModelQueryResults createObjectFromHeaders(Form requestHeaders, Representation entity)
 			throws ResourceException {
 		
 		Object key = getRequest().getAttributes().get(idalgorithm);

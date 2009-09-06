@@ -16,15 +16,16 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.structure.CompoundHTMLReporter;
-import ambit2.rest.structure.CompoundResource;
 
-public class FastToxStep1 extends CompoundResource {
-	public static String resource = "/fasttox";
+public class KroesStep1 extends FastToxStep1 {
 
-	public FastToxStep1(Context context, Request request,
-			Response response) {
+	public KroesStep1(Context context, Request request, Response response) {
 		super(context, request, response);
 	}
+	protected String getFormAction() {
+		return String.format("%s/step2","/ttc");
+	}
+
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
@@ -48,12 +49,13 @@ public class FastToxStep1 extends CompoundResource {
 					@Override
 							public String toURI(IStructureRecord item) {
 								StringBuilder b = new StringBuilder();
-								b.append(String.format("<form action=\"%s%s\" method=\"POST\">",getUriReporter().getBaseReference(),getFormAction()));
+								b.append(String.format("<form action=\"%s/ttc/input\" method=\"GET\">",
+										getUriReporter().getBaseReference()
+										));
 								b.append(super.toURI(item));
-								
 								b.append(String.format("<input name=\"idstructure\" value=\"%d\"type=\"hidden\">",item.getIdstructure()));
 								b.append(String.format("<input name=\"idchemical\" value=\"%d\"type=\"hidden\">",item.getIdchemical()));
-								b.append("<input type=\"submit\" value=\"Select models for prediction\"></form>");
+								b.append("<input type=\"submit\" value=\"Next\"></form>");
 								b.append("</form>");
 								
 								return b.toString();
@@ -74,9 +76,5 @@ public class FastToxStep1 extends CompoundResource {
 */
 				},
 				MediaType.TEXT_HTML);
-	}
-	protected String getFormAction() {
-		return String.format("%s/step2",resource);
-	}
+	}	
 }
-

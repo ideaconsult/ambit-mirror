@@ -22,6 +22,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
+import ambit2.db.search.QueryParam;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.model.ReadModel;
@@ -85,6 +86,9 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 			Request request, Response response) throws StatusException {
 		ReadModel query = new ReadModel();
 		query.setValue(getModelID());
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		String name = form.getFirstValue("search");
+		if (name!=null) query.setFieldname(name);
 		collapsed = query.getValue()!=null;
 		return query;
 	}
@@ -134,33 +138,36 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 				final String resultRef ;
 				final IQueryRetrieval<IStructureRecord> query;
 				Integer idmodel = getModelID();
-				ModelQueryResults model = new ModelQueryResults();
+				final ModelQueryResults themodel = new ModelQueryResults();
 				if ((entity != null) && MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType(),true)) {
 					Form form = new Form(entity);
 					if (idmodel == null) idmodel = Integer.parseInt(form.getFirstValue("idmodel"));
-					model.setId(idmodel);
+					themodel.setId(idmodel);
 					IStructureRecord record = new StructureRecord(
 							Integer.parseInt(form.getFirstValue("idchemical")),
 							Integer.parseInt(form.getFirstValue("idstructure")),null,null);
 					query = new QueryStructureByID(record);
 					CompoundURIReporter<IQueryRetrieval<IStructureRecord>> r = 
 							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest().getRootRef());
-					resultRef = String.format("%s/model/%d",r.getURI(record),idmodel);
+					if (idmodel>0)
+						resultRef = String.format("%s/model/%d",r.getURI(record),idmodel);
+					else
+						resultRef = String.format("%s/model",r.getURI(record));
 				} else {
 					if (idmodel == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-					model.setId(idmodel);
+					themodel.setId(idmodel);
 					Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
 					String id = requestHeaders.getFirstValue("dataset-id");  				
 					query = new QueryDatasetByID();
 					((QueryDatasetByID)query).setValue(Integer.parseInt(id));						
-					resultRef = getURUReporter(getRequest().getRootRef()).getURI(model);
+					resultRef = getURUReporter(getRequest().getRootRef()).getURI(themodel);
 				}
 				
 				QueryReporter<ModelQueryResults,ReadModel,Object> r = new QueryReporter<ModelQueryResults,ReadModel,Object>() {
 					@Override
 					public void processItem(ModelQueryResults model, Object output) {
 						try {
-			
+							themodel.setId(model.getId());
 							model.setTestInstances(query);
 							Reference ref =  ((AmbitApplication)getApplication()).addTask(
 									String.format("Apply model %s to %s",model.toString(),query.toString()),
@@ -211,7 +218,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
         		conn = ((AmbitApplication)getApplication()).getConnection();
         		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection();
         		r.setConnection(conn);
-				r.process(new ReadModel(idmodel));
+				r.process(getModelQuery(idmodel));
 				/*
 				getResponse().setLocationRef(resultRef);
 				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
@@ -227,6 +234,9 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		}
 	}	
 	
+	protected ReadModel getModelQuery(int idmodel) {
+		return new ReadModel(idmodel);
+	}
 	
 }
 

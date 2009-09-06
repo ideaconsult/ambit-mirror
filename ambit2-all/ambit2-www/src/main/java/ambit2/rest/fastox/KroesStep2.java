@@ -1,0 +1,38 @@
+package ambit2.rest.fastox;
+
+import org.restlet.Context;
+import org.restlet.data.Request;
+import org.restlet.data.Response;
+
+import ambit2.db.model.ModelQueryResults;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StringCondition;
+import ambit2.db.update.model.ReadModel;
+import ambit2.rest.StatusException;
+import ambit2.rest.model.ModelResource;
+
+public class KroesStep2 extends ModelResource {
+
+	public KroesStep2(Context context, Request request, Response response) {
+		super(context, request, response);
+		// TODO Auto-generated constructor stub
+	}
+	@Override
+	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
+			Request request, Response response) throws StatusException {
+		ReadModel query = new ReadModel();
+		query.setValue(null);
+		query.setFieldname("ToxTree: ILSI/Kroes decision tree for TTC");
+		query.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+		collapsed = false;
+		return query;
+	}
+	@Override
+	protected ReadModel getModelQuery(int idmodel) {
+		ReadModel query = super.getModelQuery(idmodel);
+		query.setValue(null);
+		query.setFieldname("ToxTree: ILSI/Kroes decision tree for TTC");
+		query.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+		return query;
+	}
+}
