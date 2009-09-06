@@ -11,7 +11,9 @@ public class ModelQueryResults extends ModelWrapper<
 			IQueryRetrieval<IStructureRecord>,String> {
 	@Override
 	public String toString() {
-		return String.format("Model %d",getId());
+		return (getName()==null)||(getName().equals(""))?
+				String.format("Model %d",getId()):
+				String.format("Model %s",getName());
 	}
 
 
