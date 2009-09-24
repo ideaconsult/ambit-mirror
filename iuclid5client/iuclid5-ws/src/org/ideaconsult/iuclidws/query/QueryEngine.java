@@ -404,6 +404,7 @@ public class QueryEngine {
 		
 		try {
 			ExecuteQuery executeQuery = new ExecuteQuery();
+			executeQuery.setSession(session);
 			executeQuery.setQueryExecutionDefinition(queryExecutionDefinition);
 			ExecuteQueryResponse executeQueryResponse = queryEngineStub.executeQuery(executeQuery);
 			
