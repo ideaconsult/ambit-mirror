@@ -1176,10 +1176,10 @@ public class TestUtilities
 		
 		
 		//Testing SSSR algorithm wether it gives exactly the same numbering of the rings
-		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
-		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
-		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
-		tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		//tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		//tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		//tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
+		//tu.printSSSR("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO");
 		
 		//These were problematic cases, but now are OK
 		//tu.compareIsoTester("S(OC)(=O)(=O)O",null);  //OK
@@ -1203,7 +1203,10 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("C1CC1", "CC(C)CCC");
 		//tu.testSmartsManagerBoolSearch("CC(C)C", "C1CC1");
 		
-		
+		tu.testSmartsManagerBoolSearch("[CH]#CC=O", "COC(=O)C#C");
+		tu.testSmartsManagerBoolSearch("C#CC=O", "COC(=O)C#C");
+		tu.testIsomorphismTester("[CH]#CC=O", "COC(=O)C#C");
+		tu.testIsomorphismTester("C#CC=O", "COC(=O)C#C");
 		
 		//tu.testSmartsManagerBoolSearch("[C;]", "CCC");   //----------> gives an Exception  at ambit2.smarts.SmartsLogicalExpression.doAND(SmartsLogicalExpression.java:71)
 		

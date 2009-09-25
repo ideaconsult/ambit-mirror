@@ -57,7 +57,9 @@ public class SmartsManager
 {
 	int recursiveStrategy = 1; //0 - subqueries, 1 - recursive substructure search (default one)
 	boolean FlagSetSmartsDataForTarget = true;
+	boolean FlagUseCDKIsomorphismTester = true;
 	SmartsParser parser = new SmartsParser();
+	IsomorphismTester isoTester = new IsomorphismTester();
 	String querySmarts;
 	String errorMsg = "";
 	QueryAtomContainer query;
@@ -160,6 +162,11 @@ public class SmartsManager
 		FlagSetSmartsDataForTarget  = flag;
 	}
 	
+	public void setUseCDKIsomorphismTester(boolean flag)
+	{
+		FlagUseCDKIsomorphismTester  = flag;
+	}
+	
 	public void supportMOEExtension(boolean support)
 	{
 		parser.mSupportMOEExtension = support;
@@ -214,15 +221,25 @@ public class SmartsManager
 	
 	boolean mappingIn(IAtomContainer target)
 	{
-		try
-		{
-			boolean res = UniversalIsomorphismTester.isSubgraph(target, query);
-			return(res);
+		if (FlagUseCDKIsomorphismTester)
+		{	
+			try
+			{
+				boolean res = UniversalIsomorphismTester.isSubgraph(target, query);
+				return(res);
+			}
+			catch (CDKException e)
+			{
+				System.out.println(e.getMessage());
+			}
 		}
-		catch (CDKException e)
+		else
 		{
-			System.out.println(e.getMessage());
+			//Applying the Isomorphism tester of this package
+			isoTester.setQuery(query);			
+			return(isoTester.hasIsomorphism(target));
 		}
+		
 		return(false);
 	}
 		
