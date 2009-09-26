@@ -111,7 +111,9 @@ public class SmartsManager
 		if (parser.hasRecursiveSmarts)
 		{	
 			getRecursiveAtoms();
-			if (recursiveStrategy == 0)
+			
+			
+			if (recursiveStrategy == 0)  //This strategy for recursive atoms is not applied currently
 			{
 				analyseRecursiveAtoms();			
 				if(mGenerateSubQueries)
@@ -261,7 +263,7 @@ public class SmartsManager
 			getQueryRecMatches(target);
 		}
 		
-		if (noComponentsSpecified)  //There are no zero level brackets i.e. each fragments maps anywere
+		if (noComponentsSpecified)  //There are no zero level brackets i.e. each fragments maps anywhere
 		{	
 			for (int i = 0; i < parser.fragments.size(); i++)
 			{
@@ -714,7 +716,7 @@ public class SmartsManager
 	}
 	
 	
-	//---------- Implementting the Strategy 1 for recursive atoms ---------------
+	//---------- Implementing the Strategy 1 for recursive atoms ---------------
 	
 	
 	
@@ -783,8 +785,16 @@ public class SmartsManager
 		for (int i = 0; i < recAtoms.size(); i++)
 		{	
 			vRecCon = recAtoms.get(i).recSmartsContainers;
-			for (int j = 0; j < vRecCon.size(); j++)			
-				recAtoms.get(i).recSmartsMatches.add(getFirstPosAtomMappings(target,vRecCon.get(j)));
+			for (int j = 0; j < vRecCon.size(); j++)				
+			{	
+				Vector<IAtom> v ;
+				if (FlagUseCDKIsomorphismTester)
+					v = getFirstPosAtomMappings(target,vRecCon.get(j));
+				else
+					v = getFirstPosAtomMappings_CurrentIsoTester(target,vRecCon.get(j));
+				
+				recAtoms.get(i).recSmartsMatches.add(v);
+			}	
 			
 			//for (int j = 0; j < vRecCon.size(); j++)
 			//	System.out.println(recAtoms.get(i).recSmartsStrings.get(j) + "  "+
@@ -799,6 +809,18 @@ public class SmartsManager
 			sb.append(" "+target.getAtomNumber(at));
 		return(sb.toString());
 	}
+	
+	
+	Vector<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target, IAtomContainer recQuery)
+	{
+		//This function is based on the IsoTester from this package
+		
+		//TODO
+		return(new Vector<IAtom>());
+	}
+	
+	
+	//The following functions are based on the CDK Isomorphism tester ----------------
 	
 	Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target, IAtomContainer recQuery)
 	{
