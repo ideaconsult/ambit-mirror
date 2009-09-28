@@ -56,7 +56,7 @@
       <descriptors_generation_software chapter="4.6" help="" name="Software name and version for descriptor generation" options="">
 				<software_ref idref="software_catalog_2"/>
       </descriptors_generation_software>
-      <descriptors_chemicals_ratio chapter="4.7" help="" name="Descriptors/Chemicals ratio"></descriptors_chemicals_ratio>
+      <descriptors_chemicals_ratio chapter="4.7" help="" name="Chemicals/Descriptors ratio"></descriptors_chemicals_ratio>
     </QSAR_Algorithm>
     <QSAR_Applicability_domain chapter="5" help="" name="Defining the applicability domain - OECD Principle 3">
       <app_domain_description chapter="5.1" help="" name="Description of the applicability domain of the model"></app_domain_description>
@@ -110,11 +110,11 @@
         </attachment_documents>
       </attachments>
     </QSAR_Miscelaneous>
-    <QMRF_Summary chapter="10" help="" name="Summary (ECB Inventory)">
-      <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by ECB</QMRF_number>
-      <date_publication chapter="10.2" help="" name="Publication date">To be entered by ECB</date_publication>
+    <QMRF_Summary chapter="10" help="" name="Summary (JRC Inventory)">
+      <QMRF_number chapter="10.1" help="" name="QMRF number">To be entered by JRC</QMRF_number>
+      <date_publication chapter="10.2" help="" name="Publication date">To be entered by JRC</date_publication>
       <keywords chapter="10.3" help="" name="Keywords">To be entered by ECB</keywords>
-      <summary_comments chapter="10.4" help="" name="Comments">To be entered by ECB</summary_comments>
+      <summary_comments chapter="10.4" help="" name="Comments">To be entered by JRC</summary_comments>
     </QMRF_Summary>
   </QMRF_chapters>
   <Catalogs>
