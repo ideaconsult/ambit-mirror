@@ -295,16 +295,16 @@ g.	there exists a (graphical) expression of how the descriptor values of the che
 					</xsl:when>
 
 					<xsl:when test="@chapter=10">
-					<xsl:text>The summary section is specific for the ECB Inventory. If the model is submitted to ECB for inclusion in the ECB Inventory of QSAR models, then this summary is compiled by ECB after QMRF submission. The QMRF author does not have to fill in any of the fields of the summary section.</xsl:text>
+					<xsl:text>The summary section is specific for the JRC Inventory. If the model is submitted to JRC for inclusion in the JRC Inventory of QSAR models, then this summary is compiled by JRC after QMRF submission. The QMRF author does not have to fill in any of the fields of the summary section.</xsl:text>
 					</xsl:when>
 
 
 					<xsl:when test="@chapter=10.1">
-					<xsl:text>A unique number (numeric identifier) is assigned to any QMRF that is published in the ECB inventory. The number encodes the following information: model described in the QMRF (as derived from field 4.2), software implementing the model (as derived from field 1.3), version of the QMRF for the same model and the same software (as derived from the information included in field 2.4) and author of the QMRF (as derived from field 2.2). The number is unique for any QMRF uploaded and stored in the ECB inventory.</xsl:text>
+					<xsl:text>A unique number (numeric identifier) is assigned to any QMRF that is published in the JRC inventory. The number encodes the following information: model described in the QMRF (as derived from field 4.2), software implementing the model (as derived from field 1.3), version of the QMRF for the same model and the same software (as derived from the information included in field 2.4) and author of the QMRF (as derived from field 2.2). The number is unique for any QMRF uploaded and stored in the JRC inventory.</xsl:text>
 					</xsl:when>
 
 					<xsl:when test="@chapter=10.2">
-					<xsl:text>The date (month/year) of publication in the ECB inventory is reported here.</xsl:text>
+					<xsl:text>The date (month/year) of publication in the JRC inventory is reported here.</xsl:text>
 					</xsl:when>
 
 					<xsl:when test="@chapter=10.3">
@@ -312,7 +312,7 @@ g.	there exists a (graphical) expression of how the descriptor values of the che
 					</xsl:when>
 
 					<xsl:when test="@chapter=10.4">
-					<xsl:text>Any comments that are relevant for the publication of the QMRF in the ECB Inventory (e.g., comments about updates and about supporting information) are reported here.</xsl:text>
+					<xsl:text>Any comments that are relevant for the publication of the QMRF in the JRC Inventory (e.g., comments about updates and about supporting information) are reported here.</xsl:text>
 					</xsl:when>
 
 					<xsl:otherwise>

@@ -118,7 +118,7 @@ descriptors_selection,descriptors_generation,descriptors_generation_software,des
 <!ATTLIST descriptors_generation_software chapter CDATA  #FIXED "4.6" name CDATA #FIXED "Software name and version for descriptor generation" help CDATA "" options CDATA #IMPLIED>
 <!-- 4.7	Descriptors/Chemicals ratio -->
 <!ELEMENT descriptors_chemicals_ratio (#PCDATA)>
-<!ATTLIST descriptors_chemicals_ratio chapter CDATA  #FIXED "4.7" name CDATA #FIXED "Descriptors/Chemicals ratio" help CDATA "">
+<!ATTLIST descriptors_chemicals_ratio chapter CDATA  #FIXED "4.7" name CDATA #FIXED "Chemicals/Descriptors ratio" help CDATA "">
 
 
 <!-- Chapter 5 -->
