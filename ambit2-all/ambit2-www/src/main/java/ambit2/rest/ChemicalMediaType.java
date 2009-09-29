@@ -16,6 +16,9 @@ public class ChemicalMediaType  {
 	public static final MediaType CHEMICAL_CML = new MediaType("chemical/x-cml");
 	public static final MediaType CHEMICAL_SMILES = new MediaType("chemical/x-daylight-smiles");
 	public static final MediaType WEKA_ARFF = new MediaType("text/arff");
+	public static final MediaType TEXT_YAML = new MediaType("text/yaml");
+	public static final MediaType APPLICATION_YAML = new MediaType("application/x-yaml");
+	
 	
 	protected ChemicalMediaType() {
 		

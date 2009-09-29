@@ -31,6 +31,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.YAMLConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableFileImport;
@@ -61,7 +62,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	protected boolean collapsed;
 	public DatasetsResource(Context context, Request request, Response response) {
 		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
+		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
+		this.getVariants().add(new Variant(ChemicalMediaType.TEXT_YAML));		
 	}
 
 	@Override
@@ -99,6 +101,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 
 	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 		return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
+	} else if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
+			return new YAMLConvertor(new DatasetYamlReporter(getRequest().getRootRef()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputStreamConvertor(
 				new DatasetsHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
