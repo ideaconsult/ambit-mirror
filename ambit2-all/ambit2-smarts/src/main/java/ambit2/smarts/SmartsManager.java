@@ -811,12 +811,17 @@ public class SmartsManager
 	}
 	
 	
-	Vector<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target, QueryAtomContainer recQuery)
 	{
 		//This function is based on the IsoTester from this package
+		isoTester.setQuery(recQuery);
+		Vector<Integer> pos = isoTester.getIsomorphismPositions(target);		
+		Vector<IAtom> v = new Vector<IAtom>();
 		
-		//TODO
-		return(new Vector<IAtom>());
+		for (int i = 0; i < pos.size(); i++)
+			v.add(target.getAtom(pos.get(i).intValue()));		
+		
+		return(v);
 	}
 	
 	
