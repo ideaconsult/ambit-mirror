@@ -101,9 +101,11 @@
 				</xsl:choose>
 
   			<xsl:value-of select="@name"/>
+  			<!-- 
   			<xsl:text> (e-mail </xsl:text>
   			<xsl:value-of select="@email"/>
   			<xsl:text> ) </xsl:text>
+  			 -->
 		</OPTION>
 
 </xsl:template>
