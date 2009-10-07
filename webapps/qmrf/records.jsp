@@ -131,8 +131,10 @@
 				  </c:when>
 					<c:when test="${title eq 'xml'}">
 						<td>
+							<c:catch var="parseerr">
 							<x:parse xml="${row.xml}" var="doc" systemId="/WEB-INF/xslt/qmrf.dtd"/>
 							<x:out escapeXml="false" select="$doc//QMRF/QMRF_chapters/QSAR_identifier/QSAR_title"/>
+							</c:catch>
 						</td>
 				  </c:when>
 				  <c:otherwise>
