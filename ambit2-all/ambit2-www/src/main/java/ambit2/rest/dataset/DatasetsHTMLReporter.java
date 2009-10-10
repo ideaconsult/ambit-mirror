@@ -10,8 +10,8 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.query.XMLTags;
 import ambit2.rest.structure.CompoundResource;
 
 /**Generates html page for {@link QueryDatasetResource}
@@ -77,17 +77,26 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				
 				output.write("&nbsp;");
 				output.write(String.format(
+						"<a href=\"%s%s\"><img src=\"%s/images/feature.png\" alt=\"feature_definition\" title=\"Retrieve feature definitions\" border=\"0\"/></a>",
+						w.toString(),
+						PropertyResource.featuredef,
+						uriReporter.getBaseReference().toString()));	
+
+				
+				output.write("&nbsp;");
+				output.write(String.format(
 						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/smarts\" title=\"Search compounds with smarts\" border=\"0\"/></a>",
 						w.toString(),
 						QueryResource.query_resource+"/smarts",
 						uriReporter.getBaseReference().toString()));
-				
+/*				
 				output.write("&nbsp;");
 				output.write(String.format(
 						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/feature/like/\" title=\"Search compounds with smarts\" border=\"0\"/></a>",
 						w.toString(),
 						QueryResource.query_resource+"/feature/like/",
-						uriReporter.getBaseReference().toString()));				
+						uriReporter.getBaseReference().toString()));	
+						*/			
 			
 			} else {
 			
