@@ -3,6 +3,7 @@ package ambit2.db.search.property;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.search.QueryParam;
@@ -13,19 +14,18 @@ import ambit2.db.search.StringCondition;
  * @author nina
  *
  */
-public class PropertiesByDataset extends AbstractPropertyRetrieval<String, SourceDataset, StringCondition> {
+public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, SourceDataset, StringCondition> {
 	public enum QField  {
 		name {
 			@Override
 			public String getSQL() {
-				
-				return " where id_srcdataset in (select id_srcdataset from src_dataset where %s %s ?) group by idproperty";
+				return " id_srcdataset in (select id_srcdataset from src_dataset where name %s ?)";
 			}
 		},
 		id {
 			@Override
 			public String getSQL() {
-				return " where id_srcdataset = ?";
+				return " id_srcdataset = ?";
 			}
 		};
 		public abstract String getSQL();
@@ -34,8 +34,9 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<String, Sourc
 	 * 
 	 */
 	private static final long serialVersionUID = -7265871901186884735L;
+	public static String whereproperty  = " idproperty = ?";
 	public static String join  = 
-		" join property_values using(idproperty) join  property_tuples using(id) join tuples using (idtuple) %s group by idproperty";
+		" join property_values using(idproperty) join  property_tuples using(id) join tuples using (idtuple) where %s %s %s group by idproperty";
 
 	
 	/**
@@ -44,42 +45,43 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<String, Sourc
 	public PropertiesByDataset() {
 		super();
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
-		setFieldname(QField.name.toString());
+		setFieldname(null);
+		setValue(null);
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
-		if ((getFieldname()!=null) && (getValue()!=null)) {
+		if (getValue()!=null) {
 			List<QueryParam> params = new ArrayList<QueryParam>();
-			if (QField.name.toString().equals(getFieldname()))
-				params.add(new QueryParam<String>(String.class, getValue().getName()));
-			else if (QField.id.toString().equals(getFieldname()))
+			if (getValue().getId() > 0) 
 				params.add(new QueryParam<Integer>(Integer.class, getValue().getId()));
-			else return null;
+			else if (getValue().getName()!=null) 
+				params.add(new QueryParam<String>(String.class, getValue().getName()));
+			else throw new AmbitException(getValue().toString()); 
+			if (getFieldname()!=null)
+				params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));
 			return params;
 		} else return null;
 		
 	}
 	public String getSQL() throws AmbitException {
-		if (getFieldname()!=null) {
-			String where;
-			if (QField.name.toString().equals(getFieldname()))
-				where = String.format(QField.name.getSQL(),getFieldname(),getCondition().getSQL());
-			else if (QField.id.toString().equals(getFieldname()))
-				where = QField.id.getSQL();
-			else throw new AmbitException(getFieldname());
-			return base_sql + String.format(join,where);
-		}
+		if (getValue()!=null) {
+			String whereDataset;
+			String and = "";
+			if (getValue().getId() >  0) {
+				whereDataset = QField.id.getSQL();
+			} else if (getValue().getName()!=null) {
+				whereDataset = String.format(QField.name.getSQL(),getCondition().getSQL());
+			} else throw new AmbitException(getValue().toString());
+			String wherePropertyID = "";
+			if (getFieldname()!=null) {
+				and = " and ";
+				wherePropertyID = whereproperty;
+			}
 			
-		
-		return base_sql;
-	}
-	@Override
-	public void setFieldname(String fieldname) {
-		try {
-			this.fieldname = QField.valueOf(fieldname).toString();
-		} catch (Exception x) {
-			this.fieldname = QField.name.toString();
+			return base_sql + String.format(join,whereDataset,and,wherePropertyID);
 		}
+		throw new AmbitException("No dataset defined");
 	}
+
 	/*
 	 
 	public Property getObject(ResultSet rs) throws AmbitException {
@@ -103,9 +105,9 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<String, Sourc
 		return "name";
 	}
 	public Class getFieldType() {
-		return SourceDataset.class;
+		return Property.class;
 	}
 	public Class getValueType() {
-		return String.class;
+		return SourceDataset.class;
 	}
 }

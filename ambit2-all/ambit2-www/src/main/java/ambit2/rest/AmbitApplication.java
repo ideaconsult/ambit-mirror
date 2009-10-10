@@ -250,6 +250,7 @@ public class AmbitApplication extends Application {
 		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
 		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
 		router.attach(PropertiesByDatasetResource.DatasetFeaturedef,PropertiesByDatasetResource.class);
+		router.attach(PropertiesByDatasetResource.DatasetFeaturedefID,PropertiesByDatasetResource.class);
 		
 		router.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
 		router.attach(QueryResultsResource.resource,QueryResultsResource.class);
