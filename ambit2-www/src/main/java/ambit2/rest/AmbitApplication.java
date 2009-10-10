@@ -43,6 +43,7 @@ import ambit2.rest.fastox.KroesInput;
 import ambit2.rest.fastox.KroesStep1;
 import ambit2.rest.fastox.KroesStep2;
 import ambit2.rest.model.ModelResource;
+import ambit2.rest.property.PropertiesByDatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyModelResource;
@@ -162,6 +163,32 @@ public class AmbitApplication extends Application {
 		guard.setNext(DatasetsResource.class);  
 		
 		router.attach(DatasetsResource.datasets, guard);
+		/*
+		 * Have to read more on how to integrate oauth
+		MemoryOAuthProvider mo = new MemoryOAuthProvider();
+		RequestTokenResource r = new RequestTokenResource();
+		AuthorizationResource ar = new AuthorizationResource();
+		AccessTokenResource atr = new AccessTokenResource();
+		
+		//mo.addConsumer(key, new OAuthConsumer())
+		Guard guard_test = new OAuthGuard(getContext(),"", mo) {
+			@Override
+			public int authenticate(Request request) {
+				//if (request.getMethod().equals(org.restlet.data.Method.GET)) return AUTHENTICATION_VALID;
+				
+				return super.authenticate(request);
+			}
+			@Override
+			public boolean authorize(Request request) {
+				if (request.getMethod().equals(org.restlet.data.Method.GET)) return true;
+				return super.authorize(request);
+			}
+		};
+
+		guard_test.getSecrets().put("opentox", "opentox".toCharArray());  
+		guard_test.setNext(ProtectedResource.class);  
+		router.attach(ProtectedResource.resource, guard_test);
+		*/
 		
 		//router.attach(DatasetsResource.datasets, DatasetsResource.class);
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
@@ -222,6 +249,7 @@ public class AmbitApplication extends Application {
 		router.attach(PropertyResource.ConformerFeaturedef,PropertyResource.class);
 		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
 		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
+		router.attach(PropertiesByDatasetResource.DatasetFeaturedef,PropertiesByDatasetResource.class);
 		
 		router.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
 		router.attach(QueryResultsResource.resource,QueryResultsResource.class);
