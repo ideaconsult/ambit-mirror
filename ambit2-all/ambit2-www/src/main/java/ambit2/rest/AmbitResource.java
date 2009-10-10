@@ -77,7 +77,7 @@ public class AmbitResource extends Resource {
 			{DatasetsResource.datasets+"/{id}/compound/{cid}","remove all conformers",format,"DELETE","No"},
 
 			{"http://opentox.org/development/wiki/dataset","Feature definitions in a dataset",formatHeader,null,"Implemented"},
-			{DatasetsResource.datasets+"/8/feature_definition","get feature definitions available ion the dataset",format,"GET","No"},
+			{DatasetsResource.datasets+"/8/feature_definition","get feature definitions available in the dataset",format,"GET","Yes"},
 			{DatasetsResource.datasets+"/8/feature_definition/12142","get specific feature definition",format,"GET","No"},
 			{DatasetsResource.datasets+"/{id}/feature_definition/","add feature definition",format,"POST","No"},
 			{DatasetsResource.datasets+"/{id}/feature_definition/{fdid}","update feature definition",format,"PUT","No"},
