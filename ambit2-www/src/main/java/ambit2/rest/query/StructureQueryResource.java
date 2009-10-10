@@ -67,8 +67,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new StringConvertor(
 					new SmilesReporter<QueryStructureByID>(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(
-					new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);			
+			CompoundURIReporter<QueryStructureByID> reporter = new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef());
+			reporter.setDelimiter("\n");
+			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
