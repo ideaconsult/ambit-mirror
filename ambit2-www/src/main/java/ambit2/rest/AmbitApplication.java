@@ -34,6 +34,7 @@ import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
+import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
@@ -193,8 +194,9 @@ public class AmbitApplication extends Application {
 		//router.attach(DatasetsResource.datasets, DatasetsResource.class);
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
 		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
-		router.attach(datasetID_structure, CompoundResource.class);
-		router.attach(datasetID_structure_media, CompoundResource.class);
+//		router.attach(datasetID_structure, CompoundResource.class);
+		router.attach(datasetID_structure, DatasetCompoundResource.class);
+		router.attach(datasetID_structure_media, DatasetCompoundResource.class);
 		
 		
 		router.attach(dataset_structures, DatasetStructuresResource.class);
