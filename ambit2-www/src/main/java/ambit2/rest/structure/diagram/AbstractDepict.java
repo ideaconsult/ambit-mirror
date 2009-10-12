@@ -35,7 +35,6 @@ public class AbstractDepict extends Resource {
 	protected String smiles = null;
 	public AbstractDepict(Context context, Request request, Response response) {
 		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 	
 	}
