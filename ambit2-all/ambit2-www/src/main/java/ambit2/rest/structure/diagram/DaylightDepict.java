@@ -3,9 +3,11 @@ package ambit2.rest.structure.diagram;
 import java.awt.image.BufferedImage;
 
 import org.restlet.Context;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.pubchem.DepictRequest;
@@ -20,6 +22,8 @@ public class DaylightDepict extends AbstractDepict {
 	
 	public DaylightDepict(Context context, Request request, Response response) {
 		super(context,request,response);
+		this.getVariants().clear();
+		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
 
 	}
 	@Override
