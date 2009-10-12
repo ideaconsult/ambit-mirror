@@ -161,6 +161,7 @@ public class TestUtilities
 		}						
 		
 		isoTester.setQuery(query);
+		sp.setSMARTSData(mol);
 		Vector<Integer> pos = isoTester.getIsomorphismPositions(mol);
 		System.out.println("Isomorphism Positions: " + smarts  + "  in  " + smiles);
 		for (int i = 0; i < pos.size(); i++)

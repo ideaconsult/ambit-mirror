@@ -1,0 +1,158 @@
+package ambit2.smarts.test;
+
+import java.util.Vector;
+
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.smiles.SmilesParser;
+
+import org.openscience.cdk.tools.LoggingTool;
+
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsManager;
+import ambit2.smarts.SmartsParser;
+
+import junit.framework.*;
+
+
+public class TestIsomorphismTester extends TestCase
+{
+	public LoggingTool logger;	
+	public SmartsParser sp = new SmartsParser();
+	public SmartsManager man = new SmartsManager();
+	public IsomorphismTester isoTester = new IsomorphismTester();
+		
+	//Helper variable where the results from match function is stored
+	boolean boolResult;
+	int mappingPosCount;
+	
+	
+	public TestIsomorphismTester() 
+	{   
+		logger = new LoggingTool(this);
+	}
+	
+	public static Test suite() 
+	{
+		return new TestSuite(TestIsomorphismTester.class);
+	}
+	
+	public void match(String smarts, String smiles) throws Exception 
+	{
+		//Testing the algorithm via SmartsManager		
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		man.setUseCDKIsomorphismTester(false);
+		man.setQuery(smarts);
+		boolResult = man.searchIn(mol);
+		
+		
+		//Direct test of class IsomorphismTester
+		QueryAtomContainer query  = sp.parse(smarts);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return;
+		}
+		
+		isoTester.setQuery(query);
+		sp.setSMARTSData(mol);
+		Vector<Integer> pos = isoTester.getIsomorphismPositions(mol);
+		mappingPosCount = pos.size();
+	}
+	
+	
+	//---------------------------------------------------------------------------------
+	
+	
+	/**
+	 * Tests from
+	 * From http://www.daylight.com/dayhtml_tutorials/languages/smarts/index.html
+	 */
+	public void testPropertyCharge1() throws Exception {
+		match("[+1]", "[OH-].[Mg+2]");
+		assertEquals(false, boolResult);
+		assertEquals(0, mappingPosCount);
+	}
+	
+	public void testPropertyCharge2() throws Exception {
+		match("[+1]", "COCC(O)Cn1ccnc1[N+](=O)[O-]");		
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	public void testPropertyCharge3() throws Exception {
+		match("[+1]", "[NH4+]");		
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+	
+	public void testPropertyCharge4() throws Exception {
+		match("[+1]", "CN1C(=O)N(C)C(=O)C(N(C)C=N2)=C12");		
+		assertEquals(false, boolResult);
+		assertEquals(0, mappingPosCount);
+	}
+	
+	public void testPropertyCharge5() throws Exception {
+		match("[+1]", "[Cl-].[Cl-].NC(=O)c2cc[n+](COC[n+]1ccccc1C=NO)cc2");		
+		assertEquals(true, boolResult);
+		assertEquals(2, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic1() throws Exception {
+		match("[a]", "c1cc(C)c(N)cc1");		
+		assertEquals(true, boolResult);
+		assertEquals(6, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic2() throws Exception {
+		match("[a]", "c1c(C)c(N)cnc1");		
+		assertEquals(true, boolResult);
+		assertEquals(6, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic3() throws Exception {
+		match("[a]", "c1(C)c(N)cco1");		
+		assertEquals(true, boolResult);
+		assertEquals(5, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic4() throws Exception {
+		match("[a]", "c1c(C)c(N)c[nH]1");		
+		assertEquals(true, boolResult);
+		assertEquals(5, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic5() throws Exception {
+		match("[a]", "n1cc(O)ccc1");       //On1ccccc1 is not recognized as aromatic
+		assertEquals(true, boolResult);
+		assertEquals(6, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic6() throws Exception {
+		match("[a]", "[O-][n+]1ccccc1");		
+		assertEquals(true, boolResult);
+		assertEquals(6, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic7() throws Exception {
+		match("[a]", "c1ncccc1C1CCCN1C");		
+		assertEquals(true, boolResult);
+		assertEquals(6, mappingPosCount);
+	}
+	
+	public void testPropertyAromatic8() throws Exception {
+		match("[a]", "c1ccccc1C(=O)OC2CC(N3C)CCC3C2C(=O)OC");		
+		assertEquals(true, boolResult);
+		assertEquals(6, mappingPosCount);
+	}
+	
+	
+	
+	
+	
+}
