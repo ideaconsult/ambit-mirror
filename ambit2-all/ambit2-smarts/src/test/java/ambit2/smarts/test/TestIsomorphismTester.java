@@ -153,6 +153,27 @@ public class TestIsomorphismTester extends TestCase
 	
 	
 	
+	//----------------  Test recursive SMARTS -------------------
+	
+	
+	public void testRecursiveSmarts4() throws Exception {
+		match("[$(*O);$(*CC)]", "c1ncccc1C1CCCN1C");
+		assertEquals(false, boolResult);
+		//assertEquals(0, mappingPosCount);
+	}
+	
+	public void testRecursiveSmarts5() throws Exception {
+		match("[$(*O);$(*CC)]", "N12CCC36C1CC(C(C2)=CCOC4CC5=O)C4C3N5c7ccccc76");		
+		assertEquals(true, boolResult);
+		//assertEquals(1, mappingPosCount);
+	}
+	
+	public void testRecursiveSmarts6() throws Exception {
+		match("[$([CX3]=[CX1]),$([CX3+]-[CX1-])]", "CN1C(=O)N(C)C(=O)C(N(C)C=N2)=C12");		
+		assertEquals(false, boolResult);
+		//assertEquals(0, mappingPosCount);
+	}
+	
 	
 	
 }
