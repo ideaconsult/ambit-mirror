@@ -136,6 +136,15 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("useMOEvPrimitive");
 	}
+	/**
+	 * For backward compatibility
+	 * @return
+	 * @throws SMARTSException
+	 */
+	public List<List<Integer>> getUniqueMatchingAtoms() throws SMARTSException {
+    	if (sqt == null) throw new SMARTSException("Undefined SMARTS pattern");
+    	return sqt.getUniqueMatchingAtoms(); 
+	}
 }
 
 

@@ -123,7 +123,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	}
 
 	public String getImplementationDetails() {
-		return "Nikolai Kochev smarts package";
+		return "AMBIT smarts package";
 	}
 	@Override
 	public void setSmarts(String smarts) throws SMARTSException {
@@ -143,6 +143,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 			sman = new SmartsManager();
 		sman.useMOEvPrimitive(flag);
 	}
+
 }
 
 

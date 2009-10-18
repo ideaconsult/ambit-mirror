@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts.query;
 
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
@@ -48,6 +50,12 @@ public interface ISmartsPattern<T> {
 	void setHint(String hint);	
 	void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException;
 	QueryAtomContainer getQuery();
+	/**
+	 * Just for backward compatibility
+	 * @return
+	 * @throws SMARTSException
+	 */
+	public List getUniqueMatchingAtoms() throws SMARTSException;
 }
 
 
