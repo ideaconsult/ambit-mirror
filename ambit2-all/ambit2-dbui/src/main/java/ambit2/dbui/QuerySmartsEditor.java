@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.BooleanCondition;
@@ -121,7 +123,22 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 								boolean notfound = result.getResult().toString().equals("0");
 								status.setText((notfound)?"NOT FOUND":"FOUND");
 								status.setIcon((notfound)?Utils.createImageIcon("images/cross.png"):Utils.createImageIcon("images/tick.png"));
-								panel2D.setSelected((notfound)?null:(IAtomContainer)result.getExplanation());
+								panel2D.setSelector(new IProcessor<IAtomContainer, IAtomContainer>() {
+									public IAtomContainer process(
+											IAtomContainer target)
+											throws AmbitException {
+										selectionInList.getSelection().setVerboseMatch(true);
+										VerboseDescriptorResult result = selectionInList.getSelection().process(target);
+										if (result.getExplanation() instanceof IAtomContainer) 
+											return (IAtomContainer)result.getExplanation();
+										else return null;
+									}
+									public long getID() {return 0;}
+									public void setEnabled(boolean value) {}
+									public boolean isEnabled() {
+										return true;
+									}
+								});
 							}
 						}
 					} catch (Exception x) {
