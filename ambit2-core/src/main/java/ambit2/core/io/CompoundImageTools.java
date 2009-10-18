@@ -33,6 +33,7 @@ import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.MFAnalyser;
 
+import ambit2.base.interfaces.IProcessor;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 
 
@@ -50,7 +51,8 @@ public class CompoundImageTools {
     BufferedImage buffer = null;
     protected Color borderColor = Color.GRAY;
     protected int borderWidth = 5;
-    public int getBorderWidth() {
+
+	public int getBorderWidth() {
 		return borderWidth;
 	}
 	public void setBorderWidth(int borderWidth) {
@@ -117,10 +119,13 @@ public class CompoundImageTools {
 	public synchronized BufferedImage getImage(IAtomContainer molecule) {
 		return getImage(molecule,null);
 	}
-	public synchronized BufferedImage getImage(IAtomContainer molecule, IAtomContainer highlighted) {
-		return getImage(molecule, highlighted,false);
+	public synchronized BufferedImage getImage(IAtomContainer molecule, 
+			IProcessor<IAtomContainer,IAtomContainer> selector) {
+		return getImage(molecule, selector,false);
 	}
-    public synchronized BufferedImage getImage(IAtomContainer molecule, IAtomContainer highlighted, boolean build2d) {    
+    public synchronized BufferedImage getImage(IAtomContainer molecule, 
+    		IProcessor<IAtomContainer,IAtomContainer> selector, 
+    		boolean build2d) {    
     	renderer = createRenderer(imageSize,background);
     	r2dm = renderer.getRenderer2DModel();
         
@@ -135,7 +140,7 @@ public class CompoundImageTools {
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
-        paint(renderer,molecules, false, g, highlighted,imageSize);
+        paint(renderer,molecules, false, g, selector,imageSize);
         if (borderColor != background)
         	paintBorderShadow(g,getBorderWidth(),new Rectangle(imageSize));
         g.dispose();
@@ -216,8 +221,8 @@ public class CompoundImageTools {
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
-			IAtomContainer highlighted) {
-		paint(renderer, molecules, explicitH, g, highlighted,getImageSize());
+			IProcessor<IAtomContainer,IAtomContainer> selector) {
+		paint(renderer, molecules, explicitH, g, selector,getImageSize());
 	}
 	/**
 	 * TODO sort molecules, in order to display the largest part first
@@ -232,7 +237,7 @@ public class CompoundImageTools {
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
-			IAtomContainer highlighted,
+			IProcessor<IAtomContainer,IAtomContainer> selector,
 			Dimension imageSize)	
 	{
     	renderer = createRenderer(imageSize,Color.white);
@@ -272,11 +277,22 @@ public class CompoundImageTools {
 	            GeometryTools.scaleMolecule(mol, d, 0.8,r2dm.getRenderingCoordinates());
 	            GeometryTools.center(mol, d,r2dm.getRenderingCoordinates());
 	            GeometryTools.translate2DCenterTo(mol,center,r2dm.getRenderingCoordinates());
-
-	    		if (highlighted != null) {
-	    			r2dm.setSelectedPart(highlighted);
-	    			r2dm.setColorAtomsByType(false);
-	    		} 
+	            IAtomContainer highlighted = null;
+	            if (selector!= null)
+	            	try {
+	    				IAtomContainer selected = selector.process(mol);
+	    				if(selected!=null) {
+	    					if (highlighted==null) highlighted = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+	    					highlighted.add(selected);
+	    				}
+	            	} catch (Exception x) {
+	            		
+	            	}
+    	    	if (highlighted != null) {
+    	    		r2dm.setSelectedPartColor(Color.red);
+    	    		r2dm.setSelectedPart(highlighted);
+    	    		r2dm.setColorAtomsByType(false);
+    	    	} 	  
 				renderer.paintMolecule(molecules.getAtomContainer(i),g,r);
 				
 				col++;

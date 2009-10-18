@@ -46,33 +46,53 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.core.io.CompoundImageTools;
 import ambit2.ui.editors.Panel2D;
 
 
 public class Panel2DTest {
 	protected IMolecule mol;
-	IAtomContainer selected;
 	@Before
 	public void setup() throws Exception  {
-		String smiles="CCc1ccccc1.C1CCCC1.C1CCC1.[Na+].CCCCCCCCCCCCCCCCC(CCCCCCCCC)CCCCCCCCCCCC";
+		//String smiles="CCc1ccccc1.C1CCCC1.C1CCC1.[Na+].CCCCCCCCCCCCCCCCC(CCCCCCCCC)CCCCCCCCCCCC";
+		String smiles = "NCCCCCCCCC";
         SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         mol = sp.parseSmiles(smiles);		
 
 		for (int i=0; i < mol.getBondCount();i++)
 			mol.getBond(i).setID(Integer.toString(i+1));
-		selected = new Molecule();
-
-		selected.addBond(mol.getBond(0));
-		selected.addBond(mol.getBond(1));		
+	
+	}
+	protected IProcessor<IAtomContainer, IAtomContainer> getSelector(IAtomContainer mol) {
+		return new IProcessor<IAtomContainer, IAtomContainer>() {
+			public IAtomContainer process(IAtomContainer mol)
+					throws AmbitException {
+				Molecule selected = new Molecule();
+				for (int i=0; i < 2 ;i++) {
+					selected.addAtom(mol.getBond(i).getAtom(0));
+					selected.addAtom(mol.getBond(i).getAtom(1));
+					selected.addBond(mol.getBond(i));			
+				}	
+				return selected;
+			}
+			public boolean isEnabled() { return true;	}
+			public void setEnabled(boolean value) {}
+			public long getID() {
+				return 0;
+			}
+		};
+		
 	}
 	@Test
 	public void testHighlight() throws Exception {
 		Panel2D panel = new Panel2D();
+		
 		panel.setPreferredSize(new Dimension(400,400));
 
 		panel.setAtomContainer(mol);
-		panel.setSelected(selected);		
+		panel.setSelector(getSelector(mol));	
 		JOptionPane.showMessageDialog(null,
 				new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 						new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,panel,new JPanel()),
@@ -91,7 +111,7 @@ public class Panel2DTest {
 
 		CompoundImageTools tools = new CompoundImageTools();
 		tools.setImageSize(new Dimension(300,300));
-		BufferedImage image = tools.getImage(mol,selected);
+		BufferedImage image = tools.getImage(mol,getSelector(mol));
 		
 		File file = new File("image.png");
 		FileOutputStream out = new FileOutputStream(file);

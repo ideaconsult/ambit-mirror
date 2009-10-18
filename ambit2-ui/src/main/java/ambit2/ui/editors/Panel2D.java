@@ -45,6 +45,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.base.interfaces.IProcessor;
 import ambit2.core.io.CompoundImageTools;
 
 
@@ -59,9 +60,22 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	 * 
 	 */
 	private static final long serialVersionUID = -6293533800645578594L;
+	public enum property_name {
+		panel2d_molecule,
+		panel2d_selected
+	};
 	protected CompoundImageTools tools;
 	protected IAtomContainer atomContainer;
-	protected IAtomContainer selected;
+	protected IProcessor<IAtomContainer,IAtomContainer> selector=null;
+	public IProcessor<IAtomContainer, IAtomContainer> getSelector() {
+		return selector;
+	}
+	public void setSelector(IProcessor<IAtomContainer, IAtomContainer> selector) {
+		this.selector = selector;
+		image = null;
+		repaint();
+	}	
+	
 	protected Image image=null;
 	protected boolean generate2d = true;
 	protected boolean editable = false;
@@ -99,7 +113,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	public void paint(Graphics g) {
 		super.paintComponent(g);    
 		if (image == null) {
-			image = tools.getImage(atomContainer,selected,generate2d);
+			image = tools.getImage(atomContainer,getSelector(),generate2d);
 		}
 		g.drawImage(image,0,0,this);
 	}
@@ -108,17 +122,11 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 		this.generate2d = generate2d;
 		image = null;
 		atomContainer = mol;
-		selected = null;
 		repaint();
 	}	
 	public void setAtomContainer(IAtomContainer mol) {
 		setAtomContainer(mol,false);
 	}
-	public void setSelected(IAtomContainer selected) {
-		this.selected = selected;
-		image = null;
-		repaint();
-	}	
 	public void stateChanged(EventObject e) {
 		Rectangle r = ((Component)e.getSource()).getBounds();
 		tools.setImageSize(new Dimension(r.width,r.height));
@@ -164,8 +172,23 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 		
 	}
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getNewValue() instanceof IAtomContainer)
-			setAtomContainer((IAtomContainer)evt.getNewValue(),true);
+		if (evt.getNewValue() instanceof IAtomContainer) {
+			try {
+				property_name name = property_name.valueOf(evt.getPropertyName());
+				switch (name) {
+				case panel2d_molecule: {
+					setAtomContainer((IAtomContainer)evt.getNewValue(),true);
+					break;
+				}
+				case panel2d_selected: {
+					setSelector((IProcessor<IAtomContainer,IAtomContainer>)evt.getNewValue());
+					break;
+				}
+				}
+			} catch (Exception x) {
+				setAtomContainer((IAtomContainer)evt.getNewValue(),true);
+			}
+		}
 		
 	}
 	public boolean confirm() {
