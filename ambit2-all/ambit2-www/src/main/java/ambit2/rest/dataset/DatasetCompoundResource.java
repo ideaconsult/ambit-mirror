@@ -14,10 +14,12 @@ import ambit2.rest.structure.CompoundResource;
 
 /**
  * Compound from a dataset
+ * 
  * @author nina
  *
  */
 public class DatasetCompoundResource extends CompoundResource {
+	public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 
 	public DatasetCompoundResource(Context context, Request request,
 			Response response) {

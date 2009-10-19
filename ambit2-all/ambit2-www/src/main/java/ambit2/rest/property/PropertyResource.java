@@ -2,6 +2,7 @@ package ambit2.rest.property;
 
 import java.io.Writer;
 
+import org.jfree.data.general.Dataset;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -30,6 +31,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;

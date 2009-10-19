@@ -1,6 +1,7 @@
 package ambit2.rest.query;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -50,7 +51,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
-
+		/* workaround for clients not being able to set accept headers */
+		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		String media = acceptform.getFirstValue("accept-header");
+		if (media != null) {
+			variant.setMediaType(new MediaType(Reference.decode(media)));
+		}
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);

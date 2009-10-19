@@ -10,9 +10,16 @@ import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.rest.StatusException;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
+import ambit2.rest.structure.CompoundResource;
 
+/**
+ * All compounds from a dataset
+ * @author nina
+ *
+ */
 public class DatasetStructuresResource extends StructureQueryResource<QueryDatasetByID> {
-	
+	public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
+
 	public DatasetStructuresResource(Context context, Request request, Response response) {
 		super(context,request,response);
 		
