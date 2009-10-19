@@ -10,13 +10,14 @@ import java.util.concurrent.ExecutionException;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -52,10 +53,11 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 	public static final String resourceKey = "idtask";
 	public static final String resourceID = String.format("/%s/{%s}", resource,resourceKey);
 	
-	public TaskResource(Context context, Request request, Response response) {
-		super(context, request, response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
 	}
 
 	@Override

@@ -11,9 +11,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -22,7 +22,6 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
-import ambit2.db.search.QueryParam;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.model.ReadModel;
@@ -55,10 +54,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	};
 	
 	protected String category = "";
-	public ModelResource(Context context, Request request, Response response) {
-		super(context,request,response);
 
-	}
 	protected Integer getModelID() throws StatusException {
 		Object id = getRequest().getAttributes().get(resourceKey);
 		if (id != null) try {
@@ -124,12 +120,9 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest().getRootRef());
 	}
 	@Override
-	public boolean allowPost() {
-		return true;
-	}
-	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
+
 		//retrieve dataset; calculate value, assign to feature, return uri to feature
 
 		synchronized (this) {
@@ -232,6 +225,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 				try { conn.close(); } catch (Exception x) {}
 			}
 		}
+		return getResponse().getEntity();
 	}	
 	
 	protected ReadModel getModelQuery(int idmodel) {

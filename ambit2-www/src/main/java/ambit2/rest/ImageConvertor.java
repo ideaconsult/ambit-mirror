@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.restlet.data.MediaType;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 

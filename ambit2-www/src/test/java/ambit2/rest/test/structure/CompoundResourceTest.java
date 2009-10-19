@@ -148,7 +148,7 @@ public class CompoundResourceTest extends ResourceTest {
 	public void testPNGMedia() throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		request.setResourceRef(getTestURI()+"/diagram/png");
+		request.setResourceRef(getTestURI()+"?accept-header=image/png");
 		request.setMethod(Method.GET);
 		Response response = client.handle(request);
 		Assert.assertEquals(200,response.getStatus().getCode());

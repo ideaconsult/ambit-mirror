@@ -1,8 +1,8 @@
 package ambit2.rest;
 
 import org.restlet.data.MediaType;
-import org.restlet.resource.DomRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 
 import ambit2.base.exceptions.AmbitException;

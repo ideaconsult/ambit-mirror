@@ -20,10 +20,7 @@ import ambit2.rest.structure.CompoundResource;
 public class DatasetStructuresResource extends StructureQueryResource<QueryDatasetByID> {
 	public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
 
-	public DatasetStructuresResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		
-	}
+
 
 	@Override
 	protected QueryDatasetByID createQuery(Context context, Request request,

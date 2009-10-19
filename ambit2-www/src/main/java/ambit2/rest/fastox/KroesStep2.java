@@ -13,10 +13,7 @@ import ambit2.rest.model.ModelResource;
 
 public class KroesStep2 extends ModelResource {
 
-	public KroesStep2(Context context, Request request, Response response) {
-		super(context, request, response);
-		// TODO Auto-generated constructor stub
-	}
+
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
 			Request request, Response response) throws StatusException {

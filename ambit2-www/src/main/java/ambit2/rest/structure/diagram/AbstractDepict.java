@@ -7,17 +7,16 @@ import java.io.Writer;
 
 import javax.imageio.ImageIO;
 
-import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Resource;
-import org.restlet.resource.Variant;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
+import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.AbstractReporter;
@@ -30,13 +29,14 @@ import ambit2.rest.error.EmptyMoleculeException;
  * @author nina
  *
  */
-public class AbstractDepict extends Resource {
+public class AbstractDepict extends ServerResource {
 
 	protected String smiles = null;
-	public AbstractDepict(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-	
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		this.getVariants().put(Method.GET,new Variant(MediaType.TEXT_HTML));
 	}
 	protected BufferedImage getImage(String smiles,int width,int height) throws AmbitException {
 		return null;
@@ -54,7 +54,7 @@ public class AbstractDepict extends Resource {
 		b.append("</tr></table>");
 		return b.toString();
 	}
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();

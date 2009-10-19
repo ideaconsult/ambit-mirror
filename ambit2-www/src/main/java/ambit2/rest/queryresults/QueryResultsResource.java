@@ -3,12 +3,13 @@ package ambit2.rest.queryresults;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
@@ -25,13 +26,6 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 	public static String resource = "/query/results";
 	public static String resourceKey = "id";
 	public static String resourceID = String.format("%s/{%s}",resource,resourceKey);	
-	public QueryResultsResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));			
-	}
 
 	@Override
 	protected QueryStoredResults createQuery(Context context, Request request,
@@ -54,11 +48,7 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 		throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	@Override
-	public boolean allowPost() {
-		return true;
-	}
-	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
 		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
 		Form form = new Form(entity);

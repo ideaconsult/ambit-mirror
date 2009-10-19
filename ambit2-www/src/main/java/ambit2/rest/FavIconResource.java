@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.restlet.data.MediaType;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.Resource;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.io.DownloadTool;
 

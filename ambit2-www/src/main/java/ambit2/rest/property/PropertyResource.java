@@ -1,18 +1,16 @@
 package ambit2.rest.property;
 
-import java.io.Writer;
-
-import org.jfree.data.general.Dataset;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -25,13 +23,13 @@ import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -82,13 +80,11 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	
 	protected boolean collapsed ;
 	
-	public PropertyResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));	
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML});	
 	}
-	
 	
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -152,13 +148,13 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		}
 	}
 
-	
 	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
 		if (getRequest().getAttributes().get(idfeaturedef)==null)
 			createNewObject(entity);
 		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		return getResponse().getEntity();
 	}
 	
 	/**
@@ -189,10 +185,6 @@ create a new feature definition  	 POST  	 /feature_definition  	 name: String, 
 		return new CreatePropertyReferenceID(entry);
 	}
 	
-	@Override
-	public boolean allowPost() {
-		return true;
-	}
 	@Override
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Reference baseReference) throws ResourceException {

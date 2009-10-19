@@ -15,14 +15,14 @@ import javax.sql.DataSource;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
-import org.restlet.Directory;
-import org.restlet.Guard;
 import org.restlet.Restlet;
-import org.restlet.Router;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
+import org.restlet.resource.Directory;
+import org.restlet.routing.Router;
+import org.restlet.security.Guard;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -85,11 +85,6 @@ public class AmbitApplication extends Application {
 	protected ConcurrentMap<UUID,Task<Reference>> tasks;
 
 
-	public final static String dataset_structures = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
-	public final static String datasetID_structure = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
-	public final static String datasetID_structure_media = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID_media);
-	
-	
 	protected String connectionURI;
 	protected DataSource datasource = null;
 	public AmbitApplication(Context context) {
@@ -100,6 +95,14 @@ public class AmbitApplication extends Application {
         File logFile = new File(tmpDir,"ambit2-www.log");		
 		System.setProperty("java.util.logging.config.file",logFile.getAbsolutePath());
 		*/
+		try {
+			//ServletContext sc = (ServletContext) getContext().getAttributes().get(“org.restlet.ext.servlet.ServletContext”);
+			Object result =  getContext().getAttributes();//.getFirstValue("Database");
+			System.out.println("---------" + result);
+		} catch (Exception x) {
+			System.out.println("---------");
+			x.printStackTrace();
+		}
 		try {
 			LoginInfo li = new LoginInfo();
 			li.setDatabase("ambit2");
@@ -195,11 +198,11 @@ public class AmbitApplication extends Application {
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
 		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
 //		router.attach(datasetID_structure, CompoundResource.class);
-		router.attach(datasetID_structure, DatasetCompoundResource.class);
-		router.attach(datasetID_structure_media, DatasetCompoundResource.class);
 		
+		router.attach(DatasetCompoundResource.resource, DatasetCompoundResource.class);
+		//router.attach(datasetID_structure_media, DatasetCompoundResource.class);
 		
-		router.attach(dataset_structures, DatasetStructuresResource.class);
+		router.attach(DatasetStructuresResource.resource, DatasetStructuresResource.class);
 		
 		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
 		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
@@ -325,19 +328,10 @@ public class AmbitApplication extends Application {
 		return router;
 	}
 	
-	/*
-      at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1936)
-        at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2060)
-        at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2536)
-        at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2465)
-        at com.mysql.jdbc.StatementImpl.execute(StatementImpl.java:734)
-        at org.apache.commons.dbcp.DelegatingStatement.execute(DelegatingStatement.java:264)
-        at ambit2.rest.AmbitApplication.getConnection(AmbitApplication.java:251)
-        at ambit2.rest.query.QueryResource.getRepresentation(QueryResource.java:49)
-        at org.restlet.resource.Resource.handleGet(Resource.java:464)
 
-	 */
 	public Connection getConnection() throws AmbitException , SQLException{
+
+		
 		SQLException error = null;
 		Connection c = null;
 		for (int retry=0; retry< 3; retry++)

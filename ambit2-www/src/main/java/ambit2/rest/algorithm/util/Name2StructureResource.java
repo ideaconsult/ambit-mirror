@@ -12,13 +12,11 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.Resource;
-import org.restlet.resource.Variant;
 
-import ambit2.db.search.StringCondition;
-import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
 /**
@@ -44,7 +42,7 @@ public class Name2StructureResource extends Resource {
 		} else name = null; 		
 	}
 
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 		
 		try {
 	        if (name != null) {

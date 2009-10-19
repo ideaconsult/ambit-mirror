@@ -7,9 +7,9 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -22,26 +22,13 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelHTMLReporter;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.model.ModelURIReporter;
-import ambit2.rest.structure.CompoundHTMLReporter;
 
 public class FastToxStep2 extends ModelResource {
 	public static String resource = String.format("%s/step2",FastToxStep1.resource);
 	protected IStructureRecord record = null;
 	
-	
-	public FastToxStep2(Context context, Request request, Response response) {
-		super(context,request,response);
-		
-
-	}
-	
 	@Override
-	public boolean allowPost() {
-		return super.allowPost();
-	}
-	
-	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
 		Form form = new Form(entity);
 		try { 
@@ -52,7 +39,8 @@ public class FastToxStep2 extends ModelResource {
 		} catch (Exception x) {
 			throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST,x);
 		}
-		getResponse().setEntity(getRepresentation(new Variant(MediaType.TEXT_HTML)));
+		getResponse().setEntity(get(new Variant(MediaType.TEXT_HTML)));
+		return getResponse().getEntity();
 	}
 	
 	

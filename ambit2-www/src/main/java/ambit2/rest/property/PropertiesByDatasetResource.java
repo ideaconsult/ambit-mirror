@@ -27,10 +27,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 	public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
 	public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
 
-	public PropertiesByDatasetResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
+
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws StatusException {

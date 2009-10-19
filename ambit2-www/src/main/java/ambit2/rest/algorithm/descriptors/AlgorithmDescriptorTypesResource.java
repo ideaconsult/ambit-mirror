@@ -26,12 +26,7 @@ public class AlgorithmDescriptorTypesResource extends AlgorithmCatalogResource {
 	public enum descriptortypes  {
 		constitutionalDescriptor,geometricalDescriptor,topologicalDescriptor,quantumchemical,physicochemical,patternmining,pharmacophore,simdist
 	};
-	public AlgorithmDescriptorTypesResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
 
-
-	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {

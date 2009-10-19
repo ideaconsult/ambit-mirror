@@ -1,13 +1,12 @@
 package ambit2.rest.query;
 
-import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
-import org.restlet.data.Response;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -38,15 +37,22 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 									extends QueryResource<Q,IStructureRecord> {
 
 	protected String media;
-	public StructureQueryResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));	
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_SMILES));
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_CML));			
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));		
-		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
-		this.getVariants().add(new Variant(MediaType.APPLICATION_PDF));
-//		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {
+				ChemicalMediaType.CHEMICAL_MDLSDF,
+				ChemicalMediaType.CHEMICAL_SMILES,
+				ChemicalMediaType.CHEMICAL_CML,
+				MediaType.IMAGE_PNG,
+				MediaType.APPLICATION_PDF,
+				MediaType.TEXT_HTML,
+				MediaType.TEXT_XML,
+				MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_PLAIN
+				});
+				
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)

@@ -6,8 +6,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.restlet.data.MediaType;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
 
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;

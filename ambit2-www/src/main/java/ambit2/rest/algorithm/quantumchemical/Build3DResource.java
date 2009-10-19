@@ -6,13 +6,16 @@ import java.io.OutputStream;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Variant;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MDLWriter;
@@ -32,8 +35,9 @@ public class Build3DResource extends AlgorithmCatalogResource {
 	protected String smiles = null;
 	protected MopacShell shell;
 	
-	public Build3DResource(Context context, Request request, Response response) {
-		super(context,request,response);
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
 		setCategory("");
 		try {
 			shell = new MopacShell();
@@ -41,8 +45,8 @@ public class Build3DResource extends AlgorithmCatalogResource {
 			x.printStackTrace();
 			shell = null;
 		}
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));	
-	
+		customizeVariants(new MediaType[] {ChemicalMediaType.CHEMICAL_MDLSDF});
+			
 	}
 	public Representation getreRepresentation(Variant variant) {
 		

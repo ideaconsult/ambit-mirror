@@ -6,8 +6,8 @@ import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -19,9 +19,6 @@ import ambit2.rest.structure.CompoundHTMLReporter;
 
 public class KroesStep1 extends FastToxStep1 {
 
-	public KroesStep1(Context context, Request request, Response response) {
-		super(context, request, response);
-	}
 	protected String getFormAction() {
 		return String.format("%s/step2","/ttc");
 	}

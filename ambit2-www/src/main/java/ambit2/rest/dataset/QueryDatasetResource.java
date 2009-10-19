@@ -4,11 +4,12 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
@@ -23,11 +24,7 @@ import ambit2.rest.query.QueryResource;
 
 public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
 	public final static String datasetName =  String.format("/query%s/{dataset_name}",DatasetsResource.datasets);
-	public QueryDatasetResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));		
-	}
-	
+
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws StatusException {

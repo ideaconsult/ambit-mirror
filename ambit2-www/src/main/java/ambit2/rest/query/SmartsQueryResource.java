@@ -29,10 +29,6 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	public final static String dataset_smarts_resource_id =  String.format("%s%s%s",DatasetsResource.datasetID,query_resource,"/smarts/{smarts}");
 	public final static String dataset_smarts_resource =  String.format("%s%s%s",DatasetsResource.datasetID,query_resource,"/smarts");
 	
-	public SmartsQueryResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
 	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
@@ -75,10 +71,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					);
 		}
 	}		
-	@Override
-	public boolean allowPost() {
-		return true;
-	}
+
 /*
 	@Override
 	public void acceptRepresentation(Representation entity)

@@ -2,12 +2,13 @@ package ambit2.rest.propertyvalue;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -36,19 +37,19 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 	public static final String FeatureNameConformer =  String.format("/feature/{name}%s",ConformerResource.conformerID);
 	public static final String FeatureNameCompound = String.format("/feature/{name}%s",CompoundResource.compoundID);
 	
-	
-	public PropertyValueResource(Context context, Request request, Response response) {
-		super(context,request,response);
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
-			query = createQuery(context, request, response);
+			query = createQuery(getContext(),getRequest(),getResponse());
 			error = null;
 		} catch (AmbitException x) {
 			query = null;
 			error = x;
-		}
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+		}		
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
+
 	}
 	
 	@Override

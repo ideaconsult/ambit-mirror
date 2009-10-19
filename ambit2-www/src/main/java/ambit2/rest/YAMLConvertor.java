@@ -2,12 +2,11 @@ package ambit2.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 import org.ho.yaml.YamlEncoder;
 import org.restlet.data.MediaType;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
 
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;

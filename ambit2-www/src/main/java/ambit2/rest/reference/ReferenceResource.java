@@ -5,13 +5,14 @@ import java.io.Writer;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
@@ -65,14 +66,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 	public final static String idreference = "idreference";
 	public final static String referenceID = String.format("%s/{%s}",reference,idreference);
 	
-	public ReferenceResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));		
-	
-	}
+
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
@@ -122,11 +116,12 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 		}
 	} 
 	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
 		if (getRequest().getAttributes().get(idreference)==null)
 			createNewObject(entity);
 		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		return getResponse().getEntity();
 	}
 	@Override
 	protected QueryURIReporter<LiteratureEntry, ReadReference> getURUReporter(
@@ -149,11 +144,7 @@ create a new reference  	 POST  	 /reference  	 name:String, algorithm_id:String
 			LiteratureEntry entry) throws ResourceException {
 		return new CreateReference(entry);
 	}
-	
-	@Override
-	public boolean allowPost() {
-		return true;
-	}
+
 	/*
 	if (MediaType.TEXT_XML.equals(entity.getMediaType())) {
 		ReferenceDOMParser parser = new ReferenceDOMParser() {

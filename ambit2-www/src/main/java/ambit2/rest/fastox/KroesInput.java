@@ -8,9 +8,9 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -41,10 +41,6 @@ public class KroesInput extends FeatureResource {
 		this.record = record;
 	}
 
-	public KroesInput(Context context, Request request, Response response) {
-		super(context, request, response);
-		
-	}
 
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -139,11 +135,7 @@ public class KroesInput extends FeatureResource {
 		field.setFieldname(new Property("DailyIntake","User input",""));
 		return (IQueryRetrieval) field;
 	}
-	@Override
-	public void acceptRepresentation(Representation entity)
-			throws ResourceException {
-		super.acceptRepresentation(entity);
-	}
+
 	protected IStructureRecord getRecordByParameters() {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		record.setIdchemical(Integer.parseInt(form.getFirstValue("idchemical")));

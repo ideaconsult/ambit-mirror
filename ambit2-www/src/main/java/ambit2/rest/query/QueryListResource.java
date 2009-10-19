@@ -19,11 +19,7 @@ public class QueryListResource extends AlgorithmCatalogResource {
 	public enum querytypes  {
 		feature,smarts,smiles,substructure,inchi,similarity,dataset,endpoints
 	};
-	public QueryListResource(Context context, Request request, Response response) {
-		super(context,request,response);
 
-	
-	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {

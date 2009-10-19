@@ -3,13 +3,14 @@ package ambit2.rest.propertyvalue;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -24,6 +25,7 @@ import ambit2.db.update.value.UpdateCompoundPropertyValueNumber;
 import ambit2.db.update.value.UpdateCompoundPropertyValueString;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -72,20 +74,19 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	};		
 	public static final String featureID = "idfeature";
 	public static final String resource = String.format("%s/{%s}",PropertyValueResource.featureKey,featureID);
-	public FeatureResource(Context context, Request request, Response response) {
-		super(context,request,response);
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
-			query = createQuery(context, request, response);
+			query = createQuery(getContext(), getRequest(),getResponse());
 			error = null;
 		} catch (AmbitException x) {
 			query = null;
 			error = x;
 		}
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,MediaType.TEXT_PLAIN});
 	}
-	
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
@@ -152,10 +153,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		} catch (Exception x) {  }	
 		return record;
 	}
-	@Override
-	public boolean allowPost() {
-		return true;
-	}
+
 
 	@Override
 	protected PropertyValue createObjectFromHeaders(Form requestHeaders, Representation entity)
@@ -202,17 +200,21 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			}			
 	};
 	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
+
 		createNewObject(entity);
 		getResponse().setLocationRef(getRequest().getOriginalRef());
 		getResponse().setStatus(Status.SUCCESS_OK);
-		getResponse().setEntity(getRepresentation(new Variant(MediaType.TEXT_HTML)));
+		getResponse().setEntity(get(new Variant(MediaType.TEXT_HTML)));
+		return getResponse().getEntity();
 	}
 	@Override
-	public void storeRepresentation(Representation entity)
+	protected Representation put(Representation entity)
 			throws ResourceException {
+
 		createNewObject(entity);
+		return entity;
 	}
 	/*
 	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
