@@ -31,6 +31,7 @@ import java.util.List;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.smarts.SMARTSQueryTool;
 
 import ambit2.core.config.Resources;
@@ -124,7 +125,15 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 	}
 	public IAtomContainer getMatchingStructure(IAtomContainer mol)
 			throws SMARTSException {
-		throw new SMARTSException("Not supported");
+		IAtomContainer selected = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		List<List<Integer>> list = sqt.getUniqueMatchingAtoms();
+        for (int j=0; j < list.size();j++) {
+        	List<Integer> l = list.get(j); 
+        	for (int k=0; k < l.size();k++) {
+        		selected.addAtom(mol.getAtom(l.get(k)));
+        	}	
+        }		
+        return selected;
 	}
 	public List<List<Integer>> getUniqueMatchingAtoms(IAtomContainer mol)
 			throws SMARTSException {
