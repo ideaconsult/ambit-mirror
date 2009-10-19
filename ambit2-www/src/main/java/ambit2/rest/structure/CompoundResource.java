@@ -92,6 +92,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
+		/* workaround for clients not being able to set accept headers */
+		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		String media = acceptform.getFirstValue("accept-header");
+		if (media != null) {
+			variant.setMediaType(new MediaType(Reference.decode(media)));
+		}		
 		if (query == null) {
 			if (variant.getMediaType().equals(MediaType.TEXT_HTML)) 
 				return new StringConvertor(new AbstractReporter<Object,Writer>() {
@@ -109,14 +115,6 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				},MediaType.TEXT_HTML);
 			else throw new NotFoundException();
 		}
-		if ("png".equals(media)) variant.setMediaType(MediaType.IMAGE_PNG);
-		if ("pdf".equals(media)) variant.setMediaType(MediaType.APPLICATION_PDF);
-		if ("sdf".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_MDLSDF);
-		if ("cml".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_CML);
-		if ("smiles".equals(media)) variant.setMediaType(ChemicalMediaType.CHEMICAL_SMILES);
-		if ("xml".equals(media)) variant.setMediaType(MediaType.TEXT_XML);
-		if ("html".equals(media)) variant.setMediaType(MediaType.TEXT_HTML);
-		if ("uri".equals(media)) variant.setMediaType(MediaType.TEXT_URI_LIST);
 		
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
 			//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));

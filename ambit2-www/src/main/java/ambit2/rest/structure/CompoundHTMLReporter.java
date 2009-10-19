@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import org.openscience.cdk.CDKConstants;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -13,6 +14,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.propertyvalue.PropertyValueHTMLReporter;
@@ -124,6 +126,40 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					);
 			
 			*/
+			
+			MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
+					ChemicalMediaType.CHEMICAL_SMILES,
+					ChemicalMediaType.CHEMICAL_CML,
+					ChemicalMediaType.WEKA_ARFF,
+					MediaType.TEXT_URI_LIST,
+					MediaType.TEXT_XML,
+					MediaType.APPLICATION_PDF,
+					//MediaType.APPLICATION_
+					};
+			String[] image = {
+					"structures.gif",
+					"structures.gif",
+					"structures.gif",
+					"download.gif",
+					"download.gif",
+					"xml.png",
+					"pdf.png",
+					
+			};
+			
+			for (int i=0;i<mimes.length;i++) {
+				MediaType mime = mimes[i];
+				output.write("&nbsp;");
+				output.write(String.format(
+						"<a href=\"%s?accept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+						"",
+						mime,
+						uriReporter.getBaseReference().toString(),
+						image[i],
+						mime,
+						mime));	
+			}				
+			
 			output.write("<h4><div class=\"actions\"><span class=\"right\">");
 			output.write(String.format("<form method=\"post\" action=\"\">",""));
 			output.write(String.format("%s","Query name:&nbsp;"));
@@ -173,7 +209,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
-				"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>", 
+				//"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>",
+				"<a href=\"%s\"><img src=\"%s?accept-header=image/png\" alt=\"%s\" title=\"%d\"/></a>",
+				
 				w, w, 
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");

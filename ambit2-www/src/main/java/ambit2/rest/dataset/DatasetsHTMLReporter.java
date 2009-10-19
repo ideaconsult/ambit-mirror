@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.db.SourceDataset;
@@ -89,7 +90,41 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						w.toString(),
 						QueryResource.query_resource+"/smarts",
 						uriReporter.getBaseReference().toString()));
-/*				
+				
+				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
+						ChemicalMediaType.CHEMICAL_SMILES,
+						ChemicalMediaType.CHEMICAL_CML,
+						ChemicalMediaType.WEKA_ARFF,
+						MediaType.TEXT_URI_LIST,
+						MediaType.TEXT_XML,
+						MediaType.APPLICATION_PDF};
+				
+				for (MediaType mime:mimes) {
+					output.write("&nbsp;");
+					output.write(String.format(
+							"<a href=\"%s%s?accept-header=%s\"  ><img src=\"%s/images/structures.gif\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							w.toString(),
+							CompoundResource.compound,
+							mime,
+							uriReporter.getBaseReference().toString(),
+							mime,
+							mime));	
+				}				
+				/*
+				String[] mimes = {"text/uri-list","chemical/x-mdl-sdfile","chemical/x-daylight-smiles"};
+				for (String mime:mimes) {
+					output.write("&nbsp;");
+					output.write(String.format(
+							"<a href=\"javascript:getURL('%s%s','%s')\"><img src=\"%s/images/structures.gif\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							w.toString(),
+							CompoundResource.compound,
+							mime,
+							uriReporter.getBaseReference().toString(),
+							mime,
+							mime));	
+				}
+			*/
+			/*	
 				output.write("&nbsp;");
 				output.write(String.format(
 						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/feature/like/\" title=\"Search compounds with smarts\" border=\"0\"/></a>",

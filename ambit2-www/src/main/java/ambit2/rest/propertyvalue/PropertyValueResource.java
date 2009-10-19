@@ -24,7 +24,6 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
