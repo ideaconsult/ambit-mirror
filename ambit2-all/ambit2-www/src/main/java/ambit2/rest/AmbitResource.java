@@ -3,15 +3,19 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Resource;
-import org.restlet.resource.StringRepresentation;
-import org.restlet.resource.Variant;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
+import org.restlet.resource.ServerResource;
 
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.dataset.DatasetsResource;
@@ -23,7 +27,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.template.OntologyResource;
 
-public class AmbitResource extends Resource {
+public class AmbitResource extends ServerResource {
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
 	protected String[][] uri = {
@@ -186,16 +190,17 @@ public class AmbitResource extends Resource {
 			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"}
 			
 	};
-	public AmbitResource() {
-		super();
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
-		
-		//consumer = new DatasetConsumer();
 
-	}
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+        List<Variant> variants = new ArrayList<Variant>();
+        variants.add(new Variant(MediaType.TEXT_HTML));
+        variants.add(new Variant(MediaType.TEXT_XML));
+        variants.add(new Variant(MediaType.TEXT_URI_LIST));
+        getVariants().put(Method.GET, variants);
 	
+	}
 	protected String getSearchString() {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		Object key = form.getFirstValue("search");
@@ -205,7 +210,7 @@ public class AmbitResource extends Resource {
 	}
 	
 	@Override
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 		try {
 			String search = getSearchString();
 			if (search != null) {
@@ -290,6 +295,21 @@ public class AmbitResource extends Resource {
 		writeSearchForm(w, title, baseReference, meta);
 		
 	}
+	public static String js() {
+		String s = 
+		"function getURL(url, contentType) {\n"+
+		"	 var client = new XMLHttpRequest();\n"+
+		"	 client.open(\"GET\", url)\n"+
+		"	 client.setRequestHeader(\"Accept\", contentType);"+
+		"	 client.send();\n"+
+		"	client.onreadystatechange=function() {\n"+
+		"       if (client.readyState==4) {\n"+
+		"			headers.put('content-type', contentType)	\n"+
+		"			document.write(client.responseText); }"+
+		"	}\n}";
+		return s;
+
+	}
 	public static void writeTopHeader(Writer w,String title,Reference baseReference,String meta) throws IOException {
 
 		w.write(
@@ -299,6 +319,9 @@ public class AmbitResource extends Resource {
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
 		w.write("<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,FOLLOW\">");
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+		w.write("<script type=\"text/javascript\">\n");
+		w.write(js());
+		w.write("</script>\n");
 		w.write("</head>\n");
 		w.write("<body>\n");
 		w.write("<div style= \"width: 100%; background-color: #516373;");

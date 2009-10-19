@@ -3,7 +3,7 @@ div.row span.left {
   text-align: left;
   font-weight: bold;
   background-color: #516373;
-  color: #A1D005;
+  color: #99CC00;
   FONT-FAMILY: Verdana, Arial;
   width: 50%;
   }
@@ -13,7 +13,7 @@ div.row span.right {
   text-align: right;
   font-weight: bold;
   background-color: #516373;
-  color: #A1D005;
+  color: #729203;
   FONT-FAMILY: Verdana, Arial;
   width: 50%;
   }
@@ -106,7 +106,7 @@ h2
 h3
 {
     FONT-SIZE: 12pt;
-    COLOR: #A1D005;
+    COLOR: #729203;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
@@ -115,7 +115,7 @@ h3
 h4
 {
     FONT-SIZE: 11pt;
-    COLOR: #A1D005;
+    COLOR: #729203;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
@@ -124,7 +124,7 @@ h4
 A:link
 {
     FONT-SIZE: 10pt;
-    COLOR: #A1D005;
+    COLOR: #729203;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
@@ -132,7 +132,7 @@ A:link
 A:visited
 {
     FONT-SIZE: 10pt;
-    COLOR: #A1D005;
+    COLOR: #729203;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial

@@ -21,17 +21,14 @@ import ambit2.rest.structure.CompoundResource;
 public class DatasetCompoundResource extends CompoundResource {
 	public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 
-	public DatasetCompoundResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		IQueryRetrieval<IStructureRecord> q = super.createQuery(context, request, response);
 		if (q == null) return null;
 		
-		DatasetStructuresResource ds = new DatasetStructuresResource(context,request,response);
+		DatasetStructuresResource ds = new DatasetStructuresResource();
+		ds.init(context, request, response);
 		QueryDatasetByID datasetQuery = ds.createQuery(context, request, response);
 		if (datasetQuery == null) return null;
 		QueryCombinedStructure combinedQuery = new QueryCombinedStructure();

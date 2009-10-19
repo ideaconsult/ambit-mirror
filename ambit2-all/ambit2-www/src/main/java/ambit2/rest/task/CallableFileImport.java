@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.resource.InputRepresentation;
+import org.restlet.representation.InputRepresentation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.LiteratureEntry;

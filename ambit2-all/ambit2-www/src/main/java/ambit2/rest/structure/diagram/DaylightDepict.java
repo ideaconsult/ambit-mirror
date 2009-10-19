@@ -2,12 +2,11 @@ package ambit2.rest.structure.diagram;
 
 import java.awt.image.BufferedImage;
 
-import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
-import org.restlet.resource.Variant;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.pubchem.DepictRequest;
@@ -20,11 +19,11 @@ import ambit2.pubchem.DepictRequest;
 public class DaylightDepict extends AbstractDepict {
 	protected DepictRequest depict = new DepictRequest();
 	
-	public DaylightDepict(Context context, Request request, Response response) {
-		super(context,request,response);
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
 		this.getVariants().clear();
-		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
-
+		this.getVariants().put(Method.GET,new Variant(MediaType.IMAGE_PNG));		
 	}
 	@Override
 	protected BufferedImage getImage(String smiles,int w, int h) throws AmbitException {

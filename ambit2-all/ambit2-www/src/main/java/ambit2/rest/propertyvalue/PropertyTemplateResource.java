@@ -24,10 +24,7 @@ public class PropertyTemplateResource<T> extends PropertyValueResource<T> {
 	public static final String TemplateIDConformer =  String.format("%s/{idtemplate}%s",ConformerResource.conformerID,resource);
 	public static final String TemplateIDCompound = String.format("%s/{idtemplate}%s",CompoundResource.compoundID,resource);
 	
-	public PropertyTemplateResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
+
 	@Override
 	protected IQueryRetrieval<T> createQuery(Context context,
 			Request request, Response response) throws StatusException {

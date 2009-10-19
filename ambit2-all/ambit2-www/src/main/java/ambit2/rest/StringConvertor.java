@@ -7,8 +7,8 @@ import java.io.Writer;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Language;
 import org.restlet.data.MediaType;
-import org.restlet.resource.Representation;
-import org.restlet.resource.StringRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.Reporter;

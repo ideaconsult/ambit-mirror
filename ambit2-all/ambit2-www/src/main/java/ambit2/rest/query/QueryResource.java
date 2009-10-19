@@ -3,18 +3,16 @@ package ambit2.rest.query;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.restlet.Context;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.StringRepresentation;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -41,19 +39,18 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 	public final static String query_resource = "/query";	
 	
 	
-	public QueryResource(Context context, Request request, Response response) {
-		super(context,request,response);
 
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
 	}
 	protected Connection getConnection() throws SQLException , AmbitException {
 		Connection connection = ((AmbitApplication)getApplication()).getConnection();
 		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
 		return connection;
 	}
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 
 		try {
 			int maxRetry=3;
@@ -110,6 +107,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			return null;	
 		}
 	}		
+	
 	
 	/**
 	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it

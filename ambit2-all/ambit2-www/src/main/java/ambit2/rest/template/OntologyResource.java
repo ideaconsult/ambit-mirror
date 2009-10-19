@@ -4,12 +4,13 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.exceptions.AmbitException;
@@ -30,12 +31,6 @@ public class OntologyResource extends QueryResource<QueryOntology, Object> {
 	public static String resource = "/template";
 	public static String resourceKey = "topnode";
 	public static String resourceID = String.format("%s/{%s}",resource,resourceKey);
-	public OntologyResource(Context context, Request request, Response response) {
-		super(context, request, response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));			
-	}
 
 	@Override
 	public IProcessor<QueryOntology, Representation> createConvertor(

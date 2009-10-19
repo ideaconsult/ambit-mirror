@@ -6,9 +6,9 @@ import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -36,9 +36,7 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 	public static String resource = String.format("%s/%s",CompoundResource.compoundID,resourceTag);
 
 	public static String resourceDataset = String.format("%s%s/%s}",DatasetsResource.datasetID,CompoundResource.compoundID,resourceTag);
-	public TupleResource(Context context, Request request, Response response) {
-		super(context, request, response);
-	}
+
 
 	@Override
 	public IProcessor<QueryTuple, Representation> createConvertor(

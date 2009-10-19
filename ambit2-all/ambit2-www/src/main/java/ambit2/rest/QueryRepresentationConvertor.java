@@ -1,7 +1,7 @@
 package ambit2.rest;
 
 import org.restlet.data.MediaType;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;

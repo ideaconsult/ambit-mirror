@@ -13,11 +13,11 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.Resource;
-import org.restlet.resource.StringRepresentation;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -58,7 +58,7 @@ public class PubchemResource extends Resource {
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));		
 	}
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 		
 		try {
 	        if (term != null) {

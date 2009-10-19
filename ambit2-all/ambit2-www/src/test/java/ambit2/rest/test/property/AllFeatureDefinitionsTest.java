@@ -3,26 +3,17 @@ package ambit2.rest.test.property;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.Assert;
 
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Response;
-import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.XMLTags;
 import ambit2.rest.test.ResourceTest;
 
 /**

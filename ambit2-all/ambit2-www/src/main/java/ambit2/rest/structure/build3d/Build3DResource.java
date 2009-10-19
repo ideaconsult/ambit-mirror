@@ -13,15 +13,17 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.OutputRepresentation;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Resource;
-import org.restlet.resource.StringRepresentation;
-import org.restlet.resource.Variant;
+import org.restlet.representation.OutputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
+import org.restlet.resource.ServerResource;
 
 import ambit2.core.io.MDLWriter;
 import ambit2.mopac.MopacShell;
@@ -32,24 +34,24 @@ import ambit2.rest.ChemicalMediaType;
  * @author nina
  *
  */
-public class Build3DResource extends Resource {
+public class Build3DResource extends ServerResource {
 	protected static String delim = null;	
 	protected String smiles = null;
 	protected static String bracketLeft="[";
 	protected static String bracketRight="]";
 	protected MopacShell shell;
-	
-	public Build3DResource(Context context, Request request, Response response) {
-		super(context,request,response);
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
 			shell = new MopacShell();
 		} catch (Exception x) {
 			x.printStackTrace();
 			shell = null;
 		}
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));	
 		try {
-			this.smiles = Reference.decode(request.getAttributes().get("smiles").toString());
+			this.smiles = Reference.decode(getRequest().getAttributes().get("smiles").toString());
 		} catch (Exception x) {
 			this.smiles = null;
 		}		
@@ -59,9 +61,10 @@ public class Build3DResource extends Resource {
 			for (char a='a';a<='z';a++)	d.append(a);
 			for (char a='A';a<='Z';a++)	d.append(a);
 			delim = d.toString();
-		}		
+		}			
+		this.getVariants().put(Method.GET,new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));		
 	}
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 		
 		try {
 	        if (smiles != null) {

@@ -12,9 +12,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -32,6 +32,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.query.QueryResource;
+
 
 /**
  * 
@@ -70,9 +71,10 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 			return false;
 		}
 	};	
-	public AlgorithmResource(Context context, Request request, Response response) {
-		super(context, request, response);
-		catalog = new AlgorithmCatalogResource<Algorithm>(context,request,response) {
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		catalog = new AlgorithmCatalogResource<Algorithm>() {
 			@Override
 			protected Iterator<Algorithm> createQuery(Context context,
 					Request request, Response response) throws StatusException {
@@ -133,11 +135,12 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 			}
 						
 		};
+		catalog.init(getContext(),getRequest(),getResponse());
 		catalog.setCategory("rules");
 	}
 	@Override
-	public Representation getRepresentation(Variant variant) {
-		return catalog.getRepresentation(variant);
+	public Representation get(Variant variant) {
+		return catalog.get(variant);
 	}
 	@Override
 	public IProcessor<IQueryRetrieval<ModelQueryResults>, Representation> createConvertor(
@@ -153,20 +156,13 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		return null;
 	}
 	@Override
-	public boolean allowGet() {
-		return true;
-	}
-	@Override
-	public boolean allowPost() {
-		return true;
-	}
-	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
 		if (getRequest().getAttributes().get(idalgorithm)!=null) {
 			createNewObject(entity);
 			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 			getResponse().setEntity(null);
+			return getResponse().getEntity();
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	@Override

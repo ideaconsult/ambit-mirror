@@ -7,8 +7,8 @@ import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Variant;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 
 import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
@@ -22,13 +22,6 @@ import ambit2.rest.algorithm.AlgorithmCatalogResource;
 public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResource {
 
 	protected IMolecularDescriptor descriptor = null;
-
-	public AlgorithmDescriptorResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-
-
-	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {
@@ -42,12 +35,12 @@ public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResourc
 
 	}
 	@Override
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 		try {
 			Object descriptorID = Reference.decode(getRequest().getAttributes().get(iddescriptor).toString());
-			return super.getRepresentation(variant);
+			return super.get(variant);
 		} catch (Exception x) {
-			return super.getRepresentation(variant);
+			return super.get(variant);
 		}
 	}	
 }

@@ -20,10 +20,7 @@ public class AlgorithmUtilTypesResource extends AlgorithmCatalogResource {
 	public static enum utiltypes  {
 		name2structure,build3d
 	};
-	public AlgorithmUtilTypesResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
+
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws StatusException {

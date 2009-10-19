@@ -27,10 +27,6 @@ public class PropertyModelResource<T> extends PropertyTemplateResource<T> {
 	public static final String compoundModelID = String.format("%s%s/{idmodel}",CompoundResource.compoundID,resource);
 	public static final String conformerModelID =  String.format("%s%s/{idmodel}",ConformerResource.conformerID,resource);
 
-	public PropertyModelResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
 	@Override
 	protected IQueryRetrieval<T> createQuery(Context context,
 			Request request, Response response) throws StatusException {

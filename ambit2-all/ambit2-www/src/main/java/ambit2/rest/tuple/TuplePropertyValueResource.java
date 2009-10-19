@@ -25,9 +25,6 @@ public class TuplePropertyValueResource<PropertyValue> extends PropertyValueReso
 	public static String resourceCompoundID = String.format("%s/%s/{%s}",CompoundResource.compoundID,TupleResource.resourceTag,TupleResource.resourceKey);
 	public static String resourceConformerID = String.format("%s/%s/{%s}",ConformerResource.conformerID,TupleResource.resourceTag,TupleResource.resourceKey);
 	
-	public TuplePropertyValueResource(Context context, Request request, Response response) {
-		super(context,request,response);
-	}
 	
 
 	@Override

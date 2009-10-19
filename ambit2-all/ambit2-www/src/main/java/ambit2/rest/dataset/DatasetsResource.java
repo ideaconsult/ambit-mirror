@@ -8,15 +8,16 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
-import org.restlet.resource.InputRepresentation;
-import org.restlet.resource.Representation;
+import org.restlet.representation.InputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
@@ -60,12 +61,12 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
 	
 	protected boolean collapsed;
-	public DatasetsResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(ChemicalMediaType.TEXT_YAML));		
-	}
 
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML});
+	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws StatusException {
@@ -120,15 +121,13 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		return new OutputStreamConvertor(
 				new DatasetHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
 	}
-	
+
 	@Override
-	public boolean allowPost() {
-		return getRequest().getAttributes().get(datasetKey)==null;
-	}
-	
-	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
+		if (getRequest().getAttributes().get(datasetKey)!=null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
 		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
               //factory.setSizeThreshold(100);
@@ -211,6 +210,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
             }
          getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
          */
+		return getResponse().getEntity();
             
 	}
 }

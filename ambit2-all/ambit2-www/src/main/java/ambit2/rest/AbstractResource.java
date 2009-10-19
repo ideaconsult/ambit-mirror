@@ -1,14 +1,19 @@
 package ambit2.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Resource;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
+import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -22,7 +27,7 @@ import ambit2.base.interfaces.IProcessor;
  * @param <T>
  * @param <P>
  */
-public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representation>> extends Resource {
+public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representation>> extends ServerResource {
 	protected Q query;
 	protected Exception error = null;	
 	protected Status status = Status.SUCCESS_OK;
@@ -30,23 +35,30 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	public String[] URI_to_handle() {
 		return null;
 	}
-	public AbstractResource(Context context, Request request, Response response) {
-		super(context,request,response);
+
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
 			status = Status.SUCCESS_OK;
-			query = createQuery(context, request, response);
+			query = createQuery(getContext(), getRequest(), getResponse());
 			error = null;
 		} catch (StatusException x) {
 			query = null;
 			error = x;
 			status = x.getStatus();
-		}		
+		}			
+	}
+	protected void customizeVariants(MediaType[] mimeTypes) {
+        List<Variant> variants = new ArrayList<Variant>();
+        for (MediaType mileType:mimeTypes) variants.add(new Variant(mileType));
+        getVariants().put(Method.GET, variants);
 	}
 	public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
 	
 	protected   abstract  Q createQuery(Context context, Request request, Response response) throws StatusException;
 	
-	public synchronized Representation getRepresentation(Variant variant) {
+	public synchronized Representation get(Variant variant) {
 
 		try {
 	        if (query != null) {

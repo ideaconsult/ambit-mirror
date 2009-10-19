@@ -26,10 +26,6 @@ import ambit2.rest.structure.CompoundResource;
  */
 public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	public static String resource = "/qlabel";
-	public QLabelQueryResource(Context context, Request request,
-			Response response) {
-		super(context, request, response);
-	}
 
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,

@@ -209,7 +209,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
-				//"<a href=\"%s\"><img src=\"%s/diagram/png\" alt=\"%s\" title=\"%d\"/></a>",
 				"<a href=\"%s\"><img src=\"%s?accept-header=image/png\" alt=\"%s\" title=\"%d\"/></a>",
 				
 				w, w, 

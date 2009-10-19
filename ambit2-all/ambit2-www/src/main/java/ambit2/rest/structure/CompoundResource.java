@@ -10,9 +10,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -71,23 +71,20 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
 	public final static String compoundID_media = String.format("%s%s",compoundID,"/diagram/{media}");	
 	protected boolean collapsed = false;
-	public CompoundResource(Context context, Request request, Response response) {
-		super(context,request,response);
-	
-	}
+
 	
 	@Override
 	public String[] URI_to_handle() {
 		return new String[] {compoundID,compoundID_media};
 	}
 	@Override
-	public Representation getRepresentation(Variant variant) {
+	public Representation get(Variant variant) {
 		if (query == null) try {
 			IProcessor<Object, Representation>  convertor = createConvertor(variant);
 			Representation r = convertor.process(null);
         	return r;			
 		} catch (Exception x) { getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x); return null;}
-		else return super.getRepresentation(variant);
+		else return super.get(variant);
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -252,13 +249,9 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 
 	}	
+
 	@Override
-	public boolean allowPost() {
-		return true;
-	}
-	
-	@Override
-	public void acceptRepresentation(Representation entity)
+	protected Representation post(Representation entity)
 			throws ResourceException {
 
 		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  

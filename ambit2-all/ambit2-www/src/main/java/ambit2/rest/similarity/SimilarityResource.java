@@ -33,17 +33,14 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 	protected String dataset_id;
 
 	
-	public SimilarityResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		
+	protected void doInit() throws org.restlet.resource.ResourceException {
+		super.doInit();
 		try {
-			this.dataset_id = Reference.decode(request.getAttributes().get("dataset_id").toString());
+			this.dataset_id = Reference.decode(getRequest().getAttributes().get("dataset_id").toString());
 		} catch (Exception x) {
 			this.dataset_id = null;
-		}
-
-
-	}
+		}		
+	};
 
 	@Override
 	protected QuerySimilarityBitset createQuery(Context context,

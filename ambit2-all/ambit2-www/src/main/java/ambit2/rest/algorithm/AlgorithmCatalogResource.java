@@ -6,15 +6,17 @@ import java.util.Iterator;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
-import org.restlet.resource.Representation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.Variant;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 
@@ -32,12 +34,11 @@ public class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,
 	};
 	
 	protected String category = "";
-	public AlgorithmCatalogResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(MediaType.TEXT_XML));
-		this.getVariants().add(new Variant(MediaType.TEXT_URI_LIST));		
-
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST});
+		
 	}
 	@Override
 	protected Iterator<T> createQuery(Context context, Request request,
