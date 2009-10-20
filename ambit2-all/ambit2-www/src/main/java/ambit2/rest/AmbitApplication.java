@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 
 import org.restlet.Application;
 import org.restlet.Component;
-import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
@@ -63,6 +62,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
+import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
@@ -87,22 +87,37 @@ public class AmbitApplication extends Application {
 
 	protected String connectionURI;
 	protected DataSource datasource = null;
-	public AmbitApplication(Context context) {
-		super(context);
+
+	public AmbitApplication() {
+		super();
 		tasks = new ConcurrentHashMap<UUID,Task<Reference>>();
 		/*
 		String tmpDir = System.getProperty("java.io.tmpdir");
         File logFile = new File(tmpDir,"ambit2-www.log");		
 		System.setProperty("java.util.logging.config.file",logFile.getAbsolutePath());
 		*/
+
+		connectionURI = null;
+		setStatusService(new AmbitStatusService());
+		getTaskService().setEnabled(true);
+	}
+	
+	protected String getConnectionURI() throws AmbitException {
 		try {
-			//ServletContext sc = (ServletContext) getContext().getAttributes().get(“org.restlet.ext.servlet.ServletContext”);
-			Object result =  getContext().getAttributes();//.getFirstValue("Database");
-			System.out.println("---------" + result);
+			String params = 
+				  getContext().getParameters().getFirstValue(Preferences.DATABASE);
+			//ServletContext sc = (ServletContext) getContext().getAttributes().get("org.restlet.ext.servlet.ServletContext");
+			/*
+			ServletContextAdapter adapter = (ServletContextAdapter) getContext(); 
+			ServletContext servletContext = adapter.getServletContext(); 
+			String filePrefix = servletContext.getInitParameter("internal-configuration");
+*/
+			//Object result =  sc.getInitParameter("Database");
+			System.out.println("---------" + params);
 		} catch (Exception x) {
 			System.out.println("---------");
 			x.printStackTrace();
-		}
+		}		
 		try {
 			LoginInfo li = new LoginInfo();
 			li.setDatabase("ambit2");
@@ -110,27 +125,21 @@ public class AmbitApplication extends Application {
 			li.setPassword("guest");
 			li.setPort("3306");
 			if (getContext().getParameters().size()>0) {
-				li.setDatabase(getContext().getParameters().getValues(Preferences.DATABASE));
-				li.setUser(getContext().getParameters().getValues(Preferences.USER));
-				li.setPassword(getContext().getParameters().getValues(Preferences.PASSWORD));
-				li.setHostname(getContext().getParameters().getValues(Preferences.HOST));
-				li.setPort(getContext().getParameters().getValues(Preferences.PORT));
+				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
+				li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
+				li.setPassword(getContext().getParameters().getFirstValue(Preferences.PASSWORD));
+				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
+				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 			}
-			
-			connectionURI = DatasourceFactory.getConnectionURI(
+			System.out.println(li);
+			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), li.getUser(), li.getPassword()); 
 		} catch (Exception x) {
-
-			connectionURI = null;
-			
-		}
-		
-		setStatusService(new AmbitStatusService());
-		getTaskService().setEnabled(true);
+			throw new AmbitException(x);
+		} 
+				
 	}
-	
-	
 	
 	@Override
 	public Restlet createRoot() {
@@ -265,6 +274,7 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/depict/daylight",DaylightDepict.class);
 		router.attach("/depict/cdk",CDKDepict.class);
+		router.attach("/depict/cactvs",CSLSDepict.class);
 		router.attach("/depict",AbstractDepict.class);
 		router.attach("/name2structure",Name2StructureResource.class);	
 		
@@ -329,8 +339,10 @@ public class AmbitApplication extends Application {
 	}
 	
 
-	public Connection getConnection() throws AmbitException , SQLException{
-
+	public synchronized Connection getConnection() throws AmbitException , SQLException{
+		
+		if (connectionURI == null)
+			connectionURI = getConnectionURI();
 		
 		SQLException error = null;
 		Connection c = null;
@@ -414,8 +426,8 @@ public class AmbitApplication extends Application {
         Component component = new Component();
         component.getServers().add(Protocol.HTTP, 8080);
        
-        AmbitApplication application = new AmbitApplication(component.getContext().createChildContext());
-
+        AmbitApplication application = new AmbitApplication();
+        application.setContext(component.getContext().createChildContext());
 
         // Attach the application to the component and start it
         component.getDefaultHost().attach(application);

@@ -51,6 +51,16 @@ public class AbstractDepict extends ServerResource {
 		
 		b.append(String.format("<td><img src='%s/daylight?search=%s' alt='%s' title='%s'></td><td><img src='%s/cdk?search=%s' alt='%s' title='%s'></td>",
 				ref.getHierarchicalPart(),smiles,smiles,smiles,ref.getHierarchicalPart(),smiles,smiles,smiles));
+		
+		b.append("</tr><tr>");
+		b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td></td>",
+				ref.getHierarchicalPart(),smiles,"Cactvs depiction"));		
+				
+		b.append("</tr><tr>");
+		
+		b.append(String.format("<td><img src='%s/cactvs?search=%s' alt='%s' title='%s'></td><td></td>",
+				ref.getHierarchicalPart(),smiles,smiles,smiles));
+		
 		b.append("</tr></table>");
 		return b.toString();
 	}
