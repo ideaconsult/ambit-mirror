@@ -53,7 +53,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	}
 	
 	protected Application createApplication(Context context) {
-		return new AmbitApplication(context);		
+		Application app = new AmbitApplication();
+		app.setContext(context);
+		return app;
 	}
 
 	@After

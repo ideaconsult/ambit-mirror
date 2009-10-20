@@ -1,9 +1,11 @@
 package ambit2.rest;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -83,7 +85,7 @@ import ambit2.rest.tuple.TupleResource;
  */
 public class AmbitApplication extends Application {
 	protected ConcurrentMap<UUID,Task<Reference>> tasks;
-
+	protected Properties properties = null;
 
 	protected String connectionURI;
 	protected DataSource datasource = null;
@@ -101,29 +103,37 @@ public class AmbitApplication extends Application {
 		setStatusService(new AmbitStatusService());
 		getTaskService().setEnabled(true);
 	}
-	
-	protected String getConnectionURI() throws AmbitException {
+	protected void loadProperties()  {
 		try {
-			String params = 
-				  getContext().getParameters().getFirstValue(Preferences.DATABASE);
-			//ServletContext sc = (ServletContext) getContext().getAttributes().get("org.restlet.ext.servlet.ServletContext");
-			/*
-			ServletContextAdapter adapter = (ServletContextAdapter) getContext(); 
-			ServletContext servletContext = adapter.getServletContext(); 
-			String filePrefix = servletContext.getInitParameter("internal-configuration");
-*/
-			//Object result =  sc.getInitParameter("Database");
-			System.out.println("---------" + params);
+		if (properties == null) {
+			properties = new Properties();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
+			properties.load(in);
+			in.close();		
+		}
 		} catch (Exception x) {
-			System.out.println("---------");
-			x.printStackTrace();
-		}		
+			properties = null;
+		}
+	}	
+	protected LoginInfo getLoginInfo() {
+		loadProperties();
+		LoginInfo li = new LoginInfo();
+		String p = properties.getProperty("Database");
+		li.setDatabase(p==null?"ambit2":p);
+		p = properties.getProperty("Port");
+		li.setPort(p==null?"3306":p);		
+		p = properties.getProperty("User");
+		li.setUser(p==null?"guest":p);			
+		p = properties.getProperty("Password");
+		li.setPassword(p==null?"guest":p);	
+		return li;
+	}	
+	protected String getConnectionURI() throws AmbitException {
+	
 		try {
-			LoginInfo li = new LoginInfo();
-			li.setDatabase("ambit2");
-			li.setUser("guest");
-			li.setPassword("guest");
-			li.setPort("3306");
+			LoginInfo li = getLoginInfo();
+
+			/*
 			if (getContext().getParameters().size()>0) {
 				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
 				li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
@@ -131,7 +141,7 @@ public class AmbitApplication extends Application {
 				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 			}
-			System.out.println(li);
+			*/
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), li.getUser(), li.getPassword()); 

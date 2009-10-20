@@ -15,27 +15,6 @@
 		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
 		
-		
-		<init-param>
-			<param-name>Database</param-name>
-			<param-value>ambit2</param-value>
-		</init-param>
-		<init-param>
-			<param-name>Host</param-name>
-			<param-value>localhost</param-value>
-		</init-param>
-		<init-param>
-			<param-name>Port</param-name>
-			<param-value>3306</param-value>
-		</init-param>
-		<init-param>
-			<param-name>User</param-name>
-			<param-value>guest</param-value>
-		</init-param>
-		<init-param>
-			<param-name>Password</param-name>
-			<param-value>guest</param-value>
-		</init-param>			
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>RestletServlet</servlet-name>
