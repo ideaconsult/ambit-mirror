@@ -270,9 +270,6 @@ function load(){
 </tr>
 </form>
 </table>
-
-<jsp:include page="footer.jsp" flush="true"/>
-
 </body>
 </html>
 
