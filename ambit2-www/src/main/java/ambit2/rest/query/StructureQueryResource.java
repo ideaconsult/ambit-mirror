@@ -42,12 +42,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] {
+				MediaType.TEXT_HTML,
 				ChemicalMediaType.CHEMICAL_MDLSDF,
 				ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
 				MediaType.IMAGE_PNG,
 				MediaType.APPLICATION_PDF,
-				MediaType.TEXT_HTML,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN
