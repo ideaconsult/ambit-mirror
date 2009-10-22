@@ -3,7 +3,7 @@
 	<property name="src.dir" value="${basedir}/src"></property>
 	<property name="src.test.dir" value="${basedir}/test"></property>
 	<property name="build.dir" value="${basedir}/build"></property>
-	<property name="iuclid5.jar.dir" value="${basedir}/iuclid5-ws-bin"></property>
+	<property name="iuclid5.jar.dir" value="${basedir}/jar"></property>
 	<property name="lib.dir" value="${basedir}/lib"></property>
 	
 	<path id="compile.classpath">
