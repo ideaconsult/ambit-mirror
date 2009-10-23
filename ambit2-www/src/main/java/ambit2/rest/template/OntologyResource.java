@@ -4,7 +4,6 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -36,7 +35,7 @@ public class OntologyResource extends QueryResource<QueryOntology, Object> {
 	public IProcessor<QueryOntology, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new OntologyURIReporter(getRequest().getRootRef()) {
+				return new StringConvertor(	new OntologyURIReporter(getRequest()) {
 					@Override
 					public void processItem(Object item, Writer output) {
 						super.processItem(item, output);
@@ -48,7 +47,7 @@ public class OntologyResource extends QueryResource<QueryOntology, Object> {
 				
 		} else 
 			return new OutputStreamConvertor(
-					new OntologyHTMLReporter(getRequest().getRootRef(),true)
+					new OntologyHTMLReporter(getRequest(),true)
 					,MediaType.TEXT_HTML);
 	}
 

@@ -3,13 +3,16 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -211,6 +214,8 @@ public class AmbitResource extends ServerResource {
 	
 	@Override
 	public Representation get(Variant variant) {
+		System.out.println(getRequest().getClientInfo().isAuthenticated());
+		System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
 		try {
 			String search = getSearchString();
 			if (search != null) {
@@ -219,7 +224,7 @@ public class AmbitResource extends ServerResource {
 				return null;
 			}
 		} catch (Exception x) {}
-	    System.out.println(getRequest().getAttributes());    
+
 		try {
 			if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 				StringBuilder xml = new StringBuilder();
@@ -243,7 +248,7 @@ public class AmbitResource extends ServerResource {
 			} else { //if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 				variant.setMediaType(MediaType.TEXT_HTML);
 				StringWriter writer = new StringWriter();
-				writeHTMLHeader(writer, "AMBIT", getRequest().getRootRef());
+				writeHTMLHeader(writer, "AMBIT", getRequest());
 				writer.write("<table border='0'>");
 				writer.write(String.format("<tr align='center'><th colspan='4'>%s</th></tr>",
 						"Services listed below are an initial implementation of <a href=\"http://opentox.org/dev/apis\" target=\"blank\">OpenTox REST API</a>"+
@@ -275,7 +280,7 @@ public class AmbitResource extends ServerResource {
 					*/
 				}
 				writer.write("</table>");
-				writeHTMLFooter(writer, "AMBIT", getRequest().getRootRef());
+				writeHTMLFooter(writer, "AMBIT", getRequest());
 				return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
 			}
 			
@@ -286,13 +291,13 @@ public class AmbitResource extends ServerResource {
 		}
 	}
 	
-	public static void writeHTMLHeader(Writer w,String title,Reference baseReference) throws IOException {
-		writeHTMLHeader(w, title, baseReference,"");
+	public static void writeHTMLHeader(Writer w,String title,Request request) throws IOException {
+		writeHTMLHeader(w, title, request,"");
 	}
-	public static void writeHTMLHeader(Writer w,String title,Reference baseReference,String meta) throws IOException {
+	public static void writeHTMLHeader(Writer w,String title,Request request,String meta) throws IOException {
 
-		writeTopHeader(w, title, baseReference, meta);
-		writeSearchForm(w, title, baseReference, meta);
+		writeTopHeader(w, title, request, meta);
+		writeSearchForm(w, title, request, meta);
 		
 	}
 	public static String js() {
@@ -310,8 +315,47 @@ public class AmbitResource extends ServerResource {
 		return s;
 
 	}
-	public static void writeTopHeader(Writer w,String title,Reference baseReference,String meta) throws IOException {
+	public static String jsHTTPObject() {
+		String s = 
+			"\nfunction getHTTPObject() {\n"+
+			"if (typeof XMLHttpRequest != 'undefined') { return new XMLHttpRequest(); }\n"+
+			"try { return new ActiveXObject(\"Msxml2.XMLHTTP\"); } catch (e) {\n"+
+			"try { return new ActiveXObject(\"Microsoft.XMLHTTP\"); } catch (e) {} } return false; }\n";
+		return s;
 
+	}
+	public static String jsLogout() {
+		String s = 
+			"\nfunction logout() { "+
+			"var http = getHTTPObject();\n"+ 
+			"var username = \"guest\";\n"+
+			"var password = \"guest\";\n"+
+			"http.open(\"get\", \"\", false, username, password);\n"+
+			"http.send(\"\"); \n"+
+			"	http.onreadystatechange=function() {\n"+
+			"       if (client.readyState==4) {\n"+
+			"			headers.put('Authorization', '')	\n"+
+			"			document.write(client.responseText); }"+
+			"	}\n}";			
+			//"if (http.status == 200) { document.location = this.action; alert(username); } \n"+
+			//"else { alert(\"Incorrect username and/or password.\"); } return false; }\n";
+		return s;
+
+	}		
+	public static String jsLogin() {
+		String s = 
+			"\nfunction login() { "+
+			"var username = document.getElementById(this.id + \"-username\").value;\n"+
+			"var password = document.getElementById(this.id + \"-password\").value;\n"+
+			"this.http.open(\"get\", this.action, false, username, password);\n"+
+			"this.http.send(\"\"); \n"+
+			"if (http.status == 200) { document.location = this.action; } \n"+
+			"else { alert(\"Incorrect username and/or password.\"); } return false; }\n";
+		return s;
+
+	}	
+	public static void writeTopHeader(Writer w,String title,Request request,String meta) throws IOException {
+		Reference baseReference = request==null?null:request.getRootRef();
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
@@ -319,9 +363,16 @@ public class AmbitResource extends ServerResource {
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
 		w.write("<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,FOLLOW\">");
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-		w.write("<script type=\"text/javascript\">\n");
+		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/jquery-1.3.2.js\"></script>\n",baseReference));
+
+		/*
 		w.write(js());
+		w.write(jsHTTPObject());
+		w.write(jsLogout());
 		w.write("</script>\n");
+				*/
+
 		w.write("</head>\n");
 		w.write("<body>\n");
 		w.write("<div style= \"width: 100%; background-color: #516373;");
@@ -330,7 +381,17 @@ public class AmbitResource extends ServerResource {
 
 		w.write(String.format("<div class=\"row\"><span class=\"left\"><a href=\"%s\">Home</a>",baseReference.toString()));
 		w.write("</span>");
-		w.write("	<span class=\"right\"><a href=''>Login</a>");
+		Iterator<Principal> i = request.getClientInfo().getSubject().getPrincipals().iterator();
+		Principal p = null;
+		while (i.hasNext()) { p = i.next(); break; }
+		//w.write(String.format("	<span class=\"right\"><a href='%s/user/login'>Login</a>&nbsp;<a href='%s/protected/%s'>Logout</a>&nbsp;<form action='javascript:logout()' method='get'><input type='submit' value='Logout'></form>&nbsp;%s",
+		if (p==null)
+		w.write(String.format("	<span class=\"right\"><a href='%s/user/login'>Login</a>",
+				baseReference.toString()));
+		else
+		w.write(String.format("	<span class=\"right\">%s&nbsp;<a href='%s/protected/%s'>Switch user</a>",
+				p.getName(),baseReference.toString(),p.getName()));
+		
 		//w.write(String.format("&nbsp;<a href=\"%s/help\">Help</a>",baseReference.toString()));
 		w.write("</span></div>");
 		w.write("	<div class=\"spacer\"></div>");
@@ -355,8 +416,8 @@ public class AmbitResource extends ServerResource {
 	
 	}
 	
-	public static void writeSearchForm(Writer w,String title,Reference baseReference,String meta) throws IOException {
-
+	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
+		Reference baseReference = request==null?null:request.getRootRef();
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
 		w.write("<td align='left' width='256px'>");
@@ -383,7 +444,8 @@ public class AmbitResource extends ServerResource {
 		w.write("<hr>");
 		
 	}	
-	public static void writeHTMLFooter(Writer output,String title,Reference baseReference) throws IOException {
+	public static void writeHTMLFooter(Writer output,String title,Request request) throws IOException {
+		Reference baseReference = request==null?null:request.getRootRef();
 		output.write("<div class=\"footer\"><span class=\"right\">");
 		output.write("<font color='#D6DFF7'>");
 		output.write("Developed by Ideaconsult Ltd. (2005-2009)"); 

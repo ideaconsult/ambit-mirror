@@ -3,7 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -42,9 +42,9 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 	public QueryHTMLReporter() {
 		this(null,true);
 	}
-	public QueryHTMLReporter(Reference baseRef, boolean collapsed) {
+	public QueryHTMLReporter(Request request, boolean collapsed) {
 		super();
-		uriReporter =  createURIReporter(baseRef);
+		uriReporter =  createURIReporter(request);
 		this.collapsed = collapsed;
 		processors.clear();
 		/*
@@ -62,19 +62,19 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 		});
 		
 	}	
-	protected abstract QueryURIReporter createURIReporter(Reference reference);
+	protected abstract QueryURIReporter createURIReporter(Request request);
 	
 	@Override
 	public void header(Writer w, Q query) {
 		try {
-			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.baseReference);
+			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest());
 		} catch (IOException x) {}
 	}
 	
 	@Override
 	public void footer(Writer output, Q query) {
 		try {
-			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.baseReference);
+			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

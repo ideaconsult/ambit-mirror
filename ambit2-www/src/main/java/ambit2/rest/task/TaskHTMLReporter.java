@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.rest.AmbitResource;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
@@ -15,13 +16,13 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7644836050657868159L;
-	public TaskHTMLReporter(Reference ref) {
+	public TaskHTMLReporter(Request ref) {
 		super(ref);
 	}
 	@Override
 	public void header(Writer output, Iterator<Task<Reference>> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", baseReference);//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<div id=\"div-1\">");
 		} catch (Exception x) {
 			
@@ -46,7 +47,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	public void footer(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			output.write("</div>");
-			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm, baseReference);
+			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

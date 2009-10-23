@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
@@ -25,17 +26,17 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public ModelHTMLReporter() {
 		this(null,true);
 	}
-	public ModelHTMLReporter(Reference baseRef,boolean collapsed) {
-		this(baseRef,baseRef,collapsed);
+	public ModelHTMLReporter(Request request,boolean collapsed) {
+		this(request,request,collapsed);
 	}
-	public ModelHTMLReporter(Reference baseRef,Reference originalRef,boolean collapsed) {
-		super(baseRef,collapsed);
-		templateReporter = new OntologyURIReporter(baseRef);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,true);
+	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed) {
+		super(request,collapsed);
+		templateReporter = new OntologyURIReporter(request);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,true);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<ModelQueryResults> query) {

@@ -1,7 +1,7 @@
 package ambit2.rest.dataset;
 
 import org.ho.yaml.YamlEncoder;
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
@@ -23,12 +23,12 @@ public class DatasetYamlReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 	public DatasetYamlReporter() {
 		this(null);
 	}
-	public DatasetYamlReporter(Reference baseRef) {
-		super();
+	public DatasetYamlReporter(Request request) {
+		super(request);
 	}	
 
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
+	protected QueryURIReporter createURIReporter(Request reference) {
 		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
 	}	
 	@Override

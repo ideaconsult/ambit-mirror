@@ -3,7 +3,6 @@ package ambit2.rest.propertyvalue;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -79,10 +78,10 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		try {
-			query = createQuery(getContext(), getRequest(),getResponse());
+			queryObject = createQuery(getContext(), getRequest(),getResponse());
 			error = null;
 		} catch (AmbitException x) {
-			query = null;
+			queryObject = null;
 			error = x;
 		}
 		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,MediaType.TEXT_PLAIN});
@@ -94,23 +93,23 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	
 		return new StringConvertor(new PropertyValueReporter());
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest().getRootRef()));
+			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor(
-					new PropertyValueHTMLReporter(getRequest().getRootRef(),true),MediaType.TEXT_HTML);			
+					new PropertyValueHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	getURUReporter(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
+			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
 		} else return new StringConvertor(new PropertyValueReporter());
 					
 	}		
 	@Override
 	protected QueryURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>> getURUReporter(
-			Reference baseReference) throws ResourceException {
+			Request baseReference) throws ResourceException {
 		PropertyValueURIReporter reporter = new PropertyValueURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>>(baseReference);
-		if (query instanceof AbstractQuery) {
-			if (((AbstractQuery)query).getValue() instanceof IStructureRecord)
-			reporter.setRecord((IStructureRecord)((AbstractQuery)query).getValue());
+		if (queryObject instanceof AbstractQuery) {
+			if (((AbstractQuery)queryObject).getValue() instanceof IStructureRecord)
+			reporter.setRecord((IStructureRecord)((AbstractQuery)queryObject).getValue());
 		}
 		return reporter;		
 	}
@@ -199,6 +198,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 				return u;
 			}			
 	};
+
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {

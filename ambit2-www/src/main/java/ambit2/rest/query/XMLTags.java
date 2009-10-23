@@ -19,6 +19,7 @@ public class XMLTags {
 	private static final long serialVersionUID = -3235018056866994267L;
 	public final static String ns_opentox = "http://opentox.org/1.0";
 	public final static String ns_opentox_reference = "http://www.opentox.org/Reference/1.0";
+	public final static String ns_opentox_user = "http://www.opentox.org/User/1.0";
 	public final static String ns_opentox_feature = "http://opentox.org/Feature/1.0";
 	public final static String ns_opentox_feature_definition = "http://www.opentox.org/FeatureDefinition/1.0";
 	public final static String node_ambit = "ambit";
@@ -31,6 +32,8 @@ public class XMLTags {
 	public final static String node_feature = "Feature";
 	public final static String node_reference = "Reference";
 	public final static String node_references = "References";
+	public final static String node_user = "User";
+	public final static String node_users = "Users";	
 	public final static String node_featuredefs = "FeatureDefinitions";
 	public final static String node_featuredef = "FeatureDefinition";
 	public final static String attr_href = "href";

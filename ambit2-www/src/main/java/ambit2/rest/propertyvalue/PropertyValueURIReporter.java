@@ -1,6 +1,6 @@
 package ambit2.rest.propertyvalue;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
@@ -23,7 +23,7 @@ public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends Qu
 	public void setRecord(IStructureRecord record) {
 		this.record = record;
 	}
-	public PropertyValueURIReporter(Reference baseRef) {
+	public PropertyValueURIReporter(Request baseRef) {
 		super(baseRef);
 	}
 	public PropertyValueURIReporter() {

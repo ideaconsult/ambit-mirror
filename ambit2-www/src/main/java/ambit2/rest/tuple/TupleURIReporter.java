@@ -1,6 +1,6 @@
 package ambit2.rest.tuple;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
@@ -28,8 +28,8 @@ public class TupleURIReporter extends QueryURIReporter<PropertiesTuple, QueryTup
 	public void setRecord(IStructureRecord record) {
 		this.record = record;
 	}
-	public TupleURIReporter(Reference baseRef,IStructureRecord record) {
-		this.baseReference = baseRef;
+	public TupleURIReporter(Request baseRef,IStructureRecord record) {
+		super(baseRef);
 		reporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(baseRef);
 		this.record = record;
 	}

@@ -23,7 +23,7 @@ public class AmbitStatusService extends StatusService {
 			Response response) {
 		try {
 			StringWriter w = new StringWriter();
-			AmbitResource.writeHTMLHeader(w, status.getName(), request.getRootRef());
+			AmbitResource.writeHTMLHeader(w, status.getName(), request);
 			
 			w.write(String.format("Error :<br>Code: %d<br>Name: %s<br>URI: %s<br>Description: %s<br>",
 					status.getCode(),
@@ -32,7 +32,7 @@ public class AmbitStatusService extends StatusService {
 					status.getDescription()
 					));
 
-			AmbitResource.writeHTMLFooter(w, status.getName(), request.getRootRef());
+			AmbitResource.writeHTMLFooter(w, status.getName(), request);
 	
 			return new StringRepresentation(w.toString(),MediaType.TEXT_HTML); 
 		} catch (Exception x) {

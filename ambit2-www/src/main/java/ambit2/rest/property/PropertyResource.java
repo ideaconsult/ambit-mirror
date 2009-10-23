@@ -3,7 +3,6 @@ package ambit2.rest.property;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -90,15 +89,15 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyDOMReporter(getRequest().getRootRef()));
+			return new DocumentConvertor(new PropertyDOMReporter(getRequest()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				PropertyURIReporter r = new PropertyURIReporter(getRequest().getRootRef());
+				PropertyURIReporter r = new PropertyURIReporter(getRequest());
 				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST);
 				
 		} else 
 			return new OutputStreamConvertor(
-					new PropertyHTMLReporter(getRequest().getRootRef(),collapsed)
+					new PropertyHTMLReporter(getRequest(),collapsed)
 					,MediaType.TEXT_HTML);
 	}
 
@@ -187,7 +186,7 @@ create a new feature definition  	 POST  	 /feature_definition  	 name: String, 
 	
 	@Override
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
-			Reference baseReference) throws ResourceException {
+			Request baseReference) throws ResourceException {
 		return new PropertyURIReporter(baseReference);
 	}
 }

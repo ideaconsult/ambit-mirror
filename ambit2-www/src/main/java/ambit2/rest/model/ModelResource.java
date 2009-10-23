@@ -98,9 +98,9 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	*/
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputStreamConvertor(
-				new ModelHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest().getRootRef()) {
+		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
 			@Override
 			public void processItem(ModelQueryResults dataset, Writer output) {
 				super.processItem(dataset, output);
@@ -111,13 +111,13 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
 		return new OutputStreamConvertor(
-				new ModelHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 	
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> getURUReporter(
-			Reference baseReference) throws ResourceException {
-		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest().getRootRef());
+			Request baseReference) throws ResourceException {
+		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
 	}
 	@Override
 	protected Representation post(Representation entity)
@@ -141,7 +141,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 							Integer.parseInt(form.getFirstValue("idstructure")),null,null);
 					query = new QueryStructureByID(record);
 					CompoundURIReporter<IQueryRetrieval<IStructureRecord>> r = 
-							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest().getRootRef());
+							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());
 					if (idmodel>0)
 						resultRef = String.format("%s/model/%d",r.getURI(record),idmodel);
 					else
@@ -153,7 +153,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 					String id = requestHeaders.getFirstValue("dataset-id");  				
 					query = new QueryDatasetByID();
 					((QueryDatasetByID)query).setValue(Integer.parseInt(id));						
-					resultRef = getURUReporter(getRequest().getRootRef()).getURI(themodel);
+					resultRef = getURUReporter(getRequest()).getURI(themodel);
 				}
 				
 				QueryReporter<ModelQueryResults,ReadModel,Object> r = new QueryReporter<ModelQueryResults,ReadModel,Object>() {
@@ -191,8 +191,8 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 								try {
 									DescriptorModelExecutor modelExecutor = new DescriptorModelExecutor();
 									modelExecutor.setReference(new Reference(resultRef));
-					        		connection = ((AmbitApplication)getApplication()).getConnection();
-					        		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
+					        		connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
+					        		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
 					        		modelExecutor.setConnection(connection);
 					        		return modelExecutor.process(model);
 								} catch (AmbitException x) {
@@ -208,8 +208,8 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 					}						
 				};
 				
-        		conn = ((AmbitApplication)getApplication()).getConnection();
-        		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection();
+        		conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
+        		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
         		r.setConnection(conn);
 				r.process(getModelQuery(idmodel));
 				/*

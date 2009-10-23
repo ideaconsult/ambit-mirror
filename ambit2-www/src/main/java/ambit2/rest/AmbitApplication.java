@@ -12,23 +12,33 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.FutureTask;
 
+import javax.security.auth.Subject;
 import javax.sql.DataSource;
 
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
+import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
+import org.restlet.data.Response;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
-import org.restlet.security.Guard;
+import org.restlet.security.ChallengeAuthenticator;
+import org.restlet.security.ChallengeGuard;
+import org.restlet.security.Enroler;
+import org.restlet.security.MethodAuthorizer;
+import org.restlet.security.UniformGuard;
+import org.restlet.security.Verifier;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
+import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
@@ -71,6 +81,8 @@ import ambit2.rest.task.TaskResource;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.tuple.TuplePropertyValueResource;
 import ambit2.rest.tuple.TupleResource;
+import ambit2.rest.users.SwitchUserResource;
+import ambit2.rest.users.UserResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
@@ -87,7 +99,7 @@ public class AmbitApplication extends Application {
 	protected ConcurrentMap<UUID,Task<Reference>> tasks;
 	protected Properties properties = null;
 
-	protected String connectionURI;
+	//protected String connectionURI;
 	protected DataSource datasource = null;
 
 	public AmbitApplication() {
@@ -99,7 +111,7 @@ public class AmbitApplication extends Application {
 		System.setProperty("java.util.logging.config.file",logFile.getAbsolutePath());
 		*/
 
-		connectionURI = null;
+		//connectionURI = null;
 		setStatusService(new AmbitStatusService());
 		getTaskService().setEnabled(true);
 	}
@@ -127,13 +139,27 @@ public class AmbitApplication extends Application {
 		p = properties.getProperty("Password");
 		li.setPassword(p==null?"guest":p);	
 		return li;
-	}	
+	}
 	protected String getConnectionURI() throws AmbitException {
+		return getConnectionURI(null,null);
+	}
+	protected String getConnectionURI(Request request) throws AmbitException {
+		if (request == null) return getConnectionURI(null,null);
+		else if (request.getChallengeResponse()==null)
+			return getConnectionURI(null,null);
+		else try {
+			return getConnectionURI(request.getChallengeResponse().getIdentifier(),
+					new String(request.getChallengeResponse().getSecret()));
+		} catch (Exception x) {
+			return getConnectionURI(null,null);
+		}
+	}
+	
+	protected String getConnectionURI(String user,String password) throws AmbitException {
 	
 		try {
 			LoginInfo li = getLoginInfo();
-
-			/*
+			
 			if (getContext().getParameters().size()>0) {
 				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
 				li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
@@ -141,10 +167,10 @@ public class AmbitApplication extends Application {
 				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 			}
-			*/
+			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
-	                li.getDatabase(), li.getUser(), li.getPassword()); 
+	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} 
@@ -169,55 +195,22 @@ public class AmbitApplication extends Application {
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 
-		
-		Guard guard = new Guard(getContext(),ChallengeScheme.HTTP_BASIC, "AMBIT file upload") {
-			@Override
-			public int authenticate(Request request) {
-				if (request.getMethod().equals(org.restlet.data.Method.GET)) return AUTHENTICATION_VALID;
-				return super.authenticate(request);
-			}
-			@Override
-			public boolean authorize(Request request) {
-				if (request.getMethod().equals(org.restlet.data.Method.GET)) return true;
-				return super.authorize(request);
-			}
-		};
-		guard.getSecrets().put("opentox", "opentox".toCharArray());  
-		guard.setNext(DatasetsResource.class);  
-		
-		router.attach(DatasetsResource.datasets, guard);
-		/*
-		 * Have to read more on how to integrate oauth
-		MemoryOAuthProvider mo = new MemoryOAuthProvider();
-		RequestTokenResource r = new RequestTokenResource();
-		AuthorizationResource ar = new AuthorizationResource();
-		AccessTokenResource atr = new AccessTokenResource();
-		
-		//mo.addConsumer(key, new OAuthConsumer())
-		Guard guard_test = new OAuthGuard(getContext(),"", mo) {
-			@Override
-			public int authenticate(Request request) {
-				//if (request.getMethod().equals(org.restlet.data.Method.GET)) return AUTHENTICATION_VALID;
-				
-				return super.authenticate(request);
-			}
-			@Override
-			public boolean authorize(Request request) {
-				if (request.getMethod().equals(org.restlet.data.Method.GET)) return true;
-				return super.authorize(request);
-			}
-		};
-
-		guard_test.getSecrets().put("opentox", "opentox".toCharArray());  
-		guard_test.setNext(ProtectedResource.class);  
-		router.attach(ProtectedResource.resource, guard_test);
-		*/
-		
-		//router.attach(DatasetsResource.datasets, DatasetsResource.class);
 		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
 		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
-//		router.attach(datasetID_structure, CompoundResource.class);
 		
+		DBVerifier verifier = new DBVerifier(this);
+
+	 	router.attach(UserResource.resource, createGuard(UserResource.class,verifier,false));
+	 	router.attach(UserResource.resourceID, createGuard(UserResource.class,verifier,false));
+	 	router.attach(DatasetsResource.datasets, DatasetsResource.class);		
+		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
+		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
+
+	 	/*
+	 	router.attach(DatasetsResource.datasets, createGuard(DatasetsResource.class,verifierOptional,true));		
+		router.attach(FeatureResource.CompoundFeaturedefID,createGuard(FeatureResource.class,verifierOptional,true));
+		router.attach(FeatureResource.ConformerFeaturedefID,createGuard(FeatureResource.class,verifierOptional,true));
+*/
 		router.attach(DatasetCompoundResource.resource, DatasetCompoundResource.class);
 		//router.attach(datasetID_structure_media, DatasetCompoundResource.class);
 		
@@ -237,9 +230,6 @@ public class AmbitApplication extends Application {
 		router.attach(ConformerResource.conformerID,ConformerResource.class);
 		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
 
-		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
-		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
-		
 		router.attach(PropertyValueResource.compoundFeature,PropertyValueResource.class);
 		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
 		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
@@ -333,26 +323,48 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/"+TaskResource.resource, TaskResource.class);
 		router.attach(TaskResource.resourceID, TaskResource.class);
-		 
+		/** 
+        router.attach(
+                "/images",
+                new Directory(
+                        getContext(),
+                        LocalReference.createFileReference(
+                                webRootPath + "/images")));		
+                                */
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
+		 Directory jsDir = new Directory(getContext(), "war:///js");
 
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/style/", styleDir);
+		 router.attach("/js/", jsDir);
 		 router.attach("/favicon.ico", FavIconResource.class);
 		 router.attach("/favicon.png", FavIconResource.class);
-		 
 
-		return router;
+
+
+	     router.attach(SwitchUserResource.resource,createGuardGuest(SwitchUserResource.class));
+	 	 
+ 
+		 return router;
 	}
-	
-
+	public synchronized Connection getConnection(String user, String password) throws AmbitException , SQLException{
+		return getConnection(getConnectionURI(user, password));
+	}
 	public synchronized Connection getConnection() throws AmbitException , SQLException{
-		
-		if (connectionURI == null)
-			connectionURI = getConnectionURI();
+		//if (connectionURI == null)
+		//	connectionURI = getConnectionURI();
+		return getConnection(getConnectionURI(null));
+	}
+
+	public synchronized Connection getConnection(Request request) throws AmbitException , SQLException{
+		//if (connectionURI == null)
+		//	connectionURI = getConnectionURI();
+		return getConnection(getConnectionURI(request));
+	}
+	public synchronized Connection getConnection(String connectionURI) throws AmbitException , SQLException{
 		
 		SQLException error = null;
 		Connection c = null;
@@ -434,7 +446,7 @@ public class AmbitApplication extends Application {
         
         // Create a component
         Component component = new Component();
-        component.getServers().add(Protocol.HTTP, 8080);
+        final Server server = component.getServers().add(Protocol.HTTP, 8080);
        
         AmbitApplication application = new AmbitApplication();
         application.setContext(component.getContext().createChildContext());
@@ -443,7 +455,164 @@ public class AmbitApplication extends Application {
         component.getDefaultHost().attach(application);
         component.start();
 
+        System.out.println("Server started on port " + server.getPort());
+        System.out.println("Press key to stop server");
+        System.in.read();
+        System.out.println("Stopping server");
+        component.stop();
+        System.out.println("Server stopped");
     }
     	
+    protected UniformGuard createGuard(Class clazz,Verifier verifier,boolean optional) {
+    	
+    	Enroler enroler = new Enroler() {
+    		@Override
+    		public void enrole(Subject subject) {
+    			System.out.println(subject);
+    			
+    		}
+    	};
+    	/*
+    	 * Simple authorizer
+    	 */
+    	MethodAuthorizer authorizer = new MethodAuthorizer();
+    	authorizer.getAnonymousMethods().add(Method.GET);
+    	authorizer.getAnonymousMethods().add(Method.HEAD);
+    	authorizer.getAnonymousMethods().add(Method.OPTIONS);
+    	authorizer.getAuthenticatedMethods().add(Method.GET);
+    	authorizer.getAuthenticatedMethods().add(Method.PUT);
+    	authorizer.getAuthenticatedMethods().add(Method.DELETE);
+    	authorizer.getAuthenticatedMethods().add(Method.POST);
+    	authorizer.getAuthenticatedMethods().add(Method.OPTIONS);
+	        // Create a Guard
+	     ChallengeGuard guard = new ChallengeGuard(getContext(),
+	                ChallengeScheme.HTTP_BASIC, "ambit2");
+	     ChallengeAuthenticator authenticator = new ChallengeAuthenticator(getContext(),optional,ChallengeScheme.HTTP_BASIC, "ambit2") {
+	    	@Override
+	    	protected boolean authenticate(Request request, Response response) {
+	    		return super.authenticate(request, response);
+	    	} 
+	     };
+	     guard.setAuthenticator(authenticator);
+	     guard.getAuthenticator().setVerifier(verifier);
+	     guard.getAuthenticator().setEnroler(enroler);
+	     guard.setAuthorizer(authorizer);
+		 guard.setNext(clazz);     
+ 		 
+		 return guard;
+    }
     
+   protected UniformGuard createGuardGuest(Class clazz) {
+    	
+	     DBVerifier verifier = new DBVerifier(this) {
+	        	@Override
+	        	public int verify(Request request, Response response) {
+	                if (request.getChallengeResponse() != null) { 
+	                    String identifier = request.getChallengeResponse().getIdentifier();
+	                    Object name = request.getAttributes().get("name");
+	                    if ((identifier!=null) && (name != null) && (identifier.equals(name.toString())))
+	                    	return RESULT_MISSING;
+	                }
+	                return super.verify(request, response);
+	        	}
+	     };
+	     /*
+	     verifier.getSecrets().put("nina", "nina".toCharArray());
+	     verifier.getSecrets().put("guest", "guest".toCharArray());
+	     verifier.getSecrets().put("admin", "admin".toCharArray());
+	     */
+    	Enroler enroler = new Enroler() {
+    		@Override
+    		public void enrole(Subject subject) {
+    			System.out.println(subject);
+    			
+    		}
+    	};
+
+	        // Create a Guard
+	     ChallengeGuard guard = new ChallengeGuard(getContext(),
+	                ChallengeScheme.HTTP_BASIC, "ambit2");
+	     guard.setAuthenticator(new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC, "ambit2") {
+
+	    	@Override
+	    	protected boolean authenticate(Request request, Response response) {
+	    		/*
+                request.getClientInfo().getSubject().getPrincipals().add(
+                		new UserPrincipal("guest"));	
+
+                request.getClientInfo().setAuthenticated(true);
+                return true;
+   */            
+                return super.authenticate(request, response);
+	    	}; 
+	
+	     });
+	     guard.getAuthenticator().setVerifier(verifier);
+	     guard.getAuthenticator().setEnroler(enroler);
+		 guard.setNext(clazz);     
+ 		 
+		 return guard;
+    }    
 }
+
+/*
+        RoleAuthorizer roleAuthorizer = new RoleAuthorizer();
+        roleAuthorizer.getAuthorizedRoles().add(findRole("admin"));
+        roleAuthorizer.setNext(new HelloWorldRestlet());
+        
+        MemoryRealm realm = new MemoryRealm();
+        context.setEnroler(realm.getEnroler());
+        context.setVerifier(realm.getVerifier());
+
+        // Add users
+        User stiger = new User("stiger", "pwd", "Scott", "Tiger",
+                "scott.tiger@foobar.com");
+        realm.getUsers().add(stiger);
+
+        User larmstrong = new User("larmstrong", "pwd", "Louis", "Armstrong",
+                "la@foobar.com");
+        realm.getUsers().add(larmstrong);
+
+        // Add groups
+        Group employees = new Group("employees ", "All FooBar employees");
+        employees.getMemberUsers().add(larmstrong);
+        realm.getRootGroups().add(employees);
+
+        Group contractors = new Group("contractors ", "All FooBar contractors");
+        contractors.getMemberUsers().add(stiger);
+        realm.getRootGroups().add(contractors);
+
+        Group managers = new Group("managers", "All FooBar managers");
+        realm.getRootGroups().add(managers);
+
+        Group directors = new Group("directors ", "Top-level directors");
+        directors.getMemberUsers().add(larmstrong);
+        managers.getMemberGroups().add(directors);
+
+        Group developers = new Group("developers", "All FooBar developers");
+        realm.getRootGroups().add(developers);
+
+        Group engineers = new Group("engineers", "All FooBar engineers");
+        engineers.getMemberUsers().add(stiger);
+        developers.getMemberGroups().add(engineers);
+
+        // realm.map(customer1, app.getRole("user"));
+        realm.map(managers, app.findRole("admin"));
+
+        getDefaultHost().attach(app);
+        getServers().add(Protocol.HTTP, RestletTestCase.TEST_PORT);
+        
+        ////
+        ChallengeResponse#isAuthenticated
+        public Restlet createRoot() {
+
+    Router securedRoute = new Router(getContext());
+
+	securedRoute.add("/users",UsersResource.class);
+	securedRoute.add("/user/{id}",UsersResource.class);
+    Guard guard = new Guard(getContext(), ChallengeScheme.HTTP_BASIC, "whatever");
+        guard.setNext(securedRoute);
+    return guard;
+  }
+        */
+

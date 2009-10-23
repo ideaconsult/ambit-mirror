@@ -2,7 +2,7 @@ package ambit2.rest.reference;
 
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.db.readers.IQueryRetrieval;
@@ -18,12 +18,12 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<LiteratureEntry, IQ
 	public ReferenceHTMLReporter() {
 		this(null,true);
 	}
-	public ReferenceHTMLReporter(Reference baseRef, boolean collapsed) {
+	public ReferenceHTMLReporter(Request baseRef, boolean collapsed) {
 		super(baseRef,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(request);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<LiteratureEntry> query) {

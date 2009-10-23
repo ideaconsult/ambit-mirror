@@ -28,7 +28,7 @@ public class KroesStep1 extends FastToxStep1 {
 			throws AmbitException, ResourceException {
 		return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
-						(getRequest()==null)?null:getRequest().getRootRef(),
+						getRequest(),
 						collapsed,
 						getURIReporter()) {
 					
@@ -38,7 +38,7 @@ public class KroesStep1 extends FastToxStep1 {
 							AmbitResource.writeHTMLHeader(output,
 									collapsed?"Chemical compounds":"Chemical compound"
 									,
-									getURIReporter().getBaseReference()
+									getURIReporter().getRequest()
 									);
 							
 						} catch (Exception x) {}		

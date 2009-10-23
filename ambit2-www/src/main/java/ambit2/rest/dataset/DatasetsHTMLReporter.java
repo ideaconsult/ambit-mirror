@@ -4,7 +4,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
@@ -28,15 +28,15 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 	public DatasetsHTMLReporter() {
 		this(null,true);
 	}
-	public DatasetsHTMLReporter(Reference baseRef,boolean collapsed) {
+	public DatasetsHTMLReporter(Request baseRef,boolean collapsed) {
 		this(baseRef,baseRef,collapsed);
 	}
-	public DatasetsHTMLReporter(Reference baseRef,Reference originalRef,boolean collapsed) {
+	public DatasetsHTMLReporter(Request baseRef,Request originalRef,boolean collapsed) {
 		super(baseRef,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(request);
 	}
 	@Override
 	public void footer(Writer output, IQueryRetrieval<SourceDataset> query) {

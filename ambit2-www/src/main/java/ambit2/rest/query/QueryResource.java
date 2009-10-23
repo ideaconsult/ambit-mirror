@@ -6,8 +6,7 @@ import java.sql.SQLException;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -46,15 +45,15 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
 	}
 	protected Connection getConnection() throws SQLException , AmbitException {
-		Connection connection = ((AmbitApplication)getApplication()).getConnection();
-		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection();
+		Connection connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
+		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
 		return connection;
 	}
 	public Representation get(Variant variant) {
 
 		try {
 			int maxRetry=3;
-	        if (query != null) {
+	        if (queryObject != null) {
 	        	IProcessor<Q, Representation>  convertor = null;
 	        	Connection connection = null;
 	        	int retry=0;
@@ -65,7 +64,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		        		Reporter reporter = ((RepresentationConvertor)convertor).getReporter();
 			        	if (reporter instanceof IDBProcessor)
 			        		((IDBProcessor)reporter).setConnection(connection);
-			        	Representation r = convertor.process(query);
+			        	Representation r = convertor.process(queryObject);
 			        	r.setCharacterSet(CharacterSet.UTF_8);
 			        	return r;
 		        	} catch (StatusException x) {
@@ -123,7 +122,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			executor.setConnection(getConnection());
 			executor.open();
 			executor.process(createUpdateObject(entry));
-			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest().getRootRef());
+			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest());
 			getResponse().setLocationRef(uriReporter.getURI(entry));
 			getResponse().setStatus(Status.SUCCESS_OK);
 			getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
@@ -138,7 +137,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			try {if(c != null) c.close();} catch (Exception x) {}
 		}
 	}
-	protected QueryURIReporter<T, Q>  getURUReporter(Reference baseReference) throws ResourceException {
+	protected QueryURIReporter<T, Q>  getURUReporter(Request baseReference) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
 	protected  AbstractUpdate createUpdateObject(T entry) throws ResourceException {

@@ -5,7 +5,6 @@ import java.io.Writer;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -74,9 +73,9 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 			
 			return new StringConvertor(new PropertyValueReporter());
 			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-				return new DocumentConvertor(new ReferenceDOMReporter(getRequest().getRootRef()));
+				return new DocumentConvertor(new ReferenceDOMReporter(getRequest()));
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(getRequest().getRootRef()) {
+				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(getRequest()) {
 					@Override
 					public void processItem(LiteratureEntry dataset, Writer output) {
 						super.processItem(dataset, output);
@@ -87,7 +86,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 				},MediaType.TEXT_URI_LIST);
 			} else 
 				return new OutputStreamConvertor(
-						new ReferenceHTMLReporter(getRequest().getRootRef(),query.getValue()==null),
+						new ReferenceHTMLReporter(getRequest(),queryObject.getValue()==null),
 						MediaType.TEXT_HTML);
 	}
 
@@ -125,7 +124,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 	}
 	@Override
 	protected QueryURIReporter<LiteratureEntry, ReadReference> getURUReporter(
-			Reference baseReference) throws ResourceException {
+			Request baseReference) throws ResourceException {
 		return new ReferenceURIReporter<ReadReference>(baseReference);
 	}
 	/**

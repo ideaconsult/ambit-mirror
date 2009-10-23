@@ -8,6 +8,7 @@ import org.openscience.cdk.CDKConstants;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
@@ -34,19 +35,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected PropertyValueHTMLReporter valueReporter;
 	protected RetrieveFieldPropertyValue fieldQuery;
 	
-	public CompoundHTMLReporter(Reference reference,boolean collapsed,QueryURIReporter urireporter) {
-		super(reference,collapsed);
+	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter) {
+		super(request,collapsed);
 		if (urireporter != null) this.uriReporter = urireporter;
 		valueReporter = null;
 		fieldQuery = null;
 	}
-	public CompoundHTMLReporter(Reference reference,boolean collapsed) {
-		this(reference,collapsed,null);
+	public CompoundHTMLReporter(Request request,boolean collapsed) {
+		this(request,collapsed,null);
 
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request);
 	}
 	@Override
 	public void processItem(IStructureRecord record, Writer writer) {
@@ -85,7 +86,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			AmbitResource.writeTopHeader(w,
 					collapsed?"Chemical compounds":"Chemical compound"
 					,
-					uriReporter.getBaseReference(),
+					uriReporter.getRequest(),
 					""
 					);
 			
@@ -190,7 +191,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			//output.write("</form>");			
 			AmbitResource.writeHTMLFooter(output,
 					"",
-					uriReporter.getBaseReference()
+					uriReporter.getRequest()
 					);
 			getOutput().flush();			
 		} catch (Exception x) {}		

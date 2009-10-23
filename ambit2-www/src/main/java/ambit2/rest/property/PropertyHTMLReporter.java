@@ -2,7 +2,7 @@ package ambit2.rest.property;
 
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.db.readers.IQueryRetrieval;
@@ -20,12 +20,12 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	 * 
 	 */
 	private static final long serialVersionUID = 3196496706491834527L;
-	public PropertyHTMLReporter(Reference ref,boolean collapsed) {
+	public PropertyHTMLReporter(Request ref,boolean collapsed) {
 		super(ref,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new PropertyURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new PropertyURIReporter(request);
 	}
 
 	@Override

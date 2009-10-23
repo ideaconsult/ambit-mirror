@@ -8,7 +8,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -65,7 +64,12 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML});
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,
+				ChemicalMediaType.CHEMICAL_SMILES,
+				ChemicalMediaType.CHEMICAL_CML,
+				ChemicalMediaType.CHEMICAL_MDLSDF,
+				ChemicalMediaType.CHEMICAL_MDLMOL,
+				ChemicalMediaType.WEKA_ARFF});
 	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
@@ -101,14 +105,14 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			throws AmbitException, ResourceException {
 
 	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-		return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
+		return new DocumentConvertor(new DatasetsXMLReporter(getRequest()));	
 	} else if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
-			return new YAMLConvertor(new DatasetYamlReporter(getRequest().getRootRef()),ChemicalMediaType.TEXT_YAML);			
+			return new YAMLConvertor(new DatasetYamlReporter(getRequest()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputStreamConvertor(
-				new DatasetsHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest().getRootRef()) {
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
 			@Override
 			public void processItem(SourceDataset dataset, Writer output) {
 				super.processItem(dataset, output);
@@ -119,7 +123,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
 		return new OutputStreamConvertor(
-				new DatasetHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+				new DatasetHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 
 	@Override
@@ -135,7 +139,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	          try {
 	              List<FileItem> items = upload.parseRequest(getRequest());
 	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest().getRootRef());
+	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 						 "File import",
 						new CallableFileImport(items,DatasetHTMLReporter.fileUploadField,getConnection(),reporter),
@@ -152,7 +156,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			if ((entity != null) && (ChemicalMediaType.CHEMICAL_MDLSDF.equals(entity.getMediaType()))) {
 				try {
 		          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-		            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest().getRootRef());					
+		            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());					
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 							 "File import"+entity.getDownloadName(),
 							new CallableFileImport((InputRepresentation)entity,getConnection(),reporter),

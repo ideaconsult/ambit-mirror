@@ -79,7 +79,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new StringConvertor(
 					new SmilesReporter<QueryStructureByID>(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			CompoundURIReporter<QueryStructureByID> reporter = new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef());
+			CompoundURIReporter<QueryStructureByID> reporter = new CompoundURIReporter<QueryStructureByID>(getRequest());
 			reporter.setDelimiter("\n");
 			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
@@ -87,9 +87,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter((getRequest()==null)?null:getRequest().getRootRef(),true),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
 		} else
-			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()==null?null:getRequest().getRootRef()));
+			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()));
 	}
 	
 	protected String getMediaParameter(Request request) {

@@ -1,6 +1,6 @@
 package ambit2.rest.reference;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,11 +36,11 @@ public class ReferenceDOMReporter extends QueryDOMReporter<LiteratureEntry, Read
 	 */
 	private static final long serialVersionUID = -4039338676682812945L;
 
-	public ReferenceDOMReporter(Reference reference) {
+	public ReferenceDOMReporter(Request reference) {
 		super(reference);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
+	protected QueryURIReporter createURIReporter(Request reference) {
 		return new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(reference);
 	}
 

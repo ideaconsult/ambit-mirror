@@ -1,6 +1,6 @@
 package ambit2.rest.dataset;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,12 +31,12 @@ public class DatasetsXMLReporter extends QueryDOMReporter<SourceDataset, IQueryR
 	 */
 	private static final long serialVersionUID = -7889958961008530806L;
 
-	public DatasetsXMLReporter(Reference reference) {
+	public DatasetsXMLReporter(Request reference) {
 		super(reference);
 	}
 
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
+	protected QueryURIReporter createURIReporter(Request reference) {
 		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
 	}
 	@Override

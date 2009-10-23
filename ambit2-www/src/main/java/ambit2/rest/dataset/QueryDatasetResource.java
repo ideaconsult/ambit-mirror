@@ -39,12 +39,12 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
+			return new DocumentConvertor(new DatasetsXMLReporter(getRequest()));	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef(),true),MediaType.TEXT_HTML);			
+					new DatasetHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest().getRootRef()) {
+			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
 				@Override
 				public void processItem(SourceDataset dataset, Writer output) {
 					super.processItem(dataset, output);
@@ -55,7 +55,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 			},MediaType.TEXT_URI_LIST);
 		} else 
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest().getRootRef(),true),MediaType.TEXT_HTML);
+					new DatasetHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
 	}		
 		//return new DocumentConvertor(new DatasetReporter(getRequest().getRootRef()));
 

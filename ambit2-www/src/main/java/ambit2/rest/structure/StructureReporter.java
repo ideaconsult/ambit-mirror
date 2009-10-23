@@ -1,6 +1,6 @@
 package ambit2.rest.structure;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.w3c.dom.Document;
 
 import ambit2.base.exceptions.AmbitException;
@@ -32,7 +32,7 @@ public class StructureReporter extends QueryXMLReporter<QueryStructureByID> {
 	 * 
 	 */
 	private static final long serialVersionUID = -5178949909366051266L;
-	public StructureReporter(Reference reference) {
+	public StructureReporter(Request reference) {
 		super(reference);
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval());

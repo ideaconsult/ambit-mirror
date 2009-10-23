@@ -47,10 +47,10 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 			*/
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new TupleHTMLReporter(getRequest().getRootRef(),query.getFieldname()),MediaType.TEXT_HTML);
+					new TupleHTMLReporter(getRequest(),queryObject.getFieldname()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		
-			return new StringConvertor(	new TupleURIReporter(getRequest().getRootRef(),query.getFieldname()) {
+			return new StringConvertor(	new TupleURIReporter(getRequest(),queryObject.getFieldname()) {
 				@Override
 				public void processItem(PropertiesTuple src, Writer output) {
 					super.processItem(src, output);
@@ -62,7 +62,7 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 			
 		} else //html 	
 			return new StringConvertor(
-					new TupleHTMLReporter(getRequest().getRootRef(),query.getFieldname()),MediaType.TEXT_HTML);
+					new TupleHTMLReporter(getRequest(),queryObject.getFieldname()),MediaType.TEXT_HTML);
 		
 	}
 	

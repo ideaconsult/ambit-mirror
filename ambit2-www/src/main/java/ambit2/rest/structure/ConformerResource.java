@@ -81,6 +81,6 @@ public class ConformerResource extends CompoundResource {
 		}
 	}	
 	protected QueryURIReporter getURIReporter() {
-		return new ConformerURIReporter<QueryStructureByID>(getRequest().getRootRef());
+		return new ConformerURIReporter<QueryStructureByID>(getRequest());
 	}
 }

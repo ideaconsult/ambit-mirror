@@ -3,7 +3,7 @@ package ambit2.rest.propertyvalue;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -39,7 +39,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 	private static final long serialVersionUID = -8615960185043692493L;
 	protected String feature_uri;
 	protected IStructureRecord record;
-	public PropertyValueXMLReporter(Reference baseRef) {
+	public PropertyValueXMLReporter(Request baseRef) {
 		super(baseRef);
 	}	
 
@@ -47,7 +47,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 		this(null);
 	}	
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
+	protected QueryURIReporter createURIReporter(Request reference) {
 		return new PropertyValueURIReporter(reference);
 	}
 	public Document getOutput() throws AmbitException {

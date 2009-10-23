@@ -60,16 +60,13 @@ public class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,
 	@Override
 	public IProcessor<Iterator<T>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		/*
-		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
-			*/
+
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new CatalogHTMLReporter<T>(getRequest()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		
-			return new StringConvertor(	new CatalogURIReporter<T>(getRequest().getRootRef()) {
+			return new StringConvertor(	new CatalogURIReporter<T>(getRequest()) {
 				@Override
 				public void processItem(T src, Writer output) {
 					super.processItem(src, output);
@@ -81,7 +78,7 @@ public class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,
 			
 		} else //html 	
 			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest().getRootRef()),MediaType.TEXT_HTML);
+					new CatalogHTMLReporter<T>(getRequest()),MediaType.TEXT_HTML);
 		
 	}
 	

@@ -1,6 +1,6 @@
 package ambit2.rest.property;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,12 +37,12 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	 */
 	private static final long serialVersionUID = 7852309113522482578L;
 	protected ReferenceDOMReporter referenceReporter;
-	public PropertyDOMReporter(Reference ref) {
+	public PropertyDOMReporter(Request ref) {
 		super(ref);
 		referenceReporter = new ReferenceDOMReporter(ref);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
+	protected QueryURIReporter createURIReporter(Request reference) {
 		return new PropertyURIReporter(reference);
 	}
 

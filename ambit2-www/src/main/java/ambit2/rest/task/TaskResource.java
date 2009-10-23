@@ -128,10 +128,10 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 			Variant variant) throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new TaskHTMLReporter(getRequest().getRootRef()) ,MediaType.TEXT_HTML);
+					new TaskHTMLReporter(getRequest()) ,MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		
-			return new StringConvertor(	new CatalogURIReporter(null) {
+			return new StringConvertor(	new CatalogURIReporter(getRequest()) {
 				@Override
 				public void processItem(Object src, Writer output) {
 					super.processItem(src,output);
