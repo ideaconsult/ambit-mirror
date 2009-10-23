@@ -16,10 +16,10 @@ import ambit2.db.update.AbstractUpdate;
  */
 public class CreateStructureQLabel extends AbstractUpdate<IStructureRecord, QLabel> {
 	protected String[] sql = {
-			"insert into quality_structure (idstructure,user_name,`label`,`text`) values (?,?,?,?) on duplicate key update `label`=?,`text`=?"
+			"insert into quality_structure (idstructure,user_name,`label`,`text`) values (?,?,?,?) on duplicate key update `label`=?,`text`=?,updated=CURRENT_TIMESTAMP"
 	};
 	protected String[] sql_defaultuser = {
-			"insert into quality_structure (idstructure,user_name,`label`,`text`) values (?,SUBSTRING_INDEX(user(),'@',1),?,?) on duplicate key update `label`=?,`text`=?"
+			"insert into quality_structure (idstructure,user_name,`label`,`text`) values (?,SUBSTRING_INDEX(user(),'@',1),?,?) on duplicate key update `label`=?,`text`=?,user_name=values(user_name),updated=CURRENT_TIMESTAMP"
 	};
 	
 	public CreateStructureQLabel(IStructureRecord record, QLabel label) {
