@@ -21,11 +21,7 @@ public class UpdateCompoundPropertyValueString extends AbstractUpdate<IStructure
 					select_string_compound,
 					ValueWriter.onduplicate_string)
 	};
-	//public static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
-	//public static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";	
-	//	public static final String select_string = "select null,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
-	//public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING'";
-	
+
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if ((getObject().getProperty()==null) || getObject().getProperty().getId()<=0) throw new AmbitException("Undefined property");
 		if ((getGroup() == null) || getGroup().getIdchemical()<=0) throw new AmbitException("Undefined compound");		

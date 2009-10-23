@@ -46,7 +46,7 @@ public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 			"SELECT null,?,SUBSTRING_INDEX(user(),'@',1),idreference FROM catalog_references WHERE title=?\n"+
 			"ON DUPLICATE KEY UPDATE name=?, src_dataset.idreference = catalog_references.idreference",
 			*/
-		"update src_dataset set name=? where id_srcdataset=?"
+		"update src_dataset set name=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
 	};
 	public UpdateDataset(SourceDataset dataset) {
 		super(dataset);

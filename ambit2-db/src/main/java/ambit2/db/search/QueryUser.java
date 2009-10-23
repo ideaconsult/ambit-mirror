@@ -52,6 +52,10 @@ public class QueryUser extends AbstractQuery<String,String,StringCondition, Ambi
 		"SELECT user_name,email,registration_status,registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer FROM users ";
 	public static final String WHERE = " where %s %s ?";
 	
+	public QueryUser(String value) {
+		this();
+		setValue(value);
+	}	
 	
 	public QueryUser() {
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
@@ -95,5 +99,9 @@ public class QueryUser extends AbstractQuery<String,String,StringCondition, Ambi
 	}
 	public boolean isPrescreen() {
 		return false;
+	}
+	@Override
+	public String toString() {
+		return getValue()==null?"All users":String.format("User %s", getValue());
 	}
 }

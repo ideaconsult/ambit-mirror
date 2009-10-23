@@ -57,8 +57,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	public static final String select_string = "select null,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
 	public static final String select_number = "values (null,?,?,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC')";
 	
-	public static final String onduplicate_number = " on duplicate key update value_num=?, status=?, idvalue_string=null,text=null,idtype='NUMERIC'";
-	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING'";
+	public static final String onduplicate_number = " on duplicate key update value_num=?, status=?, idvalue_string=null,text=null,idtype='NUMERIC',user_name=values(user_name) ";
+	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING',user_name=values(user_name) ";
 	
 	protected static final String insert_tuple = "insert into property_tuples select ?,id from property_values where idproperty=? and idstructure=?";
 	
