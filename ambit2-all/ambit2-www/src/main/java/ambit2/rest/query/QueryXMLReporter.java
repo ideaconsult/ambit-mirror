@@ -6,6 +6,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,11 +48,11 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	private static final long serialVersionUID = -7776155843790521467L;
 
 
-	public QueryXMLReporter(Reference reference) {
+	public QueryXMLReporter(Request request) {
 		super();
-		this.reference = reference;
-		compoundURI = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(reference);
-		conformerURI = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(reference);
+		this.reference = request==null?null:request.getRootRef();
+		compoundURI = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request);
+		conformerURI = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request);
 		
 	}
 	@Override

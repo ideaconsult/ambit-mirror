@@ -110,17 +110,14 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 			@Override
 			public IProcessor<Iterator<Algorithm>, Representation> createConvertor(
 					Variant variant) throws AmbitException, ResourceException {
-				/*
-				if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-					return new DocumentConvertor(new DatasetsXMLReporter(getRequest().getRootRef()));	
-					*/
+	
 				if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					return new StringConvertor(
-							new AlgorithmHTMLReporter(getRequest().getRootRef(),
+							new AlgorithmHTMLReporter(getRequest(),
 									getRequest().getAttributes().get(idalgorithm)==null
 									),MediaType.TEXT_HTML);
 				} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-					AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest().getRootRef()) {
+					AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest()) {
 						@Override
 						public void processItem(Algorithm item, Writer output) {
 							super.processItem(item, output);
@@ -130,7 +127,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 					return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
 				} else //html 	
 					return new StringConvertor(
-							new CatalogHTMLReporter(getRequest().getRootRef()),MediaType.TEXT_HTML);
+							new CatalogHTMLReporter(getRequest()),MediaType.TEXT_HTML);
 				
 			}
 						
@@ -155,6 +152,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
@@ -215,7 +213,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 	}
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> getURUReporter(
-			Reference baseReference) throws ResourceException {
+			Request baseReference) throws ResourceException {
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(baseReference);
 	}
 }

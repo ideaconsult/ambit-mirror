@@ -78,9 +78,9 @@ public class AbstractDepict extends ServerResource {
 	    				public void close() throws Exception {};
 	    				public Writer process(String target) throws AmbitException {
 	    					try {
-	    					AmbitResource.writeHTMLHeader(getOutput(), smiles, getRequest().getRootRef());
+	    					AmbitResource.writeHTMLHeader(getOutput(), smiles, getRequest());
 	    					getOutput().write(target);
-	    					AmbitResource.writeHTMLFooter(getOutput(), smiles, getRequest().getRootRef());
+	    					AmbitResource.writeHTMLFooter(getOutput(), smiles, getRequest());
 	    					} catch (Exception x) {}
 	    					return getOutput();
 	    				};

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
@@ -23,7 +23,7 @@ public class DatasetHTMLReporter extends DatasetsHTMLReporter {
 	public DatasetHTMLReporter() {
 		this(null,true);
 	}
-	public DatasetHTMLReporter(Reference baseRef,boolean collapsed) {
+	public DatasetHTMLReporter(Request baseRef,boolean collapsed) {
 		super(baseRef,collapsed);
 	}
 	@Override

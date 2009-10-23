@@ -101,12 +101,12 @@ public class PubchemResource extends Resource {
 	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					variant.setMediaType(MediaType.TEXT_HTML);
 					StringWriter writer = new StringWriter();
-					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest().getRootRef());
+					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest());
 					writer.write("<h2>PubChem search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
 					writer.write(String.format("<a href=\"%s/query/pubchem/50-00-0\">%s/query/pubchem/50-00-0</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));
 					writer.write(String.format("<a href=\"%s/query/pubchem?search=50-00-0\">%s/query/pubchem?search=50-00-0</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));
-					AmbitResource.writeHTMLFooter(writer, "AMBIT", getRequest().getRootRef());
+					AmbitResource.writeHTMLFooter(writer, "AMBIT", getRequest());
 					return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
 	        	} else {      	
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,"Undefined query");

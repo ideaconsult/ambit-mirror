@@ -49,11 +49,11 @@ public class KroesInput extends FeatureResource {
 	
 		return new StringConvertor(new PropertyValueReporter());
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest().getRootRef()));
+			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor(
-					new PropertyValueHTMLReporter<PropertyValue>(getRequest().getRootRef(),true) {
+					new PropertyValueHTMLReporter<PropertyValue>(getRequest(),true) {
 						protected int count = 0;
 						@Override
 						public void processItem(PropertyValue item,
@@ -92,7 +92,7 @@ public class KroesInput extends FeatureResource {
 						}
 					},MediaType.TEXT_HTML);		
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	getURUReporter(getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
+			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
 			
 		} else return new StringConvertor(new PropertyValueReporter());
 					

@@ -2,7 +2,7 @@ package ambit2.rest.template;
 
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
@@ -23,13 +23,13 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, QueryOntolog
 	 */
 	private static final long serialVersionUID = -4281274169475316720L;
 	protected int count = 0;
-	public OntologyHTMLReporter(Reference reference,boolean collapsed) {
+	public OntologyHTMLReporter(Request reference,boolean collapsed) {
 		super(reference,collapsed);
 
 	}	
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new OntologyURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new OntologyURIReporter(request);
 	}
 	
 	public String toURI(Object record) {
@@ -82,7 +82,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, QueryOntolog
 			AmbitResource.writeHTMLHeader(output,
 					query.toString()
 					,
-					uriReporter.getBaseReference()
+					uriReporter.getRequest()
 					);
 			output.write(String.format("<h4>%s</h4>",query.toString()));
 
@@ -92,7 +92,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, QueryOntolog
 		try {
 			AmbitResource.writeHTMLFooter(output,
 					"",
-					uriReporter.getBaseReference()
+					uriReporter.getRequest()
 					);
 			getOutput().flush();			
 		} catch (Exception x) {}		

@@ -2,7 +2,7 @@ package ambit2.rest.propertyvalue;
 
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
@@ -38,10 +38,10 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
-	public PropertyValueHTMLReporter(Reference baseRef) {
+	public PropertyValueHTMLReporter(Request baseRef) {
 		this(baseRef,false);
 	}
-	public PropertyValueHTMLReporter(Reference baseRef, boolean editable) {
+	public PropertyValueHTMLReporter(Request baseRef, boolean editable) {
 	
 		super(baseRef,true);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,true);
@@ -49,8 +49,8 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 		this.editable = editable;
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return new PropertyValueURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return new PropertyValueURIReporter(request);
 	}
 	
 

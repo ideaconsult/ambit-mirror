@@ -1,6 +1,6 @@
 package ambit2.rest.property;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.db.readers.IQueryRetrieval;
@@ -18,7 +18,7 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	 */
 	private static final long serialVersionUID = 711954935147788056L;
 
-	public PropertyURIReporter(Reference ref) {
+	public PropertyURIReporter(Request ref) {
 		super(ref);
 	}
 	public PropertyURIReporter() {

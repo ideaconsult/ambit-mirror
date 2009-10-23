@@ -1,6 +1,7 @@
 package ambit2.rest.template;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
@@ -15,7 +16,7 @@ public class OntologyURIReporter extends QueryURIReporter<Object, IQueryRetrieva
 	 */
 	private static final long serialVersionUID = 5978886153193570408L;
 	protected PropertyURIReporter reporter;
-	public OntologyURIReporter(Reference ref) {
+	public OntologyURIReporter(Request ref) {
 		super(ref);
 		reporter = new PropertyURIReporter(ref);
 	}

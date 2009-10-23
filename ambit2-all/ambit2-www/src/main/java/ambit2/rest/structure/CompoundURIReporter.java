@@ -1,7 +1,7 @@
 package ambit2.rest.structure;
 
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
@@ -20,8 +20,8 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 
-	public CompoundURIReporter(Reference baseRef) {
-		super(baseRef);
+	public CompoundURIReporter(Request request) {
+		super(request);
 	}
 	public CompoundURIReporter() {
 	}	

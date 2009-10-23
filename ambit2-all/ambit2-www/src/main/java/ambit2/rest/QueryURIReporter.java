@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -28,14 +29,25 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}	
+	protected Request request;
+	public Request getRequest() {
+		return request;
+	}
+	public void setRequest(Request request) {
+		this.request = request;
+	}
 	protected Reference baseReference;
 	public Reference getBaseReference() {
 		return baseReference;
 	}
-	public QueryURIReporter(Reference baseRef) {
+	protected QueryURIReporter(Reference baseRef) {
 		this.baseReference = baseRef;
 	}
-	public QueryURIReporter() {
+	public QueryURIReporter(Request request) {
+		this(request==null?null:request.getRootRef());
+		setRequest(request);
+	}	
+	protected QueryURIReporter() {
 	}	
 	@Override
 	public void processItem(T item, Writer output) {

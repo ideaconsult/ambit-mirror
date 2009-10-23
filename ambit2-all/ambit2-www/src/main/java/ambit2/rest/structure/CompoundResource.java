@@ -79,7 +79,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	}
 	@Override
 	public Representation get(Variant variant) {
-		if (query == null) try {
+		if (queryObject == null) try {
 			IProcessor<Object, Representation>  convertor = createConvertor(variant);
 			Representation r = convertor.process(null);
         	return r;			
@@ -95,15 +95,15 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		if (media != null) {
 			variant.setMediaType(new MediaType(Reference.decode(media)));
 		}		
-		if (query == null) {
+		if (queryObject == null) {
 			if (variant.getMediaType().equals(MediaType.TEXT_HTML)) 
 				return new StringConvertor(new AbstractReporter<Object,Writer>() {
 					
 					public Writer process(Object target) throws AmbitException {
 						try {
-							AmbitResource.writeHTMLHeader(getOutput(), "Compound", getRequest().getRootRef());
+							AmbitResource.writeHTMLHeader(getOutput(), "Compound", getRequest());
 							getOutput().write("<div>No search criteria specified</div>");
-							AmbitResource.writeHTMLFooter(getOutput(), "Compound", getRequest().getRootRef());
+							AmbitResource.writeHTMLFooter(getOutput(), "Compound", getRequest());
 						} catch (Exception x) {}
 						return getOutput();
 					}
@@ -140,11 +140,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new PDFReporter<QueryStructureByID>());				
 	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new QueryXMLReporter((getRequest()==null)?null:getRequest().getRootRef()));
+			return new DocumentConvertor(new QueryXMLReporter(getRequest()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(
-							(getRequest()==null)?null:getRequest().getRootRef(),
+							getRequest(),
 							collapsed,
 							getURIReporter()),
 					MediaType.TEXT_HTML);
@@ -159,7 +159,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);			
 	}
 	protected QueryURIReporter getURIReporter() {
-		return new CompoundURIReporter<QueryStructureByID>(getRequest().getRootRef());
+		return new CompoundURIReporter<QueryStructureByID>(getRequest());
 	}
 	
 	@Override

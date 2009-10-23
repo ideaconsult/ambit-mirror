@@ -1,9 +1,8 @@
 package ambit2.rest.dataset;
 
 import org.ho.yaml.YamlEncoder;
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
-import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
@@ -25,11 +24,11 @@ public abstract class QueryYAMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 	public QueryYAMLReporter() {
 		this(null);
 	}
-	public QueryYAMLReporter(Reference baseRef) {
+	public QueryYAMLReporter(Request request) {
 		super();
-		uriReporter = createURIReporter(baseRef); 
+		uriReporter = createURIReporter(request); 
 	}
-	protected abstract QueryURIReporter createURIReporter(Reference reference);
+	protected abstract QueryURIReporter createURIReporter(Request request);
 
 
 	public void open() throws DbAmbitException {

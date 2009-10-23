@@ -3,7 +3,7 @@ package ambit2.rest.algorithm;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.rest.AmbitResource;
 
@@ -19,13 +19,13 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7644836050657868159L;
-	public CatalogHTMLReporter(Reference ref) {
-		super(ref);
+	public CatalogHTMLReporter(Request request) {
+		super(request);
 	}
 	@Override
 	public void header(Writer output, Iterator<T> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", baseReference);//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 		} catch (Exception x) {
 			
 		}
@@ -41,7 +41,7 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	@Override
 	public void footer(Writer output, Iterator<T> query) {
 		try {
-			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm, baseReference);
+			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

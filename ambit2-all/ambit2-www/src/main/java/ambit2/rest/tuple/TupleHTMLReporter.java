@@ -2,7 +2,7 @@ package ambit2.rest.tuple;
 
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
@@ -26,7 +26,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	private static final long serialVersionUID = -221066858588150887L;
 	protected DatasetURIReporter<IQueryRetrieval<SourceDataset>> ds_reporter;
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
-	public TupleHTMLReporter(Reference ref,IStructureRecord record) {
+	public TupleHTMLReporter(Request ref,IStructureRecord record) {
 		super(ref,true);
 		((TupleURIReporter) uriReporter).setRecord(record);
 		ds_reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(ref);
@@ -34,8 +34,8 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 		
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Reference reference) {
-		return  new TupleURIReporter(reference,null);
+	protected QueryURIReporter createURIReporter(Request request) {
+		return  new TupleURIReporter(request,null);
 	}
 	@Override
 	public void header(Writer w, QueryTuple query) {

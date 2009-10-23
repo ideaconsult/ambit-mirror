@@ -1,11 +1,9 @@
 package ambit2.rest.algorithm;
 
 import java.io.Writer;
-import java.net.URLEncoder;
 import java.util.Iterator;
 
-import org.restlet.data.Reference;
-import org.restlet.data.Response;
+import org.restlet.data.Request;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitResource;
@@ -22,14 +20,14 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	 */
 	private static final long serialVersionUID = 7544605965468875232L;
 	protected boolean collapsed = false;
-	public AlgorithmHTMLReporter(Reference ref, boolean collapsed) {
+	public AlgorithmHTMLReporter(Request ref, boolean collapsed) {
 		super(ref);
 		this.collapsed = collapsed;
 	}
 	@Override
 	public void header(Writer output, Iterator<Algorithm> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", baseReference);//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<table>");
 		} catch (Exception x) {
 			
@@ -52,7 +50,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void footer(Writer output, Iterator<Algorithm> query) {
 		try {
 			output.write("</table>");
-			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm+"/rules", baseReference);
+			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm+"/rules", getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

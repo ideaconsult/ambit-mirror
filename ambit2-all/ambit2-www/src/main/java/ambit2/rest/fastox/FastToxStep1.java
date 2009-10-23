@@ -26,7 +26,7 @@ public class FastToxStep1 extends CompoundResource {
 			throws AmbitException, ResourceException {
 		return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
-						(getRequest()==null)?null:getRequest().getRootRef(),
+						getRequest(),
 						collapsed,
 						getURIReporter()) {
 					
@@ -36,7 +36,7 @@ public class FastToxStep1 extends CompoundResource {
 							AmbitResource.writeHTMLHeader(output,
 									collapsed?"Chemical compounds":"Chemical compound"
 									,
-									getURIReporter().getBaseReference()
+									getRequest()
 									);
 							
 						} catch (Exception x) {}		

@@ -87,7 +87,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		Client client = new Client(Protocol.HTTP);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
 		ChallengeResponse authentication = new ChallengeResponse(scheme,  
-		         "opentox", "opentox");  
+		         "guest", "guest");  
 		request.setChallengeResponse(authentication);  		
 		request.setResourceRef(uri);
 		request.setMethod(Method.POST);
@@ -102,7 +102,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		Client client = new Client(Protocol.HTTP);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
 		ChallengeResponse authentication = new ChallengeResponse(scheme,  
-		         "opentox", "opentox");  
+		         "guest", "guest");  
 		request.setChallengeResponse(authentication);  
 		request.setResourceRef(uri);
 		request.setMethod(Method.POST);
@@ -133,6 +133,8 @@ public class DatasetsResourceTest extends ResourceTest {
 			//System.out.println(r.getStatus() + " " +r.getLocationRef());
 			if (r.getStatus().equals(Status.CLIENT_ERROR_BAD_REQUEST)) 
 				throw new ResourceException(r.getStatus());
+			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_ACCEPTABLE))
+				throw new ResourceException(r.getStatus());
 			Request request = new Request();
 			Client client = new Client(Protocol.HTTP);
 			request.setResourceRef(uri);
@@ -157,8 +159,8 @@ public class DatasetsResourceTest extends ResourceTest {
 	public void testCreateEntryFromFile() throws Exception {
 		
 		FileRepresentation rep = new FileRepresentation(
-				//"E:/src/ambit2-all/ambit2-www/src/test/resources/input.sdf", 
-				"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
+				"E:/src/ambit2-all/ambit2-www/src/test/resources/input.sdf", 
+				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
 				ChemicalMediaType.CHEMICAL_MDLSDF, 0);
 				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
 				

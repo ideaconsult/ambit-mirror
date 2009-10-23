@@ -2,7 +2,7 @@ package ambit2.rest.dataset;
 
 import java.io.Writer;
 
-import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
@@ -17,7 +17,7 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<SourceDataset>> extend
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 
-	public DatasetURIReporter(Reference baseRef) {
+	public DatasetURIReporter(Request baseRef) {
 		super(baseRef);
 	}
 	public DatasetURIReporter() {

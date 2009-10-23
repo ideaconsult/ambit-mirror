@@ -14,6 +14,8 @@ import org.restlet.Application;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -69,6 +71,10 @@ public abstract class ResourceTest extends DbUnitTest {
 	public Response testPost(String uri, MediaType media, Form headers) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
+		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
+		ChallengeResponse authentication = new ChallengeResponse(scheme,  
+		         "guest", "guest");  
+		request.setChallengeResponse(authentication);  		
 		request.setResourceRef(uri);
 		request.setMethod(Method.POST);
 		request.getAttributes().put("org.restlet.http.headers", headers);		

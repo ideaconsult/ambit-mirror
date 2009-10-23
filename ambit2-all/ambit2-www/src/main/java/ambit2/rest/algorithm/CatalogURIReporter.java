@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.restlet.data.Reference;
+import org.restlet.data.Request;
 
 import ambit2.base.processors.batch.ListReporter;
 
@@ -13,12 +14,23 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 	 * 
 	 */
 	private static final long serialVersionUID = 2871865183499748866L;
-	
+	protected Request request;
+	public Request getRequest() {
+		return request;
+	}
+	public void setRequest(Request request) {
+		this.request = request;
+	}
 	protected Reference baseReference;
-	public CatalogURIReporter(Reference baseRef) {
+	public CatalogURIReporter(Request request) {
+		this(request==null?null:request.getRootRef());
+		setRequest(request);
+		
+	}	
+	protected CatalogURIReporter(Reference baseRef) {
 		this.baseReference = baseRef;
 	}
-	public CatalogURIReporter() {
+	protected CatalogURIReporter() {
 	}	
 	@Override
 	public void processItem(T item, Writer output) {

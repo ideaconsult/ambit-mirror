@@ -54,7 +54,7 @@ public class FastToxStep2 extends ModelResource {
 	*/
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputStreamConvertor(
-				new ModelHTMLReporter(getRequest().getRootRef(),collapsed) {
+				new ModelHTMLReporter(getRequest(),collapsed) {
 					
 					@Override
 					public void header(Writer w,
@@ -80,7 +80,7 @@ public class FastToxStep2 extends ModelResource {
 					}
 				},MediaType.TEXT_HTML) ;
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest().getRootRef()) {
+		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
 			@Override
 			public void processItem(ModelQueryResults dataset, Writer output) {
 				super.processItem(dataset, output);
@@ -91,7 +91,7 @@ public class FastToxStep2 extends ModelResource {
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
 		return new OutputStreamConvertor(
-				new ModelHTMLReporter(getRequest().getRootRef(),collapsed),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 	
 

@@ -28,7 +28,7 @@ import ambit2.base.interfaces.IProcessor;
  * @param <P>
  */
 public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representation>> extends ServerResource {
-	protected Q query;
+	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status status = Status.SUCCESS_OK;
 	
@@ -41,10 +41,11 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 		super.doInit();
 		try {
 			status = Status.SUCCESS_OK;
-			query = createQuery(getContext(), getRequest(), getResponse());
+			queryObject = createQuery(getContext(), getRequest(), getResponse());
 			error = null;
+
 		} catch (StatusException x) {
-			query = null;
+			queryObject = null;
 			error = x;
 			status = x.getStatus();
 		}			
@@ -53,6 +54,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
         List<Variant> variants = new ArrayList<Variant>();
         for (MediaType mileType:mimeTypes) variants.add(new Variant(mileType));
         getVariants().put(Method.GET, variants);
+        getVariants().put(Method.POST, variants);
 	}
 	public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
 	
@@ -61,13 +63,13 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	public synchronized Representation get(Variant variant) {
 
 		try {
-	        if (query != null) {
+	        if (queryObject != null) {
 	        	IProcessor<Q, Representation> convertor = null;
 
 		        	try {
 		        		getResponse().setStatus(status);
 		        		convertor = createConvertor(variant);
-			        	Representation r = convertor.process(query);
+			        	Representation r = convertor.process(queryObject);
 			        	return r;
 		        	} catch (NotFoundException x) {
 
@@ -118,5 +120,10 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	 */
 	protected String getParameter(Form requestHeaders,String paramName) throws ResourceException {
 		return getParameter(requestHeaders, paramName,false);
+	}
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		return post(entity);
 	}
 }
