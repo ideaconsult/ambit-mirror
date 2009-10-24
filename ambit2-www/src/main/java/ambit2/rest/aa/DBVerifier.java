@@ -3,13 +3,7 @@ package ambit2.rest.aa;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.security.SecretVerifier;
-import org.restlet.security.UserPrincipal;
-import org.restlet.security.Verifier;
 
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.user.VerifyUser;

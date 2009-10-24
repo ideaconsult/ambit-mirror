@@ -160,13 +160,17 @@ public class AmbitApplication extends Application {
 		try {
 			LoginInfo li = getLoginInfo();
 			
-			if (getContext().getParameters().size()>0) {
+			if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
 				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
+			if (getContext().getParameters().getFirstValue(Preferences.USER)!=null)
 				li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
+			if (getContext().getParameters().getFirstValue(Preferences.PASSWORD)!=null)
 				li.setPassword(getContext().getParameters().getFirstValue(Preferences.PASSWORD));
+			if (getContext().getParameters().getFirstValue(Preferences.HOST)!=null)
 				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
+			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
-			}
+			
 			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
@@ -201,7 +205,7 @@ public class AmbitApplication extends Application {
 		DBVerifier verifier = new DBVerifier(this);
 
 	 	router.attach(UserResource.resource, createGuard(UserResource.class,verifier,false));
-	 	router.attach(UserResource.resourceID, createGuard(UserResource.class,verifier,false));
+	 	router.attach(String.format("%s%s", UserResource.resource,UserResource.resourceID), createGuard(UserResource.class,verifier,false));
 	 	router.attach(DatasetsResource.datasets, DatasetsResource.class);		
 		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
 		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
@@ -269,8 +273,8 @@ public class AmbitApplication extends Application {
 		router.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
 		router.attach(QueryResultsResource.resource,QueryResultsResource.class);
 		
-		router.attach(PubchemResource.resourceID,PubchemResource.class);
 		router.attach(PubchemResource.resource,PubchemResource.class);
+		router.attach(String.format("%s%s",PubchemResource.resource,PubchemResource.resourceID),PubchemResource.class);
 		
 		router.attach("/depict/daylight",DaylightDepict.class);
 		router.attach("/depict/cdk",CDKDepict.class);
