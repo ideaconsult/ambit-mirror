@@ -31,10 +31,9 @@ import ambit2.rest.query.QueryResource;
 
 public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	public final static String resource = "/user";
-	public final static String id = "id";
+	protected final static String resourceKey = "id";
 	public final static String login = "login";
-	//public final static String logout = "logout";
-	public final static String resourceID = String.format("%s/{%s}",resource,id);
+	public final static String resourceID = String.format("/{%s}",resourceKey);
 	
 	@Override
 	protected void doInit() throws ResourceException {
@@ -69,7 +68,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	protected QueryUser createQuery(Context context,
 			Request request, Response response) throws StatusException {
 		
-		Object idref = request.getAttributes().get(id);
+		Object idref = request.getAttributes().get(resourceKey);
 		try {
 			if (idref==null) {
 				Role role = new Role();
