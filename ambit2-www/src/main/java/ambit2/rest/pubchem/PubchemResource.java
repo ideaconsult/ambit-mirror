@@ -4,20 +4,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Resource;
+import org.restlet.resource.ResourceException;
+import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -34,29 +34,32 @@ import ambit2.rest.ChemicalMediaType;
  * @author nina
  *
  */
-public class PubchemResource extends Resource {
-	public static final String resource = "/query/pubchem";
-	public static final String resourceKey = "term";
-	public static final String resourceID = String.format("%s/{%s}",resource,resourceKey);
+public class PubchemResource extends ServerResource {
+	public static final String resource = "/pubchem";
+	protected static final String resourceKey = "term";
+	public static final String resourceID = String.format("/{%s}",resourceKey);
 	protected String term = "";
 	protected EntrezSearchProcessor entrezQuery ;
-	public PubchemResource(Context context, Request request, Response response) {
-		super(context,request,response);
-		this.getVariants().add(new Variant(MediaType.TEXT_PLAIN));
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));		
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		MediaType[] mimeTypes = new MediaType[] {MediaType.TEXT_PLAIN,ChemicalMediaType.CHEMICAL_MDLSDF,MediaType.TEXT_HTML,ChemicalMediaType.CHEMICAL_MDLSDF};
+        List<Variant> variants = new ArrayList<Variant>();
+        for (MediaType mileType:mimeTypes) variants.add(new Variant(mileType));
+        getVariants().put(Method.GET, variants);
+	
 		
 		try {
-			this.term = Reference.decode(request.getAttributes().get("term").toString());
+			this.term = Reference.decode(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
-			Form form = request.getResourceRef().getQueryAsForm();
+			Form form = getRequest().getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue("search");
 			if (key != null) {
 				term = Reference.decode(key.toString());
 			} else this.term = null;
 		}		
 		entrezQuery = new EntrezSearchProcessor();
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-		this.getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));		
+
 	}
 	public Representation get(Variant variant) {
 		
