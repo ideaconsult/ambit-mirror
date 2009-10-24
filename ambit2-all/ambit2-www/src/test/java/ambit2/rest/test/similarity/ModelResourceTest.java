@@ -31,9 +31,9 @@ public class ModelResourceTest extends ResourceTest {
 		headers.add("dataset-id", "1");
 		Response response  =  testPost(getTestURI(),MediaType.TEXT_URI_LIST,headers);
 		Status status = response.getStatus();
-		Assert.assertEquals(Status.SUCCESS_CREATED,status);
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER,status);
 		
-		System.out.println(response.getLocationRef());
+		Assert.assertNotNull(response.getLocationRef());
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		request.setResourceRef(response.getLocationRef());
