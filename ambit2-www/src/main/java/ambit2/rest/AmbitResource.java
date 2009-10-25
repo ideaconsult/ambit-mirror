@@ -437,7 +437,7 @@ public class AmbitResource extends ServerResource {
 			query_smiles = "";
 		}
 		w.write("<form action='' method='get'>\n");
-		w.write(String.format("<input name='search' size='80' value='%s'>\n",query_smiles));
+		w.write(String.format("<input name='search' size='80' value='%s'>\n",query_smiles==null?"":query_smiles));
 		w.write("<input type='submit' value='Search'><br>");
 		//w.write(baseReference.toString());
 

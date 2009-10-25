@@ -109,7 +109,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("<form action='' method='get'>\n");
 			w.write(String.format("<input name='property' size='20' value='%s'>\n",property));
 			w.write("&nbsp;");
-			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles));
+			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
 
 			w.write("<input type='submit' value='Search'><br>");
 			//w.write(baseReference.toString());
