@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import ambit2.base.exceptions.AmbitIOException;
 
@@ -41,9 +40,12 @@ public class Property extends Model {
 	 * 
 	 */
 	private static final long serialVersionUID = -6813235410505542235L;
+	/*
 	private static java.util.concurrent.CopyOnWriteArrayList<Property> properties = 
 		new CopyOnWriteArrayList<Property>();	
+		*/
 	private static String defaultReference = "Default property reference";
+	
 
 /*
 	public static synchronized Property getInstance(String name) {
@@ -73,13 +75,9 @@ public class Property extends Model {
 			return getInstance(name, reference.getTitle(),reference.getURL());
 	}	
 	public static synchronized Property getInstance(String name,String reference, String url) {
-		for (Property p: properties)
-			if (p.getName().equals(name) && p.getReference().getTitle().equals(reference)) {
-			return p;
-		}
 		Property p = new Property(name,LiteratureEntry.getInstance(reference,url));
 		p.setLabel(name);
-		properties.add(p);
+
 		return p;
 	}		
 	public enum IO_QUESTION  {
