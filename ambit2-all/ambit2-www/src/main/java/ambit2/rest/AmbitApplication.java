@@ -1,5 +1,6 @@
 package ambit2.rest;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +27,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Directory;
+import org.restlet.resource.Finder;
+import org.restlet.routing.Filter;
+import org.restlet.routing.Route;
 import org.restlet.routing.Router;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.ChallengeGuard;
@@ -33,6 +37,7 @@ import org.restlet.security.Enroler;
 import org.restlet.security.MethodAuthorizer;
 import org.restlet.security.UniformGuard;
 import org.restlet.security.Verifier;
+import org.restlet.util.RouteList;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -61,6 +66,7 @@ import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyModelResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
+import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
@@ -186,27 +192,57 @@ public class AmbitApplication extends Application {
 		Router router = new Router(this.getContext());
 		router.attach("/help", AmbitResource.class);
 		
-		router.attach("/", AmbitResource.class);
-		router.attach("", AmbitResource.class);	
-		router.attach(FastToxStep1.resource, FastToxStep1.class);
-		router.attach(FastToxStep2.resource, FastToxStep2.class);
 
-		router.attach("/ttc", KroesStep1.class);
-		router.attach("/ttc/step2", KroesStep2.class);
-		router.attach("/ttc/input", KroesInput.class);
+		router.attach("", AmbitResource.class);	
+		
+		Router fastoxRouter = new Router(getContext());
+		router.attach(FastToxStep1.resource,fastoxRouter);
+		fastoxRouter.attachDefault(FastToxStep1.class);
+		fastoxRouter.attach("/step2", FastToxStep2.class);
+
+		Router ttcRouter = new Router(getContext());
+		router.attach("/ttc",ttcRouter);
+		ttcRouter.attachDefault(KroesStep1.class);
+		ttcRouter.attach("/step2", KroesStep2.class);
+		ttcRouter.attach("/input", KroesInput.class);
 		
 		
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 
-		router.attach(DatasetsResource.datasetID, DatasetsResource.class);
-		router.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
+		Router datasetsRouter = new Router(getContext());
+		datasetsRouter.attachDefault(DatasetsResource.class);
+		router.attach(DatasetsResource.datasets, datasetsRouter);		
+
+		
+		Router datasetRouter = new Router(getContext());
+		datasetRouter.attachDefault(DatasetsResource.class);
+		datasetsRouter.attach(String.format("/{%s}",DatasetsResource.datasetKey), datasetRouter);
+		
+		
 		
 		DBVerifier verifier = new DBVerifier(this);
+		/**
+		 * /user
+		 */
+		Router usersRouter = new Router(getContext());
+		usersRouter.attachDefault(UserResource.class);
+	 	
+		/**
+		 * /user/{userid}
+		 */
+		Router userRouter = new Router(getContext());
+		userRouter.attachDefault(UserResource.class);
+	 	usersRouter.attach(UserResource.resourceID,userRouter);
+	 	
+	 	/**
+	 	 *  authentication mandatory for users resource
+	 	 */
+		Filter guard = createGuard(verifier,false);
+		guard.setNext(usersRouter);
+	 	router.attach(UserResource.resource, guard);
 
-	 	router.attach(UserResource.resource, createGuard(UserResource.class,verifier,false));
-	 	router.attach(String.format("%s%s", UserResource.resource,UserResource.resourceID), createGuard(UserResource.class,verifier,false));
-	 	router.attach(DatasetsResource.datasets, DatasetsResource.class);		
+	 			
 		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
 		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
 
@@ -215,118 +251,199 @@ public class AmbitApplication extends Application {
 		router.attach(FeatureResource.CompoundFeaturedefID,createGuard(FeatureResource.class,verifierOptional,true));
 		router.attach(FeatureResource.ConformerFeaturedefID,createGuard(FeatureResource.class,verifierOptional,true));
 */
-		router.attach(DatasetCompoundResource.resource, DatasetCompoundResource.class);
+
+		datasetRouter.attach(CompoundResource.compoundID, DatasetCompoundResource.class);
 		//router.attach(datasetID_structure_media, DatasetCompoundResource.class);
 		
-		router.attach(DatasetStructuresResource.resource, DatasetStructuresResource.class);
+		datasetRouter.attach(CompoundResource.compound, DatasetStructuresResource.class);
 		
-		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
-		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
-		router.attach(SimilarityResource.fp+"/smiles/{smiles}",SimilarityResource.class);
-		router.attach(SimilarityResource.fp_dataset+"/smiles/{smiles}",SimilarityResource.class);		
+	
 		
 		//router.attach("/cas/{cas}"+fp,SimilarityResource.class);
-		//router.attach("/name/{name}"+fp,SimilarityResource.class);		
-		router.attach(CompoundResource.compound,CompoundResource.class);
-		router.attach(CompoundResource.compoundID,CompoundResource.class);
-		router.attach(CompoundResource.compoundID_media, CompoundResource.class);		
-		router.attach(ConformerResource.conformers,ConformerResource.class);
-		router.attach(ConformerResource.conformerID,ConformerResource.class);
-		router.attach(ConformerResource.conformerID_media, ConformerResource.class);		
+		//router.attach("/name/{name}"+fp,SimilarityResource.class);	
+		
+		Router compoundsRouter = new Router(getContext());
+		compoundsRouter.attachDefault(CompoundResource.class);
+		router.attach(CompoundResource.compound,compoundsRouter);
+		
+		Router compoundRouter = new Router(getContext());
+		compoundRouter.attachDefault(CompoundResource.class);
+		compoundsRouter.attach(String.format("/{%s}",CompoundResource.idcompound),compoundRouter);
+	
+		Router conformersRouter = new Router(getContext());
+		conformersRouter.attachDefault(ConformerResource.class);
+		compoundRouter.attach(ConformerResource.conformerKey,conformersRouter);		
+		
+		Router conformerRouter = new Router(getContext());
+		conformerRouter.attachDefault(ConformerResource.class);
+		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),conformerRouter);	
 
-		router.attach(PropertyValueResource.compoundFeature,PropertyValueResource.class);
-		router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
-		router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
+		compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
 
+		Router featureByAlias = new Router(getContext());
+		featureByAlias.attachDefault(PropertyValueResource.class);
+		
+		compoundRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
+		conformerRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
+		
+		//router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
+		//router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
+		
 		router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
 		router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
 
+		Router templateRouter = new Router(getContext());
+		templateRouter.attachDefault(PropertyTemplateResource.class);
+		templateRouter.attach(PropertyTemplateResource.resourceID,PropertyTemplateResource.class);
+		
+		compoundRouter.attach(PropertyTemplateResource.resource,templateRouter);
+		conformerRouter.attach(PropertyTemplateResource.resource,templateRouter);
+		/*
 		router.attach(PropertyTemplateResource.compoundTemplate,PropertyTemplateResource.class);
 		router.attach(PropertyTemplateResource.compoundTemplateID,PropertyTemplateResource.class);
 		router.attach(PropertyTemplateResource.conformerTemplateID,PropertyTemplateResource.class);
 
 		router.attach(PropertyTemplateResource.TemplateIDCompound,PropertyTemplateResource.class);
 		router.attach(PropertyTemplateResource.TemplateIDConformer,PropertyTemplateResource.class);
+		*/
 		
+		Router modelsRouter = new Router(getContext());
+		modelsRouter.attachDefault(ModelResource.class);
+		router.attach(ModelResource.resource,modelsRouter);
+		
+		Router modelRouter = new Router(getContext());
+		modelRouter.attachDefault(ModelResource.class);
+		modelsRouter.attach(String.format("/{%s}",ModelResource.resourceKey),modelRouter);
+		
+		compoundRouter.attach(ModelResource.resource,PropertyModelResource.class);
+		conformerRouter.attach(ModelResource.resource,PropertyModelResource.class);
+		compoundRouter.attach(String.format("%s/{%s}",ModelResource.resource,ModelResource.resourceKey),PropertyModelResource.class);
+		conformerRouter.attach(String.format("%s/{%s}",ModelResource.resource,ModelResource.resourceKey),PropertyModelResource.class);
+		/*
 		router.attach(PropertyModelResource.compoundModel,PropertyModelResource.class);
 		router.attach(PropertyModelResource.compoundModelID,PropertyModelResource.class);
 		router.attach(PropertyModelResource.conformerModelID,PropertyModelResource.class);
-		
-		router.attach(TupleResource.resource,TupleResource.class);
-		router.attach(TuplePropertyValueResource.resourceCompoundID,TuplePropertyValueResource.class);
-		router.attach(TuplePropertyValueResource.resourceConformerID,TuplePropertyValueResource.class);
-		router.attach(TupleResource.resourceDataset,TupleResource.class);
+		*/
+		Router tupleRouter = new Router(getContext());
+		tupleRouter.attachDefault(TupleResource.class);
+		tupleRouter.attach(String.format("/{%s}", TupleResource.resourceKey),TuplePropertyValueResource.class);
 
+		compoundRouter.attach(TupleResource.resourceTag,tupleRouter);
+		conformerRouter.attach(TupleResource.resourceTag,tupleRouter);
 		
-		router.attach(ReferenceResource.referenceID,ReferenceResource.class);
-		router.attach(ReferenceResource.reference,ReferenceResource.class);
+		Router referenceRouter = new Router(getContext());
+		router.attach(ReferenceResource.reference,referenceRouter);
+		referenceRouter.attachDefault(ReferenceResource.class);
+		referenceRouter.attach(String.format("/{%s}",ReferenceResource.idreference),ReferenceResource.class);
 
-		router.attach(PropertyResource.featuredef,PropertyResource.class);
-		router.attach(PropertyResource.featuredefID,PropertyResource.class);
+		Router feature_def = new Router(getContext());
+		router.attach(PropertyResource.featuredef,feature_def);
+		feature_def.attachDefault(PropertyResource.class);
+		feature_def.attach(PropertyResource.featuredefID,PropertyResource.class);
+
+		compoundRouter.attach(PropertyResource.featuredef,feature_def);
+		conformerRouter.attach(PropertyResource.featuredef,feature_def);
+		/*
 		router.attach(PropertyResource.CompoundFeaturedef,PropertyResource.class);
 		router.attach(PropertyResource.ConformerFeaturedef,PropertyResource.class);
 		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
 		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
-		router.attach(PropertiesByDatasetResource.DatasetFeaturedef,PropertiesByDatasetResource.class);
-		router.attach(PropertiesByDatasetResource.DatasetFeaturedefID,PropertiesByDatasetResource.class);
+		*/
 		
-		router.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
-		router.attach(QueryResultsResource.resource,QueryResultsResource.class);
+		//public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
+		//public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
+		datasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
+		datasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
 		
-		router.attach(PubchemResource.resource,PubchemResource.class);
-		router.attach(String.format("%s%s",PubchemResource.resource,PubchemResource.resourceID),PubchemResource.class);
+
+
 		
-		router.attach("/depict/daylight",DaylightDepict.class);
-		router.attach("/depict/cdk",CDKDepict.class);
-		router.attach("/depict/cactvs",CSLSDepict.class);
-		router.attach("/depict",AbstractDepict.class);
+		Router depictRouter = new Router();
+		router.attach("/depict",depictRouter);
+		depictRouter.attachDefault(AbstractDepict.class);
+		depictRouter.attach("/daylight",DaylightDepict.class);
+		depictRouter.attach("/cdk",CDKDepict.class);
+		depictRouter.attach("/cactvs",CSLSDepict.class);
+
+		
 		router.attach("/name2structure",Name2StructureResource.class);	
 		
 		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
 		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
 		
-		router.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
-		router.attach(String.format("%s%s%s",DatasetsResource.datasetID,QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
+		/**
+		 * Queries
+		 */
+		Router queryRouter = new Router(getContext());
+		router.attach(QueryResource.query_resource,queryRouter);
+		queryRouter.attachDefault(QueryListResource.class);
+		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
+		
+		Router queryResults = new Router(getContext());
+		queryResults.attachDefault(QueryResultsResource.class);
+		queryResults.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
+		queryRouter.attach(QueryResultsResource.resource,queryResults);
+		
+		queryRouter.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
+		
+		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 				
-		router.attach(SmartsQueryResource.smarts_resource,SmartsQueryResource.class);
-		router.attach(SmartsQueryResource.smartsID,SmartsQueryResource.class);
-		router.attach(SmartsQueryResource.dataset_smarts_resource,SmartsQueryResource.class);
-		router.attach(SmartsQueryResource.dataset_smarts_resource_id,SmartsQueryResource.class);
+		Router pubchem = new Router(getContext());
+		queryRouter.attach(PubchemResource.resource,pubchem);
+		pubchem.attachDefault(PubchemResource.class);
+		pubchem.attach(PubchemResource.resourceID,PubchemResource.class);
+
+		Router csls = new Router(getContext());
+		queryRouter.attach(CSLSResource.resource,csls);
+		csls.attachDefault(CSLSResource.class);
+		csls.attach(CSLSResource.resourceID,CSLSResource.class);
+		csls.attach(CSLSResource.resourceID+CSLSResource.representationID,CSLSResource.class);
 		
-		router.attach(QueryResource.query_resource,QueryListResource.class);
+		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
+		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
+		Router similarity = new Router(getContext());
+		queryRouter.attach(SimilarityResource.resource,similarity);
+		similarity.attachDefault(SimilarityResource.class);
+		//search dataset for similar compounds
+		datasetRouter.attach(SimilarityResource.resource,similarity);	
 		
-		router.attach(AlgorithmCatalogResource.algorithm,AlgorithmCatalogResource.class);
-		router.attach(String.format("%s/%s",AlgorithmCatalogResource.algorithm,AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
+		Router smartsRouter = new Router(getContext());
+		smartsRouter.attachDefault(SmartsQueryResource.class);
+		smartsRouter.attach(SmartsQueryResource.resourceID,SmartsQueryResource.class);
+		queryRouter.attach(SmartsQueryResource.resource,smartsRouter);
+		
+		datasetRouter.attach(SmartsQueryResource.resource,smartsRouter);
+		
+		Router algoRouter = new Router(getContext());
+		algoRouter.attachDefault(AlgorithmCatalogResource.class);
+		router.attach(AlgorithmCatalogResource.algorithm,algoRouter);
+		algoRouter.attach(String.format("/%s",AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
 						AlgorithmDescriptorTypesResource.class);
 		
-		router.attach(String.format("%s/%s",AlgorithmCatalogResource.algorithm,"util"),
-				AlgorithmUtilTypesResource.class);
+		
+		algoRouter.attach(String.format("/%s","util"),AlgorithmUtilTypesResource.class);
 		
 		for (AlgorithmUtilTypesResource.utiltypes o : AlgorithmUtilTypesResource.utiltypes.values())
-			router.attach(String.format("%s/%s/%s",
-					AlgorithmCatalogResource.algorithm,
+			algoRouter.attach(String.format("/%s/%s",
 					"util",
 					o.toString()
 					),
 					AlgorithmUtilTypesResource.class);
 		
 		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
-			router.attach(String.format("%s/%s/%s/{%s}",
-					AlgorithmCatalogResource.algorithm,
+			algoRouter.attach(String.format("/%s/%s/{%s}",
 					AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString(),
 					o.toString(),
 					AlgorithmDescriptorTypesResource.iddescriptor),
 					AlgorithmDescriptorTypesResource.class);		
 		
-		router.attach(String.format("%s/rules/{%s}",AlgorithmCatalogResource.algorithm,AlgorithmResource.idalgorithm),AlgorithmResource.class);
-		router.attach(String.format("%s/rules",AlgorithmCatalogResource.algorithm),AlgorithmResource.class);
+		algoRouter.attach(String.format("/rules/{%s}",AlgorithmResource.idalgorithm),AlgorithmResource.class);
+		algoRouter.attach("/rules",AlgorithmResource.class);
 		
-		router.attach(ModelResource.resource,ModelResource.class);
-		router.attach(ModelResource.resourceID,ModelResource.class);
-
-		
-		router.attach("/"+TaskResource.resource, TaskResource.class);
-		router.attach(TaskResource.resourceID, TaskResource.class);
+		Router taskRouter = new Router(getContext());
+		taskRouter.attachDefault(TaskResource.class);
+		taskRouter.attach(TaskResource.resourceID, TaskResource.class);
+		router.attach(TaskResource.resource, taskRouter);		
 		/** 
         router.attach(
                 "/images",
@@ -335,11 +452,14 @@ public class AmbitApplication extends Application {
                         LocalReference.createFileReference(
                                 webRootPath + "/images")));		
                                 */
+		
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
 		 Directory jsDir = new Directory(getContext(), "war:///js");
 
+		 
+		 router.attach("/", AmbitResource.class);
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/style/", styleDir);
@@ -350,8 +470,11 @@ public class AmbitApplication extends Application {
 
 
 	     router.attach(SwitchUserResource.resource,createGuardGuest(SwitchUserResource.class));
-	 	 
- 
+	     /*
+	     StringWriter w = new StringWriter();
+	     printRoutes(router, ">",w);
+	     System.out.println(w);
+	     */
 		 return router;
 	}
 	public synchronized Connection getConnection(String user, String password) throws AmbitException , SQLException{
@@ -421,7 +544,7 @@ public class AmbitApplication extends Application {
 		Task<Reference> task = new Task<Reference>(futureTask);
 		task.setName(taskName);
 		Reference ref =	new Reference(
-				String.format("%s/%s/%s", baseReference.toString(),TaskResource.resource,Reference.encode(uuid.toString())));
+				String.format("%s%s/%s", baseReference.toString(),TaskResource.resource,Reference.encode(uuid.toString())));
 		task.setUri(ref);
 		tasks.put(uuid,task);
 		getTaskService().submit(futureTask);	
@@ -467,7 +590,7 @@ public class AmbitApplication extends Application {
         System.out.println("Server stopped");
     }
     	
-    protected UniformGuard createGuard(Class clazz,Verifier verifier,boolean optional) {
+    protected UniformGuard createGuard(Verifier verifier,boolean optional) {
     	
     	Enroler enroler = new Enroler() {
     		@Override
@@ -501,8 +624,6 @@ public class AmbitApplication extends Application {
 	     guard.getAuthenticator().setVerifier(verifier);
 	     guard.getAuthenticator().setEnroler(enroler);
 	     guard.setAuthorizer(authorizer);
-		 guard.setNext(clazz);     
- 		 
 		 return guard;
     }
     
@@ -557,6 +678,43 @@ public class AmbitApplication extends Application {
  		 
 		 return guard;
     }    
+   
+   public static String printRoutes(Restlet re,String delimiter,StringWriter b) {
+	   		
+	 		while (re != null) {
+	 			
+	 			b.append(re.getClass().toString());
+	 			b.append('\t');
+	 			if (re instanceof Finder) {
+	 				b.append(((Finder)re).getTargetClass().getName());
+	 				b.append('\n');
+	 				re = null;
+	 			} else if (re instanceof Filter)
+		 			re = ((Filter)re).getNext();
+		 		else if (re instanceof Router) {
+		 			b.append('\n');
+		 			RouteList list = ((Router)re).getRoutes();
+		 		 	for (Route r : list) { 
+		 		 		
+		 		 		b.append(delimiter);
+		 		 		b.append(r.getTemplate().getPattern());
+		 		 		b.append('\t');
+		 		 		b.append(r.getTemplate().getVariableNames().toString());
+		 		 		printRoutes(r.getNext(),'\t'+delimiter+r.getTemplate().getPattern(),b);
+		 		 	}	
+		 		 	
+		 			break;
+		 		} else {
+		 			break;
+		 		}
+		 		
+		 		
+	 		}
+
+	 		return b.toString();
+
+	 	}
+
 }
 
 /*

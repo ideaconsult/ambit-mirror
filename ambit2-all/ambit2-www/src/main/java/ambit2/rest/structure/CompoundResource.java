@@ -69,14 +69,9 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String compound = "/compound";
 	public final static String idcompound = "idcompound";
 	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
-	public final static String compoundID_media = String.format("%s%s",compoundID,"/diagram/{media}");	
+
 	protected boolean collapsed = false;
 
-	
-	@Override
-	public String[] URI_to_handle() {
-		return new String[] {compoundID,compoundID_media};
-	}
 	@Override
 	public Representation get(Variant variant) {
 		if (queryObject == null) try {

@@ -49,9 +49,9 @@ Location: http://example.org/thenewurl
  *
  */
 public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Task<Reference>,IProcessor<Iterator<Task<Reference>>, Representation>> {
-	public static final String resource = "task";
+	public static final String resource = "/task";
 	public static final String resourceKey = "idtask";
-	public static final String resourceID = String.format("/%s/{%s}", resource,resourceKey);
+	public static final String resourceID = String.format("/{%s}", resourceKey);
 	
 
 	@Override

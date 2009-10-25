@@ -71,7 +71,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	};	
 	public final static String featuredef = "/feature_definition";
 	public final static String idfeaturedef = "id_feature_definition";
-	public final static String featuredefID = String.format("%s/{%s}",featuredef,idfeaturedef);
+	public final static String featuredefID = String.format("/{%s}",idfeaturedef);
 	public final static String CompoundFeaturedefID = String.format("%s%s/{%s}",CompoundResource.compoundID,featuredef,idfeaturedef);
 	public final static String ConformerFeaturedefID = String.format("%s%s/{%s}",ConformerResource.conformerID,featuredef,idfeaturedef);
 	public final static String ConformerFeaturedef = String.format("%s%s",ConformerResource.conformerID,featuredef);

@@ -30,8 +30,7 @@ import ambit2.rest.structure.ConformerResource;
 public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
 	public static final String featureKey = "/feature";
 	public static final String compoundFeature = String.format("%s/feature",CompoundResource.compoundID);
-	public static final String compoundFeatureName = String.format("%s/feature/{name}",CompoundResource.compoundID);
-	public static final String conformerFeatureName =  String.format("%s/feature/{name}",ConformerResource.conformerID);
+
 	
 	public static final String FeatureNameConformer =  String.format("/feature/{name}%s",ConformerResource.conformerID);
 	public static final String FeatureNameCompound = String.format("/feature/{name}%s",CompoundResource.compoundID);

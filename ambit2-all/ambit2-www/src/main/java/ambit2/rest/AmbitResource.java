@@ -201,6 +201,7 @@ public class AmbitResource extends ServerResource {
         variants.add(new Variant(MediaType.TEXT_HTML));
         variants.add(new Variant(MediaType.TEXT_XML));
         variants.add(new Variant(MediaType.TEXT_URI_LIST));
+        variants.add(new Variant(MediaType.TEXT_PLAIN));
         getVariants().put(Method.GET, variants);
 	
 	}
@@ -226,7 +227,11 @@ public class AmbitResource extends ServerResource {
 		} catch (Exception x) {}
 
 		try {
-			if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
+			if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
+			     StringWriter w = new StringWriter();
+			     AmbitApplication.printRoutes(getApplication().getRoot(),">",w);
+				return new StringRepresentation(w.toString());		
+			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 				StringBuilder xml = new StringBuilder();
 				xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 				xml.append("<ambit xmlns=\"http://ambit.sourceforge.net/ambit/rest/v2\">");
@@ -424,9 +429,15 @@ public class AmbitResource extends ServerResource {
 		w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("<td align='center'>");
-
+		String query_smiles = "";
+		try {
+			Form form = request.getResourceRef().getQueryAsForm();
+			query_smiles = form.getFirstValue("search");
+		} catch (Exception x) {
+			query_smiles = "";
+		}
 		w.write("<form action='' method='get'>\n");
-		w.write("<input name='search' size='80'>\n");
+		w.write(String.format("<input name='search' size='80' value='%s'>\n",query_smiles));
 		w.write("<input type='submit' value='Search'><br>");
 		//w.write(baseReference.toString());
 

@@ -52,7 +52,8 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	@Override
 	public void processItem(T item, Writer output) {
 		try {
-			output.write(getURI(item));
+			String o = getURI(item);
+			if (o != null) 	output.write(o);
 			output.flush();
 		} catch (IOException x) {
 			x.printStackTrace();

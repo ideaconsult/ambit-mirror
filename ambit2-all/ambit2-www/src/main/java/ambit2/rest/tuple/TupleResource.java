@@ -32,10 +32,10 @@ import ambit2.rest.structure.ConformerResource;
  */
 public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 	public static String resourceKey = "idtuple";
-	public static String resourceTag = "tuple";
-	public static String resource = String.format("%s/%s",CompoundResource.compoundID,resourceTag);
+	public static String resourceTag = "/tuple";
+	//public static String resource = String.format("%s/%s",CompoundResource.compoundID,resourceTag);
 
-	public static String resourceDataset = String.format("%s%s/{%s}",DatasetsResource.datasetID,CompoundResource.compoundID,resourceTag);
+//	public static String resourceDataset = String.format("%s%s/{%s}",DatasetsResource.datasetID,CompoundResource.compoundID,resourceTag);
 
 
 	@Override

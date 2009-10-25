@@ -24,8 +24,8 @@ import ambit2.rest.dataset.DatasetsResource;
  *
  */
 public class PropertiesByDatasetResource extends PropertyResource {
-	public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
-	public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
+	//public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
+	//public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
 
 
 	@Override

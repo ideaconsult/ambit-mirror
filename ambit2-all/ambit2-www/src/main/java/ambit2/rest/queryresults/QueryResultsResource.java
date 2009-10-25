@@ -23,9 +23,9 @@ import ambit2.rest.query.StructureQueryResource;
  *
  */
 public class QueryResultsResource extends StructureQueryResource<QueryStoredResults> {
-	public static String resource = "/query/results";
+	public static String resource = "/results";
 	public static String resourceKey = "id";
-	public static String resourceID = String.format("%s/{%s}",resource,resourceKey);	
+	public static String resourceID = String.format("/{%s}",resourceKey);	
 
 	@Override
 	protected QueryStoredResults createQuery(Context context, Request request,

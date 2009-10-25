@@ -24,11 +24,8 @@ import ambit2.rest.dataset.DatasetsResource;
  */
 public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	public final static String smartsKey =  "smarts";
-	public final static String smarts_resource =  String.format("%s/%s/{%s}",query_resource,smartsKey,smartsKey);
-	public final static String smartsID =  String.format("%s/%s",query_resource,smartsKey);
-	public final static String dataset_smarts_resource_id =  String.format("%s%s%s",DatasetsResource.datasetID,query_resource,"/smarts/{smarts}");
-	public final static String dataset_smarts_resource =  String.format("%s%s%s",DatasetsResource.datasetID,query_resource,"/smarts");
-	
+	public final static String resourceID =  String.format("/{%s}",smartsKey);
+	public final static String resource =  String.format("/%s",smartsKey);
 	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,

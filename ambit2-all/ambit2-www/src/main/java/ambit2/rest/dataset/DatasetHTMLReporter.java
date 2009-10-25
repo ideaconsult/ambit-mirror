@@ -56,7 +56,7 @@ public class DatasetHTMLReporter extends DatasetsHTMLReporter {
 				w.toString(),
 				dataset.getName()));				
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}		
 
 		

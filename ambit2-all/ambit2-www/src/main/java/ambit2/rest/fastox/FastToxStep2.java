@@ -24,7 +24,7 @@ import ambit2.rest.model.ModelResource;
 import ambit2.rest.model.ModelURIReporter;
 
 public class FastToxStep2 extends ModelResource {
-	public static String resource = String.format("%s/step2",FastToxStep1.resource);
+	//public static String resource = String.format("%s/step2",FastToxStep1.resource);
 	protected IStructureRecord record = null;
 	
 	@Override

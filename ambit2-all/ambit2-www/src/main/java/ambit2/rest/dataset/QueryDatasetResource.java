@@ -4,7 +4,6 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -23,7 +22,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
 public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
-	public final static String datasetName =  String.format("/query%s/{dataset_name}",DatasetsResource.datasets);
+	public final static String datasetName =  String.format("%s/{dataset_name}",DatasetsResource.datasets);
 
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
