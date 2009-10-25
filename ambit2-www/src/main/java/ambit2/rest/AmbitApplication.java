@@ -46,6 +46,7 @@ import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
@@ -420,7 +421,16 @@ public class AmbitApplication extends Application {
 		algoRouter.attach(String.format("/%s",AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
 						AlgorithmDescriptorTypesResource.class);
 		
-		
+		algoRouter.attach(String.format("/%s/{category}",AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
+				AlgorithmDescriptorResource.class);		
+		/*
+		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
+			algoRouter.attach(String.format("/%s/%s/{%s}",
+					AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString(),
+					o.toString(),
+					AlgorithmDescriptorTypesResource.iddescriptor),
+					AlgorithmDescriptorTypesResource.class);			
+		*/
 		algoRouter.attach(String.format("/%s","util"),AlgorithmUtilTypesResource.class);
 		
 		for (AlgorithmUtilTypesResource.utiltypes o : AlgorithmUtilTypesResource.utiltypes.values())
@@ -430,12 +440,7 @@ public class AmbitApplication extends Application {
 					),
 					AlgorithmUtilTypesResource.class);
 		
-		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
-			algoRouter.attach(String.format("/%s/%s/{%s}",
-					AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString(),
-					o.toString(),
-					AlgorithmDescriptorTypesResource.iddescriptor),
-					AlgorithmDescriptorTypesResource.class);		
+	
 		
 		algoRouter.attach(String.format("/rules/{%s}",AlgorithmResource.idalgorithm),AlgorithmResource.class);
 		algoRouter.attach("/rules",AlgorithmResource.class);
