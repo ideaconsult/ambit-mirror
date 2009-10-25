@@ -55,7 +55,9 @@ public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, 
 
 	public LiteratureEntry getObject(ResultSet rs) throws AmbitException {
 		try {
-			return LiteratureEntry.getInstance(rs.getString(2), rs.getString(3),rs.getInt(1));
+			LiteratureEntry le =  new LiteratureEntry(rs.getString(2), rs.getString(3));
+			le.setId(rs.getInt(1));
+			return le;
 		} catch (Exception x) {
 			return null;
 		}
