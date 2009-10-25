@@ -69,7 +69,7 @@ public class RandomAccessSDFReader extends RandomAccessReader {
     @Override
     public IChemObjectReader createChemObjectReader() {
         //return new FilteredMDLReader();
-    	return new MDLV2000Reader();
+    	return new MDLV2000ReaderExtended();
     }
     protected boolean isRecordEnd(String line) {
         return line.equals("$$$$");

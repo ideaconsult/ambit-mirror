@@ -139,13 +139,15 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                             currentLine = null;
                         }
                         // do MDL molfile version checking
-                        if (currentLine.contains("V2000") || currentLine.contains("v2000")) {
-                        	currentFormat = (IChemFormat)MDLV2000Format.getInstance();
-                        } else if (currentLine.contains("V3000") || currentLine.contains("v3000")) {
-                        	currentFormat = (IChemFormat)MDLV3000Format.getInstance();
-                        }
+                        if (currentLine!=null)
+	                        if (currentLine.contains("V2000") || currentLine.contains("v2000")) {
+	                        	currentFormat = (IChemFormat)MDLV2000Format.getInstance();
+	                        } else if (currentLine.contains("V3000") || currentLine.contains("v3000")) {
+	                        	currentFormat = (IChemFormat)MDLV3000Format.getInstance();
+	                        }
                     }
-                    buffer.append(currentLine);
+                    if (currentLine != null)
+                    	buffer.append(currentLine);
                     buffer.append("\n");
                     logger.debug("MDL file part read: ", buffer);
                     IChemObjectReader reader = factory.createReader(currentFormat);

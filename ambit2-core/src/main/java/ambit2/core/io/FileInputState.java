@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.openscience.cdk.io.CMLReader;
-import org.openscience.cdk.io.HINReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.PDBReader;
@@ -111,7 +110,7 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[CML_INDEX])) {
 			return new IteratingChemObjectReaderWrapper(new CMLReader(stream));			
 		} else if (ext.endsWith(extensions[HIN_INDEX])) {
-			return new IteratingChemObjectReaderWrapper(new HINReader(stream));
+			return new IteratingChemObjectReaderWrapper(new ambit2.core.io.HINReader(stream));
 		} else if (ext.endsWith(extensions[PDB_INDEX])) {
 			return new IteratingChemObjectReaderWrapper(new PDBReader(stream));
 		} else if ((ext.toLowerCase().indexOf("euras")>=0) && (ext.endsWith(extensions[XLS_INDEX]))) {

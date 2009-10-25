@@ -34,21 +34,27 @@ public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectRe
 	}
 
 	public boolean hasNext() {
-		recordBuffer = new StringBuffer();
+		recordBuffer = null;
 		try {
 			while (input.ready()) {
+				if (recordBuffer==null)
+					recordBuffer = new StringBuffer();
 				String line = input.readLine();
 				recordBuffer.append(line);
 				recordBuffer.append('\n');
 				if (isEndOfRecord(line))
 					return true;
 			}
+			//return recordBuffer!=null;
+			return acceptLastRecord();
 		} catch (Exception x) {
 			logger.error(x);
 		}
 		return false;
 	}
-
+	protected boolean acceptLastRecord() {
+		return false;
+	}
 	public Object next() {
 		return recordBuffer.toString();
 	}
