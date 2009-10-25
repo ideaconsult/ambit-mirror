@@ -19,6 +19,10 @@ public class RawIteratingMOLReader extends RawIteratingReader<IStructureRecord> 
 		return (line == null) || ("M  END".equals(line.trim()));
 	}
 	@Override
+	protected boolean acceptLastRecord() {
+		return recordBuffer!=null;
+	}
+	@Override
 	public IResourceFormat getFormat() {
 	    return MDLV2000Format.getInstance();
 	}

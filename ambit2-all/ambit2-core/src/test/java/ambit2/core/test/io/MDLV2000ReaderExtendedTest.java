@@ -26,17 +26,20 @@ package ambit2.core.test.io;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
+import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.IChemObjectReader;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.core.groups.ComponentGroup;
 import ambit2.core.groups.ContainerGroup;
@@ -47,10 +50,11 @@ import ambit2.core.groups.MonomerGroup;
 import ambit2.core.groups.MultipleGroup;
 import ambit2.core.groups.StructureRepeatingUnit;
 import ambit2.core.groups.SuppleAtomContainer;
+import ambit2.core.io.FileInputState;
 import ambit2.core.io.MDLV2000ReaderExtended;
 import ambit2.core.io.SGroupMDL2000Helper.SGROUP_CONNECTIVITY;
 
-public class MDLV2000ReaderExtendedTest extends TestCase {
+public class MDLV2000ReaderExtendedTest  {
 
 	protected IChemObject readSGroup(String file) throws Exception {
 		return readSGroup("ambit2/core/data/mdl/", file);
@@ -65,18 +69,19 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
 		reader.close();
 		return newMol;
 	}
+	@Test
 	public void testAbbreviation() throws Exception {
         IChemObject mol = readSGroup("abbreviation.mol");
-		assertNotNull(mol);
-		assertTrue(mol instanceof SuppleAtomContainer);
+		Assert.assertNotNull(mol);
+		Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(10,sca.getBondCount());
-        assertEquals(10,sca.getAtomCount());
+        Assert.assertEquals(10,sca.getBondCount());
+        Assert.assertEquals(10,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(1,superatom.size());
-        assertNotNull(superatom.get(0));
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(1,superatom.size());
+        Assert.assertNotNull(superatom.get(0));
 		sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, false,7,7,false);
@@ -97,8 +102,8 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
         if (superatom.get(i) instanceof IExpandable)
             ((IExpandable)superatom.get(i)).setExpanded(expanded);
         //print(mol);
-        assertEquals(atoms,mol.getAtomCount());
-        assertEquals(bonds,mol.getBondCount());
+        Assert.assertEquals(atoms,mol.getAtomCount());
+        Assert.assertEquals(bonds,mol.getBondCount());
         if (display)
         display(mol,superatom.getClass().getName() + " [ expanded is "+expanded + "]");
                 
@@ -119,23 +124,24 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
         for (int i=0; i < sca.getBondCount(); i++) 
             System.out.println((i+1)+"."+sca.getBond(i).getAtom(0).getID() + " "+sca.getBond(i).getAtom(1).getID());        
     }
+    @Test
 	public void testCopolymer() throws Exception {
         IChemObject mol = readSGroup("copolymer.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(20,sca.getBondCount());
-        assertEquals(20+2,sca.getAtomCount());
+        Assert.assertEquals(20,sca.getBondCount());
+        Assert.assertEquals(20+2,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(2,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(2,superatom.size());
         for (int i=0; i < superatom.size(); i++) {
             if (superatom.get(i) instanceof ComponentGroup) {
-                assertNotNull(superatom.get(i));
-                assertNull(((ComponentGroup)superatom.get(i)).getOrder());
+                Assert.assertNotNull(superatom.get(i));
+                Assert.assertNull(((ComponentGroup)superatom.get(i)).getOrder());
             } else  if (superatom.get(i) instanceof ContainerGroup) {
-                assertEquals(1,((ContainerGroup)superatom.get(i)).getComponents().size());
+                Assert.assertEquals(1,((ContainerGroup)superatom.get(i)).getComponents().size());
             }
 
         }
@@ -143,41 +149,43 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
         verify((IAtomContainer)mol, superatom, false,20,20,true);
         verify((IAtomContainer)mol, superatom, true,20,20,true);           
 	}
+    @Test
 	public void testGeneric() throws Exception {
         IChemObject mol = readSGroup("generic.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(11,sca.getBondCount());
-        assertEquals(19,sca.getAtomCount());
+        Assert.assertEquals(11,sca.getBondCount());
+        Assert.assertEquals(19,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(2,superatom.size());
-        assertNotNull(superatom.get(0));
-        assertNotNull(superatom.get(1));
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(2,superatom.size());
+        Assert.assertNotNull(superatom.get(0));
+        Assert.assertNotNull(superatom.get(1));
         sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, false,17,11,false);
         verify((IAtomContainer)mol, superatom, true,17,11,false);        
 	}
+    @Test
 	public void testMixture() throws Exception {
         IChemObject mol = readSGroup("mixture_unordered.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(11,sca.getBondCount());
-        assertEquals(15+4,sca.getAtomCount());
+        Assert.assertEquals(11,sca.getBondCount());
+        Assert.assertEquals(15+4,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(4,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(4,superatom.size());
         for (int i=0; i < superatom.size(); i++) {
             if (superatom.get(i) instanceof ComponentGroup) {
-                assertNotNull(superatom.get(i));
-                assertNull(((ComponentGroup)superatom.get(i)).getOrder());
+                Assert.assertNotNull(superatom.get(i));
+                Assert.assertNull(((ComponentGroup)superatom.get(i)).getOrder());
             } else  if (superatom.get(i) instanceof ContainerGroup) {
-                assertEquals(3,((ContainerGroup)superatom.get(i)).getComponents().size());
+                Assert.assertEquals(3,((ContainerGroup)superatom.get(i)).getComponents().size());
             }
 
         }
@@ -185,27 +193,28 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
         verify((IAtomContainer)mol, superatom, false,15,11,true);
         verify((IAtomContainer)mol, superatom, true,15,11,true);          
 	}
+    @Test
 	public void testFormulation() throws Exception {
         IChemObject mol = readSGroup("mixture_ordered.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(29,sca.getBondCount());
-        assertEquals(31+3,sca.getAtomCount());
+        Assert.assertEquals(29,sca.getBondCount());
+        Assert.assertEquals(31+3,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(3,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(3,superatom.size());
         for (int i=0; i < superatom.size(); i++) {
             if (superatom.get(i) instanceof ComponentGroup) {
-                assertNotNull(superatom.get(i));
-                assertNotNull(((ComponentGroup)superatom.get(i)).getOrder());
+                Assert.assertNotNull(superatom.get(i));
+                Assert.assertNotNull(((ComponentGroup)superatom.get(i)).getOrder());
                 System.out.println(((ComponentGroup)superatom.get(i)).getSubscript());
             } else  if (superatom.get(i) instanceof ContainerGroup) {
-                assertEquals(2,((ContainerGroup)superatom.get(i)).getComponents().size());
-                assertEquals(ContainerGroup.SGROUP_MIXTURE.FORMULATION,
+                Assert.assertEquals(2,((ContainerGroup)superatom.get(i)).getComponents().size());
+                Assert.assertEquals(ContainerGroup.SGROUP_MIXTURE.FORMULATION,
                         ((ContainerGroup)superatom.get(i)).getType());
-                assertEquals("f",
+                Assert.assertEquals("f",
                         ((ContainerGroup)superatom.get(i)).getSubscript());                
             }
 
@@ -215,70 +224,73 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
         verify((IAtomContainer)mol, superatom, true,31,29,false);         
         
 	}
+    @Test
 	public void testMonomer() throws Exception {
         IChemObject mol = readSGroup("monomer.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(2,sca.getBondCount());
-        assertEquals(3+1,sca.getAtomCount());
+        Assert.assertEquals(2,sca.getBondCount());
+        Assert.assertEquals(3+1,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(1,superatom.size());
-        assertNotNull(superatom.get(0));
-        assertEquals("mon",superatom.get(0).getSubscript());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(1,superatom.size());
+        Assert.assertNotNull(superatom.get(0));
+        Assert.assertEquals("mon",superatom.get(0).getSubscript());
         sca.setFiltered(true);
         verify((IAtomContainer)mol, superatom, false,3,2,false);
         verify((IAtomContainer)mol, superatom, true,3,2,false);          
 	}
+    @Test
     public void testMUL_MON2() throws Exception {
         IChemObject mol = readSGroup("12401-47-7.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(3,sca.getBondCount());
-        assertEquals(7+3,sca.getAtomCount());
+        Assert.assertEquals(3,sca.getBondCount());
+        Assert.assertEquals(7+3,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(3,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(3,superatom.size());
         int mon = 0;
         int mul = 0;
         for (int i=0; i < superatom.size();i++) {
             ISGroup g = superatom.get(i);
             if (g instanceof MonomerGroup) {
-                assertEquals("mon",g.getSubscript());
+                Assert.assertEquals("mon",g.getSubscript());
                 mon++;
             }
             if (g instanceof MultipleGroup) {
                 mul++;
-                assertEquals(SGROUP_CONNECTIVITY.HT,g.getProperty(ISGroup.SGROUP_CONNECTIVITY));
-                assertEquals("2",g.getSubscript());
+                Assert.assertEquals(SGROUP_CONNECTIVITY.HT,g.getProperty(ISGroup.SGROUP_CONNECTIVITY));
+                Assert.assertEquals("2",g.getSubscript());
             }
         }
-        assertEquals(1,mul);
-        assertEquals(2,mon);
+        Assert.assertEquals(1,mul);
+        Assert.assertEquals(2,mon);
         
         sca.setFiltered(true);
         verify((IAtomContainer)mol, superatom, false,6,3,false);
         verify((IAtomContainer)mol, superatom, true,7,3,false);          
-    }    
+    }   
+    @Test
 	public void testPolymer() throws Exception {
         IChemObject mol = readSGroup("polymer.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(5,sca.getBondCount());
-        assertEquals(6+1,sca.getAtomCount());
+        Assert.assertEquals(5,sca.getBondCount());
+        Assert.assertEquals(6+1,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(1,superatom.size());
-        assertNotNull(superatom.get(0));
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(1,superatom.size());
+        Assert.assertNotNull(superatom.get(0));
         sca.setFiltered(true);
-        assertEquals(SGROUP_CONNECTIVITY.HT,((IChemObject)superatom.get(0)).getProperty(ISGroup.SGROUP_CONNECTIVITY));
-        assertEquals("n",superatom.get(0).getSubscript());        
+        Assert.assertEquals(SGROUP_CONNECTIVITY.HT,((IChemObject)superatom.get(0)).getProperty(ISGroup.SGROUP_CONNECTIVITY));
+        Assert.assertEquals("n",superatom.get(0).getSubscript());        
         verify((IAtomContainer)mol, superatom, false,6,5,false);
         verify((IAtomContainer)mol, superatom, true,6,5,false);           
 	}
@@ -286,20 +298,21 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
      * CAS 1398-61-4 Chitin
      * @throws Exception
      */
+    @Test
     public void testChitin() throws Exception {
         IChemObject mol = readSGroup("sru.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(49,sca.getBondCount());
-        assertEquals(47+1,sca.getAtomCount());
+        Assert.assertEquals(49,sca.getBondCount());
+        Assert.assertEquals(47+1,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(1,superatom.size());
-        assertNotNull(superatom.get(0));
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(1,superatom.size());
+        Assert.assertNotNull(superatom.get(0));
         sca.setFiltered(true);
-        assertEquals(SGROUP_CONNECTIVITY.HT,((IChemObject)superatom.get(0)).getProperty(ISGroup.SGROUP_CONNECTIVITY));
+        Assert.assertEquals(SGROUP_CONNECTIVITY.HT,((IChemObject)superatom.get(0)).getProperty(ISGroup.SGROUP_CONNECTIVITY));
         System.out.println(superatom.get(0).getSubscript());        
         verify((IAtomContainer)mol, superatom, false,47,49,false);
         verify((IAtomContainer)mol, superatom, true,47,49,false);
@@ -307,96 +320,101 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
         for (IAtom atom : superatom.get(0).getAtoms(true)) {
             sru++;
         }
-        assertEquals(16,sru);
+        Assert.assertEquals(16,sru);
     }    
+    @Test
 	public void testMultipleGroups() throws Exception {
         IChemObject mol = readSGroup("multiplegroups.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(6,sca.getBondCount());
-        assertEquals(10,sca.getAtomCount());
+        Assert.assertEquals(6,sca.getBondCount());
+        Assert.assertEquals(10,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
+        Assert.assertNotNull(superatom);
         sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, false,3,2,false);
         verify((IAtomContainer)mol, superatom, true,9,6,false);        
 	}
+    @Test
     public void testMultipleGroup_SCN() throws Exception {
         IChemObject mol = readSGroup("multiplegroups_SCN.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(0,sca.getBondCount());
-        assertEquals(4+2,sca.getAtomCount());
+        Assert.assertEquals(0,sca.getBondCount());
+        Assert.assertEquals(4+2,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(2,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(2,superatom.size());
         sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, true,4,0,false);
         verify((IAtomContainer)mol, superatom, false,2,0,false);        
     }
+    @Test
     public void testMultipleGroup_SAL3() throws Exception {
         IChemObject mol = readSGroup("multiplegroups_SAL3.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(36,sca.getBondCount());
-        assertEquals(37+1,sca.getAtomCount());
+        Assert.assertEquals(36,sca.getBondCount());
+        Assert.assertEquals(37+1,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(1,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(1,superatom.size());
         sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, true,37,36,false);
         verify((IAtomContainer)mol, superatom, false,13,12,false);        
     }
+    @Test
     public void testMultipleGroup_SAL5SPA2() throws Exception {
         IChemObject mol = readSGroup("multiplegroups_SAL5SPA2.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(63,sca.getBondCount());
-        assertEquals(67+1,sca.getAtomCount());
+        Assert.assertEquals(63,sca.getBondCount());
+        Assert.assertEquals(67+1,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(1,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(1,superatom.size());
         sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, true,67,63,false);
         verify((IAtomContainer)mol, superatom, false,23,21,false);        
     }
+    @Test
 	public void testRGroup() throws Exception {
         IChemObject mol = readSGroup("rgroup.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(18,sca.getBondCount());
-        assertEquals(19+2,sca.getAtomCount());
+        Assert.assertEquals(18,sca.getBondCount());
+        Assert.assertEquals(19+2,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(2,superatom.size());
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(2,superatom.size());
         int sru=0;
         int dat = 0;
         for (int i=0; i < superatom.size();i++) {
             if (superatom.get(i) instanceof StructureRepeatingUnit) {
-                assertEquals("3,5-7",superatom.get(i).getSubscript());
+                Assert.assertEquals("3,5-7",superatom.get(i).getSubscript());
                 sru++;
             } else if (superatom.get(i) instanceof DataGroup) {
                 dat++;
-                assertNotNull(((DataGroup)superatom.get(i)).getMulticenter());
+                Assert.assertNotNull(((DataGroup)superatom.get(i)).getMulticenter());
             }
             
         }
-        assertEquals(1,sru);
-        assertEquals(1,dat);
+        Assert.assertEquals(1,sru);
+        Assert.assertEquals(1,dat);
         sca.setFiltered(true);
 
         verify((IAtomContainer)mol, superatom, true,19,18,true);
@@ -404,22 +422,23 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
 	}
 	public void testSuperGroup() throws Exception {
         IChemObject mol = readSGroup("supergroup.mol");
-        assertNotNull(mol);
-        assertTrue(mol instanceof SuppleAtomContainer);
+        Assert.assertNotNull(mol);
+        Assert.assertTrue(mol instanceof SuppleAtomContainer);
         SuppleAtomContainer sca = (SuppleAtomContainer) mol;
         sca.setFiltered(false);
-        assertEquals(15,sca.getBondCount());
-        assertEquals(16,sca.getAtomCount());
+        Assert.assertEquals(15,sca.getBondCount());
+        Assert.assertEquals(16,sca.getAtomCount());
         List<ISGroup> superatom = getGroup(sca);
-        assertNotNull(superatom);
-        assertEquals(2,superatom.size());
-        assertNotNull(superatom.get(0));
-        assertNotNull(superatom.get(1));
+        Assert.assertNotNull(superatom);
+        Assert.assertEquals(2,superatom.size());
+        Assert.assertNotNull(superatom.get(0));
+        Assert.assertNotNull(superatom.get(1));
         sca.setFiltered(true);
         verify((IAtomContainer)mol, superatom, false,12,11,false);
         verify((IAtomContainer)mol, superatom, true,14,13,false);
                      
 	}	
+	@Test
 	public void testSTY() throws Exception {
 		File[] files = new File("src/test/resources/ambit2/core/data/M__STY").listFiles();
 		if (files == null) throw new Exception("Files not found");
@@ -435,6 +454,7 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
             }
 		}
 	}
+	@Test
 	public void testRGP() throws Exception {
 		File[] files = new File("src/test/resources/ambit2/core/data/M__RGP").listFiles();
 		if (files == null) throw new Exception("Files not found");
@@ -450,7 +470,42 @@ public class MDLV2000ReaderExtendedTest extends TestCase {
 				//throw new Exception(file.getName(),x);
 			}
 	}	
+	@Test
 	public void testRGFile() throws Exception {
         IChemObject mol = readSGroup("ambit2/core/data/M__RGP/","marvin_sketch.mol");
+	}		
+	@Test
+	public void testMol_without_Mend() throws Exception {
+		IIteratingChemObjectReader reader = 
+			 FileInputState.getReader(getClass().getClassLoader().getResourceAsStream("ambit2/core/data/mdl/test_no_mend.mol"),
+					 "test_no_mend.mol");
+		int count = 0;
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			Assert.assertTrue(o instanceof IAtomContainer);
+			Assert.assertEquals(23,((IAtomContainer)o).getAtomCount());
+			count++;
+		}
+		reader.close();
+		Assert.assertEquals(1,count);
+	}		
+	@Test
+	public void testHIN() throws Exception {
+		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/hin/test.hin");
+		IIteratingChemObjectReader reader = 
+			 FileInputState.getReader(in,
+					 "test.hin");
+		int count = 0;
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			System.out.println(o);
+			/*
+			Assert.assertTrue(o instanceof IAtomContainer);
+			Assert.assertEquals(23,((IAtomContainer)o).getAtomCount());
+			*/
+			count++;
+		}
+		reader.close();
+		Assert.assertEquals(1,count);
 	}		
 }

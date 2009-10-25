@@ -554,10 +554,11 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
             while (true) {
                 line = input.readLine(); linecount++;
                 if (line == null) {
-                    throw new CDKException("The expected property block is missing!");
+                	break;
+                    //throw new CDKException("The expected property block is missing!"); property block is not mandatory
                 }
 		if (line.startsWith("M  END")) break;
-                
+		if (line.trim().equals("")) continue;
                 boolean lineRead = false;
                 if (line.startsWith("M  CHG")) {
                     // FIXME: if this is encountered for the first time, all
