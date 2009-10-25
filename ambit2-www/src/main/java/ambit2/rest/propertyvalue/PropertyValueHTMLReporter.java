@@ -2,6 +2,7 @@ package ambit2.rest.propertyvalue;
 
 import java.io.Writer;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
@@ -88,7 +89,11 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 				} else
 					output.write(String.format("<td>%s</td>",
 							v.getValue().toString().replace("\n", "<br>")));					
-							
+				output.write("<td>");				
+				if (v.getValue().toString().startsWith("InChI"))
+					output.write(String.format("&nbsp;<a href='http://rdf.openmolecules.net/?%s' target='_blank'><img src='%s/images/search.png' border='0' alt='Look up at OpenMolecules.net' title='openmolecules.net'></a>",
+							Reference.encode(v.getValue().toString()),uriReporter.getBaseReference().toString()));						
+				output.write("</td>");	
 				output.write("</tr>");
 				
 				output.write("</form>");

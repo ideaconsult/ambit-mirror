@@ -19,7 +19,7 @@ import ambit2.rest.structure.CompoundResource;
  *
  */
 public class DatasetCompoundResource extends CompoundResource {
-	public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
+	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,

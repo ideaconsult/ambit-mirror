@@ -17,6 +17,7 @@ import ambit2.rest.structure.ConformerResource;
 
 public class PropertyTemplateResource<T> extends PropertyValueResource<T> {
 	public static final String resource = "/template";
+	public static final String resourceID = "/{idtemplate}";
 	public static final String compoundTemplate = String.format("%s%s",CompoundResource.compoundID,resource);
 	public static final String compoundTemplateID = String.format("%s%s/{idtemplate}",CompoundResource.compoundID,resource);
 	public static final String conformerTemplateID =  String.format("%s%s/{idtemplate}",ConformerResource.conformerID,resource);

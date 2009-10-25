@@ -77,10 +77,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			logger.error(x);
 		}
 	}
+	
 	public void header(Writer w, Q query) {
 		try {
 			String property = "";
-			String search="";
+
 			Reference baseReference = uriReporter.getBaseReference();
 			
 			AmbitResource.writeTopHeader(w,
@@ -97,11 +98,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 			w.write("</td>");
 			w.write("<td align='center'>");
+			String query_smiles = "";
+			try {
+				Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
+				query_smiles = form.getFirstValue("search");
+			} catch (Exception x) {
+				query_smiles = "";
+			}
 
 			w.write("<form action='' method='get'>\n");
 			w.write(String.format("<input name='property' size='20' value='%s'>\n",property));
 			w.write("&nbsp;");
-			w.write(String.format("<input name='search' size='60' value='%s'>\n",search));
+			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles));
+
 			w.write("<input type='submit' value='Search'><br>");
 			//w.write(baseReference.toString());
 

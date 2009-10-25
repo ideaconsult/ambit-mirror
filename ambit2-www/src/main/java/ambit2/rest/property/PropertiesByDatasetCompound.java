@@ -16,7 +16,7 @@ import ambit2.rest.dataset.DatasetsResource;
  *
  */
 public class PropertiesByDatasetCompound extends PropertiesByDatasetResource {
-	public final static String DatasetCompoundFeaturedefID = String.format("%s%s",DatasetsResource.datasetID,CompoundFeaturedef);
+	//public final static String DatasetCompoundFeaturedefID = String.format("%s%s",DatasetsResource.datasetID,CompoundFeaturedef);
 	
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,

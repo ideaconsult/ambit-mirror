@@ -35,7 +35,7 @@ public class TupleURIReporter extends QueryURIReporter<PropertiesTuple, QueryTup
 	}
 	@Override
 	public String getURI(String ref, PropertiesTuple item) {
-		return String.format("%s/%s/%d", reporter.getURI(record),TupleResource.resourceTag,item.getId());
+		return String.format("%s%s/%d", reporter.getURI(record),TupleResource.resourceTag,item.getId());
 	}
 
 }

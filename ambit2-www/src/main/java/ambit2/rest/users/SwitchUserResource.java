@@ -1,18 +1,11 @@
 package ambit2.rest.users;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.restlet.Context;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.representation.Representation;
-import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-
-import ambit2.rest.StatusException;
 
 /**
  * Test setup for a protected resource

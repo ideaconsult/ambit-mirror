@@ -57,7 +57,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	
 	public final static String datasets = "/dataset";	
 	public final static String datasetKey = "dataset_id";	
-	public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
+	//public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
 	
 	protected boolean collapsed;
 

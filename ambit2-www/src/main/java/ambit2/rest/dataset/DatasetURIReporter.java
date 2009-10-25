@@ -24,6 +24,7 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<SourceDataset>> extend
 	}	
 	@Override
 	public String getURI(String ref, SourceDataset dataset) {
+		if (dataset == null) return null;
 		return
 		String.format("%s/%s/%d", 
 				ref,
