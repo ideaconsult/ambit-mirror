@@ -22,7 +22,19 @@ Methods are currently /smiles, /inchi, /inchikey, /names,/image, /ficus, /ficts,
  *
  */
 public class NCISearchProcessor extends HTTPRequest<String, String>  {
-	public enum METHODS {all,smiles,inchi,inchikey,names,image,ficus,ficts,uuuuu,sdf};
+	public enum METHODS {
+		all,smiles,inchi,inchikey,names,image,ficus,ficts,uuuuu,
+		sdf {
+			@Override
+			public String getMediaType() {
+				return "chemical/x-mdl-sdfile";
+			}
+		}
+		,hashisy;
+		public String getMediaType() {
+			return "text/plain";
+		}
+		};
 	protected long wait_ms = 0;
 
 	public long getWait_ms() {
