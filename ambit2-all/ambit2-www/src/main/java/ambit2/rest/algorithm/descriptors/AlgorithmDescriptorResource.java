@@ -1,17 +1,10 @@
 package ambit2.rest.algorithm.descriptors;
 
-import java.util.Iterator;
-
 import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.restlet.Context;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
+import org.restlet.ext.rdf.Link;
 import org.restlet.representation.Representation;
-import org.restlet.representation.Variant;
-
-import ambit2.rest.StatusException;
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import org.restlet.resource.ResourceException;
 
 /**
  * Descriptor calculation 
@@ -22,18 +15,22 @@ import ambit2.rest.algorithm.AlgorithmCatalogResource;
 public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResource {
 
 	protected IMolecularDescriptor descriptor = null;
-	@Override
-	protected Iterator<String> createQuery(Context context, Request request,
-			Response response) throws StatusException {
-		setCategory(AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString());
-		/*
-		ArrayList<String> q = new ArrayList<String>();
-		for (descriptors d : descriptors.values())
-			q.add(String.format("%s/%s",request.getOriginalRef(),d.toString()));
-			*/
-		return null;
-
+	public AlgorithmDescriptorResource() {
+		//setCategory("http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#definition");
+		super();
 	}
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+	}
+	@Override
+	protected String add(Link link) {
+		Object type = Reference.decode(getRequest().getAttributes().get("category").toString());
+		if(type.equals(link.getTargetAsReference().toString()))
+			return link.getSourceAsReference().toString();
+		else return null;
+	}
+	/*
 	@Override
 	public Representation get(Variant variant) {
 		try {
@@ -43,4 +40,5 @@ public class AlgorithmDescriptorResource extends AlgorithmDescriptorTypesResourc
 			return super.get(variant);
 		}
 	}	
+	*/
 }
