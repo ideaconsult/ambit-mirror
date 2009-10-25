@@ -2,7 +2,6 @@ package ambit2.db.search.structure;
 
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -125,7 +124,6 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 	}
 	@Override
 	public String toString() {
-		if (getValue() != null) return getValue().toString();
-		return "SMARTS";
+		return String.format("SMARTS %s", getValue()==null?"":getValue().toString());
 	}
 }
