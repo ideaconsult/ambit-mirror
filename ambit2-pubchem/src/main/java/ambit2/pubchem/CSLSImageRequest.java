@@ -33,7 +33,7 @@ public class CSLSImageRequest extends CSLSRequest<BufferedImage> {
 	
 	public CSLSImageRequest() {
 		super();
-		representation = "image";
+		representation = NCISearchProcessor.METHODS.image;
 	}
 
 	@Override
