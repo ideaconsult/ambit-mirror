@@ -22,7 +22,9 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.AbstractReporter;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.ARFFReporter;
 import ambit2.db.reporters.CMLReporter;
+import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
@@ -148,7 +150,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST);
-						
+		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
+			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);	
+		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
+			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
 		} else
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);			

@@ -46,6 +46,7 @@ import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.RDFGraphResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
@@ -121,6 +122,7 @@ public class AmbitApplication extends Application {
 		//connectionURI = null;
 		setStatusService(new AmbitStatusService());
 		getTaskService().setEnabled(true);
+		getTunnelService().setUserAgentTunnel(true);
 	}
 	protected void loadProperties()  {
 		try {
@@ -195,6 +197,8 @@ public class AmbitApplication extends Application {
 		
 
 		router.attach("", AmbitResource.class);	
+		//test
+		router.attach("/rdf",RDFGraphResource.class);
 		
 		Router fastoxRouter = new Router(getContext());
 		router.attach(FastToxStep1.resource,fastoxRouter);

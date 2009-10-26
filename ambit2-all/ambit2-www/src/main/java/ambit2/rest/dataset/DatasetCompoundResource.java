@@ -13,7 +13,7 @@ import ambit2.rest.StatusException;
 import ambit2.rest.structure.CompoundResource;
 
 /**
- * Compound from a dataset
+ * Compound from a dataset; if id is valid, but the compound doesn't belong to the dataset , it will not be a hit
  * 
  * @author nina
  *

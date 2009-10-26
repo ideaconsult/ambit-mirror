@@ -94,19 +94,33 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 						ChemicalMediaType.CHEMICAL_SMILES,
 						ChemicalMediaType.CHEMICAL_CML,
-						ChemicalMediaType.WEKA_ARFF,
 						MediaType.TEXT_URI_LIST,
 						MediaType.TEXT_XML,
-						MediaType.APPLICATION_PDF};
-				
-				for (MediaType mime:mimes) {
+						MediaType.APPLICATION_PDF,
+						MediaType.TEXT_CSV,
+						ChemicalMediaType.WEKA_ARFF						
+						};
+				String[] image = {
+						"structures.gif",
+						"structures.gif",
+						"structures.gif",
+						"link.png",
+						"xml.png",
+						"pdf.png",
+						"excel.png",
+						"weka.jpg"						
+						
+				};		
+				for (int i=0;i<mimes.length;i++) {
+					MediaType mime = mimes[i];
 					output.write("&nbsp;");
 					output.write(String.format(
-							"<a href=\"%s%s?accept-header=%s\"  ><img src=\"%s/images/structures.gif\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							"<a href=\"%s%s?accept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 							w.toString(),
 							CompoundResource.compound,
 							mime,
 							uriReporter.getBaseReference().toString(),
+							image[i],
 							mime,
 							mime));	
 				}				

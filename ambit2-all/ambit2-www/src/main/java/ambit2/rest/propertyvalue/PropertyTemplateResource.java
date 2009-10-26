@@ -54,7 +54,12 @@ public class PropertyTemplateResource<T> extends PropertyValueResource<T> {
 			Object id = request.getAttributes().get("idtemplate");
 			if (id != null) {
 				Template template = new Template();
-				template.setId(Integer.parseInt(id.toString()));
+				try {
+					template.setId(Integer.parseInt(id.toString()));
+				} catch (NumberFormatException x) {
+					template.setName(Reference.decode(id.toString()));
+					template.setId(-1);
+				}
 				field.setFieldname(template);
 			} 
 		} catch (Exception x) {
