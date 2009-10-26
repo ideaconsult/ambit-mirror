@@ -76,6 +76,7 @@ public class AlgorithmDescriptorsResource extends ResourceTest {
 		Representation r = new InputRepresentation(in);
 		RdfXmlReader reader = new RdfXmlReader(r,gh);
 		reader.parse();
+		in.close();
 		Iterator<Link> links = g.iterator();
 		while (links.hasNext()) {
 			Link link = links.next();
@@ -83,7 +84,7 @@ public class AlgorithmDescriptorsResource extends ResourceTest {
 					(link.getTarget()==null)?"":
 						(link.getTarget() instanceof Literal)?link.getTargetAsLiteral().getValue():link.getTarget()));
 		}
-		in.close();
+		System.out.println(g.getRdfN3Representation());
 		
 	}		
 }

@@ -97,9 +97,16 @@ public class AbstractDepict extends ServerResource {
 	        	return new OutputRepresentation(MediaType.IMAGE_PNG) {
 	        		@Override
 	        		public void write(OutputStream out) throws IOException {
-	        			ImageIO.write(image, "PNG", out);
-	        			out.flush();
-	        			out.close();
+	        			try {
+	        				ImageIO.write(image, "PNG", out);
+	        			} catch (IOException x) {
+	        				throw x;
+	        			} catch (Exception x) {
+	        				
+	        			} finally {
+		        			try { out.flush(); } catch (Exception x) {}
+		        			try { out.close(); } catch (Exception x) {}
+	        			}
 	        		}
 	        	};
 	        } else {

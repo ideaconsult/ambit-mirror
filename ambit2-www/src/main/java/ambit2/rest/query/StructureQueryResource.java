@@ -2,16 +2,18 @@ package ambit2.rest.query;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.ARFFReporter;
 import ambit2.db.reporters.CMLReporter;
+import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
@@ -37,7 +39,14 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 									extends QueryResource<Q,IStructureRecord> {
 
 	protected String media;
+	protected Template template;
+	public Template getTemplate() {
+		return template;
+	}
+	public void setTemplate(Template template) {
+		this.template = (template==null)?new Template(null):template;
 
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -50,7 +59,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
-				MediaType.TEXT_PLAIN
+				MediaType.TEXT_PLAIN,
+				ChemicalMediaType.TEXT_YAML,
+				ChemicalMediaType.WEKA_ARFF
 				});
 				
 	}
@@ -58,6 +69,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
+		setTemplate(template);
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
@@ -65,7 +77,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);
+					new SDFReporter<QueryStructureByID>(template),ChemicalMediaType.CHEMICAL_MDLSDF);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) {
 				return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 						new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);				
@@ -74,7 +86,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
-					new PDFReporter<QueryStructureByID>());				
+					new PDFReporter<QueryStructureByID>(template));				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			return new StringConvertor(
 					new SmilesReporter<QueryStructureByID>(),MediaType.TEXT_PLAIN);
@@ -88,6 +100,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
+			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);			
+		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
+			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
 		} else
 			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()));
 	}

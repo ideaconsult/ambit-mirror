@@ -22,6 +22,8 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
+import weka.core.Instances;
+
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
 import ambit2.rest.ChemicalMediaType;
@@ -51,6 +53,23 @@ public class CompoundResourceTest extends ResourceTest {
 		}
 		return count ==1;
 	}		
+	@Override
+	public boolean verifyResponseARFF(String uri, MediaType media, InputStream in)
+			throws Exception {
+		//test ARFF file using weka
+		Instances instances = new Instances(new InputStreamReader(in));
+		in.close();
+		Assert.assertEquals(1,instances.numInstances());
+		Assert.assertEquals("Dataset",instances.relationName());
+		Assert.assertEquals("1530-32-1",instances.firstInstance().stringValue(1));
+		Assert.assertEquals("URI",instances.attribute(0).name());
+		Assert.assertEquals("CAS",instances.attribute(1).name());
+		return true;
+	}		
+	@Test
+	public void testARFF() throws Exception {
+		testGet(String.format("http://localhost:%d/compound/11", port),ChemicalMediaType.WEKA_ARFF);
+	}	
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);

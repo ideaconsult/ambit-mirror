@@ -140,20 +140,21 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 					ChemicalMediaType.CHEMICAL_SMILES,
 					ChemicalMediaType.CHEMICAL_CML,
-					ChemicalMediaType.WEKA_ARFF,
 					MediaType.TEXT_URI_LIST,
 					MediaType.TEXT_XML,
 					MediaType.APPLICATION_PDF,
-					//MediaType.APPLICATION_
+					MediaType.TEXT_CSV,
+					ChemicalMediaType.WEKA_ARFF,					
 					};
 			String[] image = {
 					"structures.gif",
 					"structures.gif",
 					"structures.gif",
-					"download.gif",
-					"download.gif",
+					"link.png",
 					"xml.png",
 					"pdf.png",
+					"excel.png",
+					"weka.jpg"					
 					
 			};
 			

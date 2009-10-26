@@ -10,7 +10,6 @@ import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.rest.StatusException;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
-import ambit2.rest.structure.CompoundResource;
 
 /**
  * All compounds from a dataset
