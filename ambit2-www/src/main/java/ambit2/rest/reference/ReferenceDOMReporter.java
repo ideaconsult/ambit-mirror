@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.QueryDOMReporter;
@@ -30,7 +30,7 @@ import ambit2.rest.query.XMLTags;
  * @author nina
  *
  */
-public class ReferenceDOMReporter extends QueryDOMReporter<LiteratureEntry, ReadReference> {
+public class ReferenceDOMReporter extends QueryDOMReporter<ILiteratureEntry, ReadReference> {
 	/**
 	 * 
 	 */
@@ -41,7 +41,7 @@ public class ReferenceDOMReporter extends QueryDOMReporter<LiteratureEntry, Read
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference) {
-		return new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(reference);
+		return new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(reference);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class ReferenceDOMReporter extends QueryDOMReporter<LiteratureEntry, Read
 	}
 
 	@Override
-	public void processItem(LiteratureEntry item, Document doc) {
+	public void processItem(ILiteratureEntry item, Document doc) {
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_reference, XMLTags.node_references);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -67,7 +67,7 @@ public class ReferenceDOMReporter extends QueryDOMReporter<LiteratureEntry, Read
 		
 	}
 	@Override
-	public Element getItemElement(Document doc, LiteratureEntry item) {
+	public Element getItemElement(Document doc, ILiteratureEntry item) {
 		Element e = doc.createElementNS(XMLTags.ns_opentox_reference,XMLTags.node_reference);
         e.setAttribute(XMLTags.attr_id,Integer.toString(item.getId()));
         e.setAttribute(XMLTags.attr_name,item.getName());

@@ -7,7 +7,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ambit2.base.data.AmbitUser;
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryUser;
 import ambit2.rest.QueryDOMReporter;
@@ -31,7 +31,7 @@ public class UsersDOMReporter extends QueryDOMReporter<AmbitUser, QueryUser> {
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference) {
-		return new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(reference);
+		return new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(reference);
 	}
 
 	@Override

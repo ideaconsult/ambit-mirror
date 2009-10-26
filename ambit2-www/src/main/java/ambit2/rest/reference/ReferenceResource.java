@@ -13,6 +13,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -41,7 +42,7 @@ import ambit2.rest.query.QueryResource;
  *
  * @param <Q>
  */
-public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEntry> {
+public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEntry> {
 	/**
 	 * Parameters, expected in http headers
 	 * @author nina
@@ -75,9 +76,9 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 				return new DocumentConvertor(new ReferenceDOMReporter(getRequest()));
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(getRequest()) {
+				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest()) {
 					@Override
-					public void processItem(LiteratureEntry dataset, Writer output) {
+					public void processItem(ILiteratureEntry dataset, Writer output) {
 						super.processItem(dataset, output);
 						try {
 						output.write('\n');
@@ -123,7 +124,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,LiteratureEnt
 		return getResponse().getEntity();
 	}
 	@Override
-	protected QueryURIReporter<LiteratureEntry, ReadReference> getURUReporter(
+	protected QueryURIReporter<ILiteratureEntry, ReadReference> getURUReporter(
 			Request baseReference) throws ResourceException {
 		return new ReferenceURIReporter<ReadReference>(baseReference);
 	}
@@ -140,7 +141,7 @@ create a new reference  	 POST  	 /reference  	 name:String, algorithm_id:String
 	}
 	@Override
 	protected AbstractUpdate createUpdateObject(
-			LiteratureEntry entry) throws ResourceException {
+			ILiteratureEntry entry) throws ResourceException {
 		return new CreateReference(entry);
 	}
 

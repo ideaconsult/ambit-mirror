@@ -34,22 +34,23 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.DeleteReference;
 import ambit2.db.update.reference.UpdateReference;
 
-public final class Reference_crud_test  extends CRUDTest<Object,LiteratureEntry>  {
+public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry>  {
 
 	@Override
-	protected IQueryUpdate<Object,LiteratureEntry> createQuery() throws Exception {
-		LiteratureEntry ref = LiteratureEntry.getInstance("newtitle","newurl");
+	protected IQueryUpdate<Object,ILiteratureEntry> createQuery() throws Exception {
+		ILiteratureEntry ref = LiteratureEntry.getInstance("newtitle","newurl");
 		return new CreateReference(ref);
 	}
 
 	@Override
-	protected void createVerify(IQueryUpdate<Object,LiteratureEntry> query)
+	protected void createVerify(IQueryUpdate<Object,ILiteratureEntry> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='newtitle' and url='newurl'");
@@ -58,13 +59,13 @@ public final class Reference_crud_test  extends CRUDTest<Object,LiteratureEntry>
 	}
 
 	@Override
-	protected IQueryUpdate<Object,LiteratureEntry> deleteQuery() throws Exception {
+	protected IQueryUpdate<Object,ILiteratureEntry> deleteQuery() throws Exception {
 		LiteratureEntry ref = LiteratureEntry.getInstance("IUPAC name");
 		return new DeleteReference(ref);
 	}
 
 	@Override
-	protected void deleteVerify(IQueryUpdate<Object,LiteratureEntry> query)
+	protected void deleteVerify(IQueryUpdate<Object,ILiteratureEntry> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM catalog_references where title='IUPAC name'");
@@ -74,14 +75,14 @@ public final class Reference_crud_test  extends CRUDTest<Object,LiteratureEntry>
 	}
 
 	@Override
-	protected IQueryUpdate<Object,LiteratureEntry> updateQuery() throws Exception {
+	protected IQueryUpdate<Object,ILiteratureEntry> updateQuery() throws Exception {
 		LiteratureEntry ref = LiteratureEntry.getInstance("New name","newurl");
 		ref.setId(2);
 		return new UpdateReference(ref);
 	}
 
 	@Override
-	protected void updateVerify(IQueryUpdate<Object,LiteratureEntry> query)
+	protected void updateVerify(IQueryUpdate<Object,ILiteratureEntry> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM catalog_references where title='IUPAC name'");
@@ -94,14 +95,14 @@ public final class Reference_crud_test  extends CRUDTest<Object,LiteratureEntry>
 	}
 
 	@Override
-	protected IQueryUpdate<Object, LiteratureEntry> createQueryNew()
+	protected IQueryUpdate<Object, ILiteratureEntry> createQueryNew()
 			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected void createVerifyNew(IQueryUpdate<Object, LiteratureEntry> query)
+	protected void createVerifyNew(IQueryUpdate<Object, ILiteratureEntry> query)
 			throws Exception {
 		// TODO Auto-generated method stub
 		

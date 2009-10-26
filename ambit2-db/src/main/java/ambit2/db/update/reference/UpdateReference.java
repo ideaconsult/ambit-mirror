@@ -32,16 +32,16 @@ package ambit2.db.update.reference;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
-public class UpdateReference extends AbstractObjectUpdate<LiteratureEntry>{
+public class UpdateReference extends AbstractObjectUpdate<ILiteratureEntry>{
 
 	public static final String[] update_sql = {"update catalog_references set title=?, url=? where idreference=?"};
 
-	public UpdateReference(LiteratureEntry ref) {
+	public UpdateReference(ILiteratureEntry ref) {
 		super(ref);
 	}
 	public UpdateReference() {
