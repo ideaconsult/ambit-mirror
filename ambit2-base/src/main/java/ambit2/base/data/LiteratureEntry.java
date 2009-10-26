@@ -4,7 +4,6 @@
  */
 package ambit2.base.data;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 
@@ -26,9 +25,10 @@ public class LiteratureEntry extends AmbitBean {
 	protected String URL;
     protected int id = -1;
     protected boolean editable;
-
+/*
 	private static java.util.concurrent.CopyOnWriteArrayList<LiteratureEntry> references = 
 		new CopyOnWriteArrayList<LiteratureEntry>();
+		*/
 
 	public static synchronized LiteratureEntry getInstance() {
 		return getInstance("Default","http://ambit.sourceforge.net");
@@ -50,20 +50,9 @@ public class LiteratureEntry extends AmbitBean {
 		return getInstance(name,url,-1);
 	}
 	public static synchronized LiteratureEntry getInstance(String name,String url, int id) {
-		if (name.length()>255) name = name.substring(0,255);
-		int index =  references.indexOf(name);
-		if (index < 0) {
-			
-			LiteratureEntry et = new LiteratureEntry(name,url);
-			et.setId(id);
-			references.add(et);
-			return et;
-		} else {
-			LiteratureEntry et =  references.get(index);
-			et.setId(id);
-			return et;
-		}
-
+		LiteratureEntry et = new LiteratureEntry(name,url);
+		et.setId(id);
+		return et;
 	}	    
 	public String getTitle() {
 		return title;
