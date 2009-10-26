@@ -42,14 +42,19 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
      * 
      */
     private static final long serialVersionUID = 7257863166977468657L;
+    protected static String s_idchemical = "idchemical";
+    protected static String s_idstructure = "idstructure";
+    protected static String s_ustructure = "ustructure";
+    protected static String s_format = "format";
+    
 
     public IStructureRecord getObject(ResultSet rs) throws AmbitException {
         try {
             IStructureRecord r = getValue();
-            r.setIdchemical(rs.getInt("idchemical"));
-            r.setIdstructure(rs.getInt("idstructure"));
-            r.setContent(rs.getString("ustructure"));
-            r.setFormat(rs.getString("format"));
+            r.setIdchemical(rs.getInt(s_idchemical));
+            r.setIdstructure(rs.getInt(s_idstructure));
+            r.setContent(rs.getString(s_ustructure));
+            r.setFormat(rs.getString(s_format));
             r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), rs.getString(6));
             return r;
         } catch (SQLException x){
