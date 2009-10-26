@@ -1,14 +1,15 @@
 package ambit2.db.reporters;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Iterator;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -17,14 +18,23 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveTemplateStructure;
 
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
+import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
-public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Document> {
+/**
+ * Generates PDF 
+ * @author nina
+ *
+ * @param <Q>
+ */
+public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<IStructureRecord, Q, Document> {
 	/**
 	 * 
 	 */
@@ -32,20 +42,27 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected MoleculeReader reader = new MoleculeReader();
 	protected CompoundImageTools depict = new CompoundImageTools();
 	protected PdfPTable table;
-	protected Profile header;
-	
+	protected Font font;
 
-	public Profile getHeader() {
-		return header;
+	public PDFReporter() {	
+		this(new Template());
 	}
-	public void setHeader(Profile header) {
-		this.header = header;
-	}
-	public PDFReporter() {
+
+	public PDFReporter(Template template) {
+		setTemplate(template);
 		depict.setBackground(Color.white);
 		depict.setBorderColor(Color.white);
+		depict.setImageSize(new Dimension(400,400));
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval());
+		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveTemplateStructure(getTemplate())) {
+			@Override
+			public IStructureRecord process(IStructureRecord target)
+					throws AmbitException {
+				((RetrieveTemplateStructure)getQuery()).setRecord(target);
+				return super.process(target);
+			}
+		});		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target,getOutput());
@@ -58,15 +75,15 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		super.setOutput(pdfDoc);
 	}
 
-    protected void writeHeader()  {
-        
-        PdfPCell cell = new PdfPCell(new Paragraph("Structure"));
-        cell.setBackgroundColor(Color.white);
-        table.addCell(cell);    
-        
-        cell = new PdfPCell(new Paragraph("Properties"));
-        cell.setBackgroundColor(Color.white);
-        table.addCell(cell);
+	protected void writeHeader(Document writer) throws IOException {
+        String[] tops = new String[] {"Structure","Properties"};
+        for (String top:tops) { 
+        	Chunk chunk = new Chunk(top);
+        	chunk.setFont(font);
+        	PdfPCell cell = new PdfPCell(new Paragraph(chunk));
+	        cell.setBackgroundColor(Color.white);
+	        table.addCell(cell);
+        }
         
        
     }
@@ -87,10 +104,17 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
         output.addKeywords(query.toString());        
         output.open();		
         
+        font = new Font(Font.TIMES_ROMAN,10,Font.NORMAL);
+        
         table = new PdfPTable(new float[]{3f,5f});
         table.setWidthPercentage(100);      
         
-        writeHeader();
+        
+        try {
+        	writeHeader(output);
+        } catch (Exception x) {
+        	
+        }
     	
     };
     public void footer(Document output, Q query) {
@@ -105,8 +129,12 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public void processItem(IStructureRecord item, Document document) {
 
 		try {
-
-			writeMolecule(reader.process(item));
+			if(header == null) header = template2Header(getTemplate());
+			
+			IAtomContainer mol = reader.process(item);
+			for (Property p : item.getProperties())
+				mol.getProperties().put(p,item.getProperty(p));
+			writeMolecule(mol);
 			
 			
 		} catch (Exception x) {
@@ -118,22 +146,12 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
         Object value;       
         
         try {
-
-        		/*
-            //give it a chance to create a header just before the first write
-            if (!writingStarted) {
-                if (header == null) setHeader(molecule.getProperties());
-                writeHeader();
-                writingStarted = true;
-            }
-                  */   
+ 
             Paragraph p = new Paragraph("");
+
             String s;
             
-            if (header != null)  {
-            Iterator<Property> props = header.getProperties(true);
-	            while (props.hasNext()) {
-	            	Property property = props.next();
+	            for (Property property : header) {
 	                StringBuffer b = new StringBuffer();
 	                b.append(property.getLabel());
 	                b.append(" = ");
@@ -144,15 +162,16 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	                        s = value.toString();
 	                    } else {
 	                        s = value.toString();
-	                        
 	                    }
-	                    
 	                    b.append(s);
-	                    p.add(new Paragraph(b.toString()));
+	                    
+	                    Chunk chunk = new Chunk(b.toString());
+	                    chunk.setFont(font);
+	                    p.add(new Paragraph(chunk));
 	                } 
 	                
 	            }
-            }
+            
             BufferedImage image = depict.getImage(molecule);
             image.flush();
       

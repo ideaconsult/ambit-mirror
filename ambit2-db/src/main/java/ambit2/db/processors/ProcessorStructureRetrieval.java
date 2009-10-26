@@ -44,6 +44,7 @@ import ambit2.db.search.QueryExecutor;
 
 public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {
 	protected IQueryRetrieval<IStructureRecord> query;
+	
 	public ProcessorStructureRetrieval() {
 		this(new RetrieveStructure());
 	}
@@ -74,10 +75,11 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
         ResultSet rs = null;
         try { 
         	rs = exec.process(query);
-        	if (rs.next())
-        		return query.getObject(rs);
-        	else
-        		return target;
+        	IStructureRecord result = target;
+        	while (rs.next()) {
+        		result = query.getObject(rs);
+        	}
+        	return result;
         } catch (Exception x) {
         	throw new AmbitException(query.getSQL(),x);
         } finally {
