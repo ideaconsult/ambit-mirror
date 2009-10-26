@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -16,7 +17,7 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, LiteratureEntry>  implements IQueryRetrieval<LiteratureEntry> {
+public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, ILiteratureEntry>  implements IQueryRetrieval<ILiteratureEntry> {
 	protected static String sql = "select idreference,title,url from catalog_references %s";
 	protected static String where = "where idreference = ?";
 	/**
@@ -32,7 +33,7 @@ public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, 
 		this(null);
 	}
 		
-	public double calculateMetric(LiteratureEntry object) {
+	public double calculateMetric(ILiteratureEntry object) {
 		return 1;
 	}
 
@@ -53,9 +54,9 @@ public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, 
 		return String.format(sql,getValue()==null?"":where);
 	}
 
-	public LiteratureEntry getObject(ResultSet rs) throws AmbitException {
+	public ILiteratureEntry getObject(ResultSet rs) throws AmbitException {
 		try {
-			LiteratureEntry le =  new LiteratureEntry(rs.getString(2), rs.getString(3));
+			ILiteratureEntry le =  new LiteratureEntry(rs.getString(2), rs.getString(3));
 			le.setId(rs.getInt(1));
 			return le;
 		} catch (Exception x) {

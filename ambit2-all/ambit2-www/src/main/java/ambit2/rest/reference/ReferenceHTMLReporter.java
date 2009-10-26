@@ -4,12 +4,12 @@ import java.io.Writer;
 
 import org.restlet.data.Request;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 
-public class ReferenceHTMLReporter extends QueryHTMLReporter<LiteratureEntry, IQueryRetrieval<LiteratureEntry>> {
+public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>> {
 	/**
 	 * 
 	 */
@@ -23,15 +23,15 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<LiteratureEntry, IQ
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request) {
-		return new ReferenceURIReporter<IQueryRetrieval<LiteratureEntry>>(request);
+		return new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(request);
 	}
 	@Override
-	public void header(Writer w, IQueryRetrieval<LiteratureEntry> query) {
+	public void header(Writer w, IQueryRetrieval<ILiteratureEntry> query) {
 		super.header(w, query);
 		try {w.write(String.format("<h3>Reference%s</h3>",collapsed?"s":""));} catch (Exception x) {}
 	}
 	@Override
-	public void processItem(LiteratureEntry item, Writer output) {
+	public void processItem(ILiteratureEntry item, Writer output) {
 		try {
 			output.write("<div>");
 			output.write("Name: ");

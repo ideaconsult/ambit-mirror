@@ -162,7 +162,7 @@ public class AmbitResource extends ServerResource {
 			{"/query/feature/like/phenol","Search by property (another option)",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]",format,"GET","Under development"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
-			{"/query/similarity/method/fp1024/distance/tanimoto/0.5/smiles/c1ccccc1","Demo similarity search, to be refactored",format,"GET","Yes"},
+			{"/query/similarity?search=c1ccccc1&threshold=0.8","Demo similarity search, to be refactored",format,"GET","Yes"},
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			
 			{"http://opentox.org/dev/apis/dataset","Search results as datasets; remap into Datasets",formatHeader,null,"Implemented"},

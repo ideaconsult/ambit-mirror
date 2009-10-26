@@ -2,7 +2,7 @@ package ambit2.rest.reference;
 
 import org.restlet.data.Request;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 
@@ -12,7 +12,7 @@ import ambit2.rest.QueryURIReporter;
  *
  * @param <Q>
  */
-public class ReferenceURIReporter <Q extends IQueryRetrieval<LiteratureEntry>> extends QueryURIReporter<LiteratureEntry, Q> {
+public class ReferenceURIReporter <Q extends IQueryRetrieval<ILiteratureEntry>> extends QueryURIReporter<ILiteratureEntry, Q> {
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ public class ReferenceURIReporter <Q extends IQueryRetrieval<LiteratureEntry>> e
 	}	
 
 	@Override
-	public String getURI(String ref, LiteratureEntry item) {
+	public String getURI(String ref, ILiteratureEntry item) {
 		return String.format("%s%s/%d",ref,ReferenceResource.reference,item.getId());
 	}
 

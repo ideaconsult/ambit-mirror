@@ -32,16 +32,16 @@ package ambit2.db.update.reference;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
-public class DeleteReference extends AbstractObjectUpdate<LiteratureEntry> {
+public class DeleteReference extends AbstractObjectUpdate<ILiteratureEntry> {
 
 	public static final String[] delete_sql = {"delete from catalog_references where title=?"};
 
-	public DeleteReference(LiteratureEntry ref) {
+	public DeleteReference(ILiteratureEntry ref) {
 		super(ref);
 	}
 	public DeleteReference() {

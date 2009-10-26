@@ -32,17 +32,17 @@ package ambit2.db.update.reference;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
-public class CreateReference extends AbstractObjectUpdate<LiteratureEntry>{
+public class CreateReference extends AbstractObjectUpdate<ILiteratureEntry>{
 	public static final String[] create_sql = {
 		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
 	};
 
-	public CreateReference(LiteratureEntry ref) {
+	public CreateReference(ILiteratureEntry ref) {
 		super(ref);
 	}
 	public CreateReference() {
