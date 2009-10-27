@@ -27,6 +27,7 @@ To be able to access mysql database, there should be "settings.xml" file in your
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
+	<ambit.db>ambit2</ambit.db>
 	<ambit.db.user.root.password>mysql-root-password</ambit.db.user.root.password>
         <ambit.db.user.test>mysql-user-name</ambit.db.user.test>
         <ambit.db.user.test.password>mysq-user-password</ambit.db.user.test.password>
