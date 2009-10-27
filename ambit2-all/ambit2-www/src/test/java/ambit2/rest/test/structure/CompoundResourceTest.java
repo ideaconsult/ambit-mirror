@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.Client;
@@ -26,6 +27,8 @@ import weka.core.Instances;
 
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
+import ambit2.core.io.DelimitedFileReader;
+import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
@@ -70,6 +73,26 @@ public class CompoundResourceTest extends ResourceTest {
 	public void testARFF() throws Exception {
 		testGet(String.format("http://localhost:%d/compound/11", port),ChemicalMediaType.WEKA_ARFF);
 	}	
+	@Override
+	public boolean verifyResponseCSV(String uri, MediaType media, InputStream in)
+			throws Exception {
+
+		int count = 0;
+		IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			Assert.assertTrue(o instanceof IChemObject);
+			//Assert.assertTrue(((IChemObject)o).getProperty("URI").equals("/compound/11"));
+			count++;
+		}
+		in.close();
+		return count==1;
+		
+	}		
+	@Test
+	public void testCSV() throws Exception {
+		testGet(String.format("http://localhost:%d/compound/11", port),MediaType.TEXT_CSV);
+	}		
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);

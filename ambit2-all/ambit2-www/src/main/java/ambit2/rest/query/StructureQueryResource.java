@@ -61,7 +61,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.TEXT_YAML,
-				ChemicalMediaType.WEKA_ARFF
+				ChemicalMediaType.WEKA_ARFF,
+				MediaType.TEXT_CSV
 				});
 				
 	}
