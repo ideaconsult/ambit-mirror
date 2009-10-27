@@ -3,6 +3,7 @@ package ambit2.db.search;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO refactor with enums
 public class NumberCondition implements IQueryCondition{
 	private static List<NumberCondition> instances = null;
 	public static final String between = "between";

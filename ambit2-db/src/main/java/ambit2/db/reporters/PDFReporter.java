@@ -18,7 +18,9 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveTemplateStructure;
+import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -49,20 +51,31 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 
 	public PDFReporter(Template template) {
-		setTemplate(template);
+		super();
+		setTemplate(template==null?new Template(null):template);
 		depict.setBackground(Color.white);
 		depict.setBorderColor(Color.white);
 		depict.setImageSize(new Dimension(400,400));
 		getProcessors().clear();
-		getProcessors().add(new ProcessorStructureRetrieval());
+
+		if (getTemplate().size()>0) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
+		else
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveTemplateStructure(getTemplate())) {
-			@Override
-			public IStructureRecord process(IStructureRecord target)
-					throws AmbitException {
-				((RetrieveTemplateStructure)getQuery()).setRecord(target);
-				return super.process(target);
-			}
-		});		
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveTemplateStructure)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target,getOutput());
@@ -90,12 +103,13 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
     @Override
     public void close() throws SQLException {
     	try {
-    	getOutput().close();
+    		getOutput().close();
     	} catch (Exception x) {x.printStackTrace(); }
     	super.close();
     	
     }
     public void header(Document output, Q query) {
+    	
 		output.addCreationDate();
         output.addCreator(getClass().getName());
         output.addSubject("");
@@ -119,9 +133,9 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
     };
     public void footer(Document output, Q query) {
         try {
-        	getOutput().add(table);
+        	output.add(table);
         } catch (Exception x) {
-
+        	x.printStackTrace();
         }	
     };
 	
