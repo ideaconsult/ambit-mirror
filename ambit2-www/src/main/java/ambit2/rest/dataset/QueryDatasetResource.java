@@ -17,7 +17,6 @@ import ambit2.db.readers.RetrieveDatasets;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
@@ -26,7 +25,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		RetrieveDatasets query = new RetrieveDatasets();
 		Object name = request.getAttributes().get("dataset_name");
 		if (name != null)

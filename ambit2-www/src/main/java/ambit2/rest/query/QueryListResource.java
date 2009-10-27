@@ -1,6 +1,5 @@
 package ambit2.rest.query;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,12 +8,12 @@ import org.restlet.Restlet;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.Finder;
+import org.restlet.resource.ResourceException;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
 import org.restlet.util.RouteList;
 
-import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
@@ -26,7 +25,7 @@ public class QueryListResource extends AlgorithmCatalogResource {
 
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		setCategory("");
 		
 		ArrayList<String> q = new ArrayList<String>();

@@ -8,6 +8,9 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
+import org.restlet.data.ReferenceList;
+import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 
 import ambit2.base.data.Property;
@@ -102,6 +105,35 @@ public class AllFeatureDefinitionsTest extends ResourceTest {
 		return count>1;
 	}
 	
+	@Test
+	public void testURIRepresentation() throws Exception {
+		testGetRepresentation(getTestURI(),MediaType.TEXT_URI_LIST);
+	}
+	@Override
+	public boolean verifyRepresentation(String uri, MediaType media,
+			Representation representation) throws Exception {
+		
+		ReferenceList list = new ReferenceList(representation);
+		for (Reference ref : list ) {
+			System.out.println("\n");
+			System.out.println(ref.getBaseRef());
+			System.out.println(ref.getFragment());
+			System.out.println(ref.getExtensions());
+			System.out.println(ref.getHierarchicalPart());
+			System.out.println(ref.getHostDomain());
+			System.out.println(ref.getIdentifier());
+			System.out.println(ref.getLastSegment());
+			System.out.println(ref.getMatrix());
+			System.out.println(ref.getAuthority());
+			System.out.println(ref.getPath());
+			System.out.println(ref.getQuery());
+			System.out.println(ref.getRelativePart());
+			System.out.println(ref.getRemainingPart());
+			System.out.println(ref.getScheme());
+			System.out.println(ref.getSegments());
+		}
+		return true;
+	}
 	
 	@Test
 	public void testURI() throws Exception {

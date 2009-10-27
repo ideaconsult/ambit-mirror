@@ -63,11 +63,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			StringWriter w = new StringWriter();
 			uriReporter.processItem(dataset, w);
 			
-			output.write("<br>");
-			output.write(String.format(
-						"<a href=\"%s\">%s</a>",
-						w.toString(),
-						dataset.getName()));
+			//output.write("<br>");
+			output.write("<div id=\"div-1b\">");
+
+			
 			if (!collapsed) {
 				output.write("&nbsp;");
 				output.write(String.format(
@@ -124,33 +123,16 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 							mime,
 							mime));	
 				}				
-				/*
-				String[] mimes = {"text/uri-list","chemical/x-mdl-sdfile","chemical/x-daylight-smiles"};
-				for (String mime:mimes) {
-					output.write("&nbsp;");
-					output.write(String.format(
-							"<a href=\"javascript:getURL('%s%s','%s')\"><img src=\"%s/images/structures.gif\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
-							w.toString(),
-							CompoundResource.compound,
-							mime,
-							uriReporter.getBaseReference().toString(),
-							mime,
-							mime));	
-				}
-			*/
-			/*	
-				output.write("&nbsp;");
-				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/feature/like/\" title=\"Search compounds with smarts\" border=\"0\"/></a>",
-						w.toString(),
-						QueryResource.query_resource+"/feature/like/",
-						uriReporter.getBaseReference().toString()));	
-						*/			
+	
 			
 			} else {
 			
 			}
-		
+			output.write(String.format(
+					"&nbsp;<a href=\"%s\">%s</a>",
+					w.toString(),
+					dataset.getName()));
+			output.write("</div>");
 		} catch (Exception x) {
 			
 		}

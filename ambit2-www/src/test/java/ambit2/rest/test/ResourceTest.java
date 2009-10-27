@@ -24,6 +24,8 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -42,7 +44,9 @@ public abstract class ResourceTest extends DbUnitTest {
         // Create a component
         component = new Component();
         component.getServers().add(Protocol.HTTP, port);
-       
+        component.getServers().add(Protocol.HTTPS, port);
+        component.getClients().add(Protocol.HTTP);
+        component.getClients().add(Protocol.HTTPS);        
         Context context = component .getContext().createChildContext(); 
         context.getParameters().add(Preferences.DATABASE, getDatabase());
         context.getParameters().add(Preferences.USER, getUser());
@@ -51,6 +55,7 @@ public abstract class ResourceTest extends DbUnitTest {
         context.getParameters().add(Preferences.HOST, getHost());
         app = createApplication(context);
         component.getDefaultHost().attach(app);
+        component.getInternalRouter().attach("/",app);
         component.start();        
 	}
 	
@@ -99,6 +104,14 @@ public abstract class ResourceTest extends DbUnitTest {
 		return response;
 	}
 	
+	public void testGetRepresentation(String uri, MediaType media) throws Exception {
+		ClientResource client = new ClientResource(uri);
+		Assert.assertTrue(verifyRepresentation(uri,media,client.get(media)));
+	}	
+	
+	public boolean verifyRepresentation(String uri, MediaType media,Representation representation) throws Exception {
+		throw new Exception("Not implemented");
+	}
 	public Status testHandleError(String uri, MediaType media) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);

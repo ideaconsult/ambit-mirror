@@ -3,13 +3,13 @@ package ambit2.rest.dataset;
 import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
-import ambit2.rest.StatusException;
 import ambit2.rest.structure.CompoundResource;
 
 /**
@@ -23,7 +23,7 @@ public class DatasetCompoundResource extends CompoundResource {
 
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		IQueryRetrieval<IStructureRecord> q = super.createQuery(context, request, response);
 		if (q == null) return null;
 		

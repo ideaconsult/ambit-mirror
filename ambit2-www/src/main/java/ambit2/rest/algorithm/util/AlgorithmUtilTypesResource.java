@@ -6,8 +6,8 @@ import java.util.Iterator;
 import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.resource.ResourceException;
 
-import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
@@ -23,7 +23,7 @@ public class AlgorithmUtilTypesResource extends AlgorithmCatalogResource {
 
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		setCategory("util");
 		ArrayList<String> q = new ArrayList<String>();
  		for (utiltypes d : utiltypes.values())

@@ -49,7 +49,7 @@ public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
 			if ("".equals(name)) throw new AmbitException("Empty name");
 			Property p = new Property(name);
 			String label = Property.guessLabel(name);
-			if (element.getAttribute(XMLTags.attr_id)!=null)
+			if (element.getAttribute(XMLTags.attr_type)!=null)
 				p.setLabel(element.getAttribute(XMLTags.attr_type));
 			else
 				p.setLabel(label==null?name:label);

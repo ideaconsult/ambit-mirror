@@ -6,17 +6,15 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByQuality;
-import ambit2.rest.StatusException;
-import ambit2.rest.structure.CompoundResource;
 
 /**
  * Retrieves Dataset ofcompounds, given a quality label. 
@@ -29,7 +27,7 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		QueryStructureByQuality q = new QueryStructureByQuality();
 		Form form = request.getResourceRef().getQueryAsForm();
 		Object key = form.getFirstValue("search");
@@ -40,8 +38,10 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 	        	StringBuilder b = new StringBuilder();
 	        	b.append("Valid values are ");
 	        	for(QUALITY v : QUALITY.values()) { b.append(v); b.append('\t');}
-				throw new StatusException(
-						new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,b.toString())
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						b.toString(),
+						x
 						);
 	        }			
 		} else {

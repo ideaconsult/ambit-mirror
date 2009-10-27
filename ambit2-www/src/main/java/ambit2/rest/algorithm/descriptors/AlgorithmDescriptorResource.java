@@ -3,7 +3,6 @@ package ambit2.rest.algorithm.descriptors;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.restlet.data.Reference;
 import org.restlet.ext.rdf.Link;
-import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 /**

@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.representation.Representation;
@@ -16,8 +15,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
-import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 
 /**
@@ -42,7 +39,7 @@ public class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,
 	}
 	@Override
 	protected Iterator<T> createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		ArrayList<T> q = new ArrayList<T>();
 		for (algorithmtypes d : algorithmtypes.values())
 			q.add((T)String.format("%s/%s","algorithm",d.toString()));	

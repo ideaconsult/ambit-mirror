@@ -3,12 +3,11 @@ package ambit2.rest.property;
 import org.restlet.Context;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined;
-import ambit2.rest.StatusException;
-import ambit2.rest.dataset.DatasetsResource;
 
 /**
  * Retrieve features per compound from a dataset
@@ -20,7 +19,7 @@ public class PropertiesByDatasetCompound extends PropertiesByDatasetResource {
 	
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		IQueryRetrieval<Property> q = super.createQuery(context, request, response);
 		if (q == null) return null;
 		PropertyResource propertyResource = new PropertyResource();

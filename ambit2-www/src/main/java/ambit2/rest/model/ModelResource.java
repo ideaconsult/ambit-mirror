@@ -29,7 +29,6 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundURIReporter;
@@ -55,7 +54,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	
 	protected String category = "";
 
-	protected Integer getModelID() throws StatusException {
+	protected Integer getModelID() throws ResourceException {
 		Object id = getRequest().getAttributes().get(resourceKey);
 		if (id != null) try {
 //			ModelQueryResults model = new ModelQueryResults();
@@ -63,7 +62,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 			return new Integer(Reference.decode(id.toString()));
 			
 		} catch (NumberFormatException x) {
-			throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		} catch (Exception x) {
 			return null;
 		} else return null;
@@ -79,7 +78,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	}
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		ReadModel query = new ReadModel();
 		query.setValue(getModelID());
 		Form form = getRequest().getResourceRef().getQueryAsForm();
@@ -170,10 +169,11 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 							//getResponse().setStatus(Status.SUCCESS_CREATED);
 							getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 							getResponse().setEntity(null);
-						} catch (StatusException x) {
-							getResponse().setStatus(x.getStatus());
 						} catch (AmbitException x) {
-							getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
+							if (x.getCause() instanceof ResourceException)
+								getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
+							else
+								getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
 						}
 						
 					}
@@ -217,8 +217,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 				getResponse().setEntity(null);
 				*/
-			} catch (StatusException x) {
-				throw new ResourceException(x.getStatus());
+	
 			} catch (Exception x) {
 				throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
 			} finally {

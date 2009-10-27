@@ -10,7 +10,6 @@ import java.util.concurrent.ExecutionException;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -23,7 +22,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.CatalogURIReporter;
 
@@ -62,7 +60,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 
 	@Override
 	protected synchronized Iterator<Task<Reference>> createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		
 		Object id = request.getAttributes().get(resourceKey);
 
@@ -74,7 +72,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 			} else {
 
 				Task<Reference> task = ((AmbitApplication)getApplication()).findTask(Reference.decode(id.toString()));
-				if (task==null) throw new StatusException(Status.CLIENT_ERROR_NOT_FOUND);
+				if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				
 				Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");  
 				if (responseHeaders == null) {
@@ -116,8 +114,10 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 
 		} catch (Exception x) {
 
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid task id %d",id))
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid task id %d",id),
+					x
 					);
 		}
 		
