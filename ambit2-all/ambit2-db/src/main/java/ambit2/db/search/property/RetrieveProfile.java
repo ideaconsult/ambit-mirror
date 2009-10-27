@@ -41,29 +41,60 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 public class RetrieveProfile extends AbstractPropertyRetrieval<String, Profile<Property>, StringCondition> {
+	public enum QueryMode {
+		id {
+			@Override
+			String getParam(Property arg0) {
+				return String.format("%d", arg0.getId());
+			}
+		},
+		name {
+			@Override
+			String getParam(Property arg0) {
+				return String.format("'%s'", arg0.getName());
+			}
+		};
+		abstract String getParam(Property param);
+
+	};
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -347765028858989655L;
 	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference) %s";
-
+	
+	public RetrieveProfile(QueryMode querymode) {
+		super();
+		setFieldname(querymode.toString());
+	}	
+	public RetrieveProfile() {
+		this(QueryMode.name);
+	}
+	
 	public List<QueryParam> getParameters() throws AmbitException {
 		return null;
+	}
+
+	@Override
+	public void setFieldname(String fieldname) {
+		try {
+			super.setFieldname(QueryMode.valueOf(fieldname).toString());
+		} catch (Exception x) {
+			super.setFieldname(QueryMode.name.toString());
+		}
 	}
 
 	public String getSQL() throws AmbitException {
 		if (getValue()==null) return sql;
 		
 		StringBuilder b = new StringBuilder();
-
-		String delimiter = "where name in ( ";
+		QueryMode mode = QueryMode.valueOf(getFieldname());
+		String delimiter = String.format("where %s in ( ",getFieldname());
 		Iterator<Property> i = getValue().getProperties(true);
 		int count = 0;
 		while (i.hasNext()) {
 			b.append(delimiter);
-			b.append('\'');
-			b.append(i.next().getName());
-			b.append('\'');
+			b.append(mode.getParam(i.next()));
 			delimiter= ",";
 			count++;
 		}

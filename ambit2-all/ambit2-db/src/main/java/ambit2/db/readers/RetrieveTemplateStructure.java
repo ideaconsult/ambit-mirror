@@ -12,7 +12,7 @@ import ambit2.base.interfaces.IStructureRecord;
 
 public class RetrieveTemplateStructure extends	RetrieveTemplate<IStructureRecord> {
 	protected IStructureRecord record;
-	
+	protected boolean addPropertiesToTemplate;
 	public RetrieveTemplateStructure() {
 		this(null);
 	}
@@ -24,6 +24,11 @@ public class RetrieveTemplateStructure extends	RetrieveTemplate<IStructureRecord
 	}
 	public void setRecord(IStructureRecord record) {
 		this.record = record;
+	}
+	@Override
+	public void setFieldname(Template fieldname) {
+		super.setFieldname(fieldname);
+		addPropertiesToTemplate = (fieldname!=null) && (getFieldname().size()==0);
 	}
 	/**
 	 * 
@@ -40,7 +45,7 @@ public class RetrieveTemplateStructure extends	RetrieveTemplate<IStructureRecord
 			Property p = Property.getInstance(rs.getString(1),le); 
 			p.setOrder(rs.getInt(13));
 			p.setUnits(rs.getString(11));
-			if ((getFieldname()!=null) && (getFieldname().get(p)==null)) {
+			if (addPropertiesToTemplate && (getFieldname()!=null) && (getFieldname().get(p)==null)) {
 				p.setEnabled(true);
 				getFieldname().add(p);
 			}

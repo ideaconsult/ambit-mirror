@@ -11,7 +11,9 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveTemplateStructure;
+import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<IStructureRecord, Q, Writer> {
 
@@ -28,6 +30,17 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public CSVReporter(Template template) {
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
+
+		if (getTemplate().size()>0) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
+		else
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveTemplateStructure(getTemplate())) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
@@ -74,6 +87,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			writeHeader(writer);
 			int i = 0;
 			writer.write(String.format("/compound/%d",item.getIdchemical()));
+			if (item.getIdstructure()>0)
+				writer.write(String.format("/conformer/%d",item.getIdstructure()));
 			for (Property p : header) {
 				Object value = item.getProperty(p);
 				if (p.getClazz()==Number.class) 
