@@ -22,7 +22,6 @@ import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
@@ -100,7 +99,7 @@ public class KroesInput extends FeatureResource {
 	
 	@Override
 	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		RetrieveFieldPropertyValue  field = new RetrieveFieldPropertyValue() {
 			@Override
 			public String toString() {
@@ -117,8 +116,10 @@ public class KroesInput extends FeatureResource {
 			record.setIdchemical(Integer.parseInt(form.getFirstValue("idchemical")));
 			record.setIdstructure(Integer.parseInt(form.getFirstValue("idstructure")));
 		} catch (NumberFormatException x) {
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)))
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)),
+					x
 					);
 		}
 		

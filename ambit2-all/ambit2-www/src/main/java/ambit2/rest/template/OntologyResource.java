@@ -16,7 +16,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.rest.OutputStreamConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
@@ -53,7 +52,7 @@ public class OntologyResource extends QueryResource<QueryOntology, Object> {
 
 	@Override
 	protected QueryOntology createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		Object key = request.getAttributes().get(resourceKey);
 		QueryOntology q = new QueryOntology();
 		q.setValue(key==null?null:new Dictionary(Reference.decode(key.toString()),null));

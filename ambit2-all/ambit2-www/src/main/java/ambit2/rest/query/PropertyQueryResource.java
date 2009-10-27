@@ -9,7 +9,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
-import ambit2.rest.StatusException;
 
 /**
  * Search for structures, given a property value
@@ -32,21 +31,21 @@ public class PropertyQueryResource extends StructureQueryResource<QueryField> {
 	}
 	@Override
 	protected QueryField createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		QueryField q =  new QueryField();
 		q.setChemicalsOnly(true);
         try {
         	Object value = request.getAttributes().get("value");
         	if (value == null)
-    			throw new StatusException(
-    					new Status(Status.SERVER_ERROR_INTERNAL,"Invalid search criteria")
+    			throw new ResourceException(
+    					Status.SERVER_ERROR_INTERNAL,"Invalid search criteria"
     					);
         	else
         		q.setValue(Reference.decode(value.toString()));
 
         } catch (Exception x) {
-			throw new StatusException(
-					new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
+			throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
 					);
         }			
         StringCondition condition = StringCondition.getInstance(StringCondition.C_EQ);

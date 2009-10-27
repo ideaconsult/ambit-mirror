@@ -32,7 +32,7 @@ public class DatasetReporterTest extends ResourceTest {
 		int count=0;
 		while ((line = reader.readLine())!=null) {
 			System.out.println(line);
-			Assert.assertEquals("http://localhost:8181/dataset/1", line);
+			Assert.assertEquals("http://localhost:8181/compound/7", line);
 			count++;
 		}
 		return count ==1;

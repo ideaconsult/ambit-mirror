@@ -29,10 +29,8 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.YAMLConvertor;
-import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableFileImport;
 
@@ -49,14 +47,14 @@ import ambit2.rest.task.CallableFileImport;
  * <li>PUT and DELETE not yet supported
  * </ul>
  * 
- * @author nina
+ * @author nina 
  *
  */
 public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
 	
 	
-	public final static String datasets = "/dataset";	
-	public final static String datasetKey = "dataset_id";	
+	public final static String datasets = "/datasets";	
+
 	//public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
 	
 	protected boolean collapsed;
@@ -73,30 +71,17 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
+
 		ReadDataset query = new ReadDataset();
-		
-		Object id = request.getAttributes().get(datasetKey);
-		collapsed = true;
-		if (id != null) try {
-			SourceDataset dataset = new SourceDataset();
-			dataset.setId(new Integer(Reference.decode(id.toString())));
-			query.setValue(dataset);
-			collapsed = false;
-		} catch (NumberFormatException x) {
-			error = new InvalidResourceIDException(id);
-			query=null;
-		} catch (Exception x) {
-			query.setValue(null);
-		}
-		else {
-			Form form = request.getResourceRef().getQueryAsForm();
-			Object key = form.getFirstValue("search");
-			if (key != null) {
-				RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
-				query_by_name.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
-				return query_by_name;
-			} 
+		query.setValue(null);
+		collapsed = false;
+		Form form = request.getResourceRef().getQueryAsForm();
+		Object key = form.getFirstValue("search");
+		if (key != null) {
+			RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
+			query_by_name.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+			return query_by_name;
 		}
 		return query;
 	}
@@ -129,9 +114,6 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
-		if (getRequest().getAttributes().get(datasetKey)!=null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			
 		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
               //factory.setSizeThreshold(100);

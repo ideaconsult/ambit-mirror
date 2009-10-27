@@ -43,7 +43,6 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
@@ -134,7 +133,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new ImageReporter<QueryStructureByID>(d),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
-					new PDFReporter<QueryStructureByID>());				
+					new PDFReporter<QueryStructureByID>(getTemplate()));				
 	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new QueryXMLReporter(getRequest()));
@@ -166,7 +165,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		media = getMediaParameter(request);
 		try {
 			Object key = request.getAttributes().get(idcompound);
@@ -240,13 +239,15 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				return query;
 			}
 		} catch (NumberFormatException x) {
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(idcompound)))
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid resource id %d",request.getAttributes().get(idcompound)),
+					x
 					);
 		} catch (Exception x) {
-			throw new StatusException(
-					new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
-					);
+			throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x)
+					;
 		}
 		
 

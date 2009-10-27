@@ -5,12 +5,12 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.StatusException;
 
 /**
  * Conformer resource as in http://opentox.org/development/wiki/structure
@@ -43,15 +43,17 @@ public class ConformerResource extends CompoundResource {
 	
 	@Override
 	protected QueryStructureByID createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		media = getMediaParameter(request);
 		try {
 			IStructureRecord record = new StructureRecord();
 			try {
 				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));
 			} catch (NumberFormatException x) {
-				throw new StatusException(
-						new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(idcompound)))
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format("Invalid resource id %d",request.getAttributes().get(idcompound)),
+						x
 						);				
 			}
 			QueryStructureByID query = new QueryStructureByID();			
@@ -69,8 +71,10 @@ public class ConformerResource extends CompoundResource {
 			query.setValue(record);
 			return query;
 		} catch (Exception x) {
-			throw new StatusException(
-					new Status(Status.SERVER_ERROR_INTERNAL,x,String.format("Invalid resource id %d",request.getAttributes().get(idcompound)))
+			throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,
+					String.format("Invalid resource id %d",request.getAttributes().get(idcompound)),
+					x
 					);
 		}
 	}	

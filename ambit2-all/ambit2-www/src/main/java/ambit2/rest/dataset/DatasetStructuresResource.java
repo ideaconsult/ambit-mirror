@@ -5,9 +5,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.db.search.structure.QueryDatasetByID;
-import ambit2.rest.StatusException;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -23,12 +23,11 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 
 	@Override
 	protected QueryDatasetByID createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		try {
 			Object id = request.getAttributes().get("dataset_id");
-			
-			
 			if (id != null)  try {
+				
 				QueryDatasetByID query = new QueryDatasetByID();
 				query.setValue(new Integer(Reference.decode(id.toString())));
 				query.setMaxRecords(1000);
@@ -41,8 +40,8 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 			else throw new InvalidResourceIDException("");
 			
 		} catch (Exception x) {
-			throw new StatusException(
-					new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage())
+			throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
 					);
 		}		
 	}

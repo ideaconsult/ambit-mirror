@@ -24,7 +24,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.descriptors.processors.DescriptorsFactory;
-import ambit2.rest.StatusException;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 
 /**
@@ -71,7 +70,7 @@ public class AlgorithmDescriptorTypesResource extends AlgorithmCatalogResource<S
 	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		try {
 			initGraph();
 			ArrayList<String> q = new ArrayList<String>();
@@ -91,7 +90,7 @@ public class AlgorithmDescriptorTypesResource extends AlgorithmCatalogResource<S
 	
 			return q.iterator();
 		} catch (Exception x) {
-			throw new StatusException(new Status(Status.SERVER_ERROR_INTERNAL,x,x.getMessage()));
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 		
 	}

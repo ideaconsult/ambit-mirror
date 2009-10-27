@@ -17,9 +17,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
 import ambit2.db.SourceDataset;
 import ambit2.db.update.tuple.QueryTuple;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -68,18 +67,18 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 	
 	@Override
 	protected QueryTuple createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		
 		QueryTuple tuple = new QueryTuple();
 		tuple.setChemicalsOnly(true);
 		IStructureRecord record = new StructureRecord();
 		tuple.setFieldname(record);
 		Object cid = getRequest().getAttributes().get(CompoundResource.idcompound);
-		if (cid == null) throw new StatusException(status.CLIENT_ERROR_BAD_REQUEST);
+		if (cid == null) throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST);
 		try {
 			record.setIdchemical(Integer.parseInt(cid.toString()));
 		} catch (Exception x) {
-			throw new StatusException(status.CLIENT_ERROR_BAD_REQUEST);
+			throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		cid = getRequest().getAttributes().get(ConformerResource.idconformer);
 		try {
@@ -88,7 +87,7 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 		} catch (Exception x) {
 			tuple.setChemicalsOnly(true);
 		}
-		cid = getRequest().getAttributes().get(DatasetsResource.datasetKey);
+		cid = getRequest().getAttributes().get(DatasetResource.datasetKey);
 		
 		try {
 			SourceDataset dataset = new SourceDataset();

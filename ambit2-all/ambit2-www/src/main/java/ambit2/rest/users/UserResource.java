@@ -23,7 +23,6 @@ import ambit2.db.search.QueryUser;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
@@ -66,7 +65,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	
 	@Override
 	protected QueryUser createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		
 		Object idref = request.getAttributes().get(resourceKey);
 		try {
@@ -75,7 +74,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 				role.setName("admin");
 				if (getRequest().getClientInfo().isInRole(role))
 					return new QueryUser();
-				else throw new StatusException(Status.CLIENT_ERROR_FORBIDDEN);
+				else throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 			} else {
 				String username = Reference.decode(idref.toString());
 				if (login.equals(username)) {
@@ -98,11 +97,9 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 				} else  return new QueryUser(username);
 			}
 
-		} catch (StatusException x) {
-			throw x;
 		} catch (Exception x) {
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid user id %d",idref))
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid user id %d",idref),x
 					);
 		}		
 

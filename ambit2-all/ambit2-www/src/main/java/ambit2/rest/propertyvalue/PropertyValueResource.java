@@ -21,7 +21,6 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
@@ -42,7 +41,7 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 		try {
 			queryObject = createQuery(getContext(),getRequest(),getResponse());
 			error = null;
-		} catch (AmbitException x) {
+		} catch (ResourceException x) {
 			queryObject = null;
 			error = x;
 		}		
@@ -81,7 +80,7 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 	}
 	@Override
 	protected IQueryRetrieval<T> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		RetrieveFieldPropertyValue  field = new RetrieveFieldPropertyValue();
 		field.setSearchByAlias(true);
 		
@@ -89,8 +88,10 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 		try {
 			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
 		} catch (NumberFormatException x) {
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)))
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)),
+					x
 					);
 		}
 		try {

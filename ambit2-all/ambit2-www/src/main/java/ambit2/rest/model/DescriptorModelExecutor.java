@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -19,11 +20,8 @@ import ambit2.db.DbReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
-import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.descriptors.processors.DescriptorsFactory;
-import ambit2.rest.StatusException;
 import ambit2.rest.task.TaskResource;
 
 /**
@@ -102,7 +100,7 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
     		else return reference;
 		} catch (Exception x) {
 			x.printStackTrace();
-			throw new StatusException(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
+			throw new AmbitException(x);
 		} finally {
 			
 		}

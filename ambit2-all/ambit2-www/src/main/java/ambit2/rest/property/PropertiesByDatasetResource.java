@@ -6,14 +6,14 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.PropertiesByDataset;
-import ambit2.rest.StatusException;
-import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.dataset.DatasetResource;
 
 /**
  * Retrieves feature definitions by dataset 
@@ -30,8 +30,8 @@ public class PropertiesByDatasetResource extends PropertyResource {
 
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
-			Request request, Response response) throws StatusException {
-		Object id = request.getAttributes().get(DatasetsResource.datasetKey);
+			Request request, Response response) throws ResourceException {
+		Object id = request.getAttributes().get(DatasetResource.datasetKey);
 		collapsed = true;
 		PropertiesByDataset q = new PropertiesByDataset();
 		SourceDataset dataset = new SourceDataset();
@@ -46,7 +46,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 			dataset.setId(-1);
 			q.setValue(dataset);
 		} catch (Exception x) {
-			throw new StatusException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x));
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
 		}
 		else {
 			Form form = request.getResourceRef().getQueryAsForm();

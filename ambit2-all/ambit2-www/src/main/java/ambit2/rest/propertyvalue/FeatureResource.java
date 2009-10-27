@@ -29,7 +29,6 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
@@ -80,7 +79,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		try {
 			queryObject = createQuery(getContext(), getRequest(),getResponse());
 			error = null;
-		} catch (AmbitException x) {
+		} catch (ResourceException x) {
 			queryObject = null;
 			error = x;
 		}
@@ -116,14 +115,14 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	//TODO refactor to throw ResourceException
 	@Override
 	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		RetrieveFieldPropertyValue  field = new RetrieveFieldPropertyValue();
 		field.setSearchByID(true);
 		field.setChemicalsOnly(true);
 		IStructureRecord record = getRecordByParameters();
 		field.setChemicalsOnly(record.getIdstructure()<=0);
 		field.setValue(record);
-		try {field.setFieldname(getPropertyByParameters()); } catch (ResourceException x) {throw new StatusException(x.getStatus());}
+		field.setFieldname(getPropertyByParameters()); 
 		return (IQueryRetrieval) field;
 	}
 	protected Property getPropertyByParameters() throws ResourceException {

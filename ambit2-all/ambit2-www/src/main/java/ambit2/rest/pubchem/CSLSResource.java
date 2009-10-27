@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,8 @@ import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
 import ambit2.pubchem.CSLSRequest;
-import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
 import ambit2.rest.AmbitResource;

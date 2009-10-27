@@ -2,18 +2,14 @@ package ambit2.rest.queryresults;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
-import ambit2.rest.StatusException;
 import ambit2.rest.query.StructureQueryResource;
 
 /**
@@ -29,7 +25,7 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 
 	@Override
 	protected QueryStoredResults createQuery(Context context, Request request,
-			Response response) throws StatusException {
+			Response response) throws ResourceException {
 		Object key = request.getAttributes().get(resourceKey);
 		if (key !=null) try {
 			QueryStoredResults q = new QueryStoredResults() {
@@ -43,9 +39,9 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 			q.setValue(null);
 			return q;
 		} catch (Exception x) {
-			throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-		throw new StatusException(Status.CLIENT_ERROR_BAD_REQUEST);
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	@Override
 	protected Representation post(Representation entity)

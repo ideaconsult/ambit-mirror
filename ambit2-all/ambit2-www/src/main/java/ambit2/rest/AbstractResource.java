@@ -44,7 +44,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 			queryObject = createQuery(getContext(), getRequest(), getResponse());
 			error = null;
 
-		} catch (StatusException x) {
+		} catch (ResourceException x) {
 			queryObject = null;
 			error = x;
 			status = x.getStatus();
@@ -58,7 +58,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	}
 	public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
 	
-	protected   abstract  Q createQuery(Context context, Request request, Response response) throws StatusException;
+	protected   abstract  Q createQuery(Context context, Request request, Response response) throws ResourceException;
 	
 	public synchronized Representation get(Variant variant) {
 
@@ -75,7 +75,7 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 
 		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, new NotFoundException(x.getMessage()));
 		    			return null;
-		        	} catch (StatusException x) {
+		        	} catch (ResourceException x) {
 		    			getResponse().setStatus(x.getStatus());
 		    			return null;
 		        	} catch (Exception x) {

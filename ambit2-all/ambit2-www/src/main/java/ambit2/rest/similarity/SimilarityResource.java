@@ -25,7 +25,6 @@ import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.StatusException;
 import ambit2.rest.query.StructureQueryResource;
 
 /**
@@ -61,7 +60,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 
 	@Override
 	protected QuerySimilarityBitset createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 	
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
@@ -79,15 +78,18 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 				mol = MoleculeTools.getMolecule(query_smiles);			
 				
 			} catch (InvalidSmilesException x) {
-				throw new StatusException(new Status(
-						Status.CLIENT_ERROR_BAD_REQUEST,x,
-						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles"))
-						));
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles")),
+						x
+						);
 
 			} catch (Exception x) {
-				throw new StatusException(new Status(
-						Status.SERVER_ERROR_INTERNAL,x,x.getMessage()
-						));
+				throw new ResourceException(
+						Status.SERVER_ERROR_INTERNAL,
+						x.getMessage(),
+						x
+						);
 			}			
 			break;
 		case url:
@@ -117,15 +119,16 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 					mol = MoleculeTools.readMolfile(reader);
 				}				
 			} catch (InvalidSmilesException x) {
-				throw new StatusException(new Status(
-						Status.CLIENT_ERROR_BAD_REQUEST,x,
-						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles"))
-						));
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles")),
+						x
+						);
 
 			} catch (Exception x) {
-				throw new StatusException(new Status(
-						Status.SERVER_ERROR_INTERNAL,x,x.getMessage()
-						));
+				throw new ResourceException(
+						Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
+						);
 			} finally {
 				try {reader.close();} catch (Exception x){};
 			}
@@ -154,7 +157,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 			q.setValue(getBitset(mol));
 			return q;
 		} catch (Exception x) {
-			throw new StatusException(new Status(Status.SERVER_ERROR_INTERNAL,x));
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 		
 

@@ -5,13 +5,13 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveTuplePropertyValue;
-import ambit2.rest.StatusException;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -29,15 +29,17 @@ public class TuplePropertyValueResource<PropertyValue> extends PropertyValueReso
 
 	@Override
 	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		RetrieveTuplePropertyValue field = new RetrieveTuplePropertyValue();
 		//RetrieveTupleStructure field = new RetrieveTupleStructure();
 		IStructureRecord record = new StructureRecord();
 		try {
 			record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(CompoundResource.idcompound).toString())));
 		} catch (NumberFormatException x) {
-			throw new StatusException(
-					new Status(Status.CLIENT_ERROR_BAD_REQUEST,x,String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)))
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid resource id %d",request.getAttributes().get(CompoundResource.idcompound)),
+					x
 					);
 		}
 		try {

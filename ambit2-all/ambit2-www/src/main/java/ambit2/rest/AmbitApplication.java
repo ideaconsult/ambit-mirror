@@ -53,6 +53,7 @@ import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
+import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.QueryDatasetResource;
@@ -180,7 +181,7 @@ public class AmbitApplication extends Application {
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 			
-			
+			System.out.println(li);
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -215,14 +216,16 @@ public class AmbitApplication extends Application {
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 
-		Router datasetsRouter = new Router(getContext());
-		datasetsRouter.attachDefault(DatasetsResource.class);
-		router.attach(DatasetsResource.datasets, datasetsRouter);		
+		Router allDatasetsRouter = new Router(getContext());
+		allDatasetsRouter.attachDefault(DatasetsResource.class);
+		router.attach(DatasetsResource.datasets, allDatasetsRouter);		
 
 		
 		Router datasetRouter = new Router(getContext());
-		datasetRouter.attachDefault(DatasetsResource.class);
-		datasetsRouter.attach(String.format("/{%s}",DatasetsResource.datasetKey), datasetRouter);
+		datasetRouter.attachDefault(DatasetResource.class);
+		//this is for backward compatibility
+		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
+		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), datasetRouter);
 		
 		
 		
@@ -583,13 +586,15 @@ public class AmbitApplication extends Application {
         // Create a component
         Component component = new Component();
         final Server server = component.getServers().add(Protocol.HTTP, 8080);
-       
+        component.getClients().add(Protocol.HTTP);
+        component.getClients().add(Protocol.HTTPS);
         AmbitApplication application = new AmbitApplication();
         application.setContext(component.getContext().createChildContext());
 
         // Attach the application to the component and start it
         component.getDefaultHost().attach(application);
         component.start();
+        component.getInternalRouter().attach("/",application);
 
         System.out.println("Server started on port " + server.getPort());
         System.out.println("Press key to stop server");

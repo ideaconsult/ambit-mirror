@@ -28,7 +28,6 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.model.CreateModel;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -77,7 +76,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		catalog = new AlgorithmCatalogResource<Algorithm>() {
 			@Override
 			protected Iterator<Algorithm> createQuery(Context context,
-					Request request, Response response) throws StatusException {
+					Request request, Response response) throws ResourceException {
 				try {
 					ArrayList<Algorithm> q = new ArrayList<Algorithm>();
 					Object key = getRequest().getAttributes().get(idalgorithm);
@@ -104,7 +103,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 						return null;
 					} else	return q.iterator();
 				} catch (Exception x) {
-					throw new StatusException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage()));
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
 				}
 			}
 			@Override
@@ -148,7 +147,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		// TODO Auto-generated method stub
 		return null;
 	}

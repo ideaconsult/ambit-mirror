@@ -25,7 +25,6 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 
 /**
  * Abstract parent class for all resources , which retrieves something from the database
@@ -67,7 +66,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			        	Representation r = convertor.process(queryObject);
 			        	r.setCharacterSet(CharacterSet.UTF_8);
 			        	return r;
-		        	} catch (StatusException x) {
+		        	} catch (ResourceException x) {
 		    			getResponse().setStatus(x.getStatus());
 		    			return null;			        	
 		        	} catch (NotFoundException x) {

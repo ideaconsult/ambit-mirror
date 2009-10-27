@@ -27,7 +27,6 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
-import ambit2.rest.StatusException;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
@@ -95,7 +94,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				PropertyURIReporter r = new PropertyURIReporter(getRequest());
 				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST);
-				
+		
 		} else 
 			return new OutputStreamConvertor(
 					new PropertyHTMLReporter(getRequest(),collapsed)
@@ -104,7 +103,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
-			Request request, Response response) throws StatusException {
+			Request request, Response response) throws ResourceException {
 		
 		IStructureRecord record = null;
 		boolean chemicalsOnly = true;
