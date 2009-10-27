@@ -139,6 +139,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	}	
 	public boolean verifyResponseTXT(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
+	}	
+	public boolean verifyResponseCSV(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
 	}		
 	public boolean verifyResponseARFF(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
@@ -166,6 +169,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseCML(uri, media, in);
 		else if (ChemicalMediaType.WEKA_ARFF.equals(media))
 			return verifyResponseARFF(uri, media, in);
+		else if (MediaType.TEXT_CSV.equals(media))
+			return verifyResponseCSV(uri, media, in);		
 		else throw new Exception("Unknown format "+media);
 	}
 	protected Document createDOM(InputSource in) throws Exception {

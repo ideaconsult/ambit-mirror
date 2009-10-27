@@ -12,6 +12,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.data.MediaType;
 
+import com.lowagie.text.pdf.PdfReader;
+
 import weka.core.Instances;
 
 import ambit2.rest.ChemicalMediaType;
@@ -45,6 +47,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 			//Assert.assertEquals("1530-32-1",instances.firstInstance().stringValue(0));
 			Assert.assertEquals("URI",instances.attribute(0).name());
 			return true;
+			
 			
 		}		
 		@Test
@@ -85,5 +88,17 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 				count++;
 			}
 			return count==1;
+		}		
+		@Test
+		public void testPDF() throws Exception {
+			testGet(getTestURI(),MediaType.APPLICATION_PDF);
+		}		
+		@Override
+		public boolean verifyResponsePDF(String uri, MediaType media, InputStream in)
+				throws Exception {
+			PdfReader reader = new PdfReader(in);
+			Assert.assertNotNull(reader);
+			Assert.assertTrue(reader.getNumberOfPages()>0);
+			return true;
 		}		
 }
