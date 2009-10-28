@@ -124,6 +124,7 @@ public class AmbitApplication extends Application {
 		setStatusService(new AmbitStatusService());
 		getTaskService().setEnabled(true);
 		getTunnelService().setUserAgentTunnel(true);
+		
 	}
 	protected void loadProperties()  {
 		try {
@@ -180,8 +181,7 @@ public class AmbitApplication extends Application {
 				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
-			
-			System.out.println(li);
+
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -584,18 +584,10 @@ public class AmbitApplication extends Application {
     public static void main(String[] args) throws Exception {
         
         // Create a component
-        Component component = new Component();
+        Component component = new AmbitComponent();
         final Server server = component.getServers().add(Protocol.HTTP, 8080);
-        component.getClients().add(Protocol.HTTP);
-        component.getClients().add(Protocol.HTTPS);
-        AmbitApplication application = new AmbitApplication();
-        application.setContext(component.getContext().createChildContext());
-
-        // Attach the application to the component and start it
-        component.getDefaultHost().attach(application);
         component.start();
-        component.getInternalRouter().attach("/",application);
-
+   
         System.out.println("Server started on port " + server.getPort());
         System.out.println("Press key to stop server");
         System.in.read();
