@@ -19,6 +19,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
+import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
@@ -57,7 +58,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		depict.setBorderColor(Color.white);
 		depict.setImageSize(new Dimension(400,400));
 		getProcessors().clear();
-
+		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveStructure()));
 		if (getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
 				@Override
