@@ -70,7 +70,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			if (!collapsed) {
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/structures.gif\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
+						"<a href=\"%s%s\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
 						w.toString(),
 						CompoundResource.compound,
 						uriReporter.getBaseReference().toString()));	
@@ -89,7 +89,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						w.toString(),
 						QueryResource.query_resource+"/smarts",
 						uriReporter.getBaseReference().toString()));
-				
+				output.write("&nbsp;");
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 						ChemicalMediaType.CHEMICAL_SMILES,
 						ChemicalMediaType.CHEMICAL_CML,
@@ -116,7 +116,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 					output.write(String.format(
 							"<a href=\"%s%s?accept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 							w.toString(),
-							CompoundResource.compound,
+							"",
+							//CompoundResource.compound,
 							mime,
 							uriReporter.getBaseReference().toString(),
 							image[i],
