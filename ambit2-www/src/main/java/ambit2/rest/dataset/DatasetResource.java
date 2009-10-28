@@ -1,6 +1,5 @@
 package ambit2.rest.dataset;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.restlet.Context;
@@ -16,7 +15,6 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.structure.QueryDatasetByID;
-import ambit2.rest.links.ReferenceFeatureDefinitionParser;
 import ambit2.rest.property.PropertyDOMParser;
 
 
@@ -60,9 +58,13 @@ public class DatasetResource extends DatasetStructuresResource {
 					@Override
 					public void processItem(Property property)
 							throws AmbitException {
-						if (property!= null) profile.add(property);
+						if (property!= null) {
+							property.setEnabled(true);
+							profile.add(property);
+						}
 					}
 				};
+				setTemplate(profile);
 				parser.parse(new InputStreamReader(r.getStream()));
 				r.getStream().close();
 			}
