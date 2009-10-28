@@ -145,7 +145,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 	public String getSQL() throws AmbitException {
 		StringBuilder b = new StringBuilder();
 
-		if (getFieldname()!=null) {
+		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
 			Iterator<Property> i = getFieldname().getProperties(true);
 			
 			String delimiter = "(";
@@ -158,7 +158,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		}
 		return String.format(
 				sql(),
-				(getFieldname()==null || "".equals(getFieldname()))
+				(getFieldname()==null || "".equals(getFieldname()) )
 				?"":String.format(where,searchMode.getSQL(),getCondition()),
 				b.toString()
 				);
