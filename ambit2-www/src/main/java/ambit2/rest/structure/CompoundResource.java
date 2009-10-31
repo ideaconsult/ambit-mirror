@@ -86,6 +86,9 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
+		if (!variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+			setTemplate(createTemplate(getContext(),getRequest(),getResponse()));
+		}
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
@@ -169,7 +172,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
 		try {
-			setTemplate(createTemplate(context, request, response));
+			
 			Object key = request.getAttributes().get(idcompound);
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
