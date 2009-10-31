@@ -1,7 +1,6 @@
 package ambit2.rest.structure;
 
 import org.restlet.data.Request;
-import org.w3c.dom.Document;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -38,14 +37,14 @@ public class StructureReporter extends QueryXMLReporter<QueryStructureByID> {
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,output);
+				processItem(target);
 				return target;
 			};
 		});	
 		
 	}
 	@Override
-	public void processItem(IStructureRecord record, Document output) {
+	public void processItem(IStructureRecord record) throws AmbitException {
 		/*
 		Element e_record = output.createElementNS(XMLTags.ns_opentox,node_structure);
         e_record.setAttribute(attr_idchemical,Integer.toString(record.getIdchemical()));

@@ -91,7 +91,9 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
-
+  
+  <template idtemplate="2" name="All"/>
+  <dictionary idsubject="1" idobject="2"/>  
 
 
   <property_string idvalue_string="1" value="1530-32-1"/>

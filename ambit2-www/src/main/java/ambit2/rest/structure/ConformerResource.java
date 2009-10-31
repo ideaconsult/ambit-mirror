@@ -46,6 +46,7 @@ public class ConformerResource extends CompoundResource {
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
 		try {
+			setTemplate(createTemplate(context, request, response));
 			IStructureRecord record = new StructureRecord();
 			try {
 				record.setIdchemical(Integer.parseInt(Reference.decode(request.getAttributes().get(idcompound).toString())));

@@ -5,6 +5,7 @@ import java.io.Writer;
 import org.restlet.data.Request;
 
 import ambit2.base.data.AmbitUser;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -32,7 +33,7 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 		try {w.write(String.format("<h3>User%s</h3>",collapsed?"s":""));} catch (Exception x) {}
 	}
 	@Override
-	public void processItem(AmbitUser item, Writer output) {
+	public void processItem(AmbitUser item) throws AmbitException {
 		try {
 			
 			output.write("<div>");

@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryDOMReporter;
@@ -50,12 +51,12 @@ public class DatasetsXMLReporter extends QueryDOMReporter<SourceDataset, IQueryR
 		
 	}
 	@Override
-	public void processItem(SourceDataset dataset, Document doc) {
+	public void processItem(SourceDataset dataset) throws AmbitException {
 
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_datasets);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
-        		parent.item(i).appendChild(getItemElement(doc, dataset));
+        		parent.item(i).appendChild(getItemElement(output, dataset));
         		break;
         	}		
 	}	

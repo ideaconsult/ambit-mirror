@@ -7,6 +7,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.QueryDOMReporter;
@@ -56,11 +57,11 @@ public class ReferenceDOMReporter extends QueryDOMReporter<ILiteratureEntry, Rea
 	}
 
 	@Override
-	public void processItem(ILiteratureEntry item, Document doc) {
+	public void processItem(ILiteratureEntry item) throws AmbitException  {
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_reference, XMLTags.node_references);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
-		                parent.item(i).appendChild(getItemElement(doc, item));
+		                parent.item(i).appendChild(getItemElement(output, item));
 		        		break;
 		   }		
 

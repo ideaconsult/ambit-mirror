@@ -2,10 +2,12 @@ package ambit2.rest.dataset;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Logger;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ChemicalMediaType;
@@ -41,7 +43,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 	@Override
 	public void footer(Writer output, IQueryRetrieval<SourceDataset> query) {
 		try {
-			if (collapsed) {
+			//if (collapsed) {
 				output.write("\n<hr>");
 				output.write("<div class=\"actions\"><span class=\"center\">");
 				output.write("<form method=\"post\" ENCTYPE=\"multipart/form-data\">");
@@ -53,15 +55,16 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				output.write("<br><input type='submit' value='Submit'>");
 				output.write("</form>");
 				output.write("</span></div>\n");		
-			}
+			//}
 		} catch (Exception x) {}
 		super.footer(output, query);
 	}
 	@Override
-	public void processItem(SourceDataset dataset, Writer output) {
+	public void processItem(SourceDataset dataset) throws AmbitException {
 		try {
 			StringWriter w = new StringWriter();
-			uriReporter.processItem(dataset, w);
+			uriReporter.setOutput(w);
+			uriReporter.processItem(dataset);
 			
 			//output.write("<br>");
 			output.write("<div id=\"div-1b\">");
@@ -133,9 +136,17 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 					"&nbsp;<a href=\"%s\">%s</a>",
 					w.toString(),
 					dataset.getName()));
+			
+			/*
+			output.write(String.format(
+					"&nbsp;<a href=\"%s\">%s</a>",
+					w.toString(),
+					dataset.getReference().getTitle()));			
+			*/
 			output.write("</div>");
 		} catch (Exception x) {
-			
+			x.printStackTrace();
+			Logger.getLogger(getClass().getName()).severe(x.getMessage());
 		}
 	}
 

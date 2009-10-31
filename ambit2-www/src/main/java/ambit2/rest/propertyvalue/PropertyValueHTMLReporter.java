@@ -6,6 +6,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
@@ -56,7 +57,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	
 
 	@Override
-	public void processItem(T item, Writer output) {
+	public void processItem(T item) throws AmbitException  {
 		try {
 			
 			if (item instanceof IStructureRecord) {
@@ -119,7 +120,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 			if (query instanceof AbstractQuery) {
 				if (((AbstractQuery)query).getValue() instanceof IStructureRecord) {
 					record = (IStructureRecord)((AbstractQuery)query).getValue();
-					cmp_reporter.processItem(record,w);
+					cmp_reporter.processItem(record);
 				}
 			}			
 			w.write("<table>");

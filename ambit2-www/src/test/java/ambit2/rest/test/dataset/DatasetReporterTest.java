@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.restlet.data.MediaType;
 
+import ambit2.base.data.Property;
+import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.rest.test.ResourceTest;
 
 /**
@@ -32,10 +35,14 @@ public class DatasetReporterTest extends ResourceTest {
 		int count=0;
 		while ((line = reader.readLine())!=null) {
 			System.out.println(line);
-			Assert.assertEquals("http://localhost:8181/compound/7", line);
+			/*
+			Assert.assertTrue(
+					line.equals("http://localhost:8181/compound/7") ||
+					line.equals("http://localhost:8181/compound/10"));
+					*/
 			count++;
 		}
-		return count ==1;
+		return count ==4;
 	}			
 	@Test
 	public void testXML() throws Exception {
@@ -44,6 +51,7 @@ public class DatasetReporterTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
+		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int count=0;
@@ -53,6 +61,29 @@ public class DatasetReporterTest extends ResourceTest {
 		}
 		return count ==1;
 	}		
+	@Test
+	public void testCSV() throws Exception {
+		testGet(String.format("http://localhost:%d/dataset/1?features=http://localhost:%d/feature_definition", port,port)
+				,MediaType.TEXT_CSV);
+	}
+	@Override
+	public boolean verifyResponseCSV(String uri, MediaType media, InputStream in)
+			throws Exception {
+
+		int count = 0;
+		IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			Assert.assertTrue(o instanceof IChemObject);
+			
+			Assert.assertNotNull(((IChemObject)o).getProperties());
+			Assert.assertEquals(4,((IChemObject)o).getProperties().size());
+			count++;
+		}
+		in.close();
+		return count==4;
+
+	}			
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);

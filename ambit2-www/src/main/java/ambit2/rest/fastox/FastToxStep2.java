@@ -58,7 +58,7 @@ public class FastToxStep2 extends ModelResource {
 							IQueryRetrieval<ModelQueryResults> query) {
 						super.header(w, query);
 					
-						cmp_reporter.processItem(record, w);
+						try {cmp_reporter.processItem(record);} catch (AmbitException x) {};
 					}
 					@Override
 					protected void writeMoreColumns(ModelQueryResults model,
@@ -79,8 +79,8 @@ public class FastToxStep2 extends ModelResource {
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
 			@Override
-			public void processItem(ModelQueryResults dataset, Writer output) {
-				super.processItem(dataset, output);
+			public void processItem(ModelQueryResults dataset) throws AmbitException {
+				super.processItem(dataset);
 				try {
 				output.write('\n');
 				} catch (Exception x) {}

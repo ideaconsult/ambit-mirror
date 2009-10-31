@@ -1,7 +1,5 @@
 package ambit2.rest.dataset;
 
-import java.io.Writer;
-
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -40,12 +38,12 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 			return new DocumentConvertor(new DatasetsXMLReporter(getRequest()));	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
+					new DatasetsHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
 				@Override
-				public void processItem(SourceDataset dataset, Writer output) {
-					super.processItem(dataset, output);
+				public void processItem(SourceDataset dataset) throws AmbitException {
+					super.processItem(dataset);
 					try {
 					output.write('\n');
 					} catch (Exception x) {}
@@ -53,7 +51,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 			},MediaType.TEXT_URI_LIST);
 		} else 
 			return new OutputStreamConvertor(
-					new DatasetHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
+					new DatasetsHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
 	}		
 		//return new DocumentConvertor(new DatasetReporter(getRequest().getRootRef()));
 

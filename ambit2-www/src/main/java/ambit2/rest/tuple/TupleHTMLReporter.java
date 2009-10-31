@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import org.restlet.data.Request;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
 import ambit2.db.SourceDataset;
@@ -41,7 +42,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	public void header(Writer w, QueryTuple query) {
 		super.header(w, query);
 		try {
-			cmp_reporter.processItem(query.getFieldname(),w);
+			cmp_reporter.processItem(query.getFieldname());
 			w.write("<table><th>Dataset</th><th>Browse data</th>");
 			
 		} catch (Exception x) {};
@@ -53,7 +54,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	}
 
 	@Override
-	public void processItem(PropertiesTuple item, Writer output) {
+	public void processItem(PropertiesTuple item) throws AmbitException  {
 		try {
 		output.write(String.format("<tr><td><a href=\"%s\">%s</a></td><td><a href=\"%s\">Browse</a> </td></tr>", 
 				ds_reporter.getURI(item.getDataset()),

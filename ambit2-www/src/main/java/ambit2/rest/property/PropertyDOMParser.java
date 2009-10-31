@@ -35,9 +35,11 @@ public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
 		super();
 		setNameSpace(XMLTags.ns_opentox_feature_definition);
 		setNodeTag(XMLTags.node_featuredef);
-		referenceParser = new ReferenceDOMParser() {
+		referenceParser = new ReferenceDOMParser(){
 			@Override
-			public void processItem(LiteratureEntry item) throws AmbitException {
+			public void handleItem(LiteratureEntry item) throws AmbitException {
+				// TODO Auto-generated method stub
+				
 			}
 		};
 	}

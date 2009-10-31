@@ -18,14 +18,17 @@ import ambit2.rest.query.StructureQueryResource;
  */
 public class DatasetStructuresResource extends StructureQueryResource<QueryDatasetByID> {
 	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
-
+	public final static String dataset = "/dataset";	
+	public final static String datasetKey = "dataset_id";	
+	
 
 
 	@Override
 	protected QueryDatasetByID createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
-			Object id = request.getAttributes().get("dataset_id");
+			setTemplate(createTemplate(context, request, response));
+			Object id = request.getAttributes().get(datasetKey);
 			if (id != null)  try {
 				
 				QueryDatasetByID query = new QueryDatasetByID();

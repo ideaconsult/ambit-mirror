@@ -51,7 +51,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Document doc = createDOM(in);
         PropertyDOMParser parser = new PropertyDOMParser() {
         	@Override
-        	public void processItem(Property entry) throws AmbitException {
+        	public void handleItem(Property entry) throws AmbitException {
         		Assert.assertEquals(1,entry.getId());
         		Assert.assertEquals("Property 1",entry.getName());
         		Assert.assertEquals(8,entry.getReference().getId());
@@ -149,7 +149,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Document doc = createDOM(new StringReader(xml));
 		PropertyDOMParser parser = new PropertyDOMParser() {
         	@Override
-        	public void processItem(Property entry) throws AmbitException {
+        	public void handleItem(Property entry) throws AmbitException {
         		le.add(entry);
 
         	}

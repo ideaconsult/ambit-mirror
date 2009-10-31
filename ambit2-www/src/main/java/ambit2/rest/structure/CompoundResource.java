@@ -97,11 +97,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					
 					public Writer process(Object target) throws AmbitException {
 						try {
-							AmbitResource.writeHTMLHeader(getOutput(), "Compound", getRequest());
-							getOutput().write("<div>No search criteria specified</div>");
-							AmbitResource.writeHTMLFooter(getOutput(), "Compound", getRequest());
+							AmbitResource.writeHTMLHeader(output, "Compound", getRequest());
+							output.write("<div>No search criteria specified</div>");
+							AmbitResource.writeHTMLFooter(output, "Compound", getRequest());
 						} catch (Exception x) {}
-						return getOutput();
+						return output;
 					}
 					public void close() throws Exception {}
 
@@ -115,7 +115,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);	
 		else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);
+					new SDFReporter<QueryStructureByID>(getTemplate()),ChemicalMediaType.CHEMICAL_MDLSDF);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
@@ -142,7 +142,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new CompoundHTMLReporter(
 							getRequest(),
 							collapsed,
-							getURIReporter()),
+							getURIReporter(),
+							getTemplate()),
 					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter)getURIReporter();
@@ -157,7 +158,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
 		} else
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_MDLSDF);			
+					new SDFReporter<QueryStructureByID>(getTemplate()),ChemicalMediaType.CHEMICAL_MDLSDF);			
 	}
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest());
@@ -168,6 +169,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
 		try {
+			setTemplate(createTemplate(context, request, response));
 			Object key = request.getAttributes().get(idcompound);
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();

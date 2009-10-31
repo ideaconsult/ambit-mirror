@@ -5,6 +5,7 @@ import java.io.Writer;
 import org.restlet.data.Request;
 
 import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -31,7 +32,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 		try {w.write(String.format("<h3>Reference%s</h3>",collapsed?"s":""));} catch (Exception x) {}
 	}
 	@Override
-	public void processItem(ILiteratureEntry item, Writer output) {
+	public void processItem(ILiteratureEntry item) throws AmbitException  {
 		try {
 			output.write("<div>");
 			output.write("Name: ");

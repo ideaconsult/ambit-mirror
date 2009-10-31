@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryUser;
 import ambit2.rest.QueryDOMReporter;
@@ -46,11 +47,11 @@ public class UsersDOMReporter extends QueryDOMReporter<AmbitUser, QueryUser> {
 	}
 
 	@Override
-	public void processItem(AmbitUser item, Document doc) {
+	public void processItem(AmbitUser user) throws AmbitException {
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_user, XMLTags.node_users);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
-		                parent.item(i).appendChild(getItemElement(doc, item));
+		                parent.item(i).appendChild(getItemElement(output,user));
 		        		break;
 		   }		
 

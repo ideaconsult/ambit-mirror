@@ -77,10 +77,10 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest()) {
 					@Override
-					public void processItem(ILiteratureEntry dataset, Writer output) {
-						super.processItem(dataset, output);
+					public void processItem(ILiteratureEntry dataset) throws AmbitException  {
+						super.processItem(dataset);
 						try {
-						output.write('\n');
+							output.write('\n');
 						} catch (Exception x) {}
 					}
 				},MediaType.TEXT_URI_LIST);

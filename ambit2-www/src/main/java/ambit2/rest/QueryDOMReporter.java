@@ -1,8 +1,11 @@
 package ambit2.rest;
 
+import java.util.logging.Logger;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,6 +15,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.query.XMLTags;
+import ambit2.rest.reference.AbstractDOMParser;
 
 /**
  * Parent class for all DOM reporters
@@ -27,12 +31,14 @@ public abstract class QueryDOMReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	private static final long serialVersionUID = 2357730001828019569L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
 	public QueryDOMReporter(Request req) {
+		super();
 		uriReporter = createURIReporter(req); 
 	}
 	protected abstract QueryURIReporter createURIReporter(Request req);
 	@Override
 	public Document getOutput() throws AmbitException {
 		try {
+			if (output!=null) return output;
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			return doc;
 		} catch (ParserConfigurationException x) {
@@ -47,6 +53,11 @@ public abstract class QueryDOMReporter<T,Q extends IQueryRetrieval<T>> extends Q
         return e_uri;
 	}		
 	public abstract Element getItemElement(Document doc, T item);
-
 	
+	public void readDeep(Reference uri,AbstractDOMParser<T> parser) throws AmbitException {
+		Logger.getLogger(getClass().getName()).info(uri.toString());
+		RESTClient<T, Q,AbstractDOMParser<T>> client = new RESTClient<T, Q,AbstractDOMParser<T>>(parser,this);
+		client.process(uri);
+	}		
+
 }

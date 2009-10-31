@@ -45,7 +45,7 @@ public class AllFeatureDefinitionsTest extends ResourceTest {
 		Document doc = createDOM(in);
         PropertyDOMParser parser = new PropertyDOMParser() {
         	@Override
-        	public void processItem(Property entry) throws AmbitException {
+        	public void handleItem(Property entry) throws AmbitException {
         		System.out.println(entry);
         		switch (entry.getId()) {
         		case 1: {

@@ -29,9 +29,11 @@ public class PropertyQueryResource extends StructureQueryResource<QueryField> {
 			this.dataset_id = null;
 		}		
 	}
+
 	@Override
 	protected QueryField createQuery(Context context, Request request,
 			Response response) throws ResourceException {
+		setTemplate(createTemplate(context, request, response));
 		QueryField q =  new QueryField();
 		q.setChemicalsOnly(true);
         try {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -42,7 +43,7 @@ public class PropertyValueReporter<T> extends QueryReporter<T,IQueryRetrieval<T>
 	}
 
 	@Override
-	public void processItem(T item, Writer output) {
+	public void processItem(T item) throws AmbitException {
 		try {
 			if (item instanceof IStructureRecord) {
 				IStructureRecord v = (IStructureRecord) item;
