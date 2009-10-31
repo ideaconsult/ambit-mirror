@@ -30,7 +30,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
 		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
@@ -49,7 +49,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			});
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -78,11 +78,17 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		@data
 		*/
 		if (header == null) {
-			header = template2Header(template);
+			header = template2Header(template,true);
 		
 			writer.write("@attribute URI string\n");
-			for (Property p : header) 
-				writer.write(String.format("@attribute %s %s\n", p.getName(), p.getClazz()==Number.class?"numeric":"string"));
+			for (Property p : header) {
+				String d = p.getName().indexOf(" ")>=0?"\"":"";
+				writer.write(String.format("@attribute %s%s%s %s\n", 
+						d,
+						p.getName(),
+						d,
+						p.getClazz()==Number.class?"numeric":"string"));
+			}
 			
 			writer.write("\n@data\n");
 		}
@@ -98,8 +104,9 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	};
 
 	@Override
-	public void processItem(IStructureRecord item, Writer writer) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
+			Writer writer = getOutput();
 			writeHeader(writer);
 			int i = 0;
 			writer.write(String.format("/compound/%d",item.getIdchemical()));

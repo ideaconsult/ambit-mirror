@@ -12,6 +12,8 @@ import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 
+import com.sun.org.apache.xerces.internal.parsers.AbstractDOMParser;
+
 /**
  * Executes a query {@link IQueryRetrieval} and reports the results via {@link Reporter} interface
  * @author nina
@@ -78,7 +80,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		processors = new ProcessorsChain<T,IBatchStatistics,IProcessor>();
 		processors.add(new DefaultAmbitProcessor<T,T>() {
 			public T process(T target) throws AmbitException {
-				processItem(target,output);
+				processItem(target);
 				return target;
 			};
 		});
@@ -100,9 +102,11 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 			if (stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ)==0)
 				throw new NotFoundException(query.toString());
 			return output;
+
 		} catch (AmbitException x) {
 			throw x;
 		} catch (Exception x ) {
+			//TODO smth reasonable for java.io.IOException: An established connection was aborted by the software in your host machine
 			throw new AmbitException(x);
 		} finally {
 			if (isShowFooter()) footer(output, query);
@@ -113,7 +117,8 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	protected AbstractBatchProcessor<IQueryRetrieval<T>, T> createBatch() {
 		return new DbReader<T>();
 	}
-	public abstract void processItem(T item, Output output);
+	public abstract void processItem(T item) throws AmbitException;
 	
+
 	
 }

@@ -60,7 +60,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveStructure()));
 		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
@@ -79,7 +79,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			});
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -141,10 +141,10 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
     };
 	
 	@Override
-	public void processItem(IStructureRecord item, Document document) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 
 		try {
-			if(header == null) header = template2Header(getTemplate());
+			if(header == null) header = template2Header(getTemplate(),true);
 			
 			IAtomContainer mol = reader.process(item);
 			for (Property p : item.getProperties())

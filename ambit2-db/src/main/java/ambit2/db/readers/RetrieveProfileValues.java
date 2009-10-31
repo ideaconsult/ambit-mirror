@@ -60,7 +60,13 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		idproperty {
 			@Override
 			public String getParam(Property arg0) {
-				return Integer.toString(arg0.getId());
+				try {
+					if (arg0.getId()>0)
+						return Integer.toString(arg0.getId());
+					else return null;
+				} catch (Exception x) {
+					return null;
+				}
 			}
 		};
 		public String getSQL() {
@@ -71,14 +77,15 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 	protected SearchMode searchMode = SearchMode.name;
 	
 	public RetrieveProfileValues() {
-		this(SearchMode.idproperty,null);
+		this(SearchMode.idproperty,null,false);
 		
 	}
-	public RetrieveProfileValues(SearchMode querymode,Profile profile) {
+	public RetrieveProfileValues(SearchMode querymode,Profile profile,boolean chemicalsOnly) {
 		super();
 		setSearchMode(querymode);
 		setFieldname(profile);
 		setCondition(new SetCondition(conditions.in));
+		setChemicalsOnly(chemicalsOnly);
 	}		
 	public SearchMode getSearchMode() {
 		return searchMode;
@@ -135,7 +142,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"where idchemical=? %s %s order by idstructure limit 1";
 				
 
-	protected final String where = "and %s %s ";
+	protected final String where = "and %s ";
 
 	protected String sql() {
 		return isChemicalsOnly()?
@@ -148,18 +155,31 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
 			Iterator<Property> i = getFieldname().getProperties(true);
 			
-			String delimiter = "(";
+			int count = 0;
+			b.append(getCondition());
+			b.append(" (");
+			String delimiter = "";
 			while (i.hasNext()) {
-				b.append(delimiter);
-				b.append(searchMode.getParam(i.next()));
-				delimiter = ",";
+				String p = searchMode.getParam(i.next());
+				if (p != null) {
+					b.append(delimiter);
+					b.append(p);
+					count++;
+					delimiter = ",";
+				}
+				
 			}
 			b.append(")");
+			if (count == 0) {
+				b = new StringBuilder();
+				b.append(" is null");
+			}
 		}
+		
 		return String.format(
 				sql(),
 				(getFieldname()==null || "".equals(getFieldname()) )
-				?"":String.format(where,searchMode.getSQL(),getCondition()),
+				?"":String.format(where,searchMode.getSQL()),
 				b.toString()
 				);
 	}

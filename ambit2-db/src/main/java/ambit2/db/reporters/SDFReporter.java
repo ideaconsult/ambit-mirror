@@ -37,7 +37,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveStructure()));
 
 		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
@@ -56,7 +56,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			});		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -64,7 +64,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 
 	@Override
-	public void processItem(IStructureRecord item, Writer output) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
 			output.write(item.getContent());
 			for (Property p : item.getProperties()) {

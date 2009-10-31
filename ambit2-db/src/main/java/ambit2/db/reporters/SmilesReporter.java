@@ -25,13 +25,13 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
 	}
 	@Override
-	public void processItem(IStructureRecord item, Writer output) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
 			Object smiles = item.getProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
 			if (smiles == null)

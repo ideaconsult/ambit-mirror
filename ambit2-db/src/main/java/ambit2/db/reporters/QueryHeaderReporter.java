@@ -38,10 +38,14 @@ public abstract class QueryHeaderReporter<T,Q extends IQueryRetrieval<T>,Output>
 	}
 	
 	
-	protected List<Property> template2Header(Template template) {
+	protected List<Property> template2Header(Template template, boolean propertiesOnly) {
 		List<Property> h = new ArrayList<Property>();
 		Iterator<Property> it = template.getProperties(true);
-		while (it.hasNext()) h.add(it.next());
+		while (it.hasNext()) {
+			Property t = it.next();
+			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
+				h.add(it.next());
+		}
 		Collections.sort(h,new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {
 				return o1.getOrder()-o2.getOrder();
@@ -49,4 +53,5 @@ public abstract class QueryHeaderReporter<T,Q extends IQueryRetrieval<T>,Output>
 		});	
 		return h;
 	}
+
 }
