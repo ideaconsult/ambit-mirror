@@ -25,7 +25,7 @@ public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends 
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -33,12 +33,12 @@ public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends 
 
 	
 	@Override
-	public void processItem(IStructureRecord item, Writer writer) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 
 		try {
 			//TODO generate PDFcontent
-			writer.write("<p>");
-			writer.write(item.getContent());		
+			getOutput().write("<p>");
+			getOutput().write(item.getContent());		
 		} catch (Exception x) {
 			logger.error(x);
 		}

@@ -32,7 +32,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		getProcessors().clear();
 
 		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate())) {
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
@@ -51,7 +51,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			});
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -67,7 +67,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	
 	protected void writeHeader(Writer writer) throws IOException {
 		if (header == null) {
-			header = template2Header(template);
+			header = template2Header(template,true);
 		
 			writer.write("URI");
 			for (Property p : header) 
@@ -82,8 +82,10 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	};
 
 	@Override
-	public void processItem(IStructureRecord item, Writer writer) {
+	public void processItem(IStructureRecord item) throws AmbitException {
+		Writer writer = getOutput();
 		try {
+			
 			writeHeader(writer);
 			int i = 0;
 			writer.write(String.format("/compound/%d",item.getIdchemical()));

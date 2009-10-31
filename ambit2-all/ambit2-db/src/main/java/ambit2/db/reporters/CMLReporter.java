@@ -29,7 +29,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -40,7 +40,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		return super.getOutput();
 	}
 	@Override
-	public void processItem(IStructureRecord item, Writer output) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
 			CMLWriter cmlwriter = new CMLWriter(output);
 			cmlwriter.write(reader.process(item));

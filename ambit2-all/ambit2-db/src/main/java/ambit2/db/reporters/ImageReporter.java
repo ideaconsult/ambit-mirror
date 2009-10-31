@@ -31,7 +31,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -42,7 +42,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		return super.getOutput();
 	}
 	@Override
-	public void processItem(IStructureRecord item, OutputStream output) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
 			ImageIO.write(depict.getImage(reader.process(item)),"png",output);
 			

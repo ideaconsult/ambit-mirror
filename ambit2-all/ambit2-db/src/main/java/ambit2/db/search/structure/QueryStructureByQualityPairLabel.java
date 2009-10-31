@@ -41,7 +41,7 @@ public class QueryStructureByQualityPairLabel extends 	AbstractStructureQuery<St
 				result =   String.format(sql,where);
 			else
 				result =  String.format(sql,"");
-		System.out.println(result);
+		//System.out.println(result);
 		return result;
 	}
 

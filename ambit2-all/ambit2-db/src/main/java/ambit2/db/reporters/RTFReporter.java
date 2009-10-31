@@ -20,7 +20,7 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
@@ -28,11 +28,11 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	
 	@Override
-	public void processItem(IStructureRecord item, Document document) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 
 		try {
 			//TODO generate PDFcontent
-			document.add(new Paragraph(item.getContent()));			
+			getOutput().add(new Paragraph(item.getContent()));			
 		} catch (Exception x) {
 			logger.error(x);
 		}

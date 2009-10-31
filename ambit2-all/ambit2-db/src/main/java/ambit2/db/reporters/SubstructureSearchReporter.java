@@ -17,12 +17,12 @@ public abstract class SubstructureSearchReporter<Output> extends QueryReporter<I
 		getProcessors().add(new ProcessorStructureRetrieval());
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target,getOutput());
+				processItem(target);
 				return target;
 			};
 		});	
 	}
-	public void processItem(IStructureRecord item, Output output) {
+	public void processItem(IStructureRecord item) throws AmbitException {
 		
 	};
 }
