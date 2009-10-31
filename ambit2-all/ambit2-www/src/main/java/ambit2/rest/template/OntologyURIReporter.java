@@ -21,21 +21,24 @@ public class OntologyURIReporter extends QueryURIReporter<Object, IQueryRetrieva
 		reporter = new PropertyURIReporter(ref);
 	}
 	@Override
-	public String getURI(String ref, Object item) {
+	public String getURI(String ref, Object record) {
 		
-		if (item instanceof Dictionary) {
-			Dictionary dict = (Dictionary)item;
+		boolean isDictionary=(record instanceof Dictionary) || 
+		((record instanceof Property) && ((Property)record).getClazz().equals(Dictionary.class));
+		
+		if (isDictionary) {
+			Dictionary dict = (Dictionary)record;
 			return String.format("%s%s/%s/%s",
 					ref,
 					OntologyResource.resource,
 					dict.getParentTemplate()==null?"All":
-					Reference.encode(((Dictionary)item).getParentTemplate().toString()),
-					Reference.encode(((Dictionary)item).getTemplate().toString())
+					Reference.encode(((Dictionary)record).getParentTemplate().toString()),
+					Reference.encode(((Dictionary)record).getTemplate().toString())
 					);
-		} else if ((item instanceof Property) && ((Property)item).getClazz().equals(Dictionary.class)) 
-			return reporter.getURI((Property)item);
+		} else 
+			return reporter.getURI((Property)record);
 		//else return item.toString();
-		else return "";
+		//else return "";
 	}
 
 }
