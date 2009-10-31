@@ -77,6 +77,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		        		x.printStackTrace();
 		        		if (retry <maxRetry) {
 		        			retry++;
+		        			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,String.format("Retry %d ",retry));
 		        			continue;
 		        		}
 		        		else {
@@ -92,8 +93,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
 		        	}
 	        	}
-    			return new StringRepresentation("<error>Error</error>",
-    					variant.getMediaType());	
+    			return null;	        	
 	        	
 	        } else {
 	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,error);
