@@ -56,7 +56,7 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 	}
 	@Override
-	public void processItem(IStructureRecord record, Document output) {
+	public void processItem(IStructureRecord record) throws AmbitException {
 		Element e_record = toURI(reference,output, record);
         if (e_record == null) return;
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_compounds);
@@ -93,7 +93,7 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}
 	public Element toURI(Reference reference, Document doc, IStructureRecord record) {
 		StringWriter w = new StringWriter();
-		compoundURI.processItem(record, w);
+		try {compoundURI.processItem(record); } catch (Exception x){};
 		String uri = w.toString();
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_compound);
         for (int i=0; i < parent.getLength();i++)
@@ -117,7 +117,7 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		if (record.getIdstructure()<=0) return null;
 		
 		StringWriter w = new StringWriter();
-		conformerURI.processItem(record, w);
+		try {conformerURI.processItem(record);} catch (Exception x) {}
 
 		Element e_uri = doc.createElementNS(XMLTags.ns_opentox,XMLTags.node_conformer);
         e_uri.setAttribute(XMLTags.attr_href,w.toString());

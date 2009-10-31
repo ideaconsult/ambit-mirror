@@ -78,7 +78,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 		
 	}
 	@Override
-	public void processItem(T item, Document doc) {
+	public void processItem(T item) throws AmbitException  {
 
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_feature, XMLTags.node_features);
         for (int i=0; i < parent.getLength();i++)
@@ -90,7 +90,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
         		e_uri.setAttribute(XMLTags.attr_href,feature_uri);
         		e_feature.appendChild(e_uri);
         		*/
-        		parent.item(i).appendChild(getItemElement(doc, item));
+        		parent.item(i).appendChild(getItemElement(output, item));
         		break;
         	}	
 	}

@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Assert;
 
+import org.jmol.util.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.restlet.Application;
@@ -30,40 +31,34 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import ambit2.base.config.Preferences;
-import ambit2.rest.AmbitApplication;
+import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
 
 public abstract class ResourceTest extends DbUnitTest {
 	protected Component component=null;
-	protected Application app;
+
 	protected int port = 8181;
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
+		Logger.setLogLevel(Logger.LEVEL_WARN);
 		setUpDatabase("src/test/resources/src-datasets.xml");
-        // Create a component
-        component = new Component();
-        component.getServers().add(Protocol.HTTP, port);
-        component.getServers().add(Protocol.HTTPS, port);
-        component.getClients().add(Protocol.HTTP);
-        component.getClients().add(Protocol.HTTPS);        
-        Context context = component .getContext().createChildContext(); 
+
+
+        Context context = new Context();
         context.getParameters().add(Preferences.DATABASE, getDatabase());
         context.getParameters().add(Preferences.USER, getUser());
         context.getParameters().add(Preferences.PASSWORD, getPWD());
         context.getParameters().add(Preferences.PORT, getPort());
         context.getParameters().add(Preferences.HOST, getHost());
-        app = createApplication(context);
-        component.getDefaultHost().attach(app);
-        component.getInternalRouter().attach("/",app);
+        
+        // Create a component
+        component = new AmbitComponent(context);
+        component.getServers().add(Protocol.HTTP, port);
+        component.getServers().add(Protocol.HTTPS, port);        
         component.start();        
 	}
-	
-	protected Application createApplication(Context context) {
-		Application app = new AmbitApplication();
-		app.setContext(context);
-		return app;
-	}
+
 
 	@After
 	public void tearDown() throws Exception {

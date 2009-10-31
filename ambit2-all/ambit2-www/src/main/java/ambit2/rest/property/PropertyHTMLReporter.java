@@ -5,6 +5,7 @@ import java.io.Writer;
 import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -29,7 +30,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	}
 
 	@Override
-	public void processItem(Property item, Writer output) {
+	public void processItem(Property item) throws AmbitException  {
 		try {
 			output.write(String.format(
 						"<a href=\"%s\">%s %s</a>&nbsp;",

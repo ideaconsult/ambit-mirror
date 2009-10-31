@@ -1,7 +1,5 @@
 package ambit2.rest.tuple;
 
-import java.io.Writer;
-
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
@@ -51,8 +49,8 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 		
 			return new StringConvertor(	new TupleURIReporter(getRequest(),queryObject.getFieldname()) {
 				@Override
-				public void processItem(PropertiesTuple src, Writer output) {
-					super.processItem(src, output);
+				public void processItem(PropertiesTuple src) throws AmbitException {
+					super.processItem(src);
 					try {
 					output.write("\n");
 					} catch (Exception x) {}

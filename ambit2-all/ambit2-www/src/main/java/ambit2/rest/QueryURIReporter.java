@@ -6,6 +6,7 @@ import java.io.Writer;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
@@ -50,7 +51,7 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	protected QueryURIReporter() {
 	}	
 	@Override
-	public void processItem(T item, Writer output) {
+	public void processItem(T item) throws AmbitException {
 		try {
 			String o = getURI(item);
 			if (o != null) 	output.write(o);

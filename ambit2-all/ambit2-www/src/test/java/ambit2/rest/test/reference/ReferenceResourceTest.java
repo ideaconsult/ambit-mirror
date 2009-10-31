@@ -58,7 +58,7 @@ public class ReferenceResourceTest extends ResourceTest {
 		Document doc = createDOM(in);
         ReferenceDOMParser parser = new ReferenceDOMParser() {
         	@Override
-        	public void processItem(LiteratureEntry entry) throws AmbitException {
+        	public void handleItem(LiteratureEntry entry) throws AmbitException {
         		Assert.assertEquals(1,entry.getId());
         		Assert.assertEquals("CAS Registry Number",entry.getName());
         		Assert.assertEquals("http://www.cas.org",entry.getURL());
@@ -138,7 +138,7 @@ public class ReferenceResourceTest extends ResourceTest {
 		Document doc = createDOM(new StringReader(xml));
 		ReferenceDOMParser parser = new ReferenceDOMParser() {
         	@Override
-        	public void processItem(LiteratureEntry entry) throws AmbitException {
+        	public void handleItem(LiteratureEntry entry) throws AmbitException {
         		le.add(entry);
 
         	}

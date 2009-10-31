@@ -15,9 +15,10 @@ import org.xml.sax.SAXException;
 
 import ambit2.base.exceptions.AmbitException;
 
-public abstract class AbstractDOMParser<T> {
+public abstract class AbstractDOMParser<T>  {
 	protected String nameSpace;
 	protected String nodeTag;
+	
 	public String getNameSpace() {
 		return nameSpace;
 	}
@@ -30,6 +31,7 @@ public abstract class AbstractDOMParser<T> {
 	public void setNodeTag(String nodeTag) {
 		this.nodeTag = nodeTag;
 	}
+
 	public void parse(Reader reader)  throws ParserConfigurationException,IOException, SAXException, AmbitException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -40,15 +42,16 @@ public abstract class AbstractDOMParser<T> {
 	 * @param doc
 	 * @throws AmbitException
 	 */
+	
 	public void parse(Document doc)  throws AmbitException {
 		
 		NodeList nodes = doc.getElementsByTagName(nodeTag);
 		for (int i=0; i < nodes.getLength();i++) 
 			if (nodes.item(i) instanceof Element) {
 				
-				processItem(parse((Element)nodes.item(i)));
+				handleItem(parse((Element)nodes.item(i)));
 			}
 	}
-	public abstract void processItem(T item) throws AmbitException ;
+	public abstract void handleItem(T item) throws AmbitException ;
 	public abstract T parse(Element element) throws AmbitException;
 }

@@ -3,6 +3,8 @@ package ambit2.rest.structure;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.restlet.data.Form;
@@ -10,10 +12,16 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
+import ambit2.base.data.Property;
+import ambit2.base.data.Template;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveFieldPropertyValue;
+import ambit2.db.readers.RetrieveProfileValues;
+import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
@@ -33,16 +41,41 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	 */
 	private static final long serialVersionUID = -7776155843790521467L;
 	protected PropertyValueHTMLReporter valueReporter;
-	protected RetrieveFieldPropertyValue fieldQuery;
-	
+	//protected RetrieveFieldPropertyValue fieldQuery;
+
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter) {
+		this(request,collapsed,urireporter,null);
+	}
+	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,Template template) {
 		super(request,collapsed);
+		setTemplate(template==null?new Template(null):template);
 		if (urireporter != null) this.uriReporter = urireporter;
 		valueReporter = null;
-		fieldQuery = null;
+
+		
+		getProcessors().clear();
+		if (getTemplate().size()>0) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
+		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+				processItem(target);
+				return target;
+			};
+		});			
+	
+	}
+	public CompoundHTMLReporter(Request request,boolean collapsed,Template template) {
+		this(request,collapsed,null,template);
 	}
 	public CompoundHTMLReporter(Request request,boolean collapsed) {
-		this(request,collapsed,null);
+		this(request,collapsed,null,null);
 
 	}
 	@Override
@@ -50,12 +83,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request);
 	}
 	@Override
-	public void processItem(IStructureRecord record, Writer writer) {
+	public void processItem(IStructureRecord record) throws AmbitException  {
 
 		try {
-			writer.write("<div id=\"div-1a\">");
-			writer.write(toURI(record));
-			writer.write("</div>");		
+			output.write("<div id=\"div-1a\">");
+			output.write(toURI(record));
+			output.write("</div>");		
 
 			if (!collapsed) {
 /*
@@ -203,7 +236,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					"",
 					uriReporter.getRequest()
 					);
-			getOutput().flush();			
+			output.flush();			
 		} catch (Exception x) {}		
 	};
 
@@ -268,7 +301,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		};
 			for (String[] n:s)
 			b.append(String.format("<a href=\"%s/%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
-			//b.append("</div>");
+			
+			List<Property> props = template2Header(getTemplate(),true);
+
+			for(Property property: props) 
+				if (property.getId()>0) {
+					Object value = record.getProperty(property);
+					b.append(String.format("<b>%s</b>&nbsp;%s<br>",
+							property.getName(),value==null?"":
+								value.toString()));
+				}
+			//b.append("</table>");
 			b.append("</div>");		
 	
 		return b.toString();

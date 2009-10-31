@@ -7,6 +7,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
@@ -57,12 +58,13 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	}
 
 	@Override
-	public void processItem(Property item, Document doc) {
+	public void processItem(Property item) throws AmbitException {
+		if (item ==null) return;
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_featuredefs);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
 
-		                parent.item(i).appendChild(getItemElement(doc,item));
+		                parent.item(i).appendChild(getItemElement(output,item));
 		        		break;
 		   }			
 	}

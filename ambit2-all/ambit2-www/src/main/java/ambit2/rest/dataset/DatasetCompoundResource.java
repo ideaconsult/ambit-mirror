@@ -22,8 +22,18 @@ public class DatasetCompoundResource extends CompoundResource {
 	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 
 	@Override
+	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		Object id = request.getAttributes().get(DatasetResource.datasetKey);
+		if (id != null)
+			return String.format("riap://application/dataset/%s/feature_definition",id);
+		else 
+			return super.getDefaultTemplateURI(context,request,response);
+			
+	}
+	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		setTemplate(createTemplate(context, request, response));
 		IQueryRetrieval<IStructureRecord> q = super.createQuery(context, request, response);
 		if (q == null) return null;
 		

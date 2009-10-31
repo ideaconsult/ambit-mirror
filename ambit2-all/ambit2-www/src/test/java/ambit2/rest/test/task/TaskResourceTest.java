@@ -8,26 +8,56 @@ import java.util.concurrent.Callable;
 import junit.framework.Assert;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Application;
+import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
+import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 
+import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
-	@Override
-	protected Application createApplication(Context context) {
-		Application app = super.createApplication(context);
-		Assert.assertTrue(app instanceof AmbitApplication);
+	protected AmbitApplication app;
+	@Before
+	public void setUp() throws Exception {
+		setUpDatabase("src/test/resources/src-datasets.xml");
 
-		return app;
 
+        Context context = new Context();
+        context.getParameters().add(Preferences.DATABASE, getDatabase());
+        context.getParameters().add(Preferences.USER, getUser());
+        context.getParameters().add(Preferences.PASSWORD, getPWD());
+        context.getParameters().add(Preferences.PORT, getPort());
+        context.getParameters().add(Preferences.HOST, getHost());
+        
+        // Create a component
+        component = new Component();
+        
+		component.getClients().add(Protocol.FILE);
+		component.getClients().add(Protocol.HTTP);
+		component.getClients().add(Protocol.HTTPS);
+
+	    app = new AmbitApplication();
+	    app.setContext(context);
+	    
+	    // Attach the application to the component and start it
+	    
+	    component.getDefaultHost().attach(app);
+	    component.getInternalRouter().attach("/",app);
+	    
+        component.getServers().add(Protocol.HTTP, port);
+        component.getServers().add(Protocol.HTTPS, port);        
+
+        component.start();        
 	}
+	
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/task", port);

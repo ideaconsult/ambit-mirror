@@ -9,7 +9,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.db.reporters.QueryHeaderReporter;
 
 /**
  * Generates HTML representation of a resource
@@ -18,7 +18,7 @@ import ambit2.db.reporters.QueryReporter;
  * @param <T>
  * @param <Q>
  */
-public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends QueryReporter<T,Q,Writer>  {
+public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends QueryHeaderReporter<T,Q,Writer>  {
 	protected QueryURIReporter uriReporter;
 	
 
@@ -56,7 +56,7 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 		*/
 		processors.add(new DefaultAmbitProcessor<T,T>() {
 			public T process(T target) throws AmbitException {
-				processItem(target,output);
+				processItem(target);
 				return target;
 			};
 		});

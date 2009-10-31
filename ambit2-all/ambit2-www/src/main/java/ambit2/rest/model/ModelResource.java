@@ -1,6 +1,5 @@
 package ambit2.rest.model;
 
-import java.io.Writer;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
@@ -101,8 +100,8 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
 			@Override
-			public void processItem(ModelQueryResults dataset, Writer output) {
-				super.processItem(dataset, output);
+			public void processItem(ModelQueryResults dataset) throws AmbitException  {
+				super.processItem(dataset);
 				try {
 				output.write('\n');
 				} catch (Exception x) {}
@@ -157,7 +156,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 				
 				QueryReporter<ModelQueryResults,ReadModel,Object> r = new QueryReporter<ModelQueryResults,ReadModel,Object>() {
 					@Override
-					public void processItem(ModelQueryResults model, Object output) {
+					public void processItem(ModelQueryResults model) throws AmbitException {
 						try {
 							themodel.setId(model.getId());
 							model.setTestInstances(query);

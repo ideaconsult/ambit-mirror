@@ -1,6 +1,5 @@
 package ambit2.rest.dataset;
 
-import java.io.Writer;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -99,8 +98,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
 			@Override
-			public void processItem(SourceDataset dataset, Writer output) {
-				super.processItem(dataset, output);
+			public void processItem(SourceDataset dataset) throws AmbitException  {
+				super.processItem(dataset);
 				try {
 				output.write('\n');
 				} catch (Exception x) {}
@@ -108,7 +107,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
 		return new OutputStreamConvertor(
-				new DatasetHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 
 	@Override
@@ -124,7 +123,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 						 "File import",
-						new CallableFileImport(items,DatasetHTMLReporter.fileUploadField,getConnection(),reporter),
+						new CallableFileImport(items,DatasetsHTMLReporter.fileUploadField,getConnection(),reporter),
 						getRequest().getRootRef());		
 				  getResponse().setLocationRef(ref);
 				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);

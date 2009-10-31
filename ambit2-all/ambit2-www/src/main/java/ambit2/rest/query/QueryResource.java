@@ -106,13 +106,11 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		}
 	}		
 	
-	
 	/**
 	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
 	 */
-	public void createNewObject(Representation entity) throws ResourceException {
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		T entry = createObjectFromHeaders(requestHeaders, entity);
+	public void executeUpdate(Representation entity, T entry, AbstractUpdate updateObject) throws ResourceException {
+
 		Connection c = null;
 		//TODO it is inefficient to instantiate executor in all classes
 		UpdateExecutor executor = new UpdateExecutor();
@@ -120,7 +118,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 
 			executor.setConnection(getConnection());
 			executor.open();
-			executor.process(createUpdateObject(entry));
+			executor.process(updateObject);
 			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest());
 			getResponse().setLocationRef(uriReporter.getURI(entry));
 			getResponse().setStatus(Status.SUCCESS_OK);
@@ -135,14 +133,38 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			try {executor.close();} catch (Exception x) {}
 			try {if(c != null) c.close();} catch (Exception x) {}
 		}
+	}	
+	/**
+	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
+	 */
+	public void createNewObject(Representation entity) throws ResourceException {
+		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
+		T entry = createObjectFromHeaders(requestHeaders, entity);
+		executeUpdate(entity, 
+				entry,
+				createUpdateObject(entry));
+	
 	}
+	/**
+	 * DELETE - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
+	 */
+	public void deleteObject(Representation entity) throws ResourceException {
+		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
+		T entry = createObjectFromHeaders(requestHeaders, entity);
+		executeUpdate(entity, 
+				entry,
+				createDeleteObject(entry));
+	
+	}	
 	protected QueryURIReporter<T, Q>  getURUReporter(Request baseReference) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
 	protected  AbstractUpdate createUpdateObject(T entry) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}
-	
+	protected  AbstractUpdate createDeleteObject(T entry) throws ResourceException {
+		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+	}	
 	protected T createObjectFromHeaders(Form requestHeaders, Representation entity) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}

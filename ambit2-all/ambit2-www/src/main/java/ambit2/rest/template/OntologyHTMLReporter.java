@@ -2,27 +2,34 @@ package ambit2.rest.template;
 
 import java.io.Writer;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RESTClient;
+import ambit2.rest.property.PropertyDOMParser;
+import ambit2.rest.reference.AbstractDOMParser;
 
 /**
  * Reporter for {@link Dictionary} or {@link Property}
  * @author nina
  *
  */
-public class OntologyHTMLReporter extends QueryHTMLReporter<Object, QueryOntology> {
+public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrieval<Object>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4281274169475316720L;
 	protected int count = 0;
+	
 	public OntologyHTMLReporter(Request reference,boolean collapsed) {
 		super(reference,collapsed);
 
@@ -34,28 +41,55 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, QueryOntolog
 	
 	public String toURI(Object record) {
 		count++;
-		if (count==1) return ""; 
+		//if (count==1) return ""; 
 		
 		String w = uriReporter.getURI(record);
 		
+		boolean isDictionary=(record instanceof Dictionary) || 
+		((record instanceof Property) && ((Property)record).getClazz().equals(Dictionary.class));
 		return String.format(
 				"<img src=\"%s/images/%s\">%s<a href=\"%s\">%s</a>&nbsp;<br>",
 
 				uriReporter.getBaseReference().toString(),
-				(record instanceof Dictionary)?"folder.png":"feature.png",
-						(record instanceof Dictionary)?"":"&nbsp;Feature:&nbsp;",						
-
+				isDictionary?"folder.png":"feature.png",
+				isDictionary?"":"&nbsp;Feature:&nbsp;",						
 				w,
-				(record instanceof Dictionary)?((Dictionary)record).getTemplate():record.toString()
+				isDictionary?((Dictionary)record).getTemplate():record.toString()
 						);
 
 		
 	}	
+
 	@Override
-	public void processItem(Object record, Writer writer) {
+	public void processItem(Object record) throws AmbitException  {
 
 		try {
-			writer.write(toURI(record));
+			if ((record instanceof Dictionary) || 
+					((record instanceof Property) && ((Property)record).getClazz().equals(Dictionary.class))){
+				output.write(toURI(record));
+				
+				if (!collapsed) {
+					AbstractDOMParser parser = new PropertyDOMParser(){
+						@Override
+						public void handleItem(Property item) throws AmbitException {
+							processItem(item);
+							
+						}
+					};				
+
+					
+					
+					Reference newuri = new Reference(String.format("%s/view/tree", uriReporter.getURI(record)));
+					if (!newuri.equals(uriReporter.getRequest().getOriginalRef())) {
+						RESTClient client = new RESTClient(parser,null);
+						client.process(newuri);
+					}
+					
+							
+				}				
+				
+			} else if  ((record instanceof Property) && !((Property)record).getClazz().equals(Dictionary.class))
+				output.write(toURI(record));
 			if (!collapsed) {
 /*
 				String[] more = new String[] {
@@ -94,7 +128,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, QueryOntolog
 					"",
 					uriReporter.getRequest()
 					);
-			getOutput().flush();			
+			output.flush();			
 		} catch (Exception x) {}		
 	};
 

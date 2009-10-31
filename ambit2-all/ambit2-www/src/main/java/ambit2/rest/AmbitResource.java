@@ -144,10 +144,11 @@ public class AmbitResource extends ServerResource {
 					
 
 			{"http://opentox.org/dev/apis/feature-ontology","Feature ontology (PROPOSAL)",formatHeader,null},
-			{"/template/Endpoints","Hierarchical view of endpoints",format,"GET","Yes"},
-			{"/template/Descriptors","Hierarchical view of descriptors",format,"GET","Yes"},
-			{"/template/Dataset","Hierarchical view of features in datasets",format,"GET","Yes"},
-			{"/template/Identifiers","Hierarchical view of identifiers",format,"GET","Yes"},
+			{String.format("%s/All/Endpoints",OntologyResource.resource),"Hierarchical view of endpoints",format,"GET","Yes"},
+			{String.format("%s/All/Descriptors",OntologyResource.resource),"Hierarchical view of descriptors",format,"GET","Yes"},
+			{String.format("%s/All/Dataset",OntologyResource.resource),"Hierarchical view of features in datasets",format,"GET","Yes"},
+			{String.format("%s/All/Identifiers",OntologyResource.resource),"Hierarchical view of identifiers",format,"GET","Yes"},
+			{String.format("%s/{subject}/{object}",OntologyResource.resource),"Delete entry",format,"DELETE","Yes"},
 			
 
 			{"(to be discussed)","Dataset search",formatHeader,null,"Implemented"},			
@@ -410,7 +411,7 @@ public class AmbitResource extends ServerResource {
 		w.write(String.format("<a href='%s/query/similarity'>Similar&nbsp;structures</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/smarts'>SMARTS&nbsp;patterns</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s%s/Endpoints'>Endpoints</a>&nbsp;",baseReference,OntologyResource.resource));
+		w.write(String.format("<a href='%s%s/Taxonomy'>Taxonomy</a>&nbsp;",baseReference,OntologyResource.resource));
 		w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
 		w.write(String.format("<a href='%s%s'>Feature definitions</a>&nbsp;",baseReference,PropertyResource.featuredef));

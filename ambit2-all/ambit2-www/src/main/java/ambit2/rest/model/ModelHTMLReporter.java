@@ -58,11 +58,11 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	}
 	
 	@Override
-	public void processItem(ModelQueryResults model, Writer output) {
+	public void processItem(ModelQueryResults model) {
 		try {
 			output.write("<tr>\n");
 			StringWriter w = new StringWriter();
-			uriReporter.processItem(model, w);
+			uriReporter.processItem(model);
 
 			output.write(String.format(
 						"<td><a href=\"%s\">%s</a></td>",

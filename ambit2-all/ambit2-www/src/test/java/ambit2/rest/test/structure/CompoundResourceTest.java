@@ -23,6 +23,7 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 
+import weka.core.Attribute;
 import weka.core.Instances;
 
 import ambit2.base.io.DownloadTool;
@@ -55,7 +56,21 @@ public class CompoundResourceTest extends ResourceTest {
 			count++;
 		}
 		return count ==1;
-	}		
+	}	
+	/*
+	@Override
+	public boolean verifyResponseARFF(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			count++;
+		}
+		return count ==8;
+	}	
+	*/
 	@Override
 	public boolean verifyResponseARFF(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -64,14 +79,20 @@ public class CompoundResourceTest extends ResourceTest {
 		in.close();
 		Assert.assertEquals(1,instances.numInstances());
 		Assert.assertEquals("Dataset",instances.relationName());
-		Assert.assertEquals("1530-32-1",instances.firstInstance().stringValue(1));
+		Attribute cas = new Attribute("CAS");
+		
+		
+		Assert.assertEquals("1530-32-1",instances.firstInstance().stringValue(3));
 		Assert.assertEquals("URI",instances.attribute(0).name());
-		Assert.assertEquals("CAS",instances.attribute(1).name());
+		Assert.assertEquals("CAS",instances.attribute(3).name());
 		return true;
 	}		
+	
 	@Test
 	public void testARFF() throws Exception {
-		testGet(String.format("http://localhost:%d/compound/11", port),ChemicalMediaType.WEKA_ARFF);
+		testGet(String.format("http://localhost:%d/compound/11?features=http://localhost:%d/feature_definition", 
+				port,port)
+				,ChemicalMediaType.WEKA_ARFF);
 	}	
 	@Override
 	public boolean verifyResponseCSV(String uri, MediaType media, InputStream in)
@@ -91,7 +112,9 @@ public class CompoundResourceTest extends ResourceTest {
 	}		
 	@Test
 	public void testCSV() throws Exception {
-		testGet(String.format("http://localhost:%d/compound/11", port),MediaType.TEXT_CSV);
+	
+		testGet(String.format("http://localhost:%d/compound/11?features=http://localhost:%d/feature_definition", 
+				port,port),MediaType.TEXT_CSV);
 	}		
 	@Test
 	public void testHTML() throws Exception {

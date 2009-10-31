@@ -1,12 +1,22 @@
 package ambit2.rest.query;
 
+import java.io.InputStreamReader;
+import java.util.logging.Logger;
+
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
+import org.restlet.data.Response;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.Preferences;
+import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -18,6 +28,7 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
+import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
@@ -26,8 +37,10 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.CompoundURIReporter;
+import ambit2.rest.template.OntologyResource;
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
@@ -47,6 +60,64 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		this.template = (template==null)?new Template(null):template;
 
 	}
+	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		return String.format("riap://application%s/All/Identifiers/view/tree",OntologyResource.resource);
+	}
+	protected Template createTemplate(Context context, Request request,
+			Response response) throws ResourceException {
+		
+		try {
+			Template profile = new Template(null);
+			profile.setId(-1);				
+			
+			Form form = request.getResourceRef().getQueryAsForm();
+			String[] featuresURI =  form.getValuesArray("features");
+
+			for (String featureURI:featuresURI) 
+				readFeatures(featureURI, profile);
+			
+			if (profile.size() == 0) {
+				readFeatures(getDefaultTemplateURI(context,request,response), profile);
+
+			}
+			return profile;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+		}
+		
+	}	
+	protected void readFeatures(String uri,final Template profile) {
+		if (uri==null) return;
+		Representation r = null;
+		try {
+			
+			Logger.getLogger(uri);
+			ClientResource client = new ClientResource(uri);
+			client.setClientInfo(getRequest().getClientInfo());
+			client.setReferrerRef(getRequest().getOriginalRef());
+			r = client.get(MediaType.TEXT_XML);
+			
+			PropertyDOMParser parser = new PropertyDOMParser() {
+				@Override
+				public void handleItem(Property property)
+						throws AmbitException {
+					if (property!= null)  {
+						property.setEnabled(true);
+						profile.add(property);
+					}
+				}
+			};		
+			parser.parse(new InputStreamReader(r.getStream()));
+		
+		} catch (Exception x) {
+			Logger.getLogger(getClass().getName()).severe(x.getMessage());
+
+		} finally {
+			
+			try {if (r != null) r.getStream().close(); } catch (Exception x) {}
+			
+		}
+	}	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -100,7 +171,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getRequest(),true,getTemplate()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);			

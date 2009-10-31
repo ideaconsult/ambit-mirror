@@ -1,8 +1,10 @@
 package ambit2.rest.dataset;
 
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -11,6 +13,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -37,38 +40,48 @@ import ambit2.rest.property.PropertyDOMParser;
 public class DatasetResource extends DatasetStructuresResource {
 	
 	
-	public final static String dataset = "/dataset";	
-	public final static String datasetKey = "dataset_id";	
-	
+
+	@Override
+	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		Object id = request.getAttributes().get(datasetKey);
+		if (id != null)
+			return String.format("riap://application/dataset/%s/feature_definition",id);
+		else 
+			return super.getDefaultTemplateURI(context,request,response);
+			
+	}
 	@Override
 	protected QueryDatasetByID createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		
 		try {
 			QueryDatasetByID q = super.createQuery(context, request, response);
-			if (q.getValue() > 0) {
-				ClientResource client = new ClientResource(
-						String.format("riap://application/dataset/%d/feature_definition",q.getValue()));
-				client.setClientInfo(getRequest().getClientInfo());
-				client.setReferrerRef(getRequest().getOriginalRef());
-				Representation r = client.get(MediaType.TEXT_XML);
-				final Template profile = new Template(null);
-				profile.setId(-1);				
-				PropertyDOMParser parser = new PropertyDOMParser() {
-					@Override
-					public void processItem(Property property)
-							throws AmbitException {
-						if (property!= null) {
-							property.setEnabled(true);
-							profile.add(property);
-						}
-					}
-				};
-				setTemplate(profile);
-				parser.parse(new InputStreamReader(r.getStream()));
-				r.getStream().close();
-			}
+			setTemplate(createTemplate(context, request, response));
 			return q;
+			/*
+			final Template profile = new Template(null);
+			profile.setId(-1);				
+			
+			Form form = request.getResourceRef().getQueryAsForm();
+			String[] featuresURI =  form.getValuesArray("features");
+
+			for (String featureURI:featuresURI) {
+				readFeatures(featureURI, profile);
+			}
+			
+			if (q.getValue() > 0) {
+				readFeatures(String.format("riap://application/dataset/%d/feature_definition",q.getValue()), profile);
+				setTemplate(profile);
+			}
+			try {
+				 Preferences.setProperty(Preferences.MAXRECORDS,
+						 form.getFirstValue("max"));
+			} catch (Exception x) {
+				
+			}
+
+			return q;
+			*/
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
