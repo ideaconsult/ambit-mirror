@@ -51,6 +51,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		super(request,collapsed);
 		setTemplate(template==null?new Template(null):template);
 		if (urireporter != null) this.uriReporter = urireporter;
+		
 		pReporter = new PropertyURIReporter(request);
 		table = collapsed;
 		getProcessors().clear();
@@ -75,6 +76,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public Writer getOutput() throws AmbitException {
 		Writer w = super.getOutput();
 		pReporter.setOutput(w);
+		uriReporter.setOutput(w);
 		return w;
 	}
 	public CompoundHTMLReporter(Request request,boolean collapsed,Template template) {
@@ -143,7 +145,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				query_property = "";
 			}
 			w.write("<form action='' method='get'>\n");
-			w.write(String.format("<input name='property' size='20' value='%s'>\n",query_property));
+			w.write(String.format("<input name='property' size='20' value='%s'>\n",query_property==null?"":query_property));
 			w.write("&nbsp;");
 			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
 

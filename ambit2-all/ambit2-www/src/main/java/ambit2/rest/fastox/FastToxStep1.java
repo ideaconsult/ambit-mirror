@@ -24,7 +24,7 @@ public class FastToxStep1 extends CompoundResource {
 		return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
 						getRequest(),
-						collapsed,
+						false,
 						getURIReporter()) {
 					
 					

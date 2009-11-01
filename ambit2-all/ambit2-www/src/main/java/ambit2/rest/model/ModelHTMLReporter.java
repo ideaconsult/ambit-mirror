@@ -12,6 +12,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
+import ambit2.rest.template.OntologyResource;
 import ambit2.rest.template.OntologyURIReporter;
 
 public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> {
@@ -76,23 +77,25 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 				output.write("<td></td>");
 			else
 				output.write(String.format(
-						"<td><img src=\"%s/images/structures.gif\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s/query/results/%d\">Browse</a></td>",
+						"<td><img src=\"%s/images/table.png\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s/query/results/%d\">Browse</a></td>",
 						uriReporter.getBaseReference(),
 						uriReporter.getBaseReference(),
 						model.getTrainingInstances().getFieldname().getId()
 						));
 						
 			output.write(String.format(
-					"<td><img src=\"%s/images/feature.png\" alt=\"Features\" title=\"Browse features\" border=\"0\"/>&nbsp;<a href=\"%s/template/%s\">%s</a></td>",
+					"<td><img src=\"%s/images/feature.png\" alt=\"Features\" title=\"Browse features\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getBaseReference(),
+					OntologyResource.resource,
 					model.getPredictors()==null?"":Reference.encode(model.getPredictors().getName()),
 					model.getPredictors()==null?"":model.getPredictors().getName()		
 			));
 			output.write(String.format(
-					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Dependent variable(s)\" title=\"Dependent variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s/template/%s\">%s</a></td>",
+					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Dependent variable(s)\" title=\"Dependent variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getBaseReference(),
+					OntologyResource.resource,
 					model.getDependent()==null?"":Reference.encode(model.getDependent().getName()),
 					model.getDependent()==null?"":model.getDependent().getName()		
 			));			
