@@ -23,6 +23,7 @@ import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.task.TaskResource;
+import ambit2.rest.template.OntologyResource;
 
 /**
  * Executes a model and returns {@link Reference} for a {@link TaskResource}
@@ -80,7 +81,7 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
     		
 			batch.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println(evt.getNewValue());
+					//System.out.println(evt.getNewValue());
 					
 				}
 			});
@@ -94,9 +95,9 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
     		q.setId(1);
     		*/
     		IBatchStatistics stats = batch.process(model.getTestInstances());
-    		System.out.println(stats);
+    		//System.out.println(stats);
     		if (reference ==null)	
-    			return new Reference(String.format("/template/%s",model.getDependent().getName()));
+    			return new Reference(String.format("%s/All/%s",OntologyResource.resource,model.getDependent().getName()));
     		else return reference;
 		} catch (Exception x) {
 			x.printStackTrace();
