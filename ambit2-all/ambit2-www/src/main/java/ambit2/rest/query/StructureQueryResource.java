@@ -61,7 +61,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	}
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
-		return String.format("riap://application%s/All/Identifiers/view/tree",OntologyResource.resource);
+		return null;//return String.format("riap://application%s/All/Identifiers/view/tree",OntologyResource.resource);
 	}
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
