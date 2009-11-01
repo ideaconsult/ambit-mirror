@@ -3,7 +3,6 @@ package ambit2.rest.structure;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
@@ -26,7 +25,7 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.propertyvalue.PropertyValueHTMLReporter;
+import ambit2.rest.property.PropertyURIReporter;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -40,7 +39,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	 * 
 	 */
 	private static final long serialVersionUID = -7776155843790521467L;
-	protected PropertyValueHTMLReporter valueReporter;
+	protected PropertyURIReporter pReporter;
+	protected boolean table = true;
+	protected int count = 0;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter) {
@@ -50,9 +51,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		super(request,collapsed);
 		setTemplate(template==null?new Template(null):template);
 		if (urireporter != null) this.uriReporter = urireporter;
-		valueReporter = null;
-
-		
+		pReporter = new PropertyURIReporter(request);
+		table = collapsed;
 		getProcessors().clear();
 		if (getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
@@ -71,6 +71,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		});			
 	
 	}
+	@Override
+	public Writer getOutput() throws AmbitException {
+		Writer w = super.getOutput();
+		pReporter.setOutput(w);
+		return w;
+	}
 	public CompoundHTMLReporter(Request request,boolean collapsed,Template template) {
 		this(request,collapsed,null,template);
 	}
@@ -84,31 +90,22 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}
 	@Override
 	public void processItem(IStructureRecord record) throws AmbitException  {
-
+		
 		try {
-			output.write("<div id=\"div-1a\">");
-			output.write(toURI(record));
-			output.write("</div>");		
-
-			if (!collapsed) {
-/*
-				String[] more = new String[] {
-						"conformer/all",
-						
-						"feature/",
-						"query/similar/",
-						"query/smarts/",
-						"model/",
-						"dataset/"
-						
-						};
-				for (String m:more)
-					output.write(String.format("<a href='%s'>%s</a>&nbsp;",m,m));
-*/
+			if (table) {
+				output.write("<tr>");
+				output.write(toURITable(record));
+				output.write("</tr>");		
+				
+			} else {
+				output.write("<div id=\"div-1a\">");
+				output.write(toURI(record));
+				output.write("</div>");		
 			}
 		} catch (Exception x) {
 			logger.error(x);
 		}
+		count++;
 	}
 	
 	public void header(Writer w, Q query) {
@@ -222,15 +219,30 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			output.write("</form>");	
 			output.write("</span></div></h4>\n");	
 			
+			if (table) {
+				output.write("<table border='0' width='99%'>"); 
+				output.write("<th bgcolor='#99CC00'>Compound</th>"); //ECB42C
+				List<Property> props = template2Header(getTemplate(),true);
+
+				for(Property p: props) {
+					
+					output.write(
+							String.format("<th bgcolor='#99CC00' align='center'><a href='%s'>%s</a></th>",
+						pReporter.getURI(p),p.getName()));
+
+				}				
+			}
+			else
+				output.write("<div id=\"div-1\">");
 			
-			output.write("<div id=\"div-1\">");
 			
 
 		} catch (Exception x) {}		
 	};
 	public void footer(Writer output, Q query) {
 		try {
-			output.write("</div>");
+			if (table) output.write("</table>");
+			else output.write("</div>");
 			//output.write("</form>");			
 			AmbitResource.writeHTMLFooter(output,
 					"",
@@ -244,6 +256,59 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		// TODO Auto-generated method stub
 		
 	}
+	public String toURITable(IStructureRecord record) {
+		String w = uriReporter.getURI(record);
+		StringBuilder b = new StringBuilder();
+		
+		b.append("<tr>");
+		
+
+		b.append(String.format(
+				"<th><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=150&h=150\" alt=\"%s\" title=\"%d\"/></a></th>",
+				
+				w, w, 
+				w, record.getIdchemical()));
+
+
+			List<Property> props = template2Header(getTemplate(),true);
+
+			for(Property property: props) {
+				//if (property.getId()>0) {
+					Object value = record.getProperty(property);
+					b.append(String.format("<td bgcolor='%s' width='100' align='right'>",((count % 2)==1)?"#F9FFE6":"#FBFFEC" )) ; //"#EBEEF1"
+					if (value != null) {
+						//?property=MW&search=100+..+200
+						b.append(String.format("<a href=\"%s/compound?property=%s&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Search for %s=%s' title='Search for %s=%s'></a>", 
+								uriReporter.getBaseReference(),
+								Reference.encode(property.getName()),
+								Reference.encode(value.toString()),
+								uriReporter.getBaseReference(),		
+								property.getName(),
+								value.toString(),
+								property.getName(),
+								value.toString()							
+						));
+						//?property=MW&search=100+..+200
+						b.append(String.format("&nbsp;<a href=\"%s/compound?search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Relaxed search for %s' title='Relaxed search for %s'></a>", 
+								uriReporter.getBaseReference(),
+								Reference.encode(value.toString()),
+								uriReporter.getBaseReference(),		
+								value.toString(),
+								value.toString()							
+						));						
+					}
+					b.append(String.format("<br><a href='%s'>%s</a>",
+							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
+							value==null?"":
+								value.toString().length()>40?value.toString().substring(0,40):value.toString()
+										));					
+					b.append("</td>");
+				}
+
+			b.append("</tr>");		
+	
+		return b.toString();
+	}		
 	
 	public String toURI(IStructureRecord record) {
 		String w = uriReporter.getURI(record);
@@ -259,35 +324,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
 
-		/*
-		if (getConnection()!= null) {
-			if (fieldQuery==null) {
-				fieldQuery = new RetrieveFieldPropertyValue();
-				fieldQuery.setSearchByAlias(true);
-			}
-			fieldQuery.setValue(record);
-			try {
-				String[] features = new String[] {CDKConstants.CASRN};
-				for (String feature: features) {
-					StringWriter writer = new StringWriter();
-					fieldQuery.setFieldname(Property.getInstance(feature,LiteratureEntry.getInstance()));
-					valueReporter = new PropertyValueHTMLReporter(getUriReporter().getBaseReference()) ;
-					valueReporter.setShowFooter(false);
-					valueReporter.setShowHeader(false);				
-					valueReporter.setOutput(writer);
-					valueReporter.setConnection(getConnection());
-					valueReporter.process(fieldQuery);
-					b.append("<table>");
-					b.append(writer.toString());
-					b.append("</table>");
-				}
-			} catch (Exception x) {
-				x.printStackTrace();
-			} finally {
-				try {valueReporter.setConnection(null); } catch (Exception x) {}
-			}
-		}
-		*/
 		String[][] s = new String[][] {
 				{"feature",CDKConstants.CASRN,"CAS RN"},
 				{"feature","EC","EINECS"},
@@ -319,7 +355,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 	@Override
 	public void close() throws SQLException {
-		valueReporter.close();
 		super.close();
 	}
 	@Override

@@ -42,6 +42,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	public void header(Writer w, QueryTuple query) {
 		super.header(w, query);
 		try {
+			cmp_reporter.setOutput(w);
 			cmp_reporter.processItem(query.getFieldname());
 			w.write("<table><th>Dataset</th><th>Browse data</th>");
 			

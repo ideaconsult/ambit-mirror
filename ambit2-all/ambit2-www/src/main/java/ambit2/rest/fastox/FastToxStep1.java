@@ -51,20 +51,7 @@ public class FastToxStep1 extends CompoundResource {
 								
 								return b.toString();
 							}
-					/*
-					@Override
-					public void processItem(IStructureRecord item, Writer writer) {
-						try {
-							//writer.write(String.format("<form action=\"%s%s/step2\" method=\"POST\">",getUriReporter().getBaseReference(),resource));
-							super.processItem(item, writer);
-						//	output.write("</div><div id=\"div-1\"><table><tr><th><form><input name=\"Daily Intake,mg/kg\"><input type=\"submit\"/></form></th></tr></table>");
-							
-
-						} catch (Exception x) {
-							
-						}
-					}
-*/
+	
 				},
 				MediaType.TEXT_HTML);
 	}

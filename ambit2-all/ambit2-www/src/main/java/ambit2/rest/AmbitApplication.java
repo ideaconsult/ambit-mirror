@@ -170,7 +170,7 @@ public class AmbitApplication extends Application {
 	
 		try {
 			LoginInfo li = getLoginInfo();
-			
+
 			if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
 				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
 			if (getContext().getParameters().getFirstValue(Preferences.USER)!=null)
@@ -181,7 +181,8 @@ public class AmbitApplication extends Application {
 				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
-
+		
+			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -215,6 +216,7 @@ public class AmbitApplication extends Application {
 		
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
+		router.attach(OntologyResource.resourceTree, OntologyResource.class);
 
 		Router allDatasetsRouter = new Router(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
@@ -456,14 +458,14 @@ public class AmbitApplication extends Application {
 		taskRouter.attachDefault(TaskResource.class);
 		taskRouter.attach(TaskResource.resourceID, TaskResource.class);
 		router.attach(TaskResource.resource, taskRouter);		
-		/** 
+		/*
         router.attach(
                 "/images",
                 new Directory(
                         getContext(),
                         LocalReference.createFileReference(
-                                webRootPath + "/images")));		
-                                */
+                                 "/webapps/images")));		
+                               */
 		
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
@@ -612,7 +614,6 @@ public class AmbitApplication extends Application {
     	authorizer.getAnonymousMethods().add(Method.GET);
     	authorizer.getAnonymousMethods().add(Method.HEAD);
     	authorizer.getAnonymousMethods().add(Method.OPTIONS);
-    	authorizer.getAuthenticatedMethods().add(Method.GET);
     	authorizer.getAuthenticatedMethods().add(Method.PUT);
     	authorizer.getAuthenticatedMethods().add(Method.DELETE);
     	authorizer.getAuthenticatedMethods().add(Method.POST);

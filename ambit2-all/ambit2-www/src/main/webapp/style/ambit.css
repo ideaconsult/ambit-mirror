@@ -124,7 +124,7 @@ h4
 A:link
 {
     FONT-SIZE: 10pt;
-    COLOR: #729203;
+    COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
@@ -132,7 +132,7 @@ A:link
 A:visited
 {
     FONT-SIZE: 10pt;
-    COLOR: #729203;
+    COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
@@ -140,7 +140,7 @@ A:visited
 A:active
 {
     FONT-SIZE: 10pt;
-    COLOR: #ECB42C;
+    COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
@@ -148,7 +148,7 @@ A:active
 A:hover
 {
     FONT-SIZE: 10pt;
-    COLOR: #516373;
+    COLOR: #99CC00;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Verdana, Arial
