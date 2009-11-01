@@ -49,6 +49,8 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			output.write("<th>Predictors</th>\n");
 			output.write("<th>Dependent variables</th>\n");
 			output.write("</tr>\n");
+			cmp_reporter.setOutput(w);
+			uriReporter.setOutput(w);
 		} catch (Exception x) {}		
 	}
 	@Override
@@ -62,6 +64,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 		try {
 			output.write("<tr>\n");
 			StringWriter w = new StringWriter();
+			uriReporter.setOutput(w);
 			uriReporter.processItem(model);
 
 			output.write(String.format(
