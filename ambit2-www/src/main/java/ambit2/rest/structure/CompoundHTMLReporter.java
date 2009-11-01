@@ -110,7 +110,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	
 	public void header(Writer w, Q query) {
 		try {
-			String property = "";
 
 			Reference baseReference = uriReporter.getBaseReference();
 			
@@ -129,15 +128,22 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("</td>");
 			w.write("<td align='center'>");
 			String query_smiles = "";
+			Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
 			try {
-				Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
+				
 				query_smiles = form.getFirstValue("search");
 			} catch (Exception x) {
 				query_smiles = "";
 			}
+			String query_property = "";
+			try {
 
+				query_property = form.getFirstValue("property");
+			} catch (Exception x) {
+				query_property = "";
+			}
 			w.write("<form action='' method='get'>\n");
-			w.write(String.format("<input name='property' size='20' value='%s'>\n",property));
+			w.write(String.format("<input name='property' size='20' value='%s'>\n",query_property));
 			w.write("&nbsp;");
 			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
 
@@ -220,8 +226,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			output.write("</span></div></h4>\n");	
 			
 			if (table) {
-				output.write("<table border='0' width='99%'>"); 
-				output.write("<th bgcolor='#99CC00'>Compound</th>"); //ECB42C
+				output.write("<table border='0' >"); 
+				output.write("<th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
 
 				for(Property p: props) {
