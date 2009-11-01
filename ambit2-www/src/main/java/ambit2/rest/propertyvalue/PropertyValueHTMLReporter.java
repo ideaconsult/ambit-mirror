@@ -120,6 +120,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 			if (query instanceof AbstractQuery) {
 				if (((AbstractQuery)query).getValue() instanceof IStructureRecord) {
 					record = (IStructureRecord)((AbstractQuery)query).getValue();
+					cmp_reporter.setOutput(output);
 					cmp_reporter.processItem(record);
 				}
 			}			
