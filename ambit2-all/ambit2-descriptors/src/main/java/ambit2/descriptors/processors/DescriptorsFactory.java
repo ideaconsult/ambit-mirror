@@ -29,7 +29,6 @@
 
 package ambit2.descriptors.processors;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,53 +36,31 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.base.data.ClassHolder;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.processors.DefaultAmbitProcessor;
 
-public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Property>> {
+public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Property>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 275242996048077139L;
 
-	public Profile<Property> process(String target)
-			throws AmbitException {
-		Profile<Property> p = new Template();
-		if (target==null)
-			target="ambit2/descriptors/descriptors.txt";
-		InputStream in = DescriptorsFactory.class.getClassLoader().getResourceAsStream(target);
-		List<ClassHolder> classes = ClassHolder.load(in);
-		for (int i=0; i < classes.size();i++) {
-			try {
-				boolean enabled = true;
-				String name= classes.get(i).getClazz();
-				if (classes.get(i).getClazz().indexOf(";")==0) {
-					name = classes.get(i).getClazz().substring(1);
-					enabled = false;
-				}
-				try {
-					Property property = createDescriptor2Property(name);
-					if (property != null) {
-						property.setEnabled(enabled);
-						property.setOrder(i);
-						p.add(property);
-					}
-
-				} catch (Exception x) {
-					x.printStackTrace();
-				}
-
-			} catch (Exception x) {
-				x.printStackTrace();
-			}
+	@Override
+	protected void addToResult(String name, boolean enabled, int order,
+			Profile<Property> result) throws Exception {
+		Property property = createDescriptor2Property(name);
+		if (property != null) {
+			property.setEnabled(enabled);
+			property.setOrder(order);
+			result.add(property);
 		}
-		return p;
+	}
+	@Override
+	protected Profile<Property> createResult() {
+		return new Template();
 	}
 
 	public static List<Property> createDescriptor2Properties(String className) throws Exception  {
@@ -100,7 +77,7 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 			                new Class[] {}).
 			        invoke(o, new Object[] { });					
 				} catch (Exception x) {
-					x.printStackTrace();
+					//x.printStackTrace();
 				}				
 				DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
 				for (String name : value.getNames()) {
@@ -116,8 +93,19 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 	}
 	
 	public static Property createDescriptor2Property(String className) throws Exception  {
-		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
-		//if (o instanceof IMolecularDescriptor) {verify for interface
+		IMolecularDescriptor descriptor = createDescriptor(className);
+		if (descriptor!=null) {
+			Property property = Property.getInstance(descriptor.getClass().getName().substring(descriptor.getClass().getName().lastIndexOf('.')+1),
+					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
+						);
+			property.setLabel(descriptor.getClass().getName());
+			property.setClazz(descriptor.getClass());
+			return property;	
+		} else return null;
+	}
+	
+	public static IMolecularDescriptor createDescriptor(String className) throws Exception  {
+			Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
 			Object o = clazz.newInstance();
 			if (o instanceof IMolecularDescriptor) {
 				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
@@ -128,14 +116,9 @@ public class DescriptorsFactory extends DefaultAmbitProcessor<String,Profile<Pro
 			                new Class[] {}).
 			        invoke(o, new Object[] { });					
 				} catch (Exception x) {
-					x.printStackTrace();
+					//x.printStackTrace();
 				}
-				Property property = Property.getInstance(clazz.getName().substring(clazz.getName().lastIndexOf('.')+1),
-						LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
-							);
-				property.setLabel(clazz.getName());
-				property.setClazz(clazz);
-				return property;				
+				return descriptor;			
 			} else return null;
-	}
+	}	
 }
