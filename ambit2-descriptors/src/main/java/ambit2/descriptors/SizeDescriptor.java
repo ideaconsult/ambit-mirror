@@ -29,6 +29,8 @@
 
 package ambit2.descriptors;
 
+import java.util.logging.Logger;
+
 import javax.vecmath.Point3d;
 
 import org.openscience.cdk.exception.CDKException;
@@ -145,7 +147,8 @@ public class SizeDescriptor implements IMolecularDescriptor {
 
                     IAtom currentAtom = container.getAtom(k);
                     if (currentAtom.getPoint3d() == null) {
-                        throw new CDKException("Atom "+k+" did not have any 3D coordinates. These are required");
+                        throw new CDKException("Molecules should have 3D coordinates");
+                        		
                     }
 
                     //mass = factory.getMajorIsotope( currentAtom.getSymbol() ).getMassNumber();
@@ -163,12 +166,11 @@ public class SizeDescriptor implements IMolecularDescriptor {
                 
     			Matrix m = new Matrix(imat);
     			try {
-    				
-	    			System.out.println("SingularValueDecomposition "+container.getAtomCount());
+    				Logger.getLogger(getClass().getName()).fine(String.format("SingularValueDecomposition %d",container.getAtomCount()));
 	    			long now = System.currentTimeMillis();
 	    		    SingularValueDecomposition svd = m.svd();
 	    		    now  = System.currentTimeMillis() - now;
-	    		    System.out.println("SingularValueDecomposition DONE "+Long.toString(now) + " ms.");
+	    		    Logger.getLogger(getClass().getName()).fine(String.format("SingularValueDecomposition DONE in %d ms",now));
 	    		    Matrix pcapoints =  m.times(svd.getV());
     		    
 	    			double[] max = new double[3];

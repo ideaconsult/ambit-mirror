@@ -90,78 +90,7 @@ public class SpherosityDescriptor implements IMolecularDescriptor {
         } else value = (DescriptorValue) o;
         return value;
     }
-    /*
-    public double[] doCalculation(AtomContainer container) throws CDKException {        
-        IsotopeFactory factory = null;
-        try {
-            factory = IsotopeFactory.getInstance();
-        } catch (Exception e) {
-            //logger.debug(e);
-        }
-
-        double ccf = 1.000138;
-        double eps = 1e-5;
-
-        double[][] imat = new double[container.getAtomCount()][3];
-        Point3d centerOfMass = GeometryTools.get3DCenter(container);
-
-                for (int k = 0; k < container.getAtomCount(); k++) {
-                    double[] xyz = new double[3];
-                    double mass = 0.0;
-                    double radius = 0.0;
-
-                    org.openscience.cdk.interfaces.Atom currentAtom = container.getAtomAt(k);
-                    if (currentAtom.getPoint3d() == null) {
-                        throw new CDKException("Atom "+k+" did not have any 3D coordinates. These are required");
-                    }
-
-                    mass = factory.getMajorIsotope( currentAtom.getSymbol() ).getMassNumber();
-
-                    radius = centerOfMass.distance( currentAtom.getPoint3d() );
-
-                    imat[k][0] = currentAtom.getPoint3d().x - centerOfMass.x;
-                    imat[k][1] = currentAtom.getPoint3d().y - centerOfMass.y;
-                    imat[k][2] = currentAtom.getPoint3d().z - centerOfMass.z;
-
-           
-                }
-                
    
-
-    			Matrix m = new Matrix(imat);
-    			OrthogonalTransform pcaTransform = new OrthogonalTransform();
-    			//System.err.println("PCA running ...");
-    			int d = imat[0].length;
-    			pcaTransform.InitializeFilter(m,d,d);
-    			//System.err.println("PCA trasnform ...");			
-    			Matrix pcapoints = pcaTransform.TransformPoints(m);
-    			double[] max = new double[3];
-    			double[] min = new double[3];
-    			
-    			for (int i=0; i < pcapoints.getRowDimension();i++) {
-    			    if (i==0) {
-    			        max[0] = pcapoints.get(i,0);
-    			        max[1] = pcapoints.get(i,1);
-    			        max[2] = pcapoints.get(i,2);    			        
-    			        min[0] = pcapoints.get(i,0);
-    			        min[1] = pcapoints.get(i,1);
-    			        min[2] = pcapoints.get(i,2);    			        
-    			    } else 
-    			    	for (int k=0;k< 3; k++) {
-    			    		if (max[k] <  pcapoints.get(i,k))
-    			    			 max[k] = pcapoints.get(i,k);
-    			    		if (min[k] >  pcapoints.get(i,k))
-   			    			 min[k] = pcapoints.get(i,k);    			    		
-    			    	}
-    			}
-    			for (int k=0;k< 3; k++) {
-    				max[k] = max[k]-min[k];
-    			}
-
-        return max;
-
-    }
-    */
     /* (non-Javadoc)
      * @see org.openscience.cdk.qsar.Descriptor#getParameterNames()
      */
