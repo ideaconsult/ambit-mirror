@@ -489,23 +489,5 @@ public class MDLV2000ReaderExtendedTest  {
 		reader.close();
 		Assert.assertEquals(1,count);
 	}		
-	@Test
-	public void testHIN() throws Exception {
-		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/hin/test.hin");
-		IIteratingChemObjectReader reader = 
-			 FileInputState.getReader(in,
-					 "test.hin");
-		int count = 0;
-		while (reader.hasNext()) {
-			Object o = reader.next();
-			System.out.println(o);
-			/*
-			Assert.assertTrue(o instanceof IAtomContainer);
-			Assert.assertEquals(23,((IAtomContainer)o).getAtomCount());
-			*/
-			count++;
-		}
-		reader.close();
-		Assert.assertEquals(1,count);
-	}		
+	
 }
