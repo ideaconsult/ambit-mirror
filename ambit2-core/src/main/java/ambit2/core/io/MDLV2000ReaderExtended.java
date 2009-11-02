@@ -733,7 +733,7 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
     private void initIOSettings() {
         forceReadAs3DCoords = new BooleanIOSetting("ForceReadAs3DCoordinates", IOSetting.LOW,
           "Should coordinates always be read as 3D?", 
-          "false");
+          "true");
     }
     
     public void customizeJob() {
