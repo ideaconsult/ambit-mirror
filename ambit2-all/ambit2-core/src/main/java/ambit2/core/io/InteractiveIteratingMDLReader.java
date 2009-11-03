@@ -22,7 +22,7 @@ import ambit2.base.data.Property;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-2-18
  */
-public class InteractiveIteratingMDLReader extends IteratingMDLReader {
+public class InteractiveIteratingMDLReader extends MyIteratingMDLReader {
     /**
      * @param in
      */
