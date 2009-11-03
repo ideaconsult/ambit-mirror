@@ -78,10 +78,11 @@ public class ListenerTest  {
         Assert.assertNotNull(listener.getProperties());
         Profile props = listener.getProperties();
         Assert.assertEquals(labels.length,props.size());
-        
+        /*
         for (String s: labels) {
         	Assert.assertNotNull(props.get(s));
         }	
+        */
 }    
     
     @Test public void testListenerSDF() throws Exception {
