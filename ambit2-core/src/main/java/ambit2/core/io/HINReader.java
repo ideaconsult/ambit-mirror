@@ -221,8 +221,9 @@ public class HINReader extends DefaultChemObjectReader {
                     atom.setCharge(charge);
 
                     IBond.Order bo = IBond.Order.SINGLE;
-
+                    
                     for (int j = 11; j < (11+nbond*2); j += 2) {
+                    	Boolean aromatic = false;
                         int s = Integer.parseInt(toks[j]) - 1; // since atoms start from 1 in the file
                         char bt = toks[j+1].charAt(0);
                         switch(bt) {
@@ -235,14 +236,17 @@ public class HINReader extends DefaultChemObjectReader {
                             case 't': 
                                 bo = IBond.Order.TRIPLE;
                                 break;      
-                            case 'a': 
+                            case 'a': {
                                 bo = IBond.Order.QUADRUPLE;
+                                aromatic = true;
                                 break;
+                            }
                         }
                         List<Object> ar = new ArrayList<Object>(3);
                         ar.add(atomSerial);
                         ar.add(s);
                         ar.add(bo);
+                        ar.add(aromatic);
                         cons.add( ar );
                     }
                     m.addAtom(atom);
@@ -255,8 +259,11 @@ public class HINReader extends DefaultChemObjectReader {
                     IAtom s = m.getAtom((Integer) ar.get(0));
                     IAtom e = m.getAtom((Integer) ar.get(1));
                     IBond.Order bo = (IBond.Order) ar.get(2);
-                    if (!isConnected(m, s, e))
-                        m.addBond(file.getBuilder().newBond(s, e, bo));
+                    if (!isConnected(m, s, e)) {
+                    	IBond bond = file.getBuilder().newBond(s, e, bo);
+                    	bond.setFlag(CDKConstants.ISAROMATIC, (Boolean)ar.get(3));
+                        m.addBond(bond);
+                    }
                 }
                 setOfMolecules.addMolecule(m);
                 line = input.readLine(); // read in the 'mol N'
