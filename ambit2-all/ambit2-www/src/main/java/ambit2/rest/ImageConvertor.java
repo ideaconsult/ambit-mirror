@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
@@ -47,7 +48,15 @@ public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepres
 	            		}
 	            		x.printStackTrace();
 	            	} finally {
-	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
+	            		try {
+	            			if (stream !=null) stream.flush(); 
+	            		}
+	            		catch (IOException x) {
+	            			throw x;
+	            		}
+	            		catch (Exception x) {
+	            			java.util.logging.Logger.getLogger(getClass().getName()).warning(x.getMessage());
+	            		}
 	            	}
 	            }
 	        };		
