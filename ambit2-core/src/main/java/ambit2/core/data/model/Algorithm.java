@@ -2,15 +2,31 @@ package ambit2.core.data.model;
 
 import java.util.List;
 
+import ambit2.base.data.Template;
+
 /**
  * Quick implementation of OpenTox Algorithm spec 
  * @author nina
  *
  */
-public class Algorithm {
-	protected int id;
+public class Algorithm<T> implements Comparable<Algorithm<T>> {
+	protected String id;
 	protected String name;
 	protected List<String> parameters;
+	protected T content;
+	protected Template input;
+	public Template getInput() {
+		return input;
+	}
+	public void setInput(Template input) {
+		this.input = input;
+	}
+	public T getContent() {
+		return content;
+	}
+	public void setContent(T content) {
+		this.content = content;
+	}
 	public Algorithm() {
 		this("Unknown");
 	}
@@ -18,10 +34,10 @@ public class Algorithm {
 		setName(name);
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -46,5 +62,14 @@ public class Algorithm {
 	@Override
 	public String toString() {
 		return getName();
+	}
+	public int compareTo(Algorithm<T> o) {
+		return getId().compareTo(o.getId());
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Algorithm) {
+			return getId().equals(((Algorithm)obj).getId());
+		} else return false;
 	}
 }
