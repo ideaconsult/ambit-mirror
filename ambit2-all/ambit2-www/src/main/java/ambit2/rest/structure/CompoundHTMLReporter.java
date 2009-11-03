@@ -229,7 +229,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			if (table) {
 				output.write("<table border='0' >"); 
-				output.write("<th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
+				output.write("<th  bgcolor='#99CC00'>#</th><th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
 
 				for(Property p: props) {
@@ -270,9 +270,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		b.append("<tr>");
 		
-
+		b.append(String.format("<th>%d</th>",count+1));
 		b.append(String.format(
-				"<th><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=150&h=150\" alt=\"%s\" title=\"%d\"/></a></th>",
+				"<th><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=300&h=300\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></th>",
 				
 				w, w, 
 				w, record.getIdchemical()));
@@ -326,7 +326,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
-				"<a href=\"%s\"><img src=\"%s?accept-header=image/png\" alt=\"%s\" title=\"%d\"/></a>",
+				"<a href=\"%s\"><img src=\"%s?accept-header=image/png&w=400&h=400\" width='300' height='300' alt=\"%s\" title=\"%d\"/></a>",
 				
 				w, w, 
 				w, record.getIdchemical()));
