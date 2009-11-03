@@ -4,9 +4,9 @@ package ambit2.base.data;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 
 
@@ -20,7 +20,7 @@ public class Profile<P extends Property> /*implements Collection<P> */ {
 	static public String profile_property_added = "property_added";
 	static public String profile_property_removed = "property_removed";
 	PropertyChangeSupport ps = new PropertyChangeSupport(this);
-	protected Hashtable<String,P> container;
+	protected ArrayList<P> container;
 	protected String name;
 
 	/**
@@ -28,7 +28,7 @@ public class Profile<P extends Property> /*implements Collection<P> */ {
 	 */
 	private static final long serialVersionUID = 5818041819278493531L;
 	public Profile() {
-		container = new Hashtable<String, P>();
+		container = new ArrayList<P>();
 	}
 	
 
@@ -45,10 +45,10 @@ public class Profile<P extends Property> /*implements Collection<P> */ {
 	public Iterator<P> getProperties(final boolean enabled) {
 		return new Iterator<P>() {
 			P nextProperty = null;
-			Enumeration<P> properties = container.elements();
+			Iterator<P> properties = container.iterator();
 		public boolean hasNext() {
-				while (properties.hasMoreElements()) {
-					nextProperty = properties.nextElement();
+				while (properties.hasNext()) {
+					nextProperty = properties.next();
 					if (nextProperty.isEnabled() == enabled) 
 						return true;
 				} 
@@ -66,11 +66,15 @@ public class Profile<P extends Property> /*implements Collection<P> */ {
 		
 		
 	}
+	/*
 	public P get(String key) {
 		return container.get(key);
 	}
+	*/
 	public P get(P query) {
-		return container.get(query.getName());
+		int index = container.indexOf(query);
+		if (index < 0) return null;
+		else return container.get(index);
 	}	
 	public void setChanged() {
 		ps.firePropertyChange(profile_property_change,null,this);
@@ -78,7 +82,8 @@ public class Profile<P extends Property> /*implements Collection<P> */ {
 	public boolean add(P property) {
 		property.setOrder(size()+1);
 		ps.firePropertyChange(profile_property_added,null,property);
-		container.put(property.getName(),property);
+		if(container.contains(property))  return false;
+		container.add(property);
 		return true;
 	}
 
@@ -86,7 +91,7 @@ public class Profile<P extends Property> /*implements Collection<P> */ {
 		return container.size();
 	}
 	public Collection<P> values() {
-		return container.values();
+		return container;
 	}
 	public void clear() {
 		ps.firePropertyChange("profile",this,null);		
