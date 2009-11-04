@@ -69,10 +69,14 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		if (header == null) {
 			header = template2Header(template,true);
 		
+			writer.write("");
+			for (Property p : header) 
+				writer.write(String.format(",\"%s\"", p.getTitle()));
+			
+			writer.write("\n");
 			writer.write("URI");
 			for (Property p : header) 
-				writer.write(String.format(",%s", p.getName()));
-			
+				writer.write(String.format(",\"%s\"", p.getName()));
 			writer.write("\n");
 		}
 	}	
@@ -98,6 +102,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 							value==null?"":value
 							));
 				else
+					if ((value !=null)&& (value.toString().indexOf("<html>")>=0))
+						writer.write(",\" \"");
+					else
 					writer.write(String.format(",\"%s\"",
 							value==null?"":
 							value.toString().replace("\n", "").replace("\r","")
