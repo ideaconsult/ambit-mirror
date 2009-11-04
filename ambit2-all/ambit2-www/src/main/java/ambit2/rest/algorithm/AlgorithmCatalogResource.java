@@ -62,7 +62,6 @@ public class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,
 			return new StringConvertor(
 					new CatalogHTMLReporter<T>(getRequest()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		
 			return new StringConvertor(	new CatalogURIReporter<T>(getRequest()) {
 				@Override
 				public void processItem(T src, Writer output) {

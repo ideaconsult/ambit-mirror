@@ -46,9 +46,11 @@ import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.RDFGraphResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
 import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
+import ambit2.rest.algorithm.descriptors.DescriptorResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
@@ -182,7 +184,6 @@ public class AmbitApplication extends Application {
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 		
-			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -424,14 +425,17 @@ public class AmbitApplication extends Application {
 		
 		datasetRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		
+		
 		Router algoRouter = new Router(getContext());
 		algoRouter.attachDefault(AlgorithmCatalogResource.class);
 		router.attach(AlgorithmCatalogResource.algorithm,algoRouter);
-		algoRouter.attach(String.format("/%s",AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
-						AlgorithmDescriptorTypesResource.class);
-		
-		algoRouter.attach(String.format("/%s/{category}",AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
+		algoRouter.attach(String.format("/%s",
+				AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
+					AlgorithmDescriptorTypesResource.class);
+		algoRouter.attach(String.format("/%s/{category}",
+				AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
 				AlgorithmDescriptorResource.class);		
+
 		/*
 		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
 			algoRouter.attach(String.format("/%s/%s/{%s}",
@@ -451,8 +455,11 @@ public class AmbitApplication extends Application {
 		
 	
 		
-		algoRouter.attach(String.format("/rules/{%s}",AlgorithmResource.idalgorithm),AlgorithmResource.class);
+		algoRouter.attach(String.format("/rules/{%s}",AllAlgorithmsResource.idalgorithm),AlgorithmResource.class);
 		algoRouter.attach("/rules",AlgorithmResource.class);
+		
+		algoRouter.attach("/test",DescriptorResource.class);
+		algoRouter.attach(String.format("/test/{%s}",AllAlgorithmsResource.idalgorithm),DescriptorResource.class);
 		
 		Router taskRouter = new Router(getContext());
 		taskRouter.attachDefault(TaskResource.class);

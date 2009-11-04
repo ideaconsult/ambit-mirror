@@ -1,5 +1,6 @@
 package ambit2.rest.algorithm;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.core.data.model.Algorithm;
@@ -16,6 +17,6 @@ public class AlgorithmURIReporter extends CatalogURIReporter<Algorithm> {
 		super(request);
 	}
 	public String getURI(String ref, Algorithm item) {
-		return String.format("%s%salgorithm/rules/%d",ref,"".equals(ref)?"":"/",item.getId());
+		return String.format("%s%salgorithm/test/%s",ref,"".equals(ref)?"":"/",Reference.encode(item.getId()));
 	}
 }

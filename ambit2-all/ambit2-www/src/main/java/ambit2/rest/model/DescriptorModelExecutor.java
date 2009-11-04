@@ -4,8 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
-import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
