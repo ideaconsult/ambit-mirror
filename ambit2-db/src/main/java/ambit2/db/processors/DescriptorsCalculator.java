@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
 
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 
@@ -93,8 +94,13 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     	try {
     		ha.process(a);
       	} catch (Exception x) {
-			x.printStackTrace();
+      		logger.warn(x);
     	}    		
+      	try {
+      		CDKHueckelAromaticityDetector.detectAromaticity(a);
+      	} catch (Exception x) {
+      		logger.warn(x);
+      	}
         	if (descriptors==null)	descriptors = d.process(null);
     		Iterator<Property> i = descriptors.getProperties(true);
     		while (i.hasNext()) {
