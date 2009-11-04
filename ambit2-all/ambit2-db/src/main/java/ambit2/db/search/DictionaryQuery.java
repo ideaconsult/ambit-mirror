@@ -88,4 +88,8 @@ public abstract class DictionaryQuery extends AbstractQuery<String, String, Stri
 	public boolean isPrescreen() {
 		return false;
 	}
+	@Override
+	public String toString() {
+		return (value==null)?"":getValue();
+	}
 }
