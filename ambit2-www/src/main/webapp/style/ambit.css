@@ -184,4 +184,27 @@ A:hover
   	FONT-SIZE: 10pt;
 	FONT-FAMILY: Verdana, Arial;	
 }
-
+table.results {
+	border-width: 3px 3px 3px 3px;
+	border-spacing: 0px;
+	border-style: outset outset outset outset;
+	border-color: ;
+	border-collapse: collapse;
+	background-color: white;
+}
+table.results th {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	border-style: dotted dotted dotted dotted;
+	border-color: gray gray gray gray;
+	background-color: #99CC00;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+table.results td {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	border-style: dotted dotted dotted dotted;
+	border-color: gray gray gray gray;
+	background-color: white;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
