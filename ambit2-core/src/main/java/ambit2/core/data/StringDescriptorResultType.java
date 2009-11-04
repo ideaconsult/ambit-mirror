@@ -29,19 +29,17 @@
 
 package ambit2.core.data;
 
-import org.openscience.cdk.qsar.result.IDescriptorResult;
-
-public class StringDescriptorResultType implements IDescriptorResult {
-	protected String value;
+/**
+ * type left for compatibility
+ * @author nina
+ *
+ */
+public class StringDescriptorResultType extends AbstractDescriptorResultType<String> {
+	public StringDescriptorResultType() {
+		this(null);
+	}
 	public StringDescriptorResultType(String value) {
 		this.value = value;
-	}
-	public int length() {
-		return 1;
-	}
-	@Override
-	public String toString() {
-		return value;
 	}
 
 }
