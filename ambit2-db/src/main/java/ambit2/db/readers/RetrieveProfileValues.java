@@ -134,7 +134,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units from property_values \n"+
 		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where idchemical=? %s %s group by comments,idvalue_string";
+		"where idchemical=? %s %s";
 	
 	protected final String sql_chemical_novalue = 
 		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
