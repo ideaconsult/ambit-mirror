@@ -1,5 +1,6 @@
 package ambit2.rest.query;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -9,7 +10,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -73,8 +73,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		        		//x.printStackTrace();
 		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
 		    			return null;
+		    			
 		        	} catch (SQLException x) {
-		        		x.printStackTrace();
+		        		java.util.logging.Logger.getLogger(getClass().getName()).severe(x.getMessage());
 		        		if (retry <maxRetry) {
 		        			retry++;
 		        			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,String.format("Retry %d ",retry));
@@ -85,7 +86,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			    			return null;
 		        		}
 		        	} catch (Exception x) {
-		        		x.printStackTrace();
+		        		java.util.logging.Logger.getLogger(getClass().getName()).severe(x.getMessage());
 		    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
 		    			return null;	        		
 		        	} finally {
