@@ -200,7 +200,11 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     			insertValue(((Number)value).doubleValue(),property,idtuple,mode.UNKNOWN);
     	} else
     		if (value != null)
-    			insertValue(value.toString(),property,idtuple,mode.UNKNOWN);
+    			if (value instanceof Exception)
+    				insertValue(value.toString(),property,idtuple,mode.ERROR);
+    			else
+    				insertValue(value.toString(),property,idtuple,mode.UNKNOWN);
+    				
     		else
     			insertValue(null,property,idtuple,mode.ERROR);
 	
