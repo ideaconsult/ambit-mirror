@@ -64,236 +64,9 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
     public DescriptorMopacShell() throws ShellException {
         super();
         mopac_shell = new MopacShell();
-    }
-    /*
-    protected void runMopac(IAtomContainer atomcontainer) throws CDKException {
-    	IAtomContainerSet a  = ConnectivityChecker.partitionIntoMolecules(atomcontainer);
-    	IAtomContainer mol = null;
-    	if (a.getAtomContainerCount()>1)
-    		if (errorIfDisconnected)
-    			throw new CDKException("Molecule disconnected");
-    		else {
-    			
-    			for (int i=0; i < a.getAtomContainerCount();i++)
-    				if ((mol == null) || (mol.getAtomCount() < a.getAtomContainer(i).getAtomCount())) 
-    					mol = a.getAtomContainer(i);
-    		}
-    	else mol = atomcontainer;
-    		
-    			
-        MFAnalyser mfa = new MFAnalyser(mol);
-        int heavy = mfa.getHeavyAtoms().size();
-        int light = (mol.getAtomCount()-heavy);
-        if (heavy>maxHeavyAtoms) {
-        	throw new CDKException("Skipping - heavy atoms ("+heavy + ") > " + maxHeavyAtoms );
-        } else if (light > maxAllAtoms) {
-        	throw new CDKException("Skipping - all atoms ("+light + ") > " + maxAllAtoms );
-        }
         
-        List v = mfa.getElements();
-        for (int i=0; i < v.size();i++) {
-            if (!table.contains(v.get(i).toString().trim())) {
-                throw new CDKException(MESSAGE_UNSUPPORTED_TYPE +v.get(i));
-            }
-        }
-            
-        String osName = System.getProperty("os.name");
-        if (osName.startsWith("Mac OS")) {
-            throw new CDKException(mopac_executable + " not supported for "+osName);
-        }
-        else if (osName.startsWith("Windows")) {
-            try {
-            	
-                prepareInput(mol);
-
-                String executable = mopac_path + "\\" + mopac_executable + " "+inFile;
-                debug("<MOPAC filename=\""+executable+"\">");
-                long now=System.currentTimeMillis();                
-                Process p = Runtime.getRuntime().exec(executable
-                		,new String[]{},
-                        new File(mopac_path));
-
-                InputStream stderr = p.getErrorStream();
-                InputStreamReader isr = new InputStreamReader(stderr);
-                BufferedReader br = new BufferedReader(isr);
-                String line = null;
-                debug("<stdout>");
-                while ( (line = br.readLine()) != null)
-                    debug(line);
-                debug("</stdout>");
-
-                debug("<wait process=\""+executable+"\">");
-
-                int exitVal = p.waitFor();
-                debug("</wait>");
-                debug("<exitcode value=\""+Integer.toString(exitVal)+"\">");
-                debug("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
-                debug("</MOPAC>");
-                try {
-                    debug("<parse>");
-                    parseOutput(mol);
-                    debug("</parse>");
-                } catch (Exception x) {
-                    debug("</parse>");
-                    throw new CDKException(mopac_executable + x.getMessage());
-                    
-                }
-                if (exitVal != 0) 
-                	throw new CDKException(mopac_executable + " exit with error "+exitVal);
-            } catch (Throwable x) {
-            	debug(x.getMessage());
-                throw new CDKException(x.getMessage());
-            }
-        } else { //assume Unix or Linux
-           try {
-                
-                prepareInput(mol);
-
-                String executable = mopac_path + "\\linux\\mopac "+inFile;
-                debug("<MOPAC filename=\""+executable+"\">");
-                long now=System.currentTimeMillis();                
-                Process p = Runtime.getRuntime().exec(executable
-                        ,new String[]{},
-                        new File(mopac_path));
-
-                InputStream stderr = p.getErrorStream();
-                InputStreamReader isr = new InputStreamReader(stderr);
-                BufferedReader br = new BufferedReader(isr);
-                String line = null;
-                debug("<stdout>");
-                while ( (line = br.readLine()) != null)
-                    debug(line);
-                debug("</stdout>");
-
-                debug("<wait process=\""+executable+"\">");
-
-                int exitVal = p.waitFor();
-                debug("</wait>");
-                debug("<exitcode value=\""+Integer.toString(exitVal)+"\">");
-                debug("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
-                debug("</MOPAC>");
-                try {
-                    debug("<parse>");
-                    parseOutput(mol);
-                    debug("</parse>");
-                } catch (Exception x) {
-                    debug("</parse>");
-                    throw new CDKException(mopac_executable + x.getMessage());
-                    
-                }
-                if (exitVal != 0) 
-                    throw new CDKException(mopac_executable + " exit with error "+exitVal);
-            } catch (Throwable x) {
-                debug(x.getMessage());
-                throw new CDKException(x.getMessage());
-            }
-        }
-        if (mol != atomcontainer) {
-        	Map<Object,Object> map = mol.getProperties();
-        	Iterator<Object> keys = map.keySet().iterator();
-        	while (keys.hasNext()) {
-        		Object key = keys.next();
-        		Object value = map.get(key);
-        		if (value != null)
-        			atomcontainer.setProperty(key,value);
-        	}
-        }
-        	
+    }
  
-    }
-    public void prepareInput(IAtomContainer mol) throws Exception {
-    	if (mol instanceof IMolecule) {
-			smi2sdf.setOutputFile("test.sdf");
-			smi2sdf.runShell((IMolecule)mol);
-			mengine.setInputFile("test.sdf");
-			mengine.setOutputFile("good.sdf");
-			IMolecule newmol = mengine.runShell((IMolecule)mol);
-	    	debug("Writing MOPAC input");
-	        Mopac7Writer wri = new Mopac7Writer(new FileOutputStream(mopac_path + "/" + inFile));
-	        wri.setOptimize(1);
-	        wri.setMopacCommands(mopac_commands);
-	        wri.write(newmol);
-	        wri.close();
-	        for (int i=0; i< outFile.length;i++) {
-	            File f = new File(mopac_path + "/"+outFile[i]);
-	            if (f.exists()) f.delete();
-	        }
-			
-    	}
-    }
-    /*
-    public void prepareInput(IAtomContainer mol) throws Exception {
-    	if (!"".equals(force_field) && (mol instanceof IMolecule)) {
-            long now = System.currentTimeMillis();
-            debug("<FORCE_FIELD name=\""+force_field+"\">");
-            if (h3d == null) {
-                debug("<templates>");
-                h3d = TemplateHandler3D.getInstance();
-                debug(h3d.toString());
-                debug("</templates>");
-            } 
-            debug("<structure mode=\"initialize\">");
-            if (mb3d == null) 
-                mb3d = ModelBuilder3D.getInstance(h3d, force_field);
-            try {
-                mb3d.generate3DCoordinates((IMolecule)mol,false);
-            } catch (Exception x) {
-                debug("<error name=\""+ x.getMessage() + "\"/>");
-            }
-            debug("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");
-            debug("</structure>");
-            
-            if (forceField == null) forceField = new ForceField();
-            debug("<structure mode=\"minimize\" class=\"" + forceField.getClass().getName() + "\">");
-            try {
-                
-                forceField.setUsedGMMethods(false, true, false);
-                //forceField.setConvergenceParametersForSDM(15, 0.000000001);
-                forceField.setConvergenceParametersForCGM(100000, 1);
-                forceField.setPotentialFunction(force_field);
-    
-                forceField.setMolecule((IMolecule)mol, false);
-                forceField.minimize();
-                mol = forceField.getMolecule();
-            } catch (Exception x) {
-                debug("<error name=\""+ x.getMessage() + "\"/>");
-            }
-            debug("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
-            debug("</structure>");
-            
-            debug("</FORCE_FIELD>");
-    	} else debug("<FORCE_FIELD name=\"none\">");
-    	debug("Writing MOPAC input");
-        Mopac7Writer wri = new Mopac7Writer(new FileOutputStream(mopac_path + "/" + inFile));
-        wri.setMopacCommands(mopac_commands);
-        wri.write(mol);
-        wri.close();
-        for (int i=0; i< outFile.length;i++) {
-            File f = new File(mopac_path + "/"+outFile[i]);
-            if (f.exists()) f.delete();
-        }
-    }
-    
-    public void parseOutput(IAtomContainer mol) throws Exception {
-        for (int i=0; i< 2;i++) {
-            String fname = mopac_path+"/" + outFile[i]; 
-            File f = new File(fname);
-            if (!f.exists()) continue;
-            debug("<outfile name=\""+ fname + "\">");
-            try {
-                Mopac7Reader re = new Mopac7Reader(new FileInputStream(f));
-                re.read(mol);
-                re.close();
-                f.delete();
-            } catch (Exception x) {
-                debug("<error name=\""+ x.getMessage() + "\"/>");
-                debug("</outfile>");
-                throw new Exception(x);
-            }
-            debug("</outfile>");
-        }
-    }
-*/    
     public String toString() {
     	return "Calculates electronic descriptors by " + mopac_shell + " (http://openmopac.net)";
     }
@@ -343,7 +116,8 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
     }
     public DescriptorValue calculate(IAtomContainer arg0) throws CDKException {
     	try {
-            logger.info(toString());
+    		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
+    		logger.info(toString());
 	        IAtomContainer newmol = mopac_shell.runShell(arg0);
 	        DoubleArrayResult r = new DoubleArrayResult(Mopac7Reader.parameters.length);
 	        for (int i=0; i< Mopac7Reader.parameters.length;i++) 
@@ -358,7 +132,14 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
 	       
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,Mopac7Reader.parameters);
+    	} catch (CDKException x) {
+    		throw x;
     	} catch (Exception x) {
+    		Throwable cause = x;
+    		while (cause != null) {
+    			if (cause.getCause()==null) throw new CDKException(cause.getMessage());
+    			cause = cause.getCause();
+    		}
     		throw new CDKException(x.getMessage());
     	}
         

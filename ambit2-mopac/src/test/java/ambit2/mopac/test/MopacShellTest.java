@@ -2,6 +2,7 @@ package ambit2.mopac.test;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import junit.framework.Assert;
 
@@ -15,6 +16,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.data.Property;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.base.log.AmbitLogger;
@@ -128,9 +130,24 @@ public class MopacShellTest {
             
             IAtomContainer mol = shell.runShell(a);
             double x = Double.parseDouble(mol.getProperty("ELUMO").toString());
-            double y = Double.parseDouble(a.getProperty("LUMO (eV) AM1_MOPAC 4.10").toString());
-            double error = x - y;
-            r2 += error*error;
+            Iterator i = a.getProperties().keySet().iterator();
+            while (i.hasNext()) {
+            	Property oo = (Property)i.next();
+            	if ("LUMO (eV) AM1_MOPAC 4.10".equals(oo.getName())) {
+                    double y = Double.parseDouble(a.getProperty(oo).toString());
+                    double error = x - y;
+                    r2 += error*error;
+                    n++;
+                    
+                    sxy += x*y;
+                    sx += x;
+                    sy += y;
+                    sx2 += x*x;
+                    sy2 += y*y;                    
+            		break;
+            	}
+            }
+            
             
            /*
             System.out.print(a.getAtomCount());
@@ -145,13 +162,7 @@ public class MopacShellTest {
             System.out.println();
             */
                      
-            n++;
-            
-            sxy += x*y;
-            sx += x;
-            sy += y;
-            sx2 += x*x;
-            sy2 += y*y;
+
 
     	}
     	in.close();
