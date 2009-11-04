@@ -30,23 +30,11 @@
 package ambit2.db.processors;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.result.BooleanResult;
-import org.openscience.cdk.qsar.result.DoubleArrayResult;
-import org.openscience.cdk.qsar.result.DoubleResult;
-import org.openscience.cdk.qsar.result.IDescriptorResult;
-import org.openscience.cdk.qsar.result.IntegerArrayResult;
-import org.openscience.cdk.qsar.result.IntegerResult;
 
 import ambit2.base.data.Dictionary;
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.core.data.IntArrayResult;
-import ambit2.core.data.StringDescriptorResultType;
-import ambit2.descriptors.VerboseDescriptorResult;
 import ambit2.descriptors.processors.DescriptorValue2Property;
 
 
@@ -97,24 +85,7 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 	@Override
 	protected Object getValue(DescriptorValue descriptor,Property property, int propertyIndex) {
 		return helper.getValue(descriptor, property, propertyIndex);
-		/*
-        IDescriptorResult result = descriptor.getValue();
-        double value = Double.NaN;
-        if (result instanceof VerboseDescriptorResult)
-        	result = ((VerboseDescriptorResult)result).getResult();
-        if (result instanceof DoubleResult) value = ((DoubleResult) result).doubleValue();
-        else if (result instanceof IntegerResult) value = ((IntegerResult) result).intValue();
-        else if (result instanceof BooleanResult) {
-            if (((BooleanResult) result).booleanValue()) value = 1;
-            else value = 0;
-        }
-        else if (result instanceof IntegerArrayResult) value = ((IntegerArrayResult) result).get(propertyIndex);
-        else if (result instanceof IntArrayResult) value = ((IntArrayResult) result).get(propertyIndex);
-        else if (result instanceof DoubleArrayResult) value = ((DoubleArrayResult) result).get(propertyIndex);
-        else if (result instanceof StringDescriptorResultType) 
-            return descriptor.getValue().toString();
-        return new Double(value);    
-        */
+
 	}
 	@Override
 	protected Dictionary getTemplate(DescriptorValue descriptor)
