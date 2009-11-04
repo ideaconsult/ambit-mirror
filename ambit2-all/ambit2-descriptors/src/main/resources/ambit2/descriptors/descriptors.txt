@@ -3,6 +3,7 @@ ambit2.descriptors.PKASmartsDescriptor
 ;ambit2.descriptors.SizeDescriptor
 ;ambit2.descriptors.SpherosityDescriptor
 ;ambit2.mopac.DescriptorMopacShell
+;ambit2.mopac.MopacOriginalStructure
 ;toxTree.tree.cramer.CramerRules
 ;verhaar.VerhaarScheme
 ;cramer2.CramerRulesWithExtensions

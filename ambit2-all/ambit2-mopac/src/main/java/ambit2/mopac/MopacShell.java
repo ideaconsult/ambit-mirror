@@ -58,10 +58,28 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	 * 
 	 */
 	private static final long serialVersionUID = -5948332340539224507L;
+
 	protected int maxHeavyAtoms = 60;
 	protected int maxAllAtoms = 120;
 	public static String[] defaultparams = {"PM3 NOINTER NOMM BONDS MULLIK PRECISE GNORM=0.0","bin/mopac/MOPAC_7.1.exe",""}; //mmff94
 	protected String mopac_commands = defaultparams[0];
+	protected boolean useOriginalStructure = false;
+	public boolean isUseOriginalStructure() {
+		return useOriginalStructure;
+	}
+
+	public void setUseOriginalStructure(boolean useOriginalStructure) {
+		this.useOriginalStructure = useOriginalStructure;
+	}
+
+	public boolean isOptimize() {
+		return optimize;
+	}
+
+	public void setOptimize(boolean optimize) {
+		this.optimize = optimize;
+	}
+	protected boolean optimize = true;
 	public String getMopac_commands() {
 		return mopac_commands;
 	}
@@ -119,17 +137,24 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	}	
 	@Override
 	protected IAtomContainer transform_input(IAtomContainer mol) throws ShellException {
-			smi2sdf.setOutputFile("test.sdf");
-			smi2sdf.runShell((IMolecule)mol);
-			mengine.setInputFile("test.sdf");
-			mengine.setOutputFile("good.sdf");
-			IMolecule newmol = mengine.runShell((IMolecule)mol);
+			final String msg="Empty molecule after %s processing"; 
+		    if ((mol==null) || (mol.getAtomCount()==0)) throw new ShellException(this,"Empty molecule");
+		    IAtomContainer newmol=null;
+		    if (!useOriginalStructure) {
+				smi2sdf.setOutputFile("test.sdf");
+				smi2sdf.runShell((IMolecule)mol);
+				if ((mol==null) || (mol.getAtomCount()==0)) throw new ShellException(smi2sdf,String.format(msg, smi2sdf.toString()));
+				mengine.setInputFile("test.sdf");
+				mengine.setOutputFile("good.sdf");
+				newmol = mengine.runShell((IMolecule)mol);
+				if ((newmol==null) || (newmol.getAtomCount()==0)) throw new ShellException(mengine,String.format(msg, mengine.toString()));
+		    } else newmol=mol;
 	    	logger.debug("Writing MOPAC input");
 	    	String exe = getExecutable();
 	    	String mopac_path = new File(exe).getParent();
 	    	try {
 		        Mopac7Writer wri = new Mopac7Writer(new FileOutputStream(mopac_path + "/" + inFile));
-		        wri.setOptimize(1);
+		        wri.setOptimize(isOptimize()?1:0);
 		        wri.setMopacCommands(mopac_commands);
 		        wri.write(newmol);
 		        wri.close();
@@ -219,6 +244,10 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
             }
         }
         return true;
+	}
+	@Override
+	public String toString() {
+		return "mopac";
 	}
 	@Override
 	public IAtomContainer process(IAtomContainer target) throws AmbitException {
