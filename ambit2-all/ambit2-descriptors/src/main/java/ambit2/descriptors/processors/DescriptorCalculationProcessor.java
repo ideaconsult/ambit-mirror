@@ -3,11 +3,10 @@ package ambit2.descriptors.processors;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.data.StringDescriptorResultType;
+import ambit2.core.data.AbstractDescriptorResultType;
 
 public class DescriptorCalculationProcessor extends
 		DefaultAmbitProcessor<IAtomContainer, DescriptorValue> {
@@ -43,7 +42,7 @@ public class DescriptorCalculationProcessor extends
 						descriptor.getSpecification(),
 						new String[]{},
 						new Object[]{},
-						new StringDescriptorResultType(x.getMessage()),
+						new AbstractDescriptorResultType<Exception>(x),
 						new String[] {descriptor.getClass().getName()}
 						);
 				//throw new AmbitException(getDescriptor().toString(),x);
