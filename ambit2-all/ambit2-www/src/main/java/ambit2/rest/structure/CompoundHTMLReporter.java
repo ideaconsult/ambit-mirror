@@ -149,6 +149,26 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("&nbsp;");
 			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
 
+			w.write("<br><select size='2' STYLE=\"width: 400px\" multiple name=\"features\">\n");
+			w.write("<option value=\"\">Default</option>\n");
+			String[][] options= {
+					{"template/All/Identifiers/view/tree","Identifiers"},
+					{"template/All/Descriptors/view/tree","All descriptors"},
+					{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
+					{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
+					{"template/Descriptors/ambit2.mopac.DescriptorMopacShell","Electronic descriptors (PM3 optimized structure)"},
+					{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
+					{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},						
+					
+					{"template/All/Dataset/view/tree","Datasets"},
+					{"template/All/Models/view/tree","Models"},
+					{"template/All/Endpoints/view/tree","Endpoints"},
+
+			};
+			for (String option[]:options)
+			w.write(String.format("<option value=\"%s/%s\">%s</option>\n",baseReference,option[0],option[1]));
+			
+			//w.write("</select>");
 			w.write("<input type='submit' value='Search'><br>");
 			//w.write(baseReference.toString());
 
@@ -228,7 +248,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			output.write("</span></div></h4>\n");	
 			
 			if (table) {
-				output.write("<table border='0' >"); 
+				output.write("<table class=\"results\" border='0' >"); 
 				output.write("<th  bgcolor='#99CC00'>#</th><th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
 
@@ -270,9 +290,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		b.append("<tr>");
 		
-		b.append(String.format("<th>%d</th>",count+1));
+		b.append(String.format("<td>%d</td>",count+1));
 		b.append(String.format(
-				"<th><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=300&h=300\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></th>",
+				"<td><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
 				
 				w, w, 
 				w, record.getIdchemical()));
@@ -282,9 +302,22 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 			for(Property property: props) {
 				//if (property.getId()>0) {
-					Object value = record.getProperty(property);
-					b.append(String.format("<td bgcolor='%s' width='100' align='right'>",((count % 2)==1)?"#F9FFE6":"#FBFFEC" )) ; //"#EBEEF1"
-					if (value != null) {
+				Object value = record.getProperty(property);
+				//System.out.println(String.format("%s [%s] %s",property.getName(),property.getTitle(),value==null?null:value.toString()));
+					
+					boolean isLong = (value==null)?false:value.toString().length()>255;
+					b.append(String.format("<td bgcolor='%s' width='%s' align='right'>",
+							((count % 2)==1)?"#F9FFE6":"#FBFFEC",
+							isLong?"100":"100")) ; //"#EBEEF1"
+
+					boolean isHTML = (value == null)?false:value.toString().indexOf("<html>")>=0;
+					String searchValue = (value==null)?null:
+						(
+						isHTML?null:
+						value.toString().length()>255?value.toString().substring(0,255):value.toString()
+								);
+					if (searchValue != null) {
+						
 						//?property=MW&search=100+..+200
 						b.append(String.format("<a href=\"%s/compound?property=%s&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Search for %s=%s' title='Search for %s=%s'></a>", 
 								uriReporter.getBaseReference(),
@@ -303,13 +336,21 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 								uriReporter.getBaseReference(),		
 								value.toString(),
 								value.toString()							
-						));						
+						));				
+				
 					}
-					b.append(String.format("<br><a href='%s'>%s</a>",
+					b.append("<div>");
+					
+					value = value==null?"":
+							value.toString().length()<40?value.toString():
+							value.toString().length()<255?value.toString().substring(0,40):
+							"See more";
+							
+					b.append(String.format("<a href=\"%s\">%s</a>",
 							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
-							value==null?"":
-								value.toString().length()>40?value.toString().substring(0,40):value.toString()
-										));					
+							value));
+						
+					b.append("</div>");
 					b.append("</td>");
 				}
 
@@ -326,7 +367,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
-				"<a href=\"%s\"><img src=\"%s?accept-header=image/png&w=400&h=400\" width='300' height='300' alt=\"%s\" title=\"%d\"/></a>",
+				"<a href=\"%s\"><img src=\"%s?accept-header=image/png&w=400&h=400\" width='250' height='250' alt=\"%s\" title=\"%d\"/></a>",
 				
 				w, w, 
 				w, record.getIdchemical()));
