@@ -107,7 +107,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					}
 				}
 			};		
-			parser.parse(new InputStreamReader(r.getStream()));
+			parser.parse(new InputStreamReader(r.getStream(),"UTF-8"));
 		
 		} catch (Exception x) {
 			Logger.getLogger(getClass().getName()).severe(x.getMessage());
