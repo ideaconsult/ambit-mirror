@@ -44,13 +44,15 @@ public abstract class QueryHeaderReporter<T,Q extends IQueryRetrieval<T>,Output>
 		while (it.hasNext()) {
 			Property t = it.next();
 			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
-				h.add(it.next());
+				h.add(t);
 		}
+		/*
 		Collections.sort(h,new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {
 				return o1.getOrder()-o2.getOrder();
 			}
 		});	
+		*/
 		return h;
 	}
 
