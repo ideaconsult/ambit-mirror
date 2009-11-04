@@ -64,7 +64,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		                new Class[] {}).
 		        invoke(o, new Object[] { });					
 			} catch (Exception x) {
-				x.printStackTrace();
+				//x.printStackTrace();
 			}
 			
 			if (o instanceof IMolecularDescriptor) {
