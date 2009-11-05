@@ -11,6 +11,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.StatementExecutor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Executes arbitrary {@link IQueryObject}
@@ -122,6 +123,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	protected String getSQL(Q target) throws AmbitException {
 		String sql = target.getSQL();
 		if (sql.indexOf(LIMIT)>=0) return sql;
+		else if ((target instanceof IQueryRetrieval) && ((IQueryRetrieval)target).isPrescreen()) return sql;
 		else return (target.getMaxRecords()>0?String.format(limit,sql,target.getMaxRecords()):sql);
 	}
 	@Override

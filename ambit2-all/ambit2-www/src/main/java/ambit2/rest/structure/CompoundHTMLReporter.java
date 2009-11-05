@@ -23,7 +23,7 @@ import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.QueryHTMLReporter;
+import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
@@ -34,7 +34,7 @@ Generates HTML file with links to structures . TODO - make use of a template eng
  * @param <Q>
  */
 public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>> 
-			extends QueryHTMLReporter<IStructureRecord,Q> {
+										extends QueryStructureHTMLReporter<Q> {
 	/**
 	 * 
 	 */

@@ -32,6 +32,7 @@ import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
@@ -166,7 +167,59 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest());
 	}
-	
+	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,String cond,String key,boolean chemicalsOnly) {
+		AbstractStructureQuery query;
+		
+        try {
+        	key = Reference.decode(key.toString().trim());
+        	String[] keys = key.toString().split(" .. ");
+        	Double d1=null;
+        	Double d2=null;
+        	NumberCondition condition = NumberCondition.getInstance(NumberCondition.between);
+        	if (keys.length==2) try {
+        		d1 = Double.parseDouble(keys[0].toString()); //number
+        		d2 = Double.parseDouble(keys[1].toString()); //number
+        	} catch (Exception x) {
+        		d1 = Double.parseDouble(key.toString()); 
+        	}
+        	else {
+        		d1 = Double.parseDouble(key.toString());
+        	}
+
+        	QueryFieldNumeric q = new QueryFieldNumeric();
+        	//q.setChemicalsOnly(true);
+        	q.setChemicalsOnly(chemicalsOnly);
+        	if (property != null) q.setFieldname(new Property(property,null));
+	        try {
+	        	condition = NumberCondition.getInstance(cond);
+	        	q.setValue(d1);
+	        	q.setMaxValue(d2==null?(d1+1E-10):d2);
+	        } catch (Exception x) {
+	        	condition = NumberCondition.getInstance(NumberCondition.between);
+	        	q.setValue(d1);
+	        	q.setMaxValue(d2==null?(d1+1E-10):d2);
+	        } finally {
+	        	q.setCondition(condition);
+	        }
+	        query= q;
+        } catch (Exception x) {
+        	QueryField q_by_name =  new QueryField();
+        	if (property != null) q_by_name.setFieldname(new Property(property,null));
+        	q_by_name.setValue(Reference.decode(key.toString()));
+        	q_by_name.setChemicalsOnly(chemicalsOnly);
+        	//q_by_name.setChemicalsOnly(true);
+	        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
+	        try {
+	        	condition = StringCondition.getInstance(cond);
+	        } catch (Exception xx) {
+	        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
+	        } finally {
+	        	q_by_name.setCondition(condition);
+	        }
+	        query = q_by_name;
+        }					
+        return query;
+	}
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
@@ -176,62 +229,34 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			Object key = request.getAttributes().get(idcompound);
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
-				key = form.getFirstValue("search");
-				String property = form.getFirstValue("property");
-				if (property!=null) property = Reference.decode(property.trim());
-				
-				if (key != null) {
+				String[] keys = form.getValuesArray("search");
+				String[] properties = form.getValuesArray("property");
+				String[] condition = form.getValuesArray("condition");
+				if (keys != null) {
 					collapsed = true;
-					
-					AbstractStructureQuery query;
-					
-			        try {
-			        	key = Reference.decode(key.toString().trim());
-			        	String[] keys = key.toString().split(" .. ");
-			        	Double d1=null;
-			        	Double d2=null;
-			        	NumberCondition condition = NumberCondition.getInstance(NumberCondition.between);
-			        	if (keys.length==2) try {
-			        		d1 = Double.parseDouble(keys[0].toString()); //number
-			        		d2 = Double.parseDouble(keys[1].toString()); //number
-			        	} catch (Exception x) {
-			        		d1 = Double.parseDouble(key.toString()); 
-			        	}
-			        	else {
-			        		d1 = Double.parseDouble(key.toString());
-			        	}
+					/*
+					QueryCombinedStructure qcombined = new QueryCombinedStructure();
+					qcombined.setCombine_as_and(true);
+					qcombined.setChemicalsOnly(true);
 
-			        	QueryFieldNumeric q = new QueryFieldNumeric();
-			        	q.setChemicalsOnly(true);
-			        	if (property != null) q.setFieldname(new Property(property,null));
-				        try {
-				        	condition = NumberCondition.getInstance(Reference.decode(request.getAttributes().get("condition").toString()));
-				        	q.setValue(d1);
-				        	q.setMaxValue(d2==null?(d1+1E-10):d2);
-				        } catch (Exception x) {
-				        	condition = NumberCondition.getInstance(NumberCondition.between);
-				        	q.setValue(d1);
-				        	q.setMaxValue(d2==null?(d1+1E-10):d2);
-				        } finally {
-				        	q.setCondition(condition);
-				        }
-				        query= q;
-			        } catch (Exception x) {
-			        	QueryField q_by_name =  new QueryField();
-			        	if (property != null) q_by_name.setFieldname(new Property(property,null));
-			        	q_by_name.setValue(Reference.decode(key.toString()));
-			        	q_by_name.setChemicalsOnly(true);
-				        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
-				        try {
-				        	condition = StringCondition.getInstance(Reference.decode(request.getAttributes().get("condition").toString()));
-				        } catch (Exception xx) {
-				        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
-				        } finally {
-				        	q_by_name.setCondition(condition);
-				        }
-				        query = q_by_name;
-			        }			
-
+					IQueryRetrieval<IStructureRecord>  query = qcombined;
+										*/
+					IQueryRetrieval<IStructureRecord>  query = null;
+					for (int i=0; i < keys.length; i++) {
+						String theKey = Reference.decode(keys[i].trim());
+						String property = ((properties==null)||(i>=properties.length)||(properties[i]==null))?"":Reference.decode(properties[i].trim());
+						IQueryRetrieval<IStructureRecord> q =  createSingleQuery(property,
+								((condition==null)||(i>=condition.length)||(condition[i]==null))?"":condition[i], 
+								theKey,
+								true);
+								//keys.length==1);
+						query=q;
+						break;
+						/*
+						if (keys.length>1) qcombined.add(q);
+						else query = q;
+						*/
+					}
 			        return query;
 				} else return null;			
 			} else {

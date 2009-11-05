@@ -141,9 +141,10 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 			b.append(q.getSQL());
 			c = union;
 		}
-		if (scope == null)
+		if (scope == null) {
+			b.append(groupBy());
 			return b.toString();
-		else {
+		} else {
 			StringBuffer bb = new StringBuffer();
 			c = getScopeSQL();
 			bb.append(c);
@@ -153,11 +154,13 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 			bb.append(b.toString());
 			bb.append(")\n");
 			bb.append("as U\n");
-			bb.append("using (idstructure)");
+			bb.append(String.format("\nusing (%s)",joinOn()));
+			b.append(groupBy());
 			return bb.toString();
 		}
 	}
-	
+	protected abstract String joinOn();
+	protected String groupBy() {return "";}
 	/**
 	 * SQLs of simple queries, join-ed
 	 * @return sql string
@@ -174,7 +177,7 @@ join
 (select 1 as id,idstructure,1 from structure where idstructure between 150 and 200)
 as Q2
 using(idstructure)
- */		String c = "select Q1.idquery,s.idchemical,idstructure,Q1.selected as selected,Q1.metric as metric from structure as s";
+ */		String c = "select Q1.idquery,s.idchemical,s.idstructure,Q1.selected as selected,Q1.metric as metric from structure as s";
 		b.append(c);
 		if (scope != null) {
 			join(scope,"SCOPE",b);
@@ -183,7 +186,7 @@ using(idstructure)
 			IQueryObject q = queries.get(i);
 			join(q,Integer.toString(i+1),b);
 		}
-
+		b.append(groupBy());
 		return b.toString();		
 	}	
 	protected abstract String getScopeSQL();
@@ -194,7 +197,8 @@ using(idstructure)
 		b.append(")\n");
 		b.append("as Q");
 		b.append(qname);
-		b.append("\nusing (idstructure)");
+		b.append(String.format("\nusing (%s)",joinOn()));
+		
 	}
 	/**
 	 * SQL Parameters

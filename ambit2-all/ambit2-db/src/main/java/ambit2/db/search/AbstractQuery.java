@@ -26,8 +26,17 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	protected boolean selected;
 	protected String name;
 	protected Integer id=-1;
-	
+	protected long maxRecords = 1000;
 
+	public AbstractQuery() {
+		super();
+		try {
+			setMaxRecords(Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS)));
+		} catch (Exception x) {
+			setMaxRecords(1000);
+		}	
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -92,19 +101,11 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 		return b.toString();
 	}
 	public void setMaxRecords(long records) {
-		try {
-			Preferences.setProperty(Preferences.MAXRECORDS,Long.toString(records));
-		} catch (Exception x) {
-			Preferences.setProperty(Preferences.MAXRECORDS,"2000");
-		}
+		this.maxRecords = records>0?records:1000;
 		
 	}
 	public long getMaxRecords() {
-		try {
-			return Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS));
-		} catch (Exception x) {
-			return 2000;
-		}		
+		return maxRecords;
 	}
 
 }

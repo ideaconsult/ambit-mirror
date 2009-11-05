@@ -15,7 +15,7 @@ import ambit2.db.readers.IQueryRetrieval;
  *
  * @param <Q>
  */
-public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Writer> {
+public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
 	/**
 	 * 
 	 */

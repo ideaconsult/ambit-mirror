@@ -18,7 +18,7 @@ import ambit2.db.readers.IQueryRetrieval;
  *
  * @param <Q>
  */
-public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Writer> {
+public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter< Q, Writer> {
 	protected MoleculeReader reader = new MoleculeReader();
 	/**
 	 * 

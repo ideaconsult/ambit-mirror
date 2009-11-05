@@ -32,6 +32,7 @@ package ambit2.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -46,14 +47,23 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 
 	protected ResultSet resultSet;
 	protected QueryExecutor<IQueryObject<ResultType>> executor;
-
+	protected boolean handlePrescreen = false;
+	public boolean isHandlePrescreen() {
+		return handlePrescreen;
+	}
+	public void setHandlePrescreen(boolean handlePrescreen) {
+		this.handlePrescreen = handlePrescreen;
+	}
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -509334177829567145L;
 
 	public DbReader() {
-		// TODO Auto-generated constructor stub
+
+	}
+	protected boolean prescreen(IQueryRetrieval<ResultType> query, ResultType object) throws AmbitException {
+		return query.calculateMetric(object)>0;
 	}
 	public Iterator<ResultType> getIterator(final IQueryRetrieval<ResultType> query)
 			throws AmbitException {
@@ -62,9 +72,26 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		executor.setConnection(connection);
 		setResultSet(executor.process(query));
 		return new Iterator<ResultType>() {
+			protected long counter= 0;
 			public boolean hasNext() {
 				try {
-					return getResultSet().next();
+					if (handlePrescreen && query.isPrescreen()) {
+						try {
+							counter++;
+							if (counter > query.getMaxRecords()) return false;
+							boolean loop=getResultSet().next();
+							while (loop) {
+								ResultType object = query.getObject(getResultSet());
+								if (prescreen(query, object)) return loop;
+								else loop=getResultSet().next();
+							}
+							return loop;
+						} catch (AmbitException x) {
+							Logger.getLogger(getClass().getName()).severe(x.getMessage());
+							return false;
+						}
+					} else
+						return getResultSet().next();
 				} catch (SQLException x) {
 					onError(null,null,batchStatistics,x);
 					return false;

@@ -8,13 +8,17 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
+import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
+import ambit2.rest.dataset.DatasetResource;
+import ambit2.rest.structure.CompoundResource;
 
 /**
  * SMARTS search in database
@@ -36,23 +40,45 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 				key = request.getAttributes().get(smartsKey);
 				if (key==null) throw new AmbitException("Empty smarts");
 			}
-			String smarts = Reference.decode(key.toString());
+			String smarts = Reference.decode(key.toString().trim());
 			QuerySMARTS query = new QuerySMARTS();
 			query.setChemicalsOnly(true);
 			query.setValue(new FunctionalGroup(smarts,smarts,smarts));
 			
-			Object id = request.getAttributes().get("dataset_id");
-			if (id != null) try {
-				QueryDatasetByID scope = new QueryDatasetByID();
-				scope.setValue(new Integer(Reference.decode(id.toString())));
+			
+			try {
+				Object cmpid = request.getAttributes().get(CompoundResource.idcompound);
+				if (cmpid != null) {
+					IStructureRecord record = new StructureRecord();
+					record.setIdchemical(Integer.parseInt(Reference.decode(cmpid.toString())));
+					QueryStructureByID scope = new QueryStructureByID();
+					scope.setMaxRecords(1);
+					scope.setChemicalsOnly(true);
+					scope.setValue(record);
+					
+					QueryCombinedStructure combined = new QueryCombinedStructure();
+					combined.setChemicalsOnly(true);
+					combined.setCombine_as_and(true);
+					combined.add(query);
+					combined.setScope(scope);
+					return combined;
+				}
 				
-				QueryCombinedStructure combined = new QueryCombinedStructure();
-				combined.add(query);
-				combined.setScope(scope);
-				return combined;
+				Object datasetid = request.getAttributes().get(DatasetResource.datasetKey);
+				if (datasetid != null) {
+					QueryDatasetByID scope = new QueryDatasetByID();
+					scope.setValue(new Integer(Reference.decode(datasetid.toString())));
+					
+					QueryCombinedStructure combined = new QueryCombinedStructure();
+					combined.setCombine_as_and(true);
+					combined.add(query);
+					combined.setScope(scope);
+					return combined;
+				} 
+				
 			} catch (NumberFormatException x) {
 				throw new ResourceException(
-						Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid resource id %d",id),x
+						Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid resource id %s",getRequest().getOriginalRef()),x
 						);				
 			} catch (Exception x) {
 				throw new ResourceException(
@@ -68,31 +94,5 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 		}
 	}		
 
-/*
-	@Override
-	public void acceptRepresentation(Representation entity)
-			throws ResourceException {
-		 try {
-		  if (entity.getMediaType().equals(MediaType.APPLICATION_WWW_FORM,true)) {
-		   Form form = new Form(entity);
-		  // User u = new User();
-		   //u.setName(form.getFirstValue("user[name]"));
-		   u.setName(form.getFirstValue("search"));
-		   // :TODO {save the new user to the database}
-		   getResponse().setStatus(Status.SUCCESS_OK);
-		   // We are setting the representation in the example always to
-		   // JSON.
-		   // You could support multiple representation by using a
-		   // parameter
-		   // in the request like "?response_format=xml"
-		  // Representation rep = new JsonRepresentation(u.toJSON());
-		  // getResponse().setEntity(rep);
-		  } else {
-		   getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		  }
-		 } catch (Exception e) {
-		  getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-		 }
-	}
-*/
+
 }

@@ -37,7 +37,7 @@ import com.lowagie.text.pdf.PdfPTable;
  *
  * @param <Q>
  */
-public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<IStructureRecord, Q, Document> {
+public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter< Q, Document> {
 	/**
 	 * 
 	 */

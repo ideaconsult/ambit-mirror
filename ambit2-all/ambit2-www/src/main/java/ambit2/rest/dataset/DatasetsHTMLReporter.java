@@ -88,9 +88,9 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query/smarts\" title=\"Search compounds with smarts\" border=\"0\"/></a>",
+						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds with SMARTS\" border=\"0\"/></a>",
 						w.toString(),
-						QueryResource.query_resource+"/smarts",
+						"/smarts",
 						uriReporter.getBaseReference().toString()));
 				output.write("&nbsp;");
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
