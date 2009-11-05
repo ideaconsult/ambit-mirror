@@ -10,7 +10,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 
-public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryReporter<IStructureRecord, Q, Document> {
+public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter< Q, Document> {
 	/**
 	 * 
 	 */

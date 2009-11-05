@@ -37,6 +37,10 @@ public class PropertiesByDatasetCompound extends PropertiesByDatasetResource {
 			public long getMaxRecords() {
 				return 0;
 			}
+			@Override
+			protected String joinOn() {
+				return "idproperty";
+			}
 		};
 		qc.add(q);
 		qc.add(qc);

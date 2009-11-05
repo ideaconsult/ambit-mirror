@@ -1,15 +1,14 @@
 package ambit2.db.reporters;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.hssf.record.formula.functions.T;
+
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 
 /**
@@ -20,7 +19,7 @@ import ambit2.db.readers.IQueryRetrieval;
  * @param <Q>
  * @param <Output>
  */
-public abstract class QueryHeaderReporter<T,Q extends IQueryRetrieval<T>,Output>  extends QueryReporter<T, Q, Output> {
+public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRecord>,Output>  extends QueryStructureReporter<Q, Output> {
 
 	/**
 	 * 

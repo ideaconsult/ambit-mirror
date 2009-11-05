@@ -45,7 +45,7 @@ public class QuerySMARTS extends AbstractStructureQuery<String,FunctionalGroup,B
 	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	
 	public QuerySMARTS() {
-		setMaxRecords(1000);
+		super();
 	}
 	public String getSQL() throws AmbitException {
 		return screening.getSQL();

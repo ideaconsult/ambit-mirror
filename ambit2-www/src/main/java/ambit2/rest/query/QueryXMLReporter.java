@@ -16,7 +16,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.db.reporters.QueryStructureReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
@@ -38,7 +38,7 @@ import ambit2.rest.structure.ConformerURIReporter;
  * @param <Q>
  */
 public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>> 
-			extends QueryReporter<IStructureRecord,Q, Document> {
+			extends QueryStructureReporter<Q, Document> {
 	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundURI ;
 	protected ConformerURIReporter<IQueryRetrieval<IStructureRecord>> conformerURI;
 	protected Reference reference;

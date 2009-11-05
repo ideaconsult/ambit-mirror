@@ -115,7 +115,9 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		}
 	}	
 	protected AbstractBatchProcessor<IQueryRetrieval<T>, T> createBatch() {
-		return new DbReader<T>();
+		DbReader<T> reader = new DbReader<T>();
+		reader.setHandlePrescreen(true);
+		return reader;
 	}
 	public abstract void processItem(T item) throws AmbitException;
 	

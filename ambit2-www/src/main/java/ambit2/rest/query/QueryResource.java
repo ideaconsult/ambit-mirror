@@ -1,6 +1,5 @@
 package ambit2.rest.query;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -36,13 +35,27 @@ import ambit2.rest.RepresentationConvertor;
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
 	
-	
-
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
+		try {
+			status = Status.SUCCESS_OK;
+			queryObject = createQuery(getContext(), getRequest(), getResponse());
+			error = null;
+
+		} catch (ResourceException x) {
+			queryObject = null;
+			error = x;
+			status = x.getStatus();
+		}
 		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
-	}
+		if (queryObject!=null)
+		try {
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			queryObject.setMaxRecords(Long.parseLong(form.getFirstValue("max").toString()));
+		} catch (Exception x) {}
+
+	}	
 	protected Connection getConnection() throws SQLException , AmbitException {
 		Connection connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
 		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
