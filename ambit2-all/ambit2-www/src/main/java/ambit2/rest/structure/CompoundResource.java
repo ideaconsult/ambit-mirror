@@ -268,7 +268,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		try {
 			IQueryRetrieval<IStructureRecord> q = createQuery(getContext(),getRequest(),getResponse());
 			//ProcessorCreateQuery
-			System.out.println(q);
+			
 		} catch (Exception x) {
 			
 		}		

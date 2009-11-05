@@ -1,24 +1,12 @@
 package ambit2.rest.dataset;
 
-import java.io.InputStreamReader;
-import java.util.logging.Logger;
-
 import org.restlet.Context;
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.config.Preferences;
-import ambit2.base.data.Property;
-import ambit2.base.data.Template;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.structure.QueryDatasetByID;
-import ambit2.rest.property.PropertyDOMParser;
 
 
 /**
