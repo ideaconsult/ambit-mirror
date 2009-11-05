@@ -71,6 +71,10 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		
 			writer.write("");
 			for (Property p : header) 
+				writer.write(String.format(",\"%s\"", p.getUrl()));
+			writer.write("\n");
+			writer.write("");
+			for (Property p : header) 
 				writer.write(String.format(",\"%s\"", p.getTitle()));
 			
 			writer.write("\n");
@@ -78,6 +82,11 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			for (Property p : header) 
 				writer.write(String.format(",\"%s\"", p.getName()));
 			writer.write("\n");
+			
+			writer.write("");
+			for (Property p : header) 
+				writer.write(String.format(",\"%s\"", p.getUnits()));
+			writer.write("\n");			
 		}
 	}	
 
