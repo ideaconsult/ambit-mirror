@@ -63,7 +63,8 @@ public class RESTClient<Result,Q extends IQueryRetrieval<Result>, Parser extends
 
 			r = client.get(MediaType.TEXT_XML);
 			if (client.getStatus().equals(Status.SUCCESS_OK))
-				parser.parse(new InputStreamReader(r.getStream()));
+				parser.parse(new InputStreamReader(r.getStream(),"UTF-8"));
+
 			return null; //what should be returned???????
 		} catch (NotFoundException x) {
 			return null;
