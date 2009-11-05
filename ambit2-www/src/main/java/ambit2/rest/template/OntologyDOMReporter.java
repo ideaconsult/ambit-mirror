@@ -48,7 +48,6 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 			}
 			@Override
 			public void handleItem(Property item) throws AmbitException {
-				System.out.println(item);
 				processItem(item);
 				
 			}
