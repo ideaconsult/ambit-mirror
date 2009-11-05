@@ -215,13 +215,14 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					"weka.jpg"					
 					
 			};
-			
+			String q=uriReporter.getRequest().getOriginalRef().getQuery();
 			for (int i=0;i<mimes.length;i++) {
 				MediaType mime = mimes[i];
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s?accept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
-						"",
+						"<a href=\"?%s%saccept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+						q==null?"":q,
+						q==null?"":"&",
 						mime,
 						uriReporter.getBaseReference().toString(),
 						image[i],
@@ -249,16 +250,31 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			if (table) {
 				output.write("<table class=\"results\" border='0' >"); 
+				output.write("<tr>");
 				output.write("<th  bgcolor='#99CC00'>#</th><th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
-
 				for(Property p: props) {
+					int dot = 0;
+					int end = p.getTitle().indexOf("Descriptor");
+					if (end > 0) {
+						dot = p.getTitle().lastIndexOf(".");
+						if (dot<0) dot = 0; else dot++;
+					} else end = p.getTitle().length();
+					if ((end-dot)>40) end = dot + 40;
 					
 					output.write(
-							String.format("<th bgcolor='#99CC00' align='center'><a href='%s'>%s</a></th>",
-						pReporter.getURI(p),p.getName()));
-
-				}				
+						String.format("<th bgcolor='#99CC00' align='center'><a href='%s'>%s</a></th>",
+						p.getUrl(),p.getTitle().substring(dot,end)));
+				}	
+				output.write("</tr><tr>");
+				output.write("<th></th><th></th>");
+				for(Property p: props) {
+					output.write(
+						String.format("<th bgcolor='#99CC00' align='center'><a href='%s'>%s %s</a></th>",
+						pReporter.getURI(p),p.getName(),p.getUnits()));
+				}
+			
+				output.write("</tr>");
 			}
 			else
 				output.write("<div id=\"div-1\">");
