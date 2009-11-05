@@ -52,7 +52,13 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
     		if (target.getContent()==null) return null;
     		if (target.getFormat()==null)
     			throw new AmbitException("Unknown format "+target.getFormat());
-            switch (MOL_TYPE.valueOf(target.getFormat())) {
+    		MOL_TYPE format = MOL_TYPE.SDF;
+    		try {
+    			format = MOL_TYPE.valueOf(target.getFormat());
+    		} catch (Exception x) {
+    			throw new AmbitException(x);
+    		}
+            switch (format) {
             case SDF: {
             	try {
             		return MoleculeTools.readMolfile(target.getContent());
