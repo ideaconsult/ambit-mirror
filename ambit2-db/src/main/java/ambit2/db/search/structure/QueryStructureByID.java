@@ -20,7 +20,7 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
      */
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
-	public static final String sqlField="select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where %s %s %s";
+	public static final String sqlField="select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where %s %s %s order by type_structure desc";
 	protected long maxRecords = -1;
 	public QueryStructureByID() {
 		setCondition(NumberCondition.getInstance("="));
