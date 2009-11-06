@@ -25,19 +25,42 @@ import ambit2.rest.StringConvertor;
 
 public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<String>> {
 	protected static List<Algorithm<String>> algorithmList;
+	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
 			//id,class,name
 			{"1","pKa","ambit2.descriptors.PKASmartsDescriptor",null},
 			{"2","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
 			{"3","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
-			{"4","ToxTree: Eye irritation","eye.EyeIrritationRules",null},
-			{"5","ToxTree: Skin irritation","sicret.SicretRules",null},
+			{"4","ToxTree: Eye irritation","eye.EyeIrritationRules",
+				new Property[] 
+				{
+				new Property("MolWeight","A", toxTreeReference),
+				new Property("Melting Point","°C", toxTreeReference),
+				new Property("LogP","", toxTreeReference),
+				new Property("Lipid Solubility","g/kg", toxTreeReference),
+				new Property("Water Solubility","g/l", toxTreeReference),
+				}
+			},
+			{"5","ToxTree: Skin irritation","sicret.SicretRules",
+			new Property[] 
+				{
+				new Property("MolWeight","A", toxTreeReference),
+				new Property("Melting Point","°C", toxTreeReference),
+				new Property("LogP","", toxTreeReference),
+				new Property("Lipid Solubility","g/kg", toxTreeReference),
+				new Property("Water Solubility","g/l", toxTreeReference),
+				new Property("Vapour Pressure","Pa", toxTreeReference),
+				new Property("Surface Tension","mN/m", toxTreeReference)
+				}
+			},
 			{"6","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
 			{"7","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
 			{"8","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"9","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
-				new Property("DailyIntake","\u00B5g/day", new LiteratureEntry("User input","http://toxtree.sourceforge.net"))},
+				new Property[] {
+				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
+			}},
 	};
 
 	public final static String idalgorithm = "idalgorithm";
@@ -54,7 +77,8 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 					alg.setInput(new Template("Empty"));
 				else {
 					Template predictors = new Template(String.format("Predictors-%s",d[1]));
-					predictors.add((Property)d[3]);
+					for (Property p : (Property[])d[3])
+						predictors.add(p);
 					alg.setInput(predictors);
 				}					
 				algorithmList.add(alg);

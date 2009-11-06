@@ -1,0 +1,88 @@
+package ambit2.rest;
+
+import java.io.IOException;
+import java.io.Writer;
+
+import org.restlet.data.Request;
+
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryHeaderReporter;
+
+/**
+ * HTML generation for structure queries
+ * @author nina
+ *
+ * @param <Q>
+ */
+public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>  extends QueryHeaderReporter<Q,Writer>  {
+	protected QueryURIReporter uriReporter;
+	
+
+	
+	public QueryURIReporter getUriReporter() {
+		return uriReporter;
+	}
+	public void setUriReporter(QueryURIReporter uriReporter) {
+		this.uriReporter = uriReporter;
+	}
+
+	protected boolean collapsed = true;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 16821411854045588L;
+	
+	/**
+	 * 
+	 */
+	public QueryStructureHTMLReporter() {
+		this(null,true);
+	}
+	public QueryStructureHTMLReporter(Request request, boolean collapsed) {
+		super();
+		uriReporter =  createURIReporter(request);
+		this.collapsed = collapsed;
+		processors.clear();
+		/*
+		ValuesReader valuesReader = new ValuesReader();
+		Profile profile = new Profile<Property>();
+		profile.add(Property.getCASInstance());
+		valuesReader.setProfile(profile);
+		processors.add(valuesReader);
+		*/
+		processors.add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+				processItem(target);
+				return target;
+			};
+		});
+		
+	}	
+	protected abstract QueryURIReporter createURIReporter(Request request);
+	
+	@Override
+	public void header(Writer w, Q query) {
+		try {
+			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest());
+		} catch (IOException x) {}
+	}
+	
+	@Override
+	public void footer(Writer output, Q query) {
+		try {
+			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
+			output.flush();
+		} catch (Exception x) {
+			
+		}
+		
+	}
+
+	public void open() throws DbAmbitException {
+		
+	}	
+}
