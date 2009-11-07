@@ -7,6 +7,8 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
@@ -16,7 +18,7 @@ import ambit2.rest.query.StructureQueryResource;
  * @author nina
  *
  */
-public class DatasetStructuresResource extends StructureQueryResource<QueryDatasetByID> {
+public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecord>> extends StructureQueryResource<Q> {
 	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
 	public final static String dataset = "/dataset";	
 	public final static String datasetKey = "dataset_id";	
@@ -24,7 +26,7 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 
 
 	@Override
-	protected QueryDatasetByID createQuery(Context context, Request request,
+	protected Q createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
 			setTemplate(createTemplate(context, request, response));
@@ -33,8 +35,8 @@ public class DatasetStructuresResource extends StructureQueryResource<QueryDatas
 				
 				QueryDatasetByID query = new QueryDatasetByID();
 				query.setValue(new Integer(Reference.decode(id.toString())));
-				query.setMaxRecords(1000);
-				return query;
+
+				return (Q)query;
 			} catch (NumberFormatException x) {
 				throw new InvalidResourceIDException(id);
 			} catch (Exception x) {
