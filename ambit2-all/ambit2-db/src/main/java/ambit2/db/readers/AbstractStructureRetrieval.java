@@ -20,7 +20,7 @@ public abstract class AbstractStructureRetrieval<R> extends AbstractQuery<Boolea
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public final static String sql = "select structure.idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties from structure where structure.%s =?";
+	public final static String sql = "select structure.idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties from structure where structure.%s =? order by type_structure desc";
 	protected final static int ID_idstructure=1;
 	protected final static int ID_idchemical=2;
 	protected final static int ID_structure=3;
