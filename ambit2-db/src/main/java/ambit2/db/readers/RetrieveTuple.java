@@ -80,5 +80,9 @@ public class RetrieveTuple<ResultType> extends AbstractQuery<PropertiesTuple,ISt
 			throw new AmbitException(x);
 		}
 	}
-	
+	@Override
+	public String toString() {
+		return "Property";
+
+	}
 }
