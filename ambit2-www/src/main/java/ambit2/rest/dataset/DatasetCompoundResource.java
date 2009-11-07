@@ -39,7 +39,7 @@ public class DatasetCompoundResource extends CompoundResource {
 		
 		DatasetStructuresResource ds = new DatasetStructuresResource();
 		ds.init(context, request, response);
-		QueryDatasetByID datasetQuery = ds.createQuery(context, request, response);
+		IQueryRetrieval<IStructureRecord> datasetQuery = ds.createQuery(context, request, response);
 		if (datasetQuery == null) return null;
 		QueryCombinedStructure combinedQuery = new QueryCombinedStructure();
 		combinedQuery.add(q);

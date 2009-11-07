@@ -1,12 +1,20 @@
 package ambit2.rest.dataset;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+import org.restlet.util.Template;
 
-import ambit2.db.search.structure.QueryDatasetByID;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.update.structure.ChemicalByDataset;
 
 
 /**
@@ -25,7 +33,7 @@ import ambit2.db.search.structure.QueryDatasetByID;
  * @author nina
  *
  */
-public class DatasetResource extends DatasetStructuresResource {
+public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extends DatasetStructuresResource<Q> {
 	
 	
 
@@ -39,37 +47,49 @@ public class DatasetResource extends DatasetStructuresResource {
 			
 	}
 	@Override
-	protected QueryDatasetByID createQuery(Context context, Request request,
+	protected Q createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		
 		try {
-			QueryDatasetByID q = super.createQuery(context, request, response);
+			
 			setTemplate(createTemplate(context, request, response));
-			return q;
-			/*
-			final Template profile = new Template(null);
-			profile.setId(-1);				
 			
 			Form form = request.getResourceRef().getQueryAsForm();
-			String[] featuresURI =  form.getValuesArray("features");
+			String[] datasetsURI =  form.getValuesArray("intersection");
+			if ((datasetsURI != null) && (datasetsURI.length>0)) {
+				QueryCombinedStructure qc = new QueryCombinedStructure() {
+					@Override
+					protected String getMainSQL() {
+						return "select idchemical from chemicals\n";
+					}
+					@Override
+					protected String groupBy() {
+						return "";
+					}
+				};
+				qc.setChemicalsOnly(true);
+				qc.setCombine_as_and(true);
+				try {
+				ChemicalByDataset  cd = new ChemicalByDataset(new Integer(getRequest().getAttributes().get(datasetKey).toString()));
+				qc.add(cd);
+				} catch (Exception x) {}
+				Template t = new Template(String.format("%s%s/{%s}",getRequest().getRootRef(),DatasetStructuresResource.dataset,DatasetStructuresResource.datasetKey));
+				for (String datasetURI: datasetsURI ) {
+					Map<String, Object> vars = new HashMap<String, Object>();
+					t.parse(datasetURI, vars);
+					try {
+						qc.add(new ChemicalByDataset(new Integer(vars.get(DatasetStructuresResource.datasetKey).toString())));
+					} catch (Exception x) {
+						
+					}
+				}
+				return (Q)qc;
+			} else {
+				return  super.createQuery(context, request, response);
+			}
 
-			for (String featureURI:featuresURI) {
-				readFeatures(featureURI, profile);
-			}
-			
-			if (q.getValue() > 0) {
-				readFeatures(String.format("riap://application/dataset/%d/feature_definition",q.getValue()), profile);
-				setTemplate(profile);
-			}
-			try {
-				 Preferences.setProperty(Preferences.MAXRECORDS,
-						 form.getFirstValue("max"));
-			} catch (Exception x) {
-				
-			}
-
-			return q;
-			*/
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
