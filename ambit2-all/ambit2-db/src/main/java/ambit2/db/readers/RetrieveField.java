@@ -154,6 +154,10 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	public boolean isPrescreen() {
 		return false;
 	}
-	
+	@Override
+	public String toString() {
+		return getFieldname()==null?"Property":getFieldname().getName();
+
+	}
 	
 }
