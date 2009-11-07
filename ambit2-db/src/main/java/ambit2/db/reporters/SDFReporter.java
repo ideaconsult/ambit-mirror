@@ -34,7 +34,9 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public SDFReporter(Template template) {
 		setTemplate(template);
 		getProcessors().clear();
-		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveStructure()));
+		RetrieveStructure r = new RetrieveStructure();
+		r.setMaxRecords(1);
+		getProcessors().add(new ProcessorStructureRetrieval(r));		
 
 		if (getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
