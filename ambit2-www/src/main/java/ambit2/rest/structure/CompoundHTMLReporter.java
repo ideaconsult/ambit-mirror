@@ -144,12 +144,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			} catch (Exception x) {
 				query_property = "";
 			}
-			w.write("<form action='' method='get'>\n");
-			w.write(String.format("<input name='property' size='20' value='%s'>\n",query_property==null?"":query_property));
+			w.write("<form action='' name='form' method='get'>\n");
+			w.write(String.format("<input name='property' type='text' size='20' value='%s'>\n",query_property==null?"":query_property));
 			w.write("&nbsp;");
-			w.write(String.format("<input name='search' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
-
-			w.write("<br><select size='2' STYLE=\"width: 400px\" multiple name=\"features\">\n");
+			w.write(String.format("<input name='search' type='text' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
+			w.write("<input type='submit' value='Search'><br>");
+			w.write("<select size='2' STYLE=\"width: 400px\" multiple name=\"features\">\n");
 			w.write("<option value=\"\">Default</option>\n");
 			String[][] options= {
 					{"template/All/Identifiers/view/tree","Identifiers"},
@@ -167,9 +167,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			};
 			for (String option[]:options)
 			w.write(String.format("<option value=\"%s/%s\">%s</option>\n",baseReference,option[0],option[1]));
-			
-			//w.write("</select>");
-			w.write("<input type='submit' value='Search'><br>");
+			w.write("</select>");
+			w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'><br>",
+					uriReporter.getBaseReference()));
 			//w.write(baseReference.toString());
 
 			w.write("</form>\n");

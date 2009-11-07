@@ -17,9 +17,12 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
@@ -51,19 +54,12 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 	
 	
 */
-	@Override
-	protected void doInit() throws ResourceException {
-		super.doInit();
 
-		        
-	};
 
 	@Override
 	protected QuerySimilarityBitset createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		setTemplate(createTemplate(context, request, response));
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-
 		try {
 			query_type = QueryType.valueOf(form.getFirstValue("type"));
 
@@ -83,7 +79,8 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles")),
 						x
 						);
-
+			} catch (ResourceException x) {
+				throw x;
 			} catch (Exception x) {
 				throw new ResourceException(
 						Status.SERVER_ERROR_INTERNAL,
@@ -156,6 +153,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 		q.setCondition(NumberCondition.getInstance(">"));		
 		try {
 			q.setValue(getBitset(mol));
+			setTemplate(createTemplate(context, request, response));
 			return q;
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);

@@ -61,6 +61,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
 		return connection;
 	}
+
 	public Representation get(Variant variant) {
 
 		try {
@@ -110,8 +111,15 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
     			return null;	        	
 	        	
 	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,error);
-	        	return null;
+	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) try {
+	    			IProcessor<Q, Representation>  convertor = createConvertor(variant);
+	    			Representation r = convertor.process(null);
+	            	return r;			
+	    		} catch (Exception x) { getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x); return null;}	        	
+	    		else {
+	    			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,error);
+	    			return null;
+	    		}
     	
 	        }
 		} catch (Exception x) {
