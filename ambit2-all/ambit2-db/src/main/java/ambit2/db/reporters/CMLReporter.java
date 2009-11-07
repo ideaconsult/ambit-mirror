@@ -11,6 +11,7 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveStructure;
 
 /**
  * Writes query results as CML 
@@ -26,7 +27,9 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	private static final long serialVersionUID = 2931123688036795689L;
 	public CMLReporter() {
 		getProcessors().clear();
-		getProcessors().add(new ProcessorStructureRetrieval());
+		RetrieveStructure r = new RetrieveStructure();
+		r.setMaxRecords(1);
+		getProcessors().add(new ProcessorStructureRetrieval(r));		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);

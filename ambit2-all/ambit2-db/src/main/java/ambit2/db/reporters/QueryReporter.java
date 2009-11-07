@@ -95,14 +95,14 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 
 		batch = createBatch();
 		try {
-			//batch.setMaxRecords(maxRecords);
-			batch.setProcessorChain(processors);
-			batch.setConnection(connection);			
-			IBatchStatistics stats = batch.process(query);
-			if (stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ)==0)
-				throw new NotFoundException(query.toString());
+			if (connection != null) {
+				batch.setProcessorChain(processors);
+				batch.setConnection(connection);			
+				IBatchStatistics stats = batch.process(query);
+				if (stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ)==0)
+					throw new NotFoundException(query.toString());
+			} 
 			return output;
-
 		} catch (AmbitException x) {
 			throw x;
 		} catch (Exception x ) {
