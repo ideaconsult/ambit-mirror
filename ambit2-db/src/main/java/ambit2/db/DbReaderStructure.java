@@ -8,6 +8,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveStructure;
 
 /**
  * Reads structures given a query.
@@ -23,7 +24,9 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 	protected ProcessorStructureRetrieval retriever;
 	public DbReaderStructure() {
 		super();
-		retriever = new ProcessorStructureRetrieval();
+		RetrieveStructure q = new RetrieveStructure();
+		q.setMaxRecords(1);
+		retriever = new ProcessorStructureRetrieval(q);
 	}
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {

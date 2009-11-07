@@ -29,14 +29,29 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 	private static final long serialVersionUID = 6862334340898438441L;
 	public QuerySimilarityBitset() {
 		setFieldname("Tanimoto");
+		setChemicalsOnly(false);
 	}
 	/**
 	 * select ? as idquery,idchemical,idstructure,1 as selected,Tanimoto as metric
 	 */
 	public String getSQL() throws AmbitException {
-
-		//int bc = bitset.cardinality();
 		StringBuffer b = new StringBuffer();
+		if (isChemicalsOnly()) {
+			b.append("select ? as idquery,L.idchemical,1,1 as selected,round(cbits/(bc+?-cbits),2) as metric from");
+			b.append("\n(select fp1024.idchemical,-1,(");
+			for (int h=0; h < 16; h++) {
+				b.append("bit_count(? & fp");
+				b.append(Integer.toString(h+1));
+				b.append(")");
+				if (h<15) b.append(" + "); else b.append(") ");
+			}
+			b.append(" as cbits,bc from fp1024");
+
+			b.append (") as L, chemicals ");
+			b.append("where bc > 0 and cbits > 0 and (cbits/(bc+?-cbits)>?) and L.idchemical=chemicals.idchemical ");
+			if (isForceOrdering()) b.append("order by metric desc");			
+		} else {
+		
 			//b.append("select cbits,bc,? as NA,round(cbits/(bc+?-cbits),2) as ");
 			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,round(cbits/(bc+?-cbits),2) as metric from");
 			b.append("\n(select fp1024.idchemical,structure.idstructure,(");
@@ -51,7 +66,7 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 			b.append (") as L, chemicals ");
 			b.append("where bc > 0 and cbits > 0 and (cbits/(bc+?-cbits)>?) and L.idchemical=chemicals.idchemical ");
 			if (isForceOrdering()) b.append("order by metric desc");
-					
+		}			
 	
 		return b.toString();
 

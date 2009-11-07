@@ -27,10 +27,21 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 	 * select ? as idquery,idchemical,idstructure,1 as selected,cbits as substructure
 	 */
 	public String getSQL() throws AmbitException {
-
-		//int bc = bitset.cardinality();
 		StringBuffer b = new StringBuffer();
-			//b.append("select cbits,bc,? as NA,round(cbits/(bc+?-cbits),2) as ");
+		if (isChemicalsOnly()) {
+			b.append("select ? as idquery,L.idchemical,-1,1 as selected,cbits as metric from");
+			b.append(String.format("\n(select %s.idchemical,-1,(",fptable.getTable()));
+			for (int h=0; h < 16; h++) {
+				b.append("bit_count(? & fp");
+				b.append(Integer.toString(h+1));
+				b.append(")");
+				if (h<15) b.append(" + "); else b.append(") ");
+			}
+			b.append(String.format(" as cbits,bc from %s ",fptable.getTable()));
+
+			b.append (") as L, chemicals ");
+			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical and label != 'ERROR'");			
+		} else {
 			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,cbits as metric from");
 			b.append(String.format("\n(select %s.idchemical,structure.idstructure,(",fptable.getTable()));
 			for (int h=0; h < 16; h++) {
@@ -43,7 +54,7 @@ public class QueryPrescreenBitSet extends QuerySimilarityBitset {
 
 			b.append (") as L, chemicals ");
 			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical and label != 'ERROR'");
-
+		}
 	
 		return b.toString();
 
