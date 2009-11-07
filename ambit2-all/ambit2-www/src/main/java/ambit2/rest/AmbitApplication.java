@@ -124,6 +124,7 @@ public class AmbitApplication extends Application {
 
 		//connectionURI = null;
 		setStatusService(new AmbitStatusService());
+
 		getTaskService().setEnabled(true);
 		getTunnelService().setUserAgentTunnel(true);
 		
@@ -184,6 +185,7 @@ public class AmbitApplication extends Application {
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 		
+			//li.setDatabase("echa");
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -424,6 +426,7 @@ public class AmbitApplication extends Application {
 		queryRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		
 		datasetRouter.attach(SmartsQueryResource.resource,smartsRouter);
+		compoundRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		
 		
 		Router algoRouter = new Router(getContext());
@@ -476,6 +479,7 @@ public class AmbitApplication extends Application {
 		
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
+		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
 		 Directory jsDir = new Directory(getContext(), "war:///js");
 
@@ -483,6 +487,7 @@ public class AmbitApplication extends Application {
 		 router.attach("/", AmbitResource.class);
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
+		 router.attach("/jme/", jmeDir);
 		 router.attach("/style/", styleDir);
 		 router.attach("/js/", jsDir);
 		 router.attach("/favicon.ico", FavIconResource.class);

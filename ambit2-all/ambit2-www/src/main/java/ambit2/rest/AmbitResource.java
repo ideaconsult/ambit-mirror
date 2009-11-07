@@ -371,13 +371,9 @@ public class AmbitResource extends ServerResource {
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/jquery-1.3.2.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
+//		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
 
-		/*
-		w.write(js());
-		w.write(jsHTTPObject());
-		w.write(jsLogout());
-		w.write("</script>\n");
-				*/
 
 		w.write("</head>\n");
 		w.write("<body>\n");

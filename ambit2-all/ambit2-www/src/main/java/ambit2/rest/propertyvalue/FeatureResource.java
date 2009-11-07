@@ -112,7 +112,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		}
 		return reporter;		
 	}
-	//TODO refactor to throw ResourceException
+	
 	@Override
 	protected IQueryRetrieval<PropertyValue> createQuery(Context context,
 			Request request, Response response) throws ResourceException {

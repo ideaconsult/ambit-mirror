@@ -19,6 +19,7 @@ import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ARFFReporter;
@@ -141,6 +142,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
+		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML))) 
+			throw new NotFoundException();
+		
 		setTemplate(template);
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
