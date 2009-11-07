@@ -42,7 +42,7 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 	protected CreateChemical chemical;
 	
 	public static final String create_sql = 
-		"INSERT INTO structure (idstructure,idchemical,structure,format,updated,user_name) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1))"
+		"INSERT INTO structure (idstructure,idchemical,structure,format,updated,user_name,type_structure) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1),?)"
 	;
 
 	public CreateStructure(IStructureRecord structure) {
@@ -65,6 +65,8 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 			params1.add(new QueryParam<String>(String.class, content==null?"":content));	
 			String format = getObject().getFormat();
 			params1.add(new QueryParam<String>(String.class, format==null?"SDF":format));
+			//struc type
+			params1.add(new QueryParam<String>(String.class, (content==null)||("".equals(content.trim()))?"NA":"2D with H"));
 			return params1;
 		}
 		
