@@ -73,14 +73,18 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		setResultSet(executor.process(query));
 		return new Iterator<ResultType>() {
 			protected long counter= 0;
+			
 			public boolean hasNext() {
 				try {
 					if (handlePrescreen && query.isPrescreen()) {
 						try {
 							counter++;
+							
 							if (counter > query.getMaxRecords()) return false;
 							boolean loop=getResultSet().next();
-							while (loop) {
+							long attempts=0;
+							while (loop && (attempts<= 5*query.getMaxRecords())) {
+								attempts++;
 								ResultType object = query.getObject(getResultSet());
 								if (prescreen(query, object)) return loop;
 								else loop=getResultSet().next();
