@@ -47,7 +47,11 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
     protected static String s_ustructure = "ustructure";
     protected static String s_format = "format";
     
-
+    @Override
+    public void setValue(IStructureRecord value) {
+    	super.setValue(value);
+    	if (value.getIdstructure()<=0) setFieldname(true);
+    }
     public IStructureRecord getObject(ResultSet rs) throws AmbitException {
         try {
             IStructureRecord r = getValue();

@@ -48,24 +48,24 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric\n"+
 		"from structure join chemicals using(idchemical)\n"+
 		"left join %s using(idchemical)\n"+
-		"where (%s.status is null)\n"+
-		"or (structure.updated > %s.updated)\n"+
+		"where (structure.type_structure != 'NA') &&((%s.status is null)\n"+
+		"or (structure.updated > %s.updated))\n"+
 		"union\n"+
 		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,0 as metric\n"+
 		"from structure join chemicals using(idchemical)\n"+
 		"join %s using(idchemical)\n"+
-		"where (%s.status = 'invalid')\n";
+		"where (structure.type_structure != 'NA') && (%s.status = 'invalid')\n";
 	
 	public final static String sqlFieldStruc =
 		
 		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric\n"+
 		"from structure\n"+
 		"left join %s using(idchemical,idstructure)\n"+
-		"where (%s.status is null)\n"+
-		"or (structure.updated > %s.updated)\n"+
+		"where (structure.type_structure != 'NA') & ((%s.status is null)\n"+
+		"or (structure.updated > %s.updated))\n"+
 		"union\n"+
 		"select ? as idquery, idchemical,idstructure,1 as selected,0 as metric\n"+
-		"from %s where (%s.status = 'invalid')";
+		"from %s where (structure.type_structure != 'NA') & (%s.status = 'invalid')";
 	
 	public final static String sqlSMARTS =
 		
