@@ -34,6 +34,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
+			setTemplate(createTemplate(context, request, response));
 			Form form = request.getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue("search");
 			if (key ==null) {

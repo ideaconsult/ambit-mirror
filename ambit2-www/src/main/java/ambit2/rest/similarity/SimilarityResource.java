@@ -61,7 +61,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
 	@Override
 	protected QuerySimilarityBitset createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-	
+		setTemplate(createTemplate(context, request, response));
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
 		try {
@@ -151,6 +151,7 @@ public class SimilarityResource extends StructureQueryResource<QuerySimilarityBi
         }			
         
 		QuerySimilarityBitset q = new QuerySimilarityBitset();
+		q.setChemicalsOnly(true);
 		q.setThreshold(threshold);
 		q.setCondition(NumberCondition.getInstance(">"));		
 		try {
