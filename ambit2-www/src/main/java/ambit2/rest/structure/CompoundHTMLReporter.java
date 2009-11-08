@@ -1,5 +1,6 @@
 package ambit2.rest.structure;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -109,7 +110,94 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		}
 		count++;
 	}
+	protected String content(String left, String right) throws IOException {
+		return String.format(
+				"<div class=\"rowwhite\"><span class=\"left\">%s</span><span class=\"center\">%s</span></div>",
+				left,right);
+
+	}
 	
+	protected String templates(Reference baseReference) throws IOException {
+		StringBuilder w = new StringBuilder();
+		w.append("<input type='submit' value='Retrieve data'><p>");
+		w.append("<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"features\">\n");
+		w.append("<option value=\"\">Default</option>\n");
+		String[][] options= {
+				{"template/All/Identifiers/view/tree","Identifiers"},
+				{"template/All/Dataset/view/tree","Datasets"},
+				{"template/All/Models/view/tree","Models"},
+				{"template/All/Endpoints/view/tree","Endpoints"},
+				{"template/All/Descriptors/view/tree","All descriptors"},				
+				{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
+				{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
+				{"template/Descriptors/ambit2.mopac.DescriptorMopacShell","Electronic descriptors (PM3 optimized structure)"},
+				{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
+				{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},
+		};
+		for (String option[]:options)
+		w.append(String.format("<option value=\"%s/%s\">%s</option>\n",baseReference,option[0],option[1]));
+		w.append("</select>");
+		
+		
+		return w.toString();
+	}	
+	
+	protected String downloadLinks() throws IOException {
+		StringBuilder w = new StringBuilder();
+		MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
+				ChemicalMediaType.CHEMICAL_CML,
+				ChemicalMediaType.CHEMICAL_SMILES,					
+				MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_XML,
+				MediaType.APPLICATION_PDF,
+				MediaType.TEXT_CSV,
+				ChemicalMediaType.WEKA_ARFF,					
+				};
+		String[] image = {
+				"sdf.jpg",
+				"cml.jpg",
+				"smi.png",					
+				"link.png",
+				"xml.png",
+				"pdf.png",
+				"excel.png",
+				"weka.jpg"					
+				
+		};
+		String q=uriReporter.getRequest().getOriginalRef().getQuery();
+		for (int i=0;i<mimes.length;i++) {
+			MediaType mime = mimes[i];
+			w.append("&nbsp;");
+			w.append(String.format(
+					"<a href=\"?%s%saccept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+					q==null?"":q,
+					q==null?"":"&",
+					mime,
+					uriReporter.getBaseReference().toString(),
+					image[i],
+					mime,
+					mime));	
+		}			
+		return w.toString();
+	}
+	public String resultsForm(Q query) {
+		StringBuilder w = new StringBuilder();
+		w.append(String.format("<form method=\"post\" action=\"/query\">",""));
+		w.append(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
+		w.append(String.format("<input type=\"hidden\" value='%s' name='queryURI'>\n",uriReporter.getRequest().getOriginalRef()));
+		w.append("<input type=\"submit\" value='Save search results'>&nbsp;");
+		//output.write("</form>");
+		//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
+		//output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
+		
+		//output.write(String.format("<form method=\"post\" action=\"%s/algorithm\">",uriReporter.getBaseReference()));
+		//output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
+		//output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
+		//output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
+		
+		w.append("</form>");	
+		return w.toString();
+	}
 	public void header(Writer w, Q query) {
 		try {
 
@@ -147,33 +235,21 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("<form action='' name='form' method='get'>\n");
 			w.write(String.format("<input name='property' type='text' size='20' value='%s'>\n",query_property==null?"":query_property));
 			w.write("&nbsp;");
-			w.write(String.format("<input name='search' type='text' size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
-			w.write("<input type='submit' value='Search'><br>");
-			w.write("<select size='2' STYLE=\"width: 400px\" multiple name=\"features\">\n");
-			w.write("<option value=\"\">Default</option>\n");
-			String[][] options= {
-					{"template/All/Identifiers/view/tree","Identifiers"},
-					{"template/All/Descriptors/view/tree","All descriptors"},
-					{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
-					{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
-					{"template/Descriptors/ambit2.mopac.DescriptorMopacShell","Electronic descriptors (PM3 optimized structure)"},
-					{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
-					{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},						
-					
-					{"template/All/Dataset/view/tree","Datasets"},
-					{"template/All/Models/view/tree","Models"},
-					{"template/All/Endpoints/view/tree","Endpoints"},
-
-			};
-			for (String option[]:options)
-			w.write(String.format("<option value=\"%s/%s\">%s</option>\n",baseReference,option[0],option[1]));
-			w.write("</select>");
-			w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'><br>",
+			w.write(String.format("<input name='search' type='text' size='40' value='%s'>\n",query_smiles==null?"":query_smiles));
+			if ((uriReporter.getRequest().getOriginalRef().toString().indexOf("smarts")>0)
+					||
+					uriReporter.getRequest().getOriginalRef().toString().indexOf("similarity")>0)
+			w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
 					uriReporter.getBaseReference()));
+			
+			w.write("<input type='submit' value='Search'><br>");
+			
+			//w.write(templates(baseReference));
+			
 			//w.write(baseReference.toString());
 
-			w.write("</form>\n");
-			w.write("Search by property or identifier name (optional) and value");		
+			//w.write("</form>\n"); moved in footer
+			//w.write("Search by property or identifier name (optional) and value");		
 			w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
 			w.write("</td>");
 			w.write("<td align='right' width='256px'>");
@@ -181,77 +257,20 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 			w.write("</td></tr>");
 			w.write("</table>");		
-			
-			
-			
-			w.write("<hr>");
-			/*
-			AmbitResource.writeSearchForm(w,
-					collapsed?"Chemical compounds":"Chemical compound"
-					,
-					uriReporter.getBaseReference(),
-					""
-					);
-			
-			*/
-			
-			MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
-					ChemicalMediaType.CHEMICAL_CML,
-					ChemicalMediaType.CHEMICAL_SMILES,					
-					MediaType.TEXT_URI_LIST,
-					MediaType.TEXT_XML,
-					MediaType.APPLICATION_PDF,
-					MediaType.TEXT_CSV,
-					ChemicalMediaType.WEKA_ARFF,					
-					};
-			String[] image = {
-					"sdf.jpg",
-					"cml.jpg",
-					"smi.png",					
-					"link.png",
-					"xml.png",
-					"pdf.png",
-					"excel.png",
-					"weka.jpg"					
-					
-			};
-			String q=uriReporter.getRequest().getOriginalRef().getQuery();
-			for (int i=0;i<mimes.length;i++) {
-				MediaType mime = mimes[i];
-				output.write("&nbsp;");
-				output.write(String.format(
-						"<a href=\"?%s%saccept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
-						q==null?"":q,
-						q==null?"":"&",
-						mime,
-						uriReporter.getBaseReference().toString(),
-						image[i],
-						mime,
-						mime));	
-			}				
-			
-			output.write("<h4><div class=\"actions\"><span class=\"right\">");
-			output.write(String.format("<form method=\"post\" action=\"\">",""));
-			output.write(String.format("%s","Query name:&nbsp;"));
-
-			output.write(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
-			output.write("<input type=\"submit\" value='Save search results'>&nbsp;");
-			//output.write("</form>");
-			//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
-			//output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
-			
-			//output.write(String.format("<form method=\"post\" action=\"%s/algorithm\">",uriReporter.getBaseReference()));
-			//output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
-			//output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
-			//output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
-			
-			output.write("</form>");	
-			output.write("</span></div></h4>\n");	
+			w.write("<hr>");	
 			
 			if (table) {
+				
+				output.write(String.format("<div class=\"rowwhite\"><span class=\"left\">%s</span><span class=\"center\">",
+							templates(baseReference)));
+					
 				output.write("<table class=\"results\" border='0' >"); 
-				output.write("<tr>");
-				output.write("<th  bgcolor='#99CC00'>#</th><th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
+				
+				output.write(String.format("<CAPTION CLASS=\"results\">%s%s</CAPTION>",
+						downloadLinks(),""));//resultsForm(query)
+						//,resultsForm(query)
+				output.write("<tr class=\"results\">");
+				output.write("<th width='20' class=\"results\">#</th><th class=\"results\" width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
 				for(Property p: props) {
 					int dot = 0;
@@ -263,21 +282,27 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					if ((end-dot)>40) end = dot + 40;
 					
 					output.write(
-						String.format("<th bgcolor='#99CC00' align='center'><a href='%s'>%s</a></th>",
+						String.format("<th class=\"results\" ><a href='%s'>%s</a></th>",
 						p.getUrl(),p.getTitle().substring(dot,end)));
 				}	
-				output.write("</tr><tr>");
-				output.write("<th></th><th></th>");
+				output.write("</tr><tr class=\"results\">");
+				output.write("<th class=\"results\"></th><th class=\"results\"></th>");
 				for(Property p: props) {
 					output.write(
-						String.format("<th bgcolor='#99CC00' align='center'><a href='%s'>%s %s</a></th>",
+						String.format("<th class=\"results\" align='center'><a href='%s'>%s %s</a></th>",
 						pReporter.getURI(p),p.getName(),p.getUnits()));
 				}
 			
 				output.write("</tr>");
 			}
-			else
+			else {
+				w.write(downloadLinks());
+				w.append("<h4><div class=\"actions\"><span class=\"right\">");				
+				w.write(resultsForm(query));
+				w.append("</span></div></h4>\n");	
+
 				output.write("<div id=\"div-1\">");
+			}
 			
 			
 
@@ -285,8 +310,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	};
 	public void footer(Writer output, Q query) {
 		try {
-			if (table) output.write("</table>");
+			if (table) {
+				output.write("</table>");
+				output.write("</span></div>");
+			}
 			else output.write("</div>");
+			output.write("</form>\n");
 			//output.write("</form>");			
 			AmbitResource.writeHTMLFooter(output,
 					"",
@@ -304,11 +333,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		String w = uriReporter.getURI(record);
 		StringBuilder b = new StringBuilder();
 		
-		b.append("<tr>");
 		
-		b.append(String.format("<td>%d</td>",count+1));
+		b.append(String.format("<tr class=\"results_%s\">",((count % 2)==0)?"even":"odd"));
+		
+		b.append(String.format("<td >%d</td>",count+1));
 		b.append(String.format(
-				"<td><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
+				"<td ><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
 				
 				w, w, 
 				w, record.getIdchemical()));
@@ -322,8 +352,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				//System.out.println(String.format("%s [%s] %s",property.getName(),property.getTitle(),value==null?null:value.toString()));
 					
 					boolean isLong = (value==null)?false:value.toString().length()>255;
-					b.append(String.format("<td bgcolor='%s' width='%s' align='right'>",
-							((count % 2)==1)?"#F9FFE6":"#FBFFEC",
+					b.append(String.format("<td width='%s'>",
 							isLong?"100":"100")) ; //"#EBEEF1"
 
 					boolean isHTML = (value == null)?false:value.toString().indexOf("<html>")>=0;
