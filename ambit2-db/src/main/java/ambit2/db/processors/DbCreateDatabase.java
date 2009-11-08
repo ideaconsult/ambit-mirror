@@ -188,6 +188,10 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
 	        st = connection.createStatement();
 	        st.executeQuery("GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';");
 	        st.close();        	
+	        st.executeQuery("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'localhost';");
+	        st.close();    	        
+	        st.executeQuery("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'localhost';");
+	        st.close();    
         	
         } catch (Exception x) {
         	logger.warn(x);
