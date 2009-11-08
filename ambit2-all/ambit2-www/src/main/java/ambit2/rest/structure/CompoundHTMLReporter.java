@@ -232,15 +232,45 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			} catch (Exception x) {
 				query_property = "";
 			}
+			String query_threshold = "";
+			try {
+
+				query_threshold = form.getFirstValue("threshold");
+			} catch (Exception x) {
+				query_threshold = "0.9";
+			}
+			String maxrecords = "";
+			try {
+
+				maxrecords = form.getFirstValue("max");
+			} catch (Exception x) {
+				maxrecords = "1000";
+			}					
 			w.write("<form action='' name='form' method='get'>\n");
-			w.write(String.format("<input name='property' type='text' size='20' value='%s'>\n",query_property==null?"":query_property));
-			w.write("&nbsp;");
-			w.write(String.format("<input name='search' type='text' size='40' value='%s'>\n",query_smiles==null?"":query_smiles));
-			if ((uriReporter.getRequest().getOriginalRef().toString().indexOf("smarts")>0)
-					||
-					uriReporter.getRequest().getOriginalRef().toString().indexOf("similarity")>0)
-			w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
-					uriReporter.getBaseReference()));
+			
+			
+			
+			String hint= "";
+			if (uriReporter.getRequest().getOriginalRef().toString().indexOf("smarts")>0) {
+				w.write(String.format("<input name='search' type='text' title='Enter SMARTS'  size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
+				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
+						uriReporter.getBaseReference()));				
+				hint = "Search for substructure";
+			} else if (uriReporter.getRequest().getOriginalRef().toString().indexOf("similarity")>0) {
+				w.write(String.format("<input name='search' type='text' size='40' title='Enter SMILES' value='%s'>\n",query_smiles==null?"":query_smiles));
+				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
+						uriReporter.getBaseReference()));
+				w.write("&nbsp;");
+				w.write(String.format("<input name='threshold' type='text' title='Tanimoto coefficient threshold [0,1], default 0.9' size='20' value='%s'>\n",query_threshold==null?"0.9":query_threshold));
+				
+				hint = "Draw structure and search for similar compounds";
+
+			} else {
+				w.write(String.format("<input name='property' type='text' title='Enter property name (optional)'  size='20' value='%s'>\n",query_property==null?"":query_property));
+				w.write("&nbsp;");
+				w.write(String.format("<input name='search' type='text' title='Enter molecule identifier, name or property value (e.g. benzene)'  size='40' value='%s'>\n",query_smiles==null?"":query_smiles));
+				hint = "Search by property or identifier name (optional) and value";
+			}
 			
 			w.write("<input type='submit' value='Search'><br>");
 			
@@ -249,7 +279,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			//w.write(baseReference.toString());
 
 			//w.write("</form>\n"); moved in footer
-			//w.write("Search by property or identifier name (optional) and value");		
+			w.write(hint);		
 			w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
 			w.write("</td>");
 			w.write("<td align='right' width='256px'>");
@@ -266,8 +296,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					
 				output.write("<table class=\"results\" border='0' >"); 
 				
-				output.write(String.format("<CAPTION CLASS=\"results\">%s%s</CAPTION>",
-						downloadLinks(),""));//resultsForm(query)
+				output.write(String.format("<CAPTION CLASS=\"results\">Search results \"<i>%s</i>\"&nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
+						query.toString(),
+						downloadLinks(),
+						String.format("<input name='max' type='text' title='Maximum number of hits' size='10' value='%s'>\n",maxrecords==null?"100":maxrecords)));//resultsForm(query)
 						//,resultsForm(query)
 				output.write("<tr class=\"results\">");
 				output.write("<th width='20' class=\"results\">#</th><th class=\"results\" width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
@@ -364,8 +396,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					if (searchValue != null) {
 						
 						//?property=MW&search=100+..+200
-						b.append(String.format("<a href=\"%s/compound?property=%s&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Search for %s=%s' title='Search for %s=%s'></a>", 
+						b.append(String.format("<a href=\"%s/compound?features=%s/feature_definition/%d&property=%s&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Search for %s=%s' title='Search for %s=%s'></a>", 
 								uriReporter.getBaseReference(),
+								uriReporter.getBaseReference(),
+								property.getId(),
 								Reference.encode(property.getName()),
 								Reference.encode(value.toString()),
 								uriReporter.getBaseReference(),		
@@ -375,8 +409,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 								value.toString()							
 						));
 						//?property=MW&search=100+..+200
-						b.append(String.format("&nbsp;<a href=\"%s/compound?search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Relaxed search for %s' title='Relaxed search for %s'></a>", 
+						b.append(String.format("&nbsp;<a href=\"%s/compound?features=%s/feature_definition/%d&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Relaxed search for %s' title='Relaxed search for %s'></a>", 
 								uriReporter.getBaseReference(),
+								uriReporter.getBaseReference(),
+								property.getId(),
 								Reference.encode(value.toString()),
 								uriReporter.getBaseReference(),		
 								value.toString(),
