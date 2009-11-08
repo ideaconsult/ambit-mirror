@@ -246,9 +246,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				maxrecords = form.getFirstValue("max");
 			} catch (Exception x) {
 				maxrecords = "1000";
-			}					
+			}		
+			/** This determines if similarity searching will be done via smiles or via URL **/
+			String type = "";
+			try {
+
+				type = form.getFirstValue("type");
+			} catch (Exception x) {
+				type = "smiles";
+			}				
 			w.write("<form action='' name='form' method='get'>\n");
-			
+			w.write(String.format("<input name='type' type='hidden' value='%s'>\n",type==null?"smiles":type));
 			
 			
 			String hint= "";
@@ -258,6 +266,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						uriReporter.getBaseReference()));				
 				hint = "Search for substructure";
 			} else if (uriReporter.getRequest().getOriginalRef().toString().indexOf("similarity")>0) {
+				
 				w.write(String.format("<input name='search' type='text' size='40' title='Enter SMILES' value='%s'>\n",query_smiles==null?"":query_smiles));
 				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
 						uriReporter.getBaseReference()));
@@ -373,7 +382,14 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		b.append(String.format("<tr class=\"results_%s\">",((count % 2)==0)?"even":"odd"));
 		
-		b.append(String.format("<td >%d</td>",count+1));
+		b.append(String.format("<td >%d<br>%s<br>%s</td>",
+				count+1,
+				String.format("<a href='%s/query/similarity?search=%s&type=url&threshold=0.85' title='Find similar compounds'><img src=\"%s/images/search.png\" border='0' alt='Find similar' title='Find similar'></a>",
+							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference()),
+				String.format("<a href='%s/query/smarts?search=%s&type=url' title='Find substructure'><img src=\"%s/images/search.png\" border='0' alt='Find substructure' title='Find substructure'></a>",
+							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference())							
+						));
+		
 		b.append(String.format(
 				"<td ><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
 				

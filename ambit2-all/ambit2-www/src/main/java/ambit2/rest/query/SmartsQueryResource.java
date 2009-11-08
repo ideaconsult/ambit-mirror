@@ -29,19 +29,24 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	public final static String smartsKey =  "smarts";
 	public final static String resourceID =  String.format("/{%s}",smartsKey);
 	public final static String resource =  String.format("/%s",smartsKey);
+	protected String dataset_id;
 	
+	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		return (dataset_id == null)?null:
+			String.format("riap://dataset/%s/feature_definition",dataset_id);
+	}
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
-			setTemplate(createTemplate(context, request, response));
+			
 			Form form = request.getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue("search");
 			if (key ==null) {
 				key = request.getAttributes().get(smartsKey);
 				if (key==null) throw new AmbitException("Empty smarts");
 			}
-			String smarts = Reference.decode(key.toString().trim());
+			String smarts = getSMILES(form,true);
 			QuerySMARTS query = new QuerySMARTS();
 			query.setChemicalsOnly(true);
 			query.setValue(new FunctionalGroup(smarts,smarts,smarts));
@@ -62,15 +67,32 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					combined.setCombine_as_and(true);
 					combined.add(query);
 					combined.setScope(scope);
+					setTemplate(createTemplate(context, request, response));
 					return combined;
 				}
 				
 				Object datasetid = request.getAttributes().get(DatasetResource.datasetKey);
 				if (datasetid != null) {
 					QueryDatasetByID scope = new QueryDatasetByID();
-					scope.setValue(new Integer(Reference.decode(datasetid.toString())));
+					this.dataset_id=Reference.decode(datasetid.toString());
+					setTemplate(createTemplate(context, request, response));
+					scope.setValue(new Integer(dataset_id));
 					
-					QueryCombinedStructure combined = new QueryCombinedStructure();
+					QueryCombinedStructure combined = new QueryCombinedStructure() {
+						@Override
+						protected String getMainSQL() {
+							return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s\n";
+						}
+						
+						@Override
+						protected String groupBy() {
+							return " group by idchemical";
+						}
+						@Override
+						protected String joinOn() {
+							return "idchemical";
+						}
+					};
 					combined.setCombine_as_and(true);
 					combined.add(query);
 					combined.setScope(scope);
@@ -86,6 +108,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 						Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
 						);
 			}
+			setTemplate(createTemplate(context, request, response));
 			return query;
 
 		} catch (Exception x) {

@@ -69,6 +69,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			//output.write("<br>");
 			output.write("<div id=\"div-1b\">");
 
+			output.write("<div class=\"rowwhite\"><span class=\"left\">");
 			
 			if (!collapsed) {
 				output.write("&nbsp;");
@@ -93,6 +94,15 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						"/smarts",
 						uriReporter.getBaseReference().toString()));
 				output.write("&nbsp;");
+				
+				output.write(String.format(
+						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similarcompounds within this dataset\" border=\"0\"/></a>",
+						w.toString(),
+						"/similarity",
+						uriReporter.getBaseReference().toString()));
+				output.write("&nbsp;");				
+				
+				output.write("</span><span class=\"center\">");
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 
 						ChemicalMediaType.CHEMICAL_CML,
@@ -129,15 +139,16 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 							mime));	
 				}				
 	
-			
+				
 			} else {
 			
 			}
+			
 			output.write(String.format(
 					"&nbsp;<a href=\"%s\">%s</a>",
 					w.toString(),
 					dataset.getName()));
-			
+			output.write("</span></div>");
 			/*
 			output.write(String.format(
 					"&nbsp;<a href=\"%s\">%s</a>",

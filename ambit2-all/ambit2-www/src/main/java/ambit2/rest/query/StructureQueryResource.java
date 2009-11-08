@@ -1,11 +1,21 @@
 package ambit2.rest.query;
 
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.logging.Logger;
 
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.restlet.Client;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Preference;
+import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -15,12 +25,13 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.MoleculeTools;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ARFFReporter;
 import ambit2.db.reporters.CMLReporter;
@@ -29,7 +40,6 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
-import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
@@ -41,7 +51,6 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.CompoundURIReporter;
-import ambit2.rest.template.OntologyResource;
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
@@ -54,6 +63,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	protected String media;
 	protected Template template;
+	protected enum QueryType  {smiles,url};
 	public Template getTemplate() {
 		return template;
 	}
@@ -194,4 +204,113 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return null;
 		}	
 	}
+	
+	protected IMolecule getFromURI(String uri) throws ResourceException {
+		Reader reader = null;
+		try {
+			Request rq = new Request();
+			Client client = new Client(Protocol.HTTP);
+			rq.setResourceRef(uri);
+			rq.setMethod(Method.GET);
+			rq.getClientInfo().getAcceptedMediaTypes().clear();
+			rq.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(ChemicalMediaType.CHEMICAL_MDLSDF));
+			Response resp = client.handle(rq);
+			if (resp.getStatus().equals(Status.SUCCESS_OK)) {
+				reader = new InputStreamReader(resp.getEntity().getStream());
+				return MoleculeTools.readMolfile(reader);
+			} else return null;				
+		} catch (InvalidSmilesException x) {
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles")),
+					x
+					);
+
+		} catch (Exception x) {
+			throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
+					);
+		} finally {
+			try {reader.close();} catch (Exception x){};
+		}		
+	}	
+	protected String getSMILES(Form form,boolean aromatic) throws ResourceException {
+		QueryType query_type;
+		String query_smiles;
+		try {
+			query_type = QueryType.valueOf(form.getFirstValue("type"));
+
+		} catch (Exception x) {
+			query_type = QueryType.smiles;
+		}		
+		switch (query_type) {
+		case smiles:
+
+				return Reference.decode(form.getFirstValue("search"));
+
+		case url: try {
+				query_smiles = Reference.decode(form.getFirstValue("search"));
+				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
+				IAtomContainer mol = getFromURI(query_smiles.trim());
+				AtomConfigurator c = new AtomConfigurator();
+				mol=c.process(mol);
+				CDKHueckelAromaticityDetector.detectAromaticity(mol);   
+				SmilesGenerator g = new SmilesGenerator();
+				g.setUseAromaticityFlag(aromatic);
+				return g.createSMILES((IMolecule)mol);
+		} catch (Exception x) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						x.getMessage(),
+						x
+						);
+			}	
+		default:
+			return null;
+		}
+
+	}		
+	protected IMolecule getMolecule(Form form) throws ResourceException {
+		QueryType query_type;
+		String query_smiles;
+		try {
+			query_type = QueryType.valueOf(form.getFirstValue("type"));
+
+		} catch (Exception x) {
+			query_type = QueryType.smiles;
+		}		
+		switch (query_type) {
+		case smiles:
+			try {
+				query_smiles = Reference.decode(form.getFirstValue("search"));
+				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty smiles");
+				return MoleculeTools.getMolecule(query_smiles);			
+				
+			} catch (InvalidSmilesException x) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles")),
+						x
+						);
+			} catch (ResourceException x) {
+				throw x;
+			} catch (Exception x) {
+				throw new ResourceException(
+						Status.SERVER_ERROR_INTERNAL,
+						x.getMessage(),
+						x
+						);
+			}			
+
+		case url: {
+			query_smiles = Reference.decode(form.getFirstValue("search"));
+			if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
+			return getFromURI(query_smiles);
+
+			}
+		default:
+			return null;
+		}
+
+	}	
 }
