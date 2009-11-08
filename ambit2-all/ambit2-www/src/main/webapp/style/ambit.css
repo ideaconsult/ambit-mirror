@@ -275,7 +275,6 @@ TR.results_odd
   	 border-collapse:collapse;
      vertical-align:center;
      font-size:10pt;
-     
       background-color:#E8EBEE;
      color:#516373;
      border-width:0px;
@@ -284,14 +283,16 @@ TR.results_odd
      text-align:left;     
   }   
 
-TD.results
+TD.results_col
   {  
+  	 border-collapse:collapse;
+     vertical-align:center;
      font-size:10pt;
-     background-color:#F9FFE6;
+    background-color:#F1F3F5;
      color:#516373;
      border-width:0px;
-     border-color:#F9FFE6;
-     text-align:left;
+     border-color:#FFFFFF;
+     text-align:left;   
   }
 
 TD.results

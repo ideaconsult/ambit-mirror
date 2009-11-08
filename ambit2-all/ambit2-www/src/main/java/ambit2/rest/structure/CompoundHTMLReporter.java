@@ -105,10 +105,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				output.write(toURI(record));
 				output.write("</div>");		
 			}
+			count++;
 		} catch (Exception x) {
 			logger.error(x);
 		}
-		count++;
+		
 	}
 	protected String content(String left, String right) throws IOException {
 		return String.format(
@@ -296,7 +297,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					
 				output.write("<table class=\"results\" border='0' >"); 
 				
-				output.write(String.format("<CAPTION CLASS=\"results\">Search results \"<i>%s</i>\"&nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
+				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
 						query.toString(),
 						downloadLinks(),
 						String.format("<input name='max' type='text' title='Maximum number of hits' size='10' value='%s'>\n",maxrecords==null?"100":maxrecords)));//resultsForm(query)
@@ -305,24 +306,28 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				output.write("<th width='20' class=\"results\">#</th><th class=\"results\" width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
 				for(Property p: props) {
+					int max=10;
 					int dot = 0;
 					int end = p.getTitle().indexOf("Descriptor");
 					if (end > 0) {
 						dot = p.getTitle().lastIndexOf(".");
 						if (dot<0) dot = 0; else dot++;
 					} else end = p.getTitle().length();
-					if ((end-dot)>40) end = dot + 40;
+					if ((end-dot)>max) end = dot + max;
 					
 					output.write(
-						String.format("<th class=\"results\" ><a href='%s'>%s</a></th>",
-						p.getUrl(),p.getTitle().substring(dot,end)));
+						String.format("<th width='%d' class=\"results\" ><a href='%s' title='%s'>%s</a></th>",
+								max,
+						p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)));
 				}	
 				output.write("</tr><tr class=\"results\">");
 				output.write("<th class=\"results\"></th><th class=\"results\"></th>");
 				for(Property p: props) {
 					output.write(
-						String.format("<th class=\"results\" align='center'><a href='%s'>%s %s</a></th>",
-						pReporter.getURI(p),p.getName(),p.getUnits()));
+						String.format("<th class=\"results\" align='center'><a href='%s' title='%s'>%s %s</a></th>",
+						pReporter.getURI(p),
+						p.getName(),
+						p.getName(),p.getUnits()));
 				}
 			
 				output.write("</tr>");
@@ -377,14 +382,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 
 			List<Property> props = template2Header(getTemplate(),true);
-
+			int col = 0;
+			
 			for(Property property: props) {
-				//if (property.getId()>0) {
+				col++;
 				Object value = record.getProperty(property);
 				//System.out.println(String.format("%s [%s] %s",property.getName(),property.getTitle(),value==null?null:value.toString()));
 					
 					boolean isLong = (value==null)?false:value.toString().length()>255;
-					b.append(String.format("<td width='%s'>",
+					b.append(String.format("<td %s width='%s'>",
+							//"class='results_col'",
+							((count%2)==0)?
+								((col % 2)==0)?"class='results'":"":
+								((col % 2)==0)?"":"class='results_col'",
 							isLong?"100":"100")) ; //"#EBEEF1"
 
 					boolean isHTML = (value == null)?false:value.toString().indexOf("<html>")>=0;
@@ -393,6 +403,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						isHTML?null:
 						value.toString().length()>255?value.toString().substring(0,255):value.toString()
 								);
+					/*
 					if (searchValue != null) {
 						
 						//?property=MW&search=100+..+200
@@ -420,17 +431,27 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						));				
 				
 					}
+					*/
 					b.append("<div>");
 					
 					value = value==null?"":
 							value.toString().length()<40?value.toString():
 							value.toString().length()<255?value.toString().substring(0,40):
 							"See more";
-							
+					/* Edit link		
 					b.append(String.format("<a href=\"%s\">%s</a>",
 							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
 							value));
-						
+					*/
+					b.append(String.format("<a href=\"%s/compound?features=%s/feature_definition/%d&property=%s&search=%s\">%s</a>", 
+						uriReporter.getBaseReference(),
+						uriReporter.getBaseReference(),
+						property.getId(),
+						Reference.encode(property.getName()),
+						searchValue==null?"":Reference.encode(searchValue.toString()),
+						value
+					));
+									
 					b.append("</div>");
 					b.append("</td>");
 				}
