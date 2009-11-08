@@ -47,7 +47,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 			ImageIO.write(depict.getImage(reader.process(item)),"png",output);
 			
 		} catch (Exception x) {
-			logger.error(x);
+			//logger.error(x);
 		}
 		
 	}
