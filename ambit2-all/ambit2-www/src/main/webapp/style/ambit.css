@@ -18,6 +18,36 @@ div.row span.right {
   width: 50%;
   }
   
+div.rowwhite span.left {
+  float: left;
+  text-align: left;
+  font-weight: bold;
+  background-color: #FFFFFF;
+  color: #99CC00;
+  FONT-FAMILY: Verdana, Arial;
+  width: 10%;
+  }
+
+div.rowwhite span.center {
+  float: left;
+  text-align: left;
+  font-weight: bold;
+  background-color: #FFFFFF;
+  color: #729203;
+  FONT-FAMILY: Verdana, Arial;
+  width: 90%;
+  }  
+  
+div.rowwhite span.right {
+  float: right;
+  text-align: left;
+  font-weight: bold;
+  background-color: #FFFFFF;
+  color: #729203;
+  FONT-FAMILY: Verdana, Arial;
+  width: 20%;
+  }  
+  
 div.footer span.right {
   MARGIN-TOP: 50px;
   margin-right: 7px;
@@ -184,27 +214,92 @@ A:hover
   	FONT-SIZE: 10pt;
 	FONT-FAMILY: Verdana, Arial;	
 }
-table.results {
-	border-width: 3px 3px 3px 3px;
-	border-spacing: 0px;
-	border-style: outset outset outset outset;
-	border-color: ;
-	border-collapse: collapse;
-	background-color: white;
-}
-table.results th {
-	border-width: 1px 1px 1px 1px;
-	padding: 1px 1px 1px 1px;
-	border-style: dotted dotted dotted dotted;
-	border-color: gray gray gray gray;
-	background-color: #99CC00;
-	-moz-border-radius: 0px 0px 0px 0px;
-}
-table.results td {
-	border-width: 1px 1px 1px 1px;
-	padding: 1px 1px 1px 1px;
-	border-style: dotted dotted dotted dotted;
-	border-color: gray gray gray gray;
-	background-color: white;
-	-moz-border-radius: 0px 0px 0px 0px;
-}
+
+CAPTION.results
+  {
+     background-color:#FFFFFF;
+     color:#729203;
+     border-width:0;
+     border-color:#729203;
+     text-align:left;
+  }
+
+TABLE.results
+  { 
+     font-family:verdana;
+     font-size:10pt;
+     background-color:#D9D9B2;
+     width:90%;
+     border-collapse:collapse;
+     border-style:ridge;
+     border-color:#FFFFFF;
+     border-width:2px;
+     
+  }
+
+TH.results
+  {
+  	 font-family:verdana;
+     font-size:10pt;
+     background-color:#9FD500;
+     color:#516373;
+     border-style:solid;
+     border-width:1px;
+     border-color:#FFFFFF;
+     text-align:center;
+     border-collapse:collapse;
+     border-width:0px;
+  }
+
+
+TR.results
+  { 
+     vertical-align:center;
+     border-collapse:collapse;
+  }
+  
+TR.results_even
+  { 
+  	 border-collapse:collapse;
+     vertical-align:center;
+     font-size:10pt;
+    background-color:#FFFFFF;
+     color:#516373;
+     border-width:0px;
+     border-color:#FFFFFF;
+     text-align:left;     
+  }  
+  
+TR.results_odd
+  { 
+  	 border-collapse:collapse;
+     vertical-align:center;
+     font-size:10pt;
+     
+      background-color:#E8EBEE;
+     color:#516373;
+     border-width:0px;
+     
+     border-color:#E9ECDD;
+     text-align:left;     
+  }   
+
+TD.results
+  {  
+     font-size:10pt;
+     background-color:#F9FFE6;
+     color:#516373;
+     border-width:0px;
+     border-color:#F9FFE6;
+     text-align:left;
+  }
+
+TD.results
+  {  
+     font-size:10pt;
+     background-color:#F9FFE6;
+     color:#516373;
+     border-width:0px;
+     border-color:#F9FFE6;
+     text-align:left;
+  }
