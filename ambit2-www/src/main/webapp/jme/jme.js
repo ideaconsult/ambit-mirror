@@ -14,7 +14,7 @@ function fromEditor(smiles,jme) {
     alert ("no molecule submitted");
     return;
   }
-
+  document.form.type.value = "smiles"; 
   document.form.search.value = smiles; 
 }
 
