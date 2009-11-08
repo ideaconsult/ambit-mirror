@@ -65,7 +65,7 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"or (structure.updated > %s.updated))\n"+
 		"union\n"+
 		"select ? as idquery, idchemical,idstructure,1 as selected,0 as metric\n"+
-		"from %s where (structure.type_structure != 'NA') & (%s.status = 'invalid')";
+		"from %s where (%s.status = 'invalid')";
 	
 	public final static String sqlSMARTS =
 		
