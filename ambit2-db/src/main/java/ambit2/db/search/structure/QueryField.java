@@ -48,19 +48,30 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure\n"+
 		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
 		"join properties using(idproperty) where\n"+
-		"name=? and value %s ? %s";
+		"name %s ? and value %s ? %s";
+	protected StringCondition nameCondition;
+	public StringCondition getNameCondition() {
+		return nameCondition;
+	}
+	public void setNameCondition(StringCondition nameCondition) {
+		this.nameCondition = nameCondition;
+	}
 	public final static String sqlAnyField = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join property_values using(idstructure) join property_string as f using (idvalue_string) where value %s ? %s";
 	public QueryField() {
 		setFieldname(null);
 		setCondition(StringCondition.getInstance("="));
+		setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));
 	}
 	public String getSQL() throws AmbitException {
 		
 		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
 			return String.format(sqlAnyField,getCondition().getSQL(),isChemicalsOnly()?" group by idchemical":"");
 		else
-			return String.format(sqlField,getCondition().getSQL(),isChemicalsOnly()?" group by idchemical":"");
+			return String.format(sqlField,
+					getNameCondition().getSQL().toString(),
+					getCondition().getSQL(),
+					isChemicalsOnly()?" group by idchemical":"");
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");
