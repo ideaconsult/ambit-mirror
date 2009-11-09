@@ -194,6 +194,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
         	q.setChemicalsOnly(chemicalsOnly);
         	if (property != null) q.setFieldname(new Property(property,null));
 	        try {
+	        	if ((cond==null)||"".equals(cond.trim())) throw new Exception("Undefined condition");
 	        	condition = NumberCondition.getInstance(cond);
 	        	q.setValue(d1);
 	        	q.setMaxValue(d2==null?(d1+1E-10):d2);
