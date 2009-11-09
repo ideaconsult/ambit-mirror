@@ -207,17 +207,18 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	        query= q;
         } catch (Exception x) {
         	QueryField q_by_name =  new QueryField();
-        	if (property != null) q_by_name.setFieldname(new Property(property,null));
-        	q_by_name.setValue(Reference.decode(key.toString()));
+        	if (property != null) q_by_name.setFieldname(new Property(String.format("%s%%",property),null));
+        	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));
         	q_by_name.setChemicalsOnly(chemicalsOnly);
         	//q_by_name.setChemicalsOnly(true);
 	        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
 	        try {
-	        	condition = StringCondition.getInstance(cond);
+	        	condition = (cond==null)||("".equals(cond))?StringCondition.getInstance(StringCondition.C_LIKE):StringCondition.getInstance(cond);
 	        } catch (Exception xx) {
 	        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
 	        } finally {
 	        	q_by_name.setCondition(condition);
+	        	q_by_name.setValue(String.format("%s%s",Reference.decode(key.toString()),condition.toString().equals(StringCondition.C_LIKE)?"%":""));
 	        }
 	        query = q_by_name;
         }					
@@ -247,7 +248,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					IQueryRetrieval<IStructureRecord>  query = null;
 					for (int i=0; i < keys.length; i++) {
 						String theKey = Reference.decode(keys[i].trim());
-						String property = ((properties==null)||(i>=properties.length)||(properties[i]==null))?"":Reference.decode(properties[i].trim());
+						String property = null;
+						try {
+							property = ((properties==null)||(i>=properties.length)||(properties[i]==null))?"":Reference.decode(properties[i].trim());
+						} catch (Exception x) {
+							
+							property = null;
+						}
 						IQueryRetrieval<IStructureRecord> q =  createSingleQuery(property,
 								((condition==null)||(i>=condition.length)||(condition[i]==null))?"":condition[i], 
 								theKey,
