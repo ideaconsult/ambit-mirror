@@ -45,24 +45,20 @@ public class Property extends Model {
 		new CopyOnWriteArrayList<Property>();	
 		*/
 	private static String defaultReference = "Default property reference";
-	
-
-/*
-	public static synchronized Property getInstance(String name) {
-	return getInstance(name,defaultReference);
-	}
-	*/
+	protected static final String Names = "Names";
+	protected static final String CAS = "CasRN";
+	protected static final String EC = "EC";
 	public static synchronized Property getNameInstance() {
-		return getInstance("Names", LiteratureEntry.getIUPACReference());
+		return getInstance(Names, LiteratureEntry.getIUPACReference());
 	}	
 	public static synchronized Property getCASInstance() {
-		Property p = getInstance("CAS", LiteratureEntry.getCASReference());
-		p.setLabel("CasRN");
+		Property p = getInstance(CAS, LiteratureEntry.getCASReference());
+		p.setLabel(CAS);
 		return p;
 	}		
 	public static synchronized Property getEINECSInstance() {
-		Property p =  getInstance("EC", LiteratureEntry.getEINECSReference());
-		p.setLabel("EC");
+		Property p =  getInstance(EC, LiteratureEntry.getEINECSReference());
+		p.setLabel(EC);
 		return p;
 	}			
 	public static synchronized Property getInstance(String name,String reference) {
