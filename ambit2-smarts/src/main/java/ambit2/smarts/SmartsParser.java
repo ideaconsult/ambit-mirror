@@ -544,7 +544,10 @@ public class SmartsParser
 		else
 		{
 			//Currently this index is already associated with an atom
-			//Therefore this is the second appearence of this index i.e. it defines a ring closure 
+			//Therefore this is the second appearance of this index i.e. it defines a ring closure 
+			
+			
+			//First index position is with UNDEFINED bond type
 			if (rc.firstBond == SmartsConst.BT_UNDEFINED)
 			{	
 				addBond(rc.firstAtom, prevAtom);
@@ -552,26 +555,45 @@ public class SmartsParser
 				curBond = null; 
 				curBondType = SmartsConst.BT_UNDEFINED;				
 			}	
-			else
+			else 
 			{
+				//First index position is with DEFINED bond type				
 				if (curBond == null)
-				{
-					if (rc.firstBond != curBondType)
-						newError("Atom index "+n+" is associated with two different bond types",-1,"");
-					else
-					{	
+				{	
+					if (curBondType == SmartsConst.BT_UNDEFINED)	
+					{
+						//It is allowed to have bond definition at the first index position
+						//when the second position is with undefined bond type
+						curBondType = rc.firstBond;
 						addBond(rc.firstAtom, prevAtom);
 						//Reseting the "current" bond data
-						curBond = null;
-						curBondType = SmartsConst.BT_UNDEFINED;						
-					}	
+						curBond = null; 
+						curBondType = SmartsConst.BT_UNDEFINED;
+					}
+					else
+					{	
+						//Both index positions have bond types - they must be equal 
+						if (rc.firstBond != curBondType)
+							newError("Atom index "+n+" is associated with two different bond types",-1,"");
+						else
+						{	
+							addBond(rc.firstAtom, prevAtom);
+							//Reseting the "current" bond data
+							curBond = null;
+							curBondType = SmartsConst.BT_UNDEFINED;						
+						}
+					}
 				}
 				else
+				{	
+					//Closing the ring at the second index position with a bond expression
+					//Then error is reported
 					newError("Atom index "+n+" is associated with two different bond types",-1,"");
+				}	
 			}
 			
 			//This index is made available for another usage for ring closure
-			//This is allowed by SMARTS standart but it is not recommended
+			//This is allowed by SMARTS standard but it is not recommended
 			indexes.remove(i);	
 		}
 	}
