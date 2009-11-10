@@ -81,8 +81,10 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 					if (target.returnKeys(i)) {
 						ResultSet keys = statement.getGeneratedKeys();
 		                try {
-			                while (keys.next()) 
+			                while (keys.next()) {
 			                	target.setID(i,keys.getInt(1));
+			                	break;
+			                }
 		                } catch (Exception x) {
 		                	
 		                } finally {
