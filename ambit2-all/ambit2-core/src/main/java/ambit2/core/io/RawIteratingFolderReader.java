@@ -39,14 +39,18 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
+import ambit2.core.data.EINECS;
 
 /*
  * Raw reader for multiple files in a folder
  */
 public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRecord,IRawReader<IStructureRecord>> implements IRawReader<IStructureRecord> {
 	protected CASProcessor casTransformer = new CASProcessor();
+	protected Property einecsProperty = Property.getEINECSInstance();
+	protected Property casProperty = Property.getInstance(CDKConstants.CASRN,LiteratureEntry.getCASReference());
 	public RawIteratingFolderReader(File[] files) {
 		super(files);
+		casProperty.setLabel(CDKConstants.CASRN);
 	}
 
 	@Override
@@ -54,6 +58,7 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 		Object o = super.next();
 		if (o instanceof IStructureRecord) {
 			assignCASRN((IStructureRecord)o);
+			assignEINECS((IStructureRecord)o);
 		}
 		return o;
 	}
@@ -61,27 +66,38 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 		if (reader == null) return null;
 		IStructureRecord record = reader.nextRecord();
 		assignCASRN(record);
+		assignEINECS(record);
 		return record;
 	}
 	//does file name contain CAS number? 
 	protected void assignCASRN(IStructureRecord record) {
-		if (record.getProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN))!=null)
-			record.removeProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN));
+		if (record.getProperty(casProperty)!=null)
+			record.removeProperty(casProperty);
 		int dot = files[index].getName().indexOf('.');
 		if (dot >= 0) {
 			String cas = files[index].getName().substring(0,dot);
-			if (CASNumber.isValid(cas)) {
-				record.setProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN), cas);
-			} else 
 			try {
 				cas = casTransformer.process(cas);
 				if (CASNumber.isValid(cas)) 
-					record.setProperty(Property.getInstance(CDKConstants.CASRN,CDKConstants.CASRN), cas);
+					record.setProperty(casProperty, cas);
 			} catch (Exception x) {
 				
 			}
 		}		
 	}
+	
+	protected void assignEINECS(IStructureRecord record) {
+		
+		if (record.getProperty(einecsProperty)!=null)
+			record.removeProperty(einecsProperty);
+		int dot = files[index].getName().indexOf('.');
+		if (dot >= 0) {
+			String ec = files[index].getName().substring(0,dot);
+			if (EINECS.isValid(ec)) {
+				record.setProperty(einecsProperty, ec);
+			}
+		}		
+	}	
 	
 	protected IRawReader<IStructureRecord> getItemReader(int index) throws Exception {
 		String name = files[index].getName().toLowerCase();

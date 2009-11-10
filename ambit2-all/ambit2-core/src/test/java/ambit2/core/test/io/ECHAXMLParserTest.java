@@ -6,6 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.ECHAPreregistrationListReader;
 
@@ -28,6 +29,7 @@ public class ECHAXMLParserTest {
 		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/echa_preregistration.xml");
 		ECHAPreregistrationListReader reader = new ECHAPreregistrationListReader(in);
 		int count = 0;
+		int foundCas=0;
 		while (reader.hasNext()) {
 			IStructureRecord record = reader.nextRecord();
 			/*
@@ -36,8 +38,13 @@ public class ECHAXMLParserTest {
 			System.out.println();
 			*/
 			count++;
+			for (Property p :record.getProperties()) {
+				foundCas += record.getProperty(p).equals("8008-57-9")?1:0;
+			}
 		}
 		reader.close();
-		Assert.assertEquals(9,count);
+		Assert.assertEquals(10,count);
+		Assert.assertEquals(1,foundCas);
+		//0008008-57-9
 	}
 }
