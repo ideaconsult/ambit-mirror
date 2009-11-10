@@ -20,6 +20,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.processors.CASProcessor;
 
 /**
  * Reads preregistration list in XML format as in http://apps.echa.europa.eu/preregistered/prsDownload.aspx
@@ -34,6 +35,15 @@ public class ECHAPreregistrationListReader extends
 	protected ArrayList<String> synonyms = new ArrayList<String>();
 	protected IStructureRecord record;
 	protected String tmpValue="";	
+	protected CASProcessor casProcessor = new CASProcessor();
+	protected Property casProperty = Property.getInstance(CDKConstants.CASRN,
+								LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL)); 
+	protected Property ecProperty = Property.getInstance("EC",
+								LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL));
+	protected Property nameProperty = Property.getInstance(CDKConstants.NAMES,
+								LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL));
+	protected Property registrationProperty = Property.getInstance(echa_tags.REGISTRATION_DATE.toString(),
+								LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL));
 	protected enum echa_tags {
 		dataroot,
 		PRE_REGISTERED_SUBSTANCE,
@@ -111,31 +121,23 @@ public class ECHAPreregistrationListReader extends
 	        			return true;
 	        		}
 	        		case NAME : {
-	        			record.setProperty(
-	        					Property.getInstance(CDKConstants.NAMES,
-	        							LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL))
-	        					,tmpValue);
+	        			record.setProperty(nameProperty,tmpValue);
 	        			break;				
 	        		}
 	        		case EC_NUMBER: {
-	        			record.setProperty(
-	        					Property.getInstance("EC",
-	        							LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL))
-	        					,tmpValue);
+	        			record.setProperty(ecProperty,tmpValue);
 	        			break;
 	        		}			
 	        		case CAS_NUMBER: {
-	        			record.setProperty(
-	        					Property.getInstance(CDKConstants.CASRN,
-	        							LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL))
-	        					,tmpValue);
+	        			try {
+	        				record.setProperty(casProperty,casProcessor.process(tmpValue));
+	        			} catch (Exception x) {
+	            			record.setProperty(casProperty,tmpValue);
+	        			}
 	        			break;
 	        		}
 	        		case REGISTRATION_DATE: {
-	        			record.setProperty(
-	        					Property.getInstance(echa_tags.REGISTRATION_DATE.toString(),
-	        							LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL))
-	        					,tmpValue);
+	        			record.setProperty(registrationProperty,tmpValue);
 	        			break;
 	        		}	
 	        		case SYNONYM_NAME: {
