@@ -46,6 +46,7 @@ public class EINECS {
 	 */
 	public static boolean isValid(String einecs) {
 		try {
+			if (einecs.indexOf("-")<=0) return false;
 			if (einecs.length()==9) {
 				int g = 0;
 				for (int i=0; i < w.length; i++) {
