@@ -250,6 +250,20 @@ TH.results
      border-collapse:collapse;
      border-width:0px;
   }
+  
+TH.results_odd
+  {
+  	 font-family:verdana;
+     font-size:10pt;
+     background-color:#93C400;
+     color:#516373;
+     border-style:solid;
+     border-width:1px;
+     border-color:#FFFFFF;
+     text-align:center;
+     border-collapse:collapse;
+     border-width:0px;
+  }  
 
 
 TR.results

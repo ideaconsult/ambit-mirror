@@ -312,9 +312,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						String.format("<input name='max' type='text' title='Maximum number of hits' size='10' value='%s'>\n",maxrecords==null?"100":maxrecords)));//resultsForm(query)
 						//,resultsForm(query)
 				output.write("<tr class=\"results\">");
-				output.write("<th width='20' class=\"results\">#</th><th class=\"results\" width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
+				output.write("<th width='20' class=\"results_odd\">#</th><th class=\"results_odd\" width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
+				int hc = 0;
 				for(Property p: props) {
+					hc++;
 					int max=10;
 					int dot = 0;
 					int end = p.getTitle().indexOf("Descriptor");
@@ -325,15 +327,20 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					if ((end-dot)>max) end = dot + max;
 					
 					output.write(
-						String.format("<th width='%d' class=\"results\" ><a href='%s' title='%s'>%s</a></th>",
+						String.format("<th width='%d' %s ><a href='%s' title='%s'>%s</a></th>",
 								max,
+								"class=\"results_odd\"",
+								//(hc %2)==1?"class=\"results\"":"class=\"results_odd\"",
 						p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)));
 				}	
 				output.write("</tr><tr class=\"results\">");
 				output.write("<th class=\"results\"></th><th class=\"results\"></th>");
+				hc = 0;
 				for(Property p: props) {
+					hc++;
 					output.write(
-						String.format("<th class=\"results\" align='center'><a href='%s' title='%s'>%s %s</a></th>",
+						String.format("<th %s align='center'><a href='%s' title='%s'>%s %s</a></th>",
+						(hc %2)==1?"class=\"results\"":"class=\"results_odd\"",
 						pReporter.getURI(p),
 						p.getName(),
 						p.getName(),p.getUnits()));
