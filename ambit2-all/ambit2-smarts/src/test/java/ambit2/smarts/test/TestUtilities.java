@@ -1204,10 +1204,16 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("C1CC1", "CC(C)CCC");
 		//tu.testSmartsManagerBoolSearch("CC(C)C", "C1CC1");
 		
-		tu.testSmartsManagerBoolSearch("[CH]#CC=O", "COC(=O)C#C");
-		tu.testSmartsManagerBoolSearch("C#CC=O", "COC(=O)C#C");
-		tu.testIsomorphismTester("[CH]#CC=O", "COC(=O)C#C");
-		tu.testIsomorphismTester("C#CC=O", "COC(=O)C#C");
+		//tu.testSmartsManagerBoolSearch("[CH]#CC=O", "COC(=O)C#C");
+		//tu.testSmartsManagerBoolSearch("C#CC=O", "COC(=O)C#C");
+		//tu.testIsomorphismTester("[CH]#CC=O", "COC(=O)C#C");
+		//tu.testIsomorphismTester("C#CC=O", "COC(=O)C#C");
+		
+		tu.testSmartsManagerBoolSearch("a:1:a:a:a:a:a1", "c1ccccc1");
+		tu.testSmartsManagerBoolSearch("a1:a:a:a:a:a:1", "c1ccccc1");
+		tu.testSmartsManagerBoolSearch("a:1:a:a:a:a:a:1", "c1ccccc1");
+		tu.testSmartsManagerBoolSearch("a1:a:a:a:a:a:1", "c1ccccc1");
+		
 		
 		//tu.testSmartsManagerBoolSearch("[C;]", "CCC");   //----------> gives an Exception  at ambit2.smarts.SmartsLogicalExpression.doAND(SmartsLogicalExpression.java:71)
 		
