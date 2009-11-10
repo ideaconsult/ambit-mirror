@@ -41,7 +41,11 @@ public class CreateChemical  extends AbstractObjectUpdate<IChemical> {
 	
 	
 	public static final String[] create_sql = {
-		"INSERT IGNORE INTO chemicals (idchemical,smiles,hashcode,inchi,formula) values (?,?,?,?,?)"
+		"INSERT INTO chemicals (idchemical,smiles,hashcode,inchi,formula) values (?,?,?,?,?) " +
+		"on duplicate key update smiles=ifnull(smiles,values(smiles))," +
+		"hashcode=ifnull(hashcode,values(hashcode))," +
+		"inchi=ifnull(inchi,values(inchi))," +
+		"formula=ifnull(formula,values(formula))"
 	};
 
 	public CreateChemical(IChemical chemical) {

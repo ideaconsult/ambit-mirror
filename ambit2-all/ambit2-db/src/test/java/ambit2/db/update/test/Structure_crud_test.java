@@ -156,8 +156,8 @@ public class Structure_crud_test extends CRUDTest<Object,IStructureRecord>{
 			int count = 0;
 			for (int i=0; i < table.getRowCount();i++) {
 				IStructureRecord record = new StructureRecord();
-				r.setValue(record);
 				record.setIdstructure(Integer.parseInt(table.getValue(i,"idstructure").toString()));
+				r.setValue(record);
 				ResultSet rs1 = execR.process(r);
 				while (rs1.next()) {
 					record = r.getObject(rs1);

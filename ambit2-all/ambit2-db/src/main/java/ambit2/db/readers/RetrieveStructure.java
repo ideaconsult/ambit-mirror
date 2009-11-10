@@ -52,6 +52,10 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
     	super.setValue(value);
     	if (value.getIdstructure()<=0) setFieldname(true);
     }
+    @Override
+    public Boolean getFieldname() {
+    	return value.getIdstructure()<=0?true:fieldname;
+    }
     public IStructureRecord getObject(ResultSet rs) throws AmbitException {
         try {
             IStructureRecord r = getValue();

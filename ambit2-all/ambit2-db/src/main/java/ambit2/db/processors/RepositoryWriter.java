@@ -123,22 +123,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			rs = queryexec.process(query);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(2));
-/*
-				ps_seekdataset.clearParameters();
-				ps_seekdataset.setString(1,getDataset().getName());
-				ps_seekdataset.setInt(2,record.getIdchemical());
-				ResultSet strucs = ps_seekdataset.executeQuery();
-				while (strucs.next()) 
-					if (record.getFormat().equals(strucs.getString("format")) &&
-						record.getWritableContent().equals(strucs.getString("s"))							
-							) {
-						
-						record.setIdstructure(strucs.getInt(1));
-						System.out.println("--found "+record + record.getContent());
-					}
 
-				if (strucs != null) strucs.close();
-					*/
 				break;
 			}
 		
@@ -169,7 +154,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		try {
         			findChemical(query_chemicals, idchemical_tag, structure.getIdchemical(), structure);
         		} catch (Exception x) {
-        			x.printStackTrace();
+        			logger.warn(x);
         			structure.setIdchemical(-1);
         		}
         	}
@@ -202,6 +187,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 
         }
         //add a new idchemical if idchemical <=0
+
         return structureWriter.writeStructure(structure);
         
 	}
