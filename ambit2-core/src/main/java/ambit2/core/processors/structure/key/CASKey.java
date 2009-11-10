@@ -34,47 +34,62 @@ import org.openscience.cdk.index.CASNumber;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.CASProcessor;
 
 /**
  * Returns CAS number given the structure and its properties
+ * 
  * @author nina
- *
+ * 
  */
 public class CASKey extends PropertyKey<String> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3848970585289051369L;
-	protected Property key=null;
+	protected Property key = null;
+	protected CASProcessor transformer = new CASProcessor();
+
 	public CASKey() {
 	}
 
 	public String process(IStructureRecord structure) throws AmbitException {
-		if (structure==null)
+		if (structure == null)
 			throw new AmbitException("Empty molecule!");
-		
-		if ((key == null) || (structure.getProperty(key)==null)) {
-			//find which key corresponds to CAS
-			for (Property newkey: structure.getProperties()) {
+
+		if ((key == null) || (structure.getProperty(key) == null)) {
+			// find which key corresponds to CAS
+			for (Property newkey : structure.getProperties()) {
 				Object cas = structure.getProperty(newkey);
-				if (cas == null) continue;
+				if (cas == null)
+					continue;
+
+				cas = transformer.process(cas.toString());
 				if (CASNumber.isValid(cas.toString())) {
 					this.key = newkey;
 					return cas.toString();
 				}
 			}
 		}
-		if (key == null) throw new AmbitException("CAS tag not defined");
+		if (key == null)
+			throw new AmbitException("CAS tag not defined");
 		Object o = structure.getProperty(key);
-		if ((o != null) && CASNumber.isValid(o.toString())) return o.toString();
-		else return null;
+		if (o == null)
+			return null;
+		String cas = transformer.process(o.toString());
+		if (CASNumber.isValid(cas))
+			return cas;
+		else
+			return null;
 	}
+
 	@Override
 	protected boolean isValid(Object key, Object value) {
 		return CASNumber.isValid(value.toString());
 	}
+
 	public Class getType() {
 		return String.class;
 	}
-	
+
 }

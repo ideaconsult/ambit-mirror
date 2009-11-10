@@ -36,7 +36,7 @@ import ambit2.core.data.EINECS;
  * @author nina
  *
  */
-public class EINECSKey extends PropertyKey {
+public class EINECSKey extends PropertyKey<String> {
 
 	/**
 	 * 
