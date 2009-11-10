@@ -56,6 +56,7 @@ import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.io.bcf.EurasBCFReader;
 import ambit2.core.processors.structure.MoleculeWriter;
+import ambit2.core.processors.structure.key.EINECSKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.PubchemCID;
@@ -426,6 +427,68 @@ delete from struc_dataset where idstructure>3
 		writer.close();
 		return records;
 	}		
+	@Test
+	public void testWriteMultipleFilesEinecs() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        
+		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(0,chemicals.getRowCount());
+		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(0,strucs.getRowCount());
+		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset");
+		Assert.assertEquals(0,srcdataset.getRowCount());
+		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(0,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(0,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(0,property_values.getRowCount());
+		
+		File dir = new File("src/test/resources/ambit2/db/processors/einecs");
+
+	   FilenameFilter filter = new FilenameFilter() {
+	        public boolean accept(File dir, String name) {
+	            return !name.startsWith(".");
+	        }
+	    };
+		
+		File[] files = dir.listFiles(filter);
+		Assert.assertEquals(3, files.length);
+		RawIteratingFolderReader reader = new RawIteratingFolderReader(files);
+		write(reader,c.getConnection(),new EINECSKey());
+		reader.close();
+        c.close();
+        
+        c = getConnection();
+		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(3,chemicals.getRowCount());
+		//there are two empty file without $$$$ sign, which are skipped
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(3,strucs.getRowCount());
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
+		Assert.assertEquals(1,srcdataset.getRowCount());
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(3,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		//Assert.assertEquals(34,property.getRowCount());
+		Assert.assertEquals(4,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(6,property_values.getRowCount());		
+		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
+		Assert.assertEquals(3,tuples.getRowCount());			
+		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
+		Assert.assertEquals(6,p_tuples.getRowCount());				
+		ITable p_cas = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,value FROM structure join property_values using(idstructure) join property_string using(idvalue_string) join properties using(idproperty) where name=\"EC\"");
+		Assert.assertEquals(3,p_cas.getRowCount());
+	
+		c.close();
+
+
+	}	
+		
 	@Test
 	public void testWriteMultipleFiles() throws Exception {
 		

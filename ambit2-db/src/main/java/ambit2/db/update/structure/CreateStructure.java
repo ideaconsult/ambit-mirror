@@ -32,14 +32,18 @@ package ambit2.db.update.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 import ambit2.db.update.chemical.CreateChemical;
 
 public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 	protected CreateChemical chemical;
+	protected static Property struc_typeProperty = Property.getInstance(AmbitCONSTANTS.STRUCTURETYPE, LiteratureEntry.getInstance(AmbitCONSTANTS.STRUCTURETYPE));
 	
 	public static final String create_sql = 
 		"INSERT INTO structure (idstructure,idchemical,structure,format,updated,user_name,type_structure) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1),?)"
@@ -66,7 +70,10 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 			String format = getObject().getFormat();
 			params1.add(new QueryParam<String>(String.class, format==null?"SDF":format));
 			//struc type
-			params1.add(new QueryParam<String>(String.class, (content==null)||("".equals(content.trim()))?"NA":"2D with H"));
+			//Property
+			//getObject().getProperty(struc_typeProperty)
+			params1.add(new QueryParam<String>(String.class, (content==null)||("".equals(content.trim()))?
+					AmbitCONSTANTS.STRUC_TYPE.NA.toString():AmbitCONSTANTS.STRUC_TYPE.D2withH.toString()));
 			return params1;
 		}
 		
