@@ -26,7 +26,6 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	protected static Vector<String> smartsKeys; //not really needed, except for printing structure keys
 	protected static int nKeys;
 	
-	protected FingerprintGenerator fp = new FingerprintGenerator();
 	/**
 	 * 
 	 */
