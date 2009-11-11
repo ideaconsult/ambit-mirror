@@ -30,19 +30,21 @@ public class SMARTSPropertiesReader extends DefaultAmbitProcessor<IAtomContainer
 		String[] atomprops =prop[0].split(",");
 		for (int i=0; i < atomprops.length;i++)
 			mol.getAtom(i).setProperty(CMLUtilities.SMARTSProp,atomprops[i]);
-		String[] bondprop =prop[1].split(",");
-		
-		for (int i=0; i < mol.getAtomCount();i++)
-			mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC,false);
-		
-		for (int i=0; i < bondprop.length;i++) {
-			boolean aromatic = bondprop[i].equals("1")?true:false;
-			IBond bond = mol.getBond(i);
-			bond.setFlag(CDKConstants.ISAROMATIC, aromatic);
-			for (int b=0; b < bond.getAtomCount(); b++)
-				if (aromatic) bond.getAtom(b).setFlag(CDKConstants.ISAROMATIC, true);
+		if (prop.length == 1) logger.warn("Bond properties missing!");
+		else {
+			String[] bondprop =prop[1].split(",");
+			
+			for (int i=0; i < mol.getAtomCount();i++)
+				mol.getAtom(i).setFlag(CDKConstants.ISAROMATIC,false);
+			
+			for (int i=0; i < bondprop.length;i++) {
+				boolean aromatic = bondprop[i].equals("1")?true:false;
+				IBond bond = mol.getBond(i);
+				bond.setFlag(CDKConstants.ISAROMATIC, aromatic);
+				for (int b=0; b < bond.getAtomCount(); b++)
+					if (aromatic) bond.getAtom(b).setFlag(CDKConstants.ISAROMATIC, true);
+			}
 		}
-
 		if (util == null) util = new CMLUtilities();
 		util.extractSMARTSProperties((IMolecule)mol);
 
