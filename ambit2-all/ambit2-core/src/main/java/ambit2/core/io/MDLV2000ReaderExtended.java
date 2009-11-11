@@ -712,7 +712,6 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
             logger.debug(exception);
             throw exception;
 		} catch (Exception exception) {
-			exception.printStackTrace();
             String error = "Error while parsing line " + linecount + ": " + line + " -> " + exception.getMessage();
             logger.error(error);
             logger.debug(exception);

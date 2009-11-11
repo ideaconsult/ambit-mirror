@@ -126,7 +126,7 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
             // now try to parse the next Molecule
             try {
                 if (input.ready()) {
-                	currentFormat = (IChemFormat)MDLFormat.getInstance();
+                	currentFormat = (IChemFormat)MDLV2000Format.getInstance();
                     currentLine = input.readLine();
                     StringBuffer buffer = new StringBuffer();
                     while (currentLine != null && !currentLine.equals("M  END")) {
@@ -152,7 +152,9 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                     logger.debug("MDL file part read: ", buffer);
                     IChemObjectReader reader = factory.createReader(currentFormat);
                     reader.setReader(new StringReader(buffer.toString()));
-                    nextMolecule = (IMolecule)reader.read(builder.newMolecule());
+                    Object newmol = reader.read(builder.newMolecule());
+                    
+                    nextMolecule = newmol==null?null:(IMolecule)newmol;
                     
                     if (nextMolecule.getAtomCount() > 0) {
                         hasNext = true;
