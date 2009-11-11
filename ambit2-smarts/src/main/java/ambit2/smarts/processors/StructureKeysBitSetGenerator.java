@@ -3,12 +3,14 @@ package ambit2.smarts.processors;
 import java.util.BitSet;
 import java.util.Vector;
 
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
 import ambit2.smarts.SmartsParser;
@@ -25,7 +27,8 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	protected static Vector<Vector<QuerySequenceElement>> sequences = null; 
 	protected static Vector<String> smartsKeys; //not really needed, except for printing structure keys
 	protected static int nKeys;
-	
+	protected AtomConfigurator cfg = new AtomConfigurator();
+	protected CDKHueckelAromaticityDetector aromaticDetector = new CDKHueckelAromaticityDetector();
 	/**
 	 * 
 	 */
@@ -70,7 +73,17 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	
 	
 	public BitSet process(IAtomContainer target) throws AmbitException {
-		return getStructureKeyBits(target);
+		try {
+			IAtomContainer ac = cfg.process(target);
+			aromaticDetector.detectAromaticity(ac);
+			return getStructureKeyBits(ac);
+		} catch (CDKException x) {
+			throw new AmbitException(x.getMessage());
+		} catch (AmbitException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
 	}
 	
 	protected BitSet getStructureKeyBits(IAtomContainer ac)
