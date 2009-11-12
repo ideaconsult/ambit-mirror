@@ -92,16 +92,18 @@ public class QuerySimilarityStructureTest  extends QueryTest<QuerySimilarityStru
 		q.setStructure(MoleculeFactory.makeAlkane(10));
 		String similaritySQL = q.getSQL();		
 		
+		/*
 		q.setFieldname(QuerySimilarityStructure.methods[1]);
 		Assert.assertEquals(0.81, q.getThreshold());
 		Assert.assertEquals(false, q.isForceOrdering());
 		Assert.assertEquals(NumberCondition.getInstance("<"), q.getCondition());
 		Assert.assertEquals(1,q.getValue().getAtomContainerCount());
 		Assert.assertEquals(10,q.getValue().getAtomContainer(0).getAtomCount());
-		Assert.assertFalse(similaritySQL.equals(q.getSQL()));
 		System.out.println(similaritySQL);
+		Assert.assertFalse(similaritySQL.equals(q.getSQL()));
+		*/
 		
-		q.setFieldname(QuerySimilarityStructure.methods[2]);
+		q.setFieldname(QuerySimilarityStructure.methods[1]);
 		//Assert.assertEquals(0.81, q.getThreshold());
 		//Assert.assertEquals(false, q.isForceOrdering());
 		//Assert.assertEquals(NumberCondition.getInstance("<"), q.getCondition());

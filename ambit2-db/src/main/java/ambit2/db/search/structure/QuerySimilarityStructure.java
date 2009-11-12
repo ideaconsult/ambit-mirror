@@ -57,7 +57,6 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	protected MoleculeReader molReader = null;
 	public static ClassHolder[] methods = new ClassHolder[] {
 			new ClassHolder("ambit2.db.search.structure.QuerySimilarityBitset","Tanimoto [fingerprints]","",""),
-			new ClassHolder("ambit2.db.search.structure.QueryPrescreenBitSet","Substructure","",""),
 			new ClassHolder("ambit2.db.search.structure.QueryExactStructure","Exact structure","",""),
 			
 	};
