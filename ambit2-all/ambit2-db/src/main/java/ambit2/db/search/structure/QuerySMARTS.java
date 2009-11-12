@@ -15,6 +15,7 @@ import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.descriptors.FunctionalGroup;
@@ -38,10 +39,9 @@ public class QuerySMARTS extends
 	 */
 	private static final long serialVersionUID = -4539445262832597492L;
 	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
-	protected StructureKeysBitSetGenerator skGenerator = null;
+	protected StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
 	protected FingerprintGenerator fpGenerator = new FingerprintGenerator();
-	protected QueryPrescreenBitSet screening ;
-	// protected CMLUtilities util = new CMLUtilities();
+	protected QueryPrescreenBitSet screening;
 	protected MoleculeReader reader = new MoleculeReader();
 	protected AtomConfigurator configurator = new AtomConfigurator();
 	protected Property smartsProperty = Property.getInstance(
@@ -50,7 +50,6 @@ public class QuerySMARTS extends
 	public QuerySMARTS() {
 		super();
 		screening = new QueryPrescreenBitSet();
-		screening.setMaxRecords(0);
 	}
 
 	public String getSQL() throws AmbitException {
@@ -80,16 +79,19 @@ public class QuerySMARTS extends
 
 		// if (screen == null) screen = new StructureKeysBitSetGenerator();
 		try {
+			screening.setMaxRecords(0);
 			AbstractSmartsPattern matcher = new SmartsPatternAmbit();
 			value.setQuery(matcher);
 
 			QueryAtomContainer container = matcher.getQuery();
-			IAtomContainer atomContainer = smartsToChemObject
-					.process(container);
+			IAtomContainer atomContainer = smartsToChemObject.process(container);
 			screening.setValue(fpGenerator.process(atomContainer));
-			screening.setMaxRecords(0);
+
+			screening.setFieldname(skGenerator.process(atomContainer));
+		
 		} catch (AmbitException x) {
 			screening.setValue(null);
+			screening.setFieldname(null);
 		}
 	}
 

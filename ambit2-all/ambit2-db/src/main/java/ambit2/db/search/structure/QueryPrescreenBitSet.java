@@ -2,75 +2,86 @@ package ambit2.db.search.structure;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
-import ambit2.db.processors.FP1024Writer.FPTable;
+import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 
-public class QueryPrescreenBitSet extends QuerySimilarityBitset {
-	protected FPTable fptable = FPTable.fp1024;
+/**
+ * First bitset is from structural keys, second from fingerprints
+ * @author nina
+ *
+ */
+public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,NumberCondition> {
+	protected String sql_struc = 
+	"select ? as idquery,idchemical,idstructure,1 as selected,fp.bc+sk.bc as metric from structure\n";
+	protected String sql_chemical = 
+	"select ? as idquery,idchemical,-1,1 as selected,fp.bc+sk.bc as metric from chemicals\n";
+
+	protected String sql = 
+	"%s\n"+
+	"join fp1024 fp\n"+
+	"using(idchemical)\n"+
+	"join sk1024 sk\n"+
+	"using(idchemical)\n"+
+	"where\n"+
+	"(bit_count(? & sk.fp1) + bit_count(? & sk.fp2) + bit_count(? & sk.fp3) +\n"+
+	"bit_count(? & sk.fp4) + bit_count(? & sk.fp5) + bit_count(? & sk.fp6) + bit_count(? & sk.fp7) +\n"+
+	"bit_count(? & sk.fp8) + bit_count(? & sk.fp9) + bit_count(? & sk.fp10) + bit_count(? & sk.fp11) +\n"+
+	"bit_count(? & sk.fp12) + bit_count(? & sk.fp13) + bit_count(? & sk.fp14) + bit_count(? & sk.fp15) +\n"+
+	"bit_count(? & sk.fp16))=?\n"+
+	"and\n"+
+	"(bit_count(? & fp.fp1) + bit_count(? & fp.fp2) +\n"+
+	"bit_count(? & fp.fp3) + bit_count(? & fp.fp4) +\n"+
+	"bit_count(? & fp.fp5) + bit_count(? & fp.fp6) + bit_count(? & fp.fp7) +\n"+
+	"bit_count(? & fp.fp8) + bit_count(? & fp.fp9) + bit_count(? & fp.fp10) +\n"+
+	"bit_count(? & fp.fp11) + bit_count(? & fp.fp12) + bit_count(? & fp.fp13) +\n"+
+	"bit_count(? & fp.fp14) + bit_count(? & fp.fp15) + bit_count(? & fp.fp16))=?\n"+
+	//"and fp.status = 'valid' and sk.status='valid'" +
+	" %s\n";
+	
+	protected String sql_struc_type = "and structure.type_structure != 'NA'";
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4995229206173686206L;
+	protected boolean chemicalsOnly = false;
+	public boolean isChemicalsOnly() {
+		return chemicalsOnly;
+	}
+
+	public void setChemicalsOnly(boolean chemicalsOnly) {
+		this.chemicalsOnly = chemicalsOnly;
+	}
+
 	public QueryPrescreenBitSet() {
-		this(FPTable.fp1024);
-	}
-	public QueryPrescreenBitSet(FPTable fptable) {
-		this.fptable = fptable;
+
 	}
 	
-	/**
-	 * select ? as idquery,idchemical,idstructure,1 as selected,cbits as substructure
-	 */
 	public String getSQL() throws AmbitException {
-		StringBuffer b = new StringBuffer();
-		if (isChemicalsOnly()) {
-			b.append("select ? as idquery,L.idchemical,-1,1 as selected,cbits as metric from");
-			b.append(String.format("\n(select %s.idchemical,-1,(",fptable.getTable()));
-			for (int h=0; h < 16; h++) {
-				b.append("bit_count(? & fp");
-				b.append(Integer.toString(h+1));
-				b.append(")");
-				if (h<15) b.append(" + "); else b.append(") ");
-			}
-			b.append(String.format(" as cbits,bc from %s ",fptable.getTable()));
-
-			b.append (") as L, chemicals ");
-			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical and label != 'ERROR'");			
-		} else {
-			b.append("select ? as idquery,L.idchemical,L.idstructure,1 as selected,cbits as metric from");
-			b.append(String.format("\n(select %s.idchemical,structure.idstructure,(",fptable.getTable()));
-			for (int h=0; h < 16; h++) {
-				b.append("bit_count(? & fp");
-				b.append(Integer.toString(h+1));
-				b.append(")");
-				if (h<15) b.append(" + "); else b.append(") ");
-			}
-			b.append(String.format(" as cbits,bc from %s join structure using(idchemical) ",fptable.getTable()));
-
-			b.append (") as L, chemicals ");
-			b.append("where L.cbits=? and L.idchemical=chemicals.idchemical and label != 'ERROR'");
-		}
-	
-		return b.toString();
+		return String.format(sql,
+				isChemicalsOnly()?sql_chemical:sql_struc,
+				isChemicalsOnly()?"":sql_struc_type);
 
 	}
-	
-	public List<QueryParam> getParameters() throws AmbitException {
+	protected void bitset2params(BitSet bitset, List<QueryParam> params) throws AmbitException {
 		BigInteger[] h16 = new BigInteger[16];
-		MoleculeTools.bitset2bigint16(getValue(),64,h16);
+		MoleculeTools.bitset2bigint16(bitset,64,h16);
 		
-		int bc = (getValue()==null)?0:getValue().cardinality();
-		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, getId()));
+		int bc = (getValue()==null)?0:bitset.cardinality();
 		for (int h=0; h < 16; h++)
 			params.add(new QueryParam<BigInteger>(BigInteger.class, h16[h]));
 		params.add(new QueryParam<Integer>(Integer.class, bc));
-	
+	}
+	public List<QueryParam> getParameters() throws AmbitException {
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<Integer>(Integer.class, getId()));
+		bitset2params(getFieldname(), params);
+		bitset2params(getValue(), params);
 		return params;
 	}	
 	@Override
