@@ -1,6 +1,7 @@
 package ambit2.db.search.structure;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -50,9 +51,13 @@ public class QuerySMARTS extends
 	public QuerySMARTS() {
 		super();
 		screening = new QueryPrescreenBitSet();
+		setChemicalsOnly(false);
+		setValue(null);
+		setFieldname(null);
 	}
 
 	public String getSQL() throws AmbitException {
+		prepareScreening();
 		return screening.getSQL();
 	}
 
@@ -69,30 +74,32 @@ public class QuerySMARTS extends
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
+		prepareScreening();
 		return screening.getParameters();
 	}
-
+	
+	protected void prepareScreening() throws AmbitException {
+		try {
+			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
+				screening.setMaxRecords(0);
+				AbstractSmartsPattern<IAtomContainer> matcher = new SmartsPatternAmbit();
+				value.setQuery(matcher);
+				QueryAtomContainer container = matcher.getQuery();
+				IAtomContainer atomContainer = smartsToChemObject.process(container);
+				screening.setValue(fpGenerator.process(atomContainer));
+				screening.setFieldname(skGenerator.process(atomContainer));
+			}
+		} catch (AmbitException x) {
+			Logger.getLogger(getClass().getName()).warning(x.getMessage());
+			screening.setValue(null);
+			screening.setFieldname(null);
+		}		
+	}
 	@Override
 	public void setValue(FunctionalGroup value) {
 		super.setValue(value);
-		// FastSmartsMatcher matcher = new FastSmartsMatcher();
-
-		// if (screen == null) screen = new StructureKeysBitSetGenerator();
-		try {
-			screening.setMaxRecords(0);
-			AbstractSmartsPattern matcher = new SmartsPatternAmbit();
-			value.setQuery(matcher);
-
-			QueryAtomContainer container = matcher.getQuery();
-			IAtomContainer atomContainer = smartsToChemObject.process(container);
-			screening.setValue(fpGenerator.process(atomContainer));
-
-			screening.setFieldname(skGenerator.process(atomContainer));
-		
-		} catch (AmbitException x) {
-			screening.setValue(null);
-			screening.setFieldname(null);
-		}
+		screening.setValue(null);
+		screening.setFieldname(null);
 	}
 
 	@Override
