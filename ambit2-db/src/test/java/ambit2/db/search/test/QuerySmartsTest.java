@@ -29,11 +29,12 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 		QuerySMARTS q = new QuerySMARTS();
 		q.setValue(new FunctionalGroup("aromatic aldehyde - example","c1ccccc1[$(C(C)C(=O)),$(CC(C)C(=O))]",""));
 		q.setId(999);
+		q.setChemicalsOnly(false);
 		return q;
 	}
 
 	@Test
-	public void testSelect() throws Exception {
+	public void testSelectChemicals() throws Exception {
 		Preferences.setProperty(Preferences.FASTSMARTS,"true");		
 		dbFile = "src/test/resources/ambit2/db/processors/test/smarts-dataset.xml";	
 		setUpDatabase(dbFile);
@@ -51,6 +52,42 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 		q.open();
 		q.setSession(id);
 
+		query.setChemicalsOnly(true);
+		IStoredQuery sq = q.process(query);
+		p.close();
+		q.close();
+		c.close();
+
+		c = getConnection();
+		fp = c.createQueryTable("EXPECTED_query","select * from query where idquery="+sq.getId());
+		Assert.assertEquals(1, fp.getRowCount());
+		fp = c.createQueryTable("EXPECTED_query","select idchemical,idstructure from query_results where idquery="+sq.getId());
+		Assert.assertEquals(1, fp.getRowCount());
+		Assert.assertEquals(2050,fp.getValue(0,"idchemical"));
+		
+		c.close();
+	}
+	
+	@Test
+	public void testSelectStructures() throws Exception {
+		Preferences.setProperty(Preferences.FASTSMARTS,"true");		
+		dbFile = "src/test/resources/ambit2/db/processors/test/smarts-dataset.xml";	
+		setUpDatabase(dbFile);
+		IDatabaseConnection c = getConnection();
+		
+		ITable fp = c.createQueryTable("EXPECTED","select * from structure");
+		Assert.assertEquals(4, fp.getRowCount());
+		
+		ProcessorCreateSession p = new ProcessorCreateSession();
+		p.setConnection(c.getConnection());
+		SessionID id = p.process(null);
+		c = getConnection();
+		ProcessorCreateQuery q = new ProcessorCreateQuery();
+		q.setConnection(c.getConnection());
+		q.open();
+		q.setSession(id);
+
+		query.setChemicalsOnly(false);
 		IStoredQuery sq = q.process(query);
 		p.close();
 		q.close();
@@ -64,8 +101,7 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 		Assert.assertEquals(2050,fp.getValue(0,"idchemical"));
 		
 		c.close();
-	}
-	
+	}	
 	@Override
 	protected void verify(QuerySMARTS query, ResultSet rs) throws Exception {
 		while (rs.next()) {
