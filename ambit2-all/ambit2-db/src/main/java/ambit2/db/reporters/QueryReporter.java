@@ -1,5 +1,7 @@
 package ambit2.db.reporters;
 
+import java.sql.SQLException;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -34,6 +36,14 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	protected int maxRecords = 0;
 	protected AbstractBatchProcessor batch;
 	protected boolean showHeader = true;
+	protected boolean autoCommit = true;
+
+	public boolean isAutoCommit() {
+		return autoCommit;
+	}
+	public void setAutoCommit(boolean autoCommit) {
+		this.autoCommit = autoCommit;
+	}
 	public boolean isShowHeader() {
 		return showHeader;
 	}
@@ -104,12 +114,16 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 			} 
 			return output;
 		} catch (AmbitException x) {
+			try { if (isAutoCommit()) connection.rollback(); } catch (Exception xx) {} 
 			throw x;
 		} catch (Exception x ) {
 			//TODO smth reasonable for java.io.IOException: An established connection was aborted by the software in your host machine
+			try { if (isAutoCommit()) connection.rollback(); } catch (Exception xx) {} 
 			throw new AmbitException(x);
+			
 		} finally {
 			if (isShowFooter()) footer(output, query);
+			try { if (isAutoCommit()) connection.commit(); } catch (Exception x) {} 
 			try {batch.close();} catch (Exception x) {}
 			try {connection.close();} catch (Exception x) {}
 		}
