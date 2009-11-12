@@ -59,11 +59,9 @@ public class FunctionalGroup extends AmbitBean implements
 	public long getID() {
 		return 0;
 	}
-	public void setQuery(ISmartsPattern<IAtomContainer> query) {
+	public void setQuery(ISmartsPattern<IAtomContainer> query) throws SMARTSException {
 		this.query = query;
-		try {
 		query.setSmarts(getSmarts());
-		} catch (Exception x) {x.printStackTrace();}
 	}
 	protected boolean enabled = true;
 	protected boolean verboseMatch = false;
@@ -126,7 +124,7 @@ public class FunctionalGroup extends AmbitBean implements
 	}		
 	@Override
 	public String toString() {
-			return "[" +getFamily() + "] " + getName()  ;
+		return String.format("%s %s",getFamily(),getName());
 	}
     public Element toXML(Document document) throws AmbitException {
         Element element = document.createElement(t_group);
