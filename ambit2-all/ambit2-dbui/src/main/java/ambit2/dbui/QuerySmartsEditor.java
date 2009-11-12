@@ -1,8 +1,15 @@
 package ambit2.dbui;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -25,6 +33,7 @@ import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.descriptors.FuncGroupsDescriptorFactory;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.smarts.SmartsToChemObject;
 import ambit2.ui.Utils;
 import ambit2.ui.editors.Panel2D;
 
@@ -48,6 +57,8 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 	 * 
 	 */
 	private static final long serialVersionUID = -9201007230031542807L;
+	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
+	protected static List<FunctionalGroup> gf;
 	public JComponent buildPanel() {
 
 		FormLayout layout = new FormLayout(
@@ -56,19 +67,101 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 	     PanelBuilder panel = new PanelBuilder(layout);
 	     panel.setDefaultDialogBorder();
 
-	     CellConstraints cc = new CellConstraints();   
+	        
+	    final Panel2D panel2D = new Panel2D();
+	    panel2D.setToolTipText("Double click here to edit structure");
+	    panel2D.setPreferredSize(new Dimension(200,200));
+ 	    panel2D.setMinimumSize(new Dimension(150,150));
+        panel2D.setBorder(BorderFactory.createTitledBorder("Test compound"));
+	        
+	    CellConstraints cc = new CellConstraints();   
 
-			FuncGroupsDescriptorFactory factory = new FuncGroupsDescriptorFactory();
-			List<FunctionalGroup> gf;
-			try {
+		FuncGroupsDescriptorFactory factory = new FuncGroupsDescriptorFactory();
+		
+		try {
+			//TODO add new features and save in config file 
 				gf = factory.process("ambit2/descriptors/strucfeatures.xml");
-			} catch (Exception x) {gf = new ArrayList<FunctionalGroup>();}
-			final SelectionInList<FunctionalGroup> selectionInList = new SelectionInList<FunctionalGroup>(
-            		gf,
-            		presentationModel.getModel("value"));
-			JComboBox box = BasicComponentFactory.createComboBox(selectionInList);
-			panel.add(box,cc.xywh(1,1,5,1));
-			
+		} catch (Exception x) { gf = new ArrayList<FunctionalGroup>(); }
+		final SelectionInList<FunctionalGroup> selectionInList = new SelectionInList<FunctionalGroup>(
+           		gf,
+           		presentationModel.getModel("value"));
+		selectionInList.addPropertyChangeListener("value",new PropertyChangeListener(){
+			public void propertyChange(PropertyChangeEvent evt) {
+/*show some picture when smarts is selected ... but 2d coordinates are poor
+				try {
+						AbstractSmartsPattern<IAtomContainer> matcher = new SmartsPatternAmbit();
+						((FunctionalGroup) evt.getNewValue()).setQuery(matcher);
+						IAtomContainer ac = smartsToChemObject.process(matcher.getQuery());
+						panel2D.setAtomContainer(ac,false);
+					} catch (SMARTSException x) {
+						x.printStackTrace();
+					} catch (AmbitException x) {
+						x.printStackTrace();
+					}
+					*/
+			}
+		});
+		JToolBar bar = new JToolBar();
+		bar.setFloatable(false);
+		JButton b1 = new JButton(new AbstractAction("Add"){
+			public void actionPerformed(ActionEvent e) {
+				gf.add(new FunctionalGroup("New","","",""));
+				selectionInList.setSelectionIndex(gf.size()-1);
+			}
+		});
+		bar.add(b1);
+		JButton b2 = new JButton(new AbstractAction("Remove"){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int index = selectionInList.getSelectionIndex();
+					gf.remove(index);
+					selectionInList.setSelectionIndex(index>0?index-1:0);
+				} catch (Exception x) {}
+			}
+		});
+		bar.add(b2);
+		JButton b3 = new JButton(new AbstractAction("Load"){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String tmpDir = System.getProperty("java.io.tmpdir");
+					FuncGroupsDescriptorFactory f = new FuncGroupsDescriptorFactory();
+					List<FunctionalGroup> list = f.process(tmpDir+"funcgroups.xml");
+					gf.clear();
+					for (FunctionalGroup fg:list) gf.add(fg);
+					
+				} catch (Exception x) {}
+			}
+		});		
+		bar.add(b3);
+		JButton b4 = new JButton(new AbstractAction("Save"){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String tmpDir = System.getProperty("java.io.tmpdir");
+					FileOutputStream file = new FileOutputStream(tmpDir+"funcgroups.xml");
+					FuncGroupsDescriptorFactory.saveFragments(file, gf);
+					file.close();
+					selectionInList.setSelectionIndex(0);
+				} catch (Exception x) {}
+			}
+		});		
+		bar.add(b4);	
+		JButton b5 = new JButton(new AbstractAction("Default"){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FuncGroupsDescriptorFactory f = new FuncGroupsDescriptorFactory();
+					List<FunctionalGroup> list = f.process("ambit2/descriptors/strucfeatures.xml");
+					gf.clear();
+					for (FunctionalGroup fg:list) gf.add(fg);
+					selectionInList.setSelectionIndex(0);
+					
+				} catch (Exception x) {}
+			}
+		});		
+		bar.add(b5);		
+		panel.add(bar,cc.xywh(1,1,1,1));		
+		JComboBox box = BasicComponentFactory.createComboBox(selectionInList);
+		panel.add(box,cc.xywh(3,1,3,1));
+		
 	        String[][] config = {
 	        		{"family","Group"},        		
 	        		{"name","Name"},
@@ -91,12 +184,7 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 	        	});
 	        	panel.add(t,cc.xywh(3,j+2,3,1));	   
 	        }
-	        
-	        final Panel2D panel2D = new Panel2D();
-	 	    panel2D.setToolTipText("Double click here to edit structure");
-	 	    panel2D.setPreferredSize(new Dimension(200,200));
-	 	    panel2D.setMinimumSize(new Dimension(150,150));
-	        panel2D.setBorder(BorderFactory.createTitledBorder("Test compound"));
+
 	        
 	       
 	       
@@ -154,7 +242,7 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 			b.setMinimumSize(new Dimension(64,18));
 			b.setToolTipText("Click here to verify SMARTS validity");	  
 			
-			panel.addSeparator("Test Structure",cc.xywh(3,config.length+2,3,1));
+			panel.addSeparator("Test Structure (click to edit)",cc.xywh(3,config.length+2,3,1));
 			panel.add(panel2D,cc.xywh(3,config.length+3,3,4));
 			//panel.add(new JLabel("Test structure"),cc.xywh(1,config.length+3,1,1));
 
