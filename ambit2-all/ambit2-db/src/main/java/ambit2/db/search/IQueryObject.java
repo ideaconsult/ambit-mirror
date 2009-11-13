@@ -51,4 +51,9 @@ public interface IQueryObject<ResultType> extends IStatement {
 	List<QueryParam> getParameters() throws AmbitException;	
 	long getMaxRecords();
 	void setMaxRecords(long records);
+	/**
+	 * Key to identify this query for caching purposes
+	 * @return
+	 */
+	String getKey();
 }

@@ -289,4 +289,7 @@ using(idstructure)
 		}
 		return b.toString();
 	}
+	public String getKey() {
+		return null;
+	}
 }

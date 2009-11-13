@@ -107,5 +107,8 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	public long getMaxRecords() {
 		return maxRecords;
 	}
+	public String getKey() {
+		return null;
+	}
 
 }

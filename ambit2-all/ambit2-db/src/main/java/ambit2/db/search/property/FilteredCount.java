@@ -104,4 +104,7 @@ public abstract class FilteredCount<T extends Comparable<T>> extends Model
 	public void setMaxRecords(long records) {
 		
 	}
+	public String getKey() {
+		return null;
+	}
 }
