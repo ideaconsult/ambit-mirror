@@ -33,7 +33,13 @@ package ambit2.db;
 public class SessionID {
 	protected Integer id = null;
 	protected boolean deleteOnClose = false;
-
+	protected String name;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public SessionID() {
 
 	}
