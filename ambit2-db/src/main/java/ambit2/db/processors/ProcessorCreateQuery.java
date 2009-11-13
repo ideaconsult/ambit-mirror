@@ -36,6 +36,7 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryStructureReporter;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
@@ -92,11 +93,13 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 				int rows = 0;
 				if ((result.getQuery() instanceof IQueryRetrieval) && ((IQueryRetrieval)result.getQuery()).isPrescreen())
 					rows = insertScreenedResults(result,(IQueryRetrieval<IStructureRecord>)result.getQuery());
-				else  rows = insertResults(result);
-				if (rows > 0)
-					connection.commit();
-				else 
-					connection.rollback();
+				else  {
+					rows = insertResults(result);
+					if (rows > 0)
+						connection.commit();
+					else 
+						connection.rollback();
+				}
 			}
 			s.close();
 			close();
@@ -111,7 +114,64 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 		}
 	}
 
-	protected int insertScreenedResults(StoredQuery result, IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
+	protected int insertScreenedResults(StoredQuery result, final IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
+		final PreparedStatement insertGoodResults = 
+			connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?)");
+		QueryStructureReporter<IQueryRetrieval<IStructureRecord>,IStructureRecord> reporter = 
+			new QueryStructureReporter<IQueryRetrieval<IStructureRecord>, IStructureRecord>() {
+			
+			@Override
+			public void close() throws SQLException {
+				// TODO Auto-generated method stub
+				super.close();
+			}
+
+
+			@Override
+			public void header(IStructureRecord output,
+					IQueryRetrieval<IStructureRecord> query) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void processItem(IStructureRecord record)
+					throws AmbitException {
+				try {
+					insertGoodResults.setInt(1,query.getId());
+					insertGoodResults.setInt(2,record.getIdchemical());
+					insertGoodResults.setInt(3,record.getIdstructure());
+					insertGoodResults.setDouble(4,1);					
+					insertGoodResults.executeUpdate();
+				} catch (Exception x) {
+					throw new AmbitException(x);
+				}
+				
+			}
+
+			public void open() throws DbAmbitException {
+			}
+
+			@Override
+			public void footer(IStructureRecord output,
+					IQueryRetrieval<IStructureRecord> query) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};		
+		try {
+			reporter.setAutoCommit(true);
+			reporter.setConnection(connection);
+			reporter.process(query);
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			try {insertGoodResults.close(); } catch (Exception x) { x.printStackTrace();}
+			try {reporter.close();} catch (Exception x) { x.printStackTrace();}
+		}
+		return 1;
+		/*
 		PreparedStatement queryResults = connection.prepareStatement(query.getSQL());
 		List<QueryParam> params = result.getParameters();
 		QueryExecutor.setParameters(queryResults, params);
@@ -128,6 +188,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 				double metric = query.calculateMetric(record);
 
 				if (metric >0) {
+					//System.out.println(String.format("id %d hits %d",record.getIdchemical(),rows+1));
 		
 					insertGoodResults.setInt(1,result.getId());
 					insertGoodResults.setInt(2,record.getIdchemical());
@@ -145,7 +206,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			try {insertGoodResults.close(); } catch (Exception x) {}
 			try {queryResults.close();} catch (Exception x) {}
 		}
-		
+		*/
 	}
 	
 	protected int insertResults(StoredQuery result) throws SQLException , AmbitException {
