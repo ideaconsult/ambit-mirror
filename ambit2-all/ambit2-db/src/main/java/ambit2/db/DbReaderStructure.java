@@ -42,6 +42,10 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 	protected boolean prescreen(IQueryRetrieval<IStructureRecord> query,
 			IStructureRecord object) throws AmbitException {
 		IStructureRecord record = retriever.process(object);
+		object.setIdchemical(record.getIdchemical());
+		object.setIdstructure(record.getIdstructure());
+		object.setContent(record.getContent());
+		object.setFormat(record.getFormat());
 		return super.prescreen(query, record);
 	}
 }

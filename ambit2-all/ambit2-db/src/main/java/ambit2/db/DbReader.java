@@ -73,11 +73,14 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		setResultSet(executor.process(query));
 		return new Iterator<ResultType>() {
 			protected long counter= 0;
+			protected ResultType cachedRecord = null;
 			
 			public boolean hasNext() {
 				try {
+					cachedRecord = null;
 					if (handlePrescreen && query.isPrescreen()) {
 						try {
+							
 							counter++;
 							
 							if (counter > query.getMaxRecords()) return false;
@@ -85,8 +88,8 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 							long attempts=0;
 							while (loop && (attempts<= 5*query.getMaxRecords())) {
 								attempts++;
-								ResultType object = query.getObject(getResultSet());
-								if (prescreen(query, object)) return loop;
+								cachedRecord = query.getObject(getResultSet());
+								if (prescreen(query, cachedRecord)) return loop;
 								else loop=getResultSet().next();
 							}
 							return loop;
@@ -103,7 +106,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 			}
 			public ResultType next() {
 				try {
-					return query.getObject(getResultSet());
+					return cachedRecord==null?query.getObject(getResultSet()):cachedRecord;
 				} catch (AmbitException x) {
 					onError(null,null,batchStatistics,x);
 					return null;
