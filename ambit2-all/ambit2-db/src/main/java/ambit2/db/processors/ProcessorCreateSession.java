@@ -35,6 +35,7 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.update.assessment.CreateAssessment;
 
 public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, SessionID> {
 
@@ -42,7 +43,7 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 	 * 
 	 */
 	private static final long serialVersionUID = -4591852127943879992L;
-		protected final String sql = "insert into sessions (user_name) values (SUBSTRING_INDEX(user(),'@',1))";
+		
 		
 		public void open() throws DbAmbitException {
 			// TODO Auto-generated method stub
@@ -53,8 +54,9 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 			Connection c = getConnection();
 			try {
 				connection.setAutoCommit(false);
-				PreparedStatement s = c.prepareStatement(sql);
-				if (s.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS)>0) {
+				PreparedStatement s = c.prepareStatement(CreateAssessment.sql_current_user,Statement.RETURN_GENERATED_KEYS);
+				s.setString(1,getClass().getName());
+				if (s.executeUpdate()>0) {
 					ResultSet rss = s.getGeneratedKeys();
 					while (rss.next()) 
 						target = new SessionID(rss.getInt(1));
