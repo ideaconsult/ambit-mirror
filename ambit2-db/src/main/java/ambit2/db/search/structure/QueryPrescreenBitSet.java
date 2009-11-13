@@ -49,7 +49,7 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	 * 
 	 */
 	private static final long serialVersionUID = -4995229206173686206L;
-	protected boolean chemicalsOnly = false;
+	protected boolean chemicalsOnly = true;
 	public boolean isChemicalsOnly() {
 		return chemicalsOnly;
 	}

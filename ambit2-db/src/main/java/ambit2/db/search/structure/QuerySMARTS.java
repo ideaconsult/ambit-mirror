@@ -103,6 +103,10 @@ public class QuerySMARTS extends
 	}
 
 	@Override
+	public String getKey() {
+		return super.getValue().getSmarts();
+	}
+	@Override
 	public boolean isPrescreen() {
 		return true;
 	}

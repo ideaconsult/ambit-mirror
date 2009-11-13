@@ -110,6 +110,9 @@ public class StoredQuery implements IStoredQuery {
 	
 		
 	}
+	public String getKey() {
+		return null;
+	}
 }
 
 
