@@ -37,19 +37,44 @@ import ambit2.db.SessionID;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.assessment.CreateAssessment;
 
 public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
-	protected final String sql = "insert into query (idquery,idsessions,name,content) values (null,?,?,?)";
+	protected CreateAssessment assessment;
+	protected final String sql_byname = "insert into query (idquery,idsessions,name,content) select null,idsessions,?,? from sessions where title=?";
+	protected final String sql_byid = "insert into query (idquery,idsessions,name,content) select null,idsessions,?,? from sessions where idsessions=?";
+
 	
+	public CreateStoredQuery() {
+		super();
+		assessment = new CreateAssessment();
+	}
+	@Override
+	public void setGroup(SessionID id) {
+		super.setGroup(id);
+		assessment.setObject(id);
+		assessment.setGroup(null);
+	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (index == 0) {
+		switch (index) {
+		case 0:{
+			return assessment.getParameters(0);
+		}
+		case 1:{
 			List<QueryParam> params = new ArrayList<QueryParam>();
-			params.add(new QueryParam<Integer>(Integer.class, getGroup().getId()));
 			params.add(new QueryParam<String>(String.class, getObject().getName()));
 			params.add(new QueryParam<String>(String.class, getObject().getSQL()));
-			return params;
-		} else {
+			if ((getGroup()==null)||(getGroup().getId()==null))
+				params.add(new QueryParam<String>(String.class, getGroup()==null?"Default":getGroup().getName()));
+			else
+				params.add(new QueryParam<Integer>(Integer.class, getGroup().getId()));
+			
+			return params;			
+		}
+		case 2: {
 			return getObject().getQuery().getParameters();
+		}
+		default: throw new AmbitException(String.format("invalid id %d",index));
 		}
 	}
 	@Override
@@ -59,15 +84,26 @@ public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 
 	public String[] getSQL() throws AmbitException {
 		return new String[] {
-				sql,
+				assessment.getSQL()[0],
+				(getGroup()==null)||(getGroup().getId()==null)?sql_byname:sql_byid,
 				getObject().getSQL()
 		};
 	}
 
 	public void setID(int index, int id) {
-		if (index == 0)
-			getObject().setId(id);
-		
+		switch (index) {
+		case 0: { 
+			/*
+			SessionID s = getGroup()==null?new SessionID(id):getGroup();
+			s.setId(id);
+			setGroup(s);
+			assessment.setObject(s);
+			assessment.setID(0,id);
+			*/ 
+			break;
+		}
+		case 1: { getObject().setId(id); break;}
+		}
 	}
 
 }

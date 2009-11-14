@@ -23,7 +23,8 @@ public class UpdateAssessment extends AbstractUpdate<AmbitUser,SessionID> {
 	}	
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> param = new ArrayList<QueryParam>();
-		if (getObject()==null) throw new AmbitException("Empty ID");
+		if ((getObject()==null) || (getObject().getId()==null) || (getObject().getId()<=0))
+			throw new AmbitException("Empty ID");
 		param.add(new QueryParam<String>(String.class,getObject().getName()));
 		param.add(new QueryParam<Integer>(Integer.class,getObject().getId()));
 		if (getGroup()!=null)

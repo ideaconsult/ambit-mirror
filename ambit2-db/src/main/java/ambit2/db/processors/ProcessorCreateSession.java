@@ -29,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
@@ -55,7 +56,9 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 			try {
 				connection.setAutoCommit(false);
 				PreparedStatement s = c.prepareStatement(CreateAssessment.sql_current_user,Statement.RETURN_GENERATED_KEYS);
-				s.setString(1,getClass().getName());
+				s.setNull(1,Types.INTEGER);
+				s.setString(2,getClass().getName());
+				
 				if (s.executeUpdate()>0) {
 					ResultSet rss = s.getGeneratedKeys();
 					while (rss.next()) 

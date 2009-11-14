@@ -77,16 +77,16 @@ public class AmbitUser_crud_test extends CRUDTest<Object,AmbitUser> {
 	@Override
 	protected IQueryUpdate<Object,AmbitUser> deleteQuery() throws Exception {
 		AmbitUser auser = new AmbitUser();
-		auser.setName("nina");		
+		auser.setName("admin");		
 		return new DeleteUser(auser);
 	}
 
 	@Override
 	protected void deleteVerify(IQueryUpdate<Object,AmbitUser> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM users where user_name='nina'");
+		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM users where user_name='admin'");
 		Assert.assertEquals(0,table.getRowCount());
-		table = c.createQueryTable("EXPECTED_USERROLE","SELECT * FROM user_roles where user_name='nina'");
+		table = c.createQueryTable("EXPECTED_USERROLE","SELECT * FROM user_roles where user_name='admin'");
 		Assert.assertEquals(0,table.getRowCount());		
 		c.close();
 	}
@@ -94,7 +94,7 @@ public class AmbitUser_crud_test extends CRUDTest<Object,AmbitUser> {
 	@Override
 	protected IQueryUpdate<Object,AmbitUser> updateQuery() throws Exception {
 		AmbitUser auser = new AmbitUser();
-		auser.setName("nina");
+		auser.setName("admin");
 		auser.setFirstName("Nina");
 		auser.setLastName("Nikolova");
 		return new UpdateUser(auser);
@@ -103,7 +103,7 @@ public class AmbitUser_crud_test extends CRUDTest<Object,AmbitUser> {
 	@Override
 	protected void updateVerify(IQueryUpdate<Object,AmbitUser> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM users where user_name='nina' and firstname='Nina' and lastname='Nikolova'");
+		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM users where user_name='admin' and firstname='Nina' and lastname='Nikolova'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}
