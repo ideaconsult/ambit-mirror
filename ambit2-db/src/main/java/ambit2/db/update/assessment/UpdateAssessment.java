@@ -9,27 +9,26 @@ import ambit2.db.SessionID;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
-/**
- * TODO Session class to be renamed to Assessment
- * @author nina
- *
- */
-public class CreateAssessment extends AbstractUpdate<AmbitUser,SessionID> {
-	public static final String sql = "insert into sessions (user_name,title) values (?,?)";
-	public static final String sql_current_user = "insert into sessions (user_name,title) values (SUBSTRING_INDEX(user(),'@',1),?)";
+public class UpdateAssessment extends AbstractUpdate<AmbitUser,SessionID> {
+	public static final String sql = "update sessions set title=? where idsessions=? and user_name=?" ;
+	public static final String sql_current_user = "update sessions set title=? where idsessions=? and user_name=(SUBSTRING_INDEX(user(),'@',1))";
 	
-	public CreateAssessment(AmbitUser user) {
+	public UpdateAssessment(AmbitUser user,SessionID id) {
 		super();
 		setGroup(user);
+		setObject(id);
 	}
-	public CreateAssessment() {
-		this(null);
+	public UpdateAssessment() {
+		this(null,null);
 	}	
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> param = new ArrayList<QueryParam>();
+		if (getObject()==null) throw new AmbitException("Empty ID");
+		param.add(new QueryParam<String>(String.class,getObject().getName()));
+		param.add(new QueryParam<Integer>(Integer.class,getObject().getId()));
 		if (getGroup()!=null)
 			param.add(new QueryParam<String>(String.class,getGroup().getName()));
-		param.add(new QueryParam<String>(String.class,getObject()==null?"Default":getObject().getName()));
+		
 		return param;
 	}
 

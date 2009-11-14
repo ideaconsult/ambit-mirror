@@ -18,13 +18,19 @@ public class DeleteAssessment extends AbstractUpdate<AmbitUser, SessionID> {
 	public static final String sql = "delete from sessions where user_name=? and idsessions=?";
 	public static final String sql_current_user = "delete from sessions where user_name=(SUBSTRING_INDEX(user(),'@',1)) and idsessions=?";
 	
+	public DeleteAssessment(AmbitUser user, SessionID id) {
+		super();
+		setGroup(user);
+		setObject(id);
+	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (getGroup()==null) return null;
-		else {
-			List<QueryParam> param = new ArrayList<QueryParam>();
+		List<QueryParam> param = new ArrayList<QueryParam>();
+		if (getGroup()!=null)
 			param.add(new QueryParam<String>(String.class,getGroup().getName()));
-			return param;
-		}
+		if (getObject()!=null)
+			param.add(new QueryParam<Integer>(Integer.class,getObject().getId()));
+		else throw new AmbitException("Empty ID");
+		return param;
 	}
 
 	public String[] getSQL() throws AmbitException {
