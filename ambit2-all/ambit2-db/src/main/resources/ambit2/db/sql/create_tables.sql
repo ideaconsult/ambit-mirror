@@ -419,8 +419,8 @@ CREATE TABLE  `sessions` (
   `completed` timestamp,
   `title` varchar(45) collate utf8_bin NOT NULL default 'Default',
   PRIMARY KEY  (`idsessions`),
+  UNIQUE KEY `Index_3` USING BTREE (`title`,`user_name`),
   KEY `FK_sessions_1` (`user_name`),
-  KEY `Index_3` USING BTREE (`title`),
   CONSTRAINT `FK_sessions_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

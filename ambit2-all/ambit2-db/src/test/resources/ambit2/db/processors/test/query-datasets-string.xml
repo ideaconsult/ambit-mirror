@@ -7692,12 +7692,12 @@ ePOEWOOTqA98cxZPiLMnxPHlO+eIqw8QN0uYZ0uYF0uYV0uYN0uYNe5WGyDuv+DolsbBSToHB7wD
   <struc_dataset idstructure="14" id_srcdataset="1" created="2009-06-11 09:00:20.0"/>
   <struc_dataset idstructure="15" id_srcdataset="1" created="2009-06-11 09:00:21.0"/>
   <sessions idsessions="1" user_name="guest" title="test"/>
-  <sessions idsessions="2" user_name="guest" title="test"/>
+  <sessions idsessions="2" user_name="guest" title="test2"/>
   <sessions idsessions="3" user_name="guest" title="test1"/>
-  <sessions idsessions="4" user_name="guest" title="test2"/>
-  <sessions idsessions="5" user_name="guest" title="test3"/>
-  <sessions idsessions="6" user_name="guest" title="test4"/>
-  <sessions idsessions="7" user_name="guest" title="test5"/>
+  <sessions idsessions="4" user_name="guest" title="test4"/>
+  <sessions idsessions="5" user_name="guest" title="test5"/>
+  <sessions idsessions="6" user_name="guest" title="test6"/>
+  <sessions idsessions="7" user_name="guest" title="test7"/>
   <query idquery="1" idsessions="2" name="6-membered aromatic rings (Whole Molecule) = " content="aW5zZXJ0IGlnbm9yZSBpbnRvIHF1ZXJ5X3Jlc3VsdHMgKGlkcXVlcnksaWRjaGVtaWNhbCxpZHN0
 cnVjdHVyZSxzZWxlY3RlZCxtZXRyaWMpIFNFTEVDVCA/IGFzIGlkcXVlcnksaWRjaGVtaWNhbCxp
 ZHN0cnVjdHVyZSwxIGFzIHNlbGVjdGVkLHZhbHVlX251bSBhcyBtZXRyaWMgRlJPTSBwcm9wZXJ0

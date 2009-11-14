@@ -55,7 +55,7 @@ public class StoredQuery_crud_test extends CRUDTest<SessionID,IStoredQuery> {
 		q.setName(b.toString());
 		q.setQuery(new QueryStructureByID(100215));
 		CreateStoredQuery c =  new CreateStoredQuery();
-		c.setGroup(new SessionID(1));
+		//c.setGroup(new SessionID(1));
 		c.setObject(q);
 		return c;
 	}

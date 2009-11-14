@@ -54,6 +54,10 @@ public class SessionID {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	@Override
+	public String toString() {
+		return getName()==null?String.format("%d",getId()):getName();
+	}
 }
 
 

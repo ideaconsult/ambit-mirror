@@ -22,14 +22,16 @@ public class Assessment_crud_test extends CRUDTest<AmbitUser,SessionID> {
 	@Override
 	protected IQueryUpdate<AmbitUser, SessionID> createQueryNew()
 			throws Exception {
-		return new CreateAssessment(new AmbitUser("admin"));
+		SessionID id = new SessionID();
+		id.setName("xxx");
+		return new CreateAssessment(new AmbitUser("admin"),id);
 	}
 
 	@Override
 	protected void createVerify(IQueryUpdate<AmbitUser, SessionID> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT idsessions, user_name, title from sessions where user_name='guest' and idsessions !=1");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT idsessions, user_name, title from sessions where user_name='guest' and idsessions =1");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals("Default",table.getValue(0,"title"));
 		c.close();			
@@ -40,9 +42,9 @@ public class Assessment_crud_test extends CRUDTest<AmbitUser,SessionID> {
 	protected void createVerifyNew(IQueryUpdate<AmbitUser, SessionID> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT idsessions, user_name, title from sessions where user_name='admin'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT idsessions, user_name, title from sessions where user_name='admin' and title='xxx'");
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals("Default",table.getValue(0,"title"));
+		Assert.assertEquals("xxx",table.getValue(0,"title"));
 		c.close();	
 		
 	}
