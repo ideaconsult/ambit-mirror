@@ -29,6 +29,12 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
   		<version>4.0</version>
   		<scope>test</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>net.sf.saxon</groupId>
+  		<artifactId>saxon-dom</artifactId>
+  		<version>8.7</version>
+  		<scope>runtime</scope>
+  	</dependency>
   </dependencies>
 <build>
   	<pluginManagement>
