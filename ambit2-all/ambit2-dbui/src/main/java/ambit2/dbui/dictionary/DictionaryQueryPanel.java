@@ -339,19 +339,27 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 		final MemoryRowsModel<Property> properties = new MemoryRowsModel<Property>(details) {
 			@Override
 			public void prepareList() {
-				profile.clear();
 				for (int i=content.size()-1; i >=0; i--)
 					if (!content.get(i).isEnabled())
 						content.remove(i);
-					else
-						profile.add(content.get(i));
+
 			}
+			@Override
+			public void updateProfile(Profile profile) {
+				profile.clear();
+				for (int i=content.size()-1; i >=0; i--)
+					if (content.get(i).isEnabled())
+						profile.add(content.get(i));
+
+			}
+			
+	
 		};
 		SelectFieldsPanel selectFields = new SelectFieldsPanel() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				super.actionPerformed(e);
-				properties.prepareList();			
+				properties.updateProfile(profile);			
 			}
 		};
 		selectFields.setObject(properties);

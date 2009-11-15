@@ -28,6 +28,9 @@ public class MemoryRowsModel<T> extends AbstractListModel implements TypedListMo
 	public void prepareList() {
 		content.clear();
 	}
+	public void updateProfile(Profile profile) {
+
+	}	
 	protected void rows2List() {
 		prepareList();
 
