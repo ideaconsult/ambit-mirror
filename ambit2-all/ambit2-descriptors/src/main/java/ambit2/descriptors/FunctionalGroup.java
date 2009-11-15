@@ -51,6 +51,7 @@ public class FunctionalGroup extends AmbitBean implements
 	protected static final String t_smarts = "smarts";
 	protected static final String t_hint = "hint";
 	protected static final String t_family = "family";
+	protected static final String t_example = "example";
 	protected Hashtable<String,String> properties;
 	protected ISmartsPattern<IAtomContainer> query = null;
 	public ISmartsPattern<IAtomContainer> getQuery() {
@@ -89,6 +90,11 @@ public class FunctionalGroup extends AmbitBean implements
 		setSmarts(smarts);
 		setName(name);
 		setHint(hint);
+		setExample(smarts);
+	}		
+	public FunctionalGroup(String name,String smarts,String hint,String family,String example) {
+		this(name,smarts,hint,family);
+		setExample(example);
 	}		
 	public FunctionalGroup(String name,String smarts,String hint) {
 		this(name,smarts,hint,"");
@@ -109,9 +115,15 @@ public class FunctionalGroup extends AmbitBean implements
 	public String getSmarts() {
 		return properties.get(t_smarts);
 	}
+	public String getExample() {
+		return properties.get(t_example);
+	}	
 	public void setName(String name) {
 		properties.put(t_name,name);
 	}
+	public void setExample(String name) {
+		properties.put(t_example,name==null?getSmarts():name);
+	}	
 	public void setSmarts(String smarts) {
 		properties.put(t_smarts,smarts);
 		query = null;
