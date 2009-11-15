@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db;
 
+import java.util.UUID;
+
 
 /**
  * Session ID
@@ -41,9 +43,10 @@ public class SessionID {
 		this.name = name;
 	}
 	public SessionID() {
-
+		setName(UUID.randomUUID().toString());
 	}
 	public SessionID(int id) {
+		this();
 		setId(id);
 	}
 	

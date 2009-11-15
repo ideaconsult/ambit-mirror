@@ -51,18 +51,22 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 			
 		}
 		public SessionID process(SessionID target) throws AmbitException {
-			if ((target!=null) && (target.getId()!=null) && (target.getId()>0)) return target;
+			//if ((target!=null) && (target.getId()!=null) && (target.getId()>0)) return target;
+			if (target==null) target = new SessionID();
 			Connection c = getConnection();
 			try {
 				connection.setAutoCommit(false);
+				
 				PreparedStatement s = c.prepareStatement(CreateAssessment.sql_current_user,Statement.RETURN_GENERATED_KEYS);
 				s.setNull(1,Types.INTEGER);
-				s.setString(2,getClass().getName());
-				
-				if (s.executeUpdate()>0) {
+				s.setString(2,target.getName());
+				boolean ok = s.execute();
+				if (s.getUpdateCount()>0) {
 					ResultSet rss = s.getGeneratedKeys();
-					while (rss.next()) 
-						target = new SessionID(rss.getInt(1));
+					while (rss.next()) {
+						target.setId(rss.getInt(1));
+						break;
+					}
 					rss.close();
 				}
 				connection.commit();

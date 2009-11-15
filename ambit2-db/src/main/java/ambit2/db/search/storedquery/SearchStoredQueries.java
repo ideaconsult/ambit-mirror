@@ -49,7 +49,7 @@ public class SearchStoredQueries  extends  AbstractQuery<SessionID, String, Stri
 	 * 
 	 */
 	private static final long serialVersionUID = 5945313962492375417L;
-	public final static String sqlField = "select idquery,count(idstructure) as rows,name from query_results join query using(idquery) join sessions using (idsessions) where user_name=SUBSTRING_INDEX(user(),'@',1) %s %s group by idquery order by idquery desc";
+	public final static String sqlField = "select idquery,count(idstructure) as rows,name,content from query_results join query using(idquery) join sessions using (idsessions) where user_name=SUBSTRING_INDEX(user(),'@',1) %s %s group by idquery order by idquery desc";
 	public static final String where_session = "and idsessions = ?";
 	public static final String where_query = "and name %s ?";	
 
@@ -84,6 +84,7 @@ public class SearchStoredQueries  extends  AbstractQuery<SessionID, String, Stri
 			StoredQuery q = new StoredQuery();
 			q.setId(rs.getInt(1));
 			q.setName(rs.getString(3));
+			q.setContent(rs.getString(4));
 			q.setRows(rs.getInt(2));
 			return q;
 		} catch (Exception x) {

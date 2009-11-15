@@ -20,8 +20,15 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
      */
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
-	public static final String sqlField="select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where %s %s %s order by type_structure desc";
+	public static final String sqlField="select ? as idquery,idchemical,idstructure,1 as selected,? as metric from structure where %s %s %s order by type_structure desc";
 	protected long maxRecords = -1;
+	protected int metric = 1;
+	public int getMetric() {
+		return metric;
+	}
+	public void setMetric(int metric) {
+		this.metric = metric;
+	}
 	public QueryStructureByID() {
 		setCondition(NumberCondition.getInstance("="));
 	}
@@ -66,6 +73,7 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
+		params.add(new QueryParam<Integer>(Integer.class, getMetric()));
 
 		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 		if (NumberCondition.between.equals(getCondition().getSQL())) 

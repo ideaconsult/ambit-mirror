@@ -29,7 +29,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
@@ -73,17 +76,19 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 		try {
 			StoredQuery result = new StoredQuery(-1);
 			result.setQuery(target);
-			result.setName(target.toString());
+			result.setName(UUID.randomUUID().toString());
 			
 			connection.setAutoCommit(false);	
 			
 			PreparedStatement s = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			s.setInt(1,getSession().getId().intValue());
-			if (result.getName().length()>45)
-				s.setString(2,result.getName().substring(0,44));
+			if (result.getName().length()>255)
+				s.setString(2,result.getName().substring(0,255));
 			else
 				s.setString(2,result.getName());
-            s.setString(3,result.getSQL());
+			try {
+				s.setString(3,result.getQuery().toString()==null?"Results":result.getQuery().toString());
+			} catch (Exception x) {s.setString(3,"Results");}
 			if (s.executeUpdate()>0) {
 				ResultSet rss = s.getGeneratedKeys();
 				while (rss.next())
@@ -161,6 +166,12 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			
 		};		
 		try {
+			long timeout = 8*1000;
+			try {
+				timeout = Long.parseLong(Preferences.getProperty(Preferences.TIMEOUT));
+			} catch (Exception x) {
+			}
+			reporter.setTimeout(timeout); //1s
 			reporter.setAutoCommit(true);
 			reporter.setConnection(connection);
 			reporter.process(query);

@@ -37,6 +37,8 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	protected AbstractBatchProcessor batch;
 	protected boolean showHeader = true;
 	protected boolean autoCommit = true;
+	protected long timeout = 0;
+	
 
 	public boolean isAutoCommit() {
 		return autoCommit;
@@ -104,6 +106,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		if (isShowHeader()) header(output,query);
 
 		batch = createBatch();
+		batch.setTimeout(getTimeout());
 		try {
 			if (connection != null) {
 				batch.setProcessorChain(processors);
@@ -135,6 +138,12 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	}
 	public abstract void processItem(T item) throws AmbitException;
 	
-
+	public long getTimeout() {
+		return timeout;
+	}
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+		if (batch != null) batch.setTimeout(timeout);
+	}
 	
 }

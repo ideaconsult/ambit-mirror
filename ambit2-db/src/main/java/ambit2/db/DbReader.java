@@ -44,7 +44,7 @@ import ambit2.db.search.QueryExecutor;
 public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval<ResultType>, ResultType>
 								  implements IDBProcessor<IQueryRetrieval<ResultType>, IBatchStatistics>
 									{
-
+	protected enum cached_results {TRUE,FALSE,NOTCACHED};
 	protected ResultSet resultSet;
 	protected QueryExecutor<IQueryObject<ResultType>> executor;
 	protected boolean handlePrescreen = false;
@@ -62,8 +62,50 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	public DbReader() {
 
 	}
+	/**
+	 * Returns cached query results or NOTCACHED if not in the cache. Default implementation returns NOTCACHED.
+	 * @param query
+	 * @param object
+	 * @return
+	 */
+	protected cached_results getCached(String category,String key, ResultType object) {
+		return cached_results.NOTCACHED;
+	}
+	/**
+	 * Does nothing, otherwise should cache the query result
+	 * @param query
+	 * @param object
+	 */
+	protected void cache(String category,String key, ResultType object,boolean ok) {
+
+	}	
+	/**
+	 * 
+	 * @param query
+	 * @param object
+	 * @return
+	 * @throws AmbitException
+	 */
 	protected boolean prescreen(IQueryRetrieval<ResultType> query, ResultType object) throws AmbitException {
-		return query.calculateMetric(object)>0;
+		cached_results result = getCached(query.getCategory(),query.getKey(),object);
+		switch (result) {
+		case NOTCACHED: {
+			boolean ok = query.calculateMetric(object)>0;
+			cache(query.getCategory(),query.getKey(),object,ok);
+			return ok;
+		}
+		case TRUE: {
+			System.out.println("Found , true");
+			return true;
+		}
+		case FALSE: {
+			System.out.println("Found , false");
+			return false;
+		}
+		default: {
+			throw new AmbitException("Invalid "+result);
+		}
+		}
 	}
 	public Iterator<ResultType> getIterator(final IQueryRetrieval<ResultType> query)
 			throws AmbitException {
