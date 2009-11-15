@@ -22,10 +22,13 @@ import javax.swing.JToolBar;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.HydrogenAdder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.processors.structure.AtomConfigurator;
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.structure.QuerySMARTS;
@@ -94,7 +97,9 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 						//IAtomContainer ac = smartsToChemObject.process(matcher.getQuery());
 						SmilesParser p = new  SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 						IAtomContainer ac = p.parseSmiles(((FunctionalGroup) evt.getNewValue()).getExample());
-						panel2D.setAtomContainer(ac,false);
+						AtomConfigurator c = new AtomConfigurator();
+						HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+						panel2D.setAtomContainer(ha.process(c.process(ac)),false);
 					} catch (Exception x) {
 						x.printStackTrace();
 						panel2D.setAtomContainer(null);
@@ -126,11 +131,13 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 				try {
 					String tmpDir = System.getProperty("java.io.tmpdir");
 					FuncGroupsDescriptorFactory f = new FuncGroupsDescriptorFactory();
-					List<FunctionalGroup> list = f.process(tmpDir+"funcgroups.xml");
+					List<FunctionalGroup> list = f.process(tmpDir+"structfeatures.xml");
 					gf.clear();
 					for (FunctionalGroup fg:list) gf.add(fg);
-					
-				} catch (Exception x) {}
+					selectionInList.setSelectionIndex(0);
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 			}
 		});		
 		bar.add(b3);
@@ -138,11 +145,12 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String tmpDir = System.getProperty("java.io.tmpdir");
-					FileOutputStream file = new FileOutputStream(tmpDir+"funcgroups.xml");
+					FileOutputStream file = new FileOutputStream(tmpDir+"structfeatures.xml");
 					FuncGroupsDescriptorFactory.saveFragments(file, gf);
 					file.close();
-					selectionInList.setSelectionIndex(0);
-				} catch (Exception x) {}
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 			}
 		});		
 		bar.add(b4);	
