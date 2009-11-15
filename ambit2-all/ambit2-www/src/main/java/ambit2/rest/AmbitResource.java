@@ -208,10 +208,14 @@ public class AmbitResource extends ServerResource {
 	}
 	protected String getSearchString() {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		Object key = form.getFirstValue("search");
-		if (key != null) {
-	        return Reference.decode(key.toString());
-		} else return null;		
+		String[] keys = form.getValuesArray("search");
+		if ((keys==null)||(keys.length==0)) return null;
+		StringBuilder b = new StringBuilder();
+		for (String key:keys) {
+			b.append(Reference.decode(key.toString()));
+			b.append(" ");
+		} 
+		return b.toString();		
 	}
 	
 	@Override
@@ -219,9 +223,10 @@ public class AmbitResource extends ServerResource {
 		System.out.println(getRequest().getClientInfo().isAuthenticated());
 		System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
 		try {
+			//TODO redirect with freetext query
 			String search = getSearchString();
 			if (search != null) {
-				getResponse().setLocationRef(String.format("%s/compound?search=%s",getRequest().getRootRef(),Reference.encode(search)));
+				getResponse().setLocationRef(String.format("%s/query/smarts?text=%s",getRequest().getRootRef(),Reference.encode(search)));
 				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 				return null;
 			}

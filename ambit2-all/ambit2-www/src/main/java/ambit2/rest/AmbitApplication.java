@@ -205,7 +205,8 @@ public class AmbitApplication extends Application {
 		router.attach("/help", AmbitResource.class);
 		
 
-		router.attach("", AmbitResource.class);	
+		router.attach("", SmartsQueryResource.class);	
+		router.attach("/", SmartsQueryResource.class);
 		//test
 		router.attach("/rdf",RDFGraphResource.class);
 		
@@ -489,7 +490,7 @@ public class AmbitApplication extends Application {
 		 Directory jsDir = new Directory(getContext(), "war:///js");
 
 		 
-		 router.attach("/", AmbitResource.class);
+		 
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
