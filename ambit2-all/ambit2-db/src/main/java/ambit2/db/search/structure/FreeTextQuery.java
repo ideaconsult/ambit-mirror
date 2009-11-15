@@ -119,5 +119,13 @@ public class FreeTextQuery extends AbstractStructureQuery<String[], String[], St
 			throw new AmbitException(x);
 		}
 	}
-
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		for (String s : getFieldname()) {
+			b.append(s);
+			b.append(" ");
+		}
+		return b.toString();
+	}
 }
