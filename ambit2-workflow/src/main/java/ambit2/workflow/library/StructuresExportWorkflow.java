@@ -147,7 +147,14 @@ class MyExporter extends AbstractDBProcessor<IQueryObject<IStructureRecord>, Fil
 	public void setReporter(SDFReporter<IQueryRetrieval<IStructureRecord>> reporter) {
 		this.reporter = reporter;
 	}	
-
+	public long getTimeout() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public void setTimeout(long timeout) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 
@@ -168,4 +175,5 @@ class DBExporter extends DBProcessorPerformer<MyExporter,IQueryObject<IStructure
 		exporter.setOutput((FileOutputState)context.get(output_tag));
 		return super.execute();
 	}
+	
 }
