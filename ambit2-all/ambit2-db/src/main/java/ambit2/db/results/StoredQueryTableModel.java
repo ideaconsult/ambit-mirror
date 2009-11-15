@@ -260,6 +260,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 	}		
 	public void setQuery(AbstractStructureQuery query) throws SQLException, AmbitException {
 		
+		query.setChemicalsOnly(storedResults==null?false:storedResults.isChemicalsOnly());
 		storedResults = query;
 		setResultSet(null);
 		if (getConnection() == null) throw new AmbitException("No connection!");
