@@ -95,13 +95,14 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 						//AbstractSmartsPattern<IAtomContainer> matcher = new SmartsPatternAmbit();
 						//((FunctionalGroup) evt.getNewValue()).setQuery(matcher);
 						//IAtomContainer ac = smartsToChemObject.process(matcher.getQuery());
+					if (((FunctionalGroup) evt.getNewValue()).getExample()!=null) {
 						SmilesParser p = new  SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 						IAtomContainer ac = p.parseSmiles(((FunctionalGroup) evt.getNewValue()).getExample());
 						AtomConfigurator c = new AtomConfigurator();
 						HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
 						panel2D.setAtomContainer(ha.process(c.process(ac)),false);
+					} else panel2D.setAtomContainer(null);
 					} catch (Exception x) {
-						x.printStackTrace();
 						panel2D.setAtomContainer(null);
 					}
 					
