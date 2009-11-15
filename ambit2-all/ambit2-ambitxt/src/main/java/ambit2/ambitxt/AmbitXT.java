@@ -47,15 +47,24 @@ import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
 import ambit2.base.config.Preferences;
 import ambit2.core.smiles.OpenBabelShell;
 import ambit2.mopac.MopacShell;
+import ambit2.plugin.dbtools.MySQLServerStop;
+import ambit2.plugin.dbtools.MysqlServerLauncher;
 import ambit2.ui.editors.PreferencesPanel;
+import ambit2.workflow.DBWorkflowContext;
+
+import com.microworkflow.process.WorkflowContext;
 
 public class AmbitXT extends NPluginsApplication {
 	protected AmbitSplitPane multiworkflowPanel;
+	protected DBWorkflowContext context;
 	//protected JXTaskPaneContainer taskPane;
 	protected JTabbedPane taskPane;
 	public AmbitXT(String title, int width, int height, String[] args) {
 		super(title,width,height,args);
+		context = new DBWorkflowContext();
+		startMySQL();
 		//this is a quick dirty hack to make the builder include mopac and name structure packages ...
+
 		Package pkg = getClass().getPackage();
 		try {
 			MopacShell mopac = new MopacShell();
@@ -76,6 +85,29 @@ public class AmbitXT extends NPluginsApplication {
 		if (detailsPanel!= null)
 			detailsPanel.setTitle(" ");
 
+	}
+	protected void startMySQL() {
+		try {
+			if ("true".equals(Preferences.getProperty(Preferences.START_MYSQL).toLowerCase())) {
+				MysqlServerLauncher start = new MysqlServerLauncher();
+				start.executeWith(context);
+				if (context.isMySQLStarted())
+					logger.info("MySQL server started");
+			}
+		} catch (Exception x) {
+			logger.severe(x.getMessage());
+		}
+	}
+	@Override
+	protected void doClose() {
+		try {
+			MySQLServerStop stop = new MySQLServerStop();
+			stop.executeWith(context);
+			logger.info("MySQL server stopped");
+		} catch (Exception x) {
+			logger.severe(x.getMessage());
+		}
+		super.doClose();
 	}
 	@Override
 	protected JMenuBar createMenuBar() {
