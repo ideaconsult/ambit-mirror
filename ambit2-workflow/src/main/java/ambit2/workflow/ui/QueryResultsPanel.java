@@ -88,7 +88,7 @@ public class QueryResultsPanel extends AbstractStructureBrowserPanel<AbstractStr
     }    
     @Override
     protected StoredQueryTableModel createTableModel() {
-    	return new StoredQueryTableModel();
+    	return new StoredQueryTableModel(true);
     }
     @Override
     protected void processRecord(int record) {
