@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.base.data.TypedListModel;
 
 public class MemoryRowsModel<T> extends AbstractListModel implements TypedListModel<T>, PropertyChangeListener {
@@ -15,6 +17,7 @@ public class MemoryRowsModel<T> extends AbstractListModel implements TypedListMo
 	 */
 	private static final long serialVersionUID = -5034323147503404064L;
 	protected AmbitRows<T> rows;
+	
 	protected List<T> content;
 	public MemoryRowsModel(AmbitRows<T> rows) {
 		this.rows = rows;
@@ -22,8 +25,12 @@ public class MemoryRowsModel<T> extends AbstractListModel implements TypedListMo
 
 		rows.addPropertyChangeListener(this);
 	}
-	protected void rows2List() {
+	public void prepareList() {
 		content.clear();
+	}
+	protected void rows2List() {
+		prepareList();
+
 		try {
 			rows.first();
 			while (rows.next()) {
@@ -52,26 +59,7 @@ public class MemoryRowsModel<T> extends AbstractListModel implements TypedListMo
 		}
 		
 	}
-/*
-	public boolean hasNext() {
-		try {
-			rows.next();
-			return !rows.isAfterLast();
-		} catch (SQLException x) {
-			return false;
-		}		 
-	}
-
-	public T next() {
-		try {
-			return rows.getObject();
-		} catch (AmbitException x) {
-			return null;
-		}
-	}
-*/
 	public void remove() {
-		// TODO Auto-generated method stub
 		
 	}
 
