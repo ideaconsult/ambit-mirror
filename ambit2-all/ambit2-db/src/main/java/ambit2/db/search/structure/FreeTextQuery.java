@@ -7,7 +7,6 @@ import java.util.List;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.processors.StructureNormalizer;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
@@ -52,21 +51,21 @@ public class FreeTextQuery extends AbstractStructureQuery<String[], String[], St
 	protected static final String sql = "%s";
 	
 	protected static final String pairSQL = 
-		"(select idchemical,2 as metric  from properties join property_values using(idproperty)\n"+
-		"join property_string using(idvalue_string)  join structure using(idstructure)\n"+
-		"    where name like ? and value like ?\n"+
+		"(select idchemical,1 as metric  from properties join property_values using(idproperty)\n"+
+		"join property_string using(idvalue_string)\n  join structure using(idstructure)\n"+
+		"    where name like ? and `value` like ?\n"+
 		")\n"+
 		"union\n"+
-		"(select idchemical,2 as metric  from properties join property_values using(idproperty)\n"+
-		"join property_string using(idvalue_string)  join structure using(idstructure)\n"+
-		"    where value like ? and name like ?\n"+
-		")";
+		"(select idchemical,1 as metric  from properties join property_values using(idproperty)\n"+
+		"join property_string using(idvalue_string)\n join structure using(idstructure)\n"+
+		"    where `value` like ? and name like ?\n"+
+		")\n";
 	protected static final String singleSQLName = 
 		"(select idchemical,1 as metric from properties\n"+
 		"join property_values using(idproperty) join structure using(idstructure) where name like ?)\n";
 	protected static final String singleSQLValue =
 		"(select idchemical,1 as metric  from property_values\n"+
-		"join property_string using(idvalue_string)  join structure using(idstructure)  where value like ?)\n";
+		"join property_string using(idvalue_string)  join structure using(idstructure)  where `value` like ?)\n";
 
 
 
@@ -101,10 +100,12 @@ public class FreeTextQuery extends AbstractStructureQuery<String[], String[], St
 		for (String value: getValue()) {
 			b.append(union);
 			b.append(singleSQLValue);
+			union = "\nunion\n";
 		}
 		for (String name: getFieldname()) {
 			b.append(union);
 			b.append(singleSQLName);
+			union = "\nunion\n";
 		}			
 		return String.format(sql, b.toString());
 	}
