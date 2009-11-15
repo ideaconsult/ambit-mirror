@@ -6,10 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -34,6 +33,7 @@ import ambit2.descriptors.FuncGroupsDescriptorFactory;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
 import ambit2.smarts.SmartsToChemObject;
+import ambit2.smarts.query.SMARTSException;
 import ambit2.ui.Utils;
 import ambit2.ui.editors.Panel2D;
 
@@ -87,18 +87,19 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
            		presentationModel.getModel("value"));
 		selectionInList.addPropertyChangeListener("value",new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent evt) {
-/*show some picture when smarts is selected ... but 2d coordinates are poor
+/*show some picture when smarts is selected ... but 2d coordinates are poor*/
 				try {
-						AbstractSmartsPattern<IAtomContainer> matcher = new SmartsPatternAmbit();
-						((FunctionalGroup) evt.getNewValue()).setQuery(matcher);
-						IAtomContainer ac = smartsToChemObject.process(matcher.getQuery());
+						//AbstractSmartsPattern<IAtomContainer> matcher = new SmartsPatternAmbit();
+						//((FunctionalGroup) evt.getNewValue()).setQuery(matcher);
+						//IAtomContainer ac = smartsToChemObject.process(matcher.getQuery());
+						SmilesParser p = new  SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+						IAtomContainer ac = p.parseSmiles(((FunctionalGroup) evt.getNewValue()).getExample());
 						panel2D.setAtomContainer(ac,false);
-					} catch (SMARTSException x) {
+					} catch (Exception x) {
 						x.printStackTrace();
-					} catch (AmbitException x) {
-						x.printStackTrace();
+						panel2D.setAtomContainer(null);
 					}
-					*/
+					
 			}
 		});
 		JToolBar bar = new JToolBar();
