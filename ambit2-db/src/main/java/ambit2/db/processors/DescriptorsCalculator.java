@@ -83,9 +83,9 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     		throws AmbitException {
     	IAtomContainer a = reader.process(target);
     	//necessary for some calculations
-    	for (Property p : target.getProperties()) {
+    	for (Property p : target.getProperties()) try {
     		a.setProperty(p.getName(), target.getProperty(p));
-    	}
+    	} catch (Exception x) {}
     	if (a==null) throw new AmbitException("Empty molecule"); 
     	if (a.getAtomCount()==0) throw new AmbitException("Empty molecule");
     	
