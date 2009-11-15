@@ -59,6 +59,7 @@ public class Preferences {
 	public static String PORT="Port";
 	public static String USER="User";
 	public static String PASSWORD="Password";
+	public static String TIMEOUT="timeout";
 	
 	protected final static String filename="ambit2.pref";
 	protected static Properties props = null;
@@ -74,6 +75,7 @@ public class Preferences {
 		{SCHEME,"Scheme","jdbc:mysql",String.class,"",true,VTAGS.Database},		
 		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false,VTAGS.Database},
 		{MAXRECORDS,"Maximum number of records",2000,String.class,"Maximum number of records to be returned by a search query",false,VTAGS.Database},
+		{TIMEOUT,"Timeout for search results, ms",60000,String.class,"Timeout of search queries, in milliseconds ",false,VTAGS.Database},
 
 		
 		{FASTSMARTS,"Use SMARTS accelerator","true",Boolean.class,"Accelerate SMARTS search",false,VTAGS.Structure},
