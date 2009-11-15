@@ -38,6 +38,13 @@ import ambit2.base.interfaces.IStructureRecord;
 public class StoredQuery implements IStoredQuery {
 	protected Integer id;
 	protected String name="Default query";
+	protected String content=null;
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
 	protected IQueryObject<IStructureRecord> query;
 
 	protected int rows= 0;
@@ -100,8 +107,8 @@ public class StoredQuery implements IStoredQuery {
 	@Override
 	public String toString() {
 		if (rows>0)
-			return getName() + "["+rows+"]";
-		return getName();
+			return getContent() + "["+rows+"]";
+		return getContent();
 	}
 	public long getMaxRecords() {
 		return 0;
@@ -111,6 +118,9 @@ public class StoredQuery implements IStoredQuery {
 		
 	}
 	public String getKey() {
+		return null;
+	}
+	public String getCategory() {
 		return null;
 	}
 }

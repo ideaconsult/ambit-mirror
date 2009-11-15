@@ -292,4 +292,7 @@ using(idstructure)
 	public String getKey() {
 		return null;
 	}
+	public String getCategory() {
+		return null;
+	}
 }

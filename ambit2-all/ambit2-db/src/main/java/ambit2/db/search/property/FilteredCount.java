@@ -107,4 +107,7 @@ public abstract class FilteredCount<T extends Comparable<T>> extends Model
 	public String getKey() {
 		return null;
 	}
+	public String getCategory() {
+		return null;
+	}
 }

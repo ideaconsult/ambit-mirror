@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
   <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2009-07-05 17:44:34.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.sourceforge.net" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <users user_name="admin" password="" email="admin" registration_status="confirmed" registration_date="2009-07-05 17:44:34.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default admin" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.sourceforge.net" affiliation="&quot;&quot;" keywords="admin" reviewer="false"/>
   <roles role_name="ambit_admin"/>
   <roles role_name="ambit_guest"/>
   <roles role_name="ambit_quality"/>

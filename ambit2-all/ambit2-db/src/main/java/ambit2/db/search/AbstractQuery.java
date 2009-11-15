@@ -110,5 +110,8 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	public String getKey() {
 		return null;
 	}
+	public String getCategory() {
+		return null;
+	}
 
 }

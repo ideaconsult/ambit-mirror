@@ -39,12 +39,18 @@ public class CreateAssessment extends AbstractUpdate<AmbitUser,SessionID> {
 		if (getGroup()!=null)
 			param.add(new QueryParam<String>(String.class,getGroup().getName()));
 		
+		if (getObject()==null) setObject(new SessionID());
+		if (getObject().getName()==null) getObject().setName("Default");
 		param.add(new QueryParam<String>(String.class,(getObject()==null) || (getObject().getName()==null)?"Default":getObject().getName()));
 		return param;
 	}
 
 	public String[] getSQL() throws AmbitException {
 		return new String[] {getGroup()==null?sql_current_user:sql};
+	}
+	@Override
+	public boolean returnKeys(int index) {
+		return false;
 	}
 
 	public void setID(int index, int id) {

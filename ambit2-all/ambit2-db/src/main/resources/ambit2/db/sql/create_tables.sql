@@ -428,17 +428,17 @@ CREATE TABLE  `sessions` (
 -- Table `query` User queries per session
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `query`;
-
 CREATE TABLE  `query` (
   `idquery` int(10) unsigned NOT NULL auto_increment,
   `idsessions` int(10) unsigned NOT NULL,
-  `name` varchar(45) collate utf8_bin NOT NULL,
-  `content` blob NOT NULL,
+  `name` text collate utf8_bin NOT NULL,
+  `content` text collate utf8_bin NOT NULL,
   PRIMARY KEY  (`idquery`),
+  UNIQUE KEY `Index_3` USING BTREE (`name`(255),`idsessions`),
   KEY `FK_query_1` (`idsessions`),
-  KEY `Index_3` (`name`),
   CONSTRAINT `FK_query_1` FOREIGN KEY (`idsessions`) REFERENCES `sessions` (`idsessions`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Structure queries';
+
 -- -----------------------------------------------------
 -- Table `query_results` Results of a user query
 -- -----------------------------------------------------
@@ -634,7 +634,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,8,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,9,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma seperated strings

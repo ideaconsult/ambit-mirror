@@ -61,7 +61,19 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	public static String PROPERTY_BATCHSTATS="ambit2.core.processors.batch.IBatchStatistics";	
 	protected long now = System.currentTimeMillis(); //ms
 	protected ProcessorsChain<ItemInput,IBatchStatistics,IProcessor> processor;	
+	protected long timeout = 0;
+	protected boolean cancelled = false;
 
+	public long getTimeout() {
+		return timeout;
+	}
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+	}
+	public synchronized void cancel() {
+		this.cancelled = true;
+	}
+	
 	public AbstractBatchProcessor() {
 		// TODO Auto-generated constructor stub
 	}
@@ -78,12 +90,13 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 		
 	}
 	public IBatchStatistics process(Target target) throws AmbitException {
-
+		long started = System.currentTimeMillis();
 		beforeProcessing(target);
 		IBatchStatistics result = getResult(target);		
 		ProcessorsChain<ItemInput, IBatchStatistics,IProcessor> processor = getProcessorChain(); 
 		Iterator<ItemInput> i = getIterator(target);
-		while (i.hasNext()) {
+		cancelled = false;
+		while (i.hasNext() && !cancelled) {
 			
 			ItemInput input = null;
 
@@ -104,7 +117,11 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 				onError(input, null, result, x);			
 				continue;
 			}				
-										
+			long elapsed = System.currentTimeMillis()-started;
+			if ((timeout>0) && (elapsed)>timeout) {
+				onError(input, null, result, new AmbitException(String.format("Aborted on timeout %d",elapsed)));		
+				break;
+			}
 		}
 
 		afterProcessing(target,i);

@@ -52,8 +52,14 @@ public interface IQueryObject<ResultType> extends IStatement {
 	long getMaxRecords();
 	void setMaxRecords(long records);
 	/**
-	 * Key to identify this query for caching purposes
+	 * Key to identify this query for caching purposes. 
 	 * @return
 	 */
 	String getKey();
+	/**
+	 * String to group caching results.
+	 * @return
+	 */
+	String getCategory();
+	
 }

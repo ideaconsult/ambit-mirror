@@ -16,7 +16,6 @@ import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.descriptors.FunctionalGroup;
@@ -47,7 +46,7 @@ public class QuerySMARTS extends
 	protected AtomConfigurator configurator = new AtomConfigurator();
 	protected Property smartsProperty = Property.getInstance(
 			CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
-
+	protected static final String SMARTS = "SMARTS";
 	public QuerySMARTS() {
 		super();
 		screening = new QueryPrescreenBitSet();
@@ -105,6 +104,10 @@ public class QuerySMARTS extends
 	@Override
 	public String getKey() {
 		return super.getValue().getSmarts();
+	}
+	@Override
+	public String getCategory() {
+		return SMARTS;
 	}
 	@Override
 	public boolean isPrescreen() {

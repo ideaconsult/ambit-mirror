@@ -27,6 +27,7 @@ package ambit2.db.processors.test;
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.db.SessionID;
@@ -49,12 +50,20 @@ public class ProcessorCreateQueryTest extends DbUnitTest {
 		ps.setConnection(c.getConnection());
 		SessionID s = new SessionID();
 		s = ps.process(s);
+	
+
 		
 		c = getConnection();
 		ProcessorCreateQuery pq = new ProcessorCreateQuery();
 		pq.setSession(s);
 		pq.setConnection(c.getConnection());
 		IStoredQuery storedQuery = pq.process(q);
+		c = getConnection();
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT idsessions,title from sessions where title='%s'",s.getName()));
+		Assert.assertEquals(1,table.getRowCount());		
+		Assert.assertEquals(s.getName(),table.getValue(0,"title").toString());
+		
 		Assert.assertEquals(3,storedQuery.getRows());
 		c.close();
 	}

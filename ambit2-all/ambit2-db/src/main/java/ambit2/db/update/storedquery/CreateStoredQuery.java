@@ -32,6 +32,7 @@ package ambit2.db.update.storedquery;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.AmbitUser;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SessionID;
 import ambit2.db.search.IStoredQuery;
@@ -41,8 +42,8 @@ import ambit2.db.update.assessment.CreateAssessment;
 
 public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 	protected CreateAssessment assessment;
-	protected final String sql_byname = "insert into query (idquery,idsessions,name,content) select null,idsessions,?,? from sessions where title=?";
-	protected final String sql_byid = "insert into query (idquery,idsessions,name,content) select null,idsessions,?,? from sessions where idsessions=?";
+	protected final String sql_byname = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where title=?";
+	protected final String sql_byid = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where idsessions=?";
 
 	
 	public CreateStoredQuery() {
@@ -62,6 +63,11 @@ public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 		}
 		case 1:{
 			List<QueryParam> params = new ArrayList<QueryParam>();
+			if ((getObject().getId()==null) || (getObject().getId()<=0))
+				params.add(new QueryParam<Integer>(Integer.class, null));
+			else
+				params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+				
 			params.add(new QueryParam<String>(String.class, getObject().getName()));
 			params.add(new QueryParam<String>(String.class, getObject().getSQL()));
 			if ((getGroup()==null)||(getGroup().getId()==null))
@@ -105,5 +111,12 @@ public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 		case 1: { getObject().setId(id); break;}
 		}
 	}
+	
+	public AmbitUser getUser() {
+		return assessment.getGroup();
+	}
+	public void setUser(AmbitUser user) {
+		assessment.setGroup(user);
+	}	
 
 }

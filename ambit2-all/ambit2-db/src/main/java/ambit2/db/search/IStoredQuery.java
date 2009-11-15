@@ -36,6 +36,8 @@ public interface IStoredQuery extends IQueryObject<IStructureRecord>{
 	void setRows(int rows);
 	IQueryObject<IStructureRecord> getQuery();
 	void setQuery(IQueryObject<IStructureRecord> query);	
+	String getContent();
+	void setContent(String content);
 }
 
 
