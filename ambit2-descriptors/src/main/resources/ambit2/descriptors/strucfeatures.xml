@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <funcgroups>
-<group name="Hydroxyl in Alcohol" 	 smarts="[#6][OX2H]"/>
-<group name="Aldehyde" 	 smarts="[CX3h1](=O)[#6]"/>
-<group name="Alkyl aldehyde" 	 smarts="[CX4,CH,CH2,CH3][$([CX3H1](=O)[#6])]"/>
-<group name="Alkyl Aziridine"	 smarts="CNN"/>
+<group name="Hydroxyl in Alcohol" 	 smarts="[#6][OX2H]" example="CO"/>
+<group name="Aldehyde" 	 smarts="[CX3h1](=O)[#6]" example="C(C)=O"/>
+<group name="Alkyl aldehyde" 	 smarts="[CX4,CH,CH2,CH3][$([CX3H1](=O)[#6])]" example="CCC=O"/>
+<group name="Alkyl Aziridine"	 smarts="CNN" example="CNN"/>
 <group name="Alkyl Phosphonate" 	 smarts="[$(P(=[OX1])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)]),$([P+]([OX1-])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)])]"/>
 <group name="Alkyl Phosphonate" 	 smarts="[$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2][#6])])([$([OX2H]),$([OX1-]),$([OX2][#6])]))]"/>
-<group name="Aromatic amine" 	 smarts="aN"/>
-<group name="Aromatic aldehyde" 	 smarts="a[$([CX3H1](=O)[#6])]"/>
-<group name="aromatic azo" 	 smarts="a-N=N"/>
-<group name="aromatic nitro" 	 smarts="a-[N+](=O)[O-]"/>
-<group name="aryl methyl halide" 	 smarts="a-[$([CX4,CH,CH2,CH3][Cl]),$([#6][Cl])]"/>
-<group name="Aziridine" 	 smarts="C1[N]C1"/>
-<group name="Azo" 	 smarts="N=N"/>
-<group name="Benzene, 1,2,3,4-fused" 	 smarts="c12ccccc1cccc2"/>
+<group name="Aromatic amine" 	 smarts="aN" example="c1ccccc1N"/>
+<group name="Aromatic aldehyde" 	 smarts="a[$([CX3H1](=O)[#6])]" example="c1ccccc1C(C)=O"/>
+<group name="aromatic azo" 	 smarts="a-N=N" example="c1ccccc1N=N"/>
+<group name="aromatic nitro" 	 smarts="a-[N+](=O)[O-]" example="c1ccccc1[N+](=O)[O-]"/>
+<group name="aryl methyl halide" 	 smarts="a-[$([CX4,CH,CH2,CH3][Cl]),$([#6][Cl])]" example="CCCl"/>
+<group name="Aziridine" 	 smarts="C1[N]C1" example="C1[N]C1"/>
+<group name="Azo" 	 smarts="N=N" example="c1ccccc1N=Nc2ccccc2" />
+<group name="Benzene, 1,2,3,4-fused" 	 smarts="c12ccccc1cccc2" example="c12ccccc1cccc2"/>
 <group name="Benzene,1-alkylamino-" 	 smarts="a-[NX3;H2,H1;!$(NC=O)][CX4,CH,CH2,CH3]"/>
-<group name="Benzene, 1-carbonylamino" 	 smarts="[OX1]=CN"/>
-<group name="Benzene,1-methyl" 	 smarts="a-[cX3H]"/>
+<group name="Benzene, 1-carbonylamino" 	 smarts="[OX1]=CN" example="O=CN"/>
+<group name="Benzene,1-methyl" 	 smarts="a-[cX3H]" example="c1ccccc1C([H])([H])[H]"/>
 <group name="Benzene,1-heteroamino" 	 smarts="[$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*);$(a-[NX3;H2,H1;!$(NC=O)])]"/>
-<group name="Epoxide" 	 smarts="C1[O]C1"/>
+<group name="Epoxide" 	 smarts="C1[O]C1" example="C1[O]C1"/>
 <group name="Ether" 	 smarts="[OD2]([#6])[#6]"/>
-<group name="Furan" 	 smarts="[$([or5])]"/>
-<group name="Alkyl halide" 	 smarts="[CX4,CH,CH2,CH3][Br,Cl,I]"/>
+<group name="Furan" 	 smarts="[$([or5])]" example="c1ccoc1"/>
+<group name="Alkyl halide" 	 smarts="[CX4,CH,CH2,CH3][Br,Cl,I]" example="CCBr"/>
 <group name="Halide,p-alkyl,s-alkyl" 	 smarts="[P,S][F,Cl,Br,I]"/>
 <group name="Aryl halides (halogenoarenes)" 	 smarts="a-[F,Cl,Br,I]"/>
 <group name="Heterocycle, quinone" 	 smarts="[$([o,n]=c1ccc(=[o,n])cc1),$([O,N]=C1C=CC(=[O,N])C=C1),$([O,N]=C1[#6]:,=[#6]C(=[O,N])[#6]:,=[#6]1)]"/>
 <group name="5 member aromatic heterocycle w/ 2double bonds. contains N &amp; another non C (N,O,S)" 	 
 	smarts="[$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])]"/>
-<group name="Thioketones" 	 smarts="CC(=S)C"/>
+<group name="Thioketones" 	 smarts="CC(=S)C" example="CC(=S)C"/>
 <group name="Heteroamino" 	 smarts="[$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*)]"/>
 <group name="Pyrazine" 	 smarts="[$([N=C1[#6]:,=[#6]C(=[C,N])[#6]:,=[#6]1])],$(a-[N=C1[#6]:,=[#6]C(=[C,N])[#6]:,=[#6]1])]"/>
-<group name="Hydrazine H2NNH2" 	 smarts="[NX3][NX3]"/>
+<group name="Hydrazine H2NNH2" 	 smarts="[NX3][NX3]" example="CN(C)N(C)C"/>
 <group name="Iminomethyl" 	 smarts="[nr5]:[cX3H]"/>
-<group name="Ketone" 	 smarts="[#6][CX3](=O)[#6]"/>
-<group name="N-chloramine" 	 smarts="S(=O)(=O)NCl"/>
-<group name="Aromatic N-hydroxy amine" 	 smarts="a-NO"/>
-<group name="Nitro" 	 smarts="[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8]"/>
-<group name="nitrogen mustard" 	 smarts="N(CCCl)CCCl"/>
-<group name="Nitrosamine" 	 smarts="[$([NX3]N=O)]"/>
-<group name="Nitroso" 	 smarts="[NX2]=[OX1]"/>
-<group name="N-methylol" 	 smarts="NCO"/>
+<group name="Ketone" 	 smarts="[#6][CX3](=O)[#6]" example="CC(=O)C"/>
+<group name="N-chloramine" 	 smarts="S(=O)(=O)NCl" />
+<group name="Aromatic N-hydroxy amine" 	 smarts="a-NO" example="c1ccccc1NO"/>
+<group name="Nitro" 	 smarts="[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8]" example="C[N+](=O)[O-]"/>
+<group name="N-methylol" 	 smarts="NCO" example="NCO"/>
 <group name="N-oxide" 	 smarts="a-[$([#7+][OX1-]),$([#7v5]=[OX1]);!$([#7](~[O])~[O]);!$([#7]=[#7])]"/>
 <group name="pyrrol and pyrimidine" 	 smarts="[$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*)]"/>
-<group name="Phosphoric_acid groups" 	 smarts="[OH]-P(=O)(-O)-*"/>
-<group name="Phosphoric_ester groups" 	 smarts="COP(=O)(-*)O"/>
-<group name="Primary alkyl halide" 	 smarts="[CX4,CH,CH2,CH3][#6][F,Cl,Br,I]"/>
-<group name="Propiolactone" 	 smarts="C1(=O)OCC1"/>
+<group name="Phosphoric_acid groups" 	 smarts="[OH]-P(=O)(-O)-*" example="[OH]-P(=O)(-O)-C"/>
+<group name="Phosphoric_ester groups" 	 smarts="COP(=O)(-*)O" example="COP(=O)(C)O"/>
+<group name="Primary alkyl halide" 	 smarts="[CX4,CH,CH2,CH3][#6][F,Cl,Br,I]" example="CCF"/>
+<group name="Propiolactone" 	 smarts="C1(=O)OCC1" example="C1(=O)OCC1"/>
 <group name="UrethaneDerivatives(Carbamate)" 	 smarts="[NX3,NX4+][CX3](=[OX1])[OX2,OX1-]"/>
 </funcgroups>

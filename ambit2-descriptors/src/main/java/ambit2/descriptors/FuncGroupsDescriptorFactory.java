@@ -129,7 +129,8 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 								e.getAttribute("name"),
 								e.getAttribute("smarts"),
 								e.getAttribute("hint"),
-								e.getAttribute("family")
+								e.getAttribute("family"),
+								e.getAttribute("example")
 								));
 					} catch (Exception x) {
 						x.printStackTrace();
