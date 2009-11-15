@@ -68,4 +68,12 @@ public class PBTExporter extends ProcessorFileExport<PBTWorkBook> {
 		// TODO Auto-generated method stub
 		
 	}
+	public long getTimeout() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public void setTimeout(long timeout) {
+		// TODO Auto-generated method stub
+		
+	}
 }
