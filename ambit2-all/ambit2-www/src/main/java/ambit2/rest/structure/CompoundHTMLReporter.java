@@ -310,7 +310,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
 			w.write("</td>");
 			w.write("<td align='right' width='256px'>");
-			w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+			//w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 
 			w.write("</td></tr>");
 			w.write("</table>");		
