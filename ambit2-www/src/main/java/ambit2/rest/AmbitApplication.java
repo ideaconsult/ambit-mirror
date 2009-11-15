@@ -115,6 +115,10 @@ public class AmbitApplication extends Application {
 
 	public AmbitApplication() {
 		super();
+		setName("AMBIT REST services");
+		setDescription("AMBIT implementation of OpenTox framework");
+		setOwner("Ideaconsult Ltd.");
+		setAuthor("Ideaconsult Ltd.");		
 		tasks = new ConcurrentHashMap<UUID,Task<Reference>>();
 		/*
 		String tmpDir = System.getProperty("java.io.tmpdir");
@@ -220,6 +224,7 @@ public class AmbitApplication extends Application {
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 		router.attach(OntologyResource.resourceTree, OntologyResource.class);
+		
 
 		Router allDatasetsRouter = new Router(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
