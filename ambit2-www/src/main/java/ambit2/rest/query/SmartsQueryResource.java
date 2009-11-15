@@ -45,9 +45,11 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 		
 		ArrayList<String> s = new ArrayList<String>();
 		for (String key : keys) {
+			if (key==null)continue;
 			String[] k = key.split(" ");
 			for (String kk:k) s.add(kk);
 		}
+		if (s.size()==0) return null;
 		keys = s.toArray(keys);
 		if ((keys!=null) && (keys.length>0)) {
 			FreeTextQuery query = new FreeTextQuery();
