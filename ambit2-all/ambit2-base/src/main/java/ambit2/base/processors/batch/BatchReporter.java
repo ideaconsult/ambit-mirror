@@ -83,5 +83,12 @@ public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitP
 	}	
 	protected abstract BatchProcessor<ItemList, Item> createBatch();
 	
-	public abstract void processItem(Item item, Output output);	
+	public abstract void processItem(Item item, Output output);
+	public long getTimeout() {
+		return batch.getTimeout();
+	}
+	public void setTimeout(long timeout) {
+		batch.setTimeout(timeout);
+		
+	}
 }
