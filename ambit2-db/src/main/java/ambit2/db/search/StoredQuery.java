@@ -53,8 +53,8 @@ public class StoredQuery implements IStoredQuery {
 		return name;
 	}
 	public void setName(String name) {
-		if (name.length()>45)
-			this.name = name.substring(0,45);
+		if (name.length()>255)
+			this.name = name.substring(0,255);
 		else this.name = name;
 	}
 	public StoredQuery() {

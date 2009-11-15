@@ -88,6 +88,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 			if ((key==null) || (key.length()>255)) return cached_results.NOTCACHED;
 			hits.setCategory(category);
 			hits.setValue(object);
+			hits.setFieldname(key);
 			rs = lookup.process(hits);
 			while (rs.next()) {
 				return hits.getObject(rs)?cached_results.TRUE:cached_results.FALSE;

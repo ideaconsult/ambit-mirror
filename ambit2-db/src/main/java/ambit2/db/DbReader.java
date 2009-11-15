@@ -95,11 +95,9 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 			return ok;
 		}
 		case TRUE: {
-			System.out.println("Found , true");
 			return true;
 		}
 		case FALSE: {
-			System.out.println("Found , false");
 			return false;
 		}
 		default: {
