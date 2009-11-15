@@ -17,6 +17,6 @@ public class AlgorithmURIReporter extends CatalogURIReporter<Algorithm> {
 		super(request);
 	}
 	public String getURI(String ref, Algorithm item) {
-		return String.format("%s%salgorithm/test/%s",ref,"".equals(ref)?"":"/",Reference.encode(item.getId()));
+		return String.format("%s%salgorithm/rules/%s",ref,"".equals(ref)?"":"/",Reference.encode(item.getId()));
 	}
 }
