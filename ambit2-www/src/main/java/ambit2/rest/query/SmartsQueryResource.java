@@ -1,5 +1,7 @@
 package ambit2.rest.query;
 
+import java.util.ArrayList;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -12,6 +14,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.FreeTextQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
@@ -35,16 +38,41 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 		return (dataset_id == null)?null:
 			String.format("riap://dataset/%s/feature_definition",dataset_id);
 	}
+	protected IQueryRetrieval<IStructureRecord> getScopeQuery(Context context, Request request,
+								Response response) throws ResourceException {
+		Form form = request.getResourceRef().getQueryAsForm();
+		String[] keys = form.getValuesArray("text");
+		
+		ArrayList<String> s = new ArrayList<String>();
+		for (String key : keys) {
+			String[] k = key.split(" ");
+			for (String kk:k) s.add(kk);
+		}
+		keys = s.toArray(keys);
+		if ((keys!=null) && (keys.length>0)) {
+			FreeTextQuery query = new FreeTextQuery();
+			query.setFieldname(keys);
+			query.setValue(keys);
+			return query;
+		} else return null;
+	}
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
+			IQueryRetrieval<IStructureRecord> freetextQuery = getScopeQuery(context, request, response);
 			
 			Form form = request.getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue("search");
 			if (key ==null) {
 				key = request.getAttributes().get(smartsKey);
-				if (key==null) throw new AmbitException("Empty smarts");
+				if (key==null) {
+					if (freetextQuery == null) throw new AmbitException("Empty smarts");
+					else {
+						setTemplate(createTemplate(context, request, response));
+						return freetextQuery;
+					}
+				}
 			}
 			String smarts = getSMILES(form,true);
 			QuerySMARTS query = new QuerySMARTS();
@@ -53,6 +81,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			
 			
 			try {
+				
 				Object cmpid = request.getAttributes().get(CompoundResource.idcompound);
 				if (cmpid != null) {
 					IStructureRecord record = new StructureRecord();
@@ -95,9 +124,36 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					};
 					combined.setCombine_as_and(true);
 					combined.add(query);
+					if (freetextQuery!= null) combined.add(freetextQuery);
 					combined.setScope(scope);
 					return combined;
 				} 
+				
+				if (freetextQuery != null) {
+					QueryCombinedStructure combined = new QueryCombinedStructure() {
+						@Override
+						protected String groupBy() {
+							return "";
+						}
+						protected String getScopeSQL() {
+							if (isCombine_as_and())
+								return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s";
+							else
+								return "select QSCOPE.idquery,s.idchemical,-1,QSCOPE.selected as selected,QSCOPE.metric as metric from chemicals as s";
+						
+						}			
+						@Override
+						protected String getMainSQL() {
+							return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s\n";
+						}						
+					};
+					combined.setChemicalsOnly(true);
+					combined.setCombine_as_and(true);
+					combined.add(query);
+					combined.setScope(freetextQuery);
+					setTemplate(createTemplate(context, request, response));			
+					return combined;
+				}
 				
 			} catch (NumberFormatException x) {
 				throw new ResourceException(
