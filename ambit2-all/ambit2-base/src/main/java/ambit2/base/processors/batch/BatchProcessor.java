@@ -36,6 +36,8 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 					implements IBatchProcessor<INPUT,Target,IBatchStatistics> {
 	public static String PROPERTY_BATCHSTATS="ambit2.core.processors.batch.IBatchStatistics";
 	protected ProcessorsChain<Target,IBatchStatistics,IProcessor> processor;
+	protected boolean cancelled = false;
+	protected long timeout = 0;
 	/**
 	 * 
 	 */
@@ -75,7 +77,8 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 			ProcessorsChain<Target,IBatchStatistics,IProcessor> processor = getProcessorChain();
 			if (processor == null)
 				throw new AmbitException("Processor not defined");
-			while (reader.hasNext()) {
+			long started = System.currentTimeMillis();
+			while (reader.hasNext() && !cancelled) {
 				if ((stats.getRecords(IBatchStatistics.RECORDS_STATS.RECORDS_READ) % stats.frequency)==0)
 					propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);				
 				Object object= null;
@@ -99,8 +102,15 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR, System.currentTimeMillis()-ms);					
 					continue;
 				}				
-								
+				long elapsed = System.currentTimeMillis()-started;
+				if ((timeout>0)&&(elapsed>timeout)) {
+					stats.increment(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR);
+					stats.incrementTimeElapsed(IBatchStatistics.RECORDS_STATS.RECORDS_ERROR, System.currentTimeMillis()-ms);
+					break;
+					
+				}
 			}
+			
 			propertyChangeSupport.firePropertyChange(PROPERTY_BATCHSTATS,null,stats);
 			closeIterator(reader);
 			
@@ -109,6 +119,16 @@ public abstract class BatchProcessor<INPUT,Target> extends DefaultAmbitProcessor
 			throw new AmbitException(x);
 		}
 	}
-
+	public void cancel() {
+		this.cancelled = true;
+		
+	}
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+		
+	}
+	public long getTimeout() {
+		return timeout;
+	}
 
 }

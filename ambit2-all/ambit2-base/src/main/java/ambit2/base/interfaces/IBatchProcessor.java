@@ -15,5 +15,7 @@ public interface IBatchProcessor<Target,ItemInput,Result> {
 	void onError(ItemInput input, Object output ,Result result, Exception x);
 	void onItemRead(ItemInput input, Result result);
 	void onItemProcessed(ItemInput input, Object output, Result result);
-
+	long getTimeout();
+	void setTimeout(long timeout);
+	void cancel();
 }
