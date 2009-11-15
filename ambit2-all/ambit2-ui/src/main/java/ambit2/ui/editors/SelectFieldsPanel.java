@@ -77,6 +77,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			public boolean getTag() {
 				return true;
 			}			
+
 		},
 		MOVE_LEFT {
 			@Override
@@ -113,6 +114,16 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			public boolean getTag() {
 				return true;
 			}
+			/*
+			public void move(ambit2.base.data.TypedListModel<Property> fields, JList[] table, ambit2.base.data.TypedListModel<Property>[] fieldsModel) {
+				int[] rows = table[getTableIndex()].getSelectedIndices();//getSelectedRows();
+				for (int row : rows) {
+					if (row >= table[getTableIndex()].getModel().getSize()) continue;
+					Object o = table[getTableIndex()].getModel().getElementAt(row);
+
+				}
+			};
+			*/
 			
 		},
 		MOVE_ALL_LEFT {
@@ -140,7 +151,6 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 		public abstract boolean getTag();
 		
 		public void move(TypedListModel<Property> fields,JList[] table, TypedListModel<Property>[] fieldsModel) {
-			
 			if (moveAll()) {
 				for (int i=0; i < table[getTableIndex()].getModel().getSize();i++) {
 					Object o = table[getTableIndex()].getModel().getElementAt(i);
@@ -168,6 +178,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 	protected List<JButton> buttons;
 	protected TypedListModel<Property> fields;
 	protected TypedListModel<Property>[] fieldsModel;
+	//protected Profile<Property> profile;
 	protected JList[] tables;
 	protected String help;
 	
@@ -307,6 +318,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
     	try {
     		MOVE op = MOVE.valueOf(e.getActionCommand());
     		op.move(fields, tables,fieldsModel);
+    		//Object o = table[1].getModel().getElementAt(row);
     	} catch (Exception x) {
     		x.printStackTrace();
     	}
@@ -333,16 +345,6 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 
 	public void setObject(TypedListModel<Property> object) {
 		this.fields = object;
-		/*
-		Collections.sort(fields,new Comparator<Property>() {
-			public int compare(Property o1, Property o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		
-		for (int i=0; i < fields.size();i++)
-			fields.get(i).setOrder((i+1)*100);
-			*/
 		fieldsModel = new ProfileListModel[2];
 		this.fieldsModel[0] = new ProfileListModel(object,false);
 		this.fieldsModel[1] = new ProfileListModel(object,true);

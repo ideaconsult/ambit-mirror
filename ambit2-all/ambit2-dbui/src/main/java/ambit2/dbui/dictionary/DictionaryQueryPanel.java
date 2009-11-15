@@ -30,6 +30,7 @@
 package ambit2.dbui.dictionary;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
@@ -44,8 +45,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
@@ -60,6 +59,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
+import ambit2.db.results.MemoryRowsModel;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.DictionaryObjectQuery;
 import ambit2.db.search.DictionaryQuery;
@@ -114,12 +114,13 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 			protected synchronized IQueryRetrieval<Dictionary> createNewQuery(
 					Dictionary target) throws AmbitException {
 				return new DictionaryObjectQuery(target.getTemplate()); 
-				
-			}			
+			}	
+			
 		};
+		
 		parents.setPropertyname("parents");
 		details = new AmbitRows<Property>();
-	
+
 	}
 	public JComponent buildPanel() {
 		initRows();
@@ -335,29 +336,27 @@ public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCon
 	}
 	@Override
 	protected JComponent createValueComponent() {
-		final RowsModel<Property> properties = new RowsModel<Property>(details);
-		properties.addListDataListener(new ListDataListener() {
-			public void contentsChanged(ListDataEvent e) {
-				for (int i=0;i < properties.getSize(); i++) {
-					Property p = properties.getElementAt(i);
-					//System.out.println(p+" "+p.isEnabled());
-				}
-					
-				
+		final MemoryRowsModel<Property> properties = new MemoryRowsModel<Property>(details) {
+			@Override
+			public void prepareList() {
+				profile.clear();
+				for (int i=content.size()-1; i >=0; i--)
+					if (!content.get(i).isEnabled())
+						content.remove(i);
+					else
+						profile.add(content.get(i));
 			}
-			public void intervalAdded(ListDataEvent e) {
-				// TODO Auto-generated method stub
-				
+		};
+		SelectFieldsPanel selectFields = new SelectFieldsPanel() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				super.actionPerformed(e);
+				properties.prepareList();			
 			}
-			public void intervalRemoved(ListDataEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		SelectFieldsPanel selectFields = new SelectFieldsPanel();
+		};
 		selectFields.setObject(properties);
 		return selectFields;
-			}
+	}
 	/*
 	@Override
 	protected JComponent createFieldnameComponent() {
@@ -592,7 +591,7 @@ class PathNavigationRenderer extends JLabel implements TableCellRenderer {
 		try {
 			setIcon(Utils.createImageIcon("images/resultset_next.png"));
 		} catch (Exception x) {
-			x.printStackTrace();
+			
 		}        
     }
 
