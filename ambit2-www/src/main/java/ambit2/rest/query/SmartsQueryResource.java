@@ -33,10 +33,12 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	public final static String resourceID =  String.format("/{%s}",smartsKey);
 	public final static String resource =  String.format("/%s",smartsKey);
 	protected String dataset_id;
+	protected String textSearch = "CasRN";
 	
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
-		return (dataset_id == null)?null:
-			String.format("riap://dataset/%s/feature_definition",dataset_id);
+		return (dataset_id == null)?
+			String.format("riap://application/feature_definition?text=%s",Reference.encode(textSearch)):
+			String.format("riap://application/dataset/%s/feature_definition",dataset_id);
 	}
 	protected IQueryRetrieval<IStructureRecord> getScopeQuery(Context context, Request request,
 								Response response) throws ResourceException {
@@ -55,6 +57,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			FreeTextQuery query = new FreeTextQuery();
 			query.setFieldname(keys);
 			query.setValue(keys);
+			textSearch=query.toString().trim();
 			return query;
 		} else return null;
 	}

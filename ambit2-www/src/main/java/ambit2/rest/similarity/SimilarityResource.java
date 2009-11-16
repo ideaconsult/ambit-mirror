@@ -40,7 +40,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?null:
-			String.format("riap://dataset/%s/feature_definition",dataset_id);
+			String.format("riap://application/dataset/%s/feature_definition",dataset_id);
 	}
 
 	@Override

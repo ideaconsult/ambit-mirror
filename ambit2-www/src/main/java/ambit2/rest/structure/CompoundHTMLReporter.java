@@ -268,33 +268,40 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			String hint= "";
 			if (uriReporter.getRequest().getOriginalRef().toString().indexOf("similarity")>0) {
-				
+				w.write(String.format("<label for='search'>SMILES</label>&nbsp;"));
 				w.write(String.format("<input name='search' type='text' size='40' title='Enter SMILES' value='%s'>\n",query_smiles==null?"":query_smiles));
 				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
 						uriReporter.getBaseReference()));
 				w.write("&nbsp;");
+				w.write(String.format("<label for='threshold'>Threshold</label>&nbsp;"));
 				w.write(String.format("<input name='threshold' type='text' title='Tanimoto coefficient threshold [0,1], default 0.9' size='20' value='%s'>\n",query_threshold==null?"0.9":query_threshold));
 				
 				hint = "Draw structure and search for similar compounds";
-				w.write("<input type='submit' value='Search'><br>");
+				//w.write("<input type='submit' value='Search'><br>");
 
 			} else if (uriReporter.getRequest().getOriginalRef().toString().indexOf("compound")>0) {
 				w.write(String.format("<input name='property' type='text' title='Enter property name (optional)'  size='20' value='%s'>\n",query_property==null?"":query_property));
 				w.write("&nbsp;");
 				w.write(String.format("<input name='search' type='text' title='Enter molecule identifier, name or property value (e.g. benzene)'  size='40' value='%s'>\n",query_smiles==null?"":query_smiles));
 				hint = "Search by property or identifier name (optional) and value";
-				w.write("<input type='submit' value='Search'><br>");
+				//w.write("<input type='submit' value='Search'><br>");
 			} else {
 				w.write("<table border='0'>");
-				w.write("<tr><td  colspan='2'>");
-				w.write(String.format("<input name='text' type='text' title='Enter text to search for'  size='100' value='%s'><br>\n",query_text==null?"":query_text));
-				w.write("</td></tr><tr><td>");
-				w.write(String.format("<input name='search' type='text' title='Enter SMARTS'  size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
-				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
+
+				w.write("<tr><th>");
+				w.write(String.format("<label for='search' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;"));
+				w.write("</th><td>");
+				w.write(String.format("<input name='search' type='text'   size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
+				w.write(String.format("&nbsp;<input type='button' value='Draw substructure' onClick='startEditor(\"%s\");'>",
 						uriReporter.getBaseReference()));	
-				w.write("</td><td>");
-				w.write("<input type='submit' value='Search'>");
+
 				w.write("</td></tr>");
+				w.write("<tr><th>");
+				w.write(String.format("<label for='text' title='Any text, compound identifiers, property names and values, test names and values'>Keywords</label>"));
+				w.write("</th><td>");
+				
+				w.write(String.format("<input name='text' type='text' title='Enter text to search for'  size='60' value='%s'><br>\n",query_text==null?"":query_text));
+				w.write("</td></tr>");				
 				hint = "Search for substructure and properties";				
 				w.write("</table>");
 			}
@@ -309,9 +316,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write(hint);		
 			w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
 			w.write("</td>");
-			w.write("<td align='right' width='256px'>");
+			w.write("<td align='left' valign='center' width='256px'>");
 			//w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
-
+			w.write("<input type='submit' value='Search'>");
 			w.write("</td></tr>");
 			w.write("</table>");		
 			w.write("<hr>");	

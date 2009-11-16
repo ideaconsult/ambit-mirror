@@ -1,5 +1,7 @@
 package ambit2.rest.property;
 
+import java.util.ArrayList;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -18,6 +20,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.FreeTextPropertyQuery;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreatePropertyReferenceID;
@@ -125,13 +128,15 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			collapsed = o==null;
 			if (o==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
+				IQueryRetrieval<Property> qf = getFreeTextQuery(getContext(), getRequest(), getResponse());
+				if (qf != null) return qf;
 				key = form.getFirstValue("search");
 				if (key != null) {
-					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
-					q.setFieldname(record);
-					q.setChemicalsOnly(chemicalsOnly);
-					q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
-					return q;
+						RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+						q.setFieldname(record);
+						q.setChemicalsOnly(chemicalsOnly);
+						q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+						return q;
 				} else {
 					ReadProperty property = new ReadProperty();
 					property.setFieldname(record);
@@ -145,6 +150,27 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			return new ReadProperty();
 		} finally {
 		}
+	}
+	
+	protected IQueryRetrieval<Property> getFreeTextQuery(Context context, Request request,
+			Response response) throws ResourceException {
+		Form form = request.getResourceRef().getQueryAsForm();
+		String[] keys = form.getValuesArray("text");
+		
+		ArrayList<String> s = new ArrayList<String>();
+		for (String key : keys) {
+			if (key==null)continue;
+			String[] k = key.split(" ");
+			for (String kk:k) s.add(kk);
+		}
+		if (s.size()==0) return null;
+		keys = s.toArray(keys);
+		if ((keys!=null) && (keys.length>0)) {
+			FreeTextPropertyQuery query = new FreeTextPropertyQuery();
+			query.setFieldname(keys);
+			query.setValue(keys);
+			return query;
+		} else return null;
 	}
 
 	@Override
