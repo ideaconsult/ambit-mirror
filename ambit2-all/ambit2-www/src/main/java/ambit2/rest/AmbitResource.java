@@ -391,7 +391,6 @@ public class AmbitResource extends ServerResource {
 		Iterator<Principal> i = request.getClientInfo().getSubject().getPrincipals().iterator();
 		Principal p = null;
 		while (i.hasNext()) { p = i.next(); break; }
-		//w.write(String.format("	<span class=\"right\"><a href='%s/user/login'>Login</a>&nbsp;<a href='%s/protected/%s'>Logout</a>&nbsp;<form action='javascript:logout()' method='get'><input type='submit' value='Logout'></form>&nbsp;%s",
 		if (p==null)
 		w.write(String.format("	<span class=\"right\"><a href='%s/user/login'>Login</a>",
 				baseReference.toString()));

@@ -1,12 +1,11 @@
 package ambit2.rest;
 
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.AbstractRepresentationConvertor;
 import ambit2.base.processors.Reporter;
-import ambit2.core.processors.AbstractRepresentationConvertor;
 
 /**
  * An abstract {@link IProcessor} , converting between arbitrary Content and restlet Representation.
@@ -17,7 +16,7 @@ import ambit2.core.processors.AbstractRepresentationConvertor;
  * @param <Output>
  */
 public abstract class RepresentationConvertor<Item,Content,Output,R extends Reporter<Content,Output>> 
-	extends AbstractRepresentationConvertor<T,Content,Output,Representation,MediaType,R> {
+	extends AbstractRepresentationConvertor<Item,Content,Output,Representation,MediaType,R> {
 
 	/**
 	 * 

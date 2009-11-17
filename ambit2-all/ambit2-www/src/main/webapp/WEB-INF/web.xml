@@ -10,23 +10,24 @@
 	<context-param>
 		<param-name>org.restlet.application</param-name>
 		<param-value>ambit2.rest.AmbitApplication</param-value>
+		
 	</context-param>
 	
+
 	<context-param>
 		<param-name>org.restlet.component</param-name>
 		<param-value>ambit2.rest.AmbitComponent</param-value>
 	</context-param>	
-	  
-
+			
 	<servlet>
 		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
 		<!-- 
 			<init-param>
 				<param-name>Database</param-name>
-				<param-value>ambit2</param-value>
+				<param-value>cadaster</param-value>
 			</init-param>
-		 -->
+		  -->
 	</servlet>	
 	<servlet-mapping>
 		<servlet-name>RestletServlet</servlet-name>
