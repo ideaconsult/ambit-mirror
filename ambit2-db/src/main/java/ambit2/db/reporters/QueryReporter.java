@@ -1,7 +1,5 @@
 package ambit2.db.reporters;
 
-import java.sql.SQLException;
-
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -13,8 +11,6 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
-
-import com.sun.org.apache.xerces.internal.parsers.AbstractDOMParser;
 
 /**
  * Executes a query {@link IQueryRetrieval} and reports the results via {@link Reporter} interface
