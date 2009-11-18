@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
@@ -21,10 +22,11 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 
 public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContainer, IAtomContainer>
 {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -5893878673124511317L;
+	
+	
+	public static final String markProperty = "MARKED_AB";
 
 	//When this flag is true aromatic bonds are forced between any two aromatic atoms 
 	public boolean forceAromaticBondsAlways = false; 
@@ -120,10 +122,94 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(container);
 	}
 	
+	
+	/**
+	 * Maximal possible atom container from this query is generated BUT 
+	 * this container is always fully connected as the original query.
+	 * The "removed" atoms and bonds are marked with a set property
+	 * This object is useful for visualization purposes.
+	 */	
+	public IAtomContainer extractAtomContainerFullyConnected(QueryAtomContainer query, IRingSet ringSet)
+	{
+		if (query == null) return null;
+		//Converting the atoms
+		Vector<IAtom> atoms = new Vector<IAtom>();
+		for (int i = 0; i < query.getAtomCount(); i++)
+		{	
+			IAtom a = toAtom(query.getAtom(i));			
+			if (a == null)			
+				a = getMarkedAtom();  //a marked "dummy" atom is added instead
+			atoms.add(a);
+		}	
+		
+		//Adding the atoms
+		Molecule container = new Molecule();
+		for (int i = 0; i < atoms.size(); i++)
+		{	
+			IAtom a = atoms.get(i); 
+			container.addAtom(a);
+		}
+		
+		//Converting and adding the bonds
+		for (int i = 0; i < query.getBondCount(); i++)			
+		{
+			mFlagConfirmAromaticBond = false;
+			IBond b = toBond(query.getBond(i));
+			
+			//Setting the atoms incident with  bond
+			IAtom[] ats = new IAtom[2];
+			int atNum = query.getAtomNumber(query.getBond(i).getAtom(0));				
+			ats[0] = atoms.get(atNum);
+			atNum = query.getAtomNumber(query.getBond(i).getAtom(1));				
+			ats[1] = atoms.get(atNum);
+			
+			if (b != null)
+			{	
+				b.setAtoms(ats);				
+				
+				if ((mFlagConfirmAromaticBond) && 
+					(ats[0].getFlag(CDKConstants.ISAROMATIC))  &&  (ats[1].getFlag(CDKConstants.ISAROMATIC)))
+				{
+					if (forceAromaticBondsAlways)
+					{	
+						b.setFlag(CDKConstants.ISAROMATIC,true);
+					}
+					else
+					{	
+						//Ring info is used to determine whether this bond must have aromatic flag
+						if (ringSet == null)
+						{
+							if (forceAromaticBondsForNonRingAtoms)
+								b.setFlag(CDKConstants.ISAROMATIC,true);
+						}
+						else
+						{	
+							if (isRingBond(query.getBond(i), ringSet))
+								b.setFlag(CDKConstants.ISAROMATIC,true);
+						}						
+					}	
+				}
+				container.addBond(b);
+			}
+			else  // b == null
+			{
+				b = getMarkedBond();
+				b.setAtoms(ats);
+				container.addBond(b);
+			}
+			
+		}	
+		
+		return(container);
+	}
+	
+	
+	
 	public IAtomContainer process(QueryAtomContainer target)
 			throws AmbitException {
 		return extractAtomContainer(target);
 	}
+	
 	/** Version of the function when the Ring data is not supplied outside*/
 	public IAtomContainer extractAtomContainer(QueryAtomContainer query)
 	{
@@ -131,6 +217,14 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		IRingSet ringSet = sssrf.findSSSR();
 		
 		return(extractAtomContainer(query,ringSet));
+	}
+	
+	public IAtomContainer extractAtomContainerFullyConnected(QueryAtomContainer query)
+	{
+		SSSRFinder sssrf = new SSSRFinder(query);
+		IRingSet ringSet = sssrf.findSSSR();
+		
+		return(extractAtomContainerFullyConnected(query,ringSet));
 	}
 	
 	
@@ -471,4 +565,20 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		}
 		return(false);
 	}
+	
+	IAtom getMarkedAtom()
+	{
+		Atom a = new Atom("C");
+		a.setProperty(SmartsToChemObject.markProperty,new Integer(1));
+		return(a);
+	}
+	
+	IBond getMarkedBond()
+	{
+		Bond b = new Bond();
+		b.setOrder(Order.SINGLE);
+		b.setProperty(SmartsToChemObject.markProperty,new Integer(1));
+		return(b);	
+	}
+	
 }
