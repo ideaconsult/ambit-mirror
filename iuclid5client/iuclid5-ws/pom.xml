@@ -88,6 +88,14 @@
 	<profiles>
 	</profiles>
 	<repositories>
+  	<repository>
+  		<id>repo1.maven.org</id>
+  		<name>repo1.maven.org</name>
+  		<url>http://repo1.maven.org/maven2</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</repository>	
 	</repositories>
 	<pluginRepositories>
 	</pluginRepositories>
