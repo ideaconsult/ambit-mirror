@@ -26,7 +26,6 @@ package ambit2.smarts.query;
 
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -42,8 +41,8 @@ import ambit2.smarts.processors.SMARTSPropertiesReader;
  *
  */
 public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
-	protected SmartsManager sman;
-	protected SMARTSPropertiesReader reader = new SMARTSPropertiesReader();
+	protected transient SmartsManager sman;
+	protected transient SMARTSPropertiesReader reader = new SMARTSPropertiesReader();
 	/**
 	 * 
 	 */
