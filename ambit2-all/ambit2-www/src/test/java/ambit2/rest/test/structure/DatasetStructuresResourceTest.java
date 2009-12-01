@@ -12,12 +12,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.data.MediaType;
 
-import com.lowagie.text.pdf.PdfReader;
-
 import weka.core.Instances;
-
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
+
+import com.lowagie.text.pdf.PdfReader;
 
 public class DatasetStructuresResourceTest extends ResourceTest {
 		
@@ -25,6 +24,24 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 		public String getTestURI() {
 			return String.format("http://localhost:%d/dataset/1/compound", port);
 		}
+		@Override
+		public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
+				throws Exception {
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line = null;
+			int count=0;
+			while ((line = reader.readLine())!=null) {
+				System.out.println(line);
+				count++;
+			}
+			return false;
+
+		}
+		@Test
+		public void testRDFXML() throws Exception {
+			testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+		}			
 		@Override
 		public boolean verifyResponseARFF(String uri, MediaType media, InputStream in)
 				throws Exception {

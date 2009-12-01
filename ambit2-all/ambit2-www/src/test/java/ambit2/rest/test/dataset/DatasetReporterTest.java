@@ -23,6 +23,12 @@ public class DatasetReporterTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d/dataset/1", port);
 	}
+
+	@Test
+	public void testRDFXML() throws Exception {
+		testGet(String.format("http://localhost:%d/dataset/1?features=http://localhost:%d/feature_definition", port,port)
+				,MediaType.APPLICATION_RDF_XML);
+	}	
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);

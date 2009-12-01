@@ -1,7 +1,6 @@
 package ambit2.rest.structure;
 
 import java.awt.Dimension;
-import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -20,7 +19,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.AbstractReporter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ARFFReporter;
 import ambit2.db.reporters.CMLReporter;
@@ -32,19 +30,19 @@ import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -118,13 +116,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
 			//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);	
 		else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(getTemplate()),ChemicalMediaType.CHEMICAL_MDLSDF);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
-				return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			Dimension d = new Dimension(250,250);
@@ -145,7 +143,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new QueryXMLReporter(getRequest()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(
 							getRequest(),
 							collapsed,
@@ -158,14 +156,24 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) 
+				) {
+			return new OutputStreamConvertor(
+					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
 		} else
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(getTemplate()),ChemicalMediaType.CHEMICAL_MDLSDF);			
+		
 	}
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest());

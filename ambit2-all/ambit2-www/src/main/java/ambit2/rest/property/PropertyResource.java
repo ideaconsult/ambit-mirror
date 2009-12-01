@@ -28,6 +28,7 @@ import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -85,7 +86,16 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML});	
+		customizeVariants(new MediaType[] {
+				MediaType.TEXT_HTML,
+				MediaType.TEXT_XML,
+				MediaType.TEXT_URI_LIST,
+				ChemicalMediaType.TEXT_YAML,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES
+				});	
 	}
 	
 	@Override
@@ -97,9 +107,16 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				PropertyURIReporter r = new PropertyURIReporter(getRequest());
 				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST);
-		
-		} else 
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				) {
 			return new OutputStreamConvertor(
+					new PropertyRDFReporter(getRequest(),variant.getMediaType())
+					,variant.getMediaType());		
+		} else 
+			return new OutputWriterConvertor(
 					new PropertyHTMLReporter(getRequest(),collapsed)
 					,MediaType.TEXT_HTML);
 	}

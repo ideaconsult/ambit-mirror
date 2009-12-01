@@ -20,7 +20,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
@@ -51,7 +51,7 @@ public class KroesInput extends FeatureResource {
 			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor(
+			return new OutputWriterConvertor(
 					new PropertyValueHTMLReporter<PropertyValue>(getRequest(),true) {
 						protected int count = 0;
 						@Override

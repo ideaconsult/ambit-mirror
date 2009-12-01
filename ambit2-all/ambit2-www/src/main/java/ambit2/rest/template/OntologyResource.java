@@ -21,7 +21,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.db.update.dictionary.DeleteDictionary;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
@@ -74,7 +74,7 @@ public class OntologyResource<T extends Object> extends QueryResource<IQueryRetr
 				},MediaType.TEXT_URI_LIST);
 				
 		} else 
-			return new OutputStreamConvertor(
+			return new OutputWriterConvertor(
 					new OntologyHTMLReporter(getRequest(),!isRecursive())
 					,MediaType.TEXT_HTML);
 	}

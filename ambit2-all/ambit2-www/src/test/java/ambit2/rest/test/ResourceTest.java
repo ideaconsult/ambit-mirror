@@ -1,6 +1,8 @@
 package ambit2.rest.test;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,7 +13,6 @@ import junit.framework.Assert;
 import org.jmol.util.Logger;
 import org.junit.After;
 import org.junit.Before;
-import org.restlet.Application;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -154,6 +155,31 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponseARFF(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}			
+
+	public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
+			throws Exception {
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			count++;
+		}
+		return false;
+
+	}	
+	
+	public boolean verifyResponseRDFTurtle(String uri, MediaType media,InputStream in) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			count++;
+		}
+		return false;
+	}		
 	public boolean verifyResponse(String uri, MediaType media,InputStream in) throws Exception {
 		if (MediaType.APPLICATION_PDF.equals(media))
 			return verifyResponsePDF(uri, media, in);
@@ -178,7 +204,12 @@ public abstract class ResourceTest extends DbUnitTest {
 		else if (ChemicalMediaType.WEKA_ARFF.equals(media))
 			return verifyResponseARFF(uri, media, in);
 		else if (MediaType.TEXT_CSV.equals(media))
-			return verifyResponseCSV(uri, media, in);		
+			return verifyResponseCSV(uri, media, in);
+		else if (MediaType.APPLICATION_RDF_XML.equals(media))
+			return verifyResponseRDFXML(uri, media, in);
+		else if (MediaType.APPLICATION_RDF_TURTLE.equals(media))
+			return verifyResponseRDFTurtle(uri, media, in);				
+		
 		else throw new Exception("Unknown format "+media);
 	}
 	protected Document createDOM(InputSource in) throws Exception {

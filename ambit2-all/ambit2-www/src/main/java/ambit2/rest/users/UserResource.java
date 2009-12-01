@@ -21,7 +21,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.search.QueryUser;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
@@ -53,7 +53,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 				reporter.setDelimiter("\n");
 				return new StringConvertor(	reporter,MediaType.TEXT_URI_LIST);
 			} else 
-				return new OutputStreamConvertor(
+				return new OutputWriterConvertor(
 						new UsersHTMLReporter(getRequest(),queryObject.getValue()==null),
 						MediaType.TEXT_HTML);
 	}

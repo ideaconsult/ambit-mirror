@@ -26,7 +26,7 @@ import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -95,7 +95,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor(
+			return new OutputWriterConvertor(
 					new PropertyValueHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);

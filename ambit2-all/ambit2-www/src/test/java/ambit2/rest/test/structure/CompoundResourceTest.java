@@ -89,6 +89,13 @@ public class CompoundResourceTest extends ResourceTest {
 	}		
 	
 	@Test
+	public void testRDFTurtle() throws Exception {
+		testGet(String.format("http://localhost:%d/compound/11?features=http://localhost:%d/feature_definition", 
+				port,port)
+				,MediaType.APPLICATION_RDF_TURTLE);
+	}	
+	
+	@Test
 	public void testARFF() throws Exception {
 		testGet(String.format("http://localhost:%d/compound/11?features=http://localhost:%d/feature_definition", 
 				port,port)

@@ -19,6 +19,7 @@ import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.db.search.AbstractQuery;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -45,7 +46,14 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 			queryObject = null;
 			error = x;
 		}		
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
+				MediaType.TEXT_XML,
+				MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_PLAIN,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES});
 
 	}
 	
@@ -59,11 +67,18 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor(
+			return new OutputWriterConvertor(
 					new PropertyValueHTMLReporter(getRequest()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
-			
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				) {
+			return new OutputStreamConvertor(
+					new PropertyValueRDFReporter(getRequest(),variant.getMediaType())
+					,variant.getMediaType());		
 		} else return new StringConvertor(new PropertyValueReporter());
 					
 	}		

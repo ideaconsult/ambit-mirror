@@ -165,13 +165,11 @@
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-api</artifactId>
   		<version>1.5.6</version>
-  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-nop</artifactId>
   		<version>1.5.6</version>
-  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
@@ -244,8 +242,13 @@
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-rest</artifactId>
   		<version>2.0.0-SNAPSHOT</version>
-  		<scope>compile</scope>
+
   	</dependency>
+  	<dependency>
+  		<groupId>com.hp.hpl.jena</groupId>
+  		<artifactId>jena</artifactId>
+  		<version>2.6.2</version>
+  	</dependency>   
 	
   </dependencies>
 	<repositories>

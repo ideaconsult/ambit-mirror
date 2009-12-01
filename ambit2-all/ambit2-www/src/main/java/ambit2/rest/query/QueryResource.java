@@ -48,7 +48,15 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			error = x;
 			status = x.getStatus();
 		}
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
+				MediaType.TEXT_XML,
+				MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_PLAIN,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES		
+		});
 		if (queryObject!=null)
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();

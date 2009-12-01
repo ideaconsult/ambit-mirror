@@ -58,6 +58,14 @@ public class TupleValuesResourceTest extends ResourceTest {
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
+	@Test
+	public void testRDFTurtle() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_TURTLE);
+	}
+	@Test
+	public void testRDFXML() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+	}		
 	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)

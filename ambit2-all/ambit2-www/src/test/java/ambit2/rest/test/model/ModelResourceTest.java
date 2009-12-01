@@ -53,7 +53,10 @@ public class ModelResourceTest extends ResourceTest {
 		return count>1;
 	}
 	
-	
+	@Test
+	public void testRDFXML() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+	}	
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
