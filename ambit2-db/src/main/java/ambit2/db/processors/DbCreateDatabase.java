@@ -45,10 +45,10 @@ import ambit2.db.update.user.CreateUser;
 
 /*
  cant' execute it via jdbc ...
-DROP FUNCTION IF EXISTS `sortString`;
+DROP FUNCTION IF EXISTS `sortstring`;
 
 DELIMITER $
-CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT deterministic
+CREATE FUNCTION `sortstring`(inString TEXT) RETURNS TEXT deterministic
 BEGIN
   DECLARE delim CHAR(1) DEFAULT ','; -- delimiter 
   DECLARE strings INT DEFAULT 0;     -- number of substrings
@@ -88,9 +88,9 @@ DELIMITER ;
 
 public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String> {
    	public static String[] func = {
-   	    	"DROP FUNCTION IF EXISTS `sortString`",
+   	    	"DROP FUNCTION IF EXISTS `sortstring`",
    	    	
-   	    	"CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT deterministic\n"+
+   	    	"CREATE FUNCTION `sortstring`(inString TEXT) RETURNS TEXT deterministic\n"+
    	    	"BEGIN\n"+
    	    	"  DECLARE delim CHAR(1) DEFAULT ','; -- delimiter\n"+ 
    	    	"  DECLARE strings INT DEFAULT 0;     -- number of substrings\n"+
@@ -164,7 +164,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         	"GRANT USAGE ON `"+database+"`.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';",
         	"GRANT ALL PRIVILEGES ON `"+database+"`.* TO 'admin'@'localhost' WITH GRANT OPTION;",
         	"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `"+database+"`.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';",
-        	//"GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';"
+        	//"GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';"
 
         	};
 	        Statement st = connection.createStatement();
@@ -186,7 +186,7 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         try {
         	createFunctions();
 	        st = connection.createStatement();
-	        st.executeQuery("GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost';");
+	        st.executeQuery("GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';");
 	        st.close();        	
 	        st.executeQuery("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'localhost';");
 	        st.close();    	        

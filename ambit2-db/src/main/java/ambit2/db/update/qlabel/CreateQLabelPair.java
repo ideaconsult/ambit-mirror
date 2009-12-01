@@ -50,7 +50,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		DbCreateDatabase.func[0],
 		DbCreateDatabase.func[1],
 		*/
-		"update quality_pair set text=sortString(text)\n",
+		"update quality_pair set text=sortstring(text)\n",
 		
 		"delete from quality_chemicals",
 		
@@ -82,7 +82,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"comparison\",\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic comparisong between sources\",now(),\"confirmed\",\"comparison\",\"http://ambit.sourceforge.net\");",
 		"insert ignore into user_roles (user_name,role_name) values (\"comparison\",\"ambit_quality\");",
 		
-		"update quality_chemicals set text=replace(sortString(text),',',':')\n",
+		"update quality_chemicals set text=replace(sortstring(text),',',':')\n",
 		
 		"delete from quality_structure where user_name='comparison'\n",
 		

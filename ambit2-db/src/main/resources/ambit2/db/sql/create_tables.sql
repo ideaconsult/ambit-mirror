@@ -639,10 +639,10 @@ insert into version (idmajor,idminor,comment) values (2,9,"AMBIT2 schema");
 -- -----------------------------------------------------
 -- Sorts comma seperated strings
 -- -----------------------------------------------------
-DROP FUNCTION IF EXISTS `sortString`;
+DROP FUNCTION IF EXISTS `sortstring`;
 
 DELIMITER $
-CREATE FUNCTION `sortString`(inString TEXT) RETURNS TEXT deterministic
+CREATE FUNCTION `sortstring`(inString TEXT) RETURNS TEXT deterministic
 BEGIN
   DECLARE delim CHAR(1) DEFAULT ',';
   DECLARE strings INT DEFAULT 0;     -- number of substrings
@@ -899,7 +899,7 @@ insert into catalog_references (idreference,title,url) values (2,"IUPAC name","h
 -- GRANT USAGE ON ambit2.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';
 -- GRANT ALL PRIVILEGES ON ambit2.* TO 'admin'@'localhost' WITH GRANT OPTION;
 -- GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON ambit2.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';
--- GRANT EXECUTE ON FUNCTION sortString TO 'guest'@'localhost'
+-- GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost'
 --- GRANT CREATE TEMPORARY TABLEs on ambit2.* to 'guest'@'%'
 
 SET SQL_MODE=@OLD_SQL_MODE;
