@@ -45,7 +45,7 @@ public class DbCreateDatabaseTest extends DbUnitTest {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");	
 		IDatabaseConnection c = getConnection();
 		Statement t = c.getConnection().createStatement();
-		ResultSet rs = t.executeQuery("select sortString('4,3,2,1')");
+		ResultSet rs = t.executeQuery("select sortstring('4,3,2,1')");
 		while (rs.next()) {
 			Assert.assertEquals("1,2,3,4", rs.getString(1));
 		}
