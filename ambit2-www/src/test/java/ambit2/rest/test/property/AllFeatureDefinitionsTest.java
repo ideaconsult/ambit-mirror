@@ -88,6 +88,10 @@ public class AllFeatureDefinitionsTest extends ResourceTest {
 	}	
 	 */
 	@Test
+	public void testRDFTurtle() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_TURTLE);
+	}	
+	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);
 	}

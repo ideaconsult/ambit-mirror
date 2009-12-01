@@ -13,7 +13,7 @@ import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
@@ -37,7 +37,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new DatasetsXMLReporter(getRequest()));	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor(
+			return new OutputWriterConvertor(
 					new DatasetsHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
@@ -50,7 +50,7 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 				}
 			},MediaType.TEXT_URI_LIST);
 		} else 
-			return new OutputStreamConvertor(
+			return new OutputWriterConvertor(
 					new DatasetsHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);
 	}		
 		//return new DocumentConvertor(new DatasetReporter(getRequest().getRootRef()));

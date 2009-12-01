@@ -10,7 +10,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.AmbitResource;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.structure.CompoundHTMLReporter;
 
@@ -23,7 +23,7 @@ public class KroesStep1 extends FastToxStep1 {
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
-		return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+		return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
 						getRequest(),
 						false,

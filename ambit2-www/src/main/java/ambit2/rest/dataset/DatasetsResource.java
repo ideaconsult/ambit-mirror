@@ -26,7 +26,7 @@ import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.YAMLConvertor;
@@ -93,7 +93,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	} else if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-		return new OutputStreamConvertor(
+		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
@@ -106,7 +106,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			}
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
-		return new OutputStreamConvertor(
+		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 

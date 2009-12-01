@@ -21,7 +21,7 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -85,7 +85,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 					}
 				},MediaType.TEXT_URI_LIST);
 			} else 
-				return new OutputStreamConvertor(
+				return new OutputWriterConvertor(
 						new ReferenceHTMLReporter(getRequest(),queryObject.getValue()==null),
 						MediaType.TEXT_HTML);
 	}

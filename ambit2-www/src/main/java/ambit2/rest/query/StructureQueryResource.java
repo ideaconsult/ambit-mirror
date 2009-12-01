@@ -45,9 +45,11 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.CompoundURIReporter;
@@ -144,7 +146,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.TEXT_YAML,
 				ChemicalMediaType.WEKA_ARFF,
-				MediaType.TEXT_CSV
+				MediaType.TEXT_CSV,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.APPLICATION_RDF_TRIG,
+				MediaType.APPLICATION_RDF_TRIX,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES,
 				});
 				
 	}
@@ -162,13 +170,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			variant.setMediaType(new MediaType(Reference.decode(media)));
 		}
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(template),ChemicalMediaType.CHEMICAL_MDLSDF);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) {
-				return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
-				return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
@@ -184,14 +192,25 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(getRequest(),true,getTemplate()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			return new OutputStreamConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
+				) {
+			return new OutputStreamConvertor(
+					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
+
+					
 		} else
 			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()));
 	}

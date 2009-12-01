@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
@@ -12,14 +13,14 @@ import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
-public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends QueryRepresentationConvertor<T,Q,OutputStream> {
+public class OutputWriterConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepresentationConvertor<T,Q,Writer> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7974532412944774457L;
 	
-	public OutputStreamConvertor(QueryReporter<T, Q, OutputStream> reporter,MediaType mediaType) {
+	public OutputWriterConvertor(QueryReporter<T, Q, Writer> reporter,MediaType mediaType) {
 		super(reporter,mediaType);
 	}
 
@@ -27,10 +28,10 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 		 return new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {
-   	
+            		OutputStreamWriter writer = null;          	
 	            	try {
- 
-	            		getReporter().setOutput(stream);
+	            		writer = new OutputStreamWriter(stream,"UTF-8");	  
+	            		getReporter().setOutput(writer);
 	            		getReporter().process(query);
 	            		//writer.flush();
 	            		//stream.flush();
@@ -46,7 +47,7 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 	            		logger.warn(x);
 	            		x.printStackTrace();
 	            	} finally {
-
+	            		try {if (writer !=null) writer.flush(); } catch (Exception x) { x.printStackTrace();}
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
 	            	}
 	            }

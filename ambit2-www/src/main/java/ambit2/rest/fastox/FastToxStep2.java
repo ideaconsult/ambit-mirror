@@ -13,7 +13,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelHTMLReporter;
@@ -50,7 +50,7 @@ public class FastToxStep2 extends ModelResource {
 	} else 
 	*/
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-		return new OutputStreamConvertor(
+		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed) {
 					
 					@Override
@@ -87,7 +87,7 @@ public class FastToxStep2 extends ModelResource {
 			}
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
-		return new OutputStreamConvertor(
+		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 	

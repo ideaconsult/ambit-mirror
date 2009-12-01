@@ -26,6 +26,7 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OutputStreamConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -95,7 +96,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	} else 
 	*/
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-		return new OutputStreamConvertor(
+		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
@@ -107,8 +108,16 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 				} catch (Exception x) {}
 			}
 		},MediaType.TEXT_URI_LIST);
-	} else //html 	
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+			) {
 		return new OutputStreamConvertor(
+				new ModelRDFReporter(getRequest(),variant.getMediaType())
+				,variant.getMediaType());			
+	} else //html 	
+		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
 	
