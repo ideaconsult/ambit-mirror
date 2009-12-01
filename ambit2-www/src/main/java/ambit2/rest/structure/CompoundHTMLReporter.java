@@ -152,7 +152,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				MediaType.TEXT_XML,
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_CSV,
-				ChemicalMediaType.WEKA_ARFF,					
+				ChemicalMediaType.WEKA_ARFF,
+				MediaType.APPLICATION_RDF_TURTLE
 				};
 		String[] image = {
 				"sdf.jpg",
@@ -162,7 +163,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				"xml.png",
 				"pdf.png",
 				"excel.png",
-				"weka.jpg"					
+				"weka.jpg",
+				"rdf.gif"
 				
 		};
 		String q=uriReporter.getRequest().getOriginalRef().getQuery();
