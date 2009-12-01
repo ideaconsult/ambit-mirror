@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.poi.hssf.record.formula.functions.T;
-
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
