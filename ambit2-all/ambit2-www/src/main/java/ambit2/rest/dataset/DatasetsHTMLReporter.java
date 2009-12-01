@@ -111,7 +111,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						MediaType.TEXT_XML,
 						MediaType.APPLICATION_PDF,
 						MediaType.TEXT_CSV,
-						ChemicalMediaType.WEKA_ARFF						
+						ChemicalMediaType.WEKA_ARFF,
+						MediaType.APPLICATION_RDF_TURTLE
 						};
 				String[] image = {
 						"sdf.jpg",
@@ -121,7 +122,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						"xml.png",
 						"pdf.png",
 						"excel.png",
-						"weka.jpg"						
+						"weka.jpg",
+						"rdf.gif"
 						
 				};		
 				for (int i=0;i<mimes.length;i++) {
