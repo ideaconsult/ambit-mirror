@@ -2,10 +2,13 @@ package ambit2.rest;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.OWL;
 
 public class OT {
 	public enum OTClass {
@@ -77,7 +80,13 @@ public class OT {
     public static final Property paramValue = m_model.createProperty(String.format(_NS, "paramValue"));
     public static final Property statisticsSupported = m_model.createProperty(String.format(_NS, "statisticsSupported"));
 
-
+	public static OntModel createModel() throws Exception {
+		OntModel jenaModel = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM,null);
+		jenaModel.setNsPrefix( "ot", OT.NS );
+		jenaModel.setNsPrefix( "owl", OWL.NS );
+		jenaModel.setNsPrefix( "dc", DC.NS );
+		return jenaModel;
+	}
 
 
 

@@ -41,7 +41,12 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			Request req) {
 		return new ModelURIReporter(req);
 	}
-
+	public void header(java.io.OutputStream output, Q query) {
+		super.header(output,query);
+		OT.OTClass.Model.createOntClass(getJenaModel());
+		OT.OTClass.Algorithm.createOntClass(getJenaModel());
+		OT.OTClass.Feature.createOntClass(getJenaModel());
+	};
 	
 	@Override
 	public void processItem(ModelQueryResults item) throws AmbitException {
@@ -54,7 +59,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		model.addProperty(DC.format,"N/A");
 		
 		Individual algorithm = getJenaModel().createIndividual(
-				uriReporter.getBaseReference().toString(),
+				String.format("%s/algorithm/any",uriReporter.getBaseReference().toString()),
 				OT.OTClass.Algorithm.getOntClass(getJenaModel()));
 		model.addProperty(OT.algorithm, algorithm);
 		

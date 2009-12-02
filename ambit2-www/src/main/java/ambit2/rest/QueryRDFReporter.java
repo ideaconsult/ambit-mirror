@@ -9,10 +9,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.vocabulary.DC;
-import com.hp.hpl.jena.vocabulary.OWL;
 
 /**
  * Parent class for RDF reporters
@@ -45,13 +41,6 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 		this.jenaModel = jenaModel;
 	}
 	
-	public OntModel createModel() throws Exception {
-		OntModel jenaModel = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM,null);
-		jenaModel.setNsPrefix( "ot", OT.NS );
-		jenaModel.setNsPrefix( "owl", OWL.NS );
-		jenaModel.setNsPrefix( "dc", DC.NS );
-		return jenaModel;
-	}
 	public void footer(OutputStream output, Q query) {
 		if (mediaType.equals(MediaType.APPLICATION_RDF_XML))
 			//getJenaModel().write(output,"RDF/XML");
@@ -67,7 +56,7 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	};
 	public void header(OutputStream output, Q query) {
 		try {
-			setJenaModel(jenaModel==null?createModel():jenaModel);
+			setJenaModel(jenaModel==null?OT.createModel():jenaModel);
 		} catch (Exception x) {
 			x.printStackTrace();
 		}

@@ -18,6 +18,7 @@ import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseStringType;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDDouble;
 import com.hp.hpl.jena.ontology.Individual;
@@ -61,13 +62,13 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 	}	
 	public  Individual valueProcess(Object item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-		featureValue.addProperty(OT.value,item.toString(),XSDBaseStringType.XSD);	
+		featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(item.toString(),	XSDDatatype.XSDstring));
 		if (feature!=null) featureValue.addProperty(OT.feature,feature);
 		return featureValue;
 	}	
 	public  Individual valueProcess(Number item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-		featureValue.addProperty(OT.value,item.toString(),XSDDouble.XSDdouble);
+		featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(item,	XSDDatatype.XSDdouble));
 		if (feature!=null) featureValue.addProperty(OT.feature,feature);
 		return featureValue;
 	}		
