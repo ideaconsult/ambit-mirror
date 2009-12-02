@@ -26,6 +26,7 @@ import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseStringType;
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDDouble;
 import com.hp.hpl.jena.ontology.Individual;
@@ -145,12 +146,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				*/
 				Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
 				featureValue.addProperty(OT.feature,feature);
-				
-				if (p.getClazz()==Number.class) 
-					featureValue.addProperty(OT.value,value.toString(),XSDDouble.XSDdouble);
-					
-				else
-					featureValue.addProperty(OT.value,value.toString(),XSDBaseStringType.XSD);
+
+				featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(value, 
+							(p.getClazz()==Number.class)?XSDDatatype.XSDdouble: XSDDatatype.XSDstring));
 				
 				i++;
 				dataEntry.addProperty(OT.values,featureValue);
