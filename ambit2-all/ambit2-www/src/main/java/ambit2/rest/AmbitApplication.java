@@ -44,15 +44,10 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
 import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.RDFGraphResource;
-import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorResource;
-import ambit2.rest.algorithm.descriptors.AlgorithmDescriptorTypesResource;
-import ambit2.rest.algorithm.descriptors.DescriptorResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
-import ambit2.rest.algorithm.util.AlgorithmUtilTypesResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -436,40 +431,10 @@ public class AmbitApplication extends Application {
 		
 		
 		Router algoRouter = new Router(getContext());
-		algoRouter.attachDefault(AlgorithmCatalogResource.class);
-		router.attach(AlgorithmCatalogResource.algorithm,algoRouter);
-		algoRouter.attach(String.format("/%s",
-				AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
-					AlgorithmDescriptorTypesResource.class);
-		algoRouter.attach(String.format("/%s/{category}",
-				AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),
-				AlgorithmDescriptorResource.class);		
+		algoRouter.attachDefault(AlgorithmResource.class);
+		router.attach(AlgorithmResource.algorithm,algoRouter);
+		router.attach(AlgorithmResource.resourceID,algoRouter);
 
-		/*
-		for (AlgorithmDescriptorTypesResource.descriptortypes o : AlgorithmDescriptorTypesResource.descriptortypes.values())
-			algoRouter.attach(String.format("/%s/%s/{%s}",
-					AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString(),
-					o.toString(),
-					AlgorithmDescriptorTypesResource.iddescriptor),
-					AlgorithmDescriptorTypesResource.class);			
-		*/
-		algoRouter.attach(String.format("/%s","util"),AlgorithmUtilTypesResource.class);
-		
-		for (AlgorithmUtilTypesResource.utiltypes o : AlgorithmUtilTypesResource.utiltypes.values())
-			algoRouter.attach(String.format("/%s/%s",
-					"util",
-					o.toString()
-					),
-					AlgorithmUtilTypesResource.class);
-		
-	
-		
-		algoRouter.attach(String.format("/rules/{%s}",AllAlgorithmsResource.idalgorithm),AlgorithmResource.class);
-		algoRouter.attach("/rules",AlgorithmResource.class);
-		
-		algoRouter.attach("/test",DescriptorResource.class);
-		algoRouter.attach(String.format("/test/{%s}",AllAlgorithmsResource.idalgorithm),DescriptorResource.class);
-		
 		Router taskRouter = new Router(getContext());
 		taskRouter.attachDefault(TaskResource.class);
 		taskRouter.attach(TaskResource.resourceID, TaskResource.class);

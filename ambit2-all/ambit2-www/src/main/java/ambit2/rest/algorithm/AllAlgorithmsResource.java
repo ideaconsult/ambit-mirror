@@ -28,10 +28,10 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
 			//id,class,name
-			{"1","pKa","ambit2.descriptors.PKASmartsDescriptor",null},
-			{"2","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
-			{"3","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
-			{"4","ToxTree: Eye irritation","eye.EyeIrritationRules",
+			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null},
+			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
+			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
+			{"toxtreeeye","ToxTree: Eye irritation","eye.EyeIrritationRules",
 				new Property[] 
 				{
 				new Property("MolWeight","A", toxTreeReference),
@@ -41,7 +41,7 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 				new Property("Water Solubility","g/l", toxTreeReference),
 				}
 			},
-			{"5","ToxTree: Skin irritation","sicret.SicretRules",
+			{"toxtreeskinirritation","ToxTree: Skin irritation","sicret.SicretRules",
 			new Property[] 
 				{
 				new Property("MolWeight","A", toxTreeReference),
@@ -53,23 +53,23 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 				new Property("Surface Tension","mN/m", toxTreeReference)
 				}
 			},
-			{"6","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
-			{"7","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
-			{"8","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
+			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
+			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
+			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
-			{"9","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
+			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
 			}},
 	};
 
-	public final static String idalgorithm = "idalgorithm";
 	
 	protected void initList() {
 		if (algorithmList==null) {
 			algorithmList = new ArrayList<Algorithm<String>>();
 			for (Object[] d : algorithms) {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
+				alg.setType("Rules");
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2].toString());
@@ -101,7 +101,7 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 		try {
 			initList();
 
-			Object key = getRequest().getAttributes().get(idalgorithm);
+			Object key = getRequest().getAttributes().get(AlgorithmResource.algorithmKey);
 			
 			if (key==null)
 				return algorithmList.iterator();
@@ -128,7 +128,7 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
 					new AlgorithmHTMLReporter(getRequest(),
-							getRequest().getAttributes().get(idalgorithm)==null
+							getRequest().getAttributes().get(AlgorithmResource.algorithmKey)==null
 							),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest()) {
@@ -139,6 +139,14 @@ public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<St
 				}
 			};
 			return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				) {
+			return new StringConvertor(
+					new AlgorithmRDFReporter(getRequest(),variant.getMediaType())
+					,variant.getMediaType());					
 		} else //html 	
 			return new StringConvertor(
 					new CatalogHTMLReporter(getRequest()),MediaType.TEXT_HTML);

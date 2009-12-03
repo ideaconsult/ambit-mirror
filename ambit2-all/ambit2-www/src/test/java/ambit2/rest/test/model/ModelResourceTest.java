@@ -7,10 +7,24 @@ import java.io.InputStreamReader;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.restlet.Client;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Preference;
+import org.restlet.data.Protocol;
+import org.restlet.data.Reference;
+import org.restlet.data.Request;
+import org.restlet.data.Response;
+import org.restlet.data.Status;
 
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.rest.AbstractRDFParser;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.test.ResourceTest;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 public class ModelResourceTest extends ResourceTest {
 	@Override
@@ -53,6 +67,19 @@ public class ModelResourceTest extends ResourceTest {
 		return count>1;
 	}
 	
+	public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
+	throws Exception {
+		AbstractRDFParser<Property> p = new AbstractRDFParser<Property>() {
+			@Override
+			public Property read(OntModel model) throws AmbitException {
+				return null;
+			}
+		};
+		
+		p.process(in);
+		return false;
+	}	
+	
 	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
@@ -68,9 +95,15 @@ public class ModelResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/model/1", line);
+			Assert.assertEquals(String.format("http://localhost:%d/model/1",port), line);
 			count++;
 		}
 		return count==1;
-	}	
+	}
+	@Test
+	public void testPost() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset-id", "1");
+		testAsyncTask(getTestURI(),headers, Status.SUCCESS_OK, String.format("http://localhost:%d/model/1", port));
+	}
 }

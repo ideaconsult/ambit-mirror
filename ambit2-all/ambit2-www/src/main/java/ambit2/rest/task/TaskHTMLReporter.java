@@ -7,7 +7,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.rest.AmbitResource;
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.CatalogURIReporter;
 
 public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
@@ -35,6 +35,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 			t = item.getReference().toString();
 			
 		} catch (Exception x) {
+			x.printStackTrace();
 			status = "Error";
 			t = x.getMessage();
 		} finally {
@@ -47,7 +48,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	public void footer(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			output.write("</div>");
-			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm, getRequest());
+			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

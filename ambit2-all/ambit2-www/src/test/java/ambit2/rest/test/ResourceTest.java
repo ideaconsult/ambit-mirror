@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import org.jmol.util.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -23,6 +24,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
@@ -83,6 +85,35 @@ public abstract class ResourceTest extends DbUnitTest {
 		return client.handle(request);
 	}
 	
+	
+	public void testAsyncTask(String uri,Form headers,Status expected, String uriExpected) throws Exception {
+
+		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers);
+		Status status = response.getStatus();
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER,status);
+		
+		Assert.assertNotNull(response.getLocationRef());
+		Request request = new Request();
+		Client client = new Client(Protocol.HTTP);
+		request.setResourceRef(response.getLocationRef());
+		request.setMethod(Method.GET);
+		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(MediaType.TEXT_URI_LIST));
+		Reference ref = response.getLocationRef();
+		while (status.equals(Status.REDIRECTION_SEE_OTHER) || status.equals(Status.SUCCESS_ACCEPTED)) {
+			System.out.println(status);
+			System.out.println(ref);
+			//System.out.println("poll");
+			Response response1 = client.handle(request);
+			status = response1.getStatus();
+			if (Status.REDIRECTION_SEE_OTHER.equals(status)) {
+				ref = response1.getLocationRef();
+				request.setResourceRef(ref);
+			} 
+		}
+		Assert.assertEquals(uriExpected,ref.toString());
+		Assert.assertEquals(expected, status);
+
+	}	
 	public Response testGet(String uri, MediaType media, Status expectedStatus) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);

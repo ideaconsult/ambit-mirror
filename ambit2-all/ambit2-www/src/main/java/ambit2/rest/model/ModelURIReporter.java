@@ -2,6 +2,7 @@ package ambit2.rest.model;
 
 import java.io.Writer;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.db.exceptions.DbAmbitException;
@@ -23,9 +24,9 @@ public class ModelURIReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	@Override
 	public String getURI(String ref, ModelQueryResults model) {
 		return
-		String.format("%s%s/%d", 
+		String.format("%s%s/%s", 
 				ref,
-				ModelResource.resource,model==null?"":model.getId());
+				ModelResource.resource,model==null?"":Reference.encode(model.getQueryID().toString()));
 	}
 	public void footer(Writer output, Q query) {};
 	public void header(Writer output, Q query) {};

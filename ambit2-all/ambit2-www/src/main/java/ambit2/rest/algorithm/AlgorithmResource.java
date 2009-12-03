@@ -35,7 +35,9 @@ import ambit2.rest.query.QueryResource;
  */
 public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
 	protected AllAlgorithmsResource catalog;
-
+	public final static String algorithm = "/algorithm";	
+	public final static String algorithmKey =  "idalgorithm";
+	public final static String resourceID =  String.format("%s/{%s}",algorithm,algorithmKey);
 	public enum headers  {
 		dataset_id {
 			@Override
@@ -53,7 +55,6 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		super.doInit();
 		catalog = new AllAlgorithmsResource();
 		catalog.init(getContext(),getRequest(),getResponse());
-		catalog.setCategory("rules");
 	}
 	@Override
 	public Representation get(Variant variant) {
@@ -62,21 +63,19 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 	@Override
 	public IProcessor<IQueryRetrieval<ModelQueryResults>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
-		if (getRequest().getAttributes().get(AllAlgorithmsResource.idalgorithm)!=null) {
+		if (getRequest().getAttributes().get(algorithmKey)!=null) {
 			createNewObject(entity);
 			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 			getResponse().setEntity(null);
@@ -87,7 +86,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 	protected ModelQueryResults createObjectFromHeaders(Form requestHeaders, Representation entity)
 			throws ResourceException {
 		
-		Object key = getRequest().getAttributes().get(AllAlgorithmsResource.idalgorithm);
+		Object key = getRequest().getAttributes().get(algorithmKey);
 		if (key==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Algorithm not defined");
 		key = Reference.decode(key.toString());
 		Algorithm a = catalog.find(key); //ok, create object

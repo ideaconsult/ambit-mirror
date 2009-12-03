@@ -54,7 +54,8 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 		Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(property),
 				OT.OTClass.Feature.getOntClass(getJenaModel()));
 		feature.addProperty(DC.title, property.getName());
-		feature.addProperty(DC.identifier,propertyReporter.getURI(property));
+		feature.addLiteral(DC.identifier,
+				 getJenaModel().createTypedLiteral(propertyReporter.getURI(property),XSDDatatype.XSDanyURI));
 		feature.addProperty(OT.units,property.getUnits());
 		feature.addProperty(OWL.sameAs,property.getLabel());
 		feature.addProperty(OT.hasSource, referenceReporter.getURI(property.getReference()));
