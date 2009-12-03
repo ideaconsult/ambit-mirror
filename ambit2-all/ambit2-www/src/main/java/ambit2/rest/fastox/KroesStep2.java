@@ -25,7 +25,7 @@ public class KroesStep2 extends ModelResource {
 		return query;
 	}
 	@Override
-	protected ReadModel getModelQuery(int idmodel) {
+	protected ReadModel getModelQuery(Object idmodel) throws ResourceException {
 		ReadModel query = super.getModelQuery(idmodel);
 		query.setValue(null);
 		query.setFieldname("ToxTree: ILSI/Kroes decision tree for TTC");
