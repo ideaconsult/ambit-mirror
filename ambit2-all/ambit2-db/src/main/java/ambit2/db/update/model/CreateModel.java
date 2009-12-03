@@ -20,9 +20,10 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	protected Dictionary dictPredictors;
 	protected Dictionary dictDependent;
 	protected CreateDictionary createDictionary;
-	
+	protected int sql_size = 0;
 	public static final String create_sql = 
-		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,content) SELECT null,?,?,t1.idtemplate,t2.idtemplate,? from template t1 join template t2 where t1.name=? and t2.name =?"
+		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,content) " +
+		"SELECT null,?,?,t1.idtemplate,t2.idtemplate,? from template t1 join template t2 where t1.name=? and t2.name =? ";
 	;
 
 	public CreateModel(ModelQueryResults ref) {
@@ -122,10 +123,12 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	 		}	
 		sqls.add(create_sql);
 		//for (String s:sqls) System.out.println(s);
+		sql_size = sqls.size();
 		return sqls.toArray(new String[sqls.size()]);
 	}
 	public void setID(int index, int id) {
-		getObject().setId(id);
+		if (index== (sql_size-1))
+			getObject().setId(id);
 	}
 	@Override
 	public boolean returnKeys(int index) {

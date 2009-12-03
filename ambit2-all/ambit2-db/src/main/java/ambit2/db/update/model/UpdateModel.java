@@ -15,7 +15,7 @@ import ambit2.db.update.AbstractObjectUpdate;
  */
 public class UpdateModel extends AbstractObjectUpdate<ModelQueryResults>{
 
-	public static final String[] update_sql = {"update models set content=? where idmodel=?"};
+	public static final String update_sql = "update models set content=? where %s";
 
 	public UpdateModel(ModelQueryResults ref) {
 		super(ref);
@@ -26,13 +26,23 @@ public class UpdateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getObject().getContent()));
-		params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
-		return params;
-		
+		if (getObject().getId() != null) 
+			params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+		else
+		if (getObject().getName()!=null) 
+			params.add(new QueryParam<String>(String.class, getObject().getName()));
+		else
+			throw new AmbitException("no model specified");
+		return params.size()==0?null:params;		
+				
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return update_sql;
+		if (getObject().getId()!= null) {
+			return new String[] {String.format(update_sql,ReadModel.whereID)};
+		} else	if (getObject().getName()!= null) 
+			return new String[] {String.format(update_sql,ReadModel.whereName)};
+		throw new AmbitException("no model specified");
 	}
 	public void setID(int index, int id) {
 			
