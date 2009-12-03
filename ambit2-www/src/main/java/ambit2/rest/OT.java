@@ -20,6 +20,7 @@ public class OT {
 		FeatureValue,
 		Algorithm,
 		Model,
+		Parameter,
 		Validation,
 		ValidationInfo;
 		public String getNS() {
@@ -57,6 +58,7 @@ public class OT {
     public static final Property conformer = m_model.createProperty(String.format(_NS, "conformer"));
     public static final Property isA = m_model.createProperty(String.format(_NS, "isA"));
     public static final Property model = m_model.createProperty(String.format(_NS, "model"));
+    public static final Property parameters = m_model.createProperty(String.format(_NS, "parameters"));
     public static final Property report = m_model.createProperty(String.format(_NS, "report"));
     public static final Property algorithm = m_model.createProperty(String.format(_NS, "algorithm"));
     public static final Property dependentVariables = m_model.createProperty(String.format(_NS, "dependentVariables"));
