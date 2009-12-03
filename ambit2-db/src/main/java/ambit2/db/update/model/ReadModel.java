@@ -27,7 +27,7 @@ public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, 
 		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,content\n"+
 		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors %s";
 	protected static String whereID = " idmodel = ? ";
-	protected static String whereName = " m.name %s ?";
+	protected static String whereName = " m.name %s substr(?,1,45)";
 	/**
 	 * 
 	 */

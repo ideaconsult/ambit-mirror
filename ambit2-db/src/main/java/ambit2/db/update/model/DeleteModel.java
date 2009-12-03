@@ -10,7 +10,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class DeleteModel extends AbstractObjectUpdate<ModelQueryResults> {
 
-	public static final String[] delete_sql = {"delete from models where idmodel=?"};
+	public static final String delete_sql = "delete from models where %s";
 
 	public DeleteModel(ModelQueryResults ref) {
 		super(ref);
@@ -20,13 +20,23 @@ public class DeleteModel extends AbstractObjectUpdate<ModelQueryResults> {
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
-		return params;
+		if (getObject().getId() != null) 
+			params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+		else
+		if (getObject().getName()!=null) 
+			params.add(new QueryParam<String>(String.class, getObject().getName()));
+		else
+			throw new AmbitException("no model specified");
+		return params.size()==0?null:params;		
 		
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return delete_sql;
+		if (getObject().getId()!= null) {
+			return new String[] {String.format(delete_sql,ReadModel.whereID)};
+		} else	if (getObject().getName()!= null) 
+			return new String[] {String.format(delete_sql,ReadModel.whereName)};
+		throw new AmbitException("no model specified");
 	}
 	public void setID(int index, int id) {
 			
