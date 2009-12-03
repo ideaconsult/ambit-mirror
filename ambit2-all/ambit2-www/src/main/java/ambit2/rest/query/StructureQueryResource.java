@@ -62,7 +62,7 @@ import ambit2.rest.structure.CompoundURIReporter;
  */
 public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructureRecord>>  
 									extends QueryResource<Q,IStructureRecord> {
-
+	public static final String feature_URI = "feature_uri[]";
 	protected String media;
 	protected Template template;
 	protected enum QueryType  {smiles,url};
@@ -84,7 +84,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			profile.setId(-1);				
 			
 			Form form = request.getResourceRef().getQueryAsForm();
-			String[] featuresURI =  form.getValuesArray("features");
+			String[] featuresURI =  form.getValuesArray(feature_URI);
 
 			for (String featureURI:featuresURI) 
 				readFeatures(featureURI, profile);
