@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.junit.Test;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 
 import ambit2.rest.test.ResourceTest;
 
@@ -14,6 +16,10 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d/algorithm", port);
 	}
+	@Test
+	public void testRDFXML() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+	}	
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
@@ -28,7 +34,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 6;
+		return count == 9;
 	}	
 	
 	@Test
@@ -42,9 +48,22 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
+		//	System.out.println(line);
 			count++;
 		}
 		return count > 0;
 	}	
+	@Test
+	public void testPost() throws Exception {
+		Form headers = new Form();  
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreecramer", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"ToxTree%3A+Cramer+rules"));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreecramer2", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/3", port));
+		
+	}
 }

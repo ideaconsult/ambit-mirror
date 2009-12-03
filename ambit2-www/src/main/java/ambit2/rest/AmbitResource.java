@@ -20,7 +20,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
@@ -123,18 +123,10 @@ public class AmbitResource extends ServerResource {
 			{"/compound/1/model/3","Specific model prediction",format,"GET","Yes"},
 			
 			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
-			{AlgorithmCatalogResource.algorithm,"All types of algorithms",format,"GET","Yes"},
-			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,AlgorithmCatalogResource.algorithmtypes.descriptorcalculation.toString()),"Descriptor calculation algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"preprocessing"),"Feature preprocessing",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"Learinng algorithms"),"Learning algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"clustering"),"Clustering algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"util"),"Utility algorithms",format,"GET","Under development"},
-			{String.format("%s/%s",AlgorithmCatalogResource.algorithm,"rules"),"Rules",format,"GET","Yes"},
-			
 
-			{String.format("%s/rules",AlgorithmCatalogResource.algorithm),"get a list of all available models",format,"GET","Yes"},
-			{String.format("%s/rules/1",AlgorithmCatalogResource.algorithm),"get the representation of an algorthm",format,"GET","Yes"},
-			{String.format("%s/rules/{id}",AlgorithmCatalogResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
+			{String.format("%s",AlgorithmResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
+			{String.format("%s/1",AlgorithmResource.algorithm),"get the representation of an algorthm",format,"GET","Yes"},
+			{String.format("%s/{id}",AlgorithmResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
 					
 			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},

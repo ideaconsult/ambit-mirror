@@ -50,7 +50,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void footer(Writer output, Iterator<Algorithm> query) {
 		try {
 			output.write("</table>");
-			AmbitResource.writeHTMLFooter(output, AlgorithmCatalogResource.algorithm+"/rules", getRequest());
+			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

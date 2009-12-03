@@ -18,8 +18,11 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.rest.AbstractRDFParser;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.XMLTags;
@@ -41,6 +44,18 @@ public class PropertyResourceTest extends ResourceTest {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
 	
+	public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
+	throws Exception {
+		AbstractRDFParser<Property> p = new AbstractRDFParser<Property>() {
+			@Override
+			public Property read(OntModel model) throws AmbitException {
+				return null;
+			}
+		};
+		
+		p.process(in);
+		return false;
+	}	
 	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);

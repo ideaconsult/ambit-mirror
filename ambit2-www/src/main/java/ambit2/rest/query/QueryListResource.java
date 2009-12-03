@@ -26,7 +26,6 @@ public class QueryListResource extends AlgorithmCatalogResource {
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		setCategory("");
 		
 		ArrayList<String> q = new ArrayList<String>();
 		

@@ -1,13 +1,9 @@
 package ambit2.rest.algorithm;
 
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -22,37 +18,26 @@ import ambit2.rest.StringConvertor;
  * @author nina
  *
  */
-public class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,IProcessor<Iterator<T>, Representation>> {
-	public final static String algorithm = "/algorithm";	
-	public final static String algorithmKey =  "algorithm_id";
+public abstract class AlgorithmCatalogResource<T> extends AbstractResource<Iterator<T>,T,IProcessor<Iterator<T>, Representation>> {
 
-	public enum algorithmtypes  {
-		util,preprocessing,clustering,descriptorcalculation,learning,rules
-	};
-	
-	protected String category = "";
+
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST});
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
+				MediaType.TEXT_XML,
+				MediaType.TEXT_URI_LIST,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES	
+				});
 		
 	}
-	@Override
-	protected Iterator<T> createQuery(Context context, Request request,
-			Response response) throws ResourceException {
-		ArrayList<T> q = new ArrayList<T>();
-		for (algorithmtypes d : algorithmtypes.values())
-			q.add((T)String.format("%s/%s","algorithm",d.toString()));	
-		return q.iterator();
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
+
+
 	public static String getAlgorithmURI(String category) {
-		return String.format("%s%s/{%s}",algorithm,category,algorithmKey);
+		return String.format("%s%s/{%s}",AlgorithmResource.algorithm,category,AlgorithmResource.algorithmKey);
 	}
 	@Override
 	public IProcessor<Iterator<T>, Representation> createConvertor(

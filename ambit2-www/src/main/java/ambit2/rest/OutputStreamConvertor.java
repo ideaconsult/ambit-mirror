@@ -2,7 +2,6 @@ package ambit2.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;

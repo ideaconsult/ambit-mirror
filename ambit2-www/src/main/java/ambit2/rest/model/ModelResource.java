@@ -54,15 +54,15 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	
 	protected String category = "";
 
-	protected Integer getModelID() throws ResourceException {
-		Object id = getRequest().getAttributes().get(resourceKey);
+	protected Object getModelID(Object id) throws ResourceException {
+		
 		if (id != null) try {
-//			ModelQueryResults model = new ModelQueryResults();
+			id = Reference.decode(id.toString());
 			collapsed = false;
-			return new Integer(Reference.decode(id.toString()));
+			return new Integer(id.toString());
 			
 		} catch (NumberFormatException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			return id;
 		} catch (Exception x) {
 			return null;
 		} else return null;
@@ -79,8 +79,8 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		ReadModel query = new ReadModel();
-		query.setValue(getModelID());
+		
+		ReadModel query = getModelQuery(getModelID(getRequest().getAttributes().get(resourceKey)));
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		String name = form.getFirstValue("search");
 		if (name!=null) query.setFieldname(name);
@@ -137,25 +137,26 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 			try {
 				final String resultRef ;
 				final IQueryRetrieval<IStructureRecord> query;
-				Integer idmodel = getModelID();
+				Object idmodel = getModelID(getRequest().getAttributes().get(resourceKey));
 				final ModelQueryResults themodel = new ModelQueryResults();
 				if ((entity != null) && MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType(),true)) {
 					Form form = new Form(entity);
-					if (idmodel == null) idmodel = Integer.parseInt(form.getFirstValue("idmodel"));
-					themodel.setId(idmodel);
+					if (idmodel == null) idmodel = getModelID(form.getFirstValue("idmodel"));
+					
+					if (idmodel == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					
+					themodel.setQueryID(idmodel);
+					
 					IStructureRecord record = new StructureRecord(
 							Integer.parseInt(form.getFirstValue("idchemical")),
 							Integer.parseInt(form.getFirstValue("idstructure")),null,null);
 					query = new QueryStructureByID(record);
 					CompoundURIReporter<IQueryRetrieval<IStructureRecord>> r = 
 							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());
-					if (idmodel>0)
-						resultRef = String.format("%s/model/%d",r.getURI(record),idmodel);
-					else
-						resultRef = String.format("%s/model",r.getURI(record));
+					resultRef = String.format("%s/model/%s",r.getURI(record),idmodel==null?"":idmodel);
 				} else {
 					if (idmodel == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-					themodel.setId(idmodel);
+					themodel.setQueryID(idmodel);
 					Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
 					String id = requestHeaders.getFirstValue("dataset-id");  				
 					query = new QueryDatasetByID();
@@ -235,8 +236,15 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		return getResponse().getEntity();
 	}	
 	
-	protected ReadModel getModelQuery(int idmodel) {
-		return new ReadModel(idmodel);
+	protected ReadModel getModelQuery(Object idmodel) throws ResourceException {
+		if (idmodel == null) return new ReadModel();
+		else if (idmodel instanceof Integer)
+			return new ReadModel((Integer)idmodel);
+		else {
+			ReadModel query = new ReadModel(null);
+			query.setFieldname(idmodel.toString());
+			return query;
+		}
 	}
 	
 }

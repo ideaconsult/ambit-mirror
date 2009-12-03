@@ -16,6 +16,7 @@ import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.vocabulary.DC;
 
@@ -53,7 +54,8 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		Individual model = getJenaModel().createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Model.getOntClass(getJenaModel()));
 		model.addProperty(DC.title, item.getName());
-		model.addProperty(DC.identifier,uriReporter.getURI(item));
+		model.addLiteral(DC.identifier,
+				 getJenaModel().createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
 		model.addProperty(DC.creator,"N/A");
 		model.addProperty(DC.date,"N/A");
 		model.addProperty(DC.format,"N/A");
