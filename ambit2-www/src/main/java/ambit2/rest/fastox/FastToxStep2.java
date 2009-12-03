@@ -51,7 +51,7 @@ public class FastToxStep2 extends ModelResource {
 	*/
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),collapsed) {
+				new ModelHTMLReporter(getRequest(),false) {
 					
 					@Override
 					public void header(Writer w,

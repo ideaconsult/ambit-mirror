@@ -53,14 +53,19 @@ public class PropertyModelResource<T> extends PropertyTemplateResource<T> {
 		} finally {
 			field.setValue(record);
 		}
+		ModelQueryResults template = new ModelQueryResults();
+		Object id = request.getAttributes().get("idmodel");
 		try {
 			field.setFieldname(null);
-			Object id = request.getAttributes().get("idmodel");
 			if (id != null) {
-				ModelQueryResults template = new ModelQueryResults();
-				template.setId(Integer.parseInt(id.toString()));
+				id = Reference.decode(id.toString());
+				template.setQueryID(Integer.parseInt(id.toString()));
 				field.setFieldname(template);
-			} 
+			} else 
+				field.setFieldname(null);
+		} catch (NumberFormatException x) {
+			template.setQueryID(id.toString());
+			field.setFieldname(template);			
 		} catch (Exception x) {
 			field.setFieldname(null);
 		}

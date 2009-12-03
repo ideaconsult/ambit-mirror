@@ -14,7 +14,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.AbstractDBProcessor;
-import ambit2.db.DbReader;
+import ambit2.db.DbReaderStructure;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
@@ -72,7 +72,7 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
 			p1.add(calculator);
 			p1.setAbortOnError(true);
 			
-			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+			DbReaderStructure batch = new DbReaderStructure();
 			batch.setProcessorChain(p1);
 			
     		batch.setConnection(getConnection());

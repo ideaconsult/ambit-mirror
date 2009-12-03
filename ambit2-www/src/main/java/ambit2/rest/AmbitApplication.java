@@ -45,7 +45,6 @@ import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AlgorithmResource;
-import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.RDFGraphResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
