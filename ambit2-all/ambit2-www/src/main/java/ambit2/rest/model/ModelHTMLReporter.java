@@ -33,7 +33,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed) {
 		super(request,collapsed);
 		templateReporter = new OntologyURIReporter(request);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,true);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,collapsed);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request) {
