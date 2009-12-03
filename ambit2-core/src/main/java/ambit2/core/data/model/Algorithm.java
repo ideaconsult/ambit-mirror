@@ -10,10 +10,36 @@ import ambit2.base.data.Template;
  *
  */
 public class Algorithm<T> implements Comparable<Algorithm<T>> {
+	public enum AlgorithmFormat {JAVA_CLASS,PMML,WEKA};
 	protected String id;
 	protected String name;
-	protected List<String> parameters;
+	protected List<Parameter> parameters;
 	protected T content;
+	protected AlgorithmFormat format=AlgorithmFormat.JAVA_CLASS;
+	protected String type;
+
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	protected String description;
+	protected List<String> statistics;
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public AlgorithmFormat getFormat() {
+		return format;
+	}
+	public void setFormat(AlgorithmFormat format) {
+		this.format = format;
+	}
 	protected Template input;
 	public Template getInput() {
 		return input;
@@ -46,10 +72,10 @@ public class Algorithm<T> implements Comparable<Algorithm<T>> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<String> getParameters() {
+	public List<Parameter> getParameters() {
 		return parameters;
 	}
-	public void setParameters(List<String> parameters) {
+	public void setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
 	}
 	public List<String> getStatistics() {
@@ -58,7 +84,7 @@ public class Algorithm<T> implements Comparable<Algorithm<T>> {
 	public void setStatistics(List<String> statistics) {
 		this.statistics = statistics;
 	}
-	protected List<String> statistics;
+	
 	@Override
 	public String toString() {
 		return getName();
