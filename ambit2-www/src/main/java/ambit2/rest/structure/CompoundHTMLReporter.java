@@ -27,6 +27,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.query.StructureQueryResource;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -121,7 +122,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected String templates(Reference baseReference) throws IOException {
 		StringBuilder w = new StringBuilder();
 		w.append("<input type='submit' value='Retrieve data'><p>");
-		w.append("<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"features\">\n");
+		w.append(String.format(
+				"<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"%s\">\n",
+				StructureQueryResource.feature_URI));
 		w.append("<option value=\"\">Default</option>\n");
 		String[][] options= {
 				{"template/All/Identifiers/view/tree","Identifiers"},
@@ -492,8 +495,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
 							value));
 					*/
-					b.append(String.format("<a href=\"%s/compound?features=%s/feature_definition/%d&property=%s&search=%s\">%s</a>", 
+					b.append(String.format("<a href=\"%s/compound?%s=%s/feature_definition/%d&property=%s&search=%s\">%s</a>", 
 						uriReporter.getBaseReference(),
+						StructureQueryResource.feature_URI,
 						uriReporter.getBaseReference(),
 						property.getId(),
 						Reference.encode(property.getName()),
