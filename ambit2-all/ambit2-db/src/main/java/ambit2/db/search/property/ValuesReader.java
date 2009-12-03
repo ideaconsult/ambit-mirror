@@ -69,7 +69,8 @@ public class ValuesReader extends ValuesByTemplateReader<IStructureRecord> {
 	}
 	@Override
 	public IStructureRecord process(IStructureRecord target) throws AmbitException {
-		return super.process(reader.process(target));
+		IStructureRecord record = super.process(reader.process(target));
+		return record != null?record:target;
 	}
 	@Override
 	public void close() throws SQLException {
