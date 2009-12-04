@@ -42,7 +42,7 @@ import ambit2.rest.structure.CompoundURIReporter;
  *
  */
 public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
-
+	public final static String dataset_uri = "dataset_uri";
 	public final static String resource = "/model";	
 	public final static String resourceKey =  "idmodel";
 	public final static String resourceID =  String.format("%s/{%s}",resource,resourceKey);
