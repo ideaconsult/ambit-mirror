@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ota="http://www.opentox.org/algorithms.owl#"
+  xml:base="http://www.opentox.org/algorithmTypes.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1.1</owl:versionInfo>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Algorithm Types, defined by OpenTox</rdfs:comment>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#SimilarityDistance">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DescriptorCalculation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Clustering">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#MSDMTox"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#QuantumChemical">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DescriptorCalculation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Topological">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DescriptorCalculation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Utility">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#AlgorithmType"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#PharmacophoreGeneration">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DescriptorCalculation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#PatternMining">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DescriptorCalculation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Preprocessing">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#AlgorithmType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DescriptorCalculation">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#AlgorithmType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#DataCleanup">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Preprocessing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Regression">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Learning"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#PhysicoChemical">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#DescriptorCalculation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#FeatureSelection">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Preprocessing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Classification">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Learning"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Discretization">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Preprocessing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Visualisation">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Utility"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Normalization">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Preprocessing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#MSDMTox">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#AlgorithmType"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Generation3D">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Utility"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Learning">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#MSDMTox"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#SimilarityDistanceCalculation">
+    <rdfs:subClassOf rdf:resource="http://www.opentox.org/algorithms.owl#Utility"/>
+  </owl:Class>
+  <owl:FunctionalProperty rdf:about="http://www.opentox.org/algorithms.owl#supervised">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#PatternMining"/>
+          <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#FeatureSelection"/>
+          <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Discretization"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="http://www.opentox.org/algorithms.owl#singleTargetVariable">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Classification"/>
+          <owl:Class rdf:about="http://www.opentox.org/algorithms.owl#Regression"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="http://www.opentox.org/algorithms.owl#lazyLearning">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.opentox.org/algorithms.owl#MSDMTox"/>
+  </owl:FunctionalProperty>
+  <ota:FeatureSelection rdf:about="http://www.opentox.org/algorithms.owl#FeatureSelectionSupervised">
+    <ota:supervised rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:supervised>
+  </ota:FeatureSelection>
+  <ota:Classification rdf:about="http://www.opentox.org/algorithms.owl#ClassificationEagerManyTargets">
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:lazyLearning>
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:singleTargetVariable>
+  </ota:Classification>
+  <ota:Classification rdf:about="http://www.opentox.org/algorithms.owl#ClassificationLazySingleTarget">
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:singleTargetVariable>
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:lazyLearning>
+  </ota:Classification>
+  <ota:Discretization rdf:about="http://www.opentox.org/algorithms.owl#DiscretizationSupervised">
+    <ota:supervised rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:supervised>
+  </ota:Discretization>
+  <ota:Regression rdf:about="http://www.opentox.org/algorithms.owl#RegressionLazyManyTargets">
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:singleTargetVariable>
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:lazyLearning>
+  </ota:Regression>
+  <ota:Regression rdf:about="http://www.opentox.org/algorithms.owl#RegressionLazySingleTarget">
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:singleTargetVariable>
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:lazyLearning>
+  </ota:Regression>
+  <ota:Regression rdf:about="http://www.opentox.org/algorithms.owl#RegressionEagerManyTargets">
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:singleTargetVariable>
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:lazyLearning>
+  </ota:Regression>
+  <ota:Discretization rdf:about="http://www.opentox.org/algorithms.owl#DiscretizationUnsupervised">
+    <ota:supervised rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:supervised>
+  </ota:Discretization>
+  <ota:PatternMining rdf:about="http://www.opentox.org/algorithms.owl#PatternMiningUnsupervised">
+    <ota:supervised rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:supervised>
+  </ota:PatternMining>
+  <ota:Regression rdf:about="http://www.opentox.org/algorithms.owl#RegressionEagerSingleTarget">
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:lazyLearning>
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:singleTargetVariable>
+  </ota:Regression>
+  <ota:PatternMining rdf:about="http://www.opentox.org/algorithms.owl#PatternMiningSupervised">
+    <ota:supervised rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:supervised>
+  </ota:PatternMining>
+  <ota:Classification rdf:about="http://www.opentox.org/algorithms.owl#ClassificationEagerSingleTarget">
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:singleTargetVariable>
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:lazyLearning>
+  </ota:Classification>
+  <ota:FeatureSelection rdf:about="http://www.opentox.org/algorithms.owl#FeatureSelectionUnsupervised">
+    <ota:supervised rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:supervised>
+  </ota:FeatureSelection>
+  <ota:Classification rdf:about="http://www.opentox.org/algorithms.owl#ClassificationLazyManyTargets">
+    <ota:singleTargetVariable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</ota:singleTargetVariable>
+    <ota:lazyLearning rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</ota:lazyLearning>
+  </ota:Classification>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4.1, Build 536)  http://protege.stanford.edu -->
