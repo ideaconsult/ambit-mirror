@@ -25,7 +25,7 @@ public class AmbitStatusService extends StatusService {
 			StringWriter w = new StringWriter();
 			AmbitResource.writeHTMLHeader(w, status.getName(), request);
 			
-			w.write(String.format("Error :<br>Code: %d<br>Name: %s<br>URI: %s<br>Description: %s<br>",
+			w.write(String.format("ERROR :<br>Code: %d<br>Name: %s<br>URI: %s<br>Description: %s<br>",
 					status.getCode(),
 					status.getName(),
 					status.getUri(),

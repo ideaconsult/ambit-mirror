@@ -45,7 +45,7 @@ public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepres
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-	            		//x.printStackTrace();
+	            		
 	            	} finally {
 	            		try {
 	            			if (stream !=null) stream.flush(); 

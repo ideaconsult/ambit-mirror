@@ -57,7 +57,7 @@ public abstract class CatalogRDFReporter<T> extends ListReporter<T,Writer> {
 		try {
 			setJenaModel(jenaModel==null?OT.createModel():jenaModel);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.warn(x);
 		}	}
 
 	public void close() throws Exception {

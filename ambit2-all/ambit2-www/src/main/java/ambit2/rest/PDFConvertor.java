@@ -55,10 +55,10 @@ public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Do
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-	            		x.printStackTrace();
+	            		logger.error(x);
 	            	} finally {
-	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
-	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
+	            		try {getReporter().close(); } catch (Exception x) { }
+	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { }
 	            		pdfWriter.close();
 	            	}
 	            }

@@ -27,8 +27,6 @@ import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseStringType;
-import com.hp.hpl.jena.datatypes.xsd.impl.XSDDouble;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -155,7 +153,6 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			}
 			
 		} catch (Exception x) {
-			x.printStackTrace();
 			logger.error(x);
 		}
 		

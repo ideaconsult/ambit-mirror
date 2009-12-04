@@ -62,7 +62,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 				item.getDataset().getName(),
 				uriReporter.getURI(item))
 				);
-		} catch (Exception x) {x.printStackTrace();}
+		} catch (Exception x) {logger.error(x);}
 	}
 
 }

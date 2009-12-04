@@ -159,8 +159,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			*/
 			output.write("</div>");
 		} catch (Exception x) {
-			x.printStackTrace();
-			Logger.getLogger(getClass().getName()).severe(x.getMessage());
+			logger.warn(x);
 		}
 	}
 

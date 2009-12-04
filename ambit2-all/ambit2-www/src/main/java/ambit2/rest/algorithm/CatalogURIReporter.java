@@ -38,7 +38,7 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 			output.write(getURI(item));
 			output.flush();
 		} catch (IOException x) {
-			x.printStackTrace();
+			logger.warn(x);
 		}
 	}	
 	public String getURI(String ref, T item) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.data.Reference;
@@ -53,7 +54,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 				 } catch (ResourceException x) {
 					 throw x;
                  } catch (Exception e) {
-                	 e.printStackTrace();
+                	 Logger.getLogger(getClass().getName()).getLogger(e.toString());
                 	 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,e.getMessage()));
                  } finally {
                 	 

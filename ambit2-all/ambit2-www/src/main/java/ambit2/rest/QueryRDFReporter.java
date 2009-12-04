@@ -58,7 +58,7 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 		try {
 			setJenaModel(jenaModel==null?OT.createModel():jenaModel);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.error(x);
 		}
 	};
 }
