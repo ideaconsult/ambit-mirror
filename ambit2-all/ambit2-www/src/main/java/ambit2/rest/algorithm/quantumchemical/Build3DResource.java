@@ -22,7 +22,7 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.core.io.MDLWriter;
 import ambit2.mopac.MopacShell;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.error.EmptyMoleculeException;
 
@@ -31,7 +31,7 @@ import ambit2.rest.error.EmptyMoleculeException;
  * @author nina
  *
  */
-public class Build3DResource extends AlgorithmCatalogResource {
+public class Build3DResource extends CatalogResource {
 	
 	public static String resource = "build3d";
 	protected String smiles = null;

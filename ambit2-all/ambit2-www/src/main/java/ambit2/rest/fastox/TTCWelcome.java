@@ -8,9 +8,9 @@ import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import ambit2.rest.algorithm.CatalogResource;
 
-public class TTCWelcome extends AlgorithmCatalogResource<String>{
+public class TTCWelcome extends CatalogResource<String>{
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
 		Response response) throws ResourceException {
