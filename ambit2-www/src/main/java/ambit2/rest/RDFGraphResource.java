@@ -22,6 +22,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.descriptors.processors.DescriptorsFactory;
+import ambit2.model.AbstractModel;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -122,11 +123,13 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 			if (useStatic) {
 				if (defaultOntology==null) {
 					model = OT.createModel();
+
 					readOWL(DescriptorsFactory.class.getClassLoader().getResourceAsStream("ambit2/descriptors/descriptor-algorithms.owl"),
-							model);
+						model);
 					readOWL(DescriptorsFactory.class.getClassLoader().getResourceAsStream("ambit2/descriptors/echa-endpoints.owl"),
-							model);				
-					readOWL(DescriptorsFactory.class.getClassLoader().getResourceAsStream("ambit2/model/AlgorithmTypes.owl"),
+							model);	
+
+					readOWL(AbstractModel.class.getClassLoader().getResourceAsStream("ambit2/model/AlgorithmTypes.owl"),
 							model);		
 					defaultOntology = model;	
 				} else model = defaultOntology;
