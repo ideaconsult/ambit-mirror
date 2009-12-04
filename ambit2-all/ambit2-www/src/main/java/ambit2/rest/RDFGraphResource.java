@@ -213,20 +213,20 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 							writer.write(String.format("<a href='%s?object=%s&search=%s'>%s</a>",
 									"",
 									Reference.encode(st.getSubject().toString()),
-									search,
+									search==null?"":search,
 									st.getSubject().getLocalName()));
 							
 							writer.write(String.format("&nbsp;<a href='%s?subject=%s&search=%s'>%s</a>",
 									"",
 									Reference.encode(st.getSubject().toString()),
-									search,
+									search==null?"":search,
 									"[Define]"));	
 							
 							writer.write("</td><td>");
 							writer.write(String.format("<a href='%s?predicate=%s&search=%s'>%s</a>",
 									"",
 									Reference.encode(st.getPredicate().toString()),
-									search,
+									search==null?"":search,
 									st.getPredicate().getLocalName()));							
 							writer.write("</td><td>");
 							
@@ -235,13 +235,13 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 										"",
 										"object",
 										Reference.encode(st.getObject().toString()),
-										search,
+										search==null?"":search,
 										((Resource)st.getObject()).getLocalName()));
 								
 								writer.write(String.format("&nbsp;<a href='%s?subject=%s&search=%s'>%s</a>",
 										"",
 										Reference.encode(st.getObject().toString()),
-										search,
+										search==null?"":search,
 										"[Define]"));									
 						
 							} else {
@@ -249,7 +249,7 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 										"",
 										"literal",
 										Reference.encode(((Literal)st.getObject()).getString()),
-										search,
+										search==null?"":search,
 										((Literal)st.getObject()).getString()));	
 							}
 						
