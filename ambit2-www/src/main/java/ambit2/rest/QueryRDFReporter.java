@@ -43,8 +43,8 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	
 	public void footer(OutputStream output, Q query) {
 		if (mediaType.equals(MediaType.APPLICATION_RDF_XML))
-			//getJenaModel().write(output,"RDF/XML");
-			getJenaModel().write(output,"RDF/XML-ABBREV");	
+			getJenaModel().write(output,"RDF/XML");
+			//getJenaModel().write(output,"RDF/XML-ABBREV");	
 		else if (mediaType.equals(MediaType.APPLICATION_RDF_TURTLE))
 			getJenaModel().write(output,"TURTLE");
 		else if (mediaType.equals(MediaType.TEXT_RDF_N3))
