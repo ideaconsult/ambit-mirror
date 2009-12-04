@@ -125,8 +125,16 @@ public class AmbitResource extends ServerResource {
 			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
 
 			{String.format("%s",AlgorithmResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
-			{String.format("%s/1",AlgorithmResource.algorithm),"get the representation of an algorthm",format,"GET","Yes"},
-			{String.format("%s/{id}",AlgorithmResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
+			{String.format("%s/pka",AlgorithmResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecramer",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecramer2",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Extended Cramer rules\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreeeye",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Eye irritation\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreeskinirritation",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Skin irritation\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreemic",AlgorithmResource.algorithm),"get the representation of \"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreemichaelacceptors",AlgorithmResource.algorithm),"get the representation of \"ToxTree: Michael acceptors\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecarc",AlgorithmResource.algorithm),"get the representation of \"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreekroes",AlgorithmResource.algorithm),"get the representation of \"ToxTree: ILSI/Kroes decision tree for TTC\" algorithm",format,"GET","Yes"},
+			{String.format("%s/pka",AlgorithmResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
 					
 			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
@@ -171,7 +179,7 @@ public class AmbitResource extends ServerResource {
 			{ReferenceResource.reference+"?search={query}","Search for a reference by name",format,"GET","Under development"},
 
 			
-			{"(OpenTox wiki to be updated)","Asynchronous jobs",formatHeader,null},
+			{"","Asynchronous jobs",formatHeader,null},
 			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
 			{"/task/{task id}","Information about a specific task",format,"GET","Yes"},			
 
