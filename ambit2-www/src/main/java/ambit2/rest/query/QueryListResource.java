@@ -14,14 +14,14 @@ import org.restlet.routing.Route;
 import org.restlet.routing.Router;
 import org.restlet.util.RouteList;
 
-import ambit2.rest.algorithm.AlgorithmCatalogResource;
+import ambit2.rest.algorithm.CatalogResource;
 
 /**
  * Query types
  * @author nina
  *
  */
-public class QueryListResource extends AlgorithmCatalogResource {
+public class QueryListResource extends CatalogResource {
 
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,

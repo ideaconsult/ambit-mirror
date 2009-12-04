@@ -23,7 +23,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.StringConvertor;
 
-public class AllAlgorithmsResource extends AlgorithmCatalogResource<Algorithm<String>> {
+public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	protected static List<Algorithm<String>> algorithmList;
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
