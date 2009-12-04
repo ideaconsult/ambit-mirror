@@ -82,8 +82,11 @@ public class OT {
     public static final Property paramValue = m_model.createProperty(String.format(_NS, "paramValue"));
     public static final Property statisticsSupported = m_model.createProperty(String.format(_NS, "statisticsSupported"));
 
-	public static OntModel createModel() throws Exception {
-		OntModel jenaModel = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM,null);
+    public static OntModel createModel() throws Exception {
+    	return createModel(OntModelSpec.OWL_DL_MEM);
+    }
+	public static OntModel createModel(OntModelSpec spec) throws Exception {
+		OntModel jenaModel = ModelFactory.createOntologyModel( spec,null);
 		jenaModel.setNsPrefix( "ot", OT.NS );
 		jenaModel.setNsPrefix( "owl", OWL.NS );
 		jenaModel.setNsPrefix( "dc", DC.NS );

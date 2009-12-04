@@ -395,19 +395,21 @@ public class AmbitResource extends ServerResource {
 		w.write("	<div class=\"spacer\"></div>");
 		w.write("</div>");
 		w.write("<div>");		
-		w.write(String.format("<a href='%s/fasttox'>FastTox</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/ttc'>TTC</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/depict?search=c1ccccc1'>Depiction</a>&nbsp;",baseReference));
+		
+		w.write(String.format("<a href='%s/fasttox' title='Predict'>FastTox</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/ttc' title='Thresholf of toxicological concern prediction'>TTC</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/similarity'>Similar&nbsp;structures</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/substructure'>Substructure</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/smarts'>SMARTS&nbsp;patterns</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s%s/Taxonomy'>Taxonomy</a>&nbsp;",baseReference,OntologyResource.resource));
-		w.write(String.format("<a href='%s/algorithm'>Algorithms</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/similarity' title='Search for similar structures'>Similarity</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/smarts' title='Substructure search by SMARTS patterns'>Substructure</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
-		w.write(String.format("<a href='%s%s'>Feature definitions</a>&nbsp;",baseReference,PropertyResource.featuredef));
+		w.write(String.format("<a href='%s%s' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
+		w.write(String.format("<a href='%s%s/Taxonomy' title='Features grouped in several categories'>Templates</a>&nbsp;",baseReference,OntologyResource.resource));		
 		w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/help'>Help</a>&nbsp;",baseReference));
 		w.write("</div>");
 
