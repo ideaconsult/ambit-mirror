@@ -121,16 +121,17 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 			OntModel model = null;
 			if (useStatic) {
 				if (defaultOntology==null) {
-					defaultOntology = OT.createModel();
+					model = OT.createModel();
 					readOWL(DescriptorsFactory.class.getClassLoader().getResourceAsStream("ambit2/descriptors/descriptor-algorithms.owl"),
-							defaultOntology);
+							model);
 					readOWL(DescriptorsFactory.class.getClassLoader().getResourceAsStream("ambit2/descriptors/echa-endpoints.owl"),
-							defaultOntology);				
+							model);				
 					readOWL(DescriptorsFactory.class.getClassLoader().getResourceAsStream("ambit2/model/AlgorithmTypes.owl"),
-							defaultOntology);		
-				}
-				defaultOntology = getOntology(defaultOntology==null?OT.createModel():defaultOntology);
-				model = defaultOntology;				
+							model);		
+					defaultOntology = model;	
+				} else model = defaultOntology;
+				//defaultOntology = getOntology(defaultOntology==null?OT.createModel():defaultOntology);
+							
 			} else 
 				model = getOntology(OT.createModel(OntModelSpec.OWL_MEM));
 
