@@ -12,6 +12,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Logger;
 
 import javax.security.auth.Subject;
 import javax.sql.DataSource;
@@ -504,7 +505,7 @@ public class AmbitApplication extends Application {
 		} catch (SQLException x) {
 			//TODO reinitialize the connection pool
 			error = x;
-			x.printStackTrace();
+			Logger.getLogger(getClass().getName()).severe(x.toString());
 			//remove the connection from the pool
 			try {if (c != null) c.close();} catch (Exception e) {}
 		} finally {

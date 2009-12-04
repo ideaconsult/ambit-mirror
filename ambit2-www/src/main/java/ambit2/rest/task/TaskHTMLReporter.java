@@ -36,7 +36,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 			
 		} catch (Exception x) {
 			x.printStackTrace();
-			status = "Error";
+			status = "Task Error";
 			t = x.getMessage();
 		} finally {
 			try {output.write(String.format("<p><a href='%s'>%s</a>&nbsp;%s<img src=\"/images/24x24_ambit.gif\">", t,item.getName(),status)); } catch (Exception x) {

@@ -7,8 +7,8 @@ import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Resource;
 import org.restlet.resource.ResourceException;
+import org.restlet.resource.ServerResource;
 
 import ambit2.base.io.DownloadTool;
 
@@ -17,18 +17,18 @@ import ambit2.base.io.DownloadTool;
  * @author nina
  *
  */
-public class FavIconResource extends Resource {
+public class FavIconResource extends ServerResource {
 	@Override
-	public Representation represent(Variant variant) throws ResourceException {
+	public Representation get(Variant variant) throws ResourceException {
 		return new OutputRepresentation(MediaType.IMAGE_PNG) {
 			@Override
 			public void write(OutputStream outputStream)
 					throws IOException {
 				try {
-				DownloadTool.download(getClass().getClassLoader().getResourceAsStream("16x16.png"), outputStream);
+					DownloadTool.download(getClass().getClassLoader().getResourceAsStream("/images/feature.png"), outputStream);
 				outputStream.close();				
 				} catch (Exception x) {
-					x.printStackTrace();
+					
 				}
 				
 			}

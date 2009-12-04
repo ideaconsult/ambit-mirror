@@ -92,7 +92,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		    			getResponse().setStatus(x.getStatus());
 		    			return null;			        	
 		        	} catch (NotFoundException x) {
-		        		//x.printStackTrace();
 		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
 		    			return null;
 		    			
@@ -156,7 +155,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 			
 			
 		} catch (Exception x) {
-			x.printStackTrace();
+			java.util.logging.Logger.getLogger(getClass().getName()).severe(x.toString());
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);			
 			getResponse().setEntity(null);
 		} finally {

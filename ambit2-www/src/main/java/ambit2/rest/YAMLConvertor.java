@@ -47,7 +47,6 @@ public class YAMLConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryReprese
 	            			ex = ex.getCause();
 	            		}
 	            		logger.warn(x);
-	            		x.printStackTrace();
 	            	} finally {
 	            		try {if (writer !=null) writer.flush(); writer.close();} catch (Exception x) { x.printStackTrace();}
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}

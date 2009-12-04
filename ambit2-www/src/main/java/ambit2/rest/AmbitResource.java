@@ -296,7 +296,6 @@ public class AmbitResource extends ServerResource {
 			}
 			
 		} catch (Exception x) {
-			x.printStackTrace();
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
 			return null;
 		}

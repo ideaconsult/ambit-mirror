@@ -44,7 +44,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			}
 			output.write("<br>");
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.warn(x);
 		}		
 	}
 	@Override

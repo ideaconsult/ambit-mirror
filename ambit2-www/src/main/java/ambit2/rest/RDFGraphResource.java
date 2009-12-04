@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.logging.Logger;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -153,7 +154,7 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 		try {
 			model.read(in,null);
 		} catch (Exception x) {
-			x.printStackTrace();
+			Logger.getLogger(getClass().getName()).severe(x.toString());
 		} finally {
 			try { if (in != null) in.close();} catch (Exception x) {}
 		}

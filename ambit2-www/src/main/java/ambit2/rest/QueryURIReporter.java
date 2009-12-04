@@ -57,7 +57,7 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 			if (o != null) 	output.write(o);
 			output.flush();
 		} catch (IOException x) {
-			x.printStackTrace();
+			logger.error(x);
 		}
 	}	
 	public abstract String getURI(String ref, T item);
