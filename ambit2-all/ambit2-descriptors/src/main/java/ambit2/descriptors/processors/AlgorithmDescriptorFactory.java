@@ -3,7 +3,6 @@ package ambit2.descriptors.processors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
 import ambit2.core.data.model.Algorithm;
