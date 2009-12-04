@@ -47,6 +47,8 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		OT.OTClass.Model.createOntClass(getJenaModel());
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());
 		OT.OTClass.Feature.createOntClass(getJenaModel());
+		OT.OTClass.Parameter.createOntClass(getJenaModel());
+		OT.OTClass.Dataset.createOntClass(getJenaModel());
 	};
 	
 	@Override

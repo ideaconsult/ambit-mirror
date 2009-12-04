@@ -2,6 +2,7 @@ package ambit2.rest.algorithm;
 
 import java.io.Writer;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.data.MediaType;
@@ -73,5 +74,14 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 			algorithm.addProperty(OT.parameters, iparam);
 		}
 	}
+	
+	@Override
+	public void header(Writer output, Iterator<Algorithm> query) {
+		super.header(output, query);
+		OT.OTClass.Algorithm.createOntClass(getJenaModel());
+		OT.OTClass.Parameter.createOntClass(getJenaModel());
+	}
+	
+	
 
 }
