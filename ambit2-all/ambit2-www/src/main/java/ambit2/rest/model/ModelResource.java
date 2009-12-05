@@ -25,9 +25,9 @@ import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.AmbitApplication;
-import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
@@ -113,8 +113,8 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 			) {
-		return new OutputStreamConvertor(
-				new ModelRDFReporter(getRequest(),variant.getMediaType())
+		return new RDFJenaConvertor<ModelQueryResults,IQueryRetrieval<ModelQueryResults>>(
+				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType())
 				,variant.getMediaType());			
 	} else //html 	
 		return new OutputWriterConvertor(

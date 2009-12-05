@@ -42,7 +42,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			Request req) {
 		return new ModelURIReporter(req);
 	}
-	public void header(java.io.OutputStream output, Q query) {
+	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		super.header(output,query);
 		OT.OTClass.Model.createOntClass(getJenaModel());
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());

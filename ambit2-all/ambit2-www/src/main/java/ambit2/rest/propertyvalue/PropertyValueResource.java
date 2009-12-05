@@ -21,6 +21,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
@@ -76,8 +77,8 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				) {
-			return new OutputStreamConvertor(
-					new PropertyValueRDFReporter(getRequest(),variant.getMediaType())
+			return new RDFJenaConvertor<T, IQueryRetrieval<T>>(
+					new PropertyValueRDFReporter<T>(getRequest(),variant.getMediaType())
 					,variant.getMediaType());		
 		} else return new StringConvertor(new PropertyValueReporter());
 					
