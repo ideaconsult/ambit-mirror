@@ -42,7 +42,7 @@ public class SimpleErrorHandler implements ErrorHandler {
     }
     protected static AmbitLogger logger = new AmbitLogger(SimpleErrorHandler.class);    
     public void error(SAXParseException exception) {
-    	process("Error",exception);
+    	process(getClass().getName(),exception);
     }
          
     public void fatalError(SAXParseException exception) {

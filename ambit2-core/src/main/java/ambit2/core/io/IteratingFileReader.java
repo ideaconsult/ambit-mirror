@@ -54,7 +54,7 @@ public class IteratingFileReader implements IIteratingChemObjectReader {
 			reader = FileInputState.getReader(new FileInputStream(file), file.getName(),format);
 			filename = file.getName();
 		} catch (Exception x) {
-			throw new AmbitIOException("Error",x,file.getName()); 
+			throw new AmbitIOException(getClass().getName(),x,file.getName()); 
 		}
 	}
 
