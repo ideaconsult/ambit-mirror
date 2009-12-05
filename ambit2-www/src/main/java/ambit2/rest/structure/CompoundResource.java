@@ -40,6 +40,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetRDFReporter;
@@ -124,7 +125,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
-		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
+		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG) ||
+				variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
+				variant.getMediaType().equals(MediaType.IMAGE_JPEG) ||
+				variant.getMediaType().equals(MediaType.IMAGE_TIFF) ||
+				variant.getMediaType().equals(MediaType.IMAGE_GIF) 
+				) {
 			Dimension d = new Dimension(250,250);
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			try {
@@ -135,7 +141,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				d.height = Integer.parseInt(form.getFirstValue("h").toString());
 			} catch (Exception x) {}			
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(d),MediaType.IMAGE_PNG);	
+					new ImageReporter<QueryStructureByID>(d),variant.getMediaType());	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate()));				
@@ -168,7 +174,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) 
 				) {
-			return new OutputStreamConvertor(
+			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

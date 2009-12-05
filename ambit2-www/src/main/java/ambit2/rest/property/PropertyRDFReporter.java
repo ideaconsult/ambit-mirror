@@ -1,7 +1,5 @@
 package ambit2.rest.property;
 
-import java.io.OutputStream;
-
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 
@@ -40,8 +38,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	protected QueryURIReporter createURIReporter(Request reference) {
 		return new PropertyURIReporter(reference);
 	}
-
-	public void header(OutputStream output, Q query) {
+	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		super.header(output, query);
 		OT.OTClass.Feature.createOntClass(getJenaModel());
 	

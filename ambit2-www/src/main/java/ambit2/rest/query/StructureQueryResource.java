@@ -47,6 +47,7 @@ import ambit2.rest.ImageConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetRDFReporter;
@@ -140,6 +141,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
 				MediaType.IMAGE_PNG,
+				MediaType.IMAGE_BMP,
+				MediaType.IMAGE_JPEG,
+				MediaType.IMAGE_TIFF,
+				MediaType.IMAGE_GIF,
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
@@ -207,7 +212,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
 				) {
-			return new OutputStreamConvertor(
+			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
 
 					

@@ -2,9 +2,6 @@ package ambit2.rest;
 
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.w3c.dom.Document;
@@ -35,16 +32,7 @@ public abstract class QueryDOMReporter<T,Q extends IQueryRetrieval<T>> extends Q
 		uriReporter = createURIReporter(req); 
 	}
 	protected abstract QueryURIReporter createURIReporter(Request req);
-	@Override
-	public Document getOutput() throws AmbitException {
-		try {
-			if (output!=null) return output;
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			return doc;
-		} catch (ParserConfigurationException x) {
-			throw new AmbitException(x);
-		}
-	}
+
 	public void open() throws DbAmbitException {
 	}	
 	public Element getURIElement(Document doc, T item) {

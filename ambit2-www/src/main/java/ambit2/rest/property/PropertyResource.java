@@ -30,6 +30,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
@@ -112,8 +113,8 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				) {
-			return new OutputStreamConvertor(
-					new PropertyRDFReporter(getRequest(),variant.getMediaType())
+			return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
+					new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(),variant.getMediaType())
 					,variant.getMediaType());		
 		} else 
 			return new OutputWriterConvertor(

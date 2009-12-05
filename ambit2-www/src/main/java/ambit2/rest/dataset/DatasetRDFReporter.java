@@ -28,6 +28,7 @@ import ambit2.rest.structure.CompoundURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -97,16 +98,16 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		});			
 	}
 	@Override
-	public void header(OutputStream output, Q query) {
+	public void header(OntModel output, Q query) {
 		super.header(output,query);
-		dataset = jenaModel.createIndividual(uriReporter.getBaseReference().toString(),
-					jenaModel.getOntClass(OT.OTClass.Dataset.getNS()));
+		dataset = output.createIndividual(uriReporter.getBaseReference().toString(),
+				output.getOntClass(OT.OTClass.Dataset.getNS()));
 
-		OT.OTClass.Dataset.createOntClass(jenaModel);
-		OT.OTClass.DataEntry.createOntClass(jenaModel);
-		OT.OTClass.Feature.createOntClass(jenaModel);
-		OT.OTClass.FeatureValue.createOntClass(jenaModel);
-		OT.OTClass.Compound.createOntClass(jenaModel);
+		OT.OTClass.Dataset.createOntClass(output);
+		OT.OTClass.DataEntry.createOntClass(output);
+		OT.OTClass.Feature.createOntClass(output);
+		OT.OTClass.FeatureValue.createOntClass(output);
+		OT.OTClass.Compound.createOntClass(output);
 		
 	}
 

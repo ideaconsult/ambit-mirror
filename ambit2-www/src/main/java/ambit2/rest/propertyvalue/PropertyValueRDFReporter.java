@@ -1,7 +1,5 @@
 package ambit2.rest.propertyvalue;
 
-import java.io.OutputStream;
-
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 
@@ -19,9 +17,8 @@ import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.datatypes.xsd.impl.XSDBaseStringType;
-import com.hp.hpl.jena.datatypes.xsd.impl.XSDDouble;
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 
@@ -114,7 +111,7 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 		
 	}
 	@Override
-	public void header(OutputStream output, IQueryRetrieval<T> query) {
+	public void header(OntModel jenaModel, IQueryRetrieval<T> query) {
 		super.header(output,query);
 		OT.OTClass.DataEntry.createOntClass(jenaModel);
 		OT.OTClass.Feature.createOntClass(jenaModel);

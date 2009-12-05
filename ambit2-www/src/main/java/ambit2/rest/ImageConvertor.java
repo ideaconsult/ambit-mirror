@@ -1,7 +1,10 @@
 package ambit2.rest;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import javax.imageio.ImageIO;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
@@ -18,27 +21,35 @@ import ambit2.db.reporters.QueryReporter;
  * @param <T>
  * @param <Q>
  */
-public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepresentationConvertor<T,Q,OutputStream> {
+public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractObjectConvertor<T,Q,BufferedImage> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7974532412944774457L;
 	
-	public ImageConvertor(QueryReporter<T, Q, OutputStream> reporter,MediaType mediaType) {
+	public ImageConvertor(QueryReporter<T, Q, BufferedImage> reporter,MediaType mediaType) {
 		super(reporter,mediaType);
 	}
 
-	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {
+	@Override
+	public Representation process(final BufferedImage image) throws AmbitException {
 		 return new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {
 	            	try {
-	            		getReporter().setOutput(stream);
-	            		getReporter().process(query);
-	            		//writer.flush();
-	            		//stream.flush();
-	            	} catch (AmbitException x) {
+	            		if (MediaType.IMAGE_PNG.equals(mediaType))
+	            			ImageIO.write(image,"png",stream);
+	            		else if (MediaType.IMAGE_JPEG.equals(mediaType))
+	            			ImageIO.write(image,"jpeg",stream);
+	            		else if (MediaType.IMAGE_GIF.equals(mediaType))
+	            			ImageIO.write(image,"gif",stream);	
+	            		else if (MediaType.IMAGE_TIFF.equals(mediaType))
+	            			ImageIO.write(image,"tiff",stream);	  
+	            		else if (MediaType.IMAGE_BMP.equals(mediaType))
+	            			ImageIO.write(image,"bmp",stream);	   
+	            		else ImageIO.write(image,"png",stream);	            		
+	            	} catch (Exception x) {
 	            		Throwable ex = x;
 	            		while (ex!=null) {
 	            			if (ex instanceof IOException) 
@@ -59,6 +70,11 @@ public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepres
 	            	}
 	            }
 	        };		
+	}
+
+	@Override
+	protected BufferedImage createOutput(Q query) throws AmbitException {
+		return null;
 	};	
 
 
