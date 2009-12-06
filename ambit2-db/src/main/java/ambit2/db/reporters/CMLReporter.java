@@ -21,6 +21,7 @@ import ambit2.db.readers.RetrieveStructure;
  */
 public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter< Q, Writer> {
 	protected MoleculeReader reader = new MoleculeReader();
+	protected CMLWriter cmlwriter;
 	/**
 	 * 
 	 */
@@ -39,15 +40,9 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 
 	@Override
-	public Writer getOutput() throws AmbitException {
-		return super.getOutput();
-	}
-	@Override
 	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
-			CMLWriter cmlwriter = new CMLWriter(output);
 			cmlwriter.write(reader.process(item));
-			cmlwriter.close();
 			
 		} catch (Exception x) {
 			logger.error(x);
@@ -56,10 +51,23 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 
 	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
 		
 	}
-	public void footer(Writer output, Q query) {};
-	public void header(Writer output, Q query) {};
+
+	@Override
+	public void footer(Writer output, Q query) {
+
+		try {
+			cmlwriter.close();
+		} catch (Exception x) {
+			logger.error(x);
+		}		
+	}
+
+	@Override
+	public void header(Writer output, Q query) {
+		cmlwriter = new CMLWriter(output); 
+
+	};
 
 }

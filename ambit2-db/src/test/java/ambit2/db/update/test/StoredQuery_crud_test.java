@@ -51,7 +51,7 @@ public class StoredQuery_crud_test extends CRUDTest<SessionID,IStoredQuery> {
 			throws Exception {
 		StoredQuery q = new StoredQuery();
 		StringBuilder b = new StringBuilder();
-		for (int i=0; i < 50; i++) b.append("a");
+		for (int i=0; i < 250; i++) b.append("a");
 		q.setName(b.toString());
 		q.setQuery(new QueryStructureByID(100215));
 		CreateStoredQuery c =  new CreateStoredQuery();
@@ -77,8 +77,10 @@ public class StoredQuery_crud_test extends CRUDTest<SessionID,IStoredQuery> {
 			throws Exception {
         IDatabaseConnection c = getConnection();
 		StringBuilder b = new StringBuilder();
-		for (int i=0; i < 45; i++) b.append("a");  
+		for (int i=0; i < 200; i++) b.append("a");  
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT name FROM query where name regexp '^a'");// where name='"+b.toString()+"'");
+		Assert.assertEquals(200,b.toString().length());
+		Assert.assertEquals(200,table.getValue(0,"name").toString().length());
 		Assert.assertEquals(b.toString(),table.getValue(0,"name").toString());
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM query join query_results using(idquery) \nwhere idchemical=11 and idstructure=100215 and name='"+b.toString()+"'");
 		Assert.assertEquals(1,table.getRowCount());		

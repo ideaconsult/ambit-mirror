@@ -161,7 +161,7 @@ select ?,idstructure,1 from structure where idstructure between ? and ?
 	}
 	protected abstract String joinOn();
 	protected String groupBy() {return "";}
-	protected String getMainSQL() {return "select Q1.idquery,s.idchemical,s.idstructure,Q1.selected as selected,Q1.metric as metric from structure as s";}
+	protected String getMainSQL() {return "select Q1.idquery,s.idchemical,s.idstructure,Q1.selected as selected,Q1.metric as metric,Q1.text from structure as s";}
 	/**
 	 * SQLs of simple queries, join-ed
 	 * @return sql string

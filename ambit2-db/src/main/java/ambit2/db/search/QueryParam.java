@@ -41,13 +41,6 @@ public class QueryParam<T> {
 		return value;
 	}
 	public void setValue(T value) {
-		/*
-		System.out.print(type.toString());
-		System.out.print('\t');
-		if (value != null)
-			System.out.print(value);
-		System.out.println();
-		*/
 		this.value = value;
 	}
 	@Override

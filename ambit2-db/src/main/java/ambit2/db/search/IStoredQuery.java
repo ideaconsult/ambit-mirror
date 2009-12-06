@@ -29,7 +29,7 @@ import ambit2.base.interfaces.IStructureRecord;
 
 
 public interface IStoredQuery extends IQueryObject<IStructureRecord>{
-	static String SQL_INSERT = "insert ignore into query_results (idquery,idchemical,idstructure,selected,metric) ";
+	static String SQL_INSERT = "insert ignore into query_results (idquery,idchemical,idstructure,selected,metric,text) ";
 	void setName(String name);
 	String getName();
 	int getRows();

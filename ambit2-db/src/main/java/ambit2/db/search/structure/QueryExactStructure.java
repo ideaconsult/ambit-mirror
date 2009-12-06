@@ -47,7 +47,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String,IMolecule
 	 */
 	private static final long serialVersionUID = -4140784963337312377L;
 	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure join chemicals using(idchemical) where (smiles = ?)";
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (smiles = ?)";
 	protected SmilesKey smilesKey = new SmilesKey();
 
 	
@@ -67,37 +67,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String,IMolecule
 			a.add(set.getMolecule(i));
 		return smilesKey.process(a);
 	}
-	/*
-	public String getSQL() throws AmbitException {
 
-		//int bc = bitset.cardinality();
-		StringBuffer b = new StringBuffer();
-			b.append("select ? as idquery,idchemical,idstructure,1 as selected,bc as metric from\n");
-			b.append("fp1024 join structure using(idchemical) where ");
-			for (int h=0; h < 16; h++) {
-				b.append("(? = fp");
-				b.append(Integer.toString(h+1));
-				b.append(")");
-				if (h<15) b.append(" and ");
-			}
-
-	
-		return b.toString();
-
-	}
-	
-	public List<QueryParam> getParameters() throws AmbitException {
-		long[] h16 = new long[16];
-		MoleculeTools.bitset2Long16(getValue(),64,h16);
-		int bc = getValue().cardinality();
-		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, getId()));
-		for (int h=0; h < 16; h++)
-			params.add(new QueryParam<Long>(Long.class, h16[h]));
-	
-		return params;
-	}
-	*/	
 	@Override
 	public String toString() {
 		return "Exact structure";

@@ -76,13 +76,13 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		//between 150 and 200
 		QueryStructureByID q1 = new QueryStructureByID(150,200);
 		Assert.assertNotNull(q1.getParameters().get(1).getValue());
-		Assert.assertNotNull(q1.getParameters().get(2).getValue());		
+		Assert.assertNotNull(q1.getParameters().get(3).getValue());		
 		qc.add(q1);
 		
 
 		qc.setCombine_as_and(false);
 		
-		Assert.assertEquals("select ? as idquery,idchemical,idstructure,1 as selected,? as metric from structure where idstructure <= ? order by type_structure desc\nunion\nselect ? as idquery,idchemical,idstructure,1 as selected,? as metric from structure where idstructure between  ? and ? order by type_structure desc",
+		Assert.assertEquals("select ? as idquery,idchemical,idstructure,1 as selected,? as metric,? as text from structure where idstructure <= ? order by type_structure desc\nunion\nselect ? as idquery,idchemical,idstructure,1 as selected,? as metric,? as text from structure where idstructure between  ? and ? order by type_structure desc",
 				qc.getSQL());
 		
 		Assert.assertNotNull(q.getParameters().get(1).getValue());
@@ -91,11 +91,13 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		List<QueryParam> params = qc.getParameters();
 		Assert.assertNotNull(params);
 		
-		Assert.assertEquals(7,params.size());
-		int[] values = {55,1,100,55,1,150,200};
+		Assert.assertEquals(9,params.size());
+		Object[] values = {55,1,null,100,55,1,null,150,200};
 		for (int i=0; i < params.size(); i++) {
+			if (values[i] != null) {
 			Assert.assertEquals(Integer.class,params.get(i).getType());
 			Assert.assertEquals(values[i],params.get(i).getValue());
+			}
 		}
 
 		qc.setScope(qs);

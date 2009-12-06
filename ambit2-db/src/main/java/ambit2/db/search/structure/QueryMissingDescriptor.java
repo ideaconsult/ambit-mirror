@@ -19,9 +19,9 @@ public class QueryMissingDescriptor extends AbstractStructureQuery<LiteratureEnt
 	 */
 	private static final long serialVersionUID = -8610455060315105098L;
 	public static String MISSING_DESCRIPTOR = 
-        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure %s in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where %s %s %s)";
+        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure where idstructure %s in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where %s %s %s)";
 	public static String ALL = 
-        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure";
+        "select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure";
 	public static String WHERE_NAME = "name=?";
 	public static String WHERE_TITLE = "title=?";
 

@@ -20,7 +20,7 @@ public class QueryDistance extends AbstractStructureQuery<IBond,Double,NumberCon
 	 */
 	private static final long serialVersionUID = -5464266255373802342L;
 	public final static String sqlField = 
-		"select ? as idquery,-1,idstructure,1 as selected,1 as metric from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance ";
+		"select ? as idquery,-1,idstructure,1 as selected,1 as metric,null as text from atom_structure join atom_distance using(iddistance) where atom1 = ? and atom2 = ? and distance ";
 
 	protected Double maxValue;
 	public Double getMaxValue() {

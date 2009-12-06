@@ -28,6 +28,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -49,9 +50,6 @@ import ambit2.db.search.structure.QueryStoredResults;
 
 /**
  * Inserts into query table idstructure numbers from a query identified by {@link StoredQuery}. Example:
- * <pre>
- * insert ignore into query_results (idquery,idstructure,selected) select 1,idstructure,1 from structure limit 100,200
- * </pre>
  * @author nina
 
  */
@@ -121,7 +119,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 
 	protected int insertScreenedResults(StoredQuery result, final IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
 		final PreparedStatement insertGoodResults = 
-			connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?)");
+			connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?,?)");
 		QueryStructureReporter<IQueryRetrieval<IStructureRecord>,IStructureRecord> reporter = 
 			new QueryStructureReporter<IQueryRetrieval<IStructureRecord>, IStructureRecord>() {
 			
@@ -146,7 +144,8 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 					insertGoodResults.setInt(1,query.getId());
 					insertGoodResults.setInt(2,record.getIdchemical());
 					insertGoodResults.setInt(3,record.getIdstructure());
-					insertGoodResults.setDouble(4,1);					
+					insertGoodResults.setDouble(4,1);
+					insertGoodResults.setNull(5,Types.VARCHAR);	
 					insertGoodResults.executeUpdate();
 				} catch (Exception x) {
 					throw new AmbitException(x);
@@ -182,42 +181,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			try {reporter.close();} catch (Exception x) { x.printStackTrace();}
 		}
 		return 1;
-		/*
-		PreparedStatement queryResults = connection.prepareStatement(query.getSQL());
-		List<QueryParam> params = result.getParameters();
-		QueryExecutor.setParameters(queryResults, params);
-		ResultSet rs = queryResults.executeQuery();
-		ProcessorStructureRetrieval retriever = new ProcessorStructureRetrieval();
-		PreparedStatement insertGoodResults = connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?)");
-				//= "insert ignore into query_results (idquery,idchemical,idstructure,selected,metric) ")
-		retriever.setConnection(connection);
-		try {
-			int rows = 0;
-			
-			while (rs.next()) {
-				IStructureRecord record = retriever.process(query.getObject(rs));
-				double metric = query.calculateMetric(record);
 
-				if (metric >0) {
-					//System.out.println(String.format("id %d hits %d",record.getIdchemical(),rows+1));
-		
-					insertGoodResults.setInt(1,result.getId());
-					insertGoodResults.setInt(2,record.getIdchemical());
-					insertGoodResults.setInt(3,record.getIdstructure());
-					insertGoodResults.setDouble(4,metric);					
-					rows += insertGoodResults.executeUpdate();
-					if (rows >= query.getMaxRecords()) break;
-				}
-			}
-			return rows;
-		} catch (SQLException x) {
-			throw x;
-		} finally {
-			try {rs.close(); } catch (Exception x) {}
-			try {insertGoodResults.close(); } catch (Exception x) {}
-			try {queryResults.close();} catch (Exception x) {}
-		}
-		*/
 	}
 	
 	protected int insertResults(StoredQuery result) throws SQLException , AmbitException {

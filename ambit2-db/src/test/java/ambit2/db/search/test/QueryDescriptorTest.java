@@ -29,7 +29,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 		qf.setCondition(NumberCondition.getInstance("between"));
 		qf.setId(1);
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num between ?  and ? and name=? \n", 
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num between ?  and ? and name=? \n", 
 				qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
@@ -49,7 +49,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 		
 		qf.setCondition(NumberCondition.getInstance("="));
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num = ? and name=?\n",
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num = ? and name=?\n",
 
 				qf.getSQL());
 		params = qf.getParameters();
@@ -59,7 +59,7 @@ public class QueryDescriptorTest extends QueryTest<QueryFieldNumeric> {
 		qf.setFieldname(null);
 		qf.setCondition(NumberCondition.getInstance(">"));
 		Assert.assertEquals(
-				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num > ?   \n"
+				"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) where value_num is not null and value_num > ?   \n"
 				, qf.getSQL());
 		params = qf.getParameters();
 		Assert.assertNotNull(params);

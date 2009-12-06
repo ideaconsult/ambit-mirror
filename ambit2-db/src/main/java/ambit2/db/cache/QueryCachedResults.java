@@ -1,7 +1,5 @@
-package ambit2.db.search.structure;
+package ambit2.db.cache;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,23 +10,20 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-/**
- * Returns results of a previously executed query (e.g. smarts)
- * @author nina
- *
- */
-public class QueryCachedResults extends AbstractQuery<String, IStructureRecord, EQCondition, Boolean> 
-																implements IQueryRetrieval<Boolean>{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4597129739347497000L;
+public abstract class QueryCachedResults<T>  extends AbstractQuery<String, IStructureRecord, EQCondition, T> 
+								implements IQueryRetrieval<T>{
+	
 	public static final String sqlField=
-		"select metric from query_results " +
+		"select %s from query_results " +
 		"join query using(idquery) join sessions using(idsessions) where " +
 		"sessions.title=? and query.name=? and idchemical=?";
 	protected String category;
-	
+	protected String what = "metric,text";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4381740451274951526L;
+
 
 	public QueryCachedResults() {
 		setCondition(EQCondition.getInstance());
@@ -37,7 +32,7 @@ public class QueryCachedResults extends AbstractQuery<String, IStructureRecord, 
 		this();
 		setFieldname(key);
 		setValue(record);
-	}	
+	}		
 	public List<QueryParam> getParameters() throws AmbitException {
 		if ((getFieldname()==null) || (getValue()==null) || (getCategory()==null)) throw new AmbitException("Undefined parameters");
 		
@@ -46,10 +41,23 @@ public class QueryCachedResults extends AbstractQuery<String, IStructureRecord, 
 		params.add(new QueryParam<String>(String.class, getFieldname()));
 		params.add(new QueryParam<Integer>(Integer.class, getValue().getIdchemical()));
 		return params;
+	}	
+	public double calculateMetric(T object) {
+		return 1;
 	}
 
+	public boolean isPrescreen() {
+		return false;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}	
 	public String getSQL() throws AmbitException {
-		return sqlField;
+		return String.format(sqlField,what);
 	}
 	@Override
 	public String toString() {
@@ -59,22 +67,5 @@ public class QueryCachedResults extends AbstractQuery<String, IStructureRecord, 
 			return "cached results";
 		}
 
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
 	}	
-	public double calculateMetric(Boolean object) {
-		return 1;
-	}
-	public boolean isPrescreen() {
-		return false;
-	}
-	public Boolean getObject(ResultSet rs) throws AmbitException {
-		try {
-			return rs.getBoolean(1);
-		} catch (SQLException x) { throw new AmbitException(x);}
-	}
 }

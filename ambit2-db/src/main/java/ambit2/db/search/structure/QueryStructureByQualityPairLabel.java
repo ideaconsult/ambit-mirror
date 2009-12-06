@@ -17,7 +17,7 @@ public class QueryStructureByQualityPairLabel extends 	AbstractStructureQuery<St
 	private static final long serialVersionUID = -3232148472829083139L;
 
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,case 1 when (q.label='Consensus') then 1 else 0 end as selected,cast(q.label as unsigned) as metric from\n"+
+		"select ? as idquery,idchemical,idstructure,case 1 when (q.label='Consensus') then 1 else 0 end as selected,cast(q.label as unsigned) as metric,q.label from\n"+
 		"quality_chemicals q join structure using(idchemical) where q.label = ? %s\n"+
 		"order by idchemical\n";	
 	public final static String where = " and text = ?";
