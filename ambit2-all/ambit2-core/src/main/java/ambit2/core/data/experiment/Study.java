@@ -31,7 +31,6 @@ package ambit2.core.data.experiment;
 
 import java.util.Hashtable;
 
-import weka.experiment.Experiment;
 import ambit2.base.data.AmbitBean;
 import ambit2.base.data.Template;
 
@@ -40,7 +39,7 @@ import ambit2.base.data.Template;
  * The template defines only condition names (e.g. "Species", "Duration") and here in the {@link Study} class 
  * the condition values have to be specified. (e.g.  Species="Fathead Minnow", "Duration"="96h").
  * Conditions are stored in a {@link java.util.Hashtable}. 
- * Also, study results are stored in another {@link Hashtable}, but this is for completeness, since the actual results per molecule are stored in {@link Experiment}. 
+ * Also, study results are stored in another {@link Hashtable}, but this is for completeness, since the actual results per molecule are stored in. 
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-5-2
  */
