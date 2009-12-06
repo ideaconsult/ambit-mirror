@@ -203,6 +203,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Test
 	public void testPNG() throws Exception {
 		testGet(getTestURI(),MediaType.IMAGE_PNG);
+		testGet(getTestURI(),MediaType.IMAGE_PNG);
 	}	
 	@Override
 	public boolean verifyResponsePNG(String uri, MediaType media, InputStream in)
