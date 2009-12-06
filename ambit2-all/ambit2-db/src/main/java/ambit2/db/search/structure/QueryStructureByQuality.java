@@ -20,7 +20,7 @@ public class QueryStructureByQuality extends AbstractStructureQuery<IStructureRe
 	 */
 	private static final long serialVersionUID = -3232148472829083139L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,cast(quality_structure.label as unsigned) as metric from structure left join quality_structure using(idstructure) ";
+		"select ? as idquery,idchemical,idstructure,1 as selected,cast(quality_structure.label as unsigned) as metric,quality_structure.label from structure left join quality_structure using(idstructure) ";
 	public final static String where = " where quality_structure.label %s ?";
 	public final static String where_null = " where quality_structure.label is null";
 

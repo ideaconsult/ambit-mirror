@@ -53,8 +53,8 @@ public class StoredQuery implements IStoredQuery {
 		return name;
 	}
 	public void setName(String name) {
-		if (name.length()>255)
-			this.name = name.substring(0,255);
+		if (name.length()>200)
+			this.name = name.substring(0,200);
 		else this.name = name;
 	}
 	public StoredQuery() {
@@ -75,7 +75,7 @@ public class StoredQuery implements IStoredQuery {
 	/**
 	 * Selects should be in the form 
 	 * <pre>
-	 * 	insert into query_results (idquery,idstructure,selected) select _IDQUERY_,idstructure,_SELECTED(default 1)_ from ?????
+	 * 	insert into query_results (idquery,idstructure,selected,metrix,text) select _IDQUERY_,idstructure,_SELECTED(default 1)_ from ?????
 	 * </pre>
 	 */
 	public List<QueryParam> getParameters() throws AmbitException {

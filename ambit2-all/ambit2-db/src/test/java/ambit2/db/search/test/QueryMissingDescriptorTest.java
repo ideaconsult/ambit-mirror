@@ -17,7 +17,7 @@ public class QueryMissingDescriptorTest extends QueryTest<IQueryRetrieval<IStruc
 	@Test
 	public void test() throws Exception {
 		Assert.assertEquals(
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric from structure where idstructure not in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where   title=?)",
+		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure where idstructure not in (select idstructure from property_values join properties using(idproperty) join catalog_references using(idreference) where   title=?)",
 		query.getSQL());
 	}
 	@Override

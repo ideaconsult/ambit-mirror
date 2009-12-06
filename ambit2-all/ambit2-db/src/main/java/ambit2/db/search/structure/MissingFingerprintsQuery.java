@@ -45,31 +45,31 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 	private static final long serialVersionUID = -8554160549010780854L;
 	
 	public final static String sqlField =
-		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric\n"+
+		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure join chemicals using(idchemical)\n"+
 		"left join %s using(idchemical)\n"+
 		"where (structure.type_structure != 'NA') &&((%s.status is null)\n"+
 		"or (structure.updated > %s.updated))\n"+
 		"union\n"+
-		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,0 as metric\n"+
+		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,0 as metric,null as text\n"+
 		"from structure join chemicals using(idchemical)\n"+
 		"join %s using(idchemical)\n"+
 		"where (structure.type_structure != 'NA') && (%s.status = 'invalid')\n";
 	
 	public final static String sqlFieldStruc =
 		
-		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric\n"+
+		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure\n"+
 		"left join %s using(idchemical,idstructure)\n"+
 		"where (structure.type_structure != 'NA') & ((%s.status is null)\n"+
 		"or (structure.updated > %s.updated))\n"+
 		"union\n"+
-		"select ? as idquery, idchemical,idstructure,1 as selected,0 as metric\n"+
+		"select ? as idquery, idchemical,idstructure,1 as selected,0 as metric,null as text\n"+
 		"from %s where (%s.status = 'invalid')";
 	
 	public final static String sqlSMARTS =
 		
-		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric\n"+
+		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure\n"+
 		"where atomproperties is null";
 		

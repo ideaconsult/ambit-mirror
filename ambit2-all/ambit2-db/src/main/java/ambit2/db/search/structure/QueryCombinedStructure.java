@@ -43,15 +43,15 @@ public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 
 	protected String getScopeSQL() {
 		if (isCombine_as_and())
-			return "select Q1.idquery,s.idchemical,s.idstructure,Q1.selected as selected,Q1.metric as metric from structure as s";
+			return "select Q1.idquery,s.idchemical,s.idstructure,Q1.selected as selected,Q1.metric as metric,null as text from structure as s";
 		else
-			return "select QSCOPE.idquery,s.idchemical,s.idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric from structure as s";
+			return "select QSCOPE.idquery,s.idchemical,s.idstructure,QSCOPE.selected as selected,QSCOPE.metric as metric,null as text from structure as s";
 	
 	}
 	@Override
 	protected String getMainSQL() {
 		if (isChemicalsOnly())
-			return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s";
+			return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric,null as text from chemicals as s";
 		else return super.getMainSQL();
 	}
 	protected boolean chemicalsOnly = false;

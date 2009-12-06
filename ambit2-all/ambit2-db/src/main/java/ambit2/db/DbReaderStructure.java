@@ -9,6 +9,7 @@ import java.util.List;
 import ambit2.base.data.AmbitUser;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.cache.QueryCachedResultsBoolean;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -19,7 +20,6 @@ import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.db.search.structure.QueryCachedResults;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.CreateStoredQuery;
 
@@ -32,7 +32,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 	protected CreateStoredQuery cache ;
 	protected UpdateExecutor<IQueryUpdate> cacheUpdater = new UpdateExecutor<IQueryUpdate>();
 	protected MyQuery strucQuery = new MyQuery();
-	protected QueryCachedResults hits = new QueryCachedResults();
+	protected QueryCachedResultsBoolean hits = new QueryCachedResultsBoolean();
 	protected QueryExecutor<IQueryObject> lookup = new QueryExecutor<IQueryObject>();
 	/**
 	 * 
@@ -127,7 +127,7 @@ class MyQuery extends AbstractStructureQuery<String,IStructureRecord,NumberCondi
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
 	public static final String sql=
-		"select idquery,idchemical,idstructure,1 as selected,? as metric from sessions\n"+
+		"select idquery,idchemical,idstructure,1 as selected,? as metric,null as text from sessions\n"+
 		"join query using(idsessions)\n"+
 		"join structure where title=? and name=? and idchemical=?";
 	

@@ -42,7 +42,7 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 	 * 
 	 */
 	private static final long serialVersionUID = 4597129739347497000L;
-	public static final String sqlField="select idquery,idchemical,idstructure,selected, %s from query_results %s where %s %s %s %s order by metric %s";
+	public static final String sqlField="select idquery,idchemical,idstructure,selected, %s,text from query_results %s where %s %s %s %s order by metric %s";
 	//public static final String join="join query using(idquery)";
 	public static final String join="";
 	public static final String where_query = "idquery=?";
