@@ -185,7 +185,7 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 						OutputStreamWriter writer = new OutputStreamWriter(out);
 						AmbitResource.writeHTMLHeader(writer,"Ontology playground" ,getRequest());
 						
-							
+						//queryObject.l
 						StmtIterator iter =  queryObject.listStatements(
 						new SimpleSelector(subject,predicate,object==null?literal:object));
 						                       //,BO.isClassifiedAs,(RDFNode) q));
@@ -210,8 +210,8 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 							));
 							Statement st = iter.next();
 							writer.write("<td>");
-							writer.write(String.format("%s",
-									st.getSubject().getNameSpace()));
+							writer.write(String.format("URI %s",
+									st.getSubject().getURI()));
 	
 							
 							writer.write("</td><td>");							
@@ -219,7 +219,7 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 									"",
 									Reference.encode(st.getSubject().toString()),
 									search==null?"":search,
-									st.getSubject().getLocalName()));
+									st.getSubject()));
 							
 							writer.write(String.format("&nbsp;<a href='%s?subject=%s&search=%s'>%s</a>",
 									"",
@@ -241,7 +241,7 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 										"object",
 										Reference.encode(st.getObject().toString()),
 										search==null?"":search,
-										((Resource)st.getObject()).getLocalName()));
+										((Resource)st.getObject())));
 								
 								writer.write(String.format("&nbsp;<a href='%s?subject=%s&search=%s'>%s</a>",
 										"",
