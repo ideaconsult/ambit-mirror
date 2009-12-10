@@ -30,6 +30,7 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
 
 /**
  * RDF/XML
@@ -100,15 +101,17 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	@Override
 	public void header(OntModel output, Q query) {
 		super.header(output,query);
-		dataset = output.createIndividual(uriReporter.getBaseReference().toString(),
-				output.getOntClass(OT.OTClass.Dataset.getNS()));
-
 		OT.OTClass.Dataset.createOntClass(output);
 		OT.OTClass.DataEntry.createOntClass(output);
 		OT.OTClass.Feature.createOntClass(output);
 		OT.OTClass.FeatureValue.createOntClass(output);
 		OT.OTClass.Compound.createOntClass(output);
 		
+		dataset = output.createIndividual(uriReporter.getRequest().getOriginalRef().toString(),
+				OT.OTClass.Dataset.getOntClass(output));
+		
+		dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
+		dataset.addProperty(DC.title,query.toString());
 	}
 
 	@Override
