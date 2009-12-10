@@ -69,7 +69,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			algorithmList = new ArrayList<Algorithm<String>>();
 			for (Object[] d : algorithms) {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
-				alg.setType("Rules");
+				alg.setType("http://www.opentox.org/algorithmTypes#Rules");
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2].toString());
