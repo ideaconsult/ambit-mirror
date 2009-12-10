@@ -6,7 +6,15 @@ import java.io.OutputStreamWriter;
 import ambit2.rest.OT.OTClass;
 
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
@@ -19,6 +27,46 @@ public class OntologyPlayground<T> extends RDFGraphResource<T> {
 	public OntologyPlayground() {
 		super(false);
 	}
+
+	protected void parseDataset(OntModel jenaModel, OutputStreamWriter out, OntResource dataset) throws IOException {
+		out.write(String.format("<h3>%s&nbsp;%s</h3>","Dataset", dataset==null?"":dataset));
+		StmtIterator iter =  jenaModel.listStatements(new SimpleSelector(dataset,OT.dataEntry,(RDFNode)null));
+		while (iter.hasNext()) {
+			Statement st = iter.next();
+			if (!st.getObject().isResource()) continue;
+			Resource dataEntry = (Resource) st.getObject();
+			out.write(String.format("<h4>DataEntry&nbsp;%s</h4>",dataEntry));
+			//get the compound
+			parseDataEntry(jenaModel, out, dataEntry);
+		}		
+	}
+	protected void parseDataEntry(OntModel jenaModel, OutputStreamWriter out, Resource dataEntry) throws IOException {
+		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.compound,(RDFNode)null));
+		while (compound.hasNext()) {
+			Statement st = compound.next();
+			out.write(String.format("<h5>%s&nbsp;%s</h5>","Compound", st.getObject()));
+		}	
+		//get feature values
+		parseFeatureValues(jenaModel, out, dataEntry);
+	}		
+	protected void parseFeatureValues(OntModel jenaModel, OutputStreamWriter out, Resource dataEntry) throws IOException {
+		StmtIterator values =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.values,(RDFNode)null));
+		out.write(String.format("<h5>%s</h5>","Values"));
+		while (values.hasNext()) {
+			Statement st = values.next();
+			if (st.getObject().isResource()) {
+				Resource fv = (Resource)st.getObject();
+				RDFNode value = fv.getProperty(OT.value).getObject();
+				out.write(String.format("%s&nbsp;=&nbsp;%s<br>",
+						//Feature
+						fv.getProperty(OT.feature).getObject().toString(),
+						//Value
+						value.isLiteral()?((Literal)value).getString():value
+						));
+			}
+		}
+	}
+	
 	protected void more(OutputStreamWriter out) throws IOException {
 		
 		print(OT.OTClass.Algorithm,out);
@@ -31,6 +79,17 @@ public class OntologyPlayground<T> extends RDFGraphResource<T> {
 		print(OT.OTClass.DataEntry,out);
 		print(OT.OTClass.Validation,out);
 		print(OT.OTClass.ValidationInfo,out);
+		
+		
+		OntClass aClass = OT.OTClass.Dataset.getOntClass(queryObject);
+		if (aClass != null) {
+			ExtendedIterator<? extends OntResource>  a = aClass.listInstances();	
+			if (a!=null)
+				while (a.hasNext()) {
+					parseDataset(queryObject, out,a.next());
+				}
+			
+		}
 
 	}	
 	
