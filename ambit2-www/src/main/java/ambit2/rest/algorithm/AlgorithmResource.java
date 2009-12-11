@@ -58,7 +58,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
-		return catalog.get(variant);
+		return catalog.getRepresentation(variant);
 	}
 	@Override
 	public IProcessor<IQueryRetrieval<ModelQueryResults>, Representation> createConvertor(
