@@ -39,16 +39,17 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		try {
+		//try {
 			status = Status.SUCCESS_OK;
 			queryObject = createQuery(getContext(), getRequest(), getResponse());
 			error = null;
-
+		/*
 		} catch (ResourceException x) {
 			queryObject = null;
 			error = x;
 			status = x.getStatus();
 		}			
+		*/
 	}
 	protected void customizeVariants(MediaType[] mimeTypes) {
         List<Variant> variants = new ArrayList<Variant>();
@@ -60,9 +61,9 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	
 	protected   abstract  Q createQuery(Context context, Request request, Response response) throws ResourceException;
 	
-	public synchronized Representation get(Variant variant) {
-
-		try {
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
+	try {
 	        if (queryObject != null) {
 	        	IProcessor<Q, Representation> convertor = null;
 
