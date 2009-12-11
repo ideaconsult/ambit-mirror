@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -48,7 +49,7 @@ public class Build3DResource extends CatalogResource {
 			shell = null;
 		}
 		customizeVariants(new MediaType[] {ChemicalMediaType.CHEMICAL_MDLSDF});
-		reporter = new AlgorithmURIReporter(getRequest());
+
 			
 	}
 	@Override
@@ -57,18 +58,18 @@ public class Build3DResource extends CatalogResource {
 		ArrayList<String> q = new ArrayList<String>();
 		Algorithm build = new Algorithm();
 		build.setId(resource);
+		if (reporter == null) reporter = new AlgorithmURIReporter(request);
 		q.add(reporter.getURI(build));
 		return q.iterator();
 	}
-
-	public Representation getreRepresentation(Variant variant) {
-		
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
 		try {
 			try {
-				this.smiles = Reference.decode(getRequest().getAttributes().get("smiles").toString());
+				Form form = getRequest().getResourceRef().getQueryAsForm();
+				this.smiles = Reference.decode(form.getFirstValue("search"));
 			} catch (Exception x) {
-				getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, x);
-				return null;
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x);
 			}		
 			
 	        if (smiles != null) {
@@ -97,10 +98,10 @@ public class Build3DResource extends CatalogResource {
 	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,"Undefined query");
 	        	return null;        	
 	        }
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x);
-			return null;
-		
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
 		}
 	}			
 
