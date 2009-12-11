@@ -112,10 +112,10 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	        		dimensions,
 	        		item.getIdchemical(),item.getIdstructure()));
 			File dir = file.getParentFile();
-			synchronized (this) {
+			//synchronized (this) {
 				if ((dir!=null) && !dir.exists())	dir.mkdirs();		 
 		        ImageIO.write(image,"png", file);
-			}
+			//}
 	        
 	        
 	        strucQuery.setValue(item);
