@@ -11,7 +11,6 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.FreeTextQuery;
@@ -21,6 +20,7 @@ import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.rest.dataset.DatasetResource;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
 /**
@@ -37,8 +37,8 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?
-			String.format("riap://application/feature_definition?text=%s",Reference.encode(textSearch)):
-			String.format("riap://application/dataset/%s/feature_definition",dataset_id);
+			String.format("riap://application%s?text=%s",PropertyResource.featuredef,Reference.encode(textSearch)):
+			String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
 	}
 	protected IQueryRetrieval<IStructureRecord> getScopeQuery(Context context, Request request,
 								Response response) throws ResourceException {
@@ -72,7 +72,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			if (key ==null) {
 				key = request.getAttributes().get(smartsKey);
 				if (key==null) {
-					if (freetextQuery == null) throw new AmbitException("Empty smarts");
+					if (freetextQuery == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty smarts");
 					else {
 						setTemplate(createTemplate(context, request, response));
 						return freetextQuery;
@@ -171,7 +171,8 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			}
 			setTemplate(createTemplate(context, request, response));
 			return query;
-
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(
 					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x

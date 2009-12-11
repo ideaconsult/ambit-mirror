@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
+import ambit2.rest.propertyvalue.PropertyValueResource;
 
 /**
  * Search for structures, given a property value
@@ -16,8 +17,9 @@ import ambit2.db.search.structure.QueryField;
  *
  */
 public class PropertyQueryResource extends StructureQueryResource<QueryField> {
-	public final static String property =  QueryResource.query_resource + "/feature/{condition}" + "/{value}";
-	public final static String propertyDataset =  QueryResource.query_resource + "/feature/{condition}" + "/{value}";
+	public final static String property =  String.format("%s%s/{condition}/{value}",
+			QueryResource.query_resource,PropertyValueResource.featureKey);
+	
 	protected String dataset_id;
 
 	@Override

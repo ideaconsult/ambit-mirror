@@ -9,7 +9,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;
-import ambit2.db.search.structure.QueryDatasetByID;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
 /**
@@ -25,7 +25,7 @@ public class DatasetCompoundResource extends CompoundResource {
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
 		if (id != null)
-			return String.format("riap://application/dataset/%s/feature_definition",id);
+			return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
 		else 
 			return super.getDefaultTemplateURI(context,request,response);
 			

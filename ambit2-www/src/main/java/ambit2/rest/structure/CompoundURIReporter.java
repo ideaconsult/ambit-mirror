@@ -3,9 +3,19 @@ package ambit2.rest.structure;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.db.DbReader;
+import ambit2.db.DbReaderStructure;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.AbstractBatchProcessor;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveProfileValues;
+import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.readers.RetrieveTemplateStructure;
+import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryURIReporter;
 
 /**
@@ -19,16 +29,21 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	 * 
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
-
+	protected boolean readStructure = false;
 	public CompoundURIReporter(Request request) {
+		this(request,false);
+	}
+	public CompoundURIReporter(Request request,boolean readStructure) {
 		super(request);
+		this.readStructure = readStructure;
+		
 	}
 	public CompoundURIReporter() {
+		this(null,false);
 	}	
 
 
 	public void open() throws DbAmbitException {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
@@ -36,4 +51,12 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	
 		return String.format("%s%s/%d%s",ref,CompoundResource.compound,item.getIdchemical(),delimiter);
 	}
+	@Override
+	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch() {
+		if (readStructure) {
+			DbReader<IStructureRecord> reader = new DbReaderStructure();
+			reader.setHandlePrescreen(true);
+			return reader;
+		} else return super.createBatch();
+	}	
 }	

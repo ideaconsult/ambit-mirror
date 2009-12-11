@@ -11,9 +11,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
-import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.property.PropertyRDFReporter;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms

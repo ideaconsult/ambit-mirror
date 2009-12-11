@@ -151,9 +151,9 @@ public class AllFeatureDefinitionsTest extends ResourceTest {
 		int count = 0;
 		while ((line = r.readLine())!= null) {
 			Assert.assertTrue(
-					line.equals(String.format("http://localhost:%d/feature_definition/1",port)) ||
-					line.equals(String.format("http://localhost:%d/feature_definition/2",port)) ||
-					line.equals(String.format("http://localhost:%d/feature_definition/3",port))
+					line.equals(String.format("http://localhost:%d%s/1",port,PropertyResource.featuredef)) ||
+					line.equals(String.format("http://localhost:%d%s/2",port,PropertyResource.featuredef)) ||
+					line.equals(String.format("http://localhost:%d%s/3",port,PropertyResource.featuredef))
 					);
 			count++;
 		}

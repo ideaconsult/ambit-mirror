@@ -38,16 +38,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		try {
-			status = Status.SUCCESS_OK;
-			queryObject = createQuery(getContext(), getRequest(), getResponse());
-			error = null;
-
-		} catch (ResourceException x) {
-			queryObject = null;
-			error = x;
-			status = x.getStatus();
-		}
 		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
@@ -56,13 +46,14 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES		
-		});
+		});		
 		if (queryObject!=null)
-		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			queryObject.setMaxRecords(Long.parseLong(form.getFirstValue("max").toString()));
-		} catch (Exception x) {}
-
+				try {
+					Form form = getRequest().getResourceRef().getQueryAsForm();
+					queryObject.setMaxRecords(Long.parseLong(form.getFirstValue("max").toString()));
+				} catch (Exception x) {
+					
+				}
 	}	
 	protected Connection getConnection() throws SQLException , AmbitException {
 		Connection connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
@@ -70,8 +61,8 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		return connection;
 	}
 
-	public Representation get(Variant variant) {
-
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
 		try {
 			int maxRetry=3;
 	        if (queryObject != null) {

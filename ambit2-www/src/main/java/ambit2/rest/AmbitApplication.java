@@ -382,7 +382,7 @@ public class AmbitApplication extends Application {
 		
 		router.attach("/name2structure",Name2StructureResource.class);	
 		
-		router.attach("/build3d/smiles/{smiles}",Build3DResource.class);	
+		router.attach(String.format("/%s",Build3DResource.resource),Build3DResource.class);	
 		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
 		
 		/**

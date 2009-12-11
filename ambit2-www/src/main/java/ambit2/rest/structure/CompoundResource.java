@@ -72,9 +72,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
 
 	protected boolean collapsed = false;
-
 	@Override
-	public Representation get(Variant variant) {
+	protected Representation get(Variant variant) throws ResourceException {
 		if (queryObject == null) try {
 			IProcessor<Object, Representation>  convertor = createConvertor(variant);
 			Representation r = convertor.process(null);
@@ -296,7 +295,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} catch (NumberFormatException x) {
 			throw new ResourceException(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Invalid resource id %d",request.getAttributes().get(idcompound)),
+					String.format("Invalid resource id %s",request.getAttributes().get(idcompound)==null?"":request.getAttributes().get(idcompound)),
 					x
 					);
 		} catch (Exception x) {
