@@ -17,11 +17,11 @@ public class Builder3DTest  extends ResourceTest  {
 
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/build3d/smiles/CCC",port);
+		return String.format("http://localhost:%d/build3d?search=CCC",port);
 	}
 	@Test
 	public void testInvalidSmiles() throws Exception {
-		Status status = testHandleError(String.format("http://localhost:%d/build3d/smiles/ZZZ",port),ChemicalMediaType.CHEMICAL_MDLSDF);
+		Status status = testHandleError(String.format("http://localhost:%d/build3d?search=ZZZ",port),ChemicalMediaType.CHEMICAL_MDLSDF);
 		Assert.assertEquals(400,status.getCode());
 	}	
 	@Test
