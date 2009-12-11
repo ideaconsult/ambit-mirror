@@ -24,6 +24,7 @@ import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.structure.CompoundResource;
@@ -84,11 +85,11 @@ public class AmbitResource extends ServerResource {
 			{DatasetsResource.datasets+"/{id}/compound/{cid}","remove all conformers",format,"DELETE","No"},
 
 			{"http://opentox.org/development/wiki/dataset","Feature definitions in a dataset",formatHeader,null,"Implemented"},
-			{DatasetsResource.datasets+"/8/feature_definition","get feature definitions available in the dataset",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/8/feature_definition/12142","get specific feature definition",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/{id}/feature_definition/","add feature definition",format,"POST","No"},
-			{DatasetsResource.datasets+"/{id}/feature_definition/{fdid}","update feature definition",format,"PUT","No"},
-			{DatasetsResource.datasets+"/{id}/feature_definition/{fdid}","remove feature_definition",format,"DELETE","No"},
+			{String.format("%s/8%s",DatasetsResource.datasets,PropertyResource.featuredef),"get feature definitions available in the dataset",format,"GET","Yes"},
+			{String.format("%s/8%s/12142",DatasetsResource.datasets,PropertyResource.featuredef),"get specific feature definition",format,"GET","Yes"},
+			{String.format("%s/{id}%s",DatasetsResource.datasets,PropertyResource.featuredef),"add feature definition",format,"POST","No"},
+			{String.format("%s/{id}%s/{fdid}",DatasetsResource.datasets,PropertyResource.featuredef),"update feature definition",format,"PUT","No"},
+			{String.format("%s/{id}%s/{fdid}",DatasetsResource.datasets,PropertyResource.featuredef),"remove feature_definition",format,"DELETE","No"},
 
 			{"http://opentox.org/dev/apis/dataset","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
 			{"?","?",format,"?","No"},
@@ -100,18 +101,18 @@ public class AmbitResource extends ServerResource {
 			{ReferenceResource.reference+"/11845","update information on a specific reference",format,"PUT","No"},
 			
 			{"http://opentox.org/dev/apis/feature","Features",formatHeader,null},
-			{"/feature/compound/1/feature_definition/1","get the value for a specific feature",format,"GET","Yes"},
-			{"/feature/compound/1/feature_definition","get values for all features ",format,"GET","No"},
-			{"/feature/dataset/1/feature_definition/1","get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
-			{"/feature/feature_definition/{fid}","get the value for a all compounds for a given feature definition",format,"GET","No"},
+			{String.format("%scompound/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a specific feature",format,"GET","Yes"},
+			{String.format("%s/compound/1%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"get values for all features ",format,"GET","No"},
+			{String.format("%s/dataset/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
+			{String.format("%s%s/{fid}",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a all compounds for a given feature definition",format,"GET","No"},
 			
-			{"/feature/compound/{cid}/feature_definition/{f_def_id}","update the value for a specific feature",format,"PUT","Yes"},
-			{"/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id}","update the value for a specific feature",format,"PUT","Yes"},
-			{"/feature/compound/{cid}/feature_definition/{f_def_id}","save the value for a given feature per compound",format,"POST","Yes"},
-			{"/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id}","save the value for a given feature per conformer",format,"POST","Yes"},
-			{"/feature/compound/{cid}/feature_definition","save the value for a new feature per compound",format,"POST","No"},
-			{"/feature/compound/{cid}/conformer/{cid}/feature_definition","save the value for a given feature per conformer",format,"POST","No"},
-			{"feature/compound/{cid}/feature_definition/{f_def_id}","Delete feature value",format,"DELETE","No"},
+			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
+			{String.format("%s/compound/{cid}/conformer/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
+			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a given feature per compound",format,"POST","Yes"},
+			{String.format("%s/compound/{cid}/conformer/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a given feature per conformer",format,"POST","Yes"},
+			{String.format("%s/compound/{cid}%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a new feature per compound",format,"POST","No"},
+			{String.format("%s/compound/{cid}/conformer/{cid}%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a given feature per conformer",format,"POST","No"},
+			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"Delete feature value",format,"DELETE","No"},
 
 			{"(to be discussed)","Feature tuples (PROPOSAL)",formatHeader,null},
 			{"/compound/1/tuple","All available feature tuples",format,"GET","Yes"},
@@ -159,8 +160,8 @@ public class AmbitResource extends ServerResource {
 			{"/compound?search=phenolphthalein","Search for a compound by any property value",format,"GET","Yes"},
 			{"/compound?search=NTP465","Search for a compound by any property value",format,"GET","Yes"},
 			{"/compound?search=KJFMBFZCATUALV-UHFFFAOYAH","Search for a compound by any property value",format,"GET","Yes"},
-			{"/query/feature/=/50-00-0","Search by property (another option)",format,"GET","Yes"},
-			{"/query/feature/like/phenol","Search by property (another option)",format,"GET","Yes"},
+			{String.format("/query%s/=/50-00-0",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
+			{String.format("/query%s/like/phenol",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]",format,"GET","Under development"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
 			{"/query/similarity?search=c1ccccc1&threshold=0.8","Demo similarity search, to be refactored",format,"GET","Yes"},

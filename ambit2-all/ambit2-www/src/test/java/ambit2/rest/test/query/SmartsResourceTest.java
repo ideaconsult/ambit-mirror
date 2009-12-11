@@ -8,13 +8,15 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.rest.test.ResourceTest;
 
 public class SmartsResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/query/smarts/C=O", port);
+		return String.format("http://localhost:%d/query/smarts?search=%s", port,
+				Reference.encode("c1ccccc1"));
 	}
 	@Test
 	public void testURI() throws Exception {
@@ -26,7 +28,7 @@ public class SmartsResourceTest extends ResourceTest {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/compound/7",line);
+			Assert.assertEquals(String.format("http://localhost:%d/compound/11",port),line);
 		}
 		return true;
 	}

@@ -25,12 +25,11 @@ import org.restlet.data.Response;
 
 import weka.core.Attribute;
 import weka.core.Instances;
-
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.io.DelimitedFileReader;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -91,15 +90,15 @@ public class CompoundResourceTest extends ResourceTest {
 	
 	@Test
 	public void testRDFTurtle() throws Exception {
-		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d/feature_definition", 
-				port,StructureQueryResource.feature_URI,port)
+		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
+				port,StructureQueryResource.feature_URI,port,PropertyResource.featuredef)
 				,MediaType.APPLICATION_RDF_TURTLE);
 	}	
 	
 	@Test
 	public void testARFF() throws Exception {
-		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d/feature_definition", 
-				port,StructureQueryResource.feature_URI,port)
+		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
+				port,StructureQueryResource.feature_URI,port,PropertyResource.featuredef)
 				,ChemicalMediaType.WEKA_ARFF);
 	}	
 	@Override
@@ -121,8 +120,11 @@ public class CompoundResourceTest extends ResourceTest {
 	@Test
 	public void testCSV() throws Exception {
 	
-		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d/feature_definition", 
-				port,StructureQueryResource.feature_URI,port),MediaType.TEXT_CSV);
+		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
+				port,
+				StructureQueryResource.feature_URI,
+				port,
+				PropertyResource.featuredef),MediaType.TEXT_CSV);
 	}		
 	@Test
 	public void testHTML() throws Exception {
@@ -142,12 +144,13 @@ public class CompoundResourceTest extends ResourceTest {
 	}	
 	@Test
 	public void testCML() throws Exception {
+		
 		testGet(getTestURI(),ChemicalMediaType.CHEMICAL_CML);
 	}
 	@Override
 	public boolean verifyResponseCML(String uri, MediaType media, InputStream in)
 			throws Exception {
-		/*
+	/*	
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int count=0;
@@ -163,7 +166,6 @@ public class CompoundResourceTest extends ResourceTest {
 		Assert.assertEquals(3,mol.getAtomCount());
 		Assert.assertEquals(0,mol.getBondCount());
 		return true;
-
 	}
 	@Test
 	public void testSDF() throws Exception {

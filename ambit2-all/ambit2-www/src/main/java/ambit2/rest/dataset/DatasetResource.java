@@ -16,6 +16,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryComplement;
 import ambit2.db.update.structure.ChemicalByDataset;
+import ambit2.rest.property.PropertyResource;
 
 
 /**
@@ -42,7 +43,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		Object id = request.getAttributes().get(datasetKey);
 		if (id != null)
-			return String.format("riap://application/dataset/%s/feature_definition",id);
+			return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
 		else 
 			return super.getDefaultTemplateURI(context,request,response);
 			

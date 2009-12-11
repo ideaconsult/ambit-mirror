@@ -18,7 +18,7 @@ import ambit2.rest.dataset.DatasetResource;
 /**
  * Retrieves feature definitions by dataset 
 <pre>
-	/dataset/{id}/feature_definition
+	/dataset/{id}/feature
 </pre>
  * @author nina
  *

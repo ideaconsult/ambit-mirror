@@ -106,10 +106,12 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 		
 	}
 	protected String getUpdateAction(PropertyValue v) {
-		return String.format("%s/feature/compound/%d/conformer/%d/feature_definition/%d",
+		return String.format("%s%s/compound/%d/conformer/%d%s%d",
 				getUriReporter().getBaseReference(),
+				PropertyValueResource.featureKey,
 				record.getIdchemical(),
 				record.getIdstructure(),
+				PropertyResource.featuredef,
 				v.getProperty().getId()
 				);
 	}

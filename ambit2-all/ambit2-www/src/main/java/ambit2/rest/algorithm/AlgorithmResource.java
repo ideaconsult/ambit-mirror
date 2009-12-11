@@ -57,7 +57,7 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		catalog.init(getContext(),getRequest(),getResponse());
 	}
 	@Override
-	public Representation get(Variant variant) {
+	protected Representation get(Variant variant) throws ResourceException {
 		return catalog.get(variant);
 	}
 	@Override

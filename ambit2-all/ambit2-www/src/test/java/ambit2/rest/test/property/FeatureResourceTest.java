@@ -109,7 +109,8 @@ public class FeatureResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/feature/compound/11/feature_definition/3", line);
+			Assert.assertEquals(
+					String.format("http://localhost:%d%s/compound/11%s/3",port,PropertyValueResource.featureKey,PropertyResource.featuredef), line);
 			count++;
 		}
 		return count==1;
@@ -138,7 +139,7 @@ public class FeatureResourceTest extends ResourceTest {
 		headers.add(FeatureResource.headers.value.toString(),"XXXXXX");
 		
 		Response response =  testPost(
-					String.format("http://localhost:%d/feature/compound/7/conformer/100211/feature_definition/2", port),
+					String.format("http://localhost:%d%s/compound/7/conformer/100211%s/2", port,PropertyValueResource.featureKey,PropertyResource.featuredef),
 					MediaType.TEXT_XML,
 					headers);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
@@ -156,7 +157,7 @@ public class FeatureResourceTest extends ResourceTest {
 		headers.add(FeatureResource.headers.value.toString(),"3.14");
 		
 		Response response =  testPost(
-					String.format("http://localhost:%d/feature/compound/7/conformer/100211/feature_definition/2", port),
+					String.format("http://localhost:%d%s/compound/7/conformer/100211%s/2", port,PropertyValueResource.featureKey,PropertyResource.featuredef),
 					MediaType.TEXT_XML,
 					headers);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
@@ -173,13 +174,15 @@ public class FeatureResourceTest extends ResourceTest {
 		String xml = String.format( 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><FeatureDefinitions xmlns=\"http://opentox.org/1.0\">" +
 			"<%s ID=\"1\" %s=\"Property 1\" %s=\"8\" %s=\"Property\">" +
-			"<link href=\"http://localhost:8181/feature_definition/1\"/>" +
+			"<link href=\"http://localhost:%d%s/1\"/>" +
 			"<Reference xmlns=\"http://www.opentox.org/Reference/1.0\" AlgorithmID=\"NA\" ID=\"8\" Name=\"Dummy\"/>" +
 			"</%s></FeatureDefinitions>",
 			XMLTags.node_featuredef,
 			XMLTags.attr_name,
 			XMLTags.node_reference,
 			XMLTags.attr_type,
+			port,
+			PropertyResource.featuredef,
 			XMLTags.node_featuredef,
 			
 			port,

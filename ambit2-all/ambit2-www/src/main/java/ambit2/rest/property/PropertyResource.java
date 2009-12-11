@@ -42,8 +42,8 @@ import ambit2.rest.structure.ConformerResource;
  * <br>
  * Supported REST operations:
  * <ul>
- * <li>GET 	 /feature_definition/{id}  returns text/uri-list or text/xml or text/html
- * <li>POST 	POST 	 /feature_definition (as specified)
+ * <li>GET 	 /feature/{id}  returns text/uri-list or text/xml or text/html
+ * <li>POST 	POST 	 /feature (as specified)
  * </ul>
 
  * @author nina

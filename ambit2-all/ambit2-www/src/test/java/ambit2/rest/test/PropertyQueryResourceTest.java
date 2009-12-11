@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 
+import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.PropertyQueryResource;
 
 /**
@@ -19,7 +20,7 @@ import ambit2.rest.query.PropertyQueryResource;
 public class PropertyQueryResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/query/feature/like/1530-32-1", port);
+		return String.format("http://localhost:%d/query%s/like/1530-32-1", port,PropertyValueResource.featureKey);
 	}
 	@Test
 	public void testURI() throws Exception {

@@ -24,7 +24,7 @@ import ambit2.rest.test.ResourceTest;
 public class PropertyValueResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/compound/11/feature/CasRN", port);
+		return String.format("http://localhost:%d/compound/11%s/CasRN", port,PropertyValueResource.featureKey);
 	}
 	@Test
 	public void testXML() throws Exception {

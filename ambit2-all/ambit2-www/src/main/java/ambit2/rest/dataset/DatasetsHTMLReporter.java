@@ -81,7 +81,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/feature.png\" alt=\"feature_definition\" title=\"Retrieve feature definitions\" border=\"0\"/></a>",
+						"<a href=\"%s%s\"><img src=\"%s/images/feature.png\" alt=\"features\" title=\"Retrieve feature definitions\" border=\"0\"/></a>",
 						w.toString(),
 						PropertyResource.featuredef,
 						uriReporter.getBaseReference().toString()));	

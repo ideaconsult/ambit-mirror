@@ -122,7 +122,9 @@ public class PropertyResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/feature_definition/1", line);
+			Assert.assertEquals(
+					String.format("http://localhost:%d%s/1",port,PropertyResource.featuredef)
+							, line);
 			count++;
 		}
 		return count==1;
@@ -134,7 +136,7 @@ public class PropertyResourceTest extends ResourceTest {
 		headers.add(PropertyResource.headers.name.toString(),"cas");
 		headers.add(PropertyResource.headers.reference_id.toString(),"4");
 		Response response =  testPost(
-					String.format("http://localhost:%d/feature_definition", port),
+					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.TEXT_XML,
 					headers);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
@@ -152,14 +154,16 @@ public class PropertyResourceTest extends ResourceTest {
 		String xml = String.format( 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><FeatureDefinitions xmlns=\"http://opentox.org/1.0\">" +
 			"<%s ID=\"1\" %s=\"Property 1\" %s=\"8\" %s=\"Property\">" +
-			"<link href=\"http://localhost:8181/feature_definition/1\"/>" +
+			"<link href=\"http://localhost:%d%s/1\"/>" +
 			"</%s></FeatureDefinitions>",
 			XMLTags.node_featuredef,
 			XMLTags.attr_name,
 			XMLTags.node_reference,
 			XMLTags.attr_type,
+			port,
+			PropertyResource.featuredef,			
 			XMLTags.node_featuredef,
-			
+			//?
 			port,
 			XMLTags.node_reference);
 			

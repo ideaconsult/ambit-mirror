@@ -26,6 +26,7 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -495,10 +496,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
 							value));
 					*/
-					b.append(String.format("<a href=\"%s/compound?%s=%s/feature_definition/%d&property=%s&search=%s\">%s</a>", 
+					b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s\">%s</a>", 
 						uriReporter.getBaseReference(),
 						StructureQueryResource.feature_URI,
 						uriReporter.getBaseReference(),
+						PropertyResource.featuredef,
 						property.getId(),
 						Reference.encode(property.getName()),
 						searchValue==null?"":Reference.encode(searchValue.toString()),
