@@ -62,9 +62,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
 			}},
 	};
-	@Override
-	public Representation get(Variant variant) throws ResourceException {
-		return super.get(variant);
+	
+	public Representation getRepresentation(Variant variant) throws ResourceException {
+		return get(variant);
 	}
 	
 	protected void initList() {
