@@ -22,7 +22,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	 * 
 	 */
 	private static final long serialVersionUID = -4569410787926615089L;
-
+	protected int numberofHeaderLines  = 1;
+	
 	public CSVReporter() {
 		this(null);
 	}
@@ -69,24 +70,31 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		if (header == null) {
 			header = template2Header(template,true);
 		
-			writer.write("");
-			for (Property p : header) 
-				writer.write(String.format(",\"%s\"", p.getUrl()));
-			writer.write("\n");
-			writer.write("");
-			for (Property p : header) 
-				writer.write(String.format(",\"%s\"", p.getTitle()));
-			
-			writer.write("\n");
-			writer.write("URI");
-			for (Property p : header) 
-				writer.write(String.format(",\"%s\"", p.getName()));
-			writer.write("\n");
-			
-			writer.write("");
-			for (Property p : header) 
-				writer.write(String.format(",\"%s\"", p.getUnits()));
-			writer.write("\n");			
+			if (numberofHeaderLines == 1) {
+				writer.write("");
+				for (Property p : header) 
+					writer.write(String.format(",\"%s %s\"", p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));	
+				writer.write("\n");
+			} else {
+				writer.write("");
+				for (Property p : header) 
+					writer.write(String.format(",\"%s\"", p.getUrl()));
+				writer.write("\n");
+				writer.write("");
+				for (Property p : header) 
+					writer.write(String.format(",\"%s\"", p.getTitle()));
+				
+				writer.write("\n");
+				writer.write("URI");
+				for (Property p : header) 
+					writer.write(String.format(",\"%s\"", p.getName()));
+				writer.write("\n");
+				
+				writer.write("");
+				for (Property p : header) 
+					writer.write(String.format(",\"%s\"", p.getUnits()));
+				writer.write("\n");			
+			}
 		}
 	}	
 
