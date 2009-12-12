@@ -98,7 +98,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			if (idref==null) {
 				/*
 				Form form = request.getResourceRef().getQueryAsForm();
-				Object key = form.getFirstValue("search");
+				Object key = form.getFirstValue(QueryResource.search_param);
 				if (key != null) {
 					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
 					q.setCondition(StringCondition.getInstance(StringCondition.C_SOUNDSLIKE));

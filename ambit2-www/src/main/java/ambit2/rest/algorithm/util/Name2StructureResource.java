@@ -20,6 +20,7 @@ import org.restlet.resource.ServerResource;
 
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.query.QueryResource;
 /**
  * Name2structure convertor based on opsin
  * @author nina
@@ -50,7 +51,7 @@ public class Name2StructureResource extends ServerResource {
 
 
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		Object key = form.getFirstValue("search");
+		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 			name = Reference.decode(key.toString());
 		} else name = null; 		

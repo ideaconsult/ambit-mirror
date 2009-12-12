@@ -30,7 +30,7 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 			Request request, Response response) throws ResourceException {
 		QueryStructureByQuality q = new QueryStructureByQuality();
 		Form form = request.getResourceRef().getQueryAsForm();
-		Object key = form.getFirstValue("search");
+		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 	        try {
 	        	q.setValue(new QLabel(QUALITY.valueOf(Reference.decode(key.toString()))));

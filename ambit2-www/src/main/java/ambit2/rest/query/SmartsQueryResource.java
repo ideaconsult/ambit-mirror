@@ -68,7 +68,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			IQueryRetrieval<IStructureRecord> freetextQuery = getScopeQuery(context, request, response);
 			
 			Form form = request.getResourceRef().getQueryAsForm();
-			Object key = form.getFirstValue("search");
+			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key ==null) {
 				key = request.getAttributes().get(smartsKey);
 				if (key==null) {

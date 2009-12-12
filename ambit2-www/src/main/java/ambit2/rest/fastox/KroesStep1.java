@@ -26,8 +26,7 @@ public class KroesStep1 extends FastToxStep1 {
 		return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
 						getRequest(),
-						false,
-						getURIReporter()) {
+						false) {
 					
 					
 					public void header(Writer output, QueryStructureByID query) {
@@ -35,7 +34,7 @@ public class KroesStep1 extends FastToxStep1 {
 							AmbitResource.writeHTMLHeader(output,
 									collapsed?"Chemical compounds":"Chemical compound"
 									,
-									getURIReporter().getRequest()
+									getRequest()
 									);
 							
 						} catch (Exception x) {}		

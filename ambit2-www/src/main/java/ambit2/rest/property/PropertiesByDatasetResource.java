@@ -14,6 +14,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.PropertiesByDataset;
 import ambit2.rest.dataset.DatasetResource;
+import ambit2.rest.query.QueryResource;
 
 /**
  * Retrieves feature definitions by dataset 
@@ -50,7 +51,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 		}
 		else {
 			Form form = request.getResourceRef().getQueryAsForm();
-			Object key = form.getFirstValue("search");
+			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
 				Property property = new Property(Reference.decode(key.toString()));
 				q.setFieldname(property);

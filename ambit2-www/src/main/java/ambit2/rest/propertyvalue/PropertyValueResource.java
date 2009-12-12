@@ -29,7 +29,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
-	public static final String featureKey = "/feature";
+	public static final String featureKey = "/feature_value";
 	public static final String compoundFeature = String.format("%s%s",CompoundResource.compoundID,featureKey);
 
 	

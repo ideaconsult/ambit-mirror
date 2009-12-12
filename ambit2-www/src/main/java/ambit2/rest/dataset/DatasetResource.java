@@ -22,21 +22,12 @@ import ambit2.rest.property.PropertyResource;
 /**
  * Dataset resource - A set of chemical compounds and assigned features
  * 
- * http://opentox.org/development/wiki/dataset
- * 
- * Supported operations:
- * <ul>
- * <li>GET /dataset  ; returns text/uri-list or text/xml or text/html
- * <li>POST /dataset ; accepts chemical/x-mdl-sdfile or multipart/form-data (SDF,mol, txt, csv, xls,all formats supported in Ambit)
- * <li>GET 	 /dataset/{id}  ; returns text/uri-list or text/xml
- * <li>PUT and DELETE not yet supported
- * </ul>
- * 
  * @author nina
  *
  */
 public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extends DatasetStructuresResource<Q> {
-	
+	public final static String dataset_complement_uri = "complement";
+	public final static String dataset_intersection_uri = "intersection";
 	
 
 	@Override
@@ -65,7 +56,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 		
 		
 		Form form = request.getResourceRef().getQueryAsForm();
-		String[] datasetsURI =  form.getValuesArray("complement");
+		String[] datasetsURI =  form.getValuesArray(dataset_complement_uri);
 		if ((datasetsURI != null) && (datasetsURI.length>0)) {
 			QueryComplement qc = new QueryComplement();
 			qc.setChemicalsOnly(true);
@@ -93,7 +84,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 		
 		
 		Form form = request.getResourceRef().getQueryAsForm();
-		String[] datasetsURI =  form.getValuesArray("intersection");
+		String[] datasetsURI =  form.getValuesArray(dataset_intersection_uri);
 		if ((datasetsURI != null) && (datasetsURI.length>0)) {
 			QueryCombinedStructure qc = new QueryCombinedStructure() {
 				@Override

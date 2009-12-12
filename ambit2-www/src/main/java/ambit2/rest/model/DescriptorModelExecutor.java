@@ -43,7 +43,8 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
 	public void setReference(Reference reference) {
 		this.reference = reference;
 	}
-
+	//refactor to use riap:uri?featureuri[]=xx
+	//Batch reader to read via riap/http
 	public Reference process(ModelQueryResults model)
 			throws AmbitException {
 		try {
@@ -98,7 +99,7 @@ public class DescriptorModelExecutor extends AbstractDBProcessor<ModelQueryResul
     			return new Reference(String.format("%s/All/%s",OntologyResource.resource,model.getDependent().getName()));
     		else return reference;
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.error(x);
 			throw new AmbitException(x);
 		} finally {
 			

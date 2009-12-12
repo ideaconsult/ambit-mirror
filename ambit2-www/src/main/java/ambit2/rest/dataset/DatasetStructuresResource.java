@@ -43,7 +43,8 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 				throw new InvalidResourceIDException(id);
 			}
 			else throw new InvalidResourceIDException("");
-			
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(
 					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x

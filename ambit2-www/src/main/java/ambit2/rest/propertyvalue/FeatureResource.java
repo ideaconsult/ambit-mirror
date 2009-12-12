@@ -40,15 +40,15 @@ import ambit2.rest.structure.ConformerResource;
 <pre>
 REST operations¶
 Description 	Method 	URI 	Parameters 	Result 	Status codes
-get the value for a specific feature 	GET 	/feature/compound/{cid}/feature_definition/{f_def_id} 	- 	text/xml -> xml representation of feature; text/plain -> text value of the feature 	200,404,503
-get the value for a all features 	GET 	/feature/compound/{cid} 	- 	xml representation of all features 	200,404,503
-get the value for a all feature values for a given feature definition in a dataset 	GET 	/feature/dataset/{did}/feature_definition/{fid} 	- 	xml representation of all features 	200,404,503
-get the value for a all feature values for a given feature definition 	GET 	/feature/feature_definition/{fid} 	- 	xml representation of all features 	200,404,503
-update the value for a specific feature 	PUT 	/feature/compound/{cid}/feature_definition/{f_def_id} 	value 	- 	200,400,404,503
-update the value for a specific feature 	PUT 	/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id} 	value 	- 	200,400,404,503
-save a new feature per compound 	POST 	/feature/compound/{cid}/feature_definition/{f_def_id} 	value 	URI of feature representation 	200,404,503
-save a new feature per conformer 	POST 	/feature/compound/{cid}/conformer/{cid}/feature_definition/{f_def_id} 	value 	URI of feature representation 	200,404,503
-Not supported yet: delete a feature 	DELETE 	/feature/compound/{cid}/feature_definition/{f_def_id} 	- 	- 	200,404,503 
+get the value for a specific feature 	GET 	/feature_value/compound/{cid}/feature/{f_def_id} 	- 	text/xml -> xml representation of feature; text/plain -> text value of the feature 	200,404,503
+get the value for a all features 	GET 	/feature_value/compound/{cid} 	- 	xml representation of all features 	200,404,503
+get the value for a all feature values for a given feature definition in a dataset 	GET 	/feature_value/dataset/{did}/feature/{fid} 	- 	xml representation of all features 	200,404,503
+get the value for a all feature values for a given feature definition 	GET 	/feature_value/feature/{fid} 	- 	xml representation of all features 	200,404,503
+update the value for a specific feature 	PUT 	/feature_value/compound/{cid}/feature/{f_def_id} 	value 	- 	200,400,404,503
+update the value for a specific feature 	PUT 	/feature_value/compound/{cid}/conformer/{cid}/feature/{f_def_id} 	value 	- 	200,400,404,503
+save a new feature per compound 	POST 	/feature_value/compound/{cid}/feature/{f_def_id} 	value 	URI of feature representation 	200,404,503
+save a new feature per conformer 	POST 	/feature_value/compound/{cid}/conformer/{cid}/feature/{f_def_id} 	value 	URI of feature representation 	200,404,503
+Not supported yet: delete a feature 	DELETE 	/feature_value/compound/{cid}/feature/{f_def_id} 	- 	- 	200,404,503 
 </pre>
  * @author nina
  *

@@ -66,7 +66,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 		uriReporter.processItem(query.getFieldname(),w);
 		feature_uri = w.toString();
 		*/
-		doc.appendChild(doc.createElementNS(XMLTags.ns_opentox_feature,
+		doc.appendChild(doc.createElementNS(XMLTags.ns_opentox_feature_value,
 				XMLTags.node_features));	
 		//a hack
 		if (query instanceof AbstractQuery) {
@@ -80,7 +80,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 	@Override
 	public void processItem(T item) throws AmbitException  {
 
-        NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_feature, XMLTags.node_features);
+        NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_feature_value, XMLTags.node_features);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
         		
@@ -106,13 +106,13 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 		else if (item instanceof IStructureRecord) 
 			return getItemElement(doc, (IStructureRecord) item);
 		else {
-	Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
+	Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature_value,XMLTags.node_feature);
 	e_feature.setAttribute(XMLTags.attr_value,item.toString());
 	return e_feature;
 		}
 	}
 	public Element getItemElement(Document doc, PropertyValue item) {
-		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
+		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature_value,XMLTags.node_feature);
 		if (record != null) {
 			e_feature.setAttribute("CompoundID",Integer.toString(record.getIdchemical()));
 			if (record.getIdstructure()>0)
@@ -132,7 +132,7 @@ public class PropertyValueXMLReporter<T> extends QueryDOMReporter<T,IQueryRetrie
 	</complexType>
  */	
 	public Element getItemElement(Document doc, IStructureRecord record) {
-		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature,XMLTags.node_feature);
+		Element e_feature = doc.createElementNS(XMLTags.ns_opentox_feature_value,XMLTags.node_feature);
 		
 		if (record != null) {
 			e_feature.setAttribute("CompoundID",Integer.toString(record.getIdchemical()));

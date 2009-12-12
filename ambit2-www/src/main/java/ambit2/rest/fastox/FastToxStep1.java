@@ -12,10 +12,10 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.structure.CompoundHTMLReporter;
-import ambit2.rest.structure.CompoundResource;
 
-public class FastToxStep1 extends CompoundResource {
+public class FastToxStep1 extends SmartsQueryResource {
 	public static String resource = "/fasttox";
 
 	@Override
@@ -24,8 +24,7 @@ public class FastToxStep1 extends CompoundResource {
 		return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
 						getRequest(),
-						false,
-						getURIReporter()) {
+						false) {
 					
 					
 					public void header(Writer output, QueryStructureByID query) {

@@ -20,8 +20,8 @@ public class XMLTags {
 	public final static String ns_opentox = "http://opentox.org/1.0";
 	public final static String ns_opentox_reference = "http://www.opentox.org/Reference/1.0";
 	public final static String ns_opentox_user = "http://www.opentox.org/User/1.0";
-	public final static String ns_opentox_feature = "http://opentox.org/Feature/1.0";
-	public final static String ns_opentox_feature_definition = "http://www.opentox.org/FeatureDefinition/1.0";
+	public final static String ns_opentox_feature_value = "http://opentox.org/Feature/1.0";
+	public final static String ns_opentox_feature = "http://www.opentox.org/FeatureDefinition/1.0";
 	public final static String node_ambit = "ambit";
 	public final static String node_dataset = "dataset";
 	public final static String node_datasets = "datasets";

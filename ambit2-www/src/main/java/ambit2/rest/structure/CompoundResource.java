@@ -44,6 +44,7 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetRDFReporter;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -247,7 +248,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			Object key = request.getAttributes().get(idcompound);
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
-				String[] keys = form.getValuesArray("search");
+				String[] keys = form.getValuesArray(QueryResource.search_param);
 				String[] properties = form.getValuesArray("property");
 				String[] condition = form.getValuesArray("condition");
 				if (keys != null) {

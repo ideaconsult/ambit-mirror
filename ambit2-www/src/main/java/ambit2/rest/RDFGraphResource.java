@@ -24,6 +24,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.model.AbstractModel;
+import ambit2.rest.query.QueryResource;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -118,7 +119,7 @@ public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcesso
 			predicate = arguments.predicate.getProperty(form, o);
 			object = arguments.object.getResource(form, o);
 			literal = arguments.literal.getLiteral(form, o);
-			search = form.getFirstValue("search");
+			search = form.getFirstValue(QueryResource.search_param);
 			
 			OntModel model = null;
 			if (useStatic) {
