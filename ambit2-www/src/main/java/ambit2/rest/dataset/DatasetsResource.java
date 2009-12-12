@@ -109,9 +109,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
-
 	@Override
-	protected Representation post(Representation entity)
+	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
