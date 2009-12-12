@@ -26,6 +26,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.error.EmptyMoleculeException;
+import ambit2.rest.query.QueryResource;
 
 /**
  * Under development
@@ -67,7 +68,7 @@ public class Build3DResource extends CatalogResource {
 		try {
 			try {
 				Form form = getRequest().getResourceRef().getQueryAsForm();
-				this.smiles = Reference.decode(form.getFirstValue("search"));
+				this.smiles = Reference.decode(form.getFirstValue(QueryResource.search_param));
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x);
 			}		

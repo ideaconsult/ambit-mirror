@@ -25,6 +25,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.query.QueryResource;
 
 /**
  * Retrieves structure in SDF format from pubchem
@@ -53,7 +54,7 @@ public class PubchemResource extends ServerResource {
 			this.term = Reference.decode(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
-			Object key = form.getFirstValue("search");
+			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
 				term = Reference.decode(key.toString());
 			} else this.term = null;

@@ -21,6 +21,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
@@ -36,13 +37,13 @@ public class AmbitResource extends ServerResource {
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
 	protected String[][] uri = {
 			
-			{"http://opentox.org/dev/apis/structure","Chemical compounds",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.1/structure","Chemical compounds",formatHeader,null,"Implemented"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s",CompoundResource.compound),"create a new chemical compound",format,"POST","No"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Update the representation of chemical compound",format,"PUT","No"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Remove chemical compound",format,"DELETE","No"},
 
-			{"http://opentox.org/dev/apis/structure","Conformers",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.1/structure","Conformers",formatHeader,null,"Implemented"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"update the representation of a structure",format,"PUT","No"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100)," Remove structure",format,"DELETE","No"},
@@ -50,62 +51,7 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"create a new structure",format,"POST","No"},
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"Remove conformers",format,"DELETE","No"},
 
-			{"http://opentox.org/dev/apis/feature","Feature definitions",formatHeader,null},
-			{PropertyResource.featuredef,"Retrieve all feature definitions",format,"GET","Yes"},
-			{PropertyResource.featuredef+"/12142","Get description of a specific feature definition",format,"GET","Yes"},
-			{PropertyResource.featuredef,"Create a new feature definition",format,"POST","Yes"},
-			
-			{"http://opentox.org/dev/apis/structure","Feature definitions per compound/conformer",formatHeader,null,"Implemented"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All feature definitions, available for a compound",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
-			
-			{"http://opentox.org/dev/apis/dataset","Dataset",formatHeader,null,"Implemented"},
-			{DatasetsResource.datasets,"get list of datasets available",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/8","get dataset",format,"GET","Yes"},
-			{DatasetsResource.datasets,"create a new dataset",format,"POST","Yes"},
-			{"/dataset/{id}","update dataset",format,"PUT","No"},
-			{"/dataset/{id}","remove dataset",format,"DELETE","No"},
-			
-			
-			{"http://opentox.org/dev/apis/dataset","Chemical compounds in a dataset",formatHeader,null,"Implemented"},			
-			{DatasetsResource.datasets+"/8/compound","get compounds",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/8/compound/413","get compound",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/{id}/compound","add compound",format,"POST","No"},
-			{DatasetsResource.datasets+"/{id}/compound/{cid}","update compound",format,"PUT","No"},
-			{DatasetsResource.datasets+"/{id}/compound/{cid}","remove compound from a dataset",format,"DELETE","No"},
-			{DatasetsResource.datasets+"/{id}/compound","remove all compounds in a dataset",format,"DELETE","No"},
-
-			{"http://opentox.org/dev/apis/dataset","Conformers in a dataset",formatHeader,null,"Implemented"},
-			{DatasetsResource.datasets+"/8/compound/413/conformer","get conformers",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/8/compound/413/conformer/100617","get conformer",format,"GET","Yes"},
-			{DatasetsResource.datasets+"/{id}/compound/{cid}","add conformer",format,"POST","No"},
-			{DatasetsResource.datasets+"/{id}/compound/{cid}/conformer/{id}","update conformer",format,"PUT","No"},
-			{DatasetsResource.datasets+"/{id}/compound/{cid}/conformer/{id}","remove conformer from the dataset",format,"DELETE","No"},
-			{DatasetsResource.datasets+"/{id}/compound/{cid}","remove all conformers",format,"DELETE","No"},
-
-			{"http://opentox.org/development/wiki/dataset","Feature definitions in a dataset",formatHeader,null,"Implemented"},
-			{String.format("%s/8%s",DatasetsResource.datasets,PropertyResource.featuredef),"get feature definitions available in the dataset",format,"GET","Yes"},
-			{String.format("%s/8%s/12142",DatasetsResource.datasets,PropertyResource.featuredef),"get specific feature definition",format,"GET","Yes"},
-			{String.format("%s/{id}%s",DatasetsResource.datasets,PropertyResource.featuredef),"add feature definition",format,"POST","No"},
-			{String.format("%s/{id}%s/{fdid}",DatasetsResource.datasets,PropertyResource.featuredef),"update feature definition",format,"PUT","No"},
-			{String.format("%s/{id}%s/{fdid}",DatasetsResource.datasets,PropertyResource.featuredef),"remove feature_definition",format,"DELETE","No"},
-
-			{"http://opentox.org/dev/apis/dataset","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
-			{"?","?",format,"?","No"},
-
-			{"http://opentox.org/dev/apis/feature","References",formatHeader,null},
-			{ReferenceResource.reference,"read all references",format,"GET","Yes"},
-			{ReferenceResource.reference+"/11845","read information on a specific reference",format,"GET","Yes"},
-			{ReferenceResource.reference,"create a new referenc",format,"POST","Yes"},
-			{ReferenceResource.reference+"/11845","update information on a specific reference",format,"PUT","No"},
-			
-			{"http://opentox.org/dev/apis/feature","Features",formatHeader,null},
-			{String.format("%scompound/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a specific feature",format,"GET","Yes"},
-			{String.format("%s/compound/1%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"get values for all features ",format,"GET","No"},
-			{String.format("%s/dataset/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
-			{String.format("%s%s/{fid}",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a all compounds for a given feature definition",format,"GET","No"},
-			
+			{"[ambit]","Compound properties",formatHeader,null,"Implemented"},
 			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
 			{String.format("%s/compound/{cid}/conformer/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
 			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a given feature per compound",format,"POST","Yes"},
@@ -113,18 +59,49 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/compound/{cid}%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a new feature per compound",format,"POST","No"},
 			{String.format("%s/compound/{cid}/conformer/{cid}%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a given feature per conformer",format,"POST","No"},
 			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"Delete feature value",format,"DELETE","No"},
-
-			{"(to be discussed)","Feature tuples (PROPOSAL)",formatHeader,null},
-			{"/compound/1/tuple","All available feature tuples",format,"GET","Yes"},
-			{"/compound/1/tuple/264168","Specific feature tuple",format,"GET","Yes"},
-			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
-
-			{"(to be discussed)","Model predictions (PROPOSAL)",formatHeader,null},
-			{"/compound/1/model","All available model predictions",format,"GET","Yes"},
-			{"/compound/1/model/3","Specific model prediction",format,"GET","Yes"},
 			
-			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
+			{"http://opentox.org/dev/apis/api-1.1/dataset","Datasets",formatHeader,null,"Implemented"},
+			{DatasetsResource.datasets,"get list of datasets available",format,"GET","Yes"},
+			{DatasetsResource.datasets+"?search=Skin","Search for datasets by name",format,"GET","Yes"},			
+			{DatasetsResource.datasets,"create a new dataset",format,"POST","Yes"},
+			{"/dataset/{id}","update dataset",format,"PUT","No"},
+			{"/dataset/{id}","remove dataset",format,"DELETE","No"},
+			
+			{"http://opentox.org/dev/apis/dataset","A Dataset",formatHeader,null,"Implemented"},
+			{DatasetResource.dataset+"/8","get dataset",format,"GET","Yes"},
+			{DatasetResource.dataset+"/8/metadata","get dataset metadata",format,"GET","Yes"},
+			{DatasetResource.dataset+"/8/features","get dataset features",format,"GET","Yes"},
+			{DatasetResource.dataset+"/8/compound","get compounds only",format,"GET","Yes"},	
+			
+			{"[ambit]","Chemical compounds in a dataset",formatHeader,null,"Implemented"},			
+			{DatasetResource.dataset+"/8/compound/413","get compound",format,"GET","Yes"},
+			{DatasetResource.dataset+"/{id}/compound","add compound",format,"POST","No"},
+			{DatasetResource.dataset+"/{id}/compound/{cid}","update compound",format,"PUT","No"},
+			{DatasetResource.dataset+"/{id}/compound/{cid}","remove compound from a dataset",format,"DELETE","No"},
+			{DatasetResource.dataset+"/{id}/compound","remove all compounds in a dataset",format,"DELETE","No"},
 
+			{"[ambit]","Conformers in a dataset",formatHeader,null,"Implemented"},
+			{DatasetResource.dataset+"/8/compound/413/conformer","get conformers",format,"GET","Yes"},
+			{DatasetResource.dataset+"/8/compound/413/conformer/100617","get conformer",format,"GET","Yes"},
+			{DatasetResource.dataset+"/{id}/compound/{cid}","add conformer",format,"POST","No"},
+			{DatasetResource.dataset+"/{id}/compound/{cid}/conformer/{id}","update conformer",format,"PUT","No"},
+			{DatasetResource.dataset+"/{id}/compound/{cid}/conformer/{id}","remove conformer from the dataset",format,"DELETE","No"},
+			{DatasetResource.dataset+"/{id}/compound/{cid}","remove all conformers",format,"DELETE","No"},
+
+			{"http://opentox.org/development/wiki/dataset","Features in a dataset",formatHeader,null,"Implemented"},
+			{String.format("%s/8%s",DatasetResource.dataset,PropertyResource.featuredef),"get features available in the dataset",format,"GET","Yes"},
+
+			{"http://opentox.org/dev/apis/api-1.1/Feature","Features",formatHeader,null},
+			{String.format("%s?%s=LogP",PropertyResource.featuredef,QueryResource.search_param),"Search for a feature by name",format,"GET","Yes"},
+			{PropertyResource.featuredef,"Retrieve all features",format,"GET","Yes"},
+			{PropertyResource.featuredef+"/12142","Get description of a specific feature",format,"GET","Yes"},
+			{PropertyResource.featuredef,"Create a new feature",format,"POST","Yes"},
+	
+			{"http://opentox.org/dev/apis/api-1.1/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
+			{String.format("%s/%d?feature_uris[]=%s",CompoundResource.compound,100,"featureuri"),"features and values ",format,"GET","Yes"},
+			
+
+			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
 			{String.format("%s",AlgorithmResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
 			{String.format("%s/pka",AlgorithmResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
 			{String.format("%s/toxtreecramer",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
@@ -142,19 +119,59 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
 			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
+
+			{"http://opentox.org/dev/apis/api-1.1/AsyncTask","Asynchronous jobs",formatHeader,null},
+			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
+			{"/task/{task id}","Information about a specific task",format,"GET","Yes"},		
+			
+			{"[ambit]","Features per compound/conformer",formatHeader,null,"Implemented"},
+			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All feature definitions, available for a compound",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
+			
+			{"[ambit]","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
+			{String.format("%s/8?%s=%s",DatasetResource.dataset,DatasetResource.dataset_intersection_uri,
+							"datasetURI"),
+							"intersection of two datasets (only compounds common to both datasets)",format,"GET","Yes"},
+			{String.format("%s/8?%s=%s",DatasetResource.dataset,DatasetResource.dataset_complement_uri,
+							"datasetURI"),"Finds compounds which are in the dataset 8, but not in the second dataset",format,"GET","Yes"},
+					
+			{"[ambit]","Features in a dataset",formatHeader,null,"Implemented"},
+			{String.format("%s/8%s/12142",DatasetResource.dataset,PropertyResource.featuredef),"get specific feature",format,"GET","Yes"},
+			{String.format("%s/{id}%s",DatasetResource.dataset,PropertyResource.featuredef),"add feature",format,"POST","No"},
+			{String.format("%s/{id}%s/{fdid}",DatasetResource.dataset,PropertyResource.featuredef),"update feature ",format,"PUT","No"},
+			{String.format("%s/{id}%s/{fdid}",DatasetResource.dataset,PropertyResource.featuredef),"remove feature ",format,"DELETE","No"},
+
+			{"[ambit]","References",formatHeader,null},
+			{ReferenceResource.reference,"read all references",format,"GET","Yes"},
+			{ReferenceResource.reference+"/11845","read information on a specific reference",format,"GET","Yes"},
+			{ReferenceResource.reference,"create a new reference",format,"POST","Yes"},
+			{ReferenceResource.reference+"/11845","update information on a specific reference",format,"PUT","No"},
+			{ReferenceResource.reference+"?search={query}","Search for a reference by name",format,"GET","Under development"},
 					
 
-			{"http://opentox.org/dev/apis/feature-ontology","Feature ontology (PROPOSAL)",formatHeader,null},
+			{"[ambit]","Model predictions (PROPOSAL)",formatHeader,null},
+			{"/compound/1/model","All available model predictions",format,"GET","Yes"},
+			{"/compound/1/model/3","Specific model prediction",format,"GET","Yes"},
+			
+			{"[ambit]","Feature ontology (PROPOSAL)",formatHeader,null},
 			{String.format("%s/All/Endpoints",OntologyResource.resource),"Hierarchical view of endpoints",format,"GET","Yes"},
 			{String.format("%s/All/Descriptors",OntologyResource.resource),"Hierarchical view of descriptors",format,"GET","Yes"},
 			{String.format("%s/All/Dataset",OntologyResource.resource),"Hierarchical view of features in datasets",format,"GET","Yes"},
 			{String.format("%s/All/Identifiers",OntologyResource.resource),"Hierarchical view of identifiers",format,"GET","Yes"},
 			{String.format("%s/{subject}/{object}",OntologyResource.resource),"Delete entry",format,"DELETE","Yes"},
 			
+			{"[ambit]","Feature values",formatHeader,null},
+			{String.format("%scompound/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a specific feature",format,"GET","Yes"},
+			{String.format("%s/compound/1%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"get values for all features ",format,"GET","No"},
+			{String.format("%s/dataset/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
+			{String.format("%s%s/{fid}",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a all compounds for a given feature definition",format,"GET","No"},
 
-			{"(to be discussed)","Dataset search",formatHeader,null,"Implemented"},			
-			{"/dataset?search=Skin","Search for datasets by name",format,"GET","Yes"},
-
+			{"Data entries","Data entries",formatHeader,null},
+			{"/compound/1/dataEntry","All available data entries per compound",format,"GET","Yes"},
+			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
+			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
+			
 			{"(to be discussed)","Compound search",formatHeader,null,"Implemented"},			
 			{"/compound?search=55-55-0","Search for a compound by any property value",format,"GET","Yes"},
 			{"/compound?search=phenolphthalein","Search for a compound by any property value",format,"GET","Yes"},
@@ -164,8 +181,15 @@ public class AmbitResource extends ServerResource {
 			{String.format("/query%s/like/phenol",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]",format,"GET","Under development"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
-			{"/query/similarity?search=c1ccccc1&threshold=0.8","Demo similarity search, to be refactored",format,"GET","Yes"},
+			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
+			{"/query/smarts?search=c1ccccc1O","SMARTS search",format,"GET","Yes"},
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
+			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
+			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},
+			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
+			{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
+			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"},
+		
 			
 			{"http://opentox.org/dev/apis/dataset","Search results as datasets; remap into Datasets",formatHeader,null,"Implemented"},
 			{"/query/results/1","Display previous search results",format,"GET","Yes"},
@@ -173,27 +197,8 @@ public class AmbitResource extends ServerResource {
 			{"/query/results/{id}","Delete a search result",format,"DELETE","Under development"},
 			{"/query/results/{id}","Update a search result",format,"PUT","Under development"},
 			
-			{"(to be discussed)","Feature definition search",formatHeader,null,"Implemented"},			
-			{PropertyResource.featuredef+"?search=LogP","Search for a feature definition by name",format,"GET","Yes"},
-			
-			{"(to be discussed)","Reference search",formatHeader,null,"Implemented"},			
-			{ReferenceResource.reference+"?search={query}","Search for a reference by name",format,"GET","Under development"},
 
-			
-			{"","Asynchronous jobs",formatHeader,null},
-			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
-			{"/task/{task id}","Information about a specific task",format,"GET","Yes"},			
-
-			{"(to be discussed/remapped into algorithms)","Structure diagram generation (DEMO)",formatHeader,null},
-			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},
-			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
-
-			{"(to be discussed/remapped into algorithms)","Generation of 3D structure (DEMO)",formatHeader,null},
-			{"/build3d/smiles/c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
-		
-			{"(to be discussed)","PubChem query (DEMO)",formatHeader,null},
-			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"}
-			
+	
 	};
 
 	@Override
@@ -209,7 +214,7 @@ public class AmbitResource extends ServerResource {
 	}
 	protected String getSearchString() {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String[] keys = form.getValuesArray("search");
+		String[] keys = form.getValuesArray(QueryResource.search_param);
 		if ((keys==null)||(keys.length==0)) return null;
 		StringBuilder b = new StringBuilder();
 		for (String key:keys) {
@@ -404,13 +409,13 @@ public class AmbitResource extends ServerResource {
 		w.write("</div>");
 		w.write("<div>");		
 		
-		w.write(String.format("<a href='%s/fasttox' title='Predict'>FastTox</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/ttc' title='Thresholf of toxicological concern prediction'>TTC</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/fasttox?text=50-00-0&search=%s' title='Predict'>FastTox</a>&nbsp;",baseReference,Reference.encode("C=O")));
+		w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Thresholf of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
 		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/similarity' title='Search for similar structures'>Similarity</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/query/smarts' title='Substructure search by SMARTS patterns'>Substructure</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9' title='Search for similar structures'>Similarity</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/smarts?text=\"\"' title='Substructure search by SMARTS patterns'>Substructure</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
 		w.write(String.format("<a href='%s%s' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
@@ -435,12 +440,12 @@ public class AmbitResource extends ServerResource {
 		String query_smiles = "";
 		try {
 			Form form = request.getResourceRef().getQueryAsForm();
-			query_smiles = form.getFirstValue("search");
+			query_smiles = form.getFirstValue(QueryResource.search_param);
 		} catch (Exception x) {
 			query_smiles = "";
 		}
 		w.write("<form action='' method='get'>\n");
-		w.write(String.format("<input name='search' size='80' value='%s'>\n",query_smiles==null?"":query_smiles));
+		w.write(String.format("<input name='%s' size='80' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
 		w.write("<input type='submit' value='Search'><br>");
 		//w.write(baseReference.toString());
 

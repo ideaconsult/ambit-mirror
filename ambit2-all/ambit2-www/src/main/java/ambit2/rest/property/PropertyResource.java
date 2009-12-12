@@ -73,7 +73,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				return false;
 			}
 	};	
-	public final static String featuredef = "/feature_definition";
+	public final static String featuredef = "/feature";
 	public final static String idfeaturedef = "id_feature_definition";
 	public final static String featuredefID = String.format("/{%s}",idfeaturedef);
 	/*
@@ -148,7 +148,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				Form form = request.getResourceRef().getQueryAsForm();
 				IQueryRetrieval<Property> qf = getFreeTextQuery(getContext(), getRequest(), getResponse());
 				if (qf != null) return qf;
-				key = form.getFirstValue("search");
+				key = form.getFirstValue(QueryResource.search_param);
 				if (key != null) {
 						RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
 						q.setFieldname(record);
@@ -192,7 +192,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	}
 
 	@Override
-	protected Representation post(Representation entity)
+	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		if (getRequest().getAttributes().get(idfeaturedef)==null)
 			createNewObject(entity);
@@ -203,7 +203,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	/**
 <pre>
 Description  	Method  	URI  	Parameters  	Result  	Status codes
-create a new feature definition  	 POST  	 /feature_definition  	 name: String, reference_id: String, type: String  	 URI of new feature definition  	200,400,404,503
+create a new feature definition  	 POST  	 /feature  	 name: String, reference_id: String, type: String  	 URI of new feature definition  	200,400,404,503
 </pre>
 	 */
 	@Override

@@ -26,9 +26,13 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.propertyvalue.PropertyValueResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
+import ambit2.rest.tuple.TupleResource;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -235,7 +239,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			}			
 			try {
 				
-				query_smiles = form.getFirstValue("search");
+				query_smiles = form.getFirstValue(QueryResource.search_param);
 			} catch (Exception x) {
 				query_smiles = "";
 			}
@@ -274,8 +278,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			String hint= "";
 			if (uriReporter.getRequest().getOriginalRef().toString().indexOf("similarity")>0) {
-				w.write(String.format("<label for='search'>SMILES</label>&nbsp;"));
-				w.write(String.format("<input name='search' type='text' size='40' title='Enter SMILES' value='%s'>\n",query_smiles==null?"":query_smiles));
+				w.write(String.format("<label for='%s'>SMILES</label>&nbsp;",QueryResource.search_param));
+				w.write(String.format("<input name='%s' type='text' size='40' title='Enter SMILES' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
 				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
 						uriReporter.getBaseReference()));
 				w.write("&nbsp;");
@@ -288,16 +292,16 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			} else if (uriReporter.getRequest().getOriginalRef().toString().indexOf("compound")>0) {
 				w.write(String.format("<input name='property' type='text' title='Enter property name (optional)'  size='20' value='%s'>\n",query_property==null?"":query_property));
 				w.write("&nbsp;");
-				w.write(String.format("<input name='search' type='text' title='Enter molecule identifier, name or property value (e.g. benzene)'  size='40' value='%s'>\n",query_smiles==null?"":query_smiles));
+				w.write(String.format("<input name='%s' type='text' title='Enter molecule identifier, name or property value (e.g. benzene)'  size='40' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
 				hint = "Search by property or identifier name (optional) and value";
 				//w.write("<input type='submit' value='Search'><br>");
 			} else {
 				w.write("<table border='0'>");
 
 				w.write("<tr><th>");
-				w.write(String.format("<label for='search' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;"));
+				w.write(String.format("<label for='%s' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;",QueryResource.search_param));
 				w.write("</th><td>");
-				w.write(String.format("<input name='search' type='text'   size='60' value='%s'>\n",query_smiles==null?"":query_smiles));
+				w.write(String.format("<input name='%s' type='text'   size='60' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
 				w.write(String.format("&nbsp;<input type='button' value='Draw substructure' onClick='startEditor(\"%s\");'>",
 						uriReporter.getBaseReference()));	
 
@@ -531,18 +535,18 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append("<div id=\"div-1d\">");
 
 		String[][] s = new String[][] {
-				{"feature",CDKConstants.CASRN,"CAS RN"},
-				{"feature","EC","EINECS"},
-				{"feature",CDKConstants.NAMES,"Chemical name(s)"},
-				{"feature",null,"All available feature values"},
+				{PropertyValueResource.featureKey,CDKConstants.CASRN,"CAS RN"},
+				{PropertyValueResource.featureKey,"EC","EINECS"},
+				{PropertyValueResource.featureKey,CDKConstants.NAMES,"Chemical name(s)"},
+				{PropertyValueResource.featureKey,null,"All available feature values"},
 				{"template",null,"Feature values by groups"},
-				{"tuple",null,"Feature values by dataset"},
-				//{"feature_definition",null,"Feature definitions"},
-				{"model",null,"Model predictions"},
+				{TupleResource.resourceTag,null,"Feature values by dataset"},
+				{PropertyResource.featuredef,null,"Features"},
+				{ModelResource.resource,null,"Model predictions"},
 				
 		};
 			for (String[] n:s)
-			b.append(String.format("<a href=\"%s/%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
+			b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
 			
 			List<Property> props = template2Header(getTemplate(),true);
 

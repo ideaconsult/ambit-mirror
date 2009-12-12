@@ -47,8 +47,8 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			output.write("<tr align=\"left\">\n");
 			output.write("<th>Model name</th>\n");
 			output.write("<th>Dataset</th>\n");
-			output.write("<th>Predictors</th>\n");
-			output.write("<th>Dependent variables</th>\n");
+			output.write("<th>Independent variables</th>\n");
+			output.write("<th>Predicted</th>\n");
 			output.write("</tr>\n");
 			cmp_reporter.setOutput(w);
 			uriReporter.setOutput(w);

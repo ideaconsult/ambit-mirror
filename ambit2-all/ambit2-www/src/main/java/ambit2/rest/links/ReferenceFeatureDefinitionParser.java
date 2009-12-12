@@ -34,7 +34,7 @@ public class ReferenceFeatureDefinitionParser extends ReferenceParser<Property> 
 				p.setId(Integer.parseInt(target.getLastSegment()));
 				return p;
 			}
-			if ("feature_definition".equals(s)) no++;
+			if ("feature".equals(s)) no++;
 		}
 		return null;
 		

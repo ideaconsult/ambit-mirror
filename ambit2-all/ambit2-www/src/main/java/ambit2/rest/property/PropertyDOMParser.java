@@ -33,7 +33,7 @@ public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
 	protected ReferenceDOMParser referenceParser;
 	public PropertyDOMParser() {
 		super();
-		setNameSpace(XMLTags.ns_opentox_feature_definition);
+		setNameSpace(XMLTags.ns_opentox_feature);
 		setNodeTag(XMLTags.node_featuredef);
 		referenceParser = new ReferenceDOMParser(){
 			@Override

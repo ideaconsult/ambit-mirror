@@ -23,6 +23,7 @@ import ambit2.base.processors.AbstractReporter;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.EmptyMoleculeException;
+import ambit2.rest.query.QueryResource;
 
 /**
  * Returns PNG given a smiles
@@ -71,7 +72,7 @@ public class AbstractDepict extends ServerResource {
 			int w = 400; int h = 200;
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
-			smiles = form.getFirstValue("search");		
+			smiles = form.getFirstValue(QueryResource.search_param);		
         	
 	    		if(variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 	    			StringConvertor convertor = new StringConvertor(new AbstractReporter<String,Writer>() {

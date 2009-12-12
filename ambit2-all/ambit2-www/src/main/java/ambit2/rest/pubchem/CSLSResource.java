@@ -29,6 +29,7 @@ import ambit2.pubchem.NCISearchProcessor;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.query.QueryResource;
 
 public class CSLSResource extends ServerResource {
 
@@ -53,7 +54,7 @@ public class CSLSResource extends ServerResource {
 			this.term = Reference.decode(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
-			Object key = form.getFirstValue("search");
+			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
 				term = Reference.decode(key.toString());
 			} else this.term = null;

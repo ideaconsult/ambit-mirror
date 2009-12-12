@@ -68,7 +68,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		} else return null;
 		/*
 		Form form = request.getResourceRef().getQueryAsForm();
-		Object key = form.getFirstValue("search");
+		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 			RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
 			query_by_name.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
@@ -82,7 +82,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		
 		ReadModel query = getModelQuery(getModelID(getRequest().getAttributes().get(resourceKey)));
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String name = form.getFirstValue("search");
+		String name = form.getFirstValue(QueryResource.search_param);
 		if (name!=null) query.setFieldname(name);
 		collapsed = query.getValue()!=null;
 		return query;

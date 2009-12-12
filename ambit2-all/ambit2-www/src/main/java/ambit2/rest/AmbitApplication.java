@@ -232,7 +232,7 @@ public class AmbitApplication extends Application {
 		//this is for backward compatibility
 		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
 		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), datasetRouter);
-		
+		router.attach(String.format("%s/{%s}/metadata",DatasetResource.dataset,DatasetResource.datasetKey), DatasetsResource.class);
 		
 		
 		DBVerifier verifier = new DBVerifier(this);

@@ -12,7 +12,8 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 /**
- * Asynchronous file upload
+ * Asynchronous file upload.
+ * TODO - configure accepted formats
  * @author nina
  *
  */
@@ -37,9 +38,11 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                         if (fi.getSize()>maxSize) {
                         	throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,String.format("File size %d > max allowed size %d",fi.getSize(),maxSize)));
                         }
-                        	
+
                         if (fi.getFieldName().equals(fileUploadField)) {
                         	fi.getContentType();
+                        	if (fi.getSize()==0)
+                        		 throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,"Empty file!"));	
                             found = true;
                             File file = new File(
                             		String.format("%s/%s",
@@ -53,6 +56,9 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                     return createReference();
 				 } catch (ResourceException x) {
 					 throw x;
+				 } catch (java.io.FileNotFoundException e) {
+                	 Logger.getLogger(getClass().getName()).getLogger(e.toString());
+                	 throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,e));					 
                  } catch (Exception e) {
                 	 Logger.getLogger(getClass().getName()).getLogger(e.toString());
                 	 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,e.getMessage()));

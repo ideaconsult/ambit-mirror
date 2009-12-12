@@ -20,7 +20,7 @@ import ambit2.rest.reference.AbstractDOMParser;
 public abstract class PropertyValueDOMParser extends AbstractDOMParser<PropertyValue>{
 		public PropertyValueDOMParser() {
 			super();
-			setNameSpace(XMLTags.ns_opentox_feature);
+			setNameSpace(XMLTags.ns_opentox_feature_value);
 			setNodeTag(XMLTags.node_feature);
 		}
 

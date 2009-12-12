@@ -84,7 +84,7 @@ public class OntologyResource<T extends Object> extends QueryResource<IQueryRetr
 			Response response) throws ResourceException {
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
-			form.getFirstValue("search");
+			form.getFirstValue(QueryResource.search_param);
 		} catch (Exception x) {
 			
 		}			
