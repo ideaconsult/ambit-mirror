@@ -39,11 +39,11 @@ public class QuerySMARTS extends
 	 */
 	private static final long serialVersionUID = -4539445262832597492L;
 	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
-	protected StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
-	protected FingerprintGenerator fpGenerator = new FingerprintGenerator();
+	protected transient StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
+	protected transient FingerprintGenerator fpGenerator = new FingerprintGenerator();
 	protected QueryPrescreenBitSet screening;
-	protected MoleculeReader reader = new MoleculeReader();
-	protected AtomConfigurator configurator = new AtomConfigurator();
+	protected transient MoleculeReader reader = new MoleculeReader();
+	protected transient AtomConfigurator configurator = new AtomConfigurator();
 	protected Property smartsProperty = Property.getInstance(
 			CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	protected static final String SMARTS = "SMARTS";
