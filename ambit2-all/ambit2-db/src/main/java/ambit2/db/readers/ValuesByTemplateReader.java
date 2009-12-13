@@ -10,7 +10,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.QueryExecutor;
-import ambit2.db.search.property.TemplateQuery;
 
 /**
  * Reads set of fields and values given template name 
