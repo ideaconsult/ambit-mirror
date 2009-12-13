@@ -29,6 +29,7 @@
 
 package ambit2.db.search;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
@@ -40,7 +41,7 @@ import ambit2.db.IStatement;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> May 7, 2008
  */
-public interface IQueryObject<ResultType> extends IStatement {
+public interface IQueryObject<ResultType> extends IStatement,Serializable {
 	/*
 	Element toXML();
 	void fromXML(Element node);
