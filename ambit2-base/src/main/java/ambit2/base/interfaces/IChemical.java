@@ -1,6 +1,8 @@
 package ambit2.base.interfaces;
 
-public interface IChemical {
+import java.io.Serializable;
+
+public interface IChemical extends Serializable {
 	String getFormula();
 	void setFormula(String formula);	
 	String getSmiles();
