@@ -17,54 +17,11 @@ import com.jgoodies.binding.beans.Model;
  * @param <Q>
  */
 public abstract class QueryCombined<T> extends Model implements IQueryRetrieval<T> {
-	protected List<IQueryRetrieval<T>> queries;
-/*
-	public enum SCOPE {
-		scope_last_results {
-			@Override
-			public String toString() {
-				return "last results";
-			}
-			@Override
-			public IQueryRetrieval<IStructureRecord> createQuery() {
-				return new QueryStoredResults();
-			}
-		},
-		
-		scope_dataset {
-			@Override
-			public String toString() {
-				return "a dataset";
-			}
-			@Override
-			public IQueryRetrieval<IStructureRecord> createQuery() {
-				return new QueryDataset();
-			}
-		},
-		scope_previousresults {
-			@Override
-			public String toString() {
-				return "saved results";
-			}
-			@Override
-			public IQueryRetrieval<IStructureRecord> createQuery() {
-				return new QueryStoredResults();
-			}
-		},
-	
-		scope_entiredb {
-			@Override
-			public String toString() {
-				return "entire database";
-			}
-			@Override
-			public IQueryRetrieval<IStructureRecord> createQuery() {
-				return null;
-			}
-		};
-		public abstract IQueryRetrieval<IStructureRecord> createQuery();
- 	};		
- 	*/
+	protected ArrayList<IQueryRetrieval<T>> queries;
+	protected Integer id = null;
+	protected static final String union="\nunion\n";
+	protected static final String join="\njoin\n";
+	protected IQueryObject<T> scope;
 	public enum COMBINE  {
 			AND {
 				@Override
@@ -89,14 +46,6 @@ public abstract class QueryCombined<T> extends Model implements IQueryRetrieval<
 	public List<IQueryRetrieval<T>> getQueries() {
 		return queries;
 	}
-	protected Integer id = null;
-	protected static final String union="\nunion\n";
-	protected static final String join="\njoin\n";
-	protected IQueryObject<T> scope;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -439656773187695602L;
 
 	public Integer getId() {
 		return id;
