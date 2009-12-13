@@ -1,5 +1,7 @@
 package ambit2.core.data.model;
 
+import java.io.Serializable;
+
 import ambit2.base.data.Template;
 
 
@@ -9,7 +11,7 @@ import ambit2.base.data.Template;
  * @author nina
  *
  */
-public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances extends T,Content> {
+public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances extends T,Content> implements Serializable {
 
 	/**
 	 * 

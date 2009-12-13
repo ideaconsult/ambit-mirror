@@ -1,5 +1,6 @@
 package ambit2.core.data.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ambit2.base.data.Template;
@@ -9,7 +10,7 @@ import ambit2.base.data.Template;
  * @author nina
  *
  */
-public class Algorithm<T> implements Comparable<Algorithm<T>> {
+public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T>>, Serializable {
 	public enum AlgorithmFormat {JAVA_CLASS,PMML,WEKA};
 	protected String id;
 	protected String name;
