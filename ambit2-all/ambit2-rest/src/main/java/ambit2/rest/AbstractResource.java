@@ -33,6 +33,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status status = Status.SUCCESS_OK;
+	public final static String search_param = "search";
 	
 	public String[] URI_to_handle() {
 		return null;

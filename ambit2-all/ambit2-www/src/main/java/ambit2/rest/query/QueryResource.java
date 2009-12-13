@@ -36,7 +36,7 @@ import ambit2.rest.RepresentationConvertor;
  */
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Serializable>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
-	public final static String search_param = "search";
+
 	
 	@Override
 	protected void doInit() throws ResourceException {
