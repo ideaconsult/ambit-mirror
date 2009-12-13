@@ -1,5 +1,6 @@
 package ambit2.db.search.property;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCondition, Object> implements
-												IQueryRetrieval<Object> {
+public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCondition, Serializable> implements
+												IQueryRetrieval<Serializable> {
 
 	/**
 	 * 
@@ -59,7 +60,7 @@ public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCon
 	public QueryOntology() {
 		setFieldname(true);
 	}
-	public double calculateMetric(Object object) {
+	public double calculateMetric(Serializable object) {
 		return 1;
 	}
 
@@ -83,21 +84,21 @@ public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCon
 		return String.format(includeParent?sqlParent+sqlChild:sqlChild,c,c,c);
 	}
 
-	public Object getObject(ResultSet rs) throws AmbitException {
+	public Serializable getObject(ResultSet rs) throws AmbitException {
 		try {
 			switch (rs.getInt(1)) {
 			case 0: {
-				return new Dictionary(rs.getString(3),rs.getString(2));
+				return (Serializable)new Dictionary(rs.getString(3),rs.getString(2));
 			}
 			case 1: {
-				return new Dictionary(rs.getString(3),rs.getString(2));
+				return (Serializable)new Dictionary(rs.getString(3),rs.getString(2));
 			}
 			case 2: {
 				Property p = Property.getInstance(rs.getString(3), 
 						LiteratureEntry.getInstance(rs.getString(5),rs.getString(6)));
 				p.setId(rs.getInt(7));
 				p.setUnits(rs.getString(4));
-				return p;
+				return (Serializable)p;
 			}
 			default: return null;
 			}
