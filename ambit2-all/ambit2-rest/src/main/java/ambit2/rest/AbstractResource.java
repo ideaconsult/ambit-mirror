@@ -29,7 +29,7 @@ import ambit2.base.interfaces.IProcessor;
  * @param <T>
  * @param <P>
  */
-public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representation>> extends ServerResource {
+public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> extends ServerResource {
 	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status status = Status.SUCCESS_OK;
@@ -59,11 +59,12 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 	try {
+	    	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
+	    		if ((queryObject!=null) && (queryObject instanceof Serializable))
+	    		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
+	    		else throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);        		
+	    	}
 	        if (queryObject != null) {
-	        	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
-	        		if (queryObject instanceof Serializable)
-	        		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
-	        	}
 	        	IProcessor<Q, Representation> convertor = null;
 
 		        	try {
