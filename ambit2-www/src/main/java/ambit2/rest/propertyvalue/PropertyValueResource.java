@@ -39,10 +39,8 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 
 	@Override
 	protected void doInit() throws ResourceException {
-		super.doInit();
 		try {
-			queryObject = createQuery(getContext(),getRequest(),getResponse());
-			error = null;
+			super.doInit();
 		} catch (ResourceException x) {
 			queryObject = null;
 			error = x;
@@ -54,7 +52,9 @@ public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, 
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
-				MediaType.TEXT_RDF_NTRIPLES});
+				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT
+				});
 
 	}
 	

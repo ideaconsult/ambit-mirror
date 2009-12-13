@@ -158,6 +158,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.APPLICATION_RDF_TRIX,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT
 				});
 				
 	}

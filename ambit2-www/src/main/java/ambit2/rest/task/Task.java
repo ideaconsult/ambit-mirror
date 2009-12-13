@@ -7,9 +7,25 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Task<Reference> {
+	protected enum taskStatus {Running,Cancelled,Completed};
 	protected Future<Reference> future;
 	protected Reference uri;
 	protected String name = "Default";
+	protected long started = System.currentTimeMillis();
+	protected float percentCompleted = 0;
+	
+	public String getStatus() {
+		return isDone()?taskStatus.Completed.toString():taskStatus.Running.toString();
+	}
+	public float getPercentCompleted() {
+		return percentCompleted;
+	}
+	public void setPercentCompleted(float percentCompleted) {
+		this.percentCompleted = percentCompleted;
+	}
+	public long getStarted() {
+		return started;
+	}
 	public String getName() {
 		return name;
 	}

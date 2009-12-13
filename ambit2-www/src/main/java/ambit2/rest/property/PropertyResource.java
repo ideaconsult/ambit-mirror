@@ -95,7 +95,8 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
-				MediaType.TEXT_RDF_NTRIPLES
+				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT
 				});	
 	}
 	

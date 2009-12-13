@@ -75,15 +75,19 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 
 	@Override
 	protected void doInit() throws ResourceException {
-		super.doInit();
 		try {
-			queryObject = createQuery(getContext(), getRequest(),getResponse());
-			error = null;
+			super.doInit();
 		} catch (ResourceException x) {
 			queryObject = null;
 			error = x;
 		}
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,MediaType.TEXT_PLAIN});
+		customizeVariants(new MediaType[] {
+				MediaType.TEXT_HTML,
+				MediaType.TEXT_XML,
+				MediaType.TEXT_URI_LIST,
+				ChemicalMediaType.TEXT_YAML,
+				MediaType.TEXT_PLAIN,
+				MediaType.APPLICATION_JAVA_OBJECT});
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)

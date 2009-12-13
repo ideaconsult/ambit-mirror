@@ -1,5 +1,6 @@
 package ambit2.rest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -39,17 +41,10 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		//try {
-			status = Status.SUCCESS_OK;
-			queryObject = createQuery(getContext(), getRequest(), getResponse());
-			error = null;
-		/*
-		} catch (ResourceException x) {
-			queryObject = null;
-			error = x;
-			status = x.getStatus();
-		}			
-		*/
+		status = Status.SUCCESS_OK;
+		queryObject = createQuery(getContext(), getRequest(), getResponse());
+		error = null;
+
 	}
 	protected void customizeVariants(MediaType[] mimeTypes) {
         List<Variant> variants = new ArrayList<Variant>();
@@ -65,6 +60,10 @@ public abstract class AbstractResource<Q,T,P extends IProcessor<Q, Representatio
 	protected Representation get(Variant variant) throws ResourceException {
 	try {
 	        if (queryObject != null) {
+	        	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
+	        		if (queryObject instanceof Serializable)
+	        		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
+	        	}
 	        	IProcessor<Q, Representation> convertor = null;
 
 		        	try {

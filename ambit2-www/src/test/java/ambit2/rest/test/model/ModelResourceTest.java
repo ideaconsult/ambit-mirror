@@ -11,13 +11,8 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
-import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.rest.AbstractRDFParser;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.test.ResourceTest;
-
-import com.hp.hpl.jena.ontology.OntModel;
 
 public class ModelResourceTest extends ResourceTest {
 	@Override
@@ -60,18 +55,6 @@ public class ModelResourceTest extends ResourceTest {
 		return count>1;
 	}
 	
-	public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
-	throws Exception {
-		AbstractRDFParser<Property> p = new AbstractRDFParser<Property>() {
-			@Override
-			public Property read(OntModel model) throws AmbitException {
-				return null;
-			}
-		};
-		
-		p.process(in);
-		return false;
-	}	
 	
 	@Test
 	public void testRDFXML() throws Exception {

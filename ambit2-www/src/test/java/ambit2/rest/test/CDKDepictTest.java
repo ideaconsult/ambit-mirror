@@ -44,4 +44,7 @@ public class CDKDepictTest extends ResourceTest {
 				MediaType.IMAGE_PNG);
 		Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,status);
 	}	
+	@Override
+	public void testGetJavaObject() throws Exception {
+	}
 }

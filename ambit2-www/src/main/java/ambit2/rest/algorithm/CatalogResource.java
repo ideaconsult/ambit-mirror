@@ -30,7 +30,8 @@ public abstract class CatalogResource<T> extends AbstractResource<Iterator<T>,T,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
-				MediaType.TEXT_RDF_NTRIPLES	
+				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT
 				});
 		
 	}

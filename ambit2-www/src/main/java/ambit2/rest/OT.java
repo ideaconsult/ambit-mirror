@@ -22,7 +22,8 @@ public class OT {
 		Model,
 		Parameter,
 		Validation,
-		ValidationInfo;
+		ValidationInfo,
+		Task;
 		public String getNS() {
 			return String.format(_NS, toString());
 		}
@@ -78,6 +79,7 @@ public class OT {
     public static final Property units = m_model.createProperty(String.format(_NS, "units"));
     public static final Property has3Dstructure = m_model.createProperty(String.format(_NS, "has3Dstructure"));
     public static final Property hasStatus = m_model.createProperty(String.format(_NS, "hasStatus"));
+    public static final Property percentageCompleted = m_model.createProperty(String.format(_NS, "percentageCompleted"));
     public static final Property paramScope = m_model.createProperty(String.format(_NS, "paramScope"));
     public static final Property paramValue = m_model.createProperty(String.format(_NS, "paramValue"));
     public static final Property statisticsSupported = m_model.createProperty(String.format(_NS, "statisticsSupported"));

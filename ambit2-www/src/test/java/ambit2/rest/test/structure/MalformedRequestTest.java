@@ -43,4 +43,8 @@ public class MalformedRequestTest  extends ResourceTest {
 		}
 		return count >0;
 	}		
+	@Test
+	public void testGetJavaObject() throws Exception {
+		testGetJavaObject(getTestURI(),MediaType.APPLICATION_JAVA_OBJECT,org.restlet.data.Status.CLIENT_ERROR_BAD_REQUEST);
+	}
 }

@@ -38,5 +38,8 @@ public class DepictTest extends ResourceTest {
 		file.delete();
 		return true;
 	}
+	@Override
+	public void testGetJavaObject() throws Exception {
+	}
 		
 }

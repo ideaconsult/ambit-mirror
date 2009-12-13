@@ -25,6 +25,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
+import ambit2.rest.structure.ConformerURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
@@ -67,7 +68,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
 			Request req) {
-		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req);
+		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req);
 	}
 
 	protected void initProcessors() {
@@ -107,11 +108,14 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		OT.OTClass.FeatureValue.createOntClass(output);
 		OT.OTClass.Compound.createOntClass(output);
 		
-		dataset = output.createIndividual(uriReporter.getRequest().getOriginalRef().toString(),
+		
+		dataset = output.createIndividual(
+				String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),uriReporter.getRequest().getOriginalRef().getHierarchicalPart()),
 				OT.OTClass.Dataset.getOntClass(output));
 		
 		dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
 		dataset.addProperty(DC.title,query.toString());
+		dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
 	}
 
 	@Override

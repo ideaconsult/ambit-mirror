@@ -66,7 +66,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,
+		customizeVariants(new MediaType[] {
+				MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,
 				ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
 				ChemicalMediaType.CHEMICAL_MDLSDF,
@@ -75,7 +76,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
-				MediaType.TEXT_RDF_NTRIPLES	});
+				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT});
 	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,

@@ -22,12 +22,14 @@ import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
+import org.restlet.representation.Representation;
 
 import weka.core.Attribute;
 import weka.core.Instances;
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.IteratingDelimitedFileReader;
+import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
@@ -57,26 +59,18 @@ public class CompoundResourceTest extends ResourceTest {
 		}
 		return count ==1;
 	}	
-	/*
+
 	@Override
-	public boolean verifyResponseARFF(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
-			count++;
-		}
-		return count ==8;
-	}	
-	*/
+	public Object verifyResponseJavaObject(String uri, MediaType media,
+			Representation rep) throws Exception {
+		Object query = super.verifyResponseJavaObject(uri, media, rep);
+		Assert.assertTrue(query instanceof AbstractStructureQuery);
+		return query;
+	}
 	@Override
-	public boolean verifyResponseARFF(String uri, MediaType media, InputStream in)
+	public Instances verifyResponseARFF(String uri, MediaType media, InputStream in)
 			throws Exception {
-		//test ARFF file using weka
-		Instances instances = new Instances(new InputStreamReader(in));
-		in.close();
+		Instances instances = super.verifyResponseARFF(uri, media, in);
 		Assert.assertEquals(1,instances.numInstances());
 		Assert.assertEquals("Dataset",instances.relationName());
 		Attribute cas = new Attribute("CAS");
@@ -85,7 +79,7 @@ public class CompoundResourceTest extends ResourceTest {
 		Assert.assertEquals("1530-32-1",instances.firstInstance().stringValue(3));
 		Assert.assertEquals("URI",instances.attribute(0).name());
 		Assert.assertEquals("CAS",instances.attribute(3).name());
-		return true;
+		return instances;
 	}		
 	
 	@Test
