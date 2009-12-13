@@ -1,5 +1,7 @@
 package ambit2.rest.template;
 
+import java.io.Serializable;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -32,7 +34,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class OntologyResource<T extends Object> extends QueryResource<IQueryRetrieval<T>, T> {
+public class OntologyResource<T extends Serializable> extends QueryResource<IQueryRetrieval<T>, T> {
 	
 	public static String resource = "/template";
 	public static String resourceParent = "subject";

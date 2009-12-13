@@ -11,6 +11,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.PropertyValue;
 import ambit2.db.readers.RetrieveTuplePropertyValue;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.structure.CompoundResource;
@@ -21,7 +22,7 @@ import ambit2.rest.structure.ConformerResource;
  * @author nina
  *
  */
-public class TuplePropertyValueResource<PropertyValue> extends PropertyValueResource<PropertyValue> {
+public class TuplePropertyValueResource extends PropertyValueResource<PropertyValue> {
 	public static String resourceCompoundID = String.format("%s/%s/{%s}",CompoundResource.compoundID,TupleResource.resourceTag,TupleResource.resourceKey);
 	public static String resourceConformerID = String.format("%s/%s/{%s}",ConformerResource.conformerID,TupleResource.resourceTag,TupleResource.resourceKey);
 	

@@ -1,7 +1,7 @@
 package ambit2.rest.model;
 
 import java.sql.Connection;
-import java.util.concurrent.Callable;
+import java.sql.SQLException;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -14,15 +14,11 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
-import ambit2.db.search.structure.QueryDatasetByID;
-import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OutputWriterConvertor;
@@ -31,7 +27,7 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundURIReporter;
+import ambit2.rest.task.CallableModelPredictor;
 
 /**
  * Model as in http://opentox.org/development/wiki/Model
@@ -43,6 +39,7 @@ import ambit2.rest.structure.CompoundURIReporter;
  */
 public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
 	public final static String dataset_uri = "dataset_uri";
+	
 	public final static String resource = "/model";	
 	public final static String resourceKey =  "idmodel";
 	public final static String resourceID =  String.format("%s/{%s}",resource,resourceKey);
@@ -126,6 +123,69 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 			Request baseReference) throws ResourceException {
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
 	}
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		synchronized (this) {
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Object datasetURI = form.getFirstValue(dataset_uri);
+			if (datasetURI==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Empty %s", dataset_uri));
+			final Reference reference = new Reference(Reference.decode(datasetURI.toString()));
+			
+			//models
+			IQueryRetrieval<ModelQueryResults> query = createQuery(getContext(),getRequest(),getResponse());
+			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+			
+			Connection conn = null;
+			
+			QueryReporter<ModelQueryResults,IQueryRetrieval<ModelQueryResults>,Object> readModels = new QueryReporter<ModelQueryResults,IQueryRetrieval<ModelQueryResults>,Object>() {
+				@Override
+				public void processItem(ModelQueryResults model) throws AmbitException {
+					try {
+						Reference ref =  ((AmbitApplication)getApplication()).addTask(
+								String.format("Apply model %s to %s",model.toString(),reference),
+								new CallableModelPredictor(
+										reference,
+										model,
+										(AmbitApplication)getApplication(),
+										new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest())),	
+								getRequest().getRootRef());		
+						getResponse().setLocationRef(ref);
+						//getResponse().setStatus(Status.SUCCESS_CREATED);
+						getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+						getResponse().setEntity(null);
+					} catch (Exception x) {
+						if (x.getCause() instanceof ResourceException)
+							getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
+						else
+							getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
+					}
+					
+				}
+				public void open() throws DbAmbitException {};
+				@Override
+				public void header(Object output, IQueryRetrieval<ModelQueryResults> query) {};
+				@Override
+				public void footer(Object output, IQueryRetrieval<ModelQueryResults> query) {};
+					
+			};
+			try {
+	    		conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
+	    		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
+	    		readModels.setConnection(conn);
+				readModels.process(query);		
+				return getResponse().getEntity();
+			} catch (AmbitException x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+			} catch (SQLException x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+			} finally {
+				try { conn.close();} catch  (Exception x) {}
+			}
+		}
+	}
+	/*
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
@@ -221,11 +281,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
         		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
         		r.setConnection(conn);
 				r.process(getModelQuery(idmodel));
-				/*
-				getResponse().setLocationRef(resultRef);
-				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-				getResponse().setEntity(null);
-				*/
+
 	
 			} catch (Exception x) {
 				throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
@@ -235,7 +291,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		}
 		return getResponse().getEntity();
 	}	
-	
+	*/
 	protected ReadModel getModelQuery(Object idmodel) throws ResourceException {
 		if (idmodel == null) return new ReadModel();
 		else if (idmodel instanceof Integer)

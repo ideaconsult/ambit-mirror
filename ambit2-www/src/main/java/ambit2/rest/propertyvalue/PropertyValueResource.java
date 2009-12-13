@@ -1,5 +1,7 @@
 package ambit2.rest.propertyvalue;
 
+import java.io.Serializable;
+
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -18,7 +20,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.db.search.AbstractQuery;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -28,7 +29,7 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
-public class PropertyValueResource<T> extends QueryResource<IQueryRetrieval<T>, T> {
+public class PropertyValueResource<T extends Serializable> extends QueryResource<IQueryRetrieval<T>, T> {
 	public static final String featureKey = "/feature_value";
 	public static final String compoundFeature = String.format("%s%s",CompoundResource.compoundID,featureKey);
 

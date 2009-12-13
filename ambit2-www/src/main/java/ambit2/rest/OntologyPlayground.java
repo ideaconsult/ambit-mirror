@@ -2,6 +2,7 @@ package ambit2.rest;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 
 import ambit2.rest.OT.OTClass;
 
@@ -9,7 +10,6 @@ import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -23,7 +23,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  * @param <T>
  */
-public class OntologyPlayground<T> extends RDFGraphResource<T> {
+public class OntologyPlayground<T extends Serializable> extends RDFGraphResource<T> {
 	public OntologyPlayground() {
 		super(false);
 	}

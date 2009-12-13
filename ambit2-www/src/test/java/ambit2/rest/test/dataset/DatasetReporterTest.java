@@ -18,9 +18,9 @@ import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
+import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
-import ambit2.rest.task.RDFReader;
 import ambit2.rest.test.ResourceTest;
 
 /**
@@ -42,7 +42,7 @@ public class DatasetReporterTest extends ResourceTest {
 						StructureQueryResource.feature_URI,
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						));
-		RDFReader reader = new RDFReader(String.format("http://localhost:%d",port));
+		RDFStructuresReader reader = new RDFStructuresReader(String.format("http://localhost:%d",port));
 		reader.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
 		reader.getProcessorChain().add(new IProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target)

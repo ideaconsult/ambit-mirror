@@ -1,5 +1,7 @@
 package ambit2.rest.propertyvalue;
 
+import java.io.Serializable;
+
 import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -21,13 +23,7 @@ import ambit2.rest.structure.ConformerResource;
  *
  * @param <T>
  */
-public class PropertyModelResource<T> extends PropertyTemplateResource<T> {
-	/*
-	public static final String resource = "/model";
-	public static final String compoundModel = String.format("%s%s",CompoundResource.compoundID,resource);
-	public static final String compoundModelID = String.format("%s%s/{idmodel}",CompoundResource.compoundID,resource);
-	public static final String conformerModelID =  String.format("%s%s/{idmodel}",ConformerResource.conformerID,resource);
-*/
+public class PropertyModelResource<T extends Serializable> extends PropertyTemplateResource<T> {
 	@Override
 	protected IQueryRetrieval<T> createQuery(Context context,
 			Request request, Response response) throws ResourceException {

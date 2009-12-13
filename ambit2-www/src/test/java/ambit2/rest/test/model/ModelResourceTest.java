@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
 import ambit2.rest.model.ModelResource;
@@ -77,9 +78,30 @@ public class ModelResourceTest extends ResourceTest {
 		return count==1;
 	}
 	@Test
-	public void testPost() throws Exception {
+	public void testPostDataset() throws Exception {
 		Form headers = new Form();  
-		headers.add("dataset-id", "1");
-		testAsyncTask(getTestURI(),headers, Status.SUCCESS_OK, String.format("http://localhost:%d/model/1", port));
+		//headers.add("dataset-id", "1");
+		String dataset = String.format("http://localhost:%d/dataset/1",port);
+		testAsyncTask(
+				String.format("%s?%s=%s",getTestURI(),ModelResource.dataset_uri,Reference.encode(dataset)),
+				headers, Status.SUCCESS_OK, 
+				String.format("%s?feature_uris[]=%s",
+						dataset,
+						Reference.encode(String.format("%s/predicted",getTestURI()))
+				));
 	}
+	
+	@Test
+	public void testPostCompound() throws Exception {
+		Form headers = new Form();  
+		//headers.add("dataset-id", "1");
+		String dataset = String.format("http://localhost:%d/compound/11",port);
+		testAsyncTask(
+				String.format("%s?%s=%s",getTestURI(),ModelResource.dataset_uri,Reference.encode(dataset)),
+				headers, Status.SUCCESS_OK, 
+				String.format("%s?feature_uris[]=%s",
+						dataset,
+						Reference.encode(String.format("%s/predicted",getTestURI()))
+				));
+	}	
 }

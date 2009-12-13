@@ -121,7 +121,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 			}
 
 		} catch (Exception x) {
-
+			x.printStackTrace();
 			throw new ResourceException(
 					Status.CLIENT_ERROR_BAD_REQUEST,
 					String.format("Invalid task id %d",id),

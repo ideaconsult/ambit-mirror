@@ -1,12 +1,13 @@
 package ambit2.rest.task;
 
+import java.io.Serializable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class Task<Reference> {
+public class Task<Reference> implements Serializable {
 	protected enum taskStatus {Running,Cancelled,Completed};
 	protected Future<Reference> future;
 	protected Reference uri;
@@ -47,7 +48,7 @@ public class Task<Reference> {
 	public Reference getReference() throws ExecutionException , InterruptedException, CancellationException {
 		try {
 			if (future!=null) {
-				Reference ref = future.get(10, TimeUnit.MILLISECONDS);
+				Reference ref = future.get(100000, TimeUnit.MILLISECONDS);
 				future = null;
 				setUri(ref);
 			}

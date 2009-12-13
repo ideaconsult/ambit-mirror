@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 import org.restlet.Context;
@@ -42,7 +43,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  *
  * @param <T>
  */
-public class RDFGraphResource<T> extends AbstractResource<OntModel, T, IProcessor<OntModel,Representation>> {
+public class RDFGraphResource<T extends Serializable> extends AbstractResource<OntModel, T, IProcessor<OntModel,Representation>> {
 	public static final String resource="/ontology";
 	public static OntModel defaultOntology;
 	protected boolean useStatic= true;

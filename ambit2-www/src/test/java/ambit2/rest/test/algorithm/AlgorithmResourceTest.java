@@ -66,4 +66,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/model/3", port));
 		
 	}
+	@Override
+	public void testGetJavaObject() throws Exception {
+	}
 }
