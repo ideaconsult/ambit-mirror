@@ -35,7 +35,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 
 public interface IStructureRecord extends IChemical{
-	public enum MOL_TYPE {SDF,CML,CSV};
+	public enum MOL_TYPE {SDF,CML,CSV,URI};
 	
 	
     String getFormat();
