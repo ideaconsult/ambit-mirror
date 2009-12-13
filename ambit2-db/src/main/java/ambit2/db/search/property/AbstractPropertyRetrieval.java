@@ -40,7 +40,7 @@ import ambit2.db.search.IQueryCondition;
 
 public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition> extends AbstractQuery<F, T, C, Property> 
 											implements IQueryRetrieval<Property> {
-	public static String base_sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
+	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
 	/**
 	 * 
 	 */
