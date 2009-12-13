@@ -1,6 +1,8 @@
 package ambit2.db;
 
-public class PropertiesTuple {
+import java.io.Serializable;
+
+public class PropertiesTuple implements Serializable {
 	protected int id;
 	protected SourceDataset dataset;
 	

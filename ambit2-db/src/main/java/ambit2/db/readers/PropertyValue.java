@@ -1,8 +1,10 @@
 package ambit2.db.readers;
 
+import java.io.Serializable;
+
 import ambit2.base.data.Property;
 
-public class PropertyValue<T> {
+public class PropertyValue<T> implements Serializable {
 	int id;
 	public int getId() {
 		return id;
