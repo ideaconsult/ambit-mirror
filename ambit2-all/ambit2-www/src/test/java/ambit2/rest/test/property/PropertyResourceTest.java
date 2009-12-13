@@ -78,20 +78,7 @@ public class PropertyResourceTest extends ResourceTest {
         parser.parse(doc);
         return true;
 	}	
-	/*
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count = 0;
-		while ((line = r.readLine())!= null) {
-			System.out.println(line);
-			count++;
-		}
-		return count>0;
-	}	
-	 */
+
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);

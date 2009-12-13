@@ -63,15 +63,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 		} catch (Exception x) {
 			return null;
 		} else return null;
-		/*
-		Form form = request.getResourceRef().getQueryAsForm();
-		Object key = form.getFirstValue(QueryResource.search_param);
-		if (key != null) {
-			RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
-			query_by_name.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
-			return query_by_name;
-		} 
-		*/
+
 	}
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,

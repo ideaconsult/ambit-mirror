@@ -542,11 +542,14 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				{"template",null,"Feature values by groups"},
 				{TupleResource.resourceTag,null,"Feature values by dataset"},
 				{PropertyResource.featuredef,null,"Features"},
-				{ModelResource.resource,null,"Model predictions"},
+				{null,null,"Model predictions",String.format("%s/model/null/predicted",uriReporter.getBaseReference().toString())},
 				
 		};
-			for (String[] n:s)
-			b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
+		for (String[] n:s)
+			if (n[0]==null)
+				b.append(String.format("<a href=\"%s?%s=%s\">%s</a><br>",w,StructureQueryResource.feature_URI,Reference.encode(n[3]),n[2]));
+			else
+				b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
 			
 			List<Property> props = template2Header(getTemplate(),true);
 
