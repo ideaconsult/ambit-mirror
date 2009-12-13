@@ -148,8 +148,11 @@ public class IteratingDelimitedFileReader extends
 					}
 
 					for (int i = 0; i < values.length; i++)
-						nextMolecule.setProperty(getHeaderColumn(i), values[i]
-								.toString());
+						if (values[i]!=null)
+						nextMolecule.setProperty(getHeaderColumn(i), 
+								values[i].toString());
+						else 
+							nextMolecule.removeProperty(getHeaderColumn(i));
 
 					/*
 					 * if (nextMolecule.getAtomCount() > 0) { hasNext = true; }
