@@ -98,24 +98,6 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML))) 
 			throw new NotFoundException();
-		/*
-				return new StringConvertor(new AbstractReporter<Object,Writer>() {
-					
-					public Writer process(Object target) throws AmbitException {
-						try {
-							AmbitResource.writeHTMLHeader(output, "Compound", getRequest());
-							output.write("<div>No search criteria specified</div>");
-							AmbitResource.writeHTMLFooter(output, "Compound", getRequest());
-						} catch (Exception x) {}
-						return output;
-					}
-					public void close() throws Exception {}
-
-				},MediaType.TEXT_HTML);
-			else throw new NotFoundException();
-		}
-		*/
-		
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
 			//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

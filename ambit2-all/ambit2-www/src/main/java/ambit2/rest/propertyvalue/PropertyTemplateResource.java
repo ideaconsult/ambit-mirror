@@ -1,5 +1,7 @@
 package ambit2.rest.propertyvalue;
 
+import java.io.Serializable;
+
 import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -15,7 +17,7 @@ import ambit2.db.readers.RetrieveTemplatePropertyValue;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
-public class PropertyTemplateResource<T> extends PropertyValueResource<T> {
+public class PropertyTemplateResource<T extends Serializable> extends PropertyValueResource<T> {
 	public static final String resource = "/template";
 	public static final String resourceID = "/{idtemplate}";
 	public static final String compoundTemplate = String.format("%s%s",CompoundResource.compoundID,resource);

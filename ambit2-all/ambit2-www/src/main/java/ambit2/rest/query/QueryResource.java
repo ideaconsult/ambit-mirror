@@ -34,7 +34,7 @@ import ambit2.rest.RepresentationConvertor;
  * @param <Q>
  * @param <T>
  */
-public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
+public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Serializable>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
 	public final static String search_param = "search";
 	
@@ -69,11 +69,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
 			int maxRetry=3;
+        	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
+        		if ((queryObject!=null) && (queryObject instanceof Serializable))
+        		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
+        		else throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);        		
+        	}				
 	        if (queryObject != null) {
-	        	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
-	        		if (queryObject instanceof Serializable)
-	        		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
-	        	}	        	
+        	
 	        	IProcessor<Q, Representation>  convertor = null;
 	        	Connection connection = null;
 	        	int retry=0;

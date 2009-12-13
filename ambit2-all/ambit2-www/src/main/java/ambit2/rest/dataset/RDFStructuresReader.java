@@ -1,13 +1,10 @@
-package ambit2.rest.task;
+package ambit2.rest.dataset;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -16,19 +13,17 @@ import org.restlet.util.Template;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OT;
+import ambit2.rest.RDFBatchParser;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -41,57 +36,31 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  * @author nina
  *
  */
-public class RDFReader extends AbstractBatchProcessor<Reference, IStructureRecord>	{
+public class RDFStructuresReader extends RDFBatchParser<IStructureRecord>	{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8763491584837871656L;
-	protected MediaType mediaType = MediaType.APPLICATION_RDF_XML;
-	protected OntModel jenaModel;
-	protected IStructureRecord record;
-	protected StmtIterator dataEntryIterator;
-	protected String baseReference;
+	
+
 	protected Template compoundTemplate;
 	protected Template conformerTemplate;
 	protected Template featureTemplate;
 
-	public RDFReader(String baseReference) {
-		super();
-		this.baseReference = baseReference;
+	public RDFStructuresReader(String baseReference) {
+		super(baseReference,OT.OTClass.DataEntry);
 		compoundTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,CompoundResource.compoundID));
 		conformerTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,ConformerResource.conformerID));
 		featureTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,PropertyResource.featuredefID));
 		
 	}
-	public String getBaseReference() {
-		return baseReference;
-	}
-	public void setBaseReference(String baseReference) {
-		this.baseReference = baseReference;
-	}
 	@Override
-	public void beforeProcessing(Reference target) throws AmbitException {
-		super.beforeProcessing(target);
-		try {
-			ClientResource client = new ClientResource(target);
-			Representation r = client.get(mediaType);
-			if (client.getStatus().equals(Status.SUCCESS_OK)) {
-				record = new StructureRecord();
-				jenaModel = OT.createModel();
-				jenaModel.read(r.getStream(),null);
-			}
-			
-		} catch (Exception x) {
-			throw new AmbitException(x);
-		}		
+	protected IStructureRecord createRecord() {
+		if (record == null) return new StructureRecord();
+		else record.clear(); return record;
 	}
-	@Override
-	public void afterProcessing(Reference target,
-			Iterator<IStructureRecord> iterator) throws AmbitException {
-		try {dataEntryIterator.close();} catch (Exception x){};
-		super.afterProcessing(target, iterator);
-	}
-	protected void parseDataEntry(Resource dataEntry,IStructureRecord record) {
+
+	protected void parseRecord(Resource dataEntry,IStructureRecord record) {
 		//get the compound
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.compound,(RDFNode)null));
 		while (compound.hasNext()) {
@@ -136,37 +105,6 @@ public class RDFReader extends AbstractBatchProcessor<Reference, IStructureRecor
 	
 			}
 		}
-	}
-
-/*
- * (non-Javadoc)
- * @see ambit2.base.interfaces.IBatchProcessor#getIterator(java.lang.Object)
- */
-	public Iterator<IStructureRecord> getIterator(Reference target)
-			throws AmbitException {
-			
-		return new Iterator<IStructureRecord>() {
-			public boolean hasNext() {
-				if (dataEntryIterator == null) {
-					Resource s = OT.OTClass.DataEntry.getOntClass(jenaModel);
-					if (s==null) return false;
-					dataEntryIterator =  jenaModel.listStatements(new SimpleSelector(null,null,s));
-				}
-				if ((dataEntryIterator!=null) && dataEntryIterator.hasNext()) {
-						Statement st = dataEntryIterator.next();
-						Resource dataEntry = (Resource) st.getSubject();
-						record.clear();
-						parseDataEntry( dataEntry,record);
-						return true;
-				}
-				return false;
-			}
-			public IStructureRecord next() {
-				return record;
-			}
-			public void remove() {
-			}
-		};
 	}
 
 	protected void parseFeatureURI(String uri,Property property) {

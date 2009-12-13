@@ -1,5 +1,6 @@
 package ambit2.rest.algorithm;
 
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.Iterator;
 
@@ -18,7 +19,7 @@ import ambit2.rest.StringConvertor;
  * @author nina
  *
  */
-public abstract class CatalogResource<T> extends AbstractResource<Iterator<T>,T,IProcessor<Iterator<T>, Representation>> {
+public abstract class CatalogResource<T extends Serializable> extends AbstractResource<Iterator<T>,T,IProcessor<Iterator<T>, Representation>> {
 
 
 	@Override
