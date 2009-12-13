@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class OntologyEditor extends AbstractDBProcessor<Object, Dictionary> impl
 	protected ProcessorOntology processor = new ProcessorOntology();
 	protected QueryOntology[] query = new QueryOntology[SIDE.values().length];
 	protected ListEditor[] listEditor = new ListEditor[SIDE.values().length];
-	protected AmbitRows<Object>[] rows = new AmbitRows[SIDE.values().length];
+	protected AmbitRows<Serializable>[] rows = new AmbitRows[SIDE.values().length];
 	protected ImageIcon folderIcon = null;
 	
 	protected JComponent component;
@@ -57,7 +58,7 @@ public class OntologyEditor extends AbstractDBProcessor<Object, Dictionary> impl
         for (SIDE side : SIDE.values()) {
         	query[side.ordinal()] = new QueryOntology();
         	query[side.ordinal()].setValue(side.equals(SIDE.LEFT)?new Dictionary("Endpoints",null):new Dictionary("Dataset",null));
-        	rows[side.ordinal()] = new AmbitRows<Object>();
+        	rows[side.ordinal()] = new AmbitRows<Serializable>();
 			listEditor[side.ordinal()] = new ListEditor(new RowsModel(rows[side.ordinal()])) {
 				@Override
 				protected IAmbitEditor getEditor(Object object) {
