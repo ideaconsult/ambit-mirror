@@ -68,6 +68,18 @@ public class TaskResourceTest extends ResourceTest {
 	}
 
 	@Test
+	public void testRDF() throws Exception {
+		Callable<Reference> c = new Callable<Reference>() {
+			public Reference call() throws Exception {
+				return new Reference("http://localhost/newResult");
+			}
+		};
+		((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port)));
+				
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+		
+	}	
+	@Test
 	public void testURI() throws Exception {
 		Callable<Reference> c = new Callable<Reference>() {
 			public Reference call() throws Exception {
@@ -126,4 +138,7 @@ public class TaskResourceTest extends ResourceTest {
 		Response response = testGet(longTaskURI,MediaType.TEXT_URI_LIST,Status.SUCCESS_ACCEPTED);
 		//((AmbitApplication)app).removeTasks();
 	}	
+	@Override
+	public void testGetJavaObject() throws Exception {
+	}
 }

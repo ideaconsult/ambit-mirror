@@ -1,5 +1,6 @@
 package ambit2.rest.query;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -8,6 +9,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Status;
+import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -46,7 +48,8 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
-				MediaType.TEXT_RDF_NTRIPLES		
+				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT
 		});		
 		if (queryObject!=null)
 				try {
@@ -67,6 +70,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T>  extends Abs
 		try {
 			int maxRetry=3;
 	        if (queryObject != null) {
+	        	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
+	        		if (queryObject instanceof Serializable)
+	        		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
+	        	}	        	
 	        	IProcessor<Q, Representation>  convertor = null;
 	        	Connection connection = null;
 	        	int retry=0;

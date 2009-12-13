@@ -23,6 +23,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.algorithm.AlgorithmRDFReporter;
 import ambit2.rest.algorithm.CatalogURIReporter;
 
 /**
@@ -55,7 +56,14 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,MediaType.TEXT_PLAIN});
+		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
+				MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_PLAIN,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT});
 	}
 
 	@Override
@@ -138,7 +146,14 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 					try {output.write('\n'); } catch (Exception x) {}
 				}
 			},MediaType.TEXT_URI_LIST);
-			
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				) {
+			return new StringConvertor(
+					new TaskRDFReporter(getRequest(),variant.getMediaType())
+					,variant.getMediaType());			
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 

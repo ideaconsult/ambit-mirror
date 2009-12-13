@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.Serializable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,14 +29,21 @@ import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import weka.core.Attribute;
+import weka.core.Instances;
+
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.OT;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 public abstract class ResourceTest extends DbUnitTest {
 	protected Component component=null;
@@ -130,6 +138,27 @@ public abstract class ResourceTest extends DbUnitTest {
 		}
 		return response;
 	}
+	@Test
+	public void testGetJavaObject() throws Exception {
+		testGetJavaObject(getTestURI(),MediaType.APPLICATION_JAVA_OBJECT,org.restlet.data.Status.SUCCESS_OK);
+	}
+	
+	public void testGetJavaObject(String uri, MediaType media, Status expectedStatus) throws Exception {
+		ClientResource resource  = new ClientResource(uri);
+		resource.setMethod(Method.GET);
+		resource.get(media);
+		Assert.assertEquals(expectedStatus,resource.getStatus());
+		if (resource.getStatus().isSuccess()) {
+			verifyResponseJavaObject(uri,media,resource.getResponseEntity());
+		}
+	}	
+	public Object verifyResponseJavaObject(String uri, MediaType media,Representation rep) throws Exception {
+		ObjectRepresentation<Serializable> repObject = new ObjectRepresentation<Serializable>(rep);
+		Serializable object = repObject.getObject();
+		Assert.assertNotNull(object);
+		return object;
+		
+	}		
 	
 	public void testGetRepresentation(String uri, MediaType media) throws Exception {
 		ClientResource client = new ClientResource(uri);
@@ -183,34 +212,26 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponseCSV(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}		
-	public boolean verifyResponseARFF(String uri, MediaType media,InputStream in) throws Exception {
-		throw new Exception("Not implemented");
+	public Instances verifyResponseARFF(String uri, MediaType media,InputStream in) throws Exception {
+		return  new Instances(new InputStreamReader(in));
 	}			
 
-	public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
+	public OntModel verifyResponseRDFXML(String uri, MediaType media, InputStream in)
 			throws Exception {
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
-			count++;
-		}
-		return false;
-
+		OntModel model = OT.createModel();
+		model.read(in,null);
+		Assert.assertTrue(model.size()>0);
+		return model;
 	}	
 	
-	public boolean verifyResponseRDFTurtle(String uri, MediaType media,InputStream in) throws Exception {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
-			count++;
-		}
-		return false;
+	public OntModel verifyResponseRDFTurtle(String uri, MediaType media,InputStream in) throws Exception {
+		OntModel model = OT.createModel();
+		model.read(in,null,"TURTLE");
+		Assert.assertTrue(model.size()>0);
+		return model;
+		//Predefined values for lang are "RDF/XML", "N-TRIPLE", "TURTLE" (or "TTL") and "N3". null represents the default language, "RDF/XML". "RDF/XML-ABBREV" is a synonym for "RDF/XML". 
 	}		
+	
 	public boolean verifyResponse(String uri, MediaType media,InputStream in) throws Exception {
 		if (MediaType.APPLICATION_PDF.equals(media))
 			return verifyResponsePDF(uri, media, in);
@@ -233,14 +254,13 @@ public abstract class ResourceTest extends DbUnitTest {
 		else if (ChemicalMediaType.CHEMICAL_CML.equals(media))
 			return verifyResponseCML(uri, media, in);
 		else if (ChemicalMediaType.WEKA_ARFF.equals(media))
-			return verifyResponseARFF(uri, media, in);
+			return verifyResponseARFF(uri, media, in)!=null;
 		else if (MediaType.TEXT_CSV.equals(media))
 			return verifyResponseCSV(uri, media, in);
 		else if (MediaType.APPLICATION_RDF_XML.equals(media))
-			return verifyResponseRDFXML(uri, media, in);
+			return verifyResponseRDFXML(uri, media, in)!=null;
 		else if (MediaType.APPLICATION_RDF_TURTLE.equals(media))
-			return verifyResponseRDFTurtle(uri, media, in);				
-		
+			return verifyResponseRDFTurtle(uri, media, in)!=null;				
 		else throw new Exception("Unknown format "+media);
 	}
 	protected Document createDOM(InputSource in) throws Exception {

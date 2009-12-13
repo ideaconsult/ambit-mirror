@@ -53,6 +53,7 @@ public class OntologyResource<T extends Object> extends QueryResource<IQueryRetr
 				MediaType.TEXT_HTML,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
+				MediaType.APPLICATION_JAVA_OBJECT
 				});
 
 				

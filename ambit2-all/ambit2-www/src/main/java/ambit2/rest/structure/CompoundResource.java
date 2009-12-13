@@ -73,6 +73,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
 
 	protected boolean collapsed = false;
+	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		if (queryObject == null) try {

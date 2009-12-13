@@ -44,5 +44,7 @@ public class Builder3DTest  extends ResourceTest  {
 		}
 		return true;
 	}	
-
+	@Test
+	public void testGetJavaObject() throws Exception {
+	}
 }

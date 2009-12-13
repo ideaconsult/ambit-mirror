@@ -39,6 +39,12 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 	public final static String algorithmKey =  "idalgorithm";
 	public final static String resourceID =  String.format("%s/{%s}",algorithm,algorithmKey);
 	public enum headers  {
+		dataset_uri {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}
+		},		
 		dataset_id {
 			@Override
 			public boolean isMandatory() {
