@@ -112,21 +112,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					setTemplate(createTemplate(context, request, response));
 					scope.setValue(new Integer(dataset_id));
 					
-					QueryCombinedStructure combined = new QueryCombinedStructure() {
-						@Override
-						protected String getMainSQL() {
-							return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s\n";
-						}
-						
-						@Override
-						protected String groupBy() {
-							return " group by idchemical";
-						}
-						@Override
-						protected String joinOn() {
-							return "idchemical";
-						}
-					};
+					QueryCombinedStructure combined = new DatasetQueryCombined();
 					combined.setCombine_as_and(true);
 					combined.add(query);
 					if (freetextQuery!= null) combined.add(freetextQuery);
@@ -135,23 +121,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 				} 
 				
 				if (freetextQuery != null) {
-					QueryCombinedStructure combined = new QueryCombinedStructure() {
-						@Override
-						protected String groupBy() {
-							return "";
-						}
-						protected String getScopeSQL() {
-							if (isCombine_as_and())
-								return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s";
-							else
-								return "select QSCOPE.idquery,s.idchemical,-1,QSCOPE.selected as selected,QSCOPE.metric as metric from chemicals as s";
-						
-						}			
-						@Override
-						protected String getMainSQL() {
-							return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s\n";
-						}						
-					};
+					QueryCombinedStructure combined = new MyQueryCombined();
 					combined.setChemicalsOnly(true);
 					combined.setCombine_as_and(true);
 					combined.add(query);
@@ -182,3 +152,45 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 
 
 }
+
+class MyQueryCombined extends QueryCombinedStructure { 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -214359046685832984L;
+	@Override
+	protected String groupBy() {
+		return "";
+	}
+	protected String getScopeSQL() {
+		if (isCombine_as_and())
+			return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s";
+		else
+			return "select QSCOPE.idquery,s.idchemical,-1,QSCOPE.selected as selected,QSCOPE.metric as metric from chemicals as s";
+	
+	}			
+	@Override
+	protected String getMainSQL() {
+		return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s\n";
+	}						
+};
+
+class DatasetQueryCombined extends  QueryCombinedStructure {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 64174880636638320L;
+	@Override
+	protected String getMainSQL() {
+		return "select Q1.idquery,s.idchemical,-1,Q1.selected as selected,Q1.metric as metric from chemicals as s\n";
+	}
+	
+	@Override
+	protected String groupBy() {
+		return " group by idchemical";
+	}
+	@Override
+	protected String joinOn() {
+		return "idchemical";
+	}
+};
