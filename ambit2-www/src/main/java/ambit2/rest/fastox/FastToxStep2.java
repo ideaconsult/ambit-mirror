@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -19,13 +20,20 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelHTMLReporter;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.structure.ConformerURIReporter;
 
 public class FastToxStep2 extends ModelResource {
 	//public static String resource = String.format("%s/step2",FastToxStep1.resource);
 	protected IStructureRecord record = null;
+	protected ConformerURIReporter<IQueryRetrieval<IStructureRecord>> structureReporter;
 	
 	@Override
-	protected Representation post(Representation entity)
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		structureReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());
+	}
+	@Override
+	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		Form form = new Form(entity);
 		try { 
@@ -64,10 +72,11 @@ public class FastToxStep2 extends ModelResource {
 					protected void writeMoreColumns(ModelQueryResults model,
 							Writer writer) {
 						try {
-							writer.write(String.format("<td><form method=\"POST\" action=\"%s/model/%d\">",getUriReporter().getBaseReference(),model.getId()));
-							writer.write(String.format("<input name=\"idmodel\" value=\"%d\" type=\"hidden\">",model.getId()));
-							writer.write(String.format("<input name=\"idstructure\" value=\"%d\"type=\"hidden\">",record.getIdstructure()));
-							writer.write(String.format("<input name=\"idchemical\" value=\"%d\"type=\"hidden\">",record.getIdchemical()));
+							writer.write(String.format("<td><form method=\"POST\" action=\"%s/model/%d?%s=%s\">",
+									getUriReporter().getBaseReference(),model.getId(),
+									ModelResource.dataset_uri,
+									Reference.encode(structureReporter.getURI(record))
+									));
 							writer.write("<input type=\"submit\" value=\"Predict\">");
 							writer.write("</form></td>");
 	

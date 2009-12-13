@@ -120,6 +120,11 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
 			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
 
+			{"http://opentox.org/dev/apis/Model","Model variables",formatHeader,null},
+			{String.format("%s/independent",ModelResource.resource),"Independent variables",format,"GET","Yes"},
+			{String.format("%s/dependent",ModelResource.resource),"Dependent variables",format,"GET","Yes"},
+			{String.format("%s/predicted",ModelResource.resource),"Predicted variables",format,"GET","Yes"},
+			
 			{"http://opentox.org/dev/apis/api-1.1/AsyncTask","Asynchronous jobs",formatHeader,null},
 			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
 			{"/task/{task id}","Information about a specific task",format,"GET","Yes"},		
@@ -150,9 +155,6 @@ public class AmbitResource extends ServerResource {
 			{ReferenceResource.reference+"?search={query}","Search for a reference by name",format,"GET","Under development"},
 					
 
-			{"[ambit]","Model predictions (PROPOSAL)",formatHeader,null},
-			{"/compound/1/model","All available model predictions",format,"GET","Yes"},
-			{"/compound/1/model/3","Specific model prediction",format,"GET","Yes"},
 			
 			{"[ambit]","Feature ontology (PROPOSAL)",formatHeader,null},
 			{String.format("%s/All/Endpoints",OntologyResource.resource),"Hierarchical view of endpoints",format,"GET","Yes"},

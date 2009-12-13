@@ -60,9 +60,9 @@ import ambit2.rest.fastox.KroesStep1;
 import ambit2.rest.fastox.KroesStep2;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
+import ambit2.rest.property.PropertyModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
-import ambit2.rest.propertyvalue.PropertyModelResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.CSLSResource;
@@ -329,15 +329,8 @@ public class AmbitApplication extends Application {
 		modelRouter.attachDefault(ModelResource.class);
 		modelsRouter.attach(String.format("/{%s}",ModelResource.resourceKey),modelRouter);
 		
-		compoundRouter.attach(ModelResource.resource,PropertyModelResource.class);
-		conformerRouter.attach(ModelResource.resource,PropertyModelResource.class);
-		compoundRouter.attach(String.format("%s/{%s}",ModelResource.resource,ModelResource.resourceKey),PropertyModelResource.class);
-		conformerRouter.attach(String.format("%s/{%s}",ModelResource.resource,ModelResource.resourceKey),PropertyModelResource.class);
-		/*
-		router.attach(PropertyModelResource.compoundModel,PropertyModelResource.class);
-		router.attach(PropertyModelResource.compoundModelID,PropertyModelResource.class);
-		router.attach(PropertyModelResource.conformerModelID,PropertyModelResource.class);
-		*/
+		modelsRouter.attach(String.format("/{%s}%s",ModelResource.resourceKey,PropertyModelResource.resourceID),PropertyModelResource.class);
+		
 		Router tupleRouter = new Router(getContext());
 		tupleRouter.attachDefault(TupleResource.class);
 		tupleRouter.attach(String.format("/{%s}", TupleResource.resourceKey),TuplePropertyValueResource.class);

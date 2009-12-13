@@ -50,7 +50,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	@Override
 	public void header(Writer w, IQueryRetrieval<Property> query) {
 		super.header(w, query);
-		try {w.write(collapsed?"<h3>Feature definitions</h3>":"<h3>Feature definition</h3>");} catch (Exception x) {}
+		try {w.write(collapsed?"<h3>Feature</h3>":"<h3>Features</h3>");} catch (Exception x) {}
 	}
 
 }
