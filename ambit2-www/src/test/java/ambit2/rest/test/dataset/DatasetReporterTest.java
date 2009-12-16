@@ -12,7 +12,6 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import weka.core.Attribute;
 import weka.core.Instance;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -75,15 +74,16 @@ public class DatasetReporterTest extends ResourceTest {
 	@Test
 	public void testInstances() throws Exception {
 		Reference ref = new Reference(
-				//"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/15"
-				"http://localhost:8081/dataset/1?max=3"
-				/*
+				//"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/11?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/12224&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/12207"
+				//"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/1?max=3&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/8"
+				//"http://localhost:8080/ambit2-www/dataset/1?max=10" //&feature_uris[]=http://localhost:8080/ambit2-www/feature/8"
+				
 				String.format("http://localhost:%d/dataset/2?%s=%s", 
 						port,
 						StructureQueryResource.feature_URI,
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						)
-					*/	
+					
 				);
 		RDFInstancesParser reader = new RDFInstancesParser(String.format("http://localhost:%d",port)) {
 			@Override
@@ -91,6 +91,8 @@ public class DatasetReporterTest extends ResourceTest {
 					Iterator<Instance> iterator) throws AmbitException {
 				super.afterProcessing(target, iterator);
 				System.out.println(instances);
+				//for (int i=0; i < instances.numInstances(); i++)
+				//	System.out.println(instances.instance(i));
 			}
 		};
 		reader.setProcessorChain(new ProcessorsChain<Instance, IBatchStatistics, IProcessor>());
@@ -102,8 +104,8 @@ public class DatasetReporterTest extends ResourceTest {
 				while (e.hasMoreElements()) {
 					Object o = e.nextElement();
 					try {
-						System.out.print(o.toString());
-						System.out.print(target.stringValue((Attribute)o));
+						//System.out.print(o.toString());
+						//System.out.print(target.stringValue((Attribute)o));
 						
 					} catch (Exception x) {
 						

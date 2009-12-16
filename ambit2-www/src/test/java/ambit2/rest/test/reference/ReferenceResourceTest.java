@@ -14,13 +14,19 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.rest.query.XMLTags;
+import ambit2.rest.reference.RDFReferenceParser;
 import ambit2.rest.reference.ReferenceDOMParser;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.test.ResourceTest;
@@ -49,6 +55,28 @@ public class ReferenceResourceTest extends ResourceTest {
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
+	}
+	
+	@Test
+	public void testRDFXML() throws Exception {
+		RDFReferenceParser parser = new RDFReferenceParser("");
+		parser.setProcessorChain(new ProcessorsChain<ILiteratureEntry, IBatchStatistics, IProcessor>());
+		parser.getProcessorChain().add(new IProcessor<ILiteratureEntry,ILiteratureEntry>(){
+			public long getID() {
+				return 0;
+			}
+			public ILiteratureEntry process(ILiteratureEntry target) throws AmbitException {
+				Assert.assertEquals("CAS Registry Number", target.getName());
+				Assert.assertEquals("http://www.cas.org",target.getURL());
+				return target;
+			}
+			public boolean isEnabled() {
+				return true;
+			}
+			public void setEnabled(boolean value) {
+			}
+		});
+		parser.process(new Reference(getTestURI()));
 	}
 	
 	@Override

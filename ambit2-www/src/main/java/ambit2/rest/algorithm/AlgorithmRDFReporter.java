@@ -53,20 +53,14 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		if ((item.getType()!=null) && !"".equals(item.getType()))
 			algorithm.addProperty(OT.OTProperty.isA.createProperty(getJenaModel()), item.getType());
 		
-		List<String> stats = item.getStatistics();
-		if (stats != null)
-		for (String  stat : stats)
-			algorithm.addLiteral(OT.statisticsSupported,
-					 getJenaModel().createTypedLiteral(stats.toString(),XSDDatatype.XSDstring));
-
 		List<Parameter> params = item.getParameters();
 		if (params != null)
 		for (Parameter param :params) {
 			Individual iparam = getJenaModel().createIndividual(
 					OT.OTClass.Parameter.getOntClass(getJenaModel()));
-			iparam.addLiteral(OT.paramScope,
+			iparam.addLiteral(OT.DataProperty.paramScope.createProperty(getJenaModel()),
 					 getJenaModel().createTypedLiteral(param.getScope(),XSDDatatype.XSDstring));	
-			iparam.addLiteral(OT.paramValue,
+			iparam.addLiteral(OT.DataProperty.paramValue.createProperty(getJenaModel()),
 					 getJenaModel().createTypedLiteral(param.getValue(),
 							 param.getValue() instanceof Number?
 									 (param.getValue() instanceof Integer)?XSDDatatype.XSDinteger:XSDDatatype.XSDdouble:

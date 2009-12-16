@@ -21,7 +21,7 @@ public abstract class RDFDatasetParser<Item, Feature> extends RDFBatchParser<Ite
 	protected Template featureTemplate;
 
 	public RDFDatasetParser(String baseReference) {
-		super(baseReference,OT.OTClass.DataEntry);
+		super(baseReference,OT.OTClass.DataEntry.toString());
 		compoundTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,CompoundResource.compoundID));
 		conformerTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,ConformerResource.conformerID));
 		featureTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,PropertyResource.featuredefID));
@@ -33,7 +33,7 @@ public abstract class RDFDatasetParser<Item, Feature> extends RDFBatchParser<Ite
 	private static final long serialVersionUID = -3706916949251807233L;
 
 	@Override
-	protected void parseRecord(Resource newEntry, Item record) {
+	protected Item parseRecord(Resource newEntry, Item record) {
 		//get the compound
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
@@ -45,6 +45,7 @@ public abstract class RDFDatasetParser<Item, Feature> extends RDFBatchParser<Ite
 		}	
 		//get feature values
 		parseFeatureValues( newEntry,record);
+		return record;
 	}
 	protected void parseFeatureValues(Resource dataEntry,Item record)  {
 		StmtIterator values =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.OTProperty.values.createProperty(jenaModel),(RDFNode)null));
@@ -53,7 +54,7 @@ public abstract class RDFDatasetParser<Item, Feature> extends RDFBatchParser<Ite
 			Statement st = values.next();
 			if (st.getObject().isResource()) {
 				Resource fv = (Resource)st.getObject();
-				RDFNode value = fv.getProperty(OT.value).getObject();
+				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
 				
 				String feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString();
 				Feature key = createFeature(fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject());

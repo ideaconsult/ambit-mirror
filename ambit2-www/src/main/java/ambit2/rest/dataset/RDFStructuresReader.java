@@ -55,7 +55,7 @@ public class RDFStructuresReader extends RDFDatasetParser<IStructureRecord,Prope
 			Statement st = values.next();
 			if (st.getObject().isResource()) {
 				Resource fv = (Resource)st.getObject();
-				RDFNode value = fv.getProperty(OT.value).getObject();
+				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
 				
 				String feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString();
 				Property key = Property.getInstance(feature,feature);

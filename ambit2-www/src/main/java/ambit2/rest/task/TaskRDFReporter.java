@@ -53,9 +53,9 @@ public class TaskRDFReporter extends CatalogRDFReporter<Task<Reference>> {
 				 getJenaModel().createTypedLiteral(ref,XSDDatatype.XSDanyURI));
 		task.addLiteral(DC.date,
 				 getJenaModel().createTypedLiteral(item.getStarted(),XSDDatatype.XSDdateTime));		
-		task.addLiteral(OT.hasStatus,
+		task.addLiteral(OT.DataProperty.hasStatus.createProperty(getJenaModel()),
 				 getJenaModel().createTypedLiteral(item.getStatus(),XSDDatatype.XSDstring));		
-		task.addLiteral(OT.percentageCompleted,
+		task.addLiteral(OT.DataProperty.percentageCompleted.createProperty(getJenaModel()),
 				 getJenaModel().createTypedLiteral(item.getPercentCompleted(),XSDDatatype.XSDfloat));			
 		
 	}

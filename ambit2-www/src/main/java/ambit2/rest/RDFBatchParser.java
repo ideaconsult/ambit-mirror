@@ -29,14 +29,14 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 	protected String baseReference;
 	protected Item record;
 	protected StmtIterator recordIterator;
-	protected OT.OTClass topObject;
+	protected String topObject;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8921517639325859050L;
 
 
-	public RDFBatchParser(String baseReference,OT.OTClass objectToParse) {
+	public RDFBatchParser(String baseReference,String objectToParse) {
 		super();
 		this.baseReference = baseReference;
 		topObject = objectToParse;
@@ -56,11 +56,13 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 		try {
 			ClientResource client = new ClientResource(target);
 			Representation r = client.get(mediaType);
+			if (r==null)
+				throw new AmbitException("Null representation");
 			if (client.getStatus().equals(Status.SUCCESS_OK)) {
 				record = createRecord();
 				jenaModel = OT.createModel();
 				jenaModel.read(r.getStream(),null);
-			}
+			} else throw new AmbitException(client.getStatus().getDescription());
 			
 		} catch (Exception x) {
 			throw new AmbitException(x);
@@ -87,8 +89,7 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 					if ((recordIterator!=null) && recordIterator.hasNext()) {
 							Statement st = recordIterator.next();
 							Resource newEntry = (Resource) st.getSubject();
-							record = createRecord();
-							parseRecord( newEntry,record);
+							record = parseRecord( newEntry,createRecord());
 							return true;
 					}
 					return false;
@@ -100,14 +101,19 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 				}
 			};
 		}
-		private StmtIterator initIterator(OT.OTClass otclass) {
+		private StmtIterator initIterator(String otclass) {
 			if (recordIterator == null) {
-				Resource s = otclass.getOntClass(jenaModel);
+				Resource s = createResource(otclass);
 				if (s==null) return null;
 				recordIterator =  jenaModel.listStatements(new SimpleSelector(null,null,s));
 			}
 			return recordIterator;
 		}	
 		
-		protected abstract void parseRecord(Resource newEntry,Item record);
+		protected Resource createResource(String otclass) {
+			try {
+				return OT.OTClass.valueOf(otclass).getOntClass(jenaModel);
+			} catch (Exception x) {return null;} 
+		}
+		protected abstract Item parseRecord(Resource newEntry,Item record);
 }
