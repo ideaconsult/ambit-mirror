@@ -200,8 +200,14 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = Property.getInstance(rs.getString(1),le); 
 			Object value = rs.getObject(5);
-			if (value == null) record.setProperty(p,rs.getFloat(6));
-			else record.setProperty(p,rs.getString(5));	
+			if (value == null) {
+				record.setProperty(p,rs.getFloat(6));
+				p.setClazz(Number.class);
+			}
+			else {
+				record.setProperty(p,rs.getString(5));
+				p.setClazz(String.class);
+			}
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

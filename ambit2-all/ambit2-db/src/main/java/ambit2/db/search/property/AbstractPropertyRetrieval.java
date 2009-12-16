@@ -40,12 +40,26 @@ import ambit2.db.search.IQueryCondition;
 
 public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition> extends AbstractQuery<F, T, C, Property> 
 											implements IQueryRetrieval<Property> {
-	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
+	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,null from properties join catalog_references using(idreference)";
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6129319550824253087L;
 	protected boolean chemicalsOnly = false;
+	public  enum _PROPERTY_TYPE {
+		STRING {
+			@Override
+			public Class getClazz() {
+				return String.class;
+			}
+		},
+		NUMERIC {
+			@Override
+			public Class getClazz() {
+				return Number.class;
+			}			
+		};
+		public abstract Class getClazz();};
 	public boolean isChemicalsOnly() {
 	return chemicalsOnly;
 	}
@@ -65,6 +79,12 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 			p.setUnits(rs.getString(3));
 			p.setLabel(rs.getString(7));
 			p.getReference().setId(rs.getInt(6));
+
+			try {
+				String type = rs.getString(8);
+				if (type != null)
+				p.setClazz(_PROPERTY_TYPE.valueOf(type).getClazz());
+			} catch (Exception x) {}
 			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

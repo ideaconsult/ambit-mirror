@@ -22,11 +22,11 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 	 */
 	private static final long serialVersionUID = 6247086921731939782L;
 	public static String sqlPerStructure = 
-		"select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)\n"+
+		"select idproperty,name,units,title,url,idreference,comments from properties,idtype join catalog_references using(idreference)\n"+
 		"where idproperty in (select idproperty from property_values where idstructure = ?) \n";
 
 	public static String sqlPerChemical = 
-		"select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)\n"+
+		"select idproperty,name,units,title,url,idreference,comments from properties,idtype join catalog_references using(idreference)\n"+
 		"where idproperty in (select idproperty from structure join property_values using(idstructure) where idchemical = ?) \n";
 
 	public ReadProperty(Integer id) {

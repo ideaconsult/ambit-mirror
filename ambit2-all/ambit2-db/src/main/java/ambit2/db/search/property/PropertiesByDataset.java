@@ -37,7 +37,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 	public static String whereproperty  = " idproperty = ?";
 	public static String join  = 
 		" join property_values using(idproperty) join  property_tuples using(id) join tuples using (idtuple) where %s %s %s group by idproperty";
-
+	public static String base_sql_type = "select idproperty,properties.name,units,title,url,idreference,comments,idtype from properties join catalog_references using(idreference)";
 	
 	/**
  * 
@@ -77,7 +77,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 				wherePropertyID = whereproperty;
 			}
 			
-			return base_sql + String.format(join,whereDataset,and,wherePropertyID);
+			return base_sql_type + String.format(join,whereDataset,and,wherePropertyID);
 		}
 		throw new AmbitException("No dataset defined");
 	}

@@ -61,7 +61,7 @@ public class RetrieveProfile extends AbstractPropertyRetrieval<String, Profile<P
 	 * 
 	 */
 	private static final long serialVersionUID = -347765028858989655L;
-	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference) %s";
+	public static String sql = "select idproperty,name,units,title,url,idreference,comments,null from properties join catalog_references using(idreference) %s";
 	
 	public RetrieveProfile(QueryMode querymode) {
 		super();

@@ -22,8 +22,14 @@ public class RetrieveTuplePropertyValue extends RetrieveTuple<PropertyValue> {
 			p.setId(rs.getInt(3));
 			Object value = rs.getObject(5);
 			PropertyValue pv ;
-			if (value == null) pv = new PropertyValue<Float>(p,rs.getFloat(6));
-			else pv =  new PropertyValue<String>(p,rs.getString(5));
+			if (value == null) {
+				pv = new PropertyValue<Float>(p,rs.getFloat(6));
+				p.setClazz(Number.class);
+			}
+			else {
+				pv =  new PropertyValue<String>(p,rs.getString(5));
+				p.setClazz(String.class);
+			}
 			pv.setId(rs.getInt(10));
 			return pv;
 		} catch (SQLException x) {
