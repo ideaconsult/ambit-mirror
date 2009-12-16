@@ -57,7 +57,7 @@ public class OntologyPlayground<T extends Serializable> extends RDFGraphResource
 			Statement st = values.next();
 			if (st.getObject().isResource()) {
 				Resource fv = (Resource)st.getObject();
-				RDFNode value = fv.getProperty(OT.value).getObject();
+				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
 				out.write(String.format("%s&nbsp;=&nbsp;%s<br>",
 						//Feature
 						fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString(),

@@ -53,20 +53,20 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 		feature.addProperty(DC.title, property.getName());
 		feature.addLiteral(DC.identifier,
 				 getJenaModel().createTypedLiteral(propertyReporter.getURI(property),XSDDatatype.XSDanyURI));
-		feature.addProperty(OT.units,property.getUnits());
+		feature.addProperty(OT.DataProperty.units.createProperty(getJenaModel()),property.getUnits());
 		feature.addProperty(OWL.sameAs,property.getLabel());
 		feature.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()), referenceReporter.getURI(property.getReference()));
 		return feature;
 	}	
 	public  Individual valueProcess(Object item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-		featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(item.toString(),	XSDDatatype.XSDstring));
+		featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()),getJenaModel().createTypedLiteral(item.toString(),	XSDDatatype.XSDstring));
 		if (feature!=null) featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 		return featureValue;
 	}	
 	public  Individual valueProcess(Number item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-		featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(item,	XSDDatatype.XSDdouble));
+		featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()),getJenaModel().createTypedLiteral(item,	XSDDatatype.XSDdouble));
 		if (feature!=null) featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 		return featureValue;
 	}		

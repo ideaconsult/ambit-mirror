@@ -1,7 +1,5 @@
 package ambit2.rest.reference;
 
-import java.io.Writer;
-
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -15,6 +13,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
@@ -23,8 +22,10 @@ import ambit2.db.update.reference.ReadReference;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
 
@@ -84,6 +85,14 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 						} catch (Exception x) {}
 					}
 				},MediaType.TEXT_URI_LIST);
+			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+					) {
+				return new RDFJenaConvertor<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>>(
+						new ReferenceRDFReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest(),variant.getMediaType())
+						,variant.getMediaType());					
 			} else 
 				return new OutputWriterConvertor(
 						new ReferenceHTMLReporter(getRequest(),queryObject.getValue()==null),

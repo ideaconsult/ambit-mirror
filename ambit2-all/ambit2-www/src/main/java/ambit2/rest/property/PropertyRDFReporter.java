@@ -52,7 +52,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		feature.addProperty(DC.title, item.getName());
 		feature.addLiteral(DC.identifier,
 				 getJenaModel().createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
-		feature.addProperty(OT.units,item.getUnits());
+		feature.addProperty(OT.DataProperty.units.createProperty(getJenaModel()),item.getUnits());
 		feature.addProperty(OWL.sameAs,item.getLabel());
 		feature.addProperty(OT.OTProperty.hasSource.createProperty(getJenaModel()), referenceReporter.getURI(item.getReference()));
 		if (item.getClazz()!=null)

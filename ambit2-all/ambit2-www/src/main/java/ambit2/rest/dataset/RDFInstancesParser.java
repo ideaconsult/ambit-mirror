@@ -1,7 +1,6 @@
 package ambit2.rest.dataset;
 
 import java.util.Hashtable;
-import java.util.Iterator;
 
 import org.restlet.data.Reference;
 
@@ -18,6 +17,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 
 /**
@@ -53,13 +55,29 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 		FastVector attributes = new FastVector();
 		Resource s = OT.OTClass.Feature.getOntClass(jenaModel);
 		if (s==null) return null;
-		Attribute feature = new Attribute("ID",(FastVector)null);
-		attributes.addElement(feature);
-		urilookup.put("ID", feature);
+		Attribute attr = new Attribute("ID",(FastVector)null);
+		attributes.addElement(attr);
+		urilookup.put("ID", attr);
+
 		StmtIterator features =  jenaModel.listStatements(new SimpleSelector(null,null,s));
 		while (features.hasNext()) {
-			feature = createFeature(features.next().getSubject());
-			attributes.addElement(feature);
+			
+			Statement feature = features.next();
+			/*
+			System.out.println(feature.getSubject());
+			StmtIterator entries =  jenaModel.listStatements(
+					new SimpleSelector(null,OT.OTProperty.feature.createProperty(jenaModel),feature.getSubject()));
+			while (entries.hasNext()) {
+				StmtIterator values =  jenaModel.listStatements(
+						new SimpleSelector(entries.next().getSubject(),OT.DataProperty.value.createProperty(jenaModel),(Literal)null));
+				while (values.hasNext()) {
+					System.out.println(values.next().getObject());
+				}
+			}
+			*/
+			attr = createFeature(feature.getSubject());
+
+			attributes.addElement(attr);
 		}
 		return attributes;
 	}
@@ -69,16 +87,21 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 	public void beforeProcessing(Reference target) throws AmbitException {
 		super.beforeProcessing(target);
 		attributes = parseFeatures();
-		instances = new Instances("Dataset URI TODO", attributes, 0); 				
+		instances = null; 			
+		
+		StmtIterator dataset =  jenaModel.listStatements(new SimpleSelector(null,
+				RDF.type,
+				OT.OTClass.Dataset.getOntClass(jenaModel)));
+		while (dataset.hasNext()) {
+			instances = new Instances(
+					dataset.next().getSubject().toString()
+					, attributes, 0);
+			break;
+		}
 	}
+	
 	@Override
-	public void afterProcessing(Reference target, Iterator<Instance> iterator)
-			throws AmbitException {
-		// TODO Auto-generated method stub
-		super.afterProcessing(target, iterator);
-	}
-	@Override
-	protected void parseRecord(Resource newEntry, Instance record) {
+	protected Instance parseRecord(Resource newEntry, Instance record) {
 		
 		//get the compound
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
@@ -89,6 +112,9 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 		}	
 		//get feature values
 		parseFeatureValues( newEntry,record);
+		record.setDataset(instances);
+		instances.add(record);
+		return record;
 	}
 
 	protected void parseFeatureValues(Resource dataEntry,Instance record)  {
@@ -98,8 +124,10 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 			Statement st = values.next();
 			if (st.getObject().isResource()) {
 				Resource fv = (Resource)st.getObject();
-				RDFNode value = fv.getProperty(OT.value).getObject();
-				Attribute key = urilookup.get( fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString());
+				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
+				RDFNode feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
+
+				Attribute key = urilookup.get( feature.toString());
 				if (key != null) 
 					setFeatureValue(record, key,  value);
 	
@@ -108,7 +136,15 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 	}		
 	@Override
 	protected Attribute createFeature(RDFNode feature) {
-		Attribute a= new Attribute(feature.toString(),(FastVector) null);
+		Attribute a = null;
+		try {
+			if("http://www.w3.org/2001/XMLSchema#double".equals(
+					((Resource)feature).getProperty(DC.type).getObject().toString()))
+				a = new Attribute(feature.toString());
+		} catch(Exception x) {
+			a = null;
+		}
+		if (a == null)	a = new Attribute(feature.toString(),(FastVector)null);
 		urilookup.put(feature.toString(),a);
 		return a;
 	}
@@ -127,22 +163,24 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 	public boolean readStructure(RDFNode target, Instance record) {
 		return true;
 	}
-	//TODO value type
 	@Override
 	protected void setFeatureValue(Instance record, Attribute key, RDFNode value) {
 		if (value.isLiteral())  {
-	 		//key.addStringValue(((Literal)value).getString());
-			record.setValue(key, ((Literal)value).getString() );
+	 		//
+			if (key.isNumeric()) try {
+				record.setValue(key, ((Literal)value).getDouble());
+			} catch (Exception x) {  }
+			else try {
+				//key.addStringValue(((Literal)value).getString());
+				record.setValue(key, ((Literal)value).getString() );
+			} catch (Exception x) { }
 		}
 	}
 
 	@Override
 	protected Instance createRecord() {
 		if (instances != null) {
-			Instance instance = new Instance(attributes.size());
-			instance.setDataset(instances);
-			instances.add(instance);
-			return instance;
+			return new Instance(attributes.size());
 		} else return null;
 	}
 

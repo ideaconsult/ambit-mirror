@@ -19,7 +19,10 @@ import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.util.PrintUtil;
 
 public class OntologyTest {
-	
+	@Test
+	public void test1() throws Exception {
+		
+	}
 	public void test() throws Exception {
 		OntModel jenaModel = OT.createModel(OntModelSpec.OWL_DL_MEM_RULE_INF);
 		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/opentox.owl");

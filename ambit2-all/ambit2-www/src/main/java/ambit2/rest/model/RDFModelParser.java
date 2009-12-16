@@ -19,7 +19,7 @@ public class RDFModelParser extends RDFBatchParser<ModelQueryResults> {
 	private static final long serialVersionUID = 4169047876241761152L;
 
 	public RDFModelParser(String baseReference) {
-		super(baseReference, OT.OTClass.Model);
+		super(baseReference, OT.OTClass.Model.toString());
 	}
 
 	@Override
@@ -28,8 +28,8 @@ public class RDFModelParser extends RDFBatchParser<ModelQueryResults> {
 	}
 
 	@Override
-	protected void parseRecord(Resource newEntry, ModelQueryResults record) {
-		// TODO Auto-generated method stub
+	protected ModelQueryResults parseRecord(Resource newEntry, ModelQueryResults record) {
+		return record;
 		
 	}
 

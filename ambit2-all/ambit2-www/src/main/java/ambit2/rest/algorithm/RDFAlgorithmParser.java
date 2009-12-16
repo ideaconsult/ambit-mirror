@@ -20,8 +20,8 @@ public class RDFAlgorithmParser<T extends Serializable> extends RDFBatchParser<A
 	 */
 	private static final long serialVersionUID = 1858626318484831791L;
 
-	public RDFAlgorithmParser(String baseReference, OTClass objectToParse) {
-		super(baseReference, objectToParse);
+	public RDFAlgorithmParser(String baseReference) {
+		super(baseReference, OTClass.Algorithm.toString());
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class RDFAlgorithmParser<T extends Serializable> extends RDFBatchParser<A
 	}
 
 	@Override
-	protected void parseRecord(Resource newEntry, Algorithm<T> record) {
+	protected Algorithm<T> parseRecord(Resource newEntry, Algorithm<T> record) {
 		//get the compound
 		StmtIterator alg =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.algorithm.createProperty(jenaModel),(RDFNode)null));
 		while (alg.hasNext()) {
@@ -38,6 +38,7 @@ public class RDFAlgorithmParser<T extends Serializable> extends RDFBatchParser<A
 			parseParameters(st.getObject(),record);
 
 		}	
+		return record;
 
 	}	
 	protected void parseParameters(RDFNode dataEntry,Algorithm<T> record) {

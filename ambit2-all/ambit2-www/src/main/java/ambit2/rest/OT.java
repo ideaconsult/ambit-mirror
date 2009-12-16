@@ -28,7 +28,8 @@ public class OT {
 			return String.format(_NS, toString());
 		}
 		public OntClass getOntClass(OntModel model) {
-			return model.getOntClass(getNS());
+			OntClass c = model.getOntClass(getNS());
+			return (c==null)?createOntClass(model):c;
 		}
 		public OntClass createOntClass(OntModel model) {
 			return model.createClass(getNS());
@@ -82,6 +83,21 @@ public class OT {
     /**
      * Data properties
      */
+    public enum DataProperty {
+    	value,
+    	units,
+    	has3Dstructure,
+    	hasStatus,
+    	percentageCompleted,
+    	paramScope,
+    	paramValue;
+	   	public Property createProperty(OntModel jenaModel) {
+	   		Property p = jenaModel.getProperty(String.format(_NS, toString()));
+	   		return p!= null?p:
+	   				jenaModel.createProperty(String.format(_NS, toString()));
+	   	}
+    };
+    /*
     public static final Property value = m_model.createProperty(String.format(_NS, "value"));
     public static final Property units = m_model.createProperty(String.format(_NS, "units"));
     public static final Property has3Dstructure = m_model.createProperty(String.format(_NS, "has3Dstructure"));
@@ -89,8 +105,7 @@ public class OT {
     public static final Property percentageCompleted = m_model.createProperty(String.format(_NS, "percentageCompleted"));
     public static final Property paramScope = m_model.createProperty(String.format(_NS, "paramScope"));
     public static final Property paramValue = m_model.createProperty(String.format(_NS, "paramValue"));
-    public static final Property statisticsSupported = m_model.createProperty(String.format(_NS, "statisticsSupported"));
-
+	*/
     public static OntModel createModel() throws Exception {
     	return createModel(OntModelSpec.OWL_DL_MEM);
     }
