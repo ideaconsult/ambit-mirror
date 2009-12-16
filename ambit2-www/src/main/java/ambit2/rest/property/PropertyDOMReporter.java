@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.XMLTags;
@@ -26,6 +27,7 @@ import ambit2.rest.reference.ReferenceDOMReporter;
   <attribute name="Name" type="string" use="required" /> 
   <attribute name="Reference" type="string" use="required" /> 
   <attribute name="Type" type="string" use="required" /> 
+  <attribute name="DataType" type="string" use="required" /> 
   </complexType>
   </schema>
 </pre>
@@ -74,6 +76,11 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
         e.setAttribute(XMLTags.attr_id,Integer.toString(item.getId()));
         e.setAttribute(XMLTags.attr_name,item.getName());
         e.setAttribute(XMLTags.attr_type,item.getLabel());
+        e.setAttribute(XMLTags.attr_datatype,
+        		item.getClazz()==Number.class?
+        				AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.toString():
+        				AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.toString()					
+        );
         e.setAttribute("Reference", Integer.toString(item.getReference().getId()));
         e.appendChild(getURIElement(doc, item));
         e.appendChild(referenceReporter.getItemElement(doc, item.getReference()));

@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.reference.AbstractDOMParser;
 import ambit2.rest.reference.ReferenceDOMParser;
@@ -56,6 +57,13 @@ public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
 			else
 				p.setLabel(label==null?name:label);
 			p.setId(Integer.parseInt(element.getAttribute(XMLTags.attr_id)));
+			try {
+				p.setClazz(
+						AbstractPropertyRetrieval._PROPERTY_TYPE.valueOf(
+								element.getAttribute(XMLTags.attr_datatype)).getClazz());
+			} catch (Exception x) {
+				p.setClazz(null);
+			}
 			
 			LiteratureEntry le = null;
 			NodeList nrefs = element.getElementsByTagName(XMLTags.node_reference);
