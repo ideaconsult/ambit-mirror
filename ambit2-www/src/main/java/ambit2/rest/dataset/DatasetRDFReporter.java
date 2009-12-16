@@ -128,13 +128,13 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				
 			Individual dataEntry = getJenaModel().createIndividual(
 						OT.OTClass.DataEntry.getOntClass(getJenaModel()));
-			dataset.addProperty(OT.dataEntry,dataEntry);
+			dataset.addProperty(OT.OTProperty.dataEntry.createProperty(getJenaModel()),dataEntry);
 			int i = 0;
 			
 			Individual compound = getJenaModel().createIndividual(
 					uriReporter.getURI(item),OT.OTClass.Compound.getOntClass(getJenaModel()));
 			
-			dataEntry.addProperty(OT.compound, compound);
+			dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);
 			
 //			if (item.getIdstructure()>0)
 //				writer.write(String.format("/conformer/%d",item.getIdstructure()));
@@ -151,13 +151,13 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				feature.addProperty(RDFJenaModel.OTProperty.hasSource.getProperty(getJenaModel()), referenceReporter.getURI(p.getReference()));
 				*/
 				Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
-				featureValue.addProperty(OT.feature,feature);
+				featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 
 				featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(value, 
 							(p.getClazz()==Number.class)?XSDDatatype.XSDdouble: XSDDatatype.XSDstring));
 				
 				i++;
-				dataEntry.addProperty(OT.values,featureValue);
+				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
 			}
 			
 		} catch (Exception x) {

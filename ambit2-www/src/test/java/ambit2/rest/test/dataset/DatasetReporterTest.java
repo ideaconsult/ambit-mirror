@@ -2,6 +2,8 @@ package ambit2.rest.test.dataset;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 import junit.framework.Assert;
 
@@ -10,6 +12,8 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import weka.core.Attribute;
+import weka.core.Instance;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -17,7 +21,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.IteratingDelimitedFileReader;
-import ambit2.db.processors.ProcessorStructureRetrieval;
+import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
@@ -68,6 +72,60 @@ public class DatasetReporterTest extends ResourceTest {
 		//MediaType.APPLICATION_RDF_XML);
 	}	
 	
+	@Test
+	public void testInstances() throws Exception {
+		Reference ref = new Reference(
+				//"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/15"
+				"http://localhost:8081/dataset/1?max=3"
+				/*
+				String.format("http://localhost:%d/dataset/2?%s=%s", 
+						port,
+						StructureQueryResource.feature_URI,
+						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
+						)
+					*/	
+				);
+		RDFInstancesParser reader = new RDFInstancesParser(String.format("http://localhost:%d",port)) {
+			@Override
+			public void afterProcessing(Reference target,
+					Iterator<Instance> iterator) throws AmbitException {
+				super.afterProcessing(target, iterator);
+				System.out.println(instances);
+			}
+		};
+		reader.setProcessorChain(new ProcessorsChain<Instance, IBatchStatistics, IProcessor>());
+		reader.getProcessorChain().add(new IProcessor<Instance,Instance>() {
+			
+			public Instance process(Instance target)
+					throws AmbitException {
+				Enumeration e = target.enumerateAttributes();
+				while (e.hasMoreElements()) {
+					Object o = e.nextElement();
+					try {
+						System.out.print(o.toString());
+						System.out.print(target.stringValue((Attribute)o));
+						
+					} catch (Exception x) {
+						
+					}
+					System.out.print("\t");
+				}
+				System.out.println();
+				return target;
+			}
+			public boolean isEnabled() {
+				return true;
+			}
+			public void setEnabled(boolean value) {
+			}
+			public long getID() {
+				return 0;
+			}
+		});
+
+		reader.process(ref);
+		//MediaType.APPLICATION_RDF_XML);
+	}		
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);

@@ -36,16 +36,15 @@ public class CallableModelPredictor extends CallableQueryProcessor<Object, IStru
 	protected Reference datasetURI;
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelUriReporter;
 	
-	public CallableModelPredictor(Reference target, ModelQueryResults model,
-			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter
+	public CallableModelPredictor(Reference target, 
+			Reference appReference,
+			AmbitApplication application,
+			ModelQueryResults model,
+			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter		
 				) {
-		super(target);
+		super(target,appReference,application);
 		this.model = model;
 		this.modelUriReporter = reporter;
-	}	
-	public CallableModelPredictor(Reference target, ModelQueryResults model, AmbitApplication application,ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter) {
-		this(target,model,reporter);
-		this.application = application;
 	}	
 
 	@Override

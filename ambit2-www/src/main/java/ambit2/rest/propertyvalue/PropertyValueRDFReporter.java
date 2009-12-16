@@ -55,19 +55,19 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 				 getJenaModel().createTypedLiteral(propertyReporter.getURI(property),XSDDatatype.XSDanyURI));
 		feature.addProperty(OT.units,property.getUnits());
 		feature.addProperty(OWL.sameAs,property.getLabel());
-		feature.addProperty(OT.hasSource, referenceReporter.getURI(property.getReference()));
+		feature.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()), referenceReporter.getURI(property.getReference()));
 		return feature;
 	}	
 	public  Individual valueProcess(Object item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
 		featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(item.toString(),	XSDDatatype.XSDstring));
-		if (feature!=null) featureValue.addProperty(OT.feature,feature);
+		if (feature!=null) featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 		return featureValue;
 	}	
 	public  Individual valueProcess(Number item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
 		featureValue.addLiteral(OT.value,getJenaModel().createTypedLiteral(item,	XSDDatatype.XSDdouble));
-		if (feature!=null) featureValue.addProperty(OT.feature,feature);
+		if (feature!=null) featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 		return featureValue;
 	}		
 	public  Individual jenaProcess(PropertyValue item) throws AmbitException {
@@ -80,14 +80,14 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 			dataEntry = getJenaModel().createIndividual(OT.OTClass.DataEntry.getOntClass(getJenaModel()));
 			Individual compound = getJenaModel().createIndividual(
 				cmpReporter.getURI(record),OT.OTClass.Compound.getOntClass(getJenaModel()));
-			dataEntry.addProperty(OT.compound, compound);			
+			dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);			
 		}		
 		for (Property p : record.getProperties())  {
 			Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
 					OT.OTClass.Feature.getOntClass(getJenaModel()));
 			Individual featureValue = valueProcess(record.getProperty(p),feature);
 			if (dataEntry!=null)
-				dataEntry.addProperty(OT.values,featureValue);
+				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
 		}
 	}	
 	public void jenaProcess(Object item) throws AmbitException {

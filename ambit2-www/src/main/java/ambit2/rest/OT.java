@@ -51,27 +51,34 @@ public class OT {
     /**
      * Object properties
      */
-    public static final Property dataEntry = m_model.createProperty(String.format(_NS, "dataEntry"));
-    public static final Property compound = m_model.createProperty(String.format(_NS, "compound"));
-    public static final Property feature = m_model.createProperty(String.format(_NS, "feature"));
-    public static final Property values = m_model.createProperty(String.format(_NS, "values"));
-    public static final Property hasSource = m_model.createProperty(String.format(_NS, "hasSource"));
-    public static final Property conformer = m_model.createProperty(String.format(_NS, "conformer"));
-    public static final Property isA = m_model.createProperty(String.format(_NS, "isA"));
-    public static final Property model = m_model.createProperty(String.format(_NS, "model"));
-    public static final Property parameters = m_model.createProperty(String.format(_NS, "parameters"));
-    public static final Property report = m_model.createProperty(String.format(_NS, "report"));
-    public static final Property algorithm = m_model.createProperty(String.format(_NS, "algorithm"));
-    public static final Property dependentVariables = m_model.createProperty(String.format(_NS, "dependentVariables"));
-    public static final Property independentVariables = m_model.createProperty(String.format(_NS, "independentVariables"));
-    public static final Property predictedVariables = m_model.createProperty(String.format(_NS, "predictedVariables"));
-    public static final Property trainingDataset = m_model.createProperty(String.format(_NS, "trainingDataset"));
-    public static final Property validationReport = m_model.createProperty(String.format(_NS, "validationReport"));
-    public static final Property validation = m_model.createProperty(String.format(_NS, "validation"));
-    public static final Property hasValidationInfo = m_model.createProperty(String.format(_NS, "hasValidationInfo"));
-    public static final Property validationModel = m_model.createProperty(String.format(_NS, "validationModel"));
-    public static final Property validationPredictionDataset = m_model.createProperty(String.format(_NS, "validationPredictionDataset"));
-    public static final Property validationTestDataset = m_model.createProperty(String.format(_NS, "validationTestDataset"));
+    public enum OTProperty {
+		   	dataEntry,
+		    compound ,
+		    feature ,
+		    values ,
+		    hasSource,
+		    conformer ,
+		    isA ,
+		    model ,
+		    parameters ,
+		    report ,
+		    algorithm ,
+		    dependentVariables ,
+		    independentVariables ,
+		    predictedVariables ,
+		    trainingDataset ,
+		    validationReport ,
+		    validation ,
+		    hasValidationInfo,
+		    validationModel ,
+		    validationPredictionDataset ,
+		    validationTestDataset;
+		   	public Property createProperty(OntModel jenaModel) {
+		   		Property p = jenaModel.getProperty(String.format(_NS, toString()));
+		   		return p!= null?p:
+		   				jenaModel.createProperty(String.format(_NS, toString()));
+		   	}
+    }
     /**
      * Data properties
      */

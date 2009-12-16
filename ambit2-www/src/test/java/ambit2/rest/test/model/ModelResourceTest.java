@@ -95,7 +95,9 @@ public class ModelResourceTest extends ResourceTest {
 	public void testPostCompound() throws Exception {
 		Form headers = new Form();  
 		//headers.add("dataset-id", "1");
-		String dataset = String.format("http://localhost:%d/compound/11",port);
+		
+		//String dataset = String.format("http://localhost:%d/compound/11",port);
+		String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1";
 		testAsyncTask(
 				String.format("%s?%s=%s",getTestURI(),ModelResource.dataset_uri,Reference.encode(dataset)),
 				headers, Status.SUCCESS_OK, 

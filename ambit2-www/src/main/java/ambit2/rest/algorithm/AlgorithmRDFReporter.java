@@ -51,7 +51,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 				 getJenaModel().createTypedLiteral(reporter.getURI(null),XSDDatatype.XSDanyURI));	
 		
 		if ((item.getType()!=null) && !"".equals(item.getType()))
-			algorithm.addProperty(OT.isA, item.getType());
+			algorithm.addProperty(OT.OTProperty.isA.createProperty(getJenaModel()), item.getType());
 		
 		List<String> stats = item.getStatistics();
 		if (stats != null)
@@ -71,7 +71,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 							 param.getValue() instanceof Number?
 									 (param.getValue() instanceof Integer)?XSDDatatype.XSDinteger:XSDDatatype.XSDdouble:
 									 XSDDatatype.XSDstring));	
-			algorithm.addProperty(OT.parameters, iparam);
+			algorithm.addProperty(OT.OTProperty.parameters.createProperty(getJenaModel()), iparam);
 		}
 	}
 	

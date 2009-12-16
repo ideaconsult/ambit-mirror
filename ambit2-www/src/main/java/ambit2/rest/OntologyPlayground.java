@@ -30,7 +30,7 @@ public class OntologyPlayground<T extends Serializable> extends RDFGraphResource
 
 	protected void parseDataset(OntModel jenaModel, OutputStreamWriter out, OntResource dataset) throws IOException {
 		out.write(String.format("<h3>%s&nbsp;%s</h3>","Dataset", dataset==null?"":dataset));
-		StmtIterator iter =  jenaModel.listStatements(new SimpleSelector(dataset,OT.dataEntry,(RDFNode)null));
+		StmtIterator iter =  jenaModel.listStatements(new SimpleSelector(dataset,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (iter.hasNext()) {
 			Statement st = iter.next();
 			if (!st.getObject().isResource()) continue;
@@ -41,7 +41,7 @@ public class OntologyPlayground<T extends Serializable> extends RDFGraphResource
 		}		
 	}
 	protected void parseDataEntry(OntModel jenaModel, OutputStreamWriter out, Resource dataEntry) throws IOException {
-		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.compound,(RDFNode)null));
+		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
 			Statement st = compound.next();
 			out.write(String.format("<h5>%s&nbsp;%s</h5>","Compound", st.getObject()));
@@ -50,7 +50,8 @@ public class OntologyPlayground<T extends Serializable> extends RDFGraphResource
 		parseFeatureValues(jenaModel, out, dataEntry);
 	}		
 	protected void parseFeatureValues(OntModel jenaModel, OutputStreamWriter out, Resource dataEntry) throws IOException {
-		StmtIterator values =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.values,(RDFNode)null));
+		StmtIterator values =  jenaModel.listStatements(new SimpleSelector(dataEntry,
+				OT.OTProperty.values.createProperty(jenaModel),(RDFNode)null));
 		out.write(String.format("<h5>%s</h5>","Values"));
 		while (values.hasNext()) {
 			Statement st = values.next();
@@ -59,7 +60,7 @@ public class OntologyPlayground<T extends Serializable> extends RDFGraphResource
 				RDFNode value = fv.getProperty(OT.value).getObject();
 				out.write(String.format("%s&nbsp;=&nbsp;%s<br>",
 						//Feature
-						fv.getProperty(OT.feature).getObject().toString(),
+						fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString(),
 						//Value
 						value.isLiteral()?((Literal)value).getString():value
 						));
