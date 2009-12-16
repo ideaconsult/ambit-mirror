@@ -25,20 +25,20 @@ public class FreeTextPropertyQuery extends AbstractPropertyRetrieval<String[], S
 	protected static final String sql = "%s";
 	
 	protected static final String pairSQL = 
-		"(select idproperty,name,units,title,url,idreference,comments  from catalog_references join properties using(idreference) join property_values using(idproperty)\n"+
+		"(select idproperty,name,units,title,url,idreference,comments,null  from catalog_references join properties using(idreference) join property_values using(idproperty)\n"+
 		"join property_string using(idvalue_string)\n  join structure using(idstructure)\n"+
 		"    where name like ? and `value` like ?\n"+
 		")\n"+
 		"union\n"+
-		"(select idproperty,name,units,title,url,idreference,comments  from catalog_references join properties using(idreference) join property_values using(idproperty)\n"+
+		"(select idproperty,name,units,title,url,idreference,comments,null  from catalog_references join properties using(idreference) join property_values using(idproperty)\n"+
 		"join property_string using(idvalue_string)\n join structure using(idstructure)\n"+
 		"    where `value` like ? and name like ?\n"+
 		")\n";
 	protected static final String singleSQLName = 
-		"(select idproperty,name,units,title,url,idreference,comments  from catalog_references join properties using(idreference)\n"+
+		"(select idproperty,name,units,title,url,idreference,comments,null  from catalog_references join properties using(idreference)\n"+
 		"join property_values using(idproperty) join structure using(idstructure) where name like ?)\n";
 	protected static final String singleSQLValue =
-		"(select idproperty,name,units,title,url,idreference,comments  from catalog_references join properties using(idreference) join property_values using(idproperty)\n"+
+		"(select idproperty,name,units,title,url,idreference,comments,null  from catalog_references join properties using(idreference) join property_values using(idproperty)\n"+
 		"join property_string using(idvalue_string)  join structure using(idstructure)  where `value` like ?)\n";
 
 
