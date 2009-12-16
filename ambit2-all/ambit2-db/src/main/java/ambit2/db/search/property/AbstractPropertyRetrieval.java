@@ -46,6 +46,9 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 	 */
 	private static final long serialVersionUID = -6129319550824253087L;
 	protected boolean chemicalsOnly = false;
+	protected final static String XSDInt = "http://www.w3.org/2001/XMLSchema#int";
+	protected final static String XSDString = "http://www.w3.org/2001/XMLSchema#string";
+	protected final static String XSDDouble = "http://www.w3.org/2001/XMLSchema#double";
 	public  enum _PROPERTY_TYPE {
 		STRING {
 			@Override
@@ -58,8 +61,16 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 			public Class getClazz() {
 				return Number.class;
 			}			
+			@Override
+			public String getXSDType() {
+				return XSDDouble;
+			}
 		};
-		public abstract Class getClazz();};
+		public abstract Class getClazz();
+		public String getXSDType() {
+			return XSDString;
+		}
+	};
 	public boolean isChemicalsOnly() {
 	return chemicalsOnly;
 	}
