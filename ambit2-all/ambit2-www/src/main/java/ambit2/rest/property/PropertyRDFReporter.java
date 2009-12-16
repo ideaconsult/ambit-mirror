@@ -7,6 +7,7 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.OT;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
@@ -54,6 +55,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		feature.addProperty(OT.units,item.getUnits());
 		feature.addProperty(OWL.sameAs,item.getLabel());
 		feature.addProperty(OT.OTProperty.hasSource.createProperty(getJenaModel()), referenceReporter.getURI(item.getReference()));
+		if (item.getClazz()!=null)
+		feature.addProperty(DC.type,
+				 (item.getClazz()==Number.class)?
+						AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
+						AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
+						);
 	}
 
 	public void open() throws DbAmbitException {
