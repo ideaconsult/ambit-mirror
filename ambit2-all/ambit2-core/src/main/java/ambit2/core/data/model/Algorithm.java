@@ -11,6 +11,10 @@ import ambit2.base.data.Template;
  *
  */
 public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T>>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6624262246346428281L;
 	public enum AlgorithmFormat {JAVA_CLASS,PMML,WEKA};
 	protected String id;
 	protected String name;
@@ -26,7 +30,6 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 		this.type = type;
 	}
 	protected String description;
-	protected List<String> statistics;
 	
 	public String getDescription() {
 		return description;
@@ -79,12 +82,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public void setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
 	}
-	public List<String> getStatistics() {
-		return statistics;
-	}
-	public void setStatistics(List<String> statistics) {
-		this.statistics = statistics;
-	}
+
 	
 	@Override
 	public String toString() {
