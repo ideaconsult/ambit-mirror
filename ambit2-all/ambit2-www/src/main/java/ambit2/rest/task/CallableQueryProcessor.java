@@ -3,6 +3,7 @@ package ambit2.rest.task;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
+import org.restlet.Application;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
@@ -21,9 +22,12 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	protected Target target;
 	protected Reference sourceReference;
 	protected AmbitApplication application;
+	protected Reference applicationRootReference;
 
-	public CallableQueryProcessor(Reference uri) {
+	public CallableQueryProcessor(Reference uri,Reference applicationRootReference,AmbitApplication application) {
 		this.sourceReference = uri;
+		this.application = application;
+		this.applicationRootReference = applicationRootReference;
 	}
 	
 	public Reference call() throws Exception {
@@ -51,7 +55,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		if (target instanceof AbstractStructureQuery)
 			return new DbReaderStructure();
 		else
-			return new RDFStructuresReader(sourceReference.toString());
+			return new RDFStructuresReader(applicationRootReference.toString());
 	}
 	protected abstract Target createTarget(Reference reference) throws Exception;
 	protected abstract Reference createReference() throws Exception ;

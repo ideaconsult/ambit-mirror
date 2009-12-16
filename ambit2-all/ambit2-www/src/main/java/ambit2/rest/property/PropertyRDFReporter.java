@@ -53,7 +53,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 				 getJenaModel().createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
 		feature.addProperty(OT.units,item.getUnits());
 		feature.addProperty(OWL.sameAs,item.getLabel());
-		feature.addProperty(OT.hasSource, referenceReporter.getURI(item.getReference()));
+		feature.addProperty(OT.OTProperty.hasSource.createProperty(getJenaModel()), referenceReporter.getURI(item.getReference()));
 	}
 
 	public void open() throws DbAmbitException {

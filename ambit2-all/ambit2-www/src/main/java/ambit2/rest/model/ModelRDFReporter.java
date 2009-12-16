@@ -65,7 +65,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		Individual algorithm = getJenaModel().createIndividual(
 				String.format("%s/algorithm/any",uriReporter.getBaseReference().toString()),
 				OT.OTClass.Algorithm.getOntClass(getJenaModel()));
-		model.addProperty(OT.algorithm, algorithm);
+		model.addProperty(OT.OTProperty.algorithm.createProperty(getJenaModel()), algorithm);
 		
 		Template t = item.getPredictors();
 		Iterator<Property> i = t.getProperties(true);
@@ -73,7 +73,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			Property p = i.next();
 			Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
 					OT.OTClass.Feature.getOntClass(getJenaModel()));
-			model.addProperty(OT.independentVariables, feature);
+			model.addProperty(OT.OTProperty.independentVariables.createProperty(getJenaModel()), feature);
 		}
 		
 		t = item.getDependent();
@@ -82,7 +82,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			Property p = i.next();
 			Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
 					OT.OTClass.Feature.getOntClass(getJenaModel()));
-			model.addProperty(OT.dependentVariables, feature);
+			model.addProperty(OT.OTProperty.dependentVariables.createProperty(getJenaModel()), feature);
 		}		
 		//item.getDependent()
 		/*

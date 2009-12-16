@@ -139,8 +139,9 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 								String.format("Apply model %s to %s",model.toString(),reference),
 								new CallableModelPredictor(
 										reference,
-										model,
+										getRequest().getRootRef(),
 										(AmbitApplication)getApplication(),
+										model,
 										new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest())),	
 								getRequest().getRootRef());		
 						getResponse().setLocationRef(ref);
