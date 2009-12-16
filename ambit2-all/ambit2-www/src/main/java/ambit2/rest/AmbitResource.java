@@ -121,9 +121,9 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
 
 			{"http://opentox.org/dev/apis/Model","Model variables",formatHeader,null},
-			{String.format("%s/independent",ModelResource.resource),"Independent variables",format,"GET","Yes"},
-			{String.format("%s/dependent",ModelResource.resource),"Dependent variables",format,"GET","Yes"},
-			{String.format("%s/predicted",ModelResource.resource),"Predicted variables",format,"GET","Yes"},
+			{String.format("%s/1/independent",ModelResource.resource),"Independent variables",format,"GET","Yes"},
+			{String.format("%s/1/dependent",ModelResource.resource),"Dependent variables",format,"GET","Yes"},
+			{String.format("%s/1/predicted",ModelResource.resource),"Predicted variables",format,"GET","Yes"},
 			
 			{"http://opentox.org/dev/apis/api-1.1/AsyncTask","Asynchronous jobs",formatHeader,null},
 			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
