@@ -19,6 +19,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.OT;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
@@ -145,6 +146,12 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				
 				Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
 						OT.OTClass.Feature.getOntClass(getJenaModel()));
+				if (p.getClazz()!=null)
+				feature.addProperty(DC.type,
+						 (p.getClazz()==Number.class)?
+								AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
+								AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
+								);				
 				/*
 				feature.addProperty(RDFJenaModel.DCProperty.title.getProperty(getJenaModel()), p.getName());
 				feature.addProperty(RDFJenaModel.DCProperty.identifier.getProperty(getJenaModel()),propertyReporter.getURI(p));
