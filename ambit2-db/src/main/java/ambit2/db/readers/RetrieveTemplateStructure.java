@@ -39,7 +39,9 @@ public class RetrieveTemplateStructure extends	RetrieveTemplate<IStructureRecord
 		try {
 			IStructureRecord record = getRecord();
 			if (record==null) record = new StructureRecord();
-			record.setIdstructure(rs.getInt(4));
+			if (chemicalsOnly && record.getIdstructure()>0) ; //skip
+			else
+				record.setIdstructure(rs.getInt(4));
 			record.setIdchemical(rs.getInt(9));
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = Property.getInstance(rs.getString(1),le); 
