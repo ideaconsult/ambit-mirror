@@ -44,7 +44,6 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
-import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RDFJenaConvertor;
@@ -53,7 +52,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.structure.CompoundHTMLReporter;
-import ambit2.rest.structure.CompoundURIReporter;
+import ambit2.rest.structure.ConformerURIReporter;
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
@@ -191,7 +190,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new StringConvertor(
 					new SmilesReporter<QueryStructureByID>(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			CompoundURIReporter<QueryStructureByID> reporter = new CompoundURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen());
+			ConformerURIReporter<QueryStructureByID> reporter = new ConformerURIReporter<QueryStructureByID>(getRequest());
 			reporter.setDelimiter("\n");
 			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
