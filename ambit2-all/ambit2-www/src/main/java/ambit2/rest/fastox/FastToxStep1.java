@@ -43,8 +43,8 @@ public class FastToxStep1 extends SmartsQueryResource {
 								b.append(String.format("<form action=\"%s%s\" method=\"POST\">",getUriReporter().getBaseReference(),getFormAction()));
 								b.append(super.toURI(item));
 								
-								b.append(String.format("<input name=\"idstructure\" value=\"%d\"type=\"hidden\">",item.getIdstructure()));
-								b.append(String.format("<input name=\"idchemical\" value=\"%d\"type=\"hidden\">",item.getIdchemical()));
+								b.append(String.format("<input name=\"idstructure\" value=\"%d\" type=\"hidden\">",item.getIdstructure()));
+								b.append(String.format("<input name=\"idchemical\" value=\"%d\" type=\"hidden\">",item.getIdchemical()));
 								b.append("<input type=\"submit\" value=\"Select models for prediction\"></form>");
 								b.append("</form>");
 								
