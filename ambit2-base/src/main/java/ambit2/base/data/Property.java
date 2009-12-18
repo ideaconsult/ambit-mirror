@@ -37,6 +37,9 @@ import com.jgoodies.binding.beans.Model;
 
 
 public class Property extends Model implements Serializable {
+	public void setName(String name) {
+		this.name = name;
+	}
 	/**
 	 * 
 	 */
@@ -241,5 +244,13 @@ public class Property extends Model implements Serializable {
 			((Property)obj).getName().equals(getName()) &&
 			((Property)obj).getReference().equals(getReference()) ; 
 		} else return false;
+	}
+	public void assign(Property newProperty) {
+		this.id = newProperty.id;
+		this.name = newProperty.name;
+		this.reference = new LiteratureEntry(newProperty.reference.title,newProperty.reference.URL);
+		this.label = newProperty.label;
+		this.clazz = newProperty.clazz;
+		this.units = newProperty.units;
 	}
 }
