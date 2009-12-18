@@ -25,46 +25,47 @@ import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
 	protected AmbitApplication app;
+
 	@Before
 	public void setUp() throws Exception {
 		setUpDatabase("src/test/resources/src-datasets.xml");
 
+		Context context = new Context();
+		context.getParameters().add(Preferences.DATABASE, getDatabase());
+		context.getParameters().add(Preferences.USER, getUser());
+		context.getParameters().add(Preferences.PASSWORD, getPWD());
+		context.getParameters().add(Preferences.PORT, getPort());
+		context.getParameters().add(Preferences.HOST, getHost());
 
-        Context context = new Context();
-        context.getParameters().add(Preferences.DATABASE, getDatabase());
-        context.getParameters().add(Preferences.USER, getUser());
-        context.getParameters().add(Preferences.PASSWORD, getPWD());
-        context.getParameters().add(Preferences.PORT, getPort());
-        context.getParameters().add(Preferences.HOST, getHost());
-        
-        // Create a component
-        component = new Component();
-        
+		// Create a component
+		component = new Component();
+
 		component.getClients().add(Protocol.FILE);
 		component.getClients().add(Protocol.HTTP);
 		component.getClients().add(Protocol.HTTPS);
 
-	    app = new AmbitApplication();
-	    app.setContext(context);
-	    
-	    // Attach the application to the component and start it
-	    
-	    component.getDefaultHost().attach(app);
-	    component.getInternalRouter().attach("/",app);
-	    
-        component.getServers().add(Protocol.HTTP, port);
-        component.getServers().add(Protocol.HTTPS, port);        
+		app = new AmbitApplication();
+		app.setContext(context);
 
-        component.start();        
+		// Attach the application to the component and start it
+
+		component.getDefaultHost().attach(app);
+		component.getInternalRouter().attach("/", app);
+
+		component.getServers().add(Protocol.HTTP, port);
+		component.getServers().add(Protocol.HTTPS, port);
+
+		component.start();
 	}
-	
+
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/task", port);
 	}
+
 	@After
 	public void cleanup() {
-		((AmbitApplication)app).removeTasks();
+		((AmbitApplication) app).removeTasks();
 	}
 
 	@Test
@@ -74,11 +75,13 @@ public class TaskResourceTest extends ResourceTest {
 				return new Reference("http://localhost/newResult");
 			}
 		};
-		((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port)));
-				
-		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
-		
-	}	
+		((AmbitApplication) app).addTask("Test task", c, new Reference(String
+				.format("http://localhost:%d", port)));
+
+		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
+
+	}
+
 	@Test
 	public void testURI() throws Exception {
 		Callable<Reference> c = new Callable<Reference>() {
@@ -86,58 +89,67 @@ public class TaskResourceTest extends ResourceTest {
 				return new Reference("quickTaskURI");
 			}
 		};
-		((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port)));
-				
-		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
-		
+		((AmbitApplication) app).addTask("Test task", c, new Reference(String
+				.format("http://localhost:%d", port)));
+
+		testGet(getTestURI(), MediaType.TEXT_URI_LIST);
+
 	}
+
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
 			throws Exception {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
+		int count = 0;
+		while ((line = reader.readLine()) != null) {
 			System.out.println(line);
-			//Assert.assertEquals("http://localhost:8181/newURI",line);
+			// Assert.assertEquals("http://localhost:8181/newURI",line);
 			count++;
 		}
 		return count == 1;
-	}	
-	
+	}
+
 	@Test
 	public void testCompletedTaskURI() throws Exception {
-		//creating task that completes immediately
+		// creating task that completes immediately
 		Callable<Reference> c = new Callable<Reference>() {
 			public Reference call() throws Exception {
 				return new Reference("quickTaskURI");
 			}
 		};
-		Reference completedTaskURI = ((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port)));
-				
-		Response response = testGet(completedTaskURI.toString(),MediaType.TEXT_URI_LIST,Status.REDIRECTION_SEE_OTHER);
-		Assert.assertEquals(
-					String.format("http://localhost:%d/task/quickTaskURI",port),
-					response.getLocationRef().toString());
-		//((AmbitApplication)app).removeTasks();
+		Reference completedTaskURI = ((AmbitApplication) app).addTask(
+				"Test task", c, new Reference(String.format(
+						"http://localhost:%d", port)));
+
+		Response response = testGet(completedTaskURI.toString(),
+				MediaType.TEXT_URI_LIST, Status.REDIRECTION_SEE_OTHER);
+		Assert.assertEquals(String.format(
+				"http://localhost:%d/task/quickTaskURI", port), response
+				.getLocationRef().toString());
+		// ((AmbitApplication)app).removeTasks();
 
 	}
+
 	@Test
 	public void testRunningTaskURI() throws Exception {
 		Callable<Reference> c = new Callable<Reference>() {
 			public Reference call() throws Exception {
-				boolean always = true;
-				while (always) {
-					
-				}
+				
+				for (int i = 0; i < 100000; i++)
+					;
 				return new Reference("newURI");
 			}
 		};
-		String longTaskURI = ((AmbitApplication)app).addTask("Test task",c,new Reference(String.format("http://localhost:%d", port))).toString();
-			
-		Response response = testGet(longTaskURI,MediaType.TEXT_URI_LIST,Status.SUCCESS_ACCEPTED);
-		//((AmbitApplication)app).removeTasks();
-	}	
+		String longTaskURI = ((AmbitApplication) app).addTask("Test task", c,
+				new Reference(String.format("http://localhost:%d", port)))
+				.toString();
+
+		Response response = testGet(longTaskURI, MediaType.TEXT_URI_LIST,
+				Status.REDIRECTION_SEE_OTHER);
+		// ((AmbitApplication)app).removeTasks();
+	}
+
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}

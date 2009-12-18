@@ -24,7 +24,7 @@ public abstract class RDFDatasetParser<Item, Feature> extends RDFBatchParser<Ite
 		super(baseReference,OT.OTClass.DataEntry.toString());
 		compoundTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,CompoundResource.compoundID));
 		conformerTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,ConformerResource.conformerID));
-		featureTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,PropertyResource.featuredefID));
+		featureTemplate = new Template(String.format("%s%s%s",baseReference==null?"":baseReference,PropertyResource.featuredef,PropertyResource.featuredefID));
 		
 	}
 	/**

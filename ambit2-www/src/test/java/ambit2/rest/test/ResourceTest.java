@@ -1,6 +1,5 @@
 package ambit2.rest.test;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -35,9 +34,7 @@ import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import weka.core.Attribute;
 import weka.core.Instances;
-
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;

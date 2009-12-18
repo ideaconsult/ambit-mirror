@@ -1,6 +1,7 @@
 package ambit2.rest.task;
 
 import java.io.Serializable;
+import java.sql.Connection;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -94,7 +95,7 @@ public class CallableModelPredictor extends CallableQueryProcessor<Object, IStru
 	 * Returns reference to the same dataset, with additional features, predicted by the model
 	 */
 	@Override
-	protected Reference createReference() throws Exception {
+	protected Reference createReference(Connection connection) throws Exception {
 		String predicted = String.format("%s/predicted", 
 				(new Reference(modelUriReporter.getURI(model))).toString());
 		return new Reference(

@@ -25,6 +25,13 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  */
 public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Reference, Item> {
 	protected MediaType mediaType = MediaType.APPLICATION_RDF_XML;
+	public MediaType getMediaType() {
+		return mediaType;
+	}
+
+	public void setMediaType(MediaType mediaType) {
+		this.mediaType = mediaType;
+	}
 	protected OntModel jenaModel;
 	protected String baseReference;
 	protected Item record;

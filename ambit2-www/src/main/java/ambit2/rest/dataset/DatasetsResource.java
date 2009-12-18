@@ -168,12 +168,13 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	        	  getResponse().setStatus(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage()));
 	        	  getResponse().setEntity(null);
 	          }
-		} else if (ChemicalMediaType.CHEMICAL_MDLSDF.equals(entity.getMediaType())) {
+		} else if (isAllowedMediaType(entity.getMediaType())) {
 					try {
 			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());					
 					  Reference ref =  ((AmbitApplication)getApplication()).addTask(
-								 "File import"+entity.getDownloadName(),
+							  
+							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								new CallableFileImport((InputRepresentation)entity,getConnection(),reporter),
 								getRequest().getRootRef());		
 						  getResponse().setLocationRef(ref);
@@ -184,51 +185,20 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 					}
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 				String.format("Unsupported Content-type=%s",entity.getMediaType()));
-		
-		/*
-		if (entity != null) 
-            if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
-                // 1/ Create a factory for disk-based file items
-                DiskFileItemFactory factory = new DiskFileItemFactory();
-                factory.setSizeThreshold(1000240);
-                // 2/ Create a new file upload handler based on the Restlet
-                // FileUpload extension that will parse Restlet requests and
-                // generates FileItems.
-                RestletFileUpload upload = new RestletFileUpload(factory);
-                List<FileItem> items;
-                try {
-                    // 3/ Request is parsed by the handler which generates a
-                    // list of FileItems
-                    items = upload.parseRequest(getRequest());
-
-                    // Process only the uploaded item called "fileToUpload" and
-                    // save it on disk
-                    boolean found = false;
-                    for (final Iterator<FileItem> it = items.iterator(); 
-                    		it.hasNext()
-                            && !found;) {
-                        FileItem fi = it.next();
-                        if (fi.getFieldName().equals(DatasetsHTMLReporter.fileUploadField)) {
-                        	fi.getContentType();
-                            found = true;
-                            File file = new File(System.getProperty("java.io.tmpdir")+fi.getName());
-                            fi.write(file);
-                        }
-                    }    
-                    
-                    getResponse().setStatus(Status.REDIRECTION_FOUND);
-                    getResponse().setLocationRef(getRequest().getOriginalRef());
-                    getResponse().setEntity(null);
-                    return;
-                 } catch (Exception e) {
-                	 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,e.getMessage()));
-                 } finally {
-                	 
-                 }
-            }
-         getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-         */
+	
 		return getResponse().getEntity();
             
+	}
+	
+	protected boolean isAllowedMediaType(MediaType mediaType) {
+		return 
+		ChemicalMediaType.CHEMICAL_MDLSDF.equals(mediaType) ||
+		MediaType.APPLICATION_RDF_XML.equals(mediaType) ||
+		MediaType.APPLICATION_RDF_TURTLE.equals(mediaType) ||
+		MediaType.TEXT_RDF_N3.equals(mediaType) ||
+		//MediaType.TEXT_CSV.equals(mediaType) ||
+		ChemicalMediaType.CHEMICAL_SMILES.equals(mediaType) ||
+		ChemicalMediaType.CHEMICAL_MDLMOL.equals(mediaType);
+		//ChemicalMediaType.CHEMICAL_CML.equals(mediaType) ||
 	}
 }

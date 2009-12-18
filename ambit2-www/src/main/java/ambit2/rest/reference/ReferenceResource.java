@@ -64,7 +64,6 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 	};
 	public final static String reference = "/reference";
 	public final static String idreference = "idreference";
-	//public final static String referenceID = String.format("%s/{%s}",reference,idreference);
 	
 
 	@Override

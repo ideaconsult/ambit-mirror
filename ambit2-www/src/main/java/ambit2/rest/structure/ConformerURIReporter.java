@@ -19,10 +19,13 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	private static final long serialVersionUID = -3240656616658257198L;
 
 	public ConformerURIReporter() {
-		this(null);
+		this(null,false);
 	}	
 	public ConformerURIReporter(Request baseRef) {
-		super(baseRef);
+		super(baseRef,false);
+	}	
+	public ConformerURIReporter(Request baseRef,boolean readStructure) {
+		super(baseRef,readStructure);
 	}
 
 	public String getURI(String ref, IStructureRecord item) {

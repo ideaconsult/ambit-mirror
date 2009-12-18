@@ -49,7 +49,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
 		}
-		else {
+		
 			Form form = request.getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
@@ -57,8 +57,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 				q.setFieldname(property);
 				
 			} 
-		}
-		//feature definition
+				//feature definition
 		Object fid = request.getAttributes().get(idfeaturedef);
 		if (fid != null) try {
 			Property p = new Property(null);
