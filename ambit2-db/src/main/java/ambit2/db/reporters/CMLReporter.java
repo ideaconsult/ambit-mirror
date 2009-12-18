@@ -14,7 +14,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 
 /**
- * Writes query results as CML 
+ * Writes query results as CML .  TODO The output is not correct for multiple molecules!!!!
  * @author nina
  *
  * @param <Q>

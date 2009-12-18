@@ -47,6 +47,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});
+		/*
 		else
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveTemplateStructure(getTemplate())) {
 				@Override
@@ -56,6 +57,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});		
+			*/
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
