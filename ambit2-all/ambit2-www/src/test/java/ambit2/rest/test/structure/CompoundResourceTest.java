@@ -180,6 +180,7 @@ public class CompoundResourceTest extends ResourceTest {
 			IAtomContainer mol = (IAtomContainer)o;
 			Assert.assertEquals(3,mol.getAtomCount());
 			Assert.assertEquals(0,mol.getBondCount());
+		//	Assert.assertEquals(0,mol.getProperties().size());test datasets has properties inside structure table field
 			count++;
 		}
 		return count==1;

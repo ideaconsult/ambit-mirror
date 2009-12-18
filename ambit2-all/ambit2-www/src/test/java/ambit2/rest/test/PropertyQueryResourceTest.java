@@ -33,7 +33,7 @@ public class PropertyQueryResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals(String.format("http://localhost:8181/compound/11",port), line);
+			Assert.assertEquals(String.format("http://localhost:8181/compound/11/conformer/100215",port), line);
 			count++;
 		}
 		return count==1;

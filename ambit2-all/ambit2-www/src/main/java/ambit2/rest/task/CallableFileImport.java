@@ -1,29 +1,38 @@
 package ambit2.rest.task;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
+import org.omegahat.Environment.DataStructures.logical;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.InputRepresentation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
+import ambit2.core.io.IInputState;
 import ambit2.db.SourceDataset;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.dataset.ReadDataset;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.dataset.RDFIteratingReader;
 
 public class CallableFileImport implements	java.util.concurrent.Callable<Reference> {
 	protected File file;
@@ -68,12 +77,25 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			}
 		};
 	}	
-	public CallableFileImport(InputRepresentation input,  Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+	protected String getExtension(MediaType mediaType) {
+		if (ChemicalMediaType.CHEMICAL_MDLSDF.equals(mediaType)) return ".sdf";
+		else if (MediaType.APPLICATION_RDF_XML.equals(mediaType)) return ".rdf";
+		else if (MediaType.APPLICATION_RDF_TURTLE.equals(mediaType)) return ".turtle";
+		else if (MediaType.TEXT_RDF_N3.equals(mediaType)) return ".n3";
+		else if (MediaType.APPLICATION_EXCEL.equals(mediaType)) return ".xls";
+		else if (MediaType.TEXT_CSV.equals(mediaType)) return ".csv";
+		else return null;
+	}
+	public CallableFileImport(InputRepresentation input,  
+					Connection connection,
+					DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
 		this((File)null,connection,reporter);
 		try {
+			String extension = getExtension(input.getMediaType());
+			System.out.println(input.getIdentifier());
 			File file = null;
 			if (input.getDownloadName()==null) {
-		       file = File.createTempFile("ambit2_", ".sdf");
+		       file = File.createTempFile("ambit2_", extension);
 		       file.deleteOnExit();
 			} else file = new File(
 	        		String.format("%s/%s",
@@ -99,13 +121,48 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 		}
 	}
 	
+	protected Iterator getRDFIterator(File file,String baseReference) {
+		String format = "RDF/XML";
+		if (file.getName().endsWith(".rdf"))
+			format = "RDF/XML";
+		else if (file.getName().endsWith(".n3"))
+			format = "N3";
+		else if (file.getName().endsWith(".turtle"))
+			format = "TURTLE";
+		else return null;
+		try {
+		return new RDFIteratingReader(new FileInputStream(file),
+				NoNotificationChemObjectBuilder.getInstance(),
+				baseReference,
+				format);
+		} catch (Exception x) {
+			return null;
+		}
+	}
 	public Reference importFile(File file) throws Exception {
 		try {
 
 			SourceDataset dataset = new SourceDataset(file.getName(), LiteratureEntry
 					.getInstance(file.getName(), "File uploaded by user"));		
 			dataset.setId(-1);
-			final BatchDBProcessor batch = new BatchDBProcessor();
+			final BatchDBProcessor batch = new BatchDBProcessor() {
+				@Override
+				public Iterator<String> getIterator(IInputState target)
+						throws AmbitException {
+					try {
+						File file = ((FileInputState)target).getFile();
+						Iterator i = getRDFIterator(file,getReporter().getBaseReference().toString());
+						if (i==null)
+							return super.getIterator(target);
+						else return i;
+					} catch (AmbitException x) {
+						throw x;
+					} catch (Exception x){
+						throw new AmbitException(x);
+					}
+				}
+			};
+			
 			batch.setConnection(connection);
 			final RepositoryWriter writer = new RepositoryWriter();
 			writer.setDataset(dataset);

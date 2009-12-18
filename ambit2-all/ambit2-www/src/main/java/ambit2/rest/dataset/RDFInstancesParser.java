@@ -12,6 +12,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.OT;
 
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -19,7 +20,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 
 /**
@@ -36,7 +36,7 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 	protected FastVector attributes;
 	protected Hashtable<String, Attribute> urilookup;
 	protected Instances instances;
-	
+	protected int maxNominalValues = 20;
 	public Instances getInstances() {
 		return instances;
 	}
@@ -50,34 +50,66 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 		attributes = new FastVector();
 		urilookup = new Hashtable<String, Attribute>();
 	}
-	
+	/**
+	 * Analyzes features and values to create WEKA attributes of numeric, string or nominal type
+	 * @return
+	 */
 	protected FastVector parseFeatures() {
 		FastVector attributes = new FastVector();
 		Resource s = OT.OTClass.Feature.getOntClass(jenaModel);
 		if (s==null) return null;
-		Attribute attr = new Attribute("ID",(FastVector)null);
-		attributes.addElement(attr);
-		urilookup.put("ID", attr);
-
+		
+		Property valueProperty = OT.DataProperty.value.createProperty(jenaModel);
 		StmtIterator features =  jenaModel.listStatements(new SimpleSelector(null,null,s));
 		while (features.hasNext()) {
 			
 			Statement feature = features.next();
-			/*
-			System.out.println(feature.getSubject());
+			
+			int ndouble=0;
+			int nstring = 0;
+			
+			FastVector nominal = new FastVector();
 			StmtIterator entries =  jenaModel.listStatements(
 					new SimpleSelector(null,OT.OTProperty.feature.createProperty(jenaModel),feature.getSubject()));
 			while (entries.hasNext()) {
-				StmtIterator values =  jenaModel.listStatements(
-						new SimpleSelector(entries.next().getSubject(),OT.DataProperty.value.createProperty(jenaModel),(Literal)null));
-				while (values.hasNext()) {
-					System.out.println(values.next().getObject());
-				}
-			}
-			*/
-			attr = createFeature(feature.getSubject());
+				
+				Resource entry = entries.next().getSubject();
+				try {
+					
+					Statement values = entry.getProperty(valueProperty);
+					if (values.getObject().isLiteral()) {
+						Class clazz = ((Literal)values.getObject()).getDatatype().getJavaClass();
+						if (clazz == Double.class) ndouble++;
+						else if (clazz == Float.class) ndouble++;
+						else if (clazz == Integer.class) ndouble++;
+						else if (clazz == Long.class) ndouble++;
+						else if (clazz == Short.class) ndouble++;
+						else {
+							String value = ((Literal)values.getObject()).getString();
+							if ((nominal.size()<(maxNominalValues+1)) && !nominal.contains(value))
+								nominal.addElement(value);
+							
+							nstring++;
+						}
+					}
 
-			attributes.addElement(attr);
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+				
+			}
+			
+			if ((ndouble+nstring)==0) continue;
+			Attribute a = null;
+			
+			if (ndouble > nstring) //numeric feature
+				a = new Attribute(feature.getSubject().toString());
+			else if (nominal.size()>maxNominalValues) //string attribute
+				a = new Attribute(feature.getSubject().toString(),(FastVector)null);
+			else
+				a = new Attribute(feature.getSubject().toString(),nominal);
+			urilookup.put(feature.getSubject().toString(),a);
+			attributes.addElement(a);
 		}
 		return attributes;
 	}
@@ -102,15 +134,17 @@ public class RDFInstancesParser extends RDFDatasetParser<Instance, Attribute> {
 	
 	@Override
 	protected Instance parseRecord(Resource newEntry, Instance record) {
-		
+		/*
 		//get the compound
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
 			Statement st = compound.next();
-			record.setValue(urilookup.get("ID"), st.getObject().toString());
+			//record.setValue(urilookup.get("ID"), st.getObject().toString());
 			break;
-		}	
+		}
+		*/	
 		//get feature values
+		
 		parseFeatureValues( newEntry,record);
 		record.setDataset(instances);
 		instances.add(record);

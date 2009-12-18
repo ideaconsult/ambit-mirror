@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" > 
+  <rdf:Description rdf:nodeID="A0">
+    <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XXXXX</ot:value>
+    <ot:feature rdf:resource="http://localhost:8181/feature/1"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#FeatureValue"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:nodeID="B0">
+    <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double">3.14</ot:value>
+    <ot:feature rdf:resource="http://anotherservice.com:8080/feature/1"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#FeatureValue"/>
+  </rdf:Description>  
+  
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#FeatureValue">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Dataset">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://localhost:8181/dataset/2">
+    <ot:dataEntry rdf:nodeID="A1"/>
+    <ot:dataEntry rdf:nodeID="A2"/>
+    <dc:description>http://localhost:8181/dataset/2</dc:description>
+    <dc:title>Dataset = 2</dc:title>
+    <dc:identifier>http://localhost:8181/dataset/2</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Dataset"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://localhost:8181/compound/11/conformer/100215">
+    <dc:identifier>http://localhost:8181/compound/11/conformer/100215</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Compound"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://localhost:8181/compound/7/conformer/100211">
+    <dc:identifier>http://localhost:8181/compound/7/conformer/100211</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Compound"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Compound">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A1">
+    <ot:values rdf:nodeID="A0"/>
+    <ot:values rdf:nodeID="B0"/>
+    <ot:compound rdf:resource="http://localhost:8181/compound/11/conformer/100215"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#DataEntry"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:nodeID="A2">
+    <ot:compound rdf:resource="http://localhost:8181/compound/7/conformer/100211"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#DataEntry"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://localhost:8181/feature/1">
+    <dc:type>http://www.w3.org/2001/XMLSchema#string</dc:type>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://anotherservice.com:8080/feature/1">
+    <dc:type>http://www.w3.org/2001/XMLSchema#string</dc:type>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>  
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#DataEntry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+</rdf:RDF>

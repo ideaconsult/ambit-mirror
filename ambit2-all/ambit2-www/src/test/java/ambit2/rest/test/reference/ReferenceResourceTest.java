@@ -19,6 +19,8 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
+import com.hp.hpl.jena.rdf.model.Resource;
+
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
@@ -59,7 +61,7 @@ public class ReferenceResourceTest extends ResourceTest {
 	
 	@Test
 	public void testRDFXML() throws Exception {
-		RDFReferenceParser parser = new RDFReferenceParser("");
+		RDFReferenceParser parser = new RDFReferenceParser(String.format("http://localhost:%d",port));
 		parser.setProcessorChain(new ProcessorsChain<ILiteratureEntry, IBatchStatistics, IProcessor>());
 		parser.getProcessorChain().add(new IProcessor<ILiteratureEntry,ILiteratureEntry>(){
 			public long getID() {
@@ -68,6 +70,7 @@ public class ReferenceResourceTest extends ResourceTest {
 			public ILiteratureEntry process(ILiteratureEntry target) throws AmbitException {
 				Assert.assertEquals("CAS Registry Number", target.getName());
 				Assert.assertEquals("http://www.cas.org",target.getURL());
+				Assert.assertEquals(1,target.getId());
 				return target;
 			}
 			public boolean isEnabled() {
@@ -77,6 +80,23 @@ public class ReferenceResourceTest extends ResourceTest {
 			}
 		});
 		parser.process(new Reference(getTestURI()));
+	}
+	
+	@Test
+	public void testRDFXMLForeignURI() throws Exception {
+		RDFReferenceParser parser = new RDFReferenceParser(String.format("http://localhost:%d",port)) {
+			@Override
+			protected ILiteratureEntry parseRecord(Resource newEntry,
+					ILiteratureEntry record) {
+				return super.parseRecord(newEntry, record);
+			}
+		};
+		try {
+			parser.process(new Reference("http://google.com"));
+			Assert.assertTrue(false);
+		} catch (Exception x) {
+			Assert.assertTrue(true);
+		}
 	}
 	
 	@Override

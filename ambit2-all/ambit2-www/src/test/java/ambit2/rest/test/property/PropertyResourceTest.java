@@ -14,6 +14,7 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
@@ -22,8 +23,11 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.property.RDFPropertyParser;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.test.ResourceTest;
+
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * test for {@link PropertyResource}
@@ -40,28 +44,40 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
-	/*
-	public boolean verifyResponseRDFXML(String uri, MediaType media, InputStream in)
-	throws Exception {
-		AbstractRDFParser<Property> p = new AbstractRDFParser<Property>() {
-			@Override
-			public Property read(OntModel model) throws AmbitException {
-				return null;
-			}
-		};
-		
-		p.process(in);
-		return false;
-	}
-	*/	
+
 	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+		RDFPropertyParser parser = new RDFPropertyParser(String.format("http://localhost:%d", port)) {
+			@Override
+			protected Property parseRecord(Resource newEntry, Property record) {
+				Property p = super.parseRecord(newEntry, record);
+				Assert.assertEquals("Property 1",p.getName());
+				Assert.assertEquals(1,p.getId());
+				return p;
+			}
+		};
+		parser.process(new Reference(getTestURI()));		
 	}	
-	/*
-<?xml version="1.0" encoding="UTF-8"?><FeatureDefinitions xmlns="http://opentox.org/1.0"><FeatureDefinition ID="1" Name="Property 1" Reference="8" type="TODO"><link href="http://localhost:8181/feature_definition/1"/><Reference xmlns="http://www.opentox.org/Reference/1.0" AlgorithmID="NA" ID="8" Name="Dummy"/></FeatureDefinition></FeatureDefinitions>
-	 */
 	
+	@Test
+	public void testRDFXMLForeignURI() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+		RDFPropertyParser parser = new RDFPropertyParser(String.format("http://localhost:%d", port)) {
+			@Override
+			protected Property parseRecord(Resource newEntry, Property record) {
+				Property p = super.parseRecord(newEntry, record);
+				Assert.assertTrue(false);
+				return p;
+			}
+		};
+		try {
+			parser.process(new Reference("http://google.com"));
+			Assert.assertTrue(false);
+		} catch (Exception x) {
+			Assert.assertTrue(true);
+		}
+	}		
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {

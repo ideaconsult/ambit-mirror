@@ -30,7 +30,7 @@ public class SmartsDatasetResource extends ResourceTest {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("http://localhost:8181/compound/11",line);
+			Assert.assertEquals("http://localhost:8181/compound/11/conformer/100215",line);
 		}
 		return true;
 	}
