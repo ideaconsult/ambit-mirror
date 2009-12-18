@@ -114,13 +114,10 @@ public class DatasetsResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntry() throws Exception {
 		
-				//
-	    String fname = "E:/src/ambit2-all/ambit2-www/src/test/resources/input.sdf";
-	    //"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf";
-				//ChemicalMediaType.CHEMICAL_MDLSDF, 0);
-				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
+		InputStream in  = getClass().getClassLoader().getResourceAsStream("input.sdf");
+
 		StringBuilder b = new StringBuilder();
-		BufferedReader reader = new BufferedReader(new FileReader(fname));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		while ((line=reader.readLine())!=null) {
 			b.append(line);
@@ -142,7 +139,6 @@ public class DatasetsResourceTest extends ResourceTest {
 			r = client.handle(request);
 			uri = r.getLocationRef();
 		}
-		System.out.println(r.getStatus());
 		//System.out.println(r.getLocationRef());
 	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
@@ -153,9 +149,81 @@ public class DatasetsResourceTest extends ResourceTest {
 		
 	}	
 	
-	
-	
 	@Test
+	public void testCreateEntryRDF() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+		
+		InputStream in  = getClass().getClassLoader().getResourceAsStream("import_dataset2.rdf");
+
+		StringBuilder b = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		while ((line=reader.readLine())!=null) {
+			b.append(line);
+			b.append('\n');
+		}
+		Response r = testPost(getTestURI(), MediaType.APPLICATION_RDF_XML, b.toString());
+		Reference uri = r.getLocationRef();
+		
+		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
+			//System.out.println(r.getStatus() + " " +r.getLocationRef());
+			if (r.getStatus().equals(Status.CLIENT_ERROR_BAD_REQUEST)) 
+				throw new ResourceException(r.getStatus());
+			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_ACCEPTABLE))
+				throw new ResourceException(r.getStatus());
+			Request request = new Request();
+			Client client = new Client(Protocol.HTTP);
+			request.setResourceRef(uri);
+			request.setMethod(Method.GET);
+			r = client.handle(request);
+			uri = r.getLocationRef();
+		}
+		//System.out.println(r.getLocationRef());
+	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+		
+	}	
+	
+	public void testCreateEntryFromFileRDF() throws Exception {
+		
+		FileRepresentation rep = new FileRepresentation(
+				"E:/src/ambit2-all/ambit2-www/src/test/resources/input.rdf", 
+				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
+				 MediaType.APPLICATION_RDF_XML, 0);
+				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
+				
+		Response r = testPostFile(getTestURI(), MediaType.APPLICATION_RDF_XML, rep);
+		Reference uri = r.getLocationRef();
+		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
+			//System.out.println(r.getStatus() + " " +r.getLocationRef());
+			
+			Request request = new Request();
+			Client client = new Client(Protocol.HTTP);
+			request.setResourceRef(uri);
+			request.setMethod(Method.GET);
+			r = client.handle(request);
+			uri = r.getLocationRef();
+		}
+		System.out.println(r.getStatus());
+		//System.out.println(r.getLocationRef());
+	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+		
+	}		
+	
+
 	public void testCreateEntryFromFile() throws Exception {
 		
 		FileRepresentation rep = new FileRepresentation(
