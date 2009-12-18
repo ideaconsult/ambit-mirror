@@ -49,6 +49,14 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		OT.OTClass.Feature.createOntClass(getJenaModel());
 		OT.OTClass.Parameter.createOntClass(getJenaModel());
 		OT.OTClass.Dataset.createOntClass(getJenaModel());
+		
+		output.createAnnotationProperty(DC.title.getURI());
+		output.createAnnotationProperty(DC.description.getURI());
+		output.createAnnotationProperty(DC.identifier.getURI());
+		output.createAnnotationProperty(DC.type.getURI());
+		output.createAnnotationProperty(DC.creator.getURI());
+		output.createAnnotationProperty(DC.format.getURI());
+		output.createAnnotationProperty(DC.date.getURI());
 	};
 	
 	@Override
