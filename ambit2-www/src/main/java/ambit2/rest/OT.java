@@ -34,9 +34,7 @@ public class OT {
 		public OntClass createOntClass(OntModel model) {
 			return model.createClass(getNS());
 		}		
-		public Property createProperty(OntModel model) {
-			return model.createProperty(getNS());
-		}			
+	
 
 	};
 	/** <p>The RDF model that holds the vocabulary terms</p> */
@@ -75,9 +73,9 @@ public class OT {
 		    validationPredictionDataset ,
 		    validationTestDataset;
 		   	public Property createProperty(OntModel jenaModel) {
-		   		Property p = jenaModel.getProperty(String.format(_NS, toString()));
+		   		Property p = jenaModel.getObjectProperty(String.format(_NS, toString()));
 		   		return p!= null?p:
-		   				jenaModel.createProperty(String.format(_NS, toString()));
+		   				jenaModel.createObjectProperty(String.format(_NS, toString()));
 		   	}
     }
     /**
@@ -92,9 +90,9 @@ public class OT {
     	paramScope,
     	paramValue;
 	   	public Property createProperty(OntModel jenaModel) {
-	   		Property p = jenaModel.getProperty(String.format(_NS, toString()));
+	   		Property p = jenaModel.getDatatypeProperty(String.format(_NS, toString()));
 	   		return p!= null?p:
-	   				jenaModel.createProperty(String.format(_NS, toString()));
+	   				jenaModel.createDatatypeProperty(String.format(_NS, toString()));
 	   	}
     };
     /*
