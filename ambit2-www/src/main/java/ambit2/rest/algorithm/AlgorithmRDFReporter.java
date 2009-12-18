@@ -74,8 +74,17 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		super.header(output, query);
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());
 		OT.OTClass.Parameter.createOntClass(getJenaModel());
+		
+		getJenaModel().createAnnotationProperty(DC.title.getURI());
+		getJenaModel().createAnnotationProperty(DC.description.getURI());
+		getJenaModel().createAnnotationProperty(DC.identifier.getURI());
+		getJenaModel().createAnnotationProperty(DC.type.getURI());
+		getJenaModel().createAnnotationProperty(DC.publisher.getURI());
+		getJenaModel().createAnnotationProperty(DC.format.getURI());
+		getJenaModel().createAnnotationProperty(DC.date.getURI());		
 	}
-	
+
+
 	
 
 }

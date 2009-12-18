@@ -107,6 +107,10 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		OT.OTClass.FeatureValue.createOntClass(output);
 		OT.OTClass.Compound.createOntClass(output);
 		
+		output.createAnnotationProperty(DC.title.getURI());
+		output.createAnnotationProperty(DC.description.getURI());
+		output.createAnnotationProperty(DC.identifier.getURI());
+		output.createAnnotationProperty(DC.type.getURI());
 		
 		dataset = output.createIndividual(
 				String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),uriReporter.getRequest().getOriginalRef().getHierarchicalPart()),
@@ -115,6 +119,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
 		dataset.addProperty(DC.title,query.toString());
 		dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
+		
 	}
 
 	@Override
@@ -132,7 +137,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			
 			Individual compound = getJenaModel().createIndividual(
 					uriReporter.getURI(item),OT.OTClass.Compound.getOntClass(getJenaModel()));
-			
+			compound.addProperty(DC.identifier, uriReporter.getURI(item));			
 			dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);
 			
 //			if (item.getIdstructure()>0)
