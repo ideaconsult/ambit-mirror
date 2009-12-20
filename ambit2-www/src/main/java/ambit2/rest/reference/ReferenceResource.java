@@ -17,6 +17,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
+import ambit2.db.update.reference.UpdateReference;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -136,6 +137,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 	@Override
 	protected AbstractUpdate createUpdateObject(
 			ILiteratureEntry entry) throws ResourceException {
-		return new CreateReference(entry);
+		if(entry.getId()>0) return new UpdateReference(entry);
+		else return new CreateReference(entry);
 	}
 }
