@@ -172,7 +172,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
-			variant.setMediaType(new MediaType(Reference.decode(media)));
+			variant.setMediaType(new MediaType(media));
 		}
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

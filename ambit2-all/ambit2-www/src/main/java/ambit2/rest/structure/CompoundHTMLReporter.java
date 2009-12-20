@@ -26,7 +26,6 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.propertyvalue.PropertyValueResource;
@@ -161,7 +160,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_CSV,
 				ChemicalMediaType.WEKA_ARFF,
-				MediaType.APPLICATION_RDF_TURTLE
+				MediaType.APPLICATION_RDF_XML
 				};
 		String[] image = {
 				"sdf.jpg",
@@ -183,7 +182,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					"<a href=\"?%s%saccept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 					q==null?"":q,
 					q==null?"":"&",
-					mime,
+					Reference.encode(mime.toString()),
 					uriReporter.getBaseReference().toString(),
 					image[i],
 					mime,
