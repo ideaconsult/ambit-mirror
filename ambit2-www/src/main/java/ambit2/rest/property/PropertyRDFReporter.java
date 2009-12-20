@@ -74,8 +74,9 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		
 		if(item.getLabel()==null) {
 			String label = Property.guessLabel(item.getName());
-			feature.addProperty(OWL.sameAs,label==null?item.getName():label);
-		} else feature.addProperty(OWL.sameAs,item.getLabel());
+			feature.addProperty(OWL.sameAs,String.format("%s%s",OT.NS,label==null?item.getName():label));
+		} else feature.addProperty(OWL.sameAs,
+				String.format("%s%s",OT.NS,item.getLabel()));
 		
 		
 		Individual reference = ReferenceRDFReporter.addToModel(jenaModel, item.getReference(), referenceReporter);
