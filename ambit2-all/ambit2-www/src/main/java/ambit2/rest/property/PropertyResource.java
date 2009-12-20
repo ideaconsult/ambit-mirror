@@ -26,6 +26,7 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
+import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
@@ -228,6 +229,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			throws ResourceException {
 		if (entry.getReference().getId()>0)
 			return new CreatePropertyReferenceID(entry);
+		else if (entry.getId()>0) return new UpdateProperty(entry);
 		else return new CreateProperty(entry);
 	}
 	

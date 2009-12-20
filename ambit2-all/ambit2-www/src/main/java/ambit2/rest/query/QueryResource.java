@@ -260,7 +260,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				while (iterator.hasNext()) {
 					return iterator.next();
 				}
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);	
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Nothing to write! "+getRequest().getRootRef());	
 			} catch (ResourceException x)  {
 				throw x;
 			} catch (Exception x) {
