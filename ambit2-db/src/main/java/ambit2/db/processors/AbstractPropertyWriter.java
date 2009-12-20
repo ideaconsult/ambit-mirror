@@ -40,6 +40,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.update.dictionary.TemplateAddProperty;
+import ambit2.db.update.property.ReadProperty;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
@@ -47,6 +48,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	protected TemplateAddProperty templateWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
+    protected ReadProperty readProperty = new ReadProperty();
     
     public AbstractPropertyWriter() {
 		super();
@@ -84,19 +86,33 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         int idtuple = getTuple(getDataset());
         int i=0;
         for (Property property: names) {
+        	boolean found = false;
         	property.setId(-1);
-            selectField.setValue(property);
-            
-            boolean found = false;
-            ResultSet rs1 = queryexec.process(selectField);
-            while (rs1.next()) {
-            	property = selectField.getObject(rs1);
-            	templateEntry(target, property);	  
-                descriptorEntry(target, property,i,idtuple);
-                found = true;
-            }
-            queryexec.closeResults(rs1);
-            
+        	/*
+        	if (property.getId()>0) {  // quick hack
+        		readProperty.setValue(property.getId());
+	            ResultSet rs1 = queryexec.process(readProperty);
+	            while (rs1.next()) {
+	            	Property p = readProperty.getObject(rs1);
+	            	property.assign(p);
+	            	templateEntry(target, property);	  
+	                descriptorEntry(target, property,i,idtuple);
+	                found = true;
+	            }
+	            queryexec.closeResults(rs1);
+	            
+        	} else {
+        	*/
+	            selectField.setValue(property);
+	            ResultSet rs1 = queryexec.process(selectField);
+	            while (rs1.next()) {
+	            	property = selectField.getObject(rs1);
+	            	templateEntry(target, property);	  
+	                descriptorEntry(target, property,i,idtuple);
+	                found = true;
+	            }
+	            queryexec.closeResults(rs1);
+        	//}
             if (!found) {
             	
                 Dictionary comments = getComments(property.getName(),target);
