@@ -11,10 +11,10 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.OT;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;

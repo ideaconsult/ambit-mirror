@@ -2,9 +2,6 @@ package ambit2.rest.test.dataset;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Iterator;
 
 import junit.framework.Assert;
 
@@ -13,18 +10,14 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import weka.core.Instance;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
+import weka.core.Instances;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.IteratingDelimitedFileReader;
-import ambit2.rest.dataset.RDFInstancesParser;
-import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
+import ambit2.rest.rdf.RDFInstancesIterator;
+import ambit2.rest.rdf.RDFStructuresIterator;
 import ambit2.rest.test.ResourceTest;
 
 /**
@@ -46,54 +39,39 @@ public class DatasetReporterTest extends ResourceTest {
 						StructureQueryResource.feature_URI,
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						));
-		RDFStructuresReader reader = new RDFStructuresReader(String.format("http://localhost:%d",port));
-		reader.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
-		reader.getProcessorChain().add(new IProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target)
-					throws AmbitException {
-				Assert.assertTrue(target.getIdchemical()>0);
-				Assert.assertTrue(target.getIdstructure()>0);
-				Assert.assertNotNull(target.getProperties());
-				Assert.assertNotNull(target.getContent());
-				Assert.assertEquals(MOL_TYPE.SDF.toString(),target.getFormat());
-				return target;
-			}
-			public boolean isEnabled() {
-				return true;
-			}
-			public void setEnabled(boolean value) {
-			}
-			public long getID() {
-				return 0;
-			}
-		});
+		RDFStructuresIterator iterator = new RDFStructuresIterator(ref);
+		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
+		while (iterator.hasNext()) {
+			IStructureRecord target = iterator.next();
+			Assert.assertTrue(target.getIdchemical()>0);
+			Assert.assertTrue(target.getIdstructure()>0);
+			Assert.assertNotNull(target.getProperties());
+			Assert.assertNotNull(target.getContent());
+			Assert.assertEquals(MOL_TYPE.SDF.toString(),target.getFormat());			
+		}
 
-		reader.process(ref);
-		//MediaType.APPLICATION_RDF_XML);
 	}	
 	
 	@Test
 	public void testParseInstances() throws Exception {
 		Reference ref = new Reference(DatasetReporterTest.class.getResource("/input.rdf"));
-		RDFInstancesParser reader = new RDFInstancesParser(String.format("http://localhost:%d",port)) {
-			@Override
-			public void afterProcessing(Reference target,
-					Iterator<Instance> iterator) throws AmbitException {
-				super.afterProcessing(target, iterator);
-				Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6", instances.relationName());
-				Assert.assertEquals(522, instances.numInstances());
-				Assert.assertEquals(3, instances.numAttributes());
-				Assert.assertTrue(instances.attribute(0).isNumeric());
-				Assert.assertTrue(instances.attribute(1).isNominal());
-				Assert.assertTrue(instances.attribute(2).isNumeric());
-				Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938",instances.attribute(0).name());
-				Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11936",instances.attribute(1).name());
-				Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11951",instances.attribute(2).name());
-			}
-		};
-
-		reader.setProcessorChain(new ProcessorsChain<Instance, IBatchStatistics, IProcessor>());
-		reader.process(ref);
+		RDFInstancesIterator  iterator = new RDFInstancesIterator(ref);
+		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
+		while (iterator.hasNext()) {
+			iterator.next();
+		}
+		iterator.close();
+		Instances instances = iterator.getInstances();
+	
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6", instances.relationName());
+		Assert.assertEquals(522, instances.numInstances());
+		Assert.assertEquals(3, instances.numAttributes());
+		Assert.assertTrue(instances.attribute(0).isNumeric());
+		Assert.assertTrue(instances.attribute(1).isNominal());
+		Assert.assertTrue(instances.attribute(2).isNumeric());
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938",instances.attribute(0).name());
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11936",instances.attribute(1).name());
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11951",instances.attribute(2).name());
 	}		
 	@Test
 	public void testURI() throws Exception {

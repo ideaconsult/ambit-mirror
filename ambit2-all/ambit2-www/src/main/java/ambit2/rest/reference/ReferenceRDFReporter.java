@@ -7,16 +7,14 @@ import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.BibTex;
-import ambit2.rest.OT;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.vocabulary.DC;
-import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class ReferenceRDFReporter<Q extends IQueryRetrieval<ILiteratureEntry>> extends QueryRDFReporter<ILiteratureEntry, Q> {
@@ -35,15 +33,23 @@ public class ReferenceRDFReporter<Q extends IQueryRetrieval<ILiteratureEntry>> e
 	}
 	@Override
 	public void processItem(ILiteratureEntry item) throws AmbitException {
-		Individual entry = getJenaModel().createIndividual(uriReporter.getURI(item),
-				BibTex.BTClass.Entry.getOntClass(getJenaModel()));
+		addToModel(getJenaModel(), item,uriReporter);
+	}
+	public static Individual addToModel(OntModel jenaModel,ILiteratureEntry item, 
+				QueryURIReporter<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>> uriReporter) {
+		Individual entry = null;
+		if ((uriReporter==null) || (uriReporter.getBaseReference()==null)) {
+			entry = jenaModel.createIndividual(BibTex.BTClass.Entry.getOntClass(jenaModel));
+		} else {
+			entry = jenaModel.createIndividual(uriReporter.getURI(item),BibTex.BTClass.Entry.getOntClass(jenaModel));
+			entry.addLiteral(DC.identifier,
+					jenaModel.createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));			
+		}
 		entry.addProperty(DC.title, item.getName());
 		entry.addProperty(RDFS.seeAlso,item.getURL());
-		entry.addLiteral(DC.identifier,
-				 getJenaModel().createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
-
+		return entry;
+		
 	}
-
 	public void open() throws DbAmbitException {
 		
 	}

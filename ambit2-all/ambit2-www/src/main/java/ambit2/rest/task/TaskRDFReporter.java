@@ -12,8 +12,8 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.vocabulary.DC;
 
-import ambit2.rest.OT;
 import ambit2.rest.algorithm.CatalogRDFReporter;
+import ambit2.rest.rdf.OT;
 
 /**
  * RDF generation for {@link Task}

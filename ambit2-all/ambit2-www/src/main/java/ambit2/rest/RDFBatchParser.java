@@ -4,18 +4,11 @@ import java.util.Iterator;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
-
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+import ambit2.rest.rdf.RDFObjectIterator;
 
 /**
  * Parent class for all RDF parsers
@@ -24,19 +17,12 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  * @param <Item>
  */
 public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Reference, Item> {
-	protected MediaType mediaType = MediaType.APPLICATION_RDF_XML;
-	public MediaType getMediaType() {
-		return mediaType;
-	}
-
-	public void setMediaType(MediaType mediaType) {
-		this.mediaType = mediaType;
-	}
-	protected OntModel jenaModel;
+	
+	protected RDFObjectIterator<Item> rdfObjectIterator;
+	
 	protected String baseReference;
-	protected Item record;
-	protected StmtIterator recordIterator;
-	protected String topObject;
+	protected String objectToParse;
+	protected MediaType mediaType = MediaType.APPLICATION_RDF_XML;
 	/**
 	 * 
 	 */
@@ -46,8 +32,7 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 	public RDFBatchParser(String baseReference,String objectToParse) {
 		super();
 		this.baseReference = baseReference;
-		topObject = objectToParse;
-		
+		this.objectToParse = objectToParse;		
 	}
 	
 	public String getBaseReference() {
@@ -61,25 +46,19 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 	public void beforeProcessing(Reference target) throws AmbitException {
 		super.beforeProcessing(target);
 		try {
-			ClientResource client = new ClientResource(target);
-			Representation r = client.get(mediaType);
-			if (r==null)
-				throw new AmbitException("Null representation");
-			if (client.getStatus().equals(Status.SUCCESS_OK)) {
-				record = createRecord();
-				jenaModel = OT.createModel();
-				jenaModel.read(r.getStream(),null);
-			} else throw new AmbitException(client.getStatus().getDescription());
+			rdfObjectIterator = createObjectIterator(target, mediaType);
 			
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}		
 	}	
-	protected abstract Item createRecord();
+	
+	protected abstract RDFObjectIterator<Item> createObjectIterator(Reference target, MediaType mediaType) throws ResourceException;
+
 	@Override
 	public void afterProcessing(Reference target,
 			Iterator<Item> iterator) throws AmbitException {
-		try {recordIterator.close();} catch (Exception x){};
+		try {rdfObjectIterator.close();} catch (Exception x){};
 		super.afterProcessing(target, iterator);
 	}
 	
@@ -87,40 +66,9 @@ public abstract class RDFBatchParser<Item>  extends AbstractBatchProcessor<Refer
 	 * (non-Javadoc)
 	 * @see ambit2.base.interfaces.IBatchProcessor#getIterator(java.lang.Object)
 	 */
-		public Iterator<Item> getIterator(Reference target)
+	public Iterator<Item> getIterator(Reference target)
 				throws AmbitException {
-				
-			return new Iterator<Item>() {
-				public boolean hasNext() {
-					recordIterator = initIterator(topObject);
-					if ((recordIterator!=null) && recordIterator.hasNext()) {
-							Statement st = recordIterator.next();
-							Resource newEntry = (Resource) st.getSubject();
-							record = parseRecord( newEntry,createRecord());
-							return true;
-					}
-					return false;
-				}
-				public Item next() {
-					return record;
-				}
-				public void remove() {
-				}
-			};
-		}
-		private StmtIterator initIterator(String otclass) {
-			if (recordIterator == null) {
-				Resource s = createResource(otclass);
-				if (s==null) return null;
-				recordIterator =  jenaModel.listStatements(new SimpleSelector(null,null,s));
-			}
-			return recordIterator;
-		}	
-		
-		protected Resource createResource(String otclass) {
-			try {
-				return OT.OTClass.valueOf(otclass).getOntClass(jenaModel);
-			} catch (Exception x) {return null;} 
-		}
-		protected abstract Item parseRecord(Resource newEntry,Item record);
+		return rdfObjectIterator;
+	}
+
 }

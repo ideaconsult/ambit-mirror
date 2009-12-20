@@ -1,9 +1,11 @@
 package ambit2.rest.test.property;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +21,21 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.rest.property.PropertyDOMParser;
+import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.property.RDFPropertyParser;
+import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.XMLTags;
+import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.RDFPropertyIterator;
+import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.test.ResourceTest;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * test for {@link PropertyResource}
@@ -47,32 +55,26 @@ public class PropertyResourceTest extends ResourceTest {
 
 	@Test
 	public void testRDFXML() throws Exception {
-		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
-		RDFPropertyParser parser = new RDFPropertyParser(String.format("http://localhost:%d", port)) {
-			@Override
-			protected Property parseRecord(Resource newEntry, Property record) {
-				Property p = super.parseRecord(newEntry, record);
-				Assert.assertEquals("Property 1",p.getName());
-				Assert.assertEquals(1,p.getId());
-				return p;
-			}
-		};
-		parser.process(new Reference(getTestURI()));		
+		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(getTestURI()));
+		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
+		while (iterator.hasNext()) {
+			Property p = iterator.next();
+			Assert.assertEquals("Property 1",p.getName());
+			Assert.assertEquals(1,p.getId());
+		}
+		iterator.close();
 	}	
 	
 	@Test
 	public void testRDFXMLForeignURI() throws Exception {
-		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
-		RDFPropertyParser parser = new RDFPropertyParser(String.format("http://localhost:%d", port)) {
-			@Override
-			protected Property parseRecord(Resource newEntry, Property record) {
-				Property p = super.parseRecord(newEntry, record);
+		try {		
+			RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference("http://google.com"));
+			iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
+			while (iterator.hasNext()) {
+				Property p = iterator.next();
 				Assert.assertTrue(false);
-				return p;
 			}
-		};
-		try {
-			parser.process(new Reference("http://google.com"));
+			iterator.close();
 			Assert.assertTrue(false);
 		} catch (Exception x) {
 			Assert.assertTrue(true);
@@ -132,26 +134,157 @@ public class PropertyResourceTest extends ResourceTest {
 		}
 		return count==1;
 	}	
-	
 	@Test
-	public void testCreateEntry() throws Exception {
-		Form headers = new Form();  
-		headers.add(PropertyResource.headers.name.toString(),"cas");
-		headers.add(PropertyResource.headers.reference_id.toString(),"4");
+	public void testCopyEntry() throws Exception {
+		
+		Form form = new Form();  
+		form.add(QueryResource.headers.source_uri.toString(),String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
+		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
-					MediaType.TEXT_XML,
-					headers);
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					null);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(3,table.getRowCount());
+		c.close();
+	}	
+	
+	public void testCopyEntry1() throws Exception {
+		OntModel model = OT.createModel();
+		PropertyRDFReporter.addToModel(model, 
+				new Property(String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef)),
+				new PropertyURIReporter(),
+				new ReferenceURIReporter());
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+		
+		Form form = new Form();  
+		form.add(QueryResource.headers.source_uri.toString(),String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
+		
+		Response response =  testPost(
+					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					writer.toString());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(3,table.getRowCount());
+		c.close();
+	}		
+	
+	@Test
+	public void testCreateEntry2() throws Exception {
+		
+		StringWriter writer = new StringWriter();
+        BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("feature.rdf")));
+        String line;
+        while ((line = br.readLine()) != null) {
+        	writer.append(line);
+        }
+        br.close();    		
+		
+		Form form = new Form();
+		Response response =  testPost(
+					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where name='cas' and comments='CasRN' and idreference=4");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='CasRN' and title='http://my.resource.org' and url='http://my.resource.org'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+	}		
+	/**
+<pre>
+<rdf:RDF
+    xmlns:j.0="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" > 
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#units">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#hasSource">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A0">
+    <rdfs:seeAlso>bbb</rdfs:seeAlso>
+    <dc:title>aaa</dc:title>
+    <rdf:type rdf:resource="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A1">
+    <dc:type>http://www.w3.org/2001/XMLSchema#string</dc:type>
+    <ot:hasSource rdf:nodeID="A0"/>
+    <owl:sameAs>CasRN</owl:sameAs>
+    <ot:units></ot:units>
+    <dc:title>cas</dc:title>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>
+</rdf:RDF>
+
+</pre>
+	 * @throws Exception
+	 */
+	@Test
+	public void testCreateEntry() throws Exception {
+
+		OntModel model = OT.createModel();
+		PropertyRDFReporter.addToModel(model, 
+				new Property("cas",new LiteratureEntry("aaa","bbb")),
+				new PropertyURIReporter(),
+				new ReferenceURIReporter());
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+
+		Form form = new Form();
+		Response response =  testPost(
+					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					writer.toString());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='CasRN' and title='aaa' and url='bbb'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}	
 	
-	
-	
+	@Test
+	public void testCreateForeignEntry() throws Exception {
+		Form form = new Form();  
+		form.add(QueryResource.headers.source_uri.toString(),"http://my.new.property.org");
+		
+		
+		Response response =  testPost(
+					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
+					MediaType.TEXT_RDF_N3,
+					form,
+					null);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://my.new.property.org' and comments='http://my.new.property.org' and title='http://my.new.property.org' and url='http://my.new.property.org'");
+		Assert.assertEquals(1,table.getRowCount());
+
+	}
+
 	@Test
 	public void testParser() throws Exception {
 		String xml = String.format( 

@@ -18,92 +18,82 @@ import ambit2.rest.test.ResourceTest;
 public class ModelResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d%s/1", port,ModelResource.resource);
+		return String.format("http://localhost:%d%s/1", port,
+				ModelResource.resource);
 	}
+
 	/*
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count = 0;
-		while ((line = r.readLine())!= null) {
-			System.out.println(line);
-			count++;
-		}
-		return count>0;
-	}	
-	*/
+	 * @Test public void testXML() throws Exception {
+	 * testGet(getTestURI(),MediaType.TEXT_XML); }
+	 * 
+	 * @Override public boolean verifyResponseXML(String uri, MediaType media,
+	 * InputStream in) throws Exception { BufferedReader r = new
+	 * BufferedReader(new InputStreamReader(in)); String line = null; int count
+	 * = 0; while ((line = r.readLine())!= null) { System.out.println(line);
+	 * count++; } return count>0; }
+	 */
 	@Test
 	public void testHTML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_HTML);
+		testGet(getTestURI(), MediaType.TEXT_HTML);
 	}
+
 	@Override
-	public boolean verifyResponseHTML(String uri, MediaType media, InputStream in)
-			throws Exception {
+	public boolean verifyResponseHTML(String uri, MediaType media,
+			InputStream in) throws Exception {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int count = 0;
-		while ((line = r.readLine())!= null) {
-			//Assert.assertEquals("1530-32-1 ", line);
+		while ((line = r.readLine()) != null) {
+			// Assert.assertEquals("1530-32-1 ", line);
 			System.out.println(line);
 			count++;
 		}
-		return count>1;
+		return count > 1;
 	}
-	
-	
+
 	@Test
 	public void testRDFXML() throws Exception {
-		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
-	}	
+		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
+	}
+
 	@Test
 	public void testURI() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+		testGet(getTestURI(), MediaType.TEXT_URI_LIST);
 	}
+
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
 			throws Exception {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int count = 0;
-		while ((line = r.readLine())!= null) {
-			Assert.assertEquals(String.format("http://localhost:%d/model/1",port), line);
+		while ((line = r.readLine()) != null) {
+			Assert.assertEquals(String.format("http://localhost:%d/model/1",
+					port), line);
 			count++;
 		}
-		return count==1;
+		return count == 1;
 	}
+
 	@Test
 	public void testPostDataset() throws Exception {
-		Form headers = new Form();  
-		//headers.add("dataset-id", "1");
-		String dataset = String.format("http://localhost:%d/dataset/1",port);
-		testAsyncTask(
-				String.format("%s?%s=%s",getTestURI(),ModelResource.dataset_uri,Reference.encode(dataset)),
-				headers, Status.SUCCESS_OK, 
-				String.format("%s?feature_uris[]=%s",
-						dataset,
-						Reference.encode(String.format("%s/predicted",getTestURI()))
-				));
+		Form headers = new Form();
+		String dataset = String.format("http://localhost:%d/dataset/1", port);
+		headers.add(ModelResource.dataset_uri, dataset);
+		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
+				"%s?feature_uris[]=%s", dataset, Reference.encode(String
+						.format("%s/predicted", getTestURI()))));
 	}
-	
+
 	@Test
 	public void testPostCompound() throws Exception {
-		Form headers = new Form();  
-		//headers.add("dataset-id", "1");
-		
-		//String dataset = String.format("http://localhost:%d/compound/11",port);
+		Form headers = new Form();
 		String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1";
-		testAsyncTask(
-				String.format("%s?%s=%s",getTestURI(),ModelResource.dataset_uri,Reference.encode(dataset)),
-				headers, Status.SUCCESS_OK, 
-				String.format("%s?feature_uris[]=%s",
-						dataset,
-						Reference.encode(String.format("%s/predicted",getTestURI()))
-				));
-	}	
+		headers.add(ModelResource.dataset_uri, dataset);
+		
+		testAsyncTask(getTestURI(), headers,
+				Status.SUCCESS_OK, String.format("%s?feature_uris[]=%s",
+						dataset, Reference.encode(String.format("%s/predicted",
+								getTestURI()))));
+	}
 }

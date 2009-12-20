@@ -1,7 +1,6 @@
 package ambit2.rest.reference;
 
 import org.restlet.Context;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Request;
@@ -13,7 +12,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
@@ -25,17 +23,18 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.rest.rdf.RDFReferenceIterator;
 
 /**
- * Reference resource, according to  http://opentox.org/development/wiki/feature. 
+ * Reference resource, inOpenTox API coressponds to feature.hasSource
  * <br>
  * Supported operations:
  * <ul>
  * <li>GET 	 /reference/{id} 	 returns returns text/uri-list or text/xml or text/html
- * <li>POST 	 /reference (as specified)
+ * <li>POST 	 /reference?source_uri=URI-to-denote-the-reference 
  * <li>PUT not yet supported
  * </ul>
  * @author nina
@@ -43,25 +42,7 @@ import ambit2.rest.query.QueryResource;
  * @param <Q>
  */
 public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEntry> {
-	/**
-	 * Parameters, expected in http headers
-	 * @author nina
-	 *
-	 */
-	public enum headers  {
-			name {
-				@Override
-				public boolean isMandatory() {
-					return true;
-				}
-			},
-			algorithm_id,
-			parameters,
-			experimental_protocol; 
-			public boolean isMandatory() {
-				return false;
-			}
-	};
+
 	public final static String reference = "/reference";
 	public final static String idreference = "idreference";
 	
@@ -137,38 +118,24 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			Request baseReference) throws ResourceException {
 		return new ReferenceURIReporter<ReadReference>(baseReference);
 	}
-	/**
-<pre<
-Description  	Method  	URI  	Parameters  	Result  	Status codes
-create a new reference  	 POST  	 /reference  	 name:String, algorithm_id:String, parameters:String, experimental_protocol:String  	 URI of new reference  	200,400,404,503
-</pre>
-	 */
-	protected LiteratureEntry createObjectFromHeaders(Form requestHeaders, Representation entity) throws ResourceException {
-		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
-		String url = getParameter(requestHeaders,headers.algorithm_id.toString(),headers.algorithm_id.isMandatory());  	
-		return LiteratureEntry.getInstance(name, url);
+	@Override
+	protected RDFObjectIterator<ILiteratureEntry> createObjectIterator(
+			Reference reference, MediaType mediaType) throws ResourceException {
+		return new RDFReferenceIterator(reference,mediaType);
 	}
+	@Override
+	protected RDFObjectIterator<ILiteratureEntry> createObjectIterator(
+			Representation entity) throws ResourceException {
+		return new RDFReferenceIterator(entity,entity.getMediaType());
+	}
+	@Override
+	protected LiteratureEntry onError(String sourceURI) {
+		return LiteratureEntry.getInstance(sourceURI,sourceURI);	
+	}
+
 	@Override
 	protected AbstractUpdate createUpdateObject(
 			ILiteratureEntry entry) throws ResourceException {
 		return new CreateReference(entry);
 	}
-
-	/*
-	if (MediaType.TEXT_XML.equals(entity.getMediaType())) {
-		ReferenceDOMParser parser = new ReferenceDOMParser() {
-			@Override
-			public void processItem(LiteratureEntry item)
-					throws AmbitException {
-				System.out.println(item);
-				
-			}
-		};
-		try {
-			parser.parse(entity.getReader());
-		} catch (Exception x) {
-			throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x));
-		}
-	}
-	*/
 }

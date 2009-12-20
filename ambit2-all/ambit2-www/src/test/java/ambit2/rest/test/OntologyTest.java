@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import ambit2.rest.OT;
+import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;

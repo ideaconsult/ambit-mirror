@@ -1,5 +1,7 @@
 package ambit2.rest.query;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.representation.ObjectRepresentation;
@@ -26,6 +29,7 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.rdf.RDFObjectIterator;
 
 /**
  * Abstract parent class for all resources , which retrieves something from the database
@@ -36,7 +40,21 @@ import ambit2.rest.RepresentationConvertor;
  */
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Serializable>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";	
-
+	/**
+	 * Parameters, expected in URL query
+	 * @author nina
+	 *
+	 */
+	public enum headers  {
+			source_uri {
+			}; 
+			public boolean isMandatory() {
+				return true;
+			}
+			public String getDescription() {
+				return "either use ?source_uri=URI, or POST with text/uri-list or RDF representation of the object to be created";
+			}
+	};
 	
 	@Override
 	protected void doInit() throws ResourceException {
@@ -165,22 +183,23 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		}
 	}	
 	/**
-	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
+	 * POST - create entity based on parameters in the query, creates a new entry in the databaseand returns an url to it
+	 * TODO Refactor to allow multiple objects 
 	 */
 	public void createNewObject(Representation entity) throws ResourceException {
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
-		T entry = createObjectFromHeaders(requestHeaders, entity);
+		Form queryForm = getRequest().getResourceRef().getQueryAsForm();
+		T entry = createObjectFromHeaders(queryForm, entity);
 		executeUpdate(entity, 
 				entry,
 				createUpdateObject(entry));
 	
 	}
 	/**
-	 * DELETE - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
+	 * DELETE - create entity based on parameters in the query, creates a new entry in the database and returns an url to it
 	 */
 	public void deleteObject(Representation entity) throws ResourceException {
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
-		T entry = createObjectFromHeaders(requestHeaders, entity);
+		Form queryForm = getRequest().getResourceRef().getQueryAsForm();
+		T entry = createObjectFromHeaders(queryForm, entity);
 		executeUpdate(entity, 
 				entry,
 				createDeleteObject(entry));
@@ -195,8 +214,77 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	protected  AbstractUpdate createDeleteObject(T entry) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
 	}	
-	protected T createObjectFromHeaders(Form requestHeaders, Representation entity) throws ResourceException {
+	protected RDFObjectIterator<T> createObjectIterator(Reference reference, MediaType mediaType) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+	}
+	
+	protected RDFObjectIterator<T> createObjectIterator(Representation entity) throws ResourceException {
+		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+	}
+	/**
+	 * Return this object if can't parse source_uri
+	 * @param uri
+	 * @return
+	 */
+	protected T onError(String uri) {
+		return null;
+	}
+	/**
+	 * either entity in RDF/XML or ?source_uri=URI
+	 */
+	protected T createObjectFromHeaders(Form queryForm, Representation entity) throws ResourceException {
+		RDFObjectIterator<T> iterator = null;
+		
+		if (!entity.isAvailable()) { //using URI
+			String sourceURI = getParameter(queryForm,headers.source_uri.toString(),headers.source_uri.getDescription(),headers.source_uri.isMandatory());
+			try {
+				iterator = createObjectIterator(new Reference(sourceURI),entity.getMediaType()==null?MediaType.APPLICATION_RDF_XML:entity.getMediaType());
+				iterator.setBaseReference(getRequest().getRootRef());
+				while (iterator.hasNext()) {
+					return iterator.next();
+				}		
+				//if none
+				return onError(sourceURI);
+			} catch (Exception x) {
+				return onError(sourceURI);
+			} finally {
+				try { iterator.close(); } catch (Exception x) {}
+			}
+		} else 
+			if (MediaType.TEXT_URI_LIST.equals(entity.getMediaType())) {
+				return createObjectFromURIlist(entity);
+			} else // assume RDF
+			try {
+				iterator = createObjectIterator(entity);
+				iterator.setBaseReference(getRequest().getRootRef());
+				while (iterator.hasNext()) {
+					return iterator.next();
+				}
+				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);	
+			} catch (ResourceException x)  {
+				throw x;
+			} catch (Exception x) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);	
+			} finally {
+				try { iterator.close(); } catch (Exception x) {}
+			}
+		
+	}
+	
+	protected T createObjectFromURIlist(Representation entity) throws ResourceException {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(entity.getStream()));
+			String line = null;
+			while ((line = reader.readLine())!= null)
+				return onError(line);
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+		} finally {
+			try { reader.close();} catch (Exception x) {}
+		}
+		
 	}
 	
 }

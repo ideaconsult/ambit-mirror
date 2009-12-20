@@ -7,9 +7,9 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.OT;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.vocabulary.DC;
