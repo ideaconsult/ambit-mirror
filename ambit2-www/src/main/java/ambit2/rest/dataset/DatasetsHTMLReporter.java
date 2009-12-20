@@ -2,9 +2,9 @@ package ambit2.rest.dataset;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.logging.Logger;
 
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.base.exceptions.AmbitException;
@@ -14,7 +14,6 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 
 /**Generates html page for {@link QueryDatasetResource}
@@ -112,7 +111,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						MediaType.APPLICATION_PDF,
 						MediaType.TEXT_CSV,
 						ChemicalMediaType.WEKA_ARFF,
-						MediaType.APPLICATION_RDF_TURTLE
+						MediaType.APPLICATION_RDF_XML
 						};
 				String[] image = {
 						"sdf.jpg",
@@ -134,7 +133,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 							w.toString(),
 							"",
 							//CompoundResource.compound,
-							mime,
+							Reference.encode(mime.toString()),
 							uriReporter.getBaseReference().toString(),
 							image[i],
 							mime,

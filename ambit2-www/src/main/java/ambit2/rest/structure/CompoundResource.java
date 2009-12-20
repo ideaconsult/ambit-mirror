@@ -92,7 +92,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
-			variant.setMediaType(new MediaType(Reference.decode(media)));
+			variant.setMediaType(new MediaType(media));
 		}		
 		
 		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML))) 
