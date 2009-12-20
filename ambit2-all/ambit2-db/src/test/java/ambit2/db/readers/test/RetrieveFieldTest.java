@@ -93,7 +93,7 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 		Assert.assertEquals(1,rows.size());
 		while (rows.next()) {
 			ITable table = 	c.createQueryTable("EXPECTED",
-					"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units from property_values \n"+
+					"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units,comments from property_values \n"+
 					"left join property_string using(idvalue_string) \n"+
 					"join properties using(idproperty) join catalog_references using(idreference) \n"+
 					"where idstructure=100215 and name='Property 1' "
