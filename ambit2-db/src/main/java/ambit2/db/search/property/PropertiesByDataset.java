@@ -35,6 +35,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 	 */
 	private static final long serialVersionUID = -7265871901186884735L;
 	public static String whereproperty  = " idproperty = ?";
+	public static String wherepropertyName  = " property.name = ?";
 	public static String join  = 
 		" join property_values using(idproperty) join  property_tuples using(id) join tuples using (idtuple) where %s %s %s group by idproperty";
 	public static String base_sql_type = "select idproperty,properties.name,units,title,url,idreference,comments,idtype from properties join catalog_references using(idreference)";
