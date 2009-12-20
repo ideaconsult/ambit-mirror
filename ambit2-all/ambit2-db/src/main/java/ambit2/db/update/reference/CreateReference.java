@@ -39,7 +39,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class CreateReference extends AbstractObjectUpdate<ILiteratureEntry>{
 	public static final String[] create_sql = {
-		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
+		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (?,?,?)",
 	};
 
 	public CreateReference(ILiteratureEntry ref) {
@@ -50,6 +50,7 @@ public class CreateReference extends AbstractObjectUpdate<ILiteratureEntry>{
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		params1.add(new QueryParam<Integer>(Integer.class, getObject().getId()>0?getObject().getId():null));
 		params1.add(new QueryParam<String>(String.class, getObject().getTitle()));
 		params1.add(new QueryParam<String>(String.class, getObject().getURL()));		
 		

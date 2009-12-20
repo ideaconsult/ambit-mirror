@@ -40,6 +40,7 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 		"where\n"+
 		"structure.%s =?\n"+
 		"order by type_structure desc";
+	//TODO order by requires filesort
 	protected String queryName = null;
 	public String getQueryName() {
 		return queryName;
