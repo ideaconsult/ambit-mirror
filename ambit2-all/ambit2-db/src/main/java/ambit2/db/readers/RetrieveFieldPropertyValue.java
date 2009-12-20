@@ -20,6 +20,7 @@ public class RetrieveFieldPropertyValue extends RetrieveField<PropertyValue> {
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = new Property(rs.getString(1),le); 
 			p.setUnits(rs.getString(11));
+			p.setLabel(rs.getString(12));
 			p.setId(rs.getInt(3));
 			Object value = rs.getObject(5);
 			PropertyValue pv ;

@@ -72,24 +72,24 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 		searchMode = value?SearchMode.idproperty:SearchMode.name;
 	}	
 	protected final String sql_structure = 
-		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units from property_values \n"+
+		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units,comments from property_values \n"+
 		"left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
 		"where idstructure=? %s";
 	
 	protected final String sql_structure_novalue = 
-		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
+		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units,comments from structure \n"+
 		"join  properties join catalog_references using(idreference)\n"+
 		"where idstructure=? %s";
 	
 	protected final String sql_chemical = 
-		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units from property_values \n"+
+		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units,comments from property_values \n"+
 		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
 		"where idchemical=? %s group by comments,idvalue_string";
 	
 	protected final String sql_chemical_novalue = 
-		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
+		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units,comments from structure \n"+
 		"join  properties join catalog_references using(idreference)\n"+
 		"where idchemical=? %s order by idstructure limit 1";
 				
