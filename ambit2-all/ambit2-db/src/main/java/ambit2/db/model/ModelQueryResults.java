@@ -5,6 +5,11 @@ import ambit2.core.data.model.ModelWrapper;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryStoredResults;
 
+/**
+ * Training and test instances are available via {@link IQueryRetrieval}
+ * @author nina
+ *
+ */
 public class ModelQueryResults extends ModelWrapper<
 			IQueryRetrieval<IStructureRecord>,
 			QueryStoredResults,

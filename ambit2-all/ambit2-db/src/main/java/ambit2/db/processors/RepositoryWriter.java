@@ -173,14 +173,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	} catch (SQLException x) {
         		throw x;
         	} catch (Exception x) {
-        		x.printStackTrace();
+        		//x.printStackTrace();
         		logger.warn(x);
             	//if not found, find by SMILES
             	if (structure.getIdchemical()<=0)
             		try {
             			findChemical(query_chemicals,null,structure.getSmiles(),structure);
             		} catch (Exception ex) {
-                		x.printStackTrace();
+                		//x.printStackTrace();
                 		logger.warn(x);
             		}
         	}
