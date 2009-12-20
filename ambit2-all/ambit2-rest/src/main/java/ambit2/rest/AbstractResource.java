@@ -106,10 +106,10 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	 * @return
 	 * @throws ResourceException
 	 */
-	protected String getParameter(Form requestHeaders,String paramName,boolean mandatory) throws ResourceException {
+	protected String getParameter(Form requestHeaders,String paramName,String description, boolean mandatory) throws ResourceException {
 		Object o = requestHeaders.getFirstValue(paramName);
 		if (o == null)
-			if (mandatory)	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Parameter %s is mandatory!", paramName));
+			if (mandatory)	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Parameter %s [%s] is mandatory!", paramName,description));
 			else return null;
 		else return o.toString();
 	}
@@ -120,8 +120,8 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	 * @return
 	 * @throws ResourceException
 	 */
-	protected String getParameter(Form requestHeaders,String paramName) throws ResourceException {
-		return getParameter(requestHeaders, paramName,false);
+	protected String getParameter(Form requestHeaders,String paramName,String description) throws ResourceException {
+		return getParameter(requestHeaders, paramName,description, false);
 	}
 	@Override
 	protected Representation post(Representation entity, Variant variant)
