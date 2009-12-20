@@ -1,5 +1,6 @@
 package ambit2.rest.property;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
@@ -27,7 +28,12 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	
 	@Override
 	public String getURI(String ref, Property item) {
-		return String.format("%s%s/%d%s",ref,PropertyResource.featuredef,item.getId(),getDelimiter());
+		if (item.getId()>0)
+			return String.format("%s%s/%d%s",ref,PropertyResource.featuredef,item.getId(),getDelimiter());
+		else
+			return String.format("%s%s/%s%s",ref,PropertyResource.featuredef,
+					Reference.encode(item.getName()+item.getTitle()),
+					getDelimiter());
 	}
 
 }

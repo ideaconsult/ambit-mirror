@@ -26,6 +26,7 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
+import ambit2.db.update.property.ReadPropertyByNameAndReference;
 import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
@@ -170,6 +171,8 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				}
 			}
 			else return new ReadProperty(new Integer(o.toString()));
+		} catch (NumberFormatException x) {
+			return new ReadPropertyByNameAndReference(Reference.decode(o.toString()));
 		} catch (Exception x) {
 			collapsed = true;
 			return new ReadProperty();
