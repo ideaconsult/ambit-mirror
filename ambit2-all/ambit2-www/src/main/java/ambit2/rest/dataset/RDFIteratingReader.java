@@ -52,6 +52,10 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	protected Template featureTemplate;	
 	protected StmtIterator recordIterator;
 	protected OntModel jenaModel;
+	public OntModel getJenaModel() {
+		return jenaModel;
+	}
+
 	protected IStructureRecord record;
 	protected String rdfFormat;
 	protected Hashtable<String, Property> lookup;

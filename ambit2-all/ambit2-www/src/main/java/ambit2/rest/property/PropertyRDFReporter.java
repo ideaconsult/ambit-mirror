@@ -19,6 +19,7 @@ import ambit2.rest.reference.ReferenceURIReporter;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -69,6 +70,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		}
 		feature.addProperty(DC.title, item.getName());
 		feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
+		
 		
 		if(item.getLabel()==null) {
 			String label = Property.guessLabel(item.getName());

@@ -10,6 +10,9 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.RDFReferenceIterator;
+import ambit2.rest.reference.ReferenceRDFReporter;
+import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.vocabulary.DC;
@@ -27,11 +30,12 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 	 * 
 	 */
 	private static final long serialVersionUID = 6747452583425280704L;
-	
+	protected ReferenceURIReporter referenceReporter;
 	public MetadataRDFReporter(Request request, MediaType mediaType) {
 		super(request, mediaType);
+		referenceReporter = new ReferenceURIReporter(request);
 	}
-
+	
 	@Override
 	protected QueryURIReporter<SourceDataset, IQueryRetrieval<SourceDataset>> createURIReporter(
 			Request req) {
@@ -45,9 +49,10 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 		Individual dataset = output.createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Dataset.getOntClass(output));
 		
+		Individual ref = ReferenceRDFReporter.addToModel(output, item.getReference(), referenceReporter);
 		dataset.addProperty(DC.identifier, uriReporter.getURI(item));
 		dataset.addProperty(DC.title,item.getName());
-		dataset.addProperty(RDFS.seeAlso,item.getURL());
+		dataset.addProperty(RDFS.seeAlso,ref);
 		dataset.addProperty(DC.publisher,item.getUsername());
 		dataset.addProperty(DC.source,item.getTitle());
 		
