@@ -40,7 +40,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 public class UpdateProperty extends AbstractObjectUpdate<Property> {
 
 	public static final String[] update_sql = {
-		"update properties,catalog_references set name=?, comments=?, units=? where idproperty=? and title=? and properties.idreference=catalog_references.idreference"};
+		"update properties,catalog_references set name=?, comments=?, units=? where idproperty=? and properties.idreference=catalog_references.idreference"};
 
 	public UpdateProperty(Property property) {
 		super(property);
@@ -54,7 +54,7 @@ public class UpdateProperty extends AbstractObjectUpdate<Property> {
 		params.add(new QueryParam<String>(String.class, getObject().getLabel()));
 		params.add(new QueryParam<String>(String.class, getObject().getUnits()));
 		params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
-		params.add(new QueryParam<String>(String.class, getObject().getReference().getTitle()));		
+			
 		return params;
 		
 	}

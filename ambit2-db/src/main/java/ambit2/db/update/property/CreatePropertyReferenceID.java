@@ -7,7 +7,6 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
-import ambit2.db.update.reference.CreateReference;
 
 public class CreatePropertyReferenceID  extends AbstractObjectUpdate<Property> {
 	public static final String create_sql = 
