@@ -10,6 +10,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.util.Template;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.rest.property.PropertyResource;
@@ -103,6 +104,14 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			logger.warn(x);
 			property.setUnits("");
 		}
+		
+		try {
+			ILiteratureEntry ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,OT.OTProperty.hasSource.createProperty(jenaModel));
+			property.setReference(ref);
+		} catch (Exception x) {
+			
+		}
+		/*
 		RDFReferenceIterator iterator = null;
 		String url;
 		//reference 
@@ -143,7 +152,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			logger.warn(x);
 			url = name;
 		}		
-		
+		*/
 
 		return property;
 	}

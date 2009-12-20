@@ -17,8 +17,10 @@ import ambit2.rest.reference.ReferenceResource;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -96,4 +98,44 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 		catch (Exception x) {record.setId(-1);};
 	}
 
-}
+	public static ILiteratureEntry readReference(OntModel jenaModel,Resource newEntry,Reference baseReference,Property property) {
+		String url = null;
+		try {	
+			
+			RDFReferenceIterator iterator = null;
+			RDFNode reference = newEntry.getProperty(property).getObject();
+			if (reference.isResource()) {
+				try {
+					url = getIdentifier(reference);
+					StmtIterator st = jenaModel.listStatements(new SimpleSelector(newEntry,property,(RDFNode)null));
+					iterator = new RDFReferenceIterator(jenaModel,st);
+					iterator.setBaseReference(baseReference);
+					iterator.setIterateSubjects(false);
+				} catch (Exception x) {
+					return RDFReferenceIterator.parseRecord(jenaModel,(Resource) reference, null);
+				}
+			} else {
+				url = ((Literal)reference).getString();
+				iterator = new RDFReferenceIterator(new Reference(url));
+			}
+			
+			try {
+				
+				iterator.setBaseReference(baseReference);
+				while (iterator.hasNext()) {
+					return iterator.next();
+				}
+				
+			} catch (Exception x) {
+				
+				
+			} finally {
+				try { iterator.close();} catch (Exception x) {}
+			}			
+		} catch (Exception x) {
+			logger.warn(x);
+
+		}				
+		return new LiteratureEntry(url,url);
+	}
+	}

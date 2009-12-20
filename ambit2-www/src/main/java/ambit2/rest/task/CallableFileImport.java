@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
-import org.omegahat.Environment.DataStructures.logical;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -33,6 +32,7 @@ import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFIteratingReader;
+import ambit2.rest.rdf.RDFMetaDatasetIterator;
 
 public class CallableFileImport implements	java.util.concurrent.Callable<Reference> {
 	protected File file;
@@ -121,7 +121,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 		}
 	}
 	
-	protected Iterator getRDFIterator(File file,String baseReference) {
+	protected RDFIteratingReader getRDFIterator(File file,String baseReference) {
 		String format = "RDF/XML";
 		if (file.getName().endsWith(".rdf"))
 			format = "RDF/XML";
@@ -139,10 +139,13 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			return null;
 		}
 	}
+	
+	
+	
 	public Reference importFile(File file) throws Exception {
 		try {
 
-			SourceDataset dataset = new SourceDataset(file.getName(), LiteratureEntry
+			final SourceDataset dataset = new SourceDataset(file.getName(), LiteratureEntry
 					.getInstance(file.getName(), "File uploaded by user"));		
 			dataset.setId(-1);
 			final BatchDBProcessor batch = new BatchDBProcessor() {
@@ -151,10 +154,25 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 						throws AmbitException {
 					try {
 						File file = ((FileInputState)target).getFile();
-						Iterator i = getRDFIterator(file,getReporter().getBaseReference().toString());
+						RDFIteratingReader i = getRDFIterator(file,getReporter().getBaseReference().toString());
 						if (i==null)
 							return super.getIterator(target);
-						else return i;
+						else {
+							try {
+								RDFMetaDatasetIterator datasets = new RDFMetaDatasetIterator(i.getJenaModel());
+								datasets.setBaseReference(getReporter().getBaseReference());
+								while (datasets.hasNext()) {
+									SourceDataset d = datasets.next();	
+									dataset.setId(d.getId());
+									dataset.setName(d.getName());
+									dataset.setTitle(d.getTitle());
+									dataset.setURL(d.getURL());
+								}
+							} catch (Exception x) {
+								
+							}
+							return i;
+						}
 					} catch (AmbitException x) {
 						throw x;
 					} catch (Exception x){
@@ -177,9 +195,10 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			QueryExecutor<ReadDataset> x = new QueryExecutor<ReadDataset>();
 			x.setConnection(connection);
 			ResultSet rs = x.process(q);
-			dataset = null;
+			
+			SourceDataset newDataset = null;
 			while (rs.next()) {
-				dataset = q.getObject(rs);
+				newDataset = q.getObject(rs);
 				break;
 			}
 			x.closeResults(rs);
@@ -187,7 +206,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			if (dataset== null) throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 			if (reporter == null)
 				reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>();
-			return new Reference(reporter.getURI(dataset));
+			return new Reference(reporter.getURI(newDataset));
 
 		} catch (Exception x) {
 			 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
