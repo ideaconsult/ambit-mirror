@@ -69,6 +69,9 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			public boolean isMandatory() {
 				return false;
 			}			
+			public String getDescription() {
+				return toString();
+			}
 	};		
 	public static final String featureID = "idfeature";
 	public static final String resource = String.format("%s/{%s}",PropertyValueResource.featureKey,featureID);
@@ -160,7 +163,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	@Override
 	protected PropertyValue createObjectFromHeaders(Form requestHeaders, Representation entity)
 			throws ResourceException {
-		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.isMandatory());
+		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.getDescription(),headers.value.isMandatory());
 		if (value == null) { //www form most probably
 			Form form = new Form(entity);
 			value = form.getFirstValue(headers.value.toString());
@@ -219,60 +222,5 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		createNewObject(entity);
 		return entity;
 	}
-	/*
-	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
-
-	public void createNewObject(Representation entity) throws ResourceException {
-		
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		
-		StructureRecord record = new StructureRecord();	
-		boolean chemicalsOnly = getRecordByParameters(record);
-		
-		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.isMandatory());
-		Property key = getPropertyByParameters();
-		record.setProperty(key, value);
-		
-		PropertyValuesWriter valuesWriter = new PropertyValuesWriter();
-		valuesWriter.setDataset(new SourceDataset("Unknown",LiteratureEntry.getInstance("Unknown", "Unknown")));
-		Connection c = null;
-		try {
-			valuesWriter.setConnection(getConnection());
-			valuesWriter.process(record);
-			PropertyURIReporter uriReporter = new PropertyURIReporter(getRequest().getRootRef());
-			getResponse().setLocationRef(uriReporter.getURI(key));
-			getResponse().setStatus(Status.SUCCESS_OK);
-			getResponse().setEntity(null);
-		} catch (Exception x) {
-			x.printStackTrace();
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);			
-			getResponse().setEntity(null);
-		} finally {
-			try {valuesWriter.close();} catch (Exception x) {}
-			try {if(c != null) c.close();} catch (Exception x) {}
-		}
-	}	
-	*/
-	/*
-	@Override
-	protected T createObjectFromHeaders(Form requestHeaders)
-			throws ResourceException {
-		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
-		String refid = getParameter(requestHeaders,headers.reference_id.toString(),headers.reference_id.isMandatory());
-		String type = getParameter(requestHeaders,headers.type.toString(),headers.type.isMandatory());
-		LiteratureEntry entry =  new LiteratureEntry("","");
-		try {
-			entry.setId(Integer.parseInt(refid));
-			Property p = new Property(name, entry);
-			p.setLabel(Property.guessLabel(name));
-			return p;
-		} catch (NumberFormatException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
-		}
-	}
 	
-	protected ambit2.db.update.AbstractObjectUpdate<T> createUpdateObject(T entry) throws ResourceException {
-		
-	};
-	*/
 }

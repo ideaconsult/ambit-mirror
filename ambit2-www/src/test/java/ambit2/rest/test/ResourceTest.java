@@ -38,7 +38,7 @@ import weka.core.Instances;
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.OT;
+import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
@@ -76,16 +76,20 @@ public abstract class ResourceTest extends DbUnitTest {
 	public void testGet(String uri, MediaType media) throws Exception {
 		testGet(uri, media,Status.SUCCESS_OK);
 	}
-	public Response testPost(String uri, MediaType media, Form headers) throws Exception {
+	public Response testPost(String uri, MediaType media, Form queryForm) throws Exception {
+		return testPost(uri, media, queryForm,null);
+	}
+	public Response testPost(String uri, MediaType media, Form queryForm,String inputEntity) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
 		ChallengeResponse authentication = new ChallengeResponse(scheme,  
 		         "guest", "guest");  
 		request.setChallengeResponse(authentication);  		
-		request.setResourceRef(uri);
+		request.setResourceRef(String.format("%s?%s",uri,queryForm.getQueryString()));
 		request.setMethod(Method.POST);
-		request.getAttributes().put("org.restlet.http.headers", headers);		
+		if (inputEntity==null) request.setEntity(null);
+		else request.setEntity(inputEntity,media);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		return client.handle(request);
 	}

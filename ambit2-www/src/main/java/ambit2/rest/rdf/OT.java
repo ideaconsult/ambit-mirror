@@ -1,4 +1,15 @@
-package ambit2.rest;
+package ambit2.rest.rdf;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -107,7 +118,7 @@ public class OT {
     public static OntModel createModel() throws Exception {
     	return createModel(OntModelSpec.OWL_DL_MEM);
     }
-	public static OntModel createModel(OntModelSpec spec) throws Exception {
+	public static OntModel createModel(OntModelSpec spec) throws ResourceException {
 		OntModel jenaModel = ModelFactory.createOntologyModel( spec,null);
 		jenaModel.setNsPrefix( "ot", OT.NS );
 		jenaModel.setNsPrefix( "owl", OWL.NS );
@@ -115,7 +126,41 @@ public class OT {
 		return jenaModel;
 	}
 
-
-
+    public static OntModel createModel(InputStream in, MediaType mediaType) throws ResourceException {
+    	OntModel model = createModel(OntModelSpec.OWL_DL_MEM);
+    	model.read(in,getJenaFormat(mediaType));
+    	return model;
+    }
+    public static OntModel createModel(Representation entity,MediaType mediaType) throws ResourceException {
+    	try {
+    		return createModel(entity.getStream(),entity.getMediaType()==null?entity.getMediaType():entity.getMediaType());
+    	} catch (IOException x) {
+    		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+    	}
+    }	    
+    public static OntModel createModel(Reference uri, MediaType mediaType) throws ResourceException {
+		ClientResource client = new ClientResource(uri);
+		client.setFollowRedirects(true);
+		Representation r = client.get(mediaType);
+		if (Status.SUCCESS_OK.equals(client.getStatus()))  {
+			if ((r==null) || !r.isAvailable())
+				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			return createModel(r,mediaType);		
+		} else throw new ResourceException(client.getStatus());
+    }
+	public static String getJenaFormat(MediaType mediaType) throws ResourceException {
+		if (mediaType.equals(MediaType.APPLICATION_RDF_XML))
+			return "RDF/XML";
+			//return "RDF/XML-ABBREV";	
+		else if (mediaType.equals(MediaType.APPLICATION_RDF_TURTLE))
+			return "TURTLE";
+		else if (mediaType.equals(MediaType.TEXT_RDF_N3))
+			return "N3";
+		else if (mediaType.equals(MediaType.TEXT_RDF_NTRIPLES))
+			return "N-TRIPLE";		
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format("Unsupported format %s",mediaType));
+	}
+	
 
 }

@@ -23,17 +23,19 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.FreeTextPropertyQuery;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
-import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
@@ -42,8 +44,8 @@ import ambit2.rest.structure.ConformerResource;
  * <br>
  * Supported REST operations:
  * <ul>
- * <li>GET 	 /feature/{id}  returns text/uri-list or text/xml or text/html
- * <li>POST 	POST 	 /feature (as specified)
+ * <li>GET 	 /feature/{id}  returns text/uri-list or RDF
+ * <li>POST	 /feature source_uri=URI  or RDF representation in the content
  * </ul>
 
  * @author nina
@@ -71,6 +73,9 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			type;
 			public boolean isMandatory() {
 				return false;
+			}
+			public String getDescription() {
+				return toString();
 			}
 	};	
 	public final static String featuredef = "/feature";
@@ -201,32 +206,29 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		return getResponse().getEntity();
 	}
 	
-	/**
-<pre>
-Description  	Method  	URI  	Parameters  	Result  	Status codes
-create a new feature definition  	 POST  	 /feature  	 name: String, reference_id: String, type: String  	 URI of new feature definition  	200,400,404,503
-</pre>
-	 */
 	@Override
-	protected Property createObjectFromHeaders(Form requestHeaders, Representation entity)
-			throws ResourceException {
-		String name = getParameter(requestHeaders,headers.name.toString(),headers.name.isMandatory());
-		String refid = getParameter(requestHeaders,headers.reference_id.toString(),headers.reference_id.isMandatory());
-		String type = getParameter(requestHeaders,headers.type.toString(),headers.type.isMandatory());
-		LiteratureEntry entry =  new LiteratureEntry("","");
-		try {
-			entry.setId(Integer.parseInt(refid));
-			Property p = new Property(name, entry);
-			p.setLabel(Property.guessLabel(name));
-			return p;
-		} catch (NumberFormatException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
-		}
+	protected RDFObjectIterator<Property> createObjectIterator(
+			Reference reference, MediaType mediaType) throws ResourceException {
+		return new RDFPropertyIterator(reference,mediaType);
 	}
+	@Override
+	protected RDFObjectIterator<Property> createObjectIterator(
+			Representation entity) throws ResourceException {
+		return new RDFPropertyIterator(entity,entity.getMediaType());
+	}
+	@Override
+	protected Property onError(String uri) {
+		Property p = new Property(uri,new LiteratureEntry(uri,uri));
+		p.setLabel(uri);
+		return p;
+	}
+	
 	@Override
 	protected AbstractUpdate createUpdateObject(Property entry)
 			throws ResourceException {
-		return new CreatePropertyReferenceID(entry);
+		if (entry.getReference().getId()>0)
+			return new CreatePropertyReferenceID(entry);
+		else return new CreateProperty(entry);
 	}
 	
 	@Override

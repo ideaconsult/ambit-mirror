@@ -10,7 +10,7 @@ import org.restlet.data.Request;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Parameter;
-import ambit2.rest.OT;
+import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;

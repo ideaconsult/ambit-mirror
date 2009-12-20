@@ -55,6 +55,9 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 		public boolean isMandatory() {
 			return false;
 		}
+		public String getDescription() {
+			return toString();
+		}
 	};	
 	@Override
 	protected void doInit() throws ResourceException {
@@ -101,8 +104,8 @@ public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQue
 					List<Property> p = DescriptorsFactory.createDescriptor2Properties(a.getContent().toString());
 					if ((p == null)||(p.size()==0)) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"Can't create "+key);
 
-					String dataset_uri = getParameter(requestHeaders,headers.dataset_id.toString(),headers.dataset_id.isMandatory());
-					String params = getParameter(requestHeaders,headers.algorithm_parameters.toString(),headers.algorithm_parameters.isMandatory());  	
+					String dataset_uri = getParameter(requestHeaders,headers.dataset_id.toString(),headers.dataset_id.getDescription(),headers.dataset_id.isMandatory());
+					String params = getParameter(requestHeaders,headers.algorithm_parameters.toString(),headers.algorithm_parameters.getDescription(),headers.algorithm_parameters.isMandatory());  	
 					ModelQueryResults mr = new ModelQueryResults();
 					mr.setName(a.getName());
 					mr.setContent(a.getContent().toString());

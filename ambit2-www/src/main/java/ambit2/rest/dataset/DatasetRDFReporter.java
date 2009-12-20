@@ -19,10 +19,10 @@ import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.db.search.property.AbstractPropertyRetrieval;
-import ambit2.rest.OT;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 

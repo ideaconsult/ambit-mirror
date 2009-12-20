@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 
-import ambit2.rest.OT.OTClass;
+import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.OT.OTClass;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;

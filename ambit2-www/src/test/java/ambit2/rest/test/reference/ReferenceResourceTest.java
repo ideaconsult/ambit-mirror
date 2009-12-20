@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,19 +20,20 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
-import ambit2.base.processors.ProcessorsChain;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.XMLTags;
-import ambit2.rest.reference.RDFReferenceParser;
+import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.RDFReferenceIterator;
 import ambit2.rest.reference.ReferenceDOMParser;
-import ambit2.rest.reference.ReferenceResource;
+import ambit2.rest.reference.ReferenceRDFReporter;
+import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.test.ResourceTest;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 public class ReferenceResourceTest extends ResourceTest {
 	@Override
@@ -54,84 +56,40 @@ public class ReferenceResourceTest extends ResourceTest {
 		}
 		return count>0;
 	}		
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
+
 	
 	@Test
 	public void testRDFXML() throws Exception {
-		RDFReferenceParser parser = new RDFReferenceParser(String.format("http://localhost:%d",port));
-		parser.setProcessorChain(new ProcessorsChain<ILiteratureEntry, IBatchStatistics, IProcessor>());
-		parser.getProcessorChain().add(new IProcessor<ILiteratureEntry,ILiteratureEntry>(){
-			public long getID() {
-				return 0;
-			}
-			public ILiteratureEntry process(ILiteratureEntry target) throws AmbitException {
-				Assert.assertEquals("CAS Registry Number", target.getName());
-				Assert.assertEquals("http://www.cas.org",target.getURL());
-				Assert.assertEquals(1,target.getId());
-				return target;
-			}
-			public boolean isEnabled() {
-				return true;
-			}
-			public void setEnabled(boolean value) {
-			}
-		});
-		parser.process(new Reference(getTestURI()));
+		RDFReferenceIterator iterator = new RDFReferenceIterator(new Reference(getTestURI()));
+		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
+		while (iterator.hasNext()) {
+			ILiteratureEntry target = iterator.next();
+			Assert.assertEquals("CAS Registry Number", target.getName());
+			Assert.assertEquals("http://www.cas.org",target.getURL());
+			Assert.assertEquals(1,target.getId());			
+		}
+		iterator.close();
 	}
 	
 	@Test
 	public void testRDFXMLForeignURI() throws Exception {
-		RDFReferenceParser parser = new RDFReferenceParser(String.format("http://localhost:%d",port)) {
-			@Override
-			protected ILiteratureEntry parseRecord(Resource newEntry,
-					ILiteratureEntry record) {
-				return super.parseRecord(newEntry, record);
-			}
-		};
 		try {
-			parser.process(new Reference("http://google.com"));
+			RDFReferenceIterator iterator = new RDFReferenceIterator(new Reference("http://google.com"));
+			iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
+			while (iterator.hasNext()) {
+				ILiteratureEntry target = iterator.next();
+				Assert.assertEquals("CAS Registry Number", target.getName());
+				Assert.assertEquals("http://www.cas.org",target.getURL());
+				Assert.assertEquals(1,target.getId());			
+			}
+			iterator.close();
 			Assert.assertTrue(false);
 		} catch (Exception x) {
 			Assert.assertTrue(true);
 		}
 	}
 	
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
 
-		Document doc = createDOM(in);
-        ReferenceDOMParser parser = new ReferenceDOMParser() {
-        	@Override
-        	public void handleItem(LiteratureEntry entry) throws AmbitException {
-        		Assert.assertEquals(1,entry.getId());
-        		Assert.assertEquals("CAS Registry Number",entry.getName());
-        		Assert.assertEquals("http://www.cas.org",entry.getURL());
-        		//count++;
-        	}
-        };
-        parser.parse(doc);
-        return true;
-
-	}	
-	
-	/*
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count = 0;
-		while ((line = r.readLine())!= null) {
-			System.out.println(line);
-			count++;
-		}
-		return count>0;
-	}	
-	*/
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
@@ -195,19 +153,64 @@ public class ReferenceResourceTest extends ResourceTest {
         Assert.assertEquals(1,le.size());
 	}
 	@Test
-	public void testCreateEntry() throws Exception {
-		Form headers = new Form();  
-		headers.add(ReferenceResource.headers.name.toString(),"My New Name");
-		headers.add(ReferenceResource.headers.algorithm_id.toString(),"My New Algorithm");
+	public void testCreateForeignEntry() throws Exception {
+		Form form = new Form();  
+		form.add(QueryResource.headers.source_uri.toString(),"http://my.new.algorithm.org");
+		
+		
 		Response response =  testPost(
 					String.format("http://localhost:%d/reference", port),
-					MediaType.TEXT_XML,
-					headers);
+					MediaType.TEXT_RDF_N3,
+					form,
+					null);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='My New Name' and url='My New Algorithm'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='http://my.new.algorithm.org' and url='http://my.new.algorithm.org'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}
+	
+	@Test
+	public void testCreateEntry() throws Exception {
+		OntModel model = OT.createModel();
+		ReferenceRDFReporter.addToModel(model, new LiteratureEntry("aaa","bbb"), new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>());
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+
+
+		Form form = new Form();  
+		Response response =  testPost(
+					String.format("http://localhost:%d/reference", port),
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					writer.toString());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='CAS Registry Number' and url='http://www.cas.org'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+	}		
+	@Test
+	public void testCopyEntry() throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='CAS Registry Number' and url='http://www.cas.org'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(QueryResource.headers.source_uri.toString(),String.format("http://localhost:%d/reference/1", port));
+		
+		Response response =  testPost(
+					String.format("http://localhost:%d/reference", port),
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					null);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+         c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='CAS Registry Number' and url='http://www.cas.org'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+	}	
 }

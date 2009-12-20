@@ -75,7 +75,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("CAS = 1530-32-1", line);
+			Assert.assertEquals("CasRN = 1530-32-1", line);
 			count++;
 		}
 		return count==1;

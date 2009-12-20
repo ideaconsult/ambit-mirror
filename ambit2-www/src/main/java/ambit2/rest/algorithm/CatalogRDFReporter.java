@@ -7,7 +7,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 
 import ambit2.base.processors.batch.ListReporter;
-import ambit2.rest.OT;
+import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
 

@@ -24,8 +24,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.IRawReader;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.OT;
-import ambit2.rest.property.RDFPropertyParser;
+import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
@@ -41,7 +41,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
  * Reading RDF representation of a dataset. This is a copy paste from {@link RDFStructuresReader}
- * TODO refactor to avoid duplicate code
+ * TODO refactor to use RDFStructuresIterator
  * @author nina
  *
  */
@@ -193,22 +193,23 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	}
 	
 	public Property readFeature(final RDFNode target,Property property) {
+		RDFPropertyIterator iterator =null;
 		try {
-			RDFPropertyParser parser = new RDFPropertyParser(basereference) {
-				@Override
-				protected Property parseRecord(Resource newEntry,
-						Property record) {
-					Property p = super.parseRecord(newEntry, record);
-					if (lookup == null) lookup = new Hashtable<String, Property>();
-					lookup.put(target.toString(), p);
-					return p;
-				}
+			iterator = new RDFPropertyIterator(new Reference(target.toString()));
+			iterator.setBaseReference(new Reference(basereference));
+			while (iterator.hasNext()) {
+				Property p = iterator.next();
+				if (lookup == null) lookup = new Hashtable<String, Property>();
+				lookup.put(target.toString(), p);
+				return p;
 			};
-			parser.process(new Reference(target.toString()));
+
 		} catch (Exception x) {
 			String uri = target.toString();
 			if (lookup == null) lookup = new Hashtable<String, Property>();
 			lookup.put(uri, new Property(uri,new LiteratureEntry(uri,uri)));
+		} finally {
+			try { iterator.close();} catch (Exception x) {}
 		}
 		return lookup.get(target.toString());
 	}	

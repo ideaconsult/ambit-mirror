@@ -1,6 +1,5 @@
 package ambit2.rest.test.task;
 
-import org.junit.Test;
 import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
