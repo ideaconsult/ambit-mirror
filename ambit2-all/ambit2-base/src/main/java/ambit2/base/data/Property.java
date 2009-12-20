@@ -68,7 +68,7 @@ public class Property extends Model implements Serializable {
 	public static synchronized Property getInstance(String name,String reference) {
 		return getInstance(name, reference,"");
 	}
-	public static synchronized Property getInstance(String name,LiteratureEntry reference) {
+	public static synchronized Property getInstance(String name,ILiteratureEntry reference) {
 		if (reference == null)
 			return getInstance(name, defaultReference,"http://ambit.sourceforge.net");
 		else
@@ -92,7 +92,7 @@ public class Property extends Model implements Serializable {
 	protected int order = 0;
 	protected Class clazz = java.lang.String.class;
 	protected boolean enabled = false;
-	protected LiteratureEntry reference = LiteratureEntry.getInstance();
+	protected ILiteratureEntry reference = LiteratureEntry.getInstance();
 	
 	public int getId() {
 		return id;
@@ -110,11 +110,11 @@ public class Property extends Model implements Serializable {
 		this.units = units;
 	}
 
-	public LiteratureEntry getReference() {
+	public ILiteratureEntry getReference() {
 		return reference;
 	}
 
-	public  void setReference(LiteratureEntry reference) {
+	public  void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}
 	private Property() {
@@ -135,14 +135,14 @@ public class Property extends Model implements Serializable {
 		return null;
 	}
 	public Property(String name) {
-		this(name,name);
+		this(name,Property.guessLabel(name));
 	}
 	
 	public Property(String name, LiteratureEntry reference) {
 		this(name,"",reference);
 	}	
 	public Property(String name, String units, LiteratureEntry reference) {
-		this(name,name);
+		this(name,Property.guessLabel(name));
 		setUnits(units);
 		this.reference = reference;
 	}		
@@ -248,7 +248,7 @@ public class Property extends Model implements Serializable {
 	public void assign(Property newProperty) {
 		this.id = newProperty.id;
 		this.name = newProperty.name;
-		this.reference = new LiteratureEntry(newProperty.reference.title,newProperty.reference.URL);
+		this.reference = new LiteratureEntry(newProperty.getTitle(),newProperty.getUrl());
 		this.label = newProperty.label;
 		this.clazz = newProperty.clazz;
 		this.units = newProperty.units;
