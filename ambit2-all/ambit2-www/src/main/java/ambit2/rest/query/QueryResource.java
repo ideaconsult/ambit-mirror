@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.jmol.util.Logger;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -25,6 +26,7 @@ import ambit2.db.IDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.QueryURIReporter;
@@ -167,11 +169,11 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			executor.setConnection(getConnection());
 			executor.open();
 			executor.process(updateObject);
+			
 			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest());
 			getResponse().setLocationRef(uriReporter.getURI(entry));
 			getResponse().setStatus(Status.SUCCESS_OK);
 			getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
-			
 			
 		} catch (Exception x) {
 			java.util.logging.Logger.getLogger(getClass().getName()).severe(x.toString());
@@ -257,10 +259,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			try {
 				iterator = createObjectIterator(entity);
 				iterator.setBaseReference(getRequest().getRootRef());
+				
 				while (iterator.hasNext()) {
 					return iterator.next();
 				}
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Nothing to write! "+getRequest().getRootRef());	
+				System.out.println(entity.getMediaType());
+				System.out.println(entity.toString());
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Nothing to write! "+getRequest().getRootRef() );	
 			} catch (ResourceException x)  {
 				throw x;
 			} catch (Exception x) {
