@@ -158,8 +158,9 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 						if (i==null)
 							return super.getIterator(target);
 						else {
+							RDFMetaDatasetIterator datasets = null;
 							try {
-								RDFMetaDatasetIterator datasets = new RDFMetaDatasetIterator(i.getJenaModel());
+								datasets = new RDFMetaDatasetIterator(i.getJenaModel());
 								datasets.setBaseReference(getReporter().getBaseReference());
 								while (datasets.hasNext()) {
 									SourceDataset d = datasets.next();	
@@ -170,6 +171,8 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 								}
 							} catch (Exception x) {
 								
+							} finally {
+								try { datasets.close();} catch (Exception x) {}
 							}
 							return i;
 						}
