@@ -10,6 +10,7 @@ import org.restlet.data.Request;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.algorithm.AlgorithmResource;
 import ambit2.rest.algorithm.CatalogURIReporter;
+import ambit2.rest.task.Task.taskStatus;
 
 public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 
@@ -24,6 +25,10 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	public void header(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			output.write("<h4>Tasks:");
+			for (taskStatus status :taskStatus.values())
+				output.write(String.format("<a href='?search=%s'>%s</a>&nbsp;",status,status));
+			output.write("</h4><p>");
 			output.write("<table>");
 			output.write("<tr><th>Start time</th><th>Task</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
