@@ -108,11 +108,11 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				Object value = item.getProperty(p);
 				if (p.getClazz()==Number.class) 
 					writer.write(String.format(",%s",
-							value==null?"":value
+							value==null?"?":value
 							));
 				else
 					writer.write(String.format(",\"%s\"",
-							value==null?"":
+							value==null?"?":
 							value.toString().replace("\n", "").replace("\r","")
 							));					
 				i++;
