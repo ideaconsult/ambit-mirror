@@ -48,7 +48,7 @@ public class Task<Reference> implements Serializable {
 	public Reference getReference() throws ExecutionException , InterruptedException, CancellationException {
 		try {
 			if (future!=null) {
-				Reference ref = future.get(100000, TimeUnit.MILLISECONDS);
+				Reference ref = future.get(100, TimeUnit.MILLISECONDS);
 				future = null;
 				setUri(ref);
 			}
