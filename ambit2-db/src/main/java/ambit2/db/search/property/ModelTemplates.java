@@ -35,6 +35,12 @@ public class ModelTemplates extends AbstractPropertyRetrieval<ModelQueryResults,
 				return "predictors";
 			}
 		},
+		predictors{
+			@Override
+			public String getTableColumn() {
+				return "predictors";
+			}
+		},		
 		dependent {
 			@Override
 			public String getTableColumn() {
