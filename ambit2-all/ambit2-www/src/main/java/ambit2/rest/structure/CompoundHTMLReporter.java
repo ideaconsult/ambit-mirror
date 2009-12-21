@@ -259,7 +259,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			String maxrecords = "";
 			try {
 
-				maxrecords = form.getFirstValue("max");
+				maxrecords = form.getFirstValue(QueryResource.max_hits);
 			} catch (Exception x) {
 				maxrecords = "1000";
 			}		

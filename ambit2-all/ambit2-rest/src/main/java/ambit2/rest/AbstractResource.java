@@ -34,6 +34,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	protected Exception error = null;	
 	protected Status status = Status.SUCCESS_OK;
 	public final static String search_param = "search";
+	public final static String max_hits = "max";
 	
 	public String[] URI_to_handle() {
 		return null;
