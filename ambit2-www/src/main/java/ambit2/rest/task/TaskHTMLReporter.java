@@ -23,23 +23,30 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	public void header(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
-			output.write("<div id=\"div-1\">");
+			output.write("<table>");
+			output.write("<tr><th>Task</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
 			
 		}
 	}
 	public void processItem(Task<Reference> item, Writer output) {
 		String t = "";
-		String status = item.isDone()?"Completed":"Running, Please wait ...";
+		String status = "Unknown";
 		try {
 			t = item.getReference().toString();
-			
+			status = item.getStatus();
 		} catch (Exception x) {
 			x.printStackTrace();
-			status = "Task Error";
+			status = "Error";
 			t = x.getMessage();
 		} finally {
-			try {output.write(String.format("<p><a href='%s'>%s</a>&nbsp;%s<img src=\"/images/24x24_ambit.gif\">", t,item.getName(),status)); } catch (Exception x) {
+			try {output.write(
+					String.format("<tr><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>", 
+							t,item.getName(),
+							status,
+							baseReference.toString(),
+							item.isDone()?"tick.png":"24x24_ambit.gif"
+							)); } catch (Exception x) {
 				x.printStackTrace();
 			}
 		}
@@ -47,7 +54,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	@Override
 	public void footer(Writer output, Iterator<Task<Reference>> query) {
 		try {
-			output.write("</div>");
+			output.write("</table>");
 			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
