@@ -43,9 +43,9 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 			try {output.write(
 					String.format("<tr><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>", 
 							t,item.getName(),
-							status,
 							baseReference.toString(),
-							item.isDone()?"tick.png":"24x24_ambit.gif"
+							item.isDone()?"tick.png":"24x24_ambit.gif",
+								status
 							)); } catch (Exception x) {
 				x.printStackTrace();
 			}
