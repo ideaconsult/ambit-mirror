@@ -2,6 +2,8 @@ package ambit2.rest.task;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
@@ -23,8 +25,9 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.algorithm.AlgorithmRDFReporter;
 import ambit2.rest.algorithm.CatalogURIReporter;
+import ambit2.rest.query.QueryResource;
+import ambit2.rest.task.Task.taskStatus;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -76,7 +79,31 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 			ArrayList<Task<Reference>> list = new ArrayList<Task<Reference>>();
 			if (id == null) {
 				status = Status.SUCCESS_OK;
-				return ((AmbitApplication)getApplication()).getTasks();
+				int max = 0;
+				Form form = getRequest().getResourceRef().getQueryAsForm();
+				try {
+					max = Integer.parseInt(Reference.decode(form.getFirstValue(QueryResource.search_param)));
+				} catch (Exception x) {
+					max = 0;
+				}
+				String search = Reference.decode(form.getFirstValue(QueryResource.search_param));
+				try {
+					if (search != null) taskStatus.valueOf(search);
+				} catch (Exception x) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Allowed status values: %s, %s, %s", taskStatus.Running, taskStatus.Completed, taskStatus.Cancelled));
+				}
+				if (search == null) //all tasks
+					return ((AmbitApplication)getApplication()).getTasks();
+				else {
+					Iterator<Task<Reference>> tasks = ((AmbitApplication)getApplication()).getTasks();
+					while (tasks.hasNext()) {
+						Task<Reference> task = tasks.next();
+						if (search.equals(task.getStatus()))
+							list.add(task);
+					}
+					Collections.sort(list, new TaskComparator());
+					return list.iterator();
+				}
 			} else {
 
 				Task<Reference> task = ((AmbitApplication)getApplication()).findTask(Reference.decode(id.toString()));
@@ -119,7 +146,8 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 				if (task != null) list.add(task);
 				return list.iterator();
 			}
-
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			x.printStackTrace();
 			throw new ResourceException(
@@ -157,4 +185,12 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
+}
+
+class TaskComparator implements Comparator<Task<Reference>>{
+
+	public int compare(Task<Reference> o1, Task<Reference> o2) {
+		return (int) (o2.getStarted()-o1.getStarted());
+	}
+	
 }

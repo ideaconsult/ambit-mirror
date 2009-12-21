@@ -1,6 +1,7 @@
 package ambit2.rest.task;
 
 import java.io.Writer;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.restlet.data.Reference;
@@ -24,7 +25,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<table>");
-			output.write("<tr><th>Task</th><th colspan='2'>Status</th></tr>");
+			output.write("<tr><th>Start time</th><th>Task</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
 			
 		}
@@ -41,7 +42,8 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 			t = x.getMessage();
 		} finally {
 			try {output.write(
-					String.format("<tr><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>", 
+					String.format("<tr><td>%s</td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>",
+							new Date(item.started),
 							t,item.getName(),
 							baseReference.toString(),
 							item.isDone()?"tick.png":"24x24_ambit.gif",

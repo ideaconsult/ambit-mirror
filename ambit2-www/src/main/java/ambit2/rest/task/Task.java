@@ -8,6 +8,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Task<Reference> implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -646087833848914553L;
+
 	public enum taskStatus {Running,Cancelled,Completed};
 	protected Future<Reference> future;
 	protected Reference uri;
