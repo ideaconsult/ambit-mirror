@@ -15,6 +15,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
@@ -100,10 +101,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
 			//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);	
+					new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);
 		else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(getTemplate()),ChemicalMediaType.CHEMICAL_MDLSDF);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLMOL)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new SDFReporter<QueryStructureByID>(new Template(),true),ChemicalMediaType.CHEMICAL_MDLMOL);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);

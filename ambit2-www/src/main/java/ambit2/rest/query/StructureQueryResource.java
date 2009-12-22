@@ -137,6 +137,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
 				ChemicalMediaType.CHEMICAL_MDLSDF,
+				ChemicalMediaType.CHEMICAL_MDLMOL,
 				ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
 				MediaType.IMAGE_PNG,
@@ -177,6 +178,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(template),ChemicalMediaType.CHEMICAL_MDLSDF);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLMOL)) {
+				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+						new SDFReporter<QueryStructureByID>(new Template(),true),ChemicalMediaType.CHEMICAL_MDLMOL);			
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);				
