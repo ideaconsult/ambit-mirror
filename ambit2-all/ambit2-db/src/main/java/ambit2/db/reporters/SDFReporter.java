@@ -12,7 +12,6 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
-import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
@@ -21,6 +20,13 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	 */
 	private static final long serialVersionUID = 2931123688036795689L;
 	protected Template template;
+	protected boolean MOLONLY = false;
+	public boolean isMOLONLY() {
+		return MOLONLY;
+	}
+	public void setMOLONLY(boolean molonly) {
+		MOLONLY = molonly;
+	}
 	public Template getTemplate() {
 		return template;
 	}
@@ -30,9 +36,12 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public SDFReporter() {
 		this(new Template(null));
 	}
-
 	public SDFReporter(Template template) {
+		this(template,false);
+	}
+	public SDFReporter(Template template,boolean molOnly) {
 		setTemplate(template);
+		setMOLONLY(molOnly);
 		getProcessors().clear();
 		RetrieveStructure r = new RetrieveStructure();
 		r.setMaxRecords(1);
@@ -71,6 +80,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
 			output.write(item.getContent());
+			if (isMOLONLY()) return;
 			for (Property p : item.getProperties()) {
 				Object value = item.getProperty(p);
 				if (value != null)
