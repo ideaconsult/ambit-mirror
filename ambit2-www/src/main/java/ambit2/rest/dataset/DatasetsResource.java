@@ -1,5 +1,7 @@
 package ambit2.rest.dataset;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -165,8 +167,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 				  getResponse().setEntity(null);
 				  
 	          } catch (Exception x) {
-	        	  getResponse().setStatus(new Status(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage()));
-	        	  getResponse().setEntity(null);
+	        	  throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 	          }
 		} else if (isAllowedMediaType(entity.getMediaType())) {
 					try {
@@ -181,7 +182,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 						  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 						  getResponse().setEntity(null);
 					} catch (Exception x) {
-						getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
+ 		        	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+
 					}
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 				String.format("Unsupported Content-type=%s",entity.getMediaType()));

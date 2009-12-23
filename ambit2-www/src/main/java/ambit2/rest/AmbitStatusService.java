@@ -1,5 +1,6 @@
 package ambit2.rest;
 
+import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.restlet.data.MediaType;
@@ -26,9 +27,21 @@ public class AmbitStatusService extends StatusService {
 			StringWriter w = new StringWriter();
 			AmbitResource.writeHTMLHeader(w, status.getName(), request);
 			
+			
 			w.write(String.format("%s",
 					status.getDescription()
 					));
+			if (status.getThrowable()!= null) {
+				w.write("<p>");				
+				status.getThrowable().printStackTrace(new PrintWriter(w) {
+					@Override
+					public void print(String s) {
+						super.print(String.format("%s<br>", s));
+						
+					}
+				});
+  	  
+			}
 			/*
 			w.write(String.format("ERROR :<br>Code: %d<br>Name: %s<br>URI: %s<br>Description: %s<br>",
 					status.getCode(),
