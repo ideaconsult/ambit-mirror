@@ -1,5 +1,6 @@
 package ambit2.db.reporters;
 
+import java.io.StringWriter;
 import java.io.Writer;
 
 import org.openscience.cdk.io.CMLWriter;
@@ -15,13 +16,42 @@ import ambit2.db.readers.RetrieveStructure;
 
 /**
  * Writes query results as CML .  TODO The output is not correct for multiple molecules!!!!
+<pre>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<list dictRef="cdk:moleculeSet" xmlns="http://www.xml-cml.org/schema">
+  <molecule id="m1">
+    <atomArray>
+      <atom id="1" elementType="C" formalCharge="0" hydrogenCount="3">
+        <scalar title="PropSecond_ID1" dataType="xsd:string">1</scalar>
+        <scalar title="PropFirst_ID1" dataType="xsd:string">1</scalar>
+      </atom>
+      <atom id="2" elementType="C" formalCharge="0" hydrogenCount="3">
+        <scalar title="PropFirst_ID2" dataType="xsd:string">2</scalar>
+        <scalar title="PropSecond_ID2" dataType="xsd:string">2</scalar>
+      </atom>
+    </atomArray>
+    <bondArray>
+      <bond id="b1" atomRefs2="2 1" order="S"/>
+    </bondArray>
+  </molecule>
+  <molecule id="m1">
+    <atomArray>
+      <atom id="1" elementType="C" formalCharge="0" hydrogenCount="3"/>
+      <atom id="2" elementType="C" formalCharge="0" hydrogenCount="3"/>
+    </atomArray>
+    <bondArray>
+      <bond id="b1" atomRefs2="2 1" order="S"/>
+    </bondArray>
+  </molecule>
+</list>
+</pre>
  * @author nina
  *
  * @param <Q>
  */
 public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter< Q, Writer> {
 	protected MoleculeReader reader = new MoleculeReader();
-	protected CMLWriter cmlwriter;
+
 	/**
 	 * 
 	 */
@@ -38,11 +68,21 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			};
 		});	
 	}
-
+	
 	@Override
 	public void processItem(IStructureRecord item) throws AmbitException {
 		try {
+			StringWriter w = new StringWriter();
+			CMLWriter cmlwriter = new CMLWriter(w); 
 			cmlwriter.write(reader.process(item));
+			cmlwriter.close();
+			
+			String b = w.toString();
+			int  p1 = b.indexOf("<?xml");
+			int p2 = b.indexOf("?>");
+			if ((p1>=0) && (p2>p1))
+				output.write(b.substring(p2+2));
+			else output.write(b);
 			
 		} catch (Exception x) {
 			logger.error(x);
@@ -56,9 +96,8 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	@Override
 	public void footer(Writer output, Q query) {
-
 		try {
-			cmlwriter.close();
+			output.write("</list>");
 		} catch (Exception x) {
 			logger.error(x);
 		}		
@@ -66,7 +105,11 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	@Override
 	public void header(Writer output, Q query) {
-		cmlwriter = new CMLWriter(output); 
+		try {
+			output.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+			output.write("<list dictRef=\"cdk:moleculeSet\" xmlns=\"http://www.xml-cml.org/schema\">");
+		} catch (Exception x) {}
+
 
 	};
 
