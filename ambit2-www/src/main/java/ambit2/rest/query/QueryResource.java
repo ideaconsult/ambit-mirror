@@ -110,11 +110,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			        	r.setCharacterSet(CharacterSet.UTF_8);
 			        	return r;
 		        	} catch (ResourceException x) {
-		    			getResponse().setStatus(x.getStatus());
-		    			return null;			        	
+		    			throw x;			        	
 		        	} catch (NotFoundException x) {
-		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
-		    			return null;
+		    			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
 		    			
 		        	} catch (SQLException x) {
 		        		java.util.logging.Logger.getLogger(getClass().getName()).severe(x.getMessage());
@@ -124,13 +122,12 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		        			continue;
 		        		}
 		        		else {
-			    			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x);
-			    			return null;
+		        			throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x);
 		        		}
 		        	} catch (Exception x) {
 		        		java.util.logging.Logger.getLogger(getClass().getName()).severe(x.getMessage());
-		    			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
-		    			return null;	        		
+		    			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+	
 		        	} finally {
 		        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
 		        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
@@ -143,16 +140,17 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	    			IProcessor<Q, Representation>  convertor = createConvertor(variant);
 	    			Representation r = convertor.process(null);
 	            	return r;			
-	    		} catch (Exception x) { getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x); return null;}	        	
-	    		else {
-	    			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,error);
-	    			return null;
+	    		} catch (Exception x) { 
+	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x); 
+	    		}  else {
+	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,error);
 	    		}
     	
 	        }
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
-			return null;	
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 	}		
 	
