@@ -139,7 +139,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Test
 	public void testCML() throws Exception {
 		try {
-		testGet(getTestURI(),ChemicalMediaType.CHEMICAL_CML);
+			testGet(getTestURI(),ChemicalMediaType.CHEMICAL_CML);
 		} catch (Exception x) {
 			//this is a hack until upgrading CML library
 			x.printStackTrace();
@@ -148,7 +148,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseCML(String uri, MediaType media, InputStream in)
 			throws Exception {
-	/*	
+/*
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		int count=0;
@@ -164,6 +164,7 @@ public class CompoundResourceTest extends ResourceTest {
 		Assert.assertEquals(3,mol.getAtomCount());
 		Assert.assertEquals(0,mol.getBondCount());
 		return true;
+	
 	}
 	@Test
 	public void testSDF() throws Exception {
