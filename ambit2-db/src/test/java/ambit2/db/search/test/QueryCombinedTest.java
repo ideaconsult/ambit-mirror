@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.db.SourceDataset;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryParam;

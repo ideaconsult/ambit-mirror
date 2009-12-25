@@ -31,10 +31,10 @@ package ambit2.workflow;
 
 import javax.sql.DataSource;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
-import ambit2.db.SourceDataset;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.db.search.IStoredQuery;
 

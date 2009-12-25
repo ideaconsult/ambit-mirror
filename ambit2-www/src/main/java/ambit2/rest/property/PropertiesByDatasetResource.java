@@ -9,7 +9,7 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.PropertiesByDataset;

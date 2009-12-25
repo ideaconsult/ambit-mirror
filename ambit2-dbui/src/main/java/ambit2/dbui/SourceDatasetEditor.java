@@ -1,6 +1,6 @@
 package ambit2.dbui;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.ui.editors.BeanEditor;
 
 public class SourceDatasetEditor extends BeanEditor<SourceDataset> {

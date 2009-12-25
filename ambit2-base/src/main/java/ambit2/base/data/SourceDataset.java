@@ -2,10 +2,8 @@
  * Created on 2005-3-28
  *
  */
-package ambit2.db;
+package ambit2.base.data;
 
-import ambit2.base.data.AmbitBean;
-import ambit2.base.data.LiteratureEntry;
 
 
 

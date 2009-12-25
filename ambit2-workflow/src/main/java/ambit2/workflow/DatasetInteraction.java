@@ -1,6 +1,6 @@
 package ambit2.workflow;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 
 
 public class DatasetInteraction extends UserInteraction<SourceDataset> {

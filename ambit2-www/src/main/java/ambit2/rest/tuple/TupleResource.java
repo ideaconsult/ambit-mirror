@@ -8,12 +8,12 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
-import ambit2.db.SourceDataset;
 import ambit2.db.update.tuple.QueryTuple;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetResource;

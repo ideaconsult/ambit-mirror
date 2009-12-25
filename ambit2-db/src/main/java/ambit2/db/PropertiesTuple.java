@@ -2,6 +2,8 @@ package ambit2.db;
 
 import java.io.Serializable;
 
+import ambit2.base.data.SourceDataset;
+
 public class PropertiesTuple implements Serializable {
 	protected int id;
 	protected SourceDataset dataset;
