@@ -1,6 +1,5 @@
 package ambit2.rest.test.property;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,11 +18,13 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.update.property.ReadPropertyByNameAndReference;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyResource;
@@ -318,4 +319,20 @@ public class PropertyResourceTest extends ResourceTest {
         Assert.assertEquals("Property",le.get(0).getLabel());
         Assert.assertEquals(8,le.get(0).getReference().getId());
 	}	
+	@Test
+	public void testGetJavaObject() throws Exception {
+		testGetJavaObject(String.format("http://localhost:%d%s/%s", port,PropertyResource.featuredef,Reference.encode("http://other.com/feature/200Default")),
+				MediaType.APPLICATION_JAVA_OBJECT,org.restlet.data.Status.SUCCESS_OK);
+	}
+	
+	@Override
+	public Object verifyResponseJavaObject(String uri, MediaType media,
+			Representation rep) throws Exception {
+		Object o = super.verifyResponseJavaObject(uri, media, rep);
+		Assert.assertTrue(o instanceof ReadPropertyByNameAndReference);
+		ReadPropertyByNameAndReference query = (ReadPropertyByNameAndReference)o;
+		Assert.assertEquals("http://other.com/feature/200Default",query.getValue());
+		return o;
+	}
+	
 }
