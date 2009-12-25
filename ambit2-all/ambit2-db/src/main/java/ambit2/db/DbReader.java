@@ -122,11 +122,11 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 						try {
 							
 							counter++;
-							
-							if (counter > query.getMaxRecords()) return false;
+							long max = (query.getMaxRecords()>0)?query.getMaxRecords():1000;
+							if (counter > max) return false;
 							boolean loop=getResultSet().next();
 							long attempts=0;
-							while (loop && (attempts<= 5*query.getMaxRecords())) {
+							while (loop && (attempts<= 5*max)) {
 								attempts++;
 								cachedRecord = query.getObject(getResultSet());
 								if (prescreen(query, cachedRecord)) return loop;
