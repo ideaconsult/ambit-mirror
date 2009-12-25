@@ -30,6 +30,7 @@ import ambit2.db.update.property.ReadPropertyByNameAndReference;
 import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -59,36 +60,12 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	 * @author nina
 	 *
 	 */
-	public enum headers  {
-			name {
-				@Override
-				public boolean isMandatory() {
-					return true;
-				}
-			},
-			reference_id {
-				@Override
-				public boolean isMandatory() {
-					return true;
-				}
-			},
-			type;
-			public boolean isMandatory() {
-				return false;
-			}
-			public String getDescription() {
-				return toString();
-			}
-	};	
-	public final static String featuredef = "/feature";
-	public final static String idfeaturedef = "id_feature_definition";
+
+	public final static String featuredef = OpenTox.URI.feature.getURI();
+	public final static String idfeaturedef = OpenTox.URI.feature.getKey();
+	
 	public final static String featuredefID = String.format("/{%s}",idfeaturedef);
-	/*
-	public final static String CompoundFeaturedefID = String.format("%s%s/{%s}",CompoundResource.compoundID,featuredef,idfeaturedef);
-	public final static String ConformerFeaturedefID = String.format("%s%s/{%s}",ConformerResource.conformerID,featuredef,idfeaturedef);
-	public final static String ConformerFeaturedef = String.format("%s%s",ConformerResource.conformerID,featuredef);
-	public final static String CompoundFeaturedef = String.format("%s%s",CompoundResource.compoundID,featuredef);
-	*/
+
 	protected boolean collapsed ;
 	
 	@Override

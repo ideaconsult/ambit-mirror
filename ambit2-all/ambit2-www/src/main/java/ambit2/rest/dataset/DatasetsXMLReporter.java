@@ -6,8 +6,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;

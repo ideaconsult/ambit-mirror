@@ -2,7 +2,7 @@ package ambit2.db.search;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 
 import com.jgoodies.binding.beans.Model;
 

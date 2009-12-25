@@ -37,7 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.db.SourceDatasetRows;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;

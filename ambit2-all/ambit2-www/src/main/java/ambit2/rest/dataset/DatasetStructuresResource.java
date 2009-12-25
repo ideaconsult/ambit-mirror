@@ -10,6 +10,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryDatasetByID;
+import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -20,8 +21,8 @@ import ambit2.rest.query.StructureQueryResource;
  */
 public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecord>> extends StructureQueryResource<Q> {
 	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compound);
-	public final static String dataset = "/dataset";	
-	public final static String datasetKey = "dataset_id";	
+	public final static String dataset = OpenTox.URI.dataset.getURI();	
+	public final static String datasetKey = OpenTox.URI.dataset.getKey();	
 	
 
 

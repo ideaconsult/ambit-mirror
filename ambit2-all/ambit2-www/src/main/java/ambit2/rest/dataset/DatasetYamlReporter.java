@@ -3,8 +3,8 @@ package ambit2.rest.dataset;
 import org.ho.yaml.YamlEncoder;
 import org.restlet.data.Request;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 

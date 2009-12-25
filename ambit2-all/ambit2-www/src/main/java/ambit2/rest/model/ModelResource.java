@@ -21,6 +21,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -40,9 +41,9 @@ import ambit2.rest.task.CallableModelPredictor;
 public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
 	public final static String dataset_uri = "dataset_uri";
 	
-	public final static String resource = "/model";	
-	public final static String resourceKey =  "idmodel";
-	public final static String resourceID =  String.format("%s/{%s}",resource,resourceKey);
+	public final static String resource = OpenTox.URI.model.getURI();
+	public final static String resourceKey =  OpenTox.URI.model.getKey();
+	public final static String resourceID = OpenTox.URI.model.getResourceID();
 	protected boolean collapsed = true;
 	
 	public enum modeltypes  {

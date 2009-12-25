@@ -34,7 +34,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.db.SourceDatasetRows;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.db.readers.RetrieveDatasets;

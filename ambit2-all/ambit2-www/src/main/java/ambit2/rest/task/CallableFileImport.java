@@ -17,13 +17,13 @@ import org.restlet.representation.InputRepresentation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
-import ambit2.db.SourceDataset;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.IQueryRetrieval;

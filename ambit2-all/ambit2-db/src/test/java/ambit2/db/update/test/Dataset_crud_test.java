@@ -34,7 +34,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.dataset.CreateDataset;
 import ambit2.db.update.dataset.DeleteDataset;

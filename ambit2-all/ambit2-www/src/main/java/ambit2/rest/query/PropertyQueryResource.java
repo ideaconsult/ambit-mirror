@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryField;
+import ambit2.rest.OpenTox;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 
 /**
@@ -26,7 +27,7 @@ public class PropertyQueryResource extends StructureQueryResource<QueryField> {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		try {
-			this.dataset_id = Reference.decode(getRequest().getAttributes().get("dataset_id").toString());
+			this.dataset_id = Reference.decode(getRequest().getAttributes().get(OpenTox.URI.dataset.getKey()).toString());
 		} catch (Exception x) {
 			this.dataset_id = null;
 		}		

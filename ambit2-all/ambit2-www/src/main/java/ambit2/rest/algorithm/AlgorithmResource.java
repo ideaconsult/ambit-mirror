@@ -22,6 +22,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.model.CreateModel;
 import ambit2.descriptors.processors.DescriptorsFactory;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -35,9 +36,9 @@ import ambit2.rest.query.QueryResource;
  */
 public class AlgorithmResource<Q> extends QueryResource<IQueryRetrieval<ModelQueryResults>, ModelQueryResults> {
 	protected AllAlgorithmsResource catalog;
-	public final static String algorithm = "/algorithm";	
-	public final static String algorithmKey =  "idalgorithm";
-	public final static String resourceID =  String.format("%s/{%s}",algorithm,algorithmKey);
+	public final static String algorithm = OpenTox.URI.algorithm.getURI();
+	public final static String algorithmKey =  OpenTox.URI.algorithm.getKey();
+	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();
 	public enum headers  {
 		dataset_uri {
 			@Override

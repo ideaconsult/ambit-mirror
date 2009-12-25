@@ -4,10 +4,10 @@ import java.io.Writer;
 
 import org.restlet.data.Request;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
-import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.tuple.QueryTuple;
 import ambit2.rest.QueryHTMLReporter;

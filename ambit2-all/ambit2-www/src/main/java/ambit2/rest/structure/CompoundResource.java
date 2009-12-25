@@ -37,6 +37,7 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -68,10 +69,11 @@ image/png
  * @author nina
  */
 public class CompoundResource extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
-	public final static String compound = "/compound";
-	public final static String idcompound = "idcompound";
-	public final static String compoundID = String.format("%s/{%s}",compound,idcompound);
-
+	
+	public final static String compound = OpenTox.URI.compound.getURI();
+	public final static String idcompound = OpenTox.URI.compound.getKey();
+	public final static String compoundID = OpenTox.URI.compound.getResourceID();
+	
 	protected boolean collapsed = false;
 	
 	@Override
@@ -231,7 +233,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		media = getMediaParameter(request);
 		try {
 			
-			Object key = request.getAttributes().get(idcompound);
+			Object key = request.getAttributes().get(OpenTox.URI.compound.getKey());
 			if (key==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
 				String[] keys = form.getValuesArray(QueryResource.search_param);
@@ -282,7 +284,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} catch (NumberFormatException x) {
 			throw new ResourceException(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Invalid resource id %s",request.getAttributes().get(idcompound)==null?"":request.getAttributes().get(idcompound)),
+					String.format("Invalid resource id %s",
+							request.getAttributes().get(OpenTox.URI.compound.getKey())==null?"":request.getAttributes().get(OpenTox.URI.compound.getKey())),
 					x
 					);
 		} catch (Exception x) {

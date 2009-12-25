@@ -98,7 +98,9 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 					Iterator<Task<Reference>> tasks = ((AmbitApplication)getApplication()).getTasks();
 					while (tasks.hasNext()) {
 						Task<Reference> task = tasks.next();
-						if (search.equals(task.getStatus()))
+						//if (task.isDone() && ((System.currentTimeMillis()-task.started)>old) 
+						//		((AmbitApplication)getApplication()).removeTask(id);
+						if (search.equals(task.getStatus())) 
 							list.add(task);
 					}
 					Collections.sort(list, new TaskComparator());

@@ -19,9 +19,9 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;

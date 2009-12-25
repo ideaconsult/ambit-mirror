@@ -31,7 +31,6 @@ import ambit2.ui.ColorTableCellRenderer;
 import ambit2.ui.Utils;
 
 import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.microworkflow.events.WorkflowEvent;
 import com.microworkflow.process.Activity;
 import com.microworkflow.process.CompositeActivity;

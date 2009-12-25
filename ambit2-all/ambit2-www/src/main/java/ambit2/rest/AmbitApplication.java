@@ -126,6 +126,8 @@ public class AmbitApplication extends Application {
 		getTaskService().setEnabled(true);
 		getTunnelService().setUserAgentTunnel(true);
 		
+		//Preferences.setProperty(Preferences.MAXRECORDS,"0");
+		
 	}
 	protected void loadProperties()  {
 		try {
@@ -518,7 +520,14 @@ public class AmbitApplication extends Application {
 			return null;
 		}
 	}
-
+	public synchronized void removeTask(String id) {
+		try {
+			tasks.remove(UUID.fromString(id));
+		} catch (Exception x) {
+			System.out.println(x);
+			return;
+		}
+	}
 	public synchronized Reference addTask(String taskName, Callable<Reference> callable, Reference baseReference) {
 		if (callable == null) return null;
 		FutureTask<Reference> futureTask = new FutureTask<Reference>(callable) {

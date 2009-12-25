@@ -4,7 +4,7 @@ import java.io.Writer;
 
 import org.restlet.data.Request;
 
-import ambit2.db.SourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;

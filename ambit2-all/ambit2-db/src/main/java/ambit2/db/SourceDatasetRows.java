@@ -31,6 +31,7 @@ package ambit2.db;
 
 import java.sql.SQLException;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.db.results.AmbitRows;
 
 public class SourceDatasetRows extends AmbitRows<SourceDataset> {

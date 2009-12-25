@@ -40,7 +40,7 @@ public class FeatureResourceTest extends ResourceTest {
 				PropertyResource.featuredef,
 				3);
 	}
-	///feature/compound/{idcompound}/feature_definition/{id_feature_definition}
+
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);

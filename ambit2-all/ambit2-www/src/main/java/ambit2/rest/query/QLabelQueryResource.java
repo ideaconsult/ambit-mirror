@@ -15,6 +15,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByQuality;
+import ambit2.rest.OpenTox;
 
 /**
  * Retrieves Dataset ofcompounds, given a quality label. 
@@ -48,7 +49,7 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 			q.setValue(new QLabel(QUALITY.OK));
 		}
 		
-		Object id = request.getAttributes().get("dataset_id");
+		Object id = request.getAttributes().get(OpenTox.URI.dataset.getKey());
 		if (id != null) try {
 			QueryDatasetByID scope = new QueryDatasetByID();
 			scope.setValue(new Integer(Reference.decode(id.toString())));

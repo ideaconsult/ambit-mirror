@@ -19,6 +19,7 @@ import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.db.update.reference.UpdateReference;
 import ambit2.rest.DocumentConvertor;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -44,8 +45,8 @@ import ambit2.rest.rdf.RDFReferenceIterator;
  */
 public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEntry> {
 
-	public final static String reference = "/reference";
-	public final static String idreference = "idreference";
+	public final static String reference = OpenTox.URI.reference.getURI();
+	public final static String idreference = OpenTox.URI.reference.getKey();
 	
 
 	@Override
