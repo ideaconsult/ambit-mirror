@@ -33,9 +33,10 @@ public class DatasetYamlReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
 	}	
 	@Override
-	public void processItem(SourceDataset item) throws AmbitException  {
+	public Object processItem(SourceDataset item) throws AmbitException  {
 		output.writeObject(item.getName());
 		output.writeObject(uriReporter.getURI(item));
+		return null;
 	}
 	@Override
 	public void footer(YamlEncoder output, Q query) {

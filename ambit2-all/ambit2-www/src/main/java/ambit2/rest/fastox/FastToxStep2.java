@@ -88,11 +88,12 @@ public class FastToxStep2 extends ModelResource {
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
 			@Override
-			public void processItem(ModelQueryResults dataset) throws AmbitException {
+			public Object processItem(ModelQueryResults dataset) throws AmbitException {
 				super.processItem(dataset);
 				try {
 				output.write('\n');
 				} catch (Exception x) {}
+				return null;
 			}
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	

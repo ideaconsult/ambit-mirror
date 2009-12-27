@@ -55,7 +55,7 @@ public class KroesInput extends FeatureResource {
 					new PropertyValueHTMLReporter<PropertyValue>(getRequest(),true) {
 						protected int count = 0;
 						@Override
-						public void processItem(PropertyValue item) throws AmbitException  {
+						public Object processItem(PropertyValue item) throws AmbitException  {
 							super.processItem(item);
 							try {
 								count++;
@@ -78,6 +78,7 @@ public class KroesInput extends FeatureResource {
 							} catch (Exception x) {
 								
 							}
+							return null;
 						}
 						@Override
 						public void footer(Writer w,

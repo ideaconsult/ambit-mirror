@@ -138,7 +138,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			}
 
 			@Override
-			public void processItem(IStructureRecord record)
+			public Object processItem(IStructureRecord record)
 					throws AmbitException {
 				try {
 					insertGoodResults.setInt(1,query.getId());
@@ -150,7 +150,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 				} catch (Exception x) {
 					throw new AmbitException(x);
 				}
-				
+				return null;
 			}
 
 			public void open() throws DbAmbitException {

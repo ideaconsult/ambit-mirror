@@ -51,7 +51,7 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	protected QueryURIReporter() {
 	}	
 	@Override
-	public void processItem(T item) throws AmbitException {
+	public Object processItem(T item) throws AmbitException {
 		try {
 			String o = getURI(item);
 			if (o != null) 	output.write(o);
@@ -59,6 +59,7 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 		} catch (IOException x) {
 			logger.error(x);
 		}
+		return null;
 	}	
 	public abstract String getURI(String ref, T item);
 	

@@ -10,7 +10,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.OT;
-import ambit2.rest.rdf.RDFReferenceIterator;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
@@ -45,7 +44,7 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 		OT.OTClass.Dataset.createOntClass(output);
 	};
 	@Override
-	public void processItem(SourceDataset item) throws AmbitException {
+	public Object processItem(SourceDataset item) throws AmbitException {
 		Individual dataset = output.createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Dataset.getOntClass(output));
 		
@@ -55,7 +54,7 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 		dataset.addProperty(RDFS.seeAlso,ref);
 		dataset.addProperty(DC.publisher,item.getUsername());
 		dataset.addProperty(DC.source,item.getTitle());
-		
+		return dataset;
 	}
 
 	public void open() throws DbAmbitException {

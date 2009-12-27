@@ -60,11 +60,12 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest()) {
 					@Override
-					public void processItem(ILiteratureEntry dataset) throws AmbitException  {
+					public Object processItem(ILiteratureEntry dataset) throws AmbitException  {
 						super.processItem(dataset);
 						try {
 							output.write('\n');
 						} catch (Exception x) {}
+						return null;
 					}
 				},MediaType.TEXT_URI_LIST);
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||

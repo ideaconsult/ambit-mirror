@@ -61,7 +61,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	}
 	
 	@Override
-	public void processItem(ModelQueryResults model) {
+	public Object processItem(ModelQueryResults model) {
 		try {
 			output.write("<tr>\n");
 			StringWriter w = new StringWriter();
@@ -121,6 +121,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 		} catch (Exception x) {
 			
 		}
+		return null;
 	}
 	protected void writeMoreColumns(ModelQueryResults model, Writer output) {
 	}

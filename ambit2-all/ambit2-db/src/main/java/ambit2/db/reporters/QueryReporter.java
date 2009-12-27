@@ -132,7 +132,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		reader.setHandlePrescreen(true);
 		return reader;
 	}
-	public abstract void processItem(T item) throws AmbitException;
+	public abstract Object processItem(T item) throws AmbitException;
 	
 	public long getTimeout() {
 		return timeout;

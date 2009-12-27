@@ -1,7 +1,5 @@
 package ambit2.rest.dataset;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -21,11 +19,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
@@ -123,11 +119,12 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
 			@Override
-			public void processItem(SourceDataset dataset) throws AmbitException  {
+			public Object processItem(SourceDataset dataset) throws AmbitException  {
 				super.processItem(dataset);
 				try {
 				output.write('\n');
 				} catch (Exception x) {}
+				return null;
 			}
 		},MediaType.TEXT_URI_LIST);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||

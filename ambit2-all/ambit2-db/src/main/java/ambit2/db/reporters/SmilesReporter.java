@@ -31,7 +31,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		});	
 	}
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			Object smiles = item.getProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
 			if (smiles == null)
@@ -57,6 +57,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		} catch (IOException x) {
 			x.printStackTrace();
 		}
+		return null;
 		
 	}
 

@@ -3,7 +3,6 @@ package ambit2.rest.property;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 
-import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
@@ -11,7 +10,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.rdf.BibTex;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
@@ -19,10 +17,8 @@ import ambit2.rest.reference.ReferenceURIReporter;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * Feature reporter
@@ -51,12 +47,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	
 	}
 	@Override
-	public void processItem(Property item) throws AmbitException {
-		addToModel(getJenaModel(), item, uriReporter,referenceReporter);
+	public Object processItem(Property item) throws AmbitException {
+		return addToModel(getJenaModel(), item, uriReporter,referenceReporter);
 
 	}
 
-	public static void addToModel(OntModel jenaModel,Property item, 
+	public static Individual addToModel(OntModel jenaModel,Property item, 
 			QueryURIReporter<Property, IQueryRetrieval<Property>> uriReporter,
 			ReferenceURIReporter referenceReporter
 			) {
@@ -87,7 +83,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 						AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
 						AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
 						);
-	
+		return feature;
 	}	
 	public void open() throws DbAmbitException {
 		

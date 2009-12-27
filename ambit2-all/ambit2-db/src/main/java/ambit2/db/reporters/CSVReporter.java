@@ -95,7 +95,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	};
 
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 		Writer writer = getOutput();
 		try {
 			
@@ -127,7 +127,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		} finally {
 			try { writer.write('\n'); } catch (Exception x) {}
 		}
-		
+		return null;
 	}
 
 	public void open() throws DbAmbitException {

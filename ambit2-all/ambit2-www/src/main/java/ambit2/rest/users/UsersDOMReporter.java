@@ -47,13 +47,14 @@ public class UsersDOMReporter extends QueryDOMReporter<AmbitUser, QueryUser> {
 	}
 
 	@Override
-	public void processItem(AmbitUser user) throws AmbitException {
+	public Object processItem(AmbitUser user) throws AmbitException {
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_user, XMLTags.node_users);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
 		                parent.item(i).appendChild(getItemElement(output,user));
 		        		break;
 		   }		
+		   return null;
 
 		
 	}

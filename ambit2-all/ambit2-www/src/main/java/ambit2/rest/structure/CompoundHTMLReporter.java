@@ -97,7 +97,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request);
 	}
 	@Override
-	public void processItem(IStructureRecord record) throws AmbitException  {
+	public Object processItem(IStructureRecord record) throws AmbitException  {
 		
 		try {
 			if (table) {
@@ -114,6 +114,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		} catch (Exception x) {
 			logger.error(x);
 		}
+		return null;
 		
 	}
 	protected String content(String left, String right) throws IOException {

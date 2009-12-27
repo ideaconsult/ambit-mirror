@@ -32,8 +32,8 @@ public class ReferenceRDFReporter<Q extends IQueryRetrieval<ILiteratureEntry>> e
 		return new ReferenceURIReporter(reference);
 	}
 	@Override
-	public void processItem(ILiteratureEntry item) throws AmbitException {
-		addToModel(getJenaModel(), item,uriReporter);
+	public Object processItem(ILiteratureEntry item) throws AmbitException {
+		return addToModel(getJenaModel(), item,uriReporter);
 	}
 	public static Individual addToModel(OntModel jenaModel,ILiteratureEntry item, 
 				QueryURIReporter<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>> uriReporter) {

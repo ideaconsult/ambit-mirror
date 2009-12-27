@@ -18,10 +18,9 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
-import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
@@ -44,8 +43,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	 * 
 	 */
 	private static final long serialVersionUID = -6410553622662161903L;
-	protected PropertyURIReporter propertyReporter;
+	protected PropertyRDFReporter propertyReporter;
 	protected ReferenceURIReporter referenceReporter;
+	
 	
 	protected Template template;
 	protected List<Property> header = null;
@@ -61,7 +61,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		super(request,mediaType);
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
-		propertyReporter = new PropertyURIReporter(request);
+		propertyReporter = new PropertyRDFReporter(request,mediaType);
 		referenceReporter = new ReferenceURIReporter(request);
 	}
 	@Override
@@ -119,12 +119,14 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
 		dataset.addProperty(DC.title,query.toString());
 		dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
-		
+		try {
+		propertyReporter.setOutput(getJenaModel());
+		} catch (Exception x) {}
 	}
 
 	@Override
 
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			
 			if (header == null) 
@@ -147,14 +149,18 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				Object value = item.getProperty(p);
 				if (value == null) continue;
 				
+				/*
 				Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
 						OT.OTClass.Feature.getOntClass(getJenaModel()));
-				
 				feature.addProperty(DC.type,
 						 (value instanceof Number)?
 								AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
 								AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
-								);				
+								);								
+				*/
+				
+				p.setClazz((value instanceof Number)?Double.class:String.class);
+				Individual feature = (Individual)propertyReporter.processItem(p);
 				/*
 				feature.addProperty(RDFJenaModel.DCProperty.title.getProperty(getJenaModel()), p.getName());
 				feature.addProperty(RDFJenaModel.DCProperty.identifier.getProperty(getJenaModel()),propertyReporter.getURI(p));
@@ -170,10 +176,11 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				i++;
 				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
 			}
-			
+			return dataEntry;
 		} catch (Exception x) {
 			logger.error(x);
 		}
+		return null;
 		
 	}
 	public void open() throws DbAmbitException {

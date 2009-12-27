@@ -56,16 +56,16 @@ public class QueryXMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 	}
 	@Override
-	public void processItem(IStructureRecord record) throws AmbitException {
+	public Object processItem(IStructureRecord record) throws AmbitException {
 		Element e_record = toURI(reference,output, record);
-        if (e_record == null) return;
+        if (e_record == null) return null;
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_compounds);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
         		parent.item(i).appendChild(e_record);
         		break;
         	}
-        
+        return null;
 	}
 	@Override
 	public Document getOutput() throws AmbitException{

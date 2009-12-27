@@ -28,7 +28,7 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 
 		try {
 			//TODO generate PDFcontent
@@ -36,7 +36,7 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		} catch (Exception x) {
 			logger.error(x);
 		}
-		
+		return null;
 	}
 
 	public void open() throws DbAmbitException {

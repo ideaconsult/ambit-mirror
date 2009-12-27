@@ -91,11 +91,12 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
 			@Override
-			public void processItem(ModelQueryResults dataset) throws AmbitException  {
+			public Object processItem(ModelQueryResults dataset) throws AmbitException  {
 				super.processItem(dataset);
 				try {
 				output.write('\n');
 				} catch (Exception x) {}
+				return null;
 			}
 		},MediaType.TEXT_URI_LIST);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
@@ -134,7 +135,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 			
 			QueryReporter<ModelQueryResults,IQueryRetrieval<ModelQueryResults>,Object> readModels = new QueryReporter<ModelQueryResults,IQueryRetrieval<ModelQueryResults>,Object>() {
 				@Override
-				public void processItem(ModelQueryResults model) throws AmbitException {
+				public Object processItem(ModelQueryResults model) throws AmbitException {
 					try {
 						Reference ref =  ((AmbitApplication)getApplication()).addTask(
 								String.format("Apply model %s to %s",model.toString(),reference),
@@ -155,6 +156,7 @@ public class ModelResource extends QueryResource<IQueryRetrieval<ModelQueryResul
 						else
 							getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
 					}
+					return null;
 					
 				}
 				public void open() throws DbAmbitException {};

@@ -57,7 +57,7 @@ public class ReferenceDOMReporter extends QueryDOMReporter<ILiteratureEntry, Rea
 	}
 
 	@Override
-	public void processItem(ILiteratureEntry item) throws AmbitException  {
+	public Object processItem(ILiteratureEntry item) throws AmbitException  {
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox_reference, XMLTags.node_references);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -65,7 +65,7 @@ public class ReferenceDOMReporter extends QueryDOMReporter<ILiteratureEntry, Rea
 		        		break;
 		   }		
 
-		
+		   return null;
 	}
 	@Override
 	public Element getItemElement(Document doc, ILiteratureEntry item) {

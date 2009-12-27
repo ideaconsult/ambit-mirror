@@ -74,7 +74,7 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 		Individual feature = jenaProcess(item.getProperty());
 		return valueProcess(item.getValue(),feature);
 	}
-	public void jenaProcess(IStructureRecord record) throws AmbitException {
+	public Individual jenaProcess(IStructureRecord record) throws AmbitException {
 		Individual dataEntry = null;
 		if (record != null) {
 			dataEntry = getJenaModel().createIndividual(OT.OTClass.DataEntry.getOntClass(getJenaModel()));
@@ -89,20 +89,21 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 			if (dataEntry!=null)
 				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
 		}
+		return dataEntry;
 	}	
-	public void jenaProcess(Object item) throws AmbitException {
-		valueProcess(item, null);
+	public Object jenaProcess(Object item) throws AmbitException {
+		return valueProcess(item, null);
 		
 		
 	}	
 	@Override
-	public void processItem(T item) throws AmbitException {
+	public Object processItem(T item) throws AmbitException {
 		if (item instanceof PropertyValue)
-			jenaProcess((PropertyValue)item);
+			return jenaProcess((PropertyValue)item);
 		else if (item instanceof IStructureRecord)
-			jenaProcess((IStructureRecord)item);	
+			return jenaProcess((IStructureRecord)item);	
 		else
-			jenaProcess(item);
+			return jenaProcess(item);
 	}
 
 

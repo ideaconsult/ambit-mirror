@@ -59,7 +59,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 		super.footer(output, query);
 	}
 	@Override
-	public void processItem(SourceDataset dataset) throws AmbitException {
+	public Object processItem(SourceDataset dataset) throws AmbitException {
 		try {
 			StringWriter w = new StringWriter();
 			uriReporter.setOutput(w);
@@ -160,6 +160,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 		} catch (Exception x) {
 			logger.warn(x);
 		}
+		return null;
 	}
 
 
