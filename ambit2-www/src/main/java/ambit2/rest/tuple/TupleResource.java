@@ -49,11 +49,12 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 		
 			return new StringConvertor(	new TupleURIReporter(getRequest(),queryObject.getFieldname()) {
 				@Override
-				public void processItem(PropertiesTuple src) throws AmbitException {
+				public Object processItem(PropertiesTuple src) throws AmbitException {
 					super.processItem(src);
 					try {
 					output.write("\n");
 					} catch (Exception x) {}
+					return null;
 				}
 			},MediaType.TEXT_URI_LIST);
 			

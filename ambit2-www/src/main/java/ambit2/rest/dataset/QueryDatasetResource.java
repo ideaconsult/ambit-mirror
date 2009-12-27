@@ -42,11 +42,12 @@ public class QueryDatasetResource extends QueryResource<IQueryRetrieval<SourceDa
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
 				@Override
-				public void processItem(SourceDataset dataset) throws AmbitException {
+				public Object processItem(SourceDataset dataset) throws AmbitException {
 					super.processItem(dataset);
 					try {
 					output.write('\n');
 					} catch (Exception x) {}
+					return null;
 				}
 			},MediaType.TEXT_URI_LIST);
 		} else 

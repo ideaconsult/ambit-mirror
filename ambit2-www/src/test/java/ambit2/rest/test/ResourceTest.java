@@ -4,13 +4,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Assert;
 
-import org.jmol.util.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +49,6 @@ public abstract class ResourceTest extends DbUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		Logger.setLogLevel(Logger.LEVEL_WARN);
 		setUpDatabase("src/test/resources/src-datasets.xml");
 
 

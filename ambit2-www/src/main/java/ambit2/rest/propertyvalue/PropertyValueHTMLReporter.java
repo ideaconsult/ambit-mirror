@@ -57,7 +57,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	
 
 	@Override
-	public void processItem(T item) throws AmbitException  {
+	public Object processItem(T item) throws AmbitException  {
 		try {
 			
 			if (item instanceof IStructureRecord) {
@@ -103,6 +103,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 		} catch (Exception x) {
 			
 		}
+		return null;
 		
 	}
 	protected String getUpdateAction(PropertyValue v) {

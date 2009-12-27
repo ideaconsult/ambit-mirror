@@ -55,7 +55,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	}
 
 	@Override
-	public void processItem(PropertiesTuple item) throws AmbitException  {
+	public Object processItem(PropertiesTuple item) throws AmbitException  {
 		try {
 		output.write(String.format("<tr><td><a href=\"%s\">%s</a></td><td><a href=\"%s\">Browse</a> </td></tr>", 
 				ds_reporter.getURI(item.getDataset()),
@@ -63,6 +63,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 				uriReporter.getURI(item))
 				);
 		} catch (Exception x) {logger.error(x);}
+		return null;
 	}
 
 }

@@ -32,7 +32,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 		try {w.write(String.format("<h3>Reference%s</h3>",collapsed?"s":""));} catch (Exception x) {}
 	}
 	@Override
-	public void processItem(ILiteratureEntry item) throws AmbitException  {
+	public Object processItem(ILiteratureEntry item) throws AmbitException  {
 		try {
 			output.write("<div>");
 			output.write("Name: ");
@@ -52,6 +52,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 		} catch (Exception x) {
 			
 		}
+		return null;
 	}
 
 }

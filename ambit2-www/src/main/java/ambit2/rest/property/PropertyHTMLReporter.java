@@ -30,7 +30,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	}
 
 	@Override
-	public void processItem(Property item) throws AmbitException  {
+	public Object processItem(Property item) throws AmbitException  {
 		try {
 			output.write(String.format(
 						"<a href=\"%s\">%s %s</a>&nbsp;",
@@ -46,6 +46,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 		} catch (Exception x) {
 			logger.warn(x);
 		}		
+		return null;
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<Property> query) {

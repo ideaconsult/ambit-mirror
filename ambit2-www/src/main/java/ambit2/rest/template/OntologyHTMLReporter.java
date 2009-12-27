@@ -61,7 +61,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrie
 	}	
 
 	@Override
-	public void processItem(Object record) throws AmbitException  {
+	public Object processItem(Object record) throws AmbitException  {
 
 		try {
 			if ((record instanceof Dictionary) || 
@@ -109,6 +109,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrie
 		} catch (Exception x) {
 			logger.error(x);
 		}
+		return null;
 	}
 	public void header(Writer output, QueryOntology query) {
 		try {

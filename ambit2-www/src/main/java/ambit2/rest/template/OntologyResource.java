@@ -68,11 +68,12 @@ public class OntologyResource<T extends Serializable> extends QueryResource<IQue
 		else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new OntologyURIReporter(getRequest()) {
 					@Override
-					public void processItem(Object item) throws AmbitException  {
+					public Object processItem(Object item) throws AmbitException  {
 						super.processItem(item);
 						try {
 						output.write('\n');
 						} catch (Exception x) {}
+						return null;
 					}
 				},MediaType.TEXT_URI_LIST);
 				

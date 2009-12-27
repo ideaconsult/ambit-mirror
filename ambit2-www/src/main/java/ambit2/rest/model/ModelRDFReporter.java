@@ -60,7 +60,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	};
 	
 	@Override
-	public void processItem(ModelQueryResults item) throws AmbitException {
+	public Object processItem(ModelQueryResults item) throws AmbitException {
 		Individual model = getJenaModel().createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Model.getOntClass(getJenaModel()));
 		model.addProperty(DC.title, item.getName());
@@ -100,6 +100,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		feature.addProperty(OWL.sameAs,item.getLabel());
 		feature.addProperty(OT.hasSource, referenceReporter.getURI(item.getReference()));
 		*/
+		return model;
 	}
 
 	public void open() throws DbAmbitException {

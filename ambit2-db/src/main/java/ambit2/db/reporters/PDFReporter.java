@@ -136,7 +136,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
     };
 	
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 
 		try {
 			if(header == null) header = template2Header(getTemplate(),true);
@@ -150,6 +150,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		} catch (Exception x) {
 			logger.error(x);
 		}
+		return null;
 		
 	}
     protected void writeMolecule(IAtomContainer molecule) {

@@ -60,15 +60,16 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	}
 
 	@Override
-	public void processItem(Property item) throws AmbitException {
-		if (item ==null) return;
+	public Object processItem(Property item) throws AmbitException {
+		if (item ==null) return null;
 		   NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_featuredefs);
 		   for (int i=0; i < parent.getLength();i++)
 		        	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
 
 		                parent.item(i).appendChild(getItemElement(output,item));
 		        		break;
-		   }			
+		   }		
+		   return null;
 	}
 	@Override
 	public Element getItemElement(Document doc, Property item) {

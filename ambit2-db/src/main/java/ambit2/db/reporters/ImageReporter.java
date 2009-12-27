@@ -152,7 +152,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		}
 	}
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			BufferedImage image = getCached(item);
 			if (image == null) {
@@ -160,10 +160,11 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 				cache(item,image);
 			}
 			setOutput(image);
+			return image;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
-		
+	
 	}
 	protected BufferedImage createImage(IStructureRecord item) throws AmbitException  {
 		return depict.getImage(reader.process(item));

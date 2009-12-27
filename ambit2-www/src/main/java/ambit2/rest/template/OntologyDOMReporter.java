@@ -74,8 +74,8 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 	}
 
 	@Override
-	public void processItem(Object item) throws AmbitException {
-		if (item == null) return;
+	public Object processItem(Object item) throws AmbitException {
+		if (item == null) return null;
 		count++;
 		if (item instanceof Property) {
 			((Property) item).setOrder(count);
@@ -104,6 +104,7 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 			}
 
 		}
+		return null;
 	}
 	@Override
 	public Element getItemElement(Document doc, Object item) {

@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.jmol.util.Logger;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -26,7 +25,6 @@ import ambit2.db.IDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
-import ambit2.db.update.property.ReadProperty;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.QueryURIReporter;

@@ -51,14 +51,15 @@ public class DatasetsXMLReporter extends QueryDOMReporter<SourceDataset, IQueryR
 		
 	}
 	@Override
-	public void processItem(SourceDataset dataset) throws AmbitException {
+	public Object processItem(SourceDataset dataset) throws AmbitException {
 
         NodeList parent = output.getElementsByTagNameNS(XMLTags.ns_opentox, XMLTags.node_datasets);
         for (int i=0; i < parent.getLength();i++)
         	if (parent.item(i).getNodeType() == Node.ELEMENT_NODE) {
         		parent.item(i).appendChild(getItemElement(output, dataset));
         		break;
-        	}		
+        	}	
+        return null;
 	}	
 	@Override
 	public Element getItemElement(Document doc, SourceDataset dataset) {

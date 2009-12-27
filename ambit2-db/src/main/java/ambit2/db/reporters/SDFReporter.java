@@ -77,10 +77,10 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			output.write(item.getContent());
-			if (isMOLONLY()) return;
+			if (isMOLONLY()) return null;
 			for (Property p : item.getProperties()) {
 				Object value = item.getProperty(p);
 				if (value != null)
@@ -91,7 +91,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		} catch (Exception x) {
 			logger.error(x);
 		}
-		
+		return null;
 	}
 
 	public void open() throws DbAmbitException {

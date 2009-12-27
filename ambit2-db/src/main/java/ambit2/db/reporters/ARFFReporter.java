@@ -96,7 +96,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	};
 
 	@Override
-	public void processItem(IStructureRecord item) throws AmbitException {
+	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			Writer writer = getOutput();
 			writeHeader(writer);
@@ -121,6 +121,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		} catch (Exception x) {
 			logger.error(x);
 		}
+		return null;
 		
 	}
 

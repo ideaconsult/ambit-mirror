@@ -43,7 +43,7 @@ public class PropertyValueReporter<T> extends QueryReporter<T,IQueryRetrieval<T>
 	}
 
 	@Override
-	public void processItem(T item) throws AmbitException {
+	public Object processItem(T item) throws AmbitException {
 		try {
 			if (item instanceof IStructureRecord) {
 				IStructureRecord v = (IStructureRecord) item;
@@ -57,7 +57,7 @@ public class PropertyValueReporter<T> extends QueryReporter<T,IQueryRetrieval<T>
 		} catch (Exception x) {
 			
 		}
-		
+		return null;
 	}
 
 	public void open() throws DbAmbitException {

@@ -83,7 +83,7 @@ public class DatasetReporter extends QueryReporter<SourceDataset, IQueryRetrieva
 		
 	}
 	@Override
-	public void processItem(SourceDataset dataset) throws AmbitException {
+	public Object processItem(SourceDataset dataset) throws AmbitException {
 		
 		Element e_dataset = output.createElementNS(XMLTags.ns_opentox,XMLTags.node_dataset);
         e_dataset.setAttribute(XMLTags.attr_id,Integer.toString(dataset.getId()));
@@ -92,6 +92,7 @@ public class DatasetReporter extends QueryReporter<SourceDataset, IQueryRetrieva
         //e_dataset.appendChild(toXML(doc, dataset.getReference()));
         e_dataset.appendChild(toURI(reference,output, dataset));
         output.appendChild(e_dataset);
+        return null;
 	}
     @Override
     public void footer(Document output, IQueryRetrieval<SourceDataset> query) {

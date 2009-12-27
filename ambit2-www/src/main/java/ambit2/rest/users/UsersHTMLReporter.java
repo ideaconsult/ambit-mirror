@@ -33,7 +33,7 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 		try {w.write(String.format("<h3>User%s</h3>",collapsed?"s":""));} catch (Exception x) {}
 	}
 	@Override
-	public void processItem(AmbitUser item) throws AmbitException {
+	public Object processItem(AmbitUser item) throws AmbitException {
 		try {
 			
 			output.write("<div>");
@@ -58,6 +58,7 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 		} catch (Exception x) {
 			
 		}
+		return null;
 	}
 
 }
