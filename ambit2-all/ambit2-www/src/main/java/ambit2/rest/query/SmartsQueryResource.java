@@ -83,7 +83,11 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			QuerySMARTS query = new QuerySMARTS();
 			query.setChemicalsOnly(true);
 			query.setValue(new FunctionalGroup(smarts,smarts,smarts));
-			
+			try {
+				if (smarts != null) query.prepareScreening();
+			} catch (Exception x) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+			}
 			
 			try {
 				
