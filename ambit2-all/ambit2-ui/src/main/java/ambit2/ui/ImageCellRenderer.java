@@ -7,15 +7,17 @@ package ambit2.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
@@ -67,12 +69,21 @@ public class ImageCellRenderer extends DefaultTableCellRenderer implements
     		setImage(table, isSelected, imageTools.getImage((IAtomContainer)value));
     		return this;
     	} else if (value instanceof Image) { 
-    		setImage(table,isSelected,(Image)value);
+    		scaleImage(table,isSelected,(Image)value);
     		return this;
     	} else return null;
             
 	}
-    
+    protected void scaleImage(final JTable table,final boolean isSelected, Image image) {
+		setFont(null);
+		Dimension d = imageTools.getImageSize();
+		BufferedImage scaledImage = new BufferedImage(d.width,d.height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics2D = scaledImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(image, 0, 0, d.width,d.height, null);
+		graphics2D.dispose();		
+		icon.setImage(scaledImage);
+    }    
     protected void setImage(final JTable table,final boolean isSelected, Image value) {
 		setFont(null);
 		icon.setImage((Image) value);
