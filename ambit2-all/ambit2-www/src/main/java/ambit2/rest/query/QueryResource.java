@@ -139,7 +139,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	    			Representation r = convertor.process(null);
 	            	return r;			
 	    		} catch (Exception x) { 
-	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x); 
+	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x); 
 	    		}  else {
 	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,error);
 	    		}
@@ -265,7 +265,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			} catch (ResourceException x)  {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);	
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);	
 			} finally {
 				try { iterator.close(); } catch (Exception x) {}
 			}
@@ -281,7 +281,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				return onError(line);
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		} finally {
 			try { reader.close();} catch (Exception x) {}
 		}

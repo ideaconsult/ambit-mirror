@@ -47,7 +47,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 			dataset.setId(-1);
 			q.setValue(dataset);
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 		
 			Form form = request.getResourceRef().getQueryAsForm();

@@ -115,7 +115,7 @@ public class AbstractDepict extends ServerResource {
 	        	return null;   	
 	        }
 		} catch (Exception x) {
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 			return null;
 		
 		}

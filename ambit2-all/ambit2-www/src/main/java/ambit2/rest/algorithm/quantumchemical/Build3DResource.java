@@ -102,7 +102,7 @@ public class Build3DResource extends CatalogResource {
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}			
 

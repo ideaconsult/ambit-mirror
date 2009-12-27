@@ -107,7 +107,7 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 			}
 			
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 		return model;
 	}
