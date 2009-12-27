@@ -144,7 +144,7 @@ public class OT {
     		reader.read(model,in,getJenaFormat(mediaType));
     		return model;
     	} catch (Exception x) {
-    		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+    		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
     	} finally {
     		
     	}
