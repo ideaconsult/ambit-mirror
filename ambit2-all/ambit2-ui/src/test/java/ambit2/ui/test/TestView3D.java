@@ -24,19 +24,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui.test;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.vecmath.Point3d;
 
+import org.junit.Test;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.ui.jmol.ImageTools3D;
 import ambit2.ui.jmol.Panel3D;
 
 public class TestView3D  {
 
-	public static void main(String[] args) {
-		Panel3D jmolPanel = new Panel3D();
+	public static IMolecule getMolecule() {
 		IMolecule methane = DefaultChemObjectBuilder.getInstance().newMolecule();
 		Atom atom = new Atom("C");
 		atom.setPoint3d(new Point3d(0.26,-0.36,0.00));
@@ -53,14 +63,50 @@ public class TestView3D  {
 		atom = new Atom("H");
 		atom.setPoint3d(new Point3d(-0.77,-0.73,0.00));
 		methane.addAtom(atom);
+		return methane;
+	}
+	public static void main(String[] args) {
+		Panel3D jmolPanel = new Panel3D();
+
 		
 		// then send it to the Jmol Viewer
 		//jmolPanel.getViewer().openClientFile("", "", methane);
-		jmolPanel.setObject(methane);
+		jmolPanel.setObject(getMolecule());
 		
 		JOptionPane.showMessageDialog(null,jmolPanel);
+		System.out.println("Done");
 	}
-
+	//this doesn't work
+	@Test
+	public void test() throws Exception {
+		Panel3D p = new Panel3D() {
+			@Override
+			public void paint(Graphics g) {
+				//super.paint(g);
+				BufferedImage img = new BufferedImage(250,250, BufferedImage.TYPE_INT_RGB);
+				Graphics2D graphics2D = img.createGraphics();
+				
+				painter3D.paint(graphics2D);	
+				try {
+					ImageIO.write(img,".jpeg",new File("test.jpeg"));
+				} catch (Exception x) {
+					x.printStackTrace();
+				} finally {
+					graphics2D.dispose();
+				}
+			}
+		};
+		p.setObject(getMolecule());
+		
+		JOptionPane.showMessageDialog(null,p);
+		
+		/*
+		p.setPreferredSize(new Dimension(250,250));
+		ImageTools3D painter = new ImageTools3D(p,new Dimension(250,250));
+		RenderedImage image = painter.process(getMolecule());
+		ImageIO.write(image,".png",new File("test.png"));
+		*/
+	}
 }
 
 

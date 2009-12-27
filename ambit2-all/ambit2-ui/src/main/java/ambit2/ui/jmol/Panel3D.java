@@ -26,27 +26,16 @@ package ambit2.ui.jmol;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Hashtable;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jmol.api.JmolAdapter;
 import org.jmol.api.JmolStatusListener;
-import org.jmol.api.JmolViewer;
 import org.jmol.popup.JmolPopup;
-import org.jmol.viewer.Viewer;
-import org.openscience.cdk.ChemFile;
-import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.ChemSequence;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemFile;
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IChemSequence;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 
 import ambit2.ui.editors.IAmbitEditor;
 
@@ -60,90 +49,38 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> ,Pro
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	   JmolViewer viewer;
-	   JmolPopup jmolpopup;
-	   JmolAdapter adapter;
-	   IMoleculeSet moleculeSet;
-       IChemModel model;
-       IChemSequence sequence;
-       IChemFile chemFile;
+	protected ImageTools3D painter3D;
+
 	     
 	   public Panel3D() {
 		 super();
-         try {
-	     adapter = new CdkJmolAdapter(null);
-	     viewer = Viewer.allocateViewer(this, adapter);
-	     jmolpopup = JmolPopup.newJmolPopup(viewer,true);
-	     viewer.setJmolStatusListener(new StatusListener(jmolpopup));
-	     setPreferredSize(new Dimension(400,400));
-	     
-	     moleculeSet = new MoleculeSet();
-	     model = new ChemModel();
-	     model.setMoleculeSet(moleculeSet);
-	     sequence = new ChemSequence();
-	     sequence.addChemModel(model);
-	     chemFile = new ChemFile();
-	     chemFile.addChemSequence(sequence);
-         } catch (Exception x) {
-             x.printStackTrace();
-             adapter = null;
-             moleculeSet = null;
-             model = null;
-             sequence = null;
-             chemFile = null;
-             viewer = null;
-         }
+		 Dimension size = new Dimension(400,400);
+   	     setPreferredSize(size);
+   	     try {
+   	    	 painter3D = new ImageTools3D(this,size);
+   	     } catch (Exception x) {
+
+   	    	 painter3D = null;
+   	     }
+ 
 	   }
 	 
-	   public JmolViewer getViewer() {
-	     return viewer;
-	   }
-	 
-	   final Dimension currentSize = new Dimension();
 	 
 	   public void paint(Graphics g) {
-           if (viewer != null) {
-    	     viewer.setScreenDimension(getSize(currentSize));
-    	     Rectangle rectClip = new Rectangle();
-    	     g.getClipBounds(rectClip);
-    	     g.clearRect(rectClip.x, rectClip.y, rectClip.width,  rectClip.height);
-    	     viewer.renderScreenImage(g, currentSize, rectClip);
-    	     viewer.script("autobond=false");
-//    	     viewer.script("boundbox;axes;wireframe 0.01; spacefill 0;");
-           } else {
-             Rectangle rectClip = new Rectangle();
-             g.getClipBounds(rectClip);
-             g.clearRect(rectClip.x, rectClip.y, rectClip.width,  rectClip.height);
-           }
+          painter3D.paint(g);
 	   }
 	 
-	   public void executeCmd(String command) {
-	     viewer.evalString(command);
-	   }
-	 
-	  
 	   public JComponent getJComponent() {
 		   return this;
 	   }
 	   public boolean confirm() {
-		// TODO Auto-generated method stub
 		return false;
 	   }
 	   public IAtomContainer getObject() {
-		// TODO Auto-generated method stub
 		return null;
 	   }
 	   public void setObject(IAtomContainer mol) {
-			 if (moleculeSet == null) return;  
-			 moleculeSet.removeAllAtomContainers();
-			 if (mol != null) moleculeSet.addAtomContainer(mol);
-			 try {
-				 viewer.openClientFile("","",chemFile);
-				 jmolpopup.updateComputedMenus();
-
-			 } catch (Exception x) {
-				 x.printStackTrace();
-			 }
+			 painter3D.setObject(mol);
 	   }
 
 	public boolean isEditable() {
@@ -152,8 +89,6 @@ public class Panel3D extends JPanel implements IAmbitEditor<IAtomContainer> ,Pro
 	}
 
 	public void setEditable(boolean editable) {
-		// TODO Auto-generated method stub
-		
 	}
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getNewValue() instanceof IAtomContainer)
@@ -167,6 +102,12 @@ class StatusListener implements JmolStatusListener {
 	public StatusListener(JmolPopup popup) {
 		this.popup = popup;
 	}
+	public String createImage(String file, String type, Object text_or_bytes,
+			int quality) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public void createImage(String arg0, String arg1, int arg2) {
 		// TODO Auto-generated method stub
 		
@@ -263,5 +204,22 @@ class StatusListener implements JmolStatusListener {
 		// TODO Auto-generated method stub
 		
 	}
+	public String dialogAsk(String type, String fileName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public Hashtable getRegistryInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void notifyCallback(int type, Object[] data) {
+		// TODO Auto-generated method stub
+		
+	}
+	public boolean notifyEnabled(int callback_pick) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }
+
