@@ -121,7 +121,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			}
 
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}
 	@Override

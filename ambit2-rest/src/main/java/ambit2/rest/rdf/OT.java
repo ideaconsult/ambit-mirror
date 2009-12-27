@@ -154,7 +154,7 @@ public class OT {
     	try {
     		return createModel(entity.getStream(),entity.getMediaType()==null?entity.getMediaType():entity.getMediaType());
     	} catch (IOException x) {
-    		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+    		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
     	}
     }	    
     public static OntModel createModel(Reference uri, MediaType mediaType) throws ResourceException {

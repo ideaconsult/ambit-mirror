@@ -42,7 +42,7 @@ public class FastToxStep2 extends ModelResource {
 					Integer.parseInt(form.getFirstValue("idstructure"))
 					,null,null);
 		} catch (Exception x) {
-			throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 		getResponse().setEntity(get(new Variant(MediaType.TEXT_HTML)));
 		return getResponse().getEntity();

@@ -156,7 +156,7 @@ public class KroesInput extends FeatureResource {
 			p.setId(Integer.parseInt(form.getFirstValue(PropertyResource.idfeaturedef)));
 			return new PropertyValue<Double>(p,Double.parseDouble(value.toString()));
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}	
 }
