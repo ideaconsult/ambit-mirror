@@ -77,7 +77,7 @@ public class QuerySMARTS extends
 		return screening.getParameters();
 	}
 	
-	protected void prepareScreening() throws AmbitException {
+	public void prepareScreening() throws AmbitException {
 		try {
 			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
 				screening.setMaxRecords(0);
@@ -89,9 +89,9 @@ public class QuerySMARTS extends
 				screening.setFieldname(skGenerator.process(atomContainer));
 			}
 		} catch (AmbitException x) {
-			Logger.getLogger(getClass().getName()).warning(x.getMessage());
-			screening.setValue(null);
-			screening.setFieldname(null);
+			throw x;
+			//screening.setValue(null);
+			//screening.setFieldname(null);
 		}		
 	}
 	@Override
