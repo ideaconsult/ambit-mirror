@@ -13,14 +13,13 @@ import org.restlet.resource.ResourceException;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.rdf.arp.impl.DefaultErrorHandler;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFErrorHandler;
 import com.hp.hpl.jena.rdf.model.RDFReader;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.impl.RDFDefaultErrorHandler;
+import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 
@@ -132,8 +131,11 @@ public class OT {
     public static OntModel createModel(InputStream in, MediaType mediaType) throws ResourceException {
     	OntModel model = createModel(OntModelSpec.OWL_DL_MEM);
     	RDFReader reader = model.getReader();
+    	model.enterCriticalSection(Lock.WRITE) ;
     	try {
-    		reader.setProperty("error-mode", "strict" );
+    		reader.setProperty("error-mode", "lax" );
+    		reader.setProperty("WARN_REDEFINITION_OF_ID","EM_IGNORE");
+
     		reader.setErrorHandler(new RDFDefaultErrorHandler() {
     			@Override
     			public void warning(Exception e) {
@@ -146,7 +148,8 @@ public class OT {
     	} catch (Exception x) {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
     	} finally {
-    		
+    		model.leaveCriticalSection() ;
+
     	}
     	
     }
