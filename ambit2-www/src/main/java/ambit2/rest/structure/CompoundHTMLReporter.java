@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
+import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;

@@ -1,9 +1,7 @@
 package ambit2.rest;
 
-import java.io.OutputStream;
-
+import org.restlet.Request;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
 
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;

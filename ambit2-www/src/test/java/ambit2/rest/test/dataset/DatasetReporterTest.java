@@ -109,7 +109,7 @@ public class DatasetReporterTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count ==1;
+		return count >0;
 	}		
 	@Test
 	public void testCSV() throws Exception {

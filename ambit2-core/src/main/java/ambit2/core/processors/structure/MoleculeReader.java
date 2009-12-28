@@ -30,7 +30,6 @@
 package ambit2.core.processors.structure;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;

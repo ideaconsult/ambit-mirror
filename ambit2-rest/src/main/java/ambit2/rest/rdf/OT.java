@@ -3,7 +3,9 @@ package ambit2.rest.rdf;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.restlet.Client;
 import org.restlet.data.MediaType;
+import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -161,8 +163,11 @@ public class OT {
     	}
     }	    
     public static OntModel createModel(Reference uri, MediaType mediaType) throws ResourceException {
-		ClientResource client = new ClientResource(uri);
-		client.setFollowRedirects(true);
+    	//Client httpclient = new Client(Protocol.HTTP);
+    	//httpclient.setConnectTimeout(300000);
+    	ClientResource client = new ClientResource(uri);
+		//client.setNext(httpclient);
+		client.setFollowingRedirects(true);
 		Representation r = client.get(mediaType);
 		if (Status.SUCCESS_OK.equals(client.getStatus()))  {
 			if ((r==null) || !r.isAvailable())

@@ -57,7 +57,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 				System.out.println(line);
 				count++;
 			}
-			return count ==1;
+			return count >0;
 		}	
 		@Test
 		public void testSDF() throws Exception {

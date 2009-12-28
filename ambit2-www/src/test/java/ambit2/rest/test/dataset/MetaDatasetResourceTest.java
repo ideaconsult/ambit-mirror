@@ -6,12 +6,7 @@ import org.junit.Test;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.SourceDataset;
-import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
-import ambit2.rest.rdf.RDFStructuresIterator;
 import ambit2.rest.test.ResourceTest;
 
 public class MetaDatasetResourceTest extends ResourceTest {

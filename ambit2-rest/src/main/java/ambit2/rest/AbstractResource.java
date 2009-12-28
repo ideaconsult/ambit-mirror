@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
@@ -49,14 +49,20 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 
 	}
 	protected void customizeVariants(MediaType[] mimeTypes) {
-        List<Variant> variants = new ArrayList<Variant>();
-        for (MediaType mileType:mimeTypes) variants.add(new Variant(mileType));
-        getVariants().put(Method.GET, variants);
-        getVariants().put(Method.POST, variants);
+       // List<Variant> variants = new ArrayList<Variant>();
+        for (MediaType m:mimeTypes) getVariants().add(new Variant(m));
+        //getVariants().put(Method.GET, variants);
+        //getVariants().put(Method.POST, variants);
 	}
 	public abstract P createConvertor(Variant variant) throws AmbitException, ResourceException;
 	
 	protected   abstract  Q createQuery(Context context, Request request, Response response) throws ResourceException;
+	
+	@Override
+	public List<Variant> getVariants() {
+		List<Variant> vars = super.getVariants();
+		return vars;
+	}
 	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
@@ -124,6 +130,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	protected String getParameter(Form requestHeaders,String paramName,String description) throws ResourceException {
 		return getParameter(requestHeaders, paramName,description, false);
 	}
+	
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {

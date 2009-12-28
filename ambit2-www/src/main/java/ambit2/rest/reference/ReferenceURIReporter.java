@@ -1,6 +1,6 @@
 package ambit2.rest.reference;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.db.readers.IQueryRetrieval;

@@ -1,6 +1,6 @@
 package ambit2.rest.tuple;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;

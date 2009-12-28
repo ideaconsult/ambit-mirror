@@ -22,7 +22,7 @@ public class CSLSDepict extends AbstractDepict {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		this.getVariants().clear();
-		this.getVariants().put(Method.GET,new Variant(MediaType.IMAGE_PNG));		
+		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));		
 	}
 	@Override
 	protected BufferedImage getImage(String smiles,int w, int h) throws AmbitException {

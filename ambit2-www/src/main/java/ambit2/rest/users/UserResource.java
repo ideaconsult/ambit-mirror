@@ -3,13 +3,11 @@ package ambit2.rest.users;
 import java.security.Principal;
 import java.util.Iterator;
 
-import javax.security.auth.Subject;
-
 import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -70,16 +68,14 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 		Object idref = request.getAttributes().get(resourceKey);
 		try {
 			if (idref==null) {
-				Role role = new Role();
-				role.setName("admin");
-				if (getRequest().getClientInfo().isInRole(role))
+
+				if (isInRole("admin"))
 					return new QueryUser();
 				else throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
 			} else {
 				String username = Reference.decode(idref.toString());
 				if (login.equals(username)) {
-					Subject s = getRequest().getClientInfo().getSubject();
-					Iterator<Principal> p = s.getPrincipals().iterator();
+					Iterator<Principal> p = getRequest().getClientInfo().getPrincipals().iterator();
 					while (p.hasNext()) {
 						return new QueryUser(p.next().getName());
 					}

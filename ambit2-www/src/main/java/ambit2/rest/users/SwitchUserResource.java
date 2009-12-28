@@ -18,7 +18,7 @@ public class SwitchUserResource extends  ServerResource {
 	@Override
 	protected Representation get() throws ResourceException {
 		try {
-			Iterator<Principal> i = getRequest().getClientInfo().getSubject().getPrincipals().iterator();
+			Iterator<Principal> i = getRequest().getClientInfo().getPrincipals().iterator();
 			Principal p = null;
 			while (i.hasNext()) { p = i.next(); break; }
 			getResponse().redirectSeeOther(String.format("%s/user/%s",getRequest().getRootRef(),p.getName()));

@@ -13,10 +13,10 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 

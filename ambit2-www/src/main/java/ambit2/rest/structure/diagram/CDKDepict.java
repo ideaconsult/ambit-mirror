@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -27,7 +26,7 @@ public class CDKDepict extends AbstractDepict {
 		super.doInit();
 		depict.setImageSize(new Dimension(410,210));
 		this.getVariants().clear();
-		this.getVariants().put(Method.GET,new Variant(MediaType.IMAGE_PNG));		
+		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));		
 	}
 	@Override
 	protected BufferedImage getImage(String smiles,int w, int h) throws AmbitException {

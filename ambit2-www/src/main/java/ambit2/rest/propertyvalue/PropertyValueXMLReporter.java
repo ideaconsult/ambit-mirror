@@ -3,7 +3,7 @@ package ambit2.rest.propertyvalue;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

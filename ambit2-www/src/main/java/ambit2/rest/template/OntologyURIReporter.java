@@ -1,7 +1,7 @@
 package ambit2.rest.template;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;

@@ -3,7 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;

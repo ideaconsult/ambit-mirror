@@ -44,10 +44,10 @@ public class Name2StructureResource extends ServerResource {
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN
 				};
-        List<Variant> variants = new ArrayList<Variant>();
-        for (MediaType mileType:mimeTypes) variants.add(new Variant(mileType));
-        getVariants().put(Method.GET, variants);
-        getVariants().put(Method.POST, variants);		
+        
+        for (MediaType mileType:mimeTypes) getVariants().add(new Variant(mileType));
+       // getVariants().put(Method.GET, variants);
+        //getVariants().put(Method.POST, variants);		
 
 
 		Form form = getRequest().getResourceRef().getQueryAsForm();

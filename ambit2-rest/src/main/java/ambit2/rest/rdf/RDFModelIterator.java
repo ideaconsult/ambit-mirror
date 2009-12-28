@@ -8,7 +8,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-import org.restlet.util.Template;
+import org.restlet.routing.Template;
 
 import ambit2.core.data.model.ModelWrapper;
 import ambit2.rest.OpenTox;

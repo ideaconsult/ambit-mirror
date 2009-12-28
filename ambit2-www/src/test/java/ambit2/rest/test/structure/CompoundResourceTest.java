@@ -17,11 +17,11 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.Client;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.representation.Representation;
 
 import weka.core.Attribute;

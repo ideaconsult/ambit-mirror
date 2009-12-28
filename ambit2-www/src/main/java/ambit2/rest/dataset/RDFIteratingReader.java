@@ -15,7 +15,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
-import org.restlet.util.Template;
+import org.restlet.routing.Template;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;

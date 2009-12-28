@@ -7,7 +7,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-import org.restlet.util.Template;
+import org.restlet.routing.Template;
 
 import ambit2.base.log.AmbitLogger;
 
@@ -165,6 +165,6 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	public static String getPropertyValue(Property property,RDFNode rdfNode) throws Exception  {
 		if (rdfNode.isResource())
 			return (((Literal) ((Resource)rdfNode).getProperty(property).getObject()).getString()); 
-		else throw new Exception("No a resource");
+		else throw new Exception("Not a resource");
 	}	
 }

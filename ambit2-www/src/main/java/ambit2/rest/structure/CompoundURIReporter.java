@@ -1,21 +1,14 @@
 package ambit2.rest.structure;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveStructure;
-import ambit2.db.readers.RetrieveTemplateStructure;
-import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryURIReporter;
 
 /**

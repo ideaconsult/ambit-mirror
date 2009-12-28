@@ -6,11 +6,11 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.restlet.Request;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;

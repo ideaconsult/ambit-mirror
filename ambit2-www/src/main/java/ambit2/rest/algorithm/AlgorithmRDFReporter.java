@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Parameter;

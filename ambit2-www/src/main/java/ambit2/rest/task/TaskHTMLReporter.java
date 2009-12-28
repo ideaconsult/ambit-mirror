@@ -4,8 +4,8 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.rest.AmbitResource;
 import ambit2.rest.algorithm.AlgorithmResource;

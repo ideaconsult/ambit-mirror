@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
 import ambit2.rest.test.ResourceTest;
 
@@ -45,6 +46,10 @@ public class MalformedRequestTest  extends ResourceTest {
 	}		
 	@Test
 	public void testGetJavaObject() throws Exception {
-		testGetJavaObject(getTestURI(),MediaType.APPLICATION_JAVA_OBJECT,org.restlet.data.Status.CLIENT_ERROR_BAD_REQUEST);
+		try {
+			testGetJavaObject(getTestURI(),MediaType.APPLICATION_JAVA_OBJECT,org.restlet.data.Status.CLIENT_ERROR_BAD_REQUEST);
+		} catch (ResourceException x) {
+			Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,x.getStatus());
+		}
 	}
 }

@@ -1,8 +1,8 @@
 package ambit2.rest.fastox;
 
 import org.restlet.Context;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
 import ambit2.db.model.ModelQueryResults;

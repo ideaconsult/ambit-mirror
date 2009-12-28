@@ -10,13 +10,13 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Context;
+import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 
 import ambit2.base.config.Preferences;
@@ -115,18 +115,16 @@ public class TaskResourceTest extends ResourceTest {
 		// creating task that completes immediately
 		Callable<Reference> c = new Callable<Reference>() {
 			public Reference call() throws Exception {
-				return new Reference("quickTaskURI");
+				return new Reference(String.format(
+						"http://localhost:%d/compound/1", port));
 			}
 		};
 		Reference completedTaskURI = ((AmbitApplication) app).addTask(
 				"Test task", c, new Reference(String.format(
 						"http://localhost:%d", port)));
 
-		Response response = testGet(completedTaskURI.toString(),
-				MediaType.TEXT_URI_LIST, Status.REDIRECTION_SEE_OTHER);
-		Assert.assertEquals(String.format(
-				"http://localhost:%d/task/quickTaskURI", port), response
-				.getLocationRef().toString());
+		testAsyncTask(completedTaskURI.toString(), new Form(),Status.SUCCESS_OK,String.format("http://localhost:%d/compound/1",port));
+
 		// ((AmbitApplication)app).removeTasks();
 
 	}
@@ -138,16 +136,15 @@ public class TaskResourceTest extends ResourceTest {
 				
 				for (int i = 0; i < 100000; i++)
 					;
-				return new Reference("newURI");
+				return new Reference(String.format("http://localhost:%d/dataset/1", port));
 			}
 		};
 		String longTaskURI = ((AmbitApplication) app).addTask("Test task", c,
 				new Reference(String.format("http://localhost:%d", port)))
 				.toString();
 
-		Response response = testGet(longTaskURI, MediaType.TEXT_URI_LIST,
-				Status.REDIRECTION_SEE_OTHER);
-		// ((AmbitApplication)app).removeTasks();
+		testAsyncTask(longTaskURI, new Form(),Status.SUCCESS_OK,String.format("http://localhost:%d/dataset/1", port));
+
 	}
 
 	@Override

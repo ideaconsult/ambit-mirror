@@ -3,8 +3,8 @@ package ambit2.rest.task;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;

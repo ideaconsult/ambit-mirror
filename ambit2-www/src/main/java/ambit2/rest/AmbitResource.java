@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -206,12 +206,12 @@ public class AmbitResource extends ServerResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-        List<Variant> variants = new ArrayList<Variant>();
-        variants.add(new Variant(MediaType.TEXT_HTML));
-        variants.add(new Variant(MediaType.TEXT_XML));
-        variants.add(new Variant(MediaType.TEXT_URI_LIST));
-        variants.add(new Variant(MediaType.TEXT_PLAIN));
-        getVariants().put(Method.GET, variants);
+        //List<Variant> variants = new ArrayList<Variant>();
+        getVariants().add(new Variant(MediaType.TEXT_HTML));
+        getVariants().add(new Variant(MediaType.TEXT_XML));
+        getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
+        getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+        //getVariants().put(Method.GET, variants);
 	
 	}
 	protected String getSearchString() {
@@ -228,8 +228,8 @@ public class AmbitResource extends ServerResource {
 	
 	@Override
 	public Representation get(Variant variant) {
-		System.out.println(getRequest().getClientInfo().isAuthenticated());
-		System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
+		//System.out.println(getRequest().getClientInfo().isAuthenticated());
+		//System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
 		try {
 			//TODO redirect with freetext query
 			String search = getSearchString();
@@ -395,7 +395,7 @@ public class AmbitResource extends ServerResource {
 
 		w.write(String.format("<div class=\"row\"><span class=\"left\"><a href=\"%s\">Home</a>",baseReference.toString()));
 		w.write("</span>");
-		Iterator<Principal> i = request.getClientInfo().getSubject().getPrincipals().iterator();
+		Iterator<Principal> i = request.getClientInfo().getPrincipals().iterator();
 		Principal p = null;
 		while (i.hasNext()) { p = i.next(); break; }
 		if (p==null)

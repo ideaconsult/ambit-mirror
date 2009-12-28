@@ -2,8 +2,8 @@ package ambit2.rest.propertyvalue;
 
 import java.io.Writer;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;

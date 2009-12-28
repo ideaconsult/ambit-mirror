@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
 
