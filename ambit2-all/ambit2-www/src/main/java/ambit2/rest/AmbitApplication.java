@@ -14,29 +14,29 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 
-import javax.security.auth.Subject;
 import javax.sql.DataSource;
 
 import org.restlet.Application;
 import org.restlet.Component;
+import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
+import org.restlet.routing.Template;
 import org.restlet.security.ChallengeAuthenticator;
-import org.restlet.security.ChallengeGuard;
 import org.restlet.security.Enroler;
 import org.restlet.security.MethodAuthorizer;
-import org.restlet.security.UniformGuard;
 import org.restlet.security.Verifier;
 import org.restlet.util.RouteList;
 
@@ -194,10 +194,9 @@ public class AmbitApplication extends Application {
 		} 
 				
 	}
-	
 	@Override
-	public Restlet createRoot() {
-		Router router = new Router(this.getContext());
+	public Restlet createInboundRoot() {
+		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
 		
 
@@ -207,12 +206,12 @@ public class AmbitApplication extends Application {
 		router.attach(RDFGraphResource.resource,RDFGraphResource.class);
 		router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
 		
-		Router fastoxRouter = new Router(getContext());
+		Router fastoxRouter = new MyRouter(getContext());
 		router.attach(FastToxStep1.resource,fastoxRouter);
 		fastoxRouter.attachDefault(FastToxStep1.class);
 		fastoxRouter.attach("/step2", FastToxStep2.class);
 
-		Router ttcRouter = new Router(getContext());
+		Router ttcRouter = new MyRouter(getContext());
 		router.attach("/ttc",ttcRouter);
 		ttcRouter.attachDefault(KroesStep1.class);
 		ttcRouter.attach("/step2", KroesStep2.class);
@@ -224,12 +223,12 @@ public class AmbitApplication extends Application {
 		router.attach(OntologyResource.resourceTree, OntologyResource.class);
 		
 
-		Router allDatasetsRouter = new Router(getContext());
+		Router allDatasetsRouter = new MyRouter(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
 		router.attach(DatasetsResource.datasets, allDatasetsRouter);		
 
 		
-		Router datasetRouter = new Router(getContext());
+		Router datasetRouter = new MyRouter(getContext());
 		datasetRouter.attachDefault(DatasetResource.class);
 		//this is for backward compatibility
 		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
@@ -241,13 +240,13 @@ public class AmbitApplication extends Application {
 		/**
 		 * /user
 		 */
-		Router usersRouter = new Router(getContext());
+		Router usersRouter = new MyRouter(getContext());
 		usersRouter.attachDefault(UserResource.class);
 	 	
 		/**
 		 * /user/{userid}
 		 */
-		Router userRouter = new Router(getContext());
+		Router userRouter = new MyRouter(getContext());
 		userRouter.attachDefault(UserResource.class);
 	 	usersRouter.attach(UserResource.resourceID,userRouter);
 	 	
@@ -255,8 +254,23 @@ public class AmbitApplication extends Application {
 	 	 *  authentication mandatory for users resource
 	 	 */
 		Filter guard = createGuard(verifier,false);
-		guard.setNext(usersRouter);
+		
+    	/*
+    	 * Simple authorizer
+    	 */
+    	MethodAuthorizer authorizer = new MethodAuthorizer();
+    	authorizer.getAnonymousMethods().add(Method.GET);
+    	authorizer.getAnonymousMethods().add(Method.HEAD);
+    	authorizer.getAnonymousMethods().add(Method.OPTIONS);
+    	authorizer.getAuthenticatedMethods().add(Method.PUT);
+    	authorizer.getAuthenticatedMethods().add(Method.DELETE);
+    	authorizer.getAuthenticatedMethods().add(Method.POST);
+    	authorizer.getAuthenticatedMethods().add(Method.OPTIONS);
+    	
+		authorizer.setNext(usersRouter);
+		guard.setNext(authorizer);
 	 	router.attach(UserResource.resource, guard);
+	 	router.attach(UserResource.resource, usersRouter);
 
 	 			
 		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
@@ -278,25 +292,25 @@ public class AmbitApplication extends Application {
 		//router.attach("/cas/{cas}"+fp,SimilarityResource.class);
 		//router.attach("/name/{name}"+fp,SimilarityResource.class);	
 		
-		Router compoundsRouter = new Router(getContext());
+		Router compoundsRouter = new MyRouter(getContext());
 		compoundsRouter.attachDefault(CompoundResource.class);
 		router.attach(CompoundResource.compound,compoundsRouter);
 		
-		Router compoundRouter = new Router(getContext());
+		Router compoundRouter = new MyRouter(getContext());
 		compoundRouter.attachDefault(CompoundResource.class);
 		compoundsRouter.attach(String.format("/{%s}",CompoundResource.idcompound),compoundRouter);
 	
-		Router conformersRouter = new Router(getContext());
+		Router conformersRouter = new MyRouter(getContext());
 		conformersRouter.attachDefault(ConformerResource.class);
 		compoundRouter.attach(ConformerResource.conformerKey,conformersRouter);		
 		
-		Router conformerRouter = new Router(getContext());
+		Router conformerRouter = new MyRouter(getContext());
 		conformerRouter.attachDefault(ConformerResource.class);
 		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),conformerRouter);	
 
 		compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
 
-		Router featureByAlias = new Router(getContext());
+		Router featureByAlias = new MyRouter(getContext());
 		featureByAlias.attachDefault(PropertyValueResource.class);
 		
 		compoundRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
@@ -308,44 +322,32 @@ public class AmbitApplication extends Application {
 		router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
 		router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
 
-		Router templateRouter = new Router(getContext());
+		Router templateRouter = new MyRouter(getContext());
 		templateRouter.attachDefault(PropertyTemplateResource.class);
 		templateRouter.attach(PropertyTemplateResource.resourceID,PropertyTemplateResource.class);
 		
 		compoundRouter.attach(PropertyTemplateResource.resource,templateRouter);
 		conformerRouter.attach(PropertyTemplateResource.resource,templateRouter);
-		/*
-		router.attach(PropertyTemplateResource.compoundTemplate,PropertyTemplateResource.class);
-		router.attach(PropertyTemplateResource.compoundTemplateID,PropertyTemplateResource.class);
-		router.attach(PropertyTemplateResource.conformerTemplateID,PropertyTemplateResource.class);
 
-		router.attach(PropertyTemplateResource.TemplateIDCompound,PropertyTemplateResource.class);
-		router.attach(PropertyTemplateResource.TemplateIDConformer,PropertyTemplateResource.class);
-		*/
 		
-		Router modelsRouter = new Router(getContext());
-		modelsRouter.attachDefault(ModelResource.class);
-		router.attach(ModelResource.resource,modelsRouter);
+		router.attach(ModelResource.resource,ModelResource.class);
+		router.attach(ModelResource.resourceID,ModelResource.class);
 		
-		Router modelRouter = new Router(getContext());
-		modelRouter.attachDefault(ModelResource.class);
-		modelsRouter.attach(String.format("/{%s}",ModelResource.resourceKey),modelRouter);
+		router.attach(String.format("%s%s",ModelResource.resourceID,PropertyModelResource.resourceID),PropertyModelResource.class);
 		
-		modelsRouter.attach(String.format("/{%s}%s",ModelResource.resourceKey,PropertyModelResource.resourceID),PropertyModelResource.class);
-		
-		Router tupleRouter = new Router(getContext());
+		Router tupleRouter = new MyRouter(getContext());
 		tupleRouter.attachDefault(TupleResource.class);
 		tupleRouter.attach(String.format("/{%s}", TupleResource.resourceKey),TuplePropertyValueResource.class);
 
 		compoundRouter.attach(TupleResource.resourceTag,tupleRouter);
 		conformerRouter.attach(TupleResource.resourceTag,tupleRouter);
 		
-		Router referenceRouter = new Router(getContext());
+		Router referenceRouter = new MyRouter(getContext());
 		router.attach(ReferenceResource.reference,referenceRouter);
 		referenceRouter.attachDefault(ReferenceResource.class);
 		referenceRouter.attach(String.format("/{%s}",ReferenceResource.idreference),ReferenceResource.class);
 
-		Router feature_def = new Router(getContext());
+		Router feature_def = new MyRouter(getContext());
 		router.attach(PropertyResource.featuredef,feature_def);
 		feature_def.attachDefault(PropertyResource.class);
 		feature_def.attach(PropertyResource.featuredefID,PropertyResource.class);
@@ -367,12 +369,11 @@ public class AmbitApplication extends Application {
 
 
 		
-		Router depictRouter = new Router();
-		router.attach("/depict",depictRouter);
-		depictRouter.attachDefault(AbstractDepict.class);
-		depictRouter.attach("/daylight",DaylightDepict.class);
-		depictRouter.attach("/cdk",CDKDepict.class);
-		depictRouter.attach("/cactvs",CSLSDepict.class);
+				
+		router.attach("/depict",AbstractDepict.class);
+		router.attach("/depict/daylight",DaylightDepict.class);
+		router.attach("/depict/cdk",CDKDepict.class);
+		router.attach("/depict/cactvs",CSLSDepict.class);
 
 		
 		router.attach("/name2structure",Name2StructureResource.class);	
@@ -383,12 +384,12 @@ public class AmbitApplication extends Application {
 		/**
 		 * Queries
 		 */
-		Router queryRouter = new Router(getContext());
+		Router queryRouter = new MyRouter(getContext());
 		router.attach(QueryResource.query_resource,queryRouter);
 		queryRouter.attachDefault(QueryListResource.class);
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
 		
-		Router queryResults = new Router(getContext());
+		Router queryResults = new MyRouter(getContext());
 		queryResults.attachDefault(QueryResultsResource.class);
 		queryResults.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
 		queryRouter.attach(QueryResultsResource.resource,queryResults);
@@ -397,12 +398,12 @@ public class AmbitApplication extends Application {
 		
 		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 				
-		Router pubchem = new Router(getContext());
+		Router pubchem = new MyRouter(getContext());
 		queryRouter.attach(PubchemResource.resource,pubchem);
 		pubchem.attachDefault(PubchemResource.class);
 		pubchem.attach(PubchemResource.resourceID,PubchemResource.class);
 
-		Router csls = new Router(getContext());
+		Router csls = new MyRouter(getContext());
 		queryRouter.attach(CSLSResource.resource,csls);
 		csls.attachDefault(CSLSResource.class);
 		csls.attach(CSLSResource.resourceID,CSLSResource.class);
@@ -410,13 +411,13 @@ public class AmbitApplication extends Application {
 		
 		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
 		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
-		Router similarity = new Router(getContext());
+		Router similarity = new MyRouter(getContext());
 		queryRouter.attach(SimilarityResource.resource,similarity);
 		similarity.attachDefault(SimilarityResource.class);
 		//search dataset for similar compounds
 		datasetRouter.attach(SimilarityResource.resource,similarity);	
 		
-		Router smartsRouter = new Router(getContext());
+		Router smartsRouter = new MyRouter(getContext());
 		smartsRouter.attachDefault(SmartsQueryResource.class);
 		smartsRouter.attach(SmartsQueryResource.resourceID,SmartsQueryResource.class);
 		queryRouter.attach(SmartsQueryResource.resource,smartsRouter);
@@ -425,12 +426,12 @@ public class AmbitApplication extends Application {
 		compoundRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		
 		
-		Router algoRouter = new Router(getContext());
+		Router algoRouter = new MyRouter(getContext());
 		algoRouter.attachDefault(AlgorithmResource.class);
 		router.attach(AlgorithmResource.algorithm,algoRouter);
 		router.attach(AlgorithmResource.resourceID,algoRouter);
 
-		Router taskRouter = new Router(getContext());
+		Router taskRouter = new MyRouter(getContext());
 		taskRouter.attachDefault(TaskResource.class);
 		taskRouter.attach(TaskResource.resourceID, TaskResource.class);
 		router.attach(TaskResource.resource, taskRouter);		
@@ -462,11 +463,9 @@ public class AmbitApplication extends Application {
 
 
 	     router.attach(SwitchUserResource.resource,createGuardGuest(SwitchUserResource.class));
-	     /*
-	     StringWriter w = new StringWriter();
-	     printRoutes(router, ">",w);
-	     System.out.println(w);
-	     */
+
+	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
+	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
 		 return router;
 	}
 	public synchronized Connection getConnection(String user, String password) throws AmbitException , SQLException{
@@ -583,43 +582,28 @@ public class AmbitApplication extends Application {
         System.out.println("Server stopped");
     }
     	
-    protected UniformGuard createGuard(Verifier verifier,boolean optional) {
+    protected ChallengeAuthenticator createGuard(Verifier verifier,boolean optional) {
     	
     	Enroler enroler = new Enroler() {
-    		@Override
-    		public void enrole(Subject subject) {
+    		public void enrole(ClientInfo subject) {
     			System.out.println(subject);
     			
     		}
     	};
-    	/*
-    	 * Simple authorizer
-    	 */
-    	MethodAuthorizer authorizer = new MethodAuthorizer();
-    	authorizer.getAnonymousMethods().add(Method.GET);
-    	authorizer.getAnonymousMethods().add(Method.HEAD);
-    	authorizer.getAnonymousMethods().add(Method.OPTIONS);
-    	authorizer.getAuthenticatedMethods().add(Method.PUT);
-    	authorizer.getAuthenticatedMethods().add(Method.DELETE);
-    	authorizer.getAuthenticatedMethods().add(Method.POST);
-    	authorizer.getAuthenticatedMethods().add(Method.OPTIONS);
 	        // Create a Guard
-	     ChallengeGuard guard = new ChallengeGuard(getContext(),
-	                ChallengeScheme.HTTP_BASIC, "ambit2");
-	     ChallengeAuthenticator authenticator = new ChallengeAuthenticator(getContext(),optional,ChallengeScheme.HTTP_BASIC, "ambit2") {
+	     ChallengeAuthenticator guard = new ChallengeAuthenticator(getContext(),optional,ChallengeScheme.HTTP_BASIC, "ambit2") {
 	    	@Override
 	    	protected boolean authenticate(Request request, Response response) {
 	    		return super.authenticate(request, response);
 	    	} 
 	     };
-	     guard.setAuthenticator(authenticator);
-	     guard.getAuthenticator().setVerifier(verifier);
-	     guard.getAuthenticator().setEnroler(enroler);
-	     guard.setAuthorizer(authorizer);
+	     guard.setVerifier(verifier);
+	     guard.setEnroler(enroler);
+	     
 		 return guard;
     }
     
-   protected UniformGuard createGuardGuest(Class clazz) {
+   protected ChallengeAuthenticator createGuardGuest(Class clazz) {
     	
 	     DBVerifier verifier = new DBVerifier(this) {
 	        	@Override
@@ -639,17 +623,14 @@ public class AmbitApplication extends Application {
 	     verifier.getSecrets().put("admin", "admin".toCharArray());
 	     */
     	Enroler enroler = new Enroler() {
-    		@Override
-    		public void enrole(Subject subject) {
+    		public void enrole(ClientInfo subject) {
     			System.out.println(subject);
     			
     		}
     	};
 
 	        // Create a Guard
-	     ChallengeGuard guard = new ChallengeGuard(getContext(),
-	                ChallengeScheme.HTTP_BASIC, "ambit2");
-	     guard.setAuthenticator(new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC, "ambit2") {
+    	ChallengeAuthenticator guard = new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC, "ambit2") {
 
 	    	@Override
 	    	protected boolean authenticate(Request request, Response response) {
@@ -663,9 +644,9 @@ public class AmbitApplication extends Application {
                 return super.authenticate(request, response);
 	    	}; 
 	
-	     });
-	     guard.getAuthenticator().setVerifier(verifier);
-	     guard.getAuthenticator().setEnroler(enroler);
+	     };
+	     guard.setVerifier(verifier);
+	     guard.setEnroler(enroler);
 		 guard.setNext(clazz);     
  		 
 		 return guard;
@@ -760,7 +741,7 @@ public class AmbitApplication extends Application {
         ChallengeResponse#isAuthenticated
         public Restlet createRoot() {
 
-    Router securedRoute = new Router(getContext());
+    Router securedRoute = new MyRouter(getContext());
 
 	securedRoute.add("/users",UsersResource.class);
 	securedRoute.add("/user/{id}",UsersResource.class);
@@ -770,3 +751,13 @@ public class AmbitApplication extends Application {
   }
         */
 
+/**
+ * For backward compatibility with 2.0-M5 and before
+ */
+class MyRouter extends Router {
+	public MyRouter(Context context) {
+		 super(context);
+	     setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
+	     setRoutingMode(Router.MODE_BEST_MATCH); 
+	}
+}

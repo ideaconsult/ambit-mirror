@@ -3,7 +3,6 @@ package ambit2.rest.test.property;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 
-import ambit2.rest.property.PropertyResource;
 import ambit2.rest.test.ResourceTest;
 
 public class PropertyModelResourceTest extends ResourceTest {

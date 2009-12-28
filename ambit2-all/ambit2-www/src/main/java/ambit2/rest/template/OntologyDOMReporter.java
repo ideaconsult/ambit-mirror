@@ -5,8 +5,8 @@ import java.io.Reader;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;

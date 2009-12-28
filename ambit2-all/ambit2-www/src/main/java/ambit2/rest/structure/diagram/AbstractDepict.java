@@ -37,7 +37,7 @@ public class AbstractDepict extends ServerResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		this.getVariants().put(Method.GET,new Variant(MediaType.TEXT_HTML));
+		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 	}
 	protected BufferedImage getImage(String smiles,int width,int height) throws AmbitException {
 		return null;

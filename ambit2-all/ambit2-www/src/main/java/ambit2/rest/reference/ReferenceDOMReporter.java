@@ -1,6 +1,6 @@
 package ambit2.rest.reference;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

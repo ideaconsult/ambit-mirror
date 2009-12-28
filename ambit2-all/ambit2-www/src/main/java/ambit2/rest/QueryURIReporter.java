@@ -3,8 +3,8 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;

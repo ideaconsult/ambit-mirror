@@ -9,10 +9,7 @@ import javax.imageio.ImageIO;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.restlet.Client;
 import org.restlet.data.MediaType;
-import org.restlet.data.Protocol;
-import org.restlet.data.Response;
 
 import ambit2.base.io.DownloadTool;
 

@@ -1,7 +1,7 @@
 package ambit2.rest;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 public class OpenTox {
 	public static enum URI {

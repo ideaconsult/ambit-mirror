@@ -1,7 +1,7 @@
 package ambit2.rest.property;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;

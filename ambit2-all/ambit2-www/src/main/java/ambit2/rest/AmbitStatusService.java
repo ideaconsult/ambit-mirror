@@ -3,9 +3,9 @@ package ambit2.rest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -28,7 +28,7 @@ public class AmbitStatusService extends StatusService {
 			AmbitResource.writeHTMLHeader(w, status.getName(), request);
 			
 			
-			w.write(String.format("%s",
+			w.write(String.format("<h4>%s</h4>",
 					status.getDescription()
 					));
 			if (status.getThrowable()!= null) {

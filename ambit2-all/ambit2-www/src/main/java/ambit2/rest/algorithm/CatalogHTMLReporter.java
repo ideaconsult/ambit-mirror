@@ -3,7 +3,7 @@ package ambit2.rest.algorithm;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.rest.AmbitResource;
 

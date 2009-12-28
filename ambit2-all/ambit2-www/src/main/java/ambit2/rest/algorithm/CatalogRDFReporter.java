@@ -3,8 +3,8 @@ package ambit2.rest.algorithm;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
 
 import ambit2.base.processors.batch.ListReporter;
 import ambit2.rest.rdf.OT;

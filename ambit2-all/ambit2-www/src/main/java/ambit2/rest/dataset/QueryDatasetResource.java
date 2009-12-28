@@ -1,10 +1,10 @@
 package ambit2.rest.dataset;
 
 import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 

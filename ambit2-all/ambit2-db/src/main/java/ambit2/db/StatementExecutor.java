@@ -133,7 +133,6 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 		try {
 			return	execute(c,target);	
 		} catch (Exception x) {
-			x.printStackTrace();
 			throw new ProcessorException(this,x);
 		}
 	}

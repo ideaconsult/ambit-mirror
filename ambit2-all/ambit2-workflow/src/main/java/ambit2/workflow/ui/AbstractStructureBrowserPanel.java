@@ -41,12 +41,10 @@ import javax.swing.table.TableModel;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.SessionID;
 import ambit2.db.results.StoredQueryTableModel;
 import ambit2.ui.QueryBrowser;
 import ambit2.ui.table.BrowsableTableModel;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
-import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.process.WorkflowContext;
 import com.microworkflow.ui.IWorkflowContextFactory;

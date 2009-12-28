@@ -1,12 +1,9 @@
 package ambit2.rest.links;
 
 import org.restlet.data.Reference;
-import org.restlet.util.Template;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.rest.dataset.DatasetResource;
-import ambit2.rest.property.PropertyResource;
 
 /**
  * Generates property object give an Reference

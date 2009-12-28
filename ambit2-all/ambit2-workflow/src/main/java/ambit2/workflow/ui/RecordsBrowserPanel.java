@@ -115,4 +115,8 @@ public class RecordsBrowserPanel extends AbstractStructureBrowserPanel<List<IStr
 	    }	        
 		
 	}
+	@Override
+	public String toString() {
+		return "";
+	}
 }

@@ -3,10 +3,10 @@ package ambit2.rest.task;
 import java.io.Serializable;
 import java.sql.Connection;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.resource.ClientResource;
 

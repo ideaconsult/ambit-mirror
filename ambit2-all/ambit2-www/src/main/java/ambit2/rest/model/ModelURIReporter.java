@@ -2,8 +2,8 @@ package ambit2.rest.model;
 
 import java.io.Writer;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;

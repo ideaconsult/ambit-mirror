@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +16,8 @@ import org.junit.Test;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
@@ -25,8 +26,6 @@ import org.restlet.data.Method;
 import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
@@ -85,6 +84,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		ChallengeResponse authentication = new ChallengeResponse(scheme,  
 		         "guest", "guest");  
 		request.setChallengeResponse(authentication);  		
+		
 		request.setResourceRef(String.format("%s?%s",uri,queryForm.getQueryString()));
 		request.setMethod(Method.POST);
 		if (inputEntity==null) request.setEntity(null);

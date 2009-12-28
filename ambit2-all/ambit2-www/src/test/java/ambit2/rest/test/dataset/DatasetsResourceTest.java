@@ -1,7 +1,6 @@
 package ambit2.rest.test.dataset;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -11,6 +10,8 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restlet.Client;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.MediaType;
@@ -18,8 +19,6 @@ import org.restlet.data.Method;
 import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
@@ -64,7 +63,7 @@ public class DatasetsResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count ==1;
+		return count >1;
 	}		
 	@Test
 	public void testHTML() throws Exception {
@@ -171,6 +170,8 @@ public class DatasetsResourceTest extends ResourceTest {
 		
 		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
 			//System.out.println(r.getStatus() + " " +r.getLocationRef());
+			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_FOUND))
+				throw new ResourceException(r.getStatus());
 			if (r.getStatus().equals(Status.CLIENT_ERROR_BAD_REQUEST)) 
 				throw new ResourceException(r.getStatus());
 			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_ACCEPTABLE))

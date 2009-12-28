@@ -1,7 +1,7 @@
 package ambit2.rest.dataset;
 
 import org.ho.yaml.YamlEncoder;
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;

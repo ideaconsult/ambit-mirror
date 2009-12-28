@@ -6,8 +6,8 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.restlet.engine.io.WriterOutputStream;
 
 import weka.clusterers.Clusterer;

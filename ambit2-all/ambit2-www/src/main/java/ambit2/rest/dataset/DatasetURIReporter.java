@@ -2,7 +2,7 @@ package ambit2.rest.dataset;
 
 import java.io.Writer;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;

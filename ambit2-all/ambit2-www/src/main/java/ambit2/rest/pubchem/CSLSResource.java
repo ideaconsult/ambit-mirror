@@ -45,9 +45,9 @@ public class CSLSResource extends ServerResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		MediaType[] mimeTypes = new MediaType[] {MediaType.TEXT_PLAIN,MediaType.TEXT_HTML,ChemicalMediaType.CHEMICAL_MDLSDF};
-        List<Variant> variants = new ArrayList<Variant>();
-        for (MediaType mileType:mimeTypes) variants.add(new Variant(mileType));
-        getVariants().put(Method.GET, variants);
+        
+        for (MediaType mileType:mimeTypes) getVariants().add(new Variant(mileType));
+       // getVariants().put(Method.GET, variants);
 	
 		
 		try {

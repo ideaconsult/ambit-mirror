@@ -2,8 +2,8 @@ package ambit2.rest;
 
 import java.util.logging.Logger;
 
+import org.restlet.Request;
 import org.restlet.data.Reference;
-import org.restlet.data.Request;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

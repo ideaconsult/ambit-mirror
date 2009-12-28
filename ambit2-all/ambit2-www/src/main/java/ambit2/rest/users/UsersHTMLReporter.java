@@ -2,7 +2,7 @@ package ambit2.rest.users;
 
 import java.io.Writer;
 
-import org.restlet.data.Request;
+import org.restlet.Request;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.exceptions.AmbitException;
