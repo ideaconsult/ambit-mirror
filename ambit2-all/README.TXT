@@ -35,3 +35,12 @@ To be able to access mysql database, there should be "settings.xml" file in your
     </profile>
   </profiles>
 </settings>
+
+
+Google analytics for ambit2-www AmbitApplication:
+To switch on G.A., insert the google analytics tag into .m2/settings.xml 
+<properties>
+...
+  <google.analytics>UA-XXX</google.analytics> 
+...
+</properties>
