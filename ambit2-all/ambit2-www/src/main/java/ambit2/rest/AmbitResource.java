@@ -1,17 +1,16 @@
 package ambit2.rest;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -33,6 +32,7 @@ import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.template.OntologyResource;
 
 public class AmbitResource extends ServerResource {
+	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
 	protected String[][] uri = {
@@ -360,6 +360,23 @@ public class AmbitResource extends ServerResource {
 		return s;
 
 	}		
+	public static String jsGoogleAnalytics() {
+		if (jsGoogleAnalytics==null) try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					AmbitResource.class.getClassLoader().getResourceAsStream("ambit2/rest/config/googleanalytics.js"))
+			);
+			StringBuilder b = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+            	b.append(line);
+            	b.append('\n');
+            }
+            jsGoogleAnalytics = b.toString();
+			reader.close();
+			
+		} catch (Exception x) { jsGoogleAnalytics = null;}
+		return jsGoogleAnalytics;
+	}
 	public static String jsLogin() {
 		String s = 
 			"\nfunction login() { "+
@@ -388,7 +405,8 @@ public class AmbitResource extends ServerResource {
 
 
 		w.write("</head>\n");
-		w.write("<body>\n");
+		w.write("<body>");
+		w.write("\n");
 		w.write("<div style= \"width: 100%; background-color: #516373;");
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
 		w.write("<div class=\"spacer\"></div>");
@@ -483,6 +501,8 @@ public class AmbitResource extends ServerResource {
 
 		output.write("</span>");		
 		output.write("</div>");
+		output.write("\n");
+		output.write(jsGoogleAnalytics()==null?"":jsGoogleAnalytics());
 		output.write("</body>");
 		output.write("</html>");
 
