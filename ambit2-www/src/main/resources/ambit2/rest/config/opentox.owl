@@ -17,11 +17,11 @@
     <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://opentox.org/dev/apis/api-1.1</dc:identifier>
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-11-22</dc:date>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >martin.guetlein@gmail.com</dc:contributor>
+    >2009-12-15</dc:date>
     <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >jeliazkova.nina@gmail.com</dc:contributor>
+    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >martin.guetlein@gmail.com</dc:contributor>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >OpenTox resource ontology</rdfs:comment>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -54,9 +54,6 @@
     <owl:disjointWith>
       <owl:Class rdf:ID="Parameter"/>
     </owl:disjointWith>
-    <owl:disjointWith>
-      <owl:Class rdf:ID="FeatureValue"/>
-    </owl:disjointWith>
     <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     ></dc:contributor>
     <rdfs:subClassOf>
@@ -65,56 +62,17 @@
     <owl:disjointWith>
       <owl:Class rdf:ID="Model"/>
     </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="FeatureValuePair"/>
+    </owl:disjointWith>
   </owl:Class>
-  <owl:Class rdf:ID="Compound">
+  <owl:Class rdf:ID="FeatureValue">
     <owl:disjointWith>
-      <owl:Class rdf:about="#Model"/>
+      <owl:Class rdf:ID="Tuple"/>
     </owl:disjointWith>
-    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >/compound/{compoundid}</dc:identifier>
-    <rdfs:seeAlso rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://opentox.org/dev/apis/api-1.1/structure</rdfs:seeAlso>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#OpentoxResource"/>
+      <owl:Class rdf:about="#FeatureValuePair"/>
     </rdfs:subClassOf>
-    <owl:disjointWith>
-      <owl:Class rdf:about="#Feature"/>
-    </owl:disjointWith>
-    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >1.1</owl:versionInfo>
-    <owl:disjointWith>
-      <owl:Class rdf:about="#FeatureValue"/>
-    </owl:disjointWith>
-    <owl:disjointWith>
-      <owl:Class rdf:ID="DataEntry"/>
-    </owl:disjointWith>
-    <owl:disjointWith>
-      <owl:Class rdf:about="#Parameter"/>
-    </owl:disjointWith>
-    <owl:disjointWith rdf:resource="#Dataset"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >API for OpenTox compound webservices</rdfs:comment>
-  </owl:Class>
-  <owl:Class rdf:ID="ClassificationStatistics">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="ValidationInfo"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="Conformer">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty>
-          <owl:FunctionalProperty rdf:ID="has3Dstructure"/>
-        </owl:onProperty>
-        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</owl:hasValue>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Compound"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >[Optional] support for multiple (e.g. 3D) structures per chemical compound (single structure by default)</rdfs:comment>
-    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >/compound/{compoundid}/conformer/{conformerid}</dc:identifier>
   </owl:Class>
   <owl:Class rdf:about="#OpentoxResource">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -126,41 +84,10 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >1.1</owl:versionInfo>
   </owl:Class>
-  <owl:Class rdf:about="#FeatureValue">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></rdfs:comment>
-    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></dc:identifier>
-    <owl:disjointWith>
-      <owl:Class rdf:about="#Parameter"/>
-    </owl:disjointWith>
-    <owl:disjointWith>
-      <owl:Class rdf:about="#Model"/>
-    </owl:disjointWith>
-    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Feature">
-    <owl:disjointWith>
-      <owl:Class rdf:about="#Model"/>
-    </owl:disjointWith>
-    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >1.1</owl:versionInfo>
-    <dc:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></dc:source>
-    <owl:disjointWith rdf:resource="#FeatureValue"/>
-    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >/feature/{featureid}</dc:identifier>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></dc:title>
-    <owl:disjointWith>
-      <owl:Class rdf:about="#Parameter"/>
-    </owl:disjointWith>
-    <dc:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></dc:description>
-  </owl:Class>
   <owl:Class rdf:ID="ConfusionMatrix">
-    <rdfs:subClassOf rdf:resource="#ClassificationStatistics"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ClassificationStatistics"/>
+    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:about="#Model">
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -184,32 +111,6 @@
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >The date of model creation</dc:date>
   </owl:Class>
-  <owl:Class rdf:about="#Parameter">
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></dc:title>
-    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-  </owl:Class>
-  <owl:Class rdf:about="#DataEntry">
-    <owl:disjointWith rdf:resource="#Feature"/>
-    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >/dataset/{datasetid}/compound/{compoundid}?feature_uri[]=featureuris</dc:identifier>
-    <owl:disjointWith rdf:resource="#Model"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    ></dc:title>
-    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >1.1</owl:versionInfo>
-    <owl:disjointWith rdf:resource="#Parameter"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Encapsulates a dataset entry - defined by a single Compound (or conformer) and multiple FeatureValues. Could be regarded as "Compound with features"</rdfs:comment>
-    <owl:disjointWith rdf:resource="#FeatureValue"/>
-    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-    <owl:disjointWith rdf:resource="#Dataset"/>
-  </owl:Class>
-  <owl:Class rdf:ID="YScrambling">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#ValidationInfo"/>
-    </rdfs:subClassOf>
-  </owl:Class>
   <owl:Class rdf:ID="Validation">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >A validation corresponds to the validation of a model on a test dataset. The results are stored in another dataset. Parameters with default values are optional.</rdfs:comment>
@@ -217,9 +118,6 @@
     >Datetime</dc:date>
     <rdfs:seeAlso rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://opentox.org/dev/apis/api-1.1/Validation</rdfs:seeAlso>
-    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Task">
     <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
   </owl:Class>
   <owl:Class rdf:ID="Report">
@@ -236,7 +134,6 @@
     >Reference</dc:source>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >TODO: statistics supported - is it possible to reuse ValidationInfo classes?</owl:versionInfo>
-    <owl:disjointWith rdf:resource="#FeatureValue"/>
     <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >/algorithm/{algorithmid}</dc:identifier>
     <dc:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -245,39 +142,154 @@
     >http://opentox.org/dev/apis/api-1.1/Algorithm</rdfs:seeAlso>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Name of the algorithm</dc:title>
-    <owl:disjointWith rdf:resource="#Feature"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Feature"/>
+    </owl:disjointWith>
     <owl:disjointWith rdf:resource="#Model"/>
-    <owl:disjointWith rdf:resource="#Compound"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Compound"/>
+    </owl:disjointWith>
     <owl:disjointWith rdf:resource="#Dataset"/>
     <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-    <owl:disjointWith rdf:resource="#Parameter"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Parameter"/>
+    </owl:disjointWith>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Provides access to OpenTox algorithms</rdfs:comment>
     <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     ></dc:publisher>
-    <owl:disjointWith rdf:resource="#DataEntry"/>
-  </owl:Class>
-  <owl:Class rdf:ID="EmptyDataset">
-    <rdfs:subClassOf rdf:resource="#Dataset"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Crossvalidation">
-    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ClassValueStatistics">
-    <rdfs:subClassOf rdf:resource="#ClassificationStatistics"/>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="DataEntry"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#FeatureValuePair"/>
+    </owl:disjointWith>
   </owl:Class>
   <owl:Class rdf:ID="CrossValidationInfo">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#ValidationInfo"/>
+      <owl:Class rdf:ID="ValidationInfo"/>
     </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="ConfusionMatrixCell">
-    <rdfs:subClassOf rdf:resource="#ConfusionMatrix"/>
   </owl:Class>
   <owl:Class rdf:about="#ValidationInfo">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >encapsulates validation information</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Validation"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Compound">
+    <owl:disjointWith rdf:resource="#Model"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#FeatureValuePair"/>
+    </owl:disjointWith>
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >/compound/{compoundid}</dc:identifier>
+    <rdfs:seeAlso rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://opentox.org/dev/apis/api-1.1/structure</rdfs:seeAlso>
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Feature"/>
+    </owl:disjointWith>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1.1</owl:versionInfo>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#DataEntry"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Parameter"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Dataset"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >API for OpenTox compound webservices</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="#ClassificationStatistics">
+    <rdfs:subClassOf rdf:resource="#ValidationInfo"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Conformer">
+    <rdfs:subClassOf rdf:resource="#Compound"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</owl:hasValue>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="has3Dstructure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >[Optional] support for multiple (e.g. 3D) structures per chemical compound (single structure by default)</rdfs:comment>
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >/compound/{compoundid}/conformer/{conformerid}</dc:identifier>
+  </owl:Class>
+  <owl:Class rdf:about="#FeatureValuePair">
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></dc:identifier>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:comment>
+    <owl:disjointWith rdf:resource="#Model"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Parameter"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Feature">
+    <owl:disjointWith rdf:resource="#Model"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1.1</owl:versionInfo>
+    <dc:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></dc:source>
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+    <owl:disjointWith rdf:resource="#FeatureValuePair"/>
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >/feature/{featureid}</dc:identifier>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></dc:title>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Parameter"/>
+    </owl:disjointWith>
+    <dc:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></dc:description>
+  </owl:Class>
+  <owl:Class rdf:about="#Parameter">
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></dc:title>
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+  </owl:Class>
+  <owl:Class rdf:ID="YScrambling">
+    <rdfs:subClassOf rdf:resource="#ValidationInfo"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DataEntry">
+    <owl:disjointWith rdf:resource="#Feature"/>
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >/dataset/{datasetid}/compound/{compoundid}?feature_uri[]=featureuris</dc:identifier>
+    <owl:disjointWith rdf:resource="#Model"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></dc:title>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1.1</owl:versionInfo>
+    <owl:disjointWith rdf:resource="#Parameter"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Encapsulates a dataset entry - defined by a single Compound (or conformer) and multiple FeatureValues. Could be regarded as "Compound with features"</rdfs:comment>
+    <owl:disjointWith rdf:resource="#FeatureValuePair"/>
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+    <owl:disjointWith rdf:resource="#Dataset"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Task">
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Crossvalidation">
+    <rdfs:subClassOf rdf:resource="#OpentoxResource"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EmptyDataset">
+    <rdfs:subClassOf rdf:resource="#Dataset"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Tuple">
+    <owl:disjointWith rdf:resource="#FeatureValue"/>
+    <rdfs:subClassOf rdf:resource="#FeatureValuePair"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ClassValueStatistics">
+    <rdfs:subClassOf rdf:resource="#ClassificationStatistics"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ConfusionMatrixCell">
+    <rdfs:subClassOf rdf:resource="#ConfusionMatrix"/>
   </owl:Class>
   <owl:Class rdf:ID="RegressionStatistics">
     <rdfs:subClassOf rdf:resource="#ValidationInfo"/>
@@ -285,6 +297,11 @@
   <owl:ObjectProperty rdf:ID="conformer">
     <rdfs:domain rdf:resource="#Compound"/>
     <rdfs:range rdf:resource="#Conformer"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isA">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Allows to define "is a" relationships outside of particular class hierarchy</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="crossvalidationDataset">
     <rdfs:range rdf:resource="#Dataset"/>
@@ -295,7 +312,7 @@
     <rdfs:domain rdf:resource="#Validation"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="confusionMatrixPredicted">
-    <rdfs:range rdf:resource="#FeatureValue"/>
+    <rdfs:range rdf:resource="#FeatureValuePair"/>
     <rdfs:domain rdf:resource="#ConfusionMatrixCell"/>
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:ID="confusionMatrixEntry"/>
@@ -308,14 +325,43 @@
     <rdfs:domain rdf:resource="#Validation"/>
     <rdfs:range rdf:resource="#Dataset"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="complexValue">
+    <rdfs:range rdf:resource="#FeatureValue"/>
+    <rdfs:domain rdf:resource="#Tuple"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="validationTrainingDataset">
     <rdfs:subPropertyOf rdf:resource="#validation"/>
     <rdfs:range rdf:resource="#Dataset"/>
     <rdfs:domain rdf:resource="#Validation"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="model">
+  <owl:ObjectProperty rdf:ID="trainingDataset">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="#Model"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="model"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A model is derived by applying an Algorithm on a training Dataset.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
+    <rdfs:range rdf:resource="#Dataset"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#model">
     <rdfs:domain rdf:resource="#Model"/>
     <rdfs:range rdf:resource="#Dataset"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSource">
+    <rdfs:domain rdf:resource="#Feature"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Algorithm"/>
+          <owl:Class rdf:about="#Dataset"/>
+          <owl:Class rdf:about="#Model"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="dependentVariables">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -348,6 +394,15 @@
       </owl:Class>
     </rdfs:domain>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="compound">
+    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
+    <rdfs:range rdf:resource="#Compound"/>
+    <rdfs:domain rdf:resource="#DataEntry"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A DataEntry is defined with a single compound and multiple feature values. This property sets the relationship between a DataEntry and a Compound</rdfs:comment>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="validationTestDataset">
     <rdfs:range rdf:resource="#Dataset"/>
     <rdfs:subPropertyOf rdf:resource="#validation"/>
@@ -363,6 +418,14 @@
     <rdfs:domain rdf:resource="#Model"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Variables, holding the predicted values, generated by the model</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="validationModel">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Model used in a validation exercise</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="#validation"/>
+    <rdfs:range rdf:resource="#Model"/>
+    <rdfs:domain rdf:resource="#Validation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="dataEntry">
     <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -402,9 +465,19 @@
     <rdfs:range rdf:resource="#Feature"/>
     <rdfs:subPropertyOf rdf:resource="#validation"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="algorithm">
+    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The algorithm, used to create the Model</rdfs:comment>
+    <rdfs:range rdf:resource="#Algorithm"/>
+    <rdfs:subPropertyOf rdf:resource="#model"/>
+    <rdfs:domain rdf:resource="#Model"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="classValue">
     <rdfs:domain rdf:resource="#ClassValueStatistics"/>
-    <rdfs:range rdf:resource="#FeatureValue"/>
+    <rdfs:range rdf:resource="#FeatureValuePair"/>
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:ID="classValueStatistics"/>
     </rdfs:subPropertyOf>
@@ -416,17 +489,17 @@
       <owl:ObjectProperty rdf:ID="confusionMatrix"/>
     </rdfs:subPropertyOf>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="report">
-    <rdfs:domain rdf:resource="#Report"/>
-    <rdfs:range rdf:resource="#Validation"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="values">
-    <rdfs:range rdf:resource="#FeatureValue"/>
+    <rdfs:range rdf:resource="#FeatureValuePair"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >A DataEntry is defined with a single compound and multiple feature values. This property sets the relationship between a DataEntry and multiple FeatureValues</rdfs:comment>
     <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://opentox.org/api/1.1</rdfs:isDefinedBy>
     <rdfs:domain rdf:resource="#DataEntry"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="report">
+    <rdfs:domain rdf:resource="#Report"/>
+    <rdfs:range rdf:resource="#Validation"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#classValueStatistics">
     <rdfs:domain rdf:resource="#ClassificationStatistics"/>
@@ -439,12 +512,21 @@
   <owl:ObjectProperty rdf:ID="confusionMatrixActual">
     <rdfs:domain rdf:resource="#ConfusionMatrixCell"/>
     <rdfs:subPropertyOf rdf:resource="#confusionMatrixEntry"/>
-    <rdfs:range rdf:resource="#FeatureValue"/>
+    <rdfs:range rdf:resource="#FeatureValuePair"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="validationReport">
     <rdfs:range rdf:resource="#Validation"/>
     <rdfs:subPropertyOf rdf:resource="#report"/>
     <rdfs:domain rdf:resource="#Report"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="feature">
+    <rdfs:range rdf:resource="#Feature"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >FeatureValue contains a value for specific Feature, specified by this relationship.</rdfs:comment>
+    <rdfs:domain rdf:resource="#FeatureValuePair"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="precision">
     <rdfs:domain rdf:resource="#ClassValueStatistics"/>
@@ -457,6 +539,16 @@
   <owl:DatatypeProperty rdf:ID="stratified">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Crossvalidation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numIncorrect">
+    <rdfs:domain rdf:resource="#ClassificationStatistics"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Number incorrect</dc:title>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:ID="classificationStatistics"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="numFolds">
     <rdfs:domain rdf:resource="#Crossvalidation"/>
@@ -477,31 +569,54 @@
     <rdfs:domain rdf:resource="#ClassValueStatistics"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="fold">
+    <rdfs:domain rdf:resource="#CrossValidationInfo"/>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:ID="crossValidationInfo"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasStatus">
     <rdfs:range>
       <owl:DataRange>
         <owl:oneOf rdf:parseType="Resource">
+          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+          >Cancelled</rdf:first>
           <rdf:rest rdf:parseType="Resource">
             <rdf:rest rdf:parseType="Resource">
-              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
               <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
               >Running</rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:rest>
             <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Completed</rdf:first>
           </rdf:rest>
-          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-          >Cancelled</rdf:first>
         </owl:oneOf>
       </owl:DataRange>
     </rdfs:range>
     <rdfs:domain rdf:resource="#Task"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#has3Dstructure">
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Has 3D structure</dc:title>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True, if the compound has 3D structure</rdfs:comment>
+    <rdfs:domain rdf:resource="#Compound"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="realRuntime">
+    <rdfs:domain rdf:resource="#Crossvalidation"/>
+    <rdfs:domain rdf:resource="#Validation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="percentUnpredicted">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Validation"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="classificationStatistics">
+  <owl:DatatypeProperty rdf:about="#classificationStatistics">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#ClassificationStatistics"/>
   </owl:DatatypeProperty>
@@ -530,17 +645,55 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >The value of a Parameter</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="statisticsSupported">
-    <rdfs:domain rdf:resource="#Algorithm"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="numUnpredicted">
     <rdfs:domain rdf:resource="#Validation"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="crossValidationInfo">
+  <owl:DatatypeProperty rdf:ID="statisticsSupported">
+    <rdfs:domain rdf:resource="#Algorithm"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="paramScope">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >specifies if a parameter is optional or mandatory</rdfs:comment>
+    <rdfs:domain rdf:resource="#Parameter"/>
+    <rdfs:range>
+      <owl:DataRange>
+        <owl:oneOf rdf:parseType="Resource">
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >optional</rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+          </rdf:rest>
+          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+          >mandatory</rdf:first>
+        </owl:oneOf>
+      </owl:DataRange>
+    </rdfs:range>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Parameter scope</dc:title>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="percentageCompleted">
+    <rdfs:domain rdf:resource="#Task"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Percentage completed</dc:title>
+    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#crossValidationInfo">
     <rdfs:domain rdf:resource="#CrossValidationInfo"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="meanAbsolutError">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="#regressionStatistics"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MeanAbsolutError</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="#regressionStatistics">
     <rdfs:domain rdf:resource="#RegressionStatistics"/>
@@ -554,9 +707,60 @@
     <rdfs:domain rdf:resource="#ClassValueStatistics"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="percentCorrect">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Percent Correct</dc:title>
+    <rdfs:domain rdf:resource="#ClassificationStatistics"/>
+    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rootMeanSquaredError">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >RootMeanSquaredError</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:subPropertyOf rdf:resource="#regressionStatistics"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="numInstances">
     <rdfs:domain rdf:resource="#Validation"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="yScramblingEnabled">
+    <rdfs:subPropertyOf rdf:resource="#yScramblingInfo"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="#YScrambling"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >YScramblingEnabled</dc:title>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >YScramblingEnabled</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="yScramblingSeed">
+    <rdfs:subPropertyOf rdf:resource="#yScramblingInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >YScramblingSeed</dc:title>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >YScramblingSeed</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="#YScrambling"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="value">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Literal</rdfs:comment>
+    <rdfs:domain rdf:resource="#FeatureValue"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Feature value</dc:title>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numCorrect">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
+    <rdfs:domain rdf:resource="#ClassificationStatistics"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Number correct</dc:title>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="numFalseNegatives">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -570,13 +774,13 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >TODO: make use of units ontology</owl:versionInfo>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="areaUnderROC">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#ClassValueStatistics"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="randomSeed">
     <rdfs:domain rdf:resource="#Crossvalidation"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="areaUnderROC">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#ClassValueStatistics"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="trueNegativeRate">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
@@ -586,198 +790,18 @@
     <rdfs:domain rdf:resource="#ConfusionMatrixCell"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="numTruePositives">
-    <rdfs:domain rdf:resource="#ClassValueStatistics"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </owl:DatatypeProperty>
-  <owl:TransitiveProperty rdf:ID="isA">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Allows to define "is a" relationships outside of particular class hierarchy</rdfs:comment>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-  </owl:TransitiveProperty>
-  <owl:FunctionalProperty rdf:ID="validationModel">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Model used in a validation exercise</rdfs:comment>
-    <rdfs:subPropertyOf rdf:resource="#validation"/>
-    <rdfs:range rdf:resource="#Model"/>
-    <rdfs:domain rdf:resource="#Validation"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="numIncorrect">
-    <rdfs:domain rdf:resource="#ClassificationStatistics"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Number incorrect</dc:title>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  <owl:DatatypeProperty rdf:ID="percentIncorrect">
     <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="percentCorrect">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Percent Correct</dc:title>
-    <rdfs:domain rdf:resource="#ClassificationStatistics"/>
-    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="rootMeanSquaredError">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >RootMeanSquaredError</rdfs:comment>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="#regressionStatistics"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="yScramblingEnabled">
-    <rdfs:subPropertyOf rdf:resource="#yScramblingInfo"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="#YScrambling"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >YScramblingEnabled</dc:title>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >YScramblingEnabled</rdfs:comment>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="yScramblingSeed">
-    <rdfs:subPropertyOf rdf:resource="#yScramblingInfo"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >YScramblingSeed</dc:title>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >YScramblingSeed</rdfs:comment>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="#YScrambling"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="fold">
-    <rdfs:domain rdf:resource="#CrossValidationInfo"/>
-    <rdfs:subPropertyOf rdf:resource="#crossValidationInfo"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:about="#has3Dstructure">
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Has 3D structure</dc:title>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >True, if the compound has 3D structure</rdfs:comment>
-    <rdfs:domain rdf:resource="#Compound"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="value">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Literal</rdfs:comment>
-    <rdfs:domain rdf:resource="#FeatureValue"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Feature value</dc:title>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="trainingDataset">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="#Model"/>
-    <rdfs:subPropertyOf rdf:resource="#model"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >A model is derived by applying an Algorithm on a training Dataset.</rdfs:comment>
-    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
-    <rdfs:range rdf:resource="#Dataset"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="realRuntime">
-    <rdfs:domain rdf:resource="#Validation"/>
-    <rdfs:domain rdf:resource="#Crossvalidation"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="algorithm">
-    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >The algorithm, used to create the Model</rdfs:comment>
-    <rdfs:range rdf:resource="#Algorithm"/>
-    <rdfs:subPropertyOf rdf:resource="#model"/>
-    <rdfs:domain rdf:resource="#Model"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="numCorrect">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
-    <rdfs:domain rdf:resource="#ClassificationStatistics"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Number correct</dc:title>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="hasSource">
-    <rdfs:domain rdf:resource="#Feature"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:range>
-      <owl:Class>
-        <owl:unionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="#Algorithm"/>
-          <owl:Class rdf:about="#Dataset"/>
-          <owl:Class rdf:about="#Model"/>
-        </owl:unionOf>
-      </owl:Class>
-    </rdfs:range>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="paramScope">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >specifies if a parameter is optional or mandatory</rdfs:comment>
-    <rdfs:domain rdf:resource="#Parameter"/>
-    <rdfs:range>
-      <owl:DataRange>
-        <owl:oneOf rdf:parseType="Resource">
-          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-          >mandatory</rdf:first>
-          <rdf:rest rdf:parseType="Resource">
-            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-            <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >optional</rdf:first>
-          </rdf:rest>
-        </owl:oneOf>
-      </owl:DataRange>
-    </rdfs:range>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Parameter scope</dc:title>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="percentageCompleted">
-    <rdfs:domain rdf:resource="#Task"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Percentage completed</dc:title>
-    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="compound">
-    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
-    <rdfs:range rdf:resource="#Compound"/>
-    <rdfs:domain rdf:resource="#DataEntry"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >A DataEntry is defined with a single compound and multiple feature values. This property sets the relationship between a DataEntry and a Compound</rdfs:comment>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="percentIncorrect">
-    <rdfs:subPropertyOf rdf:resource="#classificationStatistics"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Percent Incorrect</dc:title>
     <rdfs:domain rdf:resource="#ClassificationStatistics"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="meanAbsolutError">
-    <rdfs:subPropertyOf rdf:resource="#regressionStatistics"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >MeanAbsolutError</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:ID="feature">
-    <rdfs:range rdf:resource="#Feature"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >FeatureValue contains a value for specific Feature, specified by this relationship.</rdfs:comment>
-    <rdfs:domain rdf:resource="#FeatureValue"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://opentox.org/api/1.1</rdfs:isDefinedBy>
-  </owl:FunctionalProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numTruePositives">
+    <rdfs:domain rdf:resource="#ClassValueStatistics"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/date"/>
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/source"/>
   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/identifier"/>
