@@ -20,6 +20,9 @@ public class Task<Reference> implements Serializable {
 	protected long started = System.currentTimeMillis();
 	protected float percentCompleted = 0;
 	
+	public boolean isExpired(long lifetime) {
+		return (System.currentTimeMillis()-started) > lifetime;
+	}
 	public String getStatus() {
 		return isDone()?taskStatus.Completed.toString():taskStatus.Running.toString();
 	}
