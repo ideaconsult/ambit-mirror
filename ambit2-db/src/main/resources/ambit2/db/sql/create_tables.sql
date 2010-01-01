@@ -214,21 +214,22 @@ where t1.name = "Models" and t2.name is null;
 DROP TABLE IF EXISTS `models`;
 CREATE TABLE  `models` (
   `idmodel` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) collate utf8_bin NOT NULL,
+  `name` varchar(255) collate utf8_bin NOT NULL,
   `idquery` int(10) unsigned default NULL COMMENT 'dataset',
   `predictors` int(10) unsigned NOT NULL COMMENT 'template for predictors',
   `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
   `content` blob NOT NULL,
+  `algorithm` varchar(255) collate utf8_bin NOT NULL default 'N/A' COMMENT 'URI of the algorithm',
   PRIMARY KEY  (`idmodel`),
   UNIQUE KEY `Index_5` USING BTREE (`name`),
   KEY `FK_models_predictors` (`predictors`),
   KEY `FK_models_dataset` (`idquery`),
   KEY `FK_models_dependent` (`dependent`),
+  KEY `Index_6` (`algorithm`),
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predictors` FOREIGN KEY (`predictors`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 -- -----------------------------------------------------
 -- Table `tuples` for non-scalar values
 -- -----------------------------------------------------

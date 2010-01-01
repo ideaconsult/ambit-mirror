@@ -18,6 +18,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 	@Override
 	protected IQueryUpdate<Object,ModelQueryResults> createQuery() throws Exception {
 		ModelQueryResults q = new ModelQueryResults();
+		q.setAlgorithm("http://localhost:8080/algorithm/pka");
 		q.setName("Test model");
 		q.setContent("Nothing");
 		q.setPredictors(new Template("New template"));
@@ -29,8 +30,8 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 	protected void createVerify(IQueryUpdate<Object,ModelQueryResults> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","select * from models");
-		Assert.assertEquals(2,table.getRowCount());
+		ITable table = 	c.createQueryTable("EXPECTED","select * from models where algorithm='http://localhost:8080/algorithm/pka'");
+		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}
 

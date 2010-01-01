@@ -21,7 +21,14 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	protected Template dependent;
 	protected TrainingInstances instances;
 	protected TestInstances testInstances;
+	protected String algorithm;
 	
+	public String getAlgorithm() {
+		return algorithm;
+	}
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
 	public TestInstances getTestInstances() {
 		return testInstances;
 	}

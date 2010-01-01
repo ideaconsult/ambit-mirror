@@ -22,7 +22,21 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	protected T content;
 	protected AlgorithmFormat format=AlgorithmFormat.JAVA_CLASS;
 	protected String type;
+	protected boolean requiresDataset = false;
+	protected boolean supervised = false;
 
+	public boolean isSupervised() {
+		return supervised;
+	}
+	public void setSupervised(boolean supervised) {
+		this.supervised = supervised;
+	}
+	public boolean isRequiresDataset() {
+		return requiresDataset;
+	}
+	public void setRequiresDataset(boolean requiresDataset) {
+		this.requiresDataset = requiresDataset;
+	}
 	public String getType() {
 		return type;
 	}
@@ -96,5 +110,14 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 		if (obj instanceof Algorithm) {
 			return getId().equals(((Algorithm)obj).getId());
 		} else return false;
+	}
+	public String[] getParametersAsArray() {
+		if ((getParameters()==null) || (getParameters().size()==0)) return null;
+		String[] prm = new String[getParameters().size()];
+		List<Parameter> param = getParameters();
+		for (int i=0; i < param.size();i++) { 
+			prm[i] = param.get(i).getValue().toString();
+		}		
+		return prm;
 	}
 }
