@@ -44,6 +44,7 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RDFJenaConvertor;
@@ -62,7 +63,7 @@ import ambit2.rest.structure.ConformerURIReporter;
  */
 public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructureRecord>>  
 									extends QueryResource<Q,IStructureRecord> {
-	public static final String feature_URI = "feature_uris[]";
+
 	protected String media;
 	protected Template template;
 	protected enum QueryType  {smiles,url};
@@ -84,7 +85,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			profile.setId(-1);				
 			
 			Form form = request.getResourceRef().getQueryAsForm();
-			String[] featuresURI =  form.getValuesArray(feature_URI);
+			String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
 
 			for (String featureURI:featuresURI) 
 				readFeatures(featureURI, profile);

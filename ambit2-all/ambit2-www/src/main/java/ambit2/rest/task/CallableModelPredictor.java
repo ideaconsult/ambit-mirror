@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.io.Serializable;
 import java.sql.Connection;
 
-import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
@@ -23,7 +22,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.AmbitApplication;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 
 /**
@@ -102,10 +100,6 @@ public class CallableModelPredictor extends CallableQueryProcessor<Object, IStru
 				String.format("%s?feature_uris[]=%s",
 						sourceReference.toString(),
 						Reference.encode(predicted)));
-	}
-	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
 	}
 	
 

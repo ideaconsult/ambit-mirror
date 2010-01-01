@@ -31,6 +31,7 @@ import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.test.ResourceTest;
@@ -85,14 +86,14 @@ public class CompoundResourceTest extends ResourceTest {
 	@Test
 	public void testRDFTurtle() throws Exception {
 		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
-				port,StructureQueryResource.feature_URI,port,PropertyResource.featuredef)
+				port,OpenTox.params.feature_uris.toString(),port,PropertyResource.featuredef)
 				,MediaType.APPLICATION_RDF_TURTLE);
 	}	
 	
 	@Test
 	public void testARFF() throws Exception {
 		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
-				port,StructureQueryResource.feature_URI,port,PropertyResource.featuredef)
+				port,OpenTox.params.feature_uris.toString(),port,PropertyResource.featuredef)
 				,ChemicalMediaType.WEKA_ARFF);
 	}	
 	@Override
@@ -116,7 +117,7 @@ public class CompoundResourceTest extends ResourceTest {
 	
 		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
 				port,
-				StructureQueryResource.feature_URI,
+				OpenTox.params.feature_uris.toString(),
 				port,
 				PropertyResource.featuredef),MediaType.TEXT_CSV);
 	}		

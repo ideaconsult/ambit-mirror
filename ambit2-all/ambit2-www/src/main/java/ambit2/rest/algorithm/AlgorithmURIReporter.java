@@ -24,7 +24,7 @@ public class AlgorithmURIReporter extends CatalogURIReporter<Algorithm> {
 	public String getURI(String ref, Algorithm item) {
 		return String.format("%s%s/%s",
 				ref,
-				AlgorithmResource.algorithm,
+				AllAlgorithmsResource.algorithm,
 				item==null?"":Reference.encode(item.getId()));
 	}
 }

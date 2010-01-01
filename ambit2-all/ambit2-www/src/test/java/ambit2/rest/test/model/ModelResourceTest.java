@@ -12,6 +12,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
+import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -79,7 +80,7 @@ public class ModelResourceTest extends ResourceTest {
 	public void testPostDataset() throws Exception {
 		Form headers = new Form();
 		String dataset = String.format("http://localhost:%d/dataset/1", port);
-		headers.add(ModelResource.dataset_uri, dataset);
+		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
 				"%s?feature_uris[]=%s", dataset, Reference.encode(String
 						.format("%s/predicted", getTestURI()))));
@@ -89,7 +90,7 @@ public class ModelResourceTest extends ResourceTest {
 	public void testPostCompound() throws Exception {
 		Form headers = new Form();
 		String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1";
-		headers.add(ModelResource.dataset_uri, dataset);
+		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 		
 		testAsyncTask(getTestURI(), headers,
 				Status.SUCCESS_OK, String.format("%s?feature_uris[]=%s",

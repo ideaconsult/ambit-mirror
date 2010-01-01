@@ -4,6 +4,7 @@ import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.test.ResourceTest;
@@ -20,7 +21,11 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 				app,
 				(AmbitApplication)component.getApplication(), 
 				(Algorithm)null, 
-				uriReporter);
+				uriReporter,
+				new AlgorithmURIReporter(null),
+				new String[] {
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938"
+				});
 		Reference ref = c.call();
 	}
 	@Override

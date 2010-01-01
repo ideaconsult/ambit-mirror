@@ -8,6 +8,7 @@ import java.util.List;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -21,16 +22,36 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
+import ambit2.db.model.ModelQueryResults;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitApplication;
+import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.CallableSimpleModelCreator;
+import ambit2.rest.task.CallableWekaModelCreator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
+	public final static String algorithm = OpenTox.URI.algorithm.getURI();
+	public final static String algorithmKey =  OpenTox.URI.algorithm.getKey();
+	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();	
 	protected static List<Algorithm<String>> algorithmList;
+	
+	protected static String typeRules = "http://www.opentox.org/algorithms.owl#Rules";
+	protected static String typeClustering = "http://www.opentox.org/algorithms.owl#Clustering";
+	protected static String typeRegression = "http://www.opentox.org/algorithms.owl#Regression";
+	protected static String typeClassification = "http://www.opentox.org/algorithms.owl#Classification";
+	
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
 			//id,class,name
-			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null},
-			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null},
-			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null},
+			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,typeClustering},
+			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,typeClassification},
+			{"LR","Regression: Decision tree Linear regression","weka.classifiers.functions.LinearRegression",null,typeRegression},
+			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,typeRules},
+			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,typeRules},
+			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,typeRules},
 			{"toxtreeeye","ToxTree: Eye irritation","eye.EyeIrritationRules",
 				new Property[] 
 				{
@@ -39,7 +60,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("LogP","", toxTreeReference),
 				new Property("Lipid Solubility","g/kg", toxTreeReference),
 				new Property("Water Solubility","g/l", toxTreeReference),
-				}
+				},
+				typeRules
 			},
 			{"toxtreeskinirritation","ToxTree: Skin irritation","sicret.SicretRules",
 			new Property[] 
@@ -51,16 +73,17 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Water Solubility","g/l", toxTreeReference),
 				new Property("Vapour Pressure","Pa", toxTreeReference),
 				new Property("Surface Tension","mN/m", toxTreeReference)
-				}
+				},
+				typeRules
 			},
-			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null},
-			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null},
-			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null},
+			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,typeRules},
+			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,typeRules},
+			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,typeRules},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
-			}},
+			},typeRules},
 	};
 	
 	public Representation getRepresentation(Variant variant) throws ResourceException {
@@ -72,7 +95,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			algorithmList = new ArrayList<Algorithm<String>>();
 			for (Object[] d : algorithms) {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
-				alg.setType("http://www.opentox.org/algorithmTypes#Rules");
+				alg.setType(d[4].toString());
+				alg.setRequiresDataset(typeRules.equals(d[4].toString())?false:true);
+				alg.setSupervised(
+						typeClassification.equals(d[4].toString()) || typeRegression.equals(d[4].toString()) 
+						);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2].toString());
@@ -88,6 +115,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			}				
 		}
 	}
+
 	protected Algorithm<String> find(Object key) {
 		key = Reference.decode(key.toString());
 		Algorithm<String> q = new Algorithm<String>();
@@ -104,7 +132,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		try {
 			initList();
 
-			Object key = getRequest().getAttributes().get(AlgorithmResource.algorithmKey);
+			Object key = getRequest().getAttributes().get(algorithmKey);
 			
 			if (key==null)
 				return algorithmList.iterator();
@@ -131,7 +159,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
 					new AlgorithmHTMLReporter(getRequest(),
-							getRequest().getAttributes().get(AlgorithmResource.algorithmKey)==null
+							getRequest().getAttributes().get(algorithmKey)==null
 							),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest()) {
@@ -156,4 +184,50 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		
 	}
 				
+	protected Reference getSourceReference() throws ResourceException {
+		return null;
+		/*
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Object datasetURI = form.getFirstValue(dataset_uri);
+		if (datasetURI==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Empty %s", dataset_uri));
+		return new Reference(Reference.decode(datasetURI.toString()));
+		*/
+	}
+	@Override
+	protected Reference getSourceReference(Form form,Algorithm<String> model)
+			throws ResourceException {
+		if (model.getType().equals(typeRules)) return null;
+		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
+		if (datasetURI==null) 
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Empty %s [%s]", OpenTox.params.dataset_uri.toString(), OpenTox.params.dataset_uri.getDescription()));
+		return new Reference(Reference.decode(datasetURI.toString()));		
+	}
+	@Override
+	protected CallableQueryProcessor createCallable(Reference reference,
+			Algorithm<String> algorithm, Form form)
+			throws ResourceException {
+				
+			
+		if (algorithm.getType().equals(typeRules))
+			return new CallableSimpleModelCreator(
+					reference,
+					getRequest().getRootRef(),
+					(AmbitApplication)getApplication(),
+					algorithm,
+					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+					new AlgorithmURIReporter(getRequest())
+					);	
+		else {
+			String[] targetURI = OpenTox.params.target.getValuesArray(form);	
+			return new CallableWekaModelCreator(
+					reference,
+					getRequest().getRootRef(),
+					(AmbitApplication)getApplication(),
+					algorithm,
+					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+					new AlgorithmURIReporter(getRequest()),
+					targetURI);	
+		}
+	}
 }

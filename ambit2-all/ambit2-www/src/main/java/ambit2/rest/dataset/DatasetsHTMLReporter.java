@@ -148,7 +148,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			output.write(String.format(
 					"&nbsp;<a href=\"%s\">%s</a>",
 					w.toString(),
-					dataset.getName()));
+					(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getId()):dataset.getName()
+					));
 			output.write("</span></div>");
 			/*
 			output.write(String.format(

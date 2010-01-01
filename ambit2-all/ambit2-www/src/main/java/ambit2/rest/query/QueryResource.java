@@ -39,7 +39,9 @@ import ambit2.rest.rdf.RDFObjectIterator;
  * @param <T>
  */
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Serializable>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
-	public final static String query_resource = "/query";	
+	public final static String query_resource = "/query";
+	
+
 	/**
 	 * Parameters, expected in URL query
 	 * @author nina
@@ -59,7 +61,8 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
+		customizeVariants(new MediaType[] {
+				MediaType.TEXT_HTML,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
@@ -68,6 +71,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT
+				
 		});		
 		if (queryObject!=null)
 				try {

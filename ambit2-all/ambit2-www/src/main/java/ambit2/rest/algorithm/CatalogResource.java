@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -12,7 +15,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.task.CallableQueryProcessor;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms
@@ -25,21 +30,22 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
+		customizeVariants(new MediaType[] {
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
-				MediaType.APPLICATION_JAVA_OBJECT
+				MediaType.APPLICATION_JAVA_OBJECT,
+				MediaType.TEXT_HTML
 				});
 		
 	}
 
 
 	public static String getAlgorithmURI(String category) {
-		return String.format("%s%s/{%s}",AlgorithmResource.algorithm,category,AlgorithmResource.algorithmKey);
+		return String.format("%s%s/{%s}",AllAlgorithmsResource.algorithm,category,AllAlgorithmsResource.algorithmKey);
 	}
 	@Override
 	public IProcessor<Iterator<T>, Representation> createConvertor(
@@ -63,6 +69,48 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			return new StringConvertor(
 					new CatalogHTMLReporter<T>(getRequest()),MediaType.TEXT_HTML);
 		
+	}
+	
+	
+	protected CallableQueryProcessor createCallable(Reference reference,T item,Form form) throws ResourceException {
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+	}
+	
+	protected Reference getSourceReference(Form form,T model) throws ResourceException {
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+	}
+
+	
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		synchronized (this) {
+			
+			//models
+			Iterator<T> query = createQuery(getContext(),getRequest(),getResponse());
+			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+			Form form = entity.isAvailable()?new Form(entity):new Form();
+			while (query.hasNext()) 
+			try {
+				T model = query.next();
+				Reference reference = getSourceReference(form,model);
+				Reference ref =  ((AmbitApplication)getApplication()).addTask(
+						String.format("Apply %s to %s",model.toString(),reference),
+						createCallable(reference,model,form),
+						getRequest().getRootRef());		
+				getResponse().setLocationRef(ref);
+				//getResponse().setStatus(Status.SUCCESS_CREATED);
+				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+				getResponse().setEntity(null);
+			} catch (Exception x) {
+				if (x.getCause() instanceof ResourceException)
+					getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
+				else
+					getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
+			}
+			return null;
+		}
 	}
 	
 }

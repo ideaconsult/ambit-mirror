@@ -8,7 +8,7 @@ import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.rest.AmbitResource;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.CatalogURIReporter;
 import ambit2.rest.task.Task.taskStatus;
 
@@ -62,7 +62,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 	public void footer(Writer output, Iterator<Task<Reference>> query) {
 		try {
 			output.write("</table>");
-			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, getRequest());
+			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			
