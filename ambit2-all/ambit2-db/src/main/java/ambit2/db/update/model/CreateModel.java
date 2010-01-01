@@ -22,8 +22,8 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	protected CreateDictionary createDictionary;
 	protected int sql_size = 0;
 	public static final String create_sql = 
-		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,content) " +
-		"SELECT null,?,?,t1.idtemplate,t2.idtemplate,? from template t1 join template t2 where t1.name=? and t2.name =? ";
+		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,content,algorithm) " +
+		"SELECT null,?,?,t1.idtemplate,t2.idtemplate,?,? from template t1 join template t2 where t1.name=? and t2.name =? ";
 	;
 
 	public CreateModel(ModelQueryResults ref) {
@@ -93,6 +93,7 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 		else
 			params1.add(new QueryParam<Integer>(Integer.class, getObject().getTrainingInstances().getFieldname().getId()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
+		params1.add(new QueryParam<String>(String.class, getObject().getAlgorithm()));
 		params1.add(new QueryParam<String>(String.class, getObject().getPredictors().getName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getDependent().getName()));
 		return params1;

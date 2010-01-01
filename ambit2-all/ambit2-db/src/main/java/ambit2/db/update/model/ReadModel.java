@@ -4,14 +4,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jaxen.function.StringFunction;
-
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.StringCondition;
@@ -24,10 +21,10 @@ import ambit2.db.search.structure.QueryStoredResults;
  */
 public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {
 	protected static String sql = 
-		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,content\n"+
+		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,content,algorithm\n"+
 		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors %s";
 	protected static String whereID = " idmodel = ? ";
-	protected static String whereName = " m.name %s substr(?,1,45)";
+	protected static String whereName = " m.name %s substr(?,1,255)";
 	/**
 	 * 
 	 */
@@ -101,6 +98,7 @@ public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, 
 				q.setDependent(t);
 			}		
 			q.setContent(rs.getString(8));
+			q.setAlgorithm(rs.getString(9));
 			return q;
 		} catch (Exception x) {
 			return null;
