@@ -18,6 +18,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 
 import ambit2.base.data.ILiteratureEntry;
@@ -162,7 +163,7 @@ public class ReferenceResourceTest extends ResourceTest {
 					String.format("http://localhost:%d/reference", port),
 					MediaType.TEXT_RDF_N3,
 					form,
-					null);
+					(Representation)null);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
@@ -205,7 +206,7 @@ public class ReferenceResourceTest extends ResourceTest {
 					String.format("http://localhost:%d/reference", port),
 					MediaType.APPLICATION_RDF_XML,
 					form,
-					null);
+					(Representation)null);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
          c = getConnection();	

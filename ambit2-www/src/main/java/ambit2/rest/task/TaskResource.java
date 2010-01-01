@@ -122,10 +122,15 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 					try {
 						getResponse().setLocationRef(task.getReference());
 						status = Status.REDIRECTION_SEE_OTHER;
-						getResponse().setStatus(status);						
+						getResponse().setStatus(status);			
 					} catch (ExecutionException x) {
-						status = new Status(Status.CLIENT_ERROR_REQUEST_ENTITY_TOO_LARGE,x.getMessage());
-						getResponse().setStatus(status);						
+						if ((x.getCause()!=null) && (x.getCause() instanceof ResourceException)) {
+							status = ((ResourceException) x.getCause()).getStatus();
+							getResponse().setStatus(status);
+						} else {	
+							status = new Status(Status.CLIENT_ERROR_REQUEST_ENTITY_TOO_LARGE,x.getMessage());
+							getResponse().setStatus(status);
+						}
 					} catch (InterruptedException x) {
 						status = new Status(Status.CLIENT_ERROR_PRECONDITION_FAILED,x.getMessage());
 						getResponse().setStatus(status);							
@@ -141,7 +146,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 					responseHeaders.add("Cache-Control", "post-check=0, pre-check=0");
 					responseHeaders.add("Pragma", "no-cache"); //HTTP 1.0
 					responseHeaders.add("Expires", "0"); //prevents caching at the proxy server
-					responseHeaders.add("Refresh",String.format("2; url=%s",task.getReference()));
+					responseHeaders.add("Refresh",String.format("60; url=%s",task.getReference()));
 					response.setLocationRef(task.getReference());
 				}
 
@@ -151,12 +156,16 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
-			x.printStackTrace();
 			throw new ResourceException(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Invalid task id %d",id),
+					String.format("Task id %d",id),
 					x
 					);
+		} catch (Throwable x) {
+			throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,
+					x
+					);			
 		}
 		
 	}

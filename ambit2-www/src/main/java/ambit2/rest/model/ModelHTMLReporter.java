@@ -46,6 +46,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			output.write("<table width=\"90%\" >");
 			output.write("<tr align=\"left\">\n");
 			output.write("<th>Model name</th>\n");
+			output.write("<th>Algorithm</th>\n");
 			output.write("<th>Dataset</th>\n");
 			output.write("<th>Independent variables</th>\n");
 			output.write("<th>Predicted</th>\n");
@@ -73,6 +74,11 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 						w.toString(),
 						model.getName()));
 			
+			output.write(String.format(
+					"<td><a href=\"%s\">%s</a></td>",
+					model.getAlgorithm(),
+					model.getAlgorithm()));
+			
 			if ((model.getTrainingInstances()==null) || (model.getTrainingInstances().getFieldname()==null))
 				output.write("<td></td>");
 			else
@@ -82,23 +88,25 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 						uriReporter.getBaseReference(),
 						model.getTrainingInstances().getFieldname().getId()
 						));
-						
+			
 			output.write(String.format(
 					"<td><img src=\"%s/images/feature.png\" alt=\"Features\" title=\"Browse features\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getBaseReference(),
 					OntologyResource.resource,
 					model.getPredictors()==null?"":Reference.encode(model.getPredictors().getName()),
-					model.getPredictors()==null?"":model.getPredictors().getName()		
-			));
+					"Independent variables"	
+			));						
 			output.write(String.format(
 					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Dependent variable(s)\" title=\"Dependent variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getBaseReference(),
 					OntologyResource.resource,
 					model.getDependent()==null?"":Reference.encode(model.getDependent().getName()),
-					model.getDependent()==null?"":model.getDependent().getName()		
-			));			
+					"Predicted"		
+			));				
+
+		
 			/*
 			if (!collapsed) {
 				output.write("&nbsp;");

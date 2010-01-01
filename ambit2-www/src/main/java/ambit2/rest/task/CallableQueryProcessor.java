@@ -14,7 +14,6 @@ import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.AmbitApplication;
-import ambit2.rest.QueryURIReporter;
 import ambit2.rest.dataset.RDFStructuresReader;
 
 public abstract class CallableQueryProcessor<Target,Result> implements Callable<Reference> {
@@ -36,14 +35,15 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		try {
 			target = createTarget(sourceReference);
 			batch = createBatch(target);
-			batch.setProcessorChain(createProcessors());
-			
-			try {
-	    		connection = application.getConnection((Request)null);
-	    		if (connection.isClosed()) connection = application.getConnection((Request)null);			
-				batch.setConnection(connection);
-			} catch (Exception x) { connection = null;}
-			batch.process(target);
+			if (batch != null) {
+				batch.setProcessorChain(createProcessors());
+				try {
+		    		connection = application.getConnection((Request)null);
+		    		if (connection.isClosed()) connection = application.getConnection((Request)null);			
+					batch.setConnection(connection);
+				} catch (Exception x) { connection = null;}
+				batch.process(target);
+			}
 		} catch (Exception x) {
 			logger.error(x);
 			throw x;
@@ -72,5 +72,5 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	protected abstract Target createTarget(Reference reference) throws Exception;
 	protected abstract Reference createReference(Connection connection) throws Exception ;
 	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
-	protected abstract QueryURIReporter createURIReporter(Request request); 
+	//protected abstract QueryURIReporter createURIReporter(Request request); 
 }

@@ -9,7 +9,7 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitResource;
 
 /**
- * Generates HTML output for {@link AlgorithmResource}
+ * Generates HTML output for {@link AllAlgorithmsResource}
  * @author nina
  *
  */
@@ -37,11 +37,16 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 		try {
 			String t = super.getURI(item);
 			if (collapsed)
-				output.write(String.format("<tr><th align=\"left\"><a href='%s'>%s</a></th><td></td></tr>", t,item.getName()));
-			else
+				output.write(String.format("<tr><th align=\"left\"><a href='%s'>%s</a></th><td></td><td></td></tr>", t,item.getName()));
+			else {
+				String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";
+				String target = item.isSupervised()?"<td><label for='feature_uri'>Target&nbsp;</label></td><td><input type='text' name='feature_uri' size='60' value='Enter feature URL'></td>":"";
 				output.write(String.format(
-					"<tr><form action=\"\" method=\"POST\"><tr><th><a href='%s'>%s</a></th><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
-					t,item.getName()));
+					"<tr><form action=\"\" method=\"POST\"><tr><th>Algorithm:&nbsp;<a href='%s'>%s</a></th><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
+					t,item.getName(),
+					dataset,
+					target));
+			}
 		} catch (Exception x) {
 			
 		}
@@ -50,7 +55,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void footer(Writer output, Iterator<Algorithm> query) {
 		try {
 			output.write("</table>");
-			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, getRequest());
+			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

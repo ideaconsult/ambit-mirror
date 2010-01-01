@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,6 +40,7 @@ import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.Enroler;
 import org.restlet.security.MethodAuthorizer;
 import org.restlet.security.Verifier;
+import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
 
 import ambit2.base.config.Preferences;
@@ -45,7 +48,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
@@ -103,6 +106,7 @@ import ambit2.rest.users.UserResource;
 public class AmbitApplication extends Application {
 	protected ConcurrentMap<UUID,Task<Reference>> tasks;
 	protected Properties properties = null;
+	protected long taskCleanupRate = 2*60*60*1000; //2h
 
 	//protected String connectionURI;
 	protected DataSource datasource = null;
@@ -124,10 +128,34 @@ public class AmbitApplication extends Application {
 		setStatusService(new AmbitStatusService());
 
 		getTaskService().setEnabled(true);
+		setTunnelService(new TunnelService(true,true) {
+			@Override
+			public Filter createInboundFilter(Context context) {
+				return new AmbitTunnelFilter(context);
+			}
+		});
 		getTunnelService().setUserAgentTunnel(true);
-		
+
+		TimerTask cleanUpTasks  = new TimerTask() {
+			
+			@Override
+			public void run() {
+				cleanUpTasks();
+				
+			}
+		};
+
+	    Timer timer = new Timer();
+
+	    timer.scheduleAtFixedRate(cleanUpTasks,taskCleanupRate,taskCleanupRate);
+
 		//Preferences.setProperty(Preferences.MAXRECORDS,"0");
 		
+	}
+	@Override
+	protected void finalize() throws Throwable {
+		removeTasks();
+		super.finalize();
 	}
 	protected void loadProperties()  {
 		try {
@@ -427,9 +455,9 @@ public class AmbitApplication extends Application {
 		
 		
 		Router algoRouter = new MyRouter(getContext());
-		algoRouter.attachDefault(AlgorithmResource.class);
-		router.attach(AlgorithmResource.algorithm,algoRouter);
-		router.attach(AlgorithmResource.resourceID,algoRouter);
+		algoRouter.attachDefault(AllAlgorithmsResource.class);
+		router.attach(AllAlgorithmsResource.algorithm,algoRouter);
+		router.attach(AllAlgorithmsResource.resourceID,algoRouter);
 
 		Router taskRouter = new MyRouter(getContext());
 		taskRouter.attachDefault(TaskResource.class);
@@ -549,6 +577,16 @@ public class AmbitApplication extends Application {
 		return ref;
 	}
 
+	public void cleanUpTasks() {
+		Iterator<UUID> keys = tasks.keySet().iterator();
+		while (keys.hasNext()) {
+			UUID key = keys.next();
+			Task<Reference> task = tasks.get(key);
+			try {
+				if (task.isDone() && (task.isExpired(taskCleanupRate))) tasks.remove(key);
+			} catch (Exception x) {getLogger().warning(x.getMessage());}
+		}
+	}	
 	public void cancelTasks() {
 		Iterator<Task<Reference>> i = getTasks();
 		while (i.hasNext()) {

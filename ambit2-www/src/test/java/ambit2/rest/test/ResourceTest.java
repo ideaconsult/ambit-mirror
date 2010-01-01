@@ -29,6 +29,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -75,9 +76,14 @@ public abstract class ResourceTest extends DbUnitTest {
 		testGet(uri, media,Status.SUCCESS_OK);
 	}
 	public Response testPost(String uri, MediaType media, Form queryForm) throws Exception {
-		return testPost(uri, media, queryForm,null);
+		return testPost(uri, media, queryForm,(Representation)null);
 	}
 	public Response testPost(String uri, MediaType media, Form queryForm,String inputEntity) throws Exception {
+		return testPost(uri, media, queryForm,
+				inputEntity==null?(Representation)null:
+				new StringRepresentation(inputEntity,media));
+	}
+	public Response testPost(String uri, MediaType media, Form queryForm,Representation inputEntity) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
@@ -88,7 +94,8 @@ public abstract class ResourceTest extends DbUnitTest {
 		request.setResourceRef(String.format("%s?%s",uri,queryForm.getQueryString()));
 		request.setMethod(Method.POST);
 		if (inputEntity==null) request.setEntity(null);
-		else request.setEntity(inputEntity,media);
+		//else request.setEntity(inputEntity,media);
+		else request.setEntity(inputEntity);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		return client.handle(request);
 	}
@@ -96,7 +103,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	
 	public void testAsyncTask(String uri,Form headers,Status expected, String uriExpected) throws Exception {
 
-		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers);
+		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers,headers.getWebRepresentation());
 		Status status = response.getStatus();
 		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER,status);
 		
@@ -117,6 +124,7 @@ public abstract class ResourceTest extends DbUnitTest {
 				ref = response1.getLocationRef();
 				request.setResourceRef(ref);
 			} 
+
 		}
 		Assert.assertEquals(uriExpected,ref.toString());
 		Assert.assertEquals(expected, status);

@@ -7,8 +7,11 @@ import java.io.InputStreamReader;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
+import ambit2.rest.OpenTox;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
@@ -34,7 +37,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 9;
+		return count == 12;
 	}	
 	
 	@Test
@@ -66,6 +69,36 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/model/3", port));
 		
 	}
+	
+	@Test
+		public void testClassifier() throws Exception {
+			Form headers = new Form();  
+			headers.add(OpenTox.params.dataset_uri.toString(), 
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100000&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948&max=10000");
+			headers.add(OpenTox.params.target.toString(),
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948");
+			testAsyncTask(
+					String.format("http://localhost:%d/algorithm/J48", port),
+							//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+					headers, Status.SUCCESS_OK,
+					String.format("http://localhost:%d/model/%s", port,"3"));
+
+			
+	}	
+
+	@Test
+	public void testClustering() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100000");
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/SimpleKMeans", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		
+	}	
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}

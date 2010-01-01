@@ -36,7 +36,9 @@ import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.test.ResourceTest;
 
+import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.vocabulary.DC;
 
 /**
  * test for {@link PropertyResource}
@@ -145,7 +147,7 @@ public class PropertyResourceTest extends ResourceTest {
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
 					form,
-					null);
+					(Representation)null);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
 		IDatabaseConnection c = getConnection();	
@@ -310,6 +312,34 @@ public class PropertyResourceTest extends ResourceTest {
 	}	
 	
 	@Test
+	public void testCreateEntry4() throws Exception {
+
+		OntModel model = OT.createModel();
+		//feature.addRDFType(OT.OTClass.Feature.createProperty(featureModel));
+		Individual f = model.createIndividual(OT.OTClass.Feature.getOntClass(model));
+		f.addProperty(model.createAnnotationProperty(DC.creator.getURI()), model.createTypedLiteral("http://opentox.ntua.gr"));
+
+		f.setSameAs(model.createResource("http://other.com/feature/200", OT.OTClass.Feature.getOntClass(model)));
+
+		
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+
+		Form form = new Form();
+		Response response =  testPost(
+					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
+					MediaType.APPLICATION_RDF_XML,
+					form,
+					writer.toString());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://ambit.sourceforge.net'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+	}		
+	
+	@Test
 	public void testCreateForeignEntry() throws Exception {
 		Form form = new Form();  
 		form.add(QueryResource.headers.source_uri.toString(),"http://my.new.property.org");
@@ -319,7 +349,7 @@ public class PropertyResourceTest extends ResourceTest {
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.TEXT_RDF_N3,
 					form,
-					null);
+					(Representation)null);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://my.new.property.org' and comments='http://my.new.property.org' and title='http://my.new.property.org' and url='http://my.new.property.org'");

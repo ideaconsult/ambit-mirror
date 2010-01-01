@@ -19,7 +19,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import ambit2.rest.algorithm.AlgorithmResource;
+import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
@@ -102,17 +102,17 @@ public class AmbitResource extends ServerResource {
 			
 
 			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
-			{String.format("%s",AlgorithmResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
-			{String.format("%s/pka",AlgorithmResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreecramer",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreecramer2",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Extended Cramer rules\" algorithm",format,"GET","Yes"},
-			{String.format("%s/toxtreeeye",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Eye irritation\" algorithm",format,"GET","Yes"},
-			{String.format("%s/toxtreeskinirritation",AlgorithmResource.algorithm),"get the representation of an \"ToxTree: Skin irritation\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreemic",AlgorithmResource.algorithm),"get the representation of \"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreemichaelacceptors",AlgorithmResource.algorithm),"get the representation of \"ToxTree: Michael acceptors\" algorthm",format,"GET","Yes"},
-			{String.format("%s/toxtreecarc",AlgorithmResource.algorithm),"get the representation of \"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity\" algorithm",format,"GET","Yes"},
-			{String.format("%s/toxtreekroes",AlgorithmResource.algorithm),"get the representation of \"ToxTree: ILSI/Kroes decision tree for TTC\" algorithm",format,"GET","Yes"},
-			{String.format("%s/pka",AlgorithmResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
+			{String.format("%s",AllAlgorithmsResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
+			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecramer",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecramer2",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Extended Cramer rules\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreeeye",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Eye irritation\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreeskinirritation",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Skin irritation\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreemic",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreemichaelacceptors",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Michael acceptors\" algorthm",format,"GET","Yes"},
+			{String.format("%s/toxtreecarc",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity\" algorithm",format,"GET","Yes"},
+			{String.format("%s/toxtreekroes",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: ILSI/Kroes decision tree for TTC\" algorithm",format,"GET","Yes"},
+			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
 					
 			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},

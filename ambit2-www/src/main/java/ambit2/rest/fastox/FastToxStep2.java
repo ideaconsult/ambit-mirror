@@ -14,6 +14,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -74,7 +75,7 @@ public class FastToxStep2 extends ModelResource {
 						try {
 							writer.write(String.format("<td><form method=\"POST\" action=\"%s/model/%d?%s=%s\">",
 									getUriReporter().getBaseReference(),model.getId(),
-									ModelResource.dataset_uri,
+									OpenTox.params.dataset_uri.toString(),
 									Reference.encode(structureReporter.getURI(record))
 									));
 							writer.write("<input type=\"submit\" value=\"Predict\">");

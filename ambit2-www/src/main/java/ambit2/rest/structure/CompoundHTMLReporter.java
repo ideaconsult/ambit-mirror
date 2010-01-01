@@ -24,6 +24,7 @@ import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
@@ -129,7 +130,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		w.append("<input type='submit' value='Retrieve data'><p>");
 		w.append(String.format(
 				"<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"%s\">\n",
-				StructureQueryResource.feature_URI));
+				OpenTox.params.feature_uris.toString()));
 		w.append("<option value=\"\">Default</option>\n");
 		String[][] options= {
 				{"template/All/Identifiers/view/tree","Identifiers"},
@@ -502,7 +503,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					*/
 					b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s\">%s</a>", 
 						uriReporter.getBaseReference(),
-						StructureQueryResource.feature_URI,
+						OpenTox.params.feature_uris.toString(),
 						uriReporter.getBaseReference(),
 						PropertyResource.featuredef,
 						property.getId(),
@@ -547,7 +548,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		};
 		for (String[] n:s)
 			if (n[0]==null)
-				b.append(String.format("<a href=\"%s?%s=%s\">%s</a><br>",w,StructureQueryResource.feature_URI,Reference.encode(n[3]),n[2]));
+				b.append(String.format("<a href=\"%s?%s=%s\">%s</a><br>",w,OpenTox.params.feature_uris.toString(),Reference.encode(n[3]),n[2]));
 			else
 				b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
 			

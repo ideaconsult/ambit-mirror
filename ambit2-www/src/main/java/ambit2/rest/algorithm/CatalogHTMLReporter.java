@@ -41,7 +41,7 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	@Override
 	public void footer(Writer output, Iterator<T> query) {
 		try {
-			AmbitResource.writeHTMLFooter(output, AlgorithmResource.algorithm, getRequest());
+			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			

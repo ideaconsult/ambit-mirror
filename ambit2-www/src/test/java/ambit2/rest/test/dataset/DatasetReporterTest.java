@@ -14,6 +14,7 @@ import weka.core.Instances;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.IteratingDelimitedFileReader;
+import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFInstancesIterator;
@@ -36,7 +37,7 @@ public class DatasetReporterTest extends ResourceTest {
 		Reference ref = new Reference(
 				String.format("http://localhost:%d/dataset/1?%s=%s", 
 						port,
-						StructureQueryResource.feature_URI,
+						OpenTox.params.feature_uris.toString(),
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						));
 		RDFStructuresIterator iterator = new RDFStructuresIterator(ref);
@@ -116,7 +117,7 @@ public class DatasetReporterTest extends ResourceTest {
 		testGet(String.format(
 				"http://localhost:%d/dataset/1?%s=http://localhost:%d%s", 
 				port,
-				StructureQueryResource.feature_URI,
+				OpenTox.params.feature_uris.toString(),
 				port,
 				PropertyResource.featuredef)
 				,MediaType.TEXT_CSV);

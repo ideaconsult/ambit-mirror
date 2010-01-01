@@ -218,4 +218,5 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			Request baseReference) throws ResourceException {
 		return new PropertyURIReporter(baseReference);
 	}
+	
 }
