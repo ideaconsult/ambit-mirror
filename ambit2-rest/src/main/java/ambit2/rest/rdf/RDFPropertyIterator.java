@@ -11,6 +11,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
 
@@ -52,7 +53,8 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 
 	@Override
 	protected Property createRecord() {
-		return new Property("");
+		
+		return reference==null?new Property(""):new Property("",new LiteratureEntry(reference.toString(),reference.toString()));
 	}
 
 	@Override
@@ -60,6 +62,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		return new Template(String.format("%s%s",baseReference==null?"":baseReference,OpenTox.URI.feature.getResourceID()));
 	}
 
+	
 	@Override
 	protected Property parseRecord(Resource newEntry, Property record) {
 		Property p = parseRecord(jenaModel, newEntry, record,baseReference);
@@ -78,7 +81,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 	}
 	public static Property parseRecord(OntModel jenaModel, Resource newEntry, final Property property, Reference baseReference) {
 		//name
-		String name = newEntry.toString();
+		String name = newEntry.getURI();
 		String label = name;
 		
 		try { name = getTitle(newEntry);	} catch (Exception x) {	logger.warn(x);
@@ -90,7 +93,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			label = Property.guessLabel(name);
 			logger.warn(x); 
 		}	
-		property.setName(name);
+		property.setName(name==null?label:name);
 		property.setLabel(label);		
 		//units
 		try {	
@@ -105,51 +108,14 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			ILiteratureEntry ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,OT.OTProperty.hasSource.createProperty(jenaModel));
 			property.setReference(ref);
 		} catch (Exception x) {
-			
-		}
-		/*
-		RDFReferenceIterator iterator = null;
-		String url;
-		//reference 
-		try {	
-			
-			RDFNode reference = newEntry.getProperty(OT.OTProperty.hasSource.createProperty(jenaModel)).getObject();
-			if (reference.isResource()) {
-				try {
-					url = getIdentifier(reference);
-					StmtIterator st = jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.hasSource.createProperty(jenaModel),(RDFNode)null));
-					iterator = new RDFReferenceIterator(jenaModel,st);
-					iterator.setBaseReference(baseReference);
-					iterator.setIterateSubjects(false);
-				} catch (Exception x) {
-					property.setReference(RDFReferenceIterator.parseRecord(jenaModel,(Resource) reference, property.getReference()));
-					return property;
-				}
-			} else {
-				url = ((Literal)reference).getString();
-				iterator = new RDFReferenceIterator(new Reference(url));
-			}
-			
 			try {
+				property.setReference(
+						new LiteratureEntry(getCreator(newEntry),
+						property.getReference().getURL()));
+			} catch (Exception e) {
 				
-				iterator.setBaseReference(baseReference);
-				while (iterator.hasNext()) {
-					property.setReference(iterator.next());
-					return property;
-				}
-				property.setReference(new LiteratureEntry(url.toString(),url.toString()));
-			} catch (Exception x) {
-				property.setReference(new LiteratureEntry(url.toString(),url.toString()));
-				logger.warn(x);
-			} finally {
-				try { iterator.close();} catch (Exception x) {}
-			}			
-		} catch (Exception x) {
-			logger.warn(x);
-			url = name;
-		}		
-		*/
-
+			}
+		}
 		return property;
 	}
 }

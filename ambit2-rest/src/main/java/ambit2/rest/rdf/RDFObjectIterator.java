@@ -37,6 +37,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	protected Reference baseReference;
 	protected Template template;
 	protected boolean iterateSubjects = true;
+	protected Reference reference;
 	public boolean isIterateSubjects() {
 		return iterateSubjects;
 	}
@@ -55,6 +56,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	
 	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject) throws ResourceException {
 		this(OT.createModel(reference, mediaType),topObject);
+		this.reference = reference;
 	}
 	
 	public RDFObjectIterator(InputStream in,MediaType mediaType, String topObject) throws ResourceException {
@@ -162,6 +164,9 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	public static String getIdentifier(RDFNode rdfNode) throws Exception  {
 		return getPropertyValue(DC.identifier,rdfNode);
 	}	
+	public static String getCreator(RDFNode rdfNode) throws Exception  {
+		return getPropertyValue(DC.creator,rdfNode);
+	}		
 	public static String getPropertyValue(Property property,RDFNode rdfNode) throws Exception  {
 		if (rdfNode.isResource())
 			return (((Literal) ((Resource)rdfNode).getProperty(property).getObject()).getString()); 
