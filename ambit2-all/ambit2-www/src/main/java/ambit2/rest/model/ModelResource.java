@@ -6,10 +6,12 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.ReadModel;
@@ -22,8 +24,9 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.task.CallableModelPredictor;
+import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.CallableWekaPredictor;
 
 /**
  * Model as in http://opentox.org/development/wiki/Model
@@ -108,15 +111,24 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
 	}
 	@Override
-	protected CallableQueryProcessor createCallable(Reference reference,
-			ModelQueryResults model) {
-		return
-		new CallableModelPredictor(
-				reference,
-				getRequest().getRootRef(),
-				(AmbitApplication)getApplication(),
-				model,
-				new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+	protected CallableQueryProcessor createCallable(Form form,	ModelQueryResults model) {
+		if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType()))
+			return //reads Instances, instead of IStructureRecord
+			new CallableWekaPredictor(
+					form,
+					getRequest().getRootRef(),
+					(AmbitApplication)getApplication(),
+					model,
+					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+		else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+			return
+			new CallableDescriptorCalculator(
+					form,
+					getRequest().getRootRef(),
+					(AmbitApplication)getApplication(),
+					model,
+					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
 	}
 	/*
 	@Override

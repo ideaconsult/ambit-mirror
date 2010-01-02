@@ -7,6 +7,7 @@ import ambit2.db.search.structure.QueryStoredResults;
 
 /**
  * Training and test instances are available via {@link IQueryRetrieval}
+ * Content: base64 encoded string
  * @author nina
  *
  */

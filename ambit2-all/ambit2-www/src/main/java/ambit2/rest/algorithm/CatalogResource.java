@@ -72,7 +72,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	}
 	
 	
-	protected CallableQueryProcessor createCallable(Reference reference,T item,Form form) throws ResourceException {
+	protected CallableQueryProcessor createCallable(Form form, T item) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	
@@ -97,7 +97,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				Reference reference = getSourceReference(form,model);
 				Reference ref =  ((AmbitApplication)getApplication()).addTask(
 						String.format("Apply %s to %s",model.toString(),reference),
-						createCallable(reference,model,form),
+						createCallable(form,model),
 						getRequest().getRootRef());		
 				getResponse().setLocationRef(ref);
 				//getResponse().setStatus(Status.SUCCESS_CREATED);

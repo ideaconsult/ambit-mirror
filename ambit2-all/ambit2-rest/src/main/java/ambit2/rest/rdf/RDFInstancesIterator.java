@@ -25,7 +25,7 @@ import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribute> {
-
+	public static final String CompoundURI="CompoundURI";
 	public RDFInstancesIterator(Representation representation, MediaType mediaType) throws ResourceException {
 		this(OT.createModel(representation,mediaType));
 	}
@@ -122,15 +122,17 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 	}
 	@Override
 	protected Instance parseRecord(Resource newEntry, Instance record) {
-		/*
+		
+		String id = null;
 		//get the compound
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
 			Statement st = compound.next();
-			//record.setValue(urilookup.get("ID"), st.getObject().toString());
+			id = st.getObject().toString();
+			
 			break;
 		}
-		*/	
+		record.setValue(urilookup.get(CompoundURI),id);
 		//get feature values
 		
 		parseFeatureValues( newEntry,record);
@@ -158,6 +160,10 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 	}
 	protected FastVector parseFeatures() {
 		FastVector attributes = new FastVector();
+		Attribute id = new Attribute(CompoundURI,(FastVector)null);
+		urilookup.put(CompoundURI,id);
+		attributes.addElement(id);
+		
 		Resource s = OT.OTClass.Feature.getOntClass(jenaModel);
 		if (s==null) return null;
 		

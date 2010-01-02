@@ -53,8 +53,7 @@ public class RDFAlgorithmIterator extends RDFObjectIterator<Algorithm> {
 
 	@Override
 	protected Template createTemplate() {
-		return new Template(String.format("%s%s",baseReference==null?"":baseReference,
-				OpenTox.URI.algorithm.getResourceID()));
+		return OpenTox.URI.algorithm.getTemplate(baseReference);
 	}
 
 	@Override

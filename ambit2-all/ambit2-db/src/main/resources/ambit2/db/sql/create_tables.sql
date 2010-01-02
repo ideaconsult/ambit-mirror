@@ -220,6 +220,7 @@ CREATE TABLE  `models` (
   `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
   `content` blob NOT NULL,
   `algorithm` varchar(255) collate utf8_bin NOT NULL default 'N/A' COMMENT 'URI of the algorithm',
+  `mediatype` varchar(48) collate utf8_bin NOT NULL default 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
   PRIMARY KEY  (`idmodel`),
   UNIQUE KEY `Index_5` USING BTREE (`name`),
   KEY `FK_models_predictors` (`predictors`),
@@ -635,7 +636,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,9,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (2,10,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma seperated strings

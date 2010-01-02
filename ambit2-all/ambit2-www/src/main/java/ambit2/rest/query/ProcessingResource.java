@@ -28,10 +28,10 @@ import ambit2.rest.task.CallableQueryProcessor;
  */
 public abstract class ProcessingResource<Q extends IQueryRetrieval<T>,T extends Serializable> extends QueryResource<Q, T> {
 
-	protected abstract CallableQueryProcessor createCallable(Reference reference,T item);
+	protected abstract CallableQueryProcessor createCallable(Form form,T item);
 	
-	protected Reference getSourceReference() {
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+	protected Reference getSourceReference(Form form) {
+
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) throw new ResourceException(
 				Status.CLIENT_ERROR_BAD_REQUEST,String.format("Empty %s [%s]", OpenTox.params.dataset_uri.toString(), OpenTox.params.dataset_uri.getDescription()));
@@ -41,7 +41,8 @@ public abstract class ProcessingResource<Q extends IQueryRetrieval<T>,T extends 
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		synchronized (this) {
-			final Reference reference = getSourceReference();
+			final Form form = new Form(entity);
+			final Reference reference = getSourceReference(form);
 			//models
 			IQueryRetrieval<T> query = createQuery(getContext(),getRequest(),getResponse());
 			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -55,7 +56,7 @@ public abstract class ProcessingResource<Q extends IQueryRetrieval<T>,T extends 
 					try {
 						Reference ref =  ((AmbitApplication)getApplication()).addTask(
 								String.format("Apply %s to %s",model.toString(),reference),
-								createCallable(reference,model),
+								createCallable(form,model),
 								getRequest().getRootRef());		
 						getResponse().setLocationRef(ref);
 						//getResponse().setStatus(Status.SUCCESS_CREATED);

@@ -3,24 +3,20 @@ package ambit2.rest.task;
 import java.io.Serializable;
 import java.sql.Connection;
 
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.resource.ClientResource;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
-import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.model.ModelQueryResults;
-import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ValuesReader;
-import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.model.ModelURIReporter;
 
@@ -29,19 +25,19 @@ import ambit2.rest.model.ModelURIReporter;
  * @author nina
  *
  */
-public class CallableModelPredictor extends CallableQueryProcessor<Object, IStructureRecord> {
+public abstract class CallableModelPredictor<ModelItem> extends CallableQueryProcessor<Object, IStructureRecord> {
 
 	protected ModelQueryResults model;
 	protected Reference datasetURI;
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelUriReporter;
 	
-	public CallableModelPredictor(Reference target, 
+	public CallableModelPredictor(Form form, 
 			Reference appReference,
 			AmbitApplication application,
 			ModelQueryResults model,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter		
 				) {
-		super(target,appReference,application);
+		super(form,appReference,application);
 		this.model = model;
 		this.modelUriReporter = reporter;
 	}	
@@ -57,30 +53,26 @@ public class CallableModelPredictor extends CallableQueryProcessor<Object, IStru
 		}
 		return reference;
 	}
-	protected IProcessor<IStructureRecord,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception {
-		Profile<Property> p = new Profile<Property>();
-		Property property = DescriptorsFactory.createDescriptor2Property(model.getContent());
-		property.setEnabled(true);
-		p.add(property);
-		
-		DescriptorsCalculator calculator = new DescriptorsCalculator();
-		calculator.setDescriptors(p);	
-		return calculator;
-	}
-	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
+	protected abstract IProcessor<ModelItem,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception ;
+
 	
-		IProcessor<IStructureRecord,IStructureRecord> calculator = createPredictor(model);
+	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/predicted"),null,model.getDependent());
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/independent"),null,model.getPredictors());
+
+		IProcessor<ModelItem,IStructureRecord> calculator = createPredictor(model);
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		//p1.add(new ProcessorStructureRetrieval());	
 		
 		ValuesReader readProfile = new ValuesReader();
+		/*
 		Template template = new Template();
 		template.setName("DailyIntake");
 		Property di = new Property("DailyIntake");
 		di.setEnabled(true);
 		template.add(di); // this is a hack for TTC application, TODO make it generic!!!
-		readProfile.setProfile(template);
+		*/
+		readProfile.setProfile(model.getPredictors());
 		
 		p1.add(readProfile);
 		
@@ -104,3 +96,4 @@ public class CallableModelPredictor extends CallableQueryProcessor<Object, IStru
 	
 
 }
+

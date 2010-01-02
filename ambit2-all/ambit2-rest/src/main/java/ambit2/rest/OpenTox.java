@@ -1,8 +1,12 @@
 package ambit2.rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
+import org.restlet.routing.Template;
 
 public class OpenTox {
 	public static enum URI {
@@ -17,12 +21,29 @@ public class OpenTox {
 		},
 		feature,
 		reference,
-		compound,
+		compound ,
 		conformer {
 			@Override
 			public String getResourceID() {
 				return String.format("%s%s/{%s}",OpenTox.URI.compound.getResourceID(),getURI(),getKey());
 			}
+			public Object[] getIds(String uri,Reference baseReference)  {
+				return getIds(uri,getTemplate(baseReference));
+			}
+			public Object[] getIds(String uri,Template template)  {
+				Map<String, Object> vars = new HashMap<String, Object>();
+				Object[] ids = new Object[2];
+				try { 
+					template.parse(uri, vars);
+					try {
+					ids[0] = Integer.parseInt(vars.get(OpenTox.URI.compound.getKey()).toString()); } 
+					catch (Exception x) { ids[0] = null;};
+				
+					try { ids[1] = Integer.parseInt(vars.get(OpenTox.URI.conformer.getKey()).toString()); } 
+					catch (Exception x) { ids[1] = null;};
+				} catch (Exception x) {};
+				return ids;
+			}			
 		};
 		public String getURI() {
 			return String.format("/%s",toString());
@@ -40,6 +61,23 @@ public class OpenTox {
 		public int getIntValue(Request request) throws Exception {
 			return Integer.parseInt(getValue(request));
 		}		
+		public Template getTemplate(Reference baseReference) {
+			return new Template(String.format("%s%s",baseReference==null?"":baseReference,getResourceID()));
+		}
+		public Object getId(String uri, Reference baseReference) {
+			return getId(uri, getTemplate(baseReference));
+		}
+		public Object getId(String uri,Template template)  {
+			Map<String, Object> vars = new HashMap<String, Object>();
+			
+			try {
+				template.parse(uri, vars);
+				return Integer.parseInt(vars.get(getKey()).toString()); 
+			} catch (Exception x) { return null; }
+		}
+		public Object[] getIds(String uri,Reference baseReference)  {
+			return null;
+		}
 	};
 	
 	public enum params  {
@@ -84,7 +122,11 @@ public class OpenTox {
 			return form.getValuesArray(toString());
 		}
 	};
+	
+	
 	private OpenTox() {
 	}
+	
+	
 	
 }

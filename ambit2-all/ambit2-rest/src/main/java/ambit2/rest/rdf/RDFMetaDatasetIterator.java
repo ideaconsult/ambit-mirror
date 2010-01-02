@@ -57,7 +57,7 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<SourceDataset> {
 
 	@Override
 	protected Template createTemplate() {
-		return new Template(String.format("%s%s",baseReference==null?"":baseReference,OpenTox.URI.dataset.getResourceID()));
+		return OpenTox.URI.dataset.getTemplate(baseReference);
 	}
 
 	@Override

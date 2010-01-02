@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -19,8 +21,7 @@ import ambit2.rest.test.ResourceTest;
 public class ModelResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d%s/1", port,
-				ModelResource.resource);
+		return String.format("http://localhost:%d%s/1", port,ModelResource.resource);
 	}
 
 	/*
@@ -97,4 +98,60 @@ public class ModelResourceTest extends ResourceTest {
 						dataset, Reference.encode(String.format("%s/predicted",
 								getTestURI()))));
 	}
+	
+	@Test
+	public void testClustering() throws Exception {
+		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),
+				null,
+				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),
+				String.format("http://localhost:%d/algorithm/SimpleKMeans", port));
+	}
+	@Test
+	public void testJ48Test() throws Exception {
+		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/3",port,port,port),
+				String.format("http://localhost:%d/feature/3",port),
+				String.format("http://localhost:%d/dataset/2?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/3",port,port,port),
+				String.format("http://localhost:%d/algorithm/J48", port));
+	}	
+	
+	@Test
+	public void testJ48() throws Exception {
+		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/3",port,port,port,port),
+				String.format("http://localhost:%d/feature/3",port),
+				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/3",port,port,port,port),
+				String.format("http://localhost:%d/algorithm/J48", port));
+	}	
+	public void predict(String dataset, String target, String datasetTest, String algorithmURI) throws Exception {		
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
+		//First create a model
+		
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset); 
+		if (target!=null)
+		headers.add(OpenTox.params.target.toString(),target);
+
+		String wekaURI = String.format("http://localhost:%d%s/3", port,ModelResource.resource);
+
+		
+		testAsyncTask(
+				algorithmURI,
+				headers, Status.SUCCESS_OK,
+				wekaURI);
+		
+		headers = new Form();  
+		if (target!=null)
+			headers.add(OpenTox.params.target.toString(),target);		
+		headers.add(OpenTox.params.dataset_uri.toString(),datasetTest); 
+		testAsyncTask(wekaURI, headers, Status.SUCCESS_OK, String.format(
+				"%s?feature_uris[]=%s", datasetTest, Reference.encode(String
+						.format("%s/predicted", wekaURI))));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,value_num FROM property_values join properties using(idproperty) where idproperty=3");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();		
+	}	
+	
+	
 }

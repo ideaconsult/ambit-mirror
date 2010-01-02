@@ -66,13 +66,15 @@ public class DatasetReporterTest extends ResourceTest {
 	
 		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6", instances.relationName());
 		Assert.assertEquals(522, instances.numInstances());
-		Assert.assertEquals(3, instances.numAttributes());
-		Assert.assertTrue(instances.attribute(0).isNumeric());
-		Assert.assertTrue(instances.attribute(1).isNominal());
-		Assert.assertTrue(instances.attribute(2).isNumeric());
-		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938",instances.attribute(0).name());
-		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11936",instances.attribute(1).name());
-		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11951",instances.attribute(2).name());
+		Assert.assertEquals(4, instances.numAttributes());
+		Assert.assertTrue(instances.attribute(0).isString());
+		Assert.assertTrue(instances.attribute(1).isNumeric());
+		Assert.assertTrue(instances.attribute(2).isNominal());
+		Assert.assertTrue(instances.attribute(3).isNumeric());
+		Assert.assertEquals("CompoundURI",instances.attribute(0).name());
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938",instances.attribute(1).name());
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11936",instances.attribute(2).name());
+		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11951",instances.attribute(3).name());
 	}		
 	@Test
 	public void testURI() throws Exception {
