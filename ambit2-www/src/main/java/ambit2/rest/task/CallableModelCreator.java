@@ -2,6 +2,7 @@ package ambit2.rest.task;
 
 import java.sql.Connection;
 
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IBatchStatistics;
@@ -21,12 +22,12 @@ public abstract class CallableModelCreator<Item>  extends	CallableQueryProcessor
 	protected AlgorithmURIReporter alg_reporter;
 	protected Algorithm algorithm;
 	
-	public CallableModelCreator(Reference datasetUri,
+	public CallableModelCreator(Form form,
 			Reference applicationRootReference, AmbitApplication application,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter) {
-		super(datasetUri, applicationRootReference, application);
+		super(form, applicationRootReference, application);
 		this.reporter = reporter;
 		this.algorithm = algorithm;
 		this.alg_reporter = alg_reporter;

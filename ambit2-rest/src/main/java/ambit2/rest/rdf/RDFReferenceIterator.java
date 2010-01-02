@@ -84,8 +84,7 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 	}
 	@Override
 	protected Template createTemplate() {
-		return new Template(String.format("%s%s",
-				baseReference==null?"":baseReference,OpenTox.URI.reference.getResourceID()));
+		return OpenTox.URI.reference.getTemplate(baseReference);
 
 	}
 	@Override

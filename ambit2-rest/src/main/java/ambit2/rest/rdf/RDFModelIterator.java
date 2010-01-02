@@ -46,8 +46,7 @@ public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstanc
 	
 	@Override
 	protected Template createTemplate() {
-		return new Template(String.format("%s%s",baseReference==null?"":baseReference,
-				OpenTox.URI.model.getResourceID()));
+		return OpenTox.URI.model.getTemplate(baseReference);
 	}
 
 	@Override

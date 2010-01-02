@@ -38,7 +38,13 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	protected Content content;
 	protected Integer id;
 	protected String name;
-	
+	protected String contentMediaType = "application/java";
+	public String getContentMediaType() {
+		return contentMediaType;
+	}
+	public void setContentMediaType(String contentMediaType) {
+		this.contentMediaType = contentMediaType;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -49,8 +55,8 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 		return name;
 	}
 	public void setName(String name) {
-		if ((name!=null) && (name.length()>45))
-			this.name = name.substring(0,45);
+		if ((name!=null) && (name.length()>255))
+			this.name = name.substring(0,255);
 		else
 			this.name = name;
 	}

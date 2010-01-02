@@ -47,9 +47,9 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 
 	@Override
 	protected Template createTemplate() {
-		featureTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,OpenTox.URI.feature.getResourceID()));
-		conformerTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,OpenTox.URI.conformer.getResourceID()));
-		return new Template(String.format("%s%s",baseReference==null?"":baseReference,OpenTox.URI.compound.getResourceID()));
+		featureTemplate = OpenTox.URI.feature.getTemplate(baseReference);
+		conformerTemplate = OpenTox.URI.conformer.getTemplate(baseReference);
+		return OpenTox.URI.compound.getTemplate(baseReference);
 	}
 
 	protected abstract void setIDChemical(int idchemical);

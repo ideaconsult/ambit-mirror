@@ -1,5 +1,6 @@
 package ambit2.rest.test.task;
 
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
@@ -14,18 +15,17 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 	
 	public void test() throws Exception {
 		Reference app = new Reference(String.format("http://localhost:%d",port));
-		Reference dataset = new Reference(DatasetReporterTest.class.getResource("/input.rdf"));
+		Form form = new Form();
+		form.add("dataset_uri", DatasetReporterTest.class.getResource("/input.rdf").toString());
+		form.add("target", "http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938");
 		ModelURIReporter uriReporter = new ModelURIReporter(null);
 		CallableWekaModelCreator c = new CallableWekaModelCreator(
-				dataset,
+				form,
 				app,
 				(AmbitApplication)component.getApplication(), 
 				(Algorithm)null, 
 				uriReporter,
-				new AlgorithmURIReporter(null),
-				new String[] {
-					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938"
-				});
+				new AlgorithmURIReporter(null));
 		Reference ref = c.call();
 	}
 	@Override

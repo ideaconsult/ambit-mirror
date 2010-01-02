@@ -22,6 +22,7 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
+import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
@@ -97,6 +98,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType(d[4].toString());
 				alg.setRequiresDataset(typeRules.equals(d[4].toString())?false:true);
+				alg.setFormat(typeRules.equals(d[4].toString())?AlgorithmFormat.JAVA_CLASS:AlgorithmFormat.WEKA);
 				alg.setSupervised(
 						typeClassification.equals(d[4].toString()) || typeRegression.equals(d[4].toString()) 
 						);
@@ -203,15 +205,16 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					String.format("Empty %s [%s]", OpenTox.params.dataset_uri.toString(), OpenTox.params.dataset_uri.getDescription()));
 		return new Reference(Reference.decode(datasetURI.toString()));		
 	}
+
 	@Override
-	protected CallableQueryProcessor createCallable(Reference reference,
-			Algorithm<String> algorithm, Form form)
+	protected CallableQueryProcessor createCallable(Form form,
+			Algorithm<String> algorithm)
 			throws ResourceException {
 				
 			
 		if (algorithm.getType().equals(typeRules))
 			return new CallableSimpleModelCreator(
-					reference,
+					form,
 					getRequest().getRootRef(),
 					(AmbitApplication)getApplication(),
 					algorithm,
@@ -219,15 +222,14 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					new AlgorithmURIReporter(getRequest())
 					);	
 		else {
-			String[] targetURI = OpenTox.params.target.getValuesArray(form);	
+				
 			return new CallableWekaModelCreator(
-					reference,
+					form,
 					getRequest().getRootRef(),
 					(AmbitApplication)getApplication(),
 					algorithm,
 					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-					new AlgorithmURIReporter(getRequest()),
-					targetURI);	
+					new AlgorithmURIReporter(getRequest()));	
 		}
 	}
 }

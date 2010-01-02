@@ -128,7 +128,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 							status = ((ResourceException) x.getCause()).getStatus();
 							getResponse().setStatus(status);
 						} else {	
-							status = new Status(Status.CLIENT_ERROR_REQUEST_ENTITY_TOO_LARGE,x.getMessage());
+							status = new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage());
 							getResponse().setStatus(status);
 						}
 					} catch (InterruptedException x) {
@@ -158,7 +158,7 @@ public class TaskResource extends AbstractResource<Iterator<Task<Reference>>,Tas
 		} catch (Exception x) {
 			throw new ResourceException(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Task id %d",id),
+					String.format("Task id %s",id),
 					x
 					);
 		} catch (Throwable x) {

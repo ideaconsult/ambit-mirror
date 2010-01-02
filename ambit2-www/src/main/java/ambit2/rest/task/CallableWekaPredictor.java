@@ -1,42 +1,71 @@
 package ambit2.rest.task;
 
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
+import weka.core.Instance;
+import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.processors.DescriptorsCalculator;
+import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.WekaPredictor;
+import ambit2.workflow.library.QueryProperties;
 
-public class CallableWekaPredictor extends CallableModelPredictor {
-
-	public CallableWekaPredictor(Reference target, Reference appReference,
+public class CallableWekaPredictor extends CallableModelPredictor<Instance> {
+	protected String[] targetURI;
+	public CallableWekaPredictor(Form form, Reference appReference,
 			AmbitApplication application, ModelQueryResults model,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter) {
-		super(target, appReference, application, model, reporter);
-		// TODO Auto-generated constructor stub
+		super(form, appReference, application, model, reporter);
+		targetURI = form.getValuesArray(OpenTox.params.target.toString());
 	}
-	protected IProcessor<IStructureRecord,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception {
-		Profile<Property> p = new Profile<Property>();
-		Property property = DescriptorsFactory.createDescriptor2Property(model.getContent());
-		property.setEnabled(true);
-		p.add(property);
-		//TODO same code as in wekmodelcreator
-		DescriptorsCalculator calculator = new DescriptorsCalculator();
-		calculator.setDescriptors(p);	
-		return calculator;
+	@Override
+	protected IProcessor<Instance, IStructureRecord> createPredictor(
+			ModelQueryResults model) throws Exception {
+		try {
+			WekaPredictor weka = new WekaPredictor(modelUriReporter,targetURI);
+			weka.setWekaModel(model);
+			return weka;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		}
 	}
-	
+
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
 		if (target == null) throw new Exception("");
 		//use RDFObject parser and create instances on the fly
-		return new RDFInstancesParser(applicationRootReference.toString());
+		return new RDFInstancesParser(applicationRootReference.toString()) ;
 	}	
+	
+	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/predicted"),null,model.getDependent());
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/independent"),null,model.getPredictors());
+		
+		IProcessor<Instance,IStructureRecord> calculator = createPredictor(model);
+
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+
+		p1.add(calculator);
+		p1.setAbortOnError(true);
+		
+		PropertyValuesWriter writer = new PropertyValuesWriter();
+		p1.add(writer);
+		
+		return p1;
+	}
+	@Override
+	protected Object createTarget(Reference reference) throws Exception {
+		return reference;
+	}
 }

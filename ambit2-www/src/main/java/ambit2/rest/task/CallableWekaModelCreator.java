@@ -1,14 +1,14 @@
 package ambit2.rest.task;
 
+import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.io.StringWriter;
 import java.sql.Connection;
-import java.util.List;
 import java.util.UUID;
 
+import org.apache.xerces.impl.dv.util.Base64;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.engine.io.WriterOutputStream;
 import org.restlet.resource.ResourceException;
 
 import weka.classifiers.Classifier;
@@ -17,12 +17,12 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.WekaException;
 import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.RemoveUseless;
+import weka.filters.unsupervised.attribute.Remove;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.data.model.Parameter;
+import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.AbstractBatchProcessor;
@@ -53,14 +53,13 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 	 * @param algorithm  Algorithm
 	 * @param reporter ModelURIReporter (to generate model uri)
 	 */
-	public CallableWekaModelCreator(Reference datasetURI,
+	public CallableWekaModelCreator(Form form,
 			Reference applicationRootReference, AmbitApplication application,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-			AlgorithmURIReporter alg_reporter,
-			String[] targetURI) {
-		super(datasetURI, applicationRootReference, application,algorithm,reporter,alg_reporter);
-		this.targetURI = targetURI;
+			AlgorithmURIReporter alg_reporter) {
+		super(form, applicationRootReference, application,algorithm,reporter,alg_reporter);
+		targetURI = OpenTox.params.target.getValuesArray(form);
 	}
 
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
@@ -92,6 +91,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		}
 		else throw new Exception(String.format("Unknown algorithm %s",algorithm.toString()));
 
+		
 		String[] prm = algorithm.getParametersAsArray();
 		if (prm!=null)
 		try {
@@ -106,6 +106,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 			logger.warn("Error setting algorithm parameters, assuming defaults");
 		}	
 		
+		
 		/*
         MultiFilter multiFilter = new MultiFilter();
         multiFilter.setFilters(new Filter[] {
@@ -113,69 +114,97 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
                 });
         multiFilter.setInputFormat(instances);
         */
+		//remove firstCompoundID attribute
+		String[] options = new String[2];
+		options[0] = "-R";                                   
+		options[1] = "1";                                   
+		Remove remove = new Remove();                       
+		remove.setOptions(options);                          
+		remove.setInputFormat(instances);   
+		 
+		//Filter filter = new RemoveUseless();
+		//filter.setInputFormat(instances);
 		
-		Filter filter = new RemoveUseless();
-		filter.setInputFormat(instances);
-		
-        Instances newInstances = Filter.useFilter(instances, filter);	
+        Instances newInstances = Filter.useFilter(instances, remove);	
         
 		String name = String.format("%s.%s",UUID.randomUUID().toString(),weka.getClass().getName());
+		ModelQueryResults m = new ModelQueryResults();
+		m.setId(null);
+		m.setContentMediaType(AlgorithmFormat.WEKA.getMediaType());
+		m.setName(name);
+		m.setAlgorithm(alg_reporter.getURI(algorithm));
+		
 		AlgorithmURIReporter r = new AlgorithmURIReporter();
 		LiteratureEntry entry = new LiteratureEntry(name,
 					algorithm==null?weka.getClass().getName():
 					r.getURI(applicationRootReference.toString(),algorithm));
 
+		LiteratureEntry prediction = new LiteratureEntry(m.getName(),
+				reporter.getURI(applicationRootReference.toString(),m));		
 		
 		Template predictors = null;
 		Template predicted = null;
 		if (clusterer!= null) {
 			clusterer.buildClusterer(newInstances);
-			predicted = new Template(name+"Predicted");
-			for (int i=0; i < clusterer.numberOfClusters(); i++) {
-				Property property = new Property(String.format("Cluster%d",i+1),entry);
-				predicted.add(property);
-			}
-			predictors = new Template(name+"Independent");
+			predicted = new Template(name+"#Predicted");
+			Property property = new Property("Cluster",prediction);
+			predicted.add(property);
+
+			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
-				Property property = new Property(newInstances.attribute(i).name(),entry);
+				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
+				property.setOrder(i+1);
 				predictors.add(property);
 			}				
 		} else if (classifier != null) {
 			
 			for (String t : targetURI) 
-				for (int i = 0; i< instances.numAttributes(); i++)
-					if (instances.attribute(i).name().equals(t)) {
+				for (int i = 0; i< newInstances.numAttributes(); i++)
+					if (newInstances.attribute(i).name().equals(t)) {
 						newInstances.setClassIndex(i);
 						break;
 					}
-			
+
 			classifier.buildClassifier(newInstances);
-			predicted = new Template(name+"Predicted");
-			Property property = new Property(newInstances.attribute(newInstances.classIndex()).name(),entry);
+			predicted = new Template(name+"#Predicted");
+			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), prediction); 
+
 			predicted.add(property);
-			predictors = new Template(name+"Independent");
+			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
-				property = new Property(newInstances.attribute(i).name(),entry);
+				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
+				property.setOrder(i+1);
 				predictors.add(property);
 			}				
 		}
 		
-		ModelQueryResults m = new ModelQueryResults();
-		m.setName(name);
-		m.setAlgorithm(alg_reporter.getURI(algorithm));
+
 		m.setPredictors(predictors);
 		m.setDependent(predicted);
 		
-		StringWriter writer = new StringWriter();
-		WriterOutputStream wos = new WriterOutputStream(writer);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
 		 // serialize model
-		ObjectOutputStream oos = new ObjectOutputStream(wos);
+		ObjectOutputStream oos = new ObjectOutputStream(out);
 		oos.writeObject(clusterer==null?classifier:clusterer);
 		oos.flush();
-		oos.close();		
-		m.setContent(writer.toString());
-		System.out.println(m.getContent());
+		oos.close();	
+		
+		byte[] content = out.toByteArray();
+		m.setContent(Base64.encode(content));
+		/*
+		try {
+		 InputStream in = new ByteArrayInputStream(content);
+				 //m.getContent().getBytes("UTF-8"));
+		ObjectInputStream ois =  new ObjectInputStream(in);
+		
+		clusterer = null; classifier = null;
+	 	weka = ois.readObject();
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		*/
 		return m;
 	}
 
@@ -203,5 +232,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 	protected Object createTarget(Reference reference) throws Exception {
 		return reference;
 	}
+	
+
 
 }

@@ -59,7 +59,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 
 	@Override
 	protected Template createTemplate() {
-		return new Template(String.format("%s%s",baseReference==null?"":baseReference,OpenTox.URI.feature.getResourceID()));
+		return OpenTox.URI.feature.getTemplate(baseReference);
 	}
 
 	

@@ -15,7 +15,27 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	 * 
 	 */
 	private static final long serialVersionUID = -6624262246346428281L;
-	public enum AlgorithmFormat {JAVA_CLASS,PMML,WEKA};
+	public enum AlgorithmFormat {
+		JAVA_CLASS {
+			@Override
+			public String getMediaType() {
+				return "application/java";
+			}
+		},
+		PMML {
+			@Override
+			public String getMediaType() {
+				return "application/pmml+xml";
+			}
+		},
+		WEKA {
+			@Override
+			public String getMediaType() {
+				return "application/x-java-serialized-object";
+			}
+		};
+		public abstract String getMediaType();
+		};
 	protected String id;
 	protected String name;
 	protected List<Parameter> parameters;
