@@ -49,6 +49,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			output.write("<th>Algorithm</th>\n");
 			output.write("<th>Dataset</th>\n");
 			output.write("<th>Independent variables</th>\n");
+			output.write("<th>Dependent</th>\n");
 			output.write("<th>Predicted</th>\n");
 			output.write("</tr>\n");
 			cmp_reporter.setOutput(w);
@@ -103,9 +104,16 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 					uriReporter.getBaseReference(),
 					OntologyResource.resource,
 					model.getDependent()==null?"":Reference.encode(model.getDependent().getName()),
-					"Predicted"		
+					"Dependent"		
 			));				
-
+			output.write(String.format(
+					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Predicted variable(s)\" title=\"Predicted variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
+					uriReporter.getBaseReference(),
+					uriReporter.getBaseReference(),
+					OntologyResource.resource,
+					model.getPredicted()==null?"":Reference.encode(model.getPredicted().getName()),
+					"Predicted"		
+			));	
 		
 			/*
 			if (!collapsed) {

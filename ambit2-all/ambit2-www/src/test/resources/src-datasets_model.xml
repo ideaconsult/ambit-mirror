@@ -89,6 +89,7 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
    <properties idproperty="1" idreference="8" name="Property 1" units="" comments="Property" islocal="false"/>
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="false"/>
   <properties idproperty="3" idreference="8" name="CAS" units="" comments="CasRN" islocal="false"/>
+  <properties idproperty="4" idreference="8" name="Endpoint" units="" comments="Test endpoint" islocal="false"/>
   <template idtemplate="1" name="BCF"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
@@ -102,17 +103,22 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <property_string idvalue_string="2" value="A"/>
   <property_string idvalue_string="3" value="B"/>
   <property_string idvalue_string="4" value="C"/>
+  <property_string idvalue_string="5" value="P1"/>
+  <property_string idvalue_string="6" value="P2"/>
   
   <property_values id="1" idproperty="3" idstructure="100215" idvalue_string="1" user_name="guest"/>
   
   <property_values id="2" idproperty="1" idstructure="100215" idvalue_string="3" user_name="guest"/>
   <property_values id="3" idproperty="2" idstructure="100215" idvalue_string="2" user_name="guest"/>
+  <property_values id="10" idproperty="4" idstructure="100215" idvalue_string="5" user_name="guest"/>
 
   <property_values id="4" idproperty="1" idstructure="100211" idvalue_string="4" user_name="guest"/>
   <property_values id="5" idproperty="2" idstructure="100211" idvalue_string="2" user_name="guest"/>
+  <property_values id="11" idproperty="4" idstructure="100211" idvalue_string="6" user_name="guest"/>
   
   <property_values id="6" idproperty="1" idstructure="100214" idvalue_string="3" user_name="guest"/>
   <property_values id="7" idproperty="2" idstructure="100214" value_num="2" user_name="guest"/>
+  <property_values id="12" idproperty="4" idstructure="100214" idvalue_string="5" user_name="guest"/>
   
   <property_values id="8" idproperty="1" idstructure="129345" idvalue_string="4" user_name="guest"/>
   <property_values id="9" idproperty="2" idstructure="129345" idvalue_string="2" user_name="guest"/>
@@ -139,8 +145,8 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <sessions idsessions="1" user_name="guest"/>
   <query idquery="1" idsessions="1" name="test query" content=""/>
   <query_results idquery="1" idstructure="100211" idchemical="7"  selected="1" metric="1" />
-  <models idmodel="1" name="ToxTree: Cramer rules" idquery="1" predictors="1" dependent="1" content="dG94VHJlZS50cmVlLmNyYW1lci5DcmFtZXJSdWxlcw=="/>
-  <models idmodel="2" name="pKa" idquery="1" predictors="1" dependent="1" content="YW1iaXQyLmRlc2NyaXB0b3JzLlBLQVNtYXJ0c0Rlc2NyaXB0b3I="/>
+  <models idmodel="1" name="ToxTree: Cramer rules" idquery="1" predictors="1" dependent="1" predicted="1" content="dG94VHJlZS50cmVlLmNyYW1lci5DcmFtZXJSdWxlcw=="/>
+  <models idmodel="2" name="pKa" idquery="1" predictors="1" dependent="1" predicted="1" content="YW1iaXQyLmRlc2NyaXB0b3JzLlBLQVNtYXJ0c0Rlc2NyaXB0b3I="/>
   <tuples idtuple="1" id_srcdataset="2"/>
   <property_tuples idtuple="1" id="1"/>
 </dataset>

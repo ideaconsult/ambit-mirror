@@ -57,8 +57,9 @@ public abstract class CallableModelPredictor<ModelItem> extends CallableQueryPro
 
 	
 	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
-		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/predicted"),null,model.getDependent());
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/dependent"),null,model.getDependent());
 		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/independent"),null,model.getPredictors());
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/predicted"),null,model.getPredicted());
 
 		IProcessor<ModelItem,IStructureRecord> calculator = createPredictor(model);
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 

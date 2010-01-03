@@ -29,6 +29,7 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
@@ -39,6 +40,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();	
 	protected static List<Algorithm<String>> algorithmList;
 	
+	protected static String typeDescriptor = "http://www.opentox.org/algorithms.owl#DescriptorCalculation";
 	protected static String typeRules = "http://www.opentox.org/algorithms.owl#Rules";
 	protected static String typeClustering = "http://www.opentox.org/algorithms.owl#Clustering";
 	protected static String typeRegression = "http://www.opentox.org/algorithms.owl#Regression";
@@ -221,7 +223,27 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 					new AlgorithmURIReporter(getRequest())
 					);	
-		else {
+		else if (algorithm.getType().equals(typeDescriptor)) {
+			try {
+				CallableSimpleModelCreator mc = new CallableSimpleModelCreator(
+						form,
+						getRequest().getRootRef(),
+						(AmbitApplication)getApplication(),
+						algorithm,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+						new AlgorithmURIReporter(getRequest())					
+						);
+				ModelQueryResults model = mc.createModel();
+				return new CallableDescriptorCalculator(
+						form,
+						getRequest().getRootRef(),
+						(AmbitApplication)getApplication(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+			} catch (Exception x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+			}
+		} else {
 				
 			return new CallableWekaModelCreator(
 					form,
@@ -230,6 +252,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					algorithm,
 					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 					new AlgorithmURIReporter(getRequest()));	
-		}
+		} 
+			
 	}
 }

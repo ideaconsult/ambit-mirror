@@ -23,6 +23,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		q.setContent("Nothing");
 		q.setPredictors(new Template("New template"));
 		q.setDependent(new Template("BCF"));
+		q.setPredicted(new Template("BCF"));
 		return new CreateModel(q);
 	}
 
@@ -77,13 +78,19 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		ModelQueryResults q = new ModelQueryResults();
 		q.setName("Test model");
 		q.setContent("Nothing");
+		
 		Template t1 = new Template("Predictors template");
 		t1.add(new Property("New predictor 1"));
 		t1.add(new Property("New predictor 2"));
 		q.setPredictors(t1);
+		
 		Template t2 = new Template("Dependent template");
 		t2.add(new Property("New dependent"));
 		q.setDependent(t2);
+		
+		Template t3 = new Template("Predicted template");
+		t3.add(new Property("New predicted"));
+		q.setPredicted(t3);		
 		return new CreateModel(q);
 	}
 

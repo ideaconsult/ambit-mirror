@@ -26,7 +26,7 @@ public class ModelTemplates extends AbstractPropertyRetrieval<ModelQueryResults,
 		predicted {
 			@Override
 			public String getTableColumn() {
-				return "dependent";
+				return "predicted";
 			}
 		},
 		independent{

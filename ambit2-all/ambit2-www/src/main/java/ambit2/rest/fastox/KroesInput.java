@@ -76,7 +76,7 @@ public class KroesInput extends FeatureResource {
 								b.append("</form></span></div>");
 								output.write(b.toString());
 							} catch (Exception x) {
-								
+								x.printStackTrace();
 							}
 							return null;
 						}

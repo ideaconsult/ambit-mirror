@@ -104,27 +104,50 @@ public class ModelResourceTest extends ResourceTest {
 		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),
 				null,
 				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),
-				String.format("http://localhost:%d/algorithm/SimpleKMeans", port));
+				String.format("http://localhost:%d/algorithm/SimpleKMeans", port)
+				);
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,value_num FROM property_values join properties using(idproperty) where name='Cluster'");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();			
 	}
 	@Test
 	public void testJ48Test() throws Exception {
-		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/3",port,port,port),
-				String.format("http://localhost:%d/feature/3",port),
+		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/4",port,port,port,port),
+				String.format("http://localhost:%d/feature/4",port),
 				String.format("http://localhost:%d/dataset/2?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/3",port,port,port),
 				String.format("http://localhost:%d/algorithm/J48", port));
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,value_num FROM property_values join properties using(idproperty) join struc_dataset using(idstructure) where id_srcdataset=2 and idproperty=5");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();			
 	}	
 	
 	@Test
 	public void testJ48() throws Exception {
-		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/3",port,port,port,port),
-				String.format("http://localhost:%d/feature/3",port),
-				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/3",port,port,port,port),
+		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",port,port,port,port),
+				String.format("http://localhost:%d/feature/4",port),
+				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port,port),
 				String.format("http://localhost:%d/algorithm/J48", port));
+	
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT id_srcdataset,idstructure,idproperty,name,value_string,value_number FROM values_all join struc_dataset using(idstructure) where id_srcdataset=1 and idproperty=5 order by idstructure");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();		
+		
 	}	
 	public void predict(String dataset, String target, String datasetTest, String algorithmURI) throws Exception {		
 		setUpDatabase("src/test/resources/src-datasets_model.xml");
-		//First create a model
 		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT id_srcdataset,idstructure,idproperty,name,value_string,value_number FROM values_all join struc_dataset using(idstructure) where id_srcdataset=1 and idproperty=4 order by idstructure");
+		Assert.assertEquals(3,table.getRowCount());
+		c.close();		
+		//First create a model
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(),dataset); 
 		if (target!=null)
@@ -146,11 +169,7 @@ public class ModelResourceTest extends ResourceTest {
 				"%s?feature_uris[]=%s", datasetTest, Reference.encode(String
 						.format("%s/predicted", wekaURI))));
 		
-        IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED",
-				"SELECT name,value_num FROM property_values join properties using(idproperty) where idproperty=3");
-		Assert.assertEquals(4,table.getRowCount());
-		c.close();		
+	
 	}	
 	
 	

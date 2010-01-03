@@ -73,11 +73,12 @@ public class FastToxStep2 extends ModelResource {
 					protected void writeMoreColumns(ModelQueryResults model,
 							Writer writer) {
 						try {
-							writer.write(String.format("<td><form method=\"POST\" action=\"%s/model/%d?%s=%s\">",
-									getUriReporter().getBaseReference(),model.getId(),
-									OpenTox.params.dataset_uri.toString(),
-									Reference.encode(structureReporter.getURI(record))
+							writer.write(String.format("<td><form method=\"POST\" action=\"%s/model/%d\">",
+									getUriReporter().getBaseReference(),model.getId()
 									));
+							writer.write(
+									String.format("<input type=\"hidden\" value=\"%s\" name=\"%s\">",
+									structureReporter.getURI(record),OpenTox.params.dataset_uri.toString()));							
 							writer.write("<input type=\"submit\" value=\"Predict\">");
 							writer.write("</form></td>");
 	

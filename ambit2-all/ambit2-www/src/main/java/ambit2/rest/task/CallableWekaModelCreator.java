@@ -18,6 +18,8 @@ import weka.core.Instances;
 import weka.core.WekaException;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
+import weka.filters.unsupervised.attribute.RemoveUseless;
+import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -107,13 +109,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		}	
 		
 		
-		/*
-        MultiFilter multiFilter = new MultiFilter();
-        multiFilter.setFilters(new Filter[] {
-                new ReplaceMissingValues()
-                });
-        multiFilter.setInputFormat(instances);
-        */
+
 		//remove firstCompoundID attribute
 		String[] options = new String[2];
 		options[0] = "-R";                                   
@@ -122,10 +118,24 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		remove.setOptions(options);                          
 		remove.setInputFormat(instances);   
 		 
+		/*
+        MultiFilter multiFilter = new MultiFilter();
+        multiFilter.setFilters(new Filter[] {
+        		remove
+        //        new ReplaceMissingValues()
+                });
+        multiFilter.setInputFormat(instances);
+        		*/
 		//Filter filter = new RemoveUseless();
 		//filter.setInputFormat(instances);
 		
-        Instances newInstances = Filter.useFilter(instances, remove);	
+        Instances newInstances = Filter.useFilter(instances, remove);
+        Filter filter = new RemoveUseless();
+        filter.setInputFormat(newInstances);
+        newInstances = Filter.useFilter(newInstances, filter);
+        filter = new ReplaceMissingValues();
+        filter.setInputFormat(newInstances);
+        newInstances = Filter.useFilter(newInstances, filter);        
         
 		String name = String.format("%s.%s",UUID.randomUUID().toString(),weka.getClass().getName());
 		ModelQueryResults m = new ModelQueryResults();
@@ -143,6 +153,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 				reporter.getURI(applicationRootReference.toString(),m));		
 		
 		Template predictors = null;
+		Template dependent = null;
 		Template predicted = null;
 		if (clusterer!= null) {
 			clusterer.buildClusterer(newInstances);
@@ -150,6 +161,8 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 			Property property = new Property("Cluster",prediction);
 			predicted.add(property);
 
+			dependent = new Template("Empty");
+			
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
@@ -166,10 +179,16 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 					}
 
 			classifier.buildClassifier(newInstances);
-			predicted = new Template(name+"#Predicted");
-			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), prediction); 
-
-			predicted.add(property);
+			dependent = new Template(name+"#Dependent");
+			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), entry); 
+			dependent.add(property);
+			
+			predicted = new Template(name+"#predicted");
+			Property predictedProperty = new Property(property.getName(),prediction); 
+			predictedProperty.setLabel(property.getLabel());
+			predictedProperty.setUnits(property.getUnits());
+			predicted.add(predictedProperty);
+			
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
@@ -181,7 +200,8 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		
 
 		m.setPredictors(predictors);
-		m.setDependent(predicted);
+		m.setDependent(dependent);
+		m.setPredicted(predicted);
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
@@ -192,15 +212,29 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		oos.close();	
 		
 		byte[] content = out.toByteArray();
-		m.setContent(Base64.encode(content));
-		/*
-		try {
-		 InputStream in = new ByteArrayInputStream(content);
-				 //m.getContent().getBytes("UTF-8"));
-		ObjectInputStream ois =  new ObjectInputStream(in);
 		
-		clusterer = null; classifier = null;
-	 	weka = ois.readObject();
+		Form form = new Form();
+		
+		form.add("model", Base64.encode(content));
+		newInstances.delete();
+		form.add("classIndex",Integer.toString(newInstances.classIndex()));		
+		newInstances.delete();
+		form.add("header", newInstances.toString());
+		m.setContent(form.getWebRepresentation().getText());
+		
+		/*
+
+		
+		try {
+			Form newform = new Form(m.getContent());
+			 InputStream in = new ByteArrayInputStream(Base64.decode(newform.getFirstValue("model")));
+					 //m.getContent().getBytes("UTF-8"));
+			ObjectInputStream ois =  new ObjectInputStream(in);
+			
+			clusterer = null; classifier = null;
+		 	weka = ois.readObject();
+		 	
+		 	System.out.println(newform.getFirstValue("header"));
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
