@@ -46,7 +46,7 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	public PropertyValueHTMLReporter(Request baseRef, boolean editable) {
 	
 		super(baseRef,true);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,true);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,editable);
 		propertyURIReporter = new PropertyURIReporter(baseRef);
 		this.editable = editable;
 	}

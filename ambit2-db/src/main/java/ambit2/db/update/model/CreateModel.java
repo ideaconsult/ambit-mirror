@@ -17,13 +17,15 @@ import ambit2.db.update.dictionary.TemplateAddProperty;
 public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	protected List<TemplateAddProperty> templatePredictors;
 	protected List<TemplateAddProperty> templateDependent;
+	protected List<TemplateAddProperty> templatePredicted;
 	protected Dictionary dictPredictors;
 	protected Dictionary dictDependent;
+	protected Dictionary dictPredicted;
 	protected CreateDictionary createDictionary;
 	protected int sql_size = 0;
 	public static final String create_sql = 
-		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,content,mediatype,algorithm) " +
-		"SELECT null,?,?,t1.idtemplate,t2.idtemplate,?,?,? from template t1 join template t2 where t1.name=? and t2.name =? ";
+		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,predicted,content,mediatype,algorithm) " +
+		"SELECT null,?,?,t1.idtemplate,t2.idtemplate,t3.idtemplate,?,?,? from template t1 join template t2 join template t3 where t1.name=? and t2.name =? and t3.name=?";
 	;
 
 	public CreateModel(ModelQueryResults ref) {
@@ -39,8 +41,12 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 		if (object != null) {
 			dictPredictors = new Dictionary(object.getPredictors().getName(),"Predictors");
 			templatePredictors = processTemplate(dictPredictors, object.getPredictors());
+			
 			dictDependent = new Dictionary(object.getDependent().getName(),"Models");
 			templateDependent = processTemplate(dictDependent, object.getDependent());
+			
+			dictPredicted = new Dictionary(object.getPredicted().getName(),"Models");
+			templatePredicted = processTemplate(dictPredicted, object.getPredicted());			
 		}
 	}
 	protected List<TemplateAddProperty> processTemplate(Dictionary d, Template t) {
@@ -54,7 +60,7 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		int c = 0;
-		
+		//independent vars
 		if (templatePredictors.size()==0) {
 			createDictionary.setObject(dictPredictors);
 			String[] sql = createDictionary.getSQL();
@@ -70,7 +76,7 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 					c++;
 				}
 	 		}
-		
+		//dependent vars
 		if (templateDependent.size()==0) {
 			createDictionary.setObject(dictDependent);
 			String[] sql = createDictionary.getSQL();
@@ -86,6 +92,22 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 					c++;
 				}
 	 		}		
+		//Predicted
+		if (templatePredicted.size()==0) {
+			createDictionary.setObject(dictPredicted);
+			String[] sql = createDictionary.getSQL();
+			for (int k=0; k < sql.length;k++) {
+				if (c==index) return createDictionary.getParameters(k);
+				c++;
+			}
+		} else				
+			for (TemplateAddProperty t : templatePredicted) {
+				String[] sql = t.getSQL();
+				for (int k=0; k < sql.length;k++) {
+					if (c==index) return t.getParameters(k);
+					c++;
+				}
+	 		}	
 		
 		params1.add(new QueryParam<String>(String.class, getObject().getName()));
 		if (getObject().getTrainingInstances()==null)
@@ -97,13 +119,14 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 		params1.add(new QueryParam<String>(String.class, getObject().getAlgorithm()));
 		params1.add(new QueryParam<String>(String.class, getObject().getPredictors().getName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getDependent().getName()));
+		params1.add(new QueryParam<String>(String.class, getObject().getPredicted().getName()));
 		return params1;
 		
 	}
 
 	public String[] getSQL() throws AmbitException {
 		List<String> sqls = new ArrayList<String>();
-		
+		//independent
 		if (templatePredictors.size()==0) {
 			createDictionary.setObject(dictPredictors);
 			String[] sql = createDictionary.getSQL();
@@ -113,7 +136,7 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 				String[] sql = t.getSQL();
 				for (String s:sql) sqls.add(s);
 	 		}
-		
+		//dependent
 		if (templateDependent.size()==0) {
 			createDictionary.setObject(dictDependent);
 			String[] sql = createDictionary.getSQL();
@@ -123,6 +146,17 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 				String[] sql = t.getSQL();
 				for (String s:sql) sqls.add(s);
 	 		}	
+		//predicted
+		if (templatePredicted.size()==0) {
+			createDictionary.setObject(dictPredicted);
+			String[] sql = createDictionary.getSQL();
+			for (String s:sql) sqls.add(s);
+		} else		
+			for (TemplateAddProperty t : templatePredicted) {
+				String[] sql = t.getSQL();
+				for (String s:sql) sqls.add(s);
+	 		}			
+		
 		sqls.add(create_sql);
 		//for (String s:sqls) System.out.println(s);
 		sql_size = sqls.size();

@@ -48,8 +48,9 @@ public class CallableWekaPredictor extends CallableModelPredictor<Instance> {
 	}	
 	
 	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
-		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/predicted"),null,model.getDependent());
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/dependent"),null,model.getDependent());
 		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/independent"),null,model.getPredictors());
+		createProfileFromReference(new Reference(modelUriReporter.getURI(model)+"/predicted"),null,model.getPredicted());
 		
 		IProcessor<Instance,IStructureRecord> calculator = createPredictor(model);
 

@@ -19,6 +19,13 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	private static final long serialVersionUID = -9217727533985055359L;
 	protected Template predictors;
 	protected Template dependent;
+	protected Template predicted;
+	public Template getPredicted() {
+		return predicted;
+	}
+	public void setPredicted(Template predicted) {
+		this.predicted = predicted;
+	}
 	protected TrainingInstances instances;
 	protected TestInstances testInstances;
 	protected String algorithm;

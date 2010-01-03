@@ -47,7 +47,7 @@ public class CallableSimpleModelCreator< Result> extends	CallableModelCreator<Re
 	
 
 
-	protected ModelQueryResults createModel() throws Exception {
+	public ModelQueryResults createModel() throws Exception {
 		try {
 			List<Property> p = DescriptorsFactory.createDescriptor2Properties(algorithm.getContent().toString());
 			if ((p == null)||(p.size()==0)) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"Can't create a model from "+algorithm);
@@ -61,11 +61,14 @@ public class CallableSimpleModelCreator< Result> extends	CallableModelCreator<Re
 			mr.setAlgorithm(alg_reporter.getURI(algorithm));
 			mr.setPredictors(algorithm.getInput());
 
-			Template dependent = new Template();
-			dependent.setName(String.format("Model-%s",algorithm.getName()));		
+			Template dependent = new Template("Empty");
 			mr.setDependent(dependent);
 			
-			for (Property property:p) dependent.add(property);
+			Template predicted = new Template();
+			predicted.setName(String.format("Model-%s",algorithm.getName()));		
+			mr.setPredicted(predicted);
+			
+			for (Property property:p) predicted.add(property);
 
 			return mr;			
 		

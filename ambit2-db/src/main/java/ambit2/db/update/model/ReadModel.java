@@ -21,8 +21,8 @@ import ambit2.db.search.structure.QueryStoredResults;
  */
 public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {
 	protected static String sql = 
-		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,content,mediatype,algorithm\n"+
-		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors %s";
+		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm\n"+
+		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors join template t3 on t3.idtemplate = m.predicted %s";
 	protected static String whereID = " idmodel = ? ";
 	protected static String whereName = " m.name %s substr(?,1,255)";
 	/**
@@ -97,9 +97,19 @@ public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, 
 				t.setId(rs.getInt(6));
 				q.setDependent(t);
 			}		
-			q.setContent(rs.getString(8));
-			q.setContentMediaType(rs.getString(9));
-			q.setAlgorithm(rs.getString(10));
+//predicted
+			idtemplate = rs.getObject(8);
+			if (idtemplate==null) q.setDependent(null);
+			else {
+				Template t = new Template(rs.getString(9));
+				t.setId(rs.getInt(8));
+				q.setPredicted(t);
+			}
+			
+			
+			q.setContent(rs.getString(10));
+			q.setContentMediaType(rs.getString(11));
+			q.setAlgorithm(rs.getString(12));
 			return q;
 		} catch (Exception x) {
 			return null;
