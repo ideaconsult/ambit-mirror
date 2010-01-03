@@ -35,7 +35,7 @@ import ambit2.db.search.QueryCombined;
 
 public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 	
-	
+	protected long maxRecords = 0;
 	/**
 	 * 
 	 */
@@ -71,15 +71,15 @@ public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 	}
 	public void setMaxRecords(long records) {
 		try {
-			Preferences.setProperty(Preferences.MAXRECORDS,Long.toString(records));
+			maxRecords = records;
 		} catch (Exception x) {
-			Preferences.setProperty(Preferences.MAXRECORDS,"2000");
+			maxRecords = 2000;
 		}
 		
 	}
 	public long getMaxRecords() {
 		try {
-			return Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS));
+			return maxRecords;
 		} catch (Exception x) {
 			return 2000;
 		}		

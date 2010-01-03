@@ -149,7 +149,7 @@ public class AmbitApplication extends Application {
 
 	    timer.scheduleAtFixedRate(cleanUpTasks,taskCleanupRate,taskCleanupRate);
 
-		//Preferences.setProperty(Preferences.MAXRECORDS,"0");
+		Preferences.setProperty(Preferences.MAXRECORDS,"0");
 		
 	}
 	@Override
