@@ -428,7 +428,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				count+1,
 				String.format("<a href='%s/query/similarity?search=%s&type=url&threshold=0.85' title='Find similar compounds'><img src=\"%s/images/search.png\" border='0' alt='Find similar' title='Find similar'></a>",
 							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference()),
-				String.format("<a href='%s/query/smarts?search=%s&type=url' title='Find substructure'><img src=\"%s/images/search.png\" border='0' alt='Find substructure' title='Find substructure'></a>",
+				String.format("<a href='%s/query/smarts?search=%s&type=url&max=100' title='Find substructure'><img src=\"%s/images/search.png\" border='0' alt='Find substructure' title='Find substructure'></a>",
 							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference())							
 						));
 		
