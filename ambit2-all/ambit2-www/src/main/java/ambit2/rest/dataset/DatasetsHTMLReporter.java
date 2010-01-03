@@ -73,7 +73,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			if (!collapsed) {
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
+						"<a href=\"%s%s?max=100\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
 						w.toString(),
 						CompoundResource.compound,
 						uriReporter.getBaseReference().toString()));	
@@ -88,14 +88,14 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds with SMARTS\" border=\"0\"/></a>",
+						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds with SMARTS\" border=\"0\"/></a>",
 						w.toString(),
 						"/smarts",
 						uriReporter.getBaseReference().toString()));
 				output.write("&nbsp;");
 				
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similarcompounds within this dataset\" border=\"0\"/></a>",
+						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similarcompounds within this dataset\" border=\"0\"/></a>",
 						w.toString(),
 						"/similarity",
 						uriReporter.getBaseReference().toString()));
@@ -129,7 +129,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 					MediaType mime = mimes[i];
 					output.write("&nbsp;");
 					output.write(String.format(
-							"<a href=\"%s%s?accept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							"<a href=\"%s%s?accept-header=%s&max=100\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 							w.toString(),
 							"",
 							//CompoundResource.compound,
@@ -146,7 +146,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			}
 			
 			output.write(String.format(
-					"&nbsp;<a href=\"%s\">%s</a>",
+					"&nbsp;<a href=\"%s?max=100\">%s</a>",
 					w.toString(),
 					(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getId()):dataset.getName()
 					));
