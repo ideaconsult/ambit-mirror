@@ -62,6 +62,9 @@ public class InchiProcessorTest {
 	}
 
 	@Test
+	public void test() throws Exception {
+		
+	}
 	public void testProcess() throws Exception {
 		//generate(MoleculeFactory.makeBenzene(),"InChI=1/C6/c1-2-4-6-5-3-1");
 		generate(MoleculeFactory.makeAlkane(10),"");		
