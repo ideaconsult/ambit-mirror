@@ -86,11 +86,13 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			throws ResourceException {
 		synchronized (this) {
 			
+			Form form = entity.isAvailable()?new Form(entity):new Form();
+			
 			//models
-			Iterator<T> query = createQuery(getContext(),getRequest(),getResponse());
+			Iterator<T> query = queryObject;
 			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			
-			Form form = entity.isAvailable()?new Form(entity):new Form();
+			
 			while (query.hasNext()) 
 			try {
 				T model = query.next();
