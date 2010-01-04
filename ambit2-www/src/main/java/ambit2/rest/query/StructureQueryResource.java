@@ -128,7 +128,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 		} finally {
 			
-			try {if (r != null) r.getStream().close(); } catch (Exception x) {}
+			try {if (r != null) r.release(); } catch (Exception x) {}
 			
 		}
 	}	
