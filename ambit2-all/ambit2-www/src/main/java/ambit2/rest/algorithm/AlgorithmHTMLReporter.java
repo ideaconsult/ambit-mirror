@@ -40,7 +40,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				output.write(String.format("<tr><th align=\"left\"><a href='%s'>%s</a></th><td></td><td></td></tr>", t,item.getName()));
 			else {
 				String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";
-				String target = item.isSupervised()?"<td><label for='feature_uri'>Target&nbsp;</label></td><td><input type='text' name='feature_uri' size='60' value='Enter feature URL'></td>":"";
+				String target = item.isSupervised()?"<td><label for='target'>Target&nbsp;</label></td><td><input type='text' name='target' size='60' value='Enter feature URL'></td>":"";
 				output.write(String.format(
 					"<tr><form action=\"\" method=\"POST\"><tr><th>Algorithm:&nbsp;<a href='%s'>%s</a></th><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
 					t,item.getName(),
