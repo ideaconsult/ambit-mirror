@@ -30,13 +30,6 @@ import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -180,9 +173,12 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 			"	}\n"
 			;
 		*/
+		throw new  ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+		/*
 		return new OutputRepresentation(MediaType.APPLICATION_RDF_XML) {
 			@Override
 			public void write(OutputStream out) throws IOException {
+
 				QueryExecution qe = null;
 				try {
 					Query query = QueryFactory.create(queryString);
@@ -199,10 +195,12 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 				} finally {
 					try {qe.close();} catch (Exception x) {}
 				}
-				
-			}
-		};
 
+
+			}
+	
+		};
+*/
 	}
 	protected void readOWL(InputStream in , OntModel model) throws Exception {
 		try {
