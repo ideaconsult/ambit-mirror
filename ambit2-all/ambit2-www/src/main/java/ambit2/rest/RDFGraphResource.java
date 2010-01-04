@@ -30,6 +30,13 @@ import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -37,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+
 
 /**
  * Can be queried by ?subject=""&predicate=""&object=""
@@ -142,8 +150,6 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 			} else 
 				model = getOntology(OT.createModel(OntModelSpec.OWL_MEM));
 
-
-
 			object = object==null?literal:object;	
 			return model;
 		} catch (Exception x) {
@@ -152,7 +158,45 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 		
 		}	
 	}
-	
+	protected Representation sparql(final String queryString) throws ResourceException {
+		// Create a new query
+		/*
+		String queryString = 
+			"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+			"PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+			"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+			"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+			"PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+			"	select ?x\n"+ 
+			"	where {\n"+
+			"	?x rdf:type ot:Algorithm\n"+
+			"	}\n"
+			;
+		*/
+		return new OutputRepresentation(MediaType.APPLICATION_RDF_XML) {
+			@Override
+			public void write(OutputStream out) throws IOException {
+				QueryExecution qe = null;
+				try {
+					Query query = QueryFactory.create(queryString);
+			
+					// Execute the query and obtain results
+					qe = QueryExecutionFactory.create(query,defaultOntology );
+					ResultSet results = qe.execSelect();
+
+					ResultSetFormatter.outputAsRDF(out,"RDF/XML", results);
+					out.flush();
+				
+				} catch (Exception x) {
+					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+				} finally {
+					try {qe.close();} catch (Exception x) {}
+				}
+				
+			}
+		};
+
+	}
 	protected void readOWL(InputStream in , OntModel model) throws Exception {
 		try {
 			model.read(in,null);
@@ -295,6 +339,25 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 			return super.createConvertor(variant);
 	}
 	*/
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		Form form = new Form(entity);
+		String query = form.getFirstValue("query");
+		if(query != null) {
+			return sparql(query);
+		} else {
+			search = form.getFirstValue(OpenTox.params.model_uri.toString());
+			if (search != null) getOntology(defaultOntology);
+			search = form.getFirstValue(OpenTox.params.algorithm_uri.toString());
+			if (search != null) getOntology(defaultOntology);		
+			search = form.getFirstValue(OpenTox.params.feature_uris.toString());
+			if (search != null) getOntology(defaultOntology);
+			return null;
+		}
+		
+	}
+	
 }
 /*
 sparql

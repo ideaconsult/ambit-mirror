@@ -91,6 +91,18 @@ public class OpenTox {
 				return "Feature URI(s)";
 			}
 		},
+		model_uri {
+			@Override
+			public String getDescription() {
+				return "Model URI";
+			}
+		},		
+		algorithm_uri {
+			@Override
+			public String getDescription() {
+				return "Algorithm URI";
+			}
+		},			
 		dataset_uri {
 			public boolean isMandatory() {
 				return true;
@@ -107,6 +119,14 @@ public class OpenTox {
 				return "Feature URI, target variable for model generation of classification and regression models";
 			}			
 		},
+		parameters {
+			public boolean isMandatory() {
+				return false;
+			}			
+			public String getDescription() {
+				return "Algorithm parameters";
+			}			
+		},		
 		source_uri {
 		}; 
 		public boolean isMandatory() {
