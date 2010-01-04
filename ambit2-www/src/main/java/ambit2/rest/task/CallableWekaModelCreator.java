@@ -47,6 +47,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 	protected Clusterer clusterer = null;
 	protected Classifier classifier = null;
 	protected String[] targetURI = null;
+	protected String[] parameters = null;
 	/**
 	 * 
 	 * @param uri  Dataset URI
@@ -62,6 +63,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 			AlgorithmURIReporter alg_reporter) {
 		super(form, applicationRootReference, application,algorithm,reporter,alg_reporter);
 		targetURI = OpenTox.params.target.getValuesArray(form);
+		parameters = OpenTox.params.parameters.getValuesArray(form);
 	}
 
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
@@ -139,6 +141,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
         
 		String name = String.format("%s.%s",UUID.randomUUID().toString(),weka.getClass().getName());
 		ModelQueryResults m = new ModelQueryResults();
+		m.setParameters(parameters);
 		m.setId(null);
 		m.setContentMediaType(AlgorithmFormat.WEKA.getMediaType());
 		m.setName(name);

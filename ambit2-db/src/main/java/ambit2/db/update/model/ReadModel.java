@@ -21,7 +21,7 @@ import ambit2.db.search.structure.QueryStoredResults;
  */
 public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, ModelQueryResults>  implements IQueryRetrieval<ModelQueryResults> {
 	protected static String sql = 
-		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm\n"+
+		"select idmodel,m.name,idquery,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm,parameters\n"+
 		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors join template t3 on t3.idtemplate = m.predicted %s";
 	protected static String whereID = " idmodel = ? ";
 	protected static String whereName = " m.name %s substr(?,1,255)";
@@ -110,6 +110,7 @@ public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, 
 			q.setContent(rs.getString(10));
 			q.setContentMediaType(rs.getString(11));
 			q.setAlgorithm(rs.getString(12));
+			q.setParameters(rs.getString(13));
 			return q;
 		} catch (Exception x) {
 			return null;
