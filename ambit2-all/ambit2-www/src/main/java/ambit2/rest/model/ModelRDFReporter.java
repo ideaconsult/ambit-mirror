@@ -92,14 +92,16 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 					OT.OTClass.Feature.getOntClass(getJenaModel()));
 			model.addProperty(OT.OTProperty.dependentVariables.createProperty(getJenaModel()), feature);
 		}		
-		//item.getDependent()
-		/*
-		feature.addProperty(DC.title, item.getName());
-		feature.addProperty(DC.identifier,uriReporter.getURI(item));
-		feature.addProperty(OT.units,item.getUnits());
-		feature.addProperty(OWL.sameAs,item.getLabel());
-		feature.addProperty(OT.hasSource, referenceReporter.getURI(item.getReference()));
-		*/
+		
+		t = item.getPredicted();
+		i = t.getProperties(true);
+		while (i.hasNext()) {
+			Property p = i.next();
+			Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
+					OT.OTClass.Feature.getOntClass(getJenaModel()));
+			model.addProperty(OT.OTProperty.predictedVariables.createProperty(getJenaModel()), feature);
+		}			
+
 		return model;
 	}
 
