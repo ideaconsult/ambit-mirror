@@ -51,7 +51,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			//id,class,name
 			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,typeClustering},
 			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,typeClassification},
-			{"LR","Regression: Decision tree Linear regression","weka.classifiers.functions.LinearRegression",null,typeRegression},
+			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,typeRegression},
 			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,typeRules},
 			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,typeRules},
 			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,typeRules},
