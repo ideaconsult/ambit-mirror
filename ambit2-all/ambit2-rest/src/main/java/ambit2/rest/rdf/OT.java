@@ -169,11 +169,20 @@ public class OT {
 		//client.setNext(httpclient);
 		client.setFollowingRedirects(true);
 		Representation r = client.get(mediaType);
-		if (Status.SUCCESS_OK.equals(client.getStatus()))  {
-			if ((r==null) || !r.isAvailable())
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-			return createModel(r,mediaType);		
-		} else throw new ResourceException(client.getStatus());
+		try {
+			if (Status.SUCCESS_OK.equals(client.getStatus()))  {
+				if ((r==null) || !r.isAvailable())
+					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+				return createModel(r,mediaType);		
+			} else throw new ResourceException(client.getStatus());
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+		} finally {
+			try {r.release();} catch (Exception x) {}
+		}
+		
     }
 	public static String getJenaFormat(MediaType mediaType) throws ResourceException {
 		if (mediaType.equals(MediaType.APPLICATION_RDF_XML))

@@ -107,10 +107,17 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 					
 			};
 			for (MediaType m : mt) {
-				Representation r = client.get(m);
-				if (client.getStatus().equals(Status.SUCCESS_OK)) {
-					readOWL(r.getStream(),model);
-					return model;
+				Representation r = null;
+				try {
+					r = client.get(m);
+					if (client.getStatus().equals(Status.SUCCESS_OK)) {
+						readOWL(r.getStream(),model);
+						return model;
+					}
+				} catch (Exception x) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+				} finally {
+					try {r.release();} catch (Exception x) {};
 				}
 			}
 			
