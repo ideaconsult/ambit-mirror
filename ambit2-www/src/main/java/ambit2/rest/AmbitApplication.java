@@ -514,11 +514,14 @@ public class AmbitApplication extends Application {
 		
 		SQLException error = null;
 		Connection c = null;
+		
+		ResultSet rs = null;
+		Statement t = null;
 		for (int retry=0; retry< 3; retry++)
 		try {
 			c = DatasourceFactory.getDataSource(connectionURI).getConnection();
-			Statement t = c.createStatement();
-			ResultSet rs = t.executeQuery("SELECT 1");
+			t = c.createStatement();
+			rs = t.executeQuery("/* ping */SELECT 1");
 			while (rs.next()) {rs.getInt(1);}
 			rs.close();
 			t.close();
@@ -531,7 +534,8 @@ public class AmbitApplication extends Application {
 			//remove the connection from the pool
 			try {if (c != null) c.close();} catch (Exception e) {}
 		} finally {
-			
+			try { rs.close();} catch (Exception x) {}
+			try { t.close();} catch (Exception x) {}
 		}
 		if (error != null) throw error; else throw new SQLException("Can't establish connection "+connectionURI);
 	}
