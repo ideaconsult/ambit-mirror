@@ -223,7 +223,7 @@ class DataSourceAndPool {
         Properties jdbcProperties = new Properties();
         jdbcProperties.setProperty("autoReconnectForPools", "true");
         jdbcProperties.setProperty("testOnBorrow", "true");
-        jdbcProperties.setProperty("testWhileIdle", "true");
+        jdbcProperties.setProperty("testWhileIdle", "false");
         jdbcProperties.setProperty("timeBetweenEvictionRunsMillis", "60000");
         jdbcProperties.setProperty("minEvictableIdleTimeMillis", "1800000");
         jdbcProperties.setProperty("numTestsPerEvictionRun", "3");
