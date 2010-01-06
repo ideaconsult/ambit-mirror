@@ -35,8 +35,38 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.EINECS;
 
+/*
+select name,value,abcdef,g from
+(
+select name,value,
+mod(substring(value,1,1) +
+2*substring(value,2,1) +
+3*substring(value,3,1) +
+4*substring(value,5,1) +
+5*substring(value,6,1) +
+6*substring(value,7,1),11) abcdef,
+substring(value,9,1) g
+from
+properties
+join
+property_values using(idproperty)
+join property_string using(idvalue_string)
+where (length(value)=9) and (substring(value,9,1)<11)
+and (substring(value,4,1)='-')
+and (substring(value,8,1)='-')
+) e
+where
+(abcdef!=g)
+
+*/
+/**
+
+ * @author nina
+ *
+ */
 public class EINECSTest {
 
 	@Before
@@ -53,5 +83,33 @@ public class EINECSTest {
 		Assert.assertTrue(EINECS.isValid("200-002-3"));
 		Assert.assertFalse(EINECS.isValid("200-005-1"));
 	}
+
+	@Test
+	public void testIsValid1() {
+		Assert.assertFalse(EINECS.isValid("429-130-1"));
+	}
+	
+	@Test
+	public void testIsValid2() {
+		Assert.assertTrue(EINECS.isValid("420-910-5"));
+	}
+	
+	@Test
+	public void testIsValid3() {
+		Assert.assertFalse(EINECS.isValid("419-730-1"));
+	}	
+	@Test
+	public void testIsValid4() {
+		Assert.assertTrue(EINECS.isValid("243-161-4"));
+	}	
+	
+	@Test
+	public void testIsValid5() {
+		Assert.assertFalse(EINECS.isValid("431-520-1"));
+	}	
+	@Test
+	public void testIsValid6() {
+		Assert.assertTrue(EINECS.isValid("206-316-7"));
+	}		
 
 }

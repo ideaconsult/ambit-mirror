@@ -39,6 +39,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JFormattedTextField.AbstractFormatter;
@@ -61,6 +62,9 @@ public class DelimitersPanel extends JPanel implements ItemListener, PropertyCha
 	protected String delimiter = ",";
 	protected TitledBorder border;
 	public DelimitersPanel() {
+		this(false);
+	}
+	public DelimitersPanel(boolean visible) {
 		super(new GridLayout(delimiters.length+1,1));
 		border = BorderFactory.createTitledBorder("");
 		setBorder(border);
@@ -95,7 +99,7 @@ public class DelimitersPanel extends JPanel implements ItemListener, PropertyCha
 		});
 		field.setMaximumSize(new Dimension(24,12));
 		add(field);
-		setControlsVisible(false);
+		setControlsVisible(visible);
 		/*
 		field.setInputVerifier(new InputVerifier() {
 			@Override
@@ -131,6 +135,7 @@ public class DelimitersPanel extends JPanel implements ItemListener, PropertyCha
 		field.setVisible(visible);
 		
 		if (visible) border.setTitle("Delimiters"); else border.setTitle(""); 
+		repaint();
 	}
 	public void itemStateChanged(ItemEvent e) {
 		Object source = e.getItemSelectable();
@@ -164,14 +169,18 @@ public class DelimitersPanel extends JPanel implements ItemListener, PropertyCha
 	    if (update) {
 	        if (isShowing()) {
 	        	if (file != null) {
-	        		String ext = AmbitFileFilter.getSuffix(file).toLowerCase();
-	        		if (".csv".equals(ext)) {
-	        			boxes[0].setSelected(true);
-	        			setControlsVisible(true);
-	        		} else if (".txt".equals(ext)) {
-	        			boxes[2].setSelected(true);
-	        			setControlsVisible(true);
-	        		} else  
+	        		String ext = AmbitFileFilter.getSuffix(file);
+	        		if (ext != null) {
+		        		ext = ext.toLowerCase();
+		        		if (".csv".equals(ext)) {
+		        			boxes[0].setSelected(true);
+		        			setControlsVisible(true);
+		        		} else if (".txt".equals(ext)) {
+		        			boxes[2].setSelected(true);
+		        			setControlsVisible(true);
+		        		} else  
+		        			setControlsVisible(false);
+	        		} else 
 	        			setControlsVisible(false);
 	        	} else setControlsVisible(false);
 	            repaint();
@@ -179,5 +188,8 @@ public class DelimitersPanel extends JPanel implements ItemListener, PropertyCha
 	    } 
 	}
 	
+	public static void main(String args[]) {
+		JOptionPane.showMessageDialog(null,new DelimitersPanel(true));
+	}
 	
 }

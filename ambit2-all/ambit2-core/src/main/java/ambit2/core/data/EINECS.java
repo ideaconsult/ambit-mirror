@@ -61,4 +61,19 @@ public class EINECS {
 			return false;
 		}
 	}
+	public static boolean isValidFormat(String einecs) {
+		try {
+			if (einecs.indexOf("-")<=0) return false;
+			if (einecs.length()==9) {
+				for (int i=0; i < w.length; i++) 
+					Integer.parseInt(einecs.substring(index[i],index[i]+1));
+				
+				return
+				einecs.substring(3,4).equals("-") && einecs.substring(7,8).equals("-");
+
+			} else return false;
+		} catch (Exception x) {
+			return false;
+		}
+	}
 }

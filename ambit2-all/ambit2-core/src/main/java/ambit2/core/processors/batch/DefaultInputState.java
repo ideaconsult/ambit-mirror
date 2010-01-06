@@ -1,12 +1,16 @@
 package ambit2.core.processors.batch;
 
+import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.IInputState;
 
 public class DefaultInputState extends DefaultIOState implements IInputState {
-
+	protected IChemFormat fileFormat;
+	public void setFileFormat(IChemFormat fileFormat) {
+		this.fileFormat = fileFormat;
+	}
 	/**
 	 * 
 	 */
@@ -21,5 +25,7 @@ public class DefaultInputState extends DefaultIOState implements IInputState {
 			throws AmbitIOException {
 		return reader;
 	}
-
+	public IChemFormat getFileFormat() {
+		return fileFormat;
+	}
 }

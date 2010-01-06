@@ -87,7 +87,7 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 						reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
 						return reader;
 					} else {
-						IIteratingChemObjectReader ir = FileInputState.getReader(new FileInputStream(file), file.getName());
+						IIteratingChemObjectReader ir = FileInputState.getReader(new FileInputStream(file), file.getName(),((FileInputState)target).getFileFormat());
 						if (ir == null) throw new AmbitException("Unsupported format "+file.getName());
 						else {
 							RawIteratingWrapper reader = new RawIteratingWrapper(ir);

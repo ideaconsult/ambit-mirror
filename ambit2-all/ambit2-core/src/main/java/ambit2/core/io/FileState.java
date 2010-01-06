@@ -44,7 +44,10 @@ public class FileState extends Model implements IInputOutputState {
 	protected transient File file = null;
 	protected long offset = 0;
 	protected long currentRecord = 0;
-	protected IChemFormat fileFormat = null;
+	protected IChemFormat fileFormat;
+	public IChemFormat getFileFormat() {
+		return fileFormat;
+	}
 	/**
 	 * 
 	 */

@@ -32,6 +32,7 @@ import java.io.Reader;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -42,6 +43,10 @@ import org.openscience.cdk.io.setting.StringIOSetting;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.processors.CASProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.EINECS;
+import ambit2.core.processors.structure.key.CASKey;
 
 /**
  * Iterating reader for delimited files.
@@ -147,12 +152,17 @@ public class IteratingDelimitedFileReader extends
 						
 					}
 
-					for (int i = 0; i < values.length; i++)
-						if (values[i]!=null)
-						nextMolecule.setProperty(getHeaderColumn(i), 
-								values[i].toString());
-						else 
+					for (int i = 0; i < values.length; i++) 
+						if (values[i]!=null)  {
+							if (CASProcessor.isValidFormat(values[i].toString()))
+								getHeaderColumn(i).setLabel(Property.CAS);
+							else if (EINECS.isValidFormat(values[i].toString()))
+								getHeaderColumn(i).setLabel(Property.EC);
+							nextMolecule.setProperty(getHeaderColumn(i), 
+									values[i].toString());
+						} else  
 							nextMolecule.removeProperty(getHeaderColumn(i));
+
 
 					/*
 					 * if (nextMolecule.getAtomCount() > 0) { hasNext = true; }
