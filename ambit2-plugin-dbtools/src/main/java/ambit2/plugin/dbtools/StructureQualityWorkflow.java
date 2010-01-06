@@ -25,6 +25,8 @@ import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.db.search.structure.QueryStructureByValueQuality;
+import ambit2.db.update.qlabel.CreateQLabelCAS;
+import ambit2.db.update.qlabel.CreateQLabelEINECS;
 import ambit2.db.update.qlabel.CreateQLabelPair;
 import ambit2.db.update.qlabel.DeleteStructureQLabel;
 import ambit2.db.update.qlabel.DeleteValueQLabel;
@@ -56,6 +58,26 @@ public class StructureQualityWorkflow extends Workflow {
 				return addStructureFingerprints();
 			}
 		},		
+		CAS {
+			@Override
+			public String toString() {
+				return "Verify CAS numbers";
+			}
+			@Override
+			public Activity getActivity() {
+				return verifyCAS();
+			}
+		},			
+		EINECS {
+			@Override
+			public String toString() {
+				return "Verify EINECS numbers";
+			}
+			@Override
+			public Activity getActivity() {
+				return verifyEINECS();
+			}
+		},			
 		ConsensusReport {
 			@Override
 			public String toString() {
@@ -233,6 +255,39 @@ public class StructureQualityWorkflow extends Workflow {
 	    seq.addStep(m);
 	    return seq;
 }		
+	
+	protected static Sequence verifyCAS() {
+		Sequence seq = new Sequence();
+	    
+	    ActivityPrimitive<AmbitUser, String> q = new ActivityPrimitive<AmbitUser, String>(
+	    		new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE,new CreateQLabelCAS())
+	    		);
+	    q.setName("Verify CAS RN checksum");
+	    seq.addStep(q);
+	    
+	    ActivityPrimitive m = new ActivityPrimitive(DBWorkflowContext.BATCHSTATS,DBWorkflowContext.BATCHSTATS,
+	    		new QualityStatisticsProcessor()
+	    );
+	    seq.addStep(m);
+	    return seq;
+	}		
+	
+	
+	protected static Sequence verifyEINECS() {
+		Sequence seq = new Sequence();
+	    
+	    ActivityPrimitive<AmbitUser, String> q = new ActivityPrimitive<AmbitUser, String>(
+	    		new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE,new CreateQLabelEINECS())
+	    		);
+	    q.setName("Verify EINECS number checksum");
+	    seq.addStep(q);
+	    
+	    ActivityPrimitive m = new ActivityPrimitive(DBWorkflowContext.BATCHSTATS,DBWorkflowContext.BATCHSTATS,
+	    		new QualityStatisticsProcessor()
+	    );
+	    seq.addStep(m);
+	    return seq;
+	}		
 	
 	
 	protected static Sequence addStructureQualityVerifier() {

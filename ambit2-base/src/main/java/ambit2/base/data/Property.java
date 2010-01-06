@@ -49,9 +49,9 @@ public class Property extends Model implements Serializable {
 		new CopyOnWriteArrayList<Property>();	
 		*/
 	private static String defaultReference = "Default property reference";
-	protected static final String Names = "Names";
-	protected static final String CAS = "CasRN";
-	protected static final String EC = "EC";
+	public static final String Names = "Names";
+	public static final String CAS = "CasRN";
+	public static final String EC = "EC";
 	public static synchronized Property getNameInstance() {
 		return getInstance(Names, LiteratureEntry.getIUPACReference());
 	}	
@@ -132,6 +132,8 @@ public class Property extends Model implements Serializable {
 		else if (n.contains("title")) return "Names";
 		else if (n.contains("inchi")) return "InChI";
 		else if (n.contains("smiles")) return "SMILES";
+		else if (n.contains("EC-Number")) return "EC";
+		else if (n.contains("Synonym")) return "Names";
 		return null;
 	}
 	public Property(String name) {

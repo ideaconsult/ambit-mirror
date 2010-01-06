@@ -45,28 +45,75 @@ import ambit2.core.data.EINECS;
  * Raw reader for multiple files in a folder
  */
 public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRecord,IRawReader<IStructureRecord>> implements IRawReader<IStructureRecord> {
+	protected enum FileNameMode {
+		CAS,
+		EC,
+		Name
+	}
+	protected FileNameMode mode;
 	protected CASProcessor casTransformer = new CASProcessor();
 	protected Property einecsProperty = Property.getEINECSInstance();
 	protected Property casProperty = Property.getInstance(CDKConstants.CASRN,LiteratureEntry.getCASReference());
+	protected Property nameProperty = Property.getNameInstance();
+	
 	public RawIteratingFolderReader(File[] files) {
 		super(files);
 		casProperty.setLabel(CDKConstants.CASRN);
 	}
-
+	@Override
+	public void setFiles(File[] files) {
+		super.setFiles(files);
+		casTransformer = new CASProcessor();
+		int[] count = new int[FileNameMode.values().length];
+		for (File file: files) {
+			String name = file.getName().toLowerCase();
+			int dot = name.indexOf('.');
+			if (dot >= 0) {
+				String id = name.substring(0,dot);
+				try {
+					String cas = casTransformer.process(id);
+					if (CASNumber.isValid(cas)) {
+						count[FileNameMode.CAS.ordinal()]++;
+						continue;
+					}
+				} catch (Exception x) {}
+				try {
+					if (EINECS.isValid(id)) { 
+						count[FileNameMode.EC.ordinal()]++;
+						continue;
+					}
+				} catch (Exception x) {}	
+				count[FileNameMode.Name.ordinal()]++;
+			}
+		}
+		mode = FileNameMode.CAS;
+		for (FileNameMode m : FileNameMode.values()) 
+			if (count[m.ordinal()]>count[mode.ordinal()])
+				mode = m;
+	}
 	@Override
 	public Object next() {
 		Object o = super.next();
-		if (o instanceof IStructureRecord) {
-			assignCASRN((IStructureRecord)o);
-			assignEINECS((IStructureRecord)o);
-		}
+		if (o instanceof IStructureRecord)
+			switch (mode) {
+			case CAS: {assignCASRN((IStructureRecord)o);break;}
+			case EC: {assignEINECS((IStructureRecord)o);break;}
+			default: {
+				assignName((IStructureRecord)o); break;
+			}
+			}		
 		return o;
 	}
 	public IStructureRecord nextRecord() {
 		if (reader == null) return null;
 		IStructureRecord record = reader.nextRecord();
-		assignCASRN(record);
-		assignEINECS(record);
+		switch (mode) {
+		case CAS: {assignCASRN(record);break;}
+		case EC: {assignEINECS(record);break;}
+		default: {
+			assignName(record); break;
+		}
+		}
 		return record;
 	}
 	//does file name contain CAS number? 
@@ -78,8 +125,10 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			String cas = files[index].getName().substring(0,dot);
 			try {
 				cas = casTransformer.process(cas);
-				if (CASNumber.isValid(cas)) 
+				if (CASProcessor.isValidFormat(cas)) 
 					record.setProperty(casProperty, cas);
+				else
+					record.setProperty(nameProperty, files[index].getName().substring(0,dot));
 			} catch (Exception x) {
 				
 			}
@@ -93,12 +142,23 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 		int dot = files[index].getName().indexOf('.');
 		if (dot >= 0) {
 			String ec = files[index].getName().substring(0,dot);
-			if (EINECS.isValid(ec)) {
+			if (EINECS.isValidFormat(ec)) 
 				record.setProperty(einecsProperty, ec);
-			}
+			else 
+				record.setProperty(nameProperty, ec);
 		}		
 	}	
 	
+	protected void assignName(IStructureRecord record) {
+		
+		if (record.getProperty(nameProperty)!=null)
+			record.removeProperty(nameProperty);
+		int dot = files[index].getName().indexOf('.');
+		if (dot >= 0) {
+			String ec = files[index].getName().substring(0,dot);
+			record.setProperty(nameProperty, ec);
+		} else record.setProperty(nameProperty,files[index].getName());
+	}		
 	protected IRawReader<IStructureRecord> getItemReader(int index) throws Exception {
 		String name = files[index].getName().toLowerCase();
 		if (name.endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {

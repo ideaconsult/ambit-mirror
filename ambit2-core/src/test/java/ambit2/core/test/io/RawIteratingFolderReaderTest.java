@@ -58,16 +58,17 @@ public class RawIteratingFolderReaderTest {
 			new File("src/test/resources/ambit2/core/data/mdl/12042-37-4.sdf"),
 			new File("src/test/resources/ambit2/core/data/mdl/12401-47-7.mol"),			
 			new File("src/test/resources/ambit2/core/data/mdl/12401-47-7.sdf"),
+			new File("src/test/resources/ambit2/core/data/mdl/polymer.mol"),
 						
 		};
 		int count = 0;
 		RawIteratingFolderReader reader = new RawIteratingFolderReader(files);
 		while (reader.hasNext()) {
-			//System.out.println(reader.next());
+			System.out.println(reader.next());
 			count++;
 		}
 		reader.close();
-		Assert.assertEquals(4,count);
+		Assert.assertEquals(6,count);
 	}
 	
 }

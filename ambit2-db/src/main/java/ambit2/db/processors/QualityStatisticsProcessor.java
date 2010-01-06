@@ -26,9 +26,9 @@ public class QualityStatisticsProcessor extends	ConnectionStatisticsProcessor<St
 				"group by id_srcdataset,q.label\n"
 				*/
 				
-				"SELECT name as 'Source dataset',count(*) as 'errors' from quality_structure q join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
-				"where label='ProbablyERROR' and q.user_name='comparison'\n"+
-				"group by id_srcdataset,label",
+				"SELECT name as 'Source dataset',q.user_name as 'Mode',label,count(*) as 'number of compounds' from quality_structure q join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				//"where label='ProbablyERROR' and q.user_name='comparison'\n"+
+				"group by id_srcdataset,q.user_name,label",
 		
 				/*
 				"SELECT name as 'Dataset',count(*) as 'Minority' FROM quality_chemicals q\n"+

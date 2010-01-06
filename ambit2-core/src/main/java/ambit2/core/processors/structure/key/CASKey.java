@@ -63,7 +63,6 @@ public class CASKey extends PropertyKey<String> {
 				Object cas = structure.getProperty(newkey);
 				if (cas == null)
 					continue;
-
 				cas = transformer.process(cas.toString());
 				if (CASNumber.isValid(cas.toString())) {
 					this.key = newkey;
@@ -77,7 +76,8 @@ public class CASKey extends PropertyKey<String> {
 		if (o == null)
 			return null;
 		String cas = transformer.process(o.toString());
-		if (CASNumber.isValid(cas))
+		if (CASProcessor.isValidFormat(cas))
+		//if (CASNumber.isValid(cas))
 			return cas;
 		else
 			return null;
@@ -85,7 +85,7 @@ public class CASKey extends PropertyKey<String> {
 
 	@Override
 	protected boolean isValid(Object key, Object value) {
-		return CASNumber.isValid(value.toString());
+		return CASProcessor.isValidFormat(value.toString());
 	}
 
 	public Class getType() {

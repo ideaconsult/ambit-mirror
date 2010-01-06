@@ -19,4 +19,16 @@ public class CASProcessorTest {
 		Assert.assertEquals("18903-01-0",p.process("018903-01-0"));
 		
 	}
+	
+	@Test
+	public void testIsValidFormatCAS() {
+		Assert.assertFalse(CASProcessor.isValidFormat("206-316-7"));
+	}	
+	@Test
+	public void testIsValidFormatCAS1() {
+		Assert.assertTrue(CASProcessor.isValidFormat("123-45-6"));
+		Assert.assertTrue(CASProcessor.isValidFormat("130032-94-9"));
+		Assert.assertTrue(CASProcessor.isValidFormat("18903-01-0"));
+	}	
+	
 }
