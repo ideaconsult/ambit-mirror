@@ -30,6 +30,7 @@ public class ECHAXMLParserTest {
 		ECHAPreregistrationListReader reader = new ECHAPreregistrationListReader(in);
 		int count = 0;
 		int foundCas=0;
+		int foundName=0;
 		while (reader.hasNext()) {
 			IStructureRecord record = reader.nextRecord();
 			/*
@@ -40,11 +41,13 @@ public class ECHAXMLParserTest {
 			count++;
 			for (Property p :record.getProperties()) {
 				foundCas += record.getProperty(p).equals("8008-57-9")?1:0;
+				foundName += record.getProperty(p).equals("4'-methoxyacetanilide")?1:0;
 			}
 		}
 		reader.close();
-		Assert.assertEquals(10,count);
+		Assert.assertEquals(12,count);
 		Assert.assertEquals(1,foundCas);
+		Assert.assertEquals(1,foundName);
 		//0008008-57-9
 	}
 }

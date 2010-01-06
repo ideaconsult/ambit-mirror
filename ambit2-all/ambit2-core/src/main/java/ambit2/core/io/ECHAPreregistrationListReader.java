@@ -10,10 +10,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
-import org.xmlcml.cml.tools.MoleculeTool;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -66,7 +64,10 @@ public class ECHAPreregistrationListReader extends
     	record.setFormat(MOL_TYPE.SDF.toString());
     	record.setContent("");
     	try {
-    		reader =   XMLInputFactory.newInstance().createXMLStreamReader(in,"UTF-8");
+    		XMLInputFactory factory = XMLInputFactory.newInstance();
+    		factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,Boolean.TRUE);
+    		reader =   factory.createXMLStreamReader(in,"UTF-8");
+    		
     	} catch (Exception x) {
     		reader = null;
     		x.printStackTrace();
@@ -94,11 +95,30 @@ public class ECHAPreregistrationListReader extends
 	            switch (type) {
 	            case XMLStreamConstants.START_ELEMENT: {
 	    			echa_tags tag = echa_tags.valueOf(reader.getName().getLocalPart());
+	    			tmpValue = "";
 	    			switch (tag) {
 	    			case PRE_REGISTERED_SUBSTANCE: { 
 	    				record.clear();
 	    				synonyms.clear();
 	    				break;
+	    			}
+	    			case NAME : {
+	    				
+	    			}
+	    			case CAS_NUMBER: {
+	    				
+	    			}
+	    			case EC_NUMBER: {
+	    				
+	    			}
+	    			case REGISTRATION_DATE : {
+	    				
+	    			}
+	    			case SYNONYM: {
+	    				
+	    			}
+	    			case SYNONYM_NAME: {
+	    				
 	    			}
 	    			}            	
 	            	break;
@@ -152,7 +172,10 @@ public class ECHAPreregistrationListReader extends
 	            }
 	            case XMLStreamConstants.CHARACTERS: {
 	            	 
-	            	tmpValue = reader.getText().trim();
+	            	String value = reader.getText();
+	            	if ((value!=null) && (!"".equals(value))) {
+	            		tmpValue = tmpValue+value;
+	            	}
 
 	            	break;
 	            }
