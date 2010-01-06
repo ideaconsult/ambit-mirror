@@ -60,6 +60,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"(\n"+
 		"SELECT count(distinct(id_srcdataset)) c ,idchemical FROM structure\n"+
 		"join struc_dataset using(idstructure)\n"+
+		"where type_structure != 'NA'\n"+
 		"group by idchemical\n"+
 		") A where c=1\n",
 		
