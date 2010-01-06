@@ -139,10 +139,14 @@ public class FileState extends Model implements IInputOutputState {
 	public synchronized File getFile() {
 		return file;
 	}
+	public synchronized void setFile(File file) {
+		setFile(file,null);
+	}
 	/**
 	 * @param file The file to set.
 	 */
-	public synchronized void setFile(File file) {
+	public synchronized void setFile(File file,IChemFormat format) {
+		this.fileFormat = format;
 		this.file = file;
 		setFilename(file.getAbsolutePath());
 		length = file.length();
