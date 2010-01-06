@@ -13,10 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ambit2.base.config.Preferences;
-import ambit2.base.io.MolFileFilter;
 import ambit2.base.io.MyIOUtilities;
 import ambit2.core.io.FileState;
 import ambit2.core.io.IInputState;
+import ambit2.ui.DelimitersPanel;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -93,13 +93,16 @@ public class FileSelector extends JPanel implements IAmbitEditor<FileState>, Act
 			detailsModel.setBean(object);
 	}
 	public void actionPerformed(ActionEvent e) {
+		DelimitersPanel accessory = new DelimitersPanel();
 		File file = MyIOUtilities.selectFile(JOptionPane.getFrameForComponent(this), "Select file",
 				Preferences.getProperty(Preferences.DEFAULT_DIR),
 				getObject().getSupportedExtensions(),
 				getObject().getSupportedExtDescriptions(), 
-				getObject() instanceof IInputState);
+				getObject() instanceof IInputState,
+				accessory);
+		
 		if (file != null) {
-			getObject().setFile(file);
+			getObject().setFile(file,accessory.getFormat());
 			try {
 				if (file.getParent()!=null) {
 				Preferences.setProperty(Preferences.DEFAULT_DIR,file.getParent());					
