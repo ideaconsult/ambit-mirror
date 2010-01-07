@@ -73,13 +73,13 @@ public class CompoundResourceTest extends ResourceTest {
 			throws Exception {
 		Instances instances = super.verifyResponseARFF(uri, media, in);
 		Assert.assertEquals(1,instances.numInstances());
-		Assert.assertEquals("Dataset",instances.relationName());
+		Assert.assertEquals("http://localhost:8181/compound/11?feature_uris[]=http://localhost:8181/feature",instances.relationName());
 		Attribute cas = new Attribute("CAS");
 		
 		
 		Assert.assertEquals("1530-32-1",instances.firstInstance().stringValue(3));
 		Assert.assertEquals("URI",instances.attribute(0).name());
-		Assert.assertEquals("CAS",instances.attribute(3).name());
+		Assert.assertEquals("http://localhost:8181/feature/3",instances.attribute(3).name());
 		return instances;
 	}		
 	
