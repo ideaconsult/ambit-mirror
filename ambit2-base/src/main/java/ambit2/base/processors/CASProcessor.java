@@ -41,7 +41,7 @@ public class CASProcessor extends DefaultAmbitProcessor<String, String> {
 	
 	public static boolean isValidFormat(String target) {
 		try {
-			if (target.length()>11) return false;
+			if (target.length()>12) return false;
 			if (target.length()<7) return false;
 			boolean ok = false;
 			for (int i=target.length()-1;i>=0;i--) {
