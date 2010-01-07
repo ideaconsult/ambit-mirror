@@ -104,7 +104,8 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"join struc_dataset using(idstructure) group by idchemical\n"+
 		") as SS\n"+
 		"using(idchemical)\n"+
-		"where c=1\n",
+		"where c=1\n"+
+		"and type_structure != 'NA'\n",
 		//"UNLOCK TABLES"
 
 		"delete from quality_pair"
