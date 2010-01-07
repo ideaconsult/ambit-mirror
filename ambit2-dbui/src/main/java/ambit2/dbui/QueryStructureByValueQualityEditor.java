@@ -1,25 +1,16 @@
 package ambit2.dbui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.sql.Connection;
-
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.ListModel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.openscience.cdk.CDKConstants;
 
-import ambit2.base.data.Property;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.results.AmbitRows;
-import ambit2.db.results.RowsModel;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.search.structure.QueryStructureByValueQuality;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -74,7 +65,8 @@ public class QueryStructureByValueQualityEditor extends
 		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<String>(
                 		new String[] {
-                			CDKConstants.CASRN
+                			"CAS numbers",
+                			"EINECS numbers"
                 		},
                 		presentationModel.getModel("fieldname")));
 		AutoCompleteDecorator.decorate(box);
