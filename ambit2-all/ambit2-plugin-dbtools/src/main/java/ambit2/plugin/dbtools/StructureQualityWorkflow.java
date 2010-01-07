@@ -3,13 +3,10 @@ package ambit2.plugin.dbtools;
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.SelectionBean;
-import ambit2.base.data.SourceDataset;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
-import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
@@ -21,8 +18,6 @@ import ambit2.db.processors.quality.QualityLabelWriter;
 import ambit2.db.processors.quality.QualityValueWriter;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
-import ambit2.db.search.structure.QueryDataset;
-import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.db.search.structure.QueryStructureByValueQuality;
 import ambit2.db.update.qlabel.CreateQLabelCAS;
@@ -81,7 +76,7 @@ public class StructureQualityWorkflow extends Workflow {
 		ConsensusReport {
 			@Override
 			public String toString() {
-				return "Report Consensus labels summary ";
+				return "Report database statistics";
 			}
 			@Override
 			public Activity getActivity() {

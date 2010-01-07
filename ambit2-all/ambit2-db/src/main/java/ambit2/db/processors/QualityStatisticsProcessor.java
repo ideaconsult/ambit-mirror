@@ -14,22 +14,38 @@ public class QualityStatisticsProcessor extends	ConnectionStatisticsProcessor<St
 		setSql(new String[] {
 				//"Select 'Entire database' as 'Quality labels summary'",
 				//"select label as Label,count(*) 'Number of chemicals' from quality_chemicals group by label",
-				"Select 'Entire database' as 'Quality labels summary'",
-				"select label as Label,text as Details,count(*) 'Number of chemicals' from quality_chemicals group by label,text",
-				/*
-				"Select 'by sources' as 'Quality labels summary'",
-				"SELECT name as 'Source',ifnull(q.label,'Unknown')as Label,count(*) as 'Number of chemicals' FROM\n"+
-				"chemicals left join quality_chemicals q using(idchemical)\n"+
-				"join structure using(idchemical)\n"+
-				"join struc_dataset using(idstructure)\n"+
-				"join src_dataset using(id_srcdataset)\n"+
-				"group by id_srcdataset,q.label\n"
-				*/
+				"SELECT count(*) as 'Number of datasets' from src_dataset",
+
+				"select '\n'",
+				"SELECT name as 'Dataset',count(*) as 'Number of compounds' from struc_dataset  join src_dataset using(id_srcdataset)\n"+
+				"group by id_srcdataset",
+
+				"select '\n'",
 				
-				"SELECT name as 'Source dataset',q.user_name as 'Mode',label,count(*) as 'number of compounds' from quality_structure q join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
-				//"where label='ProbablyERROR' and q.user_name='comparison'\n"+
+				"Select 'Entire database' as '\nQuality labels summary'",
+				"select label as Label,text as Details,count(*) 'Number of chemicals' from quality_chemicals group by label,text",
+
+				"select '\n'",
+				
+				"SELECT name as 'Dataset',q.user_name as 'Mode',label,count(*) as 'Number of compounds' from quality_structure q join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
 				"group by id_srcdataset,q.user_name,label",
 		
+				"select '\n'",
+				
+				"SELECT group_concat(distinct(name)) as 'Datasets',q.user_name as 'Mode',label,count(distinct(idstructure)) as 'Number of compounds' from quality_labels q join property_values using(id) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				"group by id_srcdataset,q.user_name,label",
+				
+				"select '\n'",
+				
+				"SELECT name as 'Dataset',group_concat(distinct(q.user_name)) as 'Mode',label,count(distinct(idstructure)) as 'Number of compounds' from quality_labels q join property_values using(id) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				"group by id_srcdataset,label",
+				
+				"select '\n'",
+				
+				"SELECT group_concat(distinct(name)) as 'Datasets',group_concat(distinct(q.user_name)) as 'Mode',q.label,count(distinct(idchemical)) as 'Number of compounds' from quality_labels q join property_values using(id) join structure using(idstructure) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				"group by q.label",		
+				
+				"select '\n'",
 				/*
 				"SELECT name as 'Dataset',count(*) as 'Minority' FROM quality_chemicals q\n"+
 				"join quality_pair p using(idchemical)\n"+

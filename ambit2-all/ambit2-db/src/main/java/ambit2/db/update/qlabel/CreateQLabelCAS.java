@@ -9,18 +9,10 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
 public class CreateQLabelCAS extends AbstractUpdate<AmbitUser, String> {
-	protected static String[] sql = {
-		"insert ignore into roles (role_name) values (\"ambit_quality\");",
-		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (?,\"d66636b253cb346dbb6240e30def3618\",\"CAS verifier\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
-		"insert ignore into user_roles (user_name,role_name) values (?,\"ambit_quality\");",
+	protected static String select_cas = 
 
-		//"LOCK TABLES quality_pair WRITE , quality_chemicals WRITE, fp1024_struc READ \n",
-		
-	
-		"insert into quality_structure (idstructure,user_name,label,text,updated)\n"+
-		"select idstructure,?,if(cs=g,'OK','ERROR'),name,now() from\n"+
 		"(\n"+
-		"select name,value,idstructure,\n"+
+		"select name,value,idstructure,user_name,id,\n"+
 		"mod(\n"+
 		"if(length(value)>11,substring(right(value,12),1,1)*9,0)+\n"+
 		"if(length(value)>10,substring(right(value,11),1,1)*8,0)+\n"+
@@ -39,21 +31,38 @@ public class CreateQLabelCAS extends AbstractUpdate<AmbitUser, String> {
 		"property_values using(idproperty)\n"+
 		"join property_string using(idvalue_string)\n"+
 		"where (length(value)<=13)\n"+
+		"and (value regexp \"^[[:digit:]]{2,7}-[[:digit:]]{2}-[[:digit:]]$\") =1\n"+
 		"and idtype='STRING'\n"+
 		"and substring(value,1,1)>=0\n"+
 		"and substring(right(value,2),1,1)='-'\n"+
 		"and substring(right(value,5),1,1)='-'\n"+
-		") A\n"+
+		") A\n";
+	protected static String[] sql = {
+		"insert ignore into roles (role_name) values (\"ambit_quality\");",
+		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (?,\"d66636b253cb346dbb6240e30def3618\",\"CAS verifier\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
+		"insert ignore into user_roles (user_name,role_name) values (?,\"ambit_quality\");",
+		
+		"delete from quality_structure where user_name=?",
+		/*
+		"insert into quality_structure (idstructure,user_name,label,text,updated)\n"+
+		"select idstructure,?,if(cs=g,'OK','ERROR'),name,now() from\n"+				
+		select_cas+
+		"on duplicate key update label=values(label),text=values(text),updated=values(updated)\n",
+		*/
+		"insert into quality_labels (id,user_name,label,text,updated)\n"+
+		"select id,?,if(cs=g,'OK','ERROR'),name,now() from\n"+	
+		select_cas+
 		"on duplicate key update label=values(label),text=values(text),updated=values(updated)\n"
 	};
-
+	
+	
 	public CreateQLabelCAS() {
 		super();
 		setGroup(new AmbitUser("CAS numbers"));
 	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 
-		if ((index == 1) || (index == 2) || (index == 3)){
+		if ((index == 1) || (index == 2) || (index == 3) || (index == 4)  ){
 			List<QueryParam> p = new ArrayList<QueryParam>();
 			if (getGroup() ==null) setGroup(new AmbitUser("CAS numbers"));
 			p.add(new QueryParam<String>(String.class,getGroup().getName()));

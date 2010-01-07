@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
-
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
@@ -21,29 +19,41 @@ public class QueryStructureByValueQuality extends AbstractStructureQuery<String,
 	 */
 	private static final long serialVersionUID = -3232148472829083139L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,cast(label as unsigned) as metric,label from structure\n"+
+		"select ? as idquery,idchemical,idstructure,1 as selected,cast(label as unsigned) as metric,label as text from structure\n"+
 		"where idstructure in\n"+
 		"(\n"+
-		"select idstructure from properties join property_values  using(idproperty) left join quality_labels using(id) where comments=? %s\n"+
+		"select idstructure from properties join property_values  using(idproperty) left join quality_labels using(id) where quality_labels.user_name=? %s\n"+
 		")\n";
 	public final static String where = " and label %s ?";
 	public final static String where_null = " and label is null";
 
 	public QueryStructureByValueQuality() {
-		setFieldname(CDKConstants.CASRN);
+		super();
+		setFieldname(null);
 		setValue(null);
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 	}
 	public QueryStructureByValueQuality(QLabel label) {
-		setFieldname(CDKConstants.CASRN);
+		super();
+		setFieldname(null);
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 		setValue(label);
 	}	
 	public QueryStructureByValueQuality(QUALITY label) {
-		setFieldname(CDKConstants.CASRN);
+		super();
+		setFieldname(null);
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 		setValue(new QLabel(label));
 	}	
+	@Override
+	public void setFieldname(String fieldname) {
+		super.setFieldname(fieldname);
+	}
+	@Override
+	public String getFieldname() {
+
+		return super.getFieldname();
+	}
 	public String getSQL() throws AmbitException {
 		if (getValue()==null)
 			return String.format(sql,where_null);
