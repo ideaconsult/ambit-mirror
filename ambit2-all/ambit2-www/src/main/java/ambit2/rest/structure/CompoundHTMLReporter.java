@@ -128,10 +128,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected String templates(Reference baseReference) throws IOException {
 		StringBuilder w = new StringBuilder();
 		w.append("<input type='submit' value='Retrieve data'><p>");
-		w.append(String.format(
-				"<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"%s\">\n",
-				OpenTox.params.feature_uris.toString()));
-		w.append("<option value=\"\">Default</option>\n");
 		String[][] options= {
 				{"template/All/Identifiers/view/tree","Identifiers"},
 				{"template/All/Dataset/view/tree","Datasets"},
@@ -144,10 +140,41 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
 				{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},
 		};
+		
+		Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
+		String[] values = OpenTox.params.feature_uris.getValuesArray(form);
+		w.append("<input type=CHECKBOX value=\"\">Default</option>\n");
+
+		for (String option[]:options) {
+			String checked = "";
+			for (String value:values) if (value.equals(String.format("%s/%s", baseReference,option[0]))) 
+			{ checked = "CHECKED"; break;}
+			w.append(String.format("<br><input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s/%s\" name=\"%s\">%s</option>\n",
+						checked,
+						baseReference,
+						option[0],
+						OpenTox.params.feature_uris.toString(),option[1]));
+		}
+		for (String value:values) {
+			boolean add = true;
+			for (String option[]:options) 
+				if (value.equals(String.format("%s/%s", baseReference,option[0]))) { add = false; break;}
+			if (add)
+				w.append(String.format("<br><input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s\" name=\"%s\"><a href='%s' target='_blank'>%s</a></option>\n",
+						"checked",
+						value,
+						OpenTox.params.feature_uris.toString(),value,value));				
+		}
+		/*
+		w.append(String.format(
+				"<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"%s\">\n",
+				OpenTox.params.feature_uris.toString()));
+		w.append("<option value=\"\">Default</option>\n");
+
 		for (String option[]:options)
 		w.append(String.format("<option value=\"%s/%s\">%s</option>\n",baseReference,option[0],option[1]));
 		w.append("</select>");
-		
+		*/
 		
 		return w.toString();
 	}	
