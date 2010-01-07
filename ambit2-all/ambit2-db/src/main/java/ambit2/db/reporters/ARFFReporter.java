@@ -12,7 +12,6 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter< Q, Writer> {
@@ -74,27 +73,32 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		
 			writer.write("@attribute URI string\n");
 			for (Property p : header) {
-				String d = p.getName().indexOf(" ")>=0?"\"":"";
-				writer.write(String.format("@attribute %s%s%s %s\n", 
-						d,
-						p.getName(),
-						d,
-						p.getClazz()==Number.class?"numeric":"string"));
+				writer.write(getPropertyHeader(p));
 			}
 			
 			writer.write("\n@data\n");
 		}
 	}	
-
+	protected String getPropertyHeader(Property p) {
+		String d = p.getName().indexOf(" ")>=0?"\"":"";
+		return 
+		String.format("@attribute %s%s%s %s\n", 
+				d,
+				p.getName(),
+				d,
+				p.getClazz()==Number.class?"numeric":"string");
+	}
 	public void header(Writer writer, Q query) {
 		try {
-			writer.write(String.format("@relation %s\n\n", "Dataset"));
+			writer.write(String.format("@relation %s\n\n", getRelationName()));
 		} catch (IOException x) {
 			x.printStackTrace();
 			//TODO throw exception
 		}
 	};
-
+	protected String getRelationName() {
+		return "Dataset";
+	}
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
