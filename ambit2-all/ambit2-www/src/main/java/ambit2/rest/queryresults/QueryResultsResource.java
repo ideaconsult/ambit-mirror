@@ -26,6 +26,8 @@ public class QueryResultsResource extends StructureQueryResource<QueryStoredResu
 	@Override
 	protected QueryStoredResults createQuery(Context context, Request request,
 			Response response) throws ResourceException {
+		setTemplate(createTemplate(context, request, response));
+
 		Object key = request.getAttributes().get(resourceKey);
 		if (key !=null) try {
 			QueryStoredResults q = new QueryStoredResults() {
