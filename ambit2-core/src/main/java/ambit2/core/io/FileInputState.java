@@ -14,6 +14,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.bcf.EurasBCFReader;
 
@@ -91,16 +92,24 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[SMI_INDEX])) { 
 			return new IteratingSMILESReader(stream);
 		} else if (ext.endsWith(extensions[CSV_INDEX])) {
-			if ((format != null) && (format instanceof DelimitedFileFormat))
-			return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
-			else
-				return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(",",'"'));
-		} else if (ext.endsWith(extensions[TXT_INDEX])) {
-			if ((format != null) && (format instanceof DelimitedFileFormat))
+			try {
+				if ((format != null) && (format instanceof DelimitedFileFormat))
 				return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
 				else
+					return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(",",'"'));
+			} catch (Exception x) {
+				throw new AmbitIOException(x);
+			}
+		} else if (ext.endsWith(extensions[TXT_INDEX])) {
+			try {
+				if ((format != null) && (format instanceof DelimitedFileFormat))
+					return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
+				else
 					return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(" \t",'"'));			
-					//new DelimitedFileFormat('\t','"'));		
+						//new DelimitedFileFormat('\t','"'));		
+			} catch (Exception x) {
+				throw new AmbitIOException(x);
+			}
 		} else if (ext.endsWith(extensions[MOL_INDEX])) {
 			//return new IteratingChemObjectReaderWrapper(new FilteredMDLReader(stream));
 			return new IteratingChemObjectReaderWrapper(new MDLReader(stream));

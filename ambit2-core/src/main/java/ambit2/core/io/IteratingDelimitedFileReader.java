@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -67,6 +68,8 @@ public class IteratingDelimitedFileReader extends
 	protected DelimitedFileFormat format;
 
 	protected Object[] values;
+	
+	protected CASProcessor casTransformer = new CASProcessor();
 
 
 
@@ -93,13 +96,12 @@ public class IteratingDelimitedFileReader extends
 		return LiteratureEntry.getInstance(getClass().getName(),getClass().getName());
 	}	
 
-	public IteratingDelimitedFileReader(InputStream in) {
-		this(new InputStreamReader(in));
+	public IteratingDelimitedFileReader(InputStream in) throws UnsupportedEncodingException {
+		this(new InputStreamReader(in,"UTF-8"));
 	}
 
-	public IteratingDelimitedFileReader(InputStream in,
-			DelimitedFileFormat format) {
-		this(new InputStreamReader(in), format);
+	public IteratingDelimitedFileReader(InputStream in,DelimitedFileFormat format) throws UnsupportedEncodingException{
+		this(new InputStreamReader(in,"UTF-8"), format);
 	}
 
 	/*
@@ -154,12 +156,15 @@ public class IteratingDelimitedFileReader extends
 
 					for (int i = 0; i < values.length; i++) 
 						if (values[i]!=null)  {
-							if (CASProcessor.isValidFormat(values[i].toString()))
+							String cas = casTransformer.process(values[i].toString());
+							if (CASProcessor.isValidFormat(cas)) {
 								getHeaderColumn(i).setLabel(Property.CAS);
+								values[i] = cas;
+							}
 							else if (EINECS.isValidFormat(values[i].toString()))
 								getHeaderColumn(i).setLabel(Property.EC);
 							nextMolecule.setProperty(getHeaderColumn(i), 
-									values[i].toString());
+									values[i].toString().trim());
 						} else  
 							nextMolecule.removeProperty(getHeaderColumn(i));
 
