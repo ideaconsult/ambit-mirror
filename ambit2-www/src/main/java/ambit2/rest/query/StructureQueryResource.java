@@ -50,6 +50,7 @@ import ambit2.rest.PDFConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.structure.CompoundHTMLReporter;
@@ -206,7 +207,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new CompoundHTMLReporter(getRequest(),true,getTemplate()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);			
+					new ARFFResourceReporter(getTemplate(),getRequest()),ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);

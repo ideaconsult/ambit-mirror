@@ -21,7 +21,6 @@ import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.ARFFReporter;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
@@ -44,6 +43,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.QueryXMLReporter;
@@ -151,7 +151,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFReporter(getTemplate()),ChemicalMediaType.WEKA_ARFF);	
+					new ARFFResourceReporter(getTemplate(),getRequest()),ChemicalMediaType.WEKA_ARFF);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
