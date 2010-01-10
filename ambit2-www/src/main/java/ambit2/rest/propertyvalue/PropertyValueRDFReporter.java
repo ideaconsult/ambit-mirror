@@ -11,6 +11,8 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.property.PropertyRDFReporter;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceURIReporter;
@@ -48,6 +50,12 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 		return new PropertyValueURIReporter<T, IQueryRetrieval<T>>(req);
 	}
 	public  Individual jenaProcess(Property property) throws AmbitException {
+		return
+		PropertyRDFReporter.addToModel(getJenaModel(),property, 
+				propertyReporter,
+				referenceReporter
+				);
+		/*
 		Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(property),
 				OT.OTClass.Feature.getOntClass(getJenaModel()));
 		feature.addProperty(DC.title, property.getName());
@@ -56,7 +64,8 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 		feature.addProperty(OT.DataProperty.units.createProperty(getJenaModel()),property.getUnits());
 		feature.addProperty(OWL.sameAs,property.getLabel());
 		feature.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()), referenceReporter.getURI(property.getReference()));
-		return feature;
+		*/
+
 	}	
 	public  Individual valueProcess(Object item,Individual feature) throws AmbitException {
 		Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));

@@ -307,7 +307,8 @@ public class PropertyResourceTest extends ResourceTest {
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='http://www.opentox.org/api/1.1#CasRN' and title='aaa' and url='bbb'");
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='%s' and title='aaa' and url='bbb'",Property.opentox_CAS));
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}	
