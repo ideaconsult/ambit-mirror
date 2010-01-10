@@ -51,18 +51,24 @@ public class Property extends Model implements Serializable {
 	private static String defaultReference = "Default property reference";
 	public static final String Names = "Names";
 	public static final String CAS = "CasRN";
+	public static final String opentox_CAS = "http://www.opentox.org/api/1.1#CASRN";
+	public static final String opentox_Name = "http://www.opentox.org/api/1.1#ChemicalName";
+	public static final String opentox_IupacName = "http://www.opentox.org/api/1.1#IUPACName";
+	public static final String opentox_EC = "http://www.opentox.org/api/1.1#EINECS";
+	public static final String opentox_InChI = "http://www.opentox.org/api/1.1#InChI";
+	public static final String opentox_SMILES = "http://www.opentox.org/api/1.1#SMILES";
 	public static final String EC = "EC";
 	public static synchronized Property getNameInstance() {
 		return getInstance(Names, LiteratureEntry.getIUPACReference());
 	}	
 	public static synchronized Property getCASInstance() {
 		Property p = getInstance(CAS, LiteratureEntry.getCASReference());
-		p.setLabel(CAS);
+		p.setLabel(opentox_CAS);
 		return p;
 	}		
 	public static synchronized Property getEINECSInstance() {
 		Property p =  getInstance(EC, LiteratureEntry.getEINECSReference());
-		p.setLabel(EC);
+		p.setLabel(opentox_EC);
 		return p;
 	}			
 	public static synchronized Property getInstance(String name,String reference) {
@@ -125,15 +131,15 @@ public class Property extends Model implements Serializable {
 	 * @param name
 	 */
 	public static String guessLabel(String n) {
-		if (n.startsWith("cas")) return "CasRN";
+		if (n.startsWith("cas")) return opentox_CAS;
 		else if (n.contains("species")) return "Species";
-		else if (n.contains("iupac")) return "IUPAC Name";		
-		else if (n.contains("name")) return "Names";
-		else if (n.contains("title")) return "Names";
-		else if (n.contains("inchi")) return "InChI";
-		else if (n.contains("smiles")) return "SMILES";
-		else if (n.contains("EC-Number")) return "EC";
-		else if (n.contains("Synonym")) return "Names";
+		else if (n.contains("iupac")) return opentox_IupacName;	
+		else if (n.contains("name")) return opentox_Name;
+		else if (n.contains("title")) return opentox_Name;
+		else if (n.contains("inchi")) return opentox_InChI;
+		else if (n.contains("smiles")) return opentox_SMILES;
+		else if (n.contains("EC-Number")) return opentox_EC;
+		else if (n.contains("Synonym")) return opentox_Name;
 		return null;
 	}
 	public Property(String name) {
