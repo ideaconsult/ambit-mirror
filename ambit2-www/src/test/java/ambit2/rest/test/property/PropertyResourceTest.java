@@ -61,6 +61,7 @@ public class PropertyResourceTest extends ResourceTest {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(getTestURI()));
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
 		while (iterator.hasNext()) {
+			
 			Property p = iterator.next();
 			Assert.assertEquals("Property 1",p.getName());
 			Assert.assertEquals(1,p.getId());
@@ -306,7 +307,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='CasRN' and title='aaa' and url='bbb'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='http://www.opentox.org/api/1.1#CasRN' and title='aaa' and url='bbb'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}	
