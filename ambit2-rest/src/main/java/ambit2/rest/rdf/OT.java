@@ -3,9 +3,7 @@ package ambit2.rest.rdf;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.restlet.Client;
 import org.restlet.data.MediaType;
-import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -125,6 +123,8 @@ public class OT {
 	public static OntModel createModel(OntModelSpec spec) throws ResourceException {
 		OntModel jenaModel = ModelFactory.createOntologyModel( spec,null);
 		jenaModel.setNsPrefix( "ot", OT.NS );
+		jenaModel.setNsPrefix( "ota", OTA.NS );
+		jenaModel.setNsPrefix( "otee", OTEE.NS );
 		jenaModel.setNsPrefix( "owl", OWL.NS );
 		jenaModel.setNsPrefix( "dc", DC.NS );
 		return jenaModel;
