@@ -17,6 +17,7 @@ import ambit2.rest.reference.ReferenceURIReporter;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 
@@ -67,12 +68,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		feature.addProperty(DC.title, item.getName());
 		feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
 		
-		
-		if(item.getLabel()==null) {
-			String label = Property.guessLabel(item.getName());
-			feature.addProperty(OWL.sameAs,String.format("%s%s",OT.NS,label==null?item.getName():label));
-		} else feature.addProperty(OWL.sameAs,
-				String.format("%s%s","",item.getLabel()));
+		String uri = item.getLabel();
+		if(uri==null) uri  = Property.guessLabel(item.getName());
+		if (uri.indexOf("http://")<0) {
+			uri = String.format("%s%s",OT.NS,uri);
+		}
+		feature.addProperty(OWL.sameAs,jenaModel.createResource(uri));
 		
 		
 		Individual reference = ReferenceRDFReporter.addToModel(jenaModel, item.getReference(), referenceReporter);
