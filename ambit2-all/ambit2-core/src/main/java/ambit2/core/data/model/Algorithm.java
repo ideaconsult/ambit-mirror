@@ -15,6 +15,20 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	 * 
 	 */
 	private static final long serialVersionUID = -6624262246346428281L;
+	
+	public static String typeAny = "http://www.opentox.org/algorithmTypes.owl#AlgorithmType";
+	public static String typeLearning = "http://www.opentox.org/algorithmTypes.owl#Learning";
+	public static String typeDescriptor = "http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation";
+	public static String typeRules = "http://www.opentox.org/algorithmTypes.owl#Rules";
+	public static String typeClustering = "http://www.opentox.org/algorithmTypes.owl#Clustering";
+	public static String typeRegression = "http://www.opentox.org/algorithmTypes.owl#Regression";
+	public static String typeClassification = "http://www.opentox.org/algorithmTypes.owl#Classification";
+	public static String typeSingleTarget = "http://www.opentox.org/algorithmTypes.owl#SingleTarget";
+	public static String typeEagerLearning = "http://www.opentox.org/algorithmTypes.owl#EagerLearning";
+	public static String typeLazyLearning = "http://www.opentox.org/algorithmTypes.owl#LazyLearning";
+	public static String typeSupervised = "http://www.opentox.org/algorithmTypes.owl#Supervised";
+	public static String typeUnSupervised = "http://www.opentox.org/algorithmTypes.owl#Unsupervised";
+	
 	public enum AlgorithmFormat {
 		JAVA_CLASS {
 			@Override
@@ -41,28 +55,28 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	protected List<Parameter> parameters;
 	protected T content;
 	protected AlgorithmFormat format=AlgorithmFormat.JAVA_CLASS;
-	protected String type;
-	protected boolean requiresDataset = false;
-	protected boolean supervised = false;
+	protected String[] type;
 
 	public boolean isSupervised() {
-		return supervised;
+		return hasType(typeClassification) || hasType(typeRegression);
 	}
-	public void setSupervised(boolean supervised) {
-		this.supervised = supervised;
-	}
+
 	public boolean isRequiresDataset() {
-		return requiresDataset;
+		return hasType(typeClustering) || hasType(typeClassification) || hasType(typeRegression) || 
+		hasType(typeLearning) || hasType(typeLazyLearning) || hasType(typeEagerLearning);
 	}
-	public void setRequiresDataset(boolean requiresDataset) {
-		this.requiresDataset = requiresDataset;
-	}
-	public String getType() {
+
+	public String[] getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(String[] type) {
 		this.type = type;
 	}
+	public boolean hasType(String type) {
+		for (String t: this.type)
+			if (t.equals(type)) return true;
+		return false;
+	}	
 	protected String description;
 	
 	public String getDescription() {
@@ -93,9 +107,11 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	}
 	public Algorithm() {
 		this("Unknown");
+		
 	}
 	public Algorithm(String name) {
 		setName(name);
+		setType(new String[] {typeAny});
 	}
 
 	public String getId() {
