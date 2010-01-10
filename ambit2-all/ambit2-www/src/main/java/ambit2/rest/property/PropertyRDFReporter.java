@@ -2,6 +2,7 @@ package ambit2.rest.property;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
@@ -71,10 +72,9 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		String uri = item.getLabel();
 		if(uri==null) uri  = Property.guessLabel(item.getName());
 		if (uri.indexOf("http://")<0) {
-			uri = String.format("%s%s",OT.NS,uri);
+			uri = String.format("%s%s",OT.NS,Reference.encode(uri));
 		}
 		feature.addProperty(OWL.sameAs,jenaModel.createResource(uri));
-		
 		
 		Individual reference = ReferenceRDFReporter.addToModel(jenaModel, item.getReference(), referenceReporter);
 		feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), reference);
@@ -86,6 +86,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 						);
 		return feature;
 	}	
+	
 	public void open() throws DbAmbitException {
 		
 	}
