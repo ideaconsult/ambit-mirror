@@ -40,21 +40,20 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();	
 	protected static List<Algorithm<String>> algorithmList;
 	
-	protected static String typeDescriptor = "http://www.opentox.org/algorithms.owl#DescriptorCalculation";
-	protected static String typeRules = "http://www.opentox.org/algorithms.owl#Rules";
-	protected static String typeClustering = "http://www.opentox.org/algorithms.owl#Clustering";
-	protected static String typeRegression = "http://www.opentox.org/algorithms.owl#Regression";
-	protected static String typeClassification = "http://www.opentox.org/algorithms.owl#Classification";
+
 	
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
 			//id,class,name
-			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,typeClustering},
-			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,typeClassification},
-			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,typeRegression},
-			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,typeRules},
-			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,typeRules},
-			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,typeRules},
+			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,
+				new String[] {Algorithm.typeClustering,Algorithm.typeSingleTarget,Algorithm.typeLazyLearning,Algorithm.typeUnSupervised}},
+			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,
+					new String[] {Algorithm.typeClassification,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised}},
+			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,
+						new String[] {Algorithm.typeRegression,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised}},
+			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {Algorithm.typeRules}},
+			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {Algorithm.typeRules}},
+			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {Algorithm.typeRules}},
 			{"toxtreeeye","ToxTree: Eye irritation","eye.EyeIrritationRules",
 				new Property[] 
 				{
@@ -64,7 +63,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Lipid Solubility","g/kg", toxTreeReference),
 				new Property("Water Solubility","g/l", toxTreeReference),
 				},
-				typeRules
+				new String[] {Algorithm.typeRules}
 			},
 			{"toxtreeskinirritation","ToxTree: Skin irritation","sicret.SicretRules",
 			new Property[] 
@@ -77,16 +76,16 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Vapour Pressure","Pa", toxTreeReference),
 				new Property("Surface Tension","mN/m", toxTreeReference)
 				},
-				typeRules
+				new String[] {Algorithm.typeRules}
 			},
-			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,typeRules},
-			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,typeRules},
-			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,typeRules},
+			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {Algorithm.typeRules}},
+			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {Algorithm.typeRules}},
+			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {Algorithm.typeRules}},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
-			},typeRules},
+			},new String[] {Algorithm.typeRules}},
 	};
 	
 	public Representation getRepresentation(Variant variant) throws ResourceException {
@@ -98,12 +97,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			algorithmList = new ArrayList<Algorithm<String>>();
 			for (Object[] d : algorithms) {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
-				alg.setType(d[4].toString());
-				alg.setRequiresDataset(typeRules.equals(d[4].toString())?false:true);
-				alg.setFormat(typeRules.equals(d[4].toString())?AlgorithmFormat.JAVA_CLASS:AlgorithmFormat.WEKA);
-				alg.setSupervised(
-						typeClassification.equals(d[4].toString()) || typeRegression.equals(d[4].toString()) 
-						);
+				alg.setType((String[])d[4]);
+				alg.setFormat(alg.hasType(Algorithm.typeRules)?AlgorithmFormat.JAVA_CLASS:AlgorithmFormat.WEKA);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2].toString());
@@ -200,7 +195,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	@Override
 	protected Reference getSourceReference(Form form,Algorithm<String> model)
 			throws ResourceException {
-		if (model.getType().equals(typeRules)) return null;
+		if (model.hasType(Algorithm.typeRules)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -214,7 +209,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			throws ResourceException {
 				
 			
-		if (algorithm.getType().equals(typeRules))
+		if (algorithm.hasType(Algorithm.typeRules))
 			return new CallableSimpleModelCreator(
 					form,
 					getRequest().getRootRef(),
@@ -223,7 +218,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 					new AlgorithmURIReporter(getRequest())
 					);	
-		else if (algorithm.getType().equals(typeDescriptor)) {
+		else if (algorithm.hasType(Algorithm.typeDescriptor)) {
 			try {
 				CallableSimpleModelCreator mc = new CallableSimpleModelCreator(
 						form,

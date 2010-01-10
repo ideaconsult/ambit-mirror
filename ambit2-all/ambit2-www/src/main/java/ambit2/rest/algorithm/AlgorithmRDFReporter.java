@@ -11,9 +11,12 @@ import org.restlet.data.MediaType;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Parameter;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.OTA;
+import ambit2.rest.rdf.OTA.OTAClass;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.vocabulary.DC;
 
 /**
@@ -50,8 +53,19 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		algorithm.addLiteral(DC.publisher,
 				 getJenaModel().createTypedLiteral(reporter.getURI(null),XSDDatatype.XSDanyURI));	
 		
-		if ((item.getType()!=null) && !"".equals(item.getType()))
-			algorithm.addProperty(OT.OTProperty.isA.createProperty(getJenaModel()), item.getType());
+		String[] types = item.getType();
+		for (String type:types)
+			if ((type!=null) && !"".equals(type)) {
+				
+				for (OTAClass value: OTA.OTAClass.values()) 
+					if (value.getNS().equals(type)) {
+						OntClass c = value.createOntClass(getJenaModel());
+						//algorithm.addProperty(RDF.type, type); 
+						algorithm.addOntClass(c);
+					}
+				algorithm.addProperty(OT.OTProperty.isA.createProperty(getJenaModel()), type);
+				
+			}
 		
 		List<Parameter> params = item.getParameters();
 		if (params != null)
@@ -74,7 +88,17 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		super.header(output, query);
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());
 		OT.OTClass.Parameter.createOntClass(getJenaModel());
-		
+		/*
+		OTA.OTAClass.Classification.createOntClass(getJenaModel());
+		OTA.OTAClass.Clustering.createOntClass(getJenaModel());
+		OTA.OTAClass.Regression.createOntClass(getJenaModel());
+		OTA.OTAClass.Rules.createOntClass(getJenaModel());
+		OTA.OTAClass.Learning.createOntClass(getJenaModel());
+		OTA.OTAClass.LazyLearning.createOntClass(getJenaModel());
+		OTA.OTAClass.EagerLearning.createOntClass(getJenaModel());
+		OTA.OTAClass.SingleTarget.createOntClass(getJenaModel());
+		OTA.OTAClass.DescriptorCalculation.createOntClass(getJenaModel());
+		*/
 		getJenaModel().createAnnotationProperty(DC.title.getURI());
 		getJenaModel().createAnnotationProperty(DC.description.getURI());
 		getJenaModel().createAnnotationProperty(DC.identifier.getURI());
