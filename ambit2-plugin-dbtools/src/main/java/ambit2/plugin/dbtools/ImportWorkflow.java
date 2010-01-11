@@ -77,6 +77,9 @@ public class ImportWorkflow extends Workflow {
 		final SelectionBean<ClassHolder> selection = new SelectionBean<ClassHolder>(
 				new ClassHolder[] {
 						new ClassHolder(
+								"ambit2.core.processors.structure.key.NoneKey",
+								"None", "", ""),						
+						new ClassHolder(
 								"ambit2.core.processors.structure.key.CASKey",
 								"CAS registry number", "", ""),
 						new ClassHolder(
