@@ -12,6 +12,7 @@ import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.OT.OTClass;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
@@ -59,10 +60,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			ReferenceURIReporter referenceReporter
 			) {
 		Individual feature = null;
+		OTClass featureType = (item.getClazz()==Number.class)?OTClass.NumericFeature:OTClass.Feature;
+		
 		if ((uriReporter==null) || (uriReporter.getBaseReference()==null) || (item.getId()<0)) {
-			feature = jenaModel.createIndividual(OT.OTClass.Feature.getOntClass(jenaModel));
+			feature = jenaModel.createIndividual(featureType.getOntClass(jenaModel));
 		} else {
-			feature = jenaModel.createIndividual(uriReporter.getURI(item),OT.OTClass.Feature.getOntClass(jenaModel));
+			feature = jenaModel.createIndividual(uriReporter.getURI(item),featureType.getOntClass(jenaModel));
 			feature.addLiteral(DC.identifier,
 					jenaModel.createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
 		}
@@ -84,6 +87,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 						AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
 						AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
 						);
+		
 		return feature;
 	}	
 	
