@@ -30,6 +30,34 @@ public class OT {
 		Dataset,
 		DataEntry,
 		Feature,
+		NumericFeature {
+			@Override
+			public OntClass createOntClass(OntModel model) {
+				OntClass feature = Feature.getOntClass(model);
+				OntClass stringFeature = model.createClass(getNS());
+				feature.addSubClass(stringFeature);
+				return stringFeature;
+			}			
+		},
+		NominalFeature {
+			@Override
+			public OntClass createOntClass(OntModel model) {
+				OntClass feature = Feature.getOntClass(model);
+				OntClass stringFeature = model.createClass(getNS());
+				feature.addSubClass(stringFeature);
+				return stringFeature;
+			}
+		},
+		StringFeature {
+			@Override
+			public OntClass createOntClass(OntModel model) {
+				OntClass feature = Feature.getOntClass(model);
+				OntClass stringFeature = model.createClass(getNS());
+				feature.addSubClass(stringFeature);
+				return stringFeature;
+			}
+			
+		},
 		FeatureValue,
 		Algorithm,
 		Model,
