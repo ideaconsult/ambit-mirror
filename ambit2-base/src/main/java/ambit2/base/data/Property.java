@@ -131,6 +131,7 @@ public class Property extends Model implements Serializable {
 	 * @param name
 	 */
 	public static String guessLabel(String n) {
+		n = n.toLowerCase();
 		if (n.startsWith("cas")) return opentox_CAS;
 		else if (n.contains("species")) return "Species";
 		else if (n.contains("iupac")) return opentox_IupacName;	
@@ -138,8 +139,10 @@ public class Property extends Model implements Serializable {
 		else if (n.contains("title")) return opentox_Name;
 		else if (n.contains("inchi")) return opentox_InChI;
 		else if (n.contains("smiles")) return opentox_SMILES;
-		else if (n.contains("EC-Number")) return opentox_EC;
-		else if (n.contains("Synonym")) return opentox_Name;
+		else if (n.equals("ec-number")) return opentox_EC;
+		else if (n.equals("ec_number")) return opentox_EC;
+		else if (n.equals("ec")) return opentox_EC;
+		else if (n.contains("synonym")) return opentox_Name;
 		return null;
 	}
 	public Property(String name) {
@@ -261,4 +264,22 @@ public class Property extends Model implements Serializable {
 		this.clazz = newProperty.clazz;
 		this.units = newProperty.units;
 	}
+	
+	public boolean isCAS() {
+		String label = getLabel();
+		if (getName().equals(label)) label = guessLabel(getName());
+		return opentox_CAS.equals(label);
+	}
+	public boolean isName() {
+		String label = getLabel();
+		if (getName().equals(label)) label = guessLabel(getName());
+		return opentox_Name.equals(label) || opentox_IupacName.equals(label);
+	}
+	public boolean isEINECS() {
+		String label = getLabel();
+		if (getName().equals(label)) label = guessLabel(getName());
+		return opentox_EC.equals(label);
+	}
+	
+	
 }
