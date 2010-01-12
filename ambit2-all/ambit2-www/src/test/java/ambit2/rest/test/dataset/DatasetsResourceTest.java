@@ -150,13 +150,31 @@ public class DatasetsResourceTest extends ResourceTest {
 	
 	@Test
 	public void testCreateEntryRDF() throws Exception {
+		CreateEntryRDF("import_dataset2.rdf");
+		
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+	}
+	@Test
+	public void testCreateEntryRDF1() throws Exception {
+		CreateEntryRDF("FeatureGenerationExample.rdf");
+		
+		IDatabaseConnection c = getConnection();	
+        ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(7,table.getRowCount());
+		c.close();
+	}	
+	public void CreateEntryRDF(String name) throws Exception {
+			
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(5,table.getRowCount());
 		c.close();
 		
-		InputStream in  = getClass().getClassLoader().getResourceAsStream("import_dataset2.rdf");
+		InputStream in  = getClass().getClassLoader().getResourceAsStream(name);
 
 		StringBuilder b = new StringBuilder();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -185,11 +203,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		}
 		//System.out.println(r.getLocationRef());
 	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
-		
-        c = getConnection();	
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(5,table.getRowCount());
-		c.close();
+
 		
 	}	
 	
