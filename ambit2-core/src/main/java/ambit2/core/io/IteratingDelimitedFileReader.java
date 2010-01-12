@@ -33,7 +33,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -45,9 +44,7 @@ import org.openscience.cdk.io.setting.StringIOSetting;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.processors.CASProcessor;
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
-import ambit2.core.processors.structure.key.CASKey;
 
 /**
  * Iterating reader for delimited files.

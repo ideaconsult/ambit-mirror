@@ -36,6 +36,7 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 
 public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,NumberCondition> {
 	/**
@@ -47,8 +48,19 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 		"SELECT ? as idquery,idchemical,idstructure,1 as selected,value_num as metric,null as text FROM properties join property_values using(idproperty) join structure using(idstructure) ";
 	public final String where_all = "where value_num is not null and value_num %s ? %s %s \n";
 	public final String where_equal = "where value_num is not null and value_num = ? %s\n";
-
+	public final String where_name = "and %s=?";
+	protected SearchMode searchMode = SearchMode.name;
+	
 	protected Number maxValue;
+	
+	public boolean isSearchByAlias() {
+		return searchMode==SearchMode.alias;
+	}
+
+	public void setSearchByAlias(boolean value) {
+		searchMode = value?SearchMode.alias:SearchMode.name;
+	}	
+	
 	public Number getMaxValue() {
 		return maxValue;
 	}
@@ -65,11 +77,11 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 //where value_num %s ? %s %s and value_num is not null\n";
 //where abs(value_num - ?) < 1E-4 %s and value_num is not null\n";
 		String sql = NumberCondition.getInstance("=").equals(getCondition())?
-					String.format(sqlField+where_equal,(isAnyField()?"":"and name=?"))
+					String.format(sqlField+where_equal,(isAnyField()?"":String.format(where_name, searchMode.getSQL())))
 				:
 					String.format(sqlField+where_all,getCondition().getSQL(),
 					(NumberCondition.getInstance(NumberCondition.between).equals(getCondition()))?" and ?":"",
-					(isAnyField()?"":"and name=?")					
+					(isAnyField()?"":String.format(where_name, searchMode.getSQL()))					
 					);
 		if (isChemicalsOnly()) return sql + " group by idchemical"; else return sql;
 					

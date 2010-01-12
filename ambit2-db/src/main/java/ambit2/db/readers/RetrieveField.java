@@ -11,6 +11,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 
 public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructureRecord,EQCondition,ResultType> implements IQueryRetrieval<ResultType> {
 	/**
@@ -25,19 +26,7 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	public void setAddNew(boolean addNew) {
 		this.addNew = addNew;
 	}
-	protected enum SearchMode {
-		name,
-		alias {
-			@Override
-			public String getSQL() {
-				return "comments";
-			}
-		},
-		idproperty;
-		public String getSQL() {
-			return toString();
-		}
-	}
+
 	protected SearchMode searchMode = SearchMode.name;
 	public SearchMode getSearchMode() {
 		return searchMode;

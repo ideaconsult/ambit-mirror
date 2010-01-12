@@ -53,6 +53,10 @@ public class CASKey extends PropertyKey<String> {
 	public CASKey() {
 	}
 
+	@Override
+	public boolean isKeyValid(Property key) {
+		return key.isCAS();
+	}
 	public String process(IStructureRecord structure) throws AmbitException {
 		if (structure == null)
 			throw new AmbitException("Empty molecule!");
@@ -63,7 +67,10 @@ public class CASKey extends PropertyKey<String> {
 				Object cas = structure.getProperty(newkey);
 				if (cas == null)
 					continue;
+				if (!isKeyValid(newkey)) continue;
+				
 				cas = transformer.process(cas.toString());
+				
 				if (CASNumber.isValid(cas.toString())) {
 					this.key = newkey;
 					return cas.toString();
