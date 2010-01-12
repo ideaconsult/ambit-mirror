@@ -111,5 +111,8 @@ public class EINECSTest {
 	public void testIsValid6() {
 		Assert.assertTrue(EINECS.isValid("206-316-7"));
 	}		
-
+	@Test
+	public void testIsValidFormat() {
+		Assert.assertTrue(EINECS.isValidFormat("614-842-7"));
+	}	
 }

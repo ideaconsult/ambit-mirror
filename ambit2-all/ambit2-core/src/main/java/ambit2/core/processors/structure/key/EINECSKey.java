@@ -29,6 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
+import ambit2.base.data.Property;
 import ambit2.core.data.EINECS;
 
 /**
@@ -47,7 +48,10 @@ public class EINECSKey extends PropertyKey<String> {
 	protected boolean isValid(Object key, Object value) {
 		return EINECS.isValidFormat(value.toString());
 	}
-
+	@Override
+	public boolean isKeyValid(Property key) {
+		return key.isEINECS();
+	}
 	public Class getType() {
 		return String.class;
 	}

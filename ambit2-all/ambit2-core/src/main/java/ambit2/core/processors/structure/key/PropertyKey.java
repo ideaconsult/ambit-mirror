@@ -55,6 +55,9 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 	public void setKey(Property key) {
 		this.key = key;
 	}	
+	public boolean isKeyValid(Property key) {
+		return true;
+	}
 	public Result process(IStructureRecord structure) throws AmbitException {
 		if (structure==null)
 			throw new AmbitException("Empty molecule!");
@@ -62,8 +65,8 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 		if ((key == null) || (structure.getProperty(key)==null)) {
 			//find which key corresponds to CAS
 			for (Property newkey: structure.getProperties()) {
-
-				if (isValid(newkey, structure.getProperty(newkey).toString())) {
+				
+				if (isKeyValid(newkey) && isValid(newkey, structure.getProperty(newkey).toString())) {
 					this.key = newkey;
 					return getProperty(structure);
 				}

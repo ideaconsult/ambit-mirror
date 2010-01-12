@@ -45,7 +45,26 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 		qf.setValue("value");
 		qf.setCondition(StringCondition.getInstance("regexp"));
 		qf.setId(1);
-		Assert.assertEquals(String.format(QueryField.sqlField,qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
+		Assert.assertEquals(String.format(QueryField.sqlField,"name",qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
+		List<QueryParam> params = qf.getParameters();
+		Assert.assertNotNull(params);
+		Assert.assertEquals(3,params.size());
+		Assert.assertEquals(Integer.class,params.get(0).getType());
+		Assert.assertEquals(String.class,params.get(1).getType());
+		Assert.assertEquals(String.class,params.get(2).getType());
+		Assert.assertEquals(1,params.get(0).getValue());
+		Assert.assertEquals("name",params.get(1).getValue());
+		Assert.assertEquals("value",params.get(2).getValue());		
+	}
+	@Test
+	public void testComments() throws Exception {
+		QueryField qf = new QueryField();
+		qf.setSearchByAlias(true);
+		qf.setFieldname(Property.getInstance("name","ref"));
+		qf.setValue("value");
+		qf.setCondition(StringCondition.getInstance("regexp"));
+		qf.setId(1);
+		Assert.assertEquals(String.format(QueryField.sqlField,"comments",qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(3,params.size());

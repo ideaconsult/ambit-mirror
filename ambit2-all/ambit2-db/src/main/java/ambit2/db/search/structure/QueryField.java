@@ -32,6 +32,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 
 
 /**
@@ -48,14 +49,24 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure\n"+
 		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
 		"join properties using(idproperty) where\n"+
-		"name %s ? and value %s ? %s";
+		"%s %s ? and value %s ? %s";
 	protected StringCondition nameCondition;
+	protected SearchMode searchMode = SearchMode.name;
+	
 	public StringCondition getNameCondition() {
 		return nameCondition;
 	}
 	public void setNameCondition(StringCondition nameCondition) {
 		this.nameCondition = nameCondition;
 	}
+	
+	public boolean isSearchByAlias() {
+		return searchMode==SearchMode.alias;
+	}
+
+	public void setSearchByAlias(boolean value) {
+		searchMode = value?SearchMode.alias:SearchMode.name;
+	}	
 	public final static String sqlAnyField = 
 		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure join property_values using(idstructure) join property_string as f using (idvalue_string) where value %s ? %s";
 	public QueryField() {
@@ -69,6 +80,7 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 			return String.format(sqlAnyField,getCondition().getSQL(),isChemicalsOnly()?" group by idchemical":"");
 		else
 			return String.format(sqlField,
+					searchMode.getSQL(),
 					getNameCondition().getSQL().toString(),
 					getCondition().getSQL(),
 					isChemicalsOnly()?" group by idchemical":"");

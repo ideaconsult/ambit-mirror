@@ -45,6 +45,19 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 	 * 
 	 */
 	private static final long serialVersionUID = -6129319550824253087L;
+	public enum SearchMode {
+		name,
+		alias {
+			@Override
+			public String getSQL() {
+				return "comments";
+			}
+		},
+		idproperty;
+		public String getSQL() {
+			return toString();
+		}
+	}	
 	protected boolean chemicalsOnly = false;
 	protected final static String XSDInt = "http://www.w3.org/2001/XMLSchema#int";
 	protected final static String XSDString = "http://www.w3.org/2001/XMLSchema#string";
