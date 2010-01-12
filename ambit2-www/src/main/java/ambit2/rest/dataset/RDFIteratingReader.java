@@ -103,8 +103,13 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		if ((recordIterator!=null) && recordIterator.hasNext()) {
 				Statement st = recordIterator.next();
 				Resource newEntry = (Resource) st.getSubject();
-				record = parseRecord( newEntry,createRecord());
-				return true;
+				try {
+					record = parseRecord( newEntry,createRecord());
+					return true;
+				} catch (Exception x) {
+					x.printStackTrace();
+					return false;
+				}
 		} else return false;
 	}
 	protected IStructureRecord createRecord() {
@@ -114,7 +119,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	public Object next() {
 		return  record;
 	}
-	protected IStructureRecord parseRecord(Resource newEntry, IStructureRecord record) {
+	protected IStructureRecord parseRecord(Resource newEntry, IStructureRecord record) throws Exception {
 		//get the compound
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
@@ -130,7 +135,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	}
 	
 	
-	protected void parseFeatureValues(Resource dataEntry,IStructureRecord record)  {
+	protected void parseFeatureValues(Resource dataEntry,IStructureRecord record)  throws Exception {
 		StmtIterator values =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.OTProperty.values.createProperty(jenaModel),(RDFNode)null));
 		
 		while (values.hasNext()) {
@@ -199,22 +204,34 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 
 	}
 	
-	public Property readFeature(final RDFNode target,Property property) {
+	public Property readFeature(final RDFNode target,Property property) throws Exception {
 		RDFPropertyIterator iterator =null;
 		try {
-			iterator = new RDFPropertyIterator(new Reference(target.toString()));
-			iterator.setBaseReference(new Reference(basereference));
-			while (iterator.hasNext()) {
-				Property p = iterator.next();
+			if(target.isAnon()) {
+				Property p = new Property("");
+				RDFPropertyIterator.parseRecord(jenaModel, (Resource)target, p, new Reference(basereference));
 				if (lookup == null) lookup = new Hashtable<String, Property>();
-				lookup.put(target.toString(), p);
+				lookup.put(p.getName(), p);				
 				return p;
-			};
-
+			} else if (target.isURIResource()) {
+				String uri = ((Resource)target).getURI();
+				iterator = new RDFPropertyIterator(new Reference(uri));
+				iterator.setBaseReference(new Reference(basereference));
+				while (iterator.hasNext()) {
+					Property p = iterator.next();
+					if (lookup == null) lookup = new Hashtable<String, Property>();
+					lookup.put(uri, p);
+					return p;
+				};
+			}
 		} catch (Exception x) {
-			String uri = target.toString();
-			if (lookup == null) lookup = new Hashtable<String, Property>();
-			lookup.put(uri, new Property(uri,new LiteratureEntry(uri,uri)));
+			if (target.isAnon()) {
+				throw x;
+			} else {
+				String uri = target.toString();
+				if (lookup == null) lookup = new Hashtable<String, Property>();
+				lookup.put(uri, new Property(uri,new LiteratureEntry(uri,uri)));
+			}
 		} finally {
 			try { iterator.close();} catch (Exception x) {}
 		}

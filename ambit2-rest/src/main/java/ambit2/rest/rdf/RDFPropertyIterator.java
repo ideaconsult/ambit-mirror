@@ -93,6 +93,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			else label = resource.isURIResource()?((Resource)resource).getURI():resource.toString();
 		}	catch (Exception x) {
 			label = Property.guessLabel(name);
+			label = label==null?name:label;
 			logger.warn(x); 
 		}	
 		property.setName(name==null?label:name);
