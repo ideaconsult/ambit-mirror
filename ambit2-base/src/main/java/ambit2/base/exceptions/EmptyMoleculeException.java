@@ -1,6 +1,5 @@
-package ambit2.rest.error;
+package ambit2.base.exceptions;
 
-import ambit2.base.exceptions.AmbitException;
 
 public class EmptyMoleculeException extends AmbitException {
 
