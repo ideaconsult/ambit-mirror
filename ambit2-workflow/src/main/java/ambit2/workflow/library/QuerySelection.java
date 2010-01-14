@@ -66,7 +66,7 @@ public class QuerySelection extends Sequence {
 						new ClassHolder("ambit2.db.search.structure.QuerySimilarityStructure","Similarity, substructure, exact structure","Search for similar structures",""),
 						new ClassHolder("ambit2.db.search.structure.QuerySMARTS","Substructure query by SMARTS","Search for substructure by SMARTS pattern",""),						
 						new ClassHolder("ambit2.db.search.structure.QueryStoredResults","Previous search results","Display results from previous queries",""),
-						new ClassHolder("ambit2.descriptors.FunctionalGroupDescriptor","Functional groups","Available functional groups",""),
+						//new ClassHolder("ambit2.descriptors.FunctionalGroupDescriptor","Functional groups","Available functional groups",""),
 						
 						new ClassHolder("ambit2.db.search.structure.QueryStructureByQualityPairLabel","Search by automatic consensus Label","The labels are assigned by 'Quality check' workflow by comparing structures from different sources",""),
 						new ClassHolder("ambit2.db.search.structure.QueryStructureByQuality","Search by Structure Quality Label","Retrieve structures with specified quality label",""),

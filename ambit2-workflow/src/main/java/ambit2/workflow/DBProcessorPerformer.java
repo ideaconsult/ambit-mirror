@@ -85,6 +85,10 @@ public class DBProcessorPerformer<P extends IDBProcessor<Target,Result>,Target,R
         	e.printStackTrace();
             context.put(errorTag, e);
             return null;
+        } catch (Throwable x) {
+        	x.printStackTrace();
+            context.put(errorTag, x);
+            return null;        	
         }
     }
 }

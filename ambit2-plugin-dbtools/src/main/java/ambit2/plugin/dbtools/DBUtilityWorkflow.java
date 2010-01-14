@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.plugin.dbtools;
 
 import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.base.data.SelectionBean;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -35,18 +34,20 @@ import ambit2.db.DbReader;
 import ambit2.db.processors.BitSetGenerator;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.db.processors.FP1024Writer;
-import ambit2.db.processors.ProcessorMissingDescriptorsQuery;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
-import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBProcessorPerformer;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
+import ambit2.workflow.calculation.CalculationDescriptors;
+import ambit2.workflow.calculation.CalculationFingerprints;
+import ambit2.workflow.calculation.CalculationSmartsData;
+import ambit2.workflow.calculation.CalculationStructuralKeys;
 import ambit2.workflow.library.LoginSequence;
 
 import com.microworkflow.execution.Performer;
@@ -67,17 +68,29 @@ public class DBUtilityWorkflow extends Workflow {
 			public String toString() {
 				return "Fingerprints (1024 bit hashed fingerprints used for similarity search and prescreening)";
 			}
+			@Override
+			public Sequence getSequence() {
+				return new CalculationFingerprints();
+			}
 		},
 		StructuralKeys {
 			@Override
 			public String toString() {
 				return "Structural keys (used to speed up SMARTS searching)";
 			}
+			@Override
+			public Sequence getSequence() {
+				return new CalculationStructuralKeys();
+			}			
 		},
 		SMARTSAccelerator {
 			@Override
 			public String toString() {
 				return "SMARTS accelerator data";
+			}
+			@Override
+			public Sequence getSequence() {
+				return new CalculationSmartsData();
 			}
 		},	
 		Descriptors {
@@ -85,7 +98,10 @@ public class DBUtilityWorkflow extends Workflow {
 			public String toString() {
 				return "Descriptors";
 			}
-			
+			@Override
+			public Sequence getSequence() {
+				return new CalculationDescriptors();
+			}			
 		},
 
 		Completed {
@@ -93,70 +109,26 @@ public class DBUtilityWorkflow extends Workflow {
 			public String toString() {
 				return "Quit, calculations are completed.";
 			}		
-		}
+			@Override
+			public Sequence getSequence() {
+				return null;
+			}
+		};
+		public abstract Sequence getSequence();
 	};
 	public DBUtilityWorkflow() {
-		//fingerprints
-		Sequence fingerprints = addCalculationFP();
-
-		//struc keys
-		Sequence strucKeys = addCalculationStructuralKeys();
-		Sequence smartsAccelerator = addCalculationSMARTSData();
-		
-		//descriptors
-		Sequence descriptorSequence = new Sequence();
-	    DescriptorsFactory factory = new DescriptorsFactory();
-	    Profile<Property> descriptors;
-	    try {
-	    	descriptors = factory.process(null);
-	    } catch (Exception x) {
-	    	x.printStackTrace();
-	    	descriptors = new Profile<Property>();
-	    }
-	    UserInteraction<Profile<Property>> defineDescriptors = new UserInteraction<Profile<Property>>(
-        		descriptors,
-        		DBWorkflowContext.DESCRIPTORS,
-        		"Select descriptor(s)");	
-	    descriptorSequence.addStep(defineDescriptors);
-        Primitive q = new Primitive(DBWorkflowContext.DESCRIPTORS,DESCRIPTORS_NEWQUERY,new Performer() {
-        	@Override
-        	public Object execute() throws Exception {
-                //QueryDataset q = new QueryDataset("Default");
-        		ProcessorMissingDescriptorsQuery p = new ProcessorMissingDescriptorsQuery();
-        		//TODO set scope - dataset
-        		//scope - entire db, query, dataset!! to be used elsewhere
-        		return p.process((Profile)getTarget());
-        	}
-        	@Override
-        	public String toString() {
-        
-        		return "Select descriptors";
-        	}
-        	
-        });
-        q.setName("Select descriptor(s)");
-        descriptorSequence.addStep(q);	    
-        descriptorSequence.addStep(addCalculationD());        
         
         Sequence seq=new Sequence();
         seq.setName("[Calculator]");    	
-        seq.addStep(getCalculationOptionsSequence(
-        		descriptorSequence,
-        		fingerprints,
-        		strucKeys,
-        		smartsAccelerator
-        		));
+        seq.addStep(getCalculationOptionsSequence());
+
         
         //setDefinition(new LoginSequence(new DatasetSelection(seq)));
         setDefinition(new LoginSequence(seq));
      
 
 	}
-	public While getCalculationOptionsSequence(
-				Activity descriptors, 
-				Activity fingerprints, 
-				Activity struckeys,
-				Activity smartsAccelerator) {
+	public While getCalculationOptionsSequence() {
 		
 		
 		While loop = new While();
@@ -178,7 +150,7 @@ public class DBUtilityWorkflow extends Workflow {
 	    				else return false;
                     }
                 }, 
-                smartsAccelerator,
+                CALC_MODE.SMARTSAccelerator.getSequence(),
                 null);
         
         Conditional descriptorCondition = new Conditional(
@@ -190,7 +162,7 @@ public class DBUtilityWorkflow extends Workflow {
 	    				else return false;
                     }
                 }, 
-                descriptors,
+                CALC_MODE.Descriptors.getSequence(),
                 smartsCondition);
         
         Conditional skeysCondition = new Conditional(
@@ -202,7 +174,7 @@ public class DBUtilityWorkflow extends Workflow {
 	    				else return false;
                     }
                 }, 
-                struckeys,
+                CALC_MODE.StructuralKeys.getSequence(),
                 descriptorCondition);
         
         Conditional fingerprintsCondition = new Conditional(
@@ -214,7 +186,7 @@ public class DBUtilityWorkflow extends Workflow {
 	    				else return false;
                     }
                 }, 
-                fingerprints,
+                CALC_MODE.Fingerprints.getSequence(),
                 skeysCondition);
         
         loop.setTestCondition(new TestCondition() {
@@ -236,114 +208,7 @@ public class DBUtilityWorkflow extends Workflow {
         loop.setBody(body);
 		return loop;
 	}	
-	protected Sequence addCalculationFP() {
-			Sequence seq = new Sequence();
-			Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
-					new Performer() {
-				@Override
-				public Object execute() throws Exception {
-					return new MissingFingerprintsQuery();
-				}
-			});
-			seq.addStep(query);
-			ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
-				new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-			p.add(new ProcessorStructureRetrieval());		
-			p.add(new BitSetGenerator(FPTable.fp1024));
-			p.add(new FP1024Writer());
-			DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
-			batch.setProcessorChain(p);
-			ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
-				new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
-					DBWorkflowContext.QUERY,
-					DBWorkflowContext.BATCHSTATS,
-					batch,false);
-		    ap.setName("Fingerprint calculations");	
-		    seq.addStep(ap);
-		    return seq;
-	}	
-	protected Sequence addCalculationStructuralKeys() {
-		Sequence seq = new Sequence();
-		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
-				new Performer() {
-			@Override
-			public Object execute() throws Exception {
-				return new MissingFingerprintsQuery(FPTable.sk1024);
-			}
-		});
-		seq.addStep(query);		
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		p.add(new ProcessorStructureRetrieval());		
-		p.add(new BitSetGenerator(FPTable.sk1024));
-		p.add(new FP1024Writer(FPTable.sk1024));
-		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
-		batch.setProcessorChain(p);
-		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
-			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
-				DBWorkflowContext.QUERY,
-				DBWorkflowContext.BATCHSTATS,
-				batch,false);
-	    ap.setName("Structural keys calculations");
-	    seq.addStep(ap);
-	    return seq;
-}		
 	
-	protected Sequence addCalculationSMARTSData() {
-		Sequence seq = new Sequence();
-		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
-				new Performer() {
-			@Override
-			public Object execute() throws Exception {
-				return new MissingFingerprintsQuery(FPTable.smarts_accelerator);
-			}
-		});
-		seq.addStep(query);		
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		p.add(new ProcessorStructureRetrieval());		
-		p.add(new SMARTSPropertiesGenerator());
-		p.add(new SMARTSAcceleratorWriter());
-		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
-		batch.setProcessorChain(p);
-		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
-			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
-				DBWorkflowContext.QUERY,
-				DBWorkflowContext.BATCHSTATS,
-				batch,false);
-	    ap.setName("SMARTS properties");
-	    seq.addStep(ap);
-	    return seq;
-}		
-	//TODO extract in a class and reuse in other workflows
-	protected Primitive addCalculationD() {
-
-		final DescriptorsCalculator calculator = new DescriptorsCalculator();
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		p1.add(new ProcessorStructureRetrieval());		
-		p1.add(calculator);
-		
-		DbReader<IStructureRecord> batch1 = new DbReader<IStructureRecord>();
-		batch1.setProcessorChain(p1);
-		
-		DBProcessorPerformer<DbReader<IStructureRecord>,IQueryRetrieval<IStructureRecord>,IBatchStatistics> performer = 
-			new DBProcessorPerformer<DbReader<IStructureRecord>,IQueryRetrieval<IStructureRecord>,IBatchStatistics>(batch1,false) {
-			public IBatchStatistics execute() throws Exception {
-				Object o = getContext().get(DBWorkflowContext.DESCRIPTORS);
-				calculator.setDescriptors((Profile)o);
-				return super.execute();
-			}
-		};	
-		
-		Primitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap1 = 
-			new Primitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
-				DESCRIPTORS_NEWQUERY,
-				DBWorkflowContext.BATCHSTATS,
-				performer);
-	    ap1.setName("Descriptor calculations");		
-	    return ap1;
-	}
 	@Override
 	public String toString() {
 	return "Database utility";
