@@ -12,63 +12,6 @@ import org.openscience.cdk.CDKConstants;
  * <b>Modified</b> 2005-4-7
  */
 public class AmbitCONSTANTS {
-	public static enum STRUC_TYPE {
-
-		NA {
-			@Override
-			public String toString() {
-				return "NA";
-			}
-		},
-		MARKUSH {
-			@Override
-			public String toString() {
-				return "MARKUSH";
-			}
-		},
-		D1 {
-			@Override
-			public String toString() {
-				return "SMILES";
-			}
-		},
-		D2noH {
-			@Override
-			public String toString() {
-				return "2D no H";
-			}
-		},
-		D2withH {
-			@Override
-			public String toString() {
-				return "2D with H";
-			}
-		},
-		D3noH {
-			@Override
-			public String toString() {
-				return "3D no H";
-			}
-		},
-		D3withH {
-			@Override
-			public String toString() {
-				return "3D with H";
-			}
-		},
-		optimized {
-			@Override
-			public String toString() {
-				return "optimized";
-			}
-		},
-		experimental {
-			@Override
-			public String toString() {
-				return "experimental";
-			}
-		}
-	};
 	/**
 	 * Version
 	 */
