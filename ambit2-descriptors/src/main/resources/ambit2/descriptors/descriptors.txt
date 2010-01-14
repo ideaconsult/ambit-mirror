@@ -1,4 +1,3 @@
-ambit2.descriptors.FunctionalGroupDescriptor
 ambit2.descriptors.PKASmartsDescriptor
 ;ambit2.descriptors.SizeDescriptor
 ;ambit2.descriptors.SpherosityDescriptor

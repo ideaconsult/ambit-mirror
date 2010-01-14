@@ -32,11 +32,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+import ambit2.base.data.Property;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
 
@@ -124,10 +124,10 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "Functional groups, defined as in http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"FunctionalGroups"),
 		    this.getClass().getName(),
 		    "$Id: FunctionalGroupDescriptor.java,v 0.2 2009/03/19 08:10:00 Nina Jeliazkova Exp $",
-            "http://ambit.sourceforge.net");
+            "http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml");
     };
     /**
      * 3 parameters : Smarts,name,hint; first two are mandatory.

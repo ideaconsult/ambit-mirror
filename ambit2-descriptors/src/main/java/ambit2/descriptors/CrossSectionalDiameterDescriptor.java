@@ -32,6 +32,8 @@ import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
+import ambit2.base.data.Property;
+
 /**
  * Cross sectional diameter.  Returns {@link org.openscience.cdk.qsar.result.DoubleResult}[3], where <br> 
  * [0] is max length, [1] is max diameter [2] is min diameter - =0 if planar
@@ -53,10 +55,10 @@ public class CrossSectionalDiameterDescriptor extends SpherosityDescriptor {
 	public static final String MIN_DIAMETER = "MIN_DIAMETER";
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://qsar.sourceforge.net/dicts/qsar-descriptors:CrossSectionalDiameter",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"CrossSectionalDiameter"),
 		    this.getClass().getName(),
 		    "$Id: CrossSectionalDiameterDescriptor.java,v 0.1 2006/06/29 14:09:00 Nina Jeliazkova Exp $",
-            "ambit2.acad.bg");
+		    "http://ambit.sourceforge.net");
     };
     /**
 

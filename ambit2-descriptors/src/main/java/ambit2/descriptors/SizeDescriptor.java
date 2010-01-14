@@ -45,6 +45,7 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
+import ambit2.base.data.Property;
 
 /**
  * Size descriptor.  Returns {@link org.openscience.cdk.qsar.result.DoubleResult}[3], where <br> 
@@ -67,10 +68,10 @@ public class SizeDescriptor implements IMolecularDescriptor {
      */
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://qsar.sourceforge.net/dicts/qsar-descriptors:SizeDescriptor",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"SizeDescriptor"),
 		    this.getClass().getName(),
 		    "$Id: SizeDescriptor.java,v 0.1 2006/07/29 11:14:00 Nina Jeliazkova Exp $",
-            "ambit2.acad.bg");
+            "http://ambit.sourceforge.net");
     };
 
     /* (non-Javadoc)

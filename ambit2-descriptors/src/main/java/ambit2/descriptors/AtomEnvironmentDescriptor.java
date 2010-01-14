@@ -27,11 +27,12 @@ import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResultType;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.base.data.Property;
 import ambit2.core.config.AmbitCONSTANTS;
 
 /**
  * implements atom environment fingerprint following
- * Xing, L., Glen, R.C. Novel Methods for the prediction of logger P, pKa and logger D. J. Chem. Inf. Comput. Sci. 2002, 42, 796-805
+ * Xing, L., Glen, R.C. Novel Methods for the prediction of logger P, pKa and log D. J. Chem. Inf. Comput. Sci. 2002, 42, 796-805
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-6-15
  */
@@ -68,10 +69,10 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
     public DescriptorSpecification getSpecification() {
         // TODO Define specification !!!!
 		return new DescriptorSpecification(
-				"http://qsar.sourceforge.net/dicts/qsar-descriptors:atomEnvironments",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"AtomEnvironment"),
 				this.getClass().getName(),
 				"$Id: AtomEnvironmentDescriptor.java,v 1.3 2005/06/15 13:30:0 nina@acad.bg",
-				"The Chemistry Development Kit");        
+				"http://ambit.sourceforge.net");        
     }
     public IDescriptorResult getDescriptorResultType() {
     	return new IntegerArrayResultType(1);

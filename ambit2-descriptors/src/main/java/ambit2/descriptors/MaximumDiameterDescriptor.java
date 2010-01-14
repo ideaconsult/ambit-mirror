@@ -32,6 +32,8 @@ import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
+import ambit2.base.data.Property;
+
 /**
  * Maximum cross sectional diameter.  Returns {@link org.openscience.cdk.qsar.result.DoubleResult}[0]. 
  * @author Nina Jeliazkova nina@acad.bg
@@ -41,10 +43,10 @@ public class MaximumDiameterDescriptor extends SpherosityDescriptor {
 
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://qsar.sourceforge.net/dicts/qsar-descriptors:MoleculeLength",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"MoleculeLength"),
 		    this.getClass().getName(),
 		    "$Id: MaximumDiameterDescriptor.java,v 0.2 2006/06/29 14:09:00 Nina Jeliazkova Exp $",
-            "ambit.acad.bg");
+		    "http://ambit.sourceforge.net");
     };    	
     public DescriptorValue calculate(IAtomContainer container) throws CDKException {
         DescriptorValue value =  getSizeDescriptorResult(container);

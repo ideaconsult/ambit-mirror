@@ -5,6 +5,7 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.AbstractDescriptorResultType;
 
@@ -36,6 +37,7 @@ public class DescriptorCalculationProcessor extends
 			throw new AmbitException("Undefined descriptor");
 		
 		try {
+			if ((target==null) || (target.getAtomCount()==0)) throw new EmptyMoleculeException();
 				return descriptor.calculate(target);
 		} catch (Exception x) {
 				return new DescriptorValue(

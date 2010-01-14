@@ -38,6 +38,7 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
+import ambit2.base.data.Property;
 import ambit2.base.external.ShellException;
 import ambit2.base.log.AmbitLogger;
 
@@ -90,11 +91,10 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
     }
     public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            //"http://qsar.sourceforge.net/dicts/qsar-descriptors:MOPAC7.1",
-        	"http://openmopac.net/Downloads/MOPAC_7.1executable.zip",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"MOPAC"),
             this.getClass().getName(),
             "$Id: DescriptorMopacShell.java,v 0.2 2007/09/21 13:02:00 nina@acad.bg$",
-            "AMBIT 2.0");
+            "http://openmopac.net/Downloads/MOPAC_7.1executable.zip");
     };
     public void setParameters(Object[] arg0) throws CDKException {
         if (arg0.length > 3) {

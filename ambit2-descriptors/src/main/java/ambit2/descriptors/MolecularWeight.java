@@ -25,7 +25,6 @@
 package ambit2.descriptors;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -35,6 +34,8 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
+
+import ambit2.base.data.Property;
 
 /**
  * 	Temporary copied from CDK in order to specify the Carbon 12 atomic mass with the right precision (see CDK bug ID  ID: 2794591)
@@ -62,15 +63,9 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
  *
  * Returns a single value named <i>wX</i> where <i>X</i> is the chemical symbol
  * or <i>MW</i> if * is specified as a parameter.
- *
- * @author      mfe4
- * @cdk.created 2004-11-13
- * @cdk.module  qsarmolecular
- * @cdk.svnrev  $Revision: 12806 $
- * @cdk.set     qsar-descriptors
- * @cdk.dictref qsar-descriptors:weight
+
  */
-@TestClass("org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptorTest")
+
 public class MolecularWeight implements IMolecularDescriptor {
 
     private String elementName = "*";
@@ -97,10 +92,10 @@ public class MolecularWeight implements IMolecularDescriptor {
     @TestMethod("testGetSpecification")
     public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-                "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weight",
+        		String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"MolecularWeight"),
                 this.getClass().getName(),
                 "$Id: MolecularWeight.java 12806 2009-05-21 8:25 nina $",
-                "The Chemistry Development Kit");
+                "http://ambit.sourceforge.net");
     }
 
     /**
