@@ -36,10 +36,9 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.IQueryObject;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryMissingDescriptor;
-import ambit2.descriptors.processors.PropertyCalculationProcessor;
 
 /**
  * Creates a query to retrieve structures without given list of descriptors
@@ -47,9 +46,18 @@ import ambit2.descriptors.processors.PropertyCalculationProcessor;
  *
  */
 public class ProcessorMissingDescriptorsQuery {
-	public IQueryRetrieval<IStructureRecord> process(Profile<Property> descriptors)
+	protected long maxRecords;
+	public ProcessorMissingDescriptorsQuery() {
+		this(10000);
+	}	
+	public ProcessorMissingDescriptorsQuery(long maxRecords) {
+		super();
+		this.maxRecords = maxRecords;
+	}
+	public IQueryObject<IStructureRecord> process(Profile<Property> descriptors)
 			throws AmbitException {
 		QueryCombinedStructure query = new QueryCombinedStructure();
+		query.setMaxRecords(maxRecords);
 		query.setCombine_as_and(false);
 		Iterator<Property> i = descriptors.getProperties(true);
 		while (i.hasNext()) {
