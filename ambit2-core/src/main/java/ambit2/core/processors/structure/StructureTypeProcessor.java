@@ -8,8 +8,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.config.AmbitCONSTANTS.STRUC_TYPE;
 import ambit2.core.groups.SuppleAtomContainer;
 
 public class StructureTypeProcessor extends DefaultAmbitProcessor<IAtomContainer, STRUC_TYPE> {
@@ -25,10 +25,13 @@ public class StructureTypeProcessor extends DefaultAmbitProcessor<IAtomContainer
 		if (target instanceof SuppleAtomContainer) return STRUC_TYPE.MARKUSH;
 		if (hasHydrogens(target)) 
 			if (has2DCoordinates(target)>0) return STRUC_TYPE.D2withH;
-			else if (has3DCoordinates(target)) return STRUC_TYPE.D3withH; else return STRUC_TYPE.NA;
+			else if (has3DCoordinates(target)) return STRUC_TYPE.D3withH; 
+			else 
+				return STRUC_TYPE.NA;
 		else
 			if (has2DCoordinates(target)>0) return STRUC_TYPE.D2noH;
-			else if (has3DCoordinates(target)) return STRUC_TYPE.D3noH; else return STRUC_TYPE.NA;			
+			else if (has3DCoordinates(target)) return STRUC_TYPE.D3noH; else 
+				return STRUC_TYPE.NA;			
 	}
 	public static boolean hasHydrogens(IAtomContainer container) {
 		Iterator<IAtom> atoms = container.atoms();
