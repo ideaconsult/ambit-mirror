@@ -49,6 +49,7 @@ public class Property extends Model implements Serializable {
 		new CopyOnWriteArrayList<Property>();	
 		*/
 	private static String defaultReference = "Default property reference";
+	public static String AMBIT_DESCRIPTORS_ONTOLOGY = "http://ambit.sourceforge.net/descriptors.owl#%s";
 	public static final String Names = "Names";
 	public static final String CAS = "CasRN";
 	public static final String opentox_CAS = "http://www.opentox.org/api/1.1#CASRN";
