@@ -19,10 +19,10 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.base.processors.AbstractReporter;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.error.EmptyMoleculeException;
 import ambit2.rest.query.QueryResource;
 
 /**
