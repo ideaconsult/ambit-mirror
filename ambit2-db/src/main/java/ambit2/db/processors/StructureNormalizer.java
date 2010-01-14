@@ -34,8 +34,10 @@ import org.openscience.cdk.tools.MFAnalyser;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.hashcode.HashcodeKey;
@@ -49,15 +51,21 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	protected HashcodeKey hashcode;	
 	protected SmilesKey smilesKey;
 	protected InchiPropertyKey inchiKey;
+	protected StructureTypeProcessor strucType;
 	public StructureNormalizer() {
 		molReader = new MoleculeReader();
 		hashcode = new HashcodeKey();
 		smilesKey = new SmilesKey();
 		inchiKey = new InchiPropertyKey();
+		strucType = new StructureTypeProcessor();
 	}
 	public IStructureRecord process(IStructureRecord structure)
 			throws AmbitException {
 		IAtomContainer molecule = molReader.process(structure);
+		if ((molecule == null) || (molecule.getAtomCount()==0)) structure.setType(STRUC_TYPE.NA);
+		else {
+			structure.setType(strucType.process(molecule));
+		}
 		if ((molecule != null) && (molecule.getProperties()!=null))
 			structure.addProperties(molecule.getProperties());
 		
