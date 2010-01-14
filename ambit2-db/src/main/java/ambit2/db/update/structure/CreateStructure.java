@@ -73,7 +73,7 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 			//Property
 			//getObject().getProperty(struc_typeProperty)
 			params1.add(new QueryParam<String>(String.class, (content==null)||("".equals(content.trim()))?
-					AmbitCONSTANTS.STRUC_TYPE.NA.toString():AmbitCONSTANTS.STRUC_TYPE.D2withH.toString()));
+					IStructureRecord.STRUC_TYPE.NA.toString():getObject().getType().toString()));
 			return params1;
 		}
 		

@@ -35,6 +35,7 @@ import java.sql.SQLException;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.smarts.CMLUtilities;
 
 public class RetrieveStructure extends AbstractStructureRetrieval<IStructureRecord> {
@@ -64,6 +65,14 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
             r.setIdstructure(rs.getInt(s_idstructure));
             r.setContent(rs.getString(s_ustructure));
             r.setFormat(rs.getString(s_format));
+            try {
+            	r.setType(STRUC_TYPE.valueOf(rs.getString(5)));
+            } catch (Exception x) {
+            	r.setType(STRUC_TYPE.NA);
+            }
+            if ((rs.getString(6)==null) || "".equals(rs.getString(6).trim()))
+            	r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
+            else
             r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), rs.getString(6));
             return r;
         } catch (SQLException x){
