@@ -38,7 +38,10 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 						item.getName(),
 						item.getUnits()));
 			if (!collapsed) {
-				output.write(String.format("Reference: <a href='%s'>%s</a>",
+				output.write(String.format("Same As : <a href='%s'>%s</a>&nbsp;",
+						item.getLabel(),
+						item.getLabel()));				
+				output.write(String.format("Created by : <a href='%s'>%s</a>",
 						item.getReference().getURL(),
 						item.getReference().getName()));
 			}
