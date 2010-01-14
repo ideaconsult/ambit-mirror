@@ -18,6 +18,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.io.MDLWriter;
@@ -25,7 +26,6 @@ import ambit2.mopac.MopacShell;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.algorithm.CatalogResource;
-import ambit2.rest.error.EmptyMoleculeException;
 import ambit2.rest.query.QueryResource;
 
 /**
