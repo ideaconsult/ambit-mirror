@@ -34,9 +34,67 @@ import java.util.Map;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 
+
 public interface IStructureRecord extends IChemical{
 	public enum MOL_TYPE {SDF,CML,CSV,URI};
-	
+	public static enum STRUC_TYPE {
+
+		NA {
+			@Override
+			public String toString() {
+				return "NA";
+			}
+		},
+		MARKUSH {
+			@Override
+			public String toString() {
+				return "MARKUSH";
+			}
+		},
+		D1 {
+			@Override
+			public String toString() {
+				return "SMILES";
+			}
+		},
+		D2noH {
+			@Override
+			public String toString() {
+				return "2D no H";
+			}
+		},
+		D2withH {
+			@Override
+			public String toString() {
+				return "2D with H";
+			}
+		},
+		D3noH {
+			@Override
+			public String toString() {
+				return "3D no H";
+			}
+		},
+		D3withH {
+			@Override
+			public String toString() {
+				return "3D with H";
+			}
+		},
+		optimized {
+			@Override
+			public String toString() {
+				return "optimized";
+			}
+		},
+		experimental {
+			@Override
+			public String toString() {
+				return "experimental";
+			}
+		}
+	};
+		
 	
     String getFormat();
     void setFormat(String format);
@@ -60,5 +118,6 @@ public interface IStructureRecord extends IChemical{
     LiteratureEntry getReference();
     void setReference(LiteratureEntry reference);
     Object clone() throws CloneNotSupportedException ;
-    
+    STRUC_TYPE getType();
+    void setType(STRUC_TYPE type);
 }

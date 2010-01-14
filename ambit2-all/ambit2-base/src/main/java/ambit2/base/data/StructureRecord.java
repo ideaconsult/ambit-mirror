@@ -42,7 +42,14 @@ public class StructureRecord implements IStructureRecord {
 	protected String format;
 	protected LiteratureEntry reference = null;
 	protected Map<Property,Object> properties;
+	protected STRUC_TYPE type = STRUC_TYPE.NA;
 	
+	public STRUC_TYPE getType() {
+		return type;
+	}
+	public void setType(STRUC_TYPE type) {
+		this.type = type;
+	}
 	public Map<Property,Object> getMap() {
 		return properties;
 	}
