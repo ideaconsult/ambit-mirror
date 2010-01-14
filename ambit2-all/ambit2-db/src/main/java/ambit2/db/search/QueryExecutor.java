@@ -66,6 +66,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 
 	
 	public synchronized ResultSet process(Q target) throws AmbitException {
+
 		long now = System.currentTimeMillis();
 		Connection c = getConnection();		
 		if (c == null) throw new AmbitException("no connection");
@@ -95,9 +96,11 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 					
 				}
 		} catch (Exception x) {
-
+			
 			throw new ProcessorException(this,x);
-		} 
+		} catch (Throwable x) { 
+			throw new ProcessorException(this,x.getMessage());
+		}
 		finally {
 			//System.out.println(System.currentTimeMillis()-now + "\t"+ (sresults==null?statement:sresults));
 		}
