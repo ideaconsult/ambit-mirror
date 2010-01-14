@@ -86,44 +86,46 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     	for (Property p : target.getProperties()) try {
     		a.setProperty(p.getName(), target.getProperty(p));
     	} catch (Exception x) {}
-    	if (a==null) throw new AmbitException("Empty molecule"); 
-    	if (a.getAtomCount()==0) throw new AmbitException("Empty molecule");
+
     	
     	writer.setStructure(target);
     	selfwriter.setStructure(target);
-    	try {
-    		ha.process(a);
-      	} catch (Exception x) {
-      		logger.warn(x);
-    	}    		
-      	try {
-      		CDKHueckelAromaticityDetector.detectAromaticity(a);
-      	} catch (Exception x) {
-      		logger.warn(x);
-      	}
-        	if (descriptors==null)	descriptors = d.process(null);
-    		Iterator<Property> i = descriptors.getProperties(true);
-    		while (i.hasNext()) {
-    			try {
-    				Property p = i.next();
-    				if (p.isEnabled()) {
-    					calc.setProperty(i.next());
-    					DescriptorValue value = calc.process(a);
-    					if (isAssignProperties() || target.getIdstructure()<=0)
-    						selfwriter.process(value);
-    					if (target.getIdstructure()>0)
-    						writer.write(value);
+    	
+    	if ((a != null) && (a.getAtomCount()>0))  {
+        	try {
+        		ha.process(a);
+          	} catch (Exception x) {
+          		//logger.warn(x);
+        	}    		
+          	try {
+          		CDKHueckelAromaticityDetector.detectAromaticity(a);
+          	} catch (Exception x) {
+          		//logger.warn(x);
+          	}    		
+    	} else {
+    		
+    	}
+    	
 
+        if (descriptors==null)	descriptors = d.process(null);
+    	Iterator<Property> i = descriptors.getProperties(true);
+    	while (i.hasNext()) {
+    		try {
+    			Property p = i.next();
+    			if (p.isEnabled()) {
+    				DescriptorValue value = null;
+    				calc.setProperty(i.next());
+    				value = calc.process(a);
+    				if (isAssignProperties() || target.getIdstructure()<=0)
+    					selfwriter.process(value);
+    				if (target.getIdstructure()>0)
+    					writer.write(value);
     				}
-    			} catch (Exception x) {
-    				x.printStackTrace();
-    	
-    			}
-    			
-    		}    	    		
-  
-
-    	
+   			} catch (Exception x) {
+   				x.printStackTrace();
+    		}
+    	}    	    		
+      	
     	return target;
 
     }
