@@ -80,7 +80,7 @@ public class FP1024WriterTest extends DbUnitTest {
 					String.format("SELECT count(*) as c FROM %s where status = 'valid'",generator.getFpmode().getTable()));
 		Assert.assertEquals(4L, fp.getValue(0,"c"));		
 		fp = 	dbConnection.createQueryTable("EXPECTED_FP",
-				String.format("SELECT count(*) as c FROM %s where status = 'error'",generator.getFpmode().getTable()));
+				String.format("SELECT count(*) as c FROM %s where status = 'invalid'",generator.getFpmode().getTable()));
 		Assert.assertEquals(1L, fp.getValue(0,"c"));					
 		fpWriter.close();
 
