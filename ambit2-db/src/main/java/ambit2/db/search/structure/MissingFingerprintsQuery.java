@@ -71,11 +71,12 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		
 		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure\n"+
-		"where atomproperties is null";
+		"where (structure.type_structure != 'NA')  and atomproperties is null";
 		
 
 	
 	public MissingFingerprintsQuery(FPTable table) {
+		super();
 		setCondition(EQCondition.getInstance());
 		setFieldname(table);
 	}	
@@ -101,12 +102,5 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 	public String toString() {
 		return (getFieldname()==null)?"Fingerprints to be calculated":getFieldname().toString();
 	}
-	@Override
-	public long getMaxRecords() {
-		return 0;
-	}
-	@Override
-	public void setMaxRecords(long records) {
-	
-	}
+
 }
