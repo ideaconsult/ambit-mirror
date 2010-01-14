@@ -47,7 +47,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 	 * 
 	 */
 	private static final long serialVersionUID = 275242996048077139L;
-
+	
 	@Override
 	protected void addToResult(String name, boolean enabled, int order,
 			Profile<Property> result) throws Exception {

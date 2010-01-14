@@ -40,6 +40,7 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import ambit2.base.data.Property;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.FunctionalGroupDescriptor;
@@ -141,7 +142,7 @@ public class FunctionalGroupDescriptorTest {
 	public void testGetSpecification() {
 		DescriptorSpecification spec = d.getSpecification();
 		assertEquals(FunctionalGroupDescriptor.class.getName(),spec.getImplementationTitle());
-		assertEquals("Functional groups, defined as in http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml"
+		assertEquals(String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"FunctionalGroups")
 				,spec.getSpecificationReference());
 	}
 

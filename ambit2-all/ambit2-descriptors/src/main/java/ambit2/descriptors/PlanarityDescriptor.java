@@ -37,6 +37,8 @@ import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
+import ambit2.base.data.Property;
+
 /**
 /**
  * Planarity descriptor (0,1); zero if planar .  Returns {@link org.openscience.cdk.qsar.result.DoubleResult}[1]. 
@@ -49,10 +51,10 @@ public class PlanarityDescriptor extends SpherosityDescriptor {
 
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://qsar.sourceforge.net/dicts/qsar-descriptors:planarity",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"PlanarityDescriptor"),
 		    this.getClass().getName(),
 		    "$Id: PlanarityDescriptor.java,v 1.11 2006/04/17 8:15:05 ninaj Exp $",
-            "The Chemistry Development Kit");
+		    "http://ambit.sourceforge.net");
     };    
     /*
     public DescriptorValue calculate(AtomContainer container) throws CDKException {

@@ -38,6 +38,8 @@ import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
+import ambit2.base.data.Property;
+
 /**
  * Spherosity descriptor. Todeschini , Handbook of Molecular descriptors.
  * @author Nina Jeliazkova nina@acad.bg
@@ -53,10 +55,10 @@ public class SpherosityDescriptor implements IMolecularDescriptor {
     }
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-            "http://qsar.sourceforge.net/dicts/qsar-descriptors:spherocity",
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"SpherosityDescriptor"),
 		    this.getClass().getName(),
 		    "$Id: SpherocityDescriptor.java,v 0.2 2006/07/29 11:24:05 Nina Jeliazkova Exp $",
-            "ambit2.acad.bg");
+            "http:///ambit.sourceforge.net");
     };
     
     /**
