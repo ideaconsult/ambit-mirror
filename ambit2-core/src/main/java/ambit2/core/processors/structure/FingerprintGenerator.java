@@ -9,6 +9,7 @@ import org.openscience.cdk.tools.HydrogenAdder;
 import org.openscience.cdk.tools.MFAnalyser;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.base.log.AmbitLogger;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -48,6 +49,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 			throws AmbitException {
 			
 			try {
+				if ((object == null) || (object.getAtomCount()==0)) throw new EmptyMoleculeException();
 				long fp_time = System.currentTimeMillis();
 				IAtomContainer c = (IMolecule) object; 
                 if (hydrogens) {
@@ -62,6 +64,9 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
     			fp_time = System.currentTimeMillis() - fp_time;
       			((IMolecule)object).setProperty(AmbitCONSTANTS.FingerprintTIME,new Long(fp_time));                
 				return fingerprinter.getFingerprint(c);
+			
+			} catch (AmbitException x) {
+				throw x;
 			} catch (Exception x) {
 				throw new AmbitException("Error generating fingerprint\t",x);
 			}
