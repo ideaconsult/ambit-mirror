@@ -2,6 +2,7 @@ package ambit2.rest.tuple;
 
 import java.io.Writer;
 
+import org.restlet.Context;
 import org.restlet.Request;
 
 import ambit2.base.data.SourceDataset;
@@ -62,7 +63,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 				item.getDataset().getName(),
 				uriReporter.getURI(item))
 				);
-		} catch (Exception x) {logger.error(x);}
+		} catch (Exception x) {Context.getCurrentLogger().severe(x.getMessage());}
 		return null;
 	}
 

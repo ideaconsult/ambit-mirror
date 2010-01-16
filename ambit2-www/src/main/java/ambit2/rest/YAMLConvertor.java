@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.ho.yaml.YamlEncoder;
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
@@ -46,7 +47,7 @@ public class YAMLConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryReprese
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-	            		logger.warn(x);
+	            		Context.getCurrentLogger().warning(x.getMessage());
 	            	} finally {
 	            		try {if (writer !=null) writer.flush(); writer.close();} catch (Exception x) { x.printStackTrace();}
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}

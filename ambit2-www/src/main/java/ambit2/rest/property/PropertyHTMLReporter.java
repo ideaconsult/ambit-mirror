@@ -2,6 +2,7 @@ package ambit2.rest.property;
 
 import java.io.Writer;
 
+import org.restlet.Context;
 import org.restlet.Request;
 
 import ambit2.base.data.Property;
@@ -47,7 +48,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			}
 			output.write("<br>");
 		} catch (Exception x) {
-			logger.warn(x);
+			Context.getCurrentLogger().warning(x.getMessage());
 		}		
 		return null;
 	}

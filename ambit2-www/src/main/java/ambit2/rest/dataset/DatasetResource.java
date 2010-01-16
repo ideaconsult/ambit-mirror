@@ -20,6 +20,10 @@ import ambit2.rest.property.PropertyResource;
 
 
 /**
+ * /dataset POST create new dataset
+ * /dataset/x POST delete the current content and write new one 
+ * /dataset/x PUT - replace/add
+ * /DELETE/x  
  * Dataset resource - A set of chemical compounds and assigned features
  * 
  * @author nina

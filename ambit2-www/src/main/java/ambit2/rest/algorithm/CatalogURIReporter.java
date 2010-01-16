@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -38,7 +39,7 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 			output.write(getURI(item));
 			output.flush();
 		} catch (IOException x) {
-			logger.warn(x);
+			Context.getCurrentLogger().warning(x.getMessage());
 		}
 	}	
 	public String getURI(String ref, T item) {

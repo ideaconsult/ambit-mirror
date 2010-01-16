@@ -2,6 +2,7 @@ package ambit2.rest.task;
 
 import java.sql.Connection;
 
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -47,7 +48,7 @@ public abstract class CallableModelCreator<Item>  extends	CallableQueryProcessor
 			x.process(update);
 			return new Reference(reporter.getURI(model));
 		} catch (Exception e) {
-			logger.error(e);
+			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;
 		} finally {
 			try {x.close();} catch (Exception xx){}

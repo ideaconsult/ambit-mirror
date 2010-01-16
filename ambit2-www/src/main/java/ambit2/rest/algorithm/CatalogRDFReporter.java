@@ -3,6 +3,7 @@ package ambit2.rest.algorithm;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
@@ -57,7 +58,7 @@ public abstract class CatalogRDFReporter<T> extends ListReporter<T,Writer> {
 		try {
 			setJenaModel(jenaModel==null?OT.createModel():jenaModel);
 		} catch (Exception x) {
-			logger.warn(x);
+			Context.getCurrentLogger().warning(x.getMessage());
 		}	}
 
 	public void close() throws Exception {

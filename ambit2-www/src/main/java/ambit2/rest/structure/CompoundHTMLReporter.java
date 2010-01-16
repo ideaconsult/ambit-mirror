@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -31,7 +32,6 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.tuple.TupleResource;
 
 /**
@@ -113,7 +113,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			}
 			count++;
 		} catch (Exception x) {
-			logger.error(x);
+			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 		

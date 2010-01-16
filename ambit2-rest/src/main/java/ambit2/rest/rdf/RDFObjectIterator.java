@@ -9,8 +9,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
-import ambit2.base.log.AmbitLogger;
-
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -28,7 +26,6 @@ import com.hp.hpl.jena.vocabulary.DC;
  * @param <Item>
  */
 public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
-	protected static AmbitLogger logger = new AmbitLogger(RDFObjectIterator.class);
 	protected OntModel jenaModel;
 	protected Item record;
 	protected StmtIterator recordIterator;	

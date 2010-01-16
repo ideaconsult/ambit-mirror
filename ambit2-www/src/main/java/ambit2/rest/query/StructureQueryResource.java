@@ -2,7 +2,6 @@ package ambit2.rest.query;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.logging.Logger;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -33,7 +32,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.ARFFReporter;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
@@ -106,7 +104,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		Representation r = null;
 		try {
 			
-			Logger.getLogger(uri);
+			getLogger().info(uri);
 			ClientResource client = new ClientResource(uri);
 			client.setClientInfo(getRequest().getClientInfo());
 			client.setReferrerRef(getRequest().getOriginalRef());
@@ -125,7 +123,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			parser.parse(new InputStreamReader(r.getStream(),"UTF-8"));
 		
 		} catch (Exception x) {
-			Logger.getLogger(getClass().getName()).severe(x.getMessage());
+			getLogger().severe(x.getMessage());
 
 		} finally {
 			

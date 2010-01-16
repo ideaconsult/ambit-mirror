@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -131,7 +132,7 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 				try { iterator.close();} catch (Exception x) {}
 			}			
 		} catch (Exception x) {
-			logger.warn(x);
+			Context.getCurrentLogger().warning(x.getMessage());
 
 		}				
 		return new LiteratureEntry(url,url);

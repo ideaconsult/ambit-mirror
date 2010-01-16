@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -57,7 +58,7 @@ public class RESTClient<Result,Q extends IQueryRetrieval<Result>, Parser extends
 	public Result process(Reference target) throws AmbitException {
 		Representation r = null;
 		try {
-			Logger.getLogger(target.toString());
+			Context.getCurrentLogger().info(target.toString());
 			ClientResource client = new ClientResource(target);
 			
 

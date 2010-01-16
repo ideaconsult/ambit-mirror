@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -84,7 +85,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		String name = newEntry.getURI();
 		String label = name;
 		
-		try { name = getTitle(newEntry);	} catch (Exception x) {	logger.warn(x);
+		try { name = getTitle(newEntry);	} catch (Exception x) {	Context.getCurrentLogger().warning(x.getMessage());
 		}	
 		//label
 		try { 
@@ -94,7 +95,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}	catch (Exception x) {
 			label = Property.guessLabel(name);
 			label = label==null?name:label;
-			logger.warn(x); 
+			Context.getCurrentLogger().warning(x.getMessage());
 		}	
 		property.setName(name==null?label:name);
 		property.setLabel(label);		
@@ -103,7 +104,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			property.setUnits(((Literal)newEntry.getProperty(OT.DataProperty.units.createProperty(jenaModel))
 						.getObject()).getString()); 
 		} catch (Exception x) {
-			logger.warn(x);
+			Context.getCurrentLogger().warning(x.getMessage());
 			property.setUnits("");
 		}
 		
