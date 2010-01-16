@@ -95,7 +95,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}	catch (Exception x) {
 			label = Property.guessLabel(name);
 			label = label==null?name:label;
-			Context.getCurrentLogger().warning(x.getMessage());
+			Context.getCurrentLogger().info(x.getMessage()==null?x.toString():x.getMessage());
 		}	
 		property.setName(name==null?label:name);
 		property.setLabel(label);		
@@ -104,7 +104,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			property.setUnits(((Literal)newEntry.getProperty(OT.DataProperty.units.createProperty(jenaModel))
 						.getObject()).getString()); 
 		} catch (Exception x) {
-			Context.getCurrentLogger().warning(x.getMessage());
+			Context.getCurrentLogger().info(x.getMessage()==null?x.toString():x.getMessage());
 			property.setUnits("");
 		}
 		

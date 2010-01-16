@@ -126,13 +126,13 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 				}
 				
 			} catch (Exception x) {
-				
+				Context.getCurrentLogger().warning(x.getMessage()==null?x.toString():x.getMessage());
 				
 			} finally {
 				try { iterator.close();} catch (Exception x) {}
 			}			
 		} catch (Exception x) {
-			Context.getCurrentLogger().warning(x.getMessage());
+			Context.getCurrentLogger().warning(x.getMessage()==null?x.toString():x.getMessage());
 
 		}				
 		return new LiteratureEntry(url,url);
