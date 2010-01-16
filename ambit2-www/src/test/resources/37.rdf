@@ -1,0 +1,107 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:j.0="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Dataset">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100291/conformer/262275">
+    <dc:identifier>http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100291/conformer/262275</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Compound"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/elements/1.1/identifier">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#FeatureValue">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A0">
+    <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2.2983</ot:value>
+    <ot:feature rdf:resource="http://ambit.uni-plovdiv.bg:8080/ambit2/feature/29658"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#FeatureValue"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/elements/1.1/type">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/37">
+    <ot:dataEntry rdf:nodeID="A1"/>
+    <ot:dataEntry rdf:nodeID="A2"/>
+    <dc:description>http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/37?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/29658&amp;accept-header=application%2Frdf%2Bxml</dc:description>
+    <dc:title>Dataset = 37</dc:title>
+    <dc:identifier>http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/37?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/29658&amp;accept-header=application%2Frdf%2Bxml</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Dataset"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#hasSource">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#compound">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/reference/12292">
+    <rdfs:seeAlso>58a5eb9a:1261e3ffe7f:56c4</rdfs:seeAlso>
+    <dc:title>58a5eb9a:1261e3ffe7f:56c4</dc:title>
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://ambit.uni-plovdiv.bg:8080/ambit2/reference/12292</dc:identifier>
+    <rdf:type rdf:resource="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/elements/1.1/title">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Compound">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#dataEntry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/elements/1.1/description">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#value">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A1">
+    <ot:compound rdf:resource="http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100291/conformer/262275"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#DataEntry"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#DataEntry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/feature/29658">
+    <dc:type>http://www.w3.org/2001/XMLSchema#string</dc:type>
+    <ot:hasSource rdf:resource="http://ambit.uni-plovdiv.bg:8080/ambit2/reference/12292"/>
+    <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#58a5eb9a%3A1261e3ffe7f%3A56c4"/>
+    <ot:units></ot:units>
+    <dc:title>58a5eb9a:1261e3ffe7f:56c4</dc:title>
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://ambit.uni-plovdiv.bg:8080/ambit2/feature/29658</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A2">
+    <ot:values rdf:nodeID="A0"/>
+    <ot:compound rdf:resource="http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100447/conformer/262274"/>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#DataEntry"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#units">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#values">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100447/conformer/262274">
+    <dc:identifier>http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100447/conformer/262274</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Compound"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+</rdf:RDF>
