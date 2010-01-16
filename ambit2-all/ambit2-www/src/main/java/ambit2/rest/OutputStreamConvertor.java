@@ -43,7 +43,7 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-            			Context.getCurrentLogger().warning(x.getMessage());
+	            		Context.getCurrentLogger().warning(x.getMessage()==null?x.toString():x.getMessage());
 
 	            	} finally {
 
