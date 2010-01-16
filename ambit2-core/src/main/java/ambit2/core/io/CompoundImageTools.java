@@ -82,7 +82,7 @@ public class CompoundImageTools {
 		this.imageSize = cellSize;
     }
     
-    private static Renderer2D createRenderer(Dimension cellSize,Color background) {
+    private Renderer2D createRenderer(Dimension cellSize,Color background) {
     	Renderer2DModel r2dm = new Renderer2DModel();
 
 		r2dm.setBackgroundDimension(cellSize);
@@ -158,7 +158,7 @@ public class CompoundImageTools {
             g2.draw(shape);
         }
     }
-    private static Color getMixedColor(Color c1, float pct1, Color c2, float pct2) {
+    private  Color getMixedColor(Color c1, float pct1, Color c2, float pct2) {
         float[] clr1 = c1.getComponents(null);
         float[] clr2 = c2.getComponents(null);
         for (int i = 0; i < clr1.length; i++) {
@@ -167,7 +167,7 @@ public class CompoundImageTools {
         return new Color(clr1[0], clr1[1], clr1[2], clr1[3]);
     }
     
-    public synchronized static void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
+    public synchronized void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
     {
         if (molecule != null) {
             if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
@@ -233,7 +233,7 @@ public class CompoundImageTools {
 	 * @param highlighted
 	 * @param imageSize
 	 */
-	public synchronized static void paint(Renderer2D renderer, 
+	public synchronized void paint(Renderer2D renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
@@ -304,7 +304,7 @@ public class CompoundImageTools {
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 	}
-	protected static void printCoordinates(Renderer2DModel model) {
+	protected void printCoordinates(Renderer2DModel model) {
 		
 		//System.out.println(model.getRenderingCoordinates().values());
 	}
