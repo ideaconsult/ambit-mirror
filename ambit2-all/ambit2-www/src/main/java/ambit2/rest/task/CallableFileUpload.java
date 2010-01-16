@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.logging.Logger;
 
 import org.apache.commons.fileupload.FileItem;
+import org.restlet.Context;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -57,10 +57,10 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 				 } catch (ResourceException x) {
 					 throw x;
 				 } catch (java.io.FileNotFoundException e) {
-                	 Logger.getLogger(getClass().getName()).getLogger(e.toString());
+					 Context.getCurrentLogger().severe(e.getMessage());
                 	 throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,e));					 
                  } catch (Exception e) {
-                	 Logger.getLogger(getClass().getName()).getLogger(e.toString());
+                	 Context.getCurrentLogger().severe(e.getMessage());
                 	 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,e.getMessage()));
                  } finally {
                 	 

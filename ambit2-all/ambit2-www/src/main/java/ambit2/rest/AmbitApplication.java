@@ -14,7 +14,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.FutureTask;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -106,7 +105,7 @@ import ambit2.rest.users.UserResource;
 public class AmbitApplication extends Application {
 	protected ConcurrentMap<UUID,Task<Reference>> tasks;
 	protected Properties properties = null;
-	protected long taskCleanupRate = 2*60*60*1000; //2h
+	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
 
 	//protected String connectionURI;
 	protected DataSource datasource = null;
@@ -213,7 +212,11 @@ public class AmbitApplication extends Application {
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 		
-			//li.setDatabase("echa");
+			//li.setDatabase("ambit-20100107");
+			//li.setHostname("192.168.1.2");
+			//li.setUser("nina");
+			//li.setPassword("sinanica");
+			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -530,7 +533,7 @@ public class AmbitApplication extends Application {
 		} catch (SQLException x) {
 			//TODO reinitialize the connection pool
 			error = x;
-			Logger.getLogger(getClass().getName()).severe(x.toString());
+			Context.getCurrentLogger().severe(x.getMessage());
 			//remove the connection from the pool
 			try {if (c != null) c.close();} catch (Exception e) {}
 		} finally {
@@ -588,7 +591,7 @@ public class AmbitApplication extends Application {
 			Task<Reference> task = tasks.get(key);
 			try {
 				if (task.isDone() && (task.isExpired(taskCleanupRate))) tasks.remove(key);
-			} catch (Exception x) {getLogger().warning(x.getMessage());}
+			} catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}
 	}	
 	public void cancelTasks() {

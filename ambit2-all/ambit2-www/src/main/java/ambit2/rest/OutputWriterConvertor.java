@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
@@ -44,8 +45,8 @@ public class OutputWriterConvertor<T,Q extends IQueryRetrieval<T>>  extends Quer
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-	            		logger.warn(x);
-	            		logger.error(x);
+            			Context.getCurrentLogger().warning(x.getMessage());
+
 	            	} finally {
 	            		try {if (writer !=null) writer.flush(); } catch (Exception x) { }
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { }

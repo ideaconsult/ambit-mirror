@@ -1,7 +1,6 @@
 package ambit2.rest;
 
-import java.util.logging.Logger;
-
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 import org.w3c.dom.Document;
@@ -43,7 +42,8 @@ public abstract class QueryDOMReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	public abstract Element getItemElement(Document doc, T item);
 	
 	public void readDeep(Reference uri,AbstractDOMParser<T> parser) throws AmbitException {
-		Logger.getLogger(getClass().getName()).info(uri.toString());
+		Context.getCurrentLogger().info(uri.toString());
+
 		RESTClient<T, Q,AbstractDOMParser<T>> client = new RESTClient<T, Q,AbstractDOMParser<T>>(parser,this);
 		client.process(uri);
 	}		

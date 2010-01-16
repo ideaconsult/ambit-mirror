@@ -2,6 +2,7 @@ package ambit2.rest.template;
 
 import java.io.Writer;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -107,7 +108,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrie
 */
 			}
 		} catch (Exception x) {
-			logger.error(x);
+			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 	}

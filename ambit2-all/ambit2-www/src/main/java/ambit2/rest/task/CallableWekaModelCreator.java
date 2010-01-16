@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.util.UUID;
 
 import org.apache.xerces.impl.dv.util.Base64;
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -107,7 +108,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 			        invoke(clusterer, prm);					
 			}
 		} catch (Exception x) {
-			logger.warn("Error setting algorithm parameters, assuming defaults");
+			Context.getCurrentLogger().warning("Error setting algorithm parameters, assuming defaults" + x.getMessage());
 		}	
 		
 		
@@ -258,7 +259,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		} catch (WekaException e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage(),e);
 		} catch (Exception e) {
-			logger.error(e);
+			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;
 		} finally {
 			try {x.close();} catch (Exception xx){}

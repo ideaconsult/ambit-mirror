@@ -1,5 +1,6 @@
 package ambit2.rest.model;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -124,7 +125,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			}
 
 		} catch (Exception x) {
-			logger.error(x);
+			Context.getCurrentLogger().severe(x.getMessage());
 		} finally {
 			try {reader.close(); } catch (Exception x) {}
 		}

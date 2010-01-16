@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -159,7 +160,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			*/
 			output.write("</div>");
 		} catch (Exception x) {
-			logger.warn(x);
+			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 	}

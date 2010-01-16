@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
@@ -42,8 +43,8 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-	            		logger.warn(x);
-	            		x.printStackTrace();
+            			Context.getCurrentLogger().warning(x.getMessage());
+
 	            	} finally {
 
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}

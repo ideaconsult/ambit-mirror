@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -57,7 +58,7 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 			if (o != null) 	output.write(o);
 			output.flush();
 		} catch (IOException x) {
-			logger.error(x);
+			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 	}	

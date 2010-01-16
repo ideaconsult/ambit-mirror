@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
@@ -178,7 +179,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			}
 			return dataEntry;
 		} catch (Exception x) {
-			logger.error(x);
+			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 		

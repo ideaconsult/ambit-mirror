@@ -150,30 +150,39 @@ public class DatasetsResourceTest extends ResourceTest {
 	
 	@Test
 	public void testCreateEntryRDF() throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+				
 		CreateEntryRDF("import_dataset2.rdf");
 		
-		IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(5,table.getRowCount());
 		c.close();
 	}
 	@Test
 	public void testCreateEntryRDF1() throws Exception {
-		CreateEntryRDF("FeatureGenerationExample.rdf");
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+				
+		CreateEntryRDF("37.rdf");
 		
-		IDatabaseConnection c = getConnection();	
-        ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		
+	//	CreateEntryRDF("FeatureGenerationExample.rdf");
+		
+		c = getConnection();	
+        table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(7,table.getRowCount());
 		c.close();
 	}	
 	public void CreateEntryRDF(String name) throws Exception {
 			
 		
-        IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(5,table.getRowCount());
-		c.close();
-		
+
 		InputStream in  = getClass().getClassLoader().getResourceAsStream(name);
 
 		StringBuilder b = new StringBuilder();

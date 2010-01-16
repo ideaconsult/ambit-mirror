@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
@@ -117,7 +118,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		    			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
 		    			
 		        	} catch (SQLException x) {
-		        		java.util.logging.Logger.getLogger(getClass().getName()).severe(x.getMessage());
+		        		Context.getCurrentLogger().severe(x.getMessage());
 		        		if (retry <maxRetry) {
 		        			retry++;
 		        			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,String.format("Retry %d ",retry));
@@ -127,7 +128,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		        			throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x);
 		        		}
 		        	} catch (Exception x) {
-		        		java.util.logging.Logger.getLogger(getClass().getName()).severe(x.getMessage());
+		        		Context.getCurrentLogger().severe(x.getMessage());
 		    			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 	
 		        	} finally {
@@ -176,7 +177,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
 			
 		} catch (Exception x) {
-			java.util.logging.Logger.getLogger(getClass().getName()).severe(x.toString());
+			Context.getCurrentLogger().severe(x.getMessage());
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);			
 			getResponse().setEntity(null);
 		} finally {

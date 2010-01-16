@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
@@ -55,7 +56,8 @@ public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Do
 	            				throw (IOException)ex;
 	            			ex = ex.getCause();
 	            		}
-	            		logger.error(x);
+            			Context.getCurrentLogger().severe(x.getMessage());
+
 	            	} finally {
 	            		try {getReporter().close(); } catch (Exception x) { }
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { }
