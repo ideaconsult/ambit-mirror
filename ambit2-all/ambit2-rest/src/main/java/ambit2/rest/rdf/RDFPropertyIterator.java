@@ -1,6 +1,7 @@
 package ambit2.rest.rdf;
 
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +86,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		String name = newEntry.getURI();
 		String label = name;
 		
-		try { name = getTitle(newEntry);	} catch (Exception x) {	Context.getCurrentLogger().warning(x.getMessage());
+		try { name = getTitle(newEntry);	} catch (Exception x) {	
 		}	
 		//label
 		try { 
@@ -95,7 +96,9 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}	catch (Exception x) {
 			label = Property.guessLabel(name);
 			label = label==null?name:label;
-			Context.getCurrentLogger().info(x.getMessage()==null?x.toString():x.getMessage());
+            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+            x.printStackTrace(new PrintWriter(stackTraceWriter));				
+			Context.getCurrentLogger().info(stackTraceWriter.toString());
 		}	
 		property.setName(name==null?label:name);
 		property.setLabel(label);		
@@ -104,7 +107,6 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			property.setUnits(((Literal)newEntry.getProperty(OT.DataProperty.units.createProperty(jenaModel))
 						.getObject()).getString()); 
 		} catch (Exception x) {
-			Context.getCurrentLogger().info(x.getMessage()==null?x.toString():x.getMessage());
 			property.setUnits("");
 		}
 		

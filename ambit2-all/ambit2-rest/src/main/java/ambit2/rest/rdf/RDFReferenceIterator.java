@@ -1,6 +1,7 @@
 package ambit2.rest.rdf;
 
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,12 +69,22 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 	}
 	
 	public static ILiteratureEntry parseRecord(OntModel jenaModel, Resource newEntry, ILiteratureEntry record) {
-		String name = newEntry.toString();
-		RDFNode value = newEntry.getProperty(DC.title).getObject();
-		if ((value!=null) && value.isLiteral())	name = ((Literal)value).getString();
-		value = newEntry.getProperty(RDFS.seeAlso).getObject();
-		record = new LiteratureEntry(name,value==null?name:value.toString());
-		return record;
+		String name = newEntry.getURI();
+		String url = "Default";
+		if (newEntry.isAnon() && (newEntry.getProperty(DC.identifier)!= null)) {
+			RDFNode value = newEntry.getProperty(DC.identifier).getObject();
+			if ((value!=null) && value.isLiteral())	name = ((Literal)value).getString();
+		} 
+		if (newEntry.getProperty(DC.title)!= null) {
+			RDFNode value = newEntry.getProperty(DC.title).getObject();
+			if ((value!=null) && value.isLiteral())	name = ((Literal)value).getString();
+		}
+		if (newEntry.getProperty(RDFS.seeAlso)!= null) {
+			RDFNode value = newEntry.getProperty(RDFS.seeAlso).getObject();
+			return new LiteratureEntry(name,value==null?name:value.toString());
+
+		} 
+		return new LiteratureEntry(name==null?"Default":name,name==null?"Default":name);
 	}
 	@Override
 	protected Resource createResource(String otclass) {
@@ -126,13 +137,18 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 				}
 				
 			} catch (Exception x) {
-				Context.getCurrentLogger().warning(x.getMessage()==null?x.toString():x.getMessage());
+				
+	            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+	            x.printStackTrace(new PrintWriter(stackTraceWriter));				
+				Context.getCurrentLogger().warning(stackTraceWriter.toString());
 				
 			} finally {
 				try { iterator.close();} catch (Exception x) {}
 			}			
 		} catch (Exception x) {
-			Context.getCurrentLogger().warning(x.getMessage()==null?x.toString():x.getMessage());
+            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+            x.printStackTrace(new PrintWriter(stackTraceWriter));				
+			Context.getCurrentLogger().warning(stackTraceWriter.toString());
 
 		}				
 		return new LiteratureEntry(url,url);
