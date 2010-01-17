@@ -47,4 +47,6 @@ public abstract class AbstractRepresentationConvertor<Item,Content,Output,R,Medi
 	}
 
 	public abstract R process(Content query) throws ambit2.base.exceptions.AmbitException;
+	
+	protected void close() {}
 }
