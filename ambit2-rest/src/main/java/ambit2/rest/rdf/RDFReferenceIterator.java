@@ -22,6 +22,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -109,11 +110,14 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 	}
 
 	public static ILiteratureEntry readReference(OntModel jenaModel,Resource newEntry,Reference baseReference,Property property) {
-		String url = null;
+		String url = newEntry.isURIResource()?newEntry.getURI():newEntry.getLocalName();
+			
 		try {	
 			
 			RDFReferenceIterator iterator = null;
-			RDFNode reference = newEntry.getProperty(property).getObject();
+			Statement p = newEntry.getProperty(property);
+			if (p==null) return null;
+			RDFNode reference = p.getObject();
 			if (reference.isResource()) {
 				try {
 					url = getIdentifier(reference);

@@ -112,6 +112,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		
 		try {
 			ILiteratureEntry ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,OT.OTProperty.hasSource.createProperty(jenaModel));
+			if (ref == null) ref = new LiteratureEntry(baseReference.toString(),baseReference.toString());
 			property.setReference(ref);
 		} catch (Exception x) {
 			try {
