@@ -336,7 +336,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://ambit.sourceforge.net'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://localhost:8181'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}		

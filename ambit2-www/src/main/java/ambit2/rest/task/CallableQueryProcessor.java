@@ -1,7 +1,5 @@
 package ambit2.rest.task;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
@@ -55,12 +53,14 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		    		if ((connection==null) || connection.isClosed()) throw new Exception("SQL Connection unavailable ");			
 					batch.setConnection(connection);
 				} catch (Exception x) { connection = null;}
+				/*
 				batch.addPropertyChangeListener(AbstractBatchProcessor.PROPERTY_BATCHSTATS,new PropertyChangeListener(){
 					public void propertyChange(PropertyChangeEvent evt) {
 						context.getLogger().info(evt.getNewValue().toString());
 						
 					}
 				});
+				*/
 				batch.process(target);
 			}
 			return createReference(connection);

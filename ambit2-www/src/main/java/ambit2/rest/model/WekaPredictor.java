@@ -89,7 +89,6 @@ public class WekaPredictor extends DefaultAmbitProcessor<Instance,IStructureReco
 		 	}
 		 	else if (weka instanceof Classifier) {
 		 		classifier = (Classifier)weka;
-		 		System.out.println(classifier);
 		 	}
 		 	else throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE,weka.getClass().getName());
 		 	

@@ -158,7 +158,8 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		Template predictors = null;
 		Template dependent = null;
 		Template predicted = null;
-		System.out.println("Build");
+		//System.out.println("Build");
+		
 		if (clusterer!= null) {
 			clusterer.buildClusterer(newInstances);
 			predicted = new Template(name+"#Predicted");
@@ -201,7 +202,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 				predictors.add(property);
 			}				
 		}
-		System.out.println("Done");
+		//System.out.println("Done");
 
 		m.setPredictors(predictors);
 		m.setDependent(dependent);
