@@ -65,7 +65,7 @@ public class DatasourceFactory {
         return DatasourceFactoryHolder.instance;
     }
     
-    public static DataSource getDataSource(String connectURI) throws AmbitException {
+    public static synchronized DataSource getDataSource(String connectURI) throws AmbitException {
         if (connectURI == null) throw new AmbitException("Connection URI not specified!");
         DataSourceAndPool ds = getInstance().datasources.get(connectURI);
         if (ds == null) {
@@ -109,7 +109,7 @@ public class DatasourceFactory {
             throw new AmbitException(x);
         }
     }    
-    public static DataSourceAndPool setupDataSource(String connectURI) throws AmbitException {
+    public static synchronized DataSourceAndPool setupDataSource(String connectURI) throws AmbitException {
         try {
             DataSourceAndPool dataSource = new DataSourceAndPool(connectURI);
             
@@ -180,10 +180,9 @@ public class DatasourceFactory {
 	
 	        connection = DatasourceFactory.getConnection(dburi.toString());
 	        st = connection.createStatement();
-	        st.execute("SELECT 1");
+	        st.execute("/*ping*/SELECT 1");
 	        return true;    
     	} catch (Exception x) {
-    		System.out.println(x);
     		return false;
     	} finally {
     		if (st != null) try {st.close();} catch (Exception x) {};
@@ -199,7 +198,9 @@ class DataSourceAndPool {
 		return datasource;
 	}
 	public ObjectPool getPool() {
-		return poolableConnectionFactory.getPool();
+		ObjectPool pool = poolableConnectionFactory.getPool();
+	//	System.out.println(String.format("Active %d Idle %d",pool.getNumActive(),pool.getNumIdle()));
+		return pool;
 	}
 
 	public DataSourceAndPool(String connectURI)  throws Exception {
@@ -219,7 +220,9 @@ class DataSourceAndPool {
         // We'll use the DriverManagerConnectionFactory,
         // using the connect string passed in the command line
         // arguments.
-        //
+        
+
+/*
         Properties jdbcProperties = new Properties();
         jdbcProperties.setProperty("autoReconnectForPools", "true");
         jdbcProperties.setProperty("testOnBorrow", "true");
@@ -233,7 +236,26 @@ class DataSourceAndPool {
         jdbcProperties.setProperty("validationQuery", "SELECT 1");
         jdbcProperties.setProperty("removeAbandoned", "true");
         jdbcProperties.setProperty("removeAbandonedTimeout", "300");
-        jdbcProperties.setProperty("logAbandoned", "true");
+
+*/
+        Properties jdbcProperties = new Properties();
+        
+        jdbcProperties.setProperty("autoReconnectForPools", "true");
+        jdbcProperties.setProperty("testOnBorrow", "true");
+        jdbcProperties.setProperty("testWhileIdle", "false");
+        jdbcProperties.setProperty("timeBetweenEvictionRunsMillis", "-1");
+        jdbcProperties.setProperty("minEvictableIdleTimeMillis", "1000 * 60 * 30");
+        jdbcProperties.setProperty("numTestsPerEvictionRun", "3");
+        jdbcProperties.setProperty("maxActive", "100");
+        jdbcProperties.setProperty("maxIdle", "100");
+        jdbcProperties.setProperty("minIdle", "0");
+        jdbcProperties.setProperty("maxWait", "1000");
+        jdbcProperties.setProperty("validationQuery", "/* ping */SELECT 1"); ///* ping */
+        
+        jdbcProperties.setProperty("removeAbandoned", "false");
+        jdbcProperties.setProperty("removeAbandonedTimeout", "300");
+        jdbcProperties.setProperty("logAbandoned", "false");
+        
         /*
         If you enable "useUsageAdvisor=true", the driver will log where in your application
         results and statements were created that were never closed once the connection closes (as
