@@ -116,7 +116,7 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 			
 			RDFReferenceIterator iterator = null;
 			Statement p = newEntry.getProperty(property);
-			if (p==null) return null;
+			//if (p==null) return url==null?null:new LiteratureEntry(url,url);
 			RDFNode reference = p.getObject();
 			if (reference.isResource()) {
 				try {

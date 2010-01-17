@@ -109,20 +109,18 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		} catch (Exception x) {
 			property.setUnits("");
 		}
-		
+		ILiteratureEntry ref;
 		try {
-			ILiteratureEntry ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,OT.OTProperty.hasSource.createProperty(jenaModel));
-			if (ref == null) ref = new LiteratureEntry(baseReference.toString(),baseReference.toString());
-			property.setReference(ref);
-		} catch (Exception x) {
-			try {
-				property.setReference(
-						new LiteratureEntry(getCreator(newEntry),
-						property.getReference().getURL()));
-			} catch (Exception e) {
-				
-			}
-		}
+			ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,OT.OTProperty.hasSource.createProperty(jenaModel));
+		} catch (Exception x) { ref = null;}
+ 
+		if (ref == null)
+		try {
+			ref = new LiteratureEntry(getCreator(newEntry),baseReference.toString());
+		} catch (Exception e) {
+			ref = new LiteratureEntry(baseReference.toString(),baseReference.toString());
+		}		
+		property.setReference(ref);
 		return property;
 	}
 }
