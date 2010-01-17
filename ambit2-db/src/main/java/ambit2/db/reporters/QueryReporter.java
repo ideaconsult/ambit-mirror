@@ -1,5 +1,7 @@
 package ambit2.db.reporters;
 
+import java.sql.SQLException;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -124,7 +126,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 			if (isShowFooter()) footer(output, query);
 			try { if (isAutoCommit()) connection.commit(); } catch (Exception x) {} 
 			try {batch.close();} catch (Exception x) {}
-			try {connection.close();} catch (Exception x) {}
+			try { close(); } catch (Exception x) {}
 		}
 	}	
 	protected AbstractBatchProcessor<IQueryRetrieval<T>, T> createBatch() {
@@ -141,5 +143,8 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		this.timeout = timeout;
 		if (batch != null) batch.setTimeout(timeout);
 	}
-	
+	@Override
+	public void close() throws SQLException {
+		super.close();
+	}
 }
