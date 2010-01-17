@@ -212,6 +212,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			return new Reference(reporter.getURI(newDataset));
 
 		} catch (Exception x) {
+			try { connection.close(); } catch (Exception xx) {}
 			 throw new ResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
 		} finally {
 			try { connection.close(); } catch (Exception x) {}

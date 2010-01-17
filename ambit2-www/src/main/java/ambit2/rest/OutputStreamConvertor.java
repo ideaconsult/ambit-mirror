@@ -48,6 +48,7 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 	            	} finally {
 
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
+	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
 	            	}
 	            }
 	        };		

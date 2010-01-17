@@ -1,5 +1,6 @@
 package ambit2.rest.dataset;
 
+import java.sql.Connection;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -25,6 +26,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DBConnection;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
@@ -151,34 +153,42 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
               //factory.setSizeThreshold(100);
 	          RestletFileUpload upload = new RestletFileUpload(factory);
+	          Connection connection = null;
 	          try {
+					DBConnection dbc = new DBConnection(getApplication().getContext());
+					connection = dbc.getConnection(getRequest());	
 	              List<FileItem> items = upload.parseRequest(getRequest());
 	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
 				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 						 "File import",
-						new CallableFileImport(items,DatasetsHTMLReporter.fileUploadField,getConnection(),reporter),
+						new CallableFileImport(items,DatasetsHTMLReporter.fileUploadField,connection,reporter),
 						getRequest().getRootRef());		
 				  getResponse().setLocationRef(ref);
 				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 				  getResponse().setEntity(null);
 				  
 	          } catch (Exception x) {
+	        	  try { connection.close(); } catch (Exception xx) {}
 	        	  throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 	          }
 		} else if (isAllowedMediaType(entity.getMediaType())) {
+					Connection connection = null;
 					try {
+						DBConnection dbc = new DBConnection(getApplication().getContext());
+						connection = dbc.getConnection(getRequest());						
 			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());					
 					  Reference ref =  ((AmbitApplication)getApplication()).addTask(
 							  
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
-								new CallableFileImport((InputRepresentation)entity,getConnection(),reporter),
+								new CallableFileImport((InputRepresentation)entity,connection,reporter),
 								getRequest().getRootRef());		
 						  getResponse().setLocationRef(ref);
 						  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 						  getResponse().setEntity(null);
 					} catch (Exception x) {
+						try { connection.close(); } catch (Exception xx) {}
  		        	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 
 					}

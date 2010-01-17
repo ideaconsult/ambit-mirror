@@ -1,5 +1,8 @@
 package ambit2.rest.task;
 
+import java.sql.Connection;
+
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -15,16 +18,15 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.descriptors.processors.DescriptorsFactory;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.model.ModelURIReporter;
 
 public class CallableDescriptorCalculator extends CallableModelPredictor<IStructureRecord> {
 
 	public CallableDescriptorCalculator(Form form,
-			Reference appReference, AmbitApplication application,
+			Reference appReference,Context context,
 			ModelQueryResults model,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter) {
-		super(form, appReference, application, model, reporter);
+		super(form, appReference, context, model, reporter);
 
 	}
 	protected IProcessor<IStructureRecord,IStructureRecord> createTranslator(ModelQueryResults model) throws Exception {

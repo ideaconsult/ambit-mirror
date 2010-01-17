@@ -1,5 +1,7 @@
 package ambit2.rest.model;
 
+import java.sql.Connection;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -16,6 +18,7 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -112,23 +115,32 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	}
 	@Override
 	protected CallableQueryProcessor createCallable(Form form,	ModelQueryResults model) {
-		if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType()))
-			return //reads Instances, instead of IStructureRecord
-			new CallableWekaPredictor(
-					form,
-					getRequest().getRootRef(),
-					(AmbitApplication)getApplication(),
-					model,
-					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
-		else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
-			return
-			new CallableDescriptorCalculator(
-					form,
-					getRequest().getRootRef(),
-					(AmbitApplication)getApplication(),
-					model,
-					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+		Connection connection=null;
+		try {
+			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType()))
+				return //reads Instances, instead of IStructureRecord
+				new CallableWekaPredictor(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+			else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+				return
+				new CallableDescriptorCalculator(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+		} finally {
+
+		}
 	}
 	/*
 	@Override

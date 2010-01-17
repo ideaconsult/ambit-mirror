@@ -25,7 +25,6 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
@@ -208,46 +207,56 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			Algorithm<String> algorithm)
 			throws ResourceException {
 				
-			
-		if (algorithm.hasType(Algorithm.typeRules))
-			return new CallableSimpleModelCreator(
-					form,
-					getRequest().getRootRef(),
-					(AmbitApplication)getApplication(),
-					algorithm,
-					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-					new AlgorithmURIReporter(getRequest())
-					);	
-		else if (algorithm.hasType(Algorithm.typeDescriptor)) {
-			try {
-				CallableSimpleModelCreator mc = new CallableSimpleModelCreator(
+		try {
+			System.out.println("Create callable");
+			if (algorithm.hasType(Algorithm.typeRules))
+				return new CallableSimpleModelCreator(
 						form,
 						getRequest().getRootRef(),
-						(AmbitApplication)getApplication(),
+						getContext(),
 						algorithm,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-						new AlgorithmURIReporter(getRequest())					
-						);
-				ModelQueryResults model = mc.createModel();
-				return new CallableDescriptorCalculator(
+						new AlgorithmURIReporter(getRequest())
+						);	
+			else if (algorithm.hasType(Algorithm.typeDescriptor)) {
+				try {
+					CallableSimpleModelCreator mc = new CallableSimpleModelCreator(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							algorithm,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new AlgorithmURIReporter(getRequest())					
+							);
+					ModelQueryResults model = mc.createModel();
+					return new CallableDescriptorCalculator(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+				} catch (Exception x) {
+					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+				}
+			} else {
+					
+				return new CallableWekaModelCreator(
 						form,
 						getRequest().getRootRef(),
-						(AmbitApplication)getApplication(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
-			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
-			}
-		} else {
-				
-			return new CallableWekaModelCreator(
-					form,
-					getRequest().getRootRef(),
-					(AmbitApplication)getApplication(),
-					algorithm,
-					new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-					new AlgorithmURIReporter(getRequest()));	
-		} 
+						getContext(),
+						algorithm,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+						new AlgorithmURIReporter(getRequest()));	
+			} 
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+		} finally {
+			//try { connection.close(); } catch (Exception x) {}
+		}
+		
+
 			
 	}
 }

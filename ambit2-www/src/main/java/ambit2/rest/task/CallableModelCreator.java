@@ -24,11 +24,11 @@ public abstract class CallableModelCreator<Item>  extends	CallableQueryProcessor
 	protected Algorithm algorithm;
 	
 	public CallableModelCreator(Form form,
-			Reference applicationRootReference, AmbitApplication application,
+			Reference applicationRootReference, Context context,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter) {
-		super(form, applicationRootReference, application);
+		super(form, applicationRootReference, context);
 		this.reporter = reporter;
 		this.algorithm = algorithm;
 		this.alg_reporter = alg_reporter;

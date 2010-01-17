@@ -70,6 +70,22 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 	}
 	
+
+	public void testLoad() throws Exception {
+		for (int i=0; i < 100;i++) {
+			Form headers = new Form();  
+			headers.add(OpenTox.params.dataset_uri.toString(), 
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100000&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948&max=10");
+			headers.add(OpenTox.params.target.toString(),
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948");
+			testPost(
+					String.format("http://localhost:%d/algorithm/J48", port),
+					MediaType.TEXT_URI_LIST,
+							//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+					headers, headers.getWebRepresentation());
+			
+		}
+	}
 	@Test
 		public void testClassifier() throws Exception {
 			Form headers = new Form();  

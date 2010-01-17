@@ -16,6 +16,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.CallableQueryProcessor;
 
@@ -79,8 +80,8 @@ public abstract class ProcessingResource<Q extends IQueryRetrieval<T>,T extends 
 					
 			};
 			try {
-	    		conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
-	    		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
+				DBConnection dbc = new DBConnection(getApplication().getContext());
+				conn = dbc.getConnection(getRequest());	
 	    		readModels.setConnection(conn);
 				readModels.process(query);		
 				return getResponse().getEntity();

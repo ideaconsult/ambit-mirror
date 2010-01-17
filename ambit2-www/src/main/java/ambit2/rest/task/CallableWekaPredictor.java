@@ -1,5 +1,8 @@
 package ambit2.rest.task;
 
+import java.sql.Connection;
+
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -14,19 +17,17 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.WekaPredictor;
-import ambit2.workflow.library.QueryProperties;
 
 public class CallableWekaPredictor extends CallableModelPredictor<Instance> {
 	protected String[] targetURI;
 	public CallableWekaPredictor(Form form, Reference appReference,
-			AmbitApplication application, ModelQueryResults model,
+			Context context, ModelQueryResults model,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter) {
-		super(form, appReference, application, model, reporter);
+		super(form, appReference, context, model, reporter);
 		targetURI = form.getValuesArray(OpenTox.params.target.toString());
 	}
 	@Override

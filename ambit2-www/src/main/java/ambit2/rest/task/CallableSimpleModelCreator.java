@@ -1,8 +1,10 @@
 package ambit2.rest.task;
 
 
+import java.sql.Connection;
 import java.util.List;
 
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -19,7 +21,6 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.descriptors.processors.DescriptorsFactory;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 
@@ -27,12 +28,12 @@ public class CallableSimpleModelCreator< Result> extends	CallableModelCreator<Re
 
 	public CallableSimpleModelCreator(Form form,
 				Reference applicationRootReference,
-				AmbitApplication application,
+				Context context,
 				Algorithm algorithm,
 				ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 				AlgorithmURIReporter alg_reporter
 				) {
-		super(form,applicationRootReference,application,algorithm,reporter,alg_reporter);
+		super(form,applicationRootReference,context,algorithm,reporter,alg_reporter);
 
 	}	
 	@Override

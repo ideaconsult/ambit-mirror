@@ -3,6 +3,7 @@ package ambit2.rest.task;
 import java.io.Serializable;
 import java.sql.Connection;
 
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -33,11 +34,11 @@ public abstract class CallableModelPredictor<ModelItem> extends CallableQueryPro
 	
 	public CallableModelPredictor(Form form, 
 			Reference appReference,
-			AmbitApplication application,
+			Context context,
 			ModelQueryResults model,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter		
 				) {
-		super(form,appReference,application);
+		super(form,appReference,context);
 		this.model = model;
 		this.modelUriReporter = reporter;
 	}	

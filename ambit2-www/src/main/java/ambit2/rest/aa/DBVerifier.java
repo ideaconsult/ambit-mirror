@@ -8,6 +8,7 @@ import org.restlet.security.SecretVerifier;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.user.VerifyUser;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.DBConnection;
 
 
 
@@ -29,7 +30,8 @@ public class DBVerifier extends SecretVerifier {
 		try {
 			query.setFieldname(identifier);
 			query.setValue(new String(inputSecret));
-			c = application.getConnection();
+			DBConnection dbc = new DBConnection(application.getContext());
+			c = dbc.getConnection();
 			executor.setConnection(c);
 			rs = executor.process(query);
 			boolean ok = false;
