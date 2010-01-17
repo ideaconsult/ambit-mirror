@@ -1,7 +1,5 @@
 package ambit2.rest.task;
 
-import java.sql.Connection;
-
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -9,6 +7,8 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import weka.core.Instance;
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
@@ -62,6 +62,8 @@ public class CallableWekaPredictor extends CallableModelPredictor<Instance> {
 		p1.setAbortOnError(true);
 		
 		PropertyValuesWriter writer = new PropertyValuesWriter();
+		writer.setDataset(new SourceDataset(sourceReference.toString(),
+				new LiteratureEntry(modelUriReporter.getURI(model),sourceReference.toString())));
 		p1.add(writer);
 		
 		return p1;

@@ -29,7 +29,7 @@ import ambit2.rest.model.ModelURIReporter;
 public abstract class CallableModelPredictor<ModelItem> extends CallableQueryProcessor<Object, IStructureRecord> {
 
 	protected ModelQueryResults model;
-	protected Reference datasetURI;
+	//protected Reference datasetURI;
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelUriReporter;
 	
 	public CallableModelPredictor(Form form, 
