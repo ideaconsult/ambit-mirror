@@ -244,8 +244,8 @@
   	</dependency>
   	<dependency>
   	<groupId>net.bull.javamelody</groupId>
-  	<artifactId>javamelody-core</artifactId>
-  	<version>1.9.0</version>
+  	<artifactId>javamelody</artifactId>
+  	<version>1.10.0</version>
   	<scope>runtime</scope>
 	</dependency>
   	<dependency>
@@ -275,6 +275,13 @@
   			<enabled>false</enabled>
   			</snapshots>
 		</repository>		
+  	<repository>
+        <id>website_ambit</id>
+  		<url>http://ambit.sourceforge.net/jars</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</repository>
 		
 	</repositories>  
 
