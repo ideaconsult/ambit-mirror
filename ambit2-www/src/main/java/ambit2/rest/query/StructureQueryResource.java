@@ -125,7 +125,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			getLogger().severe(x.getMessage());
 
 		} finally {
-			getLogger().info("release");
 			try {if (r != null) r.release(); } catch (Exception x) {}
 			
 		}
