@@ -264,17 +264,15 @@
   			<enabled>false</enabled>
   			</snapshots>
 		</repository>
-		<repository>
-			<id>maven-jrobin</id>
-			<name>http://repo.opennms.org/maven2/</name>
-			<url>http://repo.opennms.org/maven2/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-	  		<snapshots>
-  			<enabled>false</enabled>
-  			</snapshots>
-		</repository>		
+	    <repository>
+	      <id>opennms-repo</id>
+	      <name>OpenNMS Repository</name>
+	      <url>http://repo.opennms.org/maven2</url>
+	      <snapshots>
+	        <enabled>false</enabled>
+	      </snapshots>
+	    </repository>
+
   	<repository>
         <id>website_ambit</id>
   		<url>http://ambit.sourceforge.net/jars</url>
