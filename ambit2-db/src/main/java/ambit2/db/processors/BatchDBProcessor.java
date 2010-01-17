@@ -44,6 +44,7 @@ import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingMOLReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
+import ambit2.db.IDBProcessor;
 
 /**
  * Reads file 
@@ -108,8 +109,10 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 			Iterator<String> iterator) throws AmbitException {
 		
 		try {
-				if (iterator instanceof IIteratingChemObjectReader)
-			((IIteratingChemObjectReader)iterator).close();
+			if (iterator instanceof IIteratingChemObjectReader)
+				((IIteratingChemObjectReader)iterator).close();
+			else if(iterator instanceof IDBProcessor) 
+				((IDBProcessor)iterator).close();
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {
