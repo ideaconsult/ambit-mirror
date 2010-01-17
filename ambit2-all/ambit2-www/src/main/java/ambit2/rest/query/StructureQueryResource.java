@@ -95,6 +95,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			}
 			return profile;
 		} catch (Exception x) {
+			getLogger().info(x.getMessage());
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 		
@@ -104,7 +105,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		Representation r = null;
 		try {
 			
-			getLogger().info(uri);
 			ClientResource client = new ClientResource(uri);
 			client.setClientInfo(getRequest().getClientInfo());
 			client.setReferrerRef(getRequest().getOriginalRef());
@@ -121,12 +121,11 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				}
 			};		
 			parser.parse(new InputStreamReader(r.getStream(),"UTF-8"));
-		
 		} catch (Exception x) {
 			getLogger().severe(x.getMessage());
 
 		} finally {
-			
+			getLogger().info("release");
 			try {if (r != null) r.release(); } catch (Exception x) {}
 			
 		}

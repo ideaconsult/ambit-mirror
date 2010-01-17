@@ -1,10 +1,12 @@
 package ambit2.rest.task;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 import org.restlet.Context;
-import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
@@ -17,7 +19,7 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.rest.AmbitApplication;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -26,46 +28,65 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	protected AbstractBatchProcessor batch; 
 	protected Target target;
 	protected Reference sourceReference;
-	protected AmbitApplication application;
+	//protected AmbitApplication application;
+	protected Context context;
 	protected Reference applicationRootReference;
 
-	public CallableQueryProcessor(Form form,Reference applicationRootReference,AmbitApplication application) {
+	public CallableQueryProcessor(Form form,Reference applicationRootReference,Context context) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		this.sourceReference = dataset==null?null:new Reference(dataset.toString());
-		this.application = application;
+		this.context = context;
 		this.applicationRootReference = applicationRootReference;
 	}
 	
 	public Reference call() throws Exception {
+		Context.getCurrentLogger().info("Start()");
 		Connection connection = null;
 		try {
+			DBConnection dbc = new DBConnection(context);
+			connection = dbc.getConnection();
 			target = createTarget(sourceReference);
 			batch = createBatch(target);
+			
 			if (batch != null) {
+				batch.setCloseConnection(false);
 				batch.setProcessorChain(createProcessors());
 				try {
-		    		connection = application.getConnection((Request)null);
-		    		if (connection.isClosed()) connection = application.getConnection((Request)null);			
+		    		if ((connection==null) || connection.isClosed()) throw new Exception("SQL Connection unavailable ");			
 					batch.setConnection(connection);
 				} catch (Exception x) { connection = null;}
+				batch.addPropertyChangeListener(AbstractBatchProcessor.PROPERTY_BATCHSTATS,new PropertyChangeListener(){
+					public void propertyChange(PropertyChangeEvent evt) {
+						context.getLogger().info(evt.getNewValue().toString());
+						
+					}
+				});
 				batch.process(target);
 			}
+			return createReference(connection);
 		} catch (Exception x) {
-			Context.getCurrentLogger().severe(x.getMessage());
+
+            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+            x.printStackTrace(new PrintWriter(stackTraceWriter));
+			Context.getCurrentLogger().severe(stackTraceWriter.toString());
 			throw x;
 		} finally {
-			try { connection.close(); } catch (Exception x) {}
+			Context.getCurrentLogger().info("Done");
+			try { connection.close(); } catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}
+		/*
 		try {
-    		connection = application.getConnection((Request)null);
-    		if (connection.isClosed()) connection = application.getConnection((Request)null);			
+    		//connection = application.getConnection((Request)null);
+    		//if (connection.isClosed()) connection = application.getConnection((Request)null);			
 			return createReference(connection);
 		} catch (Exception x) {
 			x.printStackTrace();
 			throw x;
 		} finally {
 			try { connection.close(); } catch (Exception x) {}
-		}			
+		}		
+		*/	
+		
 	}
 	
 	protected AbstractBatchProcessor createBatch(Target target) throws Exception{

@@ -31,7 +31,6 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.CreateModel;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.dataset.RDFInstancesParser;
@@ -58,11 +57,11 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 	 * @param reporter ModelURIReporter (to generate model uri)
 	 */
 	public CallableWekaModelCreator(Form form,
-			Reference applicationRootReference, AmbitApplication application,
+			Reference applicationRootReference,Context context,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter) {
-		super(form, applicationRootReference, application,algorithm,reporter,alg_reporter);
+		super(form, applicationRootReference, context,algorithm,reporter,alg_reporter);
 		targetURI = OpenTox.params.target.getValuesArray(form);
 		parameters = OpenTox.params.parameters.getValuesArray(form);
 	}
@@ -159,6 +158,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 		Template predictors = null;
 		Template dependent = null;
 		Template predicted = null;
+		System.out.println("Build");
 		if (clusterer!= null) {
 			clusterer.buildClusterer(newInstances);
 			predicted = new Template(name+"#Predicted");
@@ -201,7 +201,7 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instance> {
 				predictors.add(property);
 			}				
 		}
-		
+		System.out.println("Done");
 
 		m.setPredictors(predictors);
 		m.setDependent(dependent);

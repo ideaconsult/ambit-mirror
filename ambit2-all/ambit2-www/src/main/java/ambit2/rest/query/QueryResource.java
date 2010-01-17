@@ -18,7 +18,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
@@ -28,6 +27,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.DBConnection;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.rdf.RDFObjectIterator;
@@ -82,12 +82,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 					
 				}
 	}	
+	/*
 	protected Connection getConnection() throws SQLException , AmbitException {
 		Connection connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
 		if (connection.isClosed()) connection = ((AmbitApplication)getApplication()).getConnection(getRequest());
 		return connection;
 	}
-
+	*/
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
@@ -105,7 +106,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	        	while (retry <maxRetry) {
 		        	try {
 		        		convertor = createConvertor(variant);
-		        		connection = getConnection();
+		        		
+		        		DBConnection dbc = new DBConnection(getContext());
+		        		connection = dbc.getConnection(getRequest());
 		        		Reporter reporter = ((RepresentationConvertor)convertor).getReporter();
 			        	if (reporter instanceof IDBProcessor)
 			        		((IDBProcessor)reporter).setConnection(connection);
@@ -166,8 +169,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		//TODO it is inefficient to instantiate executor in all classes
 		UpdateExecutor executor = new UpdateExecutor();
 		try {
+    		DBConnection dbc = new DBConnection(getContext());
+    		c = dbc.getConnection(getRequest());			
 
-			executor.setConnection(getConnection());
+			executor.setConnection(c);
 			executor.open();
 			executor.process(updateObject);
 			

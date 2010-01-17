@@ -1,21 +1,18 @@
 package ambit2.rest;
-import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-
-import javax.sql.DataSource;
+import java.util.concurrent.ThreadFactory;
 
 import org.restlet.Application;
 import org.restlet.Component;
@@ -43,9 +40,6 @@ import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
 
 import ambit2.base.config.Preferences;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.DatasourceFactory;
-import ambit2.db.LoginInfo;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
@@ -104,11 +98,9 @@ import ambit2.rest.users.UserResource;
  */
 public class AmbitApplication extends Application {
 	protected ConcurrentMap<UUID,Task<Reference>> tasks;
-	protected Properties properties = null;
-	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
 
-	//protected String connectionURI;
-	protected DataSource datasource = null;
+	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
+	protected ExecutorService pool;
 
 	public AmbitApplication() {
 		super();
@@ -116,6 +108,26 @@ public class AmbitApplication extends Application {
 		setDescription("AMBIT implementation of OpenTox framework");
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");		
+		//pool = Executors.newFixedThreadPool(5);
+		pool = Executors.newSingleThreadExecutor(new ThreadFactory() {
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setPriority(Thread.MIN_PRIORITY);
+				thread.setDaemon(true);
+				thread.setName(String.format("%s task executor",getName()));
+				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+					public void uncaughtException(Thread t, Throwable e) {
+			            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+			            e.printStackTrace(new PrintWriter(stackTraceWriter));
+						getLogger().severe(stackTraceWriter.toString());
+					}
+				});
+				return thread;
+			}
+		});
+			
+	
+
 		tasks = new ConcurrentHashMap<UUID,Task<Reference>>();
 		/*
 		String tmpDir = System.getProperty("java.io.tmpdir");
@@ -126,7 +138,8 @@ public class AmbitApplication extends Application {
 		//connectionURI = null;
 		setStatusService(new AmbitStatusService());
 
-		getTaskService().setEnabled(true);
+		//getTaskService().setEnabled(true);
+		
 		setTunnelService(new TunnelService(true,true) {
 			@Override
 			public Filter createInboundFilter(Context context) {
@@ -156,75 +169,8 @@ public class AmbitApplication extends Application {
 		removeTasks();
 		super.finalize();
 	}
-	protected void loadProperties()  {
-		try {
-		if (properties == null) {
-			properties = new Properties();
-			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
-			properties.load(in);
-			in.close();		
-		}
-		} catch (Exception x) {
-			properties = null;
-		}
-	}	
-	protected LoginInfo getLoginInfo() {
-		loadProperties();
-		LoginInfo li = new LoginInfo();
-		String p = properties.getProperty("Database");
-		li.setDatabase(p==null?"ambit2":p);
-		p = properties.getProperty("Port");
-		li.setPort(p==null?"3306":p);		
-		p = properties.getProperty("User");
-		li.setUser(p==null?"guest":p);			
-		p = properties.getProperty("Password");
-		li.setPassword(p==null?"guest":p);	
-		return li;
-	}
-	protected String getConnectionURI() throws AmbitException {
-		return getConnectionURI(null,null);
-	}
-	protected String getConnectionURI(Request request) throws AmbitException {
-		if (request == null) return getConnectionURI(null,null);
-		else if (request.getChallengeResponse()==null)
-			return getConnectionURI(null,null);
-		else try {
-			return getConnectionURI(request.getChallengeResponse().getIdentifier(),
-					new String(request.getChallengeResponse().getSecret()));
-		} catch (Exception x) {
-			return getConnectionURI(null,null);
-		}
-	}
-	
-	protected String getConnectionURI(String user,String password) throws AmbitException {
-	
-		try {
-			LoginInfo li = getLoginInfo();
 
-			if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
-				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
-			if (getContext().getParameters().getFirstValue(Preferences.USER)!=null)
-				li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
-			if (getContext().getParameters().getFirstValue(Preferences.PASSWORD)!=null)
-				li.setPassword(getContext().getParameters().getFirstValue(Preferences.PASSWORD));
-			if (getContext().getParameters().getFirstValue(Preferences.HOST)!=null)
-				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
-			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
-				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
-		
-			//li.setDatabase("ambit-20100107");
-			//li.setHostname("192.168.1.2");
-			//li.setUser("nina");
-			//li.setPassword("sinanica");
-			
-			return DatasourceFactory.getConnectionURI(
-	                li.getScheme(), li.getHostname(), li.getPort(), 
-	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
-		} catch (Exception x) {
-			throw new AmbitException(x);
-		} 
-				
-	}
+
 	@Override
 	public Restlet createInboundRoot() {
 		Router router = new MyRouter(this.getContext());
@@ -499,49 +445,7 @@ public class AmbitApplication extends Application {
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
 		 return router;
 	}
-	public synchronized Connection getConnection(String user, String password) throws AmbitException , SQLException{
-		return getConnection(getConnectionURI(user, password));
-	}
-	public synchronized Connection getConnection() throws AmbitException , SQLException{
-		//if (connectionURI == null)
-		//	connectionURI = getConnectionURI();
-		return getConnection(getConnectionURI(null));
-	}
 
-	public synchronized Connection getConnection(Request request) throws AmbitException , SQLException{
-		//if (connectionURI == null)
-		//	connectionURI = getConnectionURI();
-		return getConnection(getConnectionURI(request));
-	}
-	public synchronized Connection getConnection(String connectionURI) throws AmbitException , SQLException{
-		
-		SQLException error = null;
-		Connection c = null;
-		
-		ResultSet rs = null;
-		Statement t = null;
-		for (int retry=0; retry< 3; retry++)
-		try {
-			c = DatasourceFactory.getDataSource(connectionURI).getConnection();
-			t = c.createStatement();
-			rs = t.executeQuery("/* ping */SELECT 1");
-			while (rs.next()) {rs.getInt(1);}
-			rs.close();
-			t.close();
-			error= null;
-			return c;
-		} catch (SQLException x) {
-			//TODO reinitialize the connection pool
-			error = x;
-			Context.getCurrentLogger().severe(x.getMessage());
-			//remove the connection from the pool
-			try {if (c != null) c.close();} catch (Exception e) {}
-		} finally {
-			try { rs.close();} catch (Exception x) {}
-			try { t.close();} catch (Exception x) {}
-		}
-		if (error != null) throw error; else throw new SQLException("Can't establish connection "+connectionURI);
-	}
 	
 	public Iterator<Task<Reference>> getTasks() {
 		return tasks.values().iterator();
@@ -580,7 +484,8 @@ public class AmbitApplication extends Application {
 				String.format("%s%s/%s", baseReference.toString(),TaskResource.resource,Reference.encode(uuid.toString())));
 		task.setUri(ref);
 		tasks.put(uuid,task);
-		getTaskService().submit(futureTask);	
+		//getTaskService().submit(futureTask);
+		pool.submit(futureTask);
 		return ref;
 	}
 

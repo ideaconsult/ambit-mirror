@@ -19,10 +19,11 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 		form.add("dataset_uri", DatasetReporterTest.class.getResource("/input.rdf").toString());
 		form.add("target", "http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938");
 		ModelURIReporter uriReporter = new ModelURIReporter(null);
+		
 		CallableWekaModelCreator c = new CallableWekaModelCreator(
 				form,
 				app,
-				(AmbitApplication)component.getApplication(), 
+				((AmbitApplication)component.getApplication()).getContext(),
 				(Algorithm)null, 
 				uriReporter,
 				new AlgorithmURIReporter(null));

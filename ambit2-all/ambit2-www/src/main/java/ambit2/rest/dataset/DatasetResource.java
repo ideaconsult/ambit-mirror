@@ -33,7 +33,14 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	public final static String dataset_complement_uri = "complement";
 	public final static String dataset_intersection_uri = "intersection";
 	
-
+/*
+ *
+select count(idchemical) from
+structure s1 join struc_dataset d1 using(idstructure)
+join structure s2 using(idchemical)
+join struc_dataset d2 on s2.idstructure=d2.idstructure
+where d1.id_srcdataset=8 and d2.id_srcdataset=6
+ */
 	@Override
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		Object id = request.getAttributes().get(datasetKey);

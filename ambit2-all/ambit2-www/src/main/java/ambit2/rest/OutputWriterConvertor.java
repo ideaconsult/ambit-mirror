@@ -50,6 +50,7 @@ public class OutputWriterConvertor<T,Q extends IQueryRetrieval<T>>  extends Quer
 	            	} finally {
 	            		try {if (writer !=null) writer.flush(); } catch (Exception x) { }
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { }
+	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
 	            	}
 	            }
 	        };		
