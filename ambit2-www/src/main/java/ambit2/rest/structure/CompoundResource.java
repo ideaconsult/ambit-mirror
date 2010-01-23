@@ -27,6 +27,7 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
+import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
@@ -113,6 +114,9 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_INCHI)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new SmilesReporter<QueryStructureByID>(false,Mode.InChI),ChemicalMediaType.CHEMICAL_INCHI);				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			return new StringConvertor(
 					new SmilesReporter<QueryStructureByID>(true),MediaType.TEXT_PLAIN);				

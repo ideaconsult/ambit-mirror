@@ -38,6 +38,7 @@ import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
+import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
@@ -137,6 +138,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				ChemicalMediaType.CHEMICAL_MDLSDF,
 				ChemicalMediaType.CHEMICAL_MDLMOL,
 				ChemicalMediaType.CHEMICAL_SMILES,
+				ChemicalMediaType.CHEMICAL_INCHI,
 				ChemicalMediaType.CHEMICAL_CML,
 				MediaType.IMAGE_PNG,
 				MediaType.IMAGE_BMP,
@@ -185,6 +187,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_INCHI)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new SmilesReporter<QueryStructureByID>(false,Mode.InChI),ChemicalMediaType.CHEMICAL_INCHI);				
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate()));				

@@ -20,11 +20,43 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 	protected boolean writeProperties = false;
+	protected Property key;
+	public enum Mode {
+		SMILES {
+			@Override
+			public String getTag() {
+				return CDKConstants.SMILES;
+			}
+		},
+		InChI {
+			@Override
+			public String getTag() {
+				return CDKConstants.INCHI;
+			}
+		};
+		public abstract String getTag();
+		public Property getProperty() {
+			return Property.getInstance(getTag(),getTag());
+		}
+	}
+	protected Mode mode;
+	
+	public Mode getMode() {
+		return mode;
+	}
+	public void setMode(Mode mode) {
+		this.mode = mode;
+		key = mode.getProperty();
+	}
 	public SmilesReporter() {
 		this(false);
 	}
 	public SmilesReporter(boolean writeProperties) {
+		this(writeProperties,Mode.SMILES);
+	}
+	public SmilesReporter(boolean writeProperties,Mode mode) {
 		super();
+		setMode(mode);
 		this.writeProperties = writeProperties;
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
@@ -38,7 +70,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			Object smiles = item.getProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
+			Object smiles = item.getProperty(key);
 			if (smiles == null)
 				output.write("");
 			else 
@@ -47,7 +79,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 			if (writeProperties && (item.getProperties() != null)) {
 				for (Property key: item.getProperties()) {
 
-				if (key.getName().equals(CDKConstants.SMILES)) continue;
+				if (key.getName().equals(mode.getTag())) continue;
 					Object property = item.getProperty(key);
 					String d = key.getName().indexOf(' ')>0?"\"":"";
 					output.write(String.format("\t%s%s%s=%s",d,key.toString(),d,
