@@ -208,6 +208,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponseSMILES(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}		
+	public boolean verifyResponseInChI(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
+	}		
 	public boolean verifyResponsePNG(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}		
@@ -257,6 +260,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseMOL(uri, media, in);
 		else if (ChemicalMediaType.CHEMICAL_SMILES.equals(media))
 			return verifyResponseSMILES(uri, media, in);
+		else if (ChemicalMediaType.CHEMICAL_INCHI.equals(media))
+			return verifyResponseInChI(uri, media, in);		
 		else if (ChemicalMediaType.CHEMICAL_MDLSDF.equals(media))
 			return verifyResponseSDF(uri, media, in);
 		else if (ChemicalMediaType.CHEMICAL_CML.equals(media))

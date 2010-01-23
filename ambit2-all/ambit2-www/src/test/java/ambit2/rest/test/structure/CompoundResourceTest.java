@@ -203,6 +203,22 @@ public class CompoundResourceTest extends ResourceTest {
 		return count ==1;
 	}
 	@Test
+	public void testInChI() throws Exception {
+		testGet(String.format("http://localhost:%d/compound/7", port),ChemicalMediaType.CHEMICAL_INCHI);
+	}		
+	@Override
+	public boolean verifyResponseInChI(String uri, MediaType media,
+			InputStream in) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			Assert.assertEquals("InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2",line);
+			count++;
+		}
+		return count ==1;
+	}	
+	@Test
 	public void testSMILES() throws Exception {
 		testGet(getTestURI(),ChemicalMediaType.CHEMICAL_SMILES);
 	}	
