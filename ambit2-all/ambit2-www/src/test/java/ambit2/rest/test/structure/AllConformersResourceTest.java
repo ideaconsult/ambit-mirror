@@ -17,11 +17,24 @@ public class AllConformersResourceTest extends ConformerResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-			Assert.assertEquals("F.[F-].[Na+]	SMILES=F.[F-].[Na+]	metric=1.0",line);
+			Assert.assertEquals("F.[F-].[Na+]",line);
 			count++;
 		}
 		return count ==2;
 	}
+	
+	@Override
+	public boolean verifyResponseTXT(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			Assert.assertEquals("F.[F-].[Na+]	metric=1.0",line);
+			count++;
+		}
+		return count ==2;
+	}	
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/compound/10/conformer", port);

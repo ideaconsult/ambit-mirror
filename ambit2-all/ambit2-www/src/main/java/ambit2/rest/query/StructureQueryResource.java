@@ -190,7 +190,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new PDFReporter<QueryStructureByID>(getTemplate()));				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			return new StringConvertor(
-					new SmilesReporter<QueryStructureByID>(),MediaType.TEXT_PLAIN);
+					new SmilesReporter<QueryStructureByID>(true),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			ConformerURIReporter<QueryStructureByID> reporter = new ConformerURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen());
 			reporter.setDelimiter("\n");
@@ -216,10 +216,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
-
-					
 		} else
-			return new DocumentConvertor(new QueryXMLReporter<Q>(getRequest()));
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new SDFReporter<QueryStructureByID>(template),ChemicalMediaType.CHEMICAL_MDLSDF);
 	}
 	
 	protected String getMediaParameter(Request request) {

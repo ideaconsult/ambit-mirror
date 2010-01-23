@@ -113,6 +113,9 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
+		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
+			return new StringConvertor(
+					new SmilesReporter<QueryStructureByID>(true),MediaType.TEXT_PLAIN);				
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG) ||
 				variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
 				variant.getMediaType().equals(MediaType.IMAGE_JPEG) ||
@@ -166,7 +169,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(getTemplate()),ChemicalMediaType.CHEMICAL_MDLSDF);			
+					new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		
 	}
 	protected QueryURIReporter getURIReporter() {

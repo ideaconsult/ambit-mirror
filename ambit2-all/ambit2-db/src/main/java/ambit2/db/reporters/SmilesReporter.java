@@ -19,8 +19,13 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	 * 
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
-
+	protected boolean writeProperties = false;
 	public SmilesReporter() {
+		this(false);
+	}
+	public SmilesReporter(boolean writeProperties) {
+		super();
+		this.writeProperties = writeProperties;
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
@@ -35,25 +40,26 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		try {
 			Object smiles = item.getProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
 			if (smiles == null)
-				System.out.println(item.getProperties());
-			else {
+				output.write("");
+			else 
 				output.write(smiles.toString());
-				if (item.getProperties() != null) {
-					for (Property key: item.getProperties()) {
+			
+			if (writeProperties && (item.getProperties() != null)) {
+				for (Property key: item.getProperties()) {
 
-						if (key.equals(CDKConstants.SMILES)) continue;
-						Object property = item.getProperty(key);
-						output.write("\t");							
-						output.write(key.toString());
-						output.write("=");
-						if (property!=null) 
-							output.write(property.toString());
-					}
-						
+				if (key.getName().equals(CDKConstants.SMILES)) continue;
+					Object property = item.getProperty(key);
+					String d = key.getName().indexOf(' ')>0?"\"":"";
+					output.write(String.format("\t%s%s%s=%s",d,key.toString(),d,
+							property==null?"":property.toString()
+							));
+
 				}
-				output.write('\n');
-				output.flush();
+						
 			}
+			output.write('\n');
+			output.flush();
+			
 		} catch (IOException x) {
 			x.printStackTrace();
 		}

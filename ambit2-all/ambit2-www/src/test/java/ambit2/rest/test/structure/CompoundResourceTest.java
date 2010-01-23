@@ -15,7 +15,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -29,11 +28,11 @@ import weka.core.Instances;
 import ambit2.base.io.DownloadTool;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.IteratingDelimitedFileReader;
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.test.ResourceTest;
 
 import com.lowagie.text.pdf.PdfReader;
@@ -174,7 +173,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 			throws Exception {
-		IteratingMDLReader reader = new IteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
+		MyIteratingMDLReader reader = new MyIteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
 		int count = 0;
 		while (reader.hasNext()) {
 			Object o = reader.next();
@@ -188,6 +187,22 @@ public class CompoundResourceTest extends ResourceTest {
 		return count==1;
 	}
 	@Test
+	public void testTXT() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_PLAIN);
+	}	
+	@Override
+	public boolean verifyResponseTXT(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			Assert.assertEquals("F.[F-].[Na+]	metric=1.0",line);
+			count++;
+		}
+		return count ==1;
+	}
+	@Test
 	public void testSMILES() throws Exception {
 		testGet(getTestURI(),ChemicalMediaType.CHEMICAL_SMILES);
 	}	
@@ -198,7 +213,7 @@ public class CompoundResourceTest extends ResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-			Assert.assertEquals("F.[F-].[Na+]	SMILES=F.[F-].[Na+]	metric=1.0",line);
+			Assert.assertEquals("F.[F-].[Na+]",line);
 			count++;
 		}
 		return count ==1;
