@@ -48,7 +48,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					target));
 			}
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}
 	};
 	@Override

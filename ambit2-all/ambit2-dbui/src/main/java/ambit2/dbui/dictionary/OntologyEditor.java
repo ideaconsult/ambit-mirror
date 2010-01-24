@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import ambit2.base.data.Dictionary;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
@@ -48,7 +49,7 @@ public class OntologyEditor extends AbstractDBProcessor<Object, Dictionary> impl
 	protected ProcessorOntology processor = new ProcessorOntology();
 	protected QueryOntology[] query = new QueryOntology[SIDE.values().length];
 	protected ListEditor[] listEditor = new ListEditor[SIDE.values().length];
-	protected AmbitRows<Serializable>[] rows = new AmbitRows[SIDE.values().length];
+	protected AmbitRows<Property>[] rows = new AmbitRows[SIDE.values().length];
 	protected ImageIcon folderIcon = null;
 	
 	protected JComponent component;
@@ -58,7 +59,7 @@ public class OntologyEditor extends AbstractDBProcessor<Object, Dictionary> impl
         for (SIDE side : SIDE.values()) {
         	query[side.ordinal()] = new QueryOntology();
         	query[side.ordinal()].setValue(side.equals(SIDE.LEFT)?new Dictionary("Endpoints",null):new Dictionary("Dataset",null));
-        	rows[side.ordinal()] = new AmbitRows<Serializable>();
+        	rows[side.ordinal()] = new AmbitRows<Property>();
 			listEditor[side.ordinal()] = new ListEditor(new RowsModel(rows[side.ordinal()])) {
 				@Override
 				protected IAmbitEditor getEditor(Object object) {

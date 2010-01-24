@@ -111,7 +111,7 @@ public class RetrieveFieldNamesByAliasTest extends RetrieveTest<Property> {
 		while (rows.next()) {
 			Property p = rows.getObject();
 			ITable table = 	c.createQueryTable("EXPECTED",
-					"select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference) where name='"+p.getName()+"' and title='"+p.getReference().getTitle()+"'");		
+					"select idproperty,name,units,title,url,idreference,comments,null,islocal from properties join catalog_references using(idreference) where name='"+p.getName()+"' and title='"+p.getReference().getTitle()+"'");		
 			Assert.assertEquals(1,table.getRowCount());			
 			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
 				Object expected = table.getValue(0,rows.getMetaData().getColumnName(i));

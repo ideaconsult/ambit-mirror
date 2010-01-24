@@ -19,10 +19,11 @@ import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyDOMReporter;
+import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.reference.AbstractDOMParser;
 
-public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends QueryDOMReporter<Object, Q> {
+public class OntologyDOMReporter<Q extends IQueryRetrieval<Property>> extends QueryDOMReporter<Property, Q> {
 	protected PropertyDOMReporter<IQueryRetrieval<Property>> reporterProperty;
 
 	/**
@@ -55,7 +56,7 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference) {
-		return new OntologyURIReporter(reference);
+		return new PropertyURIReporter(reference);
 	}
 	@Override
 	public Document getOutput() throws AmbitException {
@@ -74,13 +75,13 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 	}
 
 	@Override
-	public Object processItem(Object item) throws AmbitException {
+	public Object processItem(Property item) throws AmbitException {
 		if (item == null) return null;
 		count++;
-		if (item instanceof Property) {
+		if (!item.getClazz().equals(Dictionary.class)) {
 			((Property) item).setOrder(count);
 			reporterProperty.processItem((Property) item);
-		} else if (item instanceof Dictionary){
+		} else {
 			Property p  = new Property(((Dictionary)item).getTemplate());
 			p.setLabel(((Dictionary) item).getParentTemplate());
 			p.setClazz(Dictionary.class);
@@ -92,8 +93,6 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 
 			if (recursive) {
 			
-				
-		
 				Reference newuri = (uriReporter.getBaseReference()!=null)?
 					new Reference(uriReporter.getURI(item)+"/view/tree"):
 					new Reference("riap://application"+uriReporter.getURI(item)+"/view/tree");
@@ -107,8 +106,8 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Object>> extends Quer
 		return null;
 	}
 	@Override
-	public Element getItemElement(Document doc, Object item) {
-		if (item instanceof Property)
+	public Element getItemElement(Document doc, Property item) {
+		if (!item.getClazz().equals(Dictionary.class)) 
 			return reporterProperty.getItemElement(doc,(Property) item);
 
         return null;

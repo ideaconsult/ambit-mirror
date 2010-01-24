@@ -19,6 +19,7 @@ import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
+import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
@@ -37,8 +38,14 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?
-			String.format("riap://application%s?text=%s",PropertyResource.featuredef,Reference.encode(textSearch)):
-			String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
+			//String.format("riap://application%s?text=%s",PropertyResource.featuredef,Reference.encode(textSearch))
+				String.format("%s%s?text=%s",
+						getRequest().getRootRef(),PropertyResource.featuredef,Reference.encode(textSearch))				
+			:
+				
+			String.format("%s%s/%s%s",
+						getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),dataset_id,PropertyResource.featuredef);				
+			//String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
 	}
 	protected IQueryRetrieval<IStructureRecord> getScopeQuery(Context context, Request request,
 								Response response) throws ResourceException {

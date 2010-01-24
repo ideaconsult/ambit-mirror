@@ -16,6 +16,7 @@ import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RESTClient;
 import ambit2.rest.property.PropertyDOMParser;
+import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.reference.AbstractDOMParser;
 
 /**
@@ -23,7 +24,7 @@ import ambit2.rest.reference.AbstractDOMParser;
  * @author nina
  *
  */
-public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrieval<Object>> {
+public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetrieval<Property>> {
 
 	/**
 	 * 
@@ -37,17 +38,16 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrie
 	}	
 	@Override
 	protected QueryURIReporter createURIReporter(Request request) {
-		return new OntologyURIReporter(request);
+		return new PropertyURIReporter(request);
 	}
 	
-	public String toURI(Object record) {
+	public String toURI(Property record) {
 		count++;
 		//if (count==1) return ""; 
 		
 		String w = uriReporter.getURI(record);
 		
-		boolean isDictionary=(record instanceof Dictionary) || 
-		((record instanceof Property) && ((Property)record).getClazz().equals(Dictionary.class));
+		boolean isDictionary= record.getClazz().equals(Dictionary.class);
 		return String.format(
 				"<img src=\"%s/images/%s\">%s<a href=\"%s\">%s</a>&nbsp;<br>",
 
@@ -62,11 +62,11 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrie
 	}	
 
 	@Override
-	public Object processItem(Object record) throws AmbitException  {
+	public Object processItem(Property record) throws AmbitException  {
 
 		try {
-			if ((record instanceof Dictionary) || 
-					((record instanceof Property) && ((Property)record).getClazz().equals(Dictionary.class))){
+
+			if ( record.getClazz().equals(Dictionary.class) ){
 				output.write(toURI(record));
 				
 				if (!collapsed) {
@@ -89,7 +89,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Object, IQueryRetrie
 							
 				}				
 				
-			} else if  ((record instanceof Property) && !((Property)record).getClazz().equals(Dictionary.class))
+			} else 
 				output.write(toURI(record));
 			if (!collapsed) {
 /*

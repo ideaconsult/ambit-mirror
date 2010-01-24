@@ -1,6 +1,5 @@
 package ambit2.db.search.property;
 
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,9 +13,11 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.AbstractPropertyRetrieval.PROPERTY_TABLE;
+import ambit2.db.search.property.AbstractPropertyRetrieval._PROPERTY_TYPE;
 
-public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCondition, Serializable> implements
-												IQueryRetrieval<Serializable> {
+public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCondition, Property> implements
+												IQueryRetrieval<Property> {
 
 	/**
 	 * 
@@ -24,20 +25,20 @@ public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCon
 	private static final long serialVersionUID = -6711409305156505699L;
 	protected String sqlParent = 
 	
-		"select 0,t2.name,t1.name,'','','',0,-2 ord\n"+
+		"select 0,t2.name,t1.name,'','','',0,-2 ord,-1 idreference,'Parent' comments,true islocal\n"+
 		"from ((`template` `t1`\n"+
 		"join `dictionary` `d` on((`t1`.`idtemplate` = `d`.`idsubject`)))\n"+
 		"join `template` `t2` on((`d`.`idobject` = `t2`.`idtemplate`)))\n"+
 		"where t1.name %s ?\n"+
 		"union\n";		
 	protected String sqlChild = 	
-		"select 1,t2.name,t1.name,'','','',0,-1 ord\n"+
+		"select 1,t2.name,t1.name,'','','',0,-1 ord,-1 idreference,'Child' comments,true islocal\n"+
 		"from ((`template` `t1`\n"+
 		"join `dictionary` `d` on((`t1`.`idtemplate` = `d`.`idsubject`)))\n"+
 		"join `template` `t2` on((`d`.`idobject` = `t2`.`idtemplate`)))\n"+
 		"where t2.name %s ?\n"+
 		"union\n"+
-		"select 2,template.name,properties.name,if(units != '',concat('[',units,']'),''),title,url,idproperty,`order` ord from catalog_references\n"+
+		"select 2,template.name,properties.name,units,title,url,idproperty,`order` ord,idreference,comments,islocal from catalog_references\n"+
 		"join properties using(idreference)\n"+
 		"join template_def using(idproperty)\n"+
 		"join template using(idtemplate)\n"+
@@ -60,7 +61,7 @@ public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCon
 	public QueryOntology() {
 		setFieldname(true);
 	}
-	public double calculateMetric(Serializable object) {
+	public double calculateMetric(Property object) {
 		return 1;
 	}
 
@@ -84,21 +85,28 @@ public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCon
 		return String.format(includeParent?sqlParent+sqlChild:sqlChild,c,c,c);
 	}
 
-	public Serializable getObject(ResultSet rs) throws AmbitException {
+	public Property getObject(ResultSet rs) throws AmbitException {
 		try {
 			switch (rs.getInt(1)) {
 			case 0: {
-				return (Serializable)new Dictionary(rs.getString(3),rs.getString(2));
+				return new Dictionary(rs.getString(3),rs.getString(2));
 			}
 			case 1: {
-				return (Serializable)new Dictionary(rs.getString(3),rs.getString(2));
+				return new Dictionary(rs.getString(3),rs.getString(2));
 			}
 			case 2: {
 				Property p = Property.getInstance(rs.getString(3), 
 						LiteratureEntry.getInstance(rs.getString(5),rs.getString(6)));
 				p.setId(rs.getInt(7));
 				p.setUnits(rs.getString(4));
-				return (Serializable)p;
+				p.setLabel(rs.getString(PROPERTY_TABLE.comments.toString()));
+				p.getReference().setId(rs.getInt(PROPERTY_TABLE.idreference.toString()));
+				
+				try {
+					p.setNominal(rs.getBoolean(PROPERTY_TABLE.islocal.toString()));
+				} catch (Exception x) { p.setNominal(false);}
+				return p;				
+
 			}
 			default: return null;
 			}

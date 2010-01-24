@@ -44,7 +44,7 @@ import ambit2.db.search.DictionarySubjectQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class DictionaryObjectTest extends QueryTest<DictionaryQuery> {
+public class DictionaryObjectTest extends QueryTest<DictionaryQuery<Dictionary>> {
 
 	@Before
 	public void setUp() throws Exception {
@@ -52,7 +52,7 @@ public class DictionaryObjectTest extends QueryTest<DictionaryQuery> {
 		dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";
 	}
 	@Override
-	protected DictionaryQuery createQuery() throws Exception {
+	protected DictionaryQuery<Dictionary> createQuery() throws Exception {
 		DictionaryObjectQuery q = new DictionaryObjectQuery();
 		q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
 		q.setValue("Endpoints");
@@ -60,7 +60,7 @@ public class DictionaryObjectTest extends QueryTest<DictionaryQuery> {
 	}
 
 	@Override
-	protected void verify(DictionaryQuery query, ResultSet rs) throws Exception {
+	protected void verify(DictionaryQuery<Dictionary> query, ResultSet rs) throws Exception {
 		int records = 0;
 		while (rs.next()) {
 			records ++;

@@ -24,6 +24,8 @@ import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
@@ -48,7 +50,9 @@ public class DatasetsResourceTest extends ResourceTest {
 			count++;
 		}
 		return count ==3;
-	}			
+	}	
+	
+
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);

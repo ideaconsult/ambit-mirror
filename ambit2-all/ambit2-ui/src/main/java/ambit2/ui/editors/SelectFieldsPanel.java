@@ -44,6 +44,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import ambit2.base.data.Dictionary;
 import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
 import ambit2.base.data.TypedListModel;
@@ -154,6 +155,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 			if (moveAll()) {
 				for (int i=0; i < table[getTableIndex()].getModel().getSize();i++) {
 					Object o = table[getTableIndex()].getModel().getElementAt(i);
+					if (o instanceof Dictionary) ; 
 					if (o instanceof Property) ((Property)o).setEnabled(getTag());
 				}
 			} else {
@@ -161,6 +163,7 @@ public class SelectFieldsPanel extends JPanel implements ActionListener, IAmbitE
 				for (int row : rows) {
 					if (row >= table[getTableIndex()].getModel().getSize()) continue;
 					Object o = table[getTableIndex()].getModel().getElementAt(row);
+					if (o instanceof Dictionary) ;
 					if (o instanceof Property) ((Property)o).setEnabled(!((Property)o).isEnabled());
 				}
 			}

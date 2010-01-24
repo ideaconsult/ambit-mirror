@@ -141,19 +141,20 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 				}
 				
 			} catch (Exception x) {
-				
+				/*
 	            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
 	            x.printStackTrace(new PrintWriter(stackTraceWriter));				
 				Context.getCurrentLogger().warning(stackTraceWriter.toString());
-				
+				*/
 			} finally {
 				try { iterator.close();} catch (Exception x) {}
 			}			
 		} catch (Exception x) {
+			/*
             java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
             x.printStackTrace(new PrintWriter(stackTraceWriter));				
 			Context.getCurrentLogger().warning(stackTraceWriter.toString());
-
+			*/
 		}				
 		return new LiteratureEntry(url,url);
 	}

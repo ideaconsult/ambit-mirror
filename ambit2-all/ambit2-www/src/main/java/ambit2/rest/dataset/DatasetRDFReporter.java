@@ -23,7 +23,7 @@ import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.rdf.OT;
-import ambit2.rest.reference.ReferenceURIReporter;
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.structure.ConformerURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -45,7 +45,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	 */
 	private static final long serialVersionUID = -6410553622662161903L;
 	protected PropertyRDFReporter propertyReporter;
-	protected ReferenceURIReporter referenceReporter;
+	//protected ReferenceURIReporter referenceReporter;
 	
 	
 	protected Template template;
@@ -63,7 +63,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
 		propertyReporter = new PropertyRDFReporter(request,mediaType);
-		referenceReporter = new ReferenceURIReporter(request);
+		//referenceReporter = new ReferenceURIReporter(request);
 	}
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
@@ -150,23 +150,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				Object value = item.getProperty(p);
 				if (value == null) continue;
 				
-				/*
-				Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(p),
-						OT.OTClass.Feature.getOntClass(getJenaModel()));
-				feature.addProperty(DC.type,
-						 (value instanceof Number)?
-								AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
-								AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
-								);								
-				*/
-				
 				p.setClazz((value instanceof Number)?Double.class:String.class);
 				Individual feature = (Individual)propertyReporter.processItem(p);
-				/*
-				feature.addProperty(RDFJenaModel.DCProperty.title.getProperty(getJenaModel()), p.getName());
-				feature.addProperty(RDFJenaModel.DCProperty.identifier.getProperty(getJenaModel()),propertyReporter.getURI(p));
-				feature.addProperty(RDFJenaModel.OTProperty.hasSource.getProperty(getJenaModel()), referenceReporter.getURI(p.getReference()));
-				*/
+
 				Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
 				featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 
@@ -176,6 +162,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				
 				i++;
 				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
+				
+				if (p.isNominal())
+					feature.addProperty(OTProperty.acceptValue.createProperty(getJenaModel()), value.toString());
 			}
 			return dataEntry;
 		} catch (Exception x) {

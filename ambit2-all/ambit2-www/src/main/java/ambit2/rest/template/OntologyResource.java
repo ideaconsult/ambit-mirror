@@ -1,7 +1,5 @@
 package ambit2.rest.template;
 
-import java.io.Serializable;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -14,6 +12,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Dictionary;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
@@ -25,7 +24,9 @@ import ambit2.db.update.dictionary.DeleteDictionary;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -34,7 +35,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class OntologyResource<T extends Serializable> extends QueryResource<IQueryRetrieval<T>, T> {
+public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, Property> {
 	
 	public static String resource = "/template";
 	public static String resourceParent = "subject";
@@ -55,27 +56,35 @@ public class OntologyResource<T extends Serializable> extends QueryResource<IQue
 				MediaType.TEXT_HTML,
 				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3,
+				MediaType.TEXT_RDF_NTRIPLES,				
 				MediaType.APPLICATION_JAVA_OBJECT
 				});
 
 				
 	}
 	@Override
-	public IProcessor<IQueryRetrieval<T>, Representation> createConvertor(
+	public IProcessor<IQueryRetrieval<Property>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		if (variant.getMediaType().equals(MediaType.TEXT_XML)) 
+		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new OntologyDOMReporter(getRequest(),isRecursive()));
-		else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new OntologyURIReporter(getRequest()) {
-					@Override
-					public Object processItem(Object item) throws AmbitException  {
-						super.processItem(item);
-						try {
-						output.write('\n');
-						} catch (Exception x) {}
-						return null;
-					}
-				},MediaType.TEXT_URI_LIST);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+					) {
+				return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
+						new TemplateRDFReporter<IQueryRetrieval<Property>>(
+								getRequest(),variant.getMediaType(),isRecursive())
+						,variant.getMediaType());		
+				
+				
+		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+				PropertyURIReporter r = new PropertyURIReporter(getRequest());
+				r.setDelimiter("\n");
+				return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
 				
 		} else 
 			return new OutputWriterConvertor(
@@ -84,7 +93,7 @@ public class OntologyResource<T extends Serializable> extends QueryResource<IQue
 	}
 
 	@Override
-	protected IQueryRetrieval<T> createQuery(Context context, Request request,
+	protected IQueryRetrieval<Property> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
@@ -109,9 +118,9 @@ public class OntologyResource<T extends Serializable> extends QueryResource<IQue
 			qd.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 			qd.setValue(key==null?null:Reference.decode(key.toString(),null));
 			
-			return (IQueryRetrieval<T>) qd;
+			return qd;
 		}
-		return (IQueryRetrieval<T>)q;
+		return q;
 	}
 	
 	@Override
@@ -127,24 +136,28 @@ public class OntologyResource<T extends Serializable> extends QueryResource<IQue
 
 	}	
 	@Override
-	protected T createObjectFromHeaders(Form requestHeaders,
+	protected Property createObjectFromHeaders(Form requestHeaders,
 			Representation entity) throws ResourceException {
 		Object key = getRequest().getAttributes().get(resourceKey);
 		if (key == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		Object parent = getRequest().getAttributes().get(resourceParent);
 		if (parent == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		Dictionary dictionary = new Dictionary(parent.toString(),key.toString());
-		return (T)dictionary;
+		return dictionary;
 		
 	}
 	
-	protected ambit2.db.update.AbstractUpdate createDeleteObject(T entry) throws ResourceException {
-		DeleteDictionary delete = new DeleteDictionary((Dictionary)entry);
-		return delete;
+	protected ambit2.db.update.AbstractUpdate createDeleteObject(Property entry) throws ResourceException {
+		if (entry instanceof Dictionary) {
+			DeleteDictionary delete = new DeleteDictionary((Dictionary)entry);
+			return delete;
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+				String.format("Expected %s instead of %s",Dictionary.class.getName(),entry.getClass().getName()));
 	};
 	@Override
-	protected QueryURIReporter<T, IQueryRetrieval<T>> getURUReporter(
+	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return (QueryURIReporter) new OntologyURIReporter(getRequest());
+		//return (QueryURIReporter) new OntologyURIReporter(getRequest());
+		return new PropertyURIReporter(getRequest());
 	}
 }

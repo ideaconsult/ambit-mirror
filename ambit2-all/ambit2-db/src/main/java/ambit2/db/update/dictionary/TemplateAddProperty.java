@@ -78,7 +78,7 @@ public class TemplateAddProperty extends AbstractUpdate<Dictionary,Property> {
 			return createProperty.getParameters(index-dict);		
 		else  {
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
-			params1.add(new QueryParam<String>(String.class, getObject().getName()));
+			params1.add(new QueryParam<String>(String.class, getObject().getName()==null?"Default":getObject().getName()));
 			params1.add(new QueryParam<String>(String.class, getObject().getReference().getTitle()));
 			params1.add(new QueryParam<String>(String.class, getGroup().getTemplate()));
 			return params1;

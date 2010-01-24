@@ -41,7 +41,6 @@ import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -52,6 +51,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.property.PropertyDOMParser;
+import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
@@ -88,10 +88,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
 
 			for (String featureURI:featuresURI) 
-				readFeatures(featureURI, profile);
+				readFeaturesRDF(featureURI, profile);
 			
 			if (profile.size() == 0) {
-				readFeatures(getDefaultTemplateURI(context,request,response), profile);
+				readFeaturesRDF(getDefaultTemplateURI(context,request,response), profile);
 
 			}
 			return profile;
@@ -101,7 +101,31 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 		
 	}	
-	protected void readFeatures(String uri,final Template profile) {
+	protected void readFeaturesRDF(String uri,final Template profile) {
+		if (uri==null) return;
+		Representation r = null;
+		try {
+			
+			RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(uri));
+			iterator.setBaseReference(
+					uri.startsWith("riap://application/")?new Reference("riap://application/"):
+					getRequest().getRootRef()
+					);
+			while (iterator.hasNext()) {
+				Property p = iterator.next();
+				p.setEnabled(true);
+				profile.add(p);
+			};
+			
+		} catch (Exception x) {
+			//getLogger().severe(x.getMessage());
+
+		} finally {
+			try {if (r != null) r.release(); } catch (Exception x) {}
+			
+		}
+	}		
+	protected void readFeaturesXML(String uri,final Template profile) {
 		if (uri==null) return;
 		Representation r = null;
 		try {

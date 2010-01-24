@@ -13,6 +13,8 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
+import ambit2.rest.rdf.OT.OTClass;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -72,8 +74,12 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 	protected Attribute createFeature(RDFNode feature) {
 		Attribute a = null;
 		try {
-			if("http://www.w3.org/2001/XMLSchema#double".equals(
-					((Resource)feature).getProperty(DC.type).getObject().toString()))
+			if (
+				((Resource)feature).getProperty(RDF.type).getObject().equals(
+						OTClass.NumericFeature.getOntClass(jenaModel)))
+			
+			//if("http://www.w3.org/2001/XMLSchema#double".equals(
+				//	((Resource)feature).getProperty(DC.type).getObject().toString()))
 				a = new Attribute(feature.toString());
 		} catch(Exception x) {
 			a = null;

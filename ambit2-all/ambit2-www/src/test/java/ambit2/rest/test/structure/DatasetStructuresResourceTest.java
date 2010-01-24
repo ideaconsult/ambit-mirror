@@ -9,10 +9,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.restlet.data.MediaType;
 
 import weka.core.Instances;
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
@@ -29,6 +29,11 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 		public void testRDFXML() throws Exception {
 			testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
 		}			
+		
+			/*
+		 * (non-Javadoc)
+		 * @see ambit2.rest.test.ResourceTest#verifyResponseARFF(java.lang.String, org.restlet.data.MediaType, java.io.InputStream)
+		 */
 		@Override
 		public Instances verifyResponseARFF(String uri, MediaType media, InputStream in)
 				throws Exception {
@@ -66,7 +71,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 		@Override
 		public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 				throws Exception {
-			IteratingMDLReader reader = new IteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
 			int count = 0;
 			while (reader.hasNext()) {
 				Object o = reader.next();

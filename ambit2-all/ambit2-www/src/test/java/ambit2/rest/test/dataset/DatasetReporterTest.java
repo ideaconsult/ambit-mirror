@@ -11,12 +11,12 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import weka.core.Instances;
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFInstancesIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
 import ambit2.rest.test.ResourceTest;
@@ -47,6 +47,11 @@ public class DatasetReporterTest extends ResourceTest {
 			Assert.assertTrue(target.getIdchemical()>0);
 			Assert.assertTrue(target.getIdstructure()>0);
 			Assert.assertNotNull(target.getProperties());
+			for (Property p : target.getProperties()) {
+				System.out.println(p);
+				System.out.println(p.getId());
+				System.out.println(target.getProperty(p));
+			}
 			Assert.assertNotNull(target.getContent());
 			Assert.assertEquals(MOL_TYPE.SDF.toString(),target.getFormat());			
 		}

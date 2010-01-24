@@ -20,7 +20,7 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStruct
 
 
 	
-	public static String sql = "select idproperty,name,units,title,url,idreference,comments from properties join catalog_references using(idreference)";
+	public static String sql = "select idproperty,name,units,title,url,idreference,comments,null,islocal from properties join catalog_references using(idreference)";
 	public static String where = " %s comments %s ?"; // COLLATE utf8_general_ci for case insensitive
 
 		/**

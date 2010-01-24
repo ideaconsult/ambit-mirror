@@ -84,8 +84,8 @@ public class DBConnection {
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 		
-			//li.setDatabase("ambit-20100107");
-			//li.setHostname("192.168.1.2");
+		//	li.setDatabase("ambit-test");
+			//li.setHostname("localhost");
 			//li.setUser("nina");
 			//li.setPassword("sinanica");
 			

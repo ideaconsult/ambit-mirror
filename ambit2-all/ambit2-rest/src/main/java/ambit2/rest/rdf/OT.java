@@ -58,6 +58,16 @@ public class OT {
 			}
 			
 		},
+		TupleFeature {
+			@Override
+			public OntClass createOntClass(OntModel model) {
+				OntClass feature = Feature.getOntClass(model);
+				OntClass tupleFeature = model.createClass(getNS());
+				feature.addSubClass(tupleFeature);
+				return tupleFeature;
+			}
+			
+		},		
 		FeatureValue,
 		Algorithm,
 		Model,
@@ -112,7 +122,9 @@ public class OT {
 		    hasValidationInfo,
 		    validationModel ,
 		    validationPredictionDataset ,
-		    validationTestDataset;
+		    validationTestDataset,
+		    //Nominal features
+		    acceptValue;
 		   	public Property createProperty(OntModel jenaModel) {
 		   		Property p = jenaModel.getObjectProperty(String.format(_NS, toString()));
 		   		return p!= null?p:

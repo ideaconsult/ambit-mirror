@@ -40,7 +40,20 @@ import ambit2.db.search.IQueryCondition;
 
 public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition> extends AbstractQuery<F, T, C, Property> 
 											implements IQueryRetrieval<Property> {
-	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,null from properties join catalog_references using(idreference)";
+	public enum PROPERTY_TABLE {
+		idproperty,
+		name,
+		units,
+		comments,
+		islocal,
+		idreference
+	}
+	public enum REFERENCE_TABLE {
+		idreference,
+		title,
+		url
+	}	
+	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,null,islocal from properties join catalog_references using(idreference)";
 	/**
 	 * 
 	 */
@@ -109,6 +122,9 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 				if (type != null)
 				p.setClazz(_PROPERTY_TYPE.valueOf(type).getClazz());
 			} catch (Exception x) {}
+			try {
+				p.setNominal(rs.getBoolean(9));
+			} catch (Exception x) { p.setNominal(false);}
 			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
