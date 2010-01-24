@@ -11,16 +11,16 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.template.OntologyResource;
-import ambit2.rest.template.OntologyURIReporter;
 
 public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
-	protected OntologyURIReporter templateReporter ;
+	protected PropertyURIReporter templateReporter ;
 	//only necessary if applying the model
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	
@@ -32,7 +32,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	}
 	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed) {
 		super(request,collapsed);
-		templateReporter = new OntologyURIReporter(request);
+		templateReporter = new PropertyURIReporter(request);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,collapsed);
 	}
 	@Override

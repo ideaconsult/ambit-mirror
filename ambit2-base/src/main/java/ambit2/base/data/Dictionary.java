@@ -30,18 +30,17 @@
 package ambit2.base.data;
 
 
+
 /**
  * encapsulates pseudo ontology , defined in template and dictionary tables
  * @author nina
  *
  */
-public class Dictionary extends AmbitBean {
+public class Dictionary extends Property {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1091010081539426004L;
-	protected String template;
-	protected String parentTemplate;
 	protected String relationship;
 	
 	public Dictionary() {
@@ -51,21 +50,28 @@ public class Dictionary extends AmbitBean {
 		this(template,parentTemplate,"is_a");
 	}	
 	public Dictionary(String template,String parentTemplate,String relationship) {
+		super(template,parentTemplate==null?null:new LiteratureEntry(parentTemplate,opentox_TupleFeature));
 		setTemplate(template);
 		setParentTemplate(parentTemplate);
 		setRelationship(relationship);
+		setClazz(Dictionary.class);
+		setNominal(true);
 	}	
+
 	public String getTemplate() {
-		return template;
+		return getName();
 	}
 	public void setTemplate(String template) {
-		this.template = template;
+		setName(template);
 	}
 	public String getParentTemplate() {
-		return parentTemplate;
+		return getReference()==null?null:getTitle();
 	}
 	public void setParentTemplate(String parentTemplate) {
-		this.parentTemplate = parentTemplate;
+		if (parentTemplate==null) setReference(null);
+		else {
+			setReference(new LiteratureEntry(parentTemplate,opentox_TupleFeature));
+		}
 	}
 	public String getRelationship() {
 		return relationship;
@@ -100,5 +106,8 @@ public class Dictionary extends AmbitBean {
 		} 
 		return false;
 	}
-	
+	@Override
+	public int getId() {
+		return -1;
+	}
 }

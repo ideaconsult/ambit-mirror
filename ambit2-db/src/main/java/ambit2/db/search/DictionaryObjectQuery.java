@@ -31,7 +31,7 @@ package ambit2.db.search;
 
 import ambit2.base.data.Dictionary;
 
-public class DictionaryObjectQuery extends DictionaryQuery {
+public class DictionaryObjectQuery extends DictionaryQuery<Dictionary> {
 
 	/**
 	 * 

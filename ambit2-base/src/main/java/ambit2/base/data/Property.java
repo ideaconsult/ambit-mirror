@@ -58,7 +58,15 @@ public class Property extends Model implements Serializable {
 	public static final String opentox_EC = "http://www.opentox.org/api/1.1#EINECS";
 	public static final String opentox_InChI = "http://www.opentox.org/api/1.1#InChI";
 	public static final String opentox_SMILES = "http://www.opentox.org/api/1.1#SMILES";
+	public static final String opentox_TupleFeature = "http://www.opentox.org/api/1.1#TupleFeature";
 	public static final String EC = "EC";
+	protected boolean isNominal = false;
+	public boolean isNominal() {
+		return isNominal;
+	}
+	public void setNominal(boolean isNominal) {
+		this.isNominal = isNominal;
+	}
 	public static synchronized Property getNameInstance() {
 		return getInstance(Names, LiteratureEntry.getIUPACReference());
 	}	
@@ -132,6 +140,7 @@ public class Property extends Model implements Serializable {
 	 * @param name
 	 */
 	public static String guessLabel(String n) {
+		if (n==null) return null;
 		n = n.toLowerCase();
 		if (n.startsWith("cas")) return opentox_CAS;
 		else if (n.contains("species")) return "Species";

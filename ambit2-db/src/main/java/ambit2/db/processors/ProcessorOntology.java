@@ -131,6 +131,8 @@ public class ProcessorOntology extends AbstractDBProcessor<Object, Dictionary> {
 				else if (target instanceof Property)	return createProperty((Property)target,getCurrentSide());
 			}			
 			case DELETE: {
+				if (target instanceof Dictionary) ;
+				else
 				if (target instanceof Property)	return deleteProperty((Property)target,getCurrentSide());				
 			}			
 			case SELECT: {

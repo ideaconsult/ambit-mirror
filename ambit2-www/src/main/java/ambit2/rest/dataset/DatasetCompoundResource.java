@@ -9,6 +9,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
@@ -25,7 +26,10 @@ public class DatasetCompoundResource extends CompoundResource {
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
 		if (id != null)
-			return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
+			//on riap://  the request.getRootRef() is null and all URI generation is consequently broken
+			//return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
+			return String.format("%s%s/%s%s",
+					getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),id,PropertyResource.featuredef);
 		else 
 			return super.getDefaultTemplateURI(context,request,response);
 			

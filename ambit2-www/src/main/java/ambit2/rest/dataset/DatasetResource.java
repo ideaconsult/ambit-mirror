@@ -16,6 +16,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryComplement;
 import ambit2.db.update.structure.ChemicalByDataset;
+import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 
 
@@ -45,7 +46,9 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		Object id = request.getAttributes().get(datasetKey);
 		if (id != null)
-			return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
+			//return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
+		return String.format("%s%s/%s%s",
+				getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),id,PropertyResource.featuredef);		
 		else 
 			return super.getDefaultTemplateURI(context,request,response);
 			
@@ -133,13 +136,17 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			Response response) throws ResourceException {
 		
 		try {
-			setTemplate(createTemplate(context, request, response));
+			
 			Q q = createQueryIntersection(context, request, response);
-			if (q != null)  
+			if (q != null)  {
+				setTemplate(createTemplate(context, request, response));
 				return q;
-			else {
+			} else {
 				q = createQueryComplement(context, request, response);
-				if (q != null) return q;
+				if (q != null) {
+					setTemplate(createTemplate(context, request, response));
+					return q;
+				}
 				else
 					return  super.createQuery(context, request, response);
 			}

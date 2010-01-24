@@ -31,7 +31,6 @@ package ambit2.db.search;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +38,8 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 
-public abstract class DictionaryQuery extends AbstractQuery<String, String, StringCondition,Dictionary> 
-								implements IQueryRetrieval<Dictionary>{
+public abstract class DictionaryQuery<T extends Dictionary> extends AbstractQuery<String, String, StringCondition,T> 
+								implements IQueryRetrieval<T>{
 	/**
 	 * 
 	 */
@@ -75,9 +74,9 @@ public abstract class DictionaryQuery extends AbstractQuery<String, String, Stri
 	public String getFieldname() {
 		return getTemplateName();
 	}
-	public Dictionary getObject(ResultSet rs) throws AmbitException {
+	public T getObject(ResultSet rs) throws AmbitException {
 		try {
-			return new Dictionary(rs.getString(2),rs.getString(1),rs.getString(3));
+			return (T)new Dictionary(rs.getString(2),rs.getString(1),rs.getString(3));
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

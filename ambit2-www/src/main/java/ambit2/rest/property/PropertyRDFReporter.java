@@ -4,6 +4,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
@@ -13,13 +14,13 @@ import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTClass;
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 
@@ -60,33 +61,47 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			ReferenceURIReporter referenceReporter
 			) {
 		Individual feature = null;
-		OTClass featureType = (item.getClazz()==Number.class)?OTClass.NumericFeature:OTClass.Feature;
+		OTClass featureType = item.isNominal()?OTClass.NominalFeature:
+				(item.getClazz()==Number.class)?OTClass.NumericFeature:
+			    (item.getClazz()==Dictionary.class)?OTClass.TupleFeature:OTClass.Feature;	
 		
+		String id = uriReporter.getURI(item);
 		if ((uriReporter==null) || (uriReporter.getBaseReference()==null) || (item.getId()<0)) {
-			feature = jenaModel.createIndividual(featureType.getOntClass(jenaModel));
+			if (item.getClazz() == Dictionary.class) {
+				feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
+				feature.addLiteral(DC.identifier,
+						jenaModel.createTypedLiteral(id,XSDDatatype.XSDanyURI));
+			} else
+				feature = jenaModel.createIndividual(featureType.getOntClass(jenaModel));
 		} else {
-			feature = jenaModel.createIndividual(uriReporter.getURI(item),featureType.getOntClass(jenaModel));
+			feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
 			feature.addLiteral(DC.identifier,
-					jenaModel.createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
+					jenaModel.createTypedLiteral(id,XSDDatatype.XSDanyURI));
 		}
 		feature.addProperty(DC.title, item.getName());
 		feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
 		
 		String uri = item.getLabel();
 		if(uri==null) uri  = Property.guessLabel(item.getName());
-		if (uri.indexOf("http://")<0) {
+		if ((uri!=null) && (uri.indexOf("http://")<0)) {
 			uri = String.format("%s%s",OT.NS,Reference.encode(uri));
 		}
 		feature.addProperty(OWL.sameAs,jenaModel.createResource(uri));
 		
 		Individual reference = ReferenceRDFReporter.addToModel(jenaModel, item.getReference(), referenceReporter);
 		feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), reference);
-		if (item.getClazz()!=null)
-		feature.addProperty(DC.type,
-				 (item.getClazz()==Number.class)?
-						AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
-						AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
-						);
+		
+		//TODO remove, NumericFeature is used instead
+		if (item.getClazz()!=null) {
+			feature.addProperty(DC.type,
+					 (item.getClazz()==Number.class)?
+							AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
+							AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
+							);
+			
+
+		}
+		
 		
 		return feature;
 	}	

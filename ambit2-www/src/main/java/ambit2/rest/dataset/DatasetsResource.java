@@ -147,7 +147,19 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
+		return upload(entity,variant,true);
+	}
+	@Override
+	protected Representation put(Representation entity, Variant variant)
+			throws ResourceException {
+		return upload(entity,variant,false);
+	}
+	
+	protected Representation upload(Representation entity, Variant variant,boolean newEntry)
+				throws ResourceException {		
 		if (entity == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		
+		
 		
 		if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -169,7 +181,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 				  getResponse().setEntity(null);
 				  
 	          } catch (Exception x) {
-	        	  try { connection.close(); } catch (Exception xx) {}
+	        	  try { connection.close(); } catch (Exception xx) {xx.printStackTrace();}
 	        	  throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 	          }
 		} else if (isAllowedMediaType(entity.getMediaType())) {
@@ -188,7 +200,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 						  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
 						  getResponse().setEntity(null);
 					} catch (Exception x) {
-						try { connection.close(); } catch (Exception xx) {}
+						try { connection.close(); } catch (Exception xx) {xx.printStackTrace();}
  		        	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 
 					}

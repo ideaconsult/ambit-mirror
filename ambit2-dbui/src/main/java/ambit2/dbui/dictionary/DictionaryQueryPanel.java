@@ -76,7 +76,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCondition,Dictionary,DictionaryQuery>  {
+public class DictionaryQueryPanel  extends QueryEditor<String, String, StringCondition,Dictionary,DictionaryQuery<Dictionary>>  {
 
 	/**
 	 * 

@@ -96,9 +96,11 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}	catch (Exception x) {
 			label = Property.guessLabel(name);
 			label = label==null?name:label;
+			/*
             java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
             x.printStackTrace(new PrintWriter(stackTraceWriter));				
 			Context.getCurrentLogger().info(stackTraceWriter.toString());
+			*/
 		}	
 		property.setName(name==null?label:name);
 		property.setLabel(label);		

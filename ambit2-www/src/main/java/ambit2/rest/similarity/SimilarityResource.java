@@ -19,6 +19,7 @@ import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
+import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
@@ -41,7 +42,10 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?null:
-			String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
+			String.format("%s%s/%s%s",
+					getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),dataset_id,PropertyResource.featuredef);				
+			
+//			String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
 	}
 
 	@Override

@@ -36,7 +36,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  */
 public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord, Property> {
 
-
 	public RDFStructuresIterator(Representation representation, MediaType mediaType) throws ResourceException {
 		this(OT.createModel(representation,mediaType));
 	}
@@ -138,11 +137,18 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 				Resource fv = (Resource)st.getObject();
 				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
 				
+				Resource feature = (Resource) fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
+				Property key  = RDFPropertyIterator.parseRecord(jenaModel, 
+						feature,
+						Property.getInstance("",""), baseReference);
+				/*
 				String feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString();
 				Property key = Property.getInstance(feature,feature);
 				parseFeatureURI(feature, key);
 				key.setClazz(URI.class);
-				
+				*/
+				if (feature.isURIResource())
+					parseFeatureURI(feature.getURI(), key);
 				if (value.isLiteral()) {
 					RDFDatatype datatype = ((Literal)value).getDatatype();
 					if (XSDDatatype.XSDdouble.equals(datatype)) 
