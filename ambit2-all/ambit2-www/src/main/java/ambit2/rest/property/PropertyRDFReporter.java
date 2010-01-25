@@ -61,9 +61,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			ReferenceURIReporter referenceReporter
 			) {
 		Individual feature = null;
-		OTClass featureType = item.isNominal()?OTClass.NominalFeature:
-				(item.getClazz()==Number.class)?OTClass.NumericFeature:
-			    (item.getClazz()==Dictionary.class)?OTClass.TupleFeature:OTClass.Feature;	
+		OTClass featureType = OTClass.Feature;
 		
 		String id = uriReporter.getURI(item);
 		if ((uriReporter==null) || (uriReporter.getBaseReference()==null) || (item.getId()<0)) {
@@ -78,6 +76,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			feature.addLiteral(DC.identifier,
 					jenaModel.createTypedLiteral(id,XSDDatatype.XSDanyURI));
 		}
+		if (item.isNominal())
+			feature.addOntClass(OTClass.NominalFeature.getOntClass(jenaModel));
+		
+		if (item.getClazz()==Number.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
+		if (item.getClazz()==Dictionary.class) feature.addOntClass(OTClass.TupleFeature.getOntClass(jenaModel));
+		
 		feature.addProperty(DC.title, item.getName());
 		feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
 		

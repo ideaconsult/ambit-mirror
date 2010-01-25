@@ -1,17 +1,16 @@
 package ambit2.rest.rdf;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
+import ambit2.base.data.Dictionary;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -23,6 +22,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * Parses RDF representation of a Feature {@link Property}
@@ -123,6 +124,21 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			ref = new LiteratureEntry(baseReference.toString(),baseReference.toString());
 		}		
 		property.setReference(ref);
+		
+		try {
+			property.setNominal(newEntry.hasProperty(RDF.type,OT.OTClass.NominalFeature.getOntClass(jenaModel)));
+		} catch (Exception x) {
+			property.setNominal(false);
+		}
+		try {
+			if (newEntry.hasProperty(RDF.type,OT.OTClass.NumericFeature.getOntClass(jenaModel)))
+				property.setClazz(Number.class);
+		} catch (Exception x) {}
+		try {
+			if (newEntry.hasProperty(RDF.type,OT.OTClass.TupleFeature.getOntClass(jenaModel)))
+				property.setClazz(Dictionary.class);
+		} catch (Exception x) {}
+				
 		return property;
 	}
 }
