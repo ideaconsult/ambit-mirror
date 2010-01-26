@@ -77,6 +77,7 @@ public class PropertyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
         e.setAttribute(XMLTags.attr_id,Integer.toString(item.getId()));
         e.setAttribute(XMLTags.attr_name,item.getName());
         e.setAttribute(XMLTags.attr_type,item.getLabel());
+        e.setAttribute(XMLTags.attr_nominal,Boolean.toString(item.isNominal()));
         e.setAttribute(XMLTags.attr_datatype,
         		item.getClazz()==Number.class?
         				AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.toString():

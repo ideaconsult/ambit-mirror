@@ -44,6 +44,7 @@ public class XMLTags {
 	public final static String attr_name = "Name";
 	public final static String attr_type = "Type";
 	public final static String attr_datatype = "DataType";
+	public final static String attr_nominal = "nominal";
 	public final static String slash = "/";
 	public final static String version = "1.0";
 	

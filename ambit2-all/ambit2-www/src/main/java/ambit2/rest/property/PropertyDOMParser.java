@@ -56,6 +56,12 @@ public abstract class PropertyDOMParser extends AbstractDOMParser<Property>{
 				p.setLabel(element.getAttribute(XMLTags.attr_type));
 			else
 				p.setLabel(label==null?name:label);
+			
+			if (element.getAttribute(XMLTags.attr_nominal)!=null)
+				p.setNominal(Boolean.parseBoolean(element.getAttribute(XMLTags.attr_nominal)));
+			else
+				p.setNominal(false);
+			
 			p.setId(Integer.parseInt(element.getAttribute(XMLTags.attr_id)));
 			try {
 				p.setClazz(
