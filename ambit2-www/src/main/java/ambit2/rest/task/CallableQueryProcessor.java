@@ -8,6 +8,8 @@ import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -123,8 +125,10 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	protected Profile createProfileFromReference(Reference ref, LiteratureEntry le, Profile profile) {
 		
 		RDFPropertyIterator reader = null;
+		OntModel jenaModel = null;
 		try {
 			reader = new RDFPropertyIterator(ref);
+			jenaModel = reader.getJenaModel();
 			reader.setBaseReference(applicationRootReference);
 			while (reader.hasNext()) {
 				Property p = reader.next();
@@ -138,6 +142,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 			profile.add(p);
 		} finally {
 			try {reader.close(); } catch (Exception x) {}
+			try {jenaModel.close(); } catch (Exception x) {}
 		}
 		return profile;	
 	}		

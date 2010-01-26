@@ -27,6 +27,9 @@ import com.hp.hpl.jena.vocabulary.DC;
  */
 public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	protected OntModel jenaModel;
+	public OntModel getJenaModel() {
+		return jenaModel;
+	}
 	protected Item record;
 	protected StmtIterator recordIterator;	
 	protected String topObject;
@@ -107,6 +110,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	
 	public void close() {
 		recordIterator.close();
+		
 	}
 	/**
 	 * Initializes the iterator

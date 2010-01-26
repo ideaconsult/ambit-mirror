@@ -55,6 +55,8 @@ import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
  * @author nina
@@ -104,9 +106,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected void readFeaturesRDF(String uri,final Template profile) {
 		if (uri==null) return;
 		Representation r = null;
+		RDFPropertyIterator iterator  = null;
+		OntModel jenaModel = null;
 		try {
 			
-			RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(uri));
+			iterator = new RDFPropertyIterator(new Reference(uri));
+			jenaModel = iterator.getJenaModel();
 			iterator.setBaseReference(
 					uri.startsWith("riap://application/")?new Reference("riap://application/"):
 					getRequest().getRootRef()
@@ -121,6 +126,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			//getLogger().severe(x.getMessage());
 
 		} finally {
+			try {iterator.close();} catch (Exception x) {}
+			try {jenaModel.close();} catch (Exception x) {}
 			try {if (r != null) r.release(); } catch (Exception x) {}
 			
 		}
