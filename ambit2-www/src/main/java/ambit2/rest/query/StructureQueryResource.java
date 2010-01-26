@@ -90,10 +90,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
 
 			for (String featureURI:featuresURI) 
-				readFeaturesRDF(featureURI, profile);
+				readFeaturesXML(featureURI, profile);
 			
 			if (profile.size() == 0) {
-				readFeaturesRDF(getDefaultTemplateURI(context,request,response), profile);
+				readFeaturesXML(getDefaultTemplateURI(context,request,response), profile);
 
 			}
 			return profile;
