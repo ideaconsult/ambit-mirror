@@ -80,7 +80,11 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			feature.addOntClass(OTClass.NominalFeature.getOntClass(jenaModel));
 		
 		if (item.getClazz()==Number.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
-		if (item.getClazz()==Dictionary.class) feature.addOntClass(OTClass.TupleFeature.getOntClass(jenaModel));
+		else if (item.getClazz()==Double.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
+		else if (item.getClazz()==Float.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
+		else if (item.getClazz()==Integer.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
+		else if (item.getClazz()==Long.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
+		else if (item.getClazz()==Dictionary.class) feature.addOntClass(OTClass.TupleFeature.getOntClass(jenaModel));
 		
 		feature.addProperty(DC.title, item.getName());
 		feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
@@ -96,6 +100,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), reference);
 		
 		//TODO remove, NumericFeature is used instead
+		/*
 		if (item.getClazz()!=null) {
 			feature.addProperty(DC.type,
 					 (item.getClazz()==Number.class)?
@@ -105,7 +110,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			
 
 		}
-		
+		*/
 		
 		return feature;
 	}	
