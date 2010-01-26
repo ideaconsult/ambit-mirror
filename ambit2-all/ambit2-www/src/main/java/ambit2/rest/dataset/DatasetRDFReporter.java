@@ -17,7 +17,6 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
@@ -74,7 +73,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected void initProcessors() {
 		
 		getProcessors().clear();
-		if (getTemplate().size()>0) 
+		if ((getTemplate()!=null) && (getTemplate().size()>0)) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
@@ -83,15 +82,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 					return super.process(target);
 				}
 			});
-		else
-		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveTemplateStructure(getTemplate())) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveTemplateStructure)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});
+		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);

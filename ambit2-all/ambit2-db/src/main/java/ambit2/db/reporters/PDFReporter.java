@@ -20,7 +20,6 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
-import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 import com.lowagie.text.Chunk;
