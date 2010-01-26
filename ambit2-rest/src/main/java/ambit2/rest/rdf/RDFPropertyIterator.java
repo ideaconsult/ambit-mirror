@@ -20,10 +20,11 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * Parses RDF representation of a Feature {@link Property}
@@ -89,7 +90,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		
 		try { name = getTitle(newEntry);	} catch (Exception x) {	
 		}	
-		//label
+		
 		try { 
 			RDFNode resource = newEntry.getProperty(OWL.sameAs).getObject();
 			if (resource.isLiteral()) label = ((Literal)resource).getString();
@@ -97,26 +98,23 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}	catch (Exception x) {
 			label = Property.guessLabel(name);
 			label = label==null?name:label;
-			/*
-            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-            x.printStackTrace(new PrintWriter(stackTraceWriter));				
-			Context.getCurrentLogger().info(stackTraceWriter.toString());
-			*/
 		}	
+		
 		property.setName(name==null?label:name);
 		property.setLabel(label);		
-		//units
+		
 		try {	
 			property.setUnits(((Literal)newEntry.getProperty(OT.DataProperty.units.createProperty(jenaModel))
 						.getObject()).getString()); 
 		} catch (Exception x) {
 			property.setUnits("");
 		}
+		
 		ILiteratureEntry ref;
 		try {
 			ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,OT.OTProperty.hasSource.createProperty(jenaModel));
 		} catch (Exception x) { ref = null;}
- 
+		
 		if (ref == null)
 		try {
 			ref = new LiteratureEntry(getCreator(newEntry),baseReference.toString());
@@ -125,20 +123,32 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}		
 		property.setReference(ref);
 		
+		property.setClazz(String.class);
+		StmtIterator it = null;
+		property.setNominal(false);
 		try {
-			property.setNominal(newEntry.hasProperty(RDF.type,OT.OTClass.NominalFeature.getOntClass(jenaModel)));
+			it = jenaModel.listStatements(new SimpleSelector(newEntry,RDF.type,(RDFNode)null));
+			while (it.hasNext()) {
+				Statement st = it.next();
+
+				if (!st.getObject().isResource()) continue;
+				Resource resource = st.getResource();
+				if (resource.hasURI(OT.OTClass.Feature.getNS())) continue;				
+				if (resource.hasURI(OT.OTClass.NumericFeature.getNS())) 
+					property.setClazz(Number.class);
+				else if (resource.hasURI(OT.OTClass.TupleFeature.getNS())) 
+					property.setClazz(Dictionary.class);				
+				else if (resource.hasURI(OT.OTClass.NominalFeature.getNS())) 
+					property.setNominal(true);
+					
+
+			}
 		} catch (Exception x) {
-			property.setNominal(false);
+
+		} finally {
+			try {it.close(); } catch (Exception x) {}
 		}
-		try {
-			if (newEntry.hasProperty(RDF.type,OT.OTClass.NumericFeature.getOntClass(jenaModel)))
-				property.setClazz(Number.class);
-		} catch (Exception x) {}
-		try {
-			if (newEntry.hasProperty(RDF.type,OT.OTClass.TupleFeature.getOntClass(jenaModel)))
-				property.setClazz(Dictionary.class);
-		} catch (Exception x) {}
-				
+
 		return property;
 	}
 }
