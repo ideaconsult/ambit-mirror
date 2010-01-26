@@ -12,7 +12,6 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveTemplateStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<Q, Writer> {
