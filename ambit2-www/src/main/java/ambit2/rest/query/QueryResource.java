@@ -18,6 +18,8 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
@@ -242,11 +244,12 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	 */
 	protected T createObjectFromHeaders(Form queryForm, Representation entity) throws ResourceException {
 		RDFObjectIterator<T> iterator = null;
-		
+		OntModel jenaModel = null;
 		if (!entity.isAvailable()) { //using URI
 			String sourceURI = getParameter(queryForm,headers.source_uri.toString(),headers.source_uri.getDescription(),headers.source_uri.isMandatory());
 			try {
 				iterator = createObjectIterator(new Reference(sourceURI),entity.getMediaType()==null?MediaType.APPLICATION_RDF_XML:entity.getMediaType());
+				jenaModel = iterator.getJenaModel();
 				iterator.setBaseReference(getRequest().getRootRef());
 				while (iterator.hasNext()) {
 					return iterator.next();
@@ -257,6 +260,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				return onError(sourceURI);
 			} finally {
 				try { iterator.close(); } catch (Exception x) {}
+				try { jenaModel.close(); } catch (Exception x) {}
 			}
 		} else 
 			if (MediaType.TEXT_URI_LIST.equals(entity.getMediaType())) {
@@ -264,6 +268,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			} else // assume RDF
 			try {
 				iterator = createObjectIterator(entity);
+				jenaModel = iterator.getJenaModel();
 				iterator.setBaseReference(getRequest().getRootRef());
 				
 				while (iterator.hasNext()) {
@@ -278,6 +283,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);	
 			} finally {
 				try { iterator.close(); } catch (Exception x) {}
+				try { jenaModel.close(); } catch (Exception x) {}
 			}
 		
 	}
