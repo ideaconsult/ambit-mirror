@@ -71,8 +71,10 @@ public class TemplateRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 					
 				if (!newuri.equals(uriReporter.getRequest().getOriginalRef())) {
 					RDFPropertyIterator parser=null;
+					OntModel jenaModel = null;
 					try {
 						parser = new RDFPropertyIterator(newuri);
+						jenaModel = parser.getJenaModel();
 						parser.setBaseReference(uriReporter.getRequest().getRootRef());
 						while (parser.hasNext()) {
 							Property property = parser.next();
@@ -84,6 +86,7 @@ public class TemplateRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 						
 					} finally {
 						try {parser.close(); } catch (Exception x) {}
+						try {jenaModel.close(); } catch (Exception x) {}
 					}
 				}					
 			}
