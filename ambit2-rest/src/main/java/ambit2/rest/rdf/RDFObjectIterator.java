@@ -38,6 +38,15 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	protected Template template;
 	protected boolean iterateSubjects = true;
 	protected Reference reference;
+	boolean closeModel = false;
+	public boolean isCloseModel() {
+		return closeModel;
+	}
+
+	public void setCloseModel(boolean closeModel) {
+		this.closeModel = closeModel;
+	}
+
 	public boolean isIterateSubjects() {
 		return iterateSubjects;
 	}
@@ -110,6 +119,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	
 	public void close() {
 		recordIterator.close();
+		if (closeModel) jenaModel.close();
 		
 	}
 	/**
