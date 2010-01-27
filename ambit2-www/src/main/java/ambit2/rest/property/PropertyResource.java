@@ -48,6 +48,8 @@ import ambit2.rest.structure.ConformerResource;
  * Supported REST operations:
  * <ul>
  * <li>GET 	 /feature/{id}  returns text/uri-list or RDF
+ * <li>GET 	 /feature?search=<name>&condition=like   returns text/uri-list or RDF
+ * <li>GET 	 /feature?sameas=<uri-of-sameas-resource>   returns text/uri-list or RDF
  * <li>POST	 /feature source_uri=URI  or RDF representation in the content
  * </ul>
 
@@ -133,19 +135,39 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				Form form = request.getResourceRef().getQueryAsForm();
 				IQueryRetrieval<Property> qf = getFreeTextQuery(getContext(), getRequest(), getResponse());
 				if (qf != null) return qf;
-				key = form.getFirstValue(QueryResource.search_param);
+				key = form.getFirstValue(QueryResource.sameas);
+				String condition = form.getFirstValue(QueryResource.condition);
+				if (key != null) {
+					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+					q.setSearchByAlias(true);
+					q.setFieldname(record);
+					q.setChemicalsOnly(chemicalsOnly);
+					try {
+						q.setCondition(condition==null?StringCondition.getInstance(StringCondition.C_EQ):StringCondition.getInstance(condition));
+					} catch (Exception x) {
+						q.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+					}
+					return q;	
+				}
+				key = form.getFirstValue(QueryResource.search_param);				
 				if (key != null) {
 						RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+						q.setSearchByAlias(false);
 						q.setFieldname(record);
 						q.setChemicalsOnly(chemicalsOnly);
-						q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+						try {
+							q.setCondition(condition==null?StringCondition.getInstance(StringCondition.C_REGEXP):StringCondition.getInstance(condition));
+						} catch (Exception x) {
+							q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+						}
 						return q;
-				} else {
-					ReadProperty property = new ReadProperty();
-					property.setFieldname(record);
-					property.setChemicalsOnly(chemicalsOnly);					
-					return property;
 				}
+				//otherwise
+				ReadProperty property = new ReadProperty();
+				property.setFieldname(record);
+				property.setChemicalsOnly(chemicalsOnly);					
+				return property;
+				
 			}
 			else return new ReadProperty(new Integer(o.toString()));
 		} catch (NumberFormatException x) {

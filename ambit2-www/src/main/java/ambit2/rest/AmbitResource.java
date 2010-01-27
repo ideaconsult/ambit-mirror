@@ -43,6 +43,20 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/%d",CompoundResource.compound,100),"Update the representation of chemical compound",format,"PUT","No"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Remove chemical compound",format,"DELETE","No"},
 
+			{"http://opentox.org/dev/apis/api-1.1/structure","Chemical compounds query",formatHeader,null,"Implemented"},
+			
+			{"/compound?search=55-55-0","Search for a compound by any property value",format,"GET","Yes"},
+			{"/compound?search=phenolphthalein","Search for a compound by any property value",format,"GET","Yes"},
+			{String.format("/compound?search=%s&sameas=%s","formaldehyde",Reference.encode("http://www.opentox.org/api/1.1#ChemicalName"))
+				,"Search for a compound by name",format,"GET","Yes"},
+			{String.format("/compound?search=%s&sameas=%s","50-00-0",Reference.encode("http://www.opentox.org/api/1.1#CASRN"))
+					,"Search for a compound by CAS RN",format,"GET","Yes"},		
+			{String.format("/compound?property=%s&search=%s",Reference.encode("species common name"),Reference.encode("common carp")),
+					"Search for a compound with data for species 'common carp'",format,"GET","Yes"},
+			{String.format("/compound?property=%s&search=%s",Reference.encode("LogP"),Reference.encode("7 .. 8")),
+						"Search for a compound with property value of LogP between 7 and 8",format,"GET","Yes"},
+
+			
 			{"http://opentox.org/dev/apis/api-1.1/structure","Conformers",formatHeader,null,"Implemented"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"update the representation of a structure",format,"PUT","No"},
@@ -95,6 +109,9 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s?%s=LogP",PropertyResource.featuredef,QueryResource.search_param),"Search for a feature by name",format,"GET","Yes"},
 			{PropertyResource.featuredef,"Retrieve all features",format,"GET","Yes"},
 			{PropertyResource.featuredef+"/12142","Get description of a specific feature",format,"GET","Yes"},
+			{PropertyResource.featuredef+"?search=LogP&condition=regexp","Get description of feature where dc:title regexp 'LogP'",format,"GET","Yes"},
+			{String.format(PropertyResource.featuredef+"?sameas=%s",Reference.encode("http://www.opentox.org/api/1.1#CASRN")),
+				"Get description of feature which is same as a resource, defined in some ontology'",format,"GET","Yes"},
 			{PropertyResource.featuredef,"Create a new feature",format,"POST","Yes"},
 	
 			{"http://opentox.org/dev/apis/api-1.1/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
@@ -174,11 +191,6 @@ public class AmbitResource extends ServerResource {
 			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
 			
-			{"(to be discussed)","Compound search",formatHeader,null,"Implemented"},			
-			{"/compound?search=55-55-0","Search for a compound by any property value",format,"GET","Yes"},
-			{"/compound?search=phenolphthalein","Search for a compound by any property value",format,"GET","Yes"},
-			{"/compound?search=NTP465","Search for a compound by any property value",format,"GET","Yes"},
-			{"/compound?search=KJFMBFZCATUALV-UHFFFAOYAH","Search for a compound by any property value",format,"GET","Yes"},
 			{String.format("/query%s/=/50-00-0",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
 			{String.format("/query%s/like/phenol",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]",format,"GET","Under development"},

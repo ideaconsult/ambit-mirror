@@ -55,7 +55,36 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
 	}
+	@Test
+	public void testQueryName() throws Exception {
+		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(
+				String.format("http://localhost:%d%s?%s=%s", port,
+						PropertyResource.featuredef,QueryResource.search_param,"Property")
+				));
+		iterator.setCloseModel(true);
+		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
+		while (iterator.hasNext()) {
+			Property p = iterator.next();
+			Assert.assertTrue(p.getName().startsWith("Property"));
 
+		}
+		iterator.close();
+	}	
+	@Test
+	public void testQuerySameAS() throws Exception {
+		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(
+				String.format("http://localhost:%d%s?%s=%s", port,
+						PropertyResource.featuredef,QueryResource.sameas,"CasRN")
+				));
+		iterator.setCloseModel(true);
+		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
+		while (iterator.hasNext()) {
+			Property p = iterator.next();
+			Assert.assertEquals("CAS",p.getName());
+			Assert.assertEquals(3,p.getId());
+		}
+		iterator.close();
+	}
 	@Test
 	public void testRDFXML() throws Exception {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(getTestURI()));

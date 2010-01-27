@@ -17,8 +17,6 @@ import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.ReadModel;
-import ambit2.rest.AmbitApplication;
-import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;

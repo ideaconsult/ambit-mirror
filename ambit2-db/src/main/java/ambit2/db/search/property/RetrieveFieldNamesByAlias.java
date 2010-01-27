@@ -9,6 +9,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 import ambit2.db.update.property.ReadProperty;
 
 /**
@@ -21,12 +22,21 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStruct
 
 	
 	public static String sql = "select idproperty,name,units,title,url,idreference,comments,null,islocal from properties join catalog_references using(idreference)";
-	public static String where = " %s comments %s ?"; // COLLATE utf8_general_ci for case insensitive
+	public static String where = " %s %s %s ?"; // COLLATE utf8_general_ci for case insensitive
 
 		/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8369867048140756850L;
+	protected SearchMode searchMode = SearchMode.alias;
+	
+	public boolean isSearchByAlias() {
+		return searchMode==SearchMode.alias;
+	}
+
+	public void setSearchByAlias(boolean value) {
+		searchMode = value?SearchMode.alias:SearchMode.name;
+	}		
 	public RetrieveFieldNamesByAlias() {
 		this(CDKConstants.NAMES);
 	}
@@ -50,10 +60,10 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStruct
 		}
 		public String getSQL() throws AmbitException {
 			if (getFieldname() == null)
-				return getValue()==null?sql:sql + String.format(where,"where",getCondition().getSQL());
+				return getValue()==null?sql:sql + String.format(where,"where",searchMode.getSQL(),getCondition().getSQL());
 			else {
 				String sql = isChemicalsOnly()?ReadProperty.sqlPerChemical:ReadProperty.sqlPerStructure;
-				return getValue()==null?sql:(sql + String.format(where,"and",getCondition().getSQL()));
+				return getValue()==null?sql:(sql + String.format(where,"and",searchMode.getSQL(),getCondition().getSQL()));
 			}	
 		}
 		/*
