@@ -26,7 +26,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 	 * 
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
-	public static String fileUploadField = "fileUpload";
+	public static String fileUploadField = "file";
 	public DatasetsHTMLReporter() {
 		this(null,true);
 	}
