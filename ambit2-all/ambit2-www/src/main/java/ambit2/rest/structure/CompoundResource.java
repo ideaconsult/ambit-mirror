@@ -179,7 +179,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest());
 	}
-	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,String cond,String key,boolean chemicalsOnly) {
+	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,
+			String cond,String key,boolean chemicalsOnly, boolean byAlias) {
 		AbstractStructureQuery query;
 		
         try {
@@ -201,6 +202,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
         	QueryFieldNumeric q = new QueryFieldNumeric();
         	//q.setChemicalsOnly(true);
         	q.setChemicalsOnly(chemicalsOnly);
+        	q.setSearchByAlias(byAlias);
         	if (property != null) q.setFieldname(new Property(property,null));
 	        try {
 	        	if ((cond==null)||"".equals(cond.trim())) throw new Exception("Undefined condition");
@@ -217,6 +219,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	        query= q;
         } catch (Exception x) {
         	QueryField q_by_name =  new QueryField();
+        	q_by_name.setSearchByAlias(byAlias);
         	if (property != null) q_by_name.setFieldname(new Property(String.format("%s%%",property),null));
         	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));
         	q_by_name.setChemicalsOnly(chemicalsOnly);
@@ -242,10 +245,19 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			
 			Object key = request.getAttributes().get(OpenTox.URI.compound.getKey());
 			if (key==null) {
+				boolean byAlias = true;
 				Form form = request.getResourceRef().getQueryAsForm();
+				String condition = form.getFirstValue(QueryResource.condition);
 				String[] keys = form.getValuesArray(QueryResource.search_param);
-				String[] properties = form.getValuesArray("property");
-				String[] condition = form.getValuesArray("condition");
+				String[] properties = form.getValuesArray(QueryResource.sameas);
+				if ((properties==null) || (properties.length==0)) {
+					properties  = form.getValuesArray(QueryResource.property);
+					condition = (condition==null)?"like":condition;
+					byAlias = false;
+				} else 
+					condition = (condition==null)?"=":condition;
+
+				
 				if (keys != null) {
 					collapsed = true;
 					/*
@@ -266,9 +278,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 							property = null;
 						}
 						IQueryRetrieval<IStructureRecord> q =  createSingleQuery(property,
-								((condition==null)||(i>=condition.length)||(condition[i]==null))?"":condition[i], 
+								condition, 
 								theKey,
-								true);
+								true,
+								byAlias
+								);
 								//keys.length==1);
 						query=q;
 						break;
