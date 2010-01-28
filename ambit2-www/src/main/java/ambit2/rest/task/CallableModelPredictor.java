@@ -45,26 +45,10 @@ public abstract class CallableModelPredictor<ModelItem> extends CallableQueryPro
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		
-		if (!applicationRootReference.isParent(reference)) throw 
-			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
-		ObjectRepresentation<Serializable> repObject = null;
-		try {
-			ClientResource resource  = new ClientResource(reference);
-			resource.setMethod(Method.GET);
-			resource.get(MediaType.APPLICATION_JAVA_OBJECT);
-			if (resource.getStatus().isSuccess()) {
-				repObject = new ObjectRepresentation<Serializable>(resource.getResponseEntity());
-				Serializable object = repObject.getObject();
-				return object;
-			}
-			return reference;
-		} catch (Exception x) {
-			throw x;
-		} finally {
-			try { if (repObject!=null) repObject.release();} catch (Exception x) {}
-		}
+		return getQueryObject(reference, applicationRootReference);
 	}
+
+
 	protected abstract IProcessor<ModelItem,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception ;
 
 	

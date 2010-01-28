@@ -36,6 +36,7 @@ import ambit2.rest.YAMLConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableFileImport;
+import ambit2.rest.task.CallableQueryResultsCreator;
 
 /**
  * Dataset resource - A set of chemical compounds and assigned features
@@ -149,19 +150,34 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			throws ResourceException {
 		return upload(entity,variant,true);
 	}
-	@Override
-	protected Representation put(Representation entity, Variant variant)
+	
+	/**
+	 * Creates new entry in query table and adds structures into query_results
+	 */
+	protected Representation copyDatasetToQueryResultsTable(Form form)
 			throws ResourceException {
-		return upload(entity,variant,false);
-	}
+		CallableQueryResultsCreator callable = new CallableQueryResultsCreator(
+				form,
+				getRequest().getRootRef(),
+				getContext(),
+				null);
+		try {
+			getResponse().setLocationRef(callable.call());
+			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+			return null;
+		} catch  (Exception x) {
+			throw new ResourceException(x);
+		}
+
+	}	
 	
 	protected Representation upload(Representation entity, Variant variant,boolean newEntry)
 				throws ResourceException {		
-		if (entity == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
-		
-		
-		if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			return copyDatasetToQueryResultsTable(new Form(entity));
+		} else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
               //factory.setSizeThreshold(100);
 	          RestletFileUpload upload = new RestletFileUpload(factory);

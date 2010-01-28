@@ -7,17 +7,28 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.representation.EmptyRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryComplement;
+import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.dataset.DeleteDataset;
+import ambit2.db.update.storedquery.DeleteStoredQuery;
 import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.OpenTox;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.task.CallableQueryResultsCreator;
 
 
 /**
@@ -157,5 +168,80 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 		
+	}
+	
+	/**
+	 * Creates new entry in query table and adds structures into query_results
+	 */
+	protected Representation copyDatasetToQueryResultsTable(Form form)
+			throws ResourceException {
+		if ((queryResultsID==null) || (queryResultsID<=0))
+			throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
+		CallableQueryResultsCreator callable = new CallableQueryResultsCreator(
+				form,
+				getRequest().getRootRef(),
+				getContext(),
+				new StoredQuery(queryResultsID));
+		try {
+			getResponse().setLocationRef(callable.call());
+			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+			return getResponseEntity();
+		} catch  (Exception x) {
+			throw new ResourceException(x);
+		}
+
+	}	
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			return copyDatasetToQueryResultsTable(new Form(entity));
+		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+	}
+	@Override
+	protected Representation put(Representation entity, Variant variant)
+			throws ResourceException {
+		
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			return copyDatasetToQueryResultsTable(new Form(entity));
+		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+	}
+
+	@Override
+	protected AbstractUpdate createDeleteObject(IStructureRecord entry)
+			throws ResourceException {
+		if ((queryResultsID!=null) && (queryResultsID>0)) {
+			DeleteStoredQuery c =  new DeleteStoredQuery();
+			c.setObject(new StoredQuery(queryResultsID));
+			return c;
+		} else if ((datasetID!=null) && (datasetID>0)) {
+			DeleteDataset c =  new DeleteDataset();
+			SourceDataset d = new SourceDataset();
+			d.setId(datasetID);
+			c.setObject(d);
+			return c;
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	}
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		Representation entity = getRequestEntity();
+		try {
+			executeUpdate(entity, 
+					null,
+					createDeleteObject(null));
+			return getResponseEntity();
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,x.getMessage(),x);
+		}
+	}
+	@Override
+	protected QueryURIReporter<IStructureRecord, Q> getURUReporter(
+			Request baseReference) throws ResourceException {
+		return null;
 	}
 }

@@ -48,7 +48,6 @@ import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
-import ambit2.rest.dataset.QueryDatasetResource;
 import ambit2.rest.fastox.FastToxStep1;
 import ambit2.rest.fastox.FastToxStep2;
 import ambit2.rest.fastox.KroesInput;
@@ -63,12 +62,10 @@ import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.PubchemResource;
-import ambit2.rest.query.PropertyQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
-import ambit2.rest.queryresults.QueryResultsResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
@@ -211,7 +208,6 @@ public class AmbitApplication extends Application {
 		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
 		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), datasetRouter);
 		router.attach(String.format("%s/{%s}/metadata",DatasetResource.dataset,DatasetResource.datasetKey), DatasetsResource.class);
-		
 		
 		DBVerifier verifier = new DBVerifier(this);
 		/**
@@ -356,7 +352,6 @@ public class AmbitApplication extends Application {
 		router.attach("/name2structure",Name2StructureResource.class);	
 		
 		router.attach(String.format("/%s",Build3DResource.resource),Build3DResource.class);	
-		router.attach(PropertyQueryResource.property,PropertyQueryResource.class);
 		
 		/**
 		 * Queries
@@ -366,15 +361,9 @@ public class AmbitApplication extends Application {
 		queryRouter.attachDefault(QueryListResource.class);
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
 		
-		Router queryResults = new MyRouter(getContext());
-		queryResults.attachDefault(QueryResultsResource.class);
-		queryResults.attach(QueryResultsResource.resourceID,QueryResultsResource.class);
-		queryRouter.attach(QueryResultsResource.resource,queryResults);
-		
-		queryRouter.attach(QueryDatasetResource.datasetName, QueryDatasetResource.class);
-		
 		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 				
+		
 		Router pubchem = new MyRouter(getContext());
 		queryRouter.attach(PubchemResource.resource,pubchem);
 		pubchem.attachDefault(PubchemResource.class);

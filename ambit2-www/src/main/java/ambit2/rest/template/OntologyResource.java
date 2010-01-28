@@ -123,18 +123,7 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 		return q;
 	}
 	
-	@Override
-	protected Representation delete() throws ResourceException {
-		try {
-			deleteObject(getRequestEntity());
-			return null;
-		} catch (ResourceException x) {
-			throw x;
-		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
-		}
-
-	}	
+	
 	@Override
 	protected Property createObjectFromHeaders(Form requestHeaders,
 			Representation entity) throws ResourceException {

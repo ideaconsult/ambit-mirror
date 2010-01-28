@@ -1,12 +1,17 @@
 package ambit2.rest.task;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.representation.ObjectRepresentation;
+import org.restlet.resource.ClientResource;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
@@ -149,5 +154,27 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 			try {jenaModel.close(); } catch (Exception x) {}
 		}
 		return profile;	
+	}		
+	
+	public static Object getQueryObject(Reference reference, Reference applicationRootReference) throws Exception {
+		
+		if (!applicationRootReference.isParent(reference)) throw 
+			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
+		ObjectRepresentation<Serializable> repObject = null;
+		try {
+			ClientResource resource  = new ClientResource(reference);
+			resource.setMethod(Method.GET);
+			resource.get(MediaType.APPLICATION_JAVA_OBJECT);
+			if (resource.getStatus().isSuccess()) {
+				repObject = new ObjectRepresentation<Serializable>(resource.getResponseEntity());
+				Serializable object = repObject.getObject();
+				return object;
+			}
+			return reference;
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try { if (repObject!=null) repObject.release();} catch (Exception x) {}
+		}
 	}		
 }
