@@ -116,14 +116,14 @@ public class TaskResourceTest extends ResourceTest {
 		Callable<Reference> c = new Callable<Reference>() {
 			public Reference call() throws Exception {
 				return new Reference(String.format(
-						"http://localhost:%d/compound/1", port));
+						"http://localhost:%d/compound/7", port));
 			}
 		};
 		Reference completedTaskURI = ((AmbitApplication) app).addTask(
 				"Test task", c, new Reference(String.format(
 						"http://localhost:%d", port)));
 
-		testAsyncTask(completedTaskURI.toString(), new Form(),Status.SUCCESS_OK,String.format("http://localhost:%d/compound/1",port));
+		testAsyncTask(completedTaskURI.toString(), new Form(),Status.SUCCESS_OK,String.format("http://localhost:%d/compound/7",port));
 
 		// ((AmbitApplication)app).removeTasks();
 

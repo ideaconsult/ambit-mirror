@@ -45,7 +45,11 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		try {
 			DBConnection dbc = new DBConnection(context);
 			connection = dbc.getConnection();
-			target = createTarget(sourceReference);
+			try {
+				target = createTarget(sourceReference);
+			} catch (Exception x) {
+				target = (Target)sourceReference;
+			}
 			batch = createBatch(target);
 			
 			if (batch != null) {
@@ -96,7 +100,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		if (target instanceof AbstractStructureQuery)
 			return new DbReaderStructure();
 		else
-			return new RDFStructuresReader(applicationRootReference.toString());
+			return new RDFStructuresReader(target.toString());
 	}
 	protected abstract Target createTarget(Reference reference) throws Exception;
 	protected abstract Reference createReference(Connection connection) throws Exception ;

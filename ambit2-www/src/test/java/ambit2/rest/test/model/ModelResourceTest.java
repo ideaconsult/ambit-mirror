@@ -88,7 +88,7 @@ public class ModelResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testPostCompound() throws Exception {
+	public void testPostForeignCompound() throws Exception {
 		Form headers = new Form();
 		String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1";
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
@@ -97,8 +97,33 @@ public class ModelResourceTest extends ResourceTest {
 				Status.SUCCESS_OK, String.format("%s?feature_uris[]=%s",
 						dataset, Reference.encode(String.format("%s/predicted",
 								getTestURI()))));
+		Assert.fail("Results are not written if the compound is not in the local database");
 	}
 	
+	@Test
+	public void testPostCompound() throws Exception {
+		Form headers = new Form();
+		String dataset = String.format("http://localhost:%s/compound/7",port);
+		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
+		
+		testAsyncTask(getTestURI(), headers,
+				Status.SUCCESS_OK, String.format("%s?feature_uris[]=%s",
+						dataset, Reference.encode(String.format("%s/predicted",
+								getTestURI()))));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,value,idstructure,idchemical FROM values_string join structure using(idstructure) where name='toxTree.tree.cramer.CramerRules' and idchemical=7");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("High (Class III)", table.getValue(0,"value"));
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,value,idstructure,idchemical FROM values_string join structure using(idstructure) where name='toxTree.tree.cramer.CramerRules#explanation' and idchemical=7");
+		Assert.assertEquals(1,table.getRowCount());
+
+		c.close();				
+	}
+		
 	@Test
 	public void testClustering() throws Exception {
 		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),

@@ -197,7 +197,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	 * TODO Refactor to allow multiple objects 
 	 */
 	public void createNewObject(Representation entity) throws ResourceException {
-		Form queryForm = getRequest().getResourceRef().getQueryAsForm();
+		Form queryForm = null;
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))
+				queryForm = new Form(entity);
 		T entry = createObjectFromHeaders(queryForm, entity);
 		executeUpdate(entity, 
 				entry,
@@ -303,5 +305,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		}
 		
 	}
+	
+	
 	
 }
