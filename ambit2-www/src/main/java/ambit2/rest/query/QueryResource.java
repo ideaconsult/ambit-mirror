@@ -18,8 +18,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import com.hp.hpl.jena.ontology.OntModel;
-
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
@@ -28,11 +26,13 @@ import ambit2.db.UpdateExecutor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.DBConnection;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.rdf.RDFObjectIterator;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * Abstract parent class for all resources , which retrieves something from the database
@@ -45,22 +45,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	public final static String query_resource = "/query";
 	
 
-	/**
-	 * Parameters, expected in URL query
-	 * @author nina
-	 *
-	 */
-	public enum headers  {
-			source_uri {
-			}; 
-			public boolean isMandatory() {
-				return true;
-			}
-			public String getDescription() {
-				return "either use ?source_uri=URI, or POST with text/uri-list or RDF representation of the object to be created";
-			}
-	};
-	
+
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -197,10 +182,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	 * TODO Refactor to allow multiple objects 
 	 */
 	public void createNewObject(Representation entity) throws ResourceException {
-		Form queryForm = null;
-		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))
-				queryForm = new Form(entity);
-		T entry = createObjectFromHeaders(queryForm, entity);
+		T entry = createObjectFromHeaders(null, entity);
 		executeUpdate(entity, 
 				entry,
 				createUpdateObject(entry));
@@ -246,38 +228,25 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	 */
 	protected T createObjectFromHeaders(Form queryForm, Representation entity) throws ResourceException {
 		RDFObjectIterator<T> iterator = null;
-		OntModel jenaModel = null;
 		if (!entity.isAvailable()) { //using URI
-			String sourceURI = getParameter(queryForm,headers.source_uri.toString(),headers.source_uri.getDescription(),headers.source_uri.isMandatory());
-			try {
-				iterator = createObjectIterator(new Reference(sourceURI),entity.getMediaType()==null?MediaType.APPLICATION_RDF_XML:entity.getMediaType());
-				jenaModel = iterator.getJenaModel();
-				iterator.setBaseReference(getRequest().getRootRef());
-				while (iterator.hasNext()) {
-					return iterator.next();
-				}		
-				//if none
-				return onError(sourceURI);
-			} catch (Exception x) {
-				return onError(sourceURI);
-			} finally {
-				try { iterator.close(); } catch (Exception x) {}
-				try { jenaModel.close(); } catch (Exception x) {}
-			}
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		} else 
 			if (MediaType.TEXT_URI_LIST.equals(entity.getMediaType())) {
 				return createObjectFromURIlist(entity);
+			} else if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+				return createObjectFromWWWForm(entity);
+			} else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType())) {
+				return createObjectFromMultiPartForm(entity);				
+			
 			} else // assume RDF
 			try {
 				iterator = createObjectIterator(entity);
-				jenaModel = iterator.getJenaModel();
+				iterator.setCloseModel(true);
 				iterator.setBaseReference(getRequest().getRootRef());
 				
 				while (iterator.hasNext()) {
 					return iterator.next();
 				}
-				System.out.println(entity.getMediaType());
-				System.out.println(entity.toString());
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Nothing to write! "+getRequest().getRootRef() );	
 			} catch (ResourceException x)  {
 				throw x;
@@ -285,11 +254,37 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);	
 			} finally {
 				try { iterator.close(); } catch (Exception x) {}
-				try { jenaModel.close(); } catch (Exception x) {}
 			}
 		
 	}
-	
+	protected String getObjectURI(Form queryForm) throws ResourceException {
+		return getParameter(queryForm,
+				OpenTox.params.source_uri.toString(),
+				OpenTox.params.source_uri.getDescription(),
+				true);		
+	}
+	protected T createObjectFromWWWForm(Representation entity) throws ResourceException {
+		Form queryForm = new Form(entity);
+		String sourceURI = getObjectURI(queryForm);
+		RDFObjectIterator<T> iterator = null;
+		try {
+			iterator = createObjectIterator(new Reference(sourceURI),entity.getMediaType()==null?MediaType.APPLICATION_RDF_XML:entity.getMediaType());
+			iterator.setCloseModel(true);
+			iterator.setBaseReference(getRequest().getRootRef());
+			while (iterator.hasNext()) {
+				return iterator.next();
+			}		
+			//if none
+			return onError(sourceURI);
+		} catch (Exception x) {
+			return onError(sourceURI);
+		} finally {
+			try { iterator.close(); } catch (Exception x) {}
+		}		
+	}
+	protected T createObjectFromMultiPartForm(Representation entity) throws ResourceException {
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+	}	
 	protected T createObjectFromURIlist(Representation entity) throws ResourceException {
 		BufferedReader reader = null;
 		try {
