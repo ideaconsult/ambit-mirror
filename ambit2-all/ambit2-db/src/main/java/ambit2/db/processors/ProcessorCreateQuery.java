@@ -46,6 +46,7 @@ import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.update.storedquery.CreateStoredQuery;
 
 /**
  * Inserts into query table idstructure numbers from a query identified by {@link StoredQuery}. Example:
@@ -59,39 +60,56 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	 */
 	private static final long serialVersionUID = -6765755816334059911L;
 	protected final String sql = "insert into query (idquery,idsessions,name,content) values (null,?,?,?)";
-	
-    public void open() throws DbAmbitException {
+	protected IStoredQuery result;
+    public IStoredQuery getStoredQuery() {
+		return result;
+	}
+	public void setStoredQuery(IStoredQuery storedQuery) {
+		this.result = storedQuery;
+	}
+	public void open() throws DbAmbitException {
         // TODO Auto-generated method stub
         
     }
 	public IStoredQuery process(IQueryObject<IStructureRecord> target) throws AmbitException {
 		if (target == null) throw new AmbitException("Undefined query!");
-		if (target instanceof QueryStoredResults) {
-			return ((QueryStoredResults) target).getFieldname();
-		}
+
 
 		try {
-			StoredQuery result = new StoredQuery(-1);
+			if (result == null) {
+				if (target instanceof QueryStoredResults) 
+					return ((QueryStoredResults) target).getFieldname();
+
+				result = new StoredQuery(-1);
+				result.setName(UUID.randomUUID().toString());
+			} 
+			
 			result.setQuery(target);
-			result.setName(UUID.randomUUID().toString());
-			
 			connection.setAutoCommit(false);	
+			//create entry in the query table
+			if (result.getId()<=0) {
+				PreparedStatement s = connection.prepareStatement(CreateStoredQuery.sql_byname,Statement.RETURN_GENERATED_KEYS);
+				s.setNull(1,Types.INTEGER);
+				if (result.getName().length()>255)
+					s.setString(2,result.getName().substring(0,255));
+				else
+					s.setString(2,result.getName());
+				try {
+					s.setString(3,result.getQuery().toString()==null?"Results":result.getQuery().toString());
+				} catch (Exception x) {s.setString(3,"Results");}	
+				s.setString(4,getSession().getName());
+	
+				//execute
+				if (s.executeUpdate()>0) {
+					ResultSet rss = s.getGeneratedKeys();
+					while (rss.next())
+						result.setId(new Integer(rss.getInt(1)));
+					rss.close();
+				}
+				s.close();
+			}
 			
-			PreparedStatement s = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			s.setInt(1,getSession().getId().intValue());
-			if (result.getName().length()>255)
-				s.setString(2,result.getName().substring(0,255));
-			else
-				s.setString(2,result.getName());
-			try {
-				s.setString(3,result.getQuery().toString()==null?"Results":result.getQuery().toString());
-			} catch (Exception x) {s.setString(3,"Results");}
-			if (s.executeUpdate()>0) {
-				ResultSet rss = s.getGeneratedKeys();
-				while (rss.next())
-					result.setId(new Integer(rss.getInt(1)));
-				rss.close();
-			
+			if (result.getId()>0) {
 				int rows = 0;
 				if ((result.getQuery() instanceof IQueryRetrieval) && ((IQueryRetrieval)result.getQuery()).isPrescreen())
 					rows = insertScreenedResults(result,(IQueryRetrieval<IStructureRecord>)result.getQuery());
@@ -103,7 +121,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 						connection.rollback();
 				}
 			}
-			s.close();
+			
 			close();
 			return result;
 		} catch (Exception x) {
@@ -116,7 +134,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 		}
 	}
 
-	protected int insertScreenedResults(StoredQuery result, final IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
+	protected int insertScreenedResults(IStoredQuery result, final IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
 		final PreparedStatement insertGoodResults = 
 			connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?,?)");
 		QueryStructureReporter<IQueryRetrieval<IStructureRecord>,IStructureRecord> reporter = 
@@ -183,7 +201,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 
 	}
 	
-	protected int insertResults(StoredQuery result) throws SQLException , AmbitException {
+	protected int insertResults(IStoredQuery result) throws SQLException , AmbitException {
 		
 		PreparedStatement sresults = connection.prepareStatement(result.getSQL());
 		List<QueryParam> params = result.getParameters();
