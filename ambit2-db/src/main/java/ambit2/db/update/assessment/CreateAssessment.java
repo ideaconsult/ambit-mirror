@@ -15,8 +15,8 @@ import ambit2.db.update.AbstractUpdate;
  *
  */
 public class CreateAssessment extends AbstractUpdate<AmbitUser,SessionID> {
-	public static final String sql = "insert into sessions (idsessions,user_name,title) values (?,?,?) on duplicate key update title=values(title)";
-	public static final String sql_current_user = "insert into sessions (idsessions,user_name,title) values (?,SUBSTRING_INDEX(user(),'@',1),?)  on duplicate key update title=values(title)";
+	public static final String sql = "insert into sessions (idsessions,user_name,title,completed) values (?,?,?,current_timestamp) on duplicate key update completed=current_timestamp";
+	public static final String sql_current_user = "insert into sessions (idsessions,user_name,title,completed) values (?,SUBSTRING_INDEX(user(),'@',1),?,current_timestamp)  on duplicate key update completed=current_timestamp";
 	
 	public CreateAssessment(AmbitUser user,SessionID id) {
 		super();
