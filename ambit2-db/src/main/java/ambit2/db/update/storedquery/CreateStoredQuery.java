@@ -42,8 +42,8 @@ import ambit2.db.update.assessment.CreateAssessment;
 
 public class CreateStoredQuery extends AbstractUpdate<SessionID,IStoredQuery> {
 	protected CreateAssessment assessment;
-	protected final String sql_byname = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where title=?";
-	protected final String sql_byid = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where idsessions=?";
+	public static final String sql_byname = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where title=?";
+	public static final String sql_byid = "insert ignore into query (idquery,idsessions,name,content) select ?,idsessions,?,? from sessions where idsessions=?";
 
 	
 	public CreateStoredQuery() {
