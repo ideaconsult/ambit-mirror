@@ -128,6 +128,9 @@ public class OpenTox {
 			}			
 		},		
 		source_uri {
+			public String getDescription() {
+				return "either use ?source_uri=URI, or POST with text/uri-list or RDF representation of the object to be created";
+			}
 		}; 
 		public boolean isMandatory() {
 			return true;

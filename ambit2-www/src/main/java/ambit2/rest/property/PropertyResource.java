@@ -50,7 +50,7 @@ import ambit2.rest.structure.ConformerResource;
  * <li>GET 	 /feature/{id}  returns text/uri-list or RDF
  * <li>GET 	 /feature?search=<name>&condition=like   returns text/uri-list or RDF
  * <li>GET 	 /feature?sameas=<uri-of-sameas-resource>   returns text/uri-list or RDF
- * <li>POST	 /feature source_uri=URI  or RDF representation in the content
+ * <li>POST	 /feature feature_uris[]=URI  or RDF representation in the content
  * </ul>
 
  * @author nina
@@ -225,7 +225,12 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		p.setLabel(uri);
 		return p;
 	}
-	
+	@Override
+	protected String getObjectURI(Form queryForm) throws ResourceException {
+		return getParameter(queryForm,OpenTox.params.feature_uris.toString(),
+				OpenTox.params.feature_uris.getDescription(),
+				true);
+	}
 	@Override
 	protected AbstractUpdate createUpdateObject(Property entry)
 			throws ResourceException {

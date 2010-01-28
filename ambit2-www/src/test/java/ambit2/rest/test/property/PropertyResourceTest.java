@@ -25,6 +25,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.update.property.ReadPropertyByNameAndReference;
+import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyResource;
@@ -171,7 +172,7 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testCopyEntry() throws Exception {
 		
 		Form form = new Form();  
-		form.add(QueryResource.headers.source_uri.toString(),String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
+		form.add(OpenTox.params.feature_uris.toString(),String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
@@ -195,7 +196,7 @@ public class PropertyResourceTest extends ResourceTest {
 		model.write(writer,"RDF/XML");
 		
 		Form form = new Form();  
-		form.add(QueryResource.headers.source_uri.toString(),String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
+		form.add(OpenTox.params.feature_uris.toString(),String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
@@ -362,7 +363,7 @@ public class PropertyResourceTest extends ResourceTest {
 	@Test
 	public void testCreateForeignEntry() throws Exception {
 		Form form = new Form();  
-		form.add(QueryResource.headers.source_uri.toString(),"http://my.new.property.org");
+		form.add(OpenTox.params.feature_uris.toString(),"http://my.new.property.org");
 		
 		
 		Response response =  testPost(

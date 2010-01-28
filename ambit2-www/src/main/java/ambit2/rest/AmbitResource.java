@@ -112,7 +112,7 @@ public class AmbitResource extends ServerResource {
 			{PropertyResource.featuredef+"?search=LogP&condition=regexp","Get description of feature where dc:title regexp 'LogP'",format,"GET","Yes"},
 			{String.format(PropertyResource.featuredef+"?sameas=%s",Reference.encode("http://www.opentox.org/api/1.1#CASRN")),
 				"Get description of feature which is same as a resource, defined in some ontology'",format,"GET","Yes"},
-			{PropertyResource.featuredef,"Create a new feature",format,"POST","Yes"},
+			{PropertyResource.featuredef,"Create a new feature<ul><li>RDF representation of ot:Feature in the content, RDF mime type<li>feature_uris[]=feature-URL in application/x-www-form-urlencoded</ul>",format,"POST","Yes"},
 	
 			{"http://opentox.org/dev/apis/api-1.1/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
 			{String.format("%s/%d?feature_uris[]=%s",CompoundResource.compound,100,"featureuri"),"features and values ",format,"GET","Yes"},
