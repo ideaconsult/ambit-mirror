@@ -281,9 +281,22 @@ public class AmbitResource extends ServerResource {
 				StringWriter writer = new StringWriter();
 				writeHTMLHeader(writer, "AMBIT", getRequest());
 				writer.write("<table border='0'>");
-				writer.write(String.format("<tr align='center'><th colspan='4'>%s</th></tr>",
-						"Services listed below are an initial implementation of <a href=\"http://opentox.org/dev/apis\" target=\"blank\">OpenTox REST API</a>"+
-						"<h6>All services support MIME types text/xml, text/html, text/uri-list on GET; services providing chemical structures support Chemical MIME types as well</h6>"));
+				
+				writer.write(String.format("<tr align='center'><th colspan='4'>%s%s</th></tr>",
+						"Services listed below are an initial implementation of <a href=\"http://opentox.org/dev/apis/api-1.1\" target=\"blank\">OpenTox REST API 1.1</a>",
+						String.format("<h6>All services support MIME types '%s','%s','%s','%s','%s','%s' on GET<br>Services listing chemical structures support Chemical MIME types ('%s','%s','%s','%s') as well</h6>",
+						MediaType.APPLICATION_RDF_XML,
+						MediaType.APPLICATION_RDF_TURTLE,
+						MediaType.TEXT_RDF_N3,
+						MediaType.TEXT_RDF_NTRIPLES,
+						MediaType.TEXT_HTML,
+						MediaType.TEXT_URI_LIST,
+						ChemicalMediaType.CHEMICAL_MDLSDF,
+						ChemicalMediaType.CHEMICAL_SMILES,
+						ChemicalMediaType.CHEMICAL_MDLMOL,
+						ChemicalMediaType.CHEMICAL_CML
+						)
+						));
 				
 				for (String[] s:uri) {
 					//writer.write("<li>");
