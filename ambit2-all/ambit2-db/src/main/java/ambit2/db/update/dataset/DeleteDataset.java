@@ -39,7 +39,8 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> {
 
-	public static final String[] delete_sql = {"delete from src_dataset where name=?"};
+	public static final String[] delete_sql_by_name = {"delete from src_dataset where name=?"};
+	public static final String[] delete_sql_by_id = {"delete from src_dataset where id_srcdataset=?"};
 
 	public DeleteDataset(SourceDataset dataset) {
 		super(dataset);
@@ -49,13 +50,16 @@ public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> {
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getObject().getName()));
+		if (getObject().getId()>0)
+			params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+		else
+			params.add(new QueryParam<String>(String.class, getObject().getName()));
 		return params;
 		
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return delete_sql;
+		return (getObject().getId()>0)?delete_sql_by_id:delete_sql_by_name;
 	}
 	public void setID(int index, int id) {
 		
