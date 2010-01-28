@@ -25,6 +25,7 @@ import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.OpenTox;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.rdf.OT;
@@ -156,7 +157,7 @@ public class ReferenceResourceTest extends ResourceTest {
 	@Test
 	public void testCreateForeignEntry() throws Exception {
 		Form form = new Form();  
-		form.add(QueryResource.headers.source_uri.toString(),"http://my.new.algorithm.org");
+		form.add(OpenTox.params.source_uri.toString(),"http://my.new.algorithm.org");
 		
 		
 		Response response =  testPost(
@@ -197,7 +198,7 @@ public class ReferenceResourceTest extends ResourceTest {
 		c.close();
 		
 		Form form = new Form();  
-		form.add(QueryResource.headers.source_uri.toString(),String.format("http://localhost:%d/reference/1", port));
+		form.add(OpenTox.params.source_uri.toString(),String.format("http://localhost:%d/reference/1", port));
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d/reference", port),

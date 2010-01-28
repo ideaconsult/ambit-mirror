@@ -32,6 +32,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
@@ -159,23 +160,19 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		return record;
 	}
 
-
 	@Override
-	protected PropertyValue createObjectFromHeaders(Form requestHeaders, Representation entity)
+	protected PropertyValue createObjectFromWWWForm(Representation entity)
 			throws ResourceException {
+		Form requestHeaders = new Form(entity);
 		String value = getParameter(requestHeaders,headers.value.toString(),headers.value.getDescription(),headers.value.isMandatory());
-		if (value == null) { //www form most probably
-			Form form = new Form(entity);
-			value = form.getFirstValue(headers.value.toString());
-		}
-		if (value == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Value not defined");
 		Property p = getPropertyByParameters();
 		try {
 			return new PropertyValue<Double>(p,Double.parseDouble(value.toString()));
 		} catch (Exception x) {
 			return new PropertyValue<String>(p,value.toString());
-		}
+		}		
 	}
+
 	protected AbstractUpdate createUpdateObject(PropertyValue entry) throws ResourceException {
 		IStructureRecord record = getRecordByParameters();
 		
