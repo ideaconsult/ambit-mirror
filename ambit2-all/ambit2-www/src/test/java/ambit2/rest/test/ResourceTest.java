@@ -81,7 +81,17 @@ public abstract class ResourceTest extends DbUnitTest {
 	public Response testPost(String uri, MediaType media, String inputEntity) throws Exception {
 		return testPost(uri, media, new StringRepresentation(inputEntity,media));
 	}
+	
+	public Response testPut(String uri, MediaType media, Representation inputEntity) throws Exception {
+		return testUpdate(uri, media, inputEntity, Method.PUT);
+	}
 	public Response testPost(String uri, MediaType media, Representation inputEntity) throws Exception {
+		return testUpdate(uri, media, inputEntity, Method.POST);
+	}
+	public Response testDelete(String uri, MediaType media, Representation inputEntity) throws Exception {
+		return testUpdate(uri, media, inputEntity, Method.DELETE);
+	}	
+	public Response testUpdate(String uri, MediaType media, Representation inputEntity,Method method) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
@@ -91,7 +101,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		
 		request.setResourceRef(uri);
 		//request.setResourceRef(String.format("%s?%s",uri,queryForm.getQueryString()));
-		request.setMethod(Method.POST);
+		request.setMethod(method);
 
 		if (inputEntity==null) request.setEntity(null);
 		//else request.setEntity(inputEntity,media);

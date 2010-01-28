@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.Callable;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -13,26 +14,31 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.ProcessorException;
 import ambit2.base.processors.Reporter;
 import ambit2.db.IDBProcessor;
 import ambit2.db.UpdateExecutor;
+import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.rdf.RDFObjectIterator;
-
-import com.hp.hpl.jena.ontology.OntModel;
+import ambit2.rest.task.CallableQueryProcessor;
 
 /**
  * Abstract parent class for all resources , which retrieves something from the database
@@ -164,13 +170,24 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			executor.process(updateObject);
 			
 			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest());
-			getResponse().setLocationRef(uriReporter.getURI(entry));
+			if (uriReporter!=null) {
+				getResponse().setLocationRef(uriReporter.getURI(entry));
+				getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
+			}
 			getResponse().setStatus(Status.SUCCESS_OK);
-			getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
 			
+		} catch (SQLException x) {
+			Context.getCurrentLogger().severe(x.getMessage());
+			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN,x,x.getMessage());			
+			getResponse().setEntity(null);			
+		} catch (ProcessorException x) {
+			Context.getCurrentLogger().severe(x.getMessage());
+			getResponse().setStatus((x.getCause() instanceof SQLException)?Status.CLIENT_ERROR_FORBIDDEN:Status.SERVER_ERROR_INTERNAL,
+					x,x.getMessage());			
+			getResponse().setEntity(null);			
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);			
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x,x.getMessage());			
 			getResponse().setEntity(null);
 		} finally {
 			try {executor.close();} catch (Exception x) {}
@@ -188,9 +205,11 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				createUpdateObject(entry));
 	
 	}
+	
+	
 	/**
 	 * DELETE - create entity based on parameters in the query, creates a new entry in the database and returns an url to it
-	 */
+	 
 	public void deleteObject(Representation entity) throws ResourceException {
 		Form queryForm = getRequest().getResourceRef().getQueryAsForm();
 		T entry = createObjectFromHeaders(queryForm, entity);
@@ -199,14 +218,28 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				createDeleteObject(entry));
 	
 	}	
+	*/
+	
+	protected Representation delete(Variant variant) throws ResourceException {
+		Representation entity = getRequestEntity();
+		Form queryForm = null;
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))
+			queryForm = new Form(entity);
+		T entry = createObjectFromHeaders(queryForm, entity);
+		executeUpdate(entity, 
+				entry,
+				createDeleteObject(entry));
+		getResponse().setStatus(Status.SUCCESS_OK);
+		return new EmptyRepresentation();
+	};
 	protected QueryURIReporter<T, Q>  getURUReporter(Request baseReference) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	protected  AbstractUpdate createUpdateObject(T entry) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	protected  AbstractUpdate createDeleteObject(T entry) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}	
 	protected RDFObjectIterator<T> createObjectIterator(Reference reference, MediaType mediaType) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
@@ -301,6 +334,71 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		
 	}
 	
+	protected Representation process(Representation entity, Variant variant, final boolean async)
+			throws ResourceException {
+		synchronized (this) {
+			final Form form = new Form(entity);
+			final Reference reference = new Reference(getObjectURI(form));
+			//models
+			IQueryRetrieval<T> query = createQuery(getContext(),getRequest(),getResponse());
+			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+			
+			Connection conn = null;
+			
+			QueryReporter<T,IQueryRetrieval<T>,Object> readModels = new QueryReporter<T,IQueryRetrieval<T>,Object>() {
+				@Override
+				public Object processItem(T model) throws AmbitException {
+					try {
+						Callable<Reference> task = createCallable(form,model);
+						if (async) {
+							Reference ref =  ((AmbitApplication)getApplication()).addTask(
+									String.format("Apply %s to %s",model.toString(),reference),
+									task,
+									getRequest().getRootRef());		
+							getResponse().setLocationRef(ref);
+							//getResponse().setStatus(Status.SUCCESS_CREATED);
+							getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+							getResponse().setEntity(null);
+						} else {
+							Reference ref = task.call();
+							getResponse().setLocationRef(ref);
+							getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+							getResponse().setEntity(null);
+						}
+					} catch (ResourceException x) {
+						getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
+					} catch (Exception x) {
+						getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
+					}
+					return null;
+					
+				}
+				public void open() throws DbAmbitException {};
+				@Override
+				public void header(Object output, IQueryRetrieval<T> query) {};
+				@Override
+				public void footer(Object output, IQueryRetrieval<T> query) {};
+					
+			};
+			try {
+				DBConnection dbc = new DBConnection(getApplication().getContext());
+				conn = dbc.getConnection(getRequest());	
+	    		readModels.setConnection(conn);
+				readModels.process(query);		
+				return getResponse().getEntity();
+			} catch (AmbitException x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+			} catch (SQLException x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+			} finally {
+				try { conn.close();} catch  (Exception x) {}
+			}
+		}
+	}
 	
 	
+	protected CallableQueryProcessor createCallable(Form form,T item) throws ResourceException  {
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+	}
 }

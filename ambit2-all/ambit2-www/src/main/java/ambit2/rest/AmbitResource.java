@@ -78,11 +78,12 @@ public class AmbitResource extends ServerResource {
 			{DatasetsResource.datasets,"get list of datasets available",format,"GET","Yes"},
 			{DatasetsResource.datasets+"?search=Skin","Search for datasets by name",format,"GET","Yes"},			
 			{DatasetsResource.datasets,"create a new dataset",format,"POST","Yes"},
-			{"/dataset/{id}","update dataset",format,"PUT","No"},
-			{"/dataset/{id}","remove dataset",format,"DELETE","No"},
+			{"/dataset/{id}","update dataset",format,"PUT","Yes"},
+			{"/dataset/{id}","remove dataset",format,"DELETE","Yes"},
 			
-			{"http://opentox.org/dev/apis/dataset","A Dataset",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.1/dataset","A Dataset",formatHeader,null,"Implemented"},
 			{DatasetResource.dataset+"/8","get dataset",format,"GET","Yes"},
+			{DatasetResource.dataset+"/R100","get dataset",format,"GET","Yes"},
 			{DatasetResource.dataset+"/8/metadata","get dataset metadata",format,"GET","Yes"},
 			{DatasetResource.dataset+"/8/features","get dataset features",format,"GET","Yes"},
 			{DatasetResource.dataset+"/8/compound","get compounds only",format,"GET","Yes"},	
@@ -181,7 +182,7 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/{subject}/{object}",OntologyResource.resource),"Delete entry",format,"DELETE","Yes"},
 			
 			{"[ambit]","Feature values",formatHeader,null},
-			{String.format("%scompound/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a specific feature",format,"GET","Yes"},
+			{String.format("%s/compound/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a specific feature",format,"GET","Yes"},
 			{String.format("%s/compound/1%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"get values for all features ",format,"GET","No"},
 			{String.format("%s/dataset/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
 			{String.format("%s%s/{fid}",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a all compounds for a given feature definition",format,"GET","No"},
@@ -191,8 +192,6 @@ public class AmbitResource extends ServerResource {
 			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
 			
-			{String.format("/query%s/=/50-00-0",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
-			{String.format("/query%s/like/phenol",PropertyValueResource.featureKey),"Search by property (another option)",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]",format,"GET","Under development"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
 			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
@@ -204,15 +203,6 @@ public class AmbitResource extends ServerResource {
 			{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
 			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"},
 		
-			
-			{"http://opentox.org/dev/apis/dataset","Search results as datasets; remap into Datasets",formatHeader,null,"Implemented"},
-			{"/query/results/1","Display previous search results",format,"GET","Yes"},
-			{"/query/results","Save a search result",format,"POST","Under development"},
-			{"/query/results/{id}","Delete a search result",format,"DELETE","Under development"},
-			{"/query/results/{id}","Update a search result",format,"PUT","Under development"},
-			
-
-	
 	};
 
 	@Override

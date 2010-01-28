@@ -34,6 +34,7 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
@@ -49,6 +50,8 @@ import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
+import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.rest.rdf.RDFStructuresIterator;
 
 /**
  * Chemical compound resource as in http://opentox.org/development/wiki/structure
@@ -317,21 +320,27 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 
 	}	
-
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
-
-		Form requestHeaders = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		Form form = new Form(entity);
-		form.getFirstValue("compound[]");
-		try {
-			IQueryRetrieval<IStructureRecord> q = createQuery(getContext(),getRequest(),getResponse());
-			//ProcessorCreateQuery
-			
-		} catch (Exception x) {
-			
-		}		
-		throw new ResourceException(new Status(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Not implemented yet!"));
+		if (getRequest().getAttributes().get(idcompound)==null)
+			createNewObject(entity);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		return getResponse().getEntity();
 	}
+
+	@Override
+	protected RDFObjectIterator<IStructureRecord> createObjectIterator(
+			Representation entity) throws ResourceException {
+		return new RDFStructuresIterator(entity,entity.getMediaType());
+	}
+	@Override
+	protected AbstractUpdate createUpdateObject(IStructureRecord entry)
+			throws ResourceException {
+		return super.createUpdateObject(entry);
+	}
+	@Override
+	protected IStructureRecord onError(String sourceURI) {
+		return null;
+	}	
 }

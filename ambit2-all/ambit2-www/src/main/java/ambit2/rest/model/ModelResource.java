@@ -111,9 +111,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			Request baseReference) throws ResourceException {
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
 	}
+	
 	@Override
-	protected CallableQueryProcessor createCallable(Form form,	ModelQueryResults model) {
-		Connection connection=null;
+	protected CallableQueryProcessor createCallable(Form form,	ModelQueryResults model) throws ResourceException {
+
 		try {
 			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType()))
 				return //reads Instances, instead of IStructureRecord
@@ -135,7 +136,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 		} finally {
 
 		}
