@@ -45,6 +45,9 @@ public abstract class CallableModelPredictor<ModelItem> extends CallableQueryPro
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
+		
+		if (!applicationRootReference.isParent(reference)) throw 
+			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
 		ObjectRepresentation<Serializable> repObject = null;
 		try {
 			ClientResource resource  = new ClientResource(reference);
@@ -59,7 +62,7 @@ public abstract class CallableModelPredictor<ModelItem> extends CallableQueryPro
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			try { repObject.release();} catch (Exception x) {}
+			try { if (repObject!=null) repObject.release();} catch (Exception x) {}
 		}
 	}
 	protected abstract IProcessor<ModelItem,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception ;

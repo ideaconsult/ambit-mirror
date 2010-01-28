@@ -82,7 +82,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 					String.format("http://localhost:%d/algorithm/J48", port),
 					MediaType.TEXT_URI_LIST,
 							//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
-					headers, headers.getWebRepresentation());
+					headers.getWebRepresentation());
 			
 		}
 	}

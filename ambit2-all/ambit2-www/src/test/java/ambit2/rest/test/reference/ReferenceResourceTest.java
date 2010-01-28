@@ -162,8 +162,7 @@ public class ReferenceResourceTest extends ResourceTest {
 		Response response =  testPost(
 					String.format("http://localhost:%d/reference", port),
 					MediaType.TEXT_RDF_N3,
-					form,
-					(Representation)null);
+					form.getWebRepresentation());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
         IDatabaseConnection c = getConnection();	
@@ -178,13 +177,11 @@ public class ReferenceResourceTest extends ResourceTest {
 		ReferenceRDFReporter.addToModel(model, new LiteratureEntry("aaa","bbb"), new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>());
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
+		model.close();
 
-
-		Form form = new Form();  
 		Response response =  testPost(
 					String.format("http://localhost:%d/reference", port),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
         IDatabaseConnection c = getConnection();	
@@ -205,8 +202,7 @@ public class ReferenceResourceTest extends ResourceTest {
 		Response response =  testPost(
 					String.format("http://localhost:%d/reference", port),
 					MediaType.APPLICATION_RDF_XML,
-					form,
-					(Representation)null);
+					form.getWebRepresentation());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
          c = getConnection();	

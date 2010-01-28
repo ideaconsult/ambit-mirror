@@ -176,8 +176,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
-					(Representation)null);
+					form.getWebRepresentation());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
 		IDatabaseConnection c = getConnection();	
@@ -201,7 +200,6 @@ public class PropertyResourceTest extends ResourceTest {
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
@@ -222,11 +220,9 @@ public class PropertyResourceTest extends ResourceTest {
         }
         br.close();    		
 		
-		Form form = new Form();
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
@@ -248,11 +244,9 @@ public class PropertyResourceTest extends ResourceTest {
         }
         br.close();    		
 		
-		Form form = new Form();
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		Assert.assertEquals(response.getLocationRef().toString(),"http://localhost:8181/feature/4");
@@ -264,7 +258,6 @@ public class PropertyResourceTest extends ResourceTest {
 					//String.format("http://localhost:8080/ambit2-www%s",PropertyResource.featuredef),
 					//String.format("http://ambit.uni-plovdiv.bg:8080/ambit2%s",PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 			//System.out.println(response.getStatus());
 			Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
@@ -327,11 +320,9 @@ public class PropertyResourceTest extends ResourceTest {
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
 
-		Form form = new Form();
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
@@ -356,11 +347,9 @@ public class PropertyResourceTest extends ResourceTest {
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
 
-		Form form = new Form();
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.APPLICATION_RDF_XML,
-					form,
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
@@ -379,8 +368,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
 					MediaType.TEXT_RDF_N3,
-					form,
-					(Representation)null);
+					form.getWebRepresentation());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://my.new.property.org' and comments='http://my.new.property.org' and title='http://my.new.property.org' and url='http://my.new.property.org'");

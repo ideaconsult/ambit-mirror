@@ -76,14 +76,12 @@ public abstract class ResourceTest extends DbUnitTest {
 		testGet(uri, media,Status.SUCCESS_OK);
 	}
 	public Response testPost(String uri, MediaType media, Form queryForm) throws Exception {
-		return testPost(uri, media, queryForm,(Representation)null);
+		return testPost(uri, media, queryForm==null?null:queryForm.getWebRepresentation());
 	}
-	public Response testPost(String uri, MediaType media, Form queryForm,String inputEntity) throws Exception {
-		return testPost(uri, media, queryForm,
-				inputEntity==null?(Representation)null:
-				new StringRepresentation(inputEntity,media));
+	public Response testPost(String uri, MediaType media, String inputEntity) throws Exception {
+		return testPost(uri, media, new StringRepresentation(inputEntity,media));
 	}
-	public Response testPost(String uri, MediaType media, Form queryForm,Representation inputEntity) throws Exception {
+	public Response testPost(String uri, MediaType media, Representation inputEntity) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
@@ -91,8 +89,10 @@ public abstract class ResourceTest extends DbUnitTest {
 		         "guest", "guest");  
 		request.setChallengeResponse(authentication);  		
 		
-		request.setResourceRef(String.format("%s?%s",uri,queryForm.getQueryString()));
+		request.setResourceRef(uri);
+		//request.setResourceRef(String.format("%s?%s",uri,queryForm.getQueryString()));
 		request.setMethod(Method.POST);
+
 		if (inputEntity==null) request.setEntity(null);
 		//else request.setEntity(inputEntity,media);
 		else request.setEntity(inputEntity);
@@ -103,7 +103,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	
 	public void testAsyncTask(String uri,Form headers,Status expected, String uriExpected) throws Exception {
 
-		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers,headers.getWebRepresentation());
+		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers.getWebRepresentation());
 		Status status = response.getStatus();
 		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER,status);
 		
