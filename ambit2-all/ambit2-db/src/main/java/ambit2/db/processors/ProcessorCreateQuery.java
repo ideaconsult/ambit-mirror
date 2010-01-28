@@ -30,7 +30,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 import ambit2.base.config.Preferences;
