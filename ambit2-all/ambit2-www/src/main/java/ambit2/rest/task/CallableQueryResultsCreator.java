@@ -24,6 +24,15 @@ import ambit2.rest.dataset.DatasetStructuresResource;
 
 public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor<Object, Result> {
 	protected IStoredQuery storedQuery;
+	protected boolean clearPreviousContent = false;
+	public boolean isClearPreviousContent() {
+		return clearPreviousContent;
+	}
+
+	public void setClearPreviousContent(boolean clearPreviousContent) {
+		this.clearPreviousContent = clearPreviousContent;
+	}
+
 	public CallableQueryResultsCreator(
 			Form form,
 			Reference applicationRootReference, 
@@ -65,6 +74,8 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 			xx.process(assessment);
 			 
 			ProcessorCreateQuery p = new ProcessorCreateQuery();
+			p.setDelete(clearPreviousContent);
+			p.setCopy(true);
 			p.setStoredQuery(storedQuery);
 			p.setSession(session);
 			p.setConnection(connection);

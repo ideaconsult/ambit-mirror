@@ -22,7 +22,7 @@ public abstract class QueryTest<T extends IQueryObject> extends DbUnitTest {
 	public void setUp() throws Exception {
 		super.setUp();
 		query = createQuery();
-		query.setId(999);
+		query.setId(-1);
 		executor = new QueryExecutor<T>();
 	}
 	

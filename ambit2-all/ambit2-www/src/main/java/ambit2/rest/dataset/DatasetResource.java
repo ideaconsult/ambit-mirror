@@ -173,7 +173,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	/**
 	 * Creates new entry in query table and adds structures into query_results
 	 */
-	protected Representation copyDatasetToQueryResultsTable(Form form)
+	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
 		if ((queryResultsID==null) || (queryResultsID<=0))
 			throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
@@ -182,6 +182,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 				getRequest().getRootRef(),
 				getContext(),
 				new StoredQuery(queryResultsID));
+		callable.setClearPreviousContent(clearPreviousContent);
 		try {
 			getResponse().setLocationRef(callable.call());
 			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
@@ -198,7 +199,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			return copyDatasetToQueryResultsTable(new Form(entity));
+			return copyDatasetToQueryResultsTable(new Form(entity),true);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	@Override
@@ -208,7 +209,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			return copyDatasetToQueryResultsTable(new Form(entity));
+			return copyDatasetToQueryResultsTable(new Form(entity),false);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
