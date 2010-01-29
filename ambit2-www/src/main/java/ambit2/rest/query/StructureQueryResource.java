@@ -333,7 +333,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}		
 	protected IMolecule getMolecule(Form form) throws ResourceException {
 		QueryType query_type;
-		String query_smiles;
+		String query_smiles="";
 		try {
 			query_type = QueryType.valueOf(form.getFirstValue("type"));
 
@@ -350,7 +350,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			} catch (InvalidSmilesException x) {
 				throw new ResourceException(
 						Status.CLIENT_ERROR_BAD_REQUEST,
-						String.format("Invalid smiles %s",getRequest().getAttributes().get("smiles")),
+						String.format("Invalid smiles %s",query_smiles),
 						x
 						);
 			} catch (ResourceException x) {
