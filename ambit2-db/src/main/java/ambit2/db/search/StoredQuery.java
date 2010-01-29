@@ -108,7 +108,7 @@ public class StoredQuery implements IStoredQuery {
 	public String toString() {
 		if (rows>0)
 			return getContent() + "["+rows+"]";
-		return getContent();
+		return getContent()==null?String.format("R%d",getId()):getContent();
 	}
 	public long getMaxRecords() {
 		return 0;

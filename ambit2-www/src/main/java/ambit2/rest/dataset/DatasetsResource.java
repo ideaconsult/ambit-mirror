@@ -15,6 +15,7 @@ import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -164,7 +165,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		try {
 			getResponse().setLocationRef(callable.call());
 			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-			return null;
+			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
 		} catch  (Exception x) {
 			throw new ResourceException(x);
 		}

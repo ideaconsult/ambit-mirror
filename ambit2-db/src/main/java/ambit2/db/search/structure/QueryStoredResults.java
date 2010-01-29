@@ -42,7 +42,7 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 	 * 
 	 */
 	private static final long serialVersionUID = 4597129739347497000L;
-	public static final String sqlField="select idquery,idchemical,idstructure,selected, %s,text from query_results %s where %s %s %s %s order by metric %s";
+	public static final String sqlField="select %s,idchemical,idstructure,selected, %s,text from query_results %s where %s %s %s %s order by metric %s";
 	//public static final String join="join query using(idquery)";
 	public static final String join="";
 	public static final String where_query = "idquery=?";
@@ -50,13 +50,17 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 
 	public QueryStoredResults() {
 		setCondition(EQCondition.getInstance());
+		setId(-1);
 	}
 	public QueryStoredResults(IStoredQuery query) {
 		this();
 		setFieldname(query);
+		setId(-1);
 	}	
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
+		if (getId() > 0)
+			params.add(new QueryParam<Integer>(Integer.class, getId()));		
 		if (getFieldname()!=null)
 			params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));
 		if (getValue()!=null)
@@ -71,6 +75,7 @@ public class QueryStoredResults extends AbstractStructureQuery<IStoredQuery, Boo
 		String j = (getValue()==null)?"":join;
 		String a3 = ((getFieldname()!=null)&&(getValue()!=null))?"and":"";
 		return String.format(sqlField,
+				getId()>0?"?":"idquery",
 				chemicalsOnly?"max(metric) as metric":"metric",
 				j,a1,a3,a2,
 				chemicalsOnly?"group by idchemical":"",

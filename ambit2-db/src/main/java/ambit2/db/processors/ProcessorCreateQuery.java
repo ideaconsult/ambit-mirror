@@ -61,7 +61,21 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	private static final long serialVersionUID = -6765755816334059911L;
 	protected final String sql = "insert into query (idquery,idsessions,name,content) values (null,?,?,?)";
 	protected IStoredQuery result;
-    public IStoredQuery getStoredQuery() {
+	protected boolean copy = false;
+	protected boolean delete = false;
+    public boolean isDelete() {
+		return delete;
+	}
+	public void setDelete(boolean delete) {
+		this.delete = delete;
+	}
+	public boolean isCopy() {
+		return copy;
+	}
+	public void setCopy(boolean copy) {
+		this.copy = copy;
+	}
+	public IStoredQuery getStoredQuery() {
 		return result;
 	}
 	public void setStoredQuery(IStoredQuery storedQuery) {
@@ -77,12 +91,17 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 
 		try {
 			if (result == null) {
-				if (target instanceof QueryStoredResults) 
+				if (!copy & (target instanceof QueryStoredResults))
 					return ((QueryStoredResults) target).getFieldname();
-
+				
 				result = new StoredQuery(-1);
 				result.setName(UUID.randomUUID().toString());
-			} 
+			}  else {
+				if (target instanceof QueryStoredResults) {
+					if ((((QueryStoredResults) target).getId()==result.getId()) && (result.getId()>0))
+						delete = false; //if we are copying to the same query , don't delete!
+				}
+			}
 			
 			result.setQuery(target);
 			connection.setAutoCommit(false);	
@@ -106,6 +125,11 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 						result.setId(new Integer(rss.getInt(1)));
 					rss.close();
 				}
+				s.close();
+			} else if (delete) {
+				PreparedStatement s = connection.prepareStatement("Delete from query_results where idquery=?");
+				s.setInt(1,result.getId());
+				s.executeUpdate();
 				s.close();
 			}
 			
