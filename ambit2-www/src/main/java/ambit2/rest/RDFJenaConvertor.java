@@ -65,7 +65,7 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        				jenaModel.write(output,"N-TRIPLE");	
 	        			else 
 	        				jenaModel.write(output,"RDF/XML-ABBREV");	
-
+	        			
 	            	} catch (Exception x) {
 	            		Throwable ex = x;
 	            		while (ex!=null) {
@@ -78,6 +78,7 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 
 	            		try {if (output !=null) output.flush(); } catch (Exception x) { x.printStackTrace();}
 	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
+	            		try {if (jenaModel !=null) jenaModel.close(); } catch (Exception x) { x.printStackTrace();}
 	            	}
 	            }
 	        };				
