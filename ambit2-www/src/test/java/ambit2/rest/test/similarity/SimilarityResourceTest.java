@@ -30,7 +30,7 @@ public class SimilarityResourceTest extends ResourceTest {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals(String.format("http://localhost:%d/compound/11/conformer/1",port),line);
+			Assert.assertEquals(String.format("http://localhost:%d/compound/11/conformer/100215",port),line);
 		}
 		return true;
 	}
