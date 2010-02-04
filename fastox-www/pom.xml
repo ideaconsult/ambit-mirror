@@ -5,6 +5,38 @@
   <packaging>war</packaging>
   <name>Fastox</name>
   <version>0.0.1-SNAPSHOT</version>
+  <repositories>
+  	<repository>
+  		<id>maven-restlet</id>
+  		<name>Public online Restlet repository</name>
+  		<url>http://maven.restlet.org</url>
+  		<releases>
+  			<enabled>false</enabled>
+  		</releases>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</repository>
+  	<repository>
+  		<id>opennms-repo</id>
+  		<name>OpenNMS Repository</name>
+  		<url>http://repo.opennms.org/maven2</url>
+  		<releases>
+  			<enabled>false</enabled>
+  		</releases>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</repository>
+  	<repository>
+  		<id>website_ambit</id>
+  		<name>website_ambit</name>
+  		<url>http://ambit.sourceforge.net/jars</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</repository>
+  </repositories>
   <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>
@@ -40,6 +72,7 @@
   		<version>2.8.2</version>
   	</dependency>  	
   </dependencies>
+
   <build>
   	<pluginManagement>
   		<plugins>
