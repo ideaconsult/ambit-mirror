@@ -14,6 +14,7 @@ import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 /**
  * Jena model convertor
@@ -50,22 +51,36 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 
 	@Override
 	public Representation process(final OntModel jenaModel) throws AmbitException {
+		/*
+		To optimise the speed of writing RDF/XML it is suggested that all URI processing is turned off. 
+		Also do not use RDF/XML-ABBREV. 
+		It is unclear whether the longId attribute is faster or slower; 
+		the short IDs have to be generated on the fly and a table maintained during writing. 
+		The longer IDs are long, and hence take longer to write. The following creates a faster writer: 
+
+	   RDFWriter fasterWriter = m.getWriter("RDF/XML");
+	   fasterWriter.setProperty("allowBadURIs","true");
+	   fasterWriter.setProperty("relativeURIs","");
+	   fasterWriter.setProperty("tab","0");
+
+		 */
 		 return new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream output) throws IOException {
 	            	try {
+	            		RDFWriter fasterWriter = null;
 	        			if (mediaType.equals(MediaType.APPLICATION_RDF_XML))
-	        				jenaModel.write(output,"RDF/XML");
+	        				fasterWriter = jenaModel.getWriter("RDF/XML");
 	        				//getJenaModel().write(output,"RDF/XML-ABBREV");	
 	        			else if (mediaType.equals(MediaType.APPLICATION_RDF_TURTLE))
-	        				jenaModel.write(output,"TURTLE");
+	        				fasterWriter = jenaModel.getWriter("TURTLE");
 	        			else if (mediaType.equals(MediaType.TEXT_RDF_N3))
-	        				jenaModel.write(output,"N3");
+	        				fasterWriter = jenaModel.getWriter("N3");
 	        			else if (mediaType.equals(MediaType.TEXT_RDF_NTRIPLES))
-	        				jenaModel.write(output,"N-TRIPLE");	
+	        				fasterWriter = jenaModel.getWriter("N-TRIPLE");	
 	        			else 
-	        				jenaModel.write(output,"RDF/XML-ABBREV");	
-	        			
+	        				fasterWriter = jenaModel.getWriter("RDF/XML-ABBREV");	
+	        			fasterWriter.write(jenaModel,output,"http://opentox.org/api/1.1");
 	            	} catch (Exception x) {
 	            		Throwable ex = x;
 	            		while (ex!=null) {

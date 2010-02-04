@@ -37,19 +37,19 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord, Property> {
 
 	public RDFStructuresIterator(Representation representation, MediaType mediaType) throws ResourceException {
-		this(OT.createModel(representation,mediaType));
+		this(OT.createModel(null,representation,mediaType));
 	}
 	
 	public RDFStructuresIterator(Reference reference) throws ResourceException {
-		this(OT.createModel(reference, MediaType.APPLICATION_RDF_XML));
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML));
 	}
 	
 	public RDFStructuresIterator(Reference reference,MediaType mediaType) throws ResourceException {
-		this(OT.createModel(reference, mediaType));
+		this(OT.createModel(null,reference, mediaType));
 	}
 	
 	public RDFStructuresIterator(InputStream in,MediaType mediaType) throws ResourceException {
-		this(OT.createModel(in, mediaType));
+		this(OT.createModel(null,in, mediaType));
 	}	
 
 	public RDFStructuresIterator(OntModel model, StmtIterator recordIterator) {

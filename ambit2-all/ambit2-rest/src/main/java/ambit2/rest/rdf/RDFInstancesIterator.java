@@ -29,19 +29,19 @@ import com.hp.hpl.jena.vocabulary.RDF;
 public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribute> {
 	public static final String CompoundURI="CompoundURI";
 	public RDFInstancesIterator(Representation representation, MediaType mediaType) throws ResourceException {
-		this(OT.createModel(representation,mediaType));
+		this(OT.createModel(null,representation,mediaType));
 	}
 	
 	public RDFInstancesIterator(Reference reference) throws ResourceException {
-		this(OT.createModel(reference, MediaType.APPLICATION_RDF_XML));
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML));
 	}
 	
 	public RDFInstancesIterator(Reference reference,MediaType mediaType) throws ResourceException {
-		this(OT.createModel(reference, mediaType));
+		this(OT.createModel(null,reference, mediaType));
 	}
 	
 	public RDFInstancesIterator(InputStream in,MediaType mediaType) throws ResourceException {
-		this(OT.createModel(in, mediaType));
+		this(OT.createModel(null,in, mediaType));
 	}	
 
 	public RDFInstancesIterator(OntModel model, StmtIterator recordIterator) {

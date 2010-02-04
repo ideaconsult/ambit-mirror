@@ -170,9 +170,16 @@ public class OT {
 		return jenaModel;
 	}
 
-    public static OntModel createModel(InputStream in, MediaType mediaType) throws ResourceException {
-    	OntModel model = createModel(OntModelSpec.OWL_DL_MEM);
+    public static OntModel createModel(OntModel base,InputStream in, MediaType mediaType) throws ResourceException {
+    	OntModel model = base==null?createModel(OntModelSpec.OWL_DL_MEM):base;
     	RDFReader reader = model.getReader();
+    	/**
+    	 * When reading RDF/XML the check for reuse of rdf:ID has a memory overhead,
+    	 * which can be significant for very large files. 
+    	 * In this case, this check can be suppressed by telling ARP to ignore this error. 
+    	 */
+    	reader.setProperty("WARN_REDEFINITION_OF_ID","EM_IGNORE");
+
     	model.enterCriticalSection(Lock.WRITE) ;
     	try {
     		reader.setProperty("error-mode", "lax" );
@@ -195,14 +202,14 @@ public class OT {
     	}
     	
     }
-    public static OntModel createModel(Representation entity,MediaType mediaType) throws ResourceException {
+    public static OntModel createModel(OntModel model,Representation entity,MediaType mediaType) throws ResourceException {
     	try {
-    		return createModel(entity.getStream(),entity.getMediaType()==null?entity.getMediaType():entity.getMediaType());
+    		return createModel(model,entity.getStream(),entity.getMediaType()==null?entity.getMediaType():entity.getMediaType());
     	} catch (IOException x) {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
     	}
     }	    
-    public static OntModel createModel(Reference uri, MediaType mediaType) throws ResourceException {
+    public static OntModel createModel(OntModel model,Reference uri, MediaType mediaType) throws ResourceException {
     	//Client httpclient = new Client(Protocol.HTTP);
     	//httpclient.setConnectTimeout(300000);
     	ClientResource client = new ClientResource(uri);
@@ -213,7 +220,7 @@ public class OT {
 			if (Status.SUCCESS_OK.equals(client.getStatus()))  {
 				if ((r==null) || !r.isAvailable())
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-				return createModel(r,mediaType);		
+				return createModel(model,r,mediaType);		
 			} else throw new ResourceException(client.getStatus());
 		} catch (ResourceException x) {
 			throw x;
