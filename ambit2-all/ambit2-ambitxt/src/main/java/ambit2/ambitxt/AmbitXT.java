@@ -52,8 +52,6 @@ import ambit2.plugin.dbtools.MysqlServerLauncher;
 import ambit2.ui.editors.PreferencesPanel;
 import ambit2.workflow.DBWorkflowContext;
 
-import com.microworkflow.process.WorkflowContext;
-
 public class AmbitXT extends NPluginsApplication {
 	protected AmbitSplitPane multiworkflowPanel;
 	protected DBWorkflowContext context;
