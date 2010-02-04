@@ -28,7 +28,7 @@ public abstract class AbstractPropertyGenerator<P> extends	DefaultAmbitProcessor
         	P p = generateProperty(atomContainer);
         	target.setProperty(getProperty(),p);	
     	} catch (Exception x) {
-        	target.setProperty(getProperty(),"");	
+        	target.setProperty(getProperty(),null);	
     	} finally {
     		Property tp = getTimeProperty();
     		if (tp!=null)

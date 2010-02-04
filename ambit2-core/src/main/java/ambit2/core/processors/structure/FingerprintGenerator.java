@@ -59,7 +59,9 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 
                 } else {
                     MFAnalyser mfa = new MFAnalyser((IAtomContainer) object);
-                    c = mfa.removeHydrogensPreserveMultiplyBonded();
+                    if (((IAtomContainer) object).getBondCount()>1)
+                    	c = mfa.removeHydrogensPreserveMultiplyBonded();
+                    else c = (IAtomContainer) object;
                 }
     			fp_time = System.currentTimeMillis() - fp_time;
       			((IMolecule)object).setProperty(AmbitCONSTANTS.FingerprintTIME,new Long(fp_time));                
