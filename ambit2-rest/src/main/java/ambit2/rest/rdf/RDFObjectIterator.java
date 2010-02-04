@@ -56,20 +56,20 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	}
 
 	public RDFObjectIterator(Representation representation, MediaType mediaType, String topObject) throws ResourceException {
-		this(OT.createModel(representation,mediaType),topObject);
+		this(OT.createModel(null,representation,mediaType),topObject);
 	}
 	
 	public RDFObjectIterator(Reference reference, String topObject) throws ResourceException {
-		this(OT.createModel(reference, MediaType.APPLICATION_RDF_XML),topObject);
+		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),topObject);
 	}
 	
 	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject) throws ResourceException {
-		this(OT.createModel(reference, mediaType),topObject);
+		this(OT.createModel(null,reference, mediaType),topObject);
 		this.reference = reference;
 	}
 	
 	public RDFObjectIterator(InputStream in,MediaType mediaType, String topObject) throws ResourceException {
-		this(OT.createModel(in, mediaType),topObject);
+		this(OT.createModel(null,in, mediaType),topObject);
 	}	
 
 	public RDFObjectIterator(OntModel model,String topObject, StmtIterator recordIterator) {
