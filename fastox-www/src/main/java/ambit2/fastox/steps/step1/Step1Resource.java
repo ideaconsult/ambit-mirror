@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import org.restlet.data.Form;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.WelcomeResource;
 import ambit2.fastox.steps.step2.Step2Resource;
 import ambit2.fastox.wizard.WizardResource;
@@ -16,11 +17,8 @@ import ambit2.fastox.wizard.WizardResource;
  * @author nina
  *
  */
-public class Step1Resource extends WizardResource {
-	public enum params {
-		search,
-		text
-	};
+public class Step1Resource extends FastoxStepResource {
+
 	public static final String resource = "/step1";
 	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	protected String type = "";

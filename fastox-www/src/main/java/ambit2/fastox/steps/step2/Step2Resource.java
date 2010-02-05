@@ -11,20 +11,17 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step1.Step1Resource;
 import ambit2.fastox.steps.step3.Step3Resource;
-import ambit2.fastox.wizard.WizardResource;
 
 /**
  * Browse & check structure
  * @author nina
  *
  */
-public class Step2Resource extends WizardResource {
-	public enum params {
-		dataset,
-		compound
-	};	
+public class Step2Resource extends FastoxStepResource {
+
 	public enum structure_mode {
 		d1 {
 			public String getName() {

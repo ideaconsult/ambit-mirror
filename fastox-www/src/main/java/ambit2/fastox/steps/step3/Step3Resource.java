@@ -10,9 +10,9 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step2.Step2Resource;
 import ambit2.fastox.steps.step4.Step4Resource;
-import ambit2.fastox.wizard.WizardResource;
 
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -26,16 +26,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author nina
  *
  */
-public class Step3Resource extends WizardResource {
-	public enum params {
-		query,
-		endpoint,
-		endpoint_name,
-		model,
-		model_name,
-		compound,
-		dataset
-	};		
+public class Step3Resource extends FastoxStepResource {
+	
 	public static final String resource = "/step3";
 	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	protected String endpoint = "http://www.opentox.org/echaEndpoints.owl#Endpoints";
@@ -119,68 +111,51 @@ public class Step3Resource extends WizardResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
 			key = "Endpoints";
-			writer.write("<table  border='0' width='90%'>");
-			writer.write("<tr >");
-			writer.write("<th class='results_col' width='50%'>");
+			Form form = retrieveModels(key);
 			writer.write(String.format("<h3>%s</h3>",endpoint_name));
-			writer.write("</th>");
-			writer.write("<th class='results_col' width='50%'>");
-			writer.write(String.format("<h3>Models</h3>"));			
-			writer.write("</th>");		
-			writer.write("</tr>");
-			writer.write("<tr >");
-			writer.write("<td valign='top'>");
+			renderModels(form, writer,false);
+				
 			renderEndpoints(writer,key);
-			writer.write("</td>");
-			writer.write("<td>");
-			renderModels(writer,key);
-			writer.write("</td>");
-			writer.write("</tr>");			
-			writer.write("</table>");
+		} else if ("Models".equals(key)) {
+			Form form = retrieveModels(key);
+			renderModels(form,writer,false);
 		}
-		if ("Models".equals(key))
-			renderModels(writer,key);
 		
 		writer.write(String.format("<input type='hidden' name='compound' value='%s'>", compound));
 		super.renderFormContent(writer, key);
 	}
-	public void renderModels(Writer writer,String key) throws IOException {
+	public Form retrieveModels(String key) throws IOException {
 
+		Form form = forms.get(key);
 		QueryExecution ex = null;
 		try {
-			Form form = forms.get(key);
 			
 			String query = String.format(modelsByEndpointSparql,endpoint);
 			
 			ex = QueryExecutionFactory.sparqlService(ontology_service, query);
 			ResultSet results = ex.execSelect();
 
+			form.removeAll(params.model.toString());
 			while (results.hasNext()) {
 				QuerySolution solution = results.next();
 				//Literal literal = solution.getLiteral("title");
 				Resource resource = solution.getResource("url");
-				form.removeAll(params.model.toString());
-				form.removeAll(params.model_name.toString());
 				form.add(params.model.toString(), resource.getURI());
-				//form.add(params.model_name.toString(), literal.getString());
-				
-				writer.write(String.format("<input type='checkbox' checked name='%s'>%s", resource.getURI(),resource.getURI()));
-				writer.write(String.format("<input type='hidden' name='model' value='%s'>", resource.getURI()));				
-				writer.write("<br>");
+
 			}
 
 		} catch (Exception x) {
-			writer.write("<textarea>");
-			x.printStackTrace();
-			writer.write("</textarea>");
+			form.add(params.errors.toString(),x.getMessage());
 		} finally {
 			try { ex.close();} catch (Exception x) {} ;
-		}		
+		}
+		return form;		
 	}
 	public void renderEndpoints(Writer writer,String key) throws IOException {
 
 		QueryExecution ex = null;
 		try {
+			writer.write(String.format("<h4>Specific %s</h4>",endpoint_name));		
 			Form form = forms.get(key);
 			/*
 			writer.write(String.format("<h4><a href='%s%s/%s?%s'>%s</a></h4>",
@@ -201,7 +176,7 @@ public class Step3Resource extends WizardResource {
 				form.removeAll(params.endpoint_name.toString());
 				form.add(params.endpoint.toString(), resource.getURI());
 				form.add(params.endpoint_name.toString(), literal.getString());
-				
+				form.add(params.compound.toString(),compound);
 				writer.write(String.format("<a href='%s%s/%s?%s'>%s</a><br>",
 						getRequest().getRootRef(),
 						Step3Resource.resource,

@@ -32,14 +32,14 @@ public class FastoxApplication extends Application {
         router.attach(Step3Resource.resource, Step3Resource.class);
         router.attach(Step4Resource.resource, Step4Resource.class);
         router.attach(Step5Resource.resource, Step5Resource.class);
-        router.attach(Step5Resource.resource, Step6Resource.class);
+        router.attach(Step6Resource.resource, Step6Resource.class);
         
         router.attach(Step1Resource.resourceTab, Step1Resource.class);
         router.attach(Step2Resource.resourceTab, Step2Resource.class);
         router.attach(Step3Resource.resourceTab, Step3Resource.class);
         router.attach(Step4Resource.resourceTab, Step4Resource.class);
         router.attach(Step5Resource.resourceTab, Step5Resource.class);
-        router.attach(Step5Resource.resourceTab, Step6Resource.class);   
+        router.attach(Step6Resource.resourceTab, Step6Resource.class);   
         
        
         /*

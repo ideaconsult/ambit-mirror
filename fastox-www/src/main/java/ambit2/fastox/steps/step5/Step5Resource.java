@@ -15,6 +15,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step4.Step4Resource;
 import ambit2.fastox.steps.step6.Step6Resource;
 import ambit2.fastox.wizard.WizardResource;
@@ -24,7 +25,7 @@ import ambit2.fastox.wizard.WizardResource;
  * @author nina
  *
  */
-public class Step5Resource extends WizardResource {
+public class Step5Resource extends FastoxStepResource {
 	public static String meta_refresh = 
 				"<meta http-equiv=\"refresh\" content=\"1;URL=%s\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"no-store, no-cache, must-revalidate\">\n"+
@@ -32,11 +33,7 @@ public class Step5Resource extends WizardResource {
 				"<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">\n"+
 				"<META HTTP-EQUIV=\"EXPIRES\" CONTENT=\"0\">\n";
 				
-	public enum params {
-		errors,
-		model,
-		compound
-	};	
+
 	public static final String resource = "/step5";
 	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	public Step5Resource() {
@@ -92,6 +89,7 @@ public class Step5Resource extends WizardResource {
 
 
 		//	writer.write("<br>");
+		/*
 	   int running = 0;
 		String[] models = form.getValuesArray(params.model.toString());
 		for (String model:models) {
@@ -110,7 +108,8 @@ public class Step5Resource extends WizardResource {
  
 			}
 		}		
-		
+		*/
+		int running = renderModels(form, writer,true);
 		String[] values = form.getValuesArray(params.errors.toString());
 		writer.write(values.length>0?"<h3>Errors</h3>":"");
 		for (String value:values) {
@@ -175,19 +174,7 @@ public class Step5Resource extends WizardResource {
 			
 		}			
 	}
-	protected String readUriList(InputStream in) {
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while ((line = reader.readLine()) != null) { return line; }
-			
-		} catch (Exception x) {
-			
-		} finally {
-			try {in.close(); } catch (Exception x) {}
-		}
-		return null;
-	}
+
 	protected int verifyTask(String model, String task, Form form) throws ResourceException {
 		Representation r = null;
 		try {

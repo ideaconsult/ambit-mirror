@@ -151,7 +151,6 @@ public abstract class WizardResource extends ServerResource {
 					writer = new OutputStreamWriter(out,"UTF-8");	  
 					header(writer,getMeta());
 					navigator(writer);
-					writer.write("<h4>");
 					if (forms.size()>1) renderTabs(writer);
 					else {
 						String key = forms.keys().nextElement();
