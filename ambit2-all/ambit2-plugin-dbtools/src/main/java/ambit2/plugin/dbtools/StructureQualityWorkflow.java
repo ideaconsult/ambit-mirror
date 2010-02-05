@@ -28,6 +28,7 @@ import ambit2.db.update.qlabel.DeleteValueQLabel;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
+import ambit2.workflow.calculation.CalculationSequence;
 import ambit2.workflow.library.LoginSequence;
 
 import com.microworkflow.execution.Performer;
@@ -214,29 +215,8 @@ public class StructureQualityWorkflow extends Workflow {
 	
 	protected static Sequence addStructureFingerprints() {
 		Sequence seq = new Sequence();
-		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
-				new Performer() {
-			@Override
-			public Object execute() throws Exception {
-				return new MissingFingerprintsQuery(FPTable.fp1024_struc);  //without quality labels
-			}
-		});
-		seq.addStep(query);
-		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
-			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
-		p.add(new ProcessorStructureRetrieval());		
-		p.add(new FPStructureWriter());
 		
-		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
-		batch.setProcessorChain(p);
-		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
-			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
-				DBWorkflowContext.QUERY,
-				DBWorkflowContext.BATCHSTATS,
-				batch,false);
-	    ap.setName("Generate Structure Fingerprints");	
-	    seq.addStep(ap);
-	    
+		seq.addStep(new CalculationFingerprintsStructure());
 	    
 	    ActivityPrimitive<AmbitUser, String> q = new ActivityPrimitive<AmbitUser, String>(
 	    		new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE,new CreateQLabelPair())
@@ -248,6 +228,8 @@ public class StructureQualityWorkflow extends Workflow {
 	    		new QualityStatisticsProcessor()
 	    );
 	    seq.addStep(m);
+	    
+	    
 	    return seq;
 }		
 	
@@ -417,5 +399,38 @@ class ModeCondition extends TestCondition {
 			else return false;
 	}
 	
+}
+
+class CalculationFingerprintsStructure extends CalculationSequence {
+	
+	public CalculationFingerprintsStructure() {
+		this(10000);
+	}
+	public CalculationFingerprintsStructure(long maxsize) {
+		super(maxsize);
+		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
+				new Performer() {
+			@Override
+			public Object execute() throws Exception {
+				return new MissingFingerprintsQuery(FPTable.fp1024_struc);  //without quality labels
+			}
+		});
+		addStep(query);
+		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
+			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
+		p.add(new ProcessorStructureRetrieval());		
+		p.add(new FPStructureWriter());
+		
+		DbReader<IStructureRecord> batch = new DbReader<IStructureRecord>();
+		batch.setProcessorChain(p);
+		ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics> ap = 
+			new ActivityPrimitive<IQueryRetrieval<IStructureRecord>,IBatchStatistics>( 
+				DBWorkflowContext.QUERY,
+				DBWorkflowContext.BATCHSTATS,
+				batch,false);
+	    ap.setName("Generate Structure Fingerprints");
+	    
+		addStep(getBatchLoop(ap));
+	}
 }
 
