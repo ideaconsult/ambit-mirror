@@ -696,10 +696,10 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
                     	System.out.println();
                     	*/
                 	} catch (Exception notdefined) {
-                        //if (mode == Mode.STRICT) 
+                        if (mode == Mode.STRICT) 
                         	throw new CDKException(notdefined.getMessage());
-                        //else
-                        	//logger.warn(notdefined.getMessage());
+                        else
+                        	logger.warn(notdefined.getMessage());
                 	}
                 }
                 if (!lineRead) {
