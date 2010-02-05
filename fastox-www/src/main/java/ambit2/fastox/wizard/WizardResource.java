@@ -17,6 +17,8 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.fastox.steps.FastoxStepResource.params;
+
 public abstract class WizardResource extends ServerResource {
 	public static final String tab = "tab";
 	public static final String resource = "/";
@@ -84,7 +86,13 @@ public abstract class WizardResource extends ServerResource {
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
-		writer.write("<TEXTAREA name=\"errors\" value=\"\" tabindex=\"1\"></TEXTAREA>");
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		String[] errors = form.getValuesArray(params.errors.toString());
+		if (errors.length>0) 
+			for (String error:errors)
+				writer.write(String.format("<div class='errors'>%s</div>",error));
+		else 
+			writer.write(String.format("<div class='errors'>%s</div>","None"));
 		writer.write("</FIELDSET>");
 	}
 	public void renderHelpTab(Writer writer, String key)  throws IOException {

@@ -39,7 +39,7 @@ public class Step4Resource extends FastoxStepResource {
 			writer.write(String.format("<input type='text' name='compound' value='%s'>", compound));
 			writer.write("<br>");
 		}	
-		renderModels(form, writer, true);
+		renderModels(form, writer, false);
 		super.renderFormContent(writer, key);
 	}
 	@Override
@@ -49,5 +49,8 @@ public class Step4Resource extends FastoxStepResource {
 		getRequest().getResourceRef().setQuery(form.getQueryString());
 		return get(variant);			
 
+	}
+	@Override
+	public void renderResults(Writer writer, String key) throws IOException {
 	}
 }

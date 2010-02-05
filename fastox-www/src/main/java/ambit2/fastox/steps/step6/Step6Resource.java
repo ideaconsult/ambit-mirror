@@ -39,7 +39,8 @@ public class Step6Resource extends FastoxStepResource {
 		for (String model:models) {
 			String[] uris = form.getValuesArray(model);
 			for (String uri:uris) {
-				writer.write(String.format("%s",uri));
+				if ("on".equals(uri)) continue;
+
 				writer.write(String.format("<input type='hidden' name='%s'   value='%s'>", model,uri));	
 				//String[] tasks = form.getValuesArray(uri);
 				//for (String task:tasks) {

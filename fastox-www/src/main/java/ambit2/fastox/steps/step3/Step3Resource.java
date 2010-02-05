@@ -2,9 +2,12 @@ package ambit2.fastox.steps.step3;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.restlet.data.Form;
+import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -31,7 +34,9 @@ public class Step3Resource extends FastoxStepResource {
 	public static final String resource = "/step3";
 	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	protected String endpoint = "http://www.opentox.org/echaEndpoints.owl#Endpoints";
-	protected String endpoint_name = "Toxicological endpoints";
+	protected String endpoint_name = "Endpoints";
+	protected String parentendpoint = null;
+	protected String parentendpoint_name = null;
 	
 	protected String model = "http://www.opentox.org/echaEndpoints.owl#Model";
 	protected String model_name = "Model";
@@ -68,6 +73,23 @@ public class Step3Resource extends FastoxStepResource {
 	"	        ?vars owl:sameAs <%s>.\n"+
 	"}\n";
 	
+	protected String modelsAll = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/#>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"		select DISTINCT ?url ?title ?endpoint\n"+
+		"		where {\n"+
+		"	        ?url rdf:type ot:Model.\n"+
+		"	        {\n"+
+		"	        { ?url ot:dependentVariables ?vars. } UNION { ?url ot:predictedVariables ?vars. }\n"+
+		"	        }\n"+
+		"	        ?vars owl:sameAs ?endpoint.\n"+
+		"}\n";
+	
 	public Step3Resource() {
 		super("Select endpoints and models",Step2Resource.resource,Step4Resource.resource);
 	}
@@ -77,8 +99,16 @@ public class Step3Resource extends FastoxStepResource {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		Object o = form.getFirstValue(params.endpoint.toString());
 		endpoint = (o==null)?endpoint:Reference.decode(o.toString());
+		
 		o = form.getFirstValue(params.endpoint_name.toString());
 		endpoint_name = (o==null)?endpoint_name:Reference.decode(o.toString());
+		
+		o = form.getFirstValue(params.parentendpoint.toString());
+		parentendpoint = (o==null)?parentendpoint:Reference.decode(o.toString());
+
+		o = form.getFirstValue(params.parentendpoint_name.toString());
+		parentendpoint_name = (o==null)?parentendpoint_name:Reference.decode(o.toString());
+		
 		o = form.getFirstValue(params.compound.toString());
 		compound = (o==null)?"":Reference.decode(o.toString());	
 		forms.put("Endpoints",form);
@@ -109,16 +139,39 @@ public class Step3Resource extends FastoxStepResource {
 	}
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
+		
 		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
 			key = "Endpoints";
 			Form form = retrieveModels(key);
-			writer.write(String.format("<h3>%s</h3>",endpoint_name));
+			writer.write("<div class='endpoints'>");
+			if (parentendpoint!= null) {
+				writer.write(
+					String.format("<a href='%s%s/%s?%s=%s&%s=%s'>%s</a>",
+					getRequest().getRootRef(),
+					Step3Resource.resource,
+					key,
+					params.endpoint.toString(),
+					parentendpoint==null?"http://www.opentox.org/echaEndpoints.owl#Endpoints":parentendpoint,
+					params.endpoint_name.toString(),
+					parentendpoint_name==null?"":parentendpoint_name,
+					parentendpoint_name==null?"Endpoints":parentendpoint_name
+					));
+				writer.write("&nbsp;/&nbsp;");
+			}
+			writer.write(endpoint_name);
+			writer.write("</div>");
 			renderModels(form, writer,false);
 				
-			renderEndpoints(writer,key);
+			form.add(params.compound.toString(),compound);
+			
+			retrieveEndpoints(form,key);
+			renderEndpoints(form,writer);
+			form.removeAll(params.subendpoint.toString());
 		} else if ("Models".equals(key)) {
 			Form form = retrieveModels(key);
 			renderModels(form,writer,false);
+			
+			form.add(params.compound.toString(),compound);
 		}
 		
 		writer.write(String.format("<input type='hidden' name='compound' value='%s'>", compound));
@@ -151,20 +204,12 @@ public class Step3Resource extends FastoxStepResource {
 		}
 		return form;		
 	}
-	public void renderEndpoints(Writer writer,String key) throws IOException {
-
+	public void retrieveEndpoints(Form form,String key) throws IOException {
+		
+		form.removeAll(params.subendpoint.toString());
+		List<Parameter> parameters = new ArrayList<Parameter>();
 		QueryExecution ex = null;
 		try {
-			writer.write(String.format("<h4>Specific %s</h4>",endpoint_name));		
-			Form form = forms.get(key);
-			/*
-			writer.write(String.format("<h4><a href='%s%s/%s?%s'>%s</a></h4>",
-					getRequest().getRootRef(),
-					Step3Resource.resource,
-					key,
-					form.getQueryString(),
-					endpoint_name));
-			*/
 			String query = String.format(endpointsSparql,endpoint);
 			ex = QueryExecutionFactory.sparqlService(ontology_service, query);
 			ResultSet results = ex.execSelect();
@@ -173,25 +218,43 @@ public class Step3Resource extends FastoxStepResource {
 				Literal literal = solution.getLiteral("title");
 				Resource resource = solution.getResource("url");
 				form.removeAll(params.endpoint.toString());
-				form.removeAll(params.endpoint_name.toString());
+				form.removeAll(params.endpoint_name.toString());	
+				form.removeAll(params.parentendpoint.toString());
+				form.removeAll(params.parentendpoint_name.toString());
 				form.add(params.endpoint.toString(), resource.getURI());
 				form.add(params.endpoint_name.toString(), literal.getString());
-				form.add(params.compound.toString(),compound);
-				writer.write(String.format("<a href='%s%s/%s?%s'>%s</a><br>",
+				form.add(params.parentendpoint.toString(), endpoint);
+				form.add(params.parentendpoint_name.toString(), endpoint_name);
+				
+				parameters.add(new Parameter(params.subendpoint.toString(),
+						String.format("<a href='%s%s/%s?%s'>%s</a>",
 						getRequest().getRootRef(),
 						Step3Resource.resource,
 						key,
 						form.getQueryString(),
-						literal.getString()));
+						literal.getString())));
 				
 			}
 		} catch (Exception x) {
-			writer.write("<textarea>");
-			x.printStackTrace();
-			writer.write("</textarea>");
+			form.add(params.errors.toString(),x.getMessage());
 		} finally {
 			try { ex.close();} catch (Exception x) {} ;
 		}
+		form.removeAll(params.endpoint.toString());
+		form.removeAll(params.endpoint_name.toString());				
+		form.addAll(parameters);
+
+	}	
+	public void renderEndpoints(Form form,Writer writer) throws IOException {
+
+			String[] subendpoints = form.getValuesArray(params.subendpoint.toString());
+			if (subendpoints.length==0) return;
+			writer.write(String.format("<h4>Specific %s</h4>",endpoint_name));		
+			for (String subendpoint:subendpoints) {
+				writer.write(subendpoint);
+				writer.write("<br>");
+			}
+
 		
 	}
 	@Override

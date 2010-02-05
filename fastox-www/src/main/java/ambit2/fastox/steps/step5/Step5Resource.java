@@ -240,4 +240,8 @@ public class Step5Resource extends FastoxStepResource {
 		return get(variant);		
 	
 	}
+	@Override
+	public void renderResults(Writer writer, String key) throws IOException {
+		super.renderResults(writer, key);
+	}
 }

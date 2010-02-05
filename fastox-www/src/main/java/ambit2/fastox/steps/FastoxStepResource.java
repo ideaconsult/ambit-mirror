@@ -18,8 +18,11 @@ public abstract class FastoxStepResource extends WizardResource {
 		dataset,
 		compound,
 		query,
+		parentendpoint,
+		parentendpoint_name,
 		endpoint,
 		endpoint_name,
+		subendpoint,
 		model,
 		model_name,
 		errors;
@@ -56,12 +59,18 @@ public abstract class FastoxStepResource extends WizardResource {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			String line = null;
+			String td = "th";
+			writer.write("<table class='results'>");
 			while ((line = reader.readLine()) != null) { 
-				writer.write("<br>");
-				writer.write(line);
-
+				writer.write("<tr>");
+				String[] cols = line.split(",");
+				for (String col:cols)
+					writer.write(String.format("<%s>%s</%s>",td,col.replace("\"",""),td));
+//				writer.write(line);
+				writer.write("</tr>");
+				td = "td";
 			}
-			
+			writer.write("</table>");
 		} catch (Exception x) {
 			
 		} finally {
@@ -73,6 +82,10 @@ public abstract class FastoxStepResource extends WizardResource {
 	protected int renderModels(Form form, Writer writer, boolean status) throws IOException {
 		   int running = 0;
 			String[] models = form.getValuesArray(params.model.toString());
+			if (models.length==0) {
+				writer.write("<div class='message'>No models</div>");
+				return 0;
+			}
 			writer.write("<table class='models'>");
 			writer.write("<tr><th align='left'>Model</th>");
 			if (status)	writer.write("<th align='left'>Status</th><th align='left'>Results</th>");
@@ -88,6 +101,7 @@ public abstract class FastoxStepResource extends WizardResource {
 				
 				for (String uri:uris) {
 					//writer.write("<tr>");
+					if ("on".equals(uri)) continue;
 					String[] tasks = form.getValuesArray(uri);
 					writer.write("<td>");
 					int isRunning = 0;

@@ -317,3 +317,22 @@ TD.results
      border-color:#F9FFE6;
      text-align:left;
   }
+  
+fieldset
+{
+	border: 1px solid #516373;
+	width: 20em;
+    FONT-FAMILY: Verdana, Arial;
+    font-size:10pt;
+}
+
+legend
+{
+	font-weight: bold;
+	font-size:10pt;
+	color: #516373;
+	background: #99CC00;
+	border: 1px solid #516373;
+	padding: 2px 6px;
+	FONT-FAMILY: Verdana, Arial;
+}   
