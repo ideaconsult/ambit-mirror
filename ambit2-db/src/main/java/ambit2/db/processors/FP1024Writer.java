@@ -175,7 +175,7 @@ public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, ISt
 	 * 
 	 */
 	private static final long serialVersionUID = -2919255769379557423L;
-	protected static final String insert_bitset = "INSERT INTO %s (idchemical,time,bc,status,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE time=?,bc=?,status=?,fp1=?,fp2=?,fp3=?,fp4=?,fp5=?,fp6=?,fp7=?,fp8=?,fp9=?,fp10=?,fp11=?,fp12=?,fp13=?,fp14=?,fp15=?,fp16=?";
+	protected static final String insert_bitset = "INSERT INTO %s (idchemical,time,bc,status,fp1,fp2,fp3,fp4,fp5,fp6,fp7,fp8,fp9,fp10,fp11,fp12,fp13,fp14,fp15,fp16) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE time=?,bc=?,status=?,fp1=?,fp2=?,fp3=?,fp4=?,fp5=?,fp6=?,fp7=?,fp8=?,fp9=?,fp10=?,fp11=?,fp12=?,fp13=?,fp14=?,fp15=?,fp16=?,updated=CURRENT_TIMESTAMP()";
 	protected PreparedStatement ps_bitset;
 	
 	@Override
