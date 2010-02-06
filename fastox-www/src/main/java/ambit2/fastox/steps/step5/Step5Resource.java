@@ -1,9 +1,6 @@
 package ambit2.fastox.steps.step5;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Writer;
 
 import org.restlet.data.Form;
@@ -18,7 +15,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step4.Step4Resource;
 import ambit2.fastox.steps.step6.Step6Resource;
-import ambit2.fastox.wizard.WizardResource;
 
 /**
  * Display results
@@ -78,37 +74,10 @@ public class Step5Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String[] compounds = form.getValuesArray("compound");
 		writer.write("<h3>Compounds</h3>");
-		for (String compound:compounds) {
-			writer.write(compound);
-			writer.write(String.format("<input type='hidden' name='compound'  value='%s'>", compound));
-			writer.write("<br>");
-		}	
+		writer.write(params.dataset.htmlInputText(dataset));
 		writer.write("<h3>Models</h3>");
 
-
-		//	writer.write("<br>");
-		/*
-	   int running = 0;
-		String[] models = form.getValuesArray(params.model.toString());
-		for (String model:models) {
-			writer.write(String.format("<h4>%s</h4>",model));
-			writer.write(String.format("<input type='hidden' name='model' value='%s'>", model));			
-			String[] uris = form.getValuesArray(model);
-			for (String uri:uris) {
-				writer.write(String.format("%s",uri));
-				writer.write(String.format("<input type='hidden' name='%s'   value='%s'>", model,uri));	
-				String[] tasks = form.getValuesArray(uri);
-				for (String task:tasks) {
-					if (task.equals(Status.SUCCESS_ACCEPTED.getName()) || task.equals(Status.REDIRECTION_SEE_OTHER.getName()))
-						running++;
-					writer.write(String.format(" %s",task));
-				}
- 
-			}
-		}		
-		*/
 		int running = renderModels(form, writer,true);
 		String[] values = form.getValuesArray(params.errors.toString());
 		writer.write(values.length>0?"<h3>Errors</h3>":"");
@@ -220,19 +189,17 @@ public class Step5Resource extends FastoxStepResource {
 		getRequest().getResourceRef().setQuery(form.getQueryString());
 //		return get(variant);			
 
-		String[] models = form.getValuesArray("model");
-		String[] compounds = form.getValuesArray("compound");
+		String[] models = form.getValuesArray(params.model.toString());
 		form.removeAll("model");
+		dataset = form.getFirstValue(params.dataset.toString());
 		for (String model:models) {
 			if ("on".equals(form.getFirstValue(model))) {
-				for (String compound:compounds) {
 					try {
-						runModel(model,compound,form);
+						runModel(model,dataset,form);
 						form.add("model",model);
 					} catch (ResourceException x) {
 						
 					}
-				}
 			}
 		}		
 		getRequest().getResourceRef().setQuery(form.getQueryString());

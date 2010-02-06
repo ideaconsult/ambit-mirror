@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
@@ -21,7 +18,7 @@ import ambit2.fastox.steps.step3.Step3Resource;
  *
  */
 public class Step2Resource extends FastoxStepResource {
-
+	protected String compound = null;
 	public enum structure_mode {
 		d1 {
 			public String getName() {
@@ -75,6 +72,14 @@ public class Step2Resource extends FastoxStepResource {
 
 		return "Verify structure";
 	}
+
+	public void renderFormContent(Writer writer, String key) throws IOException {
+		renderCompounds(writer);
+		super.renderFormContent(writer, key);
+	}
+
+
+	/*
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form query = getRequest().getResourceRef().getQueryAsForm();
@@ -139,10 +144,12 @@ public class Step2Resource extends FastoxStepResource {
 		writer.write(String.format("<input type='hidden' name='compound' value='%s'>", query.getFirstValue(params.compound.toString())));
 		super.renderFormContent(writer, key);
 	}
+	*/
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 
 	}
+
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {
@@ -151,25 +158,13 @@ public class Step2Resource extends FastoxStepResource {
 		if (text != null) {
 			Form query = new Form();
 			query.add(Step1Resource.params.search.toString(), text);
-			query.add("max","1");
-			Representation r = null;
-			try {
-				ClientResource client = new ClientResource(compound_service+"?"+query.getQueryString());
-				r = client.get(MediaType.TEXT_URI_LIST);
-				if (r.isAvailable()) {
-					query.add(params.compound.toString(),r.getText());
-					getRequest().getResourceRef().setQuery(query.getQueryString());
-					return get(variant);					
-				} else return super.processForm(entity, variant);
-				
-
-			}catch (Exception x) {
-				
-			} finally {
-				try {r.release();} catch (Exception x) {}
-			}
+			query.add("max","10");
+			String uri = compound_service+"?"+query.getQueryString();
+			//retrieveDataset(uri);
+			form.add(params.dataset.toString(),uri);
 		}
 		
-		return super.processForm(entity, variant);
+		getRequest().getResourceRef().setQuery(form.getQueryString());
+		return get(variant);	
 	}
 }

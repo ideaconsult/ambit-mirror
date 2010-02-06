@@ -87,4 +87,8 @@ public class Step1Resource extends FastoxStepResource {
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 	}
+	@Override
+	protected boolean isMandatory(String param) {
+		return false;
+	}
 }

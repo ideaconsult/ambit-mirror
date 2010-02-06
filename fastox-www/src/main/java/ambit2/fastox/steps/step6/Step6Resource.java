@@ -30,8 +30,8 @@ public class Step6Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer,String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String[] compounds = form.getValuesArray("compound");
-		writer.write(params.compound.htmlInputHidden(form.getFirstValue(params.compound.toString())));
+
+		writer.write(params.dataset.htmlInputText(dataset));
 		
 		renderModels(form, writer, false);
 		

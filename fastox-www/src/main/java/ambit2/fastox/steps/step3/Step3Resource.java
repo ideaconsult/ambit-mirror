@@ -40,7 +40,6 @@ public class Step3Resource extends FastoxStepResource {
 	
 	protected String model = "http://www.opentox.org/echaEndpoints.owl#Model";
 	protected String model_name = "Model";
-	protected String compound = "";
 	
 	protected String endpointsSparql = 
 	"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -91,7 +90,7 @@ public class Step3Resource extends FastoxStepResource {
 		"}\n";
 	
 	public Step3Resource() {
-		super("Select endpoints and models",Step2Resource.resource,Step4Resource.resource);
+		super("Endpoints",Step2Resource.resource,Step4Resource.resource);
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -109,8 +108,6 @@ public class Step3Resource extends FastoxStepResource {
 		o = form.getFirstValue(params.parentendpoint_name.toString());
 		parentendpoint_name = (o==null)?parentendpoint_name:Reference.decode(o.toString());
 		
-		o = form.getFirstValue(params.compound.toString());
-		compound = (o==null)?"":Reference.decode(o.toString());	
 		forms.put("Endpoints",form);
 	}
 	protected Hashtable<String, Form> createForms() {
@@ -125,24 +122,22 @@ public class Step3Resource extends FastoxStepResource {
 	}
 	@Override
 	protected String getDefaultTab() {
-		return "Select endpoints and models";
+		return "Endpoints";
 	}
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {
 		Form form = new Form(entity);
 		form.add(params.endpoint.toString(),endpoint);
-		Object o = form.getFirstValue(params.compound.toString());
-		compound = (o==null)?"":Reference.decode(o.toString());	
+		dataset = form.getFirstValue(params.dataset.toString());
 		getRequest().getResourceRef().setQuery(form.getQueryString());
 		return get(variant);	
 	}
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		
+		Form form = retrieveModels(key);
 		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
 			key = "Endpoints";
-			Form form = retrieveModels(key);
 			writer.write("<div class='endpoints'>");
 			if (parentendpoint!= null) {
 				writer.write(
@@ -162,19 +157,17 @@ public class Step3Resource extends FastoxStepResource {
 			writer.write("</div>");
 			renderModels(form, writer,false);
 				
-			form.add(params.compound.toString(),compound);
-			
 			retrieveEndpoints(form,key);
 			renderEndpoints(form,writer);
 			form.removeAll(params.subendpoint.toString());
 		} else if ("Models".equals(key)) {
-			Form form = retrieveModels(key);
 			renderModels(form,writer,false);
-			
-			form.add(params.compound.toString(),compound);
 		}
+
+		form.removeAll(params.dataset.toString());
+		form.add(params.dataset.toString(),dataset);
 		
-		writer.write(String.format("<input type='hidden' name='compound' value='%s'>", compound));
+		writer.write(params.dataset.htmlInputHidden(dataset));
 		super.renderFormContent(writer, key);
 	}
 	public Form retrieveModels(String key) throws IOException {
@@ -225,6 +218,8 @@ public class Step3Resource extends FastoxStepResource {
 				form.add(params.endpoint_name.toString(), literal.getString());
 				form.add(params.parentendpoint.toString(), endpoint);
 				form.add(params.parentendpoint_name.toString(), endpoint_name);
+				form.removeAll(params.dataset.toString());
+				form.add(params.dataset.toString(), dataset);
 				
 				parameters.add(new Parameter(params.subendpoint.toString(),
 						String.format("<a href='%s%s/%s?%s'>%s</a>",

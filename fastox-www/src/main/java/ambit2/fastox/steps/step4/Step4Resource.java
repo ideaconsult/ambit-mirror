@@ -33,13 +33,9 @@ public class Step4Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String[] compounds = form.getValuesArray("compound");
-		writer.write("<h3>Compound(s)</h3>");
-		for (String compound:compounds) {
-			writer.write(String.format("<input type='text' name='compound' value='%s'>", compound));
-			writer.write("<br>");
-		}	
+
 		renderModels(form, writer, false);
+		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}
 	@Override
