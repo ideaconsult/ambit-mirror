@@ -69,9 +69,11 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	            public void write(OutputStream output) throws IOException {
 	            	try {
 	            		RDFWriter fasterWriter = null;
-	        			if (mediaType.equals(MediaType.APPLICATION_RDF_XML))
+	        			if (mediaType.equals(MediaType.APPLICATION_RDF_XML)) {
 	        				fasterWriter = jenaModel.getWriter("RDF/XML");
-	        				//getJenaModel().write(output,"RDF/XML-ABBREV");	
+	        				//getJenaModel().write(output,"RDF/XML-ABBREV");
+	        				fasterWriter.setProperty("xmlbase",jenaModel.getNsPrefixURI(""));
+	        			}
 	        			else if (mediaType.equals(MediaType.APPLICATION_RDF_TURTLE))
 	        				fasterWriter = jenaModel.getWriter("TURTLE");
 	        			else if (mediaType.equals(MediaType.TEXT_RDF_N3))
