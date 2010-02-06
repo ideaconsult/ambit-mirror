@@ -25,7 +25,14 @@ import com.hp.hpl.jena.rdf.model.RDFWriter;
  * @param <R>
  */
 public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractObjectConvertor<T,Q,OntModel>  {
-	
+	protected boolean xml_abbreviation = true;
+	public boolean isXml_abbreviation() {
+		return xml_abbreviation;
+	}
+	public void setXml_abbreviation(boolean xml_abbreviation) {
+		this.xml_abbreviation = xml_abbreviation;
+	}
+
 	/**
 	 * 
 	 */
@@ -70,8 +77,10 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	            	try {
 	            		RDFWriter fasterWriter = null;
 	        			if (mediaType.equals(MediaType.APPLICATION_RDF_XML)) {
-	        				fasterWriter = jenaModel.getWriter("RDF/XML");
-	        				//getJenaModel().write(output,"RDF/XML-ABBREV");
+	        				if (isXml_abbreviation())
+	        					fasterWriter = jenaModel.getWriter("RDF/XML-ABBREV");//lot smaller ... but could be slower
+	        				else
+	        					fasterWriter = jenaModel.getWriter("RDF/XML");
 	        				fasterWriter.setProperty("xmlbase",jenaModel.getNsPrefixURI(""));
 	        			}
 	        			else if (mediaType.equals(MediaType.APPLICATION_RDF_TURTLE))
