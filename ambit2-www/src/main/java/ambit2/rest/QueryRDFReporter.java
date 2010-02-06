@@ -3,6 +3,7 @@ package ambit2.rest;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
@@ -35,7 +36,23 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 		return output;
 	}
 	
+	@Override
+	public void setOutput(OntModel output) throws AmbitException {
+		super.setOutput(output);
+		try {
+			output.setNsPrefix("",uriReporter.getBaseReference().toString()+"/");
+			output.setNsPrefix("af",uriReporter.getBaseReference().toString()+"/feature/");
+			output.setNsPrefix("am",uriReporter.getBaseReference().toString()+"/model/");
+			output.setNsPrefix("ac",uriReporter.getBaseReference().toString()+"/compound/");
+			output.setNsPrefix("ar",uriReporter.getBaseReference().toString()+"/reference/");
+			output.setNsPrefix("ad",uriReporter.getBaseReference().toString()+"/dataset/");
+			output.setNsPrefix("ag",uriReporter.getBaseReference().toString()+"/algorithm/");
 
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		
+	}
 	public void header(OntModel output, Q query) {};
 	public void footer(OntModel output, Q query) {};
 }
