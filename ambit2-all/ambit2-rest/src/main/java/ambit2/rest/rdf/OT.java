@@ -167,6 +167,7 @@ public class OT {
 		jenaModel.setNsPrefix( "otee", OTEE.NS );
 		jenaModel.setNsPrefix( "owl", OWL.NS );
 		jenaModel.setNsPrefix( "dc", DC.NS );
+		jenaModel.setNsPrefix( "bx", BibTex.NS );
 		return jenaModel;
 	}
 
