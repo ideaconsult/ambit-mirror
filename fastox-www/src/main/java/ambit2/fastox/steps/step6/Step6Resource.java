@@ -12,6 +12,8 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.DatasetTools;
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step5.Step5Resource;
 
@@ -31,10 +33,17 @@ public class Step6Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer,String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
-		writer.write(params.dataset.htmlInputText(dataset));
+		writer.write(params.dataset.htmlInputHidden(dataset));
 		
-		renderModels(form, writer, false);
-		
+		try {
+			store = ModelTools.retrieveModels(store,form, MediaType.APPLICATION_RDF_XML);
+		} catch (Exception x) {
+			form.add(params.errors.toString(),x.getMessage());
+		}
+	
+		ModelTools.renderModels(store,form, writer, false);
+		//todo retrieve dataset once and then only predictions into a single model
+		writer.write("<h4>Compounds</h4>");
 		String[] models = form.getValuesArray(params.model.toString());
 		for (String model:models) {
 			String[] uris = form.getValuesArray(model);
@@ -42,20 +51,20 @@ public class Step6Resource extends FastoxStepResource {
 				if ("on".equals(uri)) continue;
 
 				writer.write(String.format("<input type='hidden' name='%s'   value='%s'>", model,uri));	
-				//String[] tasks = form.getValuesArray(uri);
-				//for (String task:tasks) {
-					//if (task.equals(Status.SUCCESS_OK.getName()))
-						//displayResults(uri,form,writer);
+
 				try {
-					retrieveDataset(uri,writer," UNION { ?f owl:sameAs ?o.} ");
+					store = DatasetTools.retrieveDataset(store,uri);
 				} catch (Exception x) {
-					form.add(params.errors.toString(),x.toString());
-				}
-				//}
- 
+					form.add(params.errors.toString(),x.getMessage());
+				}	
 			}
 		}	
-		super.renderFormContent(writer, key);
+		try {
+			DatasetTools.renderDataset(store,writer,DatasetTools.modelVars); //"UNION { ?f owl:sameAs ?o.}"); //
+		} catch (Exception x) {
+			form.add(params.errors.toString(),x.toString());
+		}		
+		//super.renderFormContent(writer, key);
 	}
 	@Override
 	public void renderResults(Writer writer,String key) throws IOException {

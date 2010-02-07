@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.steps.step3.Step3Resource;
 import ambit2.fastox.steps.step5.Step5Resource;
 
@@ -34,7 +37,12 @@ public class Step4Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
-		renderModels(form, writer, false);
+		try {
+			store = ModelTools.retrieveModels(store,form, MediaType.APPLICATION_RDF_XML);
+		} catch (Exception x) {
+			form.add(params.errors.toString(),x.getMessage());
+		}
+		ModelTools.renderModels(store,form, writer, false);
 		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}

@@ -7,12 +7,14 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step2.Step2Resource;
 import ambit2.fastox.steps.step4.Step4Resource;
@@ -22,6 +24,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -139,6 +142,7 @@ public class Step3Resource extends FastoxStepResource {
 		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
 			key = "Endpoints";
 			writer.write("<h4>");
+			/*
 			if (parentendpoint!= null) {
 				writer.write(
 					String.format("<a href='%s%s/%s?%s=%s&%s=%s'>%s</a>",
@@ -153,15 +157,26 @@ public class Step3Resource extends FastoxStepResource {
 					));
 				writer.write("&nbsp;/&nbsp;");
 			}
+			*/
 			writer.write(endpoint_name);
 			writer.write("</h4>");
-			renderModels(form, writer,false);
+			try {
+				Model rdf = ModelTools.retrieveModels(null,form, MediaType.APPLICATION_RDF_XML);
+				ModelTools.renderModels(rdf, form, writer, false);
+			} catch (Exception x) {
+				form.add(params.errors.toString(),x.getMessage());
+			}
 				
 			retrieveEndpoints(form,key);
 			renderEndpoints(form,writer);
 			form.removeAll(params.subendpoint.toString());
 		} else if ("Models".equals(key)) {
-			renderModels(form,writer,false);
+			try {
+				Model rdf = ModelTools.retrieveModels(null,form, MediaType.APPLICATION_RDF_XML);
+				ModelTools.renderModels(rdf, form, writer, false);
+			} catch (Exception x) {
+				form.add(params.errors.toString(),x.getMessage());
+			}
 		}
 
 		form.removeAll(params.dataset.toString());
@@ -246,7 +261,7 @@ public class Step3Resource extends FastoxStepResource {
 
 			String[] subendpoints = form.getValuesArray(params.subendpoint.toString());
 			if (subendpoints.length==0) return;
-			writer.write(String.format("<h4>Specific %s</h4>",endpoint_name));		
+			writer.write(String.format("<h5>Specific %s</h5>",endpoint_name));		
 			for (String subendpoint:subendpoints) {
 				writer.write(subendpoint);
 				writer.write("<br>");

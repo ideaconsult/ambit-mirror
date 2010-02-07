@@ -12,7 +12,9 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.steps.step4.Step4Resource;
 import ambit2.fastox.steps.step6.Step6Resource;
 
@@ -75,10 +77,16 @@ public class Step5Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		writer.write("<h3>Compounds</h3>");
-		writer.write(params.dataset.htmlInputText(dataset));
+		writer.write(params.dataset.htmlInputHidden(dataset));
 		writer.write("<h3>Models</h3>");
-
-		int running = renderModels(form, writer,true);
+		
+		try {
+			store = ModelTools.retrieveModels(store,form, MediaType.APPLICATION_RDF_XML);
+		} catch (Exception x) {
+			form.add(params.errors.toString(),x.getMessage());
+		}
+		int running = ModelTools.renderModels(store,form, writer, true);
+		
 		String[] values = form.getValuesArray(params.errors.toString());
 		writer.write(values.length>0?"<h3>Errors</h3>":"");
 		for (String value:values) {

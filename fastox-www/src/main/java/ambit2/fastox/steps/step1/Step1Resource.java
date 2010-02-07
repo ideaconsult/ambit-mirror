@@ -23,7 +23,7 @@ public class Step1Resource extends FastoxStepResource {
 	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	protected String type = "";
 	public Step1Resource() {
-		super("Select structure",WelcomeResource.resource,Step2Resource.resource);
+		super("Search",WelcomeResource.resource,Step2Resource.resource);
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -33,7 +33,7 @@ public class Step1Resource extends FastoxStepResource {
 	}
 	@Override
 	protected String getDefaultTab() {
-		return "Structure";
+		return "Search";
 	}
 	protected Hashtable<String, Form> createForms() {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
