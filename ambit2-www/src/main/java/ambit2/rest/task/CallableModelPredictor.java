@@ -19,6 +19,7 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 
 /**
@@ -85,10 +86,14 @@ public abstract class CallableModelPredictor<ModelItem> extends CallableQueryPro
 	protected Reference createReference(Connection connection) throws Exception {
 		String predicted = String.format("%s/predicted", 
 				(new Reference(modelUriReporter.getURI(model))).toString());
+		String q = sourceReference.toString().indexOf("?")>0?"&":"?";
 		return new Reference(
-				String.format("%s?feature_uris[]=%s",
-						sourceReference.toString(),
-						Reference.encode(predicted)));
+				String.format("%s%s%s=%s",sourceReference.toString(),
+				q,
+				OpenTox.params.feature_uris.toString(),
+				Reference.encode(predicted))
+				);
+
 	}
 	
 
