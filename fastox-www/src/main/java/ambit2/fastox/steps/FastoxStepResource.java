@@ -151,7 +151,7 @@ public abstract class FastoxStepResource extends WizardResource {
 			writer.write(params.dataset.htmlInputHidden(dataset));
 			writer.write("<table class='results'>");
 			store = DatasetTools.retrieveDataset(null,dataset);
-			DatasetTools.renderDataset(store,writer,"");
+			DatasetTools.renderDataset(store,writer,"",getRequest().getRootRef());
 			writer.write("</table>");
 		} catch (Exception x) {
 			form.removeAll(params.errors.toString());

@@ -5,10 +5,12 @@ import java.io.Writer;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.rest.ChemicalMediaType;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -22,7 +24,25 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ModelTools {
-	
+	public static final MediaType[] mimes = {
+		ChemicalMediaType.CHEMICAL_MDLSDF,
+		ChemicalMediaType.CHEMICAL_CML,
+		ChemicalMediaType.CHEMICAL_SMILES,					
+		MediaType.APPLICATION_PDF,
+		MediaType.TEXT_CSV,
+		ChemicalMediaType.WEKA_ARFF,
+		MediaType.APPLICATION_RDF_XML
+		};
+		public static final String[] image = {
+				"sdf.jpg",
+				"cml.jpg",
+				"smi.png",					
+				"pdf.png",
+				"excel.png",
+				"weka.jpg",
+				"rdf.gif"
+				
+		};
 	public static Model retrieveModels(Model rdf,Form form,MediaType mediaType) throws Exception {
 		String[] modeluri = form.getValuesArray(params.model.toString());
 		for (String uri:modeluri) {
@@ -42,16 +62,15 @@ public class ModelTools {
 		return  rdf;
 	}
 	
-	public static int renderModels(Model rdf, Form form, Writer writer, boolean status) throws IOException {
+	public static int renderModels(Model rdf, Form form, Writer writer, boolean status,Reference rootReference) throws IOException {
 		   int running = 0;
-		   writer.write(String.format("<h4>%s</h4>","Models"));
 			String[] models = form.getValuesArray(params.model.toString());
 			if ((models==null) || (models.length==0)) {
 				writer.write("<div class='message'>No models</div>");
 				return 0;
 			}
 			try {
-				renderRDFModels(rdf, writer, form, status);
+				renderRDFModels(rdf, writer, form, status,rootReference);
 			} catch (Exception x) {
 				x.printStackTrace();
 				writer.write("<table class='models'>");
@@ -61,6 +80,8 @@ public class ModelTools {
 				for (String model:models) {
 					writer.write("<tr>");
 					writer.write("<td>");
+					writer.write(String.format("<a href='%s' alt='%s' title='%s' target='_blank'><img border='0' src='%s/images/chart_line.png' alt='%s' alt='%s'></a>",
+							model,model,model,rootReference.toString(),model,model));
 					writer.write(params.model.htmlInputCheckbox(model,model));
 					writer.write("</td>");
 					if (!status) continue;
@@ -79,7 +100,13 @@ public class ModelTools {
 						running += isRunning;
 						writer.write("</td>");
 						writer.write("<td>");
-						writer.write(String.format("<a href='%s'>%s</a>",uri,(isRunning==0)?"Results":"Processing"));
+						writer.write(String.format("<a href='%s'><img src='%s/images/%s' alt='%s' title='%s'></a>",
+								uri,
+								rootReference.toString(),
+								(isRunning==0)?"tick.png":"24x24_ambit.png",
+								(isRunning==0)?"Completed":"Processing",
+								(isRunning==0)?"Completed":"Processing")
+								);
 						writer.write(String.format("<input type='hidden' name='%s' value='%s'>", model,uri));	
 						writer.write("</td>");					
 
@@ -91,7 +118,7 @@ public class ModelTools {
 			return running;
 	}	
 	
-	public static int renderRDFModels(Model rdf,Writer writer, Form form, boolean status) throws Exception {
+	public static int renderRDFModels(Model rdf,Writer writer, Form form, boolean status,Reference rootReference) throws Exception {
 		final String sparql = 
 			"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 			"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
@@ -114,11 +141,12 @@ public class ModelTools {
 			Query query = QueryFactory.create(sparql);
 			qe = QueryExecutionFactory.create(query,rdf );
 			ResultSet results = qe.execSelect();
-			writer.write("<table class='resuts'>");
+			writer.write("<table class='results'>");
 			writer.write("<tr>");
 			writer.write("<th>Model</th>");
 			writer.write("<th>Creator</th>");
 			writer.write("<th>Algorithm</th>");
+			writer.write("<th></th>");
 			writer.write("</tr>");
 			while (results.hasNext()) {
 				
@@ -130,20 +158,45 @@ public class ModelTools {
 				Literal id = solution.getLiteral("id");
 				String modelUri = url.getURI()==null?(id==null?null:id.getString()):url.getURI();
 				if (modelUri==null) continue;
-				writer.write("<tr>");					
+				writer.write("<tr class='results_even'>");					
 				writer.write("<td>");
+				writer.write(String.format("<a href='%s' alt='%s' title='%s' target='_blank' ><img src='%s/images/chart_line.png' border='0' alt='%s' title='%s'></a>",
+						modelUri,modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
 				writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString()));
 				writer.write("</td><td>");
 				writer.write(creator==null?"":creator.getString());
 				writer.write("</td><td>");
 				writer.write(algo==null?"":algo.getURI());
 				writer.write("</td>");
-				
+				writer.write("<td>");
 				/**
 				 * Results URL and status
 				 */
-				if (!status) continue;
 				String[] uris = form.getValuesArray(modelUri);
+				if (!status)  {
+					for (String uri:uris) {
+						if ("on".equals(uri)) continue;
+						
+						String q= new Reference(uri).getQuery();
+						for (int i=0;i<mimes.length;i++) {
+							MediaType mime = mimes[i];
+							writer.write("&nbsp;");
+							writer.write(String.format(
+									"<a href=\"%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+									uri,
+									q==null?"?":"&",
+									Reference.encode(mime.toString()),
+									rootReference,
+									image[i],
+									mime,
+									mime));	
+						}			
+					
+						//writer.write(String.format("<a href='%s' target='_blank'>Save</a>", uri));
+					}
+					continue;
+				}
+				writer.write("</td>");
 				
 				for (String uri:uris) {
 					if ("on".equals(uri)) continue;
@@ -153,12 +206,19 @@ public class ModelTools {
 					for (String task:tasks) {
 						if (task.equals(Status.SUCCESS_ACCEPTED.getName()) || task.equals(Status.REDIRECTION_SEE_OTHER.getName()))
 							isRunning++;
-						writer.write(String.format("%s",task));
+						writer.write(String.format("%s",task.equals("OK")?"Completed":"Processing"));
 					}
 					running += isRunning;
 					writer.write("</td>");
 					writer.write("<td>");
-					writer.write(String.format("<a href='%s'>%s</a>",uri,(isRunning==0)?"Results":"Still running"));
+					writer.write(String.format("<a href='%s'><img src='%s/images/%s' border='0' alt='%s' title='%s'></a>",
+							uri,
+							rootReference.toString(),
+							(isRunning==0)?"tick.png":"24x24_ambit.gif",
+							(isRunning==0)?"Completed":"Processing",
+							(isRunning==0)?"Completed":"Processing"
+								)
+							);
 					writer.write(String.format("<input type='hidden' name='%s' value='%s'>", modelUri,uri));	
 					writer.write("</td>");					
 

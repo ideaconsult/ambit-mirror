@@ -162,7 +162,7 @@ public class Step3Resource extends FastoxStepResource {
 			writer.write("</h4>");
 			try {
 				Model rdf = ModelTools.retrieveModels(null,form, MediaType.APPLICATION_RDF_XML);
-				ModelTools.renderModels(rdf, form, writer, false);
+				ModelTools.renderModels(rdf, form, writer, false,getRequest().getRootRef());
 			} catch (Exception x) {
 				form.add(params.errors.toString(),x.getMessage());
 			}
@@ -173,7 +173,7 @@ public class Step3Resource extends FastoxStepResource {
 		} else if ("Models".equals(key)) {
 			try {
 				Model rdf = ModelTools.retrieveModels(null,form, MediaType.APPLICATION_RDF_XML);
-				ModelTools.renderModels(rdf, form, writer, false);
+				ModelTools.renderModels(rdf, form, writer, false,getRequest().getRootRef());
 			} catch (Exception x) {
 				form.add(params.errors.toString(),x.getMessage());
 			}
@@ -263,6 +263,8 @@ public class Step3Resource extends FastoxStepResource {
 			if (subendpoints.length==0) return;
 			writer.write(String.format("<h5>Specific %s</h5>",endpoint_name));		
 			for (String subendpoint:subendpoints) {
+				writer.write(String.format("<img src='%s/images/16x16_toxicological_endpoints.png'>",
+						getRootRef().toString()));
 				writer.write(subendpoint);
 				writer.write("<br>");
 			}

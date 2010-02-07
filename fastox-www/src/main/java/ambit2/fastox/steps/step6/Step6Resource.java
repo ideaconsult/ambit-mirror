@@ -16,10 +16,12 @@ import ambit2.fastox.DatasetTools;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step5.Step5Resource;
+import ambit2.rest.ChemicalMediaType;
 
 public class Step6Resource extends FastoxStepResource {
 	public static final String resource = "/step6";
 	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
+
 	public Step6Resource() {
 		super("Display results",Step5Resource.resource,null);
 	}
@@ -41,7 +43,7 @@ public class Step6Resource extends FastoxStepResource {
 			form.add(params.errors.toString(),x.getMessage());
 		}
 	
-		ModelTools.renderModels(store,form, writer, false);
+		ModelTools.renderModels(store,form, writer, false,getRootRef());
 		//todo retrieve dataset once and then only predictions into a single model
 		writer.write("<h4>Compounds</h4>");
 		String[] models = form.getValuesArray(params.model.toString());
@@ -60,7 +62,7 @@ public class Step6Resource extends FastoxStepResource {
 			}
 		}	
 		try {
-			DatasetTools.renderDataset(store,writer,DatasetTools.modelVars); //"UNION { ?f owl:sameAs ?o.}"); //
+			DatasetTools.renderDataset(store,writer,DatasetTools.modelVars,getRequest().getRootRef()); //"UNION { ?f owl:sameAs ?o.}"); //
 		} catch (Exception x) {
 			form.add(params.errors.toString(),x.toString());
 		}		

@@ -69,7 +69,7 @@ public class DatasetTools {
 		"	{ ?Model rdf:type ot:Model. ?Model ot:predictedVariables ?f. ?f dc:title ?name. OPTIONAL {?Model dc:title ?mname.} }" ;
 
 		
-	public static Model renderDataset(Model model, Writer writer,String more) throws Exception {
+	public static Model renderDataset(Model model, Writer writer,String more,Reference rootReference) throws Exception {
 		QueryExecution qe = null;
 		try {
 			Query query = QueryFactory.create(String.format(queryString,more));
@@ -101,17 +101,23 @@ public class DatasetTools {
 				Resource same = solution.getResource("o");
 				Literal name = solution.getLiteral("name");
 				
-				writer.write((name!=null)?name.getString():
-					(same!=null)?same.getLocalName():"");
-				writer.write("&nbsp;");
+
 				Resource m = solution.getResource("Model");
 				Literal mname = solution.getLiteral("mname");
 				if (m!=null)
-					writer.write(String.format("<a href='%s' target='_blank' title='Model %s' alt='%s'>Model</a>",
+					writer.write(String.format(
+							"<a href='%s' target='_blank' title='Model %s' alt='%s'><img border='0' src='%s/images/chart_line.png' alt='Model %s' title='Model %s'></a>",
 							m.getURI(),
 							mname==null?m.getURI():mname.getString(),
-							m.getURI(),mname==null?m.getURI():mname.getString()));
+							mname==null?m.getURI():mname.getString(),
+							rootReference.toString(),
+							mname==null?m.getURI():mname.getString(),
+							mname==null?m.getURI():mname.getString()));
 				
+				writer.write("&nbsp;");
+				writer.write((name!=null)?name.getString():
+					(same!=null)?same.getLocalName():"");
+								
 				writer.write("</th><td>");
 				Literal literal = solution.getLiteral("value");
 				writer.write(literal!=null?literal.getString():"");

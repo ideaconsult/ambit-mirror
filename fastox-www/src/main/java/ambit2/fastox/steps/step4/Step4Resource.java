@@ -11,7 +11,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.steps.step3.Step3Resource;
 import ambit2.fastox.steps.step5.Step5Resource;
 
@@ -42,7 +41,7 @@ public class Step4Resource extends FastoxStepResource {
 		} catch (Exception x) {
 			form.add(params.errors.toString(),x.getMessage());
 		}
-		ModelTools.renderModels(store,form, writer, false);
+		ModelTools.renderModels(store,form, writer, false,getRootRef());
 		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}

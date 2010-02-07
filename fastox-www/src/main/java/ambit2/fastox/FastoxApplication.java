@@ -60,7 +60,7 @@ public class FastoxApplication extends Application {
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
 		 
-//		 router.attach("/images/", imgDir);
+ 		 router.attach("/images/", imgDir);
 //		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
 		 router.attach("/style/", styleDir);

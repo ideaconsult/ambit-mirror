@@ -14,7 +14,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.steps.step4.Step4Resource;
 import ambit2.fastox.steps.step6.Step6Resource;
 
@@ -25,7 +24,7 @@ import ambit2.fastox.steps.step6.Step6Resource;
  */
 public class Step5Resource extends FastoxStepResource {
 	public static String meta_refresh = 
-				"<meta http-equiv=\"refresh\" content=\"1;URL=%s\">\n"+
+				"<meta http-equiv=\"refresh\" content=\"5;URL=%s\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"no-store, no-cache, must-revalidate\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"post-check=0, pre-check=0\">\n"+
 				"<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">\n"+
@@ -76,7 +75,7 @@ public class Step5Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		writer.write("<h3>Compounds</h3>");
+
 		writer.write(params.dataset.htmlInputHidden(dataset));
 		writer.write("<h3>Models</h3>");
 		
@@ -85,7 +84,7 @@ public class Step5Resource extends FastoxStepResource {
 		} catch (Exception x) {
 			form.add(params.errors.toString(),x.getMessage());
 		}
-		int running = ModelTools.renderModels(store,form, writer, true);
+		int running = ModelTools.renderModels(store,form, writer, true,getRequest().getRootRef());
 		
 		String[] values = form.getValuesArray(params.errors.toString());
 		writer.write(values.length>0?"<h3>Errors</h3>":"");
