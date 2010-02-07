@@ -45,7 +45,12 @@ public class Step6Resource extends FastoxStepResource {
 				//String[] tasks = form.getValuesArray(uri);
 				//for (String task:tasks) {
 					//if (task.equals(Status.SUCCESS_OK.getName()))
-						displayResults(uri,form,writer);
+						//displayResults(uri,form,writer);
+				try {
+					retrieveDataset(uri,writer," UNION { ?f owl:sameAs ?o.} ");
+				} catch (Exception x) {
+					form.add(params.errors.toString(),x.toString());
+				}
 				//}
  
 			}

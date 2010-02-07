@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -159,6 +160,11 @@ public class Step2Resource extends FastoxStepResource {
 			Form query = new Form();
 			query.add(Step1Resource.params.search.toString(), text);
 			query.add("max","10");
+			String[] s= new String[] {"ChemicalName","CASRN","MolecularFormula"};
+			for (String n:s) 
+			query.add("feature_uris[]",
+					String.format("%s?sameas=%s",feature_service,
+							Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
 			String uri = compound_service+"?"+query.getQueryString();
 			//retrieveDataset(uri);
 			form.add(params.dataset.toString(),uri);

@@ -29,6 +29,7 @@ public abstract class WizardResource extends ServerResource {
 	protected String tabIndex = null;
 	protected String dataset_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/dataset";
 	protected String compound_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound";
+	protected String feature_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/feature";
 	protected String ontology_service = "http://ambit.uni-plovdiv.bg:8080/ontology";
 	protected String meta;
 	//"http://localhost:8081";

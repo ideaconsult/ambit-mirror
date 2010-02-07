@@ -209,6 +209,6 @@ public class Step5Resource extends FastoxStepResource {
 	}
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
-		super.renderResults(writer, key);
+		
 	}
 }

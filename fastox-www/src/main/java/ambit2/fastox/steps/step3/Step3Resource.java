@@ -59,11 +59,11 @@ public class Step3Resource extends FastoxStepResource {
 	"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 	"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
 	"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
-	"	PREFIX dc:<http://purl.org/dc/elements/1.1/#>\n"+
+	"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
 	"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 	"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 	"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-	"		select DISTINCT ?url ?title\n"+
+	"		select DISTINCT ?url ?id\n"+
 	"		where {\n"+
 	"	        ?url rdf:type ot:Model.\n"+
 	"	        {\n"+
@@ -76,7 +76,7 @@ public class Step3Resource extends FastoxStepResource {
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
 		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
-		"	PREFIX dc:<http://purl.org/dc/elements/1.1/#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
 		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
@@ -138,7 +138,7 @@ public class Step3Resource extends FastoxStepResource {
 		Form form = retrieveModels(key);
 		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
 			key = "Endpoints";
-			writer.write("<div class='endpoints'>");
+			writer.write("<h4>");
 			if (parentendpoint!= null) {
 				writer.write(
 					String.format("<a href='%s%s/%s?%s=%s&%s=%s'>%s</a>",
@@ -154,7 +154,7 @@ public class Step3Resource extends FastoxStepResource {
 				writer.write("&nbsp;/&nbsp;");
 			}
 			writer.write(endpoint_name);
-			writer.write("</div>");
+			writer.write("</h4>");
 			renderModels(form, writer,false);
 				
 			retrieveEndpoints(form,key);
@@ -184,10 +184,12 @@ public class Step3Resource extends FastoxStepResource {
 			form.removeAll(params.model.toString());
 			while (results.hasNext()) {
 				QuerySolution solution = results.next();
-				//Literal literal = solution.getLiteral("title");
+				Literal id = solution.getLiteral("id");
 				Resource resource = solution.getResource("url");
-				form.add(params.model.toString(), resource.getURI());
-
+				if (resource.getURI()!=null)
+					form.add(params.model.toString(), resource.getURI());
+				else if (id!= null)
+					form.add(params.model.toString(), id.getString());
 			}
 
 		} catch (Exception x) {
