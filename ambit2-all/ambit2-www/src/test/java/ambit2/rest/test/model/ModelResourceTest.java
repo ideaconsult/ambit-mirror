@@ -83,9 +83,25 @@ public class ModelResourceTest extends ResourceTest {
 		String dataset = String.format("http://localhost:%d/dataset/1", port);
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
-				"%s?feature_uris[]=%s", dataset, Reference.encode(String
+				"%s?%s=%s",
+				dataset, 
+				OpenTox.params.feature_uris.toString(),
+				Reference.encode(String
 						.format("%s/predicted", getTestURI()))));
 	}
+	
+	@Test
+	public void testPostDataset1() throws Exception {
+		Form headers = new Form();
+		String dataset = String.format("http://localhost:%d/dataset/1?max=1", port);
+		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
+		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
+				"%s&%s=%s", 
+				dataset,
+				OpenTox.params.feature_uris.toString(),
+				Reference.encode(String
+						.format("%s/predicted", getTestURI()))));
+	}	
 
 	@Test
 	public void testPostForeignCompound() throws Exception {
