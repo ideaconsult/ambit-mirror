@@ -324,6 +324,7 @@ fieldset
 	width: 20em;
     FONT-FAMILY: Verdana, Arial;
     font-size:10pt;
+    vertical-align:middle;
 }
 
 legend

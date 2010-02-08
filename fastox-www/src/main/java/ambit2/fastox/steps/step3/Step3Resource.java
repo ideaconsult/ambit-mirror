@@ -40,7 +40,7 @@ public class Step3Resource extends FastoxStepResource {
 	protected String endpoint_name = "Endpoints";
 	protected String parentendpoint = null;
 	protected String parentendpoint_name = null;
-	
+	protected Hashtable<String,String> queryString;
 	protected String model = "http://www.opentox.org/echaEndpoints.owl#Model";
 	protected String model_name = "Model";
 	
@@ -86,14 +86,14 @@ public class Step3Resource extends FastoxStepResource {
 		"		select DISTINCT ?url ?title ?endpoint\n"+
 		"		where {\n"+
 		"	        ?url rdf:type ot:Model.\n"+
-		"	        {\n"+
-		"	        { ?url ot:dependentVariables ?vars. } UNION { ?url ot:predictedVariables ?vars. }\n"+
-		"	        }\n"+
-		"	        ?vars owl:sameAs ?endpoint.\n"+
-		"}\n";
+		"}\n"+
+		"  LIMIT 100\n";
 	
 	public Step3Resource() {
 		super("Endpoints",Step2Resource.resource,Step4Resource.resource);
+		queryString= new Hashtable<String, String>();
+		queryString.put("Endpoints",modelsByEndpointSparql);
+		queryString.put("Models",modelsAll);
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -158,6 +158,8 @@ public class Step3Resource extends FastoxStepResource {
 				writer.write("&nbsp;/&nbsp;");
 			}
 			*/
+			writer.write(String.format("<img src='%s/images/16x16_toxicological_endpoints.png'>",
+					getRootRef().toString()));			
 			writer.write(endpoint_name);
 			writer.write("</h4>");
 			try {
@@ -191,7 +193,7 @@ public class Step3Resource extends FastoxStepResource {
 		QueryExecution ex = null;
 		try {
 			
-			String query = String.format(modelsByEndpointSparql,endpoint);
+			String query = String.format(queryString.get(key),endpoint);
 			
 			ex = QueryExecutionFactory.sparqlService(ontology_service, query);
 			ResultSet results = ex.execSelect();
@@ -263,7 +265,7 @@ public class Step3Resource extends FastoxStepResource {
 			if (subendpoints.length==0) return;
 			writer.write(String.format("<h5>Specific %s</h5>",endpoint_name));		
 			for (String subendpoint:subendpoints) {
-				writer.write(String.format("<img src='%s/images/16x16_toxicological_endpoints.png'>",
+				writer.write(String.format("<img src='%s/images/folder.png'>",
 						getRootRef().toString()));
 				writer.write(subendpoint);
 				writer.write("<br>");

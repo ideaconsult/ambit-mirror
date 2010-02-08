@@ -78,9 +78,9 @@ public class Step1Resource extends FastoxStepResource {
 			);
 			writer.write(String.format("<input name='type' type='hidden' value='%s'>\n",type==null?"smiles":type));
 		} else if ("File".equals(key)) {
-			
+			writer.write("Under development");
 		} else if ("Structure".equals(key)) {
-			
+			writer.write("Under development");
 		}
 		super.renderFormContent(writer, key);
 	}
