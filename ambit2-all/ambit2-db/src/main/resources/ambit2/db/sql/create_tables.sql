@@ -441,9 +441,12 @@ CREATE TABLE  `query` (
   `idsessions` int(10) unsigned NOT NULL,
   `name` text collate utf8_bin NOT NULL,
   `content` text collate utf8_bin NOT NULL,
+  `idtemplate` int(10) unsigned default NULL,
   PRIMARY KEY  (`idquery`),
   UNIQUE KEY `Index_3` USING BTREE (`name`(255),`idsessions`),
   KEY `FK_query_1` (`idsessions`),
+  KEY `FK_query_2` (`idtemplate`),
+  CONSTRAINT `FK_query_2` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_query_1` FOREIGN KEY (`idsessions`) REFERENCES `sessions` (`idsessions`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Structure queries';
 
