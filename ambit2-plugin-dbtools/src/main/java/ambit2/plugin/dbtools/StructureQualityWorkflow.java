@@ -412,7 +412,9 @@ class CalculationFingerprintsStructure extends CalculationSequence {
 				new Performer() {
 			@Override
 			public Object execute() throws Exception {
-				return new MissingFingerprintsQuery(FPTable.fp1024_struc);  //without quality labels
+				MissingFingerprintsQuery q = new MissingFingerprintsQuery(FPTable.fp1024_struc);  //without quality labels
+				q.setMaxRecords(10000);
+				return q;
 			}
 		});
 		addStep(query);
