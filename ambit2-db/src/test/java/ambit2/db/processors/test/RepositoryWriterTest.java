@@ -49,11 +49,9 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.io.DelimitedFileFormat;
 import ambit2.core.io.ECHAPreregistrationListReader;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IRawReader;
-import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
@@ -320,6 +318,56 @@ select idstructure,id_srcdataset from struc_dataset where idstructure>3
 on duplicate key update idstructure=3
 delete from struc_dataset where idstructure>3
 		 */
+
+	}		
+	
+	@Test
+	public void testMarkush() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        
+		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(0,chemicals.getRowCount());
+		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(0,strucs.getRowCount());
+		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset");
+		Assert.assertEquals(0,srcdataset.getRowCount());
+		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(0,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(0,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(0,property_values.getRowCount());
+		
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/markush/68915-31-1.sdf");
+		Assert.assertNotNull(in);
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		reader.setReference(LiteratureEntry.getInstance("markush"));
+		write(reader,c.getConnection());
+        c.close();
+        
+        c = getConnection();
+		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(1,chemicals.getRowCount());
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(1,strucs.getRowCount());
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure where type_structure='MARKUSH'");
+		Assert.assertEquals(1,strucs.getRowCount());		
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
+		Assert.assertEquals(1,srcdataset.getRowCount());
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(1,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(18,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(18,property_values.getRowCount());		
+		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
+		Assert.assertEquals(1,tuples.getRowCount());			
+		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
+		Assert.assertEquals(18,p_tuples.getRowCount());				
+		c.close();
 
 	}		
 	

@@ -52,6 +52,10 @@ public class QualityStatisticsProcessor extends	ConnectionStatisticsProcessor<St
 				
 				"select '\n'",
 
+				"select name as 'Dataset',type_structure as 'Structure type',count(*) as 'Number of compounds' from src_dataset\n"+
+				"join struc_dataset using(id_srcdataset)\n"+
+				"join structure using(idstructure)\n"+
+				"group by id_srcdataset,type_structure\n"
 				
 		});
 		

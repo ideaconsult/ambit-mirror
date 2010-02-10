@@ -40,7 +40,13 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"THEN cast(s1.idstructure as char) ELSE concat_WS(',',cast(s1.idstructure as char),cast(s2.idstructure as char)) END\n"+
 		"from fp1024_struc s1\n"+
 		"join fp1024_struc s2\n"+
+		"join structure sa on s1.idstructure=sa.idstructure\n"+
+		"join structure sb on s2.idstructure=sb.idstructure\n"+
 		"where s1.idchemical = s2.idchemical and s1.idstructure != s2.idstructure and s1.status='valid' && s2.status='valid'\n"+
+		"and sa.type_structure != 'MARKUSH'\n"+
+		"and sa.type_structure != 'NA'\n"+
+		"and sb.type_structure != 'MARKUSH'\n"+
+		"and sb.type_structure != 'NA'\n"+		
 		"on duplicate key update rel=rel+values(rel),\n"+
 		"user_name=values(user_name),\n"+
 		"updated=CURRENT_TIMESTAMP(),\n"+
@@ -61,6 +67,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"SELECT count(distinct(id_srcdataset)) c ,idchemical FROM structure\n"+
 		"join struc_dataset using(idstructure)\n"+
 		"where type_structure != 'NA'\n"+
+		"and type_structure != 'MARKUSH'\n"+
 		"group by idchemical\n"+
 		") A where c=1\n",
 		
@@ -105,7 +112,8 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		") as SS\n"+
 		"using(idchemical)\n"+
 		"where c=1\n"+
-		"and type_structure != 'NA'\n",
+		"and type_structure != 'NA'\n"+
+		"and type_structure != 'MARKUSH'\n",
 		//"UNLOCK TABLES"
 
 		"delete from quality_pair"
