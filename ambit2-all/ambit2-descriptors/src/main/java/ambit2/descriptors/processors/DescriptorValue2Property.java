@@ -80,8 +80,10 @@ public class DescriptorValue2Property extends DefaultAmbitProcessor<DescriptorVa
 		for (String name: descriptor.getNames()) {
 			Property property = 
 			Property.getInstance(name,
-					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
+					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),
+					descriptor.getSpecification().getSpecificationReference())
 					);
+			property.setLabel(descriptor.getSpecification().getSpecificationReference());
 			property.setEnabled(true);
 			p.add(property);				
 
