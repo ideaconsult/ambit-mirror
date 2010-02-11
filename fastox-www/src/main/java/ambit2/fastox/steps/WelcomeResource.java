@@ -19,7 +19,7 @@ public class WelcomeResource extends WizardResource {
 	public static final String resource = "/";
 
 	public WelcomeResource() {
-		super("Fastox",null,Step2Resource.resource);
+		super("ToxPredict",null,Step2Resource.resource);
 	}
 	@Override
 	protected Hashtable<String, Form> createForms() {
@@ -45,7 +45,7 @@ public class WelcomeResource extends WizardResource {
 					getRequest().getRootRef().toString()));
 		writer.write("</td>");		
 		writer.write("<td align='center'>");
-		writer.write("<h1>Fastox</h1><h6>OpenTox Demo application</h6>");
+		writer.write("<h1>ToxPredict</h1><h6>OpenTox Demo application</h6>");
 		writer.write("</td>");
 		writer.write("<td>");
 		writer.write("</td>");		
@@ -57,7 +57,7 @@ public class WelcomeResource extends WizardResource {
 		writer.write("<input name='text' title='Enter chemical name, registry identifier, smiles, InChI' type=\"text\" size='80' value='556-82-1'/>");
 		writer.write("</td>");
 		writer.write("<td width='30%' align='left'>");
-		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Start Fastox\" title='Fastox is a series of steps, starting from structure selection towards prediction of toxicological properties by OpenTox models.' tabindex=\"1\">");		
+		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Start ToxPredict\" title='ToxPredict is a series of steps, starting from structure selection towards prediction of toxicological properties by OpenTox models.' tabindex=\"1\">");		
 		writer.write("</td>");		
 		writer.write("</tr>");
 		writer.write("<tr >");
@@ -78,7 +78,7 @@ public class WelcomeResource extends WizardResource {
 			
 		writer.write("</td>");
 		writer.write("<td >");
-		//writer.write("<blockquote>TODO: Fastox description</blockquote>");		
+		//writer.write("<blockquote>TODO: ToxPredict description</blockquote>");		
 		writer.write("</td>");	
 		writer.write("<td align='center'>");
 		writer.write("</td>");		
@@ -96,7 +96,7 @@ public class WelcomeResource extends WizardResource {
 	}
 	@Override
 	public String toString() {
-		return "Fastox";
+		return "ToxPredict";
 	}
 	protected String getTopRef() {
 		return resource;

@@ -110,6 +110,8 @@
   </developers>
 
   <build>
+        <finalName>ToxPredict</finalName>
+
   	<pluginManagement>
   		<plugins>
   			<plugin>

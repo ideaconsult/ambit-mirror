@@ -20,7 +20,7 @@ public class FastoxApplication extends Application {
 
 	public FastoxApplication() {
 		super();
-		setName("Fastox");
+		setName("ToxPredict");
 	}
     @Override
     public Restlet createInboundRoot() {
