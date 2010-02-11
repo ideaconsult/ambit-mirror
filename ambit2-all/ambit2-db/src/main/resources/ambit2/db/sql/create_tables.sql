@@ -653,7 +653,7 @@ insert into version (idmajor,idminor,comment) values (2,10,"AMBIT2 schema");
 DROP FUNCTION IF EXISTS `sortstring`;
 
 DELIMITER $
-CREATE FUNCTION `sortstring`(inString TEXT) RETURNS TEXT deterministic
+CREATE FUNCTION `sortstring`(inString TEXT) RETURNS TEXT DETERMINISTIC
 BEGIN
   DECLARE delim CHAR(1) DEFAULT ',';
   DECLARE strings INT DEFAULT 0;     -- number of substrings
@@ -697,7 +697,8 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `sql_xtab`;
 DELIMITER $$
 
-CREATE FUNCTION sql_xtab(property_num VARCHAR(128),property_nom VARCHAR(128), query INT,bins DOUBLE) RETURNS TEXT NOT DETERMINISTIC
+CREATE FUNCTION sql_xtab(property_num VARCHAR(128),property_nom VARCHAR(128), query INT,bins DOUBLE) RETURNS TEXT READS SQL 
+DATA 
 begin
    set @x="";
    set @@group_concat_max_len=100000;
@@ -751,7 +752,8 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `sql_dataset_xtab`;
 DELIMITER $$
 
-CREATE FUNCTION sql_dataset_xtab(property_num VARCHAR(128),property_nom VARCHAR(128), dataset INT,bins DOUBLE) RETURNS TEXT NOT DETERMINISTIC
+CREATE FUNCTION sql_dataset_xtab(property_num VARCHAR(128),property_nom VARCHAR(128), dataset INT,bins DOUBLE) RETURNS TEXT 
+READS SQL DATA 
 begin
    DECLARE x TEXT;
    set @@group_concat_max_len=100000;
@@ -807,7 +809,7 @@ DELIMITER $$
 -- -----------------------------------------------------
 CREATE PROCEDURE p_dataset_xtab(IN property_num VARCHAR(128),property_nom VARCHAR(128),q INT,bins DOUBLE)
 LANGUAGE SQL
-NOT DETERMINISTIC
+READS SQL DATA 
 CONTAINS SQL
 SQL SECURITY DEFINER
 begin
@@ -827,7 +829,7 @@ DELIMITER $$
 
 CREATE PROCEDURE p_xtab(IN property_num VARCHAR(128),property_nom VARCHAR(128),q INT,bins DOUBLE)
 LANGUAGE SQL
-NOT DETERMINISTIC
+READS SQL DATA 
 CONTAINS SQL
 SQL SECURITY DEFINER
 begin
