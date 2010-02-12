@@ -45,7 +45,7 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 		qf.setValue("value");
 		qf.setCondition(StringCondition.getInstance("regexp"));
 		qf.setId(1);
-		Assert.assertEquals(String.format(QueryField.sqlField,"name",qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
+		Assert.assertEquals(String.format(QueryField.sqlField,"","name",qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(3,params.size());
@@ -64,7 +64,7 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 		qf.setValue("value");
 		qf.setCondition(StringCondition.getInstance("regexp"));
 		qf.setId(1);
-		Assert.assertEquals(String.format(QueryField.sqlField,"comments",qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
+		Assert.assertEquals(String.format(QueryField.sqlField,"","comments",qf.getNameCondition(),qf.getCondition(),""), qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(3,params.size());
