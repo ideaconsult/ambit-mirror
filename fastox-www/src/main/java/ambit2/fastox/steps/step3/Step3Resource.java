@@ -112,7 +112,6 @@ public class Step3Resource extends FastoxStepResource {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put("Endpoints",new Form());
 		forms.put("Models",new Form());
-		forms.put("Help",new Form());
 		return forms;
 	}
 
@@ -142,9 +141,10 @@ public class Step3Resource extends FastoxStepResource {
 					));
 				writer.write("&nbsp;/&nbsp;");
 			}
-			*/
+			
 			writer.write(String.format("<img src='%s/images/16x16_toxicological_endpoints.png'>",
-					getRootRef().toString()));			
+					getRootRef().toString()));		
+					*/	
 			writer.write(endpoint_name);
 			writer.write("</h4>");
 			try {
@@ -226,8 +226,9 @@ public class Step3Resource extends FastoxStepResource {
 				form.add(params.dataset.toString(), dataset);
 				
 				parameters.add(new Parameter(params.subendpoint.toString(),
-						String.format("<a href='%s%s/%s?%s'>%s</a>",
+						String.format("<a href='%s/%s%s/%s?%s'>%s</a>",
 						getRequest().getRootRef(),
+						mode,
 						step.getResource(),
 						key,
 						form.getQueryString(),

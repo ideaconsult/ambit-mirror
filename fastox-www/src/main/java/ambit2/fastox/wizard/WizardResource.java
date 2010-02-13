@@ -21,29 +21,31 @@ import org.restlet.resource.ServerResource;
 
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.fastox.wizard.Wizard.WizardMode;
 	
 public abstract class WizardResource extends ServerResource {
 	protected static String jsGoogleAnalytics = null;
 	protected WizardStep step;
 	protected Hashtable<String,Form> forms;
 	protected String tabIndex = null;
-
+	protected WizardMode mode;
 	protected String meta;
-	protected Wizard wizard = Wizard.getInstance();
+	protected Wizard wizard;
+	public static final String key = "mode";
+	protected int stepIndex;
 	
 	public WizardResource(int stepIndex) throws ResourceException {
 		super();
-		this.step = wizard.getStep(stepIndex);
-		forms = createForms();
-		meta = "";
-
+		this.stepIndex = stepIndex;
+		setMode(WizardMode.A);
 	}
-	
+	public void setMode(WizardMode mode) {
+		this.mode = mode;
+	}
 	protected Hashtable<String, Form> createForms() {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put(step.getTitle(),new Form());
 		forms.put("Errors",new Form());
-		forms.put("Help",new Form());
 		return forms;
 	}
 	@Override
@@ -52,6 +54,15 @@ public abstract class WizardResource extends ServerResource {
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
 		Object t = getRequestAttributes().get(WizardStep.tab);
 		tabIndex = t==null?getDefaultTab():Reference.decode(t.toString());
+		
+		try {
+			setMode(WizardMode.valueOf(getRequest().getAttributes().get(key).toString()));
+		} catch (Exception x) { setMode(WizardMode.A);}
+
+		wizard = Wizard.getInstance(mode);
+		this.step = wizard.getStep(stepIndex);
+		forms = createForms();
+		meta = "";
 		
 	}
 	protected String getDefaultTab() {
@@ -83,24 +94,40 @@ public abstract class WizardResource extends ServerResource {
 		w.write("<body>");		
 	}
 	public void navigator(Writer writer) throws IOException {
-	//	writer.write(String.format("<h3>%s</h3>",toString()));
-		writer.write(String.format("<h2><a href='%s' target=_blank title='EC FP7 OpenTox project'>%s</a>&nbsp;<a href='%s' title='Demo application'>%s</a>&nbsp;</h2>"
-					,"http://opentox.org","OpenTox"
-					,getRootRef(),"ToxPredict"));		
-		//if (prevStep!=null)
-		//writer.write(String.format("<a href='%s%s'>%s</a>",getRootRef(),prevStep,"Back"));
-
+		
+		writer.write("<table width='99%' border='0'>");
+		writer.write("<tr>");
+		writer.write("<td align='left'>");
+		writer.write(String.format("<a href='%s' title='ToxPredict, OpenTox Demo application'><img src='%s%s' alt='ToxPredict' title='%s'></a>",
+				getRootRef(),
+				getRootRef(),
+				"/images/ToxPredict_rgb_72.png",
+				"ToxPredict",
+				"ToxPredict, OpenTox Demo application"));	
+		writer.write("</td>");
+		writer.write("<td align='right'>");
+		writer.write(String.format("<a href='%s/help' target=_blank title='Help'>Help</a>",
+				getRequest().getOriginalRef(),
+				"Help"));		
+		writer.write("</td>");
+		writer.write("<tr>");
+		
+		writer.write("</table>");
 		writer.write("<ul id=\"mainNav\" class=\"wizardStep\">\n");
+		
+		Form query = getRequest().getResourceRef().getQueryAsForm();
 		
 		if (step.getIndex()>0)
 		for (int i=1; i < wizard.size(); i++) {
 			WizardStep thestep = wizard.getStep(i) ;
+			Reference stepRef = new Reference(getRequest().getRootRef().toString()+"/"+mode+thestep.getResource());
+			stepRef.setQuery(query.getQueryString());
+			
 			if (i < step.getIndex()) {
 				writer.write(String.format(
-						"<li class=\"%s\"><a href=\"%s%s\" title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
-						"lastDone",
-						getRequest().getRootRef().toString(),
-						thestep.getResource(),
+						"<li class=\"%s\"><a href=\"%s\" title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						(i+1)==step.getIndex()?"lastDone":"done",
+						stepRef,
 						i,
 						thestep.getTitle(),
 						thestep.getDescription()
@@ -159,7 +186,7 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</FIELDSET>");		
 	}	
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<form name='%s' method='POST' action='%s%s'>","form",getRootRef(),wizard.nextStep(step)));
+		writer.write(String.format("<form name='%s' method='POST' action='%s/%s%s'>","form",getRootRef(),mode,wizard.nextStep(step)));
 	}
 	public void renderFormContent(Writer writer, String key)  throws IOException {
 		//writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -183,22 +210,25 @@ public abstract class WizardResource extends ServerResource {
 			String key = keys.nextElement();
 			if (key.equals(tabIndex)) writer.write("[");
 			
-			Reference tab = new Reference(String.format("%s%s/%s",getRootRef(),step.getResource(),Reference.encode(key)));
+			Reference tab = new Reference(String.format("%s/%s%s/%s",getRootRef(),mode,step.getResource(),Reference.encode(key)));
 			tab.setQuery(getRequest().getResourceRef().getQuery());
 			writer.write(String.format("<a href='%s'>%s</a>&nbsp;",tab,key));	
 			if (key.equals(tabIndex)) writer.write("]");
 			form = (form==null)?forms.get(key):form;
 		}
+		renderFormHeader(writer,tabIndex);
+		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\">");
 		writer.write("</h4>");
 
 		if ("Errors".equals(tabIndex)) renderErrorsTab(writer, tabIndex);
 		else if ("Help".equals(tabIndex)) renderHelpTab(writer, tabIndex);
 		else {
-			renderFormHeader(writer,tabIndex);
+			
 			renderFormContent(writer,tabIndex);
 			renderResults(writer,tabIndex);
-			renderFormFooter(writer,tabIndex);
+			
 		}
+		renderFormFooter(writer,tabIndex);
 	}		
 	public void footer(Writer output)  throws IOException  {
 	

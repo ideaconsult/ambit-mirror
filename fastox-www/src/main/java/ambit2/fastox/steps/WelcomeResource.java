@@ -26,7 +26,8 @@ public class WelcomeResource extends WizardResource {
 		return forms;
 	}
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<form name='%s' method='POST' action='%s%s'>","form",getRootRef(),wizard.nextStep(step)));
+		writer.write(mode.toString());
+		writer.write(String.format("<form name='%s' method='POST' action='%s/%s%s'>","form",getRootRef(),mode,wizard.nextStep(step)));
 	}
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
 		writer.write(String.format("</form>"));
@@ -39,11 +40,8 @@ public class WelcomeResource extends WizardResource {
 		writer.write("<table border='0' width='100%>");
 		writer.write("<tr align='center'>");
 		writer.write("<td align='left' valign='top'>");
-		writer.write(String.format("<a href='http://opentox.org' target=_blank title='OpenTox web page'><img src='%s/images/logo.png' heigh='54' width='166' border='0' alt='OpenTox' title='OpenTox'></a>",
-					getRequest().getRootRef().toString()));
 		writer.write("</td>");		
 		writer.write("<td align='center'>");
-		writer.write("<h1>ToxPredict</h1><h6>OpenTox Demo application</h6>");
 		writer.write("</td>");
 		writer.write("<td>");
 		writer.write("</td>");		
@@ -64,7 +62,7 @@ public class WelcomeResource extends WizardResource {
 		writer.write("<td >");
 		writer.write("</td>");	
 		writer.write("<td align='left'>");
-		writer.write(String.format("<a href='%s%s' title='More options for structure selection'>%s</a>",getRootRef(),step.getResource(),"Advanced"));	
+		writer.write(String.format("<a href='%s%s%s' title='More options for structure selection'>%s</a>",getRootRef(),mode,step.getResource(),"Advanced"));	
 		writer.write("</td>");		
 		writer.write("</tr>");		
 		writer.write("<tr >");

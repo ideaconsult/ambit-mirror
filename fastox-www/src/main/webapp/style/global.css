@@ -14,7 +14,7 @@ html, body {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	color:#516373; /* global font color */
+	color:#000000; /* global font color */
 }
 
 body {
@@ -54,11 +54,11 @@ add selectors here {font-size: 189%} /* =25 */
 add selectors here {font-size: 197%} /* =26 */
 
 /* ----- base links ----- */
-a:link {color:#516373;outline:none;text-decoration: none;font-weight:bold;}
-a:visited {color:#516373;outline:none;text-decoration: none;font-weight:bold;}
-a:hover {color:#99CC00;outline:none;font-weight:bold;}
-a:active {color:#516373;outline:none;text-decoration: none;font-weight:bold;}
-a:focus{color:#99CC00;outline:none;text-decoration: none;font-weight:bold;}
+a:link {color:#636BD2;outline:none;text-decoration: none;font-weight:bold;}
+a:visited {color:#636BD2;outline:none;text-decoration: none;font-weight:bold;}
+a:hover {color:#5D3188;outline:none;font-weight:bold;}
+a:active {color:#636BD2;outline:none;text-decoration: none;font-weight:bold;}
+a:focus{color:#5D3188;outline:none;text-decoration: none;font-weight:bold;}
 :focus { -moz-outline-style: none; }
 
 /* ----- random base styles and styles used in conjunction with javascript ----- */
@@ -87,8 +87,8 @@ h1 a{
 }
 h2{color:#99CC00; margin:10px 0 10px 0;*margin:0px 0 10px 0;}
 h3{}
-h4{}
-h5{color:#C36615;}
+h4{color:#5D3188;}
+h5{color:#5D3188;}
 h6{}
 
 /* = #mainNav2 & #mainNav3 & #mainNav4 & #mainNav5
@@ -104,17 +104,17 @@ h6{}
 }
 
 #mainNav li.current{
-	background-color:#BAE135;
+	background-color:#5D3188;
 	background-image: url(images/navCurrentBtn.gif);
 }
 
 #mainNav li.lastDone{
-	background-color:#516373;
+	background-color:#636BD2;
 	background-image: url(images/navLastDoneBtn.gif);
 }
 
 #mainNav li.done{
-	background-color:#7C8437;
+	background-color:#636BD2;
 	background-image: url(images/navDoneBtn.gif);
 }
 
@@ -127,7 +127,7 @@ color:#fff;
 }
 
 #mainNav li.done a:hover, #mainNav li.lastDone a:hover  {
-color:#99CC00;
+color:#5D3188;
 cursor:hand;
 }
 
@@ -156,8 +156,8 @@ display:block;
 }
 
 /* #mainNav.wizardStep */
-#mainNav.wizardStep li{width:182px;}
-#mainNav.wizardStep li a{width:182px;}
+#mainNav.wizardStep li{width:170px;}
+#mainNav.wizardStep li a{width:170px;}
 
 /* #mainNav.fourStep */
 #mainNav.fourStep li{width:227px;}
@@ -202,7 +202,7 @@ TH.results
   	 font-family:verdana;
      font-size:10pt;
      background-color:#9FD500;
-     color:#516373;
+
      border-style:solid;
      border-width:1px;
      border-color:#FFFFFF;
@@ -216,7 +216,7 @@ TH.results_odd
   	 font-family:verdana;
      font-size:10pt;
      background-color:#93C400;
-     color:#516373;
+
      border-style:solid;
      border-width:1px;
      border-color:#FFFFFF;
@@ -238,7 +238,7 @@ TR.results_even
      vertical-align:middle;
      font-size:10pt;
     background-color:#FFFFFF;
-     color:#516373;
+
      border-width:0px;
      border-color:#FFFFFF;
      text-align:left;     
@@ -250,7 +250,7 @@ TR.results_odd
      vertical-align:middle;
      font-size:10pt;
       background-color:#E8EBEE;
-     color:#516373;
+ 
      border-width:0px;
      
      border-color:#E9ECDD;
@@ -263,7 +263,7 @@ TD.results_col
      vertical-align:middle;
      font-size:10pt;
     background-color:#F1F3F5;
-     color:#516373;
+
      border-width:0px;
      border-color:#FFFFFF;
      text-align:left;   

@@ -36,7 +36,7 @@ public class Step1Resource extends FastoxStepResource {
 		forms.put("File",new Form());
 		forms.put("Structure",new Form());
 		forms.put("Errors",new Form());
-		forms.put("Help",new Form());		
+
 		return forms;
 	}	
 

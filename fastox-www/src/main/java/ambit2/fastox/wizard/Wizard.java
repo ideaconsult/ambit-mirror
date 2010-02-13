@@ -12,33 +12,92 @@ import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.steps.step6.Step6;
 
 public class Wizard {
-	protected static final Wizard instance = new Wizard();
+	public enum WizardMode {
+		A {
+			@Override
+			public Wizard getWizard() {
+				if (startFromStructure == null) {
+					startFromStructure = new Wizard(
+					 new WizardStep[] {
+								new WizardStep(0,"Welcome","ToxPredict, an OpenTox demo application",WelcomeResource.class),
+								new Step1(),
+								new Step2(),
+								new Step3(),
+								new Step4(),
+								new Step5(),
+								new Step6()
+								
+							}
+					 );
+				}
+				return startFromStructure;
+			}
+			@Override
+			public String getResource() {
+				return "A";
+			}
+			@Override
+			public String getTitle() {
+				return "Find chemical compounds";
+			}
+		},
+		B {
+			@Override
+			public Wizard getWizard() {
+				if (startFromEndpoint == null) {
+					startFromEndpoint = new Wizard(
+					 new WizardStep[] {
+								new WizardStep(0,"Welcome","ToxPredict, an OpenTox demo application",WelcomeResource.class),
 	
+								new Step1(),
+								new Step2(),
+								new Step3(),
+								new Step4(),
+								new Step5(),
+								new Step6()
+								
+							}
+					 );
+				}
+				return startFromEndpoint;
+			}
+			@Override
+			public String getResource() {
+				return "B";
+			}			
+			@Override
+			public String getTitle() {
+				return "Find models";
+			}
+			
+		};
+		public abstract Wizard getWizard();
+		public abstract String getResource();
+		public abstract String getTitle();
+		@Override
+		public String toString() {
+			return getResource();
+		}
+	}
+	protected static Wizard startFromStructure = null;
+	protected static Wizard startFromEndpoint = null;
+	protected WizardStep[] steps;
 	public static String dataset_service = "http://ideaconsult.net:8180/ambit2/dataset";
 	public static String compound_service = "http://ideaconsult.net:8180/ambit2/compound";
 	public static String feature_service = "http://ideaconsult.net:8180/ambit2/feature";
 	public static String model_service = "http://ideaconsult.net:8180/ambit2/model";
 	public static String ontology_service = "http://ideaconsult.net:8180/ontology";
 	
-	protected WizardStep[] steps = new WizardStep[] {
-		new WizardStep(0,"Welcome","ToxPredict, an OpenTox demo application",WelcomeResource.class),
-		new Step1(),
-		new Step2(),
-		new Step3(),
-		new Step4(),
-		new Step5(),
-		new Step6()
-		
-	};
-	
-	protected Wizard() {
-		
+	protected Wizard(WizardStep[] steps) {
+		this.steps= steps;
+		for (int i=0; i < steps.length;i++)
+			steps[i].setIndex(i);
 	}
 	public int size() {
 		return steps.length;
 	}
-	public static Wizard getInstance() {
-		return instance;
+	public static Wizard getInstance(WizardMode mode) {
+		return mode.getWizard();
 	}
 	public WizardStep getStep(int index) throws ResourceException {
 		if ((index <0) || (index > steps.length)) 

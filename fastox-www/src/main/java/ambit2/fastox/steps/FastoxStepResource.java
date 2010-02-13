@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 
 import org.restlet.data.Form;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;

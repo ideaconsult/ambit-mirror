@@ -10,6 +10,9 @@ public class WizardStep {
 	protected String title;
 	protected String description;
 	protected int index;
+	public void setIndex(int index) {
+		this.index = index;
+	}
 	protected Class resourceClass;
 	protected Class processor;
 	

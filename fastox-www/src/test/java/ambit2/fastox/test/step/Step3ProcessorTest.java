@@ -13,7 +13,7 @@ public class Step3ProcessorTest extends StepProcessorTest {
 
 	@Override
 	protected WizardStep getStep() {
-		return Wizard.getInstance().getStep(3);
+		return Wizard.getInstance(mode).getStep(3);
 	}
 	
 	
