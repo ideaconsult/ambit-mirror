@@ -10,14 +10,11 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
-import org.restlet.representation.Representation;
-import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.step2.Step2Resource;
-import ambit2.fastox.steps.step4.Step4Resource;
+import ambit2.fastox.wizard.Wizard;
 
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -34,8 +31,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class Step3Resource extends FastoxStepResource {
 	
-	public static final String resource = "/step3";
-	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	protected String endpoint = "http://www.opentox.org/echaEndpoints.owl#Endpoints";
 	protected String endpoint_name = "Endpoints";
 	protected String parentendpoint = null;
@@ -90,7 +85,7 @@ public class Step3Resource extends FastoxStepResource {
 		"  LIMIT 100\n";
 	
 	public Step3Resource() {
-		super("Endpoints",Step2Resource.resource,Step4Resource.resource);
+		super(3);
 		queryString= new Hashtable<String, String>();
 		queryString.put("Endpoints",modelsByEndpointSparql);
 		queryString.put("Models",modelsAll);
@@ -120,22 +115,12 @@ public class Step3Resource extends FastoxStepResource {
 		forms.put("Help",new Form());
 		return forms;
 	}
-	protected String getTopRef() {
-		return resource;
-	}
+
 	@Override
 	protected String getDefaultTab() {
 		return "Endpoints";
 	}
-	@Override
-	protected Representation processForm(Representation entity, Variant variant)
-			throws ResourceException {
-		Form form = new Form(entity);
-		form.add(params.endpoint.toString(),endpoint);
-		dataset = form.getFirstValue(params.dataset.toString());
-		getRequest().getResourceRef().setQuery(form.getQueryString());
-		return get(variant);	
-	}
+
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = retrieveModels(key);
@@ -195,7 +180,7 @@ public class Step3Resource extends FastoxStepResource {
 			
 			String query = String.format(queryString.get(key),endpoint);
 			
-			ex = QueryExecutionFactory.sparqlService(ontology_service, query);
+			ex = QueryExecutionFactory.sparqlService(Wizard.ontology_service, query);
 			ResultSet results = ex.execSelect();
 
 			form.removeAll(params.model.toString());
@@ -223,7 +208,7 @@ public class Step3Resource extends FastoxStepResource {
 		QueryExecution ex = null;
 		try {
 			String query = String.format(endpointsSparql,endpoint);
-			ex = QueryExecutionFactory.sparqlService(ontology_service, query);
+			ex = QueryExecutionFactory.sparqlService(Wizard.ontology_service, query);
 			ResultSet results = ex.execSelect();
 			while (results.hasNext()) {
 				QuerySolution solution = results.next();
@@ -243,7 +228,7 @@ public class Step3Resource extends FastoxStepResource {
 				parameters.add(new Parameter(params.subendpoint.toString(),
 						String.format("<a href='%s%s/%s?%s'>%s</a>",
 						getRequest().getRootRef(),
-						Step3Resource.resource,
+						step.getResource(),
 						key,
 						form.getQueryString(),
 						literal.getString())));

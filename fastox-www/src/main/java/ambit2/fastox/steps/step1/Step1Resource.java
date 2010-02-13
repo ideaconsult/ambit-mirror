@@ -8,9 +8,6 @@ import org.restlet.data.Form;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.WelcomeResource;
-import ambit2.fastox.steps.step2.Step2Resource;
-import ambit2.fastox.wizard.WizardResource;
 
 /**
  * Define structure
@@ -19,11 +16,9 @@ import ambit2.fastox.wizard.WizardResource;
  */
 public class Step1Resource extends FastoxStepResource {
 
-	public static final String resource = "/step1";
-	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	protected String type = "";
 	public Step1Resource() {
-		super("Search",WelcomeResource.resource,Step2Resource.resource);
+		super(1);
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -44,9 +39,7 @@ public class Step1Resource extends FastoxStepResource {
 		forms.put("Help",new Form());		
 		return forms;
 	}	
-	protected String getTopRef() {
-		return resource;
-	}
+
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = forms.get(key);

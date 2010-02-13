@@ -14,8 +14,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.step4.Step4Resource;
-import ambit2.fastox.steps.step6.Step6Resource;
+import ambit2.fastox.steps.StepProcessor;
 
 /**
  * Display results
@@ -31,14 +30,10 @@ public class Step5Resource extends FastoxStepResource {
 				"<META HTTP-EQUIV=\"EXPIRES\" CONTENT=\"0\">\n";
 				
 
-	public static final String resource = "/step5";
-	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	public Step5Resource() {
-		super("Estimate",Step4Resource.resource,Step6Resource.resource);
+		super(5);
 	}
-	protected String getTopRef() {
-		return resource;
-	}
+
 	@Override
 	protected String getDefaultTab() {
 		return "Estimate";
@@ -47,6 +42,7 @@ public class Step5Resource extends FastoxStepResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		meta = String.format(meta_refresh,getRequest().getResourceRef());
+		
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
@@ -113,43 +109,7 @@ public class Step5Resource extends FastoxStepResource {
 			responseHeaders.add("Refresh",String.format("5; url=%s",getRequest().getResourceRef()));				
 		}		
 	}
-	protected void runModel(String model, String compound, Form form) throws ResourceException {
-		Representation r = null;
-		try {
-			form.removeAll(model);
-			ClientResource client = new ClientResource(new Reference(model));
-			
-			client.setFollowingRedirects(false);
-			Form query = new Form();
-			query.add("dataset_uri",compound);
-			r = client.post(query.getWebRepresentation());
 
-			Status status = client.getStatus();
-			
-			Reference uri = client.getResponse().getLocationRef();
-			
-			if (uri != null) {
-				form.add(model,uri.toString());
-				form.add(uri.toString(),status.getName());
-			} else {
-				String text = readUriList(r.getStream());
-				form.add(model,text);
-				form.add(text,status.getName());
-
-				form.add(params.errors.toString(),status.toString());
-			}
-
-		} catch (ResourceException x) {
-			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
-		} catch (Exception x) {
-			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
-		} finally {
-			try {r.release();} catch (Exception x) {}
-			
-		}			
-	}
 
 	protected int verifyTask(String model, String task, Form form) throws ResourceException {
 		Representation r = null;
@@ -173,7 +133,7 @@ public class Step5Resource extends FastoxStepResource {
 				form.add(uri.toString(),status.getName());
 
 			} else {
-				String text = readUriList(r.getStream());
+				String text = StepProcessor.readUriList(r.getStream());
 				form.add(model,task);
 				form.add(text,status.getName());
 			}
@@ -192,27 +152,8 @@ public class Step5Resource extends FastoxStepResource {
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {
-		Form form = new Form(entity);
-		getRequest().getResourceRef().setQuery(form.getQueryString());
-//		return get(variant);			
-
-		String[] models = form.getValuesArray(params.model.toString());
-		form.removeAll("model");
-		dataset = form.getFirstValue(params.dataset.toString());
-		for (String model:models) {
-			if ("on".equals(form.getFirstValue(model))) {
-					try {
-						runModel(model,dataset,form);
-						form.add("model",model);
-					} catch (ResourceException x) {
-						
-					}
-			}
-		}		
-		getRequest().getResourceRef().setQuery(form.getQueryString());
 		meta = String.format(meta_refresh,getRequest().getResourceRef());
-		return get(variant);		
-	
+		return super.processForm(entity, variant);
 	}
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {

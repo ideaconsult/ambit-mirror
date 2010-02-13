@@ -5,14 +5,9 @@ import java.io.Writer;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.representation.Representation;
-import org.restlet.representation.Variant;
-import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.step3.Step3Resource;
-import ambit2.fastox.steps.step5.Step5Resource;
 
 /**
  * Run calculations with selected models, display progress indicators
@@ -20,14 +15,10 @@ import ambit2.fastox.steps.step5.Step5Resource;
  *
  */
 public class Step4Resource extends FastoxStepResource {
-	public static final String resource = "/step4";
-	public static final String resourceTab = String.format("%s/{%s}",resource,tab);
 	public Step4Resource() {
-		super("Confirm",Step3Resource.resource,Step5Resource.resource);
+		super(4);
 	}
-	protected String getTopRef() {
-		return resource;
-	}
+
 	@Override
 	protected String getDefaultTab() {
 		return "Confirm";
@@ -45,14 +36,7 @@ public class Step4Resource extends FastoxStepResource {
 		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}
-	@Override
-	protected Representation processForm(Representation entity, Variant variant)
-			throws ResourceException {
-		Form form = new Form(entity);
-		getRequest().getResourceRef().setQuery(form.getQueryString());
-		return get(variant);			
 
-	}
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 	}

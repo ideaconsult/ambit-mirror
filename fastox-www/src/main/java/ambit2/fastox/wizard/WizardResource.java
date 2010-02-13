@@ -1,6 +1,8 @@
 package ambit2.fastox.wizard;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -17,28 +19,21 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
 	
 public abstract class WizardResource extends ServerResource {
-	public static final String tab = "tab";
-	public static final String resource = "/";
-	protected String nextStep;
-	protected String prevStep;
-	protected String title;
+	protected static String jsGoogleAnalytics = null;
+	protected WizardStep step;
 	protected Hashtable<String,Form> forms;
 	protected String tabIndex = null;
-	protected String dataset_service = "http://93.123.36.100:8180/ambit2/dataset";
-	protected String compound_service = "http://93.123.36.100:8180/ambit2/compound";
-	protected String feature_service = "http://93.123.36.100:8180/ambit2/feature";
-	protected String ontology_service = "http://93.123.36.100:8180/ontology";
+
 	protected String meta;
-	//"http://localhost:8081";
+	protected Wizard wizard = Wizard.getInstance();
 	
-	public WizardResource(String title,String prevStep,String nextStep) {
+	public WizardResource(int stepIndex) throws ResourceException {
 		super();
-		this.title = title;
-		this.nextStep = nextStep;
-		this.prevStep = prevStep;
+		this.step = wizard.getStep(stepIndex);
 		forms = createForms();
 		meta = "";
 
@@ -46,7 +41,7 @@ public abstract class WizardResource extends ServerResource {
 	
 	protected Hashtable<String, Form> createForms() {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
-		forms.put(title,new Form());
+		forms.put(step.getTitle(),new Form());
 		forms.put("Errors",new Form());
 		forms.put("Help",new Form());
 		return forms;
@@ -55,7 +50,7 @@ public abstract class WizardResource extends ServerResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
-		Object t = getRequestAttributes().get(tab);
+		Object t = getRequestAttributes().get(WizardStep.tab);
 		tabIndex = t==null?getDefaultTab():Reference.decode(t.toString());
 		
 	}
@@ -68,22 +63,84 @@ public abstract class WizardResource extends ServerResource {
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
-		w.write(String.format("<html><head><title>%s</title>%s\n",title,meta));
-		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
+		w.write(String.format("<html><head><title>%s</title>%s\n",step.getTitle(),meta));
+		//w.write(String.format("<link href=\"%s/style/global.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
+		
+		w.write("<meta name=\"mssmarttagspreventparsing\" content=\"true\" />");
+		w.write("<meta http-equiv=\"imagetoolbar\" content=\"false\" />");
+
+		w.write(String.format("<style type=\"text/css\" media=\"all\">\n@import \"%s/style/global.css\";\n</style>",baseReference));
+
 		w.write("<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,FOLLOW\">");
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
+		
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
-//		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
+
+		
+		
 
 		w.write("</head>\n");
 		w.write("<body>");		
 	}
 	public void navigator(Writer writer) throws IOException {
 	//	writer.write(String.format("<h3>%s</h3>",toString()));
-		writer.write(String.format("<a href='%s'>%s</a>&nbsp;",getRootRef(),"Home"));		
-		if (prevStep!=null)
-		writer.write(String.format("<a href='%s%s'>%s</a>",getRootRef(),prevStep,"Back"));
+		writer.write(String.format("<h2><a href='%s' target=_blank title='EC FP7 OpenTox project'>%s</a>&nbsp;<a href='%s' title='Demo application'>%s</a>&nbsp;</h2>"
+					,"http://opentox.org","OpenTox"
+					,getRootRef(),"ToxPredict"));		
+		//if (prevStep!=null)
+		//writer.write(String.format("<a href='%s%s'>%s</a>",getRootRef(),prevStep,"Back"));
+
+		writer.write("<ul id=\"mainNav\" class=\"wizardStep\">\n");
+		
+		if (step.getIndex()>0)
+		for (int i=1; i < wizard.size(); i++) {
+			WizardStep thestep = wizard.getStep(i) ;
+			if (i < step.getIndex()) {
+				writer.write(String.format(
+						"<li class=\"%s\"><a href=\"%s%s\" title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						"lastDone",
+						getRequest().getRootRef().toString(),
+						thestep.getResource(),
+						i,
+						thestep.getTitle(),
+						thestep.getDescription()
+						));			
+			} else 
+			if (i == step.getIndex()) {
+				writer.write(String.format(
+						"<li class=\"current %s\"><a title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						(i==(wizard.size()-1))?"mainNavNoBg\"":"",
+						i,
+						step.getTitle(),
+						step.getDescription()
+						));				
+			} else if (i > step.getIndex()) {
+				writer.write(String.format(
+						"<li %s><a title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						(i==(wizard.size()-1))?"class=\"mainNavNoBg\"":"",
+						i,
+						thestep.getTitle(),
+						thestep.getDescription()						
+						));					
+			}
+			
+
+
+		}
+		/*
+		writer.write(
+		"<li class=\"lastDone\"><a href=\"/\" title=\"\"><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
+		"<li class=\"current\"><a title=\"\"><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
+		"<li><a title=\"\"><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
+		"<li><a title=\"\"><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
+		"<li><a title=\"\"><em>Step 5: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
+		"<li class=\"mainNavNoBg\"><a title=\"\"><em>Step 6: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>\n"+
+		*/
+		writer.write("</ul>\n");
+		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
+
+	
+		//<div class="clearfloat">&nbsp;</div>
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -102,7 +159,7 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</FIELDSET>");		
 	}	
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<form name='%s' method='POST' action='%s%s'>","form",getRootRef(),nextStep));
+		writer.write(String.format("<form name='%s' method='POST' action='%s%s'>","form",getRootRef(),wizard.nextStep(step)));
 	}
 	public void renderFormContent(Writer writer, String key)  throws IOException {
 		//writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -126,7 +183,7 @@ public abstract class WizardResource extends ServerResource {
 			String key = keys.nextElement();
 			if (key.equals(tabIndex)) writer.write("[");
 			
-			Reference tab = new Reference(String.format("%s%s/%s",getRootRef(),getTopRef(),Reference.encode(key)));
+			Reference tab = new Reference(String.format("%s%s/%s",getRootRef(),step.getResource(),Reference.encode(key)));
 			tab.setQuery(getRequest().getResourceRef().getQuery());
 			writer.write(String.format("<a href='%s'>%s</a>&nbsp;",tab,key));	
 			if (key.equals(tabIndex)) writer.write("]");
@@ -143,10 +200,33 @@ public abstract class WizardResource extends ServerResource {
 			renderFormFooter(writer,tabIndex);
 		}
 	}		
-	public void footer(Writer writer)  throws IOException  {
-		writer.write("</body>");
-		writer.write("</html>");
-	}
+	public void footer(Writer output)  throws IOException  {
+	
+		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();
+		output.write("<div class=\"footer\">");
+
+		output.write("<span class=\"right\">");
+		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='115' height='60'></a>",baseReference));
+		output.write(String.format("<a href='http://ambit.sourceforge.net'><img src=%s/images/ambit-logo.png border='0' width='115' height='50'></a>&nbsp;",baseReference));
+		//output.write(String.format("<a href='http://www.cefic.be'><img src=%s/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
+		//output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
+		
+		output.write("<br>Developed by Ideaconsult Ltd. (2005-2010)"); 
+		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
+		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
+		output.write("  </A>&nbsp; ");
+		output.write("<A HREF=\"http://jigsaw.w3.org/css-validator/check/referer\">");
+		output.write(String.format("    <IMG SRC=\"%s/images/valid-css-blue-small.png\" TITLE=\"Valid CSS\" ALT=\"Valid CSS\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
+		output.write("  </A>");
+
+		output.write("</span>");		
+		output.write("</div>");
+		output.write("\n");
+		output.write(jsGoogleAnalytics()==null?"":jsGoogleAnalytics());
+		output.write("</body>");
+		output.write("</html>");
+
+	}		
 	protected String getMeta() {
 		return meta;
 	}
@@ -182,9 +262,19 @@ public abstract class WizardResource extends ServerResource {
 			}
 		};
 	}
-	protected Representation processForm(Representation entity, Variant variant) throws ResourceException {
-		return get(variant);
-	}
+	protected Representation processForm(Representation entity, Variant variant)
+			throws ResourceException {
+		try {
+			StepProcessor p = step.getProcessor();
+			Form form = p.process(entity);
+			getRequest().getResourceRef().setQuery(form.getQueryString());
+			return get(variant);	
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		}		
+	}	
 	protected Representation processMultipartForm(Representation entity, Variant variant) throws ResourceException {
 		return get(variant);
 	}	
@@ -204,9 +294,87 @@ public abstract class WizardResource extends ServerResource {
 	}
 	@Override
 	public String toString() {
-		return String.format("%s&nbsp;%s",getApplication().getName(),title);
+		return String.format("%s&nbsp;%s",getApplication().getName(),step.getTitle());
 	}
-	protected String getTopRef() {
-		return resource;
+
+	/*
+	protected void breadcrumbs() {
+		<h2>5 step (showing each state of the step menu)</h2>	
+		<ul id="mainNav" class="fiveStep">
+			<li class="current"><a title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li><a title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li><a title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+
+			<li><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
+		</ul>
+		
+		<div class="clearfloat">&nbsp;</div>
+		
+		<ul id="mainNav" class="fiveStep">
+			<li class="lastDone"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+
+			<li class="current"><a title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li><a title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
+
+		</ul>
+		
+		<div class="clearfloat">&nbsp;</div>
+		
+		<ul id="mainNav" class="fiveStep">
+			<li class="done"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="lastDone"><a href="/" title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="current"><a title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+
+			<li><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
+		</ul>
+		
+		<div class="clearfloat">&nbsp;</div>
+		
+		<ul id="mainNav" class="fiveStep">
+			<li class="done"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+
+			<li class="done"><a href="/" title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="lastDone"><a href="/" title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="current"><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
+
+		</ul>
+		
+		<div class="clearfloat">&nbsp;</div>
+		
+		<ul id="mainNav" class="fiveStep">
+			<li class="done"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="done"><a href="/" title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="done"><a href="/" title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+
+			<li class="lastDone"><a href="/" title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
+			<li class="mainNavNoBg current"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
+		</ul>
+		
+		<div class="clearfloat">&nbsp;</div>
+
+	}
+	*/
+	
+	public static String jsGoogleAnalytics() {
+		if (jsGoogleAnalytics==null) try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					WizardResource.class.getClassLoader().getResourceAsStream("ambit2/fastox/config/googleanalytics.js"))
+			);
+			StringBuilder b = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+            	b.append(line);
+            	b.append('\n');
+            }
+            jsGoogleAnalytics = b.toString();
+			reader.close();
+			
+		} catch (Exception x) { jsGoogleAnalytics = null;}
+		return jsGoogleAnalytics;
 	}
 }

@@ -6,8 +6,6 @@ import java.util.Hashtable;
 
 import org.restlet.data.Form;
 
-import ambit2.fastox.steps.step1.Step1Resource;
-import ambit2.fastox.steps.step2.Step2Resource;
 import ambit2.fastox.wizard.WizardResource;
 
 /**
@@ -19,7 +17,7 @@ public class WelcomeResource extends WizardResource {
 	public static final String resource = "/";
 
 	public WelcomeResource() {
-		super("ToxPredict",null,Step2Resource.resource);
+		super(0);
 	}
 	@Override
 	protected Hashtable<String, Form> createForms() {
@@ -28,7 +26,7 @@ public class WelcomeResource extends WizardResource {
 		return forms;
 	}
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<form name='%s' method='POST' action='%s%s'>","form",getRootRef(),nextStep));
+		writer.write(String.format("<form name='%s' method='POST' action='%s%s'>","form",getRootRef(),wizard.nextStep(step)));
 	}
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
 		writer.write(String.format("</form>"));
@@ -66,7 +64,7 @@ public class WelcomeResource extends WizardResource {
 		writer.write("<td >");
 		writer.write("</td>");	
 		writer.write("<td align='left'>");
-		writer.write(String.format("<a href='%s%s' title='More options for structure selection'>%s</a>",getRootRef(),Step1Resource.resource,"Advanced"));	
+		writer.write(String.format("<a href='%s%s' title='More options for structure selection'>%s</a>",getRootRef(),step.getResource(),"Advanced"));	
 		writer.write("</td>");		
 		writer.write("</tr>");		
 		writer.write("<tr >");

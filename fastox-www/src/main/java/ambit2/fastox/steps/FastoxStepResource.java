@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.DatasetTools;
-import ambit2.fastox.steps.step1.Step1Resource;
 import ambit2.fastox.wizard.WizardResource;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -49,8 +49,8 @@ public abstract class FastoxStepResource extends WizardResource {
 		
 
 		
-	public FastoxStepResource(String title, String prevStep, String nextStep) {
-		super(title, prevStep, nextStep);
+	public FastoxStepResource(int stepIndex) {
+		super(stepIndex);
 	}
 	protected boolean isMandatory(String param) {
 		return params.dataset.toString().equals(param);
@@ -75,26 +75,14 @@ public abstract class FastoxStepResource extends WizardResource {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			dataset = form.getFirstValue(params.dataset.toString());
 			if ((dataset==null) && (isMandatory(params.dataset.toString()))) {
+				
 				redirectSeeOther(String.format("%s%s",
-					getRequest().getRootRef(),Step1Resource.resource
+					getRequest().getRootRef(),wizard.getStep(1).getResource()
 					));
 				//todo error
 			}
 		}
 		return super.get(variant);
-	}
-	protected String readUriList(InputStream in) {
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while ((line = reader.readLine()) != null) { return line; }
-			
-		} catch (Exception x) {
-			
-		} finally {
-			try {in.close(); } catch (Exception x) {}
-		}
-		return null;
 	}
 	
 	protected void processURI(String line,Writer writer)  throws IOException {
@@ -159,6 +147,12 @@ public abstract class FastoxStepResource extends WizardResource {
 		} 		
 	}
 
+	@Override
+	protected Representation processForm(Representation entity, Variant variant)
+			throws ResourceException {
+		// TODO Auto-generated method stub
+		return super.processForm(entity, variant);
+	}
 	
 	
 }
