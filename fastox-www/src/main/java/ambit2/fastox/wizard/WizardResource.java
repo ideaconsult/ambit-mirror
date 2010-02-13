@@ -195,24 +195,22 @@ public abstract class WizardResource extends ServerResource {
 	}	
 	public void renderTabs(Writer writer)  throws IOException {
 		
-		writer.write("<h4>");
+		writer.write("<div id=\"tabs4\">");
 		Form form = null;
 		Enumeration<String> keys = forms.keys();
-		if (forms.keySet().size()>0) {
+		//if (forms.keySet().size()>0) {
 			while (keys.hasMoreElements()) {
 				String key = keys.nextElement();
-				if (key.equals(tabIndex)) writer.write(String.format("[%s]",key));
-				else {
-					Reference tab = new Reference(String.format("%s/%s%s/%s",getRootRef(),mode,step.getResource(),Reference.encode(key)));
-					tab.setQuery(getRequest().getResourceRef().getQuery());
-					writer.write(String.format("<a href='%s'>%s</a>&nbsp;",tab,key));	
-				}
+				Reference tab = new Reference(String.format("%s/%s%s/%s",getRootRef(),mode,step.getResource(),Reference.encode(key)));
+				tab.setQuery(getRequest().getResourceRef().getQuery());
+				writer.write(String.format("<li %s><a href='%s'><span>%s</span></a></li>",
+							key.equals(tabIndex)?"id='current'":"",
+							tab,key));	
 				form = (form==null)?forms.get(key):form;
 			}
-		}
+		//}
 		renderFormHeader(writer,tabIndex);
-		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\">");
-		writer.write("</h4>");
+		writer.write("</div>");
 
 		if ("Errors".equals(tabIndex)) renderErrorsTab(writer, tabIndex);
 		else if ("Help".equals(tabIndex)) renderHelpTab(writer, tabIndex);

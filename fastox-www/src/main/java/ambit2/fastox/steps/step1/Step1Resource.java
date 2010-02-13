@@ -35,6 +35,8 @@ public class Step1Resource extends FastoxStepResource {
 		forms.put("Search",new Form());
 		forms.put("File",new Form());
 		forms.put("Structure",new Form());
+		forms.put("Substructure",new Form());
+		forms.put("Datasets",new Form());
 		//forms.put("Errors",new Form());
 
 		return forms;
@@ -44,6 +46,12 @@ public class Step1Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = forms.get(key);
 		if ("Search".equals(key)) {
+			writer.write("<table><tr><td>");			
+			writer.write("<input name='text' title='Enter chemical name, registry identifier, smiles, InChI' type=\"text\" size='80' value='556-82-1'/>");
+			writer.write("</td>");
+			writer.write("</tr></table>");
+		
+		} else if ("Substructure".equals(key)) {
 			type = "";
 			try {
 
@@ -75,6 +83,7 @@ public class Step1Resource extends FastoxStepResource {
 		} else if ("Structure".equals(key)) {
 			writer.write("Under development");
 		}
+		writer.write("<p>");
 		super.renderFormContent(writer, key);
 	}
 	@Override
