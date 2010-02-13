@@ -18,7 +18,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import ambit2.fastox.steps.FastoxStepResource.params;
-
+	
 public abstract class WizardResource extends ServerResource {
 	public static final String tab = "tab";
 	public static final String resource = "/";
@@ -27,10 +27,10 @@ public abstract class WizardResource extends ServerResource {
 	protected String title;
 	protected Hashtable<String,Form> forms;
 	protected String tabIndex = null;
-	protected String dataset_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/dataset";
-	protected String compound_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/compound";
-	protected String feature_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/feature";
-	protected String ontology_service = "http://ambit.uni-plovdiv.bg:8082/ontology";
+	protected String dataset_service = "http://93.123.36.100:8180/ambit2/dataset";
+	protected String compound_service = "http://93.123.36.100:8180/ambit2/compound";
+	protected String feature_service = "http://93.123.36.100:8180/ambit2/feature";
+	protected String ontology_service = "http://93.123.36.100:8180/ontology";
 	protected String meta;
 	//"http://localhost:8081";
 	

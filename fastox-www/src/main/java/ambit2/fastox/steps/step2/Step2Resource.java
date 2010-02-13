@@ -159,8 +159,8 @@ public class Step2Resource extends FastoxStepResource {
 		if (text != null) {
 			Form query = new Form();
 			query.add(Step1Resource.params.search.toString(), text);
-			query.add("max","5");
-			String[] s= new String[] {"ChemicalName","CASRN","MolecularFormula"};
+			query.add("max","100");
+			String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
 			for (String n:s) 
 			query.add("feature_uris[]",
 					String.format("%s?sameas=%s",feature_service,
