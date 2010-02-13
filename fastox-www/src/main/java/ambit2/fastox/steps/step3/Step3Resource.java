@@ -71,6 +71,7 @@ public class Step3Resource extends FastoxStepResource {
 	"}\n";
 	
 	protected String modelsAll = 
+
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
 		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
@@ -78,11 +79,14 @@ public class Step3Resource extends FastoxStepResource {
 		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"		select DISTINCT ?url ?title ?endpoint\n"+
+		"		select DISTINCT ?url ?endpoint\n"+
 		"		where {\n"+
 		"	        ?url rdf:type ot:Model.\n"+
-		"}\n"+
-		"  LIMIT 100\n";
+		"	        OPTIONAL {{\n"+
+		"	        { ?url ot:dependentVariables ?vars. } UNION { ?url ot:predictedVariables ?vars. }\n"+
+		"	        }\n"+
+		"	        ?vars owl:sameAs ?endpoint}.\n"+
+		"} ORDER BY ?endpoint\n";	
 	
 	public Step3Resource() {
 		super(3);
@@ -112,6 +116,7 @@ public class Step3Resource extends FastoxStepResource {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put("Endpoints",new Form());
 		forms.put("Models",new Form());
+
 		return forms;
 	}
 

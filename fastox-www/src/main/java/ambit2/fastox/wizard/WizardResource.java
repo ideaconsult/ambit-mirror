@@ -45,7 +45,7 @@ public abstract class WizardResource extends ServerResource {
 	protected Hashtable<String, Form> createForms() {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put(step.getTitle(),new Form());
-		forms.put("Errors",new Form());
+		//forms.put("Errors",new Form());
 		return forms;
 	}
 	@Override
@@ -91,7 +91,8 @@ public abstract class WizardResource extends ServerResource {
 		
 
 		w.write("</head>\n");
-		w.write("<body>");		
+		w.write("<body>");
+
 	}
 	public void navigator(Writer writer) throws IOException {
 		
@@ -154,15 +155,6 @@ public abstract class WizardResource extends ServerResource {
 
 
 		}
-		/*
-		writer.write(
-		"<li class=\"lastDone\"><a href=\"/\" title=\"\"><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
-		"<li class=\"current\"><a title=\"\"><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
-		"<li><a title=\"\"><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
-		"<li><a title=\"\"><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
-		"<li><a title=\"\"><em>Step 5: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>\n"+
-		"<li class=\"mainNavNoBg\"><a title=\"\"><em>Step 6: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>\n"+
-		*/
 		writer.write("</ul>\n");
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
 
@@ -206,15 +198,17 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("<h4>");
 		Form form = null;
 		Enumeration<String> keys = forms.keys();
-		while (keys.hasMoreElements()) {
-			String key = keys.nextElement();
-			if (key.equals(tabIndex)) writer.write("[");
-			
-			Reference tab = new Reference(String.format("%s/%s%s/%s",getRootRef(),mode,step.getResource(),Reference.encode(key)));
-			tab.setQuery(getRequest().getResourceRef().getQuery());
-			writer.write(String.format("<a href='%s'>%s</a>&nbsp;",tab,key));	
-			if (key.equals(tabIndex)) writer.write("]");
-			form = (form==null)?forms.get(key):form;
+		if (forms.keySet().size()>0) {
+			while (keys.hasMoreElements()) {
+				String key = keys.nextElement();
+				if (key.equals(tabIndex)) writer.write(String.format("[%s]",key));
+				else {
+					Reference tab = new Reference(String.format("%s/%s%s/%s",getRootRef(),mode,step.getResource(),Reference.encode(key)));
+					tab.setQuery(getRequest().getResourceRef().getQuery());
+					writer.write(String.format("<a href='%s'>%s</a>&nbsp;",tab,key));	
+				}
+				form = (form==null)?forms.get(key):form;
+			}
 		}
 		renderFormHeader(writer,tabIndex);
 		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\">");
@@ -231,7 +225,7 @@ public abstract class WizardResource extends ServerResource {
 		renderFormFooter(writer,tabIndex);
 	}		
 	public void footer(Writer output)  throws IOException  {
-	
+
 		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();
 		output.write("<div class=\"footer\">");
 
@@ -253,6 +247,7 @@ public abstract class WizardResource extends ServerResource {
 		output.write("</div>");
 		output.write("\n");
 		output.write(jsGoogleAnalytics()==null?"":jsGoogleAnalytics());
+		
 		output.write("</body>");
 		output.write("</html>");
 

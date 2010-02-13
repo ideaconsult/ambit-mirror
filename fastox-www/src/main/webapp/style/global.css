@@ -17,9 +17,28 @@ html, body {
 	color:#000000; /* global font color */
 }
 
+.wrapper {
+	min-height: 100%;
+ 	height: auto !important;
+ 	height: 100%;
+	margin: 0 auto -4em;
+}
+
+div.footer span.right {
+  MARGIN-TOP: 50px;
+  margin-right: 7px;
+  float: right;
+  text-align: right;
+  FONT-SIZE: 8pt;
+  background-color: #FFFFFF;
+  color: #516373;
+  FONT-FAMILY: Verdana, Arial;
+  width: 100%;
+ }
+  
 body {
-	background-color: #1299AB url(images/logo.png) no-repeat fixed 10% 50px;
-	margin:10px;
+	background-color: #FFFFFF;
+	margin:10px; 
 }
 
 body {font:12px verdana,arial,clean,sans-serif;*font-size:small;*font:x-small;}
@@ -56,9 +75,9 @@ add selectors here {font-size: 197%} /* =26 */
 /* ----- base links ----- */
 a:link {color:#636BD2;outline:none;text-decoration: none;font-weight:bold;}
 a:visited {color:#636BD2;outline:none;text-decoration: none;font-weight:bold;}
-a:hover {color:#5D3188;outline:none;font-weight:bold;}
+a:hover {color:#5d308a;outline:none;font-weight:bold;}
 a:active {color:#636BD2;outline:none;text-decoration: none;font-weight:bold;}
-a:focus{color:#5D3188;outline:none;text-decoration: none;font-weight:bold;}
+a:focus{color:#5d308a;outline:none;text-decoration: none;font-weight:bold;}
 :focus { -moz-outline-style: none; }
 
 /* ----- random base styles and styles used in conjunction with javascript ----- */
@@ -87,8 +106,8 @@ h1 a{
 }
 h2{color:#99CC00; margin:10px 0 10px 0;*margin:0px 0 10px 0;}
 h3{}
-h4{color:#5D3188;}
-h5{color:#5D3188;}
+h4{color:#5d308a;}
+h5{color:#5d308a;}
 h6{}
 
 /* = #mainNav2 & #mainNav3 & #mainNav4 & #mainNav5
@@ -97,25 +116,25 @@ h6{}
 	height:71px;
 	list-style:none;
 	float:left;
-	background-color:#F1F3F5;
+	background-color:#ebebeb;
 	background-image: url(images/navBtn.gif);
 	background-repeat: no-repeat;
 	background-position: right top;
 }
 
 #mainNav li.current{
-	background-color:#5D3188;
-	background-image: url(images/navCurrentBtn.gif);
+	background-color:#636bd2;
+	background-image: url(images/navCurrentBtn.png);
 }
 
 #mainNav li.lastDone{
-	background-color:#636BD2;
-	background-image: url(images/navLastDoneBtn.gif);
+	background-color:#5d308a;
+	background-image: url(images/navLastDoneBtn.png);
 }
 
 #mainNav li.done{
-	background-color:#636BD2;
-	background-image: url(images/navDoneBtn.gif);
+	background-color:#5d308a;
+	background-image: url(images/navDoneBtn.png);
 }
 
 #mainNav li a, #mainNav li a:link, #mainNav li a:visited, #mainNav li a:hover, #mainNav li a:active {
@@ -127,7 +146,7 @@ color:#fff;
 }
 
 #mainNav li.done a:hover, #mainNav li.lastDone a:hover  {
-color:#5D3188;
+color:#a2cf75;
 cursor:hand;
 }
 
@@ -278,16 +297,4 @@ TD.results
      border-color:#F9FFE6;
      text-align:left;
   }
-  
-div.footer span.right {
-  MARGIN-TOP: 50px;
-  margin-right: 7px;
-  float: right;
-  text-align: right;
-  FONT-SIZE: 8pt;
-  background-color: #FFFFFF;
-  color: #516373;
-  FONT-FAMILY: Verdana, Arial;
-  width: 100%;
- }
   
