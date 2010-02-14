@@ -1,5 +1,9 @@
 package ambit2.fastox.wizard;
 
+import java.io.InputStream;
+import java.util.Properties;
+
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
@@ -12,6 +16,58 @@ import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.steps.step6.Step6;
 
 public class Wizard {
+	protected Properties properties;
+	public enum SERVICE {
+		ontology {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ontology";
+			}
+		},
+		dataset {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ambit2/dataset";
+			}
+		},
+		compound {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ambit2/compound";
+			}
+		},		
+		model {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ambit2/model";
+			}			
+		},
+		algorithm {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ambit2/algorithm";
+			}					
+		},
+		feature {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ambit2/feature";
+			}					
+		};
+		public String getKey() {
+			return String.format("toxpredict.service.%s",toString());
+		}
+		public Reference getValue(Properties properties) {
+			try {
+				if (properties == null) return null;
+				Object o = properties.get(getKey());
+				return o==null?null:new Reference(o.toString());
+			} catch (Exception x) {
+				return new Reference(getDefaultValue());
+			}
+		}
+		public abstract String getDefaultValue();
+	}
 	public enum WizardMode {
 		A {
 			@Override
@@ -82,13 +138,11 @@ public class Wizard {
 	protected static Wizard startFromStructure = null;
 	protected static Wizard startFromEndpoint = null;
 	protected WizardStep[] steps;
-	public static String dataset_service = "http://ideaconsult.net:8180/ambit2/dataset";
-	public static String compound_service = "http://ideaconsult.net:8180/ambit2/compound";
-	public static String feature_service = "http://ideaconsult.net:8180/ambit2/feature";
-	public static String model_service = "http://ideaconsult.net:8180/ambit2/model";
-	public static String ontology_service = "http://ideaconsult.net:8180/ontology";
+
 	
 	protected Wizard(WizardStep[] steps) {
+		super();
+		properties = initProperties();
 		this.steps= steps;
 		for (int i=0; i < steps.length;i++)
 			steps[i].setIndex(i);
@@ -117,4 +171,20 @@ public class Wizard {
 	public WizardStep lastStep(WizardStep step) throws ResourceException {
 		return getStep(steps.length-1);
 	}	
+	protected Properties initProperties() {
+		Properties p = new Properties();
+		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/fastox/config/config.prop");
+		try {
+			p.load(in);
+			return p;
+		} catch (Exception x) {
+			return null;
+		} finally {
+			try {in.close();} catch (Exception x) {}
+		}
+		
+	}
+	public Reference getService(SERVICE service) {
+		return service.getValue(properties);
+	}
 }

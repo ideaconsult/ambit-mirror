@@ -15,6 +15,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard;
+import ambit2.fastox.wizard.Wizard.SERVICE;
 
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -185,7 +186,7 @@ public class Step3Resource extends FastoxStepResource {
 			
 			String query = String.format(queryString.get(key),endpoint);
 			
-			ex = QueryExecutionFactory.sparqlService(Wizard.ontology_service, query);
+			ex = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
 			ResultSet results = ex.execSelect();
 
 			form.removeAll(params.model.toString());
@@ -213,7 +214,7 @@ public class Step3Resource extends FastoxStepResource {
 		QueryExecution ex = null;
 		try {
 			String query = String.format(endpointsSparql,endpoint);
-			ex = QueryExecutionFactory.sparqlService(Wizard.ontology_service, query);
+			ex = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
 			ResultSet results = ex.execSelect();
 			while (results.hasNext()) {
 				QuerySolution solution = results.next();

@@ -104,12 +104,22 @@ h1 a{
 	background-repeat: no-repeat;
 	display:block;
 }
-h2{color:#99CC00; margin:10px 0 10px 0;*margin:0px 0 10px 0;}
+h2{color:#636bd2; margin:10px 0 10px 0;*margin:0px 0 10px 0;}
 h3{}
 h4{color:#5d308a;}
 h5{color:#5d308a;}
 h6{}
 
+div.user {
+  float: right;
+  text-align: right;
+  font-weight: italic;
+  background-color: #FFFFFF;
+  color: #ebebeb;
+  FONT-FAMILY: Verdana, Arial;
+  width: 50%;
+}
+  
 /* = #mainNav2 & #mainNav3 & #mainNav4 & #mainNav5
 ----------------------------------------------------------------------------------------------------*/
 #mainNav li{

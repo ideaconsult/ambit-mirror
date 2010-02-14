@@ -6,7 +6,9 @@ import java.util.Hashtable;
 
 import org.restlet.data.Form;
 
+import ambit2.fastox.UserResource;
 import ambit2.fastox.wizard.WizardResource;
+import ambit2.fastox.wizard.Wizard.WizardMode;
 
 /**
  * Entry point
@@ -26,8 +28,8 @@ public class WelcomeResource extends WizardResource {
 		return forms;
 	}
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(mode.toString());
-		writer.write(String.format("<form name='%s' method='POST' action='%s/%s%s'>","form",getRootRef(),mode,wizard.nextStep(step)));
+		writer.write(String.format("<form name='%s' method='POST' action='%s/%s/%s/%s%s'>","form",
+				getRootRef(),UserResource.resource,user_name,mode,wizard.nextStep(step)));
 	}
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
 		writer.write(String.format("</form>"));
@@ -37,53 +39,15 @@ public class WelcomeResource extends WizardResource {
 	public void renderFormContent(Writer writer,String key) throws IOException {
 		
 		
-		writer.write("<table border='0' width='100%>");
-		writer.write("<tr align='center'>");
-		writer.write("<td align='left' valign='top'>");
-		writer.write("</td>");		
-		writer.write("<td align='center'>");
-		writer.write("</td>");
-		writer.write("<td>");
-		writer.write("</td>");		
-		writer.write("</tr>");
-		writer.write("<tr align='center'>");
-		writer.write("<td width='10%'>");
-		writer.write("</td>");
-		writer.write("<td width='60%' align='center'>");
-		writer.write("<input name='text' title='Enter chemical name, registry identifier, smiles, InChI' type=\"text\" size='80' value='556-82-1'/>");
-		writer.write("</td>");
-		writer.write("<td width='30%' align='left'>");
-		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Start ToxPredict\" title='ToxPredict is a series of steps, starting from structure selection towards prediction of toxicological properties by OpenTox models.' tabindex=\"1\">");		
-		writer.write("</td>");		
-		writer.write("</tr>");
-		writer.write("<tr >");
-		writer.write("<td>");
-		writer.write("</td>");
-		writer.write("<td >");
-		writer.write("</td>");	
-		writer.write("<td align='left'>");
-		writer.write(String.format("<a href='%s%s%s' title='More options for structure selection'>%s</a>",getRootRef(),mode,step.getResource(),"Advanced"));	
-		writer.write("</td>");		
-		writer.write("</tr>");		
-		writer.write("<tr >");
-		writer.write("<td>");
-		writer.write("</td>");
-		writer.write("<td >");
-		writer.write("<tr >");
-		writer.write("<td>");
-			
-		writer.write("</td>");
-		writer.write("<td >");
-		//writer.write("<blockquote>TODO: ToxPredict description</blockquote>");		
-		writer.write("</td>");	
-		writer.write("<td align='center'>");
-		writer.write("</td>");		
-		writer.write("</tr>");		
-		writer.write("</td>");	
-		writer.write("<td align='left'>");
-		writer.write("</td>");		
-		writer.write("</tr>");		
-		writer.write("</table>");
+		writer.write("<h2><ul>");
+		writer.write("<li>");
+		writer.write(String.format("<a href='%s/%s/%s/%s%s' title='Specify structure'>%s</a>",
+				getRootRef(),UserResource.resource,user_name,WizardMode.A,"/step1","Structure"));	
+		writer.write("<li>");
+		writer.write(String.format("<a href='%s/%s/%s/%s%s' title='Select endpoint'>%s</a>",
+				getRootRef(),UserResource.resource,user_name,WizardMode.B,"/step1","Endpoints"));			
+		writer.write("</ul></h2>");		
+	
 		//writer.write("</FIELDSET>");
 	}
 	@Override

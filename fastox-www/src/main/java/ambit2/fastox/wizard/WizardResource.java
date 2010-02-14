@@ -19,12 +19,14 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.fastox.UserResource;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 	
 public abstract class WizardResource extends ServerResource {
 	protected static String jsGoogleAnalytics = null;
+	protected String user_name = "guest";
 	protected WizardStep step;
 	protected Hashtable<String,Form> forms;
 	protected String tabIndex = null;
@@ -60,7 +62,19 @@ public abstract class WizardResource extends ServerResource {
 		} catch (Exception x) { setMode(WizardMode.A);}
 
 		wizard = Wizard.getInstance(mode);
-		this.step = wizard.getStep(stepIndex);
+		
+		try {
+			this.step = wizard.getStep(stepIndex);
+		} catch (Exception x) {
+			step = null;
+		}
+		
+		try {
+			//user_name = Reference.decode(getRequest().getAttributes().get(UserResource.resourceKey).toString());
+			user_name="guest";
+		} catch (Exception x) { 
+			user_name="guest";
+		}		
 		forms = createForms();
 		meta = "";
 		
@@ -77,8 +91,8 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<html><head><title>%s</title>%s\n",step.getTitle(),meta));
 		//w.write(String.format("<link href=\"%s/style/global.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
 		
-		w.write("<meta name=\"mssmarttagspreventparsing\" content=\"true\" />");
-		w.write("<meta http-equiv=\"imagetoolbar\" content=\"false\" />");
+		//w.write("<meta name=\"mssmarttagspreventparsing\" content=\"true\" />");
+		//w.write("<meta http-equiv=\"imagetoolbar\" content=\"false\" />");
 
 		w.write(String.format("<style type=\"text/css\" media=\"all\">\n@import \"%s/style/global.css\";\n</style>",baseReference));
 
@@ -99,17 +113,25 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("<table width='99%' border='0'>");
 		writer.write("<tr>");
 		writer.write("<td align='left'>");
-		writer.write(String.format("<a href='%s' title='ToxPredict, OpenTox Demo application'><img src='%s%s' alt='ToxPredict' title='%s'></a>",
+		writer.write(String.format("<a href='%s' title='ToxPredict, OpenTox Demo application'><img src='%s%s' alt='ToxPredict home page' title='%s'></a>",
 				getRootRef(),
 				getRootRef(),
 				"/images/ToxPredict_rgb_72.png",
-				"ToxPredict",
+				"ToxPredict home page",
 				"ToxPredict, OpenTox Demo application"));	
 		writer.write("</td>");
 		writer.write("<td align='right'>");
-		writer.write(String.format("<a href='%s/help' target=_blank title='Help'>Help</a>",
-				getRequest().getOriginalRef(),
+		writer.write(String.format("<div class='user'>Welcome,&nbsp;<a href='%s/%s/%s'>%s</a></div><br>",
+				getRequest().getRootRef(),
+				UserResource.resource,
+				user_name==null?"guest":user_name,
+				user_name==null?"guest":user_name));			
+		writer.write(String.format("<a href='%s/help' target='help' title='Help'>%s</a><br>",
+				getRequest().getRootRef(),
 				"Help"));		
+		writer.write(String.format("<a href='%s/admin' target='admin' title='Configuration'>%s</a>",
+				getRequest().getRootRef(),
+				"Admin"));		
 		writer.write("</td>");
 		writer.write("<tr>");
 		
@@ -178,7 +200,8 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</FIELDSET>");		
 	}	
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<form name='%s' method='POST' action='%s/%s%s'>","form",getRootRef(),mode,wizard.nextStep(step)));
+		writer.write(String.format("<form name='%s' method='POST' action='%s/%s/%s/%s%s'>","form",
+				getRootRef(),UserResource.resource,user_name,mode,wizard.nextStep(step)));
 	}
 	public void renderFormContent(Writer writer, String key)  throws IOException {
 		//writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -201,7 +224,8 @@ public abstract class WizardResource extends ServerResource {
 		//if (forms.keySet().size()>0) {
 			while (keys.hasMoreElements()) {
 				String key = keys.nextElement();
-				Reference tab = new Reference(String.format("%s/%s%s/%s",getRootRef(),mode,step.getResource(),Reference.encode(key)));
+				Reference tab = new Reference(String.format("%s/%s/%s/%s%s/%s",
+						getRootRef(),UserResource.resource,user_name,mode,step.getResource(),Reference.encode(key)));
 				tab.setQuery(getRequest().getResourceRef().getQuery());
 				writer.write(String.format("<li %s><a href='%s'><span>%s</span></a></li>",
 							key.equals(tabIndex)?"id='current'":"",

@@ -9,6 +9,8 @@ import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.test.StepProcessorTest;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.WizardStep;
+import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.fastox.wizard.Wizard.WizardMode;
 
 public class Step5ProcessorTest extends StepProcessorTest {
 
@@ -20,9 +22,13 @@ public class Step5ProcessorTest extends StepProcessorTest {
 	
 	@Test
 	public void testRunModels() throws Exception {
+		Wizard wizard = Wizard.getInstance(WizardMode.A);
+		Assert.assertNotNull(wizard.getService(SERVICE.compound));
+		Assert.assertNotNull(wizard.getService(SERVICE.model));
 		Form form = new Form();
-		form.add(FastoxStepResource.params.dataset.toString(),String.format("%s/1",Wizard.compound_service));
-		String model = String.format("%s/1",Wizard.model_service);
+		form.add(FastoxStepResource.params.dataset.toString(),String.format("%s/1",
+				wizard.getService(SERVICE.compound)));
+		String model = String.format("%s/1",wizard.getService(SERVICE.model));
 		form.add(FastoxStepResource.params.model.toString(),model);
 		form.add(model,"on");
 		form = getStepProcessor().process(form.getWebRepresentation());

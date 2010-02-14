@@ -12,6 +12,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.DatasetTools;
+import ambit2.fastox.UserResource;
 import ambit2.fastox.wizard.WizardResource;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -75,8 +76,12 @@ public abstract class FastoxStepResource extends WizardResource {
 			dataset = form.getFirstValue(params.dataset.toString());
 			if ((dataset==null) && (isMandatory(params.dataset.toString()))) {
 				
-				redirectSeeOther(String.format("%s%s",
-					getRequest().getRootRef(),wizard.getStep(1).getResource()
+				redirectSeeOther(String.format("%s/%s/%s/%s%s",
+					getRequest().getRootRef(),
+					UserResource.resource,
+					user_name,
+					mode,
+					wizard.getStep(1).getResource()
 					));
 				//todo error
 			}

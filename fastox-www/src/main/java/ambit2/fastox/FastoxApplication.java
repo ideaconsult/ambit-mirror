@@ -12,6 +12,7 @@ import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
+import org.restlet.routing.Template;
 import org.restlet.util.RouteList;
 
 import ambit2.fastox.steps.WelcomeResource;
@@ -31,7 +32,19 @@ public class FastoxApplication extends Application {
         final Router router = new Router(getContext());
         router.attach(WelcomeResource.resource, WelcomeResource.class);
         router.attach("", WelcomeResource.class);
-        router.attach(String.format("/{%s}", WizardResource.key), WelcomeResource.class);
+
+        router.attach("/admin", AdminResource.class);
+        router.attach("/help", HelpResource.class);
+        router.attach("/{x}", WelcomeResource.class); //this is a hack to avoid not-matching if navigated to /ToxPredict/whatever
+        router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
+        router.setRoutingMode(Router.MODE_BEST_MATCH); 
+        
+        Router usersRouter = new Router(getContext());
+        usersRouter.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
+        usersRouter.setRoutingMode(Router.MODE_BEST_MATCH); 
+        router.attach(String.format("/%s/{%s}",UserResource.resource,UserResource.resourceKey),usersRouter);
+        router.attach(String.format("/%s",UserResource.resource),usersRouter);
+        usersRouter.attachDefault(UserResource.class);
         
         for (WizardMode mode : WizardMode.values()) {
             Wizard wizard = Wizard.getInstance(mode);
@@ -39,8 +52,8 @@ public class FastoxApplication extends Application {
             	WizardStep step = wizard.getStep(i);
             	
             	if (i>0) {
-            		router.attach(String.format("/{%s}%s",WizardResource.key,step.getResource()), step.getResourceClass());
-            		router.attach(String.format("/{%s}%s",WizardResource.key,step.getResourceTab()), step.getResourceClass());
+            		usersRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResource()), step.getResourceClass());
+            		usersRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResourceTab()), step.getResourceClass());
             	}
             	
             }  
