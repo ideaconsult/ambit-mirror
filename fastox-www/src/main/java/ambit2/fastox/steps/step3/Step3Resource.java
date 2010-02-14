@@ -13,6 +13,7 @@ import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
+import ambit2.fastox.UserResource;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
@@ -232,8 +233,10 @@ public class Step3Resource extends FastoxStepResource {
 				form.add(params.dataset.toString(), dataset);
 				
 				parameters.add(new Parameter(params.subendpoint.toString(),
-						String.format("<a href='%s/%s%s/%s?%s'>%s</a>",
+						String.format("<a href='%s/%s/%s/%s%s/%s?%s'>%s</a>",
 						getRequest().getRootRef(),
+						UserResource.resource,
+						user_name,
 						mode,
 						step.getResource(),
 						key,

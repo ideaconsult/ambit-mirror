@@ -143,7 +143,13 @@ public abstract class WizardResource extends ServerResource {
 		if (step.getIndex()>0)
 		for (int i=1; i < wizard.size(); i++) {
 			WizardStep thestep = wizard.getStep(i) ;
-			Reference stepRef = new Reference(getRequest().getRootRef().toString()+"/"+mode+thestep.getResource());
+			Reference stepRef = new Reference(
+					String.format("%s/%s/%s/%s%s",
+					getRequest().getRootRef().toString(),
+					UserResource.resource,
+					user_name,
+					mode,
+					thestep.getResource()));
 			stepRef.setQuery(query.getQueryString());
 			
 			if (i < step.getIndex()) {
@@ -225,7 +231,12 @@ public abstract class WizardResource extends ServerResource {
 			while (keys.hasMoreElements()) {
 				String key = keys.nextElement();
 				Reference tab = new Reference(String.format("%s/%s/%s/%s%s/%s",
-						getRootRef(),UserResource.resource,user_name,mode,step.getResource(),Reference.encode(key)));
+						getRootRef(),
+						UserResource.resource,
+						user_name,
+						mode,
+						step.getResource(),
+						Reference.encode(key)));
 				tab.setQuery(getRequest().getResourceRef().getQuery());
 				writer.write(String.format("<li %s><a href='%s'><span>%s</span></a></li>",
 							key.equals(tabIndex)?"id='current'":"",
