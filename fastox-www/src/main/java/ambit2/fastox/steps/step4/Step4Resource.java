@@ -21,10 +21,11 @@ public class Step4Resource extends FastoxStepResource {
 
 	@Override
 	protected String getDefaultTab() {
-		return "Confirm";
+		return "ExperimentalData";
 	}
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
+		writer.write("<h5>Under development: This page will display available experimental data for the selected endpoints</h5>");
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
 		try {

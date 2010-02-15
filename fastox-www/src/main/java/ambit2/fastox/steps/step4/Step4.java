@@ -4,6 +4,6 @@ import ambit2.fastox.wizard.WizardStep;
 
 public class Step4 extends WizardStep {
 	public Step4() {
-		super(4,"Confirm","Confirm",Step4Resource.class);
+		super(4,"ExperimentalData","Retrieve endpoints data",Step4Resource.class);
 	}
 }
