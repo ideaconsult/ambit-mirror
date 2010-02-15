@@ -506,7 +506,7 @@ public class AmbitResource extends ServerResource {
 		output.write(String.format("<a href='http://www.cefic.be'><img src=%s/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='115' height='60'></a>",baseReference));
-		output.write("<br>Developed by Ideaconsult Ltd. (2005-2009)"); 
+		output.write("<br>Developed by Ideaconsult Ltd. (2005-2010)"); 
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");
