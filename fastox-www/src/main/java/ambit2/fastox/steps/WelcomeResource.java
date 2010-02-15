@@ -28,25 +28,32 @@ public class WelcomeResource extends WizardResource {
 		return forms;
 	}
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<form name='%s' method='POST' action='%s/%s/%s/%s%s'>","form",
-				getRootRef(),UserResource.resource,user_name,mode,wizard.nextStep(step)));
+		//writer.write(String.format("<form name='%s' method='POST' action='%s/%s/%s/%s%s'>","form",
+			//	getRootRef(),UserResource.resource,user_name,mode,wizard.nextStep(step)));
 	}
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
-		writer.write(String.format("</form>"));
+		//writer.write(String.format("</form>"));
 	}
 	
 	@Override
 	public void renderFormContent(Writer writer,String key) throws IOException {
 		
-		
-		writer.write("<h2><ul>");
-		writer.write("<li>");
-		writer.write(String.format("<a href='%s/%s/%s/%s%s' title='Specify structure'>%s</a>",
-				getRootRef(),UserResource.resource,user_name,WizardMode.A,"/step1","Structure"));	
+		writer.write("<table width='90%'><tr align='left'><td>");
+		writer.write("<h2>Estimate toxicological hazard of a chemical structure</h2>");
+		writer.write(String.format("<form name='start' method='GET' action='%s/%s/%s/%s%s'>",
+				getRootRef(),UserResource.resource,user_name,WizardMode.A,"/step1"));	
+		writer.write("<ul id=\"mainNav\" class=\"wizardStep\">\n");
+		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" type=\"submit\" value=\"GO!\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
+		writer.write(String.format("</ul>"));
+		writer.write(String.format("</form>"));
+		writer.write("</td></tr></table>");
+//		writer.write(String.format("<a href='%s/%s/%s/%s%s' title='Specify structure'>%s</a>",
+//				getRootRef(),UserResource.resource,user_name,WizardMode.A,"/step1","Estimate toxicological hazard of a chemical structure"));	
+/*
 		writer.write("<li>");
 		writer.write(String.format("<a href='%s/%s/%s/%s%s' title='Select endpoint'>%s</a>",
-				getRootRef(),UserResource.resource,user_name,WizardMode.B,"/step1","Endpoints"));			
-		writer.write("</ul></h2>");		
+				getRootRef(),UserResource.resource,user_name,WizardMode.B,"/step1","Browse available endpoints and models and estimate toxicological hazard"));	
+					*/
 	
 		//writer.write("</FIELDSET>");
 	}

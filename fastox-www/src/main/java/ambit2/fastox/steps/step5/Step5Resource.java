@@ -90,11 +90,12 @@ public class Step5Resource extends FastoxStepResource {
 			writer.write(String.format("<input type='hidden' name='errors' size='40' value='%s'>", value));
 			writer.write("<br>");
 		}		
+		/*
 		writer.write(String.format(
 				"<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\" %s >",
 				(running==0)?"":"DISABLED")
 				);
-		
+		*/
 
 		if (running>0) { //refresh the page in order to check tasks
 			Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers"); 

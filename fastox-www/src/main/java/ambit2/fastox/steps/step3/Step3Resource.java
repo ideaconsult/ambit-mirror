@@ -272,3 +272,4 @@ public class Step3Resource extends FastoxStepResource {
 	public void renderResults(Writer writer, String key) throws IOException {
 	}
 }
+

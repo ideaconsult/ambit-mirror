@@ -126,6 +126,7 @@ div.user {
 	height:71px;
 	list-style:none;
 	float:left;
+	padding-right: 8px;
 	background-color:#ebebeb;
 	background-image: url(images/navBtn.gif);
 	background-repeat: no-repeat;
@@ -146,6 +147,28 @@ div.user {
 	background-color:#5d308a;
 	background-image: url(images/navDoneBtn.png);
 }
+#mainNav li.next{
+	background-image: url(images/navBtnNext.png);
+}
+#mainNav li.nonext{
+	background-color:#636bd2;
+	background-image:none;
+}
+
+.button {
+    font-size: 30px;
+    font-weight: bold;
+    color:#636bd2;
+    height: 71px;
+    width: 100px;
+    border: none;
+    background: #ebebeb;
+}
+.button:hover {
+    color: #ffffff;
+    background: #636bd2;
+}
+
 
 #mainNav li a, #mainNav li a:link, #mainNav li a:visited, #mainNav li a:hover, #mainNav li a:active {
 color:#ccc;
@@ -185,8 +208,8 @@ display:block;
 }
 
 /* #mainNav.wizardStep */
-#mainNav.wizardStep li{width:170px;}
-#mainNav.wizardStep li a{width:170px;}
+#mainNav.wizardStep li{width:162px;}
+#mainNav.wizardStep li a{width:162px;}
 
 /* #mainNav.fourStep */
 #mainNav.fourStep li{width:227px;}

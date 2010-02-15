@@ -183,6 +183,9 @@ public abstract class WizardResource extends ServerResource {
 
 
 		}
+		if ((step.getIndex()!=0) && (step.getIndex()!=(wizard.size()-1)))
+		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" type=\"submit\" value=\"NEXT\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
+
 		writer.write("</ul>\n");
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
 
@@ -211,7 +214,7 @@ public abstract class WizardResource extends ServerResource {
 	}
 	public void renderFormContent(Writer writer, String key)  throws IOException {
 		//writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
-		writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\">");
+		//writer.write("<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\">");
 		//writer.write("</FIELDSET>");
 	}	
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
@@ -244,7 +247,6 @@ public abstract class WizardResource extends ServerResource {
 				form = (form==null)?forms.get(key):form;
 			}
 		//}
-		renderFormHeader(writer,tabIndex);
 		writer.write("</div>");
 
 		if ("Errors".equals(tabIndex)) renderErrorsTab(writer, tabIndex);
@@ -255,7 +257,7 @@ public abstract class WizardResource extends ServerResource {
 			renderResults(writer,tabIndex);
 			
 		}
-		renderFormFooter(writer,tabIndex);
+
 	}		
 	public void footer(Writer output)  throws IOException  {
 
@@ -297,6 +299,8 @@ public abstract class WizardResource extends ServerResource {
 				try {
 					writer = new OutputStreamWriter(out,"UTF-8");	  
 					header(writer,getMeta());
+					renderFormHeader(writer,tabIndex);
+
 					navigator(writer);
 					if (forms.size()>1) renderTabs(writer);
 					else {
@@ -304,15 +308,17 @@ public abstract class WizardResource extends ServerResource {
 						if ("Errors".equals(key)) renderErrorsTab(writer, key);
 						else if ("Help".equals(key)) renderHelpTab(writer, key);
 						else {
-							renderFormHeader(writer,key);
+//							renderFormHeader(writer,key);
 							renderFormContent(writer,key);
 							renderResults(writer,key);
-							renderFormFooter(writer,key);
+
 						}
 					}
+									
 				} catch (Exception x) {
 					x.printStackTrace();
 				} finally {
+					renderFormFooter(writer,key);	
 					footer(writer);
 					writer.flush();
 					out.close();
