@@ -147,9 +147,11 @@ div.user {
 	background-color:#5d308a;
 	background-image: url(images/navDoneBtn.png);
 }
+
 #mainNav li.next{
 	background-image: url(images/navBtnNext.png);
 }
+
 #mainNav li.nonext{
 	background-color:#636bd2;
 	background-image:none;
@@ -158,15 +160,24 @@ div.user {
 .button {
     font-size: 30px;
     font-weight: bold;
+    text-align: left;
     color:#636bd2;
     height: 71px;
-    width: 100px;
+    width: 170px;
     border: none;
     background: #ebebeb;
+    background-image: url(images/navBtnNext.png);
+    background-repeat: no-repeat;
+    background-position: right top;
 }
+
 .button:hover {
     color: #ffffff;
+    cursor: pointer;
     background: #636bd2;
+    background-image: url(images/navBtnNext_d.png);
+    background-repeat: no-repeat;
+    background-position: right top;
 }
 
 
