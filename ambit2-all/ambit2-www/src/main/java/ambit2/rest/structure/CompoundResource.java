@@ -47,6 +47,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
+import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
@@ -77,9 +78,23 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String compound = OpenTox.URI.compound.getURI();
 	public final static String idcompound = OpenTox.URI.compound.getKey();
 	public final static String compoundID = OpenTox.URI.compound.getResourceID();
-	
+	protected boolean chemicalsOnly = true;
 	protected boolean collapsed = false;
 	
+	@Override
+	protected String getDefaultTemplateURI(Context context, Request request,
+			Response response) {
+		/*
+		Object id = request.getAttributes().get(OpenTox.URI.compound.getKey());
+		if (id != null)
+			//return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
+		return String.format("%s%s/%s%s",
+				getRequest().getRootRef(),OpenTox.URI.compound.getURI(),id,PropertyResource.featuredef);		
+		else 
+			return super.getDefaultTemplateURI(context,request,response);
+			*/
+		return null;
+	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		if (queryObject == null) try {
@@ -283,7 +298,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 						IQueryRetrieval<IStructureRecord> q =  createSingleQuery(property,
 								condition, 
 								theKey,
-								true,
+								chemicalsOnly,
 								byAlias
 								);
 								//keys.length==1);
