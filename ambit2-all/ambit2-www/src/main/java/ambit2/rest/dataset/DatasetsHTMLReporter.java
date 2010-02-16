@@ -153,10 +153,12 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 					w.toString(),
 					(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getId()):dataset.getName()
 					));
+			/*
 			output.write(String.format(
 					"<form method=POST action='%s?method=DELETE'><input type='submit' value='Delete'></form>",
 					w.toString()
-					));			
+					));
+					*/			
 			output.write("</span></div>");
 			/*
 			output.write(String.format(
