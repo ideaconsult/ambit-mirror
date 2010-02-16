@@ -410,6 +410,7 @@ public class AmbitApplication extends Application {
                                  "/webapps/images")));		
                                */
 		
+		 Directory metaDir = new Directory(getContext(), "war:///META-INF");
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
@@ -417,7 +418,7 @@ public class AmbitApplication extends Application {
 		 Directory jsDir = new Directory(getContext(), "war:///js");
 
 		 
-		 
+		 router.attach("/meta/", metaDir);
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
