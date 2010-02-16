@@ -134,7 +134,7 @@
   </scm>
 
   <build>
-        <finalName>ToxPredict</finalName>
+<finalName>ToxPredict</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -176,13 +176,13 @@
         </executions>
         <configuration>
           <revisionOnScmFailure>3.14</revisionOnScmFailure>
-          <doCheck>false</doCheck>
-          <doUpdate>false</doUpdate>
-      
+          <doCheck>true</doCheck>
+          <doUpdate>true</doUpdate>
+      <!--
           <providerImplementations>
             <svn>javasvn</svn>
           </providerImplementations>  
- 
+   -->
         </configuration>
       </plugin>
 
@@ -197,8 +197,7 @@
          -->
         <archive>
           <manifestEntries>
-            <Implementation-Build>${buildNumber}</Implementation-Build>
-            <Build-version>${build.version}</Build-version>
+            <Implementation-Build>${build.version}</Implementation-Build>
             </manifestEntries>
         </archive>
       </configuration>
