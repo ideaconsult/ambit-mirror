@@ -206,9 +206,11 @@ public class ModelResourceTest extends ResourceTest {
 		if (target!=null)
 			headers.add(OpenTox.params.target.toString(),target);		
 		headers.add(OpenTox.params.dataset_uri.toString(),datasetTest); 
-		testAsyncTask(wekaURI, headers, Status.SUCCESS_OK, String.format(
-				"%s?feature_uris[]=%s", datasetTest, Reference.encode(String
-						.format("%s/predicted", wekaURI))));
+		testAsyncTask(wekaURI, headers, Status.SUCCESS_OK, 
+				String.format("%s%sfeature_uris[]=%s", 
+				datasetTest,
+				datasetTest.indexOf("?")>0?"&":"?",
+				Reference.encode(String.format("%s/predicted", wekaURI))));
 		
 	
 	}	
