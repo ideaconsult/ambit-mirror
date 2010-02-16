@@ -112,8 +112,15 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		dataset.addProperty(DC.title,query.toString());
 		dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
 		try {
-		propertyReporter.setOutput(getJenaModel());
+			propertyReporter.setOutput(getJenaModel());
 		} catch (Exception x) {}
+		
+		if (header == null) 
+			header = template2Header(template,true);
+		
+		for (ambit2.base.data.Property p : header) try {
+			propertyReporter.processItem(p);
+		} catch (Exception x) {}		 
 	}
 
 	@Override
