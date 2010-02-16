@@ -3,7 +3,6 @@ package ambit2.rest.property;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -11,10 +10,12 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.StringCondition;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.PropertiesByDataset;
+import ambit2.db.search.property.PropertiesByQuery;
 import ambit2.rest.dataset.DatasetResource;
-import ambit2.rest.query.QueryResource;
+import ambit2.rest.dataset.DatasetStructuresResource;
+import ambit2.rest.error.InvalidResourceIDException;
 
 /**
  * Retrieves feature definitions by dataset 
@@ -34,38 +35,47 @@ public class PropertiesByDatasetResource extends PropertyResource {
 			Request request, Response response) throws ResourceException {
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
 		collapsed = true;
-		PropertiesByDataset q = new PropertiesByDataset();
-		SourceDataset dataset = new SourceDataset();
+
+		IQueryRetrieval<Property>  q = null;
 		if (id != null) try {
-			dataset.setId(new Integer(Reference.decode(id.toString())));
-			q.setFieldname(null);
-			q.setValue(dataset);
+			q = getQueryById(new Integer(Reference.decode(id.toString())));
 			collapsed = false;
 		} catch (NumberFormatException x) {
-			dataset.setName(id.toString());
-			q.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
-			dataset.setId(-1);
-			q.setValue(dataset);
+			q = getQueryById(Reference.decode(id.toString()));
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
+		return q;
+	}
+	
+	protected IQueryRetrieval<Property> getQueryById(Integer key) throws ResourceException {
+
+		try {
+			PropertiesByDataset q = new PropertiesByDataset();
+			q.setFieldname(null);
+			SourceDataset dataset = new SourceDataset();			
+			dataset.setId(key);
+			q.setValue(dataset);
+			return q;
+		} catch (Exception x) { throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,key.toString(),x);}
+
+	}
+	
+	protected IQueryRetrieval<Property> getQueryById(String key) throws ResourceException {
+		int queryResultsID = -1;
+		if (key.startsWith(DatasetStructuresResource.QR_PREFIX)) {
+			key = key.substring(DatasetStructuresResource.QR_PREFIX.length());
+			try {
+				queryResultsID = Integer.parseInt(key.toString());
+			} catch (NumberFormatException x) {
+				throw new InvalidResourceIDException(key);
+			}
+		} else throw new InvalidResourceIDException(key);
 		
-			Form form = request.getResourceRef().getQueryAsForm();
-			Object key = form.getFirstValue(QueryResource.search_param);
-			if (key != null) {
-				Property property = new Property(Reference.decode(key.toString()));
-				q.setFieldname(property);
-				
-			} 
-				//feature definition
-		Object fid = request.getAttributes().get(idfeaturedef);
-		if (fid != null) try {
-			Property p = new Property(null);
-			p.setId(new Integer(Reference.decode(fid.toString())));
-			q.setFieldname(p);
-		} catch (Exception x) {
-			//do nothing
-		}
+		PropertiesByQuery q = new PropertiesByQuery();
+		q.setChemicalsOnly(true);
+		q.setValue(new StoredQuery(queryResultsID));
+		q.setFieldname(null);
 		return q;
 	}
 }
