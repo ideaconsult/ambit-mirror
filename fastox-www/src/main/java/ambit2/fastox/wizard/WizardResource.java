@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -38,6 +39,7 @@ public abstract class WizardResource extends ServerResource {
 	protected int stepIndex;
 	protected static String version = null;
 	
+	
 	public WizardResource(int stepIndex) throws ResourceException {
 		super();
 		this.stepIndex = stepIndex;
@@ -52,13 +54,20 @@ public abstract class WizardResource extends ServerResource {
 			ClientResource r = new ClientResource(String.format("%s/meta/MANIFEST.MF",getRequest().getRootRef()));
 			p = r.get();
 			String text = p.getText();
+			//String text = build + ":0.0.1-SNAPSHOT-r1793-1266340980278";
 			int i = text.indexOf(build);
-			if (i>=0) 
+			if (i>=0) {
 				version = text.substring(i+build.length());
+				i = version.lastIndexOf('-');
+				if (i > 0) 
+					version = String.format("%s-%s", 
+							version.substring(1,i),
+							new Date(Long.parseLong(version.substring(i+1))));
+			}
 		} catch (Exception x) {
 			version = "Unknown";
 		} finally {
-			try { p.release();} catch (Exception x) {}
+			//try { p.release();} catch (Exception x) {}
 		}
 		return version;
 	}
@@ -292,7 +301,10 @@ public abstract class WizardResource extends ServerResource {
 		//output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		
 		output.write("<br>Developed by Ideaconsult Ltd. (2005-2010)<br>"); 
-		output.write(version==null?"":version+"<br>");
+		output.write(String.format("Version:&nbsp;<a href='%s/meta/MANIFEST.MF' target=_blank alt='%s' title='Web application version'>%s</a><br>",
+				getRequest().getRootRef(),
+				version==null?"":version,
+				version));
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");
