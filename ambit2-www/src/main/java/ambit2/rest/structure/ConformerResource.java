@@ -10,7 +10,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.property.PropertyResource;
 
 /**
  * Conformer resource as in http://opentox.org/development/wiki/structure
@@ -41,6 +43,29 @@ public class ConformerResource extends CompoundResource {
 	//public final static String conformers = String.format("%s%s",compoundID,conformerKey);
 	public final static String conformerID = String.format("%s%s/{%s}",compoundID,conformerKey,idconformer);
 	
+	public ConformerResource() {
+		super();
+		//chemicalsOnly = false;
+	}
+	@Override
+	protected String getDefaultTemplateURI(Context context, Request request,
+			Response response) {
+		/*
+		Object id = request.getAttributes().get(OpenTox.URI.compound.getKey());
+		if (id != null)
+			//return String.format("riap://application/dataset/%s%s",id,PropertyResource.featuredef);
+		return String.format("%s%s/%s%s",
+				getRequest().getRootRef(),
+					OpenTox.URI.compound.getURI(),
+					request.getAttributes().get(ConformerResource.idcompound),
+					OpenTox.URI.conformer.getURI(),
+					request.getAttributes().get(ConformerResource.idconformer),
+					PropertyResource.featuredef);		
+		else 
+			return super.getDefaultTemplateURI(context,request,response);
+			*/
+		return null;
+	}
 	@Override
 	protected QueryStructureByID createQuery(Context context, Request request,
 			Response response) throws ResourceException {
