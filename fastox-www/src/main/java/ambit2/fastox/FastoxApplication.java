@@ -22,10 +22,11 @@ import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 
 public class FastoxApplication extends Application {
-
+	
 	public FastoxApplication() {
 		super();
 		setName("ToxPredict");
+		
 	}
     @Override
     public Restlet createInboundRoot() {
@@ -83,8 +84,10 @@ public class FastoxApplication extends Application {
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
+		 Directory metaDir = new Directory(getContext(), "war:///META-INF");
 		 
  		 router.attach("/images/", imgDir);
+ 		router.attach("/meta/", metaDir);
 //		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
 		 router.attach("/style/", styleDir);

@@ -16,6 +16,7 @@ import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
@@ -35,11 +36,31 @@ public abstract class WizardResource extends ServerResource {
 	protected Wizard wizard;
 	public static final String key = "mode";
 	protected int stepIndex;
+	protected static String version = null;
 	
 	public WizardResource(int stepIndex) throws ResourceException {
 		super();
 		this.stepIndex = stepIndex;
 		setMode(WizardMode.A);
+	}
+	
+	protected String readVersion() {
+		if (version!=null)return version;
+		final String build = "Implementation-Build:";
+		Representation p=null;
+		try {
+			ClientResource r = new ClientResource(String.format("%s/meta/MANIFEST.MF",getRequest().getRootRef()));
+			p = r.get();
+			String text = p.getText();
+			int i = text.indexOf(build);
+			if (i>=0) 
+				version = text.substring(i+build.length());
+		} catch (Exception x) {
+			version = "Unknown";
+		} finally {
+			try { p.release();} catch (Exception x) {}
+		}
+		return version;
 	}
 	public void setMode(WizardMode mode) {
 		this.mode = mode;
@@ -77,7 +98,7 @@ public abstract class WizardResource extends ServerResource {
 		}		
 		forms = createForms();
 		meta = "";
-		
+		readVersion();
 	}
 	protected String getDefaultTab() {
 		return "Help";
@@ -264,7 +285,6 @@ public abstract class WizardResource extends ServerResource {
 
 		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();
 		output.write("<div class=\"footer\">");
-
 		output.write("<span class=\"right\">");
 		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='185' height='60'></a>",baseReference));
 		output.write(String.format("<a href='http://ambit.sourceforge.net'><img src=%s/images/ambit-logo.png border='0' width='115' height='50'></a>&nbsp;",baseReference));
@@ -272,6 +292,7 @@ public abstract class WizardResource extends ServerResource {
 		//output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		
 		output.write("<br>Developed by Ideaconsult Ltd. (2005-2010)<br>"); 
+		output.write(version==null?"":version+"<br>");
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");
