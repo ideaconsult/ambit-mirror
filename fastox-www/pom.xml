@@ -50,18 +50,7 @@
   		<name>mvnrepository</name>
   		<url>http://mvnrepository.com/</url>
   	</repository>
-  	
   </repositories>
-  <pluginRepositories>
-  	<pluginRepository>
-  		<id>tlc</id>
-  		<name>TLC Repository</name>
-  		<url>http://commons.ucalgary.ca/pub/m2</url>
-  		<snapshots>
-  			<enabled>false</enabled>
-  		</snapshots>
-  	</pluginRepository>
-  </pluginRepositories>
   <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>
@@ -138,16 +127,14 @@
   		</roles>
   	</developer>
   </developers>
-  <scm>
+ <scm>
   	<connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/fastox-www</connection>
   	<developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/fastox-www</developerConnection>
   	<url>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/fastox-www</url>
   </scm>
 
   <build>
-	<finalName>ToxPredict</finalName>
-
-        
+        <finalName>ToxPredict</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -166,7 +153,16 @@
 		          <target>1.5</target>
 		       </configuration>  				
   			</plugin>
-  	<plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<configuration>
+					<url>http://apps.ideaconsult.net:8180/manager</url>
+					<server>eos</server>
+                                	<path>/ToxPredict</path>
+				</configuration>
+			</plugin>
+	<plugin>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>maven-buildnumber-plugin</artifactId>
       <version>0.9.6</version>
@@ -197,7 +193,6 @@
         </archive>
       </configuration>
     </plugin>
-  			
   		</plugins>
   	</pluginManagement>
   </build>
