@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
-  <artifactId>fastox-www</artifactId>
+  <artifactId>ToxPredict</artifactId>
   <packaging>war</packaging>
   <name>ToxPredict</name>
   <version>0.0.1-SNAPSHOT</version>
@@ -175,23 +175,31 @@
           </execution>
         </executions>
         <configuration>
-          <revisionOnScmFailure>XXX</revisionOnScmFailure>
-          <doCheck>true</doCheck>
-          <doUpdate>true</doUpdate>
+          <revisionOnScmFailure>3.14</revisionOnScmFailure>
+          <doCheck>false</doCheck>
+          <doUpdate>false</doUpdate>
+      
+          <providerImplementations>
+            <svn>javasvn</svn>
+          </providerImplementations>  
+ 
         </configuration>
       </plugin>
 
     <plugin>
       <artifactId>maven-war-plugin</artifactId>
-      <version>2.0.2</version>
+      <version>2.0</version>
       <configuration>
+      <!-- 
         <manifest>
           <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
         </manifest>
+         -->
         <archive>
           <manifestEntries>
             <Implementation-Build>${buildNumber}</Implementation-Build>
-          </manifestEntries>
+            <Build-version>${build.version}</Build-version>
+            </manifestEntries>
         </archive>
       </configuration>
     </plugin>
@@ -201,6 +209,9 @@
   <profiles>
 	<profile>
 		<id>development</id>
+		<properties>
+		<build.version>${project.version}-r${buildNumber}-${timestamp}</build.version>
+		</properties>
 		<build>
 			<plugins>
 				<plugin>
@@ -216,6 +227,9 @@
 	</profile>
 	<profile>
 		<id>production</id>
+		<properties>
+		<build.version>${project.version}-r${buildNumber}-${timestamp}</build.version>
+		</properties>
 		<build>
 			<plugins>
 				<plugin>
