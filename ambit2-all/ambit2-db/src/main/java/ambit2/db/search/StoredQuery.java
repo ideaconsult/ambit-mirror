@@ -26,6 +26,7 @@ package ambit2.db.search;
 
 import java.util.List;
 
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 
@@ -36,9 +37,20 @@ import ambit2.base.interfaces.IStructureRecord;
  *
  */
 public class StoredQuery implements IStoredQuery {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4144504244895601171L;
 	protected Integer id;
 	protected String name="Default query";
 	protected String content=null;
+	protected Template template = null;
+	public Template getTemplate() {
+		return template;
+	}
+	public void setTemplate(Template template) {
+		this.template = template;
+	}
 	public String getContent() {
 		return content;
 	}
