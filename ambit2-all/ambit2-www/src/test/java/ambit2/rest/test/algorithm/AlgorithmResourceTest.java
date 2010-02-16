@@ -7,11 +7,9 @@ import java.io.InputStreamReader;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.query.QueryResource;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
@@ -37,7 +35,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 12;
+		return count == 19;
 	}	
 	
 	@Test
@@ -70,7 +68,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 	}
 	
-
+	@Test
+	public void testCalculateLogP() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/xlogp", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FXLogP%2Fpredicted"));
+	}	
+	@Test
+	public void testCalculateBCUT() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/BCUT", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+	}	
 	public void testLoad() throws Exception {
 		for (int i=0; i < 100;i++) {
 			Form headers = new Form();  
