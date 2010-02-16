@@ -62,7 +62,7 @@ public abstract class WizardResource extends ServerResource {
 				if (i > 0) 
 					version = String.format("%s-%s", 
 							version.substring(1,i),
-							new Date(Long.parseLong(version.substring(i+1))));
+							new Date(Long.parseLong(version.substring(i+1).trim())));
 			}
 		} catch (Exception x) {
 			version = "Unknown";
