@@ -3,7 +3,7 @@
   <groupId>ambit</groupId>
   <artifactId>fastox-www</artifactId>
   <packaging>war</packaging>
-  <name>Fastox</name>
+  <name>ToxPredict</name>
   <version>0.0.1-SNAPSHOT</version>
   <repositories>
   	<repository>
@@ -50,7 +50,18 @@
   		<name>mvnrepository</name>
   		<url>http://mvnrepository.com/</url>
   	</repository>
+  	
   </repositories>
+  <pluginRepositories>
+  	<pluginRepository>
+  		<id>tlc</id>
+  		<name>TLC Repository</name>
+  		<url>http://commons.ucalgary.ca/pub/m2</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</pluginRepository>
+  </pluginRepositories>
   <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>
@@ -101,11 +112,42 @@
   		<version>2.0-M6</version>
   	</dependency>  	
   </dependencies>
+  <description>OpenTox demo application </description>
+  <url>http://www.toxpredict.org</url>
+  <inceptionYear>2010</inceptionYear>
   <developers>
+  	<developer>
+  		<id>vedina</id>
+  		<name>Nina Jeliazkova</name>
+  		<email>jeliazkova.nina@gmail.com</email>
+  		<url>http://vediina.users.sourceforge.net</url>
+  		<organization>Ideaconsult Ltd.</organization>
+  		<organizationUrl>http://www.ideaconsult.net</organizationUrl>
+  		<roles>
+  			<role>developer</role>
+  		</roles>
+  	</developer>
+  	<developer>
+  		<id>luchesar</id>
+  		<name>Luchesar Iliev</name>
+  		<email>luchesar.iliev@gmail.com</email>
+  		<organization>Ideaconsult Ltd.</organization>
+  		<organizationUrl>http://www.ideaconsult.net</organizationUrl>
+  		<roles>
+  			<role>web designer</role>
+  		</roles>
+  	</developer>
   </developers>
+  <scm>
+  	<connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/fastox-www</connection>
+  	<developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/fastox-www</developerConnection>
+  	<url>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/fastox-www</url>
+  </scm>
 
   <build>
-        <finalName>ToxPredict</finalName>
+	<finalName>ToxPredict</finalName>
+
+        
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -124,6 +166,38 @@
 		          <target>1.5</target>
 		       </configuration>  				
   			</plugin>
+  	<plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>maven-buildnumber-plugin</artifactId>
+      <version>0.9.6</version>
+      <executions>
+        <execution>
+          <phase>validate</phase>        
+          <goals>
+            <goal>create</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <doCheck>true</doCheck>
+        <doUpdate>true</doUpdate>
+      </configuration>
+    </plugin>
+    <plugin>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>2.0.2</version>
+      <configuration>
+        <manifest>
+          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+        </manifest>
+        <archive>
+          <manifestEntries>
+            <Implementation-Build>${buildNumber}</Implementation-Build>
+          </manifestEntries>
+        </archive>
+      </configuration>
+    </plugin>
+  			
   		</plugins>
   	</pluginManagement>
   </build>
