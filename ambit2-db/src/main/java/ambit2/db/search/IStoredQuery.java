@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.search;
 
+import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 
 
@@ -38,6 +39,8 @@ public interface IStoredQuery extends IQueryObject<IStructureRecord>{
 	void setQuery(IQueryObject<IStructureRecord> query);	
 	String getContent();
 	void setContent(String content);
+	Template getTemplate();
+	void setTemplate(Template template);
 }
 
 

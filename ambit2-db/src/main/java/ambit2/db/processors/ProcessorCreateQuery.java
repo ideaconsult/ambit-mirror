@@ -29,14 +29,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 import ambit2.base.config.Preferences;
+import ambit2.base.data.Dictionary;
+import ambit2.base.data.Property;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.AbstractDBProcessor;
+import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryStructureReporter;
@@ -46,7 +51,10 @@ import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.update.IQueryUpdate;
+import ambit2.db.update.dictionary.TemplateAddProperty;
 import ambit2.db.update.storedquery.CreateStoredQuery;
+import ambit2.db.update.storedquery.QueryAddTemplate;
 
 /**
  * Inserts into query table idstructure numbers from a query identified by {@link StoredQuery}. Example:
@@ -59,11 +67,21 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	 * 
 	 */
 	private static final long serialVersionUID = -6765755816334059911L;
-	protected final String sql = "insert into query (idquery,idsessions,name,content) values (null,?,?,?)";
+	//protected final String sql = "insert into query (idquery,idsessions,name,content,idtemplate) values (null,?,?,?,?)";
 	protected IStoredQuery result;
 	protected boolean copy = false;
 	protected boolean delete = false;
-    public boolean isDelete() {
+	protected Template profile;
+	protected UpdateExecutor<IQueryUpdate> exec;
+	
+	
+    public Template getProfile() {
+		return profile;
+	}
+	public void setProfile(Template profile) {
+		this.profile = profile;
+	}
+	public boolean isDelete() {
 		return delete;
 	}
 	public void setDelete(boolean delete) {
@@ -135,18 +153,19 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			
 			if (result.getId()>0) {
 				int rows = 0;
-				if ((result.getQuery() instanceof IQueryRetrieval) && ((IQueryRetrieval)result.getQuery()).isPrescreen())
+				if ((result.getQuery() instanceof IQueryRetrieval) && ((IQueryRetrieval)result.getQuery()).isPrescreen()) {
 					rows = insertScreenedResults(result,(IQueryRetrieval<IStructureRecord>)result.getQuery());
-				else  {
+			   } else  {
 					rows = insertResults(result);
 					if (rows > 0)
 						connection.commit();
 					else 
 						connection.rollback();
 				}
+			   insertProfile(result, profile);
 			}
 			
-			close();
+		
 			return result;
 		} catch (Exception x) {
 			try {
@@ -155,9 +174,46 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 				
 			}
 			throw new ProcessorException(this,x);
+		} finally {
+			try {close(); } catch (Exception e) {}
 		}
 	}
 
+	protected void insertProfile(IStoredQuery q,Template template) throws Exception  {
+		if (template != null) 
+		try {
+			connection.setAutoCommit(true);
+			if (exec == null) exec = new UpdateExecutor<IQueryUpdate>();
+			exec.setConnection(connection);
+			TemplateAddProperty addProperty = new TemplateAddProperty();
+			Dictionary d = new Dictionary();
+			d.setParentTemplate("Dataset");
+			d.setTemplate((template.getName()==null)?String.format("Query%d",q.getId()):template.getName());
+			addProperty.setGroup(d);
+			if ((template.getId()<=0) && (template.getName()==null)) {
+				Iterator<Property> properties = template.getProperties(true);
+				while (properties.hasNext()) {
+					addProperty.setObject(properties.next());
+					exec.process(addProperty);
+				}
+				
+			}
+			template.setName(d.getTemplate());
+			QueryAddTemplate addTemplate = new QueryAddTemplate();
+			addTemplate.setGroup(q);
+			addTemplate.setObject(template);
+			exec.process(addTemplate);
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			
+		}
+	}
+	@Override
+	public void close() throws SQLException {
+		super.close();
+		try { if (exec != null) exec.close(); } catch (Exception x) {}
+	}
 	protected int insertScreenedResults(IStoredQuery result, final IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
 		final PreparedStatement insertGoodResults = 
 			connection.prepareStatement(IStoredQuery.SQL_INSERT + " values(?,?,?,1,?,?)");
