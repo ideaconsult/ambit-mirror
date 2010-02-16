@@ -44,6 +44,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
 			//id,class,name
+			
 			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,
 				new String[] {Algorithm.typeClustering,Algorithm.typeSingleTarget,Algorithm.typeLazyLearning,Algorithm.typeUnSupervised}},
 			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,
@@ -85,6 +86,18 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
 			},new String[] {Algorithm.typeRules}},
+			
+			/** Descriptors */
+			{"xlogp","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"zagrebIndex","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"molweight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor}},
+			{"whim","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"tpsa","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"lipinskifailures","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"BCUT","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor}}
+			
+			
+			
 	};
 	
 	public Representation getRepresentation(Variant variant) throws ResourceException {
