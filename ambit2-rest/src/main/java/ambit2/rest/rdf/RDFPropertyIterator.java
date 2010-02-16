@@ -151,4 +151,34 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 
 		return property;
 	}
+	
+	public static void readFeaturesRDF(String uri,final ambit2.base.data.Template profile, Reference rootRef) {
+		if (uri==null) return;
+		Representation r = null;
+		RDFPropertyIterator iterator  = null;
+		OntModel jenaModel = null;
+		try {
+			
+			iterator = new RDFPropertyIterator(new Reference(uri));
+			jenaModel = iterator.getJenaModel();
+			iterator.setBaseReference(
+					uri.startsWith("riap://application/")?new Reference("riap://application/"):
+					rootRef
+					);
+			while (iterator.hasNext()) {
+				Property p = iterator.next();
+				p.setEnabled(true);
+				profile.add(p);
+			};
+			
+		} catch (Exception x) {
+			//getLogger().severe(x.getMessage());
+
+		} finally {
+			try {iterator.close();} catch (Exception x) {}
+			try {jenaModel.close();} catch (Exception x) {}
+			try {if (r != null) r.release(); } catch (Exception x) {}
+			
+		}
+	}		
 }
