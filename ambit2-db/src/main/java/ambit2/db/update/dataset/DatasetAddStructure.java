@@ -42,7 +42,7 @@ public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructure
 	protected CreateDataset createDataset = new CreateDataset();
 	
 	public static final String create_sql = 
-		"insert into struc_dataset (idstructure,id_srcdataset) SELECT ?,id_srcdataset from src_dataset where name=?";
+		"insert ignore into struc_dataset (idstructure,id_srcdataset) SELECT ?,id_srcdataset from src_dataset where name=?";
 
 
 	public DatasetAddStructure(SourceDataset dataset,IStructureRecord record) {

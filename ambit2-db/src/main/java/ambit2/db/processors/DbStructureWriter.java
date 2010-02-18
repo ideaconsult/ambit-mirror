@@ -93,6 +93,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
             sr.add(structure);
         } else {
         	try {
+        		writeDataset(structure);
         		writeProperties(structure);
         	} catch (AmbitException x) {
         		logger.warn(x);
