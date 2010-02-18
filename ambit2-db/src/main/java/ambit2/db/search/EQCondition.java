@@ -27,4 +27,9 @@ public class EQCondition implements IQueryCondition {
 		}
 		return instances;
 	}	
+	@Override
+	public String toString() {
+
+		return eq;
+	}
 }
