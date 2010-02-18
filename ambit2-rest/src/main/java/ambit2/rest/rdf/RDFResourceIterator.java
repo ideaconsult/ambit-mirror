@@ -6,7 +6,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-public class RDFResourceIterator extends RDFObjectIterator<Resource> {
+public class RDFResourceIterator extends RDFObjectIterator<RDFNode> {
 
 	public RDFResourceIterator(OntModel model, String topObject) {
 		super(model, topObject);
@@ -23,13 +23,11 @@ public class RDFResourceIterator extends RDFObjectIterator<Resource> {
 	}
 
 	@Override
-	protected void parseObjectURI(RDFNode uri, Resource record) {
-	
+	protected void parseObjectURI(RDFNode uri, RDFNode record) {
+		
 	}
-
 	@Override
-	protected Resource parseRecord(Resource newEntry, Resource record) {
+	protected RDFNode parseRecord(RDFNode newEntry, RDFNode record) {
 		return newEntry;
 	}
-
 }

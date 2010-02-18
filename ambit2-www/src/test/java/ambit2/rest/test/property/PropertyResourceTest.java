@@ -354,8 +354,10 @@ public class PropertyResourceTest extends ResourceTest {
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
-        IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://localhost:8181'");
+        IDatabaseConnection c = getConnection();
+        //don't have consistent way to store dc:creator, so we are ignoring it
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://localhost:8181' and url='http://localhost:8181'");
+		//ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://localhost:8181'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}		

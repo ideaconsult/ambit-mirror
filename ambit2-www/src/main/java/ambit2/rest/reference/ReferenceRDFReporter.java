@@ -42,8 +42,7 @@ public class ReferenceRDFReporter<Q extends IQueryRetrieval<ILiteratureEntry>> e
 			entry = jenaModel.createIndividual(BibTex.BTClass.Entry.getOntClass(jenaModel));
 		} else {
 			entry = jenaModel.createIndividual(uriReporter.getURI(item),BibTex.BTClass.Entry.getOntClass(jenaModel));
-			entry.addLiteral(DC.identifier,
-					jenaModel.createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));			
+	
 		}
 		entry.addProperty(DC.title, item.getName());
 		entry.addProperty(RDFS.seeAlso,item.getURL());

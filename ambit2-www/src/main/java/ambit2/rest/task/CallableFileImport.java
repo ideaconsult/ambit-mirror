@@ -136,6 +136,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 				baseReference,
 				format);
 		} catch (Exception x) {
+			x.printStackTrace();
 			return null;
 		}
 	}
@@ -206,7 +207,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			}
 			x.closeResults(rs);
 			x.setConnection(null);
-			if (dataset== null) throw new ResourceException(Status.SUCCESS_NO_CONTENT);
+			if (newDataset== null) throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 			if (reporter == null)
 				reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>();
 			return new Reference(reporter.getURI(newDataset));

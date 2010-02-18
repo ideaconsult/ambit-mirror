@@ -70,7 +70,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		if (queryObject!=null)
 				try {
 					Form form = getRequest().getResourceRef().getQueryAsForm();
-					queryObject.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
+					String max = form.getFirstValue(max_hits);
+					if(max != null)
+						queryObject.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
 				} catch (Exception x) {
 					
 				}

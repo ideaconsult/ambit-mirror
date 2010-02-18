@@ -1,11 +1,9 @@
 package ambit2.rest.rdf;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -18,13 +16,9 @@ import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
-import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
@@ -63,29 +57,46 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 	}
 
 	@Override
-	protected ILiteratureEntry parseRecord(Resource newEntry, ILiteratureEntry record) {
-		ILiteratureEntry le = parseRecord(jenaModel,newEntry, record);
-		parseObjectURI(newEntry,le);
-		return le;
-	}
-	
-	public static ILiteratureEntry parseRecord(OntModel jenaModel, Resource newEntry, ILiteratureEntry record) {
-		String name = newEntry.getURI();
-		String url = "Default";
-		if (newEntry.isAnon() && (newEntry.getProperty(DC.identifier)!= null)) {
-			RDFNode value = newEntry.getProperty(DC.identifier).getObject();
-			if ((value!=null) && value.isLiteral())	name = ((Literal)value).getString();
-		} 
-		if (newEntry.getProperty(DC.title)!= null) {
-			RDFNode value = newEntry.getProperty(DC.title).getObject();
-			if ((value!=null) && value.isLiteral())	name = ((Literal)value).getString();
-		}
-		if (newEntry.getProperty(RDFS.seeAlso)!= null) {
-			RDFNode value = newEntry.getProperty(RDFS.seeAlso).getObject();
-			return new LiteratureEntry(name,value==null?name:value.toString());
+	protected ILiteratureEntry parseRecord(RDFNode newEntry, ILiteratureEntry record) {
+		if (record==null) record = createRecord();
+		Reference thisurl = reference==null?baseReference:reference;
+		String title = thisurl==null?"Default":thisurl.toString();
+		String seeAlso = title;
+		if (newEntry.isLiteral()) {
+			title = ((Literal)newEntry).getString();
+		} else if (newEntry.isResource()) {
+			
+			thisurl = new Reference(((Resource)newEntry).getURI());
+			Resource newResource = (Resource) newEntry;
 
+			try { title = getTitle(newEntry); } catch (Exception x) {title=thisurl.toString();}
+			if (newResource.getProperty(RDFS.seeAlso)!= null) {
+				RDFNode value = newResource.getProperty(RDFS.seeAlso).getObject();
+				if (value!=null)
+					if (value.isLiteral())	seeAlso = ((Literal)value).getString();
+					else seeAlso = ((Resource)value).getURI();
+	
+			} else seeAlso = title;
+		}
+		record = new LiteratureEntry(title==null?thisurl.toString():title,seeAlso==null?thisurl.toString():seeAlso);
+		parseObjectURI(newEntry,record);
+		if ((record.getId()>0) && !thisurl.equals(reference)) {
+			RDFReferenceIterator iterator = new RDFReferenceIterator(new Reference(thisurl));
+			
+			try {
+				iterator.setCloseModel(true);	
+				iterator.setBaseReference(baseReference);
+				while (iterator.hasNext()) {
+					return iterator.next();
+				}
+				
+			} catch (Exception x) {
+
+			} finally {
+				try { iterator.close();} catch (Exception x) {}
+			}
 		} 
-		return new LiteratureEntry(name==null?"Default":name,name==null?"Default":name);
+		return record;
 	}
 	@Override
 	protected Resource createResource(String otclass) {
@@ -104,11 +115,28 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 	protected void parseObjectURI(RDFNode uri, ILiteratureEntry record) {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		try {
-			getTemplate().parse(getIdentifier(uri), vars);
+			getTemplate().parse(getURI(uri), vars);
 			record.setId(Integer.parseInt(vars.get(OpenTox.URI.reference.getKey()).toString())); } 
 		catch (Exception x) {record.setId(-1);};
 	}
-
+	/*
+	public static ILiteratureEntry readReference(OntModel jenaModel,Resource feature,Reference baseReference,Property property) {
+		
+		Statement p = feature.getProperty(property);
+		if (p==null) return null;
+		
+		RDFNode target = p.getObject();
+		if(target == null) return null;
+		
+		if (target.isResource()) { 
+			return RDFReferenceIterator.parseRecord(jenaModel,(Resource) target, null);
+		} else {
+			String value = ((Literal)target).getString();
+			return new LiteratureEntry(value,value);
+		}
+	}
+	*/
+/*
 	public static ILiteratureEntry readReference(OntModel jenaModel,Resource newEntry,Reference baseReference,Property property) {
 		String url = newEntry.isURIResource()?newEntry.getURI():newEntry.getLocalName();
 			
@@ -116,11 +144,12 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 			
 			RDFReferenceIterator iterator = null;
 			Statement p = newEntry.getProperty(property);
-			//if (p==null) return url==null?null:new LiteratureEntry(url,url);
+			if (p==null) return new LiteratureEntry(url,url);
+			
 			RDFNode reference = p.getObject();
 			if (reference.isResource()) {
 				try {
-					url = getIdentifier(reference);
+					url = getURI(reference);
 					StmtIterator st = jenaModel.listStatements(new SimpleSelector(newEntry,property,(RDFNode)null));
 					iterator = new RDFReferenceIterator(jenaModel,st);
 					iterator.setBaseReference(baseReference);
@@ -130,7 +159,9 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 				}
 			} else {
 				url = ((Literal)reference).getString();
-				iterator = new RDFReferenceIterator(new Reference(url));
+				//iterator = new RDFReferenceIterator(new Reference(url));
+				//not good idea to retrieve foreign references
+				return new LiteratureEntry(url,url);
 			}
 			
 			try {
@@ -141,21 +172,15 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 				}
 				
 			} catch (Exception x) {
-				/*
-	            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-	            x.printStackTrace(new PrintWriter(stackTraceWriter));				
-				Context.getCurrentLogger().warning(stackTraceWriter.toString());
-				*/
+
 			} finally {
 				try { iterator.close();} catch (Exception x) {}
 			}			
 		} catch (Exception x) {
-			/*
-            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-            x.printStackTrace(new PrintWriter(stackTraceWriter));				
-			Context.getCurrentLogger().warning(stackTraceWriter.toString());
-			*/
+			x.printStackTrace();
+
 		}				
 		return new LiteratureEntry(url,url);
 	}
+	*/
 	}

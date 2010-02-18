@@ -103,7 +103,7 @@ public class RepositoryWriterRDFTest extends ResourceTest {
 		Assert.assertEquals(10,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
-		Assert.assertEquals(33,property.getRowCount());
+		Assert.assertEquals(34,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(57,property_values.getRowCount());		
 		tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
@@ -111,7 +111,7 @@ public class RepositoryWriterRDFTest extends ResourceTest {
 		p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
 		Assert.assertEquals(57,p_tuples.getRowCount());		
 		
-		p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM values_string where name=\"Property 1\" and value = \"XXXXX\"");
+		p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM values_string where name=\"http://localhost:8181/feature/1\" and value = \"XXXXX\"");
 		Assert.assertEquals(1,p_tuples.getRowCount());		
 		
 		p_tuples = 	c.createQueryTable("EXPECTED","SELECT value_num FROM property_values join properties using(idproperty) where name='http://anotherservice.com:8080/feature/1'");

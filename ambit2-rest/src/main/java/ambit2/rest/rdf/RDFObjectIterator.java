@@ -61,6 +61,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	
 	public RDFObjectIterator(Reference reference, String topObject) throws ResourceException {
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),topObject);
+		this.reference = reference;
 	}
 	
 	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject) throws ResourceException {
@@ -163,7 +164,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		template = createTemplate();
 	}
 	
-	protected abstract Item parseRecord(Resource newEntry,Item record);
+	protected abstract Item parseRecord(RDFNode newEntry,Item record);
 	protected abstract Item createRecord();
 	protected abstract void parseObjectURI(RDFNode uri,Item record);
 	protected abstract Template createTemplate();
@@ -172,8 +173,8 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 	public static String getTitle(RDFNode rdfNode) throws Exception  {
 		return getPropertyValue(DC.title,rdfNode);
 	}
-	public static String getIdentifier(RDFNode rdfNode) throws Exception  {
-		return getPropertyValue(DC.identifier,rdfNode);
+	public static String getURI(RDFNode rdfNode) throws Exception  {
+		return rdfNode.isURIResource()?((Resource)rdfNode).getURI():null;
 	}	
 	public static String getCreator(RDFNode rdfNode) throws Exception  {
 		return getPropertyValue(DC.creator,rdfNode);
@@ -182,5 +183,13 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		if (rdfNode.isResource())
 			return (((Literal) ((Resource)rdfNode).getProperty(property).getObject()).getString()); 
 		else throw new Exception("Not a resource");
+	}
+	public static RDFNode getPropertyNode(Property property,RDFNode rdfNode)  {
+		if (rdfNode.isResource()) {
+			Statement st = ((Resource)rdfNode).getProperty(property);
+			if (st!= null)	return ((Resource)rdfNode).getProperty(property).getObject();
+			else return null;
+		} else return null;
 	}	
+	
 }
