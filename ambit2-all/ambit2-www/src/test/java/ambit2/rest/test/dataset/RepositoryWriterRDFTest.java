@@ -124,7 +124,11 @@ public class RepositoryWriterRDFTest extends ResourceTest {
 	}
 	
 	
-	@Test
+	/**
+	 * This will not work as initially intended, because the dataset title /id is not taken into account now
+	 * to overwrite a dataset, post to its URI
+	 * @throws Exception
+	 */
 	public void testWriteSelf() throws Exception {
 		testWrite(String.format("http://localhost:%d",port));
 	}	

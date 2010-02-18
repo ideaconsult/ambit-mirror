@@ -77,7 +77,7 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<SourceDataset> {
 			return dataset;
 		} else {
 			String id = null;
-			try {	dataset.setName(getTitle(newEntry));} catch (Exception x) { }
+			try {	dataset.setName(getTitle(newEntry));} catch (Exception x) { dataset.setName(null);}
 			try {	id = getURI(newEntry);} catch (Exception x) { }
 	
 			try { dataset.setUsername(getPropertyValue(DC.publisher, newEntry)); } catch (Exception x) {}

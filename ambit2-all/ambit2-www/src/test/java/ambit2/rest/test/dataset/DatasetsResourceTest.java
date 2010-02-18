@@ -20,6 +20,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Preference;
@@ -32,6 +33,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.OpenTox;
 import ambit2.rest.test.ResourceTest;
 
 
@@ -155,6 +157,38 @@ public class DatasetsResourceTest extends ResourceTest {
 		Assert.assertEquals(5,table.getRowCount());
 		c.close();
 	}
+	
+	@Test
+	public void testPostNewQueryResult() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
+		Assert.assertEquals(0,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/R1", port));
+		
+		Response response =  testPost(
+					String.format("http://localhost:%d/dataset", port),
+					MediaType.APPLICATION_WWW_FORM,
+					form.getWebRepresentation());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/R3", port), response.getLocationRef().toString());
+
+		
+         c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
+		Assert.assertEquals(1,table.getRowCount());		
+		c.close();
+
+		CreateEntryRDF("R3_descriptors.rdf");
+	
+		Assert.fail("verify");
+		
+	}	
 	@Test
 	public void testCreateEntryRDF1() throws Exception {
         IDatabaseConnection c = getConnection();	
@@ -273,21 +307,36 @@ public class DatasetsResourceTest extends ResourceTest {
 		c.close();
 		
 	}	
-	
-	public void testCreateEntryTUMRDF1() throws Exception {
+	@Test
+	public void testCreateEntryTUMRDFRemote() throws Exception {
 	        IDatabaseConnection c = getConnection();	
 			ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 			Assert.assertEquals(5,table.getRowCount());
 			c.close();
 					
-			CreateEntryRDF("tum1.rdf");
+			CreateEntryRDF("descriptor_service_output.rdf");
 			
 			c = getConnection();	
 			table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-			Assert.assertEquals(5,table.getRowCount());
+			Assert.assertEquals(7,table.getRowCount());
 			c.close();
 
 	}
+	
+	public void testCreateEntryTUMRDFLocal() throws Exception {
+	        IDatabaseConnection c = getConnection();	
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+			Assert.assertEquals(5,table.getRowCount());
+			c.close();
+					
+			CreateEntryRDF("ambit2_4829261780582040994.rdf");
+			
+			c = getConnection();	
+			table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+			Assert.assertEquals(7,table.getRowCount());
+			c.close();
+
+	}	
 	@Test
 	public void testCreateEntryTUMRDF2() throws Exception {
 		Assert.fail("test with tum1.rdf");

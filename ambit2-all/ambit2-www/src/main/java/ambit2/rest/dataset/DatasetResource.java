@@ -43,7 +43,18 @@ import ambit2.rest.task.CallableQueryResultsCreator;
 public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extends DatasetStructuresResource<Q> {
 	public final static String dataset_complement_uri = "complement";
 	public final static String dataset_intersection_uri = "intersection";
+	protected FileUpload upload;
 	
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		upload = new FileUpload();
+		upload.setRequest(getRequest());
+		upload.setResponse(getResponse());
+		upload.setContext(getContext());
+		upload.setApplication(getApplication());
+		upload.setDataset(null);
+	}
 /*
  *
 select count(idchemical) from
@@ -190,7 +201,8 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			throw new ResourceException(x);
 		}
 
-	}	
+	}		
+	
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
@@ -199,7 +211,10 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			return copyDatasetToQueryResultsTable(new Form(entity),true);
-		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+		} else {
+			upload.setDataset(null);
+			return  upload.upload(entity,variant,true);
+		}
 	}
 	@Override
 	protected Representation put(Representation entity, Variant variant)
@@ -209,6 +224,11 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			return copyDatasetToQueryResultsTable(new Form(entity),false);
+		} else if ((datasetID!=null) && (datasetID>0)) {
+			SourceDataset dataset = new SourceDataset();
+			dataset.setId(datasetID);
+ 			upload.setDataset(dataset);
+			return  upload.upload(entity,variant,true);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
