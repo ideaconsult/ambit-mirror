@@ -1,0 +1,169 @@
+<rdf:RDF
+    xmlns:ad="http://localhost:8181/dataset/"
+    xmlns:ac="http://localhost:8181/compound/"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ag="http://localhost:8181/algorithm/"
+    xmlns:am="http://localhost:8181/model/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ar="http://localhost:8181/reference/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:bo="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:af="http://localhost:8181/feature/"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns="http://localhost:8181/">
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Compound"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Feature"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#FeatureValue"/>
+  <owl:Class rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#DataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#dataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#hasSource"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#compound"/>
+  <owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#units"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/identifier"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/type"/>
+  <ot:Dataset rdf:about="http://localhost:8181/dataset/R3">
+    <ot:dataEntry>
+      <ot:DataEntry>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-5</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-4</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-4</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-6</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-6</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:compound>
+          <ot:Compound rdf:about="http://localhost:8181/compound/7/conformer/100211">
+            <dc:identifier>http://localhost:8181/compound/7/conformer/100211</dc:identifier>
+          </ot:Compound>
+        </ot:compound>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-3</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-5</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >NaN</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-3</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+      </ot:DataEntry>
+    </ot:dataEntry>
+  </ot:Dataset>
+  <ot:Feature rdf:about="http://localhost:8181/feature/3">
+    <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI"
+    >http://localhost:8181/feature/3</dc:identifier>
+    <dc:title>CAS</dc:title>
+    <ot:units></ot:units>
+    <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#CasRN"/>
+    <ot:hasSource>
+      <bx:Entry rdf:about="http://localhost:8181/reference/8">
+        <dc:title>Dummy</dc:title>
+        <rdfs:seeAlso>NA</rdfs:seeAlso>
+      </bx:Entry>
+    </ot:hasSource>
+  </ot:Feature>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
+</rdf:RDF>

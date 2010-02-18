@@ -1,0 +1,215 @@
+<rdf:RDF
+    xmlns:ag="http://194.141.0.136:8080/algorithm/"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:ad="http://194.141.0.136:8080/dataset/"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns="http://194.141.0.136:8080/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:af="http://194.141.0.136:8080/feature/"
+    xmlns:ar="http://194.141.0.136:8080/reference/"
+    xmlns:am="http://194.141.0.136:8080/model/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ac="http://194.141.0.136:8080/compound/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:bo="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Compound"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Feature"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#FeatureValue"/>
+  <owl:Class rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#DataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#dataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#hasSource"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#values"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#compound"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#feature"/>
+  <owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#units"/>
+  <owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#value"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/identifier"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/type"/>
+  <ot:Dataset rdf:about="http://194.141.0.136:8080/dataset/40">
+    <dc:identifier>http://194.141.0.136:8080/dataset/40</dc:identifier>
+    <dc:title>Dataset = 40</dc:title>
+    <dc:description>http://194.141.0.136:8080/dataset/40</dc:description>
+    <ot:dataEntry>
+      <ot:DataEntry>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.0</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-6</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:compound>
+          <ot:Compound rdf:about="http://194.141.0.136:8080/compound/101323/conformer/262309">
+            <dc:identifier>http://194.141.0.136:8080/compound/101323/conformer/262309</dc:identifier>
+          </ot:Compound>
+        </ot:compound>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >1.4841574595792648</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-3</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.24759975994224814</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-5</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.0</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-4</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:feature>
+              <ot:Feature rdf:about="http://194.141.0.136:8080/feature/13583">
+                <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI"
+                >http://194.141.0.136:8080/feature/13583</dc:identifier>
+                <dc:title>Title</dc:title>
+                <ot:units></ot:units>
+                <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#ChemicalName"/>
+                <ot:hasSource>
+                  <bx:Entry rdf:about="http://194.141.0.136:8080/reference/12493">
+                    <dc:title>echa.sdf</dc:title>
+                    <rdfs:seeAlso>File uploaded by user</rdfs:seeAlso>
+                  </bx:Entry>
+                </ot:hasSource>
+              </ot:Feature>
+            </ot:feature>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >C21H22FN3S</ot:value>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:feature>
+              <ot:Feature rdf:about="http://194.141.0.136:8080/feature/13581">
+                <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI"
+                >http://194.141.0.136:8080/feature/13581</dc:identifier>
+                <dc:title>Remark</dc:title>
+                <ot:units></ot:units>
+                <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#Remark"/>
+                <ot:hasSource rdf:resource="http://194.141.0.136:8080/reference/12493"/>
+              </ot:Feature>
+            </ot:feature>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            > </ot:value>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.0</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-6</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.09905441723509582</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-5</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.9634435267515873</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_VC-3</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:feature>
+              <ot:Feature rdf:about="http://194.141.0.136:8080/feature/13582">
+                <dc:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI"
+                >http://194.141.0.136:8080/feature/13582</dc:identifier>
+                <dc:title>CAS</dc:title>
+                <ot:units></ot:units>
+                <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#CASRN"/>
+                <ot:hasSource rdf:resource="http://194.141.0.136:8080/reference/12493"/>
+              </ot:Feature>
+            </ot:feature>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >1019330-07-4</ot:value>
+          </ot:FeatureValue>
+        </ot:values>
+        <ot:values>
+          <ot:FeatureValue>
+            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
+            >0.0</ot:value>
+            <ot:feature>
+              <ot:Feature>
+                <owl:sameAs>http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster</owl:sameAs>
+                <ot:hasSource>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ChiClusterDescriptor</ot:hasSource>
+                <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
+                <dc:title>TUM_CDK_SC-4</dc:title>
+              </ot:Feature>
+            </ot:feature>
+          </ot:FeatureValue>
+        </ot:values>
+      </ot:DataEntry>
+    </ot:dataEntry>
+  </ot:Dataset>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
+</rdf:RDF>

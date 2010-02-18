@@ -1,0 +1,56 @@
+<rdf:RDF
+    xmlns:ad="http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/"
+    xmlns:ag="http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:af="http://ambit.uni-plovdiv.bg:8080/ambit2/feature/"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ar="http://ambit.uni-plovdiv.bg:8080/ambit2/reference/"
+    xmlns:ac="http://ambit.uni-plovdiv.bg:8080/ambit2/compound/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://ambit.uni-plovdiv.bg:8080/ambit2/"
+    xmlns:am="http://ambit.uni-plovdiv.bg:8080/ambit2/model/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#hasSource">
+    <rdf:type
+rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#units">
+    <rdf:type
+rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description
+rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/reference/64175">
+
+<rdfs:seeAlso>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/FTM</rdfs:seeAlso>
+
+<dc:title>http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/FTM</dc:title>
+    <dc:identifier
+rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://ambit.uni-plovdiv.bg:8080/ambit2/reference/64175</dc:identifier>
+    <rdf:type
+rdf:resource="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
+  </rdf:Description>
+  <rdf:Description
+rdf:about="http://ambit.uni-plovdiv.bg:8080/ambit2/feature/82119">
+    <ot:hasSource
+rdf:resource="http://ambit.uni-plovdiv.bg:8080/ambit2/reference/64175"/>
+    <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#TUM_FTM_C%
+28-C%29"/>
+    <ot:units>count</ot:units>
+    <dc:title>TUM_FTM_C(-C)</dc:title>
+    <dc:identifier
+rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://ambit.uni-plovdiv.bg:8080/ambit2/feature/82119</dc:identifier>
+    <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Feature">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description
+rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+</rdf:RDF>

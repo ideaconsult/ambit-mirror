@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -32,9 +33,11 @@ import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFIteratingReader;
-import ambit2.rest.rdf.RDFMetaDatasetIterator;
 
 public class CallableFileImport implements	java.util.concurrent.Callable<Reference> {
+	protected SourceDataset targetDataset;
+	protected ClientInfo client;
+	
 	protected File file;
 	protected File getFile() {
 		return file;
@@ -57,15 +60,17 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 		this.reporter = reporter;
 	}
 
-	public CallableFileImport(File file, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+	public CallableFileImport(ClientInfo client,SourceDataset dataset,File file, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
 		this.file = file;
 		this.connection = connection;
 		upload = null;
 		this.reporter = reporter;
+		this.targetDataset = dataset;
+		this.client = client;
 	}
 	
-	public CallableFileImport(List<FileItem> items, String fileUploadField, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
-		this((File)null,connection,reporter);
+	public CallableFileImport(ClientInfo client, SourceDataset dataset,List<FileItem> items, String fileUploadField, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+		this(client,dataset,(File)null,connection,reporter);
 		upload = new CallableFileUpload(items,fileUploadField) {
 			@Override
 			public Reference createReference() {
@@ -86,10 +91,10 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 		else if (MediaType.TEXT_CSV.equals(mediaType)) return ".csv";
 		else return null;
 	}
-	public CallableFileImport(InputRepresentation input,  
+	public CallableFileImport(ClientInfo client,SourceDataset dataset,InputRepresentation input,  
 					Connection connection,
 					DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
-		this((File)null,connection,reporter);
+		this(client,dataset,(File)null,connection,reporter);
 		try {
 			String extension = getExtension(input.getMediaType());
 			System.out.println(input.getIdentifier());
@@ -145,9 +150,11 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 	
 	public Reference importFile(File file) throws Exception {
 		try {
-
-			final SourceDataset dataset = new SourceDataset(file.getName(), LiteratureEntry
-					.getInstance(file.getName(), "File uploaded by user"));		
+			//if target dataset is not defined, create new dataset
+			final SourceDataset dataset = targetDataset!=null?targetDataset: 
+						new SourceDataset(file.getName(), LiteratureEntry
+					.getInstance(file.getName(), client==null?"File uploaded by user":client.getAddress()));	
+			
 			dataset.setId(-1);
 			final BatchDBProcessor batch = new BatchDBProcessor() {
 				@Override
@@ -159,6 +166,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 						if (i==null)
 							return super.getIterator(target);
 						else {
+							/*
 							RDFMetaDatasetIterator datasets = null;
 							try {
 								datasets = new RDFMetaDatasetIterator(i.getJenaModel());
@@ -171,10 +179,11 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 									dataset.setURL(d.getURL());
 								}
 							} catch (Exception x) {
-								
+								x.printStackTrace();
 							} finally {
 								try { datasets.close();} catch (Exception x) {}
 							}
+							*/
 							return i;
 						}
 					} catch (AmbitException x) {

@@ -108,9 +108,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),uriReporter.getRequest().getOriginalRef().getHierarchicalPart()),
 				OT.OTClass.Dataset.getOntClass(output));
 		
-		dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
-		dataset.addProperty(DC.title,query.toString());
-		dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
+		//dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
+		//dataset.addProperty(DC.title,query.toString());
+		//dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
 		try {
 			propertyReporter.setOutput(getJenaModel());
 		} catch (Exception x) {}
