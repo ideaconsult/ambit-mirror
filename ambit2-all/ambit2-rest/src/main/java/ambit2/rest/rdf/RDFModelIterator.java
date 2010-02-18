@@ -15,7 +15,6 @@ import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Parses RDF representation of a OpenTox Model {@link ModelQueryResults}
@@ -54,14 +53,14 @@ public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstanc
 		Map<String, Object> vars = new HashMap<String, Object>();
 		
 		try {
-			getTemplate().parse(getIdentifier(uri), vars);
+			getTemplate().parse(getURI(uri), vars);
 			record.setId(Integer.parseInt(vars.get(OpenTox.URI.model.getKey()).toString())); } 
 		catch (Exception x) { record.setId(-1);};
 		
 	}
 
 	@Override
-	protected ModelWrapper<T,TrainingInstances,TestInstances,Content> parseRecord(Resource newEntry,
+	protected ModelWrapper<T,TrainingInstances,TestInstances,Content> parseRecord(RDFNode newEntry,
 			ModelWrapper<T,TrainingInstances,TestInstances,Content> record) {
 		//TODO
 		return null;

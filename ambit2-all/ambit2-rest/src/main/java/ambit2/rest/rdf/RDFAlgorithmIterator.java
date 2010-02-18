@@ -60,20 +60,25 @@ public class RDFAlgorithmIterator extends RDFObjectIterator<Algorithm> {
 	protected void parseObjectURI(RDFNode uri, Algorithm record) {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		try {
-			getTemplate().parse(getIdentifier(uri), vars);
+			getTemplate().parse(getURI(uri), vars);
 			record.setId(vars.get(OpenTox.URI.algorithm.getKey()).toString()); } 
 		catch (Exception x) { };
 		
 	}
 
 	@Override
-	protected Algorithm parseRecord(Resource newEntry, Algorithm record) {
-		StmtIterator alg =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.parameters.createProperty(jenaModel),(RDFNode)null));
-		while (alg.hasNext()) {
-			Statement st = alg.next();
-			parseParameters(st.getObject(),record);
-		}	
-		return record;
+	protected Algorithm parseRecord(RDFNode newEntry, Algorithm record) {
+		if (newEntry.isLiteral()) {
+			return record;
+		} else {
+			StmtIterator alg =  jenaModel.listStatements(
+					new SimpleSelector((Resource)newEntry,OT.OTProperty.parameters.createProperty(jenaModel),(RDFNode)null));
+			while (alg.hasNext()) {
+				Statement st = alg.next();
+				parseParameters(st.getObject(),record);
+			}	
+			return record;
+		}
 	}
 	protected void parseParameters(RDFNode paramEntry,Algorithm record) {
 		//TODO

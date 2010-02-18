@@ -10,6 +10,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -168,6 +169,7 @@ public class OT {
 		jenaModel.setNsPrefix( "owl", OWL.NS );
 		jenaModel.setNsPrefix( "dc", DC.NS );
 		jenaModel.setNsPrefix( "bx", BibTex.NS );
+		jenaModel.setNsPrefix( "xsd", XSDDatatype.XSD+"#" );
 		return jenaModel;
 	}
 
@@ -214,6 +216,7 @@ public class OT {
     	//Client httpclient = new Client(Protocol.HTTP);
     	//httpclient.setConnectTimeout(300000);
     	ClientResource client = new ClientResource(uri);
+    	//System.out.println("Connecting "+uri);
 		//client.setNext(httpclient);
 		client.setFollowingRedirects(true);
 		Representation r = client.get(mediaType);

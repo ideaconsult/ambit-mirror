@@ -27,7 +27,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  *
  */
 public class RDFMetaDatasetIterator extends RDFObjectIterator<SourceDataset> {
-
+	protected RDFReferenceIterator refIterator;
 	public RDFMetaDatasetIterator(Representation representation,MediaType mediaType) throws ResourceException {
 		super(representation,mediaType,OT.OTClass.Dataset.toString());
 	}
@@ -65,29 +65,39 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<SourceDataset> {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		
 		try {
-			getTemplate().parse(getIdentifier(uri), vars);
+			getTemplate().parse(getURI(uri), vars);
 			record.setId(Integer.parseInt(vars.get(OpenTox.URI.dataset.getKey()).toString())); } 
 		catch (Exception x) { record.setId(-1);};
 		
 	}
 
 	@Override
-	protected SourceDataset parseRecord(Resource newEntry, SourceDataset dataset) {
-		String id = newEntry.getURI();
-		try {	dataset.setName(getTitle(newEntry));} catch (Exception x) { }
-		try {	id = getIdentifier(newEntry);} catch (Exception x) { }
-
-		try { dataset.setUsername(getPropertyValue(DC.publisher, newEntry)); } catch (Exception x) {}
-		try {
-			ILiteratureEntry ref = RDFReferenceIterator.readReference(jenaModel, newEntry, baseReference,RDFS.seeAlso);
-			dataset.setTitle(ref.getTitle());
-			dataset.setURL(ref.getTitle());
-		} catch (Exception x) {
-			dataset.setTitle(id);
-			dataset.setURL(id);
+	protected SourceDataset parseRecord(RDFNode newEntry, SourceDataset dataset) {
+		if (newEntry.isLiteral()) {
+			return dataset;
+		} else {
+			String id = null;
+			try {	dataset.setName(getTitle(newEntry));} catch (Exception x) { }
+			try {	id = getURI(newEntry);} catch (Exception x) { }
+	
+			try { dataset.setUsername(getPropertyValue(DC.publisher, newEntry)); } catch (Exception x) {}
+			try {
+				
+				RDFNode reference = getPropertyNode(RDFS.seeAlso, newEntry);
+				if (reference!=null) {
+					if (refIterator == null) refIterator = new RDFReferenceIterator(jenaModel);
+					ILiteratureEntry ref = refIterator.parseRecord(reference, null);
+					dataset.setTitle(ref.getTitle());
+					dataset.setURL(ref.getTitle());
+				}
+				
+			} catch (Exception x) {
+				dataset.setTitle(id);
+				dataset.setURL(id);
+			}
+			parseObjectURI(newEntry, dataset);
+			return dataset;
 		}
-		parseObjectURI(newEntry, dataset);
-		return dataset;
 	}
 
 }

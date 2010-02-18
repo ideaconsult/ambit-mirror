@@ -17,7 +17,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.routing.Template;
 
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
@@ -52,6 +51,8 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	protected Template featureTemplate;	
 	protected StmtIterator recordIterator;
 	protected OntModel jenaModel;
+	protected RDFPropertyIterator propertyIterator;
+	
 	public OntModel getJenaModel() {
 		return jenaModel;
 	}
@@ -73,7 +74,8 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		jenaModel.read(in,null,rdfFormat==null?"RDF/XML":rdfFormat);
 		compoundTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,CompoundResource.compoundID));
 		conformerTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,ConformerResource.conformerID));
-
+		propertyIterator = new RDFPropertyIterator(jenaModel);
+		propertyIterator.setBaseReference(new Reference(baseReference));
 
     }	
 	
@@ -147,8 +149,19 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 				RDFNode feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
 				
 				Property key = null;
-				if (lookup!= null) key = lookup.get(feature.toString());
-				if (key==null) key = readFeature(feature,null);		
+				String uri = null;
+				if (feature.isURIResource() && (lookup!= null)) {
+					uri = ((Resource)feature).getURI();
+					key = lookup.get(uri);
+				}
+				
+				if (key == null) {
+					key = propertyIterator.parseRecord(feature,key);
+					if (uri != null) {
+						if (lookup == null) lookup = new Hashtable<String, Property>();
+						lookup.put(uri, key);
+					}
+				}		
 				
 				if (value.isLiteral()) {
 					RDFDatatype datatype = ((Literal)value).getDatatype();
@@ -210,6 +223,9 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 
 	}
 	
+
+		
+	/*
 	public Property readFeature(final RDFNode target,Property property) throws Exception {
 		RDFPropertyIterator iterator =null;
 		try {
@@ -243,7 +259,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		}
 		return lookup.get(target.toString());
 	}	
-	
+	*/
 	protected void setFeatureValue(IStructureRecord record, Property key, RDFNode value) {
 		if (value.isLiteral()) {
 			RDFDatatype datatype = ((Literal)value).getDatatype();

@@ -1,15 +1,10 @@
 package ambit2.rest.task;
 
-import java.io.Serializable;
 import java.sql.Connection;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.representation.ObjectRepresentation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -18,7 +13,6 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ValuesReader;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 

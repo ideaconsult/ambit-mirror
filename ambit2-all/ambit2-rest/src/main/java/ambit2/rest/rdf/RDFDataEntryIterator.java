@@ -62,7 +62,7 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		Map<String, Object> vars = new HashMap<String, Object>();
 		
 		try { 
-			conformerTemplate.parse(getIdentifier(uri), vars);
+			conformerTemplate.parse(getURI(uri), vars);
 			try {
 			idchemical = Integer.parseInt(vars.get(OpenTox.URI.compound.getKey()).toString()); } 
 			catch (Exception x) {};
@@ -73,7 +73,7 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		
 		if (idchemical<=0) {
 			try {
-			getTemplate().parse(getIdentifier(uri), vars);
+			getTemplate().parse(getURI(uri), vars);
 			idchemical = Integer.parseInt(vars.get(OpenTox.URI.compound.getKey()).toString()); } 
 			catch (Exception x) {};
 		}
@@ -82,19 +82,24 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 	}
 
 	@Override
-	protected Item parseRecord(Resource newEntry, Item record) {
+	protected Item parseRecord(RDFNode newEntry, Item record) {
 		//get the compound
-		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
-		while (compound.hasNext()) {
-			Statement st = compound.next();
-			parseObjectURI(st.getObject(),record);
-			if (readStructure(st.getObject(), record))
-				break;
+		if (newEntry.isLiteral()) {
+			return record;
+		} else {
+			StmtIterator compound =  jenaModel.listStatements(
+					new SimpleSelector((Resource)newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
+			while (compound.hasNext()) {
+				Statement st = compound.next();
+				parseObjectURI(st.getObject(),record);
+				if (readStructure(st.getObject(), record))
+					break;
 
-		}	
-		//get feature values
-		parseFeatureValues( newEntry,record);
-		return record;
+			}	
+			//get feature values
+			parseFeatureValues((Resource) newEntry,record);
+			return record;
+		}
 	}
 	protected void parseFeatureValues(Resource dataEntry,Item record)  {
 		StmtIterator values =  jenaModel.listStatements(new SimpleSelector(dataEntry,OT.OTProperty.values.createProperty(jenaModel),(RDFNode)null));

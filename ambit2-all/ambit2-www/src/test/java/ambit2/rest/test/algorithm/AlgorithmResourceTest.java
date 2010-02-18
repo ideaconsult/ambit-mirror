@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -132,5 +134,26 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}	
 	@Override
 	public void testGetJavaObject() throws Exception {
+	}
+	
+	public void testDescriptorsTUM() throws Exception {
+		/*
+		I ran a short test and 
+		> > it seems to be the case, yes. 
+		> > curl -X POST -d
+		> > "dataset_uri=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/157" -d
+		> > "ALL=false" -d "GravitationalIndexDescriptor=true"
+		> > http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem
+		> > 
+		> > curl -X POST -d
+		> > "dataset_uri=http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/23" -d
+		> > "ALL=false" -d "GravitationalIndexDescriptor=true"
+		> > http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem
+		> > 
+		> > result e.g.:
+		> > http://ambit.uni-plovdiv.bg:8080/ambit2/feature/83436
+		> > for both datasets
+		*/
+		Assert.fail("Descriptor calculation with TUM services");
 	}
 }

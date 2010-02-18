@@ -3,6 +3,7 @@ package ambit2.rest.rdf;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.restlet.data.MediaType;
@@ -35,7 +36,9 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  *
  */
 public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord, Property> {
-
+	protected Hashtable<String, Property> lookup;
+	protected RDFPropertyIterator propertyIterator;
+	
 	public RDFStructuresIterator(Representation representation, MediaType mediaType) throws ResourceException {
 		this(OT.createModel(null,representation,mediaType));
 	}
@@ -58,6 +61,8 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 	}
 	public RDFStructuresIterator(OntModel model) {
 		super(model);
+		lookup = new Hashtable<String, Property>();
+		propertyIterator = new RDFPropertyIterator(model);
 	}
 	@Override
 	protected Property createFeature(RDFNode feature) {
@@ -144,18 +149,22 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 				Resource fv = (Resource)st.getObject();
 				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
 				
-				Resource feature = (Resource) fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
-				Property key  = RDFPropertyIterator.parseRecord(jenaModel, 
-						feature,
-						Property.getInstance("",""), baseReference);
-				/*
-				String feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject().toString();
-				Property key = Property.getInstance(feature,feature);
-				parseFeatureURI(feature, key);
-				key.setClazz(URI.class);
-				*/
-				if (feature.isURIResource())
-					parseFeatureURI(feature.getURI(), key);
+				RDFNode feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
+				
+				Property key = null;
+				String uri = null;
+				if (feature.isURIResource() && (lookup!= null))
+					uri = ((Resource)feature).getURI();
+					key = lookup.get(uri);
+				
+				if (key == null) {
+					key = propertyIterator.parseRecord(feature,key);
+					if (uri != null) {
+						if (lookup == null) lookup = new Hashtable<String, Property>();
+						lookup.put(uri, key);
+					}
+				}	
+				
 				if (value.isLiteral()) {
 					RDFDatatype datatype = ((Literal)value).getDatatype();
 					if (XSDDatatype.XSDdouble.equals(datatype)) 

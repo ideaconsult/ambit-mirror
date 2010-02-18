@@ -15,15 +15,14 @@
   <rdf:Description rdf:about="http://www.opentox.org/api/1.1#hasSource">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
-  <rdf:Description rdf:nodeID="A0">
-    <dc:identifier>http://my.resource.org</dc:identifier>
+  <rdf:Description rdf:about="http://my.resource.org">
   </rdf:Description>
   <rdf:Description rdf:about="http://www.opentox.org/api/1.1#Feature">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
   <rdf:Description rdf:nodeID="A1">
     <dc:type>http://www.w3.org/2001/XMLSchema#string</dc:type>
-    <ot:hasSource rdf:nodeID="A0"/>
+    <ot:hasSource rdf:resource="http://my.resource.org"/>
     <owl:sameAs>CasRN</owl:sameAs>
     <ot:units></ot:units>
     <dc:title>cas</dc:title>

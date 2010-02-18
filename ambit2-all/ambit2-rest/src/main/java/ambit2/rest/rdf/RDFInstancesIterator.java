@@ -12,7 +12,6 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
-
 import ambit2.rest.rdf.OT.OTClass;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -23,7 +22,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribute> {
@@ -127,11 +125,13 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 		} else return null;
 	}
 	@Override
-	protected Instance parseRecord(Resource newEntry, Instance record) {
+	protected Instance parseRecord(RDFNode newEntry, Instance record) {
+		if (newEntry.isLiteral()) return record;
 		
 		String id = null;
 		//get the compound
-		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
+		StmtIterator compound =  jenaModel.listStatements(
+				new SimpleSelector((Resource)newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
 			Statement st = compound.next();
 			id = st.getObject().toString();
@@ -141,7 +141,7 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 		record.setValue(urilookup.get(CompoundURI),id);
 		//get feature values
 		
-		parseFeatureValues( newEntry,record);
+		parseFeatureValues( (Resource)newEntry,record);
 		record.setDataset(instances);
 		instances.add(record);
 		return record;
