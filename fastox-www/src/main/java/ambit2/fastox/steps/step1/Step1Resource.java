@@ -46,6 +46,7 @@ public class Step1Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = forms.get(key);
 		if ("Search".equals(key)) {
+			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table><tr><td>");			
 			writer.write("<input name='text' title='Enter chemical name, registry identifier, smiles, InChI' type=\"text\" size='80' value='556-82-1'/>");
 			writer.write("</td>");
@@ -59,6 +60,7 @@ public class Step1Resource extends FastoxStepResource {
 			} catch (Exception x) {
 				type = "smiles";
 			}			
+			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write(
 			"<table>"+
 			"<tr>"+
