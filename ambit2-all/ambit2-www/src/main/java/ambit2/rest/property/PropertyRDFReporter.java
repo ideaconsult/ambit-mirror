@@ -86,8 +86,8 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		else if (item.getClazz()==Long.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
 		else if (item.getClazz()==Dictionary.class) feature.addOntClass(OTClass.TupleFeature.getOntClass(jenaModel));
 		
-		feature.addProperty(DC.title, item.getName());
-		feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
+		if (item.getName()!=null) feature.addProperty(DC.title, item.getName());
+		if (item.getUnits()!=null) feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
 		
 		String uri = item.getLabel();
 		if(uri==null) uri  = Property.guessLabel(item.getName());

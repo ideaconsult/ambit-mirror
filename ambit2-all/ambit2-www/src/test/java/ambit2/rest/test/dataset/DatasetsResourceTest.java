@@ -160,7 +160,10 @@ public class DatasetsResourceTest extends ResourceTest {
 	
 	@Test
 	public void testPostNewQueryResult() throws Exception {
-		
+		while (true) {
+			
+		}
+		/*
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
 		Assert.assertEquals(0,table.getRowCount());
@@ -187,7 +190,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		CreateEntryRDF("R3_descriptors.rdf");
 	
 		Assert.fail("verify");
-		
+		*/
 	}	
 	@Test
 	public void testCreateEntryRDF1() throws Exception {

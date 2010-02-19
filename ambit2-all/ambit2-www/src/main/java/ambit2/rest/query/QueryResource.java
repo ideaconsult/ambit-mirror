@@ -155,6 +155,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		}
 	}		
 	
+	protected void customizeEntry(T entry, Connection conection) throws ResourceException {
+		
+	}
 	/**
 	 * POST - create entity based on parameters in http header, creates a new entry in the databaseand returns an url to it
 	 */
@@ -170,6 +173,8 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 			executor.setConnection(c);
 			executor.open();
 			executor.process(updateObject);
+			
+			customizeEntry(entry, c);
 			
 			QueryURIReporter<T,Q> uriReporter = getURUReporter(getRequest());
 			if (uriReporter!=null) {

@@ -1,5 +1,7 @@
 package ambit2.rest.property;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import org.restlet.Context;
@@ -19,14 +21,15 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.FreeTextPropertyQuery;
+import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
-import ambit2.db.update.property.ReadPropertyByNameAndReference;
 import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
@@ -36,6 +39,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -171,7 +175,8 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			}
 			else return new ReadProperty(new Integer(o.toString()));
 		} catch (NumberFormatException x) {
-			return new ReadPropertyByNameAndReference(Reference.decode(o.toString()));
+			throw new InvalidResourceIDException(o);
+			
 		} catch (Exception x) {
 			collapsed = true;
 			return new ReadProperty();
@@ -208,6 +213,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return getResponse().getEntity();
 	}
+	
 	
 	@Override
 	protected RDFObjectIterator<Property> createObjectIterator(
@@ -250,4 +256,32 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		return new PropertyURIReporter(baseReference);
 	}
 	
+	@Override
+	protected void customizeEntry(Property entry, Connection connection)
+			throws ResourceException {
+		
+		if (entry.getId()>0) return;
+		QueryExecutor<RetrieveFieldNames> x = new QueryExecutor<RetrieveFieldNames>();
+		ResultSet rs = null;
+		try {
+			RetrieveFieldNames q = new RetrieveFieldNames();
+			q.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+			q.setValue(entry);
+			x.setConnection(connection);
+			rs = x.process(q);
+			while (rs.next()) {
+				Property p = q.getObject(rs);
+				entry.setId(p.getId());
+				entry.setLabel(p.getLabel());
+				entry.setUnits(p.getUnits());
+				entry.setNominal(p.isNominal());
+				entry.setReference(p.getReference());
+			}
+		} catch (Exception e) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,e.getMessage(),e);
+		} finally {
+			try {rs.close();} catch (Exception e){}
+			try {x.close();} catch (Exception e){}
+		}
+	}
 }
