@@ -33,7 +33,7 @@ public class ReadModel  extends AbstractQuery<String, Integer, StringCondition, 
 	public ReadModel(Integer id) {
 		super();
 		setValue(id);
-		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
+		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 	}
 	public ReadModel() {
 		this(null);
