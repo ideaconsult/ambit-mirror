@@ -215,7 +215,7 @@ public abstract class WizardResource extends ServerResource {
 
 		}
 		if ((step.getIndex()!=0) && (step.getIndex()!=(wizard.size()-1)))
-		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" type=\"submit\" value=\"NEXT\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
+		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" type=\"submit\" value=\"&nbsp;NEXT\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
 
 		writer.write("</ul>\n");
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
