@@ -117,6 +117,7 @@ public abstract class FastoxStepResource extends WizardResource {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			String line = null;
 			String td = "th";
+			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
 			while ((line = reader.readLine()) != null) { 
 				writer.write("<tr>");
@@ -141,6 +142,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		try {
 			writer.write(params.dataset.htmlInputHidden(dataset));
+			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
 			store = DatasetTools.retrieveDataset(null,dataset);
 			DatasetTools.renderDataset(store,writer,"",getRequest().getRootRef());

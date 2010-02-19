@@ -141,6 +141,7 @@ public class ModelTools {
 			Query query = QueryFactory.create(sparql);
 			qe = QueryExecutionFactory.create(query,rdf );
 			ResultSet results = qe.execSelect();
+			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
 			writer.write("<tr>");
 			writer.write("<th>Model</th>");
