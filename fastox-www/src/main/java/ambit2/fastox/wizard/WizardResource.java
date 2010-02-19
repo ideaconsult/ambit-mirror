@@ -65,7 +65,7 @@ public abstract class WizardResource extends ServerResource {
 							new Date(Long.parseLong(version.substring(i+1).replace("-", "").trim())));
 			}
 		} catch (Exception x) {
-			version = version + "_" +x.getMessage();
+			version = version + "_" + getRequest().getRootRef() + "_" + x.getMessage();
 		} finally {
 			//try { p.release();} catch (Exception x) {}
 		}
