@@ -147,7 +147,7 @@ public class ModelTools {
 			writer.write("<th>Model</th>");
 			writer.write("<th>Creator</th>");
 			writer.write("<th>Algorithm</th>");
-			writer.write("<th></th>");
+			writer.write("<th>Status</th>");
 			writer.write("</tr>");
 			while (results.hasNext()) {
 				
