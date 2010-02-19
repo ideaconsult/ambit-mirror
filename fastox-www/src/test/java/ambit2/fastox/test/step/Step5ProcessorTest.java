@@ -28,7 +28,7 @@ public class Step5ProcessorTest extends StepProcessorTest {
 		Form form = new Form();
 		form.add(FastoxStepResource.params.dataset.toString(),String.format("%s/1",
 				wizard.getService(SERVICE.compound)));
-		String model = String.format("%s/1",wizard.getService(SERVICE.model));
+		String model = String.format("%s/pKa",wizard.getService(SERVICE.model));
 		form.add(FastoxStepResource.params.model.toString(),model);
 		form.add(model,"on");
 		form = getStepProcessor().process(form.getWebRepresentation());
