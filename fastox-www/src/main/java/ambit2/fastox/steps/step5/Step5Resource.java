@@ -2,6 +2,7 @@ package ambit2.fastox.steps.step5;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Date;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -23,13 +24,13 @@ import ambit2.fastox.steps.StepProcessor;
  */
 public class Step5Resource extends FastoxStepResource {
 	public static String meta_refresh = 
-				"<meta http-equiv=\"refresh\" content=\"5;URL=%s\">\n"+
+				"<meta http-equiv=\"refresh\" content=\"10;URL=%s\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"no-store, no-cache, must-revalidate\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"post-check=0, pre-check=0\">\n"+
 				"<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">\n"+
 				"<META HTTP-EQUIV=\"EXPIRES\" CONTENT=\"0\">\n";
 				
-
+	protected int running = 0;
 	public Step5Resource() {
 		super(5);
 	}
@@ -46,7 +47,7 @@ public class Step5Resource extends FastoxStepResource {
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
-		int running = 0;
+		running = 0;
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		String[] models = form.getValuesArray(params.model.toString());
 		for (String model:models) {
@@ -65,7 +66,9 @@ public class Step5Resource extends FastoxStepResource {
 		if (running == 0) meta = ""; 
 		else meta = String.format(meta_refresh,getRequest().getResourceRef());
 		
-		return super.get(variant);
+		Representation r = super.get(variant);
+		//if (running > 0)		r.setExpirationDate(new Date(0)); //doesn't seem to work
+		return r;
 	}
 	
 	@Override
@@ -80,7 +83,7 @@ public class Step5Resource extends FastoxStepResource {
 		} catch (Exception x) {
 			form.add(params.errors.toString(),x.getMessage());
 		}
-		int running = ModelTools.renderModels(store,form, writer, true,getRequest().getRootRef());
+		running = ModelTools.renderModels(store,form, writer, true,getRequest().getRootRef());
 		
 		String[] values = form.getValuesArray(params.errors.toString());
 		writer.write(values.length>0?"<h3>Errors</h3>":"");
@@ -107,7 +110,7 @@ public class Step5Resource extends FastoxStepResource {
 			responseHeaders.add("Cache-Control", "post-check=0, pre-check=0");
 			responseHeaders.add("Pragma", "no-cache"); //HTTP 1.0
 			responseHeaders.add("Expires", "0"); //prevents caching at the proxy server
-			responseHeaders.add("Refresh",String.format("5; url=%s",getRequest().getResourceRef()));				
+			responseHeaders.add("Refresh",String.format("10; url=%s",getRequest().getResourceRef()));				
 		}		
 	}
 
@@ -115,7 +118,6 @@ public class Step5Resource extends FastoxStepResource {
 	protected int verifyTask(String model, String task, Form form) throws ResourceException {
 		Representation r = null;
 		try {
-			System.out.println(task);
 			ClientResource client = new ClientResource(task);
 			client.setFollowingRedirects(false);
 			r = client.get(MediaType.TEXT_URI_LIST);
@@ -154,7 +156,9 @@ public class Step5Resource extends FastoxStepResource {
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {
 		meta = String.format(meta_refresh,getRequest().getResourceRef());
-		return super.processForm(entity, variant);
+		Representation r = super.processForm(entity, variant);
+		//r.setExpirationDate(new Date(0));
+		return r;
 	}
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
