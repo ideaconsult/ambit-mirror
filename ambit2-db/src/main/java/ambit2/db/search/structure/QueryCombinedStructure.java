@@ -29,7 +29,6 @@
 
 package ambit2.db.search.structure;
 
-import ambit2.base.config.Preferences;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryCombined;
 

@@ -3,7 +3,7 @@ package ambit2.db.search.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.QueryParam;
@@ -13,7 +13,7 @@ import ambit2.db.search.QueryParam;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryMissingDescriptor extends AbstractStructureQuery<LiteratureEntry,String,BooleanCondition> {
+public class QueryMissingDescriptor extends AbstractStructureQuery<ILiteratureEntry,String,BooleanCondition> {
     /**
 	 * 
 	 */
