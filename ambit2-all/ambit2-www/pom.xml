@@ -20,18 +20,17 @@
 		</resource>
 	</resources>	    
     <plugins>
-   
+   <!-- 
 		<plugin>
 			<groupId>org.codehaus.mojo</groupId>
 		<artifactId>tomcat-maven-plugin</artifactId>
 			<configuration>
-                <!-- /user_home/.m2/settings.xml -->
                 <server>local-tomcat</server>
                 <update>true</update>
-                <!--  if not http://localhost:8080/manager -->
                 <url>http://127.0.0.1:8080/manager</url>
 			</configuration>
 		</plugin>
+		 -->
 		<plugin>
 			<groupId>org.codehaus.cargo</groupId>
 			<artifactId>cargo-maven2-plugin</artifactId>
@@ -86,6 +85,7 @@
 				<skip>true</skip>
 				</configuration>
 		</plugin>
+		
 		<plugin>
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>tomcat-maven-plugin</artifactId>
@@ -95,6 +95,42 @@
 				<path>/ambit2</path>
 			</configuration>
                 </plugin>
+                <!-- 
+                     <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.0-beta-3</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <revisionOnScmFailure>3.14</revisionOnScmFailure>
+          <doCheck>true</doCheck>
+          <doUpdate>true</doUpdate>
+        </configuration>
+      </plugin>
+ -->
+    <plugin>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>2.0</version>
+      <configuration>
+      <!-- 
+        <manifest>
+          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+        </manifest>
+         -->
+        <archive>
+          <manifestEntries>
+            <Implementation-Build>${build.version}</Implementation-Build>
+            </manifestEntries>
+        </archive>
+      </configuration>
+    </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -263,6 +299,11 @@
 		<version>1.5.9</version>
 		<scope>runtime</scope>
 	</dependency>
+  	<dependency>
+  		<groupId>com.hp.hpl.jena</groupId>
+  		<artifactId>arq</artifactId>
+  		<version>2.8.2</version>
+  	</dependency>
   </dependencies>
 	<repositories>
 		<repository>

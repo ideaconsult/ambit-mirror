@@ -46,4 +46,24 @@
 		<servlet-name>RestletServlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+	<mime-mapping>
+        <extension>sdf</extension>
+        <mime-type>chemical/x-mdl-sdfile</mime-type>
+    </mime-mapping>
+	<mime-mapping>
+        <extension>mol</extension>
+        <mime-type>chemical/x-mdl-molfile</mime-type>
+    </mime-mapping>    
+	<mime-mapping>
+        <extension>smiles</extension>
+        <mime-type>chemical/x-daylight-smiles</mime-type>
+    </mime-mapping> 
+	<mime-mapping>
+        <extension>inchi</extension>
+        <mime-type>chemical/x-inchi</mime-type>
+    </mime-mapping>     
+	<mime-mapping>
+        <extension>arff</extension>
+        <mime-type>chemical/x-arff</mime-type>
+    </mime-mapping>       
 </web-app>

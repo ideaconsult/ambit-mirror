@@ -14,12 +14,15 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.ProcessorCreateQuery;
+import ambit2.db.search.IQueryObject;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.update.assessment.CreateAssessment;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.DBConnection;
@@ -89,6 +92,9 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 			if (target instanceof AbstractStructureQuery) {
 				template = retrieveTemplate();
 				return createQueryResults((AbstractStructureQuery)target);
+			} else if (target instanceof QueryCombinedStructure) {
+					template = retrieveTemplate();
+					return createQueryResults((QueryCombinedStructure)target);				
 			} else {
 				//return new RDFStructuresReader(target.toString());
 				throw new Exception("Not implemented");
@@ -99,7 +105,7 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 				));
 			
 	}
-	protected Reference createQueryResults(AbstractStructureQuery target) throws Exception {
+	protected Reference createQueryResults(IQueryObject<IStructureRecord> target) throws Exception {
 		Connection connection = null;
 		UpdateExecutor xx = new UpdateExecutor();
 		try {
@@ -121,7 +127,7 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 			p.setStoredQuery(storedQuery);
 			p.setSession(session);
 			p.setConnection(connection);
-			IStoredQuery q = p.process((AbstractStructureQuery)target);
+			IStoredQuery q = p.process((IQueryObject<IStructureRecord>)target);
 			
 			return new Reference(String.format("%s/dataset/%s%d",
 					applicationRootReference,DatasetStructuresResource.QR_PREFIX,q.getId()));
