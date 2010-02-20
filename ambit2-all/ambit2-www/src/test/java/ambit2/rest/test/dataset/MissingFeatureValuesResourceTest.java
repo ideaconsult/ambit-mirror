@@ -8,30 +8,27 @@ import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.rest.OpenTox;
-import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.rdf.RDFStructuresIterator;
+import ambit2.rest.task.CallableDatasetCreator;
 import ambit2.rest.test.ResourceTest;
 
 public class MissingFeatureValuesResourceTest extends ResourceTest {
 
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/query%s", port,MissingFeatureValuesResource.resource);
+		return createMissingValuesReference().toString();
 	}
 	protected Reference createMissingValuesReference() {
-		Form form = new Form();
-		form.add(OpenTox.params.feature_uris.toString(),
-				String.format("http://localhost:%d%s/3", port,	PropertyResource.featuredef));
-		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/1",port));
-
-		Reference ref = new Reference(getTestURI());
-		ref.setQuery(form.getQueryString());
-		return ref;
+		return CallableDatasetCreator.createFilterReference(
+				String.format("http://localhost:%d", port),
+				String.format("http://localhost:%d/dataset/1",port),
+				new String[] {String.format("http://localhost:%d%s/3", port,	PropertyResource.featuredef)});
 	}
 
 	@Test
@@ -40,10 +37,21 @@ public class MissingFeatureValuesResourceTest extends ResourceTest {
 		Form form = new Form();
 		form.add(OpenTox.params.dataset_uri.toString(),ref.toString());
 		testPost(String.format("http://localhost:%d/dataset", port),MediaType.APPLICATION_WWW_FORM,form.getWebRepresentation());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM query join query_results using(idquery) where idquery=3");
+		Assert.assertEquals(3,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT idproperty FROM query join template_def using(idtemplate) where idquery=3");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3,table.getValue(0,"idproperty"));
+		c.close();				
 	}	
+	
+	
+
 	@Test
 	public void testRDFXML() throws Exception {
-		
+
 		RDFStructuresIterator iterator = new RDFStructuresIterator(createMissingValuesReference());
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		int count = 0;
@@ -65,12 +73,35 @@ public class MissingFeatureValuesResourceTest extends ResourceTest {
 		}
 		Assert.assertEquals(3,count);
 		
-        IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM query join query_results using(idquery) where idquery=3");
-		Assert.assertEquals(3,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT idproperty FROM query join template_def using(idtemplate) where idquery=3");
-		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals(3,table.getValue(0,"idproperty"));
-		c.close();		
+
 	}	
+	
+	
+	@Test
+	public void testCreateEmpty() throws Exception {
+		
+		Reference ref = CallableDatasetCreator.createFilterReference(
+				String.format("http://localhost:%d", port),
+				String.format("http://localhost:%d/compound/11/conformer/100215",port),
+				new String[] {String.format("http://localhost:%d%s/3", port,	PropertyResource.featuredef)});
+		
+		 createMissingValuesReference();
+		Form form = new Form();
+		form.add(OpenTox.params.dataset_uri.toString(),ref.toString());
+		testAsyncTask(String.format("http://localhost:%d/dataset", port),
+				form,
+				Status.CLIENT_ERROR_NOT_FOUND,
+				"http://localhost:8181/dataset/R3"
+				);
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM query");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();			
+	}
+	@Override
+	public void testGetJavaObject(String uri, MediaType media,
+			Status expectedStatus) throws Exception {
+		// TODO Auto-generated method stub
+		super.testGetJavaObject(uri, media, expectedStatus);
+	}
 }

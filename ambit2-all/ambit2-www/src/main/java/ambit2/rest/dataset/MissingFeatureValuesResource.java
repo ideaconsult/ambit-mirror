@@ -30,7 +30,7 @@ public class MissingFeatureValuesResource extends DatasetStructuresResource<Quer
 	protected QueryCombinedStructure createQuery(Context context, Request request, Response response)
 			throws ResourceException {
 		setTemplate(createTemplate(context, request, response));
-		if ((getTemplate()==null) || (getTemplate().size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"No feature!");
+		if ((getTemplate()==null) || (getTemplate().size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"No features set!");
 		
 		QueryCombinedStructure query = new QueryCombinedStructure();
 		try {
@@ -70,4 +70,6 @@ public class MissingFeatureValuesResource extends DatasetStructuresResource<Quer
 		
 		return query;
 	}
+	
+
 }

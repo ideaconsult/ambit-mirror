@@ -83,12 +83,7 @@ public class DBConnection {
 				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
-			/*
-			li.setUser("nina");
-			li.setPassword("sinanica");
-			li.setHostname("192.166.1.2");
-			li.setDatabase("ambit-20100207");
-			*/
+	
 			//li.setDatabase("echa");
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 

@@ -10,6 +10,8 @@ import org.restlet.routing.Template;
 
 public class OpenTox {
 	public static enum URI {
+		query,
+		missingValues,
 		task,
 		algorithm,
 		model,
