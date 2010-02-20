@@ -131,7 +131,12 @@ public class OpenTox {
 			public String getDescription() {
 				return "either use ?source_uri=URI, or POST with text/uri-list or RDF representation of the object to be created";
 			}
-		}; 
+		},
+		dataset_service {
+			public String getDescription() {
+				return "Destination dataset service, used by Algorithms and Models to store results";
+			}
+		}; 		
 		public boolean isMandatory() {
 			return true;
 		}

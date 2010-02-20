@@ -48,6 +48,7 @@ import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.fastox.FastToxStep1;
 import ambit2.rest.fastox.FastToxStep2;
 import ambit2.rest.fastox.KroesInput;
@@ -159,6 +160,14 @@ public class AmbitApplication extends Application {
 	    timer.scheduleAtFixedRate(cleanUpTasks,taskCleanupRate,taskCleanupRate);
 
 		Preferences.setProperty(Preferences.MAXRECORDS,"0");
+		
+		getMetadataService().setEnabled(true);
+		getMetadataService().addExtension("sdf", ChemicalMediaType.CHEMICAL_MDLSDF, true);
+		getMetadataService().addExtension("mol", ChemicalMediaType.CHEMICAL_MDLMOL, true);
+		getMetadataService().addExtension("inchi", ChemicalMediaType.CHEMICAL_INCHI, true);
+		getMetadataService().addExtension("cml", ChemicalMediaType.CHEMICAL_CML, true);
+		getMetadataService().addExtension("smiles", ChemicalMediaType.CHEMICAL_SMILES, true);
+
 		
 	}
 	@Override
@@ -360,6 +369,7 @@ public class AmbitApplication extends Application {
 		router.attach(QueryResource.query_resource,queryRouter);
 		queryRouter.attachDefault(QueryListResource.class);
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
+		queryRouter.attach(MissingFeatureValuesResource.resource,MissingFeatureValuesResource.class);
 		
 		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 				
@@ -396,7 +406,8 @@ public class AmbitApplication extends Application {
 		algoRouter.attachDefault(AllAlgorithmsResource.class);
 		router.attach(AllAlgorithmsResource.algorithm,algoRouter);
 		router.attach(AllAlgorithmsResource.resourceID,algoRouter);
-
+		
+		
 		Router taskRouter = new MyRouter(getContext());
 		taskRouter.attachDefault(TaskResource.class);
 		taskRouter.attach(TaskResource.resourceID, TaskResource.class);
