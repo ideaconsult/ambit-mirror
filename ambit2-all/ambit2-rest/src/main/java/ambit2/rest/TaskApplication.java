@@ -112,7 +112,16 @@ public class TaskApplication<USERID> extends Application {
 			return;
 		}
 	}
-	public synchronized Reference addTask(String taskName, Callable<Reference> callable, Reference baseReference) {
+	//shortcut for backward compatibility
+	public synchronized Reference addTask(String taskName, 
+			Callable<Reference> callable, 
+			Reference baseReference) {
+		return addTask(taskName,callable,baseReference,(USERID) "guest");
+	}
+	public synchronized Reference addTask(String taskName, 
+			Callable<Reference> callable, 
+			Reference baseReference,
+			USERID user) {
 		if (callable == null) return null;
 		FutureTask<Reference> futureTask = new FutureTask<Reference>(callable) {
 			@Override
@@ -124,7 +133,7 @@ public class TaskApplication<USERID> extends Application {
 			
 		};		
 		UUID uuid = UUID.randomUUID();
-		Task<Reference,USERID> task = new Task<Reference,USERID>(futureTask);
+		Task<Reference,USERID> task = new Task<Reference,USERID>(futureTask,user);
 		task.setName(taskName);
 		Reference ref =	new Reference(
 				String.format("%s%s/%s", baseReference.toString(),SimpleTaskResource.resource,Reference.encode(uuid.toString())));
