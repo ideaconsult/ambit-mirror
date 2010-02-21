@@ -2,7 +2,6 @@ package ambit2.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 

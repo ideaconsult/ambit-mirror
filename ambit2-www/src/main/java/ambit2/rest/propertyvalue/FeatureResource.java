@@ -32,7 +32,6 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 

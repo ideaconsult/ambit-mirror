@@ -4,6 +4,7 @@ import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
+import ambit2.rest.reporters.CatalogURIReporter;
 
 /**
  * Generates URI from algorithm ID

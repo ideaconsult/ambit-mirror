@@ -10,9 +10,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.property.PropertyResource;
 
 /**
  * Conformer resource as in http://opentox.org/development/wiki/structure

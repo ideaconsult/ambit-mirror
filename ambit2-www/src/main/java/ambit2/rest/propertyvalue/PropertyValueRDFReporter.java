@@ -12,7 +12,6 @@ import ambit2.db.readers.PropertyValue;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyRDFReporter;
-import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceURIReporter;
@@ -21,8 +20,6 @@ import ambit2.rest.structure.CompoundURIReporter;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.vocabulary.DC;
-import com.hp.hpl.jena.vocabulary.OWL;
 
 /**
  * FeatureValue

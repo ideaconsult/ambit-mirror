@@ -14,7 +14,6 @@ import ambit2.db.UpdateExecutor;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.model.CreateModel;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 

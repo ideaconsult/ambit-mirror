@@ -3,7 +3,6 @@ package ambit2.rest.structure.diagram;
 import java.awt.image.BufferedImage;
 
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;

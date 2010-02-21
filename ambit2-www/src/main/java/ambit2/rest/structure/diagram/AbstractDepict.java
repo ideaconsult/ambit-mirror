@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;

@@ -1,7 +1,6 @@
 package ambit2.rest.task;
 
 
-import java.sql.Connection;
 import java.util.List;
 
 import org.restlet.Context;
