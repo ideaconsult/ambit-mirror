@@ -1,13 +1,14 @@
 package ambit2.rest.task;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class Task<Reference> implements Serializable {
+public class Task<Reference,USERID> implements Serializable {
 	/**
 	 * 
 	 */
@@ -18,8 +19,16 @@ public class Task<Reference> implements Serializable {
 	protected Reference uri;
 	protected String name = "Default";
 	protected long started = System.currentTimeMillis();
+	protected long completed = -1;
 	protected float percentCompleted = 0;
+	protected USERID userid;
 	
+	public USERID getUserid() {
+		return userid;
+	}
+	public void setUserid(USERID userid) {
+		this.userid = userid;
+	}
 	public boolean isExpired(long lifetime) {
 		return (System.currentTimeMillis()-started) > lifetime;
 	}
@@ -58,6 +67,7 @@ public class Task<Reference> implements Serializable {
 			if (future!=null) {
 				Reference ref = future.get(100, TimeUnit.MILLISECONDS);
 				future = null;
+				completed = System.currentTimeMillis();
 				setUri(ref);
 			}
 			return uri; 
@@ -76,7 +86,13 @@ public class Task<Reference> implements Serializable {
 	@Override
 	public String toString() {
 		try {
-		return String.format("%s",getReference().toString());
+		return String.format("%s [%s] Started %s Completed %s [%s]",
+				name==null?"?":name,
+				getReference().toString(),
+				new Date(started),
+				((completed>0)?new Date(completed):"-"),
+				getStatus()
+				);
 		} catch (Exception x) {
 			return x.getMessage();
 		}

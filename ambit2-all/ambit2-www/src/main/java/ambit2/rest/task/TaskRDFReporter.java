@@ -19,7 +19,7 @@ import com.hp.hpl.jena.vocabulary.DC;
  * @author nina
  *
  */
-public class TaskRDFReporter extends CatalogRDFReporter<Task<Reference>> {
+public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,USERID>> {
 
 	/**
 	 * 
@@ -31,7 +31,7 @@ public class TaskRDFReporter extends CatalogRDFReporter<Task<Reference>> {
 		baseRef = request.getRootRef();
 	}
 	@Override
-	public void header(Writer output, Iterator<Task<Reference>> query) {
+	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
 		super.header(output, query);
 		OT.OTClass.Task.createOntClass(getJenaModel());
 		getJenaModel().createAnnotationProperty(DC.title.getURI());
@@ -40,7 +40,7 @@ public class TaskRDFReporter extends CatalogRDFReporter<Task<Reference>> {
 	}
 
 	@Override
-	public void processItem(Task<Reference> item, Writer output) {
+	public void processItem(Task<Reference,USERID> item, Writer output) {
 		String ref;
 		try {
 			ref = item.getReference().toString();

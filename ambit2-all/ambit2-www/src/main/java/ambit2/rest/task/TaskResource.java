@@ -1,7 +1,6 @@
 package ambit2.rest.task;
 
 import java.io.Writer;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -39,11 +38,11 @@ Location: http://example.org/thenewurl
  * @author nina
  *
  */
-public class TaskResource extends SimpleTaskResource {
+public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 
 	
 	@Override
-	public synchronized IProcessor<Iterator<Task<Reference>>, Representation> createConvertor(
+	public synchronized IProcessor<Iterator<Task<Reference,USERID>>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
@@ -68,12 +67,4 @@ public class TaskResource extends SimpleTaskResource {
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 
-}
-
-class TaskComparator implements Comparator<Task<Reference>>{
-
-	public int compare(Task<Reference> o1, Task<Reference> o2) {
-		return (int) (o2.getStarted()-o1.getStarted());
-	}
-	
 }

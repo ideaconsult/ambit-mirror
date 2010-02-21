@@ -43,7 +43,8 @@ Location: http://example.org/thenewurl
  * @author nina
  *
  */
-public abstract class SimpleTaskResource extends AbstractResource<Iterator<Task<Reference>>,Task<Reference>,IProcessor<Iterator<Task<Reference>>, Representation>> {
+public abstract class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<Reference,USERID>>,
+							Task<Reference,USERID>,IProcessor<Iterator<Task<Reference,USERID>>, Representation>> {
 	public static final String resource = "/task";
 	public static final String resourceKey = "idtask";
 	public static final String resourceID = String.format("/{%s}", resourceKey);
@@ -63,13 +64,13 @@ public abstract class SimpleTaskResource extends AbstractResource<Iterator<Task<
 	}
 
 	@Override
-	protected synchronized Iterator<Task<Reference>> createQuery(Context context, Request request,
+	protected synchronized Iterator<Task<Reference,USERID>> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		
 		Object id = request.getAttributes().get(resourceKey);
 
 		try {
-			ArrayList<Task<Reference>> list = new ArrayList<Task<Reference>>();
+			ArrayList<Task<Reference,USERID>> list = new ArrayList<Task<Reference,USERID>>();
 			if (id == null) {
 				status = Status.SUCCESS_OK;
 				int max = 0;
@@ -88,20 +89,20 @@ public abstract class SimpleTaskResource extends AbstractResource<Iterator<Task<
 				if (search == null) //all tasks
 					return ((TaskApplication)getApplication()).getTasks();
 				else {
-					Iterator<Task<Reference>> tasks = ((TaskApplication)getApplication()).getTasks();
+					Iterator<Task<Reference,USERID>> tasks = ((TaskApplication)getApplication()).getTasks();
 					while (tasks.hasNext()) {
-						Task<Reference> task = tasks.next();
+						Task<Reference,USERID> task = tasks.next();
 						//if (task.isDone() && ((System.currentTimeMillis()-task.started)>old) 
 						//		((AmbitApplication)getApplication()).removeTask(id);
 						if (search.equals(task.getStatus())) 
 							list.add(task);
 					}
-					Collections.sort(list, new TaskComparator());
+					Collections.sort(list, new TaskComparator<USERID>());
 					return list.iterator();
 				}
 			} else {
 
-				Task<Reference> task = ((TaskApplication)getApplication()).findTask(Reference.decode(id.toString()));
+				Task<Reference,USERID> task = ((TaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
 				if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				
 				Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");  
@@ -165,9 +166,9 @@ public abstract class SimpleTaskResource extends AbstractResource<Iterator<Task<
 	
 }
 
-class TaskComparator implements Comparator<Task<Reference>>{
+class TaskComparator<USERID> implements Comparator<Task<Reference,USERID>>{
 
-	public int compare(Task<Reference> o1, Task<Reference> o2) {
+	public int compare(Task<Reference,USERID> o1, Task<Reference,USERID> o2) {
 		return (int) (o2.getStarted()-o1.getStarted());
 	}
 	
