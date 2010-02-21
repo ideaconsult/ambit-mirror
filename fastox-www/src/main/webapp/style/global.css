@@ -513,7 +513,7 @@ TD.results {
 
 #tabs4 a {
 	float: left;
-	background: url("images/tableft4.gif") no-repeat left top;
+	background: url("images/tableft4a.png") no-repeat left top;
 	margin: 0;
 	padding: 0 0 0 7px;
 	text-decoration: none;
@@ -522,7 +522,7 @@ TD.results {
 #tabs4 a span {
 	float: left;
 	display: block;
-	background: url("images/tabright4.gif") no-repeat right top;
+	background: url("images/tabright4a.png") no-repeat right top;
 	padding: 5px 15px 4px 6px;
 	color: #636bd2;
 }
@@ -534,7 +534,7 @@ TD.results {
 
 /* End IE5-Mac hack */
 #tabs4 a:hover span {
-	color: #636bd2;
+	color: #FFFFFF;
 }
 
 #tabs4 a:hover {
@@ -550,5 +550,6 @@ TD.results {
 }
 
 #tabs4 #current a span {
+	color: #FFFFFF;
 	background-position: 100% -42px;
 }
