@@ -56,8 +56,9 @@ public class Task<Reference,USERID> implements Serializable {
 	public void setUri(Reference uri) {
 		this.uri = uri;
 	}
-	public Task(Future<Reference> future) {
+	public Task(Future<Reference> future,USERID user) {
 		this.future = future;
+		this.userid = user;
 	}
 	public Future<Reference> getFuture() {
 		return future;
