@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.restlet.Request;
 
 import ambit2.rest.AmbitResource;
+import ambit2.rest.reporters.CatalogURIReporter;
 
 /**
  * HTML reporter for {@link AlgorithmResource}

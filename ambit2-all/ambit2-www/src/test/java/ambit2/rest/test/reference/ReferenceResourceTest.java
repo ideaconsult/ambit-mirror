@@ -18,7 +18,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
 import org.w3c.dom.Document;
 
 import ambit2.base.data.ILiteratureEntry;
@@ -26,7 +25,6 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
-import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFReferenceIterator;

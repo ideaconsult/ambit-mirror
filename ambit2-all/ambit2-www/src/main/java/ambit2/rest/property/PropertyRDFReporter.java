@@ -9,12 +9,10 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTClass;
-import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 

@@ -9,7 +9,7 @@ import org.restlet.data.Reference;
 
 import ambit2.rest.AmbitResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
-import ambit2.rest.algorithm.CatalogURIReporter;
+import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.Task.taskStatus;
 
 public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {

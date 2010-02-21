@@ -1,7 +1,5 @@
 package ambit2.rest.model;
 
-import java.sql.Connection;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;

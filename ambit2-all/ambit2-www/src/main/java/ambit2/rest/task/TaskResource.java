@@ -16,7 +16,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.algorithm.CatalogURIReporter;
+import ambit2.rest.reporters.CatalogURIReporter;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs

@@ -13,8 +13,6 @@ import org.restlet.data.Reference;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.resource.ClientResource;
 
-import com.hp.hpl.jena.ontology.OntModel;
-
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -28,6 +26,8 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 public abstract class CallableQueryProcessor<Target,Result> implements Callable<Reference> {
 	protected AbstractBatchProcessor batch; 

@@ -22,8 +22,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.StoredQuery;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;

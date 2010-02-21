@@ -12,7 +12,6 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.security.Role;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.exceptions.AmbitException;

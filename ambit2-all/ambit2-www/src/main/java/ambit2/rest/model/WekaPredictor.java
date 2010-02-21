@@ -27,7 +27,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.rest.OpenTox;
-import ambit2.rest.property.PropertyURIReporter;
 
 
 
