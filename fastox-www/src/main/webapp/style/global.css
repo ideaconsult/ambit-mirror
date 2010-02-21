@@ -297,6 +297,28 @@ div.user {
 	background-position: right top;
 }
 
+
+.small_button {
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	color: #636bd2;
+	height: 18px;
+	width: 700px;
+	border: none;
+	background: #ffffff;
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+
+.small_button:hover {
+	color: #ffffff;
+	cursor: pointer;
+	background: #636bd2;
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+
 #mainNav li a, #mainNav li a:link, #mainNav li a:visited, #mainNav li a:hover, #mainNav li a:active {
 	color: #ccc;
 }

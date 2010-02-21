@@ -9,13 +9,11 @@ import java.util.List;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Parameter;
-import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.users.IToxPredictSession;
-import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 
 import com.hp.hpl.jena.query.QueryExecution;
@@ -146,7 +144,7 @@ public class Step3Resource extends FastoxStepResource {
 				session.setError(x);
 			}
 			writer.write("</form>");
-			writer.write("<form action='' method='post' name='endpoints'>");
+			
 			Form form = new Form();
 			retrieveEndpoints(form,key);
 			renderEndpoints(form,writer);
@@ -161,6 +159,9 @@ public class Step3Resource extends FastoxStepResource {
 		}
 
 		super.renderFormContent(writer, key);
+	}
+	@Override
+	public void renderFormFooter(Writer writer, String key) throws IOException {
 	}
 	public void retrieveModelsFromSparqlService(IToxPredictSession session, String key) throws IOException {
 
@@ -214,9 +215,16 @@ public class Step3Resource extends FastoxStepResource {
 				form.add(params.parentendpoint_name.toString(), session.getEndpointName());
 				form.removeAll(params.dataset.toString());
 				
+						
 				parameters.add(new Parameter(params.subendpoint.toString(),
-						String.format("<input type='radio' name='endpoint' value='%s' checked><input type='hidden' name='%s' value='%s'>%s<br>",
-						resource.getURI(), resource.getURI(),	literal.getString(),literal.getString())));
+						String.format("<form name='select_e' method='POST' action='' value='Find models for %s'><img src='%s/images/folder.png'>" +
+								"<input type='hidden' name='endpoint_name' value='%s'>" +
+								"<input type='hidden' name='endpoint' value='%s'>" +
+								"<input type='submit' name='find' class='small_button' value='%s' title='Find models for %s'></form>",
+						literal.getString(),
+						getRootRef().toString(),
+						literal.getString(),resource.getURI(),literal.getString(),literal.getString())));								
+
 				
 				/*
 				parameters.add(new Parameter(params.subendpoint.toString(),
@@ -246,21 +254,37 @@ public class Step3Resource extends FastoxStepResource {
 
 			String[] subendpoints = form.getValuesArray(params.subendpoint.toString());
 			if (subendpoints.length==0) return;
-			
-			writer.write(String.format("<h3><img src='%s/images/folder.png'><input type='radio' name='endpoint' value='%s' checked><input type='hidden' name='%s' value='%s'>%s</h3>",
-					getRootRef().toString(),
-					"http://www.opentox.org/echaEndpoints.owl#Endpoints","http://www.opentox.org/echaEndpoints.owl#Endpoints","Endpoints","Endpoints"));
-			if (!session.getEndpointName().equals("Endpoints"))
-			writer.write(String.format("<h4><img src='%s/images/folder.png'><input type='radio' name='endpoint' value='%s' checked><input type='hidden' name='%s' value='%s'>%s</h4>",
-					getRootRef().toString(),
-					session.getEndpoint(),session.getEndpoint(),session.getEndpointName(),session.getEndpointName()));
+
+			if (!session.getEndpointName().equals("Endpoints"))  
+				writer.write(String.format("<form name='select_e' method='POST' action='' value='Find models for %s'>" +
+						"<img src='%s/images/16x16_toxicological_endpoints.png'>" +
+						"<input type='hidden' name='endpoint_name' value='%s'>" +
+						"<input type='hidden' name='endpoint' value='%s'>" +
+						"<input type='submit' name='find' class='small_button' value='%s' title='Find models for %s'></form>",
+						"Endpoints",
+						getRootRef().toString(),
+						"Endpoints",
+						"http://www.opentox.org/echaEndpoints.owl#Endpoints",
+						"Endpoints","Endpoints (top level)"));
+
+			 writer.write(String.format("<img src='%s/images/resultset_next.png'>%s",getRootRef().toString(),session.getEndpointName()));
+			/*
+				writer.write(String.format("<form name='select_e' method='POST' action='' value='Find models for %s'>" +
+						"<img src='%s/images/resultset_next.png'>" +
+						"<input type='hidden' name='endpoint_name' value='%s'>" +
+						"<input type='hidden' name='endpoint' value='%s'>" +
+						"<input type='submit' name='find' class='small_button' value='%s' title='Find models for %s'></form>",
+						session.getEndpointName(),
+						getRootRef().toString(),
+					session.getEndpointName(),session.getEndpoint(),session.getEndpointName(),session.getEndpointName()));
+			*/
 			
 			//writer.write(String.format("Specific %s</h5>",session.getEndpointName()));		
 			for (String subendpoint:subendpoints) {
 				writer.write(subendpoint);
 				
 			}
-			writer.write("<input type='submit' name='find' value='Find models' title='Find models for the selected endpoint'>");
+
 
 
 		

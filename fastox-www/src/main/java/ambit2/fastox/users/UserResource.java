@@ -40,6 +40,10 @@ public class UserResource extends WizardResource {
 				writer.write(session.getModelStatus(model).toString());
 			}
 		writer.write("</ul>");
+		writer.write("<h4>Endpoints</h4><ul>");
+		
+		writer.write(session.getEndpointName());writer.write("&nbsp;");
+		writer.write(session.getEndpoint());
 		writer.write("</div>");
 		writer.write(String.format("<h2><a href='%s'>%s</a></h2>",getRequest().getRootRef(),"Go to ToxPredict"));
 	}

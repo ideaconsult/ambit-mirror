@@ -26,7 +26,7 @@ public class Step3Processor extends StepProcessor {
 		
 		Object o = form.getFirstValue(params.endpoint.toString());
 		session.setEndpoint((o==null)?session.getEndpoint():Reference.decode(o.toString()));
-		o = form.getFirstValue(session.getEndpoint());
+		o = form.getFirstValue(params.endpoint_name.toString());
 		session.setEndpointName((o==null)?session.getEndpointName():Reference.decode(o.toString()));		
 		return form;
 	}
