@@ -29,11 +29,11 @@ public class Step4Resource extends FastoxStepResource {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
 		try {
-			store = ModelTools.retrieveModels(store,form, MediaType.APPLICATION_RDF_XML);
+			store = ModelTools.retrieveModels(store,session, MediaType.APPLICATION_RDF_XML);
 		} catch (Exception x) {
-			form.add(params.errors.toString(),x.getMessage());
+			session.setError(x);
 		}
-		ModelTools.renderModels(store,form, writer, false,getRootRef());
+		ModelTools.renderModels(store,session, writer, false,getRootRef());
 		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}

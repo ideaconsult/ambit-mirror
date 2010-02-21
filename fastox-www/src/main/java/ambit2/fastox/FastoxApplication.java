@@ -2,10 +2,13 @@ package ambit2.fastox;
 
 import java.io.StringWriter;
 
-import org.restlet.Application;
 import org.restlet.Component;
+import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.Server;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
@@ -13,39 +16,75 @@ import org.restlet.routing.Filter;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
+import org.restlet.security.ChallengeAuthenticator;
+import org.restlet.security.MapVerifier;
 import org.restlet.util.RouteList;
 
 import ambit2.fastox.steps.WelcomeResource;
+import ambit2.fastox.users.IToxPredictUser;
+import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.rest.TaskApplication;
 
-public class FastoxApplication extends Application {
+public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 	
 	public FastoxApplication() {
 		super();
 		setName("ToxPredict");
 		
 	}
+    private ChallengeAuthenticator authenticatior;
+
+    private ChallengeAuthenticator createAuthenticator() {
+
+        ChallengeScheme challengeScheme = ChallengeScheme.HTTP_BASIC;
+        String realm = "ToxPredict";
+
+        // MapVerifier isn't very secure; see docs for alternatives
+        MapVerifier verifier = new MapVerifier();
+        verifier.getLocalSecrets().put("opentox", "opentox".toCharArray());
+
+        ChallengeAuthenticator auth = new ChallengeAuthenticator(null, false, challengeScheme, realm);
+        /*
+            @Override
+            protected boolean authenticate(Request request, Response response) {
+                if (request.getChallengeResponse() == null) {
+                    return false;
+                } else {
+                    return super.authenticate(request, response);
+                }
+            }
+        };
+        */
+        auth.setVerifier(verifier);
+        return auth;
+    }
+	
     @Override
     public Restlet createInboundRoot() {
         final Router router = new Router(getContext());
         router.attach(WelcomeResource.resource, WelcomeResource.class);
         router.attach("", WelcomeResource.class);
 
-        router.attach("/admin", AdminResource.class);
+        
+        this.authenticatior = createAuthenticator();
+        router.attach(String.format("/admin/{%s}",UserResource.resourceKey),authenticatior);
+        authenticatior.setNext(AdminResource.class);        
+        
         router.attach("/help", HelpResource.class);
         router.attach("/{x}", WelcomeResource.class); //this is a hack to avoid not-matching if navigated to /ToxPredict/whatever
         router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
         router.setRoutingMode(Router.MODE_BEST_MATCH); 
         
-        Router usersRouter = new Router(getContext());
-        usersRouter.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
-        usersRouter.setRoutingMode(Router.MODE_BEST_MATCH); 
-        router.attach(String.format("/%s/{%s}",UserResource.resource,UserResource.resourceKey),usersRouter);
-        router.attach(String.format("/%s",UserResource.resource),usersRouter);
-        usersRouter.attachDefault(UserResource.class);
+        Router userRouter = new Router(getContext());
+        userRouter.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
+        userRouter.setRoutingMode(Router.MODE_BEST_MATCH); 
+        router.attach(String.format("/%s/{%s}",UserResource.resource,UserResource.resourceKey),userRouter);
+        //router.attach(String.format("/%s",UserResource.resource),usersRouter);
+        userRouter.attachDefault(UserResource.class);
         
         for (WizardMode mode : WizardMode.values()) {
             Wizard wizard = Wizard.getInstance(mode);
@@ -53,8 +92,13 @@ public class FastoxApplication extends Application {
             	WizardStep step = wizard.getStep(i);
             	
             	if (i>0) {
-            		usersRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResource()), step.getResourceClass());
-            		usersRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResourceTab()), step.getResourceClass());
+            		userRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResource()), step.getResourceClass());
+            		userRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResourceTab()), step.getResourceClass());
+            		/*
+            		userRouter.attach(String.format("/%s%s",mode.getResource(),step.getResource()), step.getResourceClass());
+            		userRouter.attach(String.format("/%s%s",mode.getResource(),step.getResourceTab()), step.getResourceClass());
+
+            		 */
             	}
             	
             }  

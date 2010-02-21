@@ -14,6 +14,7 @@ import ambit2.fastox.steps.step3.Step3;
 import ambit2.fastox.steps.step4.Step4;
 import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.steps.step6.Step6;
+import ambit2.fastox.task.TaskStep;
 
 public class Wizard {
 	protected Properties properties;
@@ -126,6 +127,29 @@ public class Wizard {
 				return "Find models";
 			}
 			
+		},
+		task {
+			@Override
+			public String getResource() {
+				return "task";
+			}
+			@Override
+			public String getTitle() {
+				return "Jobs";
+			}
+			@Override
+			public Wizard getWizard() {
+				if (taskWizard == null) {
+					taskWizard = new Wizard(
+					 new WizardStep[] {
+								new WizardStep(0,"Welcome","ToxPredict, an OpenTox demo application",WelcomeResource.class),
+								new TaskStep(),
+								
+							}
+					 );
+				}
+				return taskWizard;
+			}
 		};
 		public abstract Wizard getWizard();
 		public abstract String getResource();
@@ -137,6 +161,7 @@ public class Wizard {
 	}
 	protected static Wizard startFromStructure = null;
 	protected static Wizard startFromEndpoint = null;
+	protected static Wizard taskWizard = null;
 	protected WizardStep[] steps;
 
 	

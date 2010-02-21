@@ -21,14 +21,17 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import ambit2.fastox.UserResource;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.fastox.users.IToxPredictSession;
+import ambit2.fastox.users.IToxPredictUser;
+import ambit2.fastox.users.MemoryUsersStorage;
+import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 	
 public abstract class WizardResource extends ServerResource {
 	protected static String jsGoogleAnalytics = null;
-	protected String user_name = "guest";
+	protected IToxPredictSession session;
 	protected WizardStep step;
 	protected Hashtable<String,Form> forms;
 	protected String tabIndex = null;
@@ -83,6 +86,15 @@ public abstract class WizardResource extends ServerResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
+		try {
+			session = getSession(getUserKey());
+			if (session == null)
+				getResponse().redirectTemporary(getRootRef());
+			
+		} catch (Exception x) {
+			getResponse().redirectTemporary(getRootRef());
+		}
+		
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
 		Object t = getRequestAttributes().get(WizardStep.tab);
 		tabIndex = t==null?getDefaultTab():Reference.decode(t.toString());
@@ -99,16 +111,28 @@ public abstract class WizardResource extends ServerResource {
 			step = null;
 		}
 		
-		try {
-			//user_name = Reference.decode(getRequest().getAttributes().get(UserResource.resourceKey).toString());
-			user_name="guest";
-		} catch (Exception x) { 
-			user_name="guest";
-		}		
 		forms = createForms();
 		meta = "";
 		readVersion();
+		
+		
 	}
+	protected String getUserKey() throws ResourceException {
+		Object object = getRequest().getAttributes().get(UserResource.resourceKey);
+		if (object!=null) return Reference.decode(object.toString());
+		return null;
+	}	
+	protected IToxPredictSession getSession(String id) {
+		return MemoryUsersStorage.getSession(id);
+	}
+	protected IToxPredictSession getSession(IToxPredictUser user) {
+		return MemoryUsersStorage.getSession(user);
+	}
+	protected IToxPredictSession addSession(IToxPredictUser user) {
+		return MemoryUsersStorage.addSession(user);
+	}
+
+
 	protected String getDefaultTab() {
 		return "Help";
 	}
@@ -155,13 +179,14 @@ public abstract class WizardResource extends ServerResource {
 		writer.write(String.format("<div class='user'>Welcome,&nbsp;<a href='%s/%s/%s'>%s</a></div><br>",
 				getRequest().getRootRef(),
 				UserResource.resource,
-				user_name==null?"guest":user_name,
-				user_name==null?"guest":user_name));			
+				Reference.encode(session==null?"guest":session.getUser().getId()),
+				session==null?"guest":session.getUser().getName()));			
 		writer.write(String.format("<a href='%s/help' target='help' title='Help'>%s</a><br>",
 				getRequest().getRootRef(),
 				"Help"));		
-		writer.write(String.format("<a href='%s/admin' target='admin' title='Configuration'>%s</a>",
+		writer.write(String.format("<a href='%s/admin/%s' target='admin' title='Configuration'>%s</a>",
 				getRequest().getRootRef(),
+				session.getUser().getId(),
 				"Admin"));		
 		writer.write("</td>");
 		writer.write("<tr>");
@@ -178,10 +203,10 @@ public abstract class WizardResource extends ServerResource {
 					String.format("%s/%s/%s/%s%s",
 					getRequest().getRootRef().toString(),
 					UserResource.resource,
-					user_name,
+					session.getUser().getId(),
 					mode,
 					thestep.getResource()));
-			stepRef.setQuery(query.getQueryString());
+			//stepRef.setQuery(query.getQueryString());
 			
 			if (i < step.getIndex()) {
 				writer.write(String.format(
@@ -225,11 +250,9 @@ public abstract class WizardResource extends ServerResource {
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
-		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String[] errors = form.getValuesArray(params.errors.toString());
-		if (errors.length>0) 
-			for (String error:errors)
-				writer.write(String.format("<div class='errors'>%s</div>",error));
+
+		if (session.getError() != null) 
+				writer.write(String.format("<div class='errors'>%s</div>",session.getError().getMessage()));
 		else 
 			writer.write(String.format("<div class='errors'>%s</div>","None"));
 		writer.write("</FIELDSET>");
@@ -241,7 +264,8 @@ public abstract class WizardResource extends ServerResource {
 	}	
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<form name='%s' method='POST' action='%s/%s/%s/%s%s'>","form",
-				getRootRef(),UserResource.resource,user_name,mode,wizard.nextStep(step)));
+				getRootRef(),UserResource.resource,
+				Reference.encode(session.getUser().getId()),mode,wizard.nextStep(step)));
 	}
 	public void renderFormContent(Writer writer, String key)  throws IOException {
 		//writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -267,7 +291,7 @@ public abstract class WizardResource extends ServerResource {
 				Reference tab = new Reference(String.format("%s/%s/%s/%s%s/%s",
 						getRootRef(),
 						UserResource.resource,
-						user_name,
+						session.getUser().getId(),
 						mode,
 						step.getResource(),
 						Reference.encode(key)));
@@ -364,7 +388,7 @@ public abstract class WizardResource extends ServerResource {
 			throws ResourceException {
 		try {
 			StepProcessor p = step.getProcessor();
-			Form form = p.process(entity);
+			Form form = p.process(entity,session);
 			getRequest().getResourceRef().setQuery(form.getQueryString());
 			return get(variant);	
 		} catch (ResourceException x) {
@@ -382,6 +406,12 @@ public abstract class WizardResource extends ServerResource {
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
+		if (session!=null) {
+			session.getUser().setTimeStamp(step==null?null:
+			String.format("<a href='%s'>%s</a>",getRequest().getResourceRef(),step.getDescription())
+			);
+			try {session.getUser().setClientinfo(getRequest().getClientInfo().getAddress());} catch (Exception x) {}
+		}
 		if (!entity.isAvailable())
 			return processError(entity,variant,Status.CLIENT_ERROR_BAD_REQUEST);
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))

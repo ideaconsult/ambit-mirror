@@ -5,8 +5,12 @@ import java.io.Writer;
 import java.util.Hashtable;
 
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 
-import ambit2.fastox.UserResource;
+import ambit2.fastox.users.IToxPredictSession;
+import ambit2.fastox.users.IToxPredictUser;
+import ambit2.fastox.users.ToxPredictUser;
+import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 
@@ -28,11 +32,8 @@ public class WelcomeResource extends WizardResource {
 		return forms;
 	}
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
-		//writer.write(String.format("<form name='%s' method='POST' action='%s/%s/%s/%s%s'>","form",
-			//	getRootRef(),UserResource.resource,user_name,mode,wizard.nextStep(step)));
 	}
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
-		//writer.write(String.format("</form>"));
 	}
 	
 	@Override
@@ -41,7 +42,9 @@ public class WelcomeResource extends WizardResource {
 		writer.write("<table width='90%'><tr align='left'><td>");
 		writer.write("<h2>Estimate toxicological hazard of a chemical structure</h2>");
 		writer.write(String.format("<form name='start' method='GET' action='%s/%s/%s/%s%s'>",
-				getRootRef(),UserResource.resource,user_name,WizardMode.A,"/step1"));	
+				getRootRef(),UserResource.resource,
+				Reference.encode(session.getUser().getId()),
+				WizardMode.A,"/step1"));	
 		writer.write("<ul id=\"mainNav\" class=\"wizardStep\">\n");
 		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" type=\"submit\" value=\"GO!\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
 		writer.write(String.format("</ul>"));
@@ -68,4 +71,19 @@ public class WelcomeResource extends WizardResource {
 	protected String getTopRef() {
 		return resource;
 	}
+	@Override
+	protected IToxPredictSession getSession(String id) {
+		IToxPredictSession session = null;
+		IToxPredictUser user = null;
+		try {
+			session = super.getSession(id);
+			if (session != null) return session;
+		} catch (Exception x) {}
+		try {
+			user = new ToxPredictUser(id);
+		} catch (Exception x) {
+			user = new ToxPredictUser();
+		}
+		return addSession(user);
+	}		
 }

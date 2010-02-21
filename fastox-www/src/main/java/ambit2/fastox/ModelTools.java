@@ -2,15 +2,16 @@ package ambit2.fastox;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.fastox.users.IToxPredictSession;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.task.RemoteTask;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -43,9 +44,11 @@ public class ModelTools {
 				"rdf.gif"
 				
 		};
-	public static Model retrieveModels(Model rdf,Form form,MediaType mediaType) throws Exception {
-		String[] modeluri = form.getValuesArray(params.model.toString());
-		for (String uri:modeluri) {
+	public static Model retrieveModels(Model rdf,IToxPredictSession session,MediaType mediaType) throws Exception {
+		Iterator<String> models = session.getModels();
+		if (models != null)
+		while (models.hasNext()) {
+			String uri = models.next();
 			try {
 				if (rdf==null) rdf = ModelFactory.createDefaultModel();
 				rdf.read(uri);
@@ -62,63 +65,38 @@ public class ModelTools {
 		return  rdf;
 	}
 	
-	public static int renderModels(Model rdf, Form form, Writer writer, boolean status,Reference rootReference) throws IOException {
+	public static int renderModels(Model rdf, IToxPredictSession session, Writer writer, boolean status,Reference rootReference) throws IOException {
 		   int running = 0;
-			String[] models = form.getValuesArray(params.model.toString());
-			if ((models==null) || (models.length==0)) {
+			
+			if (session.getNumberOfModels() == 0) {
 				writer.write("<div class='message'>No models</div>");
 				return 0;
-			}
+			} 
+
 			try {
-				renderRDFModels(rdf, writer, form, status,rootReference);
+				renderRDFModels(rdf, writer, session ,status,rootReference);
 			} catch (Exception x) {
 				x.printStackTrace();
 				writer.write("<table class='models'>");
 				writer.write("<tr><th align='left'>Model</th>");
 				if (status)	writer.write("<th align='left'>Status</th><th align='left'>Results</th>");
-				writer.write("</tr>");				
-				for (String model:models) {
-					writer.write("<tr>");
-					writer.write("<td>");
-					writer.write(String.format("<a href='%s' alt='%s' title='%s' target='_blank'><img border='0' src='%s/images/chart_line.png' alt='%s' alt='%s'></a>",
-							model,model,model,rootReference.toString(),model,model));
-					writer.write(params.model.htmlInputCheckbox(model,model));
-					writer.write("</td>");
-					if (!status) continue;
-					String[] uris = form.getValuesArray(model);
-					
-					for (String uri:uris) {
-						if ("on".equals(uri)) continue;
-						String[] tasks = form.getValuesArray(uri);
-						writer.write("<td>");
-						int isRunning = 0;
-						for (String task:tasks) {
-							if (task.equals(Status.SUCCESS_ACCEPTED.getName()) || task.equals(Status.REDIRECTION_SEE_OTHER.getName()))
-								isRunning++;
-							writer.write(String.format("%s",task));
-						}
-						running += isRunning;
-						writer.write("</td>");
-						writer.write("<td>");
-						writer.write(String.format("<a href='%s'><img src='%s/images/%s' alt='%s' title='%s'></a>",
-								uri,
-								rootReference.toString(),
-								(isRunning==0)?"tick.png":"24x24_ambit.png",
-								(isRunning==0)?"Completed":"Processing",
-								(isRunning==0)?"Completed":"Processing")
-								);
-						writer.write(String.format("<input type='hidden' name='%s' value='%s'>", model,uri));	
-						writer.write("</td>");					
+				writer.write("</tr>");		
+				
+				
+				Iterator<String> models = session.getModels();
+				while (models.hasNext()) {
+					writer.write("<tr><td>");
+					writer.write(models.next());
 
-					}
-					writer.write("</tr>");
+					writer.write("</td></tr>");
 				}	
 				writer.write("</table>");
 			}
 			return running;
 	}	
-	
-	public static int renderRDFModels(Model rdf,Writer writer, Form form, boolean status,Reference rootReference) throws Exception {
+	//renderRDFModels(rdf, writer, models , session ,form, status,rootReference);
+	public static int renderRDFModels(Model rdf,Writer writer, IToxPredictSession session,
+			 boolean status,Reference rootReference) throws Exception {
 		final String sparql = 
 			"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 			"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
@@ -164,6 +142,7 @@ public class ModelTools {
 				writer.write(String.format("<a href='%s' alt='%s' title='%s' target='_blank' ><img src='%s/images/chart_line.png' border='0' alt='%s' title='%s'></a>",
 						modelUri,modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
 				writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString()));
+				
 				writer.write("</td><td>");
 				writer.write(creator==null?"":creator.getString());
 				writer.write("</td><td>");
@@ -173,12 +152,11 @@ public class ModelTools {
 				/**
 				 * Results URL and status
 				 */
-				String[] uris = form.getValuesArray(modelUri);
+				Object uris = session.getModelStatus(modelUri);
 				if (!status)  {
-					for (String uri:uris) {
-						if ("on".equals(uri)) continue;
-						
-						String q= new Reference(uri).getQuery();
+					if ((uris != null) && (uris instanceof RemoteTask)) {
+						Reference uri = ((RemoteTask)uris).getResult();
+						String q= uri.getQuery();
 						for (int i=0;i<mimes.length;i++) {
 							MediaType mime = mimes[i];
 							writer.write("&nbsp;");
@@ -191,36 +169,31 @@ public class ModelTools {
 									image[i],
 									mime,
 									mime));	
-						}			
-					
-						//writer.write(String.format("<a href='%s' target='_blank'>Save</a>", uri));
+						}
 					}
-					continue;
 				}
 				writer.write("</td>");
 				
-				for (String uri:uris) {
-					if ("on".equals(uri)) continue;
-					String[] tasks = form.getValuesArray(uri);
+				if (uris instanceof RemoteTask)  {
+					
+					RemoteTask task = ((RemoteTask) uris);
 					writer.write("<td>");
 					int isRunning = 0;
-					for (String task:tasks) {
-						if (task.equals(Status.SUCCESS_ACCEPTED.getName()) || task.equals(Status.REDIRECTION_SEE_OTHER.getName()))
-							isRunning++;
-						writer.write(String.format("%s",task.equals("OK")?"Completed":"Processing"));
-					}
+					isRunning += task.isDone()?0:1;
+					writer.write((isRunning==0)?"Completed":"Processing");
+
 					running += isRunning;
 					writer.write("</td>");
 					writer.write("<td>");
 					writer.write(String.format("<a href='%s'><img src='%s/images/%s' border='0' alt='%s' title='%s'></a>",
-							uri,
+							task.getResult(),
 							rootReference.toString(),
 							(isRunning==0)?"tick.png":"24x24_ambit.gif",
 							(isRunning==0)?"Completed":"Processing",
 							(isRunning==0)?"Completed":"Processing"
 								)
 							);
-					writer.write(String.format("<input type='hidden' name='%s' value='%s'>", modelUri,uri));	
+
 					writer.write("</td>");					
 
 				}				
@@ -234,4 +207,6 @@ public class ModelTools {
 		}		
 		return running;
 	}		
+	
+	
 }

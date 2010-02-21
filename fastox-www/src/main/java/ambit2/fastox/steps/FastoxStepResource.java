@@ -7,18 +7,18 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.DatasetTools;
-import ambit2.fastox.UserResource;
+import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.WizardResource;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
 public abstract class FastoxStepResource extends WizardResource {
-	protected String dataset= null;
 	protected Model store = null;
 	public enum params {
 		search,
@@ -32,8 +32,8 @@ public abstract class FastoxStepResource extends WizardResource {
 		endpoint_name,
 		subendpoint,
 		model,
-		model_name,
-		errors;
+		model_name;
+		
 		public String htmlInputHidden(String value) {
 			return String.format("<input name='%s' type='hidden' value='%s'>\n",toString(),value);
 		}
@@ -58,8 +58,6 @@ public abstract class FastoxStepResource extends WizardResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		Form form = getRequest().getResourceRef().getQueryAsForm();
-		dataset = form.getFirstValue(params.dataset.toString());		
 	}
 	@Override
 	protected void doRelease() throws ResourceException {
@@ -71,15 +69,13 @@ public abstract class FastoxStepResource extends WizardResource {
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
-		if (dataset == null) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			dataset = form.getFirstValue(params.dataset.toString());
-			if ((dataset==null) && (isMandatory(params.dataset.toString()))) {
+		if (session.getDatasetURI() == null) {
+			if (isMandatory(params.dataset.toString())) {
 				
-				redirectSeeOther(String.format("%s/%s/%s/%s%s",
+				redirectTemporary(String.format("%s/%s/%s/%s%s",
 					getRequest().getRootRef(),
 					UserResource.resource,
-					user_name,
+					Reference.encode(session.getUser().getId()),
 					mode,
 					wizard.getStep(1).getResource()
 					));
@@ -141,22 +137,19 @@ public abstract class FastoxStepResource extends WizardResource {
 	protected void renderCompounds(Writer writer) {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		try {
-			writer.write(params.dataset.htmlInputHidden(dataset));
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
-			store = DatasetTools.retrieveDataset(null,dataset);
+			store = DatasetTools.retrieveDataset(null,session.getDatasetURI());
 			DatasetTools.renderDataset(store,writer,"",getRequest().getRootRef());
 			writer.write("</table>");
 		} catch (Exception x) {
-			form.removeAll(params.errors.toString());
-			form.add(params.errors.toString(),x.getMessage());
+			session.setError(x);
 		} 		
 	}
 
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {
-		// TODO Auto-generated method stub
 		return super.processForm(entity, variant);
 	}
 	

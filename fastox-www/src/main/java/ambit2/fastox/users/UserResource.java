@@ -1,7 +1,8 @@
-package ambit2.fastox;
+package ambit2.fastox.users;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.restlet.resource.ResourceException;
 
@@ -19,9 +20,27 @@ public class UserResource extends WizardResource {
 	}
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		writer.write(String.format("<h2>Welcome, %s</h2>",user_name));
+		writer.write(String.format("<h2>Welcome, %s</h2>",session.getUser().getName()));
 		writer.write("Sorry, ToxPredict application doesn't support user accounts yet, this is currently under development.<br>");
 		writer.write("The only available and default user is <b>guest</b><br>");
+		writer.write("<br>");
+		writer.write("<div>");
+		writer.write(session.getUser().toString());
+		writer.write("<h4>Dataset</h4>");
+		writer.write(session.getDatasetURI()==null?"No dataset selected":session.getDatasetURI());
+		writer.write("<h4>Models</h4><ul>");
+
+		Iterator<String> models = session.getModels();
+		if (models != null) 
+			while (models.hasNext()) {
+				writer.write("<li>");
+				String model = models.next();
+				writer.write(model);
+				writer.write("&nbsp;");
+				writer.write(session.getModelStatus(model).toString());
+			}
+		writer.write("</ul>");
+		writer.write("</div>");
 		writer.write(String.format("<h2><a href='%s'>%s</a></h2>",getRequest().getRootRef(),"Go to ToxPredict"));
 	}
 	@Override

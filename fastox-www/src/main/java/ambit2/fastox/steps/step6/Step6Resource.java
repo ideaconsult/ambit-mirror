@@ -2,6 +2,7 @@ package ambit2.fastox.steps.step6;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -30,36 +31,32 @@ public class Step6Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer,String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
-		writer.write(params.dataset.htmlInputHidden(dataset));
-		
 		try {
-			store = ModelTools.retrieveModels(store,form, MediaType.APPLICATION_RDF_XML);
+			store = ModelTools.retrieveModels(store,session, MediaType.APPLICATION_RDF_XML);
 		} catch (Exception x) {
-			form.add(params.errors.toString(),x.getMessage());
+			session.setError(x);
 		}
 	
-		ModelTools.renderModels(store,form, writer, false,getRootRef());
+		ModelTools.renderModels(store,session, writer, false,getRootRef());
 		//todo retrieve dataset once and then only predictions into a single model
 		writer.write("<h4>Compounds</h4>");
-		String[] models = form.getValuesArray(params.model.toString());
-		for (String model:models) {
-			String[] uris = form.getValuesArray(model);
-			for (String uri:uris) {
-				if ("on".equals(uri)) continue;
-
-				writer.write(String.format("<input type='hidden' name='%s'   value='%s'>", model,uri));	
-
+		
+		Iterator<String> models = session.getModels();
+		if (models != null)
+		while (models.hasNext())  {
+			String model = models.next();
+			String uri = session.getModelResultsURI(model);
+			if (uri != null)
 				try {
 					store = DatasetTools.retrieveDataset(store,uri);
 				} catch (Exception x) {
-					form.add(params.errors.toString(),x.getMessage());
+					session.setError(x);
 				}	
-			}
 		}	
 		try {
 			DatasetTools.renderDataset(store,writer,DatasetTools.modelVars,getRequest().getRootRef()); //"UNION { ?f owl:sameAs ?o.}"); //
 		} catch (Exception x) {
-			form.add(params.errors.toString(),x.toString());
+			session.setError(x);
 		}		
 		//super.renderFormContent(writer, key);
 	}
@@ -89,10 +86,10 @@ public class Step6Resource extends FastoxStepResource {
 
 		} catch (ResourceException x) {
 			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
+			session.setError(x);
 		} catch (Exception x) {
 			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
+			session.setError(x);
 		} finally {
 			try {r.release();} catch (Exception x) {}
 			

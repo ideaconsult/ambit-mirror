@@ -1,15 +1,17 @@
 package ambit2.fastox.steps.step5;
 
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.fastox.users.IToxPredictSession;
+import ambit2.rest.task.RemoteTask;
 
 /**
  * Form.model contains uri to models.
@@ -22,28 +24,46 @@ public class Step5Processor extends StepProcessor {
 	 * 
 	 */
 	private static final long serialVersionUID = -5628448981581045947L;
-	protected String dataset;
-	@Override
-	public Form process(Representation entity) throws AmbitException {
-		Form form = new Form(entity);
 
+	
+	@Override
+	public Form process(Representation entity, IToxPredictSession session)
+			throws AmbitException {
+		
+		Form form = new Form(entity);
+		if (session.getDatasetURI() == null) throw new AmbitException("No dataset!");
 		String[] models = form.getValuesArray(params.model.toString());
 		form.removeAll(params.model.toString());
-		dataset = form.getFirstValue(params.dataset.toString());
+		
+		if (session.getNumberOfRunningModels()==0) session.clearModels();
+		
+		if ((models == null) || (models.length==0)) throw new AmbitException("No models!");
 		for (String model:models) {
 			if ("on".equals(form.getFirstValue(model))) {
 					try {
-						runModel(model,dataset,form);
-						form.add(params.model.toString(),model);
+						Object status = session.getModelStatus(model);
+						if ((status!= null) && (status instanceof RemoteTask)) {
+							//already running, will not do anything
+						} else {
+							Form query = new Form();
+							query.add(ambit2.rest.OpenTox.params.dataset_uri.toString(),session.getDatasetURI());
+							RemoteTask task = new RemoteTask(new Reference(model),
+									MediaType.APPLICATION_WWW_FORM,
+									query.getWebRepresentation()
+									,Method.POST,authentication);
+							session.addModel(model, task);
+						}
 					} catch (ResourceException x) {
-						
+						session.addModel(model,x);
 					}
 			}
-		}		
+			form.removeAll(model);
+		}				
+		form.clear();
 		return form;	
 	
 	}
-	
+/*
 	protected void runModel(String model, String compound, Form form) throws ResourceException {
 		Representation r = null;
 		try {
@@ -51,8 +71,7 @@ public class Step5Processor extends StepProcessor {
 			ClientResource client = new ClientResource(new Reference(model));
 			
 			client.setFollowingRedirects(false);
-			Form query = new Form();
-			query.add("dataset_uri",compound);
+			
 			r = client.post(query.getWebRepresentation());
 
 			Status status = client.getStatus();
@@ -81,7 +100,7 @@ public class Step5Processor extends StepProcessor {
 			
 		}			
 	}	
-	
+	*/
 
 	
 }

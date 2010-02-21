@@ -13,9 +13,9 @@ import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
-import ambit2.fastox.UserResource;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.wizard.Wizard;
+import ambit2.fastox.users.IToxPredictSession;
+import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 
 import com.hp.hpl.jena.query.QueryExecution;
@@ -33,10 +33,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class Step3Resource extends FastoxStepResource {
 	
-	protected String endpoint = "http://www.opentox.org/echaEndpoints.owl#Endpoints";
-	protected String endpoint_name = "Endpoints";
-	protected String parentendpoint = null;
-	protected String parentendpoint_name = null;
 	protected Hashtable<String,String> queryString;
 	protected String model = "http://www.opentox.org/echaEndpoints.owl#Model";
 	protected String model_name = "Model";
@@ -100,17 +96,6 @@ public class Step3Resource extends FastoxStepResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		Object o = form.getFirstValue(params.endpoint.toString());
-		endpoint = (o==null)?endpoint:Reference.decode(o.toString());
-		
-		o = form.getFirstValue(params.endpoint_name.toString());
-		endpoint_name = (o==null)?endpoint_name:Reference.decode(o.toString());
-		
-		o = form.getFirstValue(params.parentendpoint.toString());
-		parentendpoint = (o==null)?parentendpoint:Reference.decode(o.toString());
-
-		o = form.getFirstValue(params.parentendpoint_name.toString());
-		parentendpoint_name = (o==null)?parentendpoint_name:Reference.decode(o.toString());
 		
 		forms.put("Endpoints",form);
 	}
@@ -129,7 +114,7 @@ public class Step3Resource extends FastoxStepResource {
 
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		Form form = retrieveModels(key);
+		retrieveModelsFromSparqlService(session,key);
 		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
 			key = "Endpoints";
 			writer.write("<h4>");
@@ -152,61 +137,59 @@ public class Step3Resource extends FastoxStepResource {
 			writer.write(String.format("<img src='%s/images/16x16_toxicological_endpoints.png'>",
 					getRootRef().toString()));		
 					*/	
-			writer.write(endpoint_name);
+			writer.write(session.getEndpointName());
 			writer.write("</h4>");
 			try {
-				Model rdf = ModelTools.retrieveModels(null,form, MediaType.APPLICATION_RDF_XML);
-				ModelTools.renderModels(rdf, form, writer, false,getRequest().getRootRef());
+				Model rdf = ModelTools.retrieveModels(null,session, MediaType.APPLICATION_RDF_XML);
+				ModelTools.renderModels(rdf, session, writer, false,getRequest().getRootRef());
 			} catch (Exception x) {
-				form.add(params.errors.toString(),x.getMessage());
+				session.setError(x);
 			}
-				
+			writer.write("</form>");
+			writer.write("<form action='' method='post' name='endpoints'>");
+			Form form = new Form();
 			retrieveEndpoints(form,key);
 			renderEndpoints(form,writer);
 			form.removeAll(params.subendpoint.toString());
 		} else if ("Models".equals(key)) {
 			try {
-				Model rdf = ModelTools.retrieveModels(null,form, MediaType.APPLICATION_RDF_XML);
-				ModelTools.renderModels(rdf, form, writer, false,getRequest().getRootRef());
+				Model rdf = ModelTools.retrieveModels(null,session, MediaType.APPLICATION_RDF_XML);
+				ModelTools.renderModels(rdf, session, writer, false,getRequest().getRootRef());
 			} catch (Exception x) {
-				form.add(params.errors.toString(),x.getMessage());
+				session.setError(x);
 			}
 		}
 
-		form.removeAll(params.dataset.toString());
-		form.add(params.dataset.toString(),dataset);
-		
-		writer.write(params.dataset.htmlInputHidden(dataset));
 		super.renderFormContent(writer, key);
 	}
-	public Form retrieveModels(String key) throws IOException {
+	public void retrieveModelsFromSparqlService(IToxPredictSession session, String key) throws IOException {
 
-		Form form = forms.get(key);
+		session.clearModels();
+		
 		QueryExecution ex = null;
 		try {
 			
-			String query = String.format(queryString.get(key),endpoint);
+			String query = String.format(queryString.get(key),session.getEndpoint());
 			
 			ex = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
 			ResultSet results = ex.execSelect();
 
-			form.removeAll(params.model.toString());
 			while (results.hasNext()) {
 				QuerySolution solution = results.next();
 				Literal id = solution.getLiteral("id");
 				Resource resource = solution.getResource("url");
 				if (resource.getURI()!=null)
-					form.add(params.model.toString(), resource.getURI());
+					session.addModel(resource.getURI(),Boolean.TRUE);
 				else if (id!= null)
-					form.add(params.model.toString(), id.getString());
+					session.addModel(id.getString(),Boolean.FALSE);
 			}
 
 		} catch (Exception x) {
-			form.add(params.errors.toString(),x.getMessage());
+			session.setError(x);
 		} finally {
 			try { ex.close();} catch (Exception x) {} ;
 		}
-		return form;		
+		return;	
 	}
 	public void retrieveEndpoints(Form form,String key) throws IOException {
 		
@@ -214,7 +197,7 @@ public class Step3Resource extends FastoxStepResource {
 		List<Parameter> parameters = new ArrayList<Parameter>();
 		QueryExecution ex = null;
 		try {
-			String query = String.format(endpointsSparql,endpoint);
+			String query = String.format(endpointsSparql,session.getEndpoint());
 			ex = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
 			ResultSet results = ex.execSelect();
 			while (results.hasNext()) {
@@ -227,25 +210,30 @@ public class Step3Resource extends FastoxStepResource {
 				form.removeAll(params.parentendpoint_name.toString());
 				form.add(params.endpoint.toString(), resource.getURI());
 				form.add(params.endpoint_name.toString(), literal.getString());
-				form.add(params.parentendpoint.toString(), endpoint);
-				form.add(params.parentendpoint_name.toString(), endpoint_name);
+				form.add(params.parentendpoint.toString(), session.getEndpoint());
+				form.add(params.parentendpoint_name.toString(), session.getEndpointName());
 				form.removeAll(params.dataset.toString());
-				form.add(params.dataset.toString(), dataset);
 				
+				parameters.add(new Parameter(params.subendpoint.toString(),
+						String.format("<input type='radio' name='endpoint' value='%s' checked><input type='hidden' name='%s' value='%s'>%s<br>",
+						resource.getURI(), resource.getURI(),	literal.getString(),literal.getString())));
+				
+				/*
 				parameters.add(new Parameter(params.subendpoint.toString(),
 						String.format("<a href='%s/%s/%s/%s%s/%s?%s'>%s</a>",
 						getRequest().getRootRef(),
 						UserResource.resource,
-						user_name,
+						Reference.encode(session.getUser().getId()),
 						mode,
 						step.getResource(),
 						key,
 						form.getQueryString(),
 						literal.getString())));
+						*/
 				
 			}
 		} catch (Exception x) {
-			form.add(params.errors.toString(),x.getMessage());
+			session.setError(x);
 		} finally {
 			try { ex.close();} catch (Exception x) {} ;
 		}
@@ -258,16 +246,26 @@ public class Step3Resource extends FastoxStepResource {
 
 			String[] subendpoints = form.getValuesArray(params.subendpoint.toString());
 			if (subendpoints.length==0) return;
-			writer.write(String.format("<h5>Specific %s</h5>",endpoint_name));		
+			
+			writer.write(String.format("<h3><img src='%s/images/folder.png'><input type='radio' name='endpoint' value='%s' checked><input type='hidden' name='%s' value='%s'>%s</h3>",
+					getRootRef().toString(),
+					"http://www.opentox.org/echaEndpoints.owl#Endpoints","http://www.opentox.org/echaEndpoints.owl#Endpoints","Endpoints","Endpoints"));
+			if (!session.getEndpointName().equals("Endpoints"))
+			writer.write(String.format("<h4><img src='%s/images/folder.png'><input type='radio' name='endpoint' value='%s' checked><input type='hidden' name='%s' value='%s'>%s</h4>",
+					getRootRef().toString(),
+					session.getEndpoint(),session.getEndpoint(),session.getEndpointName(),session.getEndpointName()));
+			
+			//writer.write(String.format("Specific %s</h5>",session.getEndpointName()));		
 			for (String subendpoint:subendpoints) {
-				writer.write(String.format("<img src='%s/images/folder.png'>",
-						getRootRef().toString()));
 				writer.write(subendpoint);
-				writer.write("<br>");
+				
 			}
+			writer.write("<input type='submit' name='find' value='Find models' title='Find models for the selected endpoint'>");
+
 
 		
 	}
+	
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 	}

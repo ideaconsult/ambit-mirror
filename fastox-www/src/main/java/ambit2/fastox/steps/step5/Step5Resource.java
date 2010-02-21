@@ -2,20 +2,15 @@ package ambit2.fastox.steps.step5;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Date;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.steps.StepProcessor;
 
 /**
  * Display results
@@ -47,21 +42,9 @@ public class Step5Resource extends FastoxStepResource {
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
-		running = 0;
+		running = session.pollModels();
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String[] models = form.getValuesArray(params.model.toString());
-		for (String model:models) {
-			String[] uris = form.getValuesArray(model);
-			for (String uri:uris) {
-				String[] tasks = form.getValuesArray(uri);
-				for (String task:tasks) 
-				if (task.equals(Status.SUCCESS_ACCEPTED.getName()) || task.equals(Status.REDIRECTION_SEE_OTHER.getName())) {
-					System.out.println(String.format("%s %s %s",model,uri,task));
-				    running += verifyTask(model,uri, form); 
-				}
-			}
-		}
-		
+
 		getRequest().getResourceRef().setQuery(form.getQueryString());
 		if (running == 0) meta = ""; 
 		else meta = String.format(meta_refresh,getRequest().getResourceRef());
@@ -75,30 +58,18 @@ public class Step5Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 
-		writer.write(params.dataset.htmlInputHidden(dataset));
 		writer.write("<h3>Models</h3>");
 		
 		try {
-			store = ModelTools.retrieveModels(store,form, MediaType.APPLICATION_RDF_XML);
+			store = ModelTools.retrieveModels(store,session, MediaType.APPLICATION_RDF_XML);
 		} catch (Exception x) {
-			form.add(params.errors.toString(),x.getMessage());
+			session.setError(x);
 		}
-		running = ModelTools.renderModels(store,form, writer, true,getRequest().getRootRef());
+		running = ModelTools.renderModels(store,session, writer, true,getRequest().getRootRef());
 		
-		String[] values = form.getValuesArray(params.errors.toString());
-		writer.write(values.length>0?"<h3>Errors</h3>":"");
-		for (String value:values) {
-			if (value==null) continue;
-			writer.write(value);
-			writer.write(String.format("<input type='hidden' name='errors' size='40' value='%s'>", value));
-			writer.write("<br>");
-		}		
-		/*
-		writer.write(String.format(
-				"<INPUT name=\"next\" type=\"submit\" value=\"Next\" tabindex=\"1\" %s >",
-				(running==0)?"":"DISABLED")
-				);
-		*/
+		
+		writer.write(session.getError()==null?"":"<h3>Errors</h3>");
+		writer.write(session.getError()==null?"":session.getError().getMessage());
 
 		if (running>0) { //refresh the page in order to check tasks
 			Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers"); 
@@ -115,43 +86,6 @@ public class Step5Resource extends FastoxStepResource {
 	}
 
 
-	protected int verifyTask(String model, String task, Form form) throws ResourceException {
-		Representation r = null;
-		try {
-			ClientResource client = new ClientResource(task);
-			client.setFollowingRedirects(false);
-			r = client.get(MediaType.TEXT_URI_LIST);
-			
-			Status status = client.getStatus();
-			System.out.println(status);
-			Reference uri = client.getResponse().getLocationRef();
-			form.removeAll(task);
-			form.removeAll(model);
-			if (status.SUCCESS_OK.equals(status)) {
-				form.add(model,task);
-				form.add(task,status.getName());
-			} else if (uri != null) {
-				System.out.println(uri);
-				form.add(model,uri.toString());
-				form.add(uri.toString(),status.getName());
-
-			} else {
-				String text = StepProcessor.readUriList(r.getStream());
-				form.add(model,task);
-				form.add(text,status.getName());
-			}
-			return (status.SUCCESS_ACCEPTED.equals(status) || status.REDIRECTION_SEE_OTHER.equals(status))?1:0;
-		} catch (ResourceException x) {
-			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
-		} catch (Exception x) {
-			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
-		} finally {
-			try {r.release();} catch (Exception x) {}
-		}			
-		return 0;
-	}	
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {

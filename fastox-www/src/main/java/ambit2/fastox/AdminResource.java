@@ -2,14 +2,17 @@ package ambit2.fastox;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Enumeration;
 
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.users.IToxPredictUser;
+import ambit2.fastox.users.MemoryUsersStorage;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 
 public class AdminResource extends WizardResource {
-
+	
 	public AdminResource() throws ResourceException {
 		super(0);
 	}
@@ -29,7 +32,20 @@ public class AdminResource extends WizardResource {
 		}
 		writer.write(String.format("</table>"));
 		
-		writer.write(String.format("<h2><a href='%s'>%s</a></h2>",getRequest().getRootRef(),"Go to ToxPredict"));
+		writer.write(String.format("<h4>This user</h4> %s<br>",session));
+		
+		writer.write(String.format("<h4>%s</h4>","All users"));
+		Enumeration<IToxPredictUser> users = MemoryUsersStorage.getInstance().users();
+		while (users.hasMoreElements()) {
+			IToxPredictUser user = users.nextElement();	
+			writer.write(String.format("<a href='%s/user/%s' target='blank'>%s</a>%s<br>",getRootRef(),
+					user.getId(),
+					user.getName(),
+					MemoryUsersStorage.getInstance().getSession(user).toString()));
+		}
+		
+		
+		writer.write(String.format("<h2><a href='%s'>%s</a></h2>",getRequest().getReferrerRef(),"Back"));
 		
 	}
 	@Override
@@ -40,5 +56,5 @@ public class AdminResource extends WizardResource {
 
 		return "ToxPredict configuration";
 	}
-
+	
 }

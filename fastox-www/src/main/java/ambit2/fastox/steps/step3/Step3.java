@@ -6,4 +6,6 @@ public class Step3 extends WizardStep {
 	public Step3() {
 		super(3,"Endpoints","Select endpoints and models",Step3Resource.class,Step3Processor.class);
 	}
+	
+	
 }

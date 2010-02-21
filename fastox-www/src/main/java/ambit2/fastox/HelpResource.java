@@ -8,6 +8,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.wizard.WizardResource;
 
 public class HelpResource extends WizardResource {
+	
 	public HelpResource() throws ResourceException {
 		super(0);
 	}
@@ -23,5 +24,6 @@ public class HelpResource extends WizardResource {
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 	}
+
 
 }
