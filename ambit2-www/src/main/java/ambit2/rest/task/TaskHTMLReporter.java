@@ -12,7 +12,7 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.Task.taskStatus;
 
-public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
+public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,USERID>> {
 
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 		super(ref);
 	}
 	@Override
-	public void header(Writer output, Iterator<Task<Reference>> query) {
+	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
@@ -35,7 +35,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 			
 		}
 	}
-	public void processItem(Task<Reference> item, Writer output) {
+	public void processItem(Task<Reference,USERID> item, Writer output) {
 		String t = "";
 		String status = "Unknown";
 		try {
@@ -59,7 +59,7 @@ public class TaskHTMLReporter extends CatalogURIReporter<Task<Reference>> {
 		}
 	};
 	@Override
-	public void footer(Writer output, Iterator<Task<Reference>> query) {
+	public void footer(Writer output, Iterator<Task<Reference,USERID>> query) {
 		try {
 			output.write("</table>");
 			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());

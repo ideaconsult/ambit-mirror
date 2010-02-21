@@ -20,8 +20,8 @@ import org.restlet.data.Reference;
 
 import ambit2.rest.task.Task;
 
-public class TaskApplication extends Application {
-	protected ConcurrentMap<UUID,Task<Reference>> tasks;
+public class TaskApplication<USERID> extends Application {
+	protected ConcurrentMap<UUID,Task<Reference,USERID>> tasks;
 
 	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
 	protected ExecutorService pool;
@@ -45,7 +45,7 @@ public class TaskApplication extends Application {
 			}
 		});
 
-		tasks = new ConcurrentHashMap<UUID,Task<Reference>>();		
+		tasks = new ConcurrentHashMap<UUID,Task<Reference,USERID>>();		
 		
 
 		TimerTask cleanUpTasks  = new TimerTask() {
@@ -72,16 +72,16 @@ public class TaskApplication extends Application {
 		Iterator<UUID> keys = tasks.keySet().iterator();
 		while (keys.hasNext()) {
 			UUID key = keys.next();
-			Task<Reference> task = tasks.get(key);
+			Task<Reference,USERID> task = tasks.get(key);
 			try {
 				if (task.isDone() && (task.isExpired(taskCleanupRate))) tasks.remove(key);
 			} catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}
 	}	
 	public void cancelTasks() {
-		Iterator<Task<Reference>> i = getTasks();
+		Iterator<Task<Reference,USERID>> i = getTasks();
 		while (i.hasNext()) {
-			Task<Reference> task = i.next();
+			Task<Reference,USERID> task = i.next();
 			try {
 			if (!task.isDone()) task.cancel(true);
 			} catch (Exception x) {getLogger().warning(x.getMessage());}
@@ -93,10 +93,10 @@ public class TaskApplication extends Application {
 	}	
 	
 	
-	public Iterator<Task<Reference>> getTasks() {
+	public Iterator<Task<Reference,USERID>> getTasks() {
 		return tasks.values().iterator();
 	}
-	public synchronized Task<Reference> findTask(String id) {
+	public synchronized Task<Reference,USERID> findTask(String id) {
 		try {
 		return tasks.get(UUID.fromString(id));
 		} catch (Exception x) {
@@ -124,7 +124,7 @@ public class TaskApplication extends Application {
 			
 		};		
 		UUID uuid = UUID.randomUUID();
-		Task<Reference> task = new Task<Reference>(futureTask);
+		Task<Reference,USERID> task = new Task<Reference,USERID>(futureTask);
 		task.setName(taskName);
 		Reference ref =	new Reference(
 				String.format("%s%s/%s", baseReference.toString(),SimpleTaskResource.resource,Reference.encode(uuid.toString())));
