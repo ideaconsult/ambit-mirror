@@ -24,6 +24,7 @@ public class CallableDatasetCreatorTest extends ResourceTest {
 		CallableDatasetCreator c = new CallableDatasetCreator(
 				form,
 				app,
+				new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"),
 				null);
 		Reference ref = c.call();
 		System.out.println(ref);
