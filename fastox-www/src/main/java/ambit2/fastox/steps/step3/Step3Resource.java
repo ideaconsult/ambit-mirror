@@ -255,9 +255,9 @@ public class Step3Resource extends FastoxStepResource {
 			String[] subendpoints = form.getValuesArray(params.subendpoint.toString());
 			if (subendpoints.length==0) return;
 
-			if (!session.getEndpointName().equals("Endpoints"))  
+			if (!session.getEndpointName().equals("Endpoints")) { 
 				writer.write(String.format("<form name='select_e' method='POST' action='' value='Find models for %s'>" +
-						"<img src='%s/images/16x16_toxicological_endpoints.png'>" +
+						"<img src='%s/images/resultset_next.png'>" +
 						"<input type='hidden' name='endpoint_name' value='%s'>" +
 						"<input type='hidden' name='endpoint' value='%s'>" +
 						"<input type='submit' name='find' class='small_button' value='%s' title='Find models for %s'></form>",
@@ -266,8 +266,9 @@ public class Step3Resource extends FastoxStepResource {
 						"Endpoints",
 						"http://www.opentox.org/echaEndpoints.owl#Endpoints",
 						"Endpoints","Endpoints (top level)"));
-
-			 writer.write(String.format("<img src='%s/images/resultset_next.png'>%s",getRootRef().toString(),session.getEndpointName()));
+			 }
+			 writer.write(String.format("<img src='%s/images/resultset_next.png'><img src='%s/images/resultset_next.png'>%s",
+					 getRootRef().toString(),getRootRef().toString(),session.getEndpointName()));
 			/*
 				writer.write(String.format("<form name='select_e' method='POST' action='' value='Find models for %s'>" +
 						"<img src='%s/images/resultset_next.png'>" +

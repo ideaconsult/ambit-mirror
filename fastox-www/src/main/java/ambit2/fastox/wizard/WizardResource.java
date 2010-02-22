@@ -22,7 +22,6 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import ambit2.fastox.steps.StepProcessor;
-import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.IToxPredictUser;
 import ambit2.fastox.users.MemoryUsersStorage;
@@ -181,8 +180,9 @@ public abstract class WizardResource extends ServerResource {
 				UserResource.resource,
 				Reference.encode(session==null?"guest":session.getUser().getId()),
 				session==null?"guest":session.getUser().getName()));			
-		writer.write(String.format("<a href='%s/help' target='help' title='Help'>%s</a><br>",
+		writer.write(String.format("<a href='%s/help/%s' target='_blank' title='Help'>%s</a><br>",
 				getRequest().getRootRef(),
+				session.getUser().getId(),
 				"Help"));		
 		writer.write(String.format("<a href='%s/admin/%s' target='admin' title='Configuration'>%s</a>",
 				getRequest().getRootRef(),

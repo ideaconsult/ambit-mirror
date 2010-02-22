@@ -24,6 +24,7 @@ public class ToxPredictSession implements IToxPredictSession {
 		this.endpointName = endpointName;
 	}
 	protected Hashtable<String, Object> models;
+	protected Hashtable<String, Boolean> models_preprocessing;
 	protected Exception x;
 	protected RemoteTaskPool pool = null;
 	
@@ -39,6 +40,15 @@ public class ToxPredictSession implements IToxPredictSession {
 		if (o instanceof RemoteTask) return ((RemoteTask)o).getResult().toString();
 		else return null;
 	}
+	
+	public boolean needsPreprocessing(String model) {
+		return models_preprocessing==null?null:model==null?null:models_preprocessing.get(model);
+	}
+	public void setPreprocessing(String model,Boolean required) {
+		if (models_preprocessing == null) models_preprocessing = new Hashtable<String, Boolean>();
+		models_preprocessing.put(model,required);
+		return;
+	}	
 	
 	public Object getModelStatus(String model) {
 		return models==null?null:model==null?null:models.get(model);

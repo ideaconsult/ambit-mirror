@@ -41,16 +41,27 @@ public class Step5Processor extends StepProcessor {
 		for (String model:models) {
 			if ("on".equals(form.getFirstValue(model))) {
 					try {
+						RemoteTask task = null;
 						Object status = session.getModelStatus(model);
 						if ((status!= null) && (status instanceof RemoteTask)) {
 							//already running, will not do anything
 						} else {
+							
 							Form query = new Form();
 							query.add(ambit2.rest.OpenTox.params.dataset_uri.toString(),session.getDatasetURI());
-							RemoteTask task = new RemoteTask(new Reference(model),
+							if (session.needsPreprocessing(model)) {
+								String launcher = "http://ambit.uni-plovdiv.bg:8080/ambit2/opentox/algorithm";
+								query.add(ambit2.rest.OpenTox.params.model_uri.toString(),model);
+								task = new RemoteTask(new Reference(launcher),
+										MediaType.APPLICATION_WWW_FORM,
+										query.getWebRepresentation()
+										,Method.POST,authentication);
+							} else 
+								task = new RemoteTask(new Reference(model),
 									MediaType.APPLICATION_WWW_FORM,
 									query.getWebRepresentation()
 									,Method.POST,authentication);
+							
 							session.addModel(model, task);
 						}
 					} catch (ResourceException x) {

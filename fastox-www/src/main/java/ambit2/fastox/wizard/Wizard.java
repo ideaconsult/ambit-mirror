@@ -14,7 +14,6 @@ import ambit2.fastox.steps.step3.Step3;
 import ambit2.fastox.steps.step4.Step4;
 import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.steps.step6.Step6;
-import ambit2.fastox.task.TaskStep;
 
 public class Wizard {
 	protected Properties properties;
@@ -53,6 +52,12 @@ public class Wizard {
 			@Override
 			public String getDefaultValue() {
 				return "http://apps.ideaconsult.net:8180/ambit2/feature";
+			}					
+		},
+		application {
+			@Override
+			public String getDefaultValue() {
+				return "http://apps.ideaconsult.net:8180/ambit2";
 			}					
 		};
 		public String getKey() {
@@ -127,7 +132,8 @@ public class Wizard {
 				return "Find models";
 			}
 			
-		},
+		};
+		/*
 		task {
 			@Override
 			public String getResource() {
@@ -150,7 +156,9 @@ public class Wizard {
 				}
 				return taskWizard;
 			}
+
 		};
+		*/
 		public abstract Wizard getWizard();
 		public abstract String getResource();
 		public abstract String getTitle();

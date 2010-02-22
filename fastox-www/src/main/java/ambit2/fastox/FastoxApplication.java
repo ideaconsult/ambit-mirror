@@ -3,9 +3,6 @@ package ambit2.fastox;
 import java.io.StringWriter;
 
 import org.restlet.Component;
-import org.restlet.Context;
-import org.restlet.Request;
-import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
@@ -21,12 +18,15 @@ import org.restlet.security.MapVerifier;
 import org.restlet.util.RouteList;
 
 import ambit2.fastox.steps.WelcomeResource;
+import ambit2.fastox.task.ModelLauncherResource;
+import ambit2.fastox.task.ToxPredictTaskResource;
 import ambit2.fastox.users.IToxPredictUser;
 import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.TaskApplication;
 
 public class FastoxApplication extends TaskApplication<IToxPredictUser> {
@@ -69,12 +69,16 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         router.attach(WelcomeResource.resource, WelcomeResource.class);
         router.attach("", WelcomeResource.class);
 
+        router.attach("/algorithm",ModelLauncherResource.class);
+        router.attach(SimpleTaskResource.resource,ToxPredictTaskResource.class);
+        router.attach(SimpleTaskResource.resource+SimpleTaskResource.resourceID,ToxPredictTaskResource.class);
         
         this.authenticatior = createAuthenticator();
         router.attach(String.format("/admin/{%s}",UserResource.resourceKey),authenticatior);
         authenticatior.setNext(AdminResource.class);        
         
-        router.attach("/help", HelpResource.class);
+        router.attach(String.format("/help/{%s}",UserResource.resourceKey),HelpResource.class);
+        
         router.attach("/{x}", WelcomeResource.class); //this is a hack to avoid not-matching if navigated to /ToxPredict/whatever
         router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
         router.setRoutingMode(Router.MODE_BEST_MATCH); 
@@ -94,11 +98,11 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
             	if (i>0) {
             		userRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResource()), step.getResourceClass());
             		userRouter.attach(String.format("/{%s}%s",WizardResource.key,step.getResourceTab()), step.getResourceClass());
-            		/*
-            		userRouter.attach(String.format("/%s%s",mode.getResource(),step.getResource()), step.getResourceClass());
-            		userRouter.attach(String.format("/%s%s",mode.getResource(),step.getResourceTab()), step.getResourceClass());
+            		
+ //           		userRouter.attach(String.format("/%s%s",mode.getResource(),step.getResource()), step.getResourceClass());
+   //         		userRouter.attach(String.format("/%s%s",mode.getResource(),step.getResourceTab()), step.getResourceClass());
 
-            		 */
+
             	}
             	
             }  
