@@ -1,4 +1,4 @@
-package ambit2.rest.task;
+package ambit2.rest.reporters;
 
 import java.io.Writer;
 import java.util.Iterator;
@@ -7,8 +7,8 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.rest.algorithm.CatalogRDFReporter;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.task.Task;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;

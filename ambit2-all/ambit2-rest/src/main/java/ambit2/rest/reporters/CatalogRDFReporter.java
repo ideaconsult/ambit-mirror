@@ -1,4 +1,4 @@
-package ambit2.rest.algorithm;
+package ambit2.rest.reporters;
 
 import java.io.Writer;
 import java.util.Iterator;

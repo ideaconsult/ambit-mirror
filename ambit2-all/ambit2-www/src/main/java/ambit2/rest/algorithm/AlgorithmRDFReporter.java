@@ -13,6 +13,7 @@ import ambit2.core.data.model.Parameter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OTA;
 import ambit2.rest.rdf.OTA.OTAClass;
+import ambit2.rest.reporters.CatalogRDFReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
