@@ -2,12 +2,13 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
+<!--  can't make working multople restlet applications in single war -->
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 
 	<display-name>AMBIT2</display-name>
 	<description>	AMBIT2 	</description>
 	
-	<!-- 
+	
 	<context-param>
 		<param-name>org.restlet.application</param-name>
 		<param-value>ambit2.rest.AmbitApplication</param-value>
@@ -20,7 +21,7 @@
 		<param-value>ambit2.rest.AmbitComponent</param-value>
 	</context-param>	
 			
-			 -->
+		
 <!-- javamelody -->
        <filter>
                 <filter-name>monitoring</filter-name>
@@ -33,7 +34,7 @@
         <listener>
                 <listener-class>net.bull.javamelody.SessionListener</listener-class>
         </listener>
-		
+		<!--
     <servlet>  
     <servlet-name>AmbitRestlet</servlet-name>
 
@@ -68,9 +69,9 @@
      <servlet-mapping> 
      <servlet-name>LauncherRestlet</servlet-name> <url-pattern>/opentox/*</url-pattern> 
      </servlet-mapping> 
-
+-->
 		
-		<!-- 
+	
 	<servlet>
 		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
@@ -79,7 +80,7 @@
 		<servlet-name>RestletServlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-	 -->
+	
 	<mime-mapping>
         <extension>sdf</extension>
         <mime-type>chemical/x-mdl-sdfile</mime-type>
