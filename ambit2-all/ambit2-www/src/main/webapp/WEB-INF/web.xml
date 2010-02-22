@@ -7,6 +7,7 @@
 	<display-name>AMBIT2</display-name>
 	<description>	AMBIT2 	</description>
 	
+	<!-- 
 	<context-param>
 		<param-name>org.restlet.application</param-name>
 		<param-value>ambit2.rest.AmbitApplication</param-value>
@@ -19,6 +20,7 @@
 		<param-value>ambit2.rest.AmbitComponent</param-value>
 	</context-param>	
 			
+			 -->
 <!-- javamelody -->
        <filter>
                 <filter-name>monitoring</filter-name>
@@ -32,20 +34,52 @@
                 <listener-class>net.bull.javamelody.SessionListener</listener-class>
         </listener>
 		
+    <servlet>  
+    <servlet-name>AmbitRestlet</servlet-name>
+
+     <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class> 
+     	<init-param> <param-name>org.restlet.application</param-name> 
+     	<param-value>ambit2.rest.AmbitApplication</param-value> 
+     </init-param> 
+     
+	     <init-param>
+	    <param-name>org.restlet.attribute.server</param-name> 
+	    <param-value>test.ServerServlet1</param-value> 
+	    </init-param> 
+    </servlet>
+
+     <servlet-mapping> 
+     <servlet-name>AmbitRestlet</servlet-name> <url-pattern>/*</url-pattern> 
+     </servlet-mapping>
+
+     <servlet> 
+     <servlet-name>LauncherRestlet</servlet-name>
+
+     <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class> 
+     <init-param> <param-name>org.restlet.application</param-name> 
+     <param-value>ambit2.rest.launcher.LauncherApplication</param-value> 
+     </init-param> 
+     
+     <init-param>
+     <param-name>org.restlet.attribute.server</param-name> <param-value>test.ServerServlet2</param-value> 
+     </init-param> 
+     </servlet>
+
+     <servlet-mapping> 
+     <servlet-name>LauncherRestlet</servlet-name> <url-pattern>/opentox/*</url-pattern> 
+     </servlet-mapping> 
+
+		
+		<!-- 
 	<servlet>
 		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
-		<!-- 
-			<init-param>
-				<param-name>Database</param-name>
-				<param-value>cadaster</param-value>
-			</init-param>
-		  -->
 	</servlet>	
 	<servlet-mapping>
 		<servlet-name>RestletServlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+	 -->
 	<mime-mapping>
         <extension>sdf</extension>
         <mime-type>chemical/x-mdl-sdfile</mime-type>

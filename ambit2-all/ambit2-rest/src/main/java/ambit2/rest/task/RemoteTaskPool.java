@@ -30,8 +30,10 @@ public class RemoteTaskPool {
 		try {
 			while (running()>0) {
 				poll();
-				for (RemoteTask task : pool) System.out.println(task); 
-				this.wait(5000); //5 sec
+				for (RemoteTask task : pool) System.out.println(task);
+				Thread.sleep(500);
+				Thread.yield();
+				
 			}	
 		} catch (Exception x) {
 			x.printStackTrace();
