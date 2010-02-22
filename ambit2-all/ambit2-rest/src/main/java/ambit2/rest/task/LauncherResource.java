@@ -25,6 +25,10 @@ public class LauncherResource extends ServerResource {
 	protected Form input;
 	protected Reference result;
 	
+	protected Reference dataset_service;
+	protected Reference application_root;
+	
+	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -32,9 +36,16 @@ public class LauncherResource extends ServerResource {
 		input = getRequest().getResourceRef().getQueryAsForm();
 		dataset_uri = input.getFirstValue(OpenTox.params.dataset_uri.toString());
 		model_uri = input.getFirstValue(OpenTox.params.model_uri.toString());
-		System.out.println(input);
+		this.dataset_service = getDatasetService();
+		this.application_root = getApplicationRoot();
 
 	}
+	protected Reference getDatasetService() {
+		return new Reference("http://194.141.0.136:8080/ambit2/dataset");
+	}
+	protected Reference getApplicationRoot() {
+		return new Reference("http://194.141.0.136:8080/ambit2");
+	}	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		
@@ -92,8 +103,7 @@ public class LauncherResource extends ServerResource {
 	protected Callable<Reference> createCallable(Form form) throws ResourceException {
 				
 		try {
-			//Reference app = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2");
-			Reference app = new Reference("http://194.141.0.136:8080/ambit2");
+
 			Form query = new Form();
 			if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) == null) 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -106,9 +116,8 @@ public class LauncherResource extends ServerResource {
 
 			CallableDatasetCreator c = new CallableDatasetCreator(
 					query,
-					app,
-					//new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"),
-					new Reference("http://194.141.0.136:8080/ambit2/dataset"),
+					application_root,
+					dataset_service,
 					null);
 			return c;
 		} catch (ResourceException x) {
