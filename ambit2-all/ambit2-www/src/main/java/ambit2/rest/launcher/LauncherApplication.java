@@ -17,6 +17,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RESTComponent;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.task.LauncherResource;
 import ambit2.rest.task.TaskResource;
 
 public class LauncherApplication<USERID> extends TaskApplication<USERID>{

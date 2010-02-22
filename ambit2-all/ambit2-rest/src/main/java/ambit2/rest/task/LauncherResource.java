@@ -1,4 +1,4 @@
-package ambit2.rest.launcher;
+package ambit2.rest.task;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,7 +17,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.CallableDatasetCreator;
+import ambit2.rest.TaskApplication;
 
 public class LauncherResource extends ServerResource {
 	protected String dataset_uri;
@@ -71,7 +71,7 @@ public class LauncherResource extends ServerResource {
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		try {
-			Reference ref =  ((LauncherApplication)getApplication()).addTask(
+			Reference ref =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(new Form(entity)),
 					getRequest().getRootRef());		
@@ -92,7 +92,8 @@ public class LauncherResource extends ServerResource {
 	protected Callable<Reference> createCallable(Form form) throws ResourceException {
 				
 		try {
-			Reference app = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2");
+			//Reference app = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2");
+			Reference app = new Reference("http://194.141.0.136:8080/ambit2");
 			Form query = new Form();
 			if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) == null) 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -106,7 +107,8 @@ public class LauncherResource extends ServerResource {
 			CallableDatasetCreator c = new CallableDatasetCreator(
 					query,
 					app,
-					new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"),
+					//new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"),
+					new Reference("http://194.141.0.136:8080/ambit2/dataset"),
 					null);
 			return c;
 		} catch (ResourceException x) {
