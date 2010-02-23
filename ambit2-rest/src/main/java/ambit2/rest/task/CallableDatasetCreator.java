@@ -1,5 +1,7 @@
 package ambit2.rest.task;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -18,6 +20,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.task.Task.TaskProperty;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
@@ -49,6 +52,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  *
  */
 public class CallableDatasetCreator  implements Callable<Reference>  {
+	protected PropertyChangeSupport support;
 	protected Reference applicationRoot;
 	protected String modelURI;
 	protected String datasetURI;
@@ -98,8 +102,22 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		return ref;
 	}
 	*/
-	
 	public Reference call() throws Exception {
+		try {
+			return callInternal();
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			//clean up listeners
+	    	if (support!=null) {
+	    		PropertyChangeListener[] listeners = support.getPropertyChangeListeners();
+	    		for (PropertyChangeListener l: listeners)
+	    			support.removePropertyChangeListener(l);
+	    	}
+		}
+	}
+	
+	protected Reference callInternal() throws Exception {
 		RemoteTask currentJob = null;
 		//create subsets with missing descriptors
 		run(new Reference(modelURI));
@@ -126,6 +144,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		algorithms.clear();
 		
 		//now create dataset with a nice name to send to model service
+		support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Create dataset with a nice name to send to model service %s",datasetURI));
 		input.clear();
 		Reference dataset = new Reference(datasetURI);
 		dataset.setQuery(featuresQuery.getQueryString());
@@ -142,6 +161,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			input.add(OpenTox.params.dataset_uri.toString(),currentJob.getResult().toString());
 			input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
 			
+			support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start model (finally) %s",modelURI));
 			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
 			jobs.add(currentJob);
 			jobs.run();		
@@ -160,6 +180,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		OntModel jenaModel = null;
 		StmtIterator features = null;
 		try {
+			support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Retrieving model %s",modelURI));
 			jenaModel = OT.createModel(null, modelURI,MediaType.APPLICATION_RDF_XML);
 			features =  jenaModel.listStatements(
 					new SimpleSelector(null,OT.OTProperty.independentVariables.createProperty(jenaModel),(RDFNode)null));
@@ -171,7 +192,8 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 					jenaModel = OT.createModel(jenaModel,new Reference(((Resource)feature).getURI()),MediaType.APPLICATION_RDF_XML);
 				
 				}
-			}	
+			}
+			support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Prepare dataset for model %s",modelURI));
 			//everything in, do some querying
 			launchCalculations(jenaModel,modelURI.toString());
 		} catch (Exception x) {
@@ -267,6 +289,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		RemoteTask job = new RemoteTask(datasetService,MediaType.APPLICATION_RDF_XML,input.getWebRepresentation(),Method.POST,authentication);
 		algorithms.put(algorithm,job);
 		jobs.add(job);
+		support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start descriptor calculation %s",algorithm));
 	}
 	
 	public static Reference createFilterReference(String root,String dataset, String[] features) {
@@ -282,6 +305,23 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		ref.setQuery(form.getQueryString());
 		return ref;
 	}
+    public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
+    	if (support ==null) support = new PropertyChangeSupport(this);
+    	support.addPropertyChangeListener(listener);
+    }
+    public synchronized void removePropertyChangeListener(
+			PropertyChangeListener listener) {
+    	if (support != null) support.removePropertyChangeListener(listener);
+    }
+    @Override
+    protected void finalize() throws Throwable {
+    	if (support!=null) {
+    		PropertyChangeListener[] listeners = support.getPropertyChangeListeners();
+    		for (PropertyChangeListener l: listeners)
+    			support.removePropertyChangeListener(l);
+    	}
+    	super.finalize();
+    }
 }
 
 

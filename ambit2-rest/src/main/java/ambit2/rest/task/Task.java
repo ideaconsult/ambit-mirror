@@ -1,5 +1,7 @@
 package ambit2.rest.task;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.CancellationException;
@@ -8,7 +10,25 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class Task<Reference,USERID> implements Serializable {
+public class Task<Reference,USERID> implements Serializable, PropertyChangeListener {
+	public enum TaskProperty {
+		PROPERTY_NAME {
+			@Override
+			public void update(Task task,Object value) {
+				if (value!=null) task.setName(value.toString());
+			}
+		},
+		PROPERTY_PERCENT {
+			@Override
+			public void update(Task task,Object value) {
+				try {
+				if (value!=null) task.setPercentCompleted(Float.parseFloat(value.toString()));
+				} catch (Exception x) {}
+			}			
+		};
+		public abstract void update(Task task,Object value);
+	}
+ 
 	/**
 	 * 
 	 */
@@ -97,5 +117,14 @@ public class Task<Reference,USERID> implements Serializable {
 		} catch (Exception x) {
 			return x.getMessage();
 		}
+	}
+	public void propertyChange(PropertyChangeEvent evt) {
+		try {
+			TaskProperty p = TaskProperty.valueOf(evt.getPropertyName());
+			p.update(this, evt.getNewValue());
+		} catch (Exception x) {
+			
+		}
+		
 	}
 }
