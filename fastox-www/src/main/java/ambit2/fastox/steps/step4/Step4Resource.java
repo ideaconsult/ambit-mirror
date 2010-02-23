@@ -16,7 +16,7 @@ import ambit2.fastox.steps.FastoxStepResource;
  */
 public class Step4Resource extends FastoxStepResource {
 	public Step4Resource() {
-		super(4);
+		super(-1);
 	}
 
 	@Override
@@ -26,14 +26,13 @@ public class Step4Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		writer.write("<h5>Under development: This page will display available experimental data for the selected endpoints</h5>");
-		Form form = getRequest().getResourceRef().getQueryAsForm();
 
 		try {
-			store = ModelTools.retrieveModels(store,session, MediaType.APPLICATION_RDF_XML);
+			renderRDFModels(writer, session, false, getRequest().getRootRef());
 		} catch (Exception x) {
-			session.setError(x);
+			writer.write(x.getMessage());
 		}
-		ModelTools.renderModels(store,session, writer, false,getRootRef());
+
 		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -13,10 +14,20 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.DatasetTools;
+import ambit2.fastox.ModelTools;
+import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.WizardResource;
+import ambit2.fastox.wizard.Wizard.SERVICE;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 public abstract class FastoxStepResource extends WizardResource {
 	protected Model store = null;
@@ -40,10 +51,13 @@ public abstract class FastoxStepResource extends WizardResource {
 		public String htmlInputText(String value) {
 			return String.format("<input name='%s' type='text' value='%s'>\n",toString(),value);
 		}		
-		public String htmlInputCheckbox(String value,String title) {
+		public String htmlInputCheckbox(String value,String title,boolean checked) {
 			return
-				String.format("<input type='checkbox' checked name='%s'>%s\n<input type='hidden' name='%s' value='%s'>",
-						value,title==null?value:title,toString(),value);
+				String.format("<input type='checkbox' %s name='%s'><b>%s</b>\n<input type='hidden' name='%s' value='%s'>",
+						checked?"checked='checked'":"",value,title==null?value:title,toString(),value);
+		}			
+		public String htmlInputCheckbox(String value,String title) {
+			return htmlInputCheckbox(value, title,true);
 		}		
 	};			
 		
@@ -152,6 +166,54 @@ public abstract class FastoxStepResource extends WizardResource {
 			throws ResourceException {
 		return super.processForm(entity, variant);
 	}
+	
+	public int renderRDFModels(Writer writer, IToxPredictSession session,
+			 boolean status,Reference rootReference) throws Exception {
+		int running = 0;
+		//session.clearModels();
+		ModelTools.renderModelTableCaption(writer);
+		if (session.getNumberOfModels()==0)  {
+			String q = "?url";
+			Query query = QueryFactory.create(String.format(ModelTools.sparql,q,q,q,q, q,q,q,q));
+			running += retrieveModels(null,query,writer,status,rootReference);
+		} else {
+			Iterator<String> models = session.getModels();
+			while (models.hasNext()) {
+				String model = models.next();
+				String q = String.format("<%s>",model);
+				Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q, q,q,q,""));
+				running += retrieveModels(model,query,writer,status,rootReference);
+			}
+		}
+		writer.write("</table>");
+		
+		return running;
+	}		
+	protected int retrieveModels(String modelURI,Query query,Writer writer,boolean status,Reference rootReference) throws Exception {
+		QueryExecution qe = null;
+		int running = 0;
+		try {
+			
+			qe = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
+			ResultSet results = qe.execSelect();
+			
+			int record = 0;
+			while (results.hasNext()) {
+				record++;
+				QuerySolution solution = results.next();
+				writer.write(String.format("<tr class='%s'>",(record % 2)==0?"results_even":"results_odd"));
+				running+=ModelTools.renderModelTableRow(modelURI,writer,solution,session,status,rootReference,record);
+				writer.write("</tr>");
+			}
+			
+		}catch (Exception x) {
+			throw x;
+		} finally {
+			try {qe.close();} catch (Exception x) {}
+		}		
+		return running;
+	}
+	
 	
 	
 }

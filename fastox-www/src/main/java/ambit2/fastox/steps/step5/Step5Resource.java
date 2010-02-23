@@ -27,7 +27,7 @@ public class Step5Resource extends FastoxStepResource {
 				
 	protected int running = 0;
 	public Step5Resource() {
-		super(5);
+		super(4);
 	}
 
 	@Override
@@ -65,7 +65,13 @@ public class Step5Resource extends FastoxStepResource {
 		} catch (Exception x) {
 			session.setError(x);
 		}
-		running = ModelTools.renderModels(store,session, writer, true,getRequest().getRootRef());
+		//running = ModelTools.renderModels(store,session, writer, true,getRequest().getRootRef());
+		
+		try {
+			running = renderRDFModels(writer, session, true, getRequest().getRootRef());
+		} catch (Exception x) {
+			writer.write(x.getMessage());
+		}
 		
 		
 		writer.write(session.getError()==null?"":"<h3>Errors</h3>");

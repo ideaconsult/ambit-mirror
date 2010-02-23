@@ -26,17 +26,35 @@ public class Step5Processor extends StepProcessor {
 	private static final long serialVersionUID = -5628448981581045947L;
 
 	
+	public Form saveModels(Representation entity, IToxPredictSession session)
+			throws AmbitException {
+		Form form = new Form(entity);
+		String[] models = form.getValuesArray(params.model.toString());
+			
+		session.clearModels();
+		
+		if ((models == null) || (models.length==0)) throw new AmbitException("No models!");
+		for (String model:models) {
+			if ("on".equals(form.getFirstValue(model))) {
+					try {
+						session.addModel(model, Boolean.TRUE);
+					} catch (ResourceException x) {
+						
+					}
+			}
+		}				
+		return form;
+	}
 	@Override
 	public Form process(Representation entity, IToxPredictSession session)
 			throws AmbitException {
 		
-		Form form = new Form(entity);
+		Form form = saveModels(entity,session);
 		if (session.getDatasetURI() == null) throw new AmbitException("No dataset!");
 		String[] models = form.getValuesArray(params.model.toString());
-		form.removeAll(params.model.toString());
 		
 		if (session.getNumberOfRunningModels()==0) session.clearModels();
-		
+		form.removeAll(params.model.toString());
 		if ((models == null) || (models.length==0)) throw new AmbitException("No models!");
 		for (String model:models) {
 			if ("on".equals(form.getFirstValue(model))) {
@@ -50,7 +68,7 @@ public class Step5Processor extends StepProcessor {
 							Form query = new Form();
 							query.add(ambit2.rest.OpenTox.params.dataset_uri.toString(),session.getDatasetURI());
 							if (session.needsPreprocessing(model)) {
-								String launcher = "http://ambit.uni-plovdiv.bg:8080/ambit2/opentox/algorithm";
+								String launcher = String.format("%s/algorithm",getBaseReference());
 								query.add(ambit2.rest.OpenTox.params.model_uri.toString(),model);
 								task = new RemoteTask(new Reference(launcher),
 										MediaType.APPLICATION_WWW_FORM,

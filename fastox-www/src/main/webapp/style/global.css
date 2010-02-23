@@ -454,9 +454,9 @@ TR.results_even {
 	border-collapse: collapse;
 	vertical-align: middle;
 	font-size: 10pt;
-	background-color: #FFFFFF;
-	border-width: 0px;
-	border-color: #FFFFFF;
+	background-color: #eeeeee;
+	border-width: 1px;
+	border-color: #636bd2;
 	text-align: left;     
 }  
   
@@ -464,8 +464,8 @@ TR.results_odd {
 	border-collapse: collapse;
 	vertical-align: middle;
 	font-size: 10pt;
-	background-color: #E8EBEE;
-	border-width: 0px;
+	background-color: #ffffff;
+	border-width: 1px;
 	border-color: #636bd2;
 	text-align: left;     
 }   

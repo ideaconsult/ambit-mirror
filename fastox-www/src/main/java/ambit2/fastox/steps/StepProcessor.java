@@ -18,6 +18,15 @@ import ambit2.fastox.users.IToxPredictSession;
 
 public class StepProcessor extends DefaultAmbitProcessor<Representation, Form> {
 	protected ChallengeResponse authentication = null;
+	protected Reference baseReference = null;
+	public Reference getBaseReference() {
+		return baseReference;
+	}
+
+	public void setBaseReference(Reference baseReference) {
+		this.baseReference = baseReference;
+	}
+
 	/**
 	 * 
 	 */

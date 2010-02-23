@@ -7,13 +7,10 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Parameter;
 import org.restlet.resource.ResourceException;
 
-import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 
 import com.hp.hpl.jena.query.QueryExecution;
@@ -21,7 +18,6 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -95,11 +91,11 @@ public class Step3Resource extends FastoxStepResource {
 		super.doInit();
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		
-		forms.put("Endpoints",form);
+		forms.put("Models",form);
 	}
 	protected Hashtable<String, Form> createForms() {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
-		forms.put("Endpoints",new Form());
+		//forms.put("Endpoints",new Form());
 		forms.put("Models",new Form());
 
 		return forms;
@@ -107,91 +103,23 @@ public class Step3Resource extends FastoxStepResource {
 
 	@Override
 	protected String getDefaultTab() {
-		return "Endpoints";
+		return "Models";
 	}
 
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		retrieveModelsFromSparqlService(session,key);
-		if ("Endpoints".equals(key) || "Select endpoints and models".equals(key)) {
-			key = "Endpoints";
-			writer.write("<h4>");
-			/*
-			if (parentendpoint!= null) {
-				writer.write(
-					String.format("<a href='%s%s/%s?%s=%s&%s=%s'>%s</a>",
-					getRequest().getRootRef(),
-					Step3Resource.resource,
-					key,
-					params.endpoint.toString(),
-					parentendpoint==null?"http://www.opentox.org/echaEndpoints.owl#Endpoints":parentendpoint,
-					params.endpoint_name.toString(),
-					parentendpoint_name==null?"":parentendpoint_name,
-					parentendpoint_name==null?"Endpoints":parentendpoint_name
-					));
-				writer.write("&nbsp;/&nbsp;");
-			}
-			
-			writer.write(String.format("<img src='%s/images/16x16_toxicological_endpoints.png'>",
-					getRootRef().toString()));		
-					*/	
-			writer.write(session.getEndpointName());
-			writer.write("</h4>");
-			try {
-				Model rdf = ModelTools.retrieveModels(null,session, MediaType.APPLICATION_RDF_XML);
-				ModelTools.renderModels(rdf, session, writer, false,getRequest().getRootRef());
-			} catch (Exception x) {
-				session.setError(x);
-			}
-			writer.write("</form>");
-			
-			Form form = new Form();
-			retrieveEndpoints(form,key);
-			renderEndpoints(form,writer);
-			form.removeAll(params.subendpoint.toString());
-		} else if ("Models".equals(key)) {
-			try {
-				Model rdf = ModelTools.retrieveModels(null,session, MediaType.APPLICATION_RDF_XML);
-				ModelTools.renderModels(rdf, session, writer, false,getRequest().getRootRef());
-			} catch (Exception x) {
-				session.setError(x);
-			}
+		try {
+			renderRDFModels(writer, session, false, getRequest().getRootRef());
+		} catch (Exception x) {
+			writer.write(x.getMessage());
 		}
-
 		super.renderFormContent(writer, key);
 	}
 	@Override
 	public void renderFormFooter(Writer writer, String key) throws IOException {
 	}
-	public void retrieveModelsFromSparqlService(IToxPredictSession session, String key) throws IOException {
+	
 
-		session.clearModels();
-		
-		QueryExecution ex = null;
-		try {
-			
-			String query = String.format(queryString.get(key),session.getEndpoint());
-			
-			ex = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
-			ResultSet results = ex.execSelect();
-
-			while (results.hasNext()) {
-				QuerySolution solution = results.next();
-				Literal id = solution.getLiteral("id");
-				Resource resource = solution.getResource("url");
-				if (resource.getURI()!=null)
-					session.addModel(resource.getURI(),Boolean.TRUE);
-				else if (id!= null)
-					session.addModel(id.getString(),Boolean.FALSE);
-			}
-
-		} catch (Exception x) {
-			session.setError(x);
-		} finally {
-			try { ex.close();} catch (Exception x) {} ;
-		}
-		return;	
-	}
 	public void retrieveEndpoints(Form form,String key) throws IOException {
 		
 		form.removeAll(params.subendpoint.toString());

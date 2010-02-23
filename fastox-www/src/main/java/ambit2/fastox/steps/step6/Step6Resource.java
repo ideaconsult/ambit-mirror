@@ -19,7 +19,7 @@ import ambit2.fastox.steps.FastoxStepResource;
 public class Step6Resource extends FastoxStepResource {
 
 	public Step6Resource() {
-		super(6);
+		super(5);
 	}
 	@Override
 	public void renderFormFooter(Writer writer,String key) throws IOException {
@@ -37,7 +37,12 @@ public class Step6Resource extends FastoxStepResource {
 			session.setError(x);
 		}
 	
-		ModelTools.renderModels(store,session, writer, false,getRootRef());
+		//ModelTools.renderModels(store,session, writer, false,getRootRef());
+		try {
+			renderRDFModels(writer, session, false, getRequest().getRootRef());
+		} catch (Exception x) {
+			writer.write(x.getMessage());
+		}
 		//todo retrieve dataset once and then only predictions into a single model
 		writer.write("<h4>Compounds</h4>");
 		

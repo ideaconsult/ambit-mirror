@@ -5,7 +5,7 @@ import ambit2.fastox.wizard.WizardStep;
 public class Step5 extends WizardStep {
 
 	public Step5() {
-		super(5,"Estimate","Estimate",Step5Resource.class,Step5Processor.class);
+		super(4,"Estimate","Estimate",Step5Resource.class,Step5Processor.class);
 	}
 
 }

@@ -85,7 +85,6 @@ public class Wizard {
 								new Step1(),
 								new Step2(),
 								new Step3(),
-								new Step4(),
 								new Step5(),
 								new Step6()
 								
@@ -114,7 +113,6 @@ public class Wizard {
 								new Step1(),
 								new Step2(),
 								new Step3(),
-								new Step4(),
 								new Step5(),
 								new Step6()
 								

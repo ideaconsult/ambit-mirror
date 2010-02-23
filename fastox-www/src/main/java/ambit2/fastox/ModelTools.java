@@ -13,18 +13,38 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.task.RemoteTask;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ModelTools {
+	public static final String sparql = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm  ?type \n"+
+		"		where {\n"+
+		"		        %s rdf:type ot:Model.\n"+
+		"		        OPTIONAL {%s dc:title ?title}.\n"+
+		"		        OPTIONAL {%s ot:trainingDataset ?TrainingDataset}.\n"+
+		"		        OPTIONAL {%s ot:algorithm ?algorithm}.\n"+
+		"	                OPTIONAL {?algorithm ot:isA ?type}.\n"+
+		"		        OPTIONAL { {\n"+
+		"		        { %s ot:dependentVariables ?vars. } UNION { %s ot:predictedVariables ?vars. }\n"+
+		"	                 }\n"+
+		"		        {?vars owl:sameAs ?endpoint}.\n"+
+		"	{?endpoint dc:title ?endpointName}.\n"+
+		"	       }\n"+
+		"}\n"+		
+		"	ORDER BY ?endpointName %s\n";
+			
 	public static final MediaType[] mimes = {
 		ChemicalMediaType.CHEMICAL_MDLSDF,
 		ChemicalMediaType.CHEMICAL_CML,
@@ -32,8 +52,20 @@ public class ModelTools {
 		MediaType.APPLICATION_PDF,
 		MediaType.TEXT_CSV,
 		ChemicalMediaType.WEKA_ARFF,
-		MediaType.APPLICATION_RDF_XML
+		MediaType.APPLICATION_RDF_XML,
+		MediaType.TEXT_RDF_N3,
 		};
+	
+	public static final String[] mimesDescription = {
+		"SDF file",
+		"CML file",
+		"SMILES",					
+		"PDF *.pdf",
+		"Comma delimited *.csv",
+		"Weka ARFF file *.arff",
+		"W3C Resource Description Framework (RDF/XML)",
+		"W3C Resource Description Framework (RDF N3)",
+		};	
 		public static final String[] image = {
 				"sdf.jpg",
 				"cml.jpg",
@@ -41,6 +73,7 @@ public class ModelTools {
 				"pdf.png",
 				"excel.png",
 				"weka.jpg",
+				"rdf.gif",
 				"rdf.gif"
 				
 		};
@@ -64,7 +97,7 @@ public class ModelTools {
 		}
 		return  rdf;
 	}
-	
+	/*
 	public static int renderModels(Model rdf, IToxPredictSession session, Writer writer, boolean status,Reference rootReference) throws IOException {
 		   int running = 0;
 			
@@ -76,6 +109,7 @@ public class ModelTools {
 			try {
 				renderRDFModels(rdf, writer, session ,status,rootReference);
 			} catch (Exception x) {
+				writer.write(x.getLocalizedMessage());
 				x.printStackTrace();
 				writer.write("<table class='models'>");
 				writer.write("<tr><th align='left'>Model</th>");
@@ -94,119 +128,144 @@ public class ModelTools {
 			}
 			return running;
 	}	
-	//renderRDFModels(rdf, writer, models , session ,form, status,rootReference);
-	public static int renderRDFModels(Model rdf,Writer writer, IToxPredictSession session,
-			 boolean status,Reference rootReference) throws Exception {
-		final String sparql = 
-			"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
-			"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
-			"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
-			"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
-			"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
-			"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
-			"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-			"		select DISTINCT ?url ?title ?algorithm ?creator ?id\n"+
-			"		where {\n"+
-			"	        ?url rdf:type ot:Model.\n"+
-			"	        OPTIONAL {?url dc:title ?title}.\n"+
-			"	        OPTIONAL {?url dc:creator ?creator}.\n"+
-			"	        OPTIONAL {?url ot:algorithm ?algorithm}.\n"+
-			"	        OPTIONAL {?url dc:identifier ?id}.\n"+	
-			"}\n";		
-		QueryExecution qe = null;
+	*/
+	public static void renderModelTableCaption(Writer writer) throws IOException {
+		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
+		writer.write("<table class='results' width='95%'>");
+		writer.write("<tr>");
+		writer.write("<th width='15%'>Endpoint</th>");
+		writer.write("<th width='25%'>Model</th>");
+		writer.write("<th>Descriptors</th>");
+		writer.write("<th>Training dataset</th>");
+		writer.write("<th>Algorithm</th>");
+		
+		
+		writer.write("<th></th>");
+		writer.write("<th>Status</th>");
+		writer.write("</tr>");
+	}
+	
+	public static int renderModelTableRow(String modelURI,Writer writer, QuerySolution solution,
+			 IToxPredictSession session,
+			 boolean status,Reference rootReference, int record)  throws IOException {
 		int running = 0;
-		try {
-			Query query = QueryFactory.create(sparql);
-			qe = QueryExecutionFactory.create(query,rdf );
-			ResultSet results = qe.execSelect();
-			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
-			writer.write("<table class='results'>");
-			writer.write("<tr>");
-			writer.write("<th>Model</th>");
-			writer.write("<th>Creator</th>");
-			writer.write("<th>Algorithm</th>");
-			writer.write("<th>Status</th>");
-			writer.write("</tr>");
-			while (results.hasNext()) {
-				
-				QuerySolution solution = results.next();
-				Resource url = solution.getResource("url");
-				Resource algo = solution.getResource("algorithm");
-				Literal name = solution.getLiteral("title");
-				Literal creator = solution.getLiteral("creator");
-				Literal id = solution.getLiteral("id");
-				String modelUri = url.getURI()==null?(id==null?null:id.getString()):url.getURI();
-				if (modelUri==null) continue;
-				writer.write("<tr class='results_even'>");					
-				writer.write("<td>");
-				writer.write(String.format("<a href='%s' alt='%s' title='%s' target='_blank' ><img src='%s/images/chart_line.png' border='0' alt='%s' title='%s'></a>",
-						modelUri,modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
-				writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString()));
-				
-				writer.write("</td><td>");
-				writer.write(creator==null?"":creator.getString());
-				writer.write("</td><td>");
-				writer.write(algo==null?"":algo.getURI());
-				writer.write("</td>");
-				writer.write("<td>");
-				/**
-				 * Results URL and status
-				 */
-				Object uris = session.getModelStatus(modelUri);
-				if (!status)  {
-					if ((uris != null) && (uris instanceof RemoteTask)) {
-						Reference uri = ((RemoteTask)uris).getResult();
-						String q= uri.getQuery();
-						for (int i=0;i<mimes.length;i++) {
-							MediaType mime = mimes[i];
-							writer.write("&nbsp;");
-							writer.write(String.format(
-									"<a href=\"%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
-									uri,
-									q==null?"?":"&",
-									Reference.encode(mime.toString()),
-									rootReference,
-									image[i],
-									mime,
-									mime));	
-						}
-					}
-				}
-				writer.write("</td>");
-				
-				if (uris instanceof RemoteTask)  {
-					
-					RemoteTask task = ((RemoteTask) uris);
-					writer.write("<td>");
-					int isRunning = 0;
-					isRunning += task.isDone()?0:1;
-					writer.write((isRunning==0)?"Completed":"Processing");
+		RDFNode url = solution.get("url");
+		String modelUri = url==null?modelURI:url.isResource()?((Resource) url).getURI():url.toString();
+		if (modelUri==null) return 0;
 
-					running += isRunning;
-					writer.write("</td>");
-					writer.write("<td>");
-					writer.write(String.format("<a href='%s'><img src='%s/images/%s' border='0' alt='%s' title='%s'></a>",
-							task.getResult(),
-							rootReference.toString(),
-							(isRunning==0)?"tick.png":"24x24_ambit.gif",
-							(isRunning==0)?"Completed":"Processing",
-							(isRunning==0)?"Completed":"Processing"
-								)
-							);
+		RDFNode algo = solution.getResource("algorithm");
+		RDFNode algoType = solution.get("type");
+		
+		Literal name = solution.getLiteral("title");
+		Resource dataset = solution.getResource("TrainingDataset");
+		
+		Resource endpoint = solution.getResource("endpoint");
+		Literal endpointName = solution.getLiteral("endpointName");
 
-					writer.write("</td>");					
-
-				}				
-				writer.write("</tr>");
+		String algType = algoType==null?"-":
+			algoType.isLiteral()?((Literal)algoType).getString():
+			algoType.isURIResource()?((Resource)algoType).getURI():algoType.toString();		
+		//add the model
+		if (modelUri!=null)	{
+			if (session.getModelStatus(modelUri) == null) {
+				session.addModel(modelUri,Boolean.TRUE);
 			}
-			writer.write("</table>");
-		}catch (Exception x) {
-			throw x;
-		} finally {
-			try {qe.close();} catch (Exception x) {}
-		}		
+	
+			session.setPreprocessing(modelUri, !"http://www.opentox.org/algorithmTypes.owl#Rules".equals(algType));
+		}
+		
+		writer.write("<td>");
+		writer.write(endpointName==null?"":endpointName.getString());
+		writer.write("</td><td>");
+		writer.write(String.format("<a href='%s?media=%s' alt='%s' title='%s' target='_blank' ><img src='%s/images/chart_line.png' border='0' alt='%s' title='%s'></a>",
+				modelUri,
+				Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
+				modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
+		writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString(),record==1));
+		
+		writer.write("</td><td>");
+		writer.write(session.needsPreprocessing(modelUri)?
+				String.format("<a href='%s/independent' target=_blank>YES</a>",modelUri)
+				:"-");	
+		writer.write("</td><td>"); //training dataset
+		
+		if (dataset!=null)  
+			if (dataset.isURIResource()) {
+			for (int i=0;i<mimes.length;i++) {
+				MediaType mime = mimes[i];
+				writer.write("&nbsp;");
+				writer.write(String.format(
+						"<a href=\"%s?media=%s\" ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+						dataset.getURI(),
+						Reference.encode(mime.toString()),
+						rootReference,
+						image[i],
+						mime,
+						mimesDescription[i]));	
+			}
+			} else writer.write(dataset.toString());
+		
+
+		writer.write("</td><td>"); //algorithm
+		//?media makes use of restlet Tunnel service
+		writer.write(algo==null?"":algo.isURIResource()?
+				String.format("<a href='%s?media=%s' target=_blank'>%s</a>",
+						((Resource)algo).getURI(),Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),((Resource)algo).getURI())
+				:algo.toString());		
+		writer.write("</td><td>");
+		
+
+		/**
+		 * Results URL and status
+		 */
+		Object uris = session.getModelStatus(modelUri);
+		if (!status)  {
+			if ((uris != null) && (uris instanceof RemoteTask)) {
+				Reference uri = ((RemoteTask)uris).getResult();
+				String q= uri.getQuery();
+				for (int i=0;i<mimes.length;i++) {
+					MediaType mime = mimes[i];
+					writer.write("&nbsp;");
+					writer.write(String.format(
+							"<a href=\"%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							uri,
+							q==null?"?":"&",
+							Reference.encode(mime.toString()),
+							rootReference,
+							image[i],
+							mime,
+							mimesDescription[i]));	
+				}
+			}
+		}
+		writer.write("</td>");
+		
+		if (uris instanceof RemoteTask)  {
+			
+			RemoteTask task = ((RemoteTask) uris);
+			writer.write("<td>");
+			int isRunning = 0;
+			isRunning += task.isDone()?0:1;
+			writer.write((isRunning==0)?"Completed":"Processing");
+
+			running += isRunning;
+			writer.write("</td>");
+			writer.write("<td>");
+			writer.write(String.format("<a href='%s'><img src='%s/images/%s' border='0' alt='%s' title='%s'></a>",
+					task.getResult(),
+					rootReference.toString(),
+					(isRunning==0)?"tick.png":"24x24_ambit.gif",
+					(isRunning==0)?"Completed":"Processing",
+					(isRunning==0)?"Completed":"Processing"
+						)
+					);
+
+			writer.write("</td>");					
+
+		}	else 	writer.write("<td></td><td></td>");		
 		return running;
-	}		
+	}
+		
 	
 	
 }
