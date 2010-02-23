@@ -33,6 +33,8 @@ public abstract class FastoxStepResource extends WizardResource {
 	protected Model store = null;
 	public enum params {
 		search,
+		max,
+		mode,
 		text,
 		dataset,
 		compound,

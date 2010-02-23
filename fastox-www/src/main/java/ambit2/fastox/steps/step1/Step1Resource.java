@@ -34,8 +34,6 @@ public class Step1Resource extends FastoxStepResource {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put("Search",new Form());
 		forms.put("File",new Form());
-		forms.put("Structure",new Form());
-		forms.put("Substructure",new Form());
 		forms.put("Datasets",new Form());
 		//forms.put("Errors",new Form());
 
@@ -46,13 +44,6 @@ public class Step1Resource extends FastoxStepResource {
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = forms.get(key);
 		if ("Search".equals(key)) {
-			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
-			writer.write("<table><tr><td>");			
-			writer.write("<input name='text' title='Enter chemical name, registry identifier, smiles, InChI' type=\"text\" size='80' value='556-82-1'/>");
-			writer.write("</td>");
-			writer.write("</tr></table>");
-		
-		} else if ("Substructure".equals(key)) {
 			type = "";
 			try {
 
@@ -64,25 +55,36 @@ public class Step1Resource extends FastoxStepResource {
 			writer.write(
 			"<table>"+
 			"<tr>"+
-			"<td>"+
-			"<label for='text'>Keywords</label></td><td colspan='2'><input name='text' type=\"text\" size='80'/>"+
+			"<th>"+
+			"<label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)</label>"+
+			"</th>\n"+
+			"</tr><tr>"+
+			"<td><input name='text' tabindex='1' type=\"text\" size='80' value='556-82-1'/>"+
 			"</td>"+
+			"</tr>\n"+			
+			"<tr>"+
+			"<th>"+
+			String.format("<label for='search'>or &nbsp;<input type='button' class='small_button' value='Draw a chemical structure' onClick='startEditor(\"%s\");'></label>",getRootRef())+			
+			"</th></tr>\n"+			
+			"<tr><td><input name='search' tabindex='10' title='Enter SMILES or use 'Draw' button to launch structure diagram editor' type=\"text\" size='80'/>"+
+			"</td><td>"+
+			"</td>"+					
 			"</tr>\n"+
 			"<tr>"+
 			"<td>"+
-			"<label for='search'>SMARTS</label></td><td><input name='search' type=\"text\" size='80'/>"+
-			"</td><td>"+
-			String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
-					getRootRef())+
-			"</td>"+					
-			"</tr>\n"+
+			"<label for='mode'>and search for&nbsp;</label>"+
+			"<input type='radio' name='mode' value='structure'>Structure&nbsp;<input type='radio' name='mode' checked='checked' value='substructure'>Substructure&nbsp;<input type='radio' name='mode' value='similarity'>Similarity&nbsp;\n"+
+			"</td>"+
+			"</tr>"+
+			"<tr></tr>"+
+			"<tr><td></td><td>"+
+			"<label for='max'>Number of hits</label><select name='max'><option value='1'>1</option><option value='3'>2</option><option value='5'>5</option><option value='10'>10</option></select>"+
+			"</td><tr>"+
 			"</table>"
 			
 			);
 			writer.write(String.format("<input name='type' type='hidden' value='%s'>\n",type==null?"smiles":type));
 		} else if ("File".equals(key)) {
-			writer.write("Under development");
-		} else if ("Structure".equals(key)) {
 			writer.write("Under development");
 		}
 		writer.write("<p>");

@@ -24,29 +24,62 @@ public class Step2Processor extends StepProcessor {
 			throws AmbitException {
 		Wizard wizard = Wizard.getInstance(WizardMode.A);
 		Form form = new Form(entity);
-		Form query = getFreeTextSearchQuery(form, wizard);
-		if (query != null) {
-			String uri = wizard.getService(SERVICE.compound)+"?"+query.getQueryString();
-			session.setDatasetURI(uri);
+
+		Reference ref = getSearchQuery(form, wizard);
+		System.out.println(ref);
+		if (ref != null) {
+			session.setDatasetURI(ref.toString());
 		}
+		form.clear();
 		return form;
 
 	}
 
-	protected Form getFreeTextSearchQuery(Form userDefinedSearch, Wizard wizard)  {
+	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard)  {
+		Reference topRef = null;
+		//max
+		int max = 1;
+		try {
+			max = Integer.parseInt(userDefinedSearch.getFirstValue(FastoxStepResource.params.max.toString()));
+		} catch (Exception x) {max =1;}
+		
+		Form query = new Form();
+		query.add(FastoxStepResource.params.max.toString(),Integer.toString(max));
+		
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
-		if (text != null) {
-			Form query = new Form();
+		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
+		String mode = userDefinedSearch.getFirstValue(FastoxStepResource.params.mode.toString());
+		
+		
+		if (search != null)  {
+			if ("structure".equals(mode)) {
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
+				query.add(FastoxStepResource.params.search.toString(), search);
+				query.add("threshold", "0.9999");
+				
+			} else if ("substructure".equals(mode)) {
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/smarts");
+				query.add(FastoxStepResource.params.search.toString(), search);
+				query.add(FastoxStepResource.params.text.toString(), text==null?"":text);
+				
+			} else { /// ("similarity".equals(mode)) {
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
+				query.add(FastoxStepResource.params.search.toString(), search);
+				query.add("threshold", "0.85");
+			};
+	
+		} else if (text != null) {
+			topRef = wizard.getService(SERVICE.compound);
 			query.add(FastoxStepResource.params.search.toString(), text);
-			query.add("max","100");
-			String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
-			for (String n:s) 
-			query.add("feature_uris[]",
-					String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
-							Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
-			return query;
-		}		
-		return null;
+		}
+		
+		String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
+		for (String n:s) 
+		query.add("feature_uris[]",
+				String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
+						Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
+		topRef.setQuery(query.getQueryString())		;
+		return topRef;
 	}
 }
 
