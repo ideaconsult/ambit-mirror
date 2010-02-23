@@ -31,7 +31,7 @@ public class RemoteTaskPool {
 			while (running()>0) {
 				poll();
 				for (RemoteTask task : pool) System.out.println(task);
-				Thread.sleep(500);
+				Thread.sleep(1500);
 				Thread.yield();
 				
 			}	
