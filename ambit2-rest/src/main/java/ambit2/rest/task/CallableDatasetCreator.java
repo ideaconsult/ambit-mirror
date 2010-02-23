@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -14,6 +15,7 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
+import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -144,10 +146,14 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		algorithms.clear();
 		
 		//now create dataset with a nice name to send to model service
-		support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Create dataset with a nice name to send to model service %s",datasetURI));
+		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Create dataset with a nice name to send to model service %s",datasetURI));
 		input.clear();
 		Reference dataset = new Reference(datasetURI);
-		dataset.setQuery(featuresQuery.getQueryString());
+		Form query = dataset.getQueryAsForm();
+		Iterator<Parameter> features = featuresQuery.iterator();
+		while (features.hasNext()) query.add(features.next());
+		
+		dataset.setQuery(query.getQueryString());
 		input.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 		input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
 		currentJob = new RemoteTask(new Reference(datasetService),MediaType.APPLICATION_WWW_FORM,input.getWebRepresentation(),Method.POST,authentication);
@@ -161,7 +167,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			input.add(OpenTox.params.dataset_uri.toString(),currentJob.getResult().toString());
 			input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
 			
-			support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start model (finally) %s",modelURI));
+			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start model (finally) %s",modelURI));
 			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
 			jobs.add(currentJob);
 			jobs.run();		
@@ -176,11 +182,12 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		else throw new ResourceException(currentJob.status);		
 
 	}
+	
 	protected void run(Reference modelURI) throws Exception {
 		OntModel jenaModel = null;
 		StmtIterator features = null;
 		try {
-			support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Retrieving model %s",modelURI));
+			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Retrieving model %s",modelURI));
 			jenaModel = OT.createModel(null, modelURI,MediaType.APPLICATION_RDF_XML);
 			features =  jenaModel.listStatements(
 					new SimpleSelector(null,OT.OTProperty.independentVariables.createProperty(jenaModel),(RDFNode)null));
@@ -193,7 +200,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 				
 				}
 			}
-			support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Prepare dataset for model %s",modelURI));
+			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Prepare dataset for model %s",modelURI));
 			//everything in, do some querying
 			launchCalculations(jenaModel,modelURI.toString());
 		} catch (Exception x) {
@@ -285,11 +292,11 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		input.removeAll(OpenTox.params.dataset_uri.toString());
 		input.add(OpenTox.params.dataset_uri.toString(),filter.toString());
 		input.removeAll(OpenTox.params.dataset_service.toString());
-		
+		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Missing values"));		
 		RemoteTask job = new RemoteTask(datasetService,MediaType.APPLICATION_RDF_XML,input.getWebRepresentation(),Method.POST,authentication);
 		algorithms.put(algorithm,job);
 		jobs.add(job);
-		support.firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start descriptor calculation %s",algorithm));
+		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start descriptor calculation %s",algorithm));
 	}
 	
 	public static Reference createFilterReference(String root,String dataset, String[] features) {
@@ -312,6 +319,13 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
     public synchronized void removePropertyChangeListener(
 			PropertyChangeListener listener) {
     	if (support != null) support.removePropertyChangeListener(listener);
+    }
+    public void firePropertyChange(String propertyName, 
+			Object oldValue, Object newValue) {
+    	if (support!=null) {
+    	    support.firePropertyChange(propertyName,oldValue, newValue);
+
+    	}
     }
     @Override
     protected void finalize() throws Throwable {
