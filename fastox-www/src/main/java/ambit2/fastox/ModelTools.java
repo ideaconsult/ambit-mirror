@@ -29,12 +29,13 @@ public class ModelTools {
 		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm  ?type \n"+
+		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm ?algName ?type \n"+
 		"		where {\n"+
 		"		        %s rdf:type ot:Model.\n"+
 		"		        OPTIONAL {%s dc:title ?title}.\n"+
 		"		        OPTIONAL {%s ot:trainingDataset ?TrainingDataset}.\n"+
 		"		        OPTIONAL {%s ot:algorithm ?algorithm}.\n"+
+		"		        OPTIONAL {?algorithm dc:title ?algName}.\n"+		
 		"	                OPTIONAL {?algorithm ot:isA ?type}.\n"+
 		"		        OPTIONAL { {\n"+
 		"		        { %s ot:dependentVariables ?vars. } UNION { %s ot:predictedVariables ?vars. }\n"+
@@ -83,6 +84,7 @@ public class ModelTools {
 		while (models.hasNext()) {
 			String uri = models.next();
 			try {
+				System.out.println(uri);
 				if (rdf==null) rdf = ModelFactory.createDefaultModel();
 				rdf.read(uri);
 				
@@ -129,7 +131,7 @@ public class ModelTools {
 			return running;
 	}	
 	*/
-	public static void renderModelTableCaption(Writer writer) throws IOException {
+	public static void renderModelTableCaption(Writer writer,boolean status) throws IOException {
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		writer.write("<table class='results' width='95%'>");
 		writer.write("<tr>");
@@ -141,7 +143,7 @@ public class ModelTools {
 		
 		
 		writer.write("<th></th>");
-		writer.write("<th>Status</th>");
+		writer.write(String.format("<th>%s</th>",status?"Status":""));
 		writer.write("</tr>");
 	}
 	
@@ -155,11 +157,12 @@ public class ModelTools {
 
 		RDFNode algo = solution.getResource("algorithm");
 		RDFNode algoType = solution.get("type");
-		
+		Literal algName = solution.getLiteral("algName");
+			
 		Literal name = solution.getLiteral("title");
 		Resource dataset = solution.getResource("TrainingDataset");
 		
-		Resource endpoint = solution.getResource("endpoint");
+		//Resource endpoint = solution.getResource("endpoint");
 		Literal endpointName = solution.getLiteral("endpointName");
 
 		String algType = algoType==null?"-":
@@ -210,7 +213,8 @@ public class ModelTools {
 		//?media makes use of restlet Tunnel service
 		writer.write(algo==null?"":algo.isURIResource()?
 				String.format("<a href='%s?media=%s' target=_blank'>%s</a>",
-						((Resource)algo).getURI(),Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),((Resource)algo).getURI())
+						((Resource)algo).getURI(),Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
+						algName==null?"Algorithm":algName.getString())
 				:algo.toString());		
 		writer.write("</td><td>");
 		

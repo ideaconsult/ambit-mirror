@@ -171,7 +171,7 @@ public abstract class FastoxStepResource extends WizardResource {
 			 boolean status,Reference rootReference) throws Exception {
 		int running = 0;
 		//session.clearModels();
-		ModelTools.renderModelTableCaption(writer);
+		ModelTools.renderModelTableCaption(writer,status);
 		if (session.getNumberOfModels()==0)  {
 			String q = "?url";
 			Query query = QueryFactory.create(String.format(ModelTools.sparql,q,q,q,q, q,q,q,q));
