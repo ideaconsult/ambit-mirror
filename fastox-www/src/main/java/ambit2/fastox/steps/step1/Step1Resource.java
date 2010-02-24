@@ -73,7 +73,7 @@ public class Step1Resource extends FastoxStepResource {
 			"<tr>"+
 			"<td>"+
 			"<label for='mode'>and search for&nbsp;</label>"+
-			"<input type='radio' name='mode' value='structure'>Structure&nbsp;<input type='radio' name='mode' checked='checked' value='substructure'>Substructure&nbsp;<input type='radio' name='mode' value='similarity'>Similarity&nbsp;\n"+
+			"<input type='radio' name='mode' checked='checked' value='structure'>Structure&nbsp;<input type='radio' name='mode' value='substructure'>Substructure&nbsp;<input type='radio' name='mode' value='similarity'>Similarity&nbsp;\n"+
 			"</td>"+
 			"</tr>"+
 			"<tr></tr>"+
