@@ -28,7 +28,7 @@ public class Step4Resource extends FastoxStepResource {
 		writer.write("<h5>Under development: This page will display available experimental data for the selected endpoints</h5>");
 
 		try {
-			renderRDFModels(writer, session, false, getRequest().getRootRef());
+			renderRDFModels(writer, session, false, getRequest().getRootRef(),false);
 		} catch (Exception x) {
 			writer.write(x.getMessage());
 		}

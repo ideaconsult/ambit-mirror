@@ -58,7 +58,7 @@ public class Step5Resource extends FastoxStepResource {
 		writer.write("<h3>Models</h3>");
 		
 		try {
-			renderRDFModels(writer, session, false, getRequest().getRootRef());
+			renderRDFModels(writer, session, false, getRequest().getRootRef(),false);
 		} catch (Exception x) {
 			writer.write(x.getMessage());
 		}

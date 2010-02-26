@@ -27,7 +27,6 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 public abstract class FastoxStepResource extends WizardResource {
 	protected Model store = null;
@@ -170,24 +169,29 @@ public abstract class FastoxStepResource extends WizardResource {
 	}
 	
 	public int renderRDFModels(Writer writer, IToxPredictSession session,
-			 boolean status,Reference rootReference) throws Exception {
+			 boolean status,Reference rootReference, boolean all) throws Exception {
 		int running = 0;
 		//session.clearModels();
 		ModelTools.renderModelTableCaption(writer,status);
-		if (session.getNumberOfModels()==0)  {
-			String q = "?url";
-			Query query = QueryFactory.create(String.format(ModelTools.sparql,q,q,q,q, q,q,q,q));
-			running += retrieveModels(null,query,writer,status,rootReference);
-		} else {
-			Iterator<String> models = session.getModels();
-			while (models.hasNext()) {
-				String model = models.next();
-				String q = String.format("<%s>",model);
-				Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q, q,q,q,""));
-				running += retrieveModels(model,query,writer,status,rootReference);
+		try {
+			if ((session.getNumberOfModels()==0) || all)  {
+				String q = "?url";
+				Query query = QueryFactory.create(String.format(ModelTools.sparql,q,q,q,q, q,q,q,q));
+				running += retrieveModels(null,query,writer,status,rootReference);
+			} else {
+				Iterator<String> models = session.getModels();
+				while (models.hasNext()) {
+					String model = models.next();
+					String q = String.format("<%s>",model);
+					Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q, q,q,q,""));
+					running += retrieveModels(model,query,writer,status,rootReference);
+				}
 			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			writer.write("</table>");
 		}
-		writer.write("</table>");
 		
 		return running;
 	}		

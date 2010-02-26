@@ -39,7 +39,7 @@ public class Step6Resource extends FastoxStepResource {
 	
 		//ModelTools.renderModels(store,session, writer, false,getRootRef());
 		try {
-			renderRDFModels(writer, session, false, getRequest().getRootRef());
+			renderRDFModels(writer, session, false, getRequest().getRootRef(),false);
 		} catch (Exception x) {
 			writer.write(x.getMessage());
 		}

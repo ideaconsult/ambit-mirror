@@ -109,7 +109,7 @@ public class Step3Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		try {
-			renderRDFModels(writer, session, false, getRequest().getRootRef());
+			renderRDFModels(writer, session, false, getRequest().getRootRef(),true);
 		} catch (Exception x) {
 			writer.write(x.getMessage());
 		}
