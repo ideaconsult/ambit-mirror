@@ -26,3 +26,18 @@ function processMolecule() {
   // document.form.submit();
 }
 
+function getMolFile() {
+  var mol = document.JME.molFile();
+  document.form.text.value = mol;
+}
+
+function getMolFile() {
+  var mol = document.JME.molFile();
+  document.form.text.value = mol;
+}
+
+function getSmiles() {
+  var drawing = document.JME.smiles();
+  document.form.search.value = drawing;
+}
+

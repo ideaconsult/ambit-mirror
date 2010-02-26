@@ -16,7 +16,6 @@ import ambit2.fastox.steps.FastoxStepResource;
  */
 public class Step1Resource extends FastoxStepResource {
 
-	protected String type = "";
 	public Step1Resource() {
 		super(1);
 	}
@@ -34,8 +33,8 @@ public class Step1Resource extends FastoxStepResource {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put("Search",new Form());
 		forms.put("File",new Form());
+		forms.put("Structure",new Form());
 		forms.put("Datasets",new Form());
-		//forms.put("Errors",new Form());
 
 		return forms;
 	}	
@@ -43,15 +42,9 @@ public class Step1Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		Form form = forms.get(key);
+		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		if ("Search".equals(key)) {
-			type = "";
-			try {
-
-				type = form.getFirstValue("type");
-			} catch (Exception x) {
-				type = "smiles";
-			}			
-			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
+		
 			writer.write(
 			"<table>"+
 			"<tr>"+
@@ -61,30 +54,48 @@ public class Step1Resource extends FastoxStepResource {
 			"</tr><tr>"+
 			"<td><input name='text' tabindex='1' type=\"text\" size='80' value='556-82-1'/>"+
 			"</td>"+
-			"</tr>\n"+			
-			"<tr>"+
-			"<th>"+
-			String.format("<label for='search'>or &nbsp;<input type='button' class='small_button' value='Draw a chemical structure' onClick='startEditor(\"%s\");'></label>",getRootRef())+			
-			"</th></tr>\n"+			
-			"<tr><td><input name='search' tabindex='10' title='Enter SMILES or use 'Draw' button to launch structure diagram editor' type=\"text\" size='80'/>"+
-			"</td><td>"+
-			"</td>"+					
-			"</tr>\n"+
-			"<tr>"+
 			"<td>"+
-			"<label for='mode'>and search for&nbsp;</label>"+
-			"<input type='radio' name='mode' checked='checked' value='structure'>Structure&nbsp;<input type='radio' name='mode' value='substructure'>Substructure&nbsp;<input type='radio' name='mode' value='similarity'>Similarity&nbsp;\n"+
-			"</td>"+
-			"</tr>"+
-			"<tr></tr>"+
-			"<tr><td></td><td>"+
 			"<label for='max'>Number of hits</label><select name='max'><option value='1'>1</option><option value='3'>2</option><option value='5'>5</option><option value='10'>10</option></select>"+
 			"</td><tr>"+
 			"</table>"
 			
 			);
-			writer.write(String.format("<input name='type' type='hidden' value='%s'>\n",type==null?"smiles":type));
+
 		} else if ("File".equals(key)) {
+			
+			writer.write(
+			"<table>"+
+			"<tr>"+
+			"<th>"+
+			"<label for='file'>File upload</label>"+
+			"</th>\n"+
+			"</tr><tr>"+
+			"<td><input type='file' name='file' accept='chemical/x-mdl-sdfile' size='80'>"+
+			"</td><tr>"+
+			"</table>"
+			
+			);
+		} else if ("Structure".equals(key)) {
+
+			writer.write("<table>");
+			writer.write("<tr><td>");
+			writer.write(String.format(
+			"<applet code=\"JME.class\" name=\"JME\" codebase=\"%s/jme\" archive=\"JME.jar\" width=\"540\" height=\"360\">"+
+			"<param name=\"options\" value=\"query,nohydrogens\">"+
+			"You have to enable Java and JavaScript on your machine !"+ 
+			"</applet>",
+			
+			getRequest().getRootRef()
+			));
+			
+			writer.write("<input name='search' type='hidden'>");
+			writer.write("</td><td>");
+			writer.write("<label for='mode'>search for&nbsp;</label><br>");
+			writer.write("<input type='radio' name='mode' checked='checked' value='structure'>Structure<br><input type='radio' name='mode' value='substructure'>Substructure<br><input type='radio' name='mode' value='similarity'>Similarity<br>\n");
+			writer.write("<label for='max'>Number of hits</label><select name='max'><option value='1'>1</option><option value='3'>2</option><option value='5'>5</option><option value='10'>10</option><option value='20'>20</option></select>");			
+			writer.write("</td></tr>");
+			writer.write("</table>");
+		} else if ("Datasets".equals(key)) {
 			writer.write("Under development");
 		}
 		writer.write("<p>");
