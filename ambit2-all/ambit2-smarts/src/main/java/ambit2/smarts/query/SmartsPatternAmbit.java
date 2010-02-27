@@ -43,6 +43,21 @@ import ambit2.smarts.processors.SMARTSPropertiesReader;
 public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	protected transient SmartsManager sman;
 	protected transient SMARTSPropertiesReader reader = new SMARTSPropertiesReader();
+	protected boolean useCDKIsomorphism = true;
+	
+	public boolean isUseCDKIsomorphism() {
+		return sman==null?useCDKIsomorphism:sman.isFlagUseCDKIsomorphismTester();
+	}
+
+	public void setUseCDKIsomorphism(boolean useCDKIsomorphism) {
+		this.useCDKIsomorphism = useCDKIsomorphism;
+		if (sman==null) {
+			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
+		} else {
+			sman = new SmartsManager();
+			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
+		}
+	}
 	/**
 	 * 
 	 */
@@ -52,11 +67,13 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		this("C");
 
 	}
+	
 	public SmartsPatternAmbit(String smarts) throws SMARTSException {
 		this(smarts,false);
 	}	
 	public SmartsPatternAmbit(String smarts,boolean negate) throws SMARTSException {
-		sman = new SmartsManager();				
+		sman = new SmartsManager();	
+		sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		setSmarts(smarts);
 		setNegate(negate);
 
@@ -129,6 +146,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		super.setSmarts(smarts);
 		if (sman == null) {
 			sman = new SmartsManager();
+			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		}
 		sman.setQuery(smarts);		
 		if (!sman.getErrors().equals("")) {
@@ -138,8 +156,10 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		} 	
 	}
 	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
-		if (sman ==null) 
+		if (sman ==null) {
 			sman = new SmartsManager();
+			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
+		}
 		sman.useMOEvPrimitive(flag);
 	}
 
