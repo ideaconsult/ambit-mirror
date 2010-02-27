@@ -1,6 +1,8 @@
 package ambit2.fastox.steps.step2;
 
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 
@@ -11,6 +13,7 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.rest.task.RemoteTask;
 
 public class Step2Processor extends StepProcessor {
 
@@ -49,9 +52,14 @@ public class Step2Processor extends StepProcessor {
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
 		String mode = userDefinedSearch.getFirstValue(FastoxStepResource.params.mode.toString());
+		String file = userDefinedSearch.getFirstValue(FastoxStepResource.params.file.toString());
 		
-		
-		if (search != null)  {
+		if (file != null) {
+			//upload
+			Representation input = null;
+			MediaType mime = null;
+			//RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),mime,input,Method.POST,authentication);
+		} if (search != null)  {
 			if ("structure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
 				query.add(FastoxStepResource.params.search.toString(), search);

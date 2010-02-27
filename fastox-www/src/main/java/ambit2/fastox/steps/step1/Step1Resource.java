@@ -5,9 +5,11 @@ import java.io.Writer;
 import java.util.Hashtable;
 
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.fastox.users.UserResource;
 
 /**
  * Define structure
@@ -39,9 +41,17 @@ public class Step1Resource extends FastoxStepResource {
 		return forms;
 	}	
 
+	public void renderFormHeader(Writer writer, String key)  throws IOException {
+		writer.write(String.format("<form name='%s' method='POST' %s action='%s/%s/%s/%s%s'>",
+				"form",
+				key.equals("File")?"enctype='multipart/form-data'":"",
+				getRootRef(),
+				UserResource.resource,
+				Reference.encode(session.getUser().getId()),mode,wizard.nextStep(step)));
+	}
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		Form form = forms.get(key);
+
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		if ("Search".equals(key)) {
 		

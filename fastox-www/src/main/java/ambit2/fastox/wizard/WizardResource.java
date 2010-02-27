@@ -417,7 +417,7 @@ public abstract class WizardResource extends ServerResource {
 			return processError(entity,variant,Status.CLIENT_ERROR_BAD_REQUEST);
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))
 			return processForm(entity, variant);
-		else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType()))
+		else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true))
 			return processMultipartForm(entity, variant);
 		else return processError(entity,variant,Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
@@ -426,68 +426,6 @@ public abstract class WizardResource extends ServerResource {
 		return String.format("%s&nbsp;%s",getApplication().getName(),step.getTitle());
 	}
 
-	/*
-	protected void breadcrumbs() {
-		<h2>5 step (showing each state of the step menu)</h2>	
-		<ul id="mainNav" class="fiveStep">
-			<li class="current"><a title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li><a title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li><a title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-
-			<li><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
-		</ul>
-		
-		<div class="clearfloat">&nbsp;</div>
-		
-		<ul id="mainNav" class="fiveStep">
-			<li class="lastDone"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-
-			<li class="current"><a title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li><a title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
-
-		</ul>
-		
-		<div class="clearfloat">&nbsp;</div>
-		
-		<ul id="mainNav" class="fiveStep">
-			<li class="done"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="lastDone"><a href="/" title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="current"><a title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-
-			<li><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
-		</ul>
-		
-		<div class="clearfloat">&nbsp;</div>
-		
-		<ul id="mainNav" class="fiveStep">
-			<li class="done"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-
-			<li class="done"><a href="/" title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="lastDone"><a href="/" title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="current"><a title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="mainNavNoBg"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
-
-		</ul>
-		
-		<div class="clearfloat">&nbsp;</div>
-		
-		<ul id="mainNav" class="fiveStep">
-			<li class="done"><a href="/" title=""><em>Step 1: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="done"><a href="/" title=""><em>Step 2: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="done"><a href="/" title=""><em>Step 3: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-
-			<li class="lastDone"><a href="/" title=""><em>Step 4: XXXXXXXX</em><span>Et nequ a quam turpis duisi</span></a></li>
-			<li class="mainNavNoBg current"><a title=""><em>Step 5: XXXXXXXX</em> <span>Et nequ a quam turpis duisi</span></a></li>
-		</ul>
-		
-		<div class="clearfloat">&nbsp;</div>
-
-	}
-	*/
 	
 	public static String jsGoogleAnalytics() {
 		if (jsGoogleAnalytics==null) try {
