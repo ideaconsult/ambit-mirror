@@ -151,7 +151,12 @@ public class TestIsomorphismTester extends TestCase
 		assertEquals(6, mappingPosCount);
 	}
 	
-	
+	public void testPropertyRing3() throws Exception {
+		match("CC=1CC=1", "CC=1CC=1");		
+		assertEquals(true, boolResult);
+		assertEquals(1, mappingPosCount);
+	}
+		
 	
 	//----------------  Test recursive SMARTS -------------------
 	
