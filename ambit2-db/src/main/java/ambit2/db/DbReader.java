@@ -91,6 +91,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		switch (result) {
 		case NOTCACHED: {
 			boolean ok = query.calculateMetric(object)>0;
+			if (query.getKey()!=null)
 			cache(query.getCategory(),query.getKey(),object,ok);
 			return ok;
 		}
@@ -120,13 +121,13 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 					cachedRecord = null;
 					if (handlePrescreen && query.isPrescreen()) {
 						try {
-							
+							System.out.println(counter);
 							counter++;
 							long max = (query.getMaxRecords()>0)?query.getMaxRecords():1000;
 							if (counter > max) return false;
 							boolean loop=getResultSet().next();
 							long attempts=0;
-							while (loop && (attempts<= 5*max)) {
+							while (loop /* && (attempts<= 500*max)*/) {
 								attempts++;
 								cachedRecord = query.getObject(getResultSet());
 								if (prescreen(query, cachedRecord)) return loop;
