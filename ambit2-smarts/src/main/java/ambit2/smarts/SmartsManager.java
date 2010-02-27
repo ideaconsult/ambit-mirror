@@ -58,6 +58,10 @@ public class SmartsManager
 	int recursiveStrategy = 1; //0 - subqueries, 1 - recursive substructure search (default one)
 	boolean FlagSetSmartsDataForTarget = true;
 	boolean FlagUseCDKIsomorphismTester = true;
+	public boolean isFlagUseCDKIsomorphismTester() {
+		return FlagUseCDKIsomorphismTester;
+	}
+
 	SmartsParser parser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	String querySmarts;
