@@ -8,7 +8,6 @@ import java.util.List;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.MFAnalyser;
 
@@ -17,7 +16,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.key.SmilesKey;
-import ambit2.db.processors.StructureNormalizer;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
@@ -41,10 +39,14 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 
 	
 	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (%s %s ?) or (%s %s ?)";
+		"select ? as idquery,idchemical,%s,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (%s %s ?) or (%s %s ?) %s";
 	
 	public String getSQL() throws AmbitException {
-		return String.format(sqlSMILES,getFieldname(),getCondition().getSQL(),getFieldname(),getCondition().getSQL());
+		return String.format(sqlSMILES,
+				isChemicalsOnly()?"max(idstructure) as idstructure":"idstructure",
+				getFieldname(),getCondition().getSQL(),
+				getFieldname(),getCondition().getSQL(),
+				isChemicalsOnly()?"group by idchemical":"");
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();

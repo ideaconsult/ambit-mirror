@@ -83,9 +83,11 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 				super.setFieldname(method);				
 			} else if (o instanceof QueryExactStructure) {
 				QueryExactStructure query = (QueryExactStructure)o;
-				query.setCondition(getCondition());
+				
 				this.query  = query;
 				setValue(getValue());
+				if ((getValue()!=null) && (getValue().getAtomContainerCount()>0))
+					query.setValue(getValue().getAtomContainer(0));
 				super.setFieldname(method);						
 			}
 		} catch (Exception x) {
@@ -145,15 +147,15 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 	public void setValue(IMoleculeSet set) {
 		super.setValue(set);
 		try {
-			if (query instanceof QuerySimilarityBitset) {
+			//if (query instanceof QuerySimilarityBitset) {
 				Iterator<IAtomContainer> i = set.molecules();
 				BitSet bitset = new BitSet();
 				while (i.hasNext()) {
 					bitset.or(g.process(i.next()));
 				}
 				query.setValue(bitset);
-			} else
-				query.setValue(set);
+			//} else
+			//	query.setValue(set);
 		} catch (Exception x) {
 			query.setValue(null);
 		}

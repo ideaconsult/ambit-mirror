@@ -44,6 +44,29 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	//"and fp.status = 'valid' and sk.status='valid'" +
 	" %s\n";
 	
+
+	protected String sql_exact = 
+	"%s\n"+
+	"join fp1024 fp\n"+
+	"using(idchemical)\n"+
+	"join sk1024 sk\n"+
+	"using(idchemical)\n"+
+	"where\n"+
+	"(? = sk.fp1) and (? = sk.fp2) and (? = sk.fp3) and\n"+
+	"(? = sk.fp4) and (? = sk.fp5) and (? = sk.fp6) and (? = sk.fp7) and\n"+
+	"(? = sk.fp8) and (? = sk.fp9) and (? = sk.fp10) and (? = sk.fp11) and\n"+
+	"(? = sk.fp12) and (? = sk.fp13) and (? = sk.fp14) and (? = sk.fp15) and\n"+
+	"(? = sk.fp16)\n"+
+	"and\n"+
+	"(? = fp.fp1) and (? = fp.fp2) and\n"+
+	"(? = fp.fp3) and (? = fp.fp4) and\n"+
+	"(? = fp.fp5) and (? = fp.fp6) and (? = fp.fp7) and\n"+
+	"(? = fp.fp8) and (? = fp.fp9) and (? = fp.fp10) and\n"+
+	"(? = fp.fp11) and (? = fp.fp12) and (? = fp.fp13) and\n"+
+	"(? = fp.fp14) and (? = fp.fp15) and (? = fp.fp16)\n"+
+	//"and fp.status = 'valid' and sk.status='valid'" +
+	" %s\n";	
+	
 	protected String sql_struc_type = "and structure.type_structure != 'NA'";
 	/**
 	 * 
@@ -59,11 +82,13 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	}
 
 	public QueryPrescreenBitSet() {
-
+		super();
+		setCondition(NumberCondition.getInstance("<"));
 	}
 	
 	public String getSQL() throws AmbitException {
-		return String.format(sql,
+		return String.format(
+				getCondition().equals(NumberCondition.getInstance("="))?sql_exact:sql,
 				isChemicalsOnly()?sql_chemical:sql_struc,
 				isChemicalsOnly()?"":sql_struc_type);
 
@@ -75,7 +100,9 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 		int bc = (getValue()==null)?0:bitset.cardinality();
 		for (int h=0; h < 16; h++)
 			params.add(new QueryParam<BigInteger>(BigInteger.class, h16[h]));
-		params.add(new QueryParam<Integer>(Integer.class, bc));
+		
+		if (!getCondition().equals(NumberCondition.getInstance("=")))
+			params.add(new QueryParam<Integer>(Integer.class, bc));
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
