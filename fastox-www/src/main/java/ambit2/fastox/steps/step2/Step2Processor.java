@@ -1,5 +1,7 @@
 package ambit2.fastox.steps.step2;
 
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -71,14 +73,23 @@ public class Step2Processor extends StepProcessor {
 				query.add(FastoxStepResource.params.text.toString(), text==null?"":text);
 				
 			} else { /// ("similarity".equals(mode)) {
-				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), search);
 				query.add("threshold", "0.85");
 			};
 	
 		} else if (text != null) {
-			topRef = wizard.getService(SERVICE.compound);
-			query.add(FastoxStepResource.params.search.toString(), text);
+			try {
+				//check if this is a SMILES , otherwise search as text
+				SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+				p.parseSmiles(text.trim());
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
+				query.add(FastoxStepResource.params.search.toString(), text);				
+			} catch (Exception x) {
+				topRef = wizard.getService(SERVICE.compound);
+				query.add(FastoxStepResource.params.search.toString(), text);
+			}
+
 		}
 		
 		String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
