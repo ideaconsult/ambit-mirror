@@ -48,6 +48,7 @@ import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.PubchemResource;
+import ambit2.rest.query.ExactStructureQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
@@ -345,6 +346,7 @@ public class AmbitApplication extends TaskApplication {
 		datasetRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		compoundRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		
+		queryRouter.attach(ExactStructureQueryResource.resource,ExactStructureQueryResource.class);
 		
 		Router algoRouter = new MyRouter(getContext());
 		algoRouter.attachDefault(AllAlgorithmsResource.class);

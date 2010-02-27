@@ -191,11 +191,11 @@ public class AmbitResource extends ServerResource {
 			{"/compound/1/dataEntry","All available data entries per compound",format,"GET","Yes"},
 			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
-			
-			{String.format("/query/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS NX3][CX3](=[OX1])[#6]",format,"GET","Under development"},
-			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
+
+			{String.format("/query/structure?search=%s&max=100",Reference.encode("CC1=CC1")),"Search by exact structure 	CC1=CC1",format,"GET","Yes"},
+			{String.format("/query/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS [NX3][CX3](=[OX1])[#6]",format,"GET","Yes"},
 			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
-			{"/query/smarts?search=c1ccccc1O&max=100","SMARTS search",format,"GET","Yes"},
+			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
 			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},

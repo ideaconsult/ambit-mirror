@@ -269,18 +269,19 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		QueryType query_type;
 		String query_smiles;
 		try {
-			query_type = QueryType.valueOf(form.getFirstValue("type"));
+			query_type = QueryType.valueOf(form.getFirstValue("type").trim());
 
 		} catch (Exception x) {
 			query_type = QueryType.smiles;
 		}		
+		if (form.getFirstValue(QueryResource.search_param)==null) return null;
 		switch (query_type) {
 		case smiles:
 
-				return Reference.decode(form.getFirstValue(QueryResource.search_param));
+				return Reference.decode(form.getFirstValue(QueryResource.search_param).trim());
 
 		case url: try {
-				query_smiles = Reference.decode(form.getFirstValue(QueryResource.search_param));
+				query_smiles = Reference.decode(form.getFirstValue(QueryResource.search_param).trim());
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
 				IAtomContainer mol = getFromURI(query_smiles.trim());
 				AtomConfigurator c = new AtomConfigurator();
