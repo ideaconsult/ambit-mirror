@@ -29,50 +29,185 @@
 
 package ambit2.db.search.structure;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.tools.MFAnalyser;
 
+import ambit2.base.config.Preferences;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.core.processors.structure.key.SmilesKey;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.groups.SuppleAtomContainer;
+import ambit2.core.processors.structure.AtomConfigurator;
+import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.smarts.CMLUtilities;
+import ambit2.smarts.processors.SMARTSPropertiesReader;
+import ambit2.smarts.processors.StructureKeysBitSetGenerator;
 
-public class QueryExactStructure extends AbstractStructureQuery<String,IMoleculeSet,NumberCondition>  {
+
+/**
+ * This is a hack to cope with the failure of SmilesGenerator to produce canonical SMILES.
+ * @author nina
+ *
+ */
+public class QueryExactStructure extends AbstractStructureQuery<String, IAtomContainer, BooleanCondition> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4140784963337312377L;
-	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,%s,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (smiles = ?) %s";
-	protected SmilesKey smilesKey = new SmilesKey();
+	
+	/**
+	 * 
+	 */
+	protected transient StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
+	protected transient FingerprintGenerator fpGenerator = new FingerprintGenerator();
+	protected QueryPrescreenBitSet screening;
+	protected transient MoleculeReader reader = new MoleculeReader();
+	protected transient AtomConfigurator configurator = new AtomConfigurator();
+	protected transient SMARTSPropertiesReader bondPropertiesReader = new SMARTSPropertiesReader();
+	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
+	protected static final String EXACT = "EXACT";
+	protected UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+	
+	public QueryExactStructure() {
+		super();
+		screening = new QueryPrescreenBitSet();
+		screening.setCondition(NumberCondition.getInstance("="));
+		setChemicalsOnly(false);
+		setValue(null);
+		setFieldname(null);
+	}
 
-	
 	public String getSQL() throws AmbitException {
-		return String.format(sqlSMILES,
-				isChemicalsOnly()?"max(idstructure) as idstructure":"idstructure",
-				isChemicalsOnly()?" group by idchemical":"");
+		prepareScreening();
+		return screening.getSQL();
 	}
+
+	@Override
+	public void setChemicalsOnly(boolean chemicalsOnly) {
+		super.setChemicalsOnly(chemicalsOnly);
+		screening.setChemicalsOnly(chemicalsOnly);
+	}
+
+	@Override
+	public void setId(Integer id) {
+		super.setId(id);
+		screening.setId(id);
+	}
+
 	public List<QueryParam> getParameters() throws AmbitException {
-		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, getId()));
-		params.add(new QueryParam<String>(String.class, getSmiles(getValue())));		
-		return params;
+		prepareScreening();
+		return screening.getParameters();
 	}
 	
-	
-	public String getSmiles(IMoleculeSet set) throws AmbitException {
-		IMolecule a = NoNotificationChemObjectBuilder.getInstance().newMolecule();
-		for (int i=0; i < set.getAtomContainerCount();i++)
-			a.add(set.getMolecule(i));
-		return smilesKey.process(a);
+	public void prepareScreening() throws AmbitException {
+		try {
+			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
+				screening.setMaxRecords(0);
+				IAtomContainer atomContainer = getValue();
+				screening.setValue(fpGenerator.process(atomContainer));
+				screening.setFieldname(skGenerator.process(atomContainer));
+			}
+		} catch (AmbitException x) {
+			throw x;
+			//screening.setValue(null);
+			//screening.setFieldname(null);
+		}		
+	}
+	@Override
+	public void setValue(IAtomContainer value) {
+		
+		try {
+			if (value != null) {
+				value = configurator.process(value);
+				CDKHueckelAromaticityDetector.detectAromaticity(value);	
+	            MFAnalyser mfa = new MFAnalyser(value);
+	            if ((value).getBondCount()>1)
+	            	value = mfa.removeHydrogensPreserveMultiplyBonded();
+			}
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			super.setValue(value);
+		}
+
+		
+		
+		screening.setValue(null);
+		screening.setFieldname(null);
+	}
+
+	@Override
+	public String getKey() {
+		return null;
+	}
+	@Override
+	public String getCategory() {
+		return EXACT;
+	}
+	@Override
+	public boolean isPrescreen() {
+		return true;
+	}
+
+	@Override
+	public double calculateMetric(IStructureRecord object) {
+		try {
+			if (getValue() != null) {
+
+				IAtomContainer mol = reader.process(object);
+				// empty or markush
+				if ((mol == null) || (mol.getAtomCount() == 0)
+						|| (mol instanceof SuppleAtomContainer))
+					return 0;
+
+				if ("true".equals(Preferences
+						.getProperty(Preferences.FASTSMARTS))) {
+					Object smartsdata = object.getProperty(smartsProperty);
+
+					if (smartsdata != null) {
+						mol.setProperty(smartsProperty, smartsdata);
+						mol = bondPropertiesReader.process(mol);
+					} else {
+						mol.removeProperty(smartsProperty);
+						mol = configurator.process(mol);
+						CDKHueckelAromaticityDetector.detectAromaticity(mol);
+
+					}
+				} else {
+					mol.removeProperty(smartsProperty);
+					mol = configurator.process(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+
+				}
+				try {
+	                MFAnalyser mfa = new MFAnalyser((IAtomContainer) mol);
+	                if (((IAtomContainer) mol).getBondCount()>1)
+	                	mol = mfa.removeHydrogensPreserveMultiplyBonded();
+	                
+				} catch (Exception x) {
+					
+				}
+				return uit.isIsomorph(getValue(),mol)?1:0;
+
+			} else
+				return 0;
+		} catch (Exception x) {
+			x.printStackTrace();
+			return -1;
+		}
+
 	}
 
 	@Override
 	public String toString() {
-		return "Exact structure";
+		return EXACT;
 	}
 }
