@@ -47,12 +47,14 @@ public class QueryExactStructure extends AbstractStructureQuery<String,IMolecule
 	 */
 	private static final long serialVersionUID = -4140784963337312377L;
 	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (smiles = ?)";
+		"select ? as idquery,idchemical,%s,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (smiles = ?) %s";
 	protected SmilesKey smilesKey = new SmilesKey();
 
 	
 	public String getSQL() throws AmbitException {
-		return String.format(sqlSMILES);
+		return String.format(sqlSMILES,
+				isChemicalsOnly()?"max(idstructure) as idstructure":"idstructure",
+				isChemicalsOnly()?" group by idchemical":"");
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
@@ -60,6 +62,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String,IMolecule
 		params.add(new QueryParam<String>(String.class, getSmiles(getValue())));		
 		return params;
 	}
+	
 	
 	public String getSmiles(IMoleculeSet set) throws AmbitException {
 		IMolecule a = NoNotificationChemObjectBuilder.getInstance().newMolecule();
