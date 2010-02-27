@@ -1,7 +1,6 @@
 package ambit2.db.search.structure;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -81,7 +80,8 @@ public class QuerySMARTS extends
 		try {
 			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
 				screening.setMaxRecords(0);
-				AbstractSmartsPattern<IAtomContainer> matcher = new SmartsPatternAmbit();
+				SmartsPatternAmbit matcher = new SmartsPatternAmbit();
+				matcher.setUseCDKIsomorphism(false);
 				value.setQuery(matcher);
 				QueryAtomContainer container = matcher.getQuery();
 				IAtomContainer atomContainer = smartsToChemObject.process(container);
