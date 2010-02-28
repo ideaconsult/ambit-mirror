@@ -3,7 +3,6 @@ package ambit2.fastox.steps.step1;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.restlet.data.Form;
@@ -47,7 +46,7 @@ public class Step1Resource extends FastoxStepResource {
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<form name='%s' method='POST' %s action='%s/%s/%s/%s%s'>",
 				"form",
-				key.equals("File")?"enctype='multipart/form-data'":"",
+				key.equals("Upload")?"enctype='multipart/form-data'":"",
 				getRootRef(),
 				UserResource.resource,
 				Reference.encode(session.getUser().getId()),mode,wizard.nextStep(step)));
