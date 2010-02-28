@@ -246,7 +246,7 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</ul>\n");
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
 
-		writer.write(String.format("<h5>%s</h5>",getHelp()));
+		writer.write(String.format("<div class='help'>%s</div>",getHelp()));
 		//<div class="clearfloat">&nbsp;</div>
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
