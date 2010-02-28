@@ -19,7 +19,14 @@ public class ToxPredictSession implements IToxPredictSession {
 	protected String endpointName = "Endpoints";
 	protected int allModels = 0;
 	protected int allEndpoints = 0;
+	protected String pageSize = "1";
 	
+	public String getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(String pageSize) {
+		this.pageSize = pageSize;
+	}
 	public int getAllModels() {
 		return allModels;
 	}

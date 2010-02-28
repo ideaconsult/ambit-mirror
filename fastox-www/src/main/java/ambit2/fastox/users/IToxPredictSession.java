@@ -33,4 +33,7 @@ public interface IToxPredictSession {
 	public void setAllModels(int allModels);
 	public int getAllEndpoints();
 	public void setAllEndpoints(int allEndpoints) ;
+	
+	public String getPageSize();
+	public void setPageSize(String pageSize);	
 }

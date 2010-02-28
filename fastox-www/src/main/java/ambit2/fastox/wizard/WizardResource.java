@@ -511,4 +511,12 @@ public abstract class WizardResource extends ServerResource {
 		}		
 		return 0;
 	}		
+	protected void writePageSize(String[] sizes, Writer writer, String key) throws IOException {
+		
+		writer.write("<label for='max'>Number of hits</label><select name='max'>");
+		for (String size:sizes)
+			writer.write(String.format("<option %s value='%s'>%s</option>",
+					session.getPageSize().equals(size)?"selected='yes'":"",size,size));			
+		writer.write("</select>");
+	}	
 }

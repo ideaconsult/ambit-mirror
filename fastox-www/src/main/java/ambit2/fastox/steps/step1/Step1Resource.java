@@ -29,8 +29,8 @@ public class Step1Resource extends FastoxStepResource {
 	protected Hashtable<String, Form> createForms() {
 		Hashtable<String, Form> forms = new Hashtable<String, Form>();
 		forms.put("Search",new Form());
-		forms.put("File",new Form());
-		forms.put("Structure",new Form());
+		forms.put("Upload",new Form());
+		forms.put("Draw",new Form());
 	//	forms.put("Datasets",new Form());
 
 		return forms;
@@ -59,14 +59,12 @@ public class Step1Resource extends FastoxStepResource {
 			"</tr><tr>"+
 			"<td><input name='text' tabindex='1' type=\"text\" size='80' value='556-82-1'/>"+
 			"</td>"+
-			"<td>"+
-			"<label for='max'>Number of hits</label><select name='max'><option value='1'>1</option><option value='3'>2</option><option value='5'>5</option><option value='10'>10</option></select>"+
-			"</td><tr>"+
-			"</table>"
+			"<td>");
+			writePageSize(new String[] {"1","5","10","20"}, writer, key);
+			writer.write("</td><tr></table>");
 			
-			);
 
-		} else if ("File".equals(key)) {
+		} else if ("Upload".equals(key)) {
 			
 			writer.write(
 			"<table>"+
@@ -80,7 +78,7 @@ public class Step1Resource extends FastoxStepResource {
 			"</table>"
 			
 			);
-		} else if ("Structure".equals(key)) {
+		} else if ("Draw".equals(key)) {
 
 			writer.write("<table>");
 			writer.write("<tr><td>");
@@ -97,7 +95,8 @@ public class Step1Resource extends FastoxStepResource {
 			writer.write("</td><td>");
 			writer.write("<label for='mode'>search for&nbsp;</label><br>");
 			writer.write("<input type='radio' name='mode' checked='checked' value='structure'>Structure<br><input type='radio' name='mode' value='substructure'>Substructure<br><input type='radio' name='mode' value='similarity'>Similarity<br>\n");
-			writer.write("<label for='max'>Number of hits</label><select name='max'><option value='1'>1</option><option value='3'>2</option><option value='5'>5</option><option value='10'>10</option><option value='20'>20</option></select>");			
+
+			writePageSize(new String[] {"1","5","10","20"}, writer, key);
 			writer.write("</td></tr>");
 			writer.write("</table>");
 		} else if ("Datasets".equals(key)) {
@@ -106,6 +105,7 @@ public class Step1Resource extends FastoxStepResource {
 		writer.write("<p>");
 		super.renderFormContent(writer, key);
 	}
+
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 	}

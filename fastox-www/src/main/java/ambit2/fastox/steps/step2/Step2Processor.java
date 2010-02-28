@@ -29,8 +29,16 @@ public class Step2Processor extends StepProcessor {
 			throws AmbitException {
 		Wizard wizard = Wizard.getInstance(WizardMode.A);
 		Form form = new Form(entity);
+		
+		int max = 1;
+		try {
+			max = Integer.parseInt(form.getFirstValue(FastoxStepResource.params.max.toString()));
+		} catch (Exception x) {max =1;}	
+		finally {
+			session.setPageSize(Integer.toString(max));
+		}
 
-		Reference ref = getSearchQuery(form, wizard);
+		Reference ref = getSearchQuery(form, wizard,max);
 		System.out.println(ref);
 		if (ref != null) {
 			session.setDatasetURI(ref.toString());
@@ -40,16 +48,13 @@ public class Step2Processor extends StepProcessor {
 
 	}
 
-	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard)  {
+	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard, int pageSize)  {
 		Reference topRef = null;
 		//max
-		int max = 1;
-		try {
-			max = Integer.parseInt(userDefinedSearch.getFirstValue(FastoxStepResource.params.max.toString()));
-		} catch (Exception x) {max =1;}
+
 		
 		Form query = new Form();
-		query.add(FastoxStepResource.params.max.toString(),Integer.toString(max));
+		query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 		
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
