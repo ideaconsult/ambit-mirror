@@ -66,15 +66,15 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 	/**
 	 * 
 	 */
-	protected transient StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
-	protected transient FingerprintGenerator fpGenerator = new FingerprintGenerator();
+	protected transient StructureKeysBitSetGenerator skGenerator;
+	protected transient FingerprintGenerator fpGenerator ;
 	protected QueryPrescreenBitSet screening;
-	protected transient MoleculeReader reader = new MoleculeReader();
-	protected transient AtomConfigurator configurator = new AtomConfigurator();
-	protected transient SMARTSPropertiesReader bondPropertiesReader = new SMARTSPropertiesReader();
+	protected transient MoleculeReader reader;
+	protected transient AtomConfigurator configurator;
+	protected transient SMARTSPropertiesReader bondPropertiesReader;
 	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	protected static final String EXACT = "EXACT";
-	protected transient UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+	protected transient UniversalIsomorphismTester uit;
 	
 	public QueryExactStructure() {
 		super();
@@ -83,6 +83,12 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 		setChemicalsOnly(false);
 		setValue(null);
 		setFieldname(null);
+		uit = new UniversalIsomorphismTester();
+		reader = new MoleculeReader();
+		configurator = new AtomConfigurator();
+		bondPropertiesReader = new SMARTSPropertiesReader();
+		fpGenerator = new FingerprintGenerator();
+		skGenerator = new StructureKeysBitSetGenerator();
 	}
 
 	public String getSQL() throws AmbitException {
@@ -112,6 +118,8 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
 				screening.setMaxRecords(0);
 				IAtomContainer atomContainer = getValue();
+				if (fpGenerator==null) fpGenerator = new FingerprintGenerator();
+				if (skGenerator == null) skGenerator = new StructureKeysBitSetGenerator();
 				screening.setValue(fpGenerator.process(atomContainer));
 				screening.setFieldname(skGenerator.process(atomContainer));
 			}
@@ -126,6 +134,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 		
 		try {
 			if (value != null) {
+				if (configurator==null) configurator = new AtomConfigurator();
 				value = configurator.process(value);
 				CDKHueckelAromaticityDetector.detectAromaticity(value);	
 	            MFAnalyser mfa = new MFAnalyser(value);
@@ -161,7 +170,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 	public double calculateMetric(IStructureRecord object) {
 		try {
 			if (getValue() != null) {
-
+				if (reader ==null) reader = new MoleculeReader();
 				IAtomContainer mol = reader.process(object);
 				// empty or markush
 				if ((mol == null) || (mol.getAtomCount() == 0)
@@ -174,6 +183,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 
 					if (smartsdata != null) {
 						mol.setProperty(smartsProperty, smartsdata);
+						if (bondPropertiesReader == null) bondPropertiesReader = new SMARTSPropertiesReader();
 						mol = bondPropertiesReader.process(mol);
 					} else {
 						mol.removeProperty(smartsProperty);
@@ -195,6 +205,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 				} catch (Exception x) {
 					
 				}
+				if (uit == null) uit = new UniversalIsomorphismTester();
 				return uit.isIsomorph(getValue(),mol)?1:0;
 
 			} else
