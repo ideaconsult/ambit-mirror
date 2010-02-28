@@ -22,7 +22,7 @@ public abstract class QueryStructureReporter<Q extends IQueryRetrieval<IStructur
 	 */
 	private static final long serialVersionUID = 7383576401402360892L;
 
-	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch() {
+	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch(Q query) {
 		DbReader<IStructureRecord> reader = new DbReaderStructure();
 		reader.setHandlePrescreen(true);
 		return reader;

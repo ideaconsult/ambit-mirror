@@ -45,11 +45,11 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 		return String.format("%s%s/%d%s",ref,CompoundResource.compound,item.getIdchemical(),delimiter);
 	}
 	@Override
-	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch() {
+	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch(Q query) {
 		if (readStructure) {
 			DbReader<IStructureRecord> reader = new DbReaderStructure();
 			reader.setHandlePrescreen(true);
 			return reader;
-		} else return super.createBatch();
+		} else return super.createBatch(query);
 	}	
 }	

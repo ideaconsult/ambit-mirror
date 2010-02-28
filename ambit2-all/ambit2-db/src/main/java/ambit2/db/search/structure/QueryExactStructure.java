@@ -74,7 +74,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 	protected transient SMARTSPropertiesReader bondPropertiesReader = new SMARTSPropertiesReader();
 	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	protected static final String EXACT = "EXACT";
-	protected UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+	protected transient UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
 	
 	public QueryExactStructure() {
 		super();

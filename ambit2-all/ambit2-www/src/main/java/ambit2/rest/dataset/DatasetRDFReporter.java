@@ -13,7 +13,10 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.db.DbReader;
+import ambit2.db.DbReaderStructure;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
@@ -190,5 +193,14 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		});	
 		*/
 		return h;
+	}
+	@Override
+	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch(Q query) {
+		if (query.isPrescreen()) {
+			DbReader<IStructureRecord> reader = new DbReaderStructure();
+			reader.setHandlePrescreen(true);
+			return reader;
+		} else	
+			return super.createBatch(query);
 	}
 }

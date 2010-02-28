@@ -103,7 +103,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		output = getOutput();
 		if (isShowHeader()) header(output,query);
 
-		batch = createBatch();
+		batch = createBatch(query);
 		batch.setTimeout(getTimeout());
 		try {
 			if (connection != null) {
@@ -129,7 +129,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 			try { close(); } catch (Exception x) {}
 		}
 	}	
-	protected AbstractBatchProcessor<IQueryRetrieval<T>, T> createBatch() {
+	protected AbstractBatchProcessor<IQueryRetrieval<T>, T> createBatch(Q query) {
 		DbReader<T> reader = new DbReader<T>();
 		reader.setHandlePrescreen(true);
 		return reader;
