@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -44,7 +44,7 @@ public abstract class WizardResource extends ServerResource {
 	protected static String jsGoogleAnalytics = null;
 	protected IToxPredictSession session;
 	protected WizardStep step;
-	protected Hashtable<String,Form> forms;
+	protected List<String> tabs;
 	protected String tabIndex = null;
 	protected WizardMode mode;
 	protected String meta;
@@ -88,11 +88,10 @@ public abstract class WizardResource extends ServerResource {
 	public void setMode(WizardMode mode) {
 		this.mode = mode;
 	}
-	protected Hashtable<String, Form> createForms() {
-		Hashtable<String, Form> forms = new Hashtable<String, Form>();
-		forms.put(step.getTitle(),new Form());
-		//forms.put("Errors",new Form());
-		return forms;
+	protected List<String> createTabs() {
+		List<String> tabs = new ArrayList<String>();
+		tabs.add(step.getTitle());
+		return tabs;
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -122,7 +121,7 @@ public abstract class WizardResource extends ServerResource {
 			step = null;
 		}
 		
-		forms = createForms();
+		tabs = createTabs();
 		meta = "";
 		readVersion();
 		
@@ -295,11 +294,9 @@ public abstract class WizardResource extends ServerResource {
 	public void renderTabs(Writer writer)  throws IOException {
 		
 		writer.write("<div id=\"tabs4\">");
-		Form form = null;
-		Enumeration<String> keys = forms.keys();
-		//if (forms.keySet().size()>0) {
-			while (keys.hasMoreElements()) {
-				String key = keys.nextElement();
+				
+		for (String key: tabs) {
+
 				Reference tab = new Reference(String.format("%s/%s/%s/%s%s/%s",
 						getRootRef(),
 						UserResource.resource,
@@ -311,8 +308,8 @@ public abstract class WizardResource extends ServerResource {
 				writer.write(String.format("<li %s><a href='%s'><span>%s</span></a></li>",
 							key.equals(tabIndex)?"id='current'":"",
 							tab,key));	
-				form = (form==null)?forms.get(key):form;
-			}
+
+		}
 		//}
 		writer.write("</div>");
 
@@ -372,9 +369,9 @@ public abstract class WizardResource extends ServerResource {
 					renderFormHeader(writer,tabIndex);
 
 					navigator(writer);
-					if (forms.size()>1) renderTabs(writer);
+					if (tabs.size()>1) renderTabs(writer);
 					else {
-						String key = forms.keys().nextElement();
+						String key = tabs.get(0);
 						if ("Errors".equals(key)) renderErrorsTab(writer, key);
 						else if ("Help".equals(key)) renderHelpTab(writer, key);
 						else {

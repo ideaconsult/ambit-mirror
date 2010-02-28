@@ -87,20 +87,14 @@ public class Step3Resource extends FastoxStepResource {
 		queryString.put("Models",modelsAll);
 		helpResource = "step3.html";
 	}
-	@Override
-	protected void doInit() throws ResourceException {
-		super.doInit();
-		Form form = getRequest().getResourceRef().getQueryAsForm();
-		
-		forms.put("Models",form);
-	}
-	protected Hashtable<String, Form> createForms() {
-		Hashtable<String, Form> forms = new Hashtable<String, Form>();
-		//forms.put("Endpoints",new Form());
-		forms.put("Models",new Form());
 
-		return forms;
-	}
+	@Override
+	protected List<String> createTabs() {
+		List<String> tabs = new ArrayList<String>();
+		tabs.add("Models");
+		return tabs;
+	}	
+
 
 	@Override
 	protected String getDefaultTab() {

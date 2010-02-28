@@ -2,7 +2,9 @@ package ambit2.fastox.steps;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -27,10 +29,10 @@ public class WelcomeResource extends WizardResource {
 		helpResource = "welcome.html";
 	}
 	@Override
-	protected Hashtable<String, Form> createForms() {
-		Hashtable<String, Form> forms = new Hashtable<String, Form>();
-		forms.put("Welcome",new Form());		
-		return forms;
+	protected List<String> createTabs() {
+		List<String> tabs = new ArrayList<String>();
+		tabs.add("Welcome");
+		return tabs;
 	}
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
 	}

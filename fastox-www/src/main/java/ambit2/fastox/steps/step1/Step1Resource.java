@@ -2,7 +2,9 @@ package ambit2.fastox.steps.step1;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -26,15 +28,14 @@ public class Step1Resource extends FastoxStepResource {
 	protected String getDefaultTab() {
 		return "Search";
 	}
-	protected Hashtable<String, Form> createForms() {
-		Hashtable<String, Form> forms = new Hashtable<String, Form>();
-		forms.put("Search",new Form());
-		forms.put("Upload",new Form());
-		forms.put("Draw",new Form());
-	//	forms.put("Datasets",new Form());
-
-		return forms;
-	}	
+	@Override
+	protected List<String> createTabs() {
+		List<String> tabs = new ArrayList<String>();
+		tabs.add("Search");
+		tabs.add("Draw");
+		tabs.add("Upload");
+		return tabs;
+	}
 
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<form name='%s' method='POST' %s action='%s/%s/%s/%s%s'>",
