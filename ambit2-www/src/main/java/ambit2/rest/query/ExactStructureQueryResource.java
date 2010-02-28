@@ -1,19 +1,25 @@
 package ambit2.rest.query;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.db.search.structure.QueryExactStructure;
+import ambit2.rest.OpenTox;
+import ambit2.rest.property.PropertyResource;
 
 public class ExactStructureQueryResource extends StructureQueryResource<QueryExactStructure> {
 	public final static String resource =  "/structure";
+	protected String textSearch = "CasRN";
 	protected String smiles;
+	protected String dataset_id;
 	
 	@Override
 	protected void doInit() throws ResourceException {
@@ -21,6 +27,15 @@ public class ExactStructureQueryResource extends StructureQueryResource<QueryExa
 		
 	}
 	
+	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		return (dataset_id == null)?
+				String.format("%s%s?text=%s",
+						getRequest().getRootRef(),PropertyResource.featuredef,Reference.encode(textSearch))				
+			:
+				
+			String.format("%s%s/%s%s",
+						getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),dataset_id,PropertyResource.featuredef);				
+	}	
 	@Override
 	protected QueryExactStructure createQuery(Context context, Request request,
 			Response response) throws ResourceException {
@@ -31,7 +46,9 @@ public class ExactStructureQueryResource extends StructureQueryResource<QueryExa
 			QueryExactStructure q = new QueryExactStructure();
 			q.setChemicalsOnly(true);
 			
-			q.setValue(p.parseSmiles(smiles));
+			IAtomContainer c = p.parseSmiles(smiles); 
+			q.setValue(c);
+			setTemplate(createTemplate(context, request, response));
 			return q;
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
