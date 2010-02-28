@@ -1,10 +1,11 @@
 package ambit2.fastox.steps.step2;
 
+import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 
@@ -15,7 +16,6 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
-import ambit2.rest.task.RemoteTask;
 
 public class Step2Processor extends StepProcessor {
 
@@ -82,7 +82,8 @@ public class Step2Processor extends StepProcessor {
 			try {
 				//check if this is a SMILES , otherwise search as text
 				SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-				p.parseSmiles(text.trim());
+				IAtomContainer c = p.parseSmiles(text.trim());
+				if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(text.trim());
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), text);				
 			} catch (Exception x) {
