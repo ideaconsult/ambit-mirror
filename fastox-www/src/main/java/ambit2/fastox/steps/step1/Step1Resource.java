@@ -20,12 +20,7 @@ public class Step1Resource extends FastoxStepResource {
 
 	public Step1Resource() {
 		super(1);
-	}
-	@Override
-	protected void doInit() throws ResourceException {
-		super.doInit();
-		/** This determines if similarity searching will be done via smiles or via URL **/
-
+		helpResource = "step1.html";
 	}
 	@Override
 	protected String getDefaultTab() {
@@ -36,7 +31,7 @@ public class Step1Resource extends FastoxStepResource {
 		forms.put("Search",new Form());
 		forms.put("File",new Form());
 		forms.put("Structure",new Form());
-		forms.put("Datasets",new Form());
+	//	forms.put("Datasets",new Form());
 
 		return forms;
 	}	

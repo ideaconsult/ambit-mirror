@@ -85,6 +85,7 @@ public class Step3Resource extends FastoxStepResource {
 		queryString= new Hashtable<String, String>();
 		queryString.put("Endpoints",modelsByEndpointSparql);
 		queryString.put("Models",modelsAll);
+		helpResource = "step3.html";
 	}
 	@Override
 	protected void doInit() throws ResourceException {

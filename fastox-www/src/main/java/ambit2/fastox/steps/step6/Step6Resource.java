@@ -20,6 +20,7 @@ public class Step6Resource extends FastoxStepResource {
 
 	public Step6Resource() {
 		super(5);
+		helpResource = "step5.html";
 	}
 	@Override
 	public void renderFormFooter(Writer writer,String key) throws IOException {

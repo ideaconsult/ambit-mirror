@@ -26,6 +26,7 @@ public class Step5Resource extends FastoxStepResource {
 	protected int running = 0;
 	public Step5Resource() {
 		super(4);
+		helpResource = "step4.html";
 	}
 
 	@Override

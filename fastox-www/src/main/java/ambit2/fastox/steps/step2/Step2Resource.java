@@ -67,6 +67,7 @@ public class Step2Resource extends FastoxStepResource {
 
 	public Step2Resource() {
 		super(2);
+		helpResource = "step2.html";
 	}
 	@Override
 	protected String getDefaultTab() {
@@ -75,7 +76,6 @@ public class Step2Resource extends FastoxStepResource {
 	}
 
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		writer.write("<h5>Under development: This page will allow to select/deselect compounds, if multiple available and also allow editing the structures. In this version all found structures will be submitted to the calculations</h5>");
 		renderCompounds(writer);
 		super.renderFormContent(writer, key);
 	}

@@ -2,6 +2,7 @@ package ambit2.fastox.wizard;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -40,7 +41,7 @@ public abstract class WizardResource extends ServerResource {
 	public static final String key = "mode";
 	protected int stepIndex;
 	protected static String version = null;
-	
+	protected String helpResource = null;
 	
 	public WizardResource(int stepIndex) throws ResourceException {
 		super();
@@ -245,7 +246,7 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</ul>\n");
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
 
-	
+		writer.write(String.format("<h5>%s</h5>",getHelp()));
 		//<div class="clearfloat">&nbsp;</div>
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
@@ -443,5 +444,27 @@ public abstract class WizardResource extends ServerResource {
 			
 		} catch (Exception x) { jsGoogleAnalytics = null;}
 		return jsGoogleAnalytics;
+	}
+	
+	protected String getHelp() {
+		if (helpResource == null) return "";
+		InputStream in = getClass().getClassLoader().getResourceAsStream(
+				String.format("ambit2/fastox/help/%s",helpResource));
+		StringBuilder b = new StringBuilder();
+	    BufferedReader input =  new BufferedReader(new InputStreamReader(in));
+	      try {
+	        String line = null; //not declared within while loop
+
+	        while (( line = input.readLine()) != null){
+	          b.append(line);
+	          b.append(System.getProperty("line.separator"));
+	        }
+	      } catch (Exception x) {
+	    	  
+	      }  finally {
+	        try { input.close(); } catch (Exception x) {};
+	      }
+	     return b.toString();
+
 	}
 }

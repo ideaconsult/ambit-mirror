@@ -24,6 +24,7 @@ public class WelcomeResource extends WizardResource {
 
 	public WelcomeResource() {
 		super(0);
+		helpResource = "welcome.html";
 	}
 	@Override
 	protected Hashtable<String, Form> createForms() {
@@ -38,7 +39,7 @@ public class WelcomeResource extends WizardResource {
 	
 	@Override
 	public void renderFormContent(Writer writer,String key) throws IOException {
-		
+
 		writer.write("<table width='90%'><tr align='left'><td>");
 		writer.write("<h2>Estimate toxicological hazard of a chemical structure</h2>");
 		writer.write(String.format("<form name='start' method='GET' action='%s/%s/%s/%s%s'>",
