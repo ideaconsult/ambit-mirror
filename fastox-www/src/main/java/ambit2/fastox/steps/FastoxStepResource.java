@@ -36,6 +36,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		mode,
 		file,
 		text,
+		threshold,
 		dataset,
 		compound,
 		query,

@@ -54,7 +54,7 @@ public class Step2Processor extends StepProcessor {
 
 		
 		Form query = new Form();
-		query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
+		
 		
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
@@ -62,25 +62,31 @@ public class Step2Processor extends StepProcessor {
 		String file = userDefinedSearch.getFirstValue(FastoxStepResource.params.file.toString());
 		
 		if (file != null) {
-			//upload
+			//should not come here
 			Representation input = null;
 			MediaType mime = null;
 			//RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),mime,input,Method.POST,authentication);
 		} if (search != null)  {
 			if ("structure".equals(mode)) {
-				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), search);
-				query.add("threshold", "0.9999");
-				
+				query.add(FastoxStepResource.params.max.toString(),"1");
 			} else if ("substructure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/smarts");
 				query.add(FastoxStepResource.params.search.toString(), search);
 				query.add(FastoxStepResource.params.text.toString(), text==null?"":text);
+				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 				
 			} else { /// ("similarity".equals(mode)) {
-				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
+				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
 				query.add(FastoxStepResource.params.search.toString(), search);
-				query.add("threshold", "0.85");
+				
+				try {  
+					query.add(FastoxStepResource.params.threshold.toString().toString(), userDefinedSearch.getFirstValue(FastoxStepResource.params.threshold.toString()));
+				} catch (Exception x) {
+					query.add(FastoxStepResource.params.threshold.toString(), "0.85");
+				}
+				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			};
 	
 		} else if (text != null) {
@@ -90,10 +96,12 @@ public class Step2Processor extends StepProcessor {
 				IAtomContainer c = p.parseSmiles(text.trim());
 				if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(text.trim());
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
-				query.add(FastoxStepResource.params.search.toString(), text);				
+				query.add(FastoxStepResource.params.search.toString(), text);		
+				query.add(FastoxStepResource.params.max.toString(),"1");
 			} catch (Exception x) {
 				topRef = wizard.getService(SERVICE.compound);
 				query.add(FastoxStepResource.params.search.toString(), text);
+				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			}
 
 		}

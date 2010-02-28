@@ -94,9 +94,12 @@ public class Step1Resource extends FastoxStepResource {
 			
 			writer.write("<input name='search' type='hidden'>");
 			writer.write("</td><td>");
-			writer.write("<label for='mode'>search for&nbsp;</label><br>");
-			writer.write("<input type='radio' name='mode' checked='checked' value='structure'>Structure<br><input type='radio' name='mode' value='substructure'>Substructure<br><input type='radio' name='mode' value='similarity'>Similarity<br>\n");
+			writer.write("<label for='mode'>Search for&nbsp;</label><br>");
+			writer.write("<input type='radio' name='mode' checked='checked' value='structure'>Structure<br><input type='radio' name='mode' value='substructure'>Substructure<br>");
+			writer.write("<input type='radio' name='mode' value='similarity'>Similarity");
 
+			writeSelectOption(new String[] {"0.9","0.8","0.7","0.6"}, writer, "threshold","Tanimoto","0.9");
+			writer.write("<br><br>");
 			writePageSize(new String[] {"1","5","10","20"}, writer, key);
 			writer.write("</td></tr>");
 			writer.write("</table>");
