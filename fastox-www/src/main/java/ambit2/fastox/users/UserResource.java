@@ -27,19 +27,22 @@ public class UserResource extends WizardResource {
 		writer.write("<div>");
 		writer.write(session.getUser().toString());
 		writer.write("<h4>Dataset</h4>");
-		writer.write(session.getDatasetURI()==null?"No dataset selected":session.getDatasetURI());
-		writer.write("<h4>Models</h4><ul>");
+		if (session.getDatasetURI()==null) writer.write("No dataset selected");
+		else writer.write(String.format("<a href='%s' target=_blank>%s</a>",session.getDatasetURI(),session.getDatasetURI()));
+		writer.write("<h4>Models</h4><table>");
 
 		Iterator<String> models = session.getModels();
 		if (models != null) 
 			while (models.hasNext()) {
-				writer.write("<li>");
+				writer.write("<tr>");
 				String model = models.next();
-				writer.write(model);
-				writer.write("&nbsp;");
+
+				writer.write(String.format("<th><a href='%s' target=_blank>%s</a></th>",model,model));
+				writer.write("<td>");
 				writer.write(session.getModelStatus(model).toString());
+				writer.write("</td></tr>");
 			}
-		writer.write("</ul>");
+		writer.write("</table>");
 		writer.write("<h4>Endpoints</h4><ul>");
 		
 		writer.write(session.getEndpointName());writer.write("&nbsp;");
