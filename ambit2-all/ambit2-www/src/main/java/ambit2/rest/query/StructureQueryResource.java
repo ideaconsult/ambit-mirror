@@ -278,10 +278,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		switch (query_type) {
 		case smiles:
 
-				return Reference.decode(form.getFirstValue(QueryResource.search_param).trim());
+				return form.getFirstValue(QueryResource.search_param).trim();
 
 		case url: try {
-				query_smiles = Reference.decode(form.getFirstValue(QueryResource.search_param).trim());
+				query_smiles = form.getFirstValue(QueryResource.search_param).trim();
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
 				IAtomContainer mol = getFromURI(query_smiles.trim());
 				AtomConfigurator c = new AtomConfigurator();
@@ -314,7 +314,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		switch (query_type) {
 		case smiles:
 			try {
-				query_smiles = Reference.decode(form.getFirstValue(QueryResource.search_param));
+				query_smiles = form.getFirstValue(QueryResource.search_param);
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty smiles");
 				return MoleculeTools.getMolecule(query_smiles);			
 				
@@ -335,7 +335,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			}			
 
 		case url: {
-			query_smiles = Reference.decode(form.getFirstValue(QueryResource.search_param));
+			query_smiles = form.getFirstValue(QueryResource.search_param);
 			if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
 			return getFromURI(query_smiles);
 
