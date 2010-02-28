@@ -102,9 +102,11 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	
 	protected AbstractBatchProcessor createBatch(Target target) throws Exception{
 		if (target == null) throw new Exception("");
-		if (target instanceof AbstractStructureQuery)
-			return new DbReaderStructure();
-		else
+		if (target instanceof AbstractStructureQuery) {
+			DbReaderStructure reader = new DbReaderStructure();
+			reader.setHandlePrescreen(true);
+			return reader;
+		} else
 			return new RDFStructuresReader(target.toString());
 	}
 	protected abstract Target createTarget(Reference reference) throws Exception;
