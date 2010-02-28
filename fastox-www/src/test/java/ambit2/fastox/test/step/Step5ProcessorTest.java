@@ -7,6 +7,9 @@ import org.restlet.data.Form;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.test.StepProcessorTest;
+import ambit2.fastox.users.IToxPredictSession;
+import ambit2.fastox.users.ToxPredictSession;
+import ambit2.fastox.users.ToxPredictUser;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.SERVICE;
@@ -22,6 +25,7 @@ public class Step5ProcessorTest extends StepProcessorTest {
 	
 	@Test
 	public void testRunModels() throws Exception {
+		IToxPredictSession session = new ToxPredictSession(new ToxPredictUser());
 		Wizard wizard = Wizard.getInstance(WizardMode.A);
 		Assert.assertNotNull(wizard.getService(SERVICE.compound));
 		Assert.assertNotNull(wizard.getService(SERVICE.model));
@@ -31,7 +35,7 @@ public class Step5ProcessorTest extends StepProcessorTest {
 		String model = String.format("%s/1",wizard.getService(SERVICE.model));
 		form.add(FastoxStepResource.params.model.toString(),model);
 		form.add(model,"on");
-		form = getStepProcessor().process(form.getWebRepresentation());
+		form = getStepProcessor().process(form.getWebRepresentation(),session);
 		
 		String[] models = form.getValuesArray(FastoxStepResource.params.model.toString());
 		Assert.assertNotNull(models);

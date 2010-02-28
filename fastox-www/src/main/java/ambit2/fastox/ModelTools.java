@@ -46,6 +46,33 @@ public class ModelTools {
 		"}\n"+		
 		"	ORDER BY ?endpointName %s\n";
 			
+	public static final String queryCount = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"		select count(distinct ?o)\n"+
+		"		where {\n"+
+		"		?o rdf:type %s.\n"+
+		"		}";
+
+	public static final String queryCountEndpoint =
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"		select count(distinct ?endpoint)\n"+
+		"		where {\n"+
+		"		?o rdf:type ot:Model.\n"+
+		"{ {\n"+
+		"{?o ot:dependentVariables ?vars. } UNION { ?o ot:predictedVariables ?vars. }\n"+
+		"  }\n"+
+		" {?vars owl:sameAs ?endpoint}.\n"+
+		"		}.\n"+
+		"}	\n";
+	
 	public static final MediaType[] mimes = {
 		ChemicalMediaType.CHEMICAL_MDLSDF,
 		ChemicalMediaType.CHEMICAL_CML,

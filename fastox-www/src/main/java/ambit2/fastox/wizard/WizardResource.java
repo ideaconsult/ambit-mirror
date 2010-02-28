@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -22,12 +23,22 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.IToxPredictUser;
 import ambit2.fastox.users.MemoryUsersStorage;
 import ambit2.fastox.users.UserResource;
+import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.Syntax;
 	
 public abstract class WizardResource extends ServerResource {
 	protected static String jsGoogleAnalytics = null;
@@ -467,4 +478,37 @@ public abstract class WizardResource extends ServerResource {
 	     return b.toString();
 
 	}
+	public int countEndpoints() throws Exception {
+		
+		return countObjects(QueryFactory.create(ModelTools.queryCountEndpoint,null,Syntax.syntaxARQ));
+	}
+	public int countObjects(String objectType) throws Exception {
+		return countObjects(QueryFactory.create(String.format(ModelTools.queryCount,objectType),null,Syntax.syntaxARQ));
+	}
+	public int countObjects(Query q) throws Exception {
+		QueryExecution qe = null;
+
+		try {
+			
+			qe = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(),q);
+			
+			ResultSet results = qe.execSelect();
+			
+			while (results.hasNext()) {
+				
+				QuerySolution solution = results.next();
+				Iterator<String> i = solution.varNames();
+				while (i.hasNext()) {
+					return solution.getLiteral(i.next()).getInt();
+				}
+				
+			}
+			
+		}catch (Exception x) {
+			throw x;
+		} finally {
+			try {qe.close();} catch (Exception x) {}
+		}		
+		return 0;
+	}		
 }

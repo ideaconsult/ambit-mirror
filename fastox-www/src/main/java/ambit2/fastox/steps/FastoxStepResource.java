@@ -221,6 +221,8 @@ public abstract class FastoxStepResource extends WizardResource {
 		return running;
 	}
 	
-	
+	@Override
+	public void renderResults(Writer writer, String key) throws IOException {
+	}
 	
 }

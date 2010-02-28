@@ -29,4 +29,8 @@ public interface IToxPredictSession {
 	public boolean needsPreprocessing(String model);
 	public void setPreprocessing(String model,Boolean required);
 	
+	public int getAllModels();
+	public void setAllModels(int allModels);
+	public int getAllEndpoints();
+	public void setAllEndpoints(int allEndpoints) ;
 }

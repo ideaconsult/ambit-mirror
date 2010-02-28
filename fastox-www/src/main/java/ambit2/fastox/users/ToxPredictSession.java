@@ -17,6 +17,22 @@ public class ToxPredictSession implements IToxPredictSession {
 	protected String datasetURI;
 	protected String endpoint = "http://www.opentox.org/echaEndpoints.owl#Endpoints";
 	protected String endpointName = "Endpoints";
+	protected int allModels = 0;
+	protected int allEndpoints = 0;
+	
+	public int getAllModels() {
+		return allModels;
+	}
+	public void setAllModels(int allModels) {
+		this.allModels = allModels;
+	}
+	public int getAllEndpoints() {
+		return allEndpoints;
+	}
+	public void setAllEndpoints(int allEndpoints) {
+		this.allEndpoints = allEndpoints;
+	}
+	
 	public String getEndpointName() {
 		return endpointName;
 	}

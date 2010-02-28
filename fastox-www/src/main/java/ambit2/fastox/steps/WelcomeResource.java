@@ -87,4 +87,25 @@ public class WelcomeResource extends WizardResource {
 		}
 		return addSession(user);
 	}		
+	@Override
+	protected String getHelp() {
+		String chemicals = "";
+		String datasets = "";
+		String models = "";
+		String endpoints = "";
+		
+		String help = super.getHelp();
+		try {	
+			if (session.getAllModels()<=0) session.setAllModels(countObjects("ot:Model"));
+		} catch (Exception x) { session.setAllModels(0);}
+		models = session.getAllModels()<=0?"":Integer.toString(session.getAllModels());
+	
+		try {	
+			if (session.getAllEndpoints()<=0) session.setAllEndpoints(countEndpoints());
+		} catch (Exception x) { session.setAllEndpoints(0);}
+		endpoints = session.getAllEndpoints()<=0?"":Integer.toString(session.getAllEndpoints());
+
+		String modelref = String.format("%s/model/%s", getRequest().getRootRef(),session.getUser().getId());
+		return String.format(help,chemicals,datasets,modelref,models,endpoints);
+	}
 }

@@ -17,6 +17,7 @@ import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
 import org.restlet.util.RouteList;
 
+import ambit2.fastox.models.ModelsResource;
 import ambit2.fastox.steps.WelcomeResource;
 import ambit2.fastox.task.ModelLauncherResource;
 import ambit2.fastox.task.ToxPredictTaskResource;
@@ -69,7 +70,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         router.attach(WelcomeResource.resource, WelcomeResource.class);
         router.attach("", WelcomeResource.class);
 
-        router.attach("/algorithm",ModelLauncherResource.class);
+        router.attach(ModelLauncherResource.resource,ModelLauncherResource.class);
         router.attach(SimpleTaskResource.resource,ToxPredictTaskResource.class);
         router.attach(SimpleTaskResource.resource+SimpleTaskResource.resourceID,ToxPredictTaskResource.class);
         
@@ -78,6 +79,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         authenticatior.setNext(AdminResource.class);        
         
         router.attach(String.format("/help/{%s}",UserResource.resourceKey),HelpResource.class);
+        router.attach(String.format("%s/{%s}",ModelsResource.resource,UserResource.resourceKey),ModelsResource.class);
         
         router.attach("/{x}", WelcomeResource.class); //this is a hack to avoid not-matching if navigated to /ToxPredict/whatever
         router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
