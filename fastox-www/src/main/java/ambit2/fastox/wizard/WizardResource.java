@@ -99,10 +99,10 @@ public abstract class WizardResource extends ServerResource {
 		try {
 			session = getSession(getUserKey());
 			if (session == null)
-				getResponse().redirectTemporary(getRootRef());
+				getResponse().redirectSeeOther(getRootRef());
 			
 		} catch (Exception x) {
-			getResponse().redirectTemporary(getRootRef());
+			getResponse().redirectSeeOther(getRootRef());
 		}
 		
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
@@ -260,13 +260,8 @@ public abstract class WizardResource extends ServerResource {
 		//<div class="clearfloat">&nbsp;</div>
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
-		writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
-
 		if (session.getError() != null) 
-				writer.write(String.format("<div class='errors'>%s</div>",session.getError().getMessage()));
-		else 
-			writer.write(String.format("<div class='errors'>%s</div>","None"));
-		writer.write("</FIELDSET>");
+			writer.write(String.format("<div class='errors'>%s</div>",session.getError().getMessage()));
 	}
 	public void renderHelpTab(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -313,14 +308,10 @@ public abstract class WizardResource extends ServerResource {
 		//}
 		writer.write("</div>");
 
-		if ("Errors".equals(tabIndex)) renderErrorsTab(writer, tabIndex);
-		else if ("Help".equals(tabIndex)) renderHelpTab(writer, tabIndex);
-		else {
-			
-			renderFormContent(writer,tabIndex);
-			renderResults(writer,tabIndex);
-			
-		}
+	
+		renderFormContent(writer,tabIndex);
+		renderResults(writer,tabIndex);
+		renderErrorsTab(writer, tabIndex);
 
 	}		
 	public void footer(Writer output)  throws IOException  {
@@ -402,9 +393,13 @@ public abstract class WizardResource extends ServerResource {
 			getRequest().getResourceRef().setQuery(form.getQueryString());
 			return get(variant);	
 		} catch (ResourceException x) {
-			throw x;
+			session.setError(x);
+			getResponse().redirectSeeOther(getRequest().getReferrerRef());
+			return null;
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+			session.setError(x);
+			getResponse().redirectSeeOther(getRequest().getReferrerRef());
+			return null;
 		}		
 	}	
 	protected Representation processMultipartForm(Representation entity, Variant variant) throws ResourceException {
@@ -416,12 +411,14 @@ public abstract class WizardResource extends ServerResource {
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
+
 		if (session!=null) {
 			session.getUser().setTimeStamp(step==null?null:
 			String.format("<a href='%s'>%s</a>",getRequest().getResourceRef(),step.getDescription())
 			);
 			try {session.getUser().setClientinfo(getRequest().getClientInfo().getAddress());} catch (Exception x) {}
 		}
+		session.setError(null);
 		if (!entity.isAvailable())
 			return processError(entity,variant,Status.CLIENT_ERROR_BAD_REQUEST);
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))

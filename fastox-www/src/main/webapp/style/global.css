@@ -231,6 +231,10 @@ div.help {
 	color: #5d308a;
 }
 
+div.errors {
+	color: #ff0000;
+}
+
 div.user {
 	float: right;
 	text-align: right;

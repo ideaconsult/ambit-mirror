@@ -19,10 +19,17 @@ import ambit2.fastox.users.UserResource;
  *
  */
 public class Step1Resource extends FastoxStepResource {
-
+	protected String search = "";
 	public Step1Resource() {
 		super(1);
 		helpResource = "step1.html";
+	}
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		search = form.getFirstValue(FastoxStepResource.params.text.toString());
+		search = search==null?"":search;
 	}
 	@Override
 	protected String getDefaultTab() {
@@ -52,15 +59,12 @@ public class Step1Resource extends FastoxStepResource {
 		if ("Search".equals(key)) {
 		
 			writer.write(
-			"<table>"+
-			"<tr>"+
-			"<th>"+
+			"<table><tr><th>"+
 			"<label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)</label>"+
-			"</th>\n"+
-			"</tr><tr>"+
-			"<td><input name='text' tabindex='1' type=\"text\" size='80' value='556-82-1'/>"+
-			"</td>"+
-			"<td>");
+			"</th></tr><tr>");
+			
+			writer.write(String.format("<td><input name='text' tabindex='1' type=\"text\" size='80' value='%s'/></td><td>",search));
+
 			writePageSize(new String[] {"1","5","10","20"}, writer, key);
 			writer.write("</td><tr></table>");
 			

@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Method;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;

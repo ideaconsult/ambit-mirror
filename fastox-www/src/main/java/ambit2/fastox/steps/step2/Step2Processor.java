@@ -1,6 +1,7 @@
 package ambit2.fastox.steps.step2;
 
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -10,6 +11,9 @@ import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.processors.CASProcessor;
+import ambit2.core.data.EINECS;
+import ambit2.core.processors.structure.key.CASKey;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
@@ -48,13 +52,12 @@ public class Step2Processor extends StepProcessor {
 
 	}
 
-	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard, int pageSize)  {
+	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard, int pageSize) throws AmbitException {
 		Reference topRef = null;
 		//max
 
 		
 		Form query = new Form();
-		
 		
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
@@ -91,6 +94,7 @@ public class Step2Processor extends StepProcessor {
 	
 		} else if (text != null) {
 			try {
+				text = text.trim();
 				//check if this is a SMILES , otherwise search as text
 				SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 				IAtomContainer c = p.parseSmiles(text.trim());
@@ -99,6 +103,14 @@ public class Step2Processor extends StepProcessor {
 				query.add(FastoxStepResource.params.search.toString(), text);		
 				query.add(FastoxStepResource.params.max.toString(),"1");
 			} catch (Exception x) {
+				if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
+					if (!CASNumber.isValid(text)) throw new AmbitException(String.format("Invalid CAS Registry number %s",text));
+					else query.add(FastoxStepResource.params.max.toString(),"1");
+				} else if (EINECS.isValidFormat(text)) { //this is EINECS
+					//we'd better not search for invalid numbers
+					if (!EINECS.isValid(text)) throw new AmbitException(String.format("Invalid EINECS number %s",text));
+					else query.add(FastoxStepResource.params.max.toString(),"1");
+				}
 				topRef = wizard.getService(SERVICE.compound);
 				query.add(FastoxStepResource.params.search.toString(), text);
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));

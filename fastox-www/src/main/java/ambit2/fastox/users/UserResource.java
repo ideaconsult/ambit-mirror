@@ -24,7 +24,7 @@ public class UserResource extends WizardResource {
 		writer.write("Sorry, ToxPredict application doesn't support user accounts yet, this is currently under development.<br>");
 		writer.write("The only available and default user is <b>guest</b><br>");
 		writer.write("<br>");
-		writer.write("<div>");
+		writer.write("<div class='help'>");
 		writer.write(session.getUser().toString());
 		writer.write("<h4>Dataset</h4>");
 		if (session.getDatasetURI()==null) writer.write("No dataset selected");
@@ -47,6 +47,9 @@ public class UserResource extends WizardResource {
 		
 		writer.write(session.getEndpointName());writer.write("&nbsp;");
 		writer.write(session.getEndpoint());
+		
+		writer.write("<h4>Error</h4>");
+		writer.write(String.format("<div class='errors'>%s</div>",session.getError()==null?"":session.getError().getMessage()));
 		writer.write("</div>");
 		writer.write(String.format("<h2><a href='%s'>%s</a></h2>",getRequest().getRootRef(),"Go to ToxPredict"));
 	}
