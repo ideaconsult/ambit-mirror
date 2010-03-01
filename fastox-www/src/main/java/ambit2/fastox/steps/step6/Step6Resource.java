@@ -30,7 +30,6 @@ public class Step6Resource extends FastoxStepResource {
 	}
 	@Override
 	public void renderFormContent(Writer writer,String key) throws IOException {
-		Form form = getRequest().getResourceRef().getQueryAsForm();
 
 		try {
 			store = ModelTools.retrieveModels(store,session, MediaType.APPLICATION_RDF_XML);

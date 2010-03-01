@@ -69,7 +69,7 @@ public class DatasetTools {
 		"	{ ?Model rdf:type ot:Model. ?Model ot:predictedVariables ?f. ?f dc:title ?name. OPTIONAL {?Model dc:title ?mname.} }" ;
 
 		
-	public static Model renderDataset(Model model, Writer writer,String more,Reference rootReference) throws Exception {
+	public static int renderDataset(Model model, Writer writer,String more,Reference rootReference) throws Exception {
 		QueryExecution qe = null;
 		try {
 			Query query = QueryFactory.create(String.format(queryString,more));
@@ -79,7 +79,9 @@ public class DatasetTools {
 			writer.write("<table class='resuts'>");
 			//http://ambit.uni-plovdiv.bg:8080/ambit2/feature?sameas=http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalName
 			String compoundURI = null;
+			int records = 0;
 			while (results.hasNext()) {
+				records++;
 				QuerySolution solution = results.next();
 				//DISTINCT ?c ?o ?f ?name ?value ?dataset
 				Resource compound = solution.getResource("c");
@@ -126,7 +128,8 @@ public class DatasetTools {
 			}
 			if (compoundURI != null) writer.write("</table></td></tr>");
 			writer.write("</table>");
-			return model;
+
+			return records;
 		}catch (Exception x) {
 			throw x;
 		} finally {

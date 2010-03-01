@@ -311,7 +311,7 @@ public abstract class WizardResource extends ServerResource {
 	
 		renderFormContent(writer,tabIndex);
 		renderResults(writer,tabIndex);
-		renderErrorsTab(writer, tabIndex);
+		//renderErrorsTab(writer, tabIndex);
 
 	}		
 	public void footer(Writer output)  throws IOException  {
@@ -363,19 +363,17 @@ public abstract class WizardResource extends ServerResource {
 					if (tabs.size()>1) renderTabs(writer);
 					else {
 						String key = tabs.get(0);
-						if ("Errors".equals(key)) renderErrorsTab(writer, key);
-						else if ("Help".equals(key)) renderHelpTab(writer, key);
-						else {
-//							renderFormHeader(writer,key);
-							renderFormContent(writer,key);
-							renderResults(writer,key);
-
-						}
+						renderFormHeader(writer,key);
+						renderFormContent(writer,key);
+						renderResults(writer,key);
+						
 					}
-									
+				} catch (ResourceException x) {
+					throw x;
 				} catch (Exception x) {
-					x.printStackTrace();
+					throw new ResourceException(x);
 				} finally {
+					renderErrorsTab(writer, key);
 					renderFormFooter(writer,key);	
 					footer(writer);
 					writer.flush();
@@ -411,7 +409,7 @@ public abstract class WizardResource extends ServerResource {
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
-
+		
 		if (session!=null) {
 			session.getUser().setTimeStamp(step==null?null:
 			String.format("<a href='%s'>%s</a>",getRequest().getResourceRef(),step.getDescription())

@@ -74,7 +74,8 @@ public class Step2Resource extends FastoxStepResource {
 	}
 
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		renderCompounds(writer);
+		if (renderCompounds(writer)==0)
+			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 		super.renderFormContent(writer, key);
 	}
 
@@ -88,6 +89,7 @@ public class Step2Resource extends FastoxStepResource {
 			Variant variant) throws ResourceException {
 		RemoteTaskPool pool = new RemoteTaskPool();
 		try {
+              //factory.setSizeThreshold(100);
 			RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),variant.getMediaType(),entity,Method.POST,null);
 			
 			pool.add(task);
@@ -95,12 +97,16 @@ public class Step2Resource extends FastoxStepResource {
 			if (Status.SUCCESS_OK.equals(task.getStatus())) {
 				session.setDatasetURI(task.getResult().toString());
 				return get(variant);	
-			} else throw new ResourceException(task.getStatus(),task.getResult().toString());
+			} else throw new ResourceException(task.getStatus(),task.getResult()==null?task.getStatus().getDescription():task.getResult().toString());
 			
 		} catch (ResourceException x) {
-			throw x;
+			session.setError(x);
+			getResponse().redirectSeeOther(getRequest().getReferrerRef());
+			return null;
 		} catch (Exception x) {
-			throw new ResourceException(x);
+			session.setError(x);
+			getResponse().redirectSeeOther(getRequest().getReferrerRef());
+			return null;
 		} finally {
 			pool.clear();
 		}

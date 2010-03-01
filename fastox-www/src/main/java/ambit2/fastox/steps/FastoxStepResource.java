@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.DatasetTools;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.users.IToxPredictSession;
@@ -151,16 +151,18 @@ public abstract class FastoxStepResource extends WizardResource {
 	}	
 	
 
-	protected void renderCompounds(Writer writer) {
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+	protected int renderCompounds(Writer writer) throws IOException {
 		try {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
 			store = DatasetTools.retrieveDataset(null,session.getDatasetURI());
-			DatasetTools.renderDataset(store,writer,"",getRequest().getRootRef());
+			int records = DatasetTools.renderDataset(store,writer,"",getRequest().getRootRef());
 			writer.write("</table>");
+			if (records ==0) session.setError(new NotFoundException("No compounds found"));
+			return records;
 		} catch (Exception x) {
 			session.setError(x);
+			throw new IOException(x.getMessage());
 		} 		
 	}
 
