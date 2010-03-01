@@ -540,6 +540,14 @@ public class SmartsParser
 				newError("Use of a bond expression for the first appearence of atom index",curChar+1,"");
 				
 			indexes.put(i,rc1);
+			
+			//Bug fixing code -----------!
+			//After first index appearance current bond data must be reset 
+			//If not a bug is caused when ring closure is with a double bond 
+			//e.g. CC=1CC=1 is parsed like it is CC1=CC=1
+			//---------------------------
+			curBond = null; 
+			curBondType = SmartsConst.BT_UNDEFINED;
 		}
 		else
 		{
