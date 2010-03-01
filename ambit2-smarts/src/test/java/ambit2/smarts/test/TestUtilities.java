@@ -1209,10 +1209,10 @@ public class TestUtilities
 		//tu.testIsomorphismTester("[CH]#CC=O", "COC(=O)C#C");
 		//tu.testIsomorphismTester("C#CC=O", "COC(=O)C#C");
 		
-		tu.testSmartsManagerBoolSearch("a:1:a:a:a:a:a1", "c1ccccc1");
-		tu.testSmartsManagerBoolSearch("a1:a:a:a:a:a:1", "c1ccccc1");
-		tu.testSmartsManagerBoolSearch("a:1:a:a:a:a:a:1", "c1ccccc1");
-		tu.testSmartsManagerBoolSearch("a1:a:a:a:a:a:1", "c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("a:1:a:a:a:a:a1", "c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("a1:a:a:a:a:a:1", "c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("a:1:a:a:a:a:a:1", "c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("a1:a:a:a:a:a:1", "c1ccccc1");
 		
 		
 		//tu.testSmartsManagerBoolSearch("[C;]", "CCC");   //----------> gives an Exception  at ambit2.smarts.SmartsLogicalExpression.doAND(SmartsLogicalExpression.java:71)
@@ -1220,6 +1220,14 @@ public class TestUtilities
 		
 		//tu.testStructureAnalysis("I:/Projects/Nina/TOXCST_v3a_320_12Feb2009.sdf");
 		//tu.testScreeningKeys("c1ccccc1NCC","[N;++]CCCCC");
+		
+		//tu.testIsomorphismTester("a", "c1ccccc1");
+		//tu.testIsomorphismTester("cF", "C1=CC=CC=C1F");
+		
+		tu.testIsomorphismTester("CC1CC1", "CC1CC1");
+		tu.testIsomorphismTester("CC1C=C1", "CC1C=C1");
+		tu.testIsomorphismTester("CC1CC=1", "CC=1CC=1");
+		
 	}
 	
 }
