@@ -23,6 +23,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
@@ -371,7 +372,13 @@ public abstract class WizardResource extends ServerResource {
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
-					throw new ResourceException(x);
+					if (x.getMessage().equals("Not Found")) {
+						ResourceException xx = new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
+								"We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again.");
+						session.setError(xx);
+						throw xx;
+						
+					} else throw new ResourceException(x);
 				} finally {
 					renderErrorsTab(writer, key);
 					renderFormFooter(writer,key);	

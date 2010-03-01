@@ -64,9 +64,6 @@ public class Step5Resource extends FastoxStepResource {
 			writer.write(x.getMessage());
 		}
 		
-		
-		writer.write(session.getError()==null?"":"<h3>Errors</h3>");
-		writer.write(session.getError()==null?"":session.getError().getMessage());
 
 		if (running>0) { //refresh the page in order to check tasks
 			Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers"); 

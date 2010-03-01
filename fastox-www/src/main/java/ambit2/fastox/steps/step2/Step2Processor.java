@@ -43,7 +43,7 @@ public class Step2Processor extends StepProcessor {
 		}
 
 		Reference ref = getSearchQuery(form, wizard,max);
-		System.out.println(ref);
+
 		if (ref != null) {
 			session.setDatasetURI(ref.toString());
 		}
@@ -63,11 +63,13 @@ public class Step2Processor extends StepProcessor {
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
 		String mode = userDefinedSearch.getFirstValue(FastoxStepResource.params.mode.toString());
 		String file = userDefinedSearch.getFirstValue(FastoxStepResource.params.file.toString());
+		String dataset = userDefinedSearch.getFirstValue(FastoxStepResource.params.dataset.toString());
 		
 		if (file != null) {
 			//should not come here, goes into processMultiPartForm
 			throw new AmbitException(String.format("Wrong place for file upload %s",file));
-		} if (search != null)  {
+		} 
+		if (search != null)  {
 			if ("structure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), search);
@@ -113,8 +115,14 @@ public class Step2Processor extends StepProcessor {
 				query.add(FastoxStepResource.params.search.toString(), text);
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			}
-
-		} else throw new AmbitException(String.format("Empty query!"));
+			
+		} else if (dataset != null) {
+			topRef = new Reference(dataset);
+			query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
+			
+		} else {
+			throw new AmbitException(String.format("Please enter a query string or draw a query structure!"));
+		}
 		
 		String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
 		for (String n:s) 

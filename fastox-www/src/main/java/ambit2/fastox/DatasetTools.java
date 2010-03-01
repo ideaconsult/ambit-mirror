@@ -75,9 +75,7 @@ public class DatasetTools {
 			Query query = QueryFactory.create(String.format(queryString,more));
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
-			//ResultSetFormatter.out(System.out, results, query);
 			writer.write("<table class='resuts'>");
-			//http://ambit.uni-plovdiv.bg:8080/ambit2/feature?sameas=http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23ChemicalName
 			String compoundURI = null;
 			int records = 0;
 			while (results.hasNext()) {

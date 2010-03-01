@@ -9,6 +9,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.task.RemoteTask;
@@ -74,8 +75,10 @@ public class Step2Resource extends FastoxStepResource {
 	}
 
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		if (renderCompounds(writer)==0)
+		if (renderCompounds(writer)==0) {
+			session.setError(new NotFoundException("We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again."));
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
+		}
 		super.renderFormContent(writer, key);
 	}
 
@@ -97,9 +100,12 @@ public class Step2Resource extends FastoxStepResource {
 			if (Status.SUCCESS_OK.equals(task.getStatus())) {
 				session.setDatasetURI(task.getResult().toString());
 				return get(variant);	
+			} else if (Status.CLIENT_ERROR_NOT_FOUND.equals(task.getStatus())) {
+				 throw new ResourceException(task.getStatus(),"Please use the \"Browse...\" button to select a file to upload!");
 			} else throw new ResourceException(task.getStatus(),task.getResult()==null?task.getStatus().getDescription():task.getResult().toString());
 			
 		} catch (ResourceException x) {
+
 			session.setError(x);
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 			return null;

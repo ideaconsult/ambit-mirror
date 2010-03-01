@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
@@ -40,6 +42,7 @@ public class Step1Resource extends FastoxStepResource {
 		tabs.add("Search");
 		tabs.add("Draw");
 		tabs.add("Upload");
+		//tabs.add("Datasets");
 		return tabs;
 	}
 
@@ -107,7 +110,15 @@ public class Step1Resource extends FastoxStepResource {
 			writer.write("</td></tr>");
 			writer.write("</table>");
 		} else if ("Datasets".equals(key)) {
-			writer.write("Under development");
+			writer.write(
+			"<table><tr><th>"+
+			"<label for='dataset'>Dataset URL</label>"+
+			"</th></tr><tr>");
+					
+			writer.write(String.format("<td><input name='dataset' tabindex='1' type=\"text\" size='80' value='%s'/></td><td>",search));
+
+			writePageSize(new String[] {"1","5","10","20"}, writer, key);
+			writer.write("</td><tr></table>");
 		}
 		writer.write("<p>");
 		super.renderFormContent(writer, key);
@@ -119,5 +130,11 @@ public class Step1Resource extends FastoxStepResource {
 	@Override
 	protected boolean isMandatory(String param) {
 		return false;
+	}
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
+		Representation r =  super.get(variant);
+		//session.setError(null);
+		return r;
 	}
 }
