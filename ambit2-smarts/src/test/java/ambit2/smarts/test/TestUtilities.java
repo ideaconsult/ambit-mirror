@@ -54,20 +54,22 @@ public class TestUtilities
 	
 	public static void printSmartsTokens(String smarts)
 	{
-		
+		System.out.println("Smarts " + smarts); 
 		QueryAtomContainer qac = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals(""))
 		{
 			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());			
 			return;
 		}
-		System.out.println(SmartsHelper.getAtomsString(qac));
+		System.out.println("Atoms: "+SmartsHelper.getAtomsString(qac));
 		/*
 		for (int i = 0; i < qac.getAtomCount(); i++)
 			if (qac.getAtom(i) instanceof SmartsAtomExpression)
 				System.out.println(
 						SmartsHelper.getAtomExpressionTokens((SmartsAtomExpression)qac.getAtom(i)));
-		*/				
+		*/		
+		
+		System.out.println("Bonds:\n" + SmartsHelper.getBondsString(qac));
 	}
 	
 	public static int boolSearch(String smarts, String smiles)
@@ -1224,10 +1226,12 @@ public class TestUtilities
 		//tu.testIsomorphismTester("a", "c1ccccc1");
 		//tu.testIsomorphismTester("cF", "C1=CC=CC=C1F");
 		
-		tu.testIsomorphismTester("CC1CC1", "CC1CC1");
-		tu.testIsomorphismTester("CC1C=C1", "CC1C=C1");
-		tu.testIsomorphismTester("CC1CC=1", "CC=1CC=1");
+		//tu.testIsomorphismTester("CC1CC1", "CC1CC1");
+		//tu.testIsomorphismTester("CC1C=C1", "CC1C=C1");
+		//tu.testIsomorphismTester("CC1CC=1", "CC=1CC=1");
 		
+		tu.printSmartsTokens("CC=1CC=1");
+		tu.printSmartsTokens("CC1CC1");
 	}
 	
 }
