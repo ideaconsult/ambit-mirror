@@ -243,7 +243,10 @@ div.help {
 }
 
 div.errors {
-	color: #ff0000;
+  color: #C00;
+  font-size: 85%;
+  font-weight: normal;
+  text-transform: uppercase;
 }
 
 div.user {
@@ -572,3 +575,4 @@ TD.results {
 	color: #FFFFFF;
 	background-position: 100% -42px;
 }
+

@@ -20,6 +20,7 @@ public class ToxPredictSession implements IToxPredictSession {
 	protected int allModels = 0;
 	protected int allEndpoints = 0;
 	protected String pageSize = "1";
+	protected Hashtable<String, Exception> errors;
 	
 	public String getPageSize() {
 		return pageSize;
@@ -48,14 +49,24 @@ public class ToxPredictSession implements IToxPredictSession {
 	}
 	protected Hashtable<String, Object> models;
 	protected Hashtable<String, Boolean> models_preprocessing;
-	protected Exception x;
-	protected RemoteTaskPool pool = null;
 	
-	public Exception getError() {
-		return x;
+	protected RemoteTaskPool pool = null;
+
+	public Iterator<String> getErrorKeys() {
+		if (errors == null) return null;
+		else return errors.keySet().iterator();
 	}
-	public void setError(Exception x) {
-		this.x = x;
+	public void clearErrors() {
+		if (errors!=null) errors.clear();
+		
+	}
+	public Exception getError(String key) {
+		if (errors == null) return null;
+		else return errors.get(key);
+	}
+	public void setError(String key, Exception x) {
+		if (errors == null) errors = new Hashtable<String, Exception>();
+		if (x == null) errors.remove(key); else errors.put(key, x);
 	}
 	public String getModelResultsURI(String model) {
 		Object o = getModelStatus(model);

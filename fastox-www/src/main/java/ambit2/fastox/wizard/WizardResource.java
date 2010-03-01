@@ -23,8 +23,8 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.ModelTools;
+import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.IToxPredictUser;
@@ -261,8 +261,14 @@ public abstract class WizardResource extends ServerResource {
 		//<div class="clearfloat">&nbsp;</div>
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
-		if (session.getError() != null) 
-			writer.write(String.format("<div class='errors'>%s</div>",session.getError().getMessage()));
+		Iterator<String> keys = session.getErrorKeys();
+		if (keys!=null)	while (keys.hasNext()) {
+			String k = keys.next(); 
+			writer.write(String.format("<div class='errors'>%s</div><br>",
+					session.getError(k)==null?"":session.getError(k).getMessage()));
+		}		
+		//if (session.getError(key) != null) 
+			//writer.write(String.format("<div class='errors'>%s</div>",session.getError(key).getMessage()));
 	}
 	public void renderHelpTab(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<FIELDSET><LEGEND>%s</LEGEND>",key));
@@ -375,7 +381,7 @@ public abstract class WizardResource extends ServerResource {
 					if (x.getMessage().equals("Not Found")) {
 						ResourceException xx = new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
 								"We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again.");
-						session.setError(xx);
+						session.setError(step.getTitle(),xx);
 						throw xx;
 						
 					} else throw new ResourceException(x);
@@ -397,12 +403,16 @@ public abstract class WizardResource extends ServerResource {
 			Form form = p.process(entity,session);
 			getRequest().getResourceRef().setQuery(form.getQueryString());
 			return get(variant);	
+		} catch (StepException x) {
+			session.setError(x.getKey(),x);
+			getResponse().redirectSeeOther(getRequest().getReferrerRef());
+			return null;			
 		} catch (ResourceException x) {
-			session.setError(x);
+			session.setError(step.getTitle(),x);
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 			return null;
 		} catch (Exception x) {
-			session.setError(x);
+			session.setError(step.getTitle(),x);
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 			return null;
 		}		
@@ -423,7 +433,7 @@ public abstract class WizardResource extends ServerResource {
 			);
 			try {session.getUser().setClientinfo(getRequest().getClientInfo().getAddress());} catch (Exception x) {}
 		}
-		session.setError(null);
+		session.clearErrors();
 		if (!entity.isAvailable())
 			return processError(entity,variant,Status.CLIENT_ERROR_BAD_REQUEST);
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))

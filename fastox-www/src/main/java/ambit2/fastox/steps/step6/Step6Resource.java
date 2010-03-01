@@ -34,7 +34,7 @@ public class Step6Resource extends FastoxStepResource {
 		try {
 			store = ModelTools.retrieveModels(store,session, MediaType.APPLICATION_RDF_XML);
 		} catch (Exception x) {
-			session.setError(x);
+			session.setError(key,x);
 		}
 	
 		//ModelTools.renderModels(store,session, writer, false,getRootRef());
@@ -55,13 +55,13 @@ public class Step6Resource extends FastoxStepResource {
 				try {
 					store = DatasetTools.retrieveDataset(store,uri);
 				} catch (Exception x) {
-					session.setError(x);
+					session.setError(key,x);
 				}	
 		}	
 		try {
 			DatasetTools.renderDataset(store,writer,DatasetTools.modelVars,getRequest().getRootRef()); //"UNION { ?f owl:sameAs ?o.}"); //
 		} catch (Exception x) {
-			session.setError(x);
+			session.setError(key,x);
 		}		
 		//super.renderFormContent(writer, key);
 	}
@@ -74,7 +74,7 @@ public class Step6Resource extends FastoxStepResource {
 		return "Display results";
 	}
 
-	
+	/*
 	protected void displayResults(String uri, Form form, Writer writer) throws ResourceException {
 		Representation r = null;
 		try {
@@ -100,4 +100,5 @@ public class Step6Resource extends FastoxStepResource {
 			
 		}			
 	}	
+	*/
 }

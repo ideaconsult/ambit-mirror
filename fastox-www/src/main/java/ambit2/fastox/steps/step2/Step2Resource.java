@@ -11,6 +11,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.fastox.steps.StepException;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
@@ -75,8 +76,8 @@ public class Step2Resource extends FastoxStepResource {
 	}
 
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		if (renderCompounds(writer)==0) {
-			session.setError(new NotFoundException("We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again."));
+		if (renderCompounds(writer,key)==0) {
+			session.setError(key,new NotFoundException("We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again."));
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 		}
 		super.renderFormContent(writer, key);
@@ -105,12 +106,12 @@ public class Step2Resource extends FastoxStepResource {
 			} else throw new ResourceException(task.getStatus(),task.getResult()==null?task.getStatus().getDescription():task.getResult().toString());
 			
 		} catch (ResourceException x) {
-
-			session.setError(x);
+			session.setError("file",new StepException("file","Please use the \"Browse...\" button to select a file to upload!",x));
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 			return null;
 		} catch (Exception x) {
-			session.setError(x);
+			session.setError("file",new StepException("file","Please use the \"Browse...\" button to select a file to upload!",x));
+			session.setError("file",x);
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 			return null;
 		} finally {

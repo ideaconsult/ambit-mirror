@@ -23,8 +23,9 @@ public interface IToxPredictSession {
 	public int getNumberOfRunningModels();
 	public Object getModelStatus(String model);
 	public String getModelResultsURI(String model);
-	public Exception getError();
-	public void setError(Exception x);
+	public Iterator<String> getErrorKeys() ;
+	public Exception getError(String key);
+	public void setError(String key,Exception x);
 	public int pollModels();
 	public boolean needsPreprocessing(String model);
 	public void setPreprocessing(String model,Boolean required);
@@ -36,4 +37,5 @@ public interface IToxPredictSession {
 	
 	public String getPageSize();
 	public void setPageSize(String pageSize);	
+	public void clearErrors();
 }

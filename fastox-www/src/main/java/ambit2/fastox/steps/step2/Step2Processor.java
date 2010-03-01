@@ -13,8 +13,10 @@ import org.restlet.representation.Representation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.EINECS;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
@@ -59,6 +61,7 @@ public class Step2Processor extends StepProcessor {
 		
 		Form query = new Form();
 		
+		String tab = userDefinedSearch.getFirstValue("tab");
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
 		String mode = userDefinedSearch.getFirstValue(FastoxStepResource.params.mode.toString());
@@ -67,13 +70,16 @@ public class Step2Processor extends StepProcessor {
 		
 		if (file != null) {
 			//should not come here, goes into processMultiPartForm
-			throw new AmbitException(String.format("Wrong place for file upload %s",file));
+			throw new StepException("file",String.format("Wrong place for file upload %s",file));
 		} 
 		if (search != null)  {
 			if ("structure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), search);
 				query.add(FastoxStepResource.params.max.toString(),"1");
+				Exception x = parseStructure(search);
+				if (x!=null) throw new StepException("search",x);
+
 			} else if ("substructure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/smarts");
 				query.add(FastoxStepResource.params.search.toString(), search);
@@ -81,6 +87,9 @@ public class Step2Processor extends StepProcessor {
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 				
 			} else { /// ("similarity".equals(mode)) {
+				Exception e = parseStructure(search);
+				if (e!=null) throw new StepException("search",e);
+				
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/similarity");
 				query.add(FastoxStepResource.params.search.toString(), search);
 				
@@ -104,11 +113,11 @@ public class Step2Processor extends StepProcessor {
 				query.add(FastoxStepResource.params.max.toString(),"1");
 			} catch (Exception x) {
 				if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
-					if (!CASNumber.isValid(text)) throw new AmbitException(String.format("Invalid CAS Registry number %s",text));
+					if (!CASNumber.isValid(text)) throw new StepException("text",String.format("Invalid CAS Registry number %s",text));
 					else query.add(FastoxStepResource.params.max.toString(),"1");
 				} else if (EINECS.isValidFormat(text)) { //this is EINECS
 					//we'd better not search for invalid numbers
-					if (!EINECS.isValid(text)) throw new AmbitException(String.format("Invalid EINECS number %s",text));
+					if (!EINECS.isValid(text)) throw new StepException("text",String.format("Invalid EINECS number %s",text));
 					else query.add(FastoxStepResource.params.max.toString(),"1");
 				}
 				topRef = wizard.getService(SERVICE.compound);
@@ -121,7 +130,13 @@ public class Step2Processor extends StepProcessor {
 			query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			
 		} else {
-			throw new AmbitException(String.format("Please enter a query string or draw a query structure!"));
+			if ("Search".equals(tab))
+				throw new StepException("text",String.format("Please enter a query string!"));
+			else if ("Draw".equals(tab))
+				throw new StepException("search",String.format("Please draw a query structure!"));
+			else if ("Datasets".equals(tab)) {
+				throw new StepException("dataset",String.format("Please select a dataset!"));
+			}
 		}
 		
 		String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
@@ -131,6 +146,19 @@ public class Step2Processor extends StepProcessor {
 						Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
 		topRef.setQuery(query.getQueryString())		;
 		return topRef;
+	}
+	
+	protected Exception parseStructure(String smiles) {
+		try {
+			SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			IAtomContainer c = p.parseSmiles(smiles);
+			AtomConfigurator cfg = new AtomConfigurator();
+			cfg.process(c);
+			return null;
+		} catch (Exception x) {
+			return x;
+		}
+		
 	}
 }
 

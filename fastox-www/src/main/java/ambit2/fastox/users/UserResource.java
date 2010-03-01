@@ -49,7 +49,11 @@ public class UserResource extends WizardResource {
 		writer.write(session.getEndpoint());
 		
 		writer.write("<h4>Error</h4>");
-		writer.write(String.format("<div class='errors'>%s</div>",session.getError()==null?"":session.getError().getMessage()));
+		Iterator<String> keys = session.getErrorKeys();
+		if (keys!=null)	while (keys.hasNext()) {
+				String k = keys.next(); 
+				writer.write(String.format("<div class='errors'>%s</div><br>",session.getError(k)==null?"":session.getError(k).getMessage()));
+		}
 		writer.write("</div>");
 		writer.write(String.format("<h2><a href='%s'>%s</a></h2>",getRequest().getRootRef(),"Go to ToxPredict"));
 	}

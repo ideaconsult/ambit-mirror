@@ -164,7 +164,7 @@ public class Step3Resource extends FastoxStepResource {
 				
 			}
 		} catch (Exception x) {
-			session.setError(x);
+			session.setError(key,x);
 		} finally {
 			try { ex.close();} catch (Exception x) {} ;
 		}

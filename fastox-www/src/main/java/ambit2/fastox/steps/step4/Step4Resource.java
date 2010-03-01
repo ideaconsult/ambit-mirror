@@ -3,10 +3,6 @@ package ambit2.fastox.steps.step4;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-
-import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 
 /**
@@ -33,7 +29,7 @@ public class Step4Resource extends FastoxStepResource {
 			writer.write(x.getMessage());
 		}
 
-		renderCompounds(writer);
+		renderCompounds(writer,key);
 		super.renderFormContent(writer, key);
 	}
 

@@ -57,38 +57,51 @@ public class Step1Resource extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 
+				
+		
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		if ("Search".equals(key)) {
 		
-			writer.write(
-			"<table><tr><th>"+
-			"<label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)</label>"+
-			"</th></tr><tr>");
+			writer.write(String.format("<table><tr><th><label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label></th></tr><tr>",
+					getRequest().getRootRef()
+					));
 			
-			writer.write(String.format("<td><input name='text' tabindex='1' type=\"text\" size='80' value='%s'/></td><td>",search));
-
+			writer.write(String.format("<td><input name='text' tabindex='1' type=\"text\" size='80' value='%s'/>",search));
+			writer.write(String.format("<div class='errors'>%s</div>",
+					session.getError("text")==null?"":session.getError("text").getMessage()
+					));				
+			writer.write("</td><td>");
 			writePageSize(new String[] {"1","5","10","20"}, writer, key);
+			
+		
 			writer.write("</td><tr></table>");
 			
 
 		} else if ("Upload".equals(key)) {
 			
-			writer.write(
-			"<table>"+
-			"<tr>"+
-			"<th>"+
-			"<label for='file'>File upload</label>"+
-			"</th>\n"+
-			"</tr><tr>"+
-			"<td><input type='file' name='file' accept='chemical/x-mdl-sdfile' size='80'>"+
-			"</td><tr>"+
-			"</table>"
+			writer.write(String.format(
+			"<table><tr><th><label for='file'>File upload<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label></th></tr><tr>"+
+			"<td><input type='file' name='file' accept='chemical/x-mdl-sdfile' size='80'>",
+			getRequest().getRootRef()
+			)
 			
 			);
+			
+			writer.write(String.format("<div class='errors'>%s</div>",
+					session.getError("file")==null?"":session.getError("file").getMessage()
+					));	
+			writer.write("</td><tr></table>");
 		} else if ("Draw".equals(key)) {
 
 			writer.write("<table>");
-			writer.write("<tr><td>");
+			writer.write(String.format("<tr><th><label for='JME'>Structure diagram<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label>",
+					getRequest().getRootRef()
+					));
+			
+			writer.write(String.format("<div class='errors'>%s</errors></div>",
+					session.getError("search")==null?"":session.getError("search").getMessage()
+					));
+			writer.write("</th></tr><tr><td>");
 			writer.write(String.format(
 			"<applet code=\"JME.class\" name=\"JME\" codebase=\"%s/jme\" archive=\"JME.jar\" width=\"540\" height=\"360\">"+
 			"<param name=\"options\" value=\"query,nohydrogens\">"+
@@ -120,10 +133,13 @@ public class Step1Resource extends FastoxStepResource {
 			writePageSize(new String[] {"1","5","10","20"}, writer, key);
 			writer.write("</td><tr></table>");
 		}
+		writer.write(String.format("<input name='tab' type='hidden' value='%s'>",key));
 		writer.write("<p>");
 		super.renderFormContent(writer, key);
 	}
-
+	@Override
+	public void renderErrorsTab(Writer writer, String key) throws IOException {
+	}
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
 	}
