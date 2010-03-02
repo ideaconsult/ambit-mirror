@@ -6,7 +6,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 
@@ -14,10 +13,10 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.EINECS;
 import ambit2.core.processors.structure.AtomConfigurator;
-import ambit2.core.processors.structure.key.CASKey;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
+import ambit2.fastox.steps.step1.Step1Resource.TABS;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
@@ -130,11 +129,11 @@ public class Step2Processor extends StepProcessor {
 			query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			
 		} else {
-			if ("Search".equals(tab))
+			if (TABS.Search.toString().equals(tab))
 				throw new StepException("text",String.format("Please enter a query string!"));
-			else if ("Draw".equals(tab))
+			else if (TABS.Draw.toString().equals(tab))
 				throw new StepException("search",String.format("Please draw a query structure!"));
-			else if ("Datasets".equals(tab)) {
+			else if (TABS.Datasets.toString().equals(tab)) {
 				throw new StepException("dataset",String.format("Please select a dataset!"));
 			}
 		}

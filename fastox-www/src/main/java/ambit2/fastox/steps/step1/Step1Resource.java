@@ -21,6 +21,12 @@ import ambit2.fastox.users.UserResource;
  */
 public class Step1Resource extends FastoxStepResource {
 	protected String search = "";
+	public enum TABS {
+		Search,
+		Draw,
+		Upload,
+		Datasets
+	};
 	public Step1Resource() {
 		super(1);
 		helpResource = "step1.html";
@@ -34,22 +40,22 @@ public class Step1Resource extends FastoxStepResource {
 	}
 	@Override
 	protected String getDefaultTab() {
-		return "Search";
+		return TABS.Search.toString();
 	}
 	@Override
 	protected List<String> createTabs() {
 		List<String> tabs = new ArrayList<String>();
-		tabs.add("Search");
-		tabs.add("Draw");
-		tabs.add("Upload");
-		//tabs.add("Datasets");
+		tabs.add(TABS.Search.toString());
+		tabs.add(TABS.Draw.toString());
+		tabs.add(TABS.Upload.toString());
+		tabs.add(TABS.Datasets.toString());
 		return tabs;
 	}
 
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
 		writer.write(String.format("<form name='%s' method='POST' %s action='%s/%s/%s/%s%s'>",
 				"form",
-				key.equals("Upload")?"enctype='multipart/form-data'":"",
+				key.equals(TABS.Upload.toString())?"enctype='multipart/form-data'":"",
 				getRootRef(),
 				UserResource.resource,
 				Reference.encode(session.getUser().getId()),mode,wizard.nextStep(step)));
@@ -60,7 +66,7 @@ public class Step1Resource extends FastoxStepResource {
 				
 		
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
-		if ("Search".equals(key)) {
+		if (TABS.Search.toString().equals(key)) {
 		
 			writer.write(String.format("<table><tr><th><label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label></th></tr><tr>",
 					getRequest().getRootRef()
@@ -77,7 +83,7 @@ public class Step1Resource extends FastoxStepResource {
 			writer.write("</td><tr></table>");
 			
 
-		} else if ("Upload".equals(key)) {
+		} else if (TABS.Upload.toString().equals(key)) {
 			
 			writer.write(String.format(
 			"<table><tr><th><label for='file'>File upload<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label></th></tr><tr>"+
@@ -91,7 +97,7 @@ public class Step1Resource extends FastoxStepResource {
 					session.getError("file")==null?"":session.getError("file").getMessage()
 					));	
 			writer.write("</td><tr></table>");
-		} else if ("Draw".equals(key)) {
+		} else if (TABS.Draw.toString().equals(key)) {
 
 			writer.write("<table>");
 			writer.write(String.format("<tr><th><label for='JME'>Structure diagram<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label>",
@@ -122,7 +128,7 @@ public class Step1Resource extends FastoxStepResource {
 			writePageSize(new String[] {"1","5","10","20"}, writer, key);
 			writer.write("</td></tr>");
 			writer.write("</table>");
-		} else if ("Datasets".equals(key)) {
+		} else if (TABS.Datasets.toString().equals(key)) {
 			writer.write(
 			"<table><tr><th>"+
 			"<label for='dataset'>Dataset URL</label>"+
