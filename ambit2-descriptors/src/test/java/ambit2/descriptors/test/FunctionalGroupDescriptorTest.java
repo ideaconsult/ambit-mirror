@@ -45,6 +45,7 @@ import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.FunctionalGroupDescriptor;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.smarts.query.SmartsPatternAmbit;
 
 public class FunctionalGroupDescriptorTest {
 	FunctionalGroupDescriptor d; 
@@ -96,20 +97,32 @@ public class FunctionalGroupDescriptorTest {
 	public void testDefaultGroups() throws Exception {
 		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
 		IAtomContainer mol = MoleculeFactory.makeAlkane(10);
-		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,1);
-
+		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,2);
+		//Alkyl C [CX4]
+		//Alanine side chain [CH3X4]
 	}			
+	
+	@Test
+	public void testDefaultGroups1() throws Exception {
+		IAtomContainer m = MoleculeFactory.makeAlkane(10);
+		m = hadder.process(m);
+		String[] smarts = new String[] {"[CX4]","[$([CX2](=C)=C)]"};
+		int[] results = new int[] {1,0};
+		for (int i=0; i < results.length; i++) {
+			String s = smarts[i];
+			SmartsPatternAmbit p = new SmartsPatternAmbit();
+			p.setSmarts(s);
+			Assert.assertEquals(results[i],p.match(m));
+		}
+	}		
 		
 	protected void calculate(List<FunctionalGroup> groups,boolean verbose,IAtomContainer m, int hits) throws Exception {
 		d.setParameters(new Object[]{groups,verbose});
 		m = hadder.process(m);
 		DescriptorValue value = d.calculate(m);
 		IDescriptorResult v = value.getValue();
+		
 		Assert.assertEquals(hits,value.getNames().length);
-		
-		//for (int i=0; i < groups.size();i++)
-			//Assert.assertEquals(groups.get(i).getName(),value.getNames()[i]);
-		
 		Assert.assertTrue(v instanceof VerboseDescriptorResult);
 		VerboseDescriptorResult verboseResult = (VerboseDescriptorResult) v;
 		IDescriptorResult r = verboseResult.getResult();
