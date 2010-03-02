@@ -235,7 +235,7 @@
     <module>ambit2-namestructure</module>
     <module>ambit2-pubchem</module>
     <module>ambit2-base</module>
-    <module>ambit2-i5rest</module>
+<!--    <module>ambit2-i5rest</module> -->
     <module>ambit2-rest</module>
   </modules>
   <distributionManagement>
