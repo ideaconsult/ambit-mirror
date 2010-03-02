@@ -150,6 +150,20 @@ public abstract class FastoxStepResource extends WizardResource {
 		return null;
 	}	
 	
+	protected int renderCompounds1(Writer writer,String key) throws IOException {
+		try {
+			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
+			writer.write("<table class='results'>");
+			store = DatasetTools.retrieveDataset(null,session.getDatasetURI());
+			int records = DatasetTools.renderDataset1(store,writer,"",getRequest().getRootRef());
+			writer.write("</table>");
+			if (records ==0) session.setError(key,new NotFoundException("No compounds found"));
+			return records;
+		} catch (Exception x) {
+			session.setError(key,x);
+			throw new IOException(x.getMessage());
+		} 		
+	}	
 
 	protected int renderCompounds(Writer writer,String key) throws IOException {
 		try {

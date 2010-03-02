@@ -15,13 +15,110 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DatasetTools {
 	public static Model retrieveDataset(Model model, String datasetURI) throws Exception {
-		return (model == null)?OT.createModel(null,new Reference(datasetURI),MediaType.APPLICATION_RDF_XML):
+		try {
+			model =  (model == null)?OT.createModel(null,new Reference(datasetURI),MediaType.TEXT_RDF_N3):
 							model.read(datasetURI);
+		} catch (Exception x) {
+			model = (model == null)?OT.createModel(null,new Reference(datasetURI),MediaType.APPLICATION_RDF_XML):
+				model.read(datasetURI);			
+		}
+		/*
+		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS","REACHRegistrationDate"};
+		for (String n:s) 
+		try {
+			if (model != null)
+				model.read(String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
+							Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
+		} catch (Exception x) {}
+		*/
+		return model;
 	}
+	
+	protected static String queryAllFeaturesInDataset = 
+		"PREFIX  dc:   <http://purl.org/dc/elements/1.1/>\n"+
+		"PREFIX  ot:   <http://www.opentox.org/api/1.1#>\n"+
+		"PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"SELECT DISTINCT  ?f\n"+
+		"WHERE\n"+
+		"  { \n"+
+	    "{ ?dataset  ot:dataEntry  ?d .}\n"+
+		"	      { ?d  rdf:type  ot:DataEntry .}\n"+
+		"	      { ?d  ot:values  ?v .}\n"+
+		"	      { ?v  ot:value  ?value .}\n"+
+		"	      { ?v  ot:feature  ?f .}\n"+
+		"	  }\n";
+
+	protected static String queryCompoundFeaturesSameAs = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"		select DISTINCT ?o ?value\n"+
+		"		where {\n"+
+		"	     OPTIONAL {  ?dataset ot:dataEntry ?d}.\n"+
+		"		 OPTIONAL { ?d rdf:type ot:DataEntry}.\n"+
+		"	     ?d ot:compound <%s>.\n"+
+		"	     OPTIONAL {?d ot:values ?v}.\n"+
+		"	     OPTIONAL {?v ot:value ?value}.\n"+
+		"	     OPTIONAL {?v ot:feature ?f}.\n"+
+		"	     OPTIONAL {?f owl:sameAs ?o}.\n"+
+		"%s	}\n"+
+		"	ORDER by ?d ?o ?f ?value";
+
+	protected static String queryCompoundFeatures = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"		select DISTINCT ?f ?o ?name ?value ?src ?title ?url\n"+
+		"		where {\n"+
+		"	     OPTIONAL {  ?dataset ot:dataEntry ?d}.\n"+
+		"		 OPTIONAL { ?d rdf:type ot:DataEntry}.\n"+
+		"	     ?d ot:compound <%s>.\n"+
+		"	     OPTIONAL {?d ot:values ?v}.\n"+
+		"	     OPTIONAL {?v ot:value ?value}.\n"+
+		"	     OPTIONAL {?v ot:feature ?f}.\n"+
+		"	     OPTIONAL {?f owl:sameAs ?o}.\n"+
+		"	     OPTIONAL {?f ot:hasSource ?src}.\n"+
+		"	     OPTIONAL {?src dc:title ?title}.\n"+
+		"	     OPTIONAL {?src rdfs:seeAlso ?url}.\n"+
+		"	     OPTIONAL {?f dc:title ?name}.\n"+
+		"%s	}\n"+
+		"	ORDER by ?o ?f ?value";
+	
+	protected static String queryCompounds = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"		select DISTINCT ?c \n"+
+		"		where {\n"+
+		"	     ?d ot:compound ?c.\n"+
+		"		}\n"+
+		"	ORDER by ?c";
+
+	protected static String querySameAs = 
+		"	{ ?f owl:sameAs %s.}\n";
+	
+	
+	protected static String queryNotID = 
+		"{ ?f owl:sameAs ?o. FILTER ( ?o !=  ot:ChemicalName ). FILTER ( ?o !=  ot:CASRN). FILTER ( ?o !=  ot:EINECS). FILTER ( ?o !=  ot:IUPACName).}\n";
+	
 	protected static String queryString = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
@@ -53,13 +150,7 @@ public class DatasetTools {
 		"	UNION\n"+
 		"	{ ?f owl:sameAs ot:SMILES.}\n"+
 			
-		"%s"+
-		
-		/*
-		"	UNION\n"+
-		"	{ ?f owl:sameAs otee:Carcinogenicity.}\n"+
-		*/
-		"	}\n"+
+		"%s	}\n"+
 		
 		"		}\n"+
 		"	ORDER by ?c ?o";
@@ -68,7 +159,117 @@ public class DatasetTools {
 		"  UNION "+
 		"	{ ?Model rdf:type ot:Model. ?Model ot:predictedVariables ?f. ?f dc:title ?name. OPTIONAL {?Model dc:title ?mname.} }" ;
 
-		
+	
+		//references do not appear, since they are not yet into the RDF model
+	public static int renderCompoundFeatures(
+			    String sparqlQuery,
+				Model model, 
+				Writer writer,
+				Resource compound, 
+				String param,
+				Reference rootReference) throws Exception {
+		QueryExecution qe = null;
+		try {
+			String compoundURI = compound.getURI();
+
+			Query query = QueryFactory.create(String.format(sparqlQuery,compoundURI,param));
+			qe = QueryExecutionFactory.create(query,model );
+			ResultSet results = qe.execSelect();
+			int records = 0;
+			while (results.hasNext()) {
+				records++;
+				QuerySolution solution = results.next();
+
+				Literal literal = solution.getLiteral("value");
+				if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) continue;
+				
+				writer.write("<tr>");
+				writer.write("<th>");
+				//Resource feature = solution.getResource("f");
+				//writer.write(feature==null?"":feature.getURI());
+				Resource sameas = solution.getResource("o");
+				writer.write(sameas!=null?sameas.getLocalName():"");				
+				writer.write("</th>");
+				writer.write("<th>");
+				RDFNode title = solution.get("title");
+				writer.write(title!=null?title.toString():"&nbsp;");	
+				writer.write("</th>");		
+				
+				writer.write("<th>");
+				Resource src = solution.getResource("src");
+				writer.write(src!=null?src.getLocalName():"");
+				RDFNode url = solution.get("url");
+				writer.write(url!=null?url.toString():"&nbsp");	
+				writer.write("</th>");
+				
+				writer.write("<td>");
+				Literal name = solution.getLiteral("name");
+				writer.write(name!=null?name.getString():"");
+				writer.write("</td>");	
+				
+				writer.write("<td>");
+				writer.write(literal!=null?literal.getString():"");
+				writer.write("</td>");
+				writer.write("</tr>");
+				
+			}
+
+			return records;
+		}catch (Exception x) {
+			throw x;
+		} finally {
+			try {qe.close();} catch (Exception x) {}
+		}		
+	}	
+	
+	public static int renderDataset1(Model model, Writer writer,String more,Reference rootReference) throws Exception {
+		QueryExecution qe = null;
+		try {
+			Query query = QueryFactory.create(queryCompounds);
+			qe = QueryExecutionFactory.create(query,model );
+			ResultSet results = qe.execSelect();
+			writer.write("<table class='resuts'>");
+			String compoundURI = null;
+			int records = 0;
+			while (results.hasNext()) {
+				records++;
+				QuerySolution solution = results.next();
+				//DISTINCT ?c ?o ?f ?name ?value ?dataset
+				Resource compound = solution.getResource("c");
+				if (!compound.getURI().equals(compoundURI)) {
+					if (compoundURI != null) writer.write("</table></td></tr>");
+					compoundURI = compound.getURI();
+					writer.write("<tr>");
+					writer.write("<td>");
+					writer.write(String.format("<img src='%s?media=%s&w=400&h=400' width='250' height='250' alt='%s'>",
+							compoundURI,
+							Reference.encode("image/png"),compoundURI));					
+					writer.write("</td>");
+					writer.write("<td>");
+					writer.write("<table>");
+				}
+				
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:CASRN"),rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:EINECS"),rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:IUPACName"),rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:ChemicalName"),rootReference);
+				writer.write("</table>");
+				writer.write("<table>");
+				renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,queryNotID,rootReference);
+				//renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,String.format(querySameAs,"<http://www.opentox.org/echaEndpoints.owl#Carcinogenicity>"),rootReference);
+				
+			}
+			if (compoundURI != null) writer.write("</table></td></tr>");
+			writer.write("</table>");
+
+			return records;
+		}catch (Exception x) {
+			throw x;
+		} finally {
+			try {qe.close();} catch (Exception x) {}
+		}		
+	}
+	
 	public static int renderDataset(Model model, Writer writer,String more,Reference rootReference) throws Exception {
 		QueryExecution qe = null;
 		try {

@@ -76,7 +76,7 @@ public class Step2Resource extends FastoxStepResource {
 	}
 
 	public void renderFormContent(Writer writer, String key) throws IOException {
-		if (renderCompounds(writer,key)==0) {
+		if (renderCompounds1(writer,key)==0) {
 			session.setError(key,new NotFoundException("We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again."));
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 		}

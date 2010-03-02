@@ -21,6 +21,7 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.rest.OpenTox;
 
 public class Step2Processor extends StepProcessor {
 
@@ -138,12 +139,21 @@ public class Step2Processor extends StepProcessor {
 			}
 		}
 		
-		String[] s= new String[] {"ChemicalName","CASRN","EINECS","REACHRegistrationDate"};
-		for (String n:s) 
-		query.add("feature_uris[]",
-				String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
-						Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
-		topRef.setQuery(query.getQueryString())		;
+		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS","REACHRegistrationDate"};
+		for (String n:s)  
+			query.add("feature_uris[]",
+					String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
+							Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
+		if (dataset!=null)  {
+			
+			query.add("feature_uris[]",String.format("%s:%s%s",
+					topRef.getScheme(),
+					topRef.getHierarchicalPart(),
+					OpenTox.URI.feature.getURI()));
+		}
+
+		topRef.setQuery(query.getQueryString());
+	
 		return topRef;
 	}
 	
