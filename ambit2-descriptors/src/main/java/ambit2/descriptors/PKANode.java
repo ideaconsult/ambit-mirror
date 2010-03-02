@@ -142,9 +142,10 @@ public class PKANode {
     	if (getSmarts() !=null) { 
 	    	SmartsPatternAmbit pattern = smartsPattern.get(getSmarts());
 	    	if (pattern == null) {
-	    		pattern = new SmartsPatternAmbit(getSmarts());
+	    		pattern = new SmartsPatternAmbit();
 	    		pattern.useMOEvPrimitive(true);
 	    		pattern.setUseCDKIsomorphism(false);
+	    		pattern.setSmarts(getSmarts());
 	    		smartsPattern.put(getSmarts(), pattern);
 	    	}
 	        return pattern.hasSMARTSPattern(ac)>0;
