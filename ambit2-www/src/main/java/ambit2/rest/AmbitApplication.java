@@ -61,6 +61,8 @@ import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
+import ambit2.rest.structure.quality.ConsensusLabelResource;
+import ambit2.rest.structure.quality.QualityLabelResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.tuple.TuplePropertyValueResource;
@@ -226,15 +228,22 @@ public class AmbitApplication extends TaskApplication {
 		Router compoundRouter = new MyRouter(getContext());
 		compoundRouter.attachDefault(CompoundResource.class);
 		compoundsRouter.attach(String.format("/{%s}",CompoundResource.idcompound),compoundRouter);
+		
+		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,ConsensusLabelResource.resource),ConsensusLabelResource.class);
+		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,QualityLabelResource.resource),QualityLabelResource.class);		
 	
 		Router conformersRouter = new MyRouter(getContext());
 		conformersRouter.attachDefault(ConformerResource.class);
 		compoundRouter.attach(ConformerResource.conformerKey,conformersRouter);		
+
 		
 		Router conformerRouter = new MyRouter(getContext());
 		conformerRouter.attachDefault(ConformerResource.class);
 		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),conformerRouter);	
+		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,ConsensusLabelResource.resource),ConsensusLabelResource.class);
+		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,QualityLabelResource.resource),QualityLabelResource.class);		
 
+		
 		compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
 
 		Router featureByAlias = new MyRouter(getContext());
@@ -390,6 +399,10 @@ public class AmbitApplication extends TaskApplication {
 
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
+	     
+	     StringWriter w = new StringWriter();
+	     AmbitApplication.printRoutes(router,">",w);
+	     System.out.println(w.toString());
 		 return router;
 	}
 
