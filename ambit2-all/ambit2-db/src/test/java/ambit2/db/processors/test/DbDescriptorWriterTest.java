@@ -135,13 +135,13 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 
         DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
         //for (String name: v.getNames())      	System.out.println(name);
-        Assert.assertEquals(4,v.getNames().length);
+        Assert.assertEquals(6,v.getNames().length);
         writer.write(v);
         c.close();
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(7,names.getRowCount());
+		Assert.assertEquals(9,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
 		Assert.assertEquals(0,values.getRowCount());		
 		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template where name=\""+d.getSpecification().getImplementationTitle()+"\"");	
