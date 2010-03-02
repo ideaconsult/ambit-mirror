@@ -1986,6 +1986,9 @@ public class SmartsParser
 	
 	static public void setExplicitHAtomData(IAtomContainer container)
 	{
+		for (int i = 0; i < container.getAtomCount(); i++)
+			container.getAtom(i).removeProperty(CMLUtilities.ExplicitH);
+	
 		for (int i = 0; i < container.getBondCount(); i++)
 		{
 			IBond bo = container.getBond(i);
