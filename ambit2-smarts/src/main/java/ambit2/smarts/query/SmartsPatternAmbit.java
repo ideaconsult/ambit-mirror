@@ -51,7 +51,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 
 	public void setUseCDKIsomorphism(boolean useCDKIsomorphism) {
 		this.useCDKIsomorphism = useCDKIsomorphism;
-		if (sman==null) {
+		if (sman!=null) {
 			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		} else {
 			sman = new SmartsManager();
