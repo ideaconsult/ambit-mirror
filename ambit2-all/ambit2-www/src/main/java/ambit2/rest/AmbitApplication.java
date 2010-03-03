@@ -57,6 +57,7 @@ import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.structure.dataset.DatasetsByStructureResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.CSLSDepict;
@@ -231,7 +232,8 @@ public class AmbitApplication extends TaskApplication {
 		
 		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,ConsensusLabelResource.resource),ConsensusLabelResource.class);
 		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,QualityLabelResource.resource),QualityLabelResource.class);		
-	
+		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,DatasetsResource.datasets),DatasetsByStructureResource.class);
+		
 		Router conformersRouter = new MyRouter(getContext());
 		conformersRouter.attachDefault(ConformerResource.class);
 		compoundRouter.attach(ConformerResource.conformerKey,conformersRouter);		
@@ -241,7 +243,8 @@ public class AmbitApplication extends TaskApplication {
 		conformerRouter.attachDefault(ConformerResource.class);
 		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),conformerRouter);	
 		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,ConsensusLabelResource.resource),ConsensusLabelResource.class);
-		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,QualityLabelResource.resource),QualityLabelResource.class);		
+		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,QualityLabelResource.resource),QualityLabelResource.class);
+		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,DatasetsResource.datasets),DatasetsByStructureResource.class);
 
 		
 		compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);

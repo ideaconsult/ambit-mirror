@@ -14,10 +14,12 @@ import ambit2.db.update.dataset.ReadDataset;
 
 public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDataset,StringCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
     
-    public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,user_name,idreference,title,url FROM struc_dataset join src_dataset using(id_srcdataset) join catalog_references using(idreference) where idstructure=? %s order by name";
+    public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,src_dataset.user_name,idreference,title,url FROM structure join  struc_dataset using(idstructure) join src_dataset using(id_srcdataset) join catalog_references using(idreference) where %s order by name";
     
     public static final String select_WHERE = "where name %s ?";
     public static final String select_AND = "and name %s ?";
+    public static final String select_structure = " idstructure = ? ";
+    public static final String select_chemical = " idchemical = ? ";
     protected ReadDataset readDataset = new ReadDataset();
 	/**
 	 * 
@@ -34,17 +36,26 @@ public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDatas
 		this(null,null);
 	}	
 	public String getSQL() throws AmbitException {
-		return 
-		(getFieldname()!=null)
-				?String.format(select_datasets_bystruc,(getValue()==null)?"":String.format(select_AND,getCondition().getSQL()))
-				:String.format(ReadDataset.select_datasets,(getValue()==null)?"":String.format(select_WHERE,getCondition().getSQL()));
+		String and = "";
+		if (getFieldname()!= null) {
+			StringBuilder b = new StringBuilder();
+			if (getFieldname().getIdchemical()>0) {b.append(select_chemical); and = " and "; }
+			if (getFieldname().getIdstructure()>0) {b.append(and); b.append(select_structure); and = " and ";  }
+			if (getValue()!=null) {b.append(and); b.append(String.format(select_AND,getCondition().getSQL())); }
+			return String.format(select_datasets_bystruc,b.toString());
+		}
+		else return 
+			String.format(ReadDataset.select_datasets,(getValue()==null)?"":String.format(select_WHERE,getCondition().getSQL()));
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> p = new ArrayList<QueryParam>();
-		if (getFieldname()!=null)
-			p.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdstructure()));
-
+		if (getFieldname()!=null) {
+			if (getFieldname().getIdchemical()>0)
+				p.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdchemical()));
+			if (getFieldname().getIdstructure()>0)
+				p.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdstructure()));
+		}
 		if (getValue() != null)
 			p.add(new QueryParam<String>(String.class,getValue().getName()));
 		return p;
