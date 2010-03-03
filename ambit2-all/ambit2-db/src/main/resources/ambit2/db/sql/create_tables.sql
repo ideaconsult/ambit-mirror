@@ -96,11 +96,13 @@ CREATE TABLE  `structure` (
   `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
   `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
   `atomproperties` blob,
+  `preference` int(10) unsigned NOT NULL default '9999',
   PRIMARY KEY  (`idstructure`),
   KEY `FK_structure_2` (`user_name`),
   KEY `idchemical` USING BTREE (`idchemical`),
   KEY `Index_4` (`label`),
   KEY `Index_5` (`idstructure`,`user_name`),
+  KEY `Index_6` (`preference`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

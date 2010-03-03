@@ -20,7 +20,7 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	protected String sql_struc = 
 	"select ? as idquery,idchemical,idstructure,1 as selected,fp.bc+sk.bc as metric,null as text from structure\n";
 	protected String sql_chemical = 
-	"select ? as idquery,idchemical,max(idstructure) as idstructure,1 as selected,fp.bc+sk.bc as metric,null as text from structure\n";
+	"select ? as idquery,idchemical,idstructure,1 as selected,fp.bc+sk.bc as metric,null as text from structure "+group;
 
 	protected String sql = 
 	"%s\n"+
@@ -28,7 +28,7 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	"using(idchemical)\n"+
 	"join sk1024 sk\n"+
 	"using(idchemical)\n"+
-	"where\n"+
+	"where %s\n"+
 	"(bit_count(? & sk.fp1) + bit_count(? & sk.fp2) + bit_count(? & sk.fp3) +\n"+
 	"bit_count(? & sk.fp4) + bit_count(? & sk.fp5) + bit_count(? & sk.fp6) + bit_count(? & sk.fp7) +\n"+
 	"bit_count(? & sk.fp8) + bit_count(? & sk.fp9) + bit_count(? & sk.fp10) + bit_count(? & sk.fp11) +\n"+
@@ -41,8 +41,7 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	"bit_count(? & fp.fp8) + bit_count(? & fp.fp9) + bit_count(? & fp.fp10) +\n"+
 	"bit_count(? & fp.fp11) + bit_count(? & fp.fp12) + bit_count(? & fp.fp13) +\n"+
 	"bit_count(? & fp.fp14) + bit_count(? & fp.fp15) + bit_count(? & fp.fp16))=?\n"+
-	"and structure.type_structure != 'NA'\n"+
-	" %s\n";
+	"and structure.type_structure != 'NA'\n";
 	
 
 	protected String sql_exact = 
@@ -51,7 +50,7 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	"using(idchemical)\n"+
 	"join sk1024 sk\n"+
 	"using(idchemical)\n"+
-	"where\n"+
+	"where %s\n"+
 	"(? = sk.fp1) and (? = sk.fp2) and (? = sk.fp3) and\n"+
 	"(? = sk.fp4) and (? = sk.fp5) and (? = sk.fp6) and (? = sk.fp7) and\n"+
 	"(? = sk.fp8) and (? = sk.fp9) and (? = sk.fp10) and (? = sk.fp11) and\n"+
@@ -64,10 +63,8 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	"(? = fp.fp8) and (? = fp.fp9) and (? = fp.fp10) and\n"+
 	"(? = fp.fp11) and (? = fp.fp12) and (? = fp.fp13) and\n"+
 	"(? = fp.fp14) and (? = fp.fp15) and (? = fp.fp16)\n"+
-	"and structure.type_structure != 'NA'\n"+
-	" %s\n";	
+	"and structure.type_structure != 'NA'\n";
 	
-	protected String sql_group = "group by idchemical";
 	/**
 	 * 
 	 */
@@ -87,10 +84,10 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	}
 	
 	public String getSQL() throws AmbitException {
-		return String.format(
-				getCondition().equals(NumberCondition.getInstance("="))?sql_exact:sql,
+		
+		return String.format(getCondition().equals(NumberCondition.getInstance("="))?sql_exact:sql,
 				isChemicalsOnly()?sql_chemical:sql_struc,
-				isChemicalsOnly()?sql_group:"");
+				isChemicalsOnly()?where_group:"");
 
 	}
 	protected void bitset2params(BitSet bitset, List<QueryParam> params) throws AmbitException {

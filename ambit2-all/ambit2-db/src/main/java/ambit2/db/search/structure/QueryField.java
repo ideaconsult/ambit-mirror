@@ -48,7 +48,7 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,structure.idstructure,1 as selected,1 as metric,null as text from structure\n"+
 		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
-		"join properties using(idproperty) %s where\n"+
+		"join properties using(idproperty) %s where %s\n"+
 		"%s %s ? and value %s ? %s";
 	protected StringCondition nameCondition;
 	protected SearchMode searchMode = SearchMode.name;
@@ -68,9 +68,8 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		searchMode = value?SearchMode.alias:SearchMode.name;
 	}	
 	public final static String sqlAnyField = 
-		"select ? as idquery,idchemical,structure.idstructure,1 as selected,1 as metric,null as text from structure join property_values using(idstructure) join property_string as f using (idvalue_string) %s where value %s ? %s";
+		"select ? as idquery,structure.idchemical,structure.idstructure,1 as selected,1 as metric,null as text from structure join property_values using(idstructure) join property_string as f using (idvalue_string) %s where %s value %s ? %s";
 	
-	protected final static String group = "inner join (select max(idstructure) as idstructure from structure group by idchemical) ids on ids.idstructure=structure.idstructure"; 
 	public QueryField() {
 		setFieldname(null);
 		setCondition(StringCondition.getInstance("="));
@@ -81,10 +80,12 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
 			return String.format(sqlAnyField,
 					isChemicalsOnly()?group:"",
+					isChemicalsOnly()?where_group:"",							
 					getCondition().getSQL(),"");
 		else
 			return String.format(sqlField,
 					isChemicalsOnly()?group:"",
+					isChemicalsOnly()?where_group:"",
 					searchMode.getSQL(),
 					getNameCondition().getSQL().toString(),
 					getCondition().getSQL(),

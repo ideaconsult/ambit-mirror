@@ -51,6 +51,9 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 	public static enum FIELD_NAMES  {idquery, idchemical,idstructure,selected,metric};
 	protected boolean order_descendant=true;
 	protected boolean chemicalsOnly = false;
+	protected final static String group = "inner join (select min(preference) as p ,idchemical from structure group by idchemical) ids using(idchemical)";
+	protected final static String where_group = " structure.preference=ids.p and ";
+
 	
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {

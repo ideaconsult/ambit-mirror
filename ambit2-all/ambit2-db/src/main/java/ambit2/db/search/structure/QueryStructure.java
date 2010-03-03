@@ -39,14 +39,14 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 
 	
 	public final static String sqlSMILES = 
-		"select ? as idquery,idchemical,%s,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) where (%s %s ?) or (%s %s ?) %s";
+		"select ? as idquery,structure.idchemical,idstructure,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) %s where %s ((%s %s ?) or (%s %s ?))";
 	
 	public String getSQL() throws AmbitException {
 		return String.format(sqlSMILES,
-				isChemicalsOnly()?"max(idstructure) as idstructure":"idstructure",
+				isChemicalsOnly()?group:"",
+				isChemicalsOnly()?where_group:"",
 				getFieldname(),getCondition().getSQL(),
-				getFieldname(),getCondition().getSQL(),
-				isChemicalsOnly()?"group by idchemical":"");
+				getFieldname(),getCondition().getSQL());
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
