@@ -236,6 +236,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	        query= q;
         } catch (Exception x) {
         	QueryField q_by_name =  new QueryField();
+        	q_by_name.setRetrieveProperties(true);
         	q_by_name.setSearchByAlias(byAlias);
         	if (property != null) q_by_name.setFieldname(new Property(String.format("%s%%",property),null));
         	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));

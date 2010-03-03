@@ -1,6 +1,8 @@
 package ambit2.rest.dataset;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	private static final long serialVersionUID = -6410553622662161903L;
 	protected PropertyRDFReporter propertyReporter;
 	//protected ReferenceURIReporter referenceReporter;
-	
+	protected Comparator<Property> comp;
 	
 	protected Template template;
 	protected List<Property> header = null;
@@ -65,7 +67,12 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
 		propertyReporter = new PropertyRDFReporter(request,mediaType);
-		//referenceReporter = new ReferenceURIReporter(request);
+		comp = new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return o1.getId()-o2.getId();
+			}
+		};
+		
 	}
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
@@ -133,6 +140,15 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			
 			if (header == null) 
 				header = template2Header(template,true);
+			
+			boolean sort = false;
+			for (Property p : item.getProperties()) 
+				if (Collections.binarySearch(header,p,comp)<0) {
+					header.add(p);
+					sort = true;
+				}
+			if (sort) Collections.sort(header,comp);
+			
 				
 			Individual dataEntry = getJenaModel().createIndividual(
 						OT.OTClass.DataEntry.getOntClass(getJenaModel()));
@@ -192,6 +208,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			}
 		});	
 		*/
+		Collections.sort(h,comp);
 		return h;
 	}
 	@Override
