@@ -1226,10 +1226,19 @@ public class TestUtilities
 		//tu.testIsomorphismTester("a", "c1ccccc1");
 		//tu.testIsomorphismTester("cF", "C1=CC=CC=C1F");
 		
-		tu.testIsomorphismTester("CC1CC1", "CC1CC1");
-		tu.testIsomorphismTester("CC1C=C1", "CC1C=C1");
-		tu.testIsomorphismTester("CC1CC=1", "CC=1CC=1");
-		tu.testIsomorphismTester("CC=1CC=1", "CC=1CC=1");
+		//tu.testIsomorphismTester("CC1CC1", "CC1CC1");
+		//tu.testIsomorphismTester("CC1C=C1", "CC1C=C1");
+		//tu.testIsomorphismTester("CC1CC=1", "CC=1CC=1");
+		//tu.testIsomorphismTester("CC=1CC=1", "CC=1CC=1");
+		
+		
+		tu.testSmartsManagerBoolSearch("[#G6;H][i]", "[H]O[N+](=O)[O-]");
+		tu.testIsomorphismTester("[#G6;H][i]", "[H]O[N+](=O)[O-]");
+		tu.testSmartsManagerBoolSearch("[i][#G6v2]", "O[N+](=O)[O-]");
+		tu.testIsomorphismTester("[i][#G6v2]", "O[N+](=O)[O-]");
+		
+		
+		
 		//tu.printSmartsTokens("CC=1CC=1C");
 		
 	}
