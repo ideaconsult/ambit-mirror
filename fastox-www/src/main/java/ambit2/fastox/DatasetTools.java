@@ -190,8 +190,8 @@ public class DatasetTools {
 				Literal literal = solution.getLiteral("value");
 				if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) continue;
 				
-				writer.write("<tr>");
-				writer.write("<th>");
+				writer.write("<tr class='results'>");
+				writer.write("<th align='left' valign='top' width='30%'>");
 				//Resource feature = solution.getResource("f");
 				//writer.write(feature==null?"":feature.getURI());
 				Resource sameas = solution.getResource("o");
@@ -238,7 +238,7 @@ public class DatasetTools {
 			Query query = QueryFactory.create(queryCompounds);
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
-			writer.write("<table class='resuts'>");
+			writer.write("<table width='90%'>");
 			String compoundURI = null;
 			int records = 0;
 			while (results.hasNext()) {
@@ -256,7 +256,7 @@ public class DatasetTools {
 							Reference.encode("image/png"),compoundURI));					
 					writer.write("</td>");
 					writer.write("<td>");
-					writer.write("<table>");
+					writer.write("<table class='results_col'>");
 				}
 				
 				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:CASRN","CAS RN",rootReference);
