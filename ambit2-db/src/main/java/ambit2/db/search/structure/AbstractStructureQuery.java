@@ -32,7 +32,6 @@ package ambit2.db.search.structure;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -61,12 +60,15 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 			record.setIdchemical(rs.getInt(2));
 			record.setIdstructure(rs.getInt(3));
 			//metric
-			record.setProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
+			retrieveMetric(record, rs);
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
 	}
+	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
+	}	
+
 	protected Object retrieveValue(ResultSet rs) throws SQLException {
 		return rs.getFloat(5);
 	}

@@ -1,5 +1,10 @@
 package ambit2.db.search.structure;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import ambit2.base.data.Property;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.IQueryCondition;
 
 
@@ -37,5 +42,8 @@ public abstract class QuerySimilarity<F,T,C extends IQueryCondition> extends Abs
 		b.append(' ');
 		b.append(getThreshold());
 		return b.toString();
+	}	
+	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
+		record.setProperty(Property.getInstance(rs.getMetaData().getColumnName(5),toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
 	}	
 }
