@@ -115,6 +115,10 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"and type_structure != 'NA'\n"+
 		"and type_structure != 'MARKUSH'\n",
 		//"UNLOCK TABLES"
+	
+		"insert into structure (idstructure,`preference`)\n"+
+		"select idstructure,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
+		"on duplicate key update `preference`=values(`preference`)\n",
 
 		"delete from quality_pair"
 	};
