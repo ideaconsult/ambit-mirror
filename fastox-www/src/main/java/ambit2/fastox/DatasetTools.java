@@ -173,6 +173,7 @@ public class DatasetTools {
 				Writer writer,
 				Resource compound, 
 				String param,
+				String caption,
 				Reference rootReference) throws Exception {
 		QueryExecution qe = null;
 		try {
@@ -194,8 +195,10 @@ public class DatasetTools {
 				//Resource feature = solution.getResource("f");
 				//writer.write(feature==null?"":feature.getURI());
 				Resource sameas = solution.getResource("o");
-				Literal sameName = solution.getLiteral("otitle");				
-				writer.write(sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"");				
+				Literal sameName = solution.getLiteral("otitle");		
+				if (caption==null)
+					writer.write(sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"");
+				else writer.write(caption);
 				writer.write("</th>");
 				writer.write("<th>");
 				RDFNode title = solution.get("title");
@@ -256,14 +259,14 @@ public class DatasetTools {
 					writer.write("<table>");
 				}
 				
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:CASRN",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:EINECS",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:IUPACName",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:CASRN","CAS RN",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:EINECS","EINECS",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:IUPACName","IUPAC name",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName","Synonym",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate","REACH Registration date",rootReference);
 				writer.write("</table>");
 				writer.write("<table>");
-				renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,queryNotID,rootReference);
+				renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,queryNotID,null,rootReference);
 				writer.write("</table>");
 				writer.write("<table>");
 				writer.write("<tr>");
