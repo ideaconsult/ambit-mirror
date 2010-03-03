@@ -171,37 +171,3 @@ public class Step2Processor extends StepProcessor {
 	}
 }
 
-
-/*
-			String uri = wizard.getService(SERVICE.compound)+"?"+query.getQueryString();
-			Reference ref = new Reference(uri);
-			Representation r = null;
-			try {
-				Form postDataset = new Form();
-				postDataset.add("dataset_uri",uri);
-				ClientResource resource = new ClientResource(wizard.getService(Wizard.SERVICE.dataset));
-				r = resource.post(postDataset.getWebRepresentation(),MediaType.APPLICATION_WWW_FORM);
-				try { r.release(); } catch (Exception x) {}
-				
-				ref = resource.getResponse().getLocationRef();
-				Status status = resource.getStatus();
-				while (status.equals(Status.REDIRECTION_SEE_OTHER) || status.equals(Status.SUCCESS_ACCEPTED)) {
-					System.out.println(status);
-					System.out.println(ref);
-					resource.setReference(ref);
-					Response response = resource.getResponse();
-
-					status = response.getStatus();
-					if (Status.REDIRECTION_SEE_OTHER.equals(status)) {
-						ref = response.getLocationRef();
-					} 
-					try { response.release(); } catch (Exception x) {}
-
-				}				
-			} catch (Exception x) {
-				x.printStackTrace();
-			} finally {
-				form.add(params.dataset.toString(),ref.toString());
-				
-			}
-*/			

@@ -92,44 +92,5 @@ public class Step5Processor extends StepProcessor {
 		return form;	
 	
 	}
-/*
-	protected void runModel(String model, String compound, Form form) throws ResourceException {
-		Representation r = null;
-		try {
-			form.removeAll(model);
-			ClientResource client = new ClientResource(new Reference(model));
-			
-			client.setFollowingRedirects(false);
-			
-			r = client.post(query.getWebRepresentation());
-
-			Status status = client.getStatus();
-			
-			Reference uri = client.getResponse().getLocationRef();
-			
-			if (uri != null) {
-				form.add(model,uri.toString());
-				form.add(uri.toString(),status.getName());
-			} else {
-				String text = readUriList(r.getStream());
-				form.add(model,text);
-				form.add(text,status.getName());
-
-				form.add(params.errors.toString(),status.toString());
-			}
-
-		} catch (ResourceException x) {
-			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
-		} catch (Exception x) {
-			x.printStackTrace();
-			form.add(params.errors.toString(),x.toString());
-		} finally {
-			try {r.release();} catch (Exception x) {}
-			
-		}			
-	}	
-	*/
-
 	
 }

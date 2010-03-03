@@ -4,8 +4,12 @@ import java.io.Writer;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.RDFMetaDatasetIterator;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -64,15 +68,16 @@ public class DatasetTools {
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
 		"		select DISTINCT ?o ?value\n"+
 		"		where {\n"+
-		"	     OPTIONAL {  ?dataset ot:dataEntry ?d}.\n"+
-		"		 OPTIONAL { ?d rdf:type ot:DataEntry}.\n"+
+		"	     ?dataset ot:dataEntry ?d.\n"+
+		"		 ?d rdf:type ot:DataEntry.\n"+
 		"	     ?d ot:compound <%s>.\n"+
-		"	     OPTIONAL {?d ot:values ?v}.\n"+
-		"	     OPTIONAL {?v ot:value ?value}.\n"+
-		"	     OPTIONAL {?v ot:feature ?f}.\n"+
-		"	     OPTIONAL {?f owl:sameAs ?o}.\n"+
-		"%s	}\n"+
-		"	ORDER by ?d ?o ?f ?value";
+		"	     ?d ot:values ?v.\n"+
+		"	     ?v ot:value ?value.\n"+
+		"	     ?v ot:feature ?f.\n"+
+		"	     ?f owl:sameAs ?o.\n"+
+		"	     ?f owl:sameAs %s.\n"+
+		" }\n"+
+		"	ORDER by ?value";
 
 	protected static String queryCompoundFeatures = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -112,12 +117,10 @@ public class DatasetTools {
 		"		}\n"+
 		"	ORDER by ?c";
 
-	protected static String querySameAs = 
-		"	{ ?f owl:sameAs %s.}\n";
 	
 	
 	protected static String queryNotID = 
-		"{ ?f owl:sameAs ?o. FILTER ( ?o !=  ot:ChemicalName ). FILTER ( ?o !=  ot:CASRN). FILTER ( ?o !=  ot:EINECS). FILTER ( ?o !=  ot:IUPACName).}\n";
+		"{ ?f owl:sameAs ?o. FILTER ( ?o !=  ot:ChemicalName ). FILTER ( ?o !=  ot:CASRN). FILTER ( ?o !=  ot:EINECS). FILTER ( ?o !=  ot:IUPACName). FILTER ( ?o !=  ot:REACHRegistrationDate).}\n";
 	
 	protected static String queryString = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -143,6 +146,8 @@ public class DatasetTools {
 		"	{ ?f owl:sameAs ot:CASRN.}\n"+
 		"	UNION\n"+
 		"	{ ?f owl:sameAs ot:EINECS.}\n"+	
+		"	UNION\n"+
+		"	{ ?f owl:sameAs ot:REACHRegistrationDate.}\n"+			
 		"	UNION\n"+
 		"	{ ?f owl:sameAs ot:InChI.}\n"+
 		"	UNION\n"+
@@ -249,21 +254,35 @@ public class DatasetTools {
 					writer.write("<table>");
 				}
 				
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:CASRN"),rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:EINECS"),rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:IUPACName"),rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,String.format(querySameAs,"ot:ChemicalName"),rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:CASRN",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:EINECS",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:IUPACName",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName",rootReference);
+				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate",rootReference);
 				writer.write("</table>");
 				writer.write("<table>");
 				renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,queryNotID,rootReference);
-				//renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,String.format(querySameAs,"<http://www.opentox.org/echaEndpoints.owl#Carcinogenicity>"),rootReference);
+				writer.write("</table>");
+				writer.write("<table>");
+				writer.write("<tr>");
 				
+				writer.write("<th>Quality label</th>");
+				String consensus = getCompoundLabel(compoundURI,"consensus");
+				String tag = getCompoundLabel(compoundURI,"comparison");
+				writer.write(String.format("<td title='%s'>%s</td>", consensus==null?"":consensus,tag==null?"":tag));
+
+				writer.write("</tr>");
+				//renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,String.format(querySameAs,"<http://www.opentox.org/echaEndpoints.owl#Carcinogenicity>"),rootReference);
+				writer.write("</table>");
+				writer.write("<table>");
+				renderCompoundDatasets(writer,compoundURI);
 			}
 			if (compoundURI != null) writer.write("</table></td></tr>");
 			writer.write("</table>");
 
 			return records;
 		}catch (Exception x) {
+			x.printStackTrace();
 			throw x;
 		} finally {
 			try {qe.close();} catch (Exception x) {}
@@ -335,4 +354,42 @@ public class DatasetTools {
 			try {qe.close();} catch (Exception x) {}
 		}		
 	}
+	
+	public static void renderCompoundDatasets(Writer writer,String compoundURI) {
+		RDFMetaDatasetIterator i=null;
+		try {
+			
+			i = new RDFMetaDatasetIterator(new Reference(String.format("%s/datasets",compoundURI)));
+			i.setCloseModel(true);
+			while(i.hasNext()) {
+				SourceDataset d = i.next();
+				writer.write("<tr>");
+				writer.write("<th>Dataset name&nbsp;</th>");
+				writer.write(String.format("<td title='%s %s'>",d.getTitle(),d.getURL()));
+				writer.write(d.getName());
+				writer.write("</td>");
+				writer.write("</tr>");
+			}
+		} catch (Exception x) {
+		} finally {
+			try { i.close(); } catch (Exception x) {} 
+		}
+	}
+	
+	public static String getCompoundLabel(String compoundURI,String label) {
+		String tag = null;
+		Representation p=null;
+		try {
+			ClientResource r = new ClientResource(String.format("%s/%s",compoundURI,label));
+			p = r.get(MediaType.TEXT_PLAIN);
+			return p.getText();
+		
+		} catch (Exception x) {
+			tag = null;
+		} finally {
+			try { p.release();} catch (Exception x) {}
+		}
+		return tag;
+	}
 }
+

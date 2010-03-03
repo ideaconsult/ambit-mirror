@@ -48,7 +48,9 @@ public class Step1Resource extends FastoxStepResource {
 		tabs.add(TABS.Search.toString());
 		tabs.add(TABS.Draw.toString());
 		tabs.add(TABS.Upload.toString());
-		tabs.add(TABS.Datasets.toString());
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		if (form.getFirstValue("dataset") != null) //usually hidden,currently for testing only
+			tabs.add(TABS.Datasets.toString());
 		return tabs;
 	}
 

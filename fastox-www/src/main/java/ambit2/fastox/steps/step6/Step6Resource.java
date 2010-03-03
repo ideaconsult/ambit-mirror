@@ -74,31 +74,5 @@ public class Step6Resource extends FastoxStepResource {
 		return "Display results";
 	}
 
-	/*
-	protected void displayResults(String uri, Form form, Writer writer) throws ResourceException {
-		Representation r = null;
-		try {
-			ClientResource client = new ClientResource(new Reference(uri));
-			client.setFollowingRedirects(false);
-			r = client.get(MediaType.TEXT_CSV);
-			//r = client.get(MediaType.TEXT_RDF_N3);
 
-			Status status = client.getStatus();
-			if (status.equals(Status.SUCCESS_OK))  {
-				renderCSV(r.getStream(), writer);
-			}
-
-
-		} catch (ResourceException x) {
-			x.printStackTrace();
-			session.setError(x);
-		} catch (Exception x) {
-			x.printStackTrace();
-			session.setError(x);
-		} finally {
-			try {r.release();} catch (Exception x) {}
-			
-		}			
-	}	
-	*/
 }
