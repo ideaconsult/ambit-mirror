@@ -24,11 +24,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.search.structure;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
@@ -45,11 +49,26 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	 * 
 	 */
 	private static final long serialVersionUID = -5810564793012596407L;
+	protected boolean retrieveProperties = false;
+	
+	public boolean isRetrieveProperties() {
+		return retrieveProperties;
+	}
+	public void setRetrieveProperties(boolean retrieveProperties) {
+		this.retrieveProperties = retrieveProperties;
+	}
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,structure.idstructure,1 as selected,1 as metric,null as text from structure\n"+
 		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
 		"join properties using(idproperty) %s where %s\n"+
 		"%s %s ? and value %s ? %s";
+	
+	public final static String sqlFieldProperties = 
+		"select ? as idquery,idchemical,structure.idstructure,1 as selected,1 as metric,null as text,idproperty,name,comments,value from structure\n"+
+		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
+		"join properties using(idproperty) %s where %s\n"+
+		"%s %s ? and value %s ? %s";
+	
 	protected StringCondition nameCondition;
 	protected SearchMode searchMode = SearchMode.name;
 	
@@ -69,21 +88,26 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	}	
 	public final static String sqlAnyField = 
 		"select ? as idquery,structure.idchemical,structure.idstructure,1 as selected,1 as metric,null as text from structure join property_values using(idstructure) join property_string as f using (idvalue_string) %s where %s value %s ? %s";
+
+	public final static String sqlAnyFieldProperties = 
+		"select ? as idquery,structure.idchemical,structure.idstructure,1 as selected,1 as metric,null as text,idproperty,name,comments,value from structure join property_values using(idstructure) join property_string as f using (idvalue_string) %s where %s value %s ? %s";
 	
 	public QueryField() {
 		setFieldname(null);
 		setCondition(StringCondition.getInstance("="));
-		setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));
+		//setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));
+		setNameCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
 	}
 	public String getSQL() throws AmbitException {
 		
+		
 		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
-			return String.format(sqlAnyField,
+			return String.format(isRetrieveProperties()?sqlAnyFieldProperties:sqlAnyField,
 					isChemicalsOnly()?group:"",
 					isChemicalsOnly()?where_group:"",							
 					getCondition().getSQL(),"");
 		else
-			return String.format(sqlField,
+			return String.format(isRetrieveProperties()?sqlFieldProperties:sqlField,
 					isChemicalsOnly()?group:"",
 					isChemicalsOnly()?where_group:"",
 					searchMode.getSQL(),
@@ -108,6 +132,24 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		if ((getFieldname()==null) && (getValue()==null)) return "Search by text properties";
 		else return super.toString();
 
+	}	
+	//idproperty,name,comments,value
+	//7,8,9,10
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		
+		try {
+			IStructureRecord record = super.getObject(rs);
+			if (isRetrieveProperties()) {
+				Property p = Property.getInstance(rs.getString(8),"","");
+				p.setId(rs.getInt(7));
+				p.setUnits(rs.getString(3));
+				p.setLabel(rs.getString(9));
+				record.setProperty(p,rs.getString(10));
+			}
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
 	}	
 }
 
