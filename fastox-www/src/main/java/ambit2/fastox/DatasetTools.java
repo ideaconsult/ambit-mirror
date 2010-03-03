@@ -66,7 +66,7 @@ public class DatasetTools {
 		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"		select DISTINCT ?o ?value\n"+
+		"		select DISTINCT ?o ?value ?otitle\n"+
 		"		where {\n"+
 		"	     ?dataset ot:dataEntry ?d.\n"+
 		"		 ?d rdf:type ot:DataEntry.\n"+
@@ -76,6 +76,7 @@ public class DatasetTools {
 		"	     ?v ot:feature ?f.\n"+
 		"	     ?f owl:sameAs ?o.\n"+
 		"	     ?f owl:sameAs %s.\n"+
+		"	     OPTIONAL {?o dc:title ?otitle}.\n"+
 		" }\n"+
 		"	ORDER by ?value";
 
@@ -193,7 +194,8 @@ public class DatasetTools {
 				//Resource feature = solution.getResource("f");
 				//writer.write(feature==null?"":feature.getURI());
 				Resource sameas = solution.getResource("o");
-				writer.write(sameas!=null?sameas.getLocalName():"");				
+				Literal sameName = solution.getLiteral("otitle");				
+				writer.write(sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"");				
 				writer.write("</th>");
 				writer.write("<th>");
 				RDFNode title = solution.get("title");
