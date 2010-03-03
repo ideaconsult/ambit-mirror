@@ -36,6 +36,8 @@ public class Step2Processor extends StepProcessor {
 		Wizard wizard = Wizard.getInstance(WizardMode.A);
 		Form form = new Form(entity);
 		
+		session.setSearch(null);
+		session.setCondition(null);		
 		int max = 1;
 		try {
 			max = Integer.parseInt(form.getFirstValue(FastoxStepResource.params.max.toString()));
@@ -44,7 +46,10 @@ public class Step2Processor extends StepProcessor {
 			session.setPageSize(Integer.toString(max));
 		}
 
-		Reference ref = getSearchQuery(form, wizard,max);
+
+
+		
+		Reference ref = getSearchQuery(form, wizard,max,session);
 
 		if (ref != null) {
 			session.setDatasetURI(ref.toString());
@@ -54,7 +59,7 @@ public class Step2Processor extends StepProcessor {
 
 	}
 
-	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard, int pageSize) throws AmbitException {
+	protected Reference getSearchQuery(Form userDefinedSearch, Wizard wizard, int pageSize, IToxPredictSession session) throws AmbitException {
 		Reference topRef = null;
 		//max
 
@@ -63,10 +68,12 @@ public class Step2Processor extends StepProcessor {
 		
 		String tab = userDefinedSearch.getFirstValue("tab");
 		String text = userDefinedSearch.getFirstValue(FastoxStepResource.params.text.toString());
+		String condition = userDefinedSearch.getFirstValue(FastoxStepResource.params.condition.toString());		
 		String search = userDefinedSearch.getFirstValue(FastoxStepResource.params.search.toString());
 		String mode = userDefinedSearch.getFirstValue(FastoxStepResource.params.mode.toString());
 		String file = userDefinedSearch.getFirstValue(FastoxStepResource.params.file.toString());
 		String dataset = userDefinedSearch.getFirstValue(FastoxStepResource.params.dataset.toString());
+
 		
 		if (file != null) {
 			//should not come here, goes into processMultiPartForm
@@ -111,6 +118,7 @@ public class Step2Processor extends StepProcessor {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), text);		
 				query.add(FastoxStepResource.params.max.toString(),"1");
+				
 			} catch (Exception x) {
 				if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
 					if (!CASNumber.isValid(text)) throw new StepException("text",String.format("Invalid CAS Registry number %s",text));
@@ -119,10 +127,15 @@ public class Step2Processor extends StepProcessor {
 					//we'd better not search for invalid numbers
 					if (!EINECS.isValid(text)) throw new StepException("text",String.format("Invalid EINECS number %s",text));
 					else query.add(FastoxStepResource.params.max.toString(),"1");
+				} else {
+					session.setSearch(text);
+					session.setCondition(condition);		
 				}
 				topRef = wizard.getService(SERVICE.compound);
 				query.add(FastoxStepResource.params.search.toString(), text);
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
+				query.add(FastoxStepResource.params.condition.toString(),condition==null?"=":condition);	
+
 			}
 			
 		} else if (dataset != null) {

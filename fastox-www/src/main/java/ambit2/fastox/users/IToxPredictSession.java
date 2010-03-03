@@ -38,4 +38,9 @@ public interface IToxPredictSession {
 	public String getPageSize();
 	public void setPageSize(String pageSize);	
 	public void clearErrors();
+	
+	public String getSearch();
+	public String getCondition();
+	public void setSearch(String s);
+	public void setCondition(String c);	
 }

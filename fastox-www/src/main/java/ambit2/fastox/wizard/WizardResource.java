@@ -521,7 +521,7 @@ public abstract class WizardResource extends ServerResource {
 		return 0;
 	}		
 	protected void writePageSize(String[] sizes, Writer writer, String key) throws IOException {
-		writeSelectOption(sizes, writer, "max", "Number of hits", session.getPageSize())	;
+		writeSelectOption(sizes, sizes,writer, "max", "Number of hits", session.getPageSize())	;
 		/*
 		
 		writer.write("<label for='max'>Number of hits</label><select name='max'>");
@@ -531,12 +531,20 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</select>");
 		*/
 	}	
-	protected void writeSelectOption(String[] options,Writer writer, String name, String caption, String selected) throws IOException {
+	protected void writeSelectOption(
+			String[] options,
+			Writer writer, String name, String caption, String selected) throws IOException {
+		writeSelectOption(options,options, writer, name, caption, selected);
+	}
+	protected void writeSelectOption(
+			String[] options,
+			String[] optionsTitle,
+			Writer writer, String name, String caption, String selected) throws IOException {
 		
 		writer.write(String.format("<label for='%s'>%s</label><select name='%s'>",name,caption,name));
-		for (String option:options)
+		for (int i=0; i < options.length;i++) 
 			writer.write(String.format("<option %s value='%s'>%s</option>",
-					selected.equals(option)?"selected='yes'":"",option,option));			
+					selected.equals(options[i])?"selected='yes'":"",options[i],optionsTitle[i]));			
 		writer.write("</select>");
 	}		
 }

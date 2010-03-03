@@ -38,6 +38,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		text,
 		threshold,
 		dataset,
+		condition,
 		compound,
 		query,
 		parentendpoint,
@@ -155,7 +156,7 @@ public abstract class FastoxStepResource extends WizardResource {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
 			store = DatasetTools.retrieveDataset(null,session.getDatasetURI());
-			int records = DatasetTools.renderDataset1(store,writer,"",getRequest().getRootRef());
+			int records = DatasetTools.renderDataset1(store,writer,"",getRequest().getRootRef(),session.getSearch(),session.getCondition());
 			writer.write("</table>");
 			if (records ==0) session.setError(key,new NotFoundException("No compounds found"));
 			return records;

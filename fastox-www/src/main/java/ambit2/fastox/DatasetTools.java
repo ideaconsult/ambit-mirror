@@ -88,21 +88,17 @@ public class DatasetTools {
 		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"		select DISTINCT ?f ?o ?name ?value ?src ?title ?url\n"+
+		"		select DISTINCT ?o ?value ?otitle\n"+
 		"		where {\n"+
-		"	     OPTIONAL {  ?dataset ot:dataEntry ?d}.\n"+
-		"		 OPTIONAL { ?d rdf:type ot:DataEntry}.\n"+
+		"	     ?dataset ot:dataEntry ?d.\n"+
+		"		 ?d rdf:type ot:DataEntry.\n"+
 		"	     ?d ot:compound <%s>.\n"+
-		"	     OPTIONAL {?d ot:values ?v}.\n"+
-		"	     OPTIONAL {?v ot:value ?value}.\n"+
-		"	     OPTIONAL {?v ot:feature ?f}.\n"+
-		"	     OPTIONAL {?f owl:sameAs ?o}.\n"+
-		"	     OPTIONAL {?f ot:hasSource ?src}.\n"+
-		"	     OPTIONAL {?src dc:title ?title}.\n"+
-		"	     OPTIONAL {?src rdfs:seeAlso ?url}.\n"+
-		"	     OPTIONAL {?f dc:title ?name}.\n"+
-		"%s	}\n"+
-		"	ORDER by ?o ?f ?value";
+		"	     ?d ot:values ?v.\n"+
+		"	     ?v ot:value ?value.\n"+
+		"	     ?v ot:feature ?f.\n"+
+		"	     ?f dc:title ?otitle.\n"+
+		"%s	}\n";
+	
 	
 	protected static String queryCompounds = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -121,7 +117,7 @@ public class DatasetTools {
 	
 	
 	protected static String queryNotID = 
-		"{ ?f owl:sameAs ?o. FILTER ( ?o !=  ot:ChemicalName ). FILTER ( ?o !=  ot:CASRN). FILTER ( ?o !=  ot:EINECS). FILTER ( ?o !=  ot:IUPACName). FILTER ( ?o !=  ot:REACHRegistrationDate).}\n";
+		"?f owl:sameAs ?o. FILTER ( ?o !=  ot:ChemicalName ). FILTER ( ?o !=  ot:CASRN). FILTER ( ?o !=  ot:EINECS). FILTER ( ?o !=  ot:IUPACName). FILTER ( ?o !=  ot:REACHRegistrationDate).\n";
 	
 	protected static String queryString = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -178,7 +174,7 @@ public class DatasetTools {
 		QueryExecution qe = null;
 		try {
 			String compoundURI = compound.getURI();
-
+			System.out.println(String.format(sparqlQuery,compoundURI,param));
 			Query query = QueryFactory.create(String.format(sparqlQuery,compoundURI,param));
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
@@ -190,7 +186,7 @@ public class DatasetTools {
 				Literal literal = solution.getLiteral("value");
 				if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) continue;
 				
-				writer.write("<tr class='results'>");
+				writer.write(String.format("<tr %s>",param==null?"class='small_button'":""));
 				writer.write("<th align='left' valign='top' width='30%'>");
 				//Resource feature = solution.getResource("f");
 				//writer.write(feature==null?"":feature.getURI());
@@ -232,7 +228,7 @@ public class DatasetTools {
 		}		
 	}	
 	
-	public static int renderDataset1(Model model, Writer writer,String more,Reference rootReference) throws Exception {
+	public static int renderDataset1(Model model, Writer writer,String more,Reference rootReference,String search,String condition) throws Exception {
 		QueryExecution qe = null;
 		try {
 			Query query = QueryFactory.create(queryCompounds);
@@ -265,9 +261,18 @@ public class DatasetTools {
 				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName","Synonym",rootReference);
 				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate","REACH Registration date",rootReference);
 				writer.write("</table>");
-				writer.write("<table>");
-				renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,queryNotID,null,rootReference);
-				writer.write("</table>");
+			
+				if (search!=null) {
+					writer.write("<table>");
+					String param;
+					if ("=".equals(condition)) 
+						param = String.format("FILTER (?value = \"%s\") .",search);
+					else
+						param = String.format("FILTER (regex(?value, \"%s\")) .",search);
+					renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,param,null,rootReference);
+					writer.write("</table>");
+				}
+				
 				writer.write("<table>");
 				writer.write("<tr>");
 				

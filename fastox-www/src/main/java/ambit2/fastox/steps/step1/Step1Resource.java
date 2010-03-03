@@ -21,6 +21,42 @@ import ambit2.fastox.users.UserResource;
  */
 public class Step1Resource extends FastoxStepResource {
 	protected String search = "";
+	public enum CONDITION {
+		Equals {
+			@Override
+			public String getCondition() {
+				return "=";
+			}
+		},
+		StartsWith {
+			@Override
+			public String getTitle() {
+				return "Starts with";
+			}
+			@Override
+			public String getCondition() {
+				return "regexp ^";
+			}
+		},
+		Contains {
+			@Override
+			public String getCondition() {
+				return "regexp";
+			}
+		},
+		SoundsLike {
+			@Override
+			public String getTitle() {
+				return "Sounds like";
+			}
+			@Override
+			public String getCondition() {
+				return "like";
+			}
+		};
+		public String getTitle() { return toString();}
+		public abstract String getCondition();
+	};
 	public enum TABS {
 		Search,
 		Draw,
@@ -70,9 +106,16 @@ public class Step1Resource extends FastoxStepResource {
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		if (TABS.Search.toString().equals(key)) {
 		
-			writer.write(String.format("<table><tr><th><label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label></th></tr><tr>",
+			writer.write(String.format("<table><tr><th><label for='text'>Free text search <br>(Enter chemical name, registry identifier, SMILES, InChI, any keywords)<em><img src=\"%s/images/star.png\" title='Required field' alt=\"required\" /></em></label></th>",
 					getRequest().getRootRef()
 					));
+			writer.write("<td align='right'>");
+			writeSelectOption(
+					new String[]{CONDITION.Equals.getCondition(),CONDITION.StartsWith.getCondition(),CONDITION.Contains.getCondition(),CONDITION.SoundsLike.getCondition()},
+					new String[]{CONDITION.Equals.getTitle(),CONDITION.StartsWith.getTitle(),CONDITION.Contains.getTitle(),CONDITION.SoundsLike.getTitle()},
+
+					writer, "condition", "", "Equals")	;
+			writer.write("</td></tr><tr>");
 			
 			writer.write(String.format("<td><input name='text' tabindex='1' type=\"text\" size='80' value='%s'/>",search));
 			writer.write(String.format("<div class='errors'>%s</div>",

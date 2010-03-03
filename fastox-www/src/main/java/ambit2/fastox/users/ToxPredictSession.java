@@ -21,6 +21,8 @@ public class ToxPredictSession implements IToxPredictSession {
 	protected int allEndpoints = 0;
 	protected String pageSize = "1";
 	protected Hashtable<String, Exception> errors;
+	protected String search;
+	protected String condition;
 	
 	public String getPageSize() {
 		return pageSize;
@@ -153,6 +155,20 @@ public class ToxPredictSession implements IToxPredictSession {
 	public String toString() {
 
 		return user.toString();
+	}
+	public String getCondition() {
+		return condition;
+	}
+	public String getSearch() {
+		return search;
+	}
+	public void setCondition(String c) {
+		condition =c;
+		
+	}
+	public void setSearch(String s) {
+		search = s;
+		
 	}
 	
 	
