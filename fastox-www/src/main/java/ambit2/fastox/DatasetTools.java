@@ -186,15 +186,18 @@ public class DatasetTools {
 				Literal literal = solution.getLiteral("value");
 				if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) continue;
 				
-				writer.write(String.format("<tr %s>",param==null?"class='small_button'":""));
+				writer.write("<tr>");
 				writer.write("<th align='left' valign='top' width='30%'>");
 				//Resource feature = solution.getResource("f");
 				//writer.write(feature==null?"":feature.getURI());
 				Resource sameas = solution.getResource("o");
 				Literal sameName = solution.getLiteral("otitle");		
+				if (caption==null) 
+					writer.write("<font color='#636bd2'>"); //didn't work with style				
 				if (caption==null)
 					writer.write(sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"");
 				else writer.write(caption);
+				writer.write("</font>");
 				writer.write("</th>");
 				writer.write("<th>");
 				RDFNode title = solution.get("title");
@@ -214,7 +217,11 @@ public class DatasetTools {
 				writer.write("</td>");	
 				
 				writer.write("<td>");
+				if (caption==null) 
+					writer.write("<font color='#636bd2'>"); //didn't work with style
 				writer.write(literal!=null?literal.getString():"");
+				if (caption==null) 
+					writer.write("</font>");
 				writer.write("</td>");
 				writer.write("</tr>");
 				
