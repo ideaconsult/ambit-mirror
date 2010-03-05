@@ -1,5 +1,7 @@
 package ambit2.rest;
 
+import java.sql.SQLException;
+
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
@@ -39,6 +41,7 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	@Override
 	public void setOutput(OntModel output) throws AmbitException {
 		super.setOutput(output);
+		if (output!=null)
 		try {
 			output.setNsPrefix("",uriReporter.getBaseReference().toString()+"/");
 			output.setNsPrefix("af",uriReporter.getBaseReference().toString()+"/feature/");
@@ -55,4 +58,8 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	}
 	public void header(OntModel output, Q query) {};
 	public void footer(OntModel output, Q query) {};
+	@Override
+	public void close() throws SQLException {
+		super.close();
+	}
 }
