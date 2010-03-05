@@ -103,6 +103,7 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	            	} finally {
 
 	            		try {if (output !=null) output.flush(); } catch (Exception x) { x.printStackTrace();}
+	            		try {getReporter().setOutput(null); } catch (Exception x) { x.printStackTrace();}
 	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
 	            		try {if (jenaModel !=null) jenaModel.close(); } catch (Exception x) { x.printStackTrace();}
 	            	}
