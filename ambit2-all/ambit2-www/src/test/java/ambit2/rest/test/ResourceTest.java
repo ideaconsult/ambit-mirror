@@ -124,16 +124,22 @@ public abstract class ResourceTest extends DbUnitTest {
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(MediaType.TEXT_URI_LIST));
 		Reference ref = response.getLocationRef();
+		response.release();
 		while (status.equals(Status.REDIRECTION_SEE_OTHER) || status.equals(Status.SUCCESS_ACCEPTED)) {
 			System.out.println(status);
 			System.out.println(ref);
-			//System.out.println("poll");
-			Response response1 = client.handle(request);
-			status = response1.getStatus();
-			if (Status.REDIRECTION_SEE_OTHER.equals(status)) {
-				ref = response1.getLocationRef();
-				request.setResourceRef(ref);
-			} 
+
+			Response response1 = null;
+			try  {
+				response1 = client.handle(request);
+				status = response1.getStatus();
+				if (Status.REDIRECTION_SEE_OTHER.equals(status)) {
+					ref = response1.getLocationRef();
+					request.setResourceRef(ref);
+				} 
+			} finally {
+				if (response1!=null) response1.release();	
+			}
 
 		}
 		Assert.assertEquals(uriExpected,ref.toString());
