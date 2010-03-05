@@ -59,6 +59,7 @@ public abstract class SimpleTaskResource<USERID> extends AbstractResource<Iterat
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
+				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT});
 	}

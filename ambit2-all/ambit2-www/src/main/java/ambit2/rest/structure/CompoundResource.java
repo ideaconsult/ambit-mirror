@@ -184,7 +184,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) 
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)  ||
+				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			

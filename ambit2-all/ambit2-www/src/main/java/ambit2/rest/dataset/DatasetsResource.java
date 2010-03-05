@@ -67,6 +67,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT});
 		upload = new FileUpload();
 		upload.setRequest(getRequest());
@@ -131,7 +132,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
+			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
+			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 			) {
 		return new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
 				new MetadataRDFReporter<IQueryRetrieval<SourceDataset>>(getRequest(),variant.getMediaType()),variant.getMediaType());			

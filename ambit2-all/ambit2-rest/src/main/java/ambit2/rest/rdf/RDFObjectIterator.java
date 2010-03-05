@@ -21,6 +21,7 @@ import com.hp.hpl.jena.vocabulary.DC;
 
 /**
  * Iterates over objects of a specified OT.class
+ * TODO make use of http://jena.sourceforge.net/ARP/standalone.html
  * @author nina
  *
  * @param <Item>
