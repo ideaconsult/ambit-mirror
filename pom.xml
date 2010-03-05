@@ -213,7 +213,7 @@
   	</pluginManagement>
   </build>
   <modules>
-
+<!--    <module>ambit2-i5rest</module> -->
     <module>ambit2-smarts</module>
     <module>ambit2-core</module>
     <module>ambit2-db</module>
@@ -235,8 +235,8 @@
     <module>ambit2-namestructure</module>
     <module>ambit2-pubchem</module>
     <module>ambit2-base</module>
-<!--    <module>ambit2-i5rest</module> -->
     <module>ambit2-rest</module>
+    <module>ambit2-usmiles</module>
   </modules>
   <distributionManagement>
   	<snapshotRepository>

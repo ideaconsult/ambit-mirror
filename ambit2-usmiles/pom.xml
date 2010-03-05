@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<description>Placeholder for canonical smiles implementation and other relevant tools</description>
+	<url>http://ambit.sourceforge.net</url>
+	<inceptionYear>2010</inceptionYear>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ambit2-usmiles</groupId>
+  <artifactId>ambit2-usmiles</artifactId>
+  <name>Canonical SMILES</name>
+  <version>2.0.0-SNAPSHOT</version>
+  <issueManagement>
+  	<url>http://sourceforge.net/tracker/?group_id=191756</url>
+  </issueManagement>
+  <developers>
+  	<developer>
+  		<id>ntk73</id>
+  		<name>Nikolay Kochev</name>
+  		<roles>
+  			<role>Cheminformatics algorithms</role>
+  			<role>Java developers</role>
+  		</roles>
+  	</developer>
+  </developers>
+  <scm>
+  	<connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-usmiles</connection>
+  	<developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-usmiles</developerConnection>
+  	<url>http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/</url>
+  </scm>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  	<url>http://www.ideaconsult.net</url>
+  </organization>
+  <dependencies>
+  </dependencies>
+</project>
