@@ -153,9 +153,10 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 				
 				Property key = null;
 				String uri = null;
-				if (feature.isURIResource() && (lookup!= null))
+				if (feature.isURIResource() && (lookup!= null)) {
 					uri = ((Resource)feature).getURI();
 					key = lookup.get(uri);
+				}
 				
 				if (key == null) {
 					key = propertyIterator.parseRecord(feature,key);
