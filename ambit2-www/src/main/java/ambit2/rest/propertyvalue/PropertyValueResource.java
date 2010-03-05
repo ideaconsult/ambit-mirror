@@ -54,6 +54,7 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT
 				});
 
@@ -76,7 +77,8 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<T, IQueryRetrieval<T>>(
 					new PropertyValueRDFReporter<T>(getRequest(),variant.getMediaType())

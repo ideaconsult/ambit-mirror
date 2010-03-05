@@ -59,7 +59,8 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
+			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
+			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 			) {
 		return new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
 				new MetadataRDFReporter<IQueryRetrieval<SourceDataset>>(getRequest(),variant.getMediaType()),variant.getMediaType());			

@@ -60,7 +60,8 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new StringConvertor(
 					new TaskRDFReporter(getRequest(),variant.getMediaType())

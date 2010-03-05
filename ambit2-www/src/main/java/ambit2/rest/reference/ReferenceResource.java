@@ -71,7 +71,8 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
+					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
+					variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 					) {
 				return new RDFJenaConvertor<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>>(
 						new ReferenceRDFReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest(),variant.getMediaType())

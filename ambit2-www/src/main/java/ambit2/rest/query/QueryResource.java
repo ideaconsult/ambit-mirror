@@ -64,7 +64,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
-				MediaType.APPLICATION_JAVA_OBJECT
+				MediaType.APPLICATION_JSON,
+				MediaType.APPLICATION_JAVA_OBJECT,
+
 				
 		});		
 		if (queryObject!=null)
