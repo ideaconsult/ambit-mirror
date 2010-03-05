@@ -107,7 +107,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		public void testClassifier() throws Exception {
 			Form headers = new Form();  
 			headers.add(OpenTox.params.dataset_uri.toString(), 
-					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100000&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948&max=10");
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948&max=10");
 			headers.add(OpenTox.params.target.toString(),
 					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948");
 			testAsyncTask(
@@ -123,7 +123,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testClustering() throws Exception {
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
-				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100000");
+				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100");
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/SimpleKMeans", port),
 						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),

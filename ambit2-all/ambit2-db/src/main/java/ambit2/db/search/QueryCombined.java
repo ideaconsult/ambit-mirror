@@ -51,6 +51,7 @@ public abstract class QueryCombined<T> extends Model implements IQueryRetrieval<
 		return id;
 	}
 	public QueryCombined() {
+		super();
 		queries = new ArrayList<IQueryRetrieval<T>>();
 	}
 	public void setId(Integer id) {

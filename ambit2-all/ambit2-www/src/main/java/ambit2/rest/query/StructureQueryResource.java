@@ -36,11 +36,14 @@ import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
+import ambit2.db.reporters.QueryTemplateReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
+import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -53,6 +56,7 @@ import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
+import ambit2.rest.task.CallableQueryProcessor;
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
@@ -87,10 +91,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
 
 			for (String featureURI:featuresURI) 
-				readFeaturesXML(featureURI, profile);
+				readFeatures(featureURI, profile);
 			
 			if (profile.size() == 0) {
-				readFeaturesXML(getDefaultTemplateURI(context,request,response), profile);
+				readFeatures(getDefaultTemplateURI(context,request,response), profile);
 
 			}
 			return profile;
@@ -100,6 +104,29 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 		
 	}	
+	
+	protected void readFeatures(String uri,final Template profile) throws Exception {
+		if (uri==null) return;
+	
+		Object q = CallableQueryProcessor.getQueryObject(new Reference(uri), getRequest().getRootRef());
+		if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
+			QueryTemplateReporter<IQueryRetrieval<Property>> reporter = new QueryTemplateReporter<IQueryRetrieval<Property>>(profile);
+			try {
+        		DBConnection dbc = new DBConnection(getContext());
+				reporter.setConnection(dbc.getConnection(getRequest()));
+				reporter.process((AbstractPropertyRetrieval)q);
+			} catch (NotFoundException x) {
+				//this is ok
+			} catch(Exception x) {
+				x.printStackTrace();
+			} finally {
+				//the reporter closes the connection as well
+				try { reporter.close();} catch (Exception x) {}
+			}
+		} else 
+
+			readFeaturesXML(uri,profile);
+	}
 
 	protected void readFeaturesXML(String uri,final Template profile) {
 		if (uri==null) return;
@@ -150,6 +177,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.TEXT_YAML,
+				MediaType.APPLICATION_JSON,
 				ChemicalMediaType.WEKA_ARFF,
 				MediaType.TEXT_CSV,
 				MediaType.APPLICATION_RDF_XML,
@@ -157,6 +185,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.APPLICATION_RDF_TRIG,
 				MediaType.APPLICATION_RDF_TRIX,
 				MediaType.TEXT_RDF_N3,
+				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				});
@@ -218,7 +247,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
+				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
