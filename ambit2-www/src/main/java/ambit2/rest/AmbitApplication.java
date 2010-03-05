@@ -130,9 +130,12 @@ public class AmbitApplication extends TaskApplication {
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
 		
+		router.attach("/", AmbitResource.class);
+		router.attach("", AmbitResource.class);
 
-		router.attach("", SmartsQueryResource.class);	
-		router.attach("/", SmartsQueryResource.class);
+		//router.attach("", SmartsQueryResource.class);	
+		//router.attach("/", SmartsQueryResource.class);
+		
 		//test
 		router.attach(RDFGraphResource.resource,RDFGraphResource.class);
 		router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
