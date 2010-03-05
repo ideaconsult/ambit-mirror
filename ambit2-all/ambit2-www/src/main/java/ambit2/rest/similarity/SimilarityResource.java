@@ -53,7 +53,8 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 			Request request, Response response) throws ResourceException {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		mol = getMolecule(form);
-		
+		if ((mol==null)||(mol.getAtomCount()==0)) 
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"Empty molecule");
 		threshold = 0.0;
         try {
         	threshold = new Double(Reference.decode(form.getFirstValue("threshold")));
