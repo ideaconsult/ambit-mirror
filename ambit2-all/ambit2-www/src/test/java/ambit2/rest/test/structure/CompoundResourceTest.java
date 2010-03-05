@@ -84,7 +84,7 @@ public class CompoundResourceTest extends ResourceTest {
 		return instances;
 	}		
 	
-	@Test
+
 	public void testRDFTurtle() throws Exception {
 		testGet(String.format("http://localhost:%d/compound/11?%s=http://localhost:%d%s", 
 				port,OpenTox.params.feature_uris.toString(),port,PropertyResource.featuredef)
@@ -199,7 +199,7 @@ public class CompoundResourceTest extends ResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-			Assert.assertEquals("F.[F-].[Na+]	metric=1.0",line);
+			Assert.assertEquals("F.[F-].[Na+]",line);
 			count++;
 		}
 		return count ==1;
