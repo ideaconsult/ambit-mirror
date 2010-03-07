@@ -2,7 +2,7 @@
 
 1) Dump the DBs
 
-mysqldump --user=root --port=33060 --opt --add-drop-database  --databases ambit > ambit.sql
+mysqldump --user=root --port=33060 -R --opt --add-drop-database  --databases ambit > ambit.sql
 mysqldump --user=root --port=33060 --opt --add-drop-database  --databases aquire > aquire.sql
 
 

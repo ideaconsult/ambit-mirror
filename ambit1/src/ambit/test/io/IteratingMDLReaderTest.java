@@ -39,8 +39,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.tools.LoggingTool;
 
-import weka.filters.unsupervised.attribute.ReplaceMissingValues;
-
 public class IteratingMDLReaderTest extends TestCase {
 	static LoggingTool logger = new LoggingTool(IteratingMDLReaderTest.class);
 	@Override

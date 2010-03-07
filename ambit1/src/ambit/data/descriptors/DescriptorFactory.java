@@ -5,7 +5,9 @@
 package ambit.data.descriptors;
 
 import org.openscience.cdk.qsar.IDescriptor;
+import org.openscience.cdk.qsar.descriptors.atomic.AtomCountDescriptor;
 import org.openscience.cdk.qsar.descriptors.atomic.WeightDescriptor;
+import org.openscience.cdk.qsar.descriptors.bond.BondCountDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor;
@@ -332,6 +334,13 @@ public class DescriptorFactory {
 	    DescriptorGroups gTopological = new DescriptorGroups();
 	    gTopological.addItem(DescriptorFactory.createDescriptorTopologicalGroup());
 		
+	    cdkDescriptor = new AtomCountDescriptor();
+		hashtable.addDescriptorPair(cdkDescriptor, createAmbitDescriptorFromCDKdescriptor(cdkDescriptor, gTopological,"","Number of rotatable bonds"));
+	    	
+    		
+	    cdkDescriptor = new BondCountDescriptor();
+		hashtable.addDescriptorPair(cdkDescriptor, createAmbitDescriptorFromCDKdescriptor(cdkDescriptor, gTopological,"","Number of rotatable bonds"));
+		
 	    cdkDescriptor = new RotatableBondsCountDescriptor();
 		hashtable.addDescriptorPair(cdkDescriptor, createAmbitDescriptorFromCDKdescriptor(cdkDescriptor, gTopological,"","Number of rotatable bonds"));
 	    	    
@@ -430,6 +439,13 @@ public class DescriptorFactory {
 		cdkDescriptor = new WeightDescriptor();
 		hashtable.addDescriptorPair(cdkDescriptor, createAmbitDescriptorFromCDKdescriptor(cdkDescriptor, gSize,"","Molecular weight"));
 
+		String[] atoms = new String[] {"C", "N", "O", "P", "S", "F", "Cl", "Br", "I"};
+		for (String atom:atoms) {
+			cdkDescriptor = new AtomTypeCountDescriptor(atom);
+			hashtable.addDescriptorPair(cdkDescriptor, createAmbitDescriptorFromCDKdescriptor(cdkDescriptor, gSize,"","Molecular weight"));
+
+		}
+		
 		/*
 		try {
 			final DescriptorGroups gr = new DescriptorGroups();

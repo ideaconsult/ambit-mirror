@@ -53,7 +53,7 @@
       <descriptors_generation_software chapter="4.6" help="" name="Software name and version for descriptor generation" options="">
 
       </descriptors_generation_software>
-      <descriptors_chemicals_ratio chapter="4.7" help="" name="Descriptors/Chemicals ratio"></descriptors_chemicals_ratio>
+      <descriptors_chemicals_ratio chapter="4.7" help="" name="Chemicals/Descriptors ratio"></descriptors_chemicals_ratio>
     </QSAR_Algorithm>
     <QSAR_Applicability_domain chapter="5" help="" name="Defining the applicability domain - OECD Principle 3">
       <app_domain_description chapter="5.1" help="" name="Description of the applicability domain of the model"></app_domain_description>
