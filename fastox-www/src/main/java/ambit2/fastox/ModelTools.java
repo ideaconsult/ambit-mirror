@@ -23,29 +23,31 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class ModelTools {
 	public static final String sparql = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
-		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
-		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
-		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
-		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
-		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
-		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
 		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm ?algName ?type \n"+
-		"		where {\n"+
-		"		        %s rdf:type ot:Model.\n"+
-		"		        OPTIONAL {%s dc:title ?title}.\n"+
-		"		        OPTIONAL {%s ot:trainingDataset ?TrainingDataset}.\n"+
-		"		        OPTIONAL {%s ot:algorithm ?algorithm}.\n"+
-		"		        OPTIONAL {?algorithm dc:title ?algName}.\n"+		
-		"	                OPTIONAL {?algorithm ot:isA ?type}.\n"+
-		"		        OPTIONAL { {\n"+
-		"		        { %s ot:dependentVariables ?vars. } UNION { %s ot:predictedVariables ?vars. }\n"+
-		"	                 }\n"+
-		"		        {?vars owl:sameAs ?endpoint}.\n"+
-		"	{?endpoint dc:title ?endpointName}.\n"+
-		"	       }\n"+
+		"where {\n"+
+		"%s rdf:type ot:Model.\n"+
+		"OPTIONAL {%s dc:title ?title}.\n"+
+		"OPTIONAL {%s ot:trainingDataset ?TrainingDataset}.\n"+
+		"OPTIONAL {%s ot:algorithm ?algorithm}.\n"+
+		"OPTIONAL {?algorithm dc:title ?algName}.\n"+		
+		"OPTIONAL {?algorithm ot:isA ?type}.\n"+
+		"OPTIONAL { {\n"+
+		"{ %s ot:dependentVariables ?vars. } UNION { %s ot:predictedVariables ?vars. }\n"+
+		"}\n"+
+		"{?vars owl:sameAs ?endpoint}.\n"+
+		"{?endpoint dc:title ?endpointName}.\n"+
+		"}\n"+
 		"}\n"+		
-		"	ORDER BY ?endpointName %s\n";
-			
+		"ORDER BY ?endpointName %s\n";
+	
+
+	
 	public static final String queryCount = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 		"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
@@ -196,9 +198,15 @@ public class ModelTools {
 			algoType.isLiteral()?((Literal)algoType).getString():
 			algoType.isURIResource()?((Resource)algoType).getURI():algoType.toString();		
 		//add the model
+		boolean selected = false; 
 		if (modelUri!=null)	{
 			if (session.getModelStatus(modelUri) == null) {
-				session.addModel(modelUri,Boolean.TRUE);
+				session.addModel(modelUri,Boolean.FALSE);
+			} else {
+				if (session.getModelStatus(modelUri) instanceof RemoteTask)
+					selected = true;
+				else if (session.getModelStatus(modelUri) instanceof Boolean)
+					selected = ((Boolean) session.getModelStatus(modelUri)).booleanValue();
 			}
 	
 			session.setPreprocessing(modelUri, !"http://www.opentox.org/algorithmTypes.owl#Rules".equals(algType));
@@ -211,7 +219,7 @@ public class ModelTools {
 				modelUri,
 				Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
 				modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
-		writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString(),record==1));
+		writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString(),selected));
 		
 		writer.write("</td><td>");
 		writer.write(session.needsPreprocessing(modelUri)?
