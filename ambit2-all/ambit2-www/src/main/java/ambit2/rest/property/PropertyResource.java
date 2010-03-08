@@ -56,6 +56,10 @@ import ambit2.rest.structure.ConformerResource;
  * <li>GET 	 /feature?sameas=<uri-of-sameas-resource>   returns text/uri-list or RDF
  * <li>POST	 /feature feature_uris[]=URI  or RDF representation in the content
  * </ul>
+<pre>
+Create a new feature from RDF representation
+curl -H "Content-type:application/rdf+xml" -X POST -d @feature.rdf http://service.net:8080/feature -v
+</pre>
 
  * @author nina
  *
@@ -268,6 +272,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		try {
 			RetrieveFieldNames q = new RetrieveFieldNames();
 			q.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+			q.setFieldname("name");
 			q.setValue(entry);
 			x.setConnection(connection);
 			rs = x.process(q);
