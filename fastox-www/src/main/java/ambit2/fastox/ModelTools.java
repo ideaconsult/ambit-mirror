@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource.params;
@@ -260,8 +261,11 @@ public class ModelTools {
 		Object uris = session.getModelStatus(modelUri);
 		if (!status)  {
 			if ((uris != null) && (uris instanceof RemoteTask)) {
-				Reference uri = ((RemoteTask)uris).getResult();
-				String q= uri.getQuery();
+				RemoteTask task = ((RemoteTask)uris);
+				Reference uri = task.getResult();
+				
+				String q= uri==null?null:uri.getQuery();
+				if (q!=null)
 				for (int i=0;i<mimes.length;i++) {
 					MediaType mime = mimes[i];
 					writer.write("&nbsp;");
@@ -285,7 +289,9 @@ public class ModelTools {
 			writer.write("<td>");
 			int isRunning = 0;
 			isRunning += task.isDone()?0:1;
-			writer.write((isRunning==0)?"Completed":"Processing");
+			writer.write((isRunning==0)?
+					(task.getStatus().equals(Status.SUCCESS_OK))?"Completed":task.getStatus().toString():
+					"Processing");
 
 			running += isRunning;
 			writer.write("</td>");
