@@ -7,9 +7,13 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.NotFoundException;
@@ -21,11 +25,11 @@ import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 
 import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFactory;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 
 public abstract class FastoxStepResource extends WizardResource {
@@ -202,7 +206,8 @@ public abstract class FastoxStepResource extends WizardResource {
 				while (models.hasNext()) {
 					String model = models.next();
 					String q = String.format("<%s>",model);
-					Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q, q,q,q,""));
+					Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q, q,q,q,""),null,Syntax.syntaxARQ);
+
 					running += retrieveModels(model,query,writer,status,rootReference);
 				}
 			}
@@ -215,13 +220,22 @@ public abstract class FastoxStepResource extends WizardResource {
 		return running;
 	}		
 	protected int retrieveModels(String modelURI,Query query,Writer writer,boolean status,Reference rootReference) throws Exception {
-		QueryExecution qe = null;
+		//QueryExecution qe = null;
+		ClientResource resource = null;
+		Representation r = null;
 		int running = 0;
 		try {
+			resource = new ClientResource(new Reference(wizard.getService(SERVICE.ontology).toString()));
+			Form form = new Form();
+			form.add("query", query.toString());
+			r = resource.post(form.getWebRepresentation(),MediaType.APPLICATION_SPARQL_RESULTS_XML);
+//			qe = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
+			//engine = QueryExecutionFactory.createServiceRequest(wizard.getService(SERVICE.ontology).toString(), query);
 			
-			qe = QueryExecutionFactory.sparqlService(wizard.getService(SERVICE.ontology).toString(), query);
-			ResultSet results = qe.execSelect();
-			
+			//ResultSet results = engine.execSelect(); //qe.execSelect();
+
+			ResultSet results = ResultSetFactory.fromXML(r.getText());
+			//ResultSet results = ResultSetFactory.fromXML(r.getStream());
 			int record = 0;
 			while (results.hasNext()) {
 				record++;
@@ -232,9 +246,11 @@ public abstract class FastoxStepResource extends WizardResource {
 			}
 			
 		}catch (Exception x) {
-			throw x;
+			System.err.println(query);
+			x.printStackTrace();
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x.getMessage()+ wizard.getService(SERVICE.ontology).toString(),x);
 		} finally {
-			try {qe.close();} catch (Exception x) {}
+			try {r.release();} catch (Exception x) {}
 		}		
 		return running;
 	}
