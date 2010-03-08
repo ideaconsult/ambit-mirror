@@ -214,12 +214,17 @@
   		</plugins>
   	</pluginManagement>
   </build>
+ <properties>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+ </properties>
   <profiles>
 	<profile>
 		<id>development</id>
 		<properties>
 		<build.version>${project.version}-r${buildNumber}-${timestamp}</build.version>
 		</properties>
+
+		
 		<build>
 			<plugins>
 				<plugin>
