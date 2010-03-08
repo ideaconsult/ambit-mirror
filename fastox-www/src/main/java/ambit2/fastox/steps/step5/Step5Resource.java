@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -17,7 +18,7 @@ import ambit2.fastox.steps.FastoxStepResource;
  */
 public class Step5Resource extends FastoxStepResource {
 	public static String meta_refresh = 
-				"<meta http-equiv=\"refresh\" content=\"10;URL=%s\">\n"+
+				"<meta http-equiv=\"refresh\" content=\"30;URL=%s\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"no-store, no-cache, must-revalidate\">\n"+
 				"<META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"post-check=0, pre-check=0\">\n"+
 				"<META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">\n"+
@@ -36,7 +37,9 @@ public class Step5Resource extends FastoxStepResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		meta = String.format(meta_refresh,getRequest().getResourceRef());
+		Reference refresh = getRequest().getResourceRef().clone();
+		if (refresh.getQueryAsForm().getFirstValue("method")==null)	refresh.addQueryParameter("method", "get");
+		meta = String.format(meta_refresh,refresh);
 		
 	}
 	@Override
@@ -75,7 +78,7 @@ public class Step5Resource extends FastoxStepResource {
 			responseHeaders.add("Cache-Control", "post-check=0, pre-check=0");
 			responseHeaders.add("Pragma", "no-cache"); //HTTP 1.0
 			responseHeaders.add("Expires", "0"); //prevents caching at the proxy server
-			responseHeaders.add("Refresh",String.format("10; url=%s",getRequest().getResourceRef()));				
+			responseHeaders.add("Refresh",String.format("30; url=%s",getRequest().getResourceRef()));				
 		}		
 	}
 
@@ -83,7 +86,9 @@ public class Step5Resource extends FastoxStepResource {
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {
-		meta = String.format(meta_refresh,getRequest().getResourceRef());
+		Reference refresh = getRequest().getResourceRef().clone();
+		if (refresh.getQueryAsForm().getFirstValue("method")==null)	refresh.addQueryParameter("method", "get");
+		meta = String.format(meta_refresh,refresh);
 		Representation r = super.processForm(entity, variant);
 		//r.setExpirationDate(new Date(0));
 		return r;
