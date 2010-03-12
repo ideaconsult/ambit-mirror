@@ -270,10 +270,10 @@ public class IteratingDelimitedFileReader extends
 
 	/**
 	 * Extract values from a line
-	 */
+*/
 	public void extractRowKeyAndData(String line) {
 		
-			StringTokenizer st = new StringTokenizer(line,format.getFieldDelimiter());
+		QuotedTokenizer st = new QuotedTokenizer(line,format.getFieldDelimiter().charAt(0));
 			int fieldIndex = 0;
 			while (st.hasMoreTokens()) {
 				if (fieldIndex>=values.length) break;
@@ -285,6 +285,11 @@ public class IteratingDelimitedFileReader extends
 			}
 
 	}
+	 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
     @Override
 	public String toString() {
         return "Reading compounds from " + format.toString(); 
