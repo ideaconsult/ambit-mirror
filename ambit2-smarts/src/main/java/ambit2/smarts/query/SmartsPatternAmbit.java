@@ -113,7 +113,9 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		/*
 		 * setSmartsDataForTarget(false)   if properties are read from db
 		 */
-		
+		if (sman == null) {
+			throw new SMARTSException("Smarts parser not initialized!");
+		}		
 		try {
 			
 			sman.setSmartsDataForTarget(reader.process((IAtomContainer)mol) == null);
@@ -122,9 +124,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 			sman.setSmartsDataForTarget(true);
 		}
 		
-		if (sman == null) {
-			throw new SMARTSException("Smarts parser not initialized!");
-		}
+
 
 		if (sman.searchIn(mol)) {
 			return 1; 
