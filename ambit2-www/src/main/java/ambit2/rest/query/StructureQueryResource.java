@@ -2,6 +2,7 @@ package ambit2.rest.query;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.Connection;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -19,12 +20,9 @@ import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -36,11 +34,9 @@ import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
-import ambit2.db.reporters.QueryTemplateReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
-import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
@@ -53,10 +49,9 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
-import ambit2.rest.property.PropertyDOMParser;
+import ambit2.rest.property.ProfileReader;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
-import ambit2.rest.task.CallableQueryProcessor;
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
@@ -87,15 +82,33 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			Template profile = new Template(null);
 			profile.setId(-1);				
 			
+			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
+			reader.setCloseConnection(false);
 			Form form = request.getResourceRef().getQueryAsForm();
 			String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
 
-			for (String featureURI:featuresURI) 
-				readFeatures(featureURI, profile);
-			
-			if (profile.size() == 0) {
-				readFeatures(getDefaultTemplateURI(context,request,response), profile);
-
+			DBConnection dbc = new DBConnection(getContext());
+			Connection conn = dbc.getConnection(getRequest());
+			try {
+				for (String featureURI:featuresURI) {
+					reader.setConnection(conn);
+					profile = reader.process(new Reference(featureURI));
+					reader.setProfile(profile);
+					
+				}
+				//	readFeatures(featureURI, profile);
+				if (profile.size() == 0) {
+					reader.setConnection(conn);
+					profile = reader.process(new Reference(getDefaultTemplateURI(context,request,response)));
+					reader.setProfile(profile);
+				}
+			} catch (Exception x) {
+				
+			} finally {
+				//the reader closes the connection
+				reader.setCloseConnection(true);
+				try { reader.close();} catch (Exception x) {}
+				try { conn.close();} catch (Exception x) {}
 			}
 			return profile;
 		} catch (Exception x) {
@@ -104,7 +117,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 		
 	}	
-	
+	/*
 	protected void readFeatures(String uri,final Template profile) throws Exception {
 		if (uri==null) return;
 	
@@ -127,36 +140,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 			readFeaturesXML(uri,profile);
 	}
+	*/
 
-	protected void readFeaturesXML(String uri,final Template profile) {
-		if (uri==null) return;
-		Representation r = null;
-		try {
-			
-			ClientResource client = new ClientResource(uri);
-			client.setClientInfo(getRequest().getClientInfo());
-			client.setReferrerRef(getRequest().getOriginalRef());
-			r = client.get(MediaType.TEXT_XML);
-			
-			PropertyDOMParser parser = new PropertyDOMParser() {
-				@Override
-				public void handleItem(Property property)
-						throws AmbitException {
-					if (property!= null)  {
-						property.setEnabled(true);
-						profile.add(property);
-					}
-				}
-			};		
-			parser.parse(new InputStreamReader(r.getStream(),"UTF-8"));
-		} catch (Exception x) {
-			getLogger().severe(x.getMessage());
 
-		} finally {
-			try {if (r != null) r.release(); } catch (Exception x) {}
-			
-		}
-	}	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
