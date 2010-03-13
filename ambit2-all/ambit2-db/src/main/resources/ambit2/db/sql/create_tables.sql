@@ -225,6 +225,7 @@ CREATE TABLE  `models` (
   `mediatype` varchar(48) collate utf8_bin NOT NULL default 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
   `parameters` text collate utf8_bin COMMENT 'Model parameters',
   `predicted` int(10) unsigned NOT NULL COMMENT 'template for predicted variables',
+  `hidden` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`idmodel`),
   UNIQUE KEY `Index_5` USING BTREE (`name`),
   KEY `FK_models_predictors` (`predictors`),
@@ -233,12 +234,11 @@ CREATE TABLE  `models` (
   KEY `Index_6` (`algorithm`),
   KEY `Index_7` (`parameters`(255)),
   KEY `FK_models_predicted` (`predicted`),
-  CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predictors` FOREIGN KEY (`predictors`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 -- -----------------------------------------------------
 -- Table `tuples` for non-scalar values
 -- -----------------------------------------------------
