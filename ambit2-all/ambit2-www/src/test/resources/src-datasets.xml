@@ -90,6 +90,7 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="false"/>
   <properties idproperty="3" idreference="8" name="CAS" units="" comments="CasRN" islocal="false"/>
   <template idtemplate="1" name="BCF"/>
+  <template idtemplate="3" name="Empty"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
@@ -124,8 +125,8 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <query idquery="2" idsessions="1" name="test query2" content="" idtemplate="1"/>
   <query_results idquery="1" idstructure="100211" idchemical="7"  selected="1" metric="1" />
   <query_results idquery="2" idstructure="100215" idchemical="11"  selected="1" metric="1" />
-  <models idmodel="1" name="ToxTree: Cramer rules" idquery="1" predictors="1" predicted="1" dependent="1" content="dG94VHJlZS50cmVlLmNyYW1lci5DcmFtZXJSdWxlcw=="/>
-  <models idmodel="2" name="pKa" idquery="1" predictors="1" predicted="1" dependent="1" content="YW1iaXQyLmRlc2NyaXB0b3JzLlBLQVNtYXJ0c0Rlc2NyaXB0b3I="/>
+  <models idmodel="1" name="ToxTree: Cramer rules" idquery="1" predictors="3" predicted="1" dependent="3" content="dG94VHJlZS50cmVlLmNyYW1lci5DcmFtZXJSdWxlcw=="/>
+  <models idmodel="2" name="pKa" idquery="1" predictors="3" predicted="1" dependent="3" content="YW1iaXQyLmRlc2NyaXB0b3JzLlBLQVNtYXJ0c0Rlc2NyaXB0b3I="/>
   <tuples idtuple="1" id_srcdataset="2"/>
   <property_tuples idtuple="1" id="1"/>
 </dataset>

@@ -49,8 +49,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		setUpDatabase("src/test/resources/src-datasets.xml");
-
+		setDatabase();
 
         Context context = new Context();
         context.getParameters().add(Preferences.DATABASE, getDatabase());
@@ -66,7 +65,9 @@ public abstract class ResourceTest extends DbUnitTest {
         component.start();        
 	}
 
-
+	protected void setDatabase() throws Exception {
+		setUpDatabase("src/test/resources/src-datasets.xml");
+	}
 	@After
 	public void tearDown() throws Exception {
 		if (component != null)
@@ -111,7 +112,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	}
 	
 	
-	public void testAsyncTask(String uri,Form headers,Status expected, String uriExpected) throws Exception {
+	public Reference testAsyncTask(String uri,Form headers,Status expected, String uriExpected) throws Exception {
 
 		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers.getWebRepresentation());
 		Status status = response.getStatus();
@@ -140,11 +141,13 @@ public abstract class ResourceTest extends DbUnitTest {
 			} finally {
 				if (response1!=null) response1.release();	
 			}
+			Thread.yield();
+			Thread.sleep(200);
 
 		}
 		Assert.assertEquals(uriExpected,ref.toString());
 		Assert.assertEquals(expected, status);
-
+		return ref;
 	}	
 	public Response testGet(String uri, MediaType media, Status expectedStatus) throws Exception {
 		Request request = new Request();
