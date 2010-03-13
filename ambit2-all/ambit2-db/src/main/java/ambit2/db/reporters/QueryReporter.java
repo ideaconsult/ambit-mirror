@@ -37,6 +37,12 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 	protected boolean autoCommit = true;
 	protected long timeout = 0;
 	
+	
+	@Override
+	public void setCloseConnection(boolean closeConnection) {
+		super.setCloseConnection(closeConnection);
+		if (batch!=null) batch.setCloseConnection(closeConnection);
+	}
 
 	public boolean isAutoCommit() {
 		return autoCommit;
@@ -104,6 +110,7 @@ public abstract class QueryReporter<T,Q extends IQueryRetrieval<T>,Output>
 		if (isShowHeader()) header(output,query);
 
 		batch = createBatch(query);
+		batch.setCloseConnection(closeConnection);
 		batch.setTimeout(getTimeout());
 		try {
 			if (connection != null) {
