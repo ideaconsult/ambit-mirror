@@ -14,6 +14,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
@@ -28,6 +29,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTProperty;
+import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -49,7 +51,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	 */
 	private static final long serialVersionUID = -6410553622662161903L;
 	protected PropertyRDFReporter propertyReporter;
-	//protected ReferenceURIReporter referenceReporter;
+	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter;
 	protected Comparator<Property> comp;
 	
 	protected Template template;
@@ -77,6 +79,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
 			Request req) {
+		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req);
 		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req);
 	}
 
@@ -155,8 +158,10 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			dataset.addProperty(OT.OTProperty.dataEntry.createProperty(getJenaModel()),dataEntry);
 			int i = 0;
 			
+			String uri = item.getType().equals(STRUC_TYPE.NA)?
+					compoundReporter.getURI(item):uriReporter.getURI(item);
 			Individual compound = getJenaModel().createIndividual(
-					uriReporter.getURI(item),OT.OTClass.Compound.getOntClass(getJenaModel()));
+					uri,OT.OTClass.Compound.getOntClass(getJenaModel()));
 			compound.addProperty(DC.identifier, uriReporter.getURI(item));			
 			dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);
 			
