@@ -45,6 +45,8 @@ public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends Repres
 					Language.ENGLISH,CharacterSet.UTF_8);
 		} catch (IOException x) {
 			throw new AmbitException(x);
+		} finally {
+			try { reporter.close(); } catch (Exception x) {}
 		}
 		
 	};
