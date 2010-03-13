@@ -59,24 +59,28 @@ public class ValuesReader extends ValuesByTemplateReader<IStructureRecord> {
 	private static final long serialVersionUID = 3678652087132468828L;
 
 	public ValuesReader() {
-		reader = new ProcessorStructureRetrieval();
+		this(new ProcessorStructureRetrieval());
 	}
+	
+	public ValuesReader(ProcessorStructureRetrieval reader) {
+		 this.reader = reader;
+	}	
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
-		reader.setConnection(connection);
+		if (reader != null) reader.setConnection(connection);
 		
 	}
 	@Override
 	public IStructureRecord process(IStructureRecord target) throws AmbitException {
-		IStructureRecord record = super.process(reader.process(target));
+		IStructureRecord record = super.process(reader==null?target:reader.process(target));
 		return record != null?record:target;
 	}
 	@Override
 	public void close() throws SQLException {
 
 		super.close();
-		reader.close();
+		if (reader != null) 	reader.close();
 	}
 	
 	@Override
