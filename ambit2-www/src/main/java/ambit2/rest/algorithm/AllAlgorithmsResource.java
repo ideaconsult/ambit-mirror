@@ -50,14 +50,15 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			//id,class,name
 			
 			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,
-				new String[] {Algorithm.typeClustering,Algorithm.typeSingleTarget,Algorithm.typeLazyLearning,Algorithm.typeUnSupervised}},
+				new String[] {Algorithm.typeClustering,Algorithm.typeSingleTarget,Algorithm.typeLazyLearning,Algorithm.typeUnSupervised},
+				null},
 			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,
-					new String[] {Algorithm.typeClassification,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised}},
+					new String[] {Algorithm.typeClassification,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null},
 			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,
-						new String[] {Algorithm.typeRegression,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised}},
-			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {Algorithm.typeRules}},
-			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {Algorithm.typeRules}},
-			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {Algorithm.typeRules}},
+						new String[] {Algorithm.typeRegression,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null},
+			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa"},
+			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
+			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
 			{"toxtreeeye","ToxTree: Eye irritation","eye.EyeIrritationRules",
 				new Property[] 
 				{
@@ -67,7 +68,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Lipid Solubility","g/kg", toxTreeReference),
 				new Property("Water Solubility","g/l", toxTreeReference),
 				},
-				new String[] {Algorithm.typeRules}
+				new String[] {Algorithm.typeRules},
+				"http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion"
 			},
 			{"toxtreeskinirritation","ToxTree: Skin irritation","sicret.SicretRules",
 			new Property[] 
@@ -80,44 +82,50 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Vapour Pressure","Pa", toxTreeReference),
 				new Property("Surface Tension","mN/m", toxTreeReference)
 				},
-				new String[] {Algorithm.typeRules}
+				new String[] {Algorithm.typeRules},
+				"http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion"
 			},
-			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {Algorithm.typeRules}},
-			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {Algorithm.typeRules}},
-			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {Algorithm.typeRules}},
+			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {Algorithm.typeRules},
+				"http://www.opentox.org/echaEndpoints.owl#Endpoints"},
+			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {Algorithm.typeRules},
+				"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
+				},
+			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {Algorithm.typeRules},
+				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity"},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
-			},new String[] {Algorithm.typeRules}},
+			},new String[] {Algorithm.typeRules}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
 			
 			/** Descriptors */
-			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow"},
+			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#MolecularWeight"},
+			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
+			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},			{"tpsa","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor","Number of bonds","org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor","Number of atoms","org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor","Number of rotatable bonds","org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},	
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor","Chi chain descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor","Chi cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",null,new String[] {Algorithm.typeDescriptor}},			
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor","Number of bonds","org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor","Number of atoms","org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor","Number of rotatable bonds","org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor","Chi chain descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor","Chi cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null},			
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
 
-			{"org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor}},			
+			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null},			
 			
 /*
  * ;org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
@@ -163,12 +171,12 @@ ambit2.descriptors.MolecularWeight
 org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
  */
-			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain}},
-			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {Algorithm.typeAppDomain}},
-			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {Algorithm.typeAppDomain}},
-			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {Algorithm.typeAppDomain}},			
-			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain}},
-			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain}}
+			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain},null},
+			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {Algorithm.typeAppDomain},null},
+			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {Algorithm.typeAppDomain},null},
+			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {Algorithm.typeAppDomain},null},			
+			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain},null},
+			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain},null}
 			
 	};
 	
@@ -180,6 +188,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 		if (algorithmList==null) {
 			algorithmList = new ArrayList<Algorithm<String>>();
 			for (Object[] d : algorithms) {
+				System.out.println(d);
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType((String[])d[4]);
 				alg.setFormat(alg.hasType(Algorithm.typeRules)?AlgorithmFormat.JAVA_CLASS:
@@ -187,6 +196,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2].toString());
+				alg.setEndpoint(d[5]==null?null:d[5].toString());
 				if (d[3]==null)
 					alg.setInput(new Template("Empty"));
 				else {

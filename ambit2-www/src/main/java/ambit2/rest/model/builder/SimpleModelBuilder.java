@@ -8,6 +8,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
@@ -65,6 +66,8 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 			for (Property property:p) {
 				property.setEnabled(true);
 				predicted.add(property);
+				if (algorithm.getEndpoint()!=null) property.setLabel(algorithm.getEndpoint());
+				property.getReference().setType(modelHidden?_type.Algorithm:_type.Model);
 			}
 
 			return mr;			
