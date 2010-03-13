@@ -127,7 +127,7 @@ class MyQuery extends AbstractStructureQuery<String,IStructureRecord,NumberCondi
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
 	public static final String sql=
-		"select idquery,idchemical,idstructure,1 as selected,? as metric,null as text from sessions\n"+
+		"select idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,null as text from sessions\n"+
 		"join query using(idsessions)\n"+
 		"join structure where title=? and name=? and idchemical=?";
 	

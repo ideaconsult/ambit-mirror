@@ -39,7 +39,7 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 
 	
 	public final static String sqlSMILES = 
-		"select ? as idquery,structure.idchemical,idstructure,1 as selected,1 as metric,null as text from structure join chemicals using(idchemical) %s where %s ((%s %s ?) or (%s %s ?))";
+		"select ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text from structure join chemicals using(idchemical) %s where %s ((%s %s ?) or (%s %s ?))";
 	
 	public String getSQL() throws AmbitException {
 		return String.format(sqlSMILES,

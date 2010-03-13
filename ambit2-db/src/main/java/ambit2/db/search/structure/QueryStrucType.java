@@ -40,7 +40,7 @@ public class QueryStrucType extends AbstractStructureQuery<IStructureRecord,STRU
 	}
 
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,cast(type_structure as unsigned) as metric,type_structure from structure where %s";
+		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,cast(type_structure as unsigned) as metric,type_structure from structure where %s";
 	public final static String where = " type_structure %s ?";
 
 	
@@ -89,6 +89,10 @@ public class QueryStrucType extends AbstractStructureQuery<IStructureRecord,STRU
 		if (rs.getObject(5)!=null)
 			return new QLabel(QUALITY.values()[rs.getInt(5)-1]);
 		else return null;
+	}
+	@Override
+	protected void retrieveStrucType(IStructureRecord record, ResultSet rs)
+			throws SQLException {
 	}
 	
 }

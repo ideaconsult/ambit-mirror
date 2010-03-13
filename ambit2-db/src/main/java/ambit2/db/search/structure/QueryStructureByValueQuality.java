@@ -19,7 +19,7 @@ public class QueryStructureByValueQuality extends AbstractStructureQuery<String,
 	 */
 	private static final long serialVersionUID = -3232148472829083139L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,cast(label as unsigned) as metric,label as text from structure\n"+
+		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,cast(label as unsigned) as metric,label as text from structure\n"+
 		"where idstructure in\n"+
 		"(\n"+
 		"select idstructure from properties join property_values  using(idproperty) left join quality_labels using(id) where quality_labels.user_name=? %s\n"+
