@@ -28,6 +28,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeLazyLearning = "http://www.opentox.org/algorithmTypes.owl#LazyLearning";
 	public static String typeSupervised = "http://www.opentox.org/algorithmTypes.owl#Supervised";
 	public static String typeUnSupervised = "http://www.opentox.org/algorithmTypes.owl#Unsupervised";
+	public static String typeAppDomain = "http://www.opentox.org/algorithmTypes.owl#ApplicabilityDomain";
 	
 	public enum AlgorithmFormat {
 		JAVA_CLASS {
@@ -47,7 +48,13 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getMediaType() {
 				return "application/x-java-serialized-object";
 			}
-		};
+		},
+		COVERAGE_SERIALIZED {
+			@Override
+			public String getMediaType() {
+				return "application/x-coverage-serialized-object";
+			}
+		};		
 		public abstract String getMediaType();
 		};
 	protected String id;
@@ -63,7 +70,11 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 
 	public boolean isRequiresDataset() {
 		return hasType(typeClustering) || hasType(typeClassification) || hasType(typeRegression) || 
-		hasType(typeLearning) || hasType(typeLazyLearning) || hasType(typeEagerLearning);
+		hasType(typeLearning) || hasType(typeLazyLearning) || hasType(typeEagerLearning) ||
+		hasType(typeDescriptor) || hasType(typeAppDomain) ;
+	}
+	public boolean isDataProcessing() {
+		return hasType(typeDescriptor);
 	}
 
 	public String[] getType() {
