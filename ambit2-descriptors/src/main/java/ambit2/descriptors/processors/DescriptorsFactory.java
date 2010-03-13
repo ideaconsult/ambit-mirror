@@ -81,22 +81,29 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 				}				
 				DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
 				for (String name : value.getNames()) {
-					Property property = new Property(name,
-							LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),
-									descriptor.getSpecification().getSpecificationReference())
-								);
-					property.setLabel(descriptor.getSpecification().getSpecificationReference());
-					property.setClazz(clazz);
-					p.add(property);
+					p.add(descriptorValue2Property(descriptor,name,value));
 				}
 				return p;				
 			} else return null;
 	}
 	
+	public static Property descriptorValue2Property(IMolecularDescriptor descriptor, String name, DescriptorValue value) throws Exception  {
+
+		Property property = new Property(name,
+				LiteratureEntry.getInstance(value.getSpecification().getImplementationTitle(),
+						"Algorithm")
+					);
+		property.setLabel(value.getSpecification().getSpecificationReference());
+		if (descriptor!=null)
+			property.setClazz(descriptor.getClass());
+
+		return property;
+	}
 	public static Property createDescriptor2Property(String className) throws Exception  {
 		IMolecularDescriptor descriptor = createDescriptor(className);
 		if (descriptor!=null) {
 			Property property = Property.getInstance(descriptor.getClass().getName().substring(descriptor.getClass().getName().lastIndexOf('.')+1),
+					
 					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
 						);
 			property.setLabel(descriptor.getClass().getName());

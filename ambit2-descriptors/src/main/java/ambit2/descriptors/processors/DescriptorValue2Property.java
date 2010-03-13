@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleResult;
@@ -74,20 +75,14 @@ public class DescriptorValue2Property extends DefaultAmbitProcessor<DescriptorVa
 		return record;
 	}
 	
-	public Iterable<Property> getPropertyNames(DescriptorValue descriptor) {
+	public Iterable<Property> getPropertyNames(DescriptorValue value) {
 		List<Property> p = new ArrayList<Property>();
 
-		for (String name: descriptor.getNames()) {
-			Property property = 
-			Property.getInstance(name,
-					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),
-					descriptor.getSpecification().getSpecificationReference())
-					);
-			property.setLabel(descriptor.getSpecification().getSpecificationReference());
-			property.setEnabled(true);
+		for (String name: value.getNames()) try {
+			Property property = DescriptorsFactory.descriptorValue2Property(null, name, value);
 			p.add(property);				
 
-		}
+		} catch (Exception x) {}
 		return p;
 	}	
 	
