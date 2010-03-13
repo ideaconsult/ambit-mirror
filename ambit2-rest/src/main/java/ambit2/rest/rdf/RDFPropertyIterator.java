@@ -13,6 +13,7 @@ import org.restlet.routing.Template;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -22,6 +23,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -31,7 +33,6 @@ import com.hp.hpl.jena.vocabulary.RDF;
  *
  */
 public class RDFPropertyIterator extends RDFObjectIterator<Property> {
-	protected RDFReferenceIterator referenceIterator;
 	
 	public RDFPropertyIterator(Representation representation,MediaType mediaType) throws ResourceException {
 		super(representation,mediaType,OT.OTClass.Feature.toString());
@@ -127,12 +128,42 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 				property.setUnits("");
 			}
 			
-			Statement stmt = newEntry.getProperty(OT.OTProperty.hasSource.createProperty(jenaModel));
+			Statement stmt = newEntry.getProperty(DC.creator);
+			
+			String creator = (stmt==null)?"Default":(stmt.getObject()==null)?
+						"Default":
+						stmt.getObject().isLiteral()?((Literal)stmt.getObject()).getString():stmt.getObject().toString();
+			
+			String hasSource = creator;
+			stmt = newEntry.getProperty(OT.OTProperty.hasSource.createProperty(jenaModel));
 			if ((stmt!=null) && (stmt.getObject()!=null) ) {
-				RDFNode reference = stmt.getObject();
-				RDFReferenceIterator iterator = new RDFReferenceIterator(jenaModel);
-				iterator.setBaseReference(getBaseReference());
-				property.setReference(iterator.parseRecord(reference, property.getReference()));
+				RDFNode source = stmt.getObject();
+				if (source.isURIResource()) {
+					hasSource = ((Resource)source).getURI();
+					if (hasSource.startsWith(String.format("%s/algorithm/",baseReference.toString()))) {
+						hasSource = hasSource.substring(0,baseReference.toString().length()+11);
+					} else if (hasSource.startsWith(String.format("%s/model/",baseReference.toString()))) {
+						hasSource = hasSource.substring(0,baseReference.toString().length()+7);
+					} if (hasSource.startsWith(String.format("%s/dataset/",baseReference.toString()))) {
+						hasSource = hasSource.substring(0,baseReference.toString().length()+9);
+					}
+							
+				} else if (source.isLiteral()) {
+					hasSource = ((Literal)source).getString();
+				} else if (source.isAnon()) {
+					hasSource = source.toString(); //what should we do here ?
+				} else hasSource = source.toString();
+			}
+			
+			LiteratureEntry le = new LiteratureEntry(hasSource,creator);
+			property.setReference(le);
+			
+			stmt = newEntry.getProperty(RDF.type);
+			RDFNode type = stmt==null?null:stmt.getObject();
+			if ((type != null) && type.isURIResource()) { 
+				if (type.equals(OT.OTClass.Algorithm)) le.setType(_type.Algorithm);
+				else if (type.equals(OT.OTClass.Model)) le.setType(_type.Model);
+				else if (type.equals(OT.OTClass.Dataset)) le.setType(_type.Dataset);
 			}
 		}
 		property.setClazz(String.class);
@@ -192,5 +223,6 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			try {if (r != null) r.release(); } catch (Exception x) {}
 			
 		}
-	}		
+	}	
+
 }

@@ -238,7 +238,7 @@ public class PropertyResourceTest extends ResourceTest {
 		Assert.assertEquals("http://localhost:8181/feature/4", response.getLocationRef().toString());
 		
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='CasRN' and title='http://my.resource.org' and url='http://my.resource.org'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='CasRN' and title='http://my.resource.org' and url='Default'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}		
@@ -394,7 +394,7 @@ public class PropertyResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();
         //don't have consistent way to store dc:creator, so we are ignoring it
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://localhost:8181' and url='http://localhost:8181'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://opentox.ntua.gr'");
 		//ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='http://other.com/feature/200' and comments='http://other.com/feature/200' and title='http://opentox.ntua.gr' and url='http://localhost:8181'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();

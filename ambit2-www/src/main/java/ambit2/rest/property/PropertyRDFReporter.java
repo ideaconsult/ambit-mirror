@@ -6,6 +6,7 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -13,7 +14,6 @@ import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTClass;
-import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -94,22 +94,36 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		}
 		feature.addProperty(OWL.sameAs,jenaModel.createResource(uri));
 		
-		Individual reference = ReferenceRDFReporter.addToModel(jenaModel, item.getReference(), referenceReporter);
-		feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), reference);
+		//ot:hasSource  ; reference.title used as source URI, reference.url used as object type  -
+		//somewhat awkward, but title is the unique field in the catalog_references table
 		
-		//TODO remove, NumericFeature is used instead
-		/*
-		if (item.getClazz()!=null) {
-			feature.addProperty(DC.type,
-					 (item.getClazz()==Number.class)?
-							AbstractPropertyRetrieval._PROPERTY_TYPE.NUMERIC.getXSDType():
-							AbstractPropertyRetrieval._PROPERTY_TYPE.STRING.getXSDType()
-							);
+		uri = item.getTitle();
+		//drop using /reference objects
+		if (uri.indexOf("http://")<0) {
+			Individual source  = null;
 			
-
+			
+			if (_type.Algorithm.equals(item.getReference().getType())) {
+				uri = String.format("%s/algorithm/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+				source = jenaModel.createIndividual(uri,OT.OTClass.Algorithm.createOntClass(jenaModel));
+				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
+			} else if (_type.Model.equals(item.getReference().getType())) {
+				uri = String.format("%s/model/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+				source = jenaModel.createIndividual(uri,OT.OTClass.Model.createOntClass(jenaModel));
+				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
+			} else if (_type.Dataset.equals(item.getReference().getType())) {
+				uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+				source = jenaModel.createIndividual(uri,OT.OTClass.Dataset.createOntClass(jenaModel));
+				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
+			} else {
+				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
+			}
+			feature.addProperty(DC.creator, item.getReference().getURL());
+		}  else {
+			feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), jenaModel.createResource(uri));
+			feature.addProperty(DC.creator, item.getReference().getURL());
 		}
-		*/
-		
+
 		return feature;
 	}	
 	

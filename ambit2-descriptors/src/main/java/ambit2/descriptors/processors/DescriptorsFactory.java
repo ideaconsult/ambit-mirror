@@ -40,6 +40,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.ILiteratureEntry._type;
 
 public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Property>> {
 
@@ -89,10 +90,11 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 	
 	public static Property descriptorValue2Property(IMolecularDescriptor descriptor, String name, DescriptorValue value) throws Exception  {
 
-		Property property = new Property(name,
-				LiteratureEntry.getInstance(value.getSpecification().getImplementationTitle(),
-						"Algorithm")
-					);
+		LiteratureEntry le = LiteratureEntry.getInstance(value.getSpecification().getImplementationTitle(),value.getSpecification().getSpecificationReference());
+		le.setType(_type.Algorithm);
+		Property property = new Property(name,le);
+
+
 		property.setLabel(value.getSpecification().getSpecificationReference());
 		if (descriptor!=null)
 			property.setClazz(descriptor.getClass());
