@@ -10,6 +10,9 @@ public class PropertyModelResourceTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d/model/1/predicted", port);
 	}
+	protected void setDatabase() throws Exception {
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
+	}
 	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
