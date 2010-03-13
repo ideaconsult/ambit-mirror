@@ -20,7 +20,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -61,6 +61,16 @@
     	<groupId>com.hp.hpl.jena</groupId>
     	<artifactId>arq</artifactId>
     	<version>2.8.2</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.hp.hpl.jena</groupId>
+    	<artifactId>iri</artifactId>
+    	<version>0.8</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.hp.hpl.jena</groupId>
+    	<artifactId>arq-extra</artifactId>
+    	<version>2.7.0</version>
     </dependency>
  
   </dependencies>
