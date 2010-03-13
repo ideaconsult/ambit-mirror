@@ -15,6 +15,17 @@ public class ModelQueryResults extends ModelWrapper<
 			IQueryRetrieval<IStructureRecord>,
 			QueryStoredResults,
 			IQueryRetrieval<IStructureRecord>,String> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6622500017764287129L;
+	protected boolean hidden = false;
+	public boolean isHidden() {
+		return hidden;
+	}
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
 	@Override
 	public String toString() {
 		return (getName()==null)||(getName().equals(""))?

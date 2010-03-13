@@ -41,6 +41,14 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
 	protected static final AmbitLogger logger = new AmbitLogger(AbstractDBProcessor.class);
 	protected SessionID sessionID = null;
 	protected Connection connection; 
+	protected boolean closeConnection = true;
+	
+	public boolean isCloseConnection() {
+		return closeConnection;
+	}
+	public void setCloseConnection(boolean closeConnection) {
+		this.closeConnection = closeConnection;
+	}
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -53,7 +61,7 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
 	}
 
 	public void setConnection(Connection connection) throws DbAmbitException {
-		if ((this.connection != null) && (this.connection != connection)) try {
+		if ((this.connection != null) && (this.connection != connection) && isCloseConnection()) try {
 			close();
 		} catch (SQLException x) {
 		    logger.error(x);      
@@ -62,7 +70,7 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
 	}
 
 	public void close() throws SQLException {
-    		if ((connection != null) && (!connection.isClosed()))
+    		if ((connection != null) && (!connection.isClosed()) && isCloseConnection())
     			connection.close();
     		connection = null;
 	}

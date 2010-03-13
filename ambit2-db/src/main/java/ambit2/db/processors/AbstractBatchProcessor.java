@@ -63,14 +63,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 	protected ProcessorsChain<ItemInput,IBatchStatistics,IProcessor> processor;	
 	protected long timeout = 0;
 	protected boolean cancelled = false;
-	protected boolean closeConnection = true;
 
-	public boolean isCloseConnection() {
-		return closeConnection;
-	}
-	public void setCloseConnection(boolean closeConnection) {
-		this.closeConnection = closeConnection;
-	}
 	public long getTimeout() {
 		return timeout;
 	}
