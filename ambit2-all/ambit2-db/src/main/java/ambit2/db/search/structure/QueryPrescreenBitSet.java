@@ -18,9 +18,9 @@ import ambit2.db.search.QueryParam;
  */
 public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,NumberCondition> {
 	protected String sql_struc = 
-	"select ? as idquery,idchemical,idstructure,1 as selected,fp.bc+sk.bc as metric,null as text from structure\n";
+	"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,fp.bc+sk.bc as metric,null as text from structure\n";
 	protected String sql_chemical = 
-	"select ? as idquery,idchemical,idstructure,1 as selected,fp.bc+sk.bc as metric,null as text from structure "+group;
+	"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,fp.bc+sk.bc as metric,null as text from structure "+group;
 
 	protected String sql = 
 	"%s\n"+

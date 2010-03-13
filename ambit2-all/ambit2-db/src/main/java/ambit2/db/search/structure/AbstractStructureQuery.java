@@ -35,6 +35,7 @@ import java.sql.SQLException;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.IQueryCondition;
@@ -52,13 +53,14 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 	protected boolean chemicalsOnly = false;
 	protected final static String group = "inner join (select min(preference) as p ,idchemical from structure group by idchemical) ids using(idchemical)";
 	protected final static String where_group = " structure.preference=ids.p and ";
-
+	private static final String selectedCol = "selected";
 	
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = new StructureRecord();
 			record.setIdchemical(rs.getInt(2));
 			record.setIdstructure(rs.getInt(3));
+			retrieveStrucType(record, rs);
 			//metric
 			retrieveMetric(record, rs);
 			return record;
@@ -66,6 +68,11 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 			throw new AmbitException(x);
 		}
 	}
+	protected void retrieveStrucType(IStructureRecord record, ResultSet rs) throws SQLException {
+		try {
+			if (rs.getBoolean(selectedCol)) record.setType(STRUC_TYPE.D2noH); else record.setType(STRUC_TYPE.NA);
+		} catch (Exception x) { record.setType(STRUC_TYPE.D1);}
+	}		
 	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
 	}	
 

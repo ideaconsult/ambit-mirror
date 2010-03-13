@@ -14,7 +14,7 @@ public class QueryDatasetByID extends AbstractStructureQuery<String,Integer,Numb
 	 */
 	private static final long serialVersionUID = -8329798753353233477L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,1 as selected,1 as metric,null as text from structure join struc_dataset using(idstructure) where id_srcdataset %s %s";
+		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text from structure join struc_dataset using(idstructure) where id_srcdataset %s %s";
 	public QueryDatasetByID(SourceDataset dataset) {
 		this(dataset==null?null:dataset.getId());
 	}

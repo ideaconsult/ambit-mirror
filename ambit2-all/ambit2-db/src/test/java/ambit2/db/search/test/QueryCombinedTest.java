@@ -82,7 +82,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 
 		qc.setCombine_as_and(false);
 		
-		Assert.assertEquals("select ? as idquery,idchemical,idstructure,1 as selected,? as metric,? as text from structure where idstructure <= ? order by type_structure desc\nunion\nselect ? as idquery,idchemical,idstructure,1 as selected,? as metric,? as text from structure where idstructure between  ? and ? order by type_structure desc",
+		Assert.assertEquals("select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,? as text from structure where idstructure <= ? order by type_structure desc\nunion\nselect ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,? as text from structure where idstructure between  ? and ? order by type_structure desc",
 				qc.getSQL());
 		
 		Assert.assertNotNull(q.getParameters().get(1).getValue());
@@ -143,7 +143,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
 			Assert.assertEquals(11,rs.getInt(2));
 			Assert.assertEquals(100215,rs.getInt(3));
-			Assert.assertEquals(1,rs.getInt(4));
+			Assert.assertEquals(0,rs.getInt(4));
 			Assert.assertEquals(12.0,rs.getDouble(5));			
 
 		}
