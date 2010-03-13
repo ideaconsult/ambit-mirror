@@ -80,6 +80,7 @@ public class OpenTox {
 		public Object[] getIds(String uri,Reference baseReference)  {
 			return null;
 		}
+		public Object[] getIds(String uri,Template template)  { return null; }
 	};
 	
 	public enum params  {
