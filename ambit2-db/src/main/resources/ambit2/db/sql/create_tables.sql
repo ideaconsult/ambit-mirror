@@ -57,10 +57,10 @@ CREATE TABLE  `catalog_references` (
   `idreference` int(11) unsigned NOT NULL auto_increment,
   `title` varchar(255) character set utf8 collate utf8_bin NOT NULL,
   `url` varchar(255) character set utf8 collate utf8_bin NOT NULL,
+  `type` enum('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook') NOT NULL default 'Dataset',
   PRIMARY KEY  (`idreference`),
   UNIQUE KEY `Index_2` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- -----------------------------------------------------
 -- Table `chemicals`
 -- -----------------------------------------------------

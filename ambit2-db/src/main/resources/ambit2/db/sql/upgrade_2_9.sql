@@ -70,3 +70,6 @@ insert into version (idmajor,idminor,comment) values (2,9,"AMBIT2 schema");
 ALTER TABLE `structure` ADD COLUMN `preference` INTEGER UNSIGNED NOT NULL DEFAULT 9999 AFTER `atomproperties`, ADD INDEX `Index_6`(`preference`);
 
 ALTER TABLE `models` ADD COLUMN `hidden` BOOLEAN NOT NULL DEFAULT 0 AFTER `predicted`;
+
+ALTER TABLE `catalog_references` ADD COLUMN `type` ENUM('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook') NOT NULL DEFAULT 'Dataset' AFTER `url`;
+

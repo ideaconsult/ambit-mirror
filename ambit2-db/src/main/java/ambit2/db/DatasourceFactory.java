@@ -199,7 +199,7 @@ class DataSourceAndPool {
 	}
 	public ObjectPool getPool() {
 		ObjectPool pool = poolableConnectionFactory.getPool();
-	//	System.out.println(String.format("Active %d Idle %d",pool.getNumActive(),pool.getNumIdle()));
+		System.out.println(String.format("Active %d Idle %d",pool.getNumActive(),pool.getNumIdle()));
 		return pool;
 	}
 

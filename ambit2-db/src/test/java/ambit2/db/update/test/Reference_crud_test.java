@@ -36,6 +36,7 @@ import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.DeleteReference;
@@ -46,6 +47,7 @@ public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry
 	@Override
 	protected IQueryUpdate<Object,ILiteratureEntry> createQuery() throws Exception {
 		ILiteratureEntry ref = LiteratureEntry.getInstance("newtitle","newurl");
+		ref.setType(_type.Model);
 		return new CreateReference(ref);
 	}
 
@@ -54,7 +56,9 @@ public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='newtitle' and url='newurl'");
+		
 		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(_type.Model.toString(),table.getValue(0,"type"));
 		c.close();
 	}
 
@@ -78,6 +82,7 @@ public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry
 	protected IQueryUpdate<Object,ILiteratureEntry> updateQuery() throws Exception {
 		LiteratureEntry ref = LiteratureEntry.getInstance("New name","newurl");
 		ref.setId(2);
+		ref.setType(_type.Algorithm);
 		return new UpdateReference(ref);
 	}
 
@@ -87,8 +92,9 @@ public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM catalog_references where title='IUPAC name'");
 		Assert.assertEquals(0,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM catalog_references where title='New name'");
+		table = 	c.createQueryTable("EXPECTED_USER","SELECT idreference,title,url,type FROM catalog_references where title='New name'");
 		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(_type.Algorithm.toString(),table.getValue(0,"type"));
 		
 		c.close();
 		
