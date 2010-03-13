@@ -34,6 +34,7 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 	protected IStoredQuery storedQuery;
 	protected boolean clearPreviousContent = false;
 	protected Template template;
+	protected Reference applicationRootReference;
 	
 	public boolean isClearPreviousContent() {
 		return clearPreviousContent;
@@ -49,7 +50,8 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 			Context context,
 			IStoredQuery storedQuery
 			) throws ResourceException {
-		super(form, applicationRootReference, context);
+		super(form, context);
+		this.applicationRootReference = applicationRootReference;
 		String dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		sourceReference = new Reference(dataset);

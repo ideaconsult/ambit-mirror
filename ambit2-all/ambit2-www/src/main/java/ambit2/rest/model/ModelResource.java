@@ -1,5 +1,7 @@
 package ambit2.rest.model;
 
+import java.sql.Connection;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -7,20 +9,30 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryTemplateReporter;
+import ambit2.db.search.property.ModelTemplates;
 import ambit2.db.update.model.ReadModel;
+import ambit2.model.numeric.DataCoverage;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.model.predictor.CoveragePredictor;
+import ambit2.rest.model.predictor.DescriptorPredictor;
+import ambit2.rest.model.predictor.WekaPredictor;
+import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableDescriptorCalculator;
@@ -111,26 +123,105 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
 	}
 	
+	protected void readVariables(ModelQueryResults model) throws ResourceException {
+		
+		ModelTemplates query = new ModelTemplates();
+		query.setFieldname(model);
+
+		QueryTemplateReporter<ModelTemplates> reporter = null;
+		Connection connection = null;
+		try {
+			DBConnection dbc = new DBConnection(getContext());
+			connection = dbc.getConnection(getRequest());
+			
+			query.setValue("dependent");
+			reporter = new QueryTemplateReporter<ModelTemplates>(model.getDependent());
+			reporter.setCloseConnection(false);
+			reporter.setConnection(connection);
+			//dependent
+			try {
+				reporter.process(query);
+			} catch (NotFoundException x) {
+				//this is ok
+			}
+		
+
+			query.setValue("independent");
+			reporter.setConnection(connection);
+			reporter.setOutput(model.getPredictors());
+			try {
+				reporter.process(query);
+			} catch (NotFoundException x) {
+				//ok
+			}
+
+			query.setValue("predicted");
+			reporter.setConnection(connection);
+			reporter.setOutput(model.getPredicted());
+			reporter.process(query);
+			
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		
+		try {
+			reporter.setCloseConnection(true);
+			reporter.close();
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		try {	connection.close(); 	} catch (Exception x) {}
+
+
+	}
 	@Override
 	protected CallableQueryProcessor createCallable(Form form,	ModelQueryResults model) throws ResourceException {
 
 		try {
-			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType()))
+			readVariables(model);
+			
+			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
+				WekaPredictor predictor = new WekaPredictor(
+						getRequest().getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+				
 				return //reads Instances, instead of IStructureRecord
-				new CallableWekaPredictor(
+				new CallableWekaPredictor<Object>(
 						form,
 						getRequest().getRootRef(),
 						getContext(),
+						predictor)
+						;
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
+				CoveragePredictor predictor = new CoveragePredictor(
+						getRequest().getRootRef(),
 						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
-			else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),null);
+				
+				return //reads Instances, instead of IStructureRecord
+				new CallableWekaPredictor<DataCoverage>(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						predictor)
+						;
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+				
+				DescriptorPredictor predictor = new DescriptorPredictor(
+						getRequest().getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+						new PropertyURIReporter(getRequest()),
+						null
+						);
 				return
 				new CallableDescriptorCalculator(
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+						predictor
+						);
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
 		} catch (ResourceException x) {
 			throw x;
@@ -217,5 +308,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		}
 	}
 	
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		return super.post(entity, variant);
+	}
 }
 

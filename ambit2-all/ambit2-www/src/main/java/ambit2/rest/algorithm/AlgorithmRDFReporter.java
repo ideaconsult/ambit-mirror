@@ -43,8 +43,6 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 				OT.OTClass.Algorithm.getOntClass(getJenaModel()));
 		algorithm.addLiteral(DC.title,
 				 getJenaModel().createTypedLiteral(item.getName(),XSDDatatype.XSDstring));
-		algorithm.addLiteral(DC.identifier,
-				 getJenaModel().createTypedLiteral(reporter.getURI(item),XSDDatatype.XSDanyURI));
 		algorithm.addLiteral(DC.date,
 				 getJenaModel().createTypedLiteral(new Date(System.currentTimeMillis()),XSDDatatype.XSDdateTime));		
 		algorithm.addLiteral(DC.format,

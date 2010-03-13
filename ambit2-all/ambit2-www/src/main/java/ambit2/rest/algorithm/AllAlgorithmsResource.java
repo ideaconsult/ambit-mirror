@@ -28,7 +28,11 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.builder.SimpleModelBuilder;
+import ambit2.rest.model.predictor.DescriptorPredictor;
+import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableDescriptorCalculator;
+import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
@@ -88,15 +92,83 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			},new String[] {Algorithm.typeRules}},
 			
 			/** Descriptors */
-			{"xlogp","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"zagrebIndex","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"molweight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor}},
-			{"whim","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"tpsa","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"lipinskifailures","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}},
-			{"BCUT","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor}}
+			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
 			
+			{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},			{"tpsa","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor","Number of bonds","org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor","Number of atoms","org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor","Number of rotatable bonds","org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
 			
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor","Chi chain descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor","Chi cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",null,new String[] {Algorithm.typeDescriptor}},			
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+
+			{"org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor}},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor}},			
+			
+/*
+ * ;org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge
+;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass
+;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability
+;org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.IPMolecularDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor
+org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor
+ambit2.descriptors.MolecularWeight
+;org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor
+org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
+;org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
+ */
+			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain}},
+			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {Algorithm.typeAppDomain}},
+			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {Algorithm.typeAppDomain}},
+			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {Algorithm.typeAppDomain}},			
+			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain}},
+			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain}}
 			
 	};
 	
@@ -110,7 +182,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			for (Object[] d : algorithms) {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType((String[])d[4]);
-				alg.setFormat(alg.hasType(Algorithm.typeRules)?AlgorithmFormat.JAVA_CLASS:AlgorithmFormat.WEKA);
+				alg.setFormat(alg.hasType(Algorithm.typeRules)?AlgorithmFormat.JAVA_CLASS:
+						alg.hasType(Algorithm.typeAppDomain)?AlgorithmFormat.COVERAGE_SERIALIZED:AlgorithmFormat.WEKA);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2].toString());
@@ -229,28 +302,73 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						getContext(),
 						algorithm,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-						new AlgorithmURIReporter(getRequest())
+						new AlgorithmURIReporter(getRequest()),
+						false
 						);	
 			else if (algorithm.hasType(Algorithm.typeDescriptor)) {
 				try {
-					CallableSimpleModelCreator mc = new CallableSimpleModelCreator(
+					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(
 							form,
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new AlgorithmURIReporter(getRequest()),
+							true
+							);	
+					Reference modelRef = modelCreator.call();
+					ModelQueryResults model = modelCreator.getModel();
+					
+					DescriptorPredictor predictor = new DescriptorPredictor(
+							getRequest().getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new PropertyURIReporter(getRequest()),
+							null
+							);
+					return
+					new CallableDescriptorCalculator(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							predictor
+							);					
+					/*
+					SimpleModelBuilder builder = new SimpleModelBuilder(
+							getRequest().getRootRef(),
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 							new AlgorithmURIReporter(getRequest())					
 							);
-					ModelQueryResults model = mc.createModel();
+					ModelQueryResults model = builder.process(algorithm);
+					
+					DescriptorPredictor predictor = new DescriptorPredictor(
+							getRequest().getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new PropertyURIReporter(getRequest()),
+							null
+								);
 					return new CallableDescriptorCalculator(
 							form,
 							getRequest().getRootRef(),
 							getContext(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
+							predictor
+							);
+							*/
+				} catch (ResourceException x) {
+					throw x;
 				} catch (Exception x) {
 					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 				}
+			} else if (algorithm.hasType(Algorithm.typeAppDomain)) {				
+				
+				return new CallableNumericalModelCreator(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						algorithm,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+						new AlgorithmURIReporter(getRequest()));					
 			} else {
 					
 				return new CallableWekaModelCreator(

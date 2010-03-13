@@ -12,26 +12,28 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.model.ModelQueryResults;
-import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.model.CreateModel;
-import ambit2.rest.algorithm.AlgorithmURIReporter;
-import ambit2.rest.model.ModelURIReporter;
+import ambit2.db.update.model.ReadModel;
+import ambit2.rest.model.builder.ModelBuilder;
 
-public abstract class CallableModelCreator<Item>  extends	CallableQueryProcessor<Object, Item> {
-	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter;
-	protected AlgorithmURIReporter alg_reporter;
+public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>>  extends	CallableQueryProcessor<Object, Item> {
 	protected Algorithm algorithm;
+	protected Builder builder; 
+	protected ModelQueryResults model;
 	
-	public CallableModelCreator(Form form,
-			Reference applicationRootReference, Context context,
+	public ModelQueryResults getModel() {
+		return model;
+	}
+	public CallableModelCreator(
+			Form form,
+			Context context,
 			Algorithm algorithm,
-			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-			AlgorithmURIReporter alg_reporter) {
-		super(form, applicationRootReference, context);
-		this.reporter = reporter;
+			Builder builder) {
+		super(form, context);
 		this.algorithm = algorithm;
-		this.alg_reporter = alg_reporter;
-		 
+		this.builder = builder;
+		
 	}
 	/**
 	 * Writes the model into database and returns a reference
@@ -40,12 +42,32 @@ public abstract class CallableModelCreator<Item>  extends	CallableQueryProcessor
 	protected Reference createReference(Connection connection) throws Exception {
 		UpdateExecutor<CreateModel> x = new UpdateExecutor<CreateModel>();
 		try {
-			ModelQueryResults model = createModel();
+			model = createModel();
 			CreateModel update = new CreateModel(model);
 			
 			x.setConnection(connection);
 			x.process(update);
-			return new Reference(reporter.getURI(model));
+			
+			if ((model.getId()==null) || (model.getId()<0)) {
+				ReadModel q = new ReadModel();
+				q.setFieldname(model.getName());
+				QueryExecutor<ReadModel> exec = new QueryExecutor<ReadModel>();
+				exec.setConnection(connection);
+				java.sql.ResultSet rs = null;
+				try {
+					rs = exec.process(q);
+					while (rs.next()) {
+						ModelQueryResults result = q.getObject(rs);
+						model.setId(result.getId());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					try {rs.close(); } catch (Exception xx) { }
+				}
+				
+			}
+			return new Reference(builder.getModelReporter().getURI(model));
 		} catch (Exception e) {
 			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;
@@ -54,7 +76,10 @@ public abstract class CallableModelCreator<Item>  extends	CallableQueryProcessor
 		}
 	}
 	
-	protected abstract ModelQueryResults createModel() throws Exception;
+	
+	protected ModelQueryResults createModel() throws Exception {
+		return builder.process(algorithm);
+	}
 	
 	@Override
 	protected ProcessorsChain<Item, IBatchStatistics, IProcessor> createProcessors()

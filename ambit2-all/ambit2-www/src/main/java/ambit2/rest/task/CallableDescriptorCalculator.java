@@ -10,31 +10,28 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
-import ambit2.db.readers.IQueryRetrieval;
 import ambit2.descriptors.processors.DescriptorsFactory;
-import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.predictor.DescriptorPredictor;
 
-public class CallableDescriptorCalculator extends CallableModelPredictor<IStructureRecord> {
+public class CallableDescriptorCalculator extends CallableModelPredictor<IStructureRecord,DescriptorPredictor> {
 
 	public CallableDescriptorCalculator(Form form,
 			Reference appReference,Context context,
-			ModelQueryResults model,
-			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter) {
-		super(form, appReference, context, model, reporter);
+			DescriptorPredictor predictor) {
+		super(form, appReference, context, predictor);
 
 	}
-	protected IProcessor<IStructureRecord,IStructureRecord> createTranslator(ModelQueryResults model) throws Exception {
-		return new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws ambit2.base.exceptions.AmbitException {
-				return (IStructureRecord)target;
-			};
-		};
-	}	
-	protected IProcessor<IStructureRecord,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception {
+
+	@Override
+	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() {
+		//DescriptorCalculator has a writer embedded
+		return null;
+	}
+	
+	protected static IProcessor<IStructureRecord,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception {
 		if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType()))
 			try {
 				Profile<Property> p = new Profile<Property>();
