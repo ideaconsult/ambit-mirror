@@ -6,15 +6,26 @@ import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.property.ProfileReader;
+import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
+	@Override
+	protected void setDatabase() throws Exception {
+		setUpDatabase("src/test/resources/num-datasets.xml");
+	}
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/algorithm", port);
@@ -37,7 +48,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 19;
+		return count == 25;
 	}	
 	
 	@Test
@@ -56,37 +67,50 @@ public class AlgorithmResourceTest extends ResourceTest {
 		}
 		return count > 0;
 	}	
-	@Test
-	public void testPost() throws Exception {
-		Form headers = new Form();  
-		testAsyncTask(
-				String.format("http://localhost:%d/algorithm/toxtreecramer", port),
-				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/model/%s", port,"ToxTree%3A+Cramer+rules"));
-		testAsyncTask(
-				String.format("http://localhost:%d/algorithm/toxtreecramer2", port),
-				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/model/3", port));
-		
-	}
+
 	
 	@Test
 	public void testCalculateLogP() throws Exception {
 		Form headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
-		testAsyncTask(
-				String.format("http://localhost:%d/algorithm/xlogp", port),
+		Reference ref = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
 				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/dataset/%s", port,"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FXLogP%2Fpredicted"));
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		
+		ref = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+			
+		int count = 0;
+		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		i.setCloseModel(true);
+		while (i.hasNext()) {
+			System.out.println(i.next());
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(1,count);
 	}	
 	@Test
 	public void testCalculateBCUT() throws Exception {
 		Form headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
-				String.format("http://localhost:%d/algorithm/BCUT", port),
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor", port),
 				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/dataset/%s", port,"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
+						));		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 	}	
 	public void testLoad() throws Exception {
 		for (int i=0; i < 100;i++) {
@@ -132,6 +156,134 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		
 	}	
+	
+	@Test
+	public void testRanges() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/pcaRanges", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+	}		
+	@Test
+	public void testDistanceEuclidean() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/distanceEuclidean", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+	}			
+	
+	@Test
+	public void testDistanceCityBlock() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/distanceCityBlock", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+	}		
+	
+	@Test
+	public void testDistanceMahalanobis() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/distanceMahalanobis", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+	}	
+	
+	@Test
+	public void testnparamdensity() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/nparamdensity", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Probability density'");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Probability density'");
+		Assert.assertEquals(4,table.getRowCount());
+
+		c.close();				
+	}	
+	
+	@Test
+	public void testLeverage() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/leverage", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Leverage'");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Leverage'");
+		Assert.assertEquals(4,table.getRowCount());
+
+		c.close();			
+		
+	}		
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}
@@ -155,5 +307,23 @@ public class AlgorithmResourceTest extends ResourceTest {
 		> > for both datasets
 		*/
 		Assert.fail("Descriptor calculation with TUM services");
+	}
+	@Test
+	public void testPost() throws Exception {
+		Form headers = new Form();  
+		for (int i=0; i < 2;i++) {
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreecramer", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"1"));
+		
+	
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreecramer2", port),
+				headers, Status.SUCCESS_OK,
+				(i==0)?String.format("http://localhost:%d/model/3", port):
+					String.format("http://localhost:%d/model/%s",port,"3"));
+		}
 	}
 }

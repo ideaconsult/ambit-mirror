@@ -13,9 +13,6 @@ import org.restlet.data.Reference;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.resource.ClientResource;
 
-import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
@@ -25,9 +22,6 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
-import ambit2.rest.rdf.RDFPropertyIterator;
-
-import com.hp.hpl.jena.ontology.OntModel;
 
 public abstract class CallableQueryProcessor<Target,Result> implements Callable<Reference> {
 	protected AbstractBatchProcessor batch; 
@@ -35,16 +29,15 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	protected Reference sourceReference;
 	//protected AmbitApplication application;
 	protected Context context;
-	protected Reference applicationRootReference;
 
-	public CallableQueryProcessor(Form form,Reference applicationRootReference,Context context) {
+	public CallableQueryProcessor(Form form,Context context) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		this.sourceReference = dataset==null?null:new Reference(dataset.toString());
 		this.context = context;
-		this.applicationRootReference = applicationRootReference;
 	}
 	
 	public Reference call() throws Exception {
+		
 		Context.getCurrentLogger().info("Start()");
 		Connection connection = null;
 		try {
@@ -55,6 +48,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 			} catch (Exception x) {
 				target = (Target)sourceReference;
 			}
+			
 			batch = createBatch(target);
 			
 			if (batch != null) {
@@ -114,49 +108,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
 	//protected abstract QueryURIReporter createURIReporter(Request request); 
 	
-	protected Property createPropertyFromReference(Reference attribute, LiteratureEntry le) {
-		RDFPropertyIterator reader = null;
-		try {
-			reader = new RDFPropertyIterator(attribute);
-			reader.setBaseReference(applicationRootReference);
-			while (reader.hasNext()) {
-				return reader.next();
-			}
-			return null;	
-		} catch (Exception x) {
-			return new Property(attribute.toString(),le);
-		} finally {
-			try {reader.close(); } catch (Exception x) {}
-		}
-	}	
-	
-	protected Profile createProfileFromReference(Reference ref, LiteratureEntry le) {
-		return createProfileFromReference(ref, le,new Profile<Property>());
-	}
-	protected Profile createProfileFromReference(Reference ref, LiteratureEntry le, Profile profile) {
-		
-		RDFPropertyIterator reader = null;
-		OntModel jenaModel = null;
-		try {
-			reader = new RDFPropertyIterator(ref);
-			jenaModel = reader.getJenaModel();
-			reader.setBaseReference(applicationRootReference);
-			while (reader.hasNext()) {
-				Property p = reader.next();
-				p.setEnabled(true);
-				profile.add(p);
-			}
-			
-		} catch (Exception x) {
-			Property p = new Property(ref.toString(),le);
-			p.setEnabled(true);
-			profile.add(p);
-		} finally {
-			try {reader.close(); } catch (Exception x) {}
-			try {jenaModel.close(); } catch (Exception x) {}
-		}
-		return profile;	
-	}		
+
 	
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference) throws Exception {
 		
