@@ -63,6 +63,15 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	protected T content;
 	protected AlgorithmFormat format=AlgorithmFormat.JAVA_CLASS;
 	protected String[] type;
+	protected String endpoint = null;
+
+	public String getEndpoint() {
+		return endpoint;
+	}
+
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
 
 	public boolean isSupervised() {
 		return hasType(typeClassification) || hasType(typeRegression);
