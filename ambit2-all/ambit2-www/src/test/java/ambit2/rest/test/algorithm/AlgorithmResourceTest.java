@@ -48,7 +48,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 25;
+		return count == 39;
 	}	
 	
 	@Test
