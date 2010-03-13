@@ -18,6 +18,7 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = -3089173811051934066L;
 	public final static String p_title="title";
 	public final static String p_url="URL";
@@ -25,7 +26,14 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	protected String URL;
     protected int id = -1;
     protected boolean editable;
-    protected static String EINECS_name = "EINECS";
+    protected _type type = _type.BibtexEntry;
+    public _type getType() {
+		return type;
+	}
+	public void setType(_type type) {
+		this.type = type;
+	}
+	protected static String EINECS_name = "EINECS";
     protected static String IUPAC_name = "IUPAC name";
     protected static String CAS_num = "CAS Registry Number";
     protected static String Default_name = "Default";

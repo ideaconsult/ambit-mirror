@@ -6,6 +6,7 @@ import java.util.List;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
@@ -18,7 +19,7 @@ import ambit2.db.search.QueryParam;
  *
  */
 public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, ILiteratureEntry>  implements IQueryRetrieval<ILiteratureEntry> {
-	protected static String sql = "select idreference,title,url from catalog_references %s";
+	protected static String sql = "select idreference,title,url,type from catalog_references %s";
 	protected static String where = "where idreference = ?";
 	/**
 	 * 
@@ -58,6 +59,11 @@ public class ReadReference  extends AbstractQuery<String, Integer, EQCondition, 
 		try {
 			ILiteratureEntry le =  new LiteratureEntry(rs.getString(2), rs.getString(3));
 			le.setId(rs.getInt(1));
+			try {
+				le.setType(_type.valueOf(rs.getString(4)));
+			} catch (Exception x) {
+				le.setType(_type.Unknown);
+			}
 			return le;
 		} catch (Exception x) {
 			return null;
