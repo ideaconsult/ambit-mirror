@@ -2,7 +2,9 @@ package ambit2.fastox.steps.step2;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
+import org.restlet.data.Form;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -12,7 +14,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.StepException;
+import ambit2.fastox.steps.step1.Step1Resource.TABS;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
 
@@ -75,6 +79,16 @@ public class Step2Resource extends FastoxStepResource {
 		return "Verify structure";
 	}
 
+	
+	@Override
+	protected List<String> createTabs() {
+		
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) != null) { //usually hidden,currently for testing only 
+			session.setDatasetURI(form.getFirstValue(OpenTox.params.dataset_uri.toString()));
+		} 
+		return super.createTabs();
+	}
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		if (renderCompounds1(writer,key)==0) {
 			session.setError(key,new NotFoundException("We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again."));

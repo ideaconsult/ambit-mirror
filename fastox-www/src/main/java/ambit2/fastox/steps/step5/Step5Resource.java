@@ -2,6 +2,7 @@ package ambit2.fastox.steps.step5;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -10,6 +11,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.rest.OpenTox;
 
 /**
  * Display results
@@ -55,7 +57,16 @@ public class Step5Resource extends FastoxStepResource {
 		//if (running > 0)		r.setExpirationDate(new Date(0)); //doesn't seem to work
 		return r;
 	}
+	@Override
+	protected List<String> createTabs() {
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) != null) { //usually hidden,currently for testing only 
+			session.setDatasetURI(form.getFirstValue(OpenTox.params.dataset_uri.toString()));
+		} 
 	
+		
+		return super.createTabs();
+	}
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 

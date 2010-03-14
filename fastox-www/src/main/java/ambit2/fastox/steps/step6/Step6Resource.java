@@ -3,6 +3,7 @@ package ambit2.fastox.steps.step6;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -15,6 +16,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.DatasetTools;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.rest.OpenTox;
 
 public class Step6Resource extends FastoxStepResource {
 
@@ -59,7 +61,8 @@ public class Step6Resource extends FastoxStepResource {
 				}	
 		}	
 		try {
-			DatasetTools.renderDataset(store,writer,DatasetTools.modelVars,getRequest().getRootRef()); //"UNION { ?f owl:sameAs ?o.}"); //
+			//DatasetTools.renderDataset(store,writer,DatasetTools.modelVars,getRequest().getRootRef()); //"UNION { ?f owl:sameAs ?o.}"); //
+			DatasetTools.renderDataset1(store,writer,"",getRequest().getRootRef(),session.getSearch(),session.getCondition());
 		} catch (Exception x) {
 			session.setError(key,x);
 		}		
@@ -69,6 +72,18 @@ public class Step6Resource extends FastoxStepResource {
 	public void renderResults(Writer writer,String key) throws IOException {
 	}
 
+	@Override
+	protected List<String> createTabs() {
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) != null) { //usually hidden,currently for testing only 
+			session.setDatasetURI(form.getFirstValue(OpenTox.params.dataset_uri.toString()));
+		} 
+		if (form.getFirstValue(OpenTox.params.model_uri.toString()) != null) { //usually hidden,currently for testing only 
+			session.addModel(form.getFirstValue(OpenTox.params.model_uri.toString()),
+					Boolean.TRUE);
+		} 			
+		return super.createTabs();
+	}
 	@Override
 	protected String getDefaultTab() {
 		return "Display results";

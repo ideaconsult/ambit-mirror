@@ -13,6 +13,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.users.UserResource;
+import ambit2.rest.OpenTox;
 
 /**
  * Define structure
@@ -21,6 +22,7 @@ import ambit2.fastox.users.UserResource;
  */
 public class Step1Resource extends FastoxStepResource {
 	protected String search = "";
+	protected String dataset_uri;
 	public enum CONDITION {
 		Equals {
 			@Override
@@ -73,6 +75,7 @@ public class Step1Resource extends FastoxStepResource {
 		Form form = getRequest().getResourceRef().getQueryAsForm();
 		search = form.getFirstValue(FastoxStepResource.params.text.toString());
 		search = search==null?"":search;
+
 	}
 	@Override
 	protected String getDefaultTab() {
@@ -85,8 +88,11 @@ public class Step1Resource extends FastoxStepResource {
 		tabs.add(TABS.Draw.toString());
 		tabs.add(TABS.Upload.toString());
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		if (form.getFirstValue("dataset") != null) //usually hidden,currently for testing only
+		if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) != null) { //usually hidden,currently for testing only 
 			tabs.add(TABS.Datasets.toString());
+			dataset_uri = form.getFirstValue(OpenTox.params.dataset_uri.toString());
+			tabIndex = TABS.Datasets.toString();
+		} else dataset_uri = "";
 		return tabs;
 	}
 
@@ -179,9 +185,9 @@ public class Step1Resource extends FastoxStepResource {
 			"<label for='dataset'>Dataset URL</label>"+
 			"</th></tr><tr>");
 					
-			writer.write(String.format("<td><input name='dataset' tabindex='1' type=\"text\" size='80' value='%s'/></td><td>",search));
+			writer.write(String.format("<td><input name='dataset' tabindex='1' type=\"text\" size='80' value='%s'/></td><td>",dataset_uri));
 
-			writePageSize(new String[] {"1","5","10","20"}, writer, key);
+			//writePageSize(new String[] {"1","5","10","20"}, writer, key);
 			writer.write("</td><tr></table>");
 		}
 		writer.write(String.format("<input name='tab' type='hidden' value='%s'>",key));

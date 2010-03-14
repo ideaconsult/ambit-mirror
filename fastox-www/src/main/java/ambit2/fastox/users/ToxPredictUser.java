@@ -35,10 +35,13 @@ public class ToxPredictUser implements IToxPredictUser ,Comparable<IToxPredictUs
 	}
 	public ToxPredictUser(String id,String name) throws IllegalArgumentException {
 		super();
-		this.id = UUID.fromString(id).toString();
-		this.name = name;
+		
+		this.id = "admin".equals(id)?id:UUID.fromString(id).toString();
+		this.name = "admin".equals(id)?id:name;
 		this.timestamp = System.currentTimeMillis();
 	}
+	
+
 	public String getName() {
 		return name;
 	}

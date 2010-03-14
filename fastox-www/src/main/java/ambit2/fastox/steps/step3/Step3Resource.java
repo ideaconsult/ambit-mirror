@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
-import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -92,6 +92,13 @@ public class Step3Resource extends FastoxStepResource {
 	protected List<String> createTabs() {
 		List<String> tabs = new ArrayList<String>();
 		tabs.add("Models");
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		if (form.getFirstValue(OpenTox.params.model_uri.toString()) != null) { //usually hidden,currently for testing only 
+			session.addModel(form.getFirstValue(OpenTox.params.model_uri.toString()),Boolean.TRUE);
+		} 			
+		if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) != null) { //usually hidden,currently for testing only 
+			session.setDatasetURI(form.getFirstValue(OpenTox.params.dataset_uri.toString()));
+		} 		
 		return tabs;
 	}	
 
