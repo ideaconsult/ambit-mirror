@@ -13,6 +13,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.smarts.CMLUtilities;
 
 public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
 	/**
@@ -72,6 +73,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			output.write(item.getContent());
 			if (isMOLONLY()) return null;
 			for (Property p : item.getProperties()) {
+				if (CMLUtilities.SMARTSProp.equals(p.getName())) continue;
 				Object value = item.getProperty(p);
 				if (value != null)
 					output.write(String.format("\n> <%s>\n%s\n",p.getName().toString(),
