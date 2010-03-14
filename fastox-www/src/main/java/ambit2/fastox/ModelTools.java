@@ -165,14 +165,14 @@ public class ModelTools {
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		writer.write("<table class='results' width='95%'>");
 		writer.write("<tr>");
-		writer.write("<th width='15%'>Endpoint</th>");
 		writer.write("<th width='25%'>Model</th>");
+		writer.write("<th width='15%'>Endpoint</th>");
 		writer.write("<th>Descriptors</th>");
 		writer.write("<th>Training dataset</th>");
 		writer.write("<th>Algorithm</th>");
-		
-		
+		/*	
 		writer.write("<th></th>");
+		*/
 		writer.write(String.format("<th>%s</th>",status?"Status":""));
 		writer.write("</tr>");
 	}
@@ -216,16 +216,19 @@ public class ModelTools {
 					);
 		}
 		
+
 		writer.write("<td>");
-		writer.write(endpointName==null?"":endpointName.getString());
-		writer.write("</td><td>");
 		writer.write(String.format("<a href='%s?media=%s' alt='%s' title='%s' target='_blank' ><img src='%s/images/chart_line.png' border='0' alt='%s' title='%s'></a>",
 				modelUri,
 				Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
 				modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
 		writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString(),selected));
 		
-		writer.write("</td><td>");
+		writer.write("</td>");
+		writer.write("<td>");
+		writer.write(endpointName==null?"":endpointName.getString());
+		writer.write("</td>");
+		writer.write("<td>");
 		writer.write(session.needsPreprocessing(modelUri)?
 				String.format("<a href='%s/independent' target=_blank>YES</a>",modelUri)
 				:"-");	
@@ -255,13 +258,13 @@ public class ModelTools {
 						((Resource)algo).getURI(),Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
 						algName==null?"Algorithm":algName.getString())
 				:algo.toString());		
-		writer.write("</td><td>");
+		writer.write("</td>");
 		
-
-		/**
-		 * Results URL and status
-		 */
 		Object uris = session.getModelStatus(modelUri);
+		/*
+		writer.write("<td>");
+
+		
 		if (!status)  {
 			if ((uris != null) && (uris instanceof RemoteTask)) {
 				RemoteTask task = ((RemoteTask)uris);
@@ -285,7 +288,7 @@ public class ModelTools {
 			}
 		}
 		writer.write("</td>");
-		
+		*/
 		if (uris instanceof RemoteTask)  {
 			
 			RemoteTask task = ((RemoteTask) uris);
