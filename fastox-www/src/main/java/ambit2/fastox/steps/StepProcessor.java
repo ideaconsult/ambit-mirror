@@ -64,8 +64,8 @@ public class StepProcessor extends DefaultAmbitProcessor<Representation, Form> {
 			ref = resource.getResponse().getLocationRef();
 			Status status = resource.getStatus();
 			while (status.equals(Status.REDIRECTION_SEE_OTHER) || status.equals(Status.SUCCESS_ACCEPTED)) {
-				System.out.println(status);
-				System.out.println(ref);
+				//System.out.println(status);
+				//System.out.println(ref);
 				resource.setReference(ref);
 				Response response = resource.getResponse();
 

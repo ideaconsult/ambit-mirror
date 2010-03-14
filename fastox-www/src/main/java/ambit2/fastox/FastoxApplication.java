@@ -144,8 +144,8 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 		 //router.attach("/favicon.ico", FavIconResource.class);
 		 //router.attach("/favicon.png", FavIconResource.class);      
 		 StringWriter w = new StringWriter();
-		 printRoutes(router," ",w);
-		 System.out.println(w.toString());
+		 //printRoutes(router," ",w);
+		 //System.out.println(w.toString());
 		 return router;
         
     }
