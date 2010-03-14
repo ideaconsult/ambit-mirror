@@ -16,6 +16,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.PropertyValuesWriter;
+import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.predictor.ModelPredictor;
@@ -52,7 +53,9 @@ public abstract class CallableModelPredictor<ModelItem,Predictor extends ModelPr
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 
 		if (predictor.isStructureRequired()) {
-			p1.add(new ProcessorStructureRetrieval());
+			RetrieveStructure r = new RetrieveStructure(true);
+			r.setMaxRecords(1);
+			p1.add(new ProcessorStructureRetrieval(r));
 		}
 		if  ((predictor.getModel().getPredictors().size()>0) &&  (predictor.isValuesRequired())) {
 			ValuesReader readProfile = new ValuesReader(null);  //no reader necessary

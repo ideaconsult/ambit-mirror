@@ -8,6 +8,7 @@ import java.util.List;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
@@ -77,6 +78,15 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
             } catch (SQLException x){
                 r.removeProperty(Property.getInstance(IMAGE_PATH,IMAGE_PATH));
             }
+            try {
+            	String t = rs.getString(5);
+            	for (STRUC_TYPE type : STRUC_TYPE.values()) if (type.toString().equals(t)) {
+            		r.setType(type);
+            		break;
+            	}
+            } catch (Exception x) {
+            	r.setType(STRUC_TYPE.NA);
+            }            
             return r;
         } catch (AmbitException x){
         	throw x;

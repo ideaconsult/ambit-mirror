@@ -102,7 +102,7 @@ CREATE TABLE  `structure` (
   KEY `idchemical` USING BTREE (`idchemical`),
   KEY `Index_4` (`label`),
   KEY `Index_5` (`idstructure`,`user_name`),
-  KEY `Index_6` (`preference`),
+  KEY `Index_6` USING BTREE (`preference`,`idchemical`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

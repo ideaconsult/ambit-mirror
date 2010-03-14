@@ -73,3 +73,6 @@ ALTER TABLE `models` ADD COLUMN `hidden` BOOLEAN NOT NULL DEFAULT 0 AFTER `predi
 
 ALTER TABLE `catalog_references` ADD COLUMN `type` ENUM('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook') NOT NULL DEFAULT 'Dataset' AFTER `url`;
 
+
+ALTER TABLE `structure` DROP INDEX `Index_6`,
+ ADD INDEX `Index_6` USING BTREE(`preference`, `idchemical`);
