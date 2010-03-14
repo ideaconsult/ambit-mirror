@@ -114,7 +114,7 @@ public class ModelTools {
 		while (models.hasNext()) {
 			String uri = models.next();
 			try {
-				System.out.println(uri);
+				//System.out.println(uri);
 				if (rdf==null) rdf = ModelFactory.createDefaultModel();
 				rdf.read(uri);
 				
@@ -210,7 +210,10 @@ public class ModelTools {
 					selected = ((Boolean) session.getModelStatus(modelUri)).booleanValue();
 			}
 	
-			session.setPreprocessing(modelUri, !"http://www.opentox.org/algorithmTypes.owl#Rules".equals(algType));
+			session.setPreprocessing(modelUri, 
+					(!"http://www.opentox.org/algorithmTypes.owl#Rules".equals(algType)) &&
+					(!"http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation".equals(algType))
+					);
 		}
 		
 		writer.write("<td>");

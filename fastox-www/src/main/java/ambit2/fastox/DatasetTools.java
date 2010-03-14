@@ -79,6 +79,29 @@ public class DatasetTools {
 		"	     OPTIONAL {?o dc:title ?otitle}.\n"+
 		" }\n"+
 		"	ORDER by ?value";
+	
+	protected static String queryPredictedFeatures = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"		select DISTINCT ?Model ?f ?o ?value ?otitle\n"+
+		"		where {\n"+
+		"	     ?dataset ot:dataEntry ?d.\n"+
+		"		 ?d rdf:type ot:DataEntry.\n"+
+		"	     ?d ot:compound <%s>.\n"+
+		"	     ?d ot:values ?v.\n"+
+		"	     ?v ot:value ?value.\n"+
+		"	     ?v ot:feature ?f.\n"+
+		"	     ?Model rdf:type ot:Model.\n"+
+		"	     ?f owl:sameAs ?o.\n"+		
+		"	     ?Model ot:predictedVariables ?f\n"+
+		"	     OPTIONAL {?f dc:title ?otitle}.\n"+
+		" }\n"+
+		"	ORDER by ?Model ?f";	
 
 	protected static String queryCompoundFeatures = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -174,7 +197,7 @@ public class DatasetTools {
 		QueryExecution qe = null;
 		try {
 			String compoundURI = compound.getURI();
-			System.out.println(String.format(sparqlQuery,compoundURI,param));
+			//System.out.println(String.format(sparqlQuery,compoundURI,param));
 			Query query = QueryFactory.create(String.format(sparqlQuery,compoundURI,param));
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
@@ -187,6 +210,19 @@ public class DatasetTools {
 				if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) continue;
 				
 				writer.write("<tr>");
+				writer.write("<th>");
+				Resource m = solution.getResource("Model");
+				Literal mname = solution.getLiteral("mname");
+				if (m!=null)
+					writer.write(String.format(
+							"<a href='%s' target='_blank' title='Model %s' alt='%s'><img border='0' src='%s/images/chart_line.png' alt='Model %s' title='Model %s'></a>",
+							m.getURI(),
+							mname==null?m.getURI():mname.getString(),
+							mname==null?m.getURI():mname.getString(),
+							rootReference.toString(),
+							mname==null?m.getURI():mname.getString(),
+							mname==null?m.getURI():mname.getString()));
+				writer.write("</th>");
 				writer.write("<th align='left' valign='top' width='30%'>");
 				//Resource feature = solution.getResource("f");
 				//writer.write(feature==null?"":feature.getURI());
@@ -254,9 +290,9 @@ public class DatasetTools {
 					compoundURI = compound.getURI();
 					writer.write("<tr>");
 					writer.write("<td>");
-					writer.write(String.format("<img src='%s?media=%s&w=400&h=400' width='250' height='250' alt='%s'>",
+					writer.write(String.format("<img src='%s?media=%s&w=400&h=400' width='250' height='250' title='%s' alt='%s'>",
 							compoundURI,
-							Reference.encode("image/png"),compoundURI));					
+							Reference.encode("image/png"),compoundURI,compoundURI));					
 					writer.write("</td>");
 					writer.write("<td>");
 					writer.write("<table class='results_col'>");
@@ -267,6 +303,9 @@ public class DatasetTools {
 				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:IUPACName","IUPAC name",rootReference);
 				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName","Synonym",rootReference);
 				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate","REACH Registration date",rootReference);
+				
+				renderCompoundFeatures(queryPredictedFeatures,model,writer, compound,"",null,rootReference);
+				
 				writer.write("</table>");
 			
 				if (search!=null) {
@@ -378,15 +417,17 @@ public class DatasetTools {
 			
 			i = new RDFMetaDatasetIterator(new Reference(String.format("%s/datasets",compoundURI)));
 			i.setCloseModel(true);
+			writer.write("<tr>");
+			writer.write("<th title='Found in datasets'>Dataset name&nbsp;</th>");
+			writer.write("<td>");
+			writer.write("<select>");
 			while(i.hasNext()) {
 				SourceDataset d = i.next();
-				writer.write("<tr>");
-				writer.write("<th>Dataset name&nbsp;</th>");
-				writer.write(String.format("<td title='%s %s'>",d.getTitle(),d.getURL()));
-				writer.write(d.getName());
-				writer.write("</td>");
-				writer.write("</tr>");
+				writer.write(String.format("<option selected='false' value='%s'>%s</option>",d.getTitle(),d.getName()));
 			}
+			writer.write("</select>");
+			writer.write("</td>");
+			writer.write("</tr>");
 		} catch (Exception x) {
 		} finally {
 			try { i.close(); } catch (Exception x) {} 
