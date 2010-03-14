@@ -41,6 +41,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
@@ -148,7 +149,10 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				key = form.getFirstValue(QueryResource.sameas);
 				String condition = form.getFirstValue(QueryResource.condition);
 				if (key != null) {
-					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(Reference.decode(key.toString()));
+					key = Reference.decode(key.toString());
+					if (!key.toString().startsWith("http://"))
+						key = String.format("%s%s",OT.NS,key);
+					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(key.toString());
 					q.setSearchByAlias(true);
 					q.setFieldname(record);
 					q.setChemicalsOnly(chemicalsOnly);
