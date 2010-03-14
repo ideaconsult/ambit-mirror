@@ -434,8 +434,8 @@ CAPTION.results {
 TABLE.results { 
 	font-family: Verdana;
 	font-size: 10pt;
-	background-color: #D9D9B2;
-	width: 90%;
+	background-color: #ebebeb;
+	width: 100%;
 	border-collapse: collapse;
 	border-style: ridge;
 	border-color: #FFFFFF;
@@ -475,7 +475,7 @@ TR.results_even {
 	border-collapse: collapse;
 	vertical-align: middle;
 	font-size: 10pt;
-	background-color: #eeeeee;
+	background-color: #f5f5ff;
 	border-width: 1px;
 	border-color: #636bd2;
 	text-align: left;     

@@ -163,7 +163,7 @@ public class ModelTools {
 	*/
 	public static void renderModelTableCaption(Writer writer,boolean status) throws IOException {
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
-		writer.write("<table class='results' width='95%'>");
+		writer.write("<table class='results'>");
 		writer.write("<tr>");
 		writer.write("<th width='25%'>Model</th>");
 		writer.write("<th width='15%'>Endpoint</th>");
@@ -292,16 +292,16 @@ public class ModelTools {
 		if (uris instanceof RemoteTask)  {
 			
 			RemoteTask task = ((RemoteTask) uris);
-			writer.write("<td>");
+			
 			int isRunning = 0;
 			isRunning += task.isDone()?0:1;
+			writer.write("<td>");
 			writer.write((isRunning==0)?
 					(task.getStatus().equals(Status.SUCCESS_OK))?"Completed":task.getStatus().toString():
 					"Processing");
 
 			running += isRunning;
-			writer.write("</td>");
-			writer.write("<td>");
+
 			writer.write(String.format("<a href='%s'><img src='%s/images/%s' border='0' alt='%s' title='%s'></a>",
 					task.getResult(),
 					rootReference.toString(),
@@ -313,7 +313,7 @@ public class ModelTools {
 
 			writer.write("</td>");					
 
-		}	else 	writer.write("<td></td><td></td>");		
+		}	else 	writer.write("<td></td>");		
 		return running;
 	}
 		
