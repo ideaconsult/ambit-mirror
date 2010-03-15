@@ -39,15 +39,14 @@ public class Step6Resource extends FastoxStepResource {
 			session.setError(key,x);
 		}
 	
-		//ModelTools.renderModels(store,session, writer, false,getRootRef());
+		/*
+		
 		try {
 			renderRDFModels(writer, session, false, getRequest().getRootRef(),false);
 		} catch (Exception x) {
 			writer.write(x.getMessage());
 		}
-		//todo retrieve dataset once and then only predictions into a single model
-		writer.write("<h4>Compounds</h4>");
-		
+		*/
 		Iterator<String> models = session.getModels();
 		if (models != null)
 		while (models.hasNext())  {
@@ -62,7 +61,7 @@ public class Step6Resource extends FastoxStepResource {
 		}	
 		try {
 			//DatasetTools.renderDataset(store,writer,DatasetTools.modelVars,getRequest().getRootRef()); //"UNION { ?f owl:sameAs ?o.}"); //
-			DatasetTools.renderDataset1(store,writer,"",getRequest().getRootRef(),session.getSearch(),session.getCondition());
+			DatasetTools.renderDataset1(session,store,writer,"",getRequest().getRootRef(),session.getSearch(),session.getCondition());
 		} catch (Exception x) {
 			session.setError(key,x);
 		}		
