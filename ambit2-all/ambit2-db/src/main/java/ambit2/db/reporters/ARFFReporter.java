@@ -115,9 +115,11 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 							value==null?"?":value
 							));
 				else
-					writer.write(String.format(",\"%s\"",
+					writer.write(String.format(",%s%s%s",
+							value==null?"":"\"",
 							value==null?"?":
-							value.toString().replace("\n", "").replace("\r","")
+							value.toString().replace("\n", "").replace("\r",""),
+							value==null?"":"\""
 							));					
 				i++;
 			}
