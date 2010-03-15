@@ -146,6 +146,8 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			
 			boolean sort = false;
 			for (Property p : item.getProperties()) 
+				if (p.getId()<=0) continue;
+				else
 				if (Collections.binarySearch(header,p,comp)<0) {
 					header.add(p);
 					sort = true;
