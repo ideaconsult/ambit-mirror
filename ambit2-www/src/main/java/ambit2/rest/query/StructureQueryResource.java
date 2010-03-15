@@ -77,6 +77,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
+		Form form = request.getResourceRef().getQueryAsForm();
+		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
+		return createTemplate(context, request, response, featuresURI);
+	}
+	protected Template createTemplate(Context context, Request request,
+			Response response,String[] featuresURI) throws ResourceException {
 		
 		try {
 			Template profile = new Template(null);
@@ -84,8 +90,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			
 			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
 			reader.setCloseConnection(false);
-			Form form = request.getResourceRef().getQueryAsForm();
-			String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
+			
+			
 
 			DBConnection dbc = new DBConnection(getContext());
 			Connection conn = dbc.getConnection(getRequest());
