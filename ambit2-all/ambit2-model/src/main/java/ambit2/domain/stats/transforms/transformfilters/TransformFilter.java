@@ -3,6 +3,8 @@
  */
 package ambit2.domain.stats.transforms.transformfilters;
 
+import java.io.Serializable;
+
 import Jama.Matrix;
 
 /**
@@ -10,7 +12,7 @@ import Jama.Matrix;
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-4-7
  */
-public class TransformFilter{
+public class TransformFilter implements Serializable {
 //protected
   protected double[] FMinVector;
   protected double[] FMaxVector;
