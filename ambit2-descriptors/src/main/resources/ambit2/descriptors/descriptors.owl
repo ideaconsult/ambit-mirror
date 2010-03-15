@@ -76,7 +76,7 @@
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >2009-01-13</dc:date>
     <bo:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >returns array of doublesm where [max length, max diameter, min diameter ]</bo:description>
+    >returns double[] where [max length, max diameter, min diameter ]</bo:description>
     <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
     <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
@@ -166,8 +166,8 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >OpenMopac</rdfs:label>
     <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
     <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#electronicDescriptor"/>
+    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
   </bo:MolecularDescriptor>
 </rdf:RDF>
 
