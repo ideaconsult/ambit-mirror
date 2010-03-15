@@ -31,7 +31,7 @@ public class DataCoverageDescriptors extends DataCoverage<Matrix> {
 	
 	protected double[] mindata = null;
 	protected double[] maxdata = null;
-	protected transient OrthogonalTransform pcaTransform = null;
+	protected OrthogonalTransform pcaTransform = null;
 
 	/**
 	 * DataCoverage constructor
