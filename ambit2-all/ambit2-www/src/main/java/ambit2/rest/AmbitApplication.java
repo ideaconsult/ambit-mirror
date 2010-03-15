@@ -54,6 +54,7 @@ import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.reference.ReferenceResource;
+import ambit2.rest.report.ReportDatasetResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -136,6 +137,7 @@ public class AmbitApplication extends TaskApplication {
 		//router.attach("", SmartsQueryResource.class);	
 		//router.attach("/", SmartsQueryResource.class);
 		
+		router.attach(ReportDatasetResource.resource,ReportDatasetResource.class);
 		//test
 		router.attach(RDFGraphResource.resource,RDFGraphResource.class);
 		router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
