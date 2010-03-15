@@ -12,7 +12,6 @@ public class DataCoverageDistanceMahalanobis extends DataCoverageDistance {
 	private static final long serialVersionUID = 545962040271628450L;
 
 	public DataCoverageDistanceMahalanobis() {
-		super();
-		appDomainMethodType = ADomainMethodType._modeMAHALANOBIS;
+		super( ADomainMethodType._modeMAHALANOBIS);
 	}
 }
