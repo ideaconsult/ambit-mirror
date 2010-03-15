@@ -4,10 +4,13 @@ import java.io.Writer;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.fastox.users.IToxPredictSession;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 
@@ -19,7 +22,6 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DatasetTools {
@@ -88,7 +90,7 @@ public class DatasetTools {
 		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"		select DISTINCT ?Model ?f ?o ?value ?otitle\n"+
+		"		select DISTINCT ?endpoint ?endpointName ?Model ?mname ?f ?o ?value ?otitle\n"+
 		"		where {\n"+
 		"	     ?dataset ot:dataEntry ?d.\n"+
 		"		 ?d rdf:type ot:DataEntry.\n"+
@@ -98,10 +100,16 @@ public class DatasetTools {
 		"	     ?v ot:feature ?f.\n"+
 		"	     ?Model rdf:type ot:Model.\n"+
 		"	     ?f owl:sameAs ?o.\n"+		
-		"	     ?Model ot:predictedVariables ?f\n"+
+		//"	     ?Model ot:predictedVariables ?f\n"+
 		"	     OPTIONAL {?f dc:title ?otitle}.\n"+
+		"		 OPTIONAL {?Model dc:title ?mname.}\n"+
+		"{\n"+
+		"{ ?Model ot:dependentVariables ?f. } UNION { ?Model ot:predictedVariables ?f. }\n"+
+		"}\n"+		
+		"        OPTIONAL {?f owl:sameAs ?endpoint}.\n"+
+		"        OPTIONAL {?endpoint dc:title ?endpointName}.\n"+		
 		" }\n"+
-		"	ORDER by ?Model ?f";	
+		"	ORDER by ?endpoint ?Model ?f";	
 
 	protected static String queryCompoundFeatures = 
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
@@ -184,9 +192,47 @@ public class DatasetTools {
 		"  UNION "+
 		"	{ ?Model rdf:type ot:Model. ?Model ot:predictedVariables ?f. ?f dc:title ?name. OPTIONAL {?Model dc:title ?mname.} }" ;
 
-	
+	protected static String getModelColumn(IToxPredictSession session, QuerySolution solution, Reference rootReference) {
+		Resource m = solution.getResource("Model");
+		Literal mname = solution.getLiteral("mname");
+		Resource endpoint = solution.getResource("endpoint");
+		Literal ename = solution.getLiteral("endpointName");
+		if (m!=null) {
+			/*
+			String download = ModelTools.getDownloadURI(session,m.getURI(), 
+						ChemicalMediaType.CHEMICAL_MDLSDF,rootReference);
+						*/
+			String download = null;
+			return String.format(
+					
+					"%s&nbsp;<a href='%s' target='_blank' title='%s' alt='%s'><img border='0' src='%s/images/chart_line.png' alt='Model %s' title='Model %s'>%s</a>&nbsp;%s",
+					ename==null?(endpoint==null?"":endpoint.getLocalName()):ename.getString(),
+					m.getURI(),
+					mname==null?m.getURI():mname.getString(),
+					mname==null?m.getURI():mname.getString(),
+					rootReference.toString(),
+					mname==null?m.getURI():mname.getString(),
+					mname==null?m.getURI():mname.getString(),
+					mname==null?m.getURI():mname.getString(),
+					download==null?"":download);
+		}
+		else return null;
+	}	
+	protected static String getNameColumn(QuerySolution solution,String caption) {
+		Resource sameas = solution.getResource("o");
+		Literal sameName = solution.getLiteral("otitle");		
+		if (caption==null)
+			return sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"";
+		else return caption; 
+	}
+	protected static String getValueColumn(QuerySolution solution) {
+		Literal literal = solution.getLiteral("value");
+		if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) return null;
+		return literal!=null?literal.getString():"";
+	}
 		//references do not appear, since they are not yet into the RDF model
 	public static int renderCompoundFeatures(
+				IToxPredictSession session,
 			    String sparqlQuery,
 				Model model, 
 				Writer writer,
@@ -202,64 +248,47 @@ public class DatasetTools {
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
 			int records = 0;
+			String thisModel = null;
 			while (results.hasNext()) {
 				records++;
 				QuerySolution solution = results.next();
 
-				Literal literal = solution.getLiteral("value");
-				if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) continue;
+				String value = getValueColumn(solution);
+				if (value == null) continue;
 				
-				writer.write("<tr>");
-				writer.write("<th>");
-				Resource m = solution.getResource("Model");
-				Literal mname = solution.getLiteral("mname");
-				if (m!=null)
-					writer.write(String.format(
-							"<a href='%s' target='_blank' title='Model %s' alt='%s'><img border='0' src='%s/images/chart_line.png' alt='Model %s' title='Model %s'></a>",
-							m.getURI(),
-							mname==null?m.getURI():mname.getString(),
-							mname==null?m.getURI():mname.getString(),
-							rootReference.toString(),
-							mname==null?m.getURI():mname.getString(),
-							mname==null?m.getURI():mname.getString()));
-				writer.write("</th>");
-				writer.write("<th align='left' valign='top' width='30%'>");
-				//Resource feature = solution.getResource("f");
-				//writer.write(feature==null?"":feature.getURI());
-				Resource sameas = solution.getResource("o");
-				Literal sameName = solution.getLiteral("otitle");		
-				if (caption==null) 
-					writer.write("<font color='#636bd2'>"); //didn't work with style				
-				if (caption==null)
-					writer.write(sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"");
-				else writer.write(caption);
-				writer.write("</font>");
-				writer.write("</th>");
-				writer.write("<th>");
-				RDFNode title = solution.get("title");
-				writer.write(title!=null?title.toString():"&nbsp;");	
-				writer.write("</th>");		
-				
-				writer.write("<th>");
-				Resource src = solution.getResource("src");
-				writer.write(src!=null?src.getLocalName():"");
-				RDFNode url = solution.get("url");
-				writer.write(url!=null?url.toString():"&nbsp");	
-				writer.write("</th>");
-				
-				writer.write("<td>");
-				Literal name = solution.getLiteral("name");
-				writer.write(name!=null?name.getString():"");
-				writer.write("</td>");	
-				
-				writer.write("<td>");
-				if (caption==null) 
-					writer.write("<font color='#636bd2'>"); //didn't work with style
-				writer.write(literal!=null?literal.getString():"");
-				if (caption==null) 
-					writer.write("</font>");
-				writer.write("</td>");
-				writer.write("</tr>");
+				String modelString = getModelColumn(session,solution,rootReference);
+				if (modelString != null) {
+					if (!modelString.equals(thisModel)) {
+						writer.write("<tr class='predictions'>");
+						writer.write("<th align='left' colspan='3' class='predictions'>");
+						thisModel = modelString;
+						writer.write(modelString);
+						
+						writer.write("</th>");
+						writer.write("</tr>");
+					} 
+						//predictions
+						writer.write("<tr><td width='10%'></td><th colspan='1' align='left' valign='top' width='50%'>");
+						writer.write(getNameColumn(solution, caption));
+						writer.write("</th><td>");
+						if (caption==null) 
+							writer.write("<font color='#636bd2'>"); //didn't work with style
+						writer.write(value);
+						if (caption==null) 
+							writer.write("</font>");
+						writer.write("</td></tr>");						
+			
+				} else {
+					writer.write("<tr><th colspan='2' align='left' valign='top' width='30%'>");
+					writer.write(getNameColumn(solution, caption));
+					writer.write("</th><td>");
+					if (caption==null) 
+						writer.write("<font color='#636bd2'>"); //didn't work with style
+					writer.write(value);
+					if (caption==null) 
+						writer.write("</font>");
+					writer.write("</td></tr>");
+				}
 				
 			}
 
@@ -271,69 +300,71 @@ public class DatasetTools {
 		}		
 	}	
 	
-	public static int renderDataset1(Model model, Writer writer,String more,Reference rootReference,String search,String condition) throws Exception {
+	public static int renderDataset1(IToxPredictSession session,Model model, Writer writer,String more,Reference rootReference,String search,String condition) throws Exception {
 		QueryExecution qe = null;
 		try {
 			Query query = QueryFactory.create(queryCompounds);
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
-			writer.write("<table width='90%'>");
+			writer.write("<table width='100%' >");
+			
+			String download = ModelTools.getDatasetDownloadUri(session,new Reference(session.getDatasetURI()), ChemicalMediaType.CHEMICAL_MDLSDF,rootReference);
+			if (download!= null) writer.write(String.format("<tr><th align='right' title='Download' colspan='3'>Download as %s</th></tr>",download));
 			String compoundURI = null;
 			int records = 0;
 			while (results.hasNext()) {
 				records++;
 				QuerySolution solution = results.next();
-				//DISTINCT ?c ?o ?f ?name ?value ?dataset
+
 				Resource compound = solution.getResource("c");
-				if (!compound.getURI().equals(compoundURI)) {
-					if (compoundURI != null) writer.write("</table></td></tr>");
-					compoundURI = compound.getURI();
-					writer.write("<tr>");
-					writer.write("<td>");
-					writer.write(String.format("<img src='%s?media=%s&w=400&h=400' width='250' height='250' title='%s' alt='%s'>",
-							compoundURI,
-							Reference.encode("image/png"),compoundURI,compoundURI));					
-					writer.write("</td>");
-					writer.write("<td>");
-					writer.write("<table class='results_col'>");
-				}
+				compoundURI = compound.getURI();
+				writer.write("<tr class='chemicalid'>");
+				writer.write("<td valign='top'>");
+				writer.write(String.format("<img src='%s?media=%s&w=400&h=400' width='250' height='250' title='%s' alt='%s'>",
+						compoundURI,
+						Reference.encode("image/png"),compoundURI,compoundURI));					
+				writer.write("</td>");
+				writer.write("<td valign='top' colspan='2'>");
+				writer.write("<table width=='100%' class='chemicalid'>");
 				
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:CASRN","CAS RN",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:EINECS","EINECS",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:IUPACName","IUPAC name",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName","Synonym",rootReference);
-				renderCompoundFeatures(queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate","REACH Registration date",rootReference);
+				renderCompoundFeatures(session,queryCompoundFeaturesSameAs,model,writer, compound,"ot:CASRN","CAS RN",rootReference);
+				renderCompoundFeatures(session,queryCompoundFeaturesSameAs,model,writer, compound,"ot:EINECS","EINECS",rootReference);
+				renderCompoundFeatures(session,queryCompoundFeaturesSameAs,model,writer, compound,"ot:IUPACName","IUPAC name",rootReference);
+				renderCompoundFeatures(session,queryCompoundFeaturesSameAs,model,writer, compound,"ot:ChemicalName","Synonym",rootReference);
+				renderCompoundFeatures(session,queryCompoundFeaturesSameAs,model,writer, compound,"ot:REACHRegistrationDate","REACH Registration date",rootReference);
 				
-				renderCompoundFeatures(queryPredictedFeatures,model,writer, compound,"",null,rootReference);
-				
-				writer.write("</table>");
-			
+
 				if (search!=null) {
-					writer.write("<table>");
+	
 					String param;
 					if ("=".equals(condition)) 
 						param = String.format("FILTER (?value = \"%s\") .",search);
 					else
 						param = String.format("FILTER (regex(?value, \"%s\")) .",search);
-					renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,param,null,rootReference);
-					writer.write("</table>");
+					renderCompoundFeatures(session,queryCompoundFeatures,model,writer, compound,param,null,rootReference);
+
 				}
 				
-				writer.write("<table>");
-				writer.write("<tr>");
-				
-				writer.write("<th>Quality label</th>");
+				writer.write("<th align='left'>Quality label</th>");
 				String consensus = getCompoundLabel(compoundURI,"consensus");
 				String tag = getCompoundLabel(compoundURI,"comparison");
-				writer.write(String.format("<td title='%s'>%s</td>", consensus==null?"":consensus,tag==null?"":tag));
-
+				if ((tag!=null)&&!"".equals(tag))
+						writer.write(String.format("<td colspan='2' title='%s'>%s</td>", consensus==null?"":consensus,tag==null?"":tag));
+				
 				writer.write("</tr>");
 				//renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,String.format(querySameAs,"<http://www.opentox.org/echaEndpoints.owl#Carcinogenicity>"),rootReference);
-				writer.write("</table>");
-				writer.write("<table>");
+				/*
 				renderCompoundDatasets(writer,compoundURI);
+				*/
+				writer.write("</table></td></tr>");
+				
+				writer.write("<tr>");
+				renderCompoundFeatures(session,queryPredictedFeatures,model,writer, compound,"",null,rootReference);
+				writer.write("</tr><tr>");
+				
+
 			}
-			if (compoundURI != null) writer.write("</table></td></tr>");
+			//if (compoundURI != null) writer.write("</table></td></tr>");
 			writer.write("</table>");
 
 			return records;
@@ -351,7 +382,7 @@ public class DatasetTools {
 			Query query = QueryFactory.create(String.format(queryString,more));
 			qe = QueryExecutionFactory.create(query,model );
 			ResultSet results = qe.execSelect();
-			writer.write("<table class='resuts'>");
+			writer.write("<table class='results'>");
 			String compoundURI = null;
 			int records = 0;
 			while (results.hasNext()) {
@@ -418,14 +449,15 @@ public class DatasetTools {
 			i = new RDFMetaDatasetIterator(new Reference(String.format("%s/datasets",compoundURI)));
 			i.setCloseModel(true);
 			writer.write("<tr>");
-			writer.write("<th title='Found in datasets'>Dataset name&nbsp;</th>");
-			writer.write("<td>");
-			writer.write("<select>");
+			writer.write("<th align='left' title='Found in datasets'>Dataset name&nbsp;</th>");
+			writer.write("<td colspan='2'>");
+			String delimiter = "";
 			while(i.hasNext()) {
 				SourceDataset d = i.next();
-				writer.write(String.format("<option selected='false' value='%s'>%s</option>",d.getTitle(),d.getName()));
+				if (d.getName().indexOf(".rdf")>0) continue;
+				writer.write(String.format("%s&nbsp;<a href='%s' title='%s' target=_blank>%s</a>",delimiter,d.getURL(),d.getTitle(),d.getName()));
+				delimiter = ",";
 			}
-			writer.write("</select>");
 			writer.write("</td>");
 			writer.write("</tr>");
 		} catch (Exception x) {

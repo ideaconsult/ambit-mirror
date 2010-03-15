@@ -317,6 +317,52 @@ public class ModelTools {
 		return running;
 	}
 		
+	public static String getDownloadURI(IToxPredictSession session,String modelUri, MediaType mediaType,Reference rootReference) {
+		Object uris = session.getModelStatus(modelUri);
+		
+			if ((uris != null) && (uris instanceof RemoteTask)) {
+				RemoteTask task = ((RemoteTask)uris);
+				Reference uri = task.getResult();
+				
+				String q= uri==null?null:uri.getQuery();
+				if (q!=null)
+				for (int i=0;i<mimes.length;i++) {
+					if (mimes[i].equals(mediaType))
+					return
+					String.format(
+							"<a href=\"%s%saccept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							uri,
+							q==null?"?":"&",
+							Reference.encode(mimes[i].toString()),
+							rootReference,
+							image[i],
+							mimes[i],
+							mimesDescription[i]);	
+				}
+			} 
+			return null;
+	}
 	
-	
+	public static String getDatasetDownloadUri(IToxPredictSession session,Reference dataset, 
+					MediaType mediaType,Reference rootReference) {
+		
+
+
+				if (dataset!=null)
+				for (int i=0;i<mimes.length;i++) {
+					Reference d = dataset.clone();
+					d.addQueryParameter("accept-header", mimes[i].toString());
+					if (mimes[i].equals(mediaType))
+					return
+					String.format(
+							"<a href='%s'  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							d,
+							rootReference,
+							image[i],
+							mimes[i],
+							mimesDescription[i]);	
+				}
+
+			return null;
+	}	
 }

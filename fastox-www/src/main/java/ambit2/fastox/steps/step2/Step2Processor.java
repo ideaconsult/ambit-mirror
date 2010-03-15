@@ -79,10 +79,12 @@ public class Step2Processor extends StepProcessor {
 			//should not come here, goes into processMultiPartForm
 			throw new StepException("file",String.format("Wrong place for file upload %s",file));
 		} 
+		
 		if (search != null)  {
 			if ("structure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), search);
+				
 				query.add(FastoxStepResource.params.max.toString(),"1");
 				Exception x = parseStructure(search);
 				if (x!=null) throw new StepException("search",x);
@@ -91,6 +93,7 @@ public class Step2Processor extends StepProcessor {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/smarts");
 				query.add(FastoxStepResource.params.search.toString(), search);
 				query.add(FastoxStepResource.params.text.toString(), text==null?"":text);
+				query.removeAll(FastoxStepResource.params.max.toString());
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 				
 			} else { /// ("similarity".equals(mode)) {
@@ -105,6 +108,7 @@ public class Step2Processor extends StepProcessor {
 				} catch (Exception x) {
 					query.add(FastoxStepResource.params.threshold.toString(), "0.85");
 				}
+				query.removeAll(FastoxStepResource.params.max.toString());
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			};
 	
@@ -117,9 +121,11 @@ public class Step2Processor extends StepProcessor {
 				if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(text.trim());
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
 				query.add(FastoxStepResource.params.search.toString(), text);		
+				query.removeAll(FastoxStepResource.params.max.toString());
 				query.add(FastoxStepResource.params.max.toString(),"1");
 				
 			} catch (Exception x) {
+				query.removeAll(FastoxStepResource.params.max.toString());
 				if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
 					if (!CASNumber.isValid(text)) throw new StepException("text",String.format("Invalid CAS Registry number %s",text));
 					else query.add(FastoxStepResource.params.max.toString(),"1");
@@ -129,17 +135,19 @@ public class Step2Processor extends StepProcessor {
 					else query.add(FastoxStepResource.params.max.toString(),"1");
 				} else {
 					session.setSearch(text);
-					session.setCondition(condition);		
+					session.setCondition(condition);	
+					query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 				}
 				topRef = wizard.getService(SERVICE.compound);
 				query.add(FastoxStepResource.params.search.toString(), text);
-				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
-				query.add(FastoxStepResource.params.condition.toString(),condition==null?"=":condition);	
+				if ((condition != null) && !("=".equals(condition)))
+					query.add(FastoxStepResource.params.condition.toString(),condition);	
 
 			}
 			
 		} else if (dataset != null) {
 			topRef = new Reference(dataset);
+			query.removeAll(FastoxStepResource.params.max.toString());
 			query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			
 		} else {
@@ -152,14 +160,28 @@ public class Step2Processor extends StepProcessor {
 			}
 		}
 		
-		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS","REACHRegistrationDate"};
-		for (String n:s)  
+		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS"};//,"REACHRegistrationDate"};
+		
+		
+		
+		for (String n:s)  {
+			/*
+			Reference fquery = wizard.getService(SERVICE.feature).clone();
+			fquery.addQueryParameter("sameas",n);
+			
+			query.add("feature_uris[]",Reference.encode(fquery.toString())
+			*/
 			query.add("feature_uris[]",
 					String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
-							Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
+							//Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
+							Reference.encode(n)));
+							
+		}
+		
 		if (dataset!=null)  {
 			
-			query.add("feature_uris[]",String.format("%s:%s%s",
+			query.add("feature_uris[]",
+					String.format("%s:%s%s",
 					topRef.getScheme(),
 					topRef.getHierarchicalPart(),
 					OpenTox.URI.feature.getURI()));

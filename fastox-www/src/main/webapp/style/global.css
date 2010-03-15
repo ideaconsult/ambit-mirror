@@ -423,6 +423,48 @@ div.user {
 
 /*--------------------------------------------------------------------------*/
 
+TABLE.chemicalid { 
+	font-family: Verdana;
+	font-size: 10pt;
+	background-color: #F8F8F8;
+	width: 100%;
+	border-collapse: collapse;
+	border-color: #F8F8F8;
+	border: 0px;
+}
+
+TR.chemicalid { 
+	font-family: Verdana;
+	font-size: 10pt;
+	background-color: #F8F8F8;
+	width: 100%;
+	border-collapse: collapse;
+	border-style: none;
+	border-color: #FFFFFF;
+	border-width: 2px;
+}
+
+TABLE.predictions { 
+	font-family: Verdana;
+	font-size: 10pt;
+	background-color: #FFFFFF;
+	width: 100%;
+	border-collapse: collapse;
+	border-style: none;
+	border-color: #FFFFFF;
+	border-width: 2px;
+}
+
+TH.predictions { 
+	font-family: Verdana;
+	font-size: 10pt;
+	background-color: #F8F8F8;
+	width: 100%;
+	border-collapse: collapse;
+	border-style: none;
+	border-color: #FFFFFF;
+	border-width: 2px;
+}
 CAPTION.results {
 	background-color: #FFFFFF;
 	color: #729203;
@@ -475,7 +517,7 @@ TR.results_even {
 	border-collapse: collapse;
 	vertical-align: middle;
 	font-size: 10pt;
-	background-color: #f5f5ff;
+	background-color: #F8F8F8;
 	border-width: 1px;
 	border-color: #636bd2;
 	text-align: left;     
