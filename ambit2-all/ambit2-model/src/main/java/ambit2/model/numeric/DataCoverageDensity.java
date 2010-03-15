@@ -30,9 +30,9 @@ public class DataCoverageDensity extends DataCoverageDescriptors {
 	 * 
 	 */
 	public DataCoverageDensity() {
-		super();
+		super( ADomainMethodType._modeDENSITY);
 		kdeList = null;
-		appDomainMethodType = ADomainMethodType._modeDENSITY;
+
 	}
 
 	/**

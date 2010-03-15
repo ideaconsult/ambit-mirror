@@ -10,7 +10,6 @@ public class DataCoverageDistanceCityBlock extends DataCoverageDistance {
 	private static final long serialVersionUID = 4750791138097501986L;
 
 	public DataCoverageDistanceCityBlock() {
-		super();
-		appDomainMethodType = ADomainMethodType._modeCITYBLOCK;
+		super(ADomainMethodType._modeCITYBLOCK);
 	}
 }
