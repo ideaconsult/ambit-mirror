@@ -228,16 +228,8 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		"		%s rdf:type ot:Model.\n"+
 		"	    %s ot:independentVariables  ?vars.\n"+
 		"	    ?vars rdf:type ot:Feature.\n"+
-		"	    ?vars ot:hasSource ?src.\n"+
-		"	    {\n"+
-		"	    { ?src rdf:type ot:Algorithm. } \n"+  //this is how it should be
-		"	    UNION "+
-		"	    {\n"+
-		"	         ?src rdf:type bibtex:Entry.\n"+  //and this is how it is implemented in ambit currently
-		"	         ?src dc:title ?algorithm.\n"+
-		//"	         OPTIONAL {?src rdfs:seeAlso ?see.}\n"+
-		"		}\n"+
-		"		}.\n"+
+		"	    ?vars ot:hasSource ?algorithm.\n"+
+		"       OPTIONAL { ?src rdf:type ot:Algorithm. } \n"+ 
 		"	}\n"+
 		"		ORDER by ?algorithm";		
 
