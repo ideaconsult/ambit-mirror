@@ -359,4 +359,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected IStructureRecord onError(String sourceURI) {
 		return null;
 	}	
+	@Override
+	protected IQueryRetrieval<IStructureRecord> returnQueryObject() {
+		IQueryRetrieval<IStructureRecord> q =  super.returnQueryObject();
+		if (q instanceof QueryField) ((QueryField)q).setRetrieveProperties(false);
+		return q;
+	}
 }
