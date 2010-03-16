@@ -64,6 +64,7 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 
 	public Template process(Reference uri) throws AmbitException {
 		if (profile == null) setProfile(new Template());
+		if (uri==null) return profile;
 		try {
 			Object q = CallableQueryProcessor.getQueryObject(uri, applicationReference);
 			if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
