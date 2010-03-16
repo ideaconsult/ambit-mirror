@@ -105,7 +105,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				//	readFeatures(featureURI, profile);
 				if (profile.size() == 0) {
 					reader.setConnection(conn);
-					profile = reader.process(new Reference(getDefaultTemplateURI(context,request,response)));
+					String templateuri = getDefaultTemplateURI(context,request,response);
+					if (templateuri!= null) profile = reader.process(new Reference(templateuri));
 					reader.setProfile(profile);
 				}
 			} catch (Exception x) {
