@@ -178,7 +178,8 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 					return currentJob.result;
 
 		} 
-		if (currentJob.error!= null) throw currentJob.error;
+		if (currentJob.error!= null) 
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,currentJob.toString(),currentJob.error);
 		else throw new ResourceException(currentJob.status);		
 
 	}
