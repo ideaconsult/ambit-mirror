@@ -220,9 +220,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"PREFIX bibtex:<http://purl.org/net/nknouf/ns/bibtex#>\n"+
 		"\n"+
-		//"	select ?Model ?vars ?x ?algorithm ?src ?see\n"+
 		"	select DISTINCT ?vars ?algorithm\n"+
 		"	where {\n"+
 		"		%s rdf:type ot:Model.\n"+

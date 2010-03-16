@@ -111,7 +111,7 @@ public class OpenTox {
 				return true;
 			}
 			public String getDescription() {
-				return "Dataset URI to be used as input to model generation (ALgorithm POST) or prediction (Model POST)";
+				return "Dataset URI to be used as input to model generation (Algorithm POST) or prediction (Model POST)";
 			}			
 		},
 		target {
