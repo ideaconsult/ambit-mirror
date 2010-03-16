@@ -50,6 +50,15 @@ import ambit2.rest.task.CallableQueryProcessor;
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Serializable>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
 	public final static String query_resource = "/query";
 	
+	/**TODO
+	 * http://markmail.org/search/?q=restlet+statusservice+variant#query:restlet%20statusservice%20variant+page:1+mid:2qrzgzbendopxg5t+state:results
+an alternate design where you would leverage the new RepresentationInfo class added to Restlet 2.0 
+by overriding the "ServerResource#getInfo(Variant)" method. 
+This would allow you to support content negotiation and conditional processing
+ without having to connect to your database.
+Then, when the "get(Variant)" method calls you back,
+ you would connect to your database, throw any exception that occurs and return a verified representation. 
+	 */
 
 
 	@Override
@@ -86,13 +95,16 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		return connection;
 	}
 	*/
+	protected  Q returnQueryObject() {
+		return queryObject;
+	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
 			int maxRetry=3;
         	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
         		if ((queryObject!=null) && (queryObject instanceof Serializable))
-        		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
+        		return new ObjectRepresentation((Serializable)returnQueryObject(),MediaType.APPLICATION_JAVA_OBJECT);
         		else throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);        		
         	}				
 	        if (queryObject != null) {
