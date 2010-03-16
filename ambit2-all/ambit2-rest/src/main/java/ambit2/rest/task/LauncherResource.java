@@ -41,10 +41,10 @@ public class LauncherResource extends ServerResource {
 
 	}
 	protected Reference getDatasetService() {
-		return new Reference("http://194.141.0.136:8080/ambit2/dataset");
+		return new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset");
 	}
 	protected Reference getApplicationRoot() {
-		return new Reference("http://194.141.0.136:8080/ambit2");
+		return new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2");
 	}	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
