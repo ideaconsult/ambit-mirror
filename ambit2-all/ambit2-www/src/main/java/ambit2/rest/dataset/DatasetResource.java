@@ -15,12 +15,14 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryComplement;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.dataset.DatasetDeleteStructure;
 import ambit2.db.update.dataset.DeleteDataset;
 import ambit2.db.update.storedquery.DeleteStoredQuery;
 import ambit2.db.update.structure.ChemicalByDataset;
@@ -247,16 +249,49 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			return c;
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
+	
+	
 	@Override
 	protected Representation delete(Variant variant) throws ResourceException {
-		Representation entity = getRequestEntity();
+		
 		try {
-			executeUpdate(entity, 
-					null,
-					createDeleteObject(null));
-			return getResponseEntity();
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			String[] compounds = OpenTox.params.compound_uris.getValuesArray(form);
+			if (compounds != null) { //partial delete
+				try {
+					DatasetDeleteStructure deleteObject;
+					if ((datasetID!=null) && (datasetID>0)) {
+						deleteObject = new DatasetDeleteStructure();
+						SourceDataset d = new SourceDataset();
+						d.setId(datasetID);						
+						deleteObject.setGroup(d);
+					} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					
+					
+					IStructureRecord record = new StructureRecord();
+					for (String compound: compounds ) {
+						Object[] ids = OpenTox.URI.conformer.getIds(compound, getRequest().getRootRef());
+						record.setIdchemical((Integer)ids[0]);
+						record.setIdstructure((Integer)ids[1]);
+						
+						deleteObject.setObject(record);
+						executeUpdate(form.getWebRepresentation(), 	null,	deleteObject);						
+					}
+				} catch (ResourceException x) {
+					throw x;
+				} catch (Exception x) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+				}
+				//String[] features = OpenTox.params.feature_uris.getValuesArray(form);
+			} else  //delete entire dataset
+				executeUpdate(getRequestEntity(), 
+						null,
+						createDeleteObject(null));
+				return getResponseEntity();
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,x.getMessage(),x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}
 	@Override
