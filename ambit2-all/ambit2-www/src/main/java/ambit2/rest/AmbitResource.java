@@ -60,10 +60,10 @@ public class AmbitResource extends ServerResource {
 			{"http://opentox.org/dev/apis/api-1.1/structure","Conformers",formatHeader,null,"Implemented"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"update the representation of a structure",format,"PUT","No"},
-			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100)," Remove structure",format,"DELETE","No"},
+			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100)," Remove structure",format,"DELETE","Yes"},
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"get available conformers of a chemical compound",format,"GET","Yes"},
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"create a new structure",format,"POST","No"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"Remove conformers",format,"DELETE","No"},
+			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"Remove conformers",format,"DELETE","Yes"},
 
 			{"[ambit]","Compound properties",formatHeader,null,"Implemented"},
 			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
@@ -80,6 +80,7 @@ public class AmbitResource extends ServerResource {
 			{DatasetsResource.datasets,"create a new dataset",format,"POST","Yes"},
 			{"/dataset/{id}","update dataset",format,"PUT","Yes"},
 			{"/dataset/{id}","remove dataset",format,"DELETE","Yes"},
+			{"/dataset/{id}?compound_uris[]=uri-of-a-compound-or-conformer","remove compounds from the dataset",format,"DELETE","Yes"},
 			
 			{"http://opentox.org/dev/apis/api-1.1/dataset","A Dataset",formatHeader,null,"Implemented"},
 			{DatasetResource.dataset+"/8","get dataset",format,"GET","Yes"},
@@ -90,18 +91,18 @@ public class AmbitResource extends ServerResource {
 			
 			{"[ambit]","Chemical compounds in a dataset",formatHeader,null,"Implemented"},			
 			{DatasetResource.dataset+"/8/compound/413","get compound",format,"GET","Yes"},
-			{DatasetResource.dataset+"/{id}/compound","add compound",format,"POST","No"},
-			{DatasetResource.dataset+"/{id}/compound/{cid}","update compound",format,"PUT","No"},
-			{DatasetResource.dataset+"/{id}/compound/{cid}","remove compound from a dataset",format,"DELETE","No"},
-			{DatasetResource.dataset+"/{id}/compound","remove all compounds in a dataset",format,"DELETE","No"},
+			//{DatasetResource.dataset+"/{id}/compound","add compound",format,"POST","No"},
+			//{DatasetResource.dataset+"/{id}/compound/{cid}","update compound",format,"PUT","No"},
+			//{DatasetResource.dataset+"/{id}/compound/{cid}","remove compound from a dataset",format,"DELETE","No"},
+			//{DatasetResource.dataset+"/{id}/compound","remove all compounds in a dataset",format,"DELETE","No"},
 
 			{"[ambit]","Conformers in a dataset",formatHeader,null,"Implemented"},
 			{DatasetResource.dataset+"/8/compound/413/conformer","get conformers",format,"GET","Yes"},
 			{DatasetResource.dataset+"/8/compound/413/conformer/100617","get conformer",format,"GET","Yes"},
-			{DatasetResource.dataset+"/{id}/compound/{cid}","add conformer",format,"POST","No"},
-			{DatasetResource.dataset+"/{id}/compound/{cid}/conformer/{id}","update conformer",format,"PUT","No"},
-			{DatasetResource.dataset+"/{id}/compound/{cid}/conformer/{id}","remove conformer from the dataset",format,"DELETE","No"},
-			{DatasetResource.dataset+"/{id}/compound/{cid}","remove all conformers",format,"DELETE","No"},
+			//{DatasetResource.dataset+"/{id}/compound/{cid}","add conformer",format,"POST","No"},
+			//{DatasetResource.dataset+"/{id}/compound/{cid}/conformer/{id}","update conformer",format,"PUT","No"},
+			//{DatasetResource.dataset+"/{id}/compound/{cid}/conformer/{id}","remove conformer from the dataset",format,"DELETE","No"},
+			//{DatasetResource.dataset+"/{id}/compound/{cid}","remove all conformers",format,"DELETE","No"},
 
 			{"http://opentox.org/development/wiki/dataset","Features in a dataset",formatHeader,null,"Implemented"},
 			{String.format("%s/8%s",DatasetResource.dataset,PropertyResource.featuredef),"get features available in the dataset",format,"GET","Yes"},
@@ -131,7 +132,9 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/toxtreecarc",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity\" algorithm",format,"GET","Yes"},
 			{String.format("%s/toxtreekroes",AllAlgorithmsResource.algorithm),"get the representation of \"ToxTree: ILSI/Kroes decision tree for TTC\" algorithm",format,"GET","Yes"},
 			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"apply a model to a dataset for prediction",format,"POST","Yes"},
-					
+			
+			{String.format("%s/leverage",AllAlgorithmsResource.algorithm),"Applicability domain by leverage. Requires dataset_uri as parameter. Creates a model, which can be used for AD estimation of other datasets",format,"POST","Yes"},
+						
 			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
@@ -165,16 +168,14 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/{id}%s/{fdid}",DatasetResource.dataset,PropertyResource.featuredef),"update feature ",format,"PUT","No"},
 			{String.format("%s/{id}%s/{fdid}",DatasetResource.dataset,PropertyResource.featuredef),"remove feature ",format,"DELETE","No"},
 
-			{"[ambit]","References",formatHeader,null},
+			{"[ambit]","References [obsolete, handled as Feature attributes]",formatHeader,null},
 			{ReferenceResource.reference,"read all references",format,"GET","Yes"},
 			{ReferenceResource.reference+"/11845","read information on a specific reference",format,"GET","Yes"},
 			{ReferenceResource.reference,"create a new reference",format,"POST","Yes"},
 			{ReferenceResource.reference+"/11845","update information on a specific reference",format,"PUT","No"},
 			{ReferenceResource.reference+"?search={query}","Search for a reference by name",format,"GET","Under development"},
 					
-
-			
-			{"[ambit]","Feature ontology (PROPOSAL)",formatHeader,null},
+			{"[ambit]","Feature ontology (This is available at ontology service)",formatHeader,null},
 			{String.format("%s/All/Endpoints",OntologyResource.resource),"Hierarchical view of endpoints",format,"GET","Yes"},
 			{String.format("%s/All/Descriptors",OntologyResource.resource),"Hierarchical view of descriptors",format,"GET","Yes"},
 			{String.format("%s/All/Dataset",OntologyResource.resource),"Hierarchical view of features in datasets",format,"GET","Yes"},
@@ -194,8 +195,11 @@ public class AmbitResource extends ServerResource {
 
 			{String.format("/query/structure?search=%s&max=100",Reference.encode("CC1=CC1")),"Search by exact structure 	CC1=CC1",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS [NX3][CX3](=[OX1])[#6]",format,"GET","Yes"},
+			{String.format("/dataset/2/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS [NX3][CX3](=[OX1])[#6] within /dataset/2",format,"GET","Yes"},
+					
 			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
+			
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
 			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},
