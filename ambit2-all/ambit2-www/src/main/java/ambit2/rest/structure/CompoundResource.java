@@ -14,6 +14,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -29,12 +30,16 @@ import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.NumberCondition;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.chemical.DeleteChemical;
+import ambit2.db.update.dataset.DeleteDataset;
+import ambit2.db.update.storedquery.DeleteStoredQuery;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
@@ -364,5 +369,45 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		IQueryRetrieval<IStructureRecord> q =  super.returnQueryObject();
 		if (q instanceof QueryField) ((QueryField)q).setRetrieveProperties(false);
 		return q;
+	}
+	
+	@Override
+	protected AbstractUpdate createDeleteObject(IStructureRecord record)
+			throws ResourceException {
+		record = record==null?new StructureRecord():record;
+		Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
+		try {
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
+			if(record.getIdchemical()<=0)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			else {
+				DeleteChemical c =  new DeleteChemical();
+				c.setObject(record);
+				return c;
+			}
+		} catch (ResourceException x) {	
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+		
+	}
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		Representation entity = getRequestEntity();
+		try {
+			executeUpdate(entity, 
+					null,
+					createDeleteObject(null));
+			return getResponseEntity();
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,x.getMessage(),x);
+		}
+	}	
+	@Override
+	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> getURUReporter(
+			Request baseReference) throws ResourceException {
+
+		return null;
 	}
 }

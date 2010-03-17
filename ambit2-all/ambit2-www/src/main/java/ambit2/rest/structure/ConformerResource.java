@@ -5,11 +5,17 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.chemical.DeleteChemical;
+import ambit2.db.update.structure.DeleteStructure;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 
 /**
@@ -105,4 +111,44 @@ public class ConformerResource extends CompoundResource {
 	protected QueryURIReporter getURIReporter() {
 		return new ConformerURIReporter<QueryStructureByID>(getRequest());
 	}
+	
+	
+	@Override
+	protected AbstractUpdate createDeleteObject(IStructureRecord record)
+			throws ResourceException {
+		record = record==null?new StructureRecord():record;
+		Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
+		try {
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
+			if(record.getIdchemical()<=0)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+			key = getRequest().getAttributes().get(OpenTox.URI.conformer.getKey());
+			record.setIdstructure(Integer.parseInt(Reference.decode(key.toString())));
+			if(record.getIdstructure()<=0)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);			
+			else {
+				DeleteStructure c =  new DeleteStructure();
+				c.setObject(record);
+				return c;
+			}
+		} catch (ResourceException x) {	
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+		
+	}
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		Representation entity = getRequestEntity();
+		try {
+			executeUpdate(entity, 
+					null,
+					createDeleteObject(null));
+			return getResponseEntity();
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,x.getMessage(),x);
+		}
+	}		
 }

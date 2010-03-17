@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -18,9 +20,11 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 
 import weka.core.Attribute;
@@ -291,4 +295,31 @@ public class CompoundResourceTest extends ResourceTest {
 		Assert.assertTrue(reader.getNumberOfPages()>0);
 		return true;
 	}
+	
+	@Test
+	public void testDeleteCompound() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT *  FROM struc_dataset where id_srcdataset=1");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();
+		
+		Response response =  testDelete(
+					String.format("http://localhost:%d/compound/7", port),
+					MediaType.APPLICATION_WWW_FORM,
+					null);
+		
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT *  FROM struc_dataset where idstructure = 100211 and id_srcdataset=1");
+		Assert.assertEquals(0,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where idchemical=7");
+		Assert.assertEquals(0,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure where idchemical=7");
+		Assert.assertEquals(0,table.getRowCount());			
+		c.close();
+				
+		
+	}		
+
 }
