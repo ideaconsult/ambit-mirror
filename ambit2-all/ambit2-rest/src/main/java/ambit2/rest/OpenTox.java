@@ -106,6 +106,18 @@ public class OpenTox {
 				return "Algorithm URI";
 			}
 		},			
+		compound_uris {
+			public boolean isMandatory() {
+				return false;
+			}
+			@Override
+			public String toString() {
+				return String.format("%s[]",super.toString());
+			}			
+			public String getDescription() {
+				return "Compound URIs";
+			}			
+		},		
 		dataset_uri {
 			public boolean isMandatory() {
 				return true;
