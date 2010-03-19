@@ -163,6 +163,7 @@ public class Step2Processor extends StepProcessor {
 		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS"};//,"REACHRegistrationDate"};
 		
 		
+		if (session.getFeatures()==null) session.setFeatures(new Form());
 		
 		for (String n:s)  {
 			/*
@@ -171,7 +172,7 @@ public class Step2Processor extends StepProcessor {
 			
 			query.add("feature_uris[]",Reference.encode(fquery.toString())
 			*/
-			query.add("feature_uris[]",
+			session.getFeatures().add("feature_uris[]",
 					String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
 							//Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
 							Reference.encode(n)));
@@ -180,7 +181,7 @@ public class Step2Processor extends StepProcessor {
 		
 		if (dataset!=null)  {
 			
-			query.add("feature_uris[]",
+			session.getFeatures().add("feature_uris[]",
 					String.format("%s:%s%s",
 					topRef.getScheme(),
 					topRef.getHierarchicalPart(),

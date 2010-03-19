@@ -4,7 +4,6 @@ import java.io.Writer;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
@@ -25,13 +24,13 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DatasetTools {
-	public static Model retrieveDataset(Model model, String datasetURI) throws Exception {
+	public static Model retrieveDataset(Model model, Reference datasetURI) throws Exception {
 		try {
-			model =  (model == null)?OT.createModel(null,new Reference(datasetURI),MediaType.TEXT_RDF_N3):
-							model.read(datasetURI);
+			model =  (model == null)?OT.createModel(null,datasetURI,MediaType.TEXT_RDF_N3):
+							model.read(datasetURI.toString());
 		} catch (Exception x) {
-			model = (model == null)?OT.createModel(null,new Reference(datasetURI),MediaType.APPLICATION_RDF_XML):
-				model.read(datasetURI);			
+			model = (model == null)?OT.createModel(null,datasetURI,MediaType.APPLICATION_RDF_XML):
+				model.read(datasetURI.toString());			
 		}
 		/*
 		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS","REACHRegistrationDate"};
@@ -308,7 +307,7 @@ public class DatasetTools {
 			ResultSet results = qe.execSelect();
 			writer.write("<table width='100%' >");
 			
-			String download = ModelTools.getDatasetDownloadUri(session,new Reference(session.getDatasetURI()), ChemicalMediaType.CHEMICAL_MDLSDF,rootReference);
+			String download = ModelTools.getDatasetDownloadUri(session,session.getSearchQuery(), ChemicalMediaType.CHEMICAL_MDLSDF,rootReference);
 			if (download!= null) writer.write(String.format("<tr><th align='right' title='Download' colspan='3'>Download as %s</th></tr>",download));
 			String compoundURI = null;
 			int records = 0;

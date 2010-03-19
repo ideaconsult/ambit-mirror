@@ -14,7 +14,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.StepException;
-import ambit2.fastox.steps.step1.Step1Resource.TABS;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;

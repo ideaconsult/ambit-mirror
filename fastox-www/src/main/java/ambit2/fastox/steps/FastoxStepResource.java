@@ -159,7 +159,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		try {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
-			store = DatasetTools.retrieveDataset(null,session.getDatasetURI());
+			store = DatasetTools.retrieveDataset(null,session.getSearchQuery());
 			int records = DatasetTools.renderDataset1(session,store,writer,"",getRequest().getRootRef(),session.getSearch(),session.getCondition());
 			writer.write("</table>");
 			if (records ==0) session.setError(key,new NotFoundException("No compounds found"));
@@ -174,7 +174,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		try {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 			writer.write("<table class='results'>");
-			store = DatasetTools.retrieveDataset(null,session.getDatasetURI());
+			store = DatasetTools.retrieveDataset(null,session.getSearchQuery());
 			int records = DatasetTools.renderDataset(store,writer,"",getRequest().getRootRef());
 			writer.write("</table>");
 			if (records ==0) session.setError(key,new NotFoundException("No compounds found"));

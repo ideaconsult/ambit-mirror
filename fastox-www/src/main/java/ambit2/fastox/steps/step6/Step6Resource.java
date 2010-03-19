@@ -8,10 +8,6 @@ import java.util.List;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.DatasetTools;
 import ambit2.fastox.ModelTools;
@@ -47,6 +43,11 @@ public class Step6Resource extends FastoxStepResource {
 			writer.write(x.getMessage());
 		}
 		*/
+		try {
+			store = DatasetTools.retrieveDataset(store,session.getSearchQuery());
+		} catch (Exception x) {
+			
+		}
 		Iterator<String> models = session.getModels();
 		if (models != null)
 		while (models.hasNext())  {
@@ -54,7 +55,7 @@ public class Step6Resource extends FastoxStepResource {
 			String uri = session.getModelResultsURI(model);
 			if (uri != null)
 				try {
-					store = DatasetTools.retrieveDataset(store,uri);
+					store = DatasetTools.retrieveDataset(store,new Reference(uri));
 				} catch (Exception x) {
 					session.setError(key,x);
 				}	
