@@ -83,7 +83,7 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 	}
 	@Override
 	public Object predict(Instance target) throws AmbitException {
-		System.out.println(target);
+
 		Instances testInstances = target.dataset();
 		try {
 			Object value = null;

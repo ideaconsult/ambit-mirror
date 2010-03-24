@@ -120,9 +120,9 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 	        Filter filter = new RemoveUseless();
 	        filter.setInputFormat(newInstances);
 	        newInstances = Filter.useFilter(newInstances, filter);
-	        filter = new ReplaceMissingValues();
-	        filter.setInputFormat(newInstances);
-	        newInstances = Filter.useFilter(newInstances, filter);    
+	       // filter = new ReplaceMissingValues();
+	       // filter.setInputFormat(newInstances);
+	       // newInstances = Filter.useFilter(newInstances, filter);    
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
