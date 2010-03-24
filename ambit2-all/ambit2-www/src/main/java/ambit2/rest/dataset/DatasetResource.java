@@ -270,9 +270,15 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 					
 					IStructureRecord record = new StructureRecord();
 					for (String compound: compounds ) {
-						Object[] ids = OpenTox.URI.conformer.getIds(compound, getRequest().getRootRef());
-						record.setIdchemical((Integer)ids[0]);
-						record.setIdstructure((Integer)ids[1]);
+						if (compound.indexOf("conformer")>0) {
+							Object[] ids = OpenTox.URI.conformer.getIds(compound, getRequest().getRootRef());
+							record.setIdchemical((Integer)ids[0]);
+							record.setIdstructure((Integer)ids[1]);
+						} else {
+							Object ids = OpenTox.URI.compound.getId(compound, getRequest().getRootRef());
+							record.setIdchemical((Integer)ids);
+							record.setIdstructure(-1);							
+						}
 						
 						deleteObject.setObject(record);
 						executeUpdate(form.getWebRepresentation(), 	null,	deleteObject);						
