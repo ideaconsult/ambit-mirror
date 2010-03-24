@@ -155,7 +155,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 						new SourceDataset(file.getName(), LiteratureEntry
 					.getInstance(file.getName(), client==null?"File uploaded by user":client.getAddress()));	
 			
-			dataset.setId(-1);
+			if (targetDataset==null) dataset.setId(-1);
 			final BatchDBProcessor batch = new BatchDBProcessor() {
 				@Override
 				public Iterator<String> getIterator(IInputState target)
