@@ -121,7 +121,7 @@ public class DatasetStructure_crud_test extends CRUDTest<SourceDataset, IStructu
 	protected IQueryUpdate<SourceDataset, IStructureRecord> deleteQuery()
 			throws Exception {
 		SourceDataset adataset = new SourceDataset();
-		adataset.setName("Dataset 1");
+		adataset.setId(1);
 		DatasetDeleteStructure d = new DatasetDeleteStructure();
 		d.setGroup(adataset);
 		
