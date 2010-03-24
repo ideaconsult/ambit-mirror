@@ -42,8 +42,11 @@ public class DatasetDeleteStructure extends AbstractUpdate<SourceDataset,IStruct
 	
 	
 	public static final String[] delete_sql = {
-		"delete struc_dataset from struc_dataset,src_dataset where idstructure=? and name=?"
+		"delete d from struc_dataset d where d.idstructure=? and id_srcdataset=?"
 	};
+	public static final String[] delete_sql_chemical = {
+		"delete d from struc_dataset d , structure t where idchemical=? and id_srcdataset=? and d.idstructure=t.idstructure"
+	};	
 
 	public DatasetDeleteStructure(SourceDataset dataset,IStructureRecord record) {
 		super();
@@ -54,11 +57,17 @@ public class DatasetDeleteStructure extends AbstractUpdate<SourceDataset,IStruct
 		this(null,null);
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (getObject()==null || getObject().getIdstructure()<=0) throw new AmbitException("Structure not defined!");
-		if (getGroup()==null || getGroup().getName()==null) throw new AmbitException("Dataset not defined!");
+		if (getGroup()==null || getGroup().getId()<=0) throw new AmbitException("Dataset not defined!");
+
+		if (getObject()==null) throw new AmbitException("Structure not defined!");
+		
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));
-		params1.add(new QueryParam<String>(String.class, getGroup().getName()));		
+		if (getObject().getIdstructure()<=0) {
+			if (getObject().getIdchemical()<=0) 
+				throw new AmbitException("Compound not defined!");
+			else params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
+		} else params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));
+		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getId()));		
 	
 		return params1;
 		
@@ -68,6 +77,10 @@ public class DatasetDeleteStructure extends AbstractUpdate<SourceDataset,IStruct
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return delete_sql;
+		if (getObject().getIdstructure()<=0) 
+			if (getObject().getIdchemical()<=0)
+				throw new AmbitException("Compound not defined!");
+			else return delete_sql_chemical;
+		else return delete_sql;
 	}
 }
