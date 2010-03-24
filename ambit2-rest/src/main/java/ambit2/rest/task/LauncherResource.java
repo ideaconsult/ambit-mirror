@@ -41,10 +41,10 @@ public class LauncherResource extends ServerResource {
 
 	}
 	protected Reference getDatasetService() {
-		return new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset");
+		return getRequest().getRootRef().addSegment(OpenTox.URI.dataset.toString());
 	}
 	protected Reference getApplicationRoot() {
-		return new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2");
+		return getRequest().getRootRef();
 	}	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
@@ -85,11 +85,10 @@ public class LauncherResource extends ServerResource {
 			Reference ref =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(new Form(entity)),
-					getRequest().getRootRef());		
+					getRequest().getRootRef(),false);		
 			getResponse().setLocationRef(ref);
 			//getResponse().setStatus(Status.SUCCESS_CREATED);
 			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-			System.out.println(ref);
 			return new StringRepresentation(ref.toString());
 		} catch (Exception x) {
 			if (x.getCause() instanceof ResourceException)

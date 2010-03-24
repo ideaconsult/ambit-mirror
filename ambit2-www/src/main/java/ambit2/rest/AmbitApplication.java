@@ -65,6 +65,7 @@ import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.structure.quality.ConsensusLabelResource;
 import ambit2.rest.structure.quality.QualityLabelResource;
+import ambit2.rest.task.LauncherResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.tuple.TuplePropertyValueResource;
@@ -141,6 +142,8 @@ public class AmbitApplication extends TaskApplication {
 		//test
 		router.attach(RDFGraphResource.resource,RDFGraphResource.class);
 		router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
+		
+		router.attach("/launch", LauncherResource.class);
 		
 		Router fastoxRouter = new MyRouter(getContext());
 		router.attach(FastToxStep1.resource,fastoxRouter);
