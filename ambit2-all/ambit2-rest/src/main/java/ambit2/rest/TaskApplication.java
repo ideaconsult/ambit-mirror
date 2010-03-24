@@ -2,6 +2,7 @@ package ambit2.rest;
 
 import java.io.PrintWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadFactory;
 
@@ -22,28 +24,18 @@ import ambit2.rest.task.Task;
 
 public class TaskApplication<USERID> extends Application {
 	protected ConcurrentMap<UUID,Task<Reference,USERID>> tasks;
-
+	public enum pool_task  { INTERNAL, EXTERNAL};
 	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
-	protected ExecutorService pool;
+	protected Hashtable<pool_task,ExecutorService> pools;
 	public TaskApplication() {
 		super();
 		//pool = Executors.newFixedThreadPool(5);
-		pool = Executors.newSingleThreadExecutor(new ThreadFactory() {
-			public Thread newThread(Runnable r) {
-				Thread thread = new Thread(r);
-				thread.setPriority(Thread.MIN_PRIORITY);
-				thread.setDaemon(true);
-				thread.setName(String.format("%s task executor",getName()));
-				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-					public void uncaughtException(Thread t, Throwable e) {
-			            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-			            e.printStackTrace(new PrintWriter(stackTraceWriter));
-						getLogger().severe(stackTraceWriter.toString());
-					}
-				});
-				return thread;
-			}
-		});
+		pools = new Hashtable<pool_task, ExecutorService>();
+		ExecutorService x= createExecutorService(5);
+		pools.put(pool_task.INTERNAL,x);
+		x = createExecutorService(1);
+		pools.put(pool_task.EXTERNAL,x);
+
 
 		tasks = new ConcurrentHashMap<UUID,Task<Reference,USERID>>();		
 		
@@ -62,6 +54,25 @@ public class TaskApplication<USERID> extends Application {
 	    timer.scheduleAtFixedRate(cleanUpTasks,taskCleanupRate,taskCleanupRate);		
 	}
 	
+	protected ExecutorService createExecutorService(int maxThreads) {
+		return Executors.newFixedThreadPool(maxThreads,new ThreadFactory() {
+		//return Executors.newCachedThreadPool(new ThreadFactory() {
+			public Thread newThread(Runnable r) {
+				Thread thread = new Thread(r);
+				thread.setPriority(Thread.MIN_PRIORITY);
+				thread.setDaemon(true);
+				thread.setName(String.format("%s task executor",getName()));
+				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+					public void uncaughtException(Thread t, Throwable e) {
+			            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+			            e.printStackTrace(new PrintWriter(stackTraceWriter));
+						getLogger().severe(stackTraceWriter.toString());
+					}
+				});
+				return thread;
+			}
+		});
+	}
 	@Override
 	protected void finalize() throws Throwable {
 		removeTasks();
@@ -98,7 +109,7 @@ public class TaskApplication<USERID> extends Application {
 	}
 	public synchronized Task<Reference,USERID> findTask(String id) {
 		try {
-		return tasks.get(UUID.fromString(id));
+			return tasks.get(UUID.fromString(id));
 		} catch (Exception x) {
 			System.out.println(x);
 			return null;
@@ -113,15 +124,22 @@ public class TaskApplication<USERID> extends Application {
 		}
 	}
 	//shortcut for backward compatibility
+	//shortcut for backward compatibility
 	public synchronized Reference addTask(String taskName, 
 			Callable<Reference> callable, 
 			Reference baseReference) {
-		return addTask(taskName,callable,baseReference,(USERID) "guest");
+		return addTask(taskName,callable,baseReference,(USERID) "guest",true);
+	}
+	
+	public synchronized Reference addTask(String taskName, 
+			Callable<Reference> callable, 
+			Reference baseReference,boolean internal) {
+		return addTask(taskName,callable,baseReference,(USERID) "guest",internal);
 	}
 	public synchronized Reference addTask(String taskName, 
 			Callable<Reference> callable, 
 			Reference baseReference,
-			USERID user) {
+			USERID user,boolean internal) {
 		if (callable == null) return null;
 		FutureTask<Reference> futureTask = new FutureTask<Reference>(callable) {
 			@Override
@@ -140,7 +158,10 @@ public class TaskApplication<USERID> extends Application {
 		task.setUri(ref);
 		tasks.put(uuid,task);
 		//getTaskService().submit(futureTask);
-		pool.submit(futureTask);
+		Future future = internal?
+			pools.get(pool_task.INTERNAL).submit(futureTask):
+			pools.get(pool_task.EXTERNAL).submit(futureTask);
+		System.out.println(future);
 		return ref;
 	}
 	
