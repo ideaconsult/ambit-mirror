@@ -203,7 +203,16 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			}
 			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Prepare dataset for model %s",modelURI));
 			//everything in, do some querying
-			launchCalculations(jenaModel,modelURI.toString());
+			try {
+				launchFeaturesCalculations(jenaModel,modelURI.toString());
+			} catch (ResourceException x) {
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,modelURI.toString(),x);
+			} catch (Exception x) {
+				throw x;
+			}
+		} catch (ResourceException x) {
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+					String.format("[%s] %s",modelURI.toString(),x.getMessage(),x));
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -212,7 +221,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		}
 	}
 	
-	protected void launchCalculations(Model jenaModel, String model) {
+	protected void launchFeaturesCalculations(Model jenaModel, String model) {
 		String queryString =
 		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 		"PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
