@@ -237,6 +237,8 @@
     <module>ambit2-base</module>
     <module>ambit2-rest</module>
     <module>ambit2-usmiles</module>
+    <module>ambit2-tautomers</module>
+    
   </modules>
   <distributionManagement>
   	<snapshotRepository>
