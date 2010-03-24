@@ -95,12 +95,24 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		if ((recordIterator!=null) && recordIterator.hasNext()) {
 				Statement st = recordIterator.next();
 				Resource newEntry = null;
-				if (iterateSubjects)
+				if (iterateSubjects) {
 					newEntry = (Resource) st.getSubject();
-				else {
-					while (!st.getObject().isResource()) st = recordIterator.next();
+					while (newEntry.isURIResource() && (
+							   newEntry.getURI().equals("http://www.opentox.org/api/1.1#NumericFeature") ||
+							   newEntry.getURI().equals("http://www.opentox.org/api/1.1#NominalFeature") ||
+							   newEntry.getURI().equals("http://www.opentox.org/api/1.1#StringFeature") 
+							   )
+							   ) {
+						if ( recordIterator.hasNext() ) 	st = recordIterator.next();
+						else return false;
+						newEntry = (Resource) st.getSubject();
+					}
+					
+				} else {
+					while (!st.getObject().isResource() ) st = recordIterator.next();
 					newEntry = (Resource) st.getObject();
 				}
+
 				record = parseRecord( newEntry,createRecord());
 				return true;
 		}
