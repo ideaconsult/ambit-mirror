@@ -107,12 +107,13 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	@Override
 	public String toString() {
 		try {
-		return String.format("%s [%s] Started %s Completed %s [%s]",
+		return String.format("%s [%s] Started %s Completed %s [%s] [%s]",
 				name==null?"?":name,
 				getReference().toString(),
 				new Date(started),
 				((completed>0)?new Date(completed):"-"),
-				getStatus()
+				getStatus(),
+				userid
 				);
 		} catch (Exception x) {
 			return x.getMessage();
