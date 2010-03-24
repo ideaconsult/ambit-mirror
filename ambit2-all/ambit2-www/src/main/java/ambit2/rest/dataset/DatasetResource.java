@@ -257,7 +257,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		try {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			String[] compounds = OpenTox.params.compound_uris.getValuesArray(form);
-			if (compounds != null) { //partial delete
+			if ((compounds != null) && (compounds.length>0)) { //partial delete
 				try {
 					DatasetDeleteStructure deleteObject;
 					if ((datasetID!=null) && (datasetID>0)) {
