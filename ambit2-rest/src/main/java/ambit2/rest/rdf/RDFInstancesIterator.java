@@ -138,7 +138,11 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 			
 			break;
 		}
-		record.setValue(urilookup.get(CompoundURI),id);
+		try {
+			record.setValue(urilookup.get(CompoundURI),id);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 		//get feature values
 		
 		parseFeatureValues( (Resource)newEntry,record);
