@@ -1,6 +1,7 @@
 package ambit2.rest.test.dataset;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -23,10 +24,12 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
+import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
 
 
@@ -269,7 +272,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		
 	}		
 	
-@Test
+	@Test
 	public void testCreateEntryFromFile() throws Exception {
 		
 		FileRepresentation rep = new FileRepresentation(
@@ -300,6 +303,46 @@ public class DatasetsResourceTest extends ResourceTest {
 		c.close();
 		
 	}	
+	
+	
+	public void testCreateEntryFromCSVFile() throws Exception {
+		
+		FileRepresentation rep = new FileRepresentation(
+				"E:/src/ambit2-all/ambit2-www/src/test/resources/PK-test.csv", 
+				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
+				MediaType.TEXT_CSV, 0);
+				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
+				
+		Response r = testPostFile(getTestURI(), MediaType.TEXT_CSV, rep);
+		Reference uri = r.getLocationRef();
+		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
+			//System.out.println(r.getStatus() + " " +r.getLocationRef());
+			
+			Request request = new Request();
+			Client client = new Client(Protocol.HTTP);
+			request.setResourceRef(uri);
+			request.setMethod(Method.GET);
+			r = client.handle(request);
+			uri = r.getLocationRef();
+		}
+		System.out.println(r.getStatus());
+		//System.out.println(r.getLocationRef());
+	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure join struc_dataset using(idstructure) where id_srcdataset=4");
+		Assert.assertEquals(1,table.getRowCount());
+
+		c.close();
+		
+		Form headers = new Form();
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/4", port));
+		Reference result = testAsyncTask(String.format("http://localhost:%d/model/pKa", port),
+				headers, Status.SUCCESS_OK,
+				"http://localhost:8181/dataset/4?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F2%2Fpredicted");
+		System.out.println(result);
+	}		
 	@Test
 	public void testCreateEntryTUMRDFRemote() throws Exception {
 	        IDatabaseConnection c = getConnection();	
@@ -462,4 +505,45 @@ public class DatasetsResourceTest extends ResourceTest {
      }
 */
 
+	@Test
+	public void testAddCompoundsToDataset() throws Exception {
+		//String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/288";
+		String dataset = String.format("http://localhost:%d/dataset/1", port);
+		String file = "E:/src/ambit2-all/ambit2-www/src/test/resources/test.sdf";
+		Reference reference = upload(new Reference(dataset),
+		new FileRepresentation(new File(file),
+		ChemicalMediaType.CHEMICAL_MDLSDF),
+		new Variant(MediaType.TEXT_URI_LIST),
+		false);
+		Assert.assertEquals(dataset,reference.toString());
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=1");
+		Assert.assertEquals(14,table.getRowCount());
+		c.close();		
+		
+	}
+	
+	protected Reference upload(Reference datasetURI,Representation entity,Variant variant,boolean newDataset) throws ResourceException {
+		try {
+              //factory.setSizeThreshold(100);
+			RemoteTask task = new RemoteTask(datasetURI,variant.getMediaType(),entity,newDataset?Method.POST:Method.PUT,null);
+			//task.poll() returns true if completed
+			while (!task.poll()) {
+				Thread.sleep(1500);
+			}
+			if (Status.SUCCESS_OK.equals(task.getStatus())) {
+				return task.getResult();
+			} else if (Status.CLIENT_ERROR_NOT_FOUND.equals(task.getStatus())) {
+				 throw new ResourceException(task.getStatus());
+			} else throw new ResourceException(task.getStatus(),task.getResult()==null?task.getStatus().getDescription():task.getResult().toString());
+			
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(x);
+		} finally {
+
+		}
+	}	
 }

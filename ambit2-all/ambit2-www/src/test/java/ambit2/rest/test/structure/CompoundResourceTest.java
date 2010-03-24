@@ -298,7 +298,7 @@ public class CompoundResourceTest extends ResourceTest {
 	
 	@Test
 	public void testDeleteCompound() throws Exception {
-		
+		//fails because foreign key constraints have been changed to restrict
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT *  FROM struc_dataset where id_srcdataset=1");
 		Assert.assertEquals(4,table.getRowCount());

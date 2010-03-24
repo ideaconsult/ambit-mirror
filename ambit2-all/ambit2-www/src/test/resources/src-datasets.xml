@@ -88,7 +88,7 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
 96B/xsDkzg==" format="SDF" updated="2008-10-29 06:35:33.0" user_name="guest" type_structure="2D with H"/>
    <properties idproperty="1" idreference="8" name="Property 1" units="" comments="Property" islocal="false"/>
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="false"/>
-  <properties idproperty="3" idreference="8" name="CAS" units="" comments="CasRN" islocal="false"/>
+  <properties idproperty="3" idreference="8" name="CAS" units="" comments="http://www.opentox.org/api/1.1#CasRN" islocal="false"/>
   <template idtemplate="1" name="BCF"/>
   <template idtemplate="3" name="Empty"/>
   <template_def idtemplate="1" idproperty="1"/>
