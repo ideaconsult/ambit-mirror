@@ -28,6 +28,40 @@ public class RemoteTask implements Serializable {
 	protected Reference result = null;
 	protected Exception error = null;
 	
+	public RemoteTask(Reference url,MediaType media, 
+			  Representation input,
+			  Method method,
+			  ChallengeResponse authentication) throws ResourceException {
+		super();
+		
+		this.url = url;
+		Representation r=null;
+		try {
+			ClientResource client = new ClientResource(url);
+			client.setChallengeResponse(authentication);
+			if (method.equals(Method.POST))
+				r = client.post(input,media);
+			else if (method.equals(Method.PUT))
+				r = client.put(input,media);
+			else if (method.equals(Method.DELETE))
+				r = client.delete(media);
+			else if (method.equals(Method.GET))
+				r = client.get(media);
+			else throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+			
+			result = handleOutput(client, r);
+			this.status = client.getStatus();
+		} catch (ResourceException x) {
+			error = x;
+			status = x.getStatus();
+		} catch (Exception x) {
+			error = x;
+			status = null;
+		} finally {
+			try { r.release(); } catch (Exception x) {}
+		}
+	}	
+	/*
 	public RemoteTask(Reference url,MediaType media, Representation input,Method method,ChallengeResponse authentication) {
 		super();
 		
@@ -50,7 +84,7 @@ public class RemoteTask implements Serializable {
 			System.out.println(toString());
 		}
 	}		
-	
+	*/
 	public boolean isCompletedOK() {
 		return Status.SUCCESS_OK.equals(status);
 	}
