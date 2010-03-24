@@ -1,5 +1,7 @@
 package ambit2.rest.dataset;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,14 +20,17 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryComplement;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.dataset.DatasetDeleteStructure;
 import ambit2.db.update.dataset.DeleteDataset;
+import ambit2.db.update.dataset.ReadDataset;
 import ambit2.db.update.storedquery.DeleteStoredQuery;
 import ambit2.db.update.structure.ChemicalByDataset;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
@@ -229,6 +234,25 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		} else if ((datasetID!=null) && (datasetID>0)) {
 			SourceDataset dataset = new SourceDataset();
 			dataset.setId(datasetID);
+			Connection c = null;
+			ResultSet rs = null;
+			try {
+				DBConnection dbc = new DBConnection(getContext());
+				c = dbc.getConnection();
+				ReadDataset read = new ReadDataset();
+				read.setValue(dataset);
+				QueryExecutor x = new QueryExecutor();
+				x.setConnection(c);
+				rs = x.process(read);
+				while (rs.next()) {
+					dataset = read.getObject(rs);
+				}
+			} catch (Exception x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+			} finally {
+				try { rs.close(); } catch (Exception x) {}
+				try { c.close(); } catch (Exception x) {}
+			}
  			upload.setDataset(dataset);
 			return  upload.upload(entity,variant,true);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
