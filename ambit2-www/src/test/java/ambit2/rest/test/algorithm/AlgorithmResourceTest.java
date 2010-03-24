@@ -13,11 +13,8 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.property.ProfileReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.test.ResourceTest;
 
@@ -128,7 +125,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		}
 	}
 	@Test
-		public void testClassifier() throws Exception {
+	public void testClassifier() throws Exception {
 			Form headers = new Form();  
 			headers.add(OpenTox.params.dataset_uri.toString(), 
 					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948&max=10");
@@ -139,9 +136,109 @@ public class AlgorithmResourceTest extends ResourceTest {
 							//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
 					headers, Status.SUCCESS_OK,
 					String.format("http://localhost:%d/model/%s", port,"3"));
-
-			
 	}	
+	
+	
+	
+	 
+	@Test
+	public void testLocalRegressionDescriptors() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		Reference dataset = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		
+		
+		headers.removeAll(OpenTox.params.dataset_uri.toString());
+		dataset.addQueryParameter(OpenTox.params.feature_uris.toString(), String.format("http://localhost:%d/feature/2", port));
+		
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+
+		headers.add(OpenTox.params.target.toString(),
+				String.format("http://localhost:%d/feature/2",port));
+		
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/LR", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"4"));
+	
+		headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+		testAsyncTask(
+				String.format("http://localhost:%d/model/4", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				"http://localhost:8181/dataset/1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted");
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT * from properties where name='Property 2'");
+		Assert.assertEquals(2,table.getRowCount());
+		
+		Assert.fail("second run, try if predictions already exists");
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+			
+		
+
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Property 2'");
+		Assert.assertEquals(7,table.getRowCount());
+   }			
+	@Test
+	public void testLocalRegression() throws Exception {
+		Form features = new Form();
+		for (int i=1 ; i < 3; i++)
+			features.add(OpenTox.params.feature_uris.toString(),String.format("http://localhost:%d/feature/%d",port,i));
+		
+		Form headers = new Form();  
+		Reference dataset = new Reference(String.format("http://localhost:%d/dataset/1",port));
+		dataset.setQuery(features.getQueryString());
+		
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+
+		headers.add(OpenTox.params.target.toString(),
+				String.format("http://localhost:%d/feature/2",port));
+		
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/LR", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+	
+		headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT * from properties where name='Property 2'");
+		Assert.assertEquals(2,table.getRowCount());
+		
+		Assert.fail("second run, try if predictions already exists");
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+			
+		
+
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Property 2'");
+		Assert.assertEquals(7,table.getRowCount());
+   }		
 
 	@Test
 	public void testClustering() throws Exception {
