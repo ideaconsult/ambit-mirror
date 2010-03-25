@@ -38,6 +38,7 @@ import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.structure.QueryStructure;
@@ -68,6 +69,7 @@ public class Structure_crud_test extends CRUDTest<Object,IStructureRecord>{
         q.setValue("10");
         
         RetrieveStructure r = new RetrieveStructure();
+        r.setFieldname(false); //structure
         QueryExecutor execR = new QueryExecutor();
         execR.setConnection(c.getConnection());
 		QueryExecutor exec = new QueryExecutor();
@@ -147,16 +149,27 @@ public class Structure_crud_test extends CRUDTest<Object,IStructureRecord>{
 			throws Exception {
 	        IDatabaseConnection c = getConnection();	
 
-			ITable table = 	c.createQueryTable("EXPECTED","SELECT idstructure,idchemical FROM structure");
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT idstructure,idchemical,type_structure FROM structure");
 			Assert.assertTrue(table.getRowCount()>0);
 	        
 	        RetrieveStructure r = new RetrieveStructure();
+	        r.setPreferedStructure(false);
+	        r.setFieldname(false);
 	        QueryExecutor execR = new QueryExecutor();
 	        execR.setConnection(c.getConnection());
 			int count = 0;
 			for (int i=0; i < table.getRowCount();i++) {
 				IStructureRecord record = new StructureRecord();
 				record.setIdstructure(Integer.parseInt(table.getValue(i,"idstructure").toString()));
+	            try {
+	            	Object t = table.getValue(i,"type_structure");
+	            	for (STRUC_TYPE type : STRUC_TYPE.values()) if (type.toString().equals(t)) {
+	            		record.setType(type);
+	            		break;
+	            	}
+	            } catch (Exception x) {
+	            	record.setType(STRUC_TYPE.NA);
+	            }				
 				r.setValue(record);
 				ResultSet rs1 = execR.process(r);
 				while (rs1.next()) {
