@@ -279,6 +279,81 @@ public class QueryResultsResourceTest extends ResourceTest {
 
 		
 	}		
+	
+	@Test
+	public void testPutConformer2Dataset() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/compound/7/conformer/100211", port));
+		
+		Response response =  testPut(
+					String.format("http://localhost:%d/dataset/3", port),
+					MediaType.APPLICATION_WWW_FORM,
+					form.getWebRepresentation());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef().toString());
+	
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
+		Assert.assertEquals(3,table.getRowCount());
+		c.close();		
+	}
+	
+	@Test
+	public void testPutPubchemSearchResult2Dataset() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/query/pubchem/50-00-0", port));
+		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/query/pubchem/50-00-0", port));
+		
+		Response response =  testPut(
+					String.format("http://localhost:%d/dataset/3", port),
+					MediaType.APPLICATION_WWW_FORM,
+					form.getWebRepresentation());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef().toString());
+	
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
+		Assert.assertEquals(4,table.getRowCount());
+
+		c.close();		
+	}	
+	
+	@Test
+	public void testPutCompound2Dataset() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/compound/7/conformer/100211", port));
+		
+		Response response =  testPut(
+					String.format("http://localhost:%d/dataset/3", port),
+					MediaType.APPLICATION_WWW_FORM,
+					form.getWebRepresentation());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef().toString());
+		
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
+		Assert.assertEquals(3,table.getRowCount());
+		c.close();				
+	}
+	
 	@Test
 	public void testPutDataset() throws Exception {
 		
