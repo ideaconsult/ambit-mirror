@@ -8,6 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.w3c.dom.Document;
 
 import ambit2.base.exceptions.AmbitException;
@@ -24,7 +25,10 @@ import ambit2.rest.test.ResourceTest;
 public class PropertyValueResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/compound/11%s/CasRN", port,PropertyValueResource.featureKey);
+		return String.format("http://localhost:%d/compound/11/%s/%s", 
+				port,
+				PropertyValueResource.featureKey,
+				Reference.encode("http://www.opentox.org/api/1.1#CasRN"));
 	}
 	@Test
 	public void testXML() throws Exception {
@@ -75,7 +79,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("CasRN = 1530-32-1", line);
+			Assert.assertEquals("[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3	InChI=InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1", line);
 			count++;
 		}
 		return count==1;
