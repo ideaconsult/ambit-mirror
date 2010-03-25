@@ -220,7 +220,7 @@ CREATE TABLE  `models` (
   `idquery` int(10) unsigned default NULL COMMENT 'dataset',
   `predictors` int(10) unsigned NOT NULL COMMENT 'template for predictors',
   `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
-  `content` blob NOT NULL,
+  `content` longblob NOT NULL,
   `algorithm` varchar(255) collate utf8_bin NOT NULL default 'N/A' COMMENT 'URI of the algorithm',
   `mediatype` varchar(48) collate utf8_bin NOT NULL default 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
   `parameters` text collate utf8_bin COMMENT 'Model parameters',
@@ -239,6 +239,7 @@ CREATE TABLE  `models` (
   CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predictors` FOREIGN KEY (`predictors`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 -- -----------------------------------------------------
 -- Table `tuples` for non-scalar values
 -- -----------------------------------------------------
