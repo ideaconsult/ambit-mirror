@@ -77,8 +77,8 @@ public class AmbitResource extends ServerResource {
 			{"http://opentox.org/dev/apis/api-1.1/dataset","Datasets",formatHeader,null,"Implemented"},
 			{DatasetsResource.datasets,"get list of datasets available",format,"GET","Yes"},
 			{DatasetsResource.datasets+"?search=Skin","Search for datasets by name",format,"GET","Yes"},			
-			{DatasetsResource.datasets,"create a new dataset",format,"POST","Yes"},
-			{"/dataset/{id}","update dataset",format,"PUT","Yes"},
+			{DatasetsResource.datasets,"create a new dataset application/x-www-form-urlencoded with compound_uris[] or dataset_uri; multipart form with 'file' parameter with supported mime type",format,"POST","Yes"},
+			{"/dataset/{id}","update dataset application/x-www-form-urlencoded with compound_uris[] or dataset_uri; multipart form with 'file' parameter with supported mime type",format,"PUT","Yes"},
 			{"/dataset/{id}","remove dataset",format,"DELETE","Yes"},
 			{"/dataset/{id}?compound_uris[]=uri-of-a-compound-or-conformer","remove compounds from the dataset",format,"DELETE","Yes"},
 			
