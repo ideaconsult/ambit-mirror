@@ -37,9 +37,9 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
-import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
@@ -63,6 +63,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected SmilesKey smilesKey;
 	protected IStructureKey propertyKey;
 	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
+	protected RetrieveStructure query_prefered_structure;
 	protected AbstractStructureQuery query_property;
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
@@ -78,6 +79,9 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		query_chemicals.setId(-1);
 		query_chemicals.setFieldname(smilesKey.getKey().toString());
 		queryexec.setCache(true);
+		query_prefered_structure = new RetrieveStructure();
+		query_prefered_structure.setPreferedStructure(true);
+		query_prefered_structure.setFieldname(true);
 	}
 	
 	
@@ -158,11 +162,21 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		//don't search for anything
 
         	} else {
+        		ResultSet rs = null;
         		try {
-        			findChemical(query_chemicals, idchemical_tag, structure.getIdchemical(), structure);
+        			query_prefered_structure.setValue(structure);
+        			query_prefered_structure.setPreferedStructure(true);
+        			query_prefered_structure.setFieldname(true);
+        			rs = queryexec.process(query_prefered_structure);
+        			while (rs.next()) {
+        				structure.setIdstructure(rs.getInt("idstructure"));
+        				break;
+        			}
         		} catch (Exception x) {
         			logger.warn(x);
         			structure.setIdchemical(-1);
+        		} finally {
+        			try { rs.close(); } catch (Exception x) {}
         		}
         	}
         } else {
