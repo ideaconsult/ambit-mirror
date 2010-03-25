@@ -77,16 +77,20 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 		return getValue();
 
 	}
+
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = new StructureRecord();
 			record.setIdchemical(rs.getInt(2));
 			record.setIdstructure(rs.getInt(3));
+			retrieveStrucType(record, rs);
+			//metric
+			retrieveMetric(record, rs);
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
-	}
+	}	
 	@Override
 	public String toString() {
 		if (getValue()==null) return "Search structure by SMILES, Inchi, Formula";
