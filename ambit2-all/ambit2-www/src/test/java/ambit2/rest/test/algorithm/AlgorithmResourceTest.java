@@ -11,11 +11,13 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
+import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
@@ -381,6 +383,45 @@ public class AlgorithmResourceTest extends ResourceTest {
 		c.close();			
 		
 	}		
+	
+	
+	public void testLeverageLocal() throws Exception {
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:8080/dataset/67?feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720", port));
+				//String.format("http://localhost:8080/dataset/67/smarts?text=Tr&feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720", port));
+		
+		RemoteTask taskTrain = new RemoteTask(
+					new Reference("http://localhost:8080/algorithm/leverage"),
+					MediaType.APPLICATION_WWW_FORM,
+					form.getWebRepresentation(),
+					Method.POST,
+					null);
+		while (taskTrain.poll()) {
+			System.out.println(taskTrain.getStatus());
+		}
+		System.out.println(taskTrain.getResult());
+		System.out.println(taskTrain.getStatus());
+
+		Form testData = new Form();  
+		testData.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:8080/dataset/67?feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720", port));
+		//String.format("http://localhost:8080/dataset/67/smarts?text=Te&feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720", port));
+		
+		RemoteTask taskEstimate = new RemoteTask(
+				taskTrain.getResult(),
+				MediaType.APPLICATION_WWW_FORM,
+				form.getWebRepresentation(),
+				Method.POST,
+				null);
+		while (taskEstimate.poll()) {
+			System.out.println(taskTrain.getStatus());
+		}
+		System.out.println(taskTrain.getResult());
+		System.out.println(taskTrain.getStatus());	
+	
+		
+	}			
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}
