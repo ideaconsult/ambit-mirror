@@ -13,7 +13,6 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
-import ambit2.db.update.chemical.DeleteChemical;
 import ambit2.db.update.structure.DeleteStructure;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;

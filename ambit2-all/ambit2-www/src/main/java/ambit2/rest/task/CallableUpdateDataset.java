@@ -13,12 +13,18 @@ import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
+import ambit2.db.DbReaderStructure;
+import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.dataset.RDFStructuresReader;
+import ambit2.rest.uri.URIStructureIterator;
 
 public class CallableUpdateDataset extends	CallableQueryProcessor<Object, String> {
+	protected String[] compounds = null;
 	protected SourceDataset dataset;
 	protected boolean clearPreviousContent = false;
 	protected Template template;
@@ -41,9 +47,14 @@ public class CallableUpdateDataset extends	CallableQueryProcessor<Object, String
 			) throws ResourceException {
 		super(form, context);
 		this.applicationRootReference = applicationRootReference;
+		compounds = form.getValuesArray(OpenTox.params.compound_uris.toString());
+
 		String datasetURI = form.getFirstValue(OpenTox.params.dataset_uri.toString());
-		if (datasetURI==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
-		sourceReference = new Reference(datasetURI);
+		if ((datasetURI==null) && ((compounds==null) || (compounds.length==0))) 
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+						OpenTox.params.dataset_uri.getDescription());
+
+		sourceReference = datasetURI==null?null:new Reference(datasetURI);
 		this.dataset = dataset;
 		this.template = null;
 		this.datasetUriReporter = datasetUriReporter;
@@ -67,6 +78,20 @@ public class CallableUpdateDataset extends	CallableQueryProcessor<Object, String
 	@Override
 
 	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference);
+		
+		return reference==null?compounds:getQueryObject(reference, applicationRootReference);
 	}
+	@Override
+	protected AbstractBatchProcessor createBatch(Object target)
+			throws Exception {
+		if (target == null) throw new Exception("");
+		if (target instanceof String[]) return 
+				new URIStructureIterator((String[]) target,applicationRootReference);
+		else if (target instanceof AbstractStructureQuery) {
+			DbReaderStructure reader = new DbReaderStructure();
+			reader.setHandlePrescreen(true);
+			return reader;
+		} else
+			return new RDFStructuresReader(target.toString());
+	}	
 }
