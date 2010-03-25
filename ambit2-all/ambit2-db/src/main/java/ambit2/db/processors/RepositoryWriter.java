@@ -142,8 +142,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		
 	}
 	public List<IStructureRecord> write(IStructureRecord structure) throws SQLException, AmbitException, OperationNotSupportedException {
+		boolean cantreadstructure ;
+		try {
+			structure = normalizer.process(structure);
+			cantreadstructure = false;
+		} catch (Exception x) {
 
-		structure = normalizer.process(structure);
+			cantreadstructure = true;
+		}
 
 		//find if a structure with specified idchemical exists
         if (structure.getIdchemical() > 0) {
