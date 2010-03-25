@@ -176,6 +176,34 @@ public class QueryResultsResourceTest extends ResourceTest {
 	}		
 	
 	@Test
+	public void testAddtoExistingQueryResult() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
+		Assert.assertEquals(0,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/3", port));
+		
+		Response response =  testPut(
+					String.format("http://localhost:%d/dataset/R1", port),
+					MediaType.APPLICATION_WWW_FORM,
+					form.getWebRepresentation());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/R1", port), response.getLocationRef().toString());
+
+		
+         c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where idquery=1");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where idquery=1");
+		Assert.assertEquals(3,table.getRowCount());		
+		c.close();
+		
+	}	
+	
+	@Test
 	public void testReplaceQueryResult() throws Exception {
 		
         IDatabaseConnection c = getConnection();	
@@ -246,7 +274,9 @@ public class QueryResultsResourceTest extends ResourceTest {
 					String.format("http://localhost:%d/dataset/1", port),
 					MediaType.APPLICATION_WWW_FORM,
 					form.getWebRepresentation());
-		Assert.assertEquals(Status.CLIENT_ERROR_UNAUTHORIZED, response.getStatus());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/1", port),response.getLocationRef());
+
 		
 	}		
 	@Test
@@ -258,13 +288,14 @@ public class QueryResultsResourceTest extends ResourceTest {
 		c.close();
 		
 		Form form = new Form();  
-		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/1", port));
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/2", port));
 		
 		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/1", port),
+					String.format("http://localhost:%d/dataset/3", port),
 					MediaType.APPLICATION_WWW_FORM,
 					form.getWebRepresentation());
-		Assert.assertEquals(Status.CLIENT_ERROR_UNAUTHORIZED, response.getStatus());
+		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef());
 		
 	}		
 	@Test

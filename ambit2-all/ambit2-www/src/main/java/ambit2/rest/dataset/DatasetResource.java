@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -35,6 +37,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.task.CallableQueryResultsCreator;
+import ambit2.rest.task.CallableUpdateDataset;
 
 
 /**
@@ -192,14 +195,32 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	 */
 	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
-		if ((queryResultsID==null) || (queryResultsID<=0))
-			throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
-		CallableQueryResultsCreator callable = new CallableQueryResultsCreator(
-				form,
-				getRequest().getRootRef(),
-				getContext(),
-				new StoredQuery(queryResultsID));
-		callable.setClearPreviousContent(clearPreviousContent);
+		Callable<Reference> callable = null;
+		if ((queryResultsID!=null) && (queryResultsID>0)) {
+			
+			callable = new CallableQueryResultsCreator(
+					form,
+					getRequest().getRootRef(),
+					getContext(),
+					new StoredQuery(queryResultsID));
+			((CallableQueryResultsCreator)callable).setClearPreviousContent(clearPreviousContent);
+		} else if ((datasetID!=null) && (datasetID>0)) {
+			//PUT only for compound_uris[]=... & feature_uris[]=....
+			//same for SourceDataset
+			SourceDataset dataset = readDataset();
+			//reading from dataset uri)
+			callable = new CallableUpdateDataset(
+					form,
+					getRequest().getRootRef(),
+					getContext(),
+					dataset,
+					new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest())
+					);
+			((CallableUpdateDataset)callable).setClearPreviousContent(clearPreviousContent);
+		} else {
+			//POST only - creating a new dataset is via DatasetsResource , should not come here
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 		try {
 			getResponse().setLocationRef(callable.call());
 			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
@@ -223,36 +244,40 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			return  upload.upload(entity,variant,true);
 		}
 	}
+	protected SourceDataset readDataset() throws ResourceException {
+		SourceDataset dataset = new SourceDataset();
+		dataset.setId(datasetID);
+		Connection c = null;
+		ResultSet rs = null;
+		try {
+			DBConnection dbc = new DBConnection(getContext());
+			c = dbc.getConnection();
+			ReadDataset read = new ReadDataset();
+			read.setValue(dataset);
+			QueryExecutor x = new QueryExecutor();
+			x.setConnection(c);
+			rs = x.process(read);
+			while (rs.next()) {
+				dataset = read.getObject(rs);
+			}
+			return dataset;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+		} finally {
+			try { rs.close(); } catch (Exception x) {}
+			try { c.close(); } catch (Exception x) {}
+		}		
+	}
 	@Override
 	protected Representation put(Representation entity, Variant variant)
 			throws ResourceException {
 		
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
-		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+	if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			return copyDatasetToQueryResultsTable(new Form(entity),false);
 		} else if ((datasetID!=null) && (datasetID>0)) {
-			SourceDataset dataset = new SourceDataset();
-			dataset.setId(datasetID);
-			Connection c = null;
-			ResultSet rs = null;
-			try {
-				DBConnection dbc = new DBConnection(getContext());
-				c = dbc.getConnection();
-				ReadDataset read = new ReadDataset();
-				read.setValue(dataset);
-				QueryExecutor x = new QueryExecutor();
-				x.setConnection(c);
-				rs = x.process(read);
-				while (rs.next()) {
-					dataset = read.getObject(rs);
-				}
-			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
-			} finally {
-				try { rs.close(); } catch (Exception x) {}
-				try { c.close(); } catch (Exception x) {}
-			}
+			SourceDataset dataset = readDataset();
  			upload.setDataset(dataset);
 			return  upload.upload(entity,variant,true);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
