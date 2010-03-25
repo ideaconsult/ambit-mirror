@@ -3,7 +3,6 @@ package ambit2.rest.model.builder;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.model.Algorithm;
@@ -12,8 +11,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
-
-import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * Abstract class for model building

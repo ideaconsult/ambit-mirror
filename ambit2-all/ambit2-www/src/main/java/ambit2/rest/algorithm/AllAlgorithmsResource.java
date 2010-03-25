@@ -28,7 +28,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
-import ambit2.rest.model.builder.SimpleModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableDescriptorCalculator;

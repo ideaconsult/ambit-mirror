@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
