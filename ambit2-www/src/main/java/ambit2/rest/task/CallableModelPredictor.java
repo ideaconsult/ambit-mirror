@@ -1,14 +1,12 @@
 package ambit2.rest.task;
 
 import java.sql.Connection;
-import java.util.Iterator;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -18,9 +16,7 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.PropertyValuesWriter;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.property.ValuesReader;
-import ambit2.rest.OpenTox;
 import ambit2.rest.model.predictor.ModelPredictor;
-import ambit2.rest.property.PropertyURIReporter;
 
 /**
  * 
