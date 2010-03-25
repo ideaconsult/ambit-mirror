@@ -147,7 +147,8 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			structure = normalizer.process(structure);
 			cantreadstructure = false;
 		} catch (Exception x) {
-
+			structure.setContent(null);
+			structure.setFormat(null);
 			cantreadstructure = true;
 		}
 
