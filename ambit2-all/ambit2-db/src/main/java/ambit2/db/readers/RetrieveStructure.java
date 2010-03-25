@@ -69,6 +69,7 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
 	public RetrieveStructure(boolean preferredStructure) {
 		super();
 		setPreferedStructure(preferedStructure);
+		setFieldname(false);
 	}
     /*
      * (non-Javadoc)
@@ -78,7 +79,8 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
     public void setValue(IStructureRecord value) {
     	super.setValue(value);
     	setFieldname((value!=null) && (value.getIdstructure()<=0));
-    	if ((value!=null) && (value.getType()!=null) && STRUC_TYPE.NA.equals(value.getType())) setFieldname(true);
+    	if ((value!=null) && (value.getType()!=null) && STRUC_TYPE.NA.equals(value.getType()) && preferedStructure) 
+    			setFieldname(true);
     }
     @Override
 	public String getSQL() throws AmbitException {
