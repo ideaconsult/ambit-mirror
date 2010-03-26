@@ -18,7 +18,7 @@ public abstract class DataCoverage<DATA>  implements  IDataCoverage<DATA> /*, IM
 	 */
 	private static final long serialVersionUID = 5355137220284907331L;
 
-	protected  Object object = null;
+	protected transient Object object = null;
 	protected ADomainMethodType appDomainMethodType  = null;
 	
 	protected double threshold = 0;

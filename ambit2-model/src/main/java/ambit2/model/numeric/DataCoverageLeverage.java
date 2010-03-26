@@ -15,7 +15,6 @@ public class DataCoverageLeverage extends DataCoverage<Matrix> {
 	private static final long serialVersionUID = -8841985800478607411L;
 	protected Matrix hat = null;
 	protected Matrix XTX1 = null;
-	protected double threshold;
 	
 	public DataCoverageLeverage() {
 		super();
@@ -57,5 +56,4 @@ public class DataCoverageLeverage extends DataCoverage<Matrix> {
 			results[i] = coverage[i]>threshold?1:0;
 		return results;
 	}
-
 }
