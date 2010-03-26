@@ -41,6 +41,7 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.AbstractDBProcessor;
@@ -62,6 +63,7 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 	protected DescriptorValue2Property selfwriter = new DescriptorValue2Property();
 	protected MoleculeReader reader = new MoleculeReader();
 	protected HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+	protected AtomConfigurator cfg = new AtomConfigurator();
     protected PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
     protected boolean assignProperties = false;
     
@@ -96,7 +98,12 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
         		ha.process(a);
           	} catch (Exception x) {
           		//logger.warn(x);
-        	}    		
+        	}   
+        	try {
+        		cfg.process(a);
+          	} catch (Exception x) {
+          		//logger.warn(x);
+        	}    	          	
           	try {
           		CDKHueckelAromaticityDetector.detectAromaticity(a);
           	} catch (Exception x) {
