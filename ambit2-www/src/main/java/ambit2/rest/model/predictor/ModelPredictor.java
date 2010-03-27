@@ -114,7 +114,8 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 	}
 	
 	protected Instances getHeader(Form form) throws IOException {
-		return new Instances(new StringReader(form.getFirstValue("header")));
+		String header = form.getFirstValue("header");
+		return header ==null?null: new Instances(new StringReader(header));
 	}
 	protected int getClassIndex(Form form) throws Exception {
 		String ci = form.getFirstValue("classIndex");
@@ -155,14 +156,16 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		 	classIndex = getClassIndex(form);
 		 	if ((header != null) &&  (classIndex>=0) && (classIndex<header.numAttributes()))	
 		 			header.setClassIndex(classIndex);
-		 	String[] options = new String[2];
-			options[0] = "-R";                                   
-			options[1] = "1";                                   
-			Remove remove  = new Remove();   
-			try {                    
-				remove.setOptions(options);                          
-			} catch (Exception x) {};
-		 	filter = remove;
+		 	if (header != null) {
+			 	String[] options = new String[2];
+				options[0] = "-R";                                   
+				options[1] = "1";                                   
+				Remove remove  = new Remove();   
+				try {                    
+					remove.setOptions(options);                          
+				} catch (Exception x) {};
+			 	filter = remove;
+		 	} else filter = null;
 		 	return (Predictor)o;
 		 } catch (ResourceException x) {
 			 throw x;

@@ -31,6 +31,7 @@ import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableDescriptorCalculator;
+import ambit2.rest.task.CallableFingerprintsModelCreator;
 import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableSimpleModelCreator;
@@ -41,7 +42,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String algorithmKey =  OpenTox.URI.algorithm.getKey();
 	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();	
 	protected static List<Algorithm<String>> algorithmList;
-	
+
 
 	
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
@@ -50,14 +51,14 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,
 				new String[] {Algorithm.typeClustering,Algorithm.typeSingleTarget,Algorithm.typeLazyLearning,Algorithm.typeUnSupervised},
-				null},
+				null,Algorithm.requires.property},
 			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,
-					new String[] {Algorithm.typeClassification,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null},
+					new String[] {Algorithm.typeClassification,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null,Algorithm.requires.property},
 			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,
-						new String[] {Algorithm.typeRegression,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null},
-			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa"},
-			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
-			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
+						new String[] {Algorithm.typeRegression,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null,Algorithm.requires.property},
+			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa",Algorithm.requires.structure},
+			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
+			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
 			{"toxtreeeye","ToxTree: Eye irritation","eye.EyeIrritationRules",
 				new Property[] 
 				{
@@ -68,7 +69,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Water Solubility","g/l", toxTreeReference),
 				},
 				new String[] {Algorithm.typeRules},
-				"http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion"
+				"http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion",
+				Algorithm.requires.structure
 			},
 			{"toxtreeskinirritation","ToxTree: Skin irritation","sicret.SicretRules",
 			new Property[] 
@@ -82,49 +84,51 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property("Surface Tension","mN/m", toxTreeReference)
 				},
 				new String[] {Algorithm.typeRules},
-				"http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion"
+				"http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion",
+				Algorithm.requires.structure
 			},
 			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {Algorithm.typeRules},
-				"http://www.opentox.org/echaEndpoints.owl#Endpoints"},
+				"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure},
 			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {Algorithm.typeRules},
 				"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
+				,Algorithm.requires.structure
 				},
 			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {Algorithm.typeRules},
-				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity"},
+				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",Algorithm.requires.structure},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
-			},new String[] {Algorithm.typeRules}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
+			},new String[] {Algorithm.typeRules}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
 			
 			/** Descriptors */
-			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow"},
-			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#MolecularWeight"},
-			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects"},
-			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure},
+			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#MolecularWeight",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},	
+			//{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},	
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor","Number of bonds","org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor","Number of atoms","org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor","Number of rotatable bonds","org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor","Number of bonds","org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor","Number of atoms","org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor","Number of rotatable bonds","org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor","Chi chain descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor","Chi cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null},			
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor","Chi chain descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor","Chi cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},			
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 
-			{"org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor","Largest Pi system","org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
+			{"org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor","Hydrogen Bond acceptors","org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor","Hydrogen Bond donors","org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
-			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor},null},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null},			
+			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},			
 			
 /*
  * ;org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
@@ -170,12 +174,14 @@ ambit2.descriptors.MolecularWeight
 org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 ;org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
  */
-			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain},null},
-			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {Algorithm.typeAppDomain},null},
-			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {Algorithm.typeAppDomain},null},
-			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {Algorithm.typeAppDomain},null},			
-			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain},null},
-			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain},null}
+			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
+			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
+			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
+			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},			
+			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
+			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
+			{"fptanimoto","Applicability domain: Leverage","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
+			{"fpmissingfragments","Applicability domain: Leverage","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure}
 			
 	};
 	
@@ -204,6 +210,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 						predictors.add(p);
 					alg.setInput(predictors);
 				}					
+				alg.setRequirement((Algorithm.requires)d[6]);
 				algorithmList.add(alg);
 			}				
 		}
@@ -370,14 +377,30 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 				}
 			} else if (algorithm.hasType(Algorithm.typeAppDomain)) {				
-				
-				return new CallableNumericalModelCreator(
-						form,
-						getRequest().getRootRef(),
-						getContext(),
-						algorithm,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-						new AlgorithmURIReporter(getRequest()));					
+				switch (algorithm.getRequirement()) {
+				case structure: {
+					return new CallableFingerprintsModelCreator(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							algorithm,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new AlgorithmURIReporter(getRequest()));						
+				}
+				case property: {
+					return new CallableNumericalModelCreator(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							algorithm,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new AlgorithmURIReporter(getRequest()));					
+				}		
+				default: {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,algorithm.toString());
+				}
+				}
+					
 			} else {
 					
 				return new CallableWekaModelCreator(
