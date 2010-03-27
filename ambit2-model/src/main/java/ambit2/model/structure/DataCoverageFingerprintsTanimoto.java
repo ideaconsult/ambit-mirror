@@ -104,4 +104,11 @@ public class DataCoverageFingerprintsTanimoto extends DataCoverageFingerprints {
 	public String getName() {
 		return "Fingerprints (Tanimoto)";
 	}
+	
+	public String getDomainName() {
+		return String.format("AppDomain_Tanimoto");
+	}
+	public String getMetricName() {
+		return String.format("Tanimoto");
+	}	
 }

@@ -65,4 +65,10 @@ public class DataCoverageFingeprintsMissingFragments extends
 	public String getName() {
 		return "Fingerprints (Missing fragments)";
 	}
+	public String getDomainName() {
+		return String.format("AppDomain_MissingFragments");
+	}
+	public String getMetricName() {
+		return String.format("MissingFragments");
+	}		
 }
