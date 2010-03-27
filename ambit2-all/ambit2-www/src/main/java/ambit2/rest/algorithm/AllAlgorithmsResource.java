@@ -180,8 +180,8 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},			
 			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
 			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
-			{"fptanimoto","Applicability domain: Leverage","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
-			{"fpmissingfragments","Applicability domain: Leverage","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure}
+			{"fptanimoto","Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
+			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure}
 			
 	};
 	
