@@ -15,7 +15,10 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	 * 
 	 */
 	private static final long serialVersionUID = -6624262246346428281L;
-	
+	public enum requires {
+		structure,
+		property
+	}
 	public static String typeAny = "http://www.opentox.org/algorithmTypes.owl#AlgorithmType";
 	public static String typeLearning = "http://www.opentox.org/algorithmTypes.owl#Learning";
 	public static String typeDescriptor = "http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation";
@@ -64,6 +67,17 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	protected AlgorithmFormat format=AlgorithmFormat.JAVA_CLASS;
 	protected String[] type;
 	protected String endpoint = null;
+	protected requires requirement;
+	
+
+
+	public requires getRequirement() {
+		return requirement;
+	}
+
+	public void setRequirement(requires requirement) {
+		this.requirement = requirement;
+	}
 
 	public String getEndpoint() {
 		return endpoint;

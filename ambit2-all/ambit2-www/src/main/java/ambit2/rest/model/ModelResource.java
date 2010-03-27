@@ -15,6 +15,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
@@ -29,13 +30,15 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.model.predictor.CoveragePredictor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
+import ambit2.rest.model.predictor.FingerprintsPredictor;
+import ambit2.rest.model.predictor.NumericADPredictor;
 import ambit2.rest.model.predictor.WekaPredictor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableDescriptorCalculator;
+import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableWekaPredictor;
 
@@ -194,18 +197,34 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						predictor)
 						;
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
-				CoveragePredictor predictor = new CoveragePredictor(
-						getRequest().getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),null);
-				
-				return //reads Instances, instead of IStructureRecord
-				new CallableWekaPredictor<DataCoverage>(
-						form,
-						getRequest().getRootRef(),
-						getContext(),
-						predictor)
-						;
+				if (model.getPredictors().size()== 0) { //hack for structure based AD
+					FingerprintsPredictor predictor = new FingerprintsPredictor(
+							getRequest().getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),null,null);
+					
+					return //reads Instances, instead of IStructureRecord
+					new CallableModelPredictor<IStructureRecord,FingerprintsPredictor>(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							predictor) {
+						
+					}	;					
+				} else {
+					NumericADPredictor predictor = new NumericADPredictor(
+							getRequest().getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),null);
+					
+					return //reads Instances, instead of IStructureRecord
+					new CallableWekaPredictor<DataCoverage>(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							predictor)
+							;
+				}
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				
 				DescriptorPredictor predictor = new DescriptorPredictor(

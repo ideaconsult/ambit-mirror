@@ -339,7 +339,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		c.close();
 		
 		Form form = new Form();  
-		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/compound/7/conformer/100211", port));
+		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/compound/7", port));
 		
 		Response response =  testPut(
 					String.format("http://localhost:%d/dataset/3", port),

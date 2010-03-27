@@ -67,6 +67,28 @@ public class AlgorithmResourceTest extends ResourceTest {
 		return count > 0;
 	}	
 
+	@Test
+	public void testCalculateCPSA() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		Reference ref = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		
+		int count = 0;
+		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		i.setCloseModel(true);
+		while (i.hasNext()) {
+			System.out.println(i.next());
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(29,count);
+	}	
 	
 	@Test
 	public void testCalculateLogP() throws Exception {
@@ -326,6 +348,24 @@ public class AlgorithmResourceTest extends ResourceTest {
 						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 	}	
+	
+	@Test
+	public void testFingerprintsAD() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/fptanimoto", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+	}		
 	
 	@Test
 	public void testnparamdensity() throws Exception {

@@ -23,7 +23,7 @@ import ambit2.rest.model.predictor.ModelPredictor;
  * @author nina
  *
  */
-public abstract class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor> extends CallableQueryProcessor<Object, IStructureRecord> {
+public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor> extends CallableQueryProcessor<Object, IStructureRecord> {
 	protected Reference applicationRootReference;
 	protected ModelPredictor predictor;
 	
