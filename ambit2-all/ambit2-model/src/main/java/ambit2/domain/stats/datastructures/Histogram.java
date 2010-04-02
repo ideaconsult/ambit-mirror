@@ -7,7 +7,6 @@
 package ambit2.domain.stats.datastructures;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -30,13 +29,12 @@ public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
     }
     public void clearFlag() {
 
-        Iterator iMap = entrySet().iterator();
+        Iterator<Entry<T,MutableInt>> iMap = entrySet().iterator();
         
         while (iMap.hasNext()) {
-            Map.Entry object = (Map.Entry) iMap.next();
+        	Entry<T,MutableInt> object =  iMap.next();
             if (object != null) {
-                MutableInt freq = (MutableInt) object.getValue();
-                freq.setFlag(false);
+                object.getValue().setFlag(false);
             } 
         }
         iMap = null;
@@ -80,14 +78,14 @@ public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
     }
     public Object getMaxFrequency() {
     	
-        Iterator iMap = entrySet().iterator();
+    	Iterator<Entry<T,MutableInt>> iMap = entrySet().iterator();
         int max = 0;
         Object maxObject = null;
         while (iMap.hasNext()) {
-            Map.Entry object = (Map.Entry) iMap.next();
+        	Entry<T,MutableInt> object =  iMap.next();
             if (object != null) {
                 
-                MutableInt freq = (MutableInt) object.getValue();
+                MutableInt freq =  object.getValue();
                 if (freq.getValue() > max) {
                     max = freq.getValue();
                     maxObject = object.getKey();
@@ -99,12 +97,12 @@ public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
 
     public int count() {
         int c  = 0;
-        Iterator iMap = entrySet().iterator();
+        Iterator<Entry<T,MutableInt>> iMap = entrySet().iterator();
         
         while (iMap.hasNext()) {
-            Map.Entry object = (Map.Entry) iMap.next();
+        	Entry<T,MutableInt> object = iMap.next();
             if (object != null) {
-                MutableInt freq = (MutableInt) object.getValue();
+                MutableInt freq = object.getValue();
                 c+= freq.getValue();
             } 
         }
@@ -122,12 +120,12 @@ public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
         if (c == 0) return 0;
 
         double e  = 0;
-        Iterator iMap = entrySet().iterator();
+        Iterator<Entry<T,MutableInt>> iMap = entrySet().iterator();
         double p;
         while (iMap.hasNext()) {
-            Map.Entry object = (Map.Entry) iMap.next();
+        	Entry<T,MutableInt> object = iMap.next();
             if (object != null) {
-                MutableInt freq = (MutableInt) object.getValue();
+                MutableInt freq = object.getValue();
                 p =  (double) freq.getValue() / c;
                 e+= p*Math.log(p);
             } 
