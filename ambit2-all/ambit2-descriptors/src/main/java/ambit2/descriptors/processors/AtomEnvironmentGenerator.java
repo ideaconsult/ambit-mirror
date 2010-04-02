@@ -4,7 +4,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -23,7 +22,7 @@ import ambit2.descriptors.AtomEnvironmentDescriptor;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 30, 2006
  */
-public class AtomEnvironmentGenerator extends DefaultAmbitProcessor  {
+public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContainer,IAtomContainer>  {
     protected CDKHydrogenAdder hAdder = null;
 	protected AtomEnvironmentDescriptor aeDescriptor = null;
 	protected Object[] aeParams = null;
@@ -39,12 +38,12 @@ public class AtomEnvironmentGenerator extends DefaultAmbitProcessor  {
 	protected AtomEnvironmentDescriptor createAtomEnvironmentDescriptor() {
 		return new AtomEnvironmentDescriptor();
 	}
-	public Object process(Object object) throws AmbitException {
-		if (object instanceof IMolecule) {
+	public IAtomContainer process(IAtomContainer object) throws AmbitException {
+
 			try {
 				
 				int[] aeResult = null;
-				IMolecule mol = (IMolecule) ((IMolecule) object).clone();
+				IAtomContainer mol = (IAtomContainer) ((IAtomContainer) object).clone();
                 //IAtomContainer mol;
 
                 
@@ -119,7 +118,6 @@ public class AtomEnvironmentGenerator extends DefaultAmbitProcessor  {
 				((IAtomContainer) object).getProperties().remove(AmbitCONSTANTS.AtomEnvironment);
 				throw new AmbitException("Error generating atom environment\t",x);
 			}
-		}
 		return object;
 	}
 
