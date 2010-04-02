@@ -24,25 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.plugin.dbtools;
 
-import ambit2.base.data.Profile;
 import ambit2.base.data.SelectionBean;
-import ambit2.base.interfaces.IBatchStatistics;
-import ambit2.base.interfaces.IProcessor;
-import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
-import ambit2.db.DbReader;
-import ambit2.db.processors.BitSetGenerator;
-import ambit2.db.processors.DescriptorsCalculator;
-import ambit2.db.processors.FP1024Writer;
-import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.processors.FP1024Writer.FPTable;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.structure.MissingFingerprintsQuery;
-import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
-import ambit2.smarts.processors.SMARTSPropertiesGenerator;
-import ambit2.workflow.ActivityPrimitive;
-import ambit2.workflow.DBProcessorPerformer;
-import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 import ambit2.workflow.calculation.CalculationDescriptors;
 import ambit2.workflow.calculation.CalculationFingerprints;
@@ -50,10 +32,7 @@ import ambit2.workflow.calculation.CalculationSmartsData;
 import ambit2.workflow.calculation.CalculationStructuralKeys;
 import ambit2.workflow.library.LoginSequence;
 
-import com.microworkflow.execution.Performer;
-import com.microworkflow.process.Activity;
 import com.microworkflow.process.Conditional;
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.TestCondition;
 import com.microworkflow.process.While;
