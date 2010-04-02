@@ -124,30 +124,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 		
 	}	
-	/*
-	protected void readFeatures(String uri,final Template profile) throws Exception {
-		if (uri==null) return;
 	
-		Object q = CallableQueryProcessor.getQueryObject(new Reference(uri), getRequest().getRootRef());
-		if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
-			QueryTemplateReporter<IQueryRetrieval<Property>> reporter = new QueryTemplateReporter<IQueryRetrieval<Property>>(profile);
-			try {
-        		DBConnection dbc = new DBConnection(getContext());
-				reporter.setConnection(dbc.getConnection(getRequest()));
-				reporter.process((AbstractPropertyRetrieval)q);
-			} catch (NotFoundException x) {
-				//this is ok
-			} catch(Exception x) {
-				x.printStackTrace();
-			} finally {
-				//the reporter closes the connection as well
-				try { reporter.close();} catch (Exception x) {}
-			}
-		} else 
-
-			readFeaturesXML(uri,profile);
-	}
-	*/
 
 
 	@Override
