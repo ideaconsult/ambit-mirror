@@ -76,3 +76,5 @@ ALTER TABLE `catalog_references` ADD COLUMN `type` ENUM('Unknown','Dataset','Alg
 
 ALTER TABLE `structure` DROP INDEX `Index_6`,
  ADD INDEX `Index_6` USING BTREE(`preference`, `idchemical`);
+
+ALTER TABLE `models` MODIFY COLUMN `content` LONGBLOB NOT NULL;
