@@ -263,14 +263,18 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
     		
     		boolean wait = true;
         	HTTPRequest<List<IStructureRecord>, List<IStructureRecord>> pollRequest = null;
-    		
+    		int trycount = 0;
     		while (wait) {
+    			trycount++;
+    			if (trycount>32)
+    				throw new ProcessorException(this,String.format("Retrial limit %d exceeded",trycount));
     			long now = System.currentTimeMillis();
 	    		for (IStructureRecord datum : data) {
 	    			wait = tag_PCT_Waiting_reqid.equals(datum.getFormat());
 	    			break;
 	    		}
 	    		if (wait) {
+	    			if (trycount>1) Thread.sleep(10000);
 	    			if (pollRequest == null) pollRequest = createPollRequest(data);
 	    			Future<List<IStructureRecord>> fpollresult = support.lookup(data, pollRequest, listener);
 	    			//System.out.println("Poll");
@@ -279,9 +283,12 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
 	    				throw new ProcessorException(this,"Poll request returns no data!");
 	    		}
 	    		now = System.currentTimeMillis()-now;
+	    		
 	    		//System.out.println(now);
     		}
     		return data;
+    	} catch (ProcessorException x) {
+    		throw x;
     	} catch (Exception x) {
     		x.printStackTrace();
     		throw new ProcessorException(this,x);
