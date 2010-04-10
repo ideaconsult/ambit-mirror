@@ -1,12 +1,7 @@
 package ambit2.ui.test;
 
 
-import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
-
-import junit.framework.Assert;
-
 
 import org.junit.Before;
 import org.junit.Test;

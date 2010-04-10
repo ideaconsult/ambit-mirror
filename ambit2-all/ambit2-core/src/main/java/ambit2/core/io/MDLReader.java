@@ -1,4 +1,4 @@
-/*  $Revision: 9817 $ $Author: egonw $ $Date: 2008-01-03 09:27:22 +0200 (четвъртък, 03 Януари 2008) $
+/*  $Revision$ $Author$ $Date$
  *
  *  Copyright (C) 1997-2007  Christoph Steinbeck <steinbeck@users.sourceforge.net>
  *
@@ -30,11 +30,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Iterator;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -48,17 +51,19 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.DefaultChemObjectReader;
-import org.openscience.cdk.io.IChemObjectReader;
+import org.openscience.cdk.io.ISimpleChemObjectReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLFormat;
 import org.openscience.cdk.io.setting.BooleanIOSetting;
 import org.openscience.cdk.io.setting.IOSetting;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 /**
- * Reads a molecule from the original MDL MOL or SDF file {cdk.cite DAL92}. An SD files
- * is read into a ChemSequence of ChemModel's. Each ChemModel will contain one
- * Molecule. If the MDL molfile contains a property block, the MDLV2000Reader should be
+ * Reads a molecule from the original MDL MOL or SDF file {@cdk.cite DAL92}. An SD files
+ * is read into a {@link IChemSequence} of {@link IChemModel}'s. Each ChemModel will contain one
+ * Molecule. If the MDL molfile contains a property block, the {@link MDLV2000Reader} should be
  * used.
  *
  * <p>If all z coordinates are 0.0, then the xy coordinates are taken as
@@ -69,21 +74,23 @@ import org.openscience.cdk.tools.LoggingTool;
  *   molecule.getProperty(CDKConstants.TITLE);
  * </pre>
  *
- * cdk.module io
- * cdk.svnrev  $Revision: 9817 $
+ * @cdk.module io
+ * @cdk.githash
  *
  * @author     steinbeck
  * @author     Egon Willighagen
- * cdk.created    2000-10-02
- * cdk.keyword    file format, MDL molfile
- * cdk.keyword    file format, SDF
+ * @cdk.created    2000-10-02
+ * @cdk.keyword    file format, MDL molfile
+ * @cdk.keyword    file format, SDF
  *
  * @see        org.openscience.cdk.io.MDLV2000Reader 
  */
+@TestClass("org.openscience.cdk.io.MDLReaderTest")
 public class MDLReader extends DefaultChemObjectReader {
 
     BufferedReader input = null;
-    private LoggingTool logger = null;
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(MDLReader.class);
 
     private BooleanIOSetting forceReadAs3DCoords;
     
@@ -92,7 +99,7 @@ public class MDLReader extends DefaultChemObjectReader {
     }
     
 	/**
-	 *  Contructs a new MDLReader that can read Molecule from a given InputStream.
+	 *  Constructs a new MDLReader that can read Molecule from a given InputStream.
 	 *
 	 *@param  in  The InputStream to read from
 	 */
@@ -106,7 +113,7 @@ public class MDLReader extends DefaultChemObjectReader {
 	}
 
 	/**
-	 * Contructs a new MDLReader that can read Molecule from a given Reader.
+	 * Constructs a new MDLReader that can read Molecule from a given Reader.
 	 *
 	 * @param  in  The Reader to read from
 	 */
@@ -115,16 +122,17 @@ public class MDLReader extends DefaultChemObjectReader {
 	}
 
 	public MDLReader(Reader in, Mode mode) {
-		super.mode = mode; 
-        logger = new LoggingTool(this);
+		super.mode = mode;
         input = new BufferedReader(in);
         initIOSettings();
 	}
 
+    @TestMethod("testGetFormat")
     public IResourceFormat getFormat() {
         return MDLFormat.getInstance();
     }
 
+    @TestMethod("testSetReader_Reader")
     public void setReader(Reader input) throws CDKException {
         if (input instanceof BufferedReader) {
             this.input = (BufferedReader)input;
@@ -133,17 +141,21 @@ public class MDLReader extends DefaultChemObjectReader {
         }
     }
 
+    @TestMethod("testSetReader_InputStream")
     public void setReader(InputStream input) throws CDKException {
         setReader(new InputStreamReader(input));
     }
 
-	public boolean accepts(Class classObject) {
+	@TestMethod("testAccepts")
+    public boolean accepts(Class classObject) {
 		Class[] interfaces = classObject.getInterfaces();
 		for (int i=0; i<interfaces.length; i++) {
 			if (IChemFile.class.equals(interfaces[i])) return true;
 			if (IChemModel.class.equals(interfaces[i])) return true;
 			if (IMolecule.class.equals(interfaces[i])) return true;
 		}
+    Class superClass = classObject.getSuperclass();
+    if (superClass != null) return this.accepts(superClass);
 		return false;
 	}
 
@@ -259,7 +271,7 @@ public class MDLReader extends DefaultChemObjectReader {
 			    data += line;
 			    // preserve newlines, unless the line is exactly 80 chars; in that case it
 			    // is assumed to continue on the next line. See MDL documentation.
-			    if (line.length() < 80) data += "\n";
+			    if (line.length() < 80) data += System.getProperty("line.separator");
 			}
 			if (fieldName != null) {
 			    logger.info("fieldName, data: ", fieldName, ", ", data);
@@ -303,13 +315,15 @@ public class MDLReader extends DefaultChemObjectReader {
         int atom1 = 0;
         int atom2 = 0;
         int order = 0;
-        int stereo = 0;
+        IBond.Stereo stereo = (IBond.Stereo)CDKConstants.UNSET;
         int RGroupCounter=1;
         int Rnumber=0;
         String [] rGroup=null;
         double x = 0.0;
         double y = 0.0;
         double z = 0.0;
+        double totalX = 0.0;
+        double totalY = 0.0;
         double totalZ = 0.0;
         //int[][] conMat = new int[0][0];
         //String help;
@@ -364,7 +378,10 @@ public class MDLReader extends DefaultChemObjectReader {
                 x = new Double(line.substring( 0,10).trim()).doubleValue();
                 y = new Double(line.substring(10,20).trim()).doubleValue();
                 z = new Double(line.substring(20,30).trim()).doubleValue();
-                totalZ += Math.abs(z); // *all* values should be zero, not just the sum
+                // *all* values should be zero, not just the sum
+                totalX += Math.abs(x);
+                totalY += Math.abs(y);
+                totalZ += Math.abs(z);
                 logger.debug("Coordinates: " + x + "; " + y + "; " + z);
                 String element = line.substring(31,34).trim();
 
@@ -387,7 +404,7 @@ public class MDLReader extends DefaultChemObjectReader {
                     rGroup=element.split("^R");
                     if (rGroup.length >1){
                     	try{
-                    		Rnumber=new Integer(rGroup[(rGroup.length-1)]).intValue();
+                    		Rnumber=Integer.parseInt(rGroup[(rGroup.length-1)]);
                     		RGroupCounter=Rnumber;
                     	}catch(Exception ex){
                     		Rnumber=RGroupCounter;
@@ -397,7 +414,7 @@ public class MDLReader extends DefaultChemObjectReader {
                     }
                     atom = molecule.getBuilder().newPseudoAtom(element);
                 } else {
-                	if (mode == IChemObjectReader.Mode.STRICT) {
+                	if (mode == ISimpleChemObjectReader.Mode.STRICT) {
                 		throw new CDKException("Invalid element type. Must be an existing element, or one in: A, Q, L, LP, *.");
                 	}
                 	atom = molecule.getBuilder().newPseudoAtom(element);
@@ -476,9 +493,14 @@ public class MDLReader extends DefaultChemObjectReader {
             }
             
             // convert to 2D, if totalZ == 0
-            if (totalZ == 0.0 && !forceReadAs3DCoords.isSet()) {
+            if (totalX == 0.0 && totalY == 0.0 && totalZ == 0.0) {
+                logger.info("All coordinates are 0.0");
+                for (IAtom atomToUpdate : molecule.atoms()) {
+                    atomToUpdate.setPoint3d(null);
+                }
+            } else if (totalZ == 0.0 && !forceReadAs3DCoords.isSet()) {
                 logger.info("Total 3D Z is 0.0, interpreting it as a 2D structure");
-                java.util.Iterator atomsToUpdate = molecule.atoms();
+                Iterator<IAtom> atomsToUpdate = molecule.atoms().iterator();
                 while (atomsToUpdate.hasNext()) {
                     IAtom atomToUpdate = (IAtom)atomsToUpdate.next();
                     Point3d p3d = atomToUpdate.getPoint3d();
@@ -495,22 +517,25 @@ public class MDLReader extends DefaultChemObjectReader {
                 atom2 = java.lang.Integer.valueOf(line.substring(3,6).trim()).intValue();
                 order = java.lang.Integer.valueOf(line.substring(6,9).trim()).intValue();
                 if (line.length() > 12) {
-                	stereo = java.lang.Integer.valueOf(line.substring(9,12).trim()).intValue();
+                	int mdlStereo = Integer.valueOf(line.substring(9,12).trim());
+                    if (mdlStereo == 1) {
+                        // MDL up bond
+                        stereo = IBond.Stereo.UP;
+                    } else if (mdlStereo == 6) {
+                        // MDL down bond
+                        stereo = IBond.Stereo.DOWN;
+                    } else if (mdlStereo == 0) {
+                        // bond has no stereochemistry
+                        stereo = IBond.Stereo.NONE;
+                    } else if (mdlStereo == 4) {
+                        //MDL bond undefined
+                        stereo = (IBond.Stereo)CDKConstants.UNSET;
+                    }
                 } else {
                 	logger.warn("Missing expected stereo field at line: " + line);
                 }
                 if (logger.isDebugEnabled()) {
                     logger.debug("Bond: " + atom1 + " - " + atom2 + "; order " + order);
-                }
-                if (stereo == 1) {
-                    // MDL up bond
-                    stereo = CDKConstants.STEREO_BOND_UP;
-                } else if (stereo == 6) {
-                    // MDL down bond
-                    stereo = CDKConstants.STEREO_BOND_DOWN;
-                } else if (stereo == 4) {
-                    //MDL bond undefined
-                    stereo = CDKConstants.STEREO_BOND_UNDEFINED;
                 }
                 // interpret CTfile's special bond orders
                 IAtom a1 = molecule.getAtom(atom1 - 1);
@@ -543,7 +568,8 @@ public class MDLReader extends DefaultChemObjectReader {
 		return molecule;
 	}
     
-    public void close() throws IOException {
+	@TestMethod("testClose")
+  public void close() throws IOException {
         input.close();
     }
     

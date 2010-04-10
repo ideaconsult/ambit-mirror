@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.exceptions.AmbitException;
@@ -56,6 +57,8 @@ public class ProcessorFile2FileReader extends DefaultAmbitProcessor<File,IIterat
 	public IIteratingChemObjectReader process(File target) throws AmbitException {
         try {
             return new RawIteratingSDFReader(new FileReader(target));
+        } catch (CDKException x) {
+        	throw new ProcessorException(this,x);
         } catch (FileNotFoundException x) {
             throw new ProcessorException(this,x);
         }

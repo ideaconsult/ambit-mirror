@@ -15,23 +15,29 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.renderer.Renderer2D;
-import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.jchempaint.renderer.Renderer;
+import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.font.AWTFontManager;
+import org.openscience.jchempaint.renderer.generators.BasicAtomGenerator;
+import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
+import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.processors.structure.StructureTypeProcessor;
@@ -43,8 +49,8 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools {
-    Renderer2DModel r2dm;
-    Renderer2D renderer;
+    RendererModel r2dm;
+    Renderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
     protected Color background = Color.white;
     protected BufferedImage defaultImage = null;
@@ -82,18 +88,23 @@ public class CompoundImageTools {
 		this.imageSize = cellSize;
     }
     
-    private Renderer2D createRenderer(Dimension cellSize,Color background) {
-    	Renderer2DModel r2dm = new Renderer2DModel();
-
-		r2dm.setBackgroundDimension(cellSize);
+    private Renderer createRenderer(Dimension cellSize,Color background) {
+       List<IGenerator> generators = new ArrayList<IGenerator>();
+       generators.add(new BasicBondGenerator());
+       generators.add(new BasicAtomGenerator());
+    	
+	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
+		RendererModel r2dm = renderer.getRenderer2DModel();	
+		//r2dm.setBackgroundDimension(cellSize);
 		r2dm.setBackColor(background);
 		r2dm.setForeColor(Color.BLACK);
 		r2dm.setDrawNumbers(false);
 		r2dm.setUseAntiAliasing(true);
 		r2dm.setColorAtomsByType(true);
 		r2dm.setShowImplicitHydrogens(false);
-		r2dm.setShowAromaticity(true);    	
-		return new Renderer2D(r2dm);
+		r2dm.setShowAromaticity(true);  
+
+		return renderer;
     }
     public synchronized BufferedImage getImage(Object o) {
         if (o instanceof IAtomContainer)
@@ -120,11 +131,11 @@ public class CompoundImageTools {
 		return getImage(molecule,null);
 	}
 	public synchronized BufferedImage getImage(IAtomContainer molecule, 
-			IProcessor<IAtomContainer,IAtomContainer> selector) {
+			IProcessor<IAtomContainer,IChemObjectSelection> selector) {
 		return getImage(molecule, selector,false);
 	}
     public synchronized BufferedImage getImage(IAtomContainer molecule, 
-    		IProcessor<IAtomContainer,IAtomContainer> selector, 
+    		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
     		boolean build2d) {    
     	renderer = createRenderer(imageSize,background);
     	r2dm = renderer.getRenderer2DModel();
@@ -178,8 +189,7 @@ public class CompoundImageTools {
             
             molecules.removeAllAtomContainers();
             if (!generateCoordinates) {
-                MFAnalyser mfa = new MFAnalyser(molecule);
-                IAtomContainer c = mfa.removeHydrogensPreserveMultiplyBonded();             	
+                IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(molecule);             	
             	molecules.addAtomContainer(c);
             	return;
             }            
@@ -189,8 +199,7 @@ public class CompoundImageTools {
                 StructureDiagramGenerator sdg = new StructureDiagramGenerator();
                 IMolecule m = null;
                 for (int i=0; i < mset.getAtomContainerCount();i++) {
-                    MFAnalyser mfa = new MFAnalyser(mset.getAtomContainer(i));
-                    IAtomContainer c = mfa.removeHydrogensPreserveMultiplyBonded();                	
+                    IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mset.getAtomContainer(i));                	
                     if (generateCoordinates) {
                         sdg.setMolecule((IMolecule)c,false);
                         m = null;
@@ -217,11 +226,11 @@ public class CompoundImageTools {
 
 
 	
-	public synchronized void paint(Renderer2D renderer, 
+	public synchronized void paint(Renderer renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
-			IProcessor<IAtomContainer,IAtomContainer> selector) {
+			IProcessor<IAtomContainer,IChemObjectSelection> selector) {
 		paint(renderer, molecules, explicitH, g, selector,getImageSize());
 	}
 	/**
@@ -233,15 +242,15 @@ public class CompoundImageTools {
 	 * @param highlighted
 	 * @param imageSize
 	 */
-	public synchronized void paint(Renderer2D renderer, 
+	public synchronized void paint(Renderer renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
-			IProcessor<IAtomContainer,IAtomContainer> selector,
+			IProcessor<IAtomContainer,IChemObjectSelection> selector,
 			Dimension imageSize)	
 	{
     	renderer = createRenderer(imageSize,Color.white);
-    	Renderer2DModel r2dm = renderer.getRenderer2DModel();
+    	RendererModel r2dm = renderer.getRenderer2DModel();
 		/*
 		Renderer2DModel r2dm = renderer.getRenderer2DModel();
 		
@@ -273,27 +282,37 @@ public class CompoundImageTools {
 				Dimension d = new Dimension(w,h);
 				center.set(r.getCenterX(),r.getCenterY());
 				IAtomContainer mol = molecules.getAtomContainer(i);
+				
+				Rectangle drawArea = new Rectangle(w,h);
+				renderer.setup(mol, drawArea);
+
+				renderer.getRenderer2DModel().setZoomFactor(0.8);
+
+				   /*
 	            GeometryTools.translateAllPositive(mol,r2dm.getRenderingCoordinates());
 	            GeometryTools.scaleMolecule(mol, d, 0.8,r2dm.getRenderingCoordinates());
 	            GeometryTools.center(mol, d,r2dm.getRenderingCoordinates());
 	            GeometryTools.translate2DCenterTo(mol,center,r2dm.getRenderingCoordinates());
-	            IAtomContainer highlighted = null;
+	            */
+	            IChemObjectSelection highlighted = null;
 	            if (selector!= null)
 	            	try {
-	    				IAtomContainer selected = selector.process(mol);
+	            		IChemObjectSelection selected = selector.process(mol);
 	    				if(selected!=null) {
-	    					if (highlighted==null) highlighted = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
-	    					highlighted.add(selected);
+	    					//if (highlighted==null) highlighted = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+	    					//highlighted.add(selected);
+	    					highlighted = selected;
+	    					
 	    				}
 	            	} catch (Exception x) {
 	            		
 	            	}
     	    	if (highlighted != null) {
     	    		r2dm.setSelectedPartColor(Color.red);
-    	    		r2dm.setSelectedPart(highlighted);
+    	    		r2dm.setSelection(highlighted);
     	    		r2dm.setColorAtomsByType(false);
     	    	} 	  
-				renderer.paintMolecule(molecules.getAtomContainer(i),g,r);
+				renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
 				
 				col++;
 				if (col >= columns) { col = 0; row++; }
@@ -304,7 +323,7 @@ public class CompoundImageTools {
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 	}
-	protected void printCoordinates(Renderer2DModel model) {
+	protected void printCoordinates(RendererModel model) {
 		
 		//System.out.println(model.getRenderingCoordinates().values());
 	}
@@ -342,7 +361,7 @@ public class CompoundImageTools {
     public synchronized void setImageSize(Dimension imageSize) {
         this.imageSize = imageSize;
         buffer = null;
-        r2dm.setBackgroundDimension(imageSize);
+       // r2dm.setBackgroundDimension(imageSize);
     }
 	public Image getDefaultImage() {
 		return defaultImage;

@@ -3,7 +3,6 @@
  *
  */
 package ambit2.core.config;
-import org.openscience.cdk.CDKConstants;
 
 /**
  * Constants
@@ -19,11 +18,11 @@ public class AmbitCONSTANTS {
 	/**
 	 * CAS RN
 	 */
-	public static final String CASRN = CDKConstants.CASRN;
+	public static final String CASRN = "CasRN";
 	/**
 	 * Chemical name
 	 */
-	public static final String NAMES = CDKConstants.NAMES;
+	public static final String NAMES = "Names";
 	/**
 	 * SMILES
 	 */

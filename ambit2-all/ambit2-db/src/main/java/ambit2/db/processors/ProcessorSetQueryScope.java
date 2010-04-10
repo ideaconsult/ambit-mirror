@@ -35,7 +35,6 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.QueryCombinedStructure;
-import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.ScopeQuery;
 
 /**

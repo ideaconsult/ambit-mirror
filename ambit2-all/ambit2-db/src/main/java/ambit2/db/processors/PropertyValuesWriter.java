@@ -28,8 +28,6 @@ import java.sql.SQLException;
 
 import javax.naming.OperationNotSupportedException;
 
-import org.openscience.cdk.CDKConstants;
-
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;

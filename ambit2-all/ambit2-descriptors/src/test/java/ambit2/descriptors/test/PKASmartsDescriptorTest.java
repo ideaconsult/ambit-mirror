@@ -55,6 +55,7 @@ import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.io.DelimitedFileWriter;
 import ambit2.core.io.IteratingDelimitedFileReader;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.PKANode;
 import ambit2.descriptors.PKASmartsDescriptor;
@@ -122,7 +123,9 @@ public class PKASmartsDescriptorTest {
     	//SmartParser throws error if explicit hydrogens are used - fixed
     	ha.setAddEexplicitHydrogens(true);
     	CDKHueckelAromaticityDetector.detectAromaticity(a);
-		a = ha.process(a);
+		
+		AtomConfigurator cfg = new AtomConfigurator();
+		a = cfg.process(ha.process(a));
 		for (int i=0; i < a.getAtomCount();i++) {
 			Assert.assertNotNull(a.getAtom(i).getValency());
 		}

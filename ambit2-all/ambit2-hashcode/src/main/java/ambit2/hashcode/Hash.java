@@ -1,7 +1,5 @@
 package ambit2.hashcode ;
 
-import java.io.*;
-import java.lang.*;
 
 public class Hash
 {   private long hash_code;

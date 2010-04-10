@@ -2,20 +2,18 @@ package ambit2.smarts.test;
 
 import java.util.Vector;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.smiles.SmilesParser;
-
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
-
-import junit.framework.*;
 
 
 public class TestIsomorphismTester extends TestCase

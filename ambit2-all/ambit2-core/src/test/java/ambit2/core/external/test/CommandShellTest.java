@@ -10,7 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.templates.MoleculeFactory;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.log.AmbitLogger;
@@ -100,8 +100,8 @@ public class CommandShellTest {
 		OpenBabelShell babel = new OpenBabelShell();
 		babel.setOutputFile(testfile);
 		IMolecule newmol = babel.runShell("c1ccccc1");
-		MFAnalyser mf = new MFAnalyser(newmol);
-		IAtomContainer c = mf.removeHydrogensPreserveMultiplyBonded();
+
+		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		
 		IMolecule mol = MoleculeFactory.makeBenzene();
 		/*

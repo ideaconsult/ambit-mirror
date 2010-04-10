@@ -8,7 +8,6 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 
 import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.base.data.TypedListModel;
 
 public class MemoryRowsModel<T> extends AbstractListModel implements TypedListModel<T>, PropertyChangeListener {

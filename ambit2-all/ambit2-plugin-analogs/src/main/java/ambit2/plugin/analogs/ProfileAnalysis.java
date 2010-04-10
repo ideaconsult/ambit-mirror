@@ -29,9 +29,6 @@
 
 package ambit2.plugin.analogs;
 
-import ambit2.workflow.DBWorkflowContext;
-
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 
 /**

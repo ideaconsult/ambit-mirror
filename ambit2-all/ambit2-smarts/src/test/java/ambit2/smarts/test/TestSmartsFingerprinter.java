@@ -2,16 +2,18 @@ package ambit2.smarts.test;
 
 import java.util.BitSet;
 
-import org.openscience.cdk.fingerprint.Fingerprinter;
-import org.openscience.cdk.tools.LoggingTool;
-import ambit2.smarts.*;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.tools.LoggingTool;
+
+import ambit2.smarts.SmartsFingerprinter;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsParser;
 
 public class TestSmartsFingerprinter extends TestCase
 {

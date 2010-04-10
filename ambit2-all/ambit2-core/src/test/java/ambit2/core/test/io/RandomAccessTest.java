@@ -36,9 +36,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
-
-import ambit2.core.io.RandomAccessReader;
-import ambit2.core.io.RandomAccessSDFReader;
+import org.openscience.cdk.io.random.RandomAccessReader;
+import org.openscience.cdk.io.random.RandomAccessSDFReader;
 
 /**
  * Test for {@link RandomAccessSDFReader}
@@ -50,15 +49,17 @@ public class RandomAccessTest  {
 
     @Test public void test() throws Exception {
     	int[] numberofatoms = {33,23,22,25,21,27,27};
-        File f = new File("data/misc/test_properties.sdf");
-        //System.out.println(System.getProperty("user.dir"));
-        //System.out.println(System.getProperty("user.name"));
-        RandomAccessReader rf = new RandomAccessSDFReader(f,DefaultChemObjectBuilder.getInstance());
-        Assert.assertEquals(rf.getNumberOfRecords(), numberofatoms.length);
-        for (int i=rf.getNumberOfRecords()-1; i >=0;i--) {
-                  IMolecule m = (IMolecule)rf.readRecord(i);
-                  Assert.assertEquals(numberofatoms[i],m.getAtomCount());
+    	String file = getClass().getClassLoader().getResource("ambit2/core/data/misc/test_properties.sdf").getFile();
+        RandomAccessReader rf = new RandomAccessSDFReader(new File(file),DefaultChemObjectBuilder.getInstance());
+        int i = numberofatoms.length;
+        rf.last();
+        for (rf.last(); rf.hasNext(); rf.previous()) {
+        	i--;
+            IMolecule m = (IMolecule)rf.readRecord(i);
+            Assert.assertEquals(numberofatoms[i],m.getAtomCount());
+            rf.previous();
         }
+
         rf.close();   
     }
 }

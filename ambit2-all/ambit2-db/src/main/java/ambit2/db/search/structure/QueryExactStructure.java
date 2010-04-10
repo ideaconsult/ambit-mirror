@@ -34,7 +34,7 @@ import java.util.List;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
@@ -137,9 +137,9 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 				if (configurator==null) configurator = new AtomConfigurator();
 				value = configurator.process(value);
 				CDKHueckelAromaticityDetector.detectAromaticity(value);	
-	            MFAnalyser mfa = new MFAnalyser(value);
-	            if ((value).getBondCount()>1)
-	            	value = mfa.removeHydrogensPreserveMultiplyBonded();
+
+	            if (value.getBondCount()>1)
+	            	value = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(value);
 			}
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -198,9 +198,8 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 
 				}
 				try {
-	                MFAnalyser mfa = new MFAnalyser((IAtomContainer) mol);
 	                if (((IAtomContainer) mol).getBondCount()>1)
-	                	mol = mfa.removeHydrogensPreserveMultiplyBonded();
+	                	mol = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mol);
 	                
 				} catch (Exception x) {
 					

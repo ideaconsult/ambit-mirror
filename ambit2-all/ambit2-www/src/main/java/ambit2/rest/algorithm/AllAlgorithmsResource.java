@@ -36,6 +36,7 @@ import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
+import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String algorithm = OpenTox.URI.algorithm.getURI();
@@ -108,7 +109,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
-			//{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},	
 			
@@ -128,7 +129,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor","Hydrogen Bond donors","org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
 			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
-			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},			
+			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			
+			
+			
+			
 			
 /*
  * ;org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
@@ -181,7 +186,11 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
 			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
 			{"fptanimoto","Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
-			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure}
+			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
+			
+			{"fingerprints","Generate fingerprints",null,null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure}
+			
+			
 			
 	};
 	
@@ -200,7 +209,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 						alg.hasType(Algorithm.typeAppDomain)?AlgorithmFormat.COVERAGE_SERIALIZED:AlgorithmFormat.WEKA);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
-				alg.setContent(d[2].toString());
+				alg.setContent(d[2]==null?null:d[2].toString());
 				alg.setEndpoint(d[5]==null?null:d[5].toString());
 				if (d[3]==null)
 					alg.setInput(new Template("Empty"));
@@ -297,6 +306,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 	protected Reference getSourceReference(Form form,Algorithm<String> model)
 			throws ResourceException {
 		if (model.hasType(Algorithm.typeRules)) return null;
+		if (model.hasType(Algorithm.typeFingerprints)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -349,28 +359,6 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 							getContext(),
 							predictor
 							);					
-					/*
-					SimpleModelBuilder builder = new SimpleModelBuilder(
-							getRequest().getRootRef(),
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new AlgorithmURIReporter(getRequest())					
-							);
-					ModelQueryResults model = builder.process(algorithm);
-					
-					DescriptorPredictor predictor = new DescriptorPredictor(
-							getRequest().getRootRef(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new PropertyURIReporter(getRequest()),
-							null
-								);
-					return new CallableDescriptorCalculator(
-							form,
-							getRequest().getRootRef(),
-							getContext(),
-							predictor
-							);
-							*/
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
@@ -400,7 +388,12 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,algorithm.toString());
 				}
 				}
-					
+			} else if (algorithm.hasType(Algorithm.typeFingerprints)) {				
+					return new CallableFingerprintsCalculator(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							algorithm);						
 			} else {
 					
 				return new CallableWekaModelCreator(

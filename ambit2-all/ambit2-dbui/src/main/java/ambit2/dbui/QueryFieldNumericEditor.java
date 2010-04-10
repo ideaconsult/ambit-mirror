@@ -36,7 +36,6 @@ import java.sql.Connection;
 import java.text.NumberFormat;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;

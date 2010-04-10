@@ -1,36 +1,36 @@
 package ambit2.ui.editors;
 
 import java.awt.Dimension;
-import java.util.Calendar;
 
 import javax.swing.JComponent;
 
-import org.openscience.cdk.applications.jchempaint.JCPPropertyHandler;
-import org.openscience.cdk.applications.jchempaint.JChemPaintEditorPanel;
-import org.openscience.cdk.applications.jchempaint.JChemPaintModel;
+import org.openscience.cdk.ChemModel;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.application.JChemPaint;
 
 public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
-	protected JChemPaintModel jcpModel; 
-	protected JChemPaintEditorPanel jcpep;
+	protected IChemModel jcpModel; 
+	protected JChemPaintPanel jcpep;
 	public StructureDiagramEditor() {
-		jcpModel = new JChemPaintModel();
+		jcpModel = new ChemModel();
 
-		jcpModel.setTitle("JChemPaint structure diagram editor");
-		jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
+		//jcpModel.setTitle("JChemPaint structure diagram editor");
+		//jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
 		Package jcpPackage = Package.getPackage("org.openscience.cdk.applications.jchempaint");
 		String version = jcpPackage.getImplementationVersion();
-		jcpModel.setSoftware("JChemPaint " + version);
-		jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
+		//jcpModel.setSoftware("JChemPaint " + version);
+		//jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
 		Dimension d = new Dimension(350,350);
-		jcpep = new JChemPaintEditorPanel(2,d,true,"stable");
+		jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
 		jcpep.setShowStatusBar(false);
 		jcpep.setShowMenuBar(true);
 		jcpep.setShowInsertTextField(true);
 		jcpep.setPreferredSize(d);
 		jcpep.setMaximumSize(new Dimension(800,800));
-		jcpep.registerModel(jcpModel);
-		jcpep.setJChemPaintModel(jcpModel,d);		
+		//jcpep.registerModel(jcpModel);
+		//jcpep.setJChemPaintModel(jcpModel,d);		
 	}
 	public boolean confirm() {
 		return true;
@@ -41,7 +41,7 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 	}
 
 	public IMoleculeSet getObject() {
-		return jcpModel.getChemModel().getMoleculeSet();
+		return jcpModel.getMoleculeSet();
 	}
 
 	public boolean isEditable() {
@@ -52,7 +52,7 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 	}
 
 	public void setObject(IMoleculeSet object) {
-		jcpModel.getChemModel().setMoleculeSet(object);
+		jcpModel.setMoleculeSet(object);
 		
 	}
 

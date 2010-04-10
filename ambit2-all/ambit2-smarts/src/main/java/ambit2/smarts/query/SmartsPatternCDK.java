@@ -74,7 +74,7 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 	public void setSmarts(String smarts) throws SMARTSException {
 		try {
 			if (sqt == null) {
-				sqt = new SMARTSQueryTool(smarts, false);
+				sqt = new SMARTSQueryTool(smarts);
 			}
 			else {
 				sqt.setSmarts(smarts);

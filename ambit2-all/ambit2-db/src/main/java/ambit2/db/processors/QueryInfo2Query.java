@@ -5,7 +5,6 @@ import java.util.BitSet;
 import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.base.data.Property;
-import ambit2.base.data.Range;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.AbstractDBProcessor;

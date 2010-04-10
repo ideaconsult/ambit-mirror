@@ -4,7 +4,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -74,12 +73,10 @@ public class DescriptorMopacShellTest {
 		DescriptorMopacShell d = new DescriptorMopacShell();
 		//todo add hydrogens
 		IAtomContainer ac = parser.parseSmiles("C[Si]");
-		try {
-			d.calculate(ac);
-			Assert.fail("Shouldn't get here");
-		} catch (CDKException x) {
-			Assert.assertEquals(MopacShell.MESSAGE_UNSUPPORTED_TYPE + "Si",x.getMessage());
-		}
+		DescriptorValue value = d.calculate(ac);
+		Assert.assertNotNull(value.getException());
+		Assert.assertEquals(MopacShell.MESSAGE_UNSUPPORTED_TYPE + "Si",value.getException().getMessage());
+		
 	}
 	@Test
 	public void testCalculate1() throws Exception  {

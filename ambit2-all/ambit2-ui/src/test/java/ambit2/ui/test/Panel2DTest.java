@@ -38,13 +38,13 @@ import javax.swing.JSplitPane;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -65,9 +65,9 @@ public class Panel2DTest {
 			mol.getBond(i).setID(Integer.toString(i+1));
 	
 	}
-	protected IProcessor<IAtomContainer, IAtomContainer> getSelector(IAtomContainer mol) {
-		return new IProcessor<IAtomContainer, IAtomContainer>() {
-			public IAtomContainer process(IAtomContainer mol)
+	protected IProcessor<IAtomContainer, IChemObjectSelection> getSelector(IAtomContainer mol) {
+		return new IProcessor<IAtomContainer, IChemObjectSelection>() {
+			public IChemObjectSelection process(IAtomContainer mol)
 					throws AmbitException {
 				Molecule selected = new Molecule();
 				for (int i=0; i < 2 ;i++) {
@@ -75,7 +75,7 @@ public class Panel2DTest {
 					selected.addAtom(mol.getBond(i).getAtom(1));
 					selected.addBond(mol.getBond(i));			
 				}	
-				return selected;
+				return new SingleSelection<Molecule>(selected);
 			}
 			public boolean isEnabled() { return true;	}
 			public void setEnabled(boolean value) {}

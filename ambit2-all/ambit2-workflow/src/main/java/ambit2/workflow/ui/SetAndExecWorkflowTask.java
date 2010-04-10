@@ -1,9 +1,9 @@
 package ambit2.workflow.ui;
 
-import com.microworkflow.process.Workflow;
-
 import nplugins.workflow.MWorkflowPlugin;
 import nplugins.workflow.SetWorkflowTask;
+
+import com.microworkflow.process.Workflow;
 
 public class SetAndExecWorkflowTask extends SetWorkflowTask {
 

@@ -35,15 +35,14 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
-import java.util.Iterator;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.io.CompoundImageTools;
@@ -66,11 +65,11 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	};
 	protected CompoundImageTools tools;
 	protected IAtomContainer atomContainer;
-	protected IProcessor<IAtomContainer,IAtomContainer> selector=null;
-	public IProcessor<IAtomContainer, IAtomContainer> getSelector() {
+	protected IProcessor<IAtomContainer,IChemObjectSelection> selector=null;
+	public IProcessor<IAtomContainer, IChemObjectSelection> getSelector() {
 		return selector;
 	}
-	public void setSelector(IProcessor<IAtomContainer, IAtomContainer> selector) {
+	public void setSelector(IProcessor<IAtomContainer, IChemObjectSelection> selector) {
 		this.selector = selector;
 		image = null;
 		repaint();
@@ -181,7 +180,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 					break;
 				}
 				case panel2d_selected: {
-					setSelector((IProcessor<IAtomContainer,IAtomContainer>)evt.getNewValue());
+					setSelector((IProcessor<IAtomContainer,IChemObjectSelection>)evt.getNewValue());
 					break;
 				}
 				}

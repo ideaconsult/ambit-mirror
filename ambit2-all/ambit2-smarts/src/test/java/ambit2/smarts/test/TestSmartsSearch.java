@@ -23,14 +23,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 */
 package ambit2.smarts.test;
 
-import junit.framework.*;
-//import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -39,12 +44,12 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.mcss.RMap;
+import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smarts.SmartsConst;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
-
-import java.util.*;
 
 /**
  * 
@@ -75,7 +80,7 @@ public class TestSmartsSearch extends TestCase
 			// lets get the query atom
 			IQueryAtom queryAtom = (IQueryAtom) query.getAtom(0);			
 			matchingAtoms = new ArrayList<List<Integer>>();
-			Iterator<IAtom> atoms = atomContainer.atoms();
+			Iterator<IAtom> atoms = atomContainer.atoms().iterator();
 			while (atoms.hasNext()) 
 			{
 				IAtom atom = atoms.next();
@@ -751,7 +756,7 @@ public class TestSmartsSearch extends TestCase
 	
 	//This molecule is specially created for Stereo Bond tests
 	//Since stereo bond is not implemented in smiles parser. 
-	Molecule getFCCCl(int absStereo)
+	Molecule getFCCCl(int absStereo) throws Exception
 	{
 		Molecule mol = new Molecule();
 		Atom a1 = new Atom("F");
@@ -764,10 +769,15 @@ public class TestSmartsSearch extends TestCase
 		mol.addAtom(a4);
 		mol.addBond(new Bond(a1,a2,IBond.Order.SINGLE));
 		Bond b = new Bond(a2,a3,IBond.Order.DOUBLE);
+		
+		throw new Exception("TODO rewrite b.setStereo(absStereo)");
+		/*
 		b.setStereo(absStereo);
+		
 		mol.addBond(b);
 		mol.addBond(new Bond(a3,a4,IBond.Order.SINGLE));
 		return(mol);
+		*/
 	}
 	
 	public void testBondStereo1() throws Exception {

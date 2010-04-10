@@ -35,7 +35,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -45,12 +44,17 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 	 * 
 	 */
 	private static final long serialVersionUID = -9052892261511104974L;
+	protected InChIGeneratorFactory factory;
+	
+	public InchiProcessor() throws CDKException {
+		super();
+		// Generate factory - throws CDKException if native code does not load
+		factory = InChIGeneratorFactory.getInstance();
+	}
 	public InChIGenerator process(IAtomContainer target) throws AmbitException {
 		try {
-			// Generate factory - throws CDKException if native code does not load
-			InChIGeneratorFactory factory = new InChIGeneratorFactory();
 			// Get InChIGenerator
-			InChIGenerator gen = factory.getInChIGenerator(MoleculeFactory.makeBenzene());
+			InChIGenerator gen = factory.getInChIGenerator(target);
 
 			INCHI_RET ret = gen.getReturnStatus();
 			if (ret == INCHI_RET.WARNING) {
@@ -61,10 +65,11 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 				throw new AmbitException("InChI failed: " + ret.toString()
 				+ " [" + gen.getMessage() + "]");
 			}
-			
+/*			
 			System.out.println(gen.getInchi());
 			System.out.println(gen.getMessage());
 			System.out.println(gen.getAuxInfo());
+*/
 			return gen;
 			
 		} catch (CDKException x) {

@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import org.openscience.cdk.io.HINWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.SMILESWriter;
-import org.openscience.cdk.io.SVGWriter;
 import org.openscience.cdk.io.XYZWriter;
 
 import ambit2.base.exceptions.AmbitIOException;
@@ -116,9 +115,11 @@ public class FileOutputState extends FileState implements IOutputState {
 			else if ((fname.endsWith(extensions[HIN_INDEX]))) 
 				writer = new HINWriter(stream);
 			else if ((fname.endsWith(extensions[MOL_INDEX]))) 
-				writer = new ambit2.core.io.MDLWriter(stream);			
+				writer = new ambit2.core.io.MDLWriter(stream);		
+			/*
 			else if ((fname.endsWith(extensions[SVG_INDEX]))) 
 				writer = new SVGWriter(stream);
+				*/
 			else if ((fname.endsWith(extensions[XLS_INDEX]))) 
 				writer = new XLSFileWriter(stream);			
 						

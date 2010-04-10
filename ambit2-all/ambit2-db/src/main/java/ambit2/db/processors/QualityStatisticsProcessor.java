@@ -50,6 +50,9 @@ public class QualityStatisticsProcessor extends	ConnectionStatisticsProcessor<St
 				"SELECT group_concat(distinct(name)) as 'Datasets',group_concat(distinct(q.user_name)) as 'Mode',q.label,count(distinct(idchemical)) as 'Number of compounds' from quality_labels q join property_values using(id) join structure using(idstructure) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
 				"group by q.label",		
 				
+				
+				"SELECT user_name,label,text,count(*) FROM quality_structure	group by user_name,label,text\n",
+				
 				"select '\n'",
 
 				"select name as 'Dataset',type_structure as 'Structure type',count(*) as 'Number of compounds' from src_dataset\n"+

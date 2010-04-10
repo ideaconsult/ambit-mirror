@@ -2,6 +2,7 @@ package ambit2.core.io;
 
 import java.io.Reader;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 
@@ -11,7 +12,7 @@ import ambit2.base.interfaces.IStructureRecord;
 public class RawIteratingSDFReader extends RawIteratingReader<IStructureRecord> {
 	public static final String delimiter = "$$$$"; 
 	protected final StructureRecord r = new StructureRecord();
-	public RawIteratingSDFReader(Reader in) {
+	public RawIteratingSDFReader(Reader in) throws CDKException {
 		super(in);
 	}
 

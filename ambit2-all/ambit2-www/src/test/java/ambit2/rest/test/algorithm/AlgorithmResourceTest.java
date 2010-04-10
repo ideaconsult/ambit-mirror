@@ -3,6 +3,8 @@ package ambit2.rest.test.algorithm;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.Statement;
 
 import junit.framework.Assert;
 
@@ -120,6 +122,31 @@ public class AlgorithmResourceTest extends ResourceTest {
 		i.close();
 		Assert.assertEquals(1,count);
 	}	
+	@Test
+	public void testCalculateFingerprints() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+        Statement t = connection.createStatement();
+        t.executeUpdate("delete from fp1024");
+        t.close();
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from fp1024");
+		Assert.assertEquals(0,table.getRowCount());
+		
+		c.close();			
+		Form headers = new Form();  
+		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/fingerprints", port),
+				headers, Status.REDIRECTION_SEE_OTHER,
+				null);		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT bc from fp1024");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();			
+	}		
 	@Test
 	public void testCalculateBCUT() throws Exception {
 		Form headers = new Form();  

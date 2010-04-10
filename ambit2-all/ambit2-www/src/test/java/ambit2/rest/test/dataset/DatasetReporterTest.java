@@ -8,12 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.representation.Variant;
-import org.restlet.resource.ResourceException;
 
 import weka.core.Instances;
 import ambit2.base.data.Property;
@@ -24,7 +19,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.rdf.RDFInstancesIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
-import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
 
 /**

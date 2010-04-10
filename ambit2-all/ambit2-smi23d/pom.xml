@@ -3,13 +3,13 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-smi23d</artifactId>
   <name>ambit2-smi23d</name>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>  
   <description>wrapper for  Smi23d executables http://www.chembiogrid.org/cheminfo/smi23d/ </description>
   <url></url>
@@ -30,7 +30,7 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-core</artifactId>
-    	<version>2.0.0-SNAPSHOT</version>
+    	<version>2.1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <reporting>

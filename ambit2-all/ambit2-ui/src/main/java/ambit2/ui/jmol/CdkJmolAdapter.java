@@ -44,8 +44,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.ICrystal;
-import org.openscience.cdk.io.IChemObjectReader;
-import org.openscience.cdk.io.ReaderFactory;
+import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.protein.data.PDBPolymer;
 import org.openscience.cdk.protein.data.PDBStructure;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
@@ -77,7 +76,7 @@ public class CdkJmolAdapter extends JmolAdapter {
 	public Object openBufferedReader(String name, BufferedReader bufferedReader) {
 		IChemFile chemFile = null;
 		try {
-			IChemObjectReader chemObjectReader = null;
+			ISimpleChemObjectReader chemObjectReader = null;
 			try {
 				chemObjectReader = new ReaderFactoryExtended()
 						.createReader(bufferedReader);
@@ -102,13 +101,13 @@ public class CdkJmolAdapter extends JmolAdapter {
 			
 			
 			//IAtomContainer atomContainer = (IAtomContainer)ChemFileManipulator.getAllInOneContainer(chemFile);
-			Iterator<IChemSequence> seq = chemFile.chemSequences();
+			Iterator<IChemSequence> seq = chemFile.chemSequences().iterator();
 			while (seq.hasNext()) {
-				Iterator<IChemModel> model = seq.next().chemModels();
+				Iterator<IChemModel> model = seq.next().chemModels().iterator();
 				while (model.hasNext()) {
-					Iterator<IAtomContainer> c = model.next().getMoleculeSet().molecules();
+					Iterator<IAtomContainer> c = model.next().getMoleculeSet().molecules().iterator();
 					while (c.hasNext()) {
-						Iterator<IAtom> it= c.next().atoms();
+						Iterator<IAtom> it= c.next().atoms().iterator();
 						while(it.hasNext()) {
 							IAtom atom=it.next();
 							try {

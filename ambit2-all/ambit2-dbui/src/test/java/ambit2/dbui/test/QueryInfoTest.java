@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import ambit2.base.data.SourceDataset;
 import ambit2.db.processors.QueryInfo2Query;
 import ambit2.db.search.IQueryObject;

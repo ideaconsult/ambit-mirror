@@ -37,7 +37,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
-import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
 
 /**

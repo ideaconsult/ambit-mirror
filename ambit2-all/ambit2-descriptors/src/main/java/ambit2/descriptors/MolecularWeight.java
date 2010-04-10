@@ -151,7 +151,7 @@ public class MolecularWeight implements IMolecularDescriptor {
      *@return The total weight of atoms of the specified element type
      */
     @TestMethod("testCalculate_IAtomContainer")
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException  {
+    public DescriptorValue calculate(IAtomContainer container)  {
         double weight = 0;
         if (elementName.equals("*")) {
             try {
@@ -163,7 +163,8 @@ public class MolecularWeight implements IMolecularDescriptor {
                     weight += (hcount * 1.00782504);
                 }
             } catch (Exception e) {
-                throw new CDKException(e.getMessage());
+                return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
+                        new DoubleResult(weight), getDescriptorNames(),e);
             }
         }
         else if (elementName.equals("H")) {
@@ -179,7 +180,8 @@ public class MolecularWeight implements IMolecularDescriptor {
                     }
                 }
             } catch (Exception e) {
-            	throw new CDKException(e.getMessage());
+                return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
+                        new DoubleResult(weight), getDescriptorNames(),e);
             }
         }
         else {
@@ -190,7 +192,8 @@ public class MolecularWeight implements IMolecularDescriptor {
                     }
                 }
             } catch (Exception e) {
-            	throw new CDKException(e.getMessage());
+                return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
+                        new DoubleResult(weight), getDescriptorNames(),e);
             }
         }
 

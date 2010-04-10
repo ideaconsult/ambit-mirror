@@ -32,7 +32,6 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-
 import ambit2.db.SessionID;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.storedquery.RetrieveStoredQuery;

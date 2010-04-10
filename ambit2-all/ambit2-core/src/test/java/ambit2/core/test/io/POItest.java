@@ -66,10 +66,11 @@ public class POItest {
 	 * @throws IOException
 	 *             When there is an error processing the file.
 	 */
-	public void readXLSFile(String file) throws IOException {
+	public void readXLSFile(String file) throws Exception {
+		
 		// create a new file input stream with the input file specified
 		// at the command line
-		FileInputStream fin = new FileInputStream(file);
+		FileInputStream fin = new FileInputStream(getClass().getClassLoader().getResource(file).getFile());
 		// create a new org.apache.poi.poifs.filesystem.Filesystem
 		POIFSFileSystem poifs = new POIFSFileSystem(fin);
 		// get the Workbook (excel part) stream in a InputStream
@@ -86,16 +87,16 @@ public class POItest {
 		fin.close();
 		// and our document input stream (don't want to leak these!)
 		din.close();
-		System.out.println("done.");
 	}
 
 	@Test public void test() throws Exception  {
-			readXLSFile("data/misc/Debnath_smiles.xls");
+			readXLSFile("ambit2/core/data/misc/Debnath_smiles.xls");
 			
 			Assert.assertTrue(true);
 	}
 	@Test public void test1() throws Exception {
-			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream("data/misc/Debnath_smiles.xls"));
+			InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/misc/Debnath_smiles.xls");
+			HSSFWorkbook workbook = new HSSFWorkbook(in);
 			HSSFSheet sheet = workbook.getSheetAt(0);
 			//HSSFSheet sheet = workbook.getSheet("Sheet1");
 			
@@ -107,7 +108,7 @@ public class POItest {
 				while (j.hasNext()) {
 					Object cell = j.next();
 					Assert.assertTrue(cell instanceof HSSFCell);
-					System.out.println(cell);
+					//System.out.println(cell);
 	
 				}
 				
@@ -116,17 +117,19 @@ public class POItest {
 		
 	}
 	@Test public void testIteratingXLSReader() throws Exception {
-		readXLS("data/misc/Debnath_smiles.xls",88);		
+		readXLS("ambit2/core/data/misc/Debnath_smiles.xls",88);		
 	}
-	
+	/* The BCF-example.xls file had been lost
 	@Test public void testFormulaReader() throws Exception {
 		//there are many empty rows with formulae
-		readXLS("data/misc/BCF-example.xls",1853);		
+		readXLS("ambit2/core/data/misc/BCF-example.xls",1853);		
 	}	
-
+	*/
 	public void readXLS(String file, int rows) throws Exception {
+		
+			String filepath = getClass().getClassLoader().getResource(file).getFile();
 			IIteratingChemObjectReader reader = FileInputState.getReader(
-					new FileInputStream(file), file);
+					new FileInputStream(filepath), filepath);
 			IReaderListener listener = new SimpleIOListener(IOSetting.HIGH);
 			reader.addChemObjectIOListener(listener);
 			int r = 0;
@@ -134,9 +137,9 @@ public class POItest {
 				Object mol = reader.next();
 				Assert.assertTrue(mol instanceof IMolecule);
 				//assertTrue(((Molecule) mol).getAtomCount() > 0);
-				System.out.println(((IMolecule)mol).getProperties());
+				//System.out.println(((IMolecule)mol).getProperties());
 				r++;
-				System.out.println(r);
+				//System.out.println(r);
 			}
 			Assert.assertEquals(rows,r);
 
@@ -160,39 +163,39 @@ class POIListener implements HSSFListener {
                 BOFRecord bof = (BOFRecord) record;
                 if (bof.getType() == bof.TYPE_WORKBOOK)
                 {
-                    System.out.println("Encountered workbook");
+                    //System.out.println("Encountered workbook");
                     // assigned to the class level member
                 } else if (bof.getType() == bof.TYPE_WORKSHEET)
                 {
-                    System.out.println("Encountered sheet reference");
+                    //System.out.println("Encountered sheet reference");
                 }
                 break;
             case BoundSheetRecord.sid:
                 BoundSheetRecord bsr = (BoundSheetRecord) record;
-                System.out.println("New sheet named: " + bsr.getSheetname());
+               // System.out.println("New sheet named: " + bsr.getSheetname());
                 break;
             case RowRecord.sid:
                 RowRecord rowrec = (RowRecord) record;
-                System.out.println("Row found, first column at "
-                        + rowrec.getFirstCol() + " last column at " + rowrec.getLastCol());
+                //System.out.println("Row found, first column at "
+                //        + rowrec.getFirstCol() + " last column at " + rowrec.getLastCol());
                 break;
             case NumberRecord.sid:
                 NumberRecord numrec = (NumberRecord) record;
-                System.out.println("Cell found with value " + numrec.getValue()
-                        + " at row " + numrec.getRow() + " and column " + numrec.getColumn());
+               // System.out.println("Cell found with value " + numrec.getValue()
+             //           + " at row " + numrec.getRow() + " and column " + numrec.getColumn());
                 break;
                 // SSTRecords store a array of unique strings used in Excel.
             case SSTRecord.sid:
                 sstrec = (SSTRecord) record;
                 for (int k = 0; k < sstrec.getNumUniqueStrings(); k++)
                 {
-                    System.out.println("String table value " + k + " = " + sstrec.getString(k));
+                    //System.out.println("String table value " + k + " = " + sstrec.getString(k));
                 }
                 break;
             case LabelSSTRecord.sid:
                 LabelSSTRecord lrec = (LabelSSTRecord) record;
-                System.out.println("String cell found with value "
-                        + sstrec.getString(lrec.getSSTIndex()));
+               // System.out.println("String cell found with value "
+                //        + sstrec.getString(lrec.getSSTIndex()));
                 break;
         }
     }

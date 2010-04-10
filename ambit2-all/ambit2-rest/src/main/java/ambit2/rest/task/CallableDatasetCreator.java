@@ -156,12 +156,16 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		dataset.setQuery(query.getQueryString());
 		input.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 		input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-		currentJob = new RemoteTask(new Reference(datasetService),MediaType.APPLICATION_WWW_FORM,input.getWebRepresentation(),Method.POST,authentication);
+		currentJob = new RemoteTask(datasetService,MediaType.APPLICATION_WWW_FORM,input.getWebRepresentation(),Method.POST,authentication);
 		jobs.add(currentJob);
 		jobs.run();
 		jobs.clear();
 		
+		
+		
 		if (Status.SUCCESS_OK.equals(currentJob.status)) {
+			if (currentJob.getResult() == null) 
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,currentJob.toString());
 			//and finally run the model
 			input.clear();
 			input.add(OpenTox.params.dataset_uri.toString(),currentJob.getResult().toString());

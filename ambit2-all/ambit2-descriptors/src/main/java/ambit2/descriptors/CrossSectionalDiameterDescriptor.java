@@ -66,15 +66,25 @@ public class CrossSectionalDiameterDescriptor extends SpherosityDescriptor {
      * @exception CDKException 
      * [0] is max length, [1] is max diameter [2] is min diameter - =0 if planar
      */
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException {
-        DescriptorValue value =  getSizeDescriptorResult(container);
-        IDescriptorResult result = value.getValue();
-        //[0] is max length, [1] is max diameter [2] is min diameter - =0 if planar 
-        DoubleArrayResult eval = ((DoubleArrayResult) result);
-        
-        return new DescriptorValue(getSpecification(), getParameterNames(), 
-                getParameters(), new DoubleResult( eval.get(1)),
-                new String[] {MAX_DIAMETER});    
+    public DescriptorValue calculate(IAtomContainer container) {
+    	try {
+	        DescriptorValue value =  getSizeDescriptorResult(container);
+	        IDescriptorResult result = value.getValue();
+	        //[0] is max length, [1] is max diameter [2] is min diameter - =0 if planar 
+	        DoubleArrayResult eval = ((DoubleArrayResult) result);
+	        
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(), new DoubleResult( eval.get(1)),getDescriptorNames()
+	                );
+    	} catch (Exception x) {
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(), null,getDescriptorNames(),x
+	                );
+    	}
+    }
+    @Override
+    public String[] getDescriptorNames() {
+    	return new String[] {MAX_DIAMETER};
     }
     public String toString() {
     	return "Max Diameter";

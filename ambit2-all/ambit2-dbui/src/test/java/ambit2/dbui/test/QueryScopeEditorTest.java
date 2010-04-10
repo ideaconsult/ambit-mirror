@@ -33,11 +33,7 @@ import java.sql.Connection;
 
 import javax.swing.JOptionPane;
 
-import org.junit.After;
-import org.junit.Before;
-
 import ambit2.db.IDBProcessor;
-import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.ScopeQuery;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.editors.IAmbitEditor;

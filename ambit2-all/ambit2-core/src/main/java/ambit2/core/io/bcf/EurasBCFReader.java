@@ -7,17 +7,17 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.IteratingXLSReader;
 
 public class EurasBCFReader extends IteratingXLSReader {
 	protected Hashtable<Double, LiteratureEntry> references;
 	public EurasBCFReader(InputStream input, int sheetIndex)
-			throws AmbitIOException {
+			throws CDKException {
 		super(input, sheetIndex);
 		setNumberOfHeaderLines(2);
 		references = new Hashtable<Double, LiteratureEntry>();

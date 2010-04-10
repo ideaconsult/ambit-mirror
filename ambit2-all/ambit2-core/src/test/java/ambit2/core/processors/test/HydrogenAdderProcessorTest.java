@@ -36,8 +36,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
@@ -50,32 +54,54 @@ public class HydrogenAdderProcessorTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+	//CDK bug submitted
 	@Test
-	public void testImplicitH() throws Exception {
+	public void testImplicitH_processorFormula() throws Exception {
 		HydrogenAdderProcessor p = new HydrogenAdderProcessor();
 		p.setAddEexplicitHydrogens(false);
 		IAtomContainer mol = MoleculeFactory.makeBenzene();
-		MFAnalyser analyser = new MFAnalyser(mol);
-		Assert.assertEquals("C6",analyser.getMolecularFormula());
+		
+		IMolecularFormula f = MolecularFormulaManipulator.getMolecularFormula(mol);
+		Assert.assertEquals("C6",MolecularFormulaManipulator.getString(f));
 		
 		Assert.assertEquals(6,mol.getAtomCount());
 		mol = p.process(mol);
 		Assert.assertEquals(6,mol.getAtomCount());
-		analyser = new MFAnalyser(mol);
-		Assert.assertEquals("C6H6",analyser.getMolecularFormula());
+		f = MolecularFormulaManipulator.getMolecularFormula(mol);
+		Assert.assertEquals("C6H6",MolecularFormulaManipulator.getString(f));
 
 	}
+	//CDK bug submitted
+	@Test
+	public void testImplicitHFormula() throws Exception {
+		
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+
+		IAtomContainer mol = MoleculeFactory.makeBenzene();
+		
+		IMolecularFormula f = MolecularFormulaManipulator.getMolecularFormula(mol);
+		Assert.assertEquals("C6",MolecularFormulaManipulator.getString(f));
+		
+		Assert.assertEquals(6,mol.getAtomCount());
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		adder.addImplicitHydrogens(mol);
+		Assert.assertEquals(6,mol.getAtomCount());
+		f = MolecularFormulaManipulator.getMolecularFormula(mol);
+		Assert.assertEquals("C6H6",MolecularFormulaManipulator.getString(f));
+
+	}	
 	@Test
 	public void testExplicitH() throws Exception {
 		HydrogenAdderProcessor p = new HydrogenAdderProcessor();
 		IAtomContainer mol = MoleculeFactory.makeBenzene();
-		MFAnalyser analyser = new MFAnalyser(mol);
-		Assert.assertEquals("C6",analyser.getMolecularFormula());		
+		IMolecularFormula f = MolecularFormulaManipulator.getMolecularFormula(mol);
+		Assert.assertEquals("C6",MolecularFormulaManipulator.getString(f));
+	
 		Assert.assertEquals(6,mol.getAtomCount());
 		mol = p.process(mol);
 		Assert.assertEquals(12,mol.getAtomCount());
-		analyser = new MFAnalyser(mol);
-		Assert.assertEquals("C6H6",analyser.getMolecularFormula());		
+		f = MolecularFormulaManipulator.getMolecularFormula(mol);
+		Assert.assertEquals("C6H6",MolecularFormulaManipulator.getString(f));
 
 	}	
 	

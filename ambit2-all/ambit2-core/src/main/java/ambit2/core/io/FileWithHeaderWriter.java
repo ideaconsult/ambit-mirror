@@ -126,7 +126,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	public abstract void writeMolecule(IMolecule molecule) ;
 	public void  writeSetOfMolecules(IMoleculeSet som)
 	{
-		Iterator<IAtomContainer> molecules = som.molecules();
+		Iterator<IAtomContainer> molecules = som.molecules().iterator();
 		while (molecules.hasNext()) {
 			writeMolecule((IMolecule)molecules.next());	
 		}

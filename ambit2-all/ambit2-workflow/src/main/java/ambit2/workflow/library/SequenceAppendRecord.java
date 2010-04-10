@@ -33,13 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.StructureRecordsAppender;
-import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.search.structure.QueryLookupStructure;
-import ambit2.db.search.structure.QueryStructure;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ProcessorPerformer;

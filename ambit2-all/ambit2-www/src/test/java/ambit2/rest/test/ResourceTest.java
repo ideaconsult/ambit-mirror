@@ -137,6 +137,7 @@ public abstract class ResourceTest extends DbUnitTest {
 				if (Status.REDIRECTION_SEE_OTHER.equals(status)) {
 					ref = response1.getLocationRef();
 					request.setResourceRef(ref);
+					if (ref == null) break;
 				} 
 			} finally {
 				if (response1!=null) response1.release();	
@@ -145,7 +146,7 @@ public abstract class ResourceTest extends DbUnitTest {
 			Thread.sleep(200);
 
 		}
-		Assert.assertEquals(uriExpected,ref.toString());
+		Assert.assertEquals(uriExpected,ref==null?ref:ref.toString());
 		Assert.assertEquals(expected, status);
 		return ref;
 	}	

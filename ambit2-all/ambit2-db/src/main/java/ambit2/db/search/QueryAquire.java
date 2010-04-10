@@ -50,8 +50,8 @@ public class QueryAquire extends QueryExperiment {
     public Object next() {
         try {
             IMolecule m = DefaultChemObjectBuilder.getInstance().newMolecule();
-            m.setProperty(CDKConstants.NAMES,resultset.getString(2));            
-            m.setProperty(CDKConstants.CASRN,
+            m.setProperty(AmbitCONSTANTS.NAMES,resultset.getString(2));            
+            m.setProperty(AmbitCONSTANTS.CASRN,
                     IdentifiersProcessor.hyphenateCAS(resultset.getString(1)));
             m.setProperty(AmbitCONSTANTS.DATASET,srcDataset);
             return m;

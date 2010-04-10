@@ -65,11 +65,15 @@ public class InchiProcessorTest {
 	public void test() throws Exception {
 		
 	}
-	public void testProcess() throws Exception {
-		//generate(MoleculeFactory.makeBenzene(),"InChI=1/C6/c1-2-4-6-5-3-1");
-		generate(MoleculeFactory.makeAlkane(10),"");		
-//		Assert.assertEquals("AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/CRV:1.3,2.3,3.3,4.3,5.3,6.3/rA:6C3C3C3C3C3C3/rB:s1;d2;s3;d4;d1s5;/rC:;;;;;;",auxinfo);
+	@Test
+	public void testProcessBenzene() throws Exception {
+		generate(MoleculeFactory.makeBenzene(),"InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
 	}
+	@Test
+	public void testProcessAlkane() throws Exception {
+		generate(MoleculeFactory.makeAlkane(10),"InChI=1/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3");		
+
+	}	
 	public void generate(IAtomContainer mol,String expected) throws Exception {
 		InchiProcessor p = new InchiProcessor();
 		HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
@@ -78,10 +82,6 @@ public class InchiProcessorTest {
 		String inchi = gen.getInchi();
 		String auxinfo = gen.getAuxInfo();
 		Assert.assertEquals(expected, inchi);
-		System.out.println(inchi);
-		//Assert.assertEquals("AuxInfo=1/0/N:1,2,6,3,5,4/E:(1,2,3,4,5,6)/CRV:1.3,2.3,3.3,4.3,5.3,6.3/rA:6C3C3C3C3C3C3/rB:s1;d2;s3;d4;d1s5;/rC:;;;;;;",auxinfo);
-
-		gen = p.process(MoleculeFactory.makeAlkane(10));
 	}
 
 }

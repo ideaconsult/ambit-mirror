@@ -1,9 +1,9 @@
-/* $RCSfile$
- * $Author: egonw $ 
- * $Date: 2007-12-11 10:04:27 +0200 (Tue, 11 Dec 2007) $
- * $Revision: 9587 $
- * 
+/* $Revision$ $Author$ $Date$
+ *Copied here from CDK source  tree in order to handle the aromatic bond issue (this code writes 4 as aromatic bond code); 
+ * until a proper fix is available.
  * Copyright (C) 1997-2007  The Chemistry Development Kit (CDK) project
+ *                    2009  Egon Willighagen <egonw@users.sf.net>
+ *                    2010  Mark Rijnbeek <mark_rynbeek@users.sf.net>
  * 
  * Contact: cdk-devel@lists.sourceforge.net
  * 
@@ -24,7 +24,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- * 
  */
 package ambit2.core.io;
 
@@ -36,15 +35,16 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.annotations.TestClass;
+import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -55,79 +55,61 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLFormat;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.io.setting.BooleanIOSetting;
+import org.openscience.cdk.io.setting.IOSetting;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 
 /**
- * Copied here from CDK source  tree in order to handle the aromatic bond issue (this code writes 4 as aromatic bond code); 
- * until a proper fix is available.
- * Writes MDL mol files and SD files.
- * <BR><BR>
- * A MDL mol file contains a single molecule, whereas a MDL SD file contains
- * one or more molecules. This class is capable of writing both mol files and
- * SD files. The correct format is automatically chosen:
- * <ul>
- * <li>if {@link #write(IChemObject)} is called with a {@link org.openscience.cdk.MoleculeSet MoleculeSet}
- * as an argument a SD files is written</li>
- * <li>if one of the two writeMolecule methods (either {@link #writeMolecule(IMolecule) this one} or
- * {@link #writeMolecule(org.openscience.cdk.interfaces.IMolecule)} that one}) is called the first time, a mol file is written</li>
- * <li>if one of the two writeMolecule methods is called more than once the output is a SD file</li>
- * </ul>
- * 
- * <p>Thus, to write several molecules to a single SD file you can either use {@link #write(IChemObject)} and pass
- * a {@link org.openscience.cdk.MoleculeSet MoleculeSet} or you can repeatedly call one of the two
- * writeMolecule methods.
- * <p>For writing a MDL molfile you can this code:
+ * Writes MDL molfiles, which contains a single molecule.
+ * For writing a MDL molfile you can this code:
  * <pre>
  * MDLWriter writer = new MDLWriter(new FileWriter(new File("output.mol")));
- * writer.write((IMolecule)molecule);
+ * writer.write((Molecule)molecule);
  * writer.close();
  * </pre>
  *
- * See {cdk.cite DAL92}.
+ * See {@cdk.cite DAL92}.
  *
- * cdk.module  io
- * cdk.svnrev  $Revision: 9587 $
- * cdk.keyword file format, MDL molfile
- * cdk.bug     1524466
+ * @cdk.module  io
+ * @cdk.githash
+ * @cdk.keyword file format, MDL molfile
  */
+@TestClass("org.openscience.cdk.io.MDLWriterTest")
 public class MDLWriter extends DefaultChemObjectWriter {
+	 public Map sdFields=null;
+	 private int moleculeNumber;
+    private final static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(MDLWriter.class);
+
+    private BooleanIOSetting forceWriteAs2DCoords;
 
     private BufferedWriter writer;
-    private LoggingTool logger;
-    private int moleculeNumber;
-    public Map sdFields=null;
-    //private boolean writeAromatic=true;
-    
-
     
     /**
-     * Contructs a new MDLWriter that can write an array of 
-     * Molecules to a Writer.
+     * Constructs a new MDLWriter that can write an {@link IMolecule}
+     * to the MDL molfile format.
      *
      * @param   out  The Writer to write to
      */
     public MDLWriter(Writer out) {
-    	logger = new LoggingTool(this);
-    	try {
-    		if (out instanceof BufferedWriter) {
-                writer = (BufferedWriter)out;
-            } else {
-                writer = new BufferedWriter(out);
-            }
-        } catch (Exception exc) {
-        }
+    	if (out instanceof BufferedWriter) {
+    	    writer = (BufferedWriter)out;
+    	} else {
+    	    writer = new BufferedWriter(out);
+    	}
+        initIOSettings();
         this.moleculeNumber = 1;
     }
 
     /**
-     * Contructs a new MDLWriter that can write an array of
-     * Molecules to a given OutputStream.
+     * Constructs a new MDLWriter that can write an {@link IMolecule}
+     * to a given OutputStream.
      *
      * @param   output  The OutputStream to write to
      */
@@ -139,6 +121,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
         this(new StringWriter());
     }
 
+    @TestMethod("testGetFormat")
     public IResourceFormat getFormat() {
         return MDLFormat.getInstance();
     }
@@ -155,61 +138,43 @@ public class MDLWriter extends DefaultChemObjectWriter {
     	setWriter(new OutputStreamWriter(output));
     }
     
-    /**
-     * 
-     * Method does not do anything until now.
-     *
-     */
     public void dontWriteAromatic(){
       //writeAromatic=false;
     }
-    
-    /**
-     * Here you can set a map which will be used to build sd fields in the file.
-     * The entries will be translated to sd fields like this:<br>
-     * &gt; &lt;key&gt;<br>
-     * &gt; value<br>
-     * empty line<br>
-     *
-     * @param  map The map to be used, map of String-String pairs
-     */
-    public void setSdFields(Map map){
-      sdFields=map;
-    }
-    
     /**
      * Flushes the output and closes this object.
      */
+    @TestMethod("testClose")
     public void close() throws IOException {
         writer.close();
     }
 
-	public boolean accepts(Class classObject) {
+	@TestMethod("testAccepts")
+    public boolean accepts(Class classObject) {
 		Class[] interfaces = classObject.getInterfaces();
 		for (int i=0; i<interfaces.length; i++) {
-			if (IMolecule.class.equals(interfaces[i])) return true;
+			if (IAtomContainer.class.equals(interfaces[i])) return true;
 			if (IChemFile.class.equals(interfaces[i])) return true;
 			if (IChemModel.class.equals(interfaces[i])) return true;
-			if (IMoleculeSet.class.equals(interfaces[i])) return true;
 		}
+	    Class superClass = classObject.getSuperclass();
+	    if (superClass != null) return this.accepts(superClass);
 		return false;
 	}
 
     /**
-     * Writes a IChemObject to the MDL molfile formated output. 
-     * It can only output ChemObjects of type ChemFile, Molecule and
-     * MoleculeSet.
+     * Writes a {@link IChemObject} to the MDL molfile formated output. 
+     * It can only output ChemObjects of type {@link IChemFile},
+     * {@link IMolecule} and {@link IAtomContainer}.
      *
-     * @param object class must be of type ChemFile, Molecule or MoleculeSet.
+     * @param object {@link IChemObject} to write
      *
-     * @see org.openscience.cdk.ChemFile
+     * @see #accepts(Class)
      */
 	public void write(IChemObject object) throws CDKException {
+		customizeJob();
 		try {
-			if (object instanceof IMoleculeSet) {
-				writeMoleculeSet((IMoleculeSet)object);
-				return;
-			} else if (object instanceof IChemFile) {
+			if (object instanceof IChemFile) {
 				writeChemFile((IChemFile)object);
 				return;
 			} else if (object instanceof IChemModel) {
@@ -219,8 +184,8 @@ public class MDLWriter extends DefaultChemObjectWriter {
 				file.addChemSequence(sequence);
 				writeChemFile((IChemFile)file);
 				return;
-			} else if (object instanceof IMolecule) {
-				writeMolecule((IMolecule)object);
+			} else if (object instanceof IAtomContainer) {
+				writeMolecule((IAtomContainer)object);
 				return;
 			}
 		} catch (Exception ex) {
@@ -228,63 +193,60 @@ public class MDLWriter extends DefaultChemObjectWriter {
 			logger.debug(ex);
 			throw new CDKException("Exception while writing MDL file: " + ex.getMessage(), ex);
 		}
-		throw new CDKException("Only supported is writing of ChemFile, MoleculeSet, AtomContainer and Molecule objects.");
-	}
-	
-	/**
-	 * Writes an array of Molecules to an OutputStream in MDL sdf format.
-	 *
-	 * @param   som  Array of Molecules that is written to an OutputStream
-	 */
-	private void writeMoleculeSet(IMoleculeSet som)
-	{
-		java.util.Iterator molecules = som.molecules();
-		while (molecules.hasNext())
-		{
-			IMolecule mol = (IMolecule)molecules.next();
-			try
-			{
-				boolean[] isVisible=new boolean[mol.getAtomCount()];
-				for(int k=0;k<isVisible.length;k++){
-					isVisible[k]=true;
-				}
-				writeMolecule(mol);
-			}
-			catch (Exception exc)
-			{
-			}
-		}
+		throw new CDKException("Only supported is writing of IChemFile, " +
+				"IChemModel, and IAtomContainer objects.");
 	}
 	
 	private void writeChemFile(IChemFile file) throws Exception {
-		List moleculesList = ChemFileManipulator.getAllAtomContainers(file);
-		for (int i=0; i<moleculesList.size(); i++) {
-			writeMolecule(file.getBuilder().newMolecule((IAtomContainer)moleculesList.get(i)));
+	    IAtomContainer bigPile = file.getBuilder().newAtomContainer();
+		for (IAtomContainer container :
+		     ChemFileManipulator.getAllAtomContainers(file)) {
+		    bigPile.add(container);
+		    if(container.getProperty(CDKConstants.TITLE)!=null){
+		        if(bigPile.getProperty(CDKConstants.TITLE)!=null)
+		            bigPile.setProperty(CDKConstants.TITLE, 
+		                    bigPile.getProperty(CDKConstants.TITLE)+"; "
+		                    +container.getProperty(CDKConstants.TITLE));
+		        else
+		            bigPile.setProperty(CDKConstants.TITLE, 
+		                    container.getProperty(CDKConstants.TITLE));
+		    }
+            if(container.getProperty(CDKConstants.REMARK)!=null){
+                if(bigPile.getProperty(CDKConstants.REMARK)!=null)
+                    bigPile.setProperty(CDKConstants.REMARK, 
+                            bigPile.getProperty(CDKConstants.REMARK)+"; "
+                            +container.getProperty(CDKConstants.REMARK));
+                else
+                    bigPile.setProperty(CDKConstants.REMARK, 
+                            container.getProperty(CDKConstants.REMARK));
+            }
 		}
+		writeMolecule(bigPile);
 	}
-	
 
 	/**
 	 * Writes a Molecule to an OutputStream in MDL sdf format.
 	 *
 	 * @param   container  Molecule that is written to an OutputStream
 	 */
-    public void writeMolecule(IMolecule container) throws Exception {
-        StringBuffer line = new StringBuffer();
+    public void writeMolecule(IAtomContainer container) throws Exception {
         // taking care of the $$$$ signs:
         // we do not write such a sign at the end of the first molecule, thus we have to write on BEFORE the second molecule
         if(moleculeNumber == 2) {
           writer.write("$$$$");
           writer.newLine();
         }
+        
+        String line = "";
+        List<Integer> rgroupList=null;
         // write header block
         // lines get shortened to 80 chars, that's in the spec
-        Object t = container.getProperty(CDKConstants.TITLE);
-        String title = (t==null)?"":t.toString();
+        String title = (String)container.getProperty(CDKConstants.TITLE);
         if (title == null) title = "";
         if(title.length()>80)
           title=title.substring(0,80);
-        writer.write(title + "\n");
+        writer.write(title);
+        writer.newLine();
         
         /* From CTX spec
          * This line has the format:
@@ -296,95 +258,113 @@ public class MDLWriter extends DefaultChemObjectWriter {
          * if input through MDL form.
          * A blank line can be substituted for line 2.
          */
-        writer.write("  CDK    ");
-        writer.write(new SimpleDateFormat("M/d/y,H:m",Locale.US).format(
-        		     Calendar.getInstance(TimeZone.getDefault()).getTime())
-        );
-        writer.write('\n');
+        writer.write("  CDK     ");
+        writer.write(new SimpleDateFormat("MMddyyHHmm").format(System.currentTimeMillis()));
+        writer.newLine();
         
-        Object o = container.getProperty(CDKConstants.REMARK);
-        String comment = o==null?"":o.toString();
+        String comment = (String)container.getProperty(CDKConstants.REMARK);
         if (comment == null) comment = "";
         if(comment.length()>80)
           comment=comment.substring(0,80);
-        writer.write(comment + "\n");
+        writer.write(comment);
+        writer.newLine();
         
         // write Counts line
-        line.append(formatMDLInt(container.getAtomCount(), 3));
-        line.append(formatMDLInt(container.getBondCount(), 3));
-        line.append("  0  0  0  0  0  0  0  0999 V2000\n");
-        writer.write(line.toString());
+		line += formatMDLInt(container.getAtomCount(), 3);
+        line += formatMDLInt(container.getBondCount(), 3);
+        line += "  0  0  0  0  0  0  0  0999 V2000";
+        writer.write(line);
+        writer.newLine();
 
         // write Atom block
         for (int f = 0; f < container.getAtomCount(); f++) {
         	IAtom atom = container.getAtom(f);
-        	line = new StringBuffer();
-        	if (atom.getPoint3d() != null) {
-                line.append(formatMDLFloat((float) atom.getPoint3d().x));
-                line.append(formatMDLFloat((float) atom.getPoint3d().y));
-                line.append(formatMDLFloat((float) atom.getPoint3d().z));
-                line.append(" ");
+        	line = "";
+            if (atom.getPoint3d() != null && !forceWriteAs2DCoords.isSet()) {
+        		line += formatMDLFloat((float) atom.getPoint3d().x);
+        		line += formatMDLFloat((float) atom.getPoint3d().y);
+        		line += formatMDLFloat((float) atom.getPoint3d().z) + " ";
         	} else if (atom.getPoint2d() != null) {
-                line.append(formatMDLFloat((float) atom.getPoint2d().x));
-                line.append(formatMDLFloat((float) atom.getPoint2d().y));
-                line.append("    0.0000 ");
+        		line += formatMDLFloat((float) atom.getPoint2d().x);
+        		line += formatMDLFloat((float) atom.getPoint2d().y);
+        		line += "    0.0000 ";
         	} else {
         		// if no coordinates available, then output a number
         		// of zeros
-                line.append(formatMDLFloat((float)0.0));
-                line.append(formatMDLFloat((float)0.0));
-                line.append(formatMDLFloat((float)0.0));
-                line.append(" ");
+        		line += formatMDLFloat((float)0.0);
+        		line += formatMDLFloat((float)0.0);
+        		line += formatMDLFloat((float)0.0) + " ";
         	}
-        	if(container.getAtom(f) instanceof IPseudoAtom)
-                line.append(formatMDLString(((IPseudoAtom) container.getAtom(f)).getLabel(), 3));
-        	else
-                line.append(formatMDLString(container.getAtom(f).getSymbol(), 3)); 
-            line.append(" 0  0  0  0  0  0  0  0  0  0  0  0");
-        	writer.write(line.toString());
+        	if(container.getAtom(f) instanceof IPseudoAtom){
+        		//according to http://www.google.co.uk/url?sa=t&ct=res&cd=2&url=http%3A%2F%2Fwww.mdl.com%2Fdownloads%2Fpublic%2Fctfile%2Fctfile.pdf&ei=MsJjSMbjAoyq1gbmj7zCDQ&usg=AFQjCNGaJSvH4wYy4FTXIaQ5f7hjoTdBAw&sig2=eSfruNOSsdMFdlrn7nhdAw an R group is written as R#
+        		IPseudoAtom pseudoAtom = (IPseudoAtom) container.getAtom(f);
+        		if (pseudoAtom.getSymbol().equals("R") && pseudoAtom.getLabel().length()>1) {
+        			line += "R# ";
+        			if (rgroupList==null) {
+        				rgroupList = new ArrayList<Integer>();
+        			}
+        			Integer rGroupNumber = new Integer(pseudoAtom.getLabel().substring(1)); 
+        			rgroupList.add(f+1); 
+        			rgroupList.add(rGroupNumber);
+        			
+        		}
+        		else
+        			line += formatMDLString(((IPseudoAtom) container.getAtom(f)).getLabel(), 3);
+        	}else{
+        		line += formatMDLString(container.getAtom(f).getSymbol(), 3);
+        	}
+        	line += " 0  0  0  0  0  0  0  0  0  0  0  0";
+        	writer.write(line);
         	writer.newLine();
         }
 
         // write Bond block
-        Iterator bonds = container.bonds();
+        Iterator<IBond> bonds = container.bonds().iterator();
         while (bonds.hasNext()) {
             IBond bond = (IBond) bonds.next();
-            line = new StringBuffer();
+
         	if (bond.getAtomCount() != 2) {
         		logger.warn("Skipping bond with more/less than two atoms: " + bond);
         	} else {
-        		if (bond.getStereo() == CDKConstants.STEREO_BOND_UP_INV || 
-        				bond.getStereo() == CDKConstants.STEREO_BOND_DOWN_INV) {
+        		if (bond.getStereo() == IBond.Stereo.UP_INVERTED || 
+        				bond.getStereo() == IBond.Stereo.DOWN_INVERTED) {
         			// turn around atom coding to correct for inv stereo
-                    line.append(formatMDLInt(container.getAtomNumber(bond.getAtom(1)) + 1,3));
-                    line.append(formatMDLInt(container.getAtomNumber(bond.getAtom(0)) + 1,3));
+        			line = formatMDLInt(container.getAtomNumber(bond.getAtom(1)) + 1,3);
+        			line += formatMDLInt(container.getAtomNumber(bond.getAtom(0)) + 1,3);
         		} else {
-                    line.append(formatMDLInt(container.getAtomNumber(bond.getAtom(0)) + 1,3));
-                    line.append(formatMDLInt(container.getAtomNumber(bond.getAtom(1)) + 1,3));
+        			line = formatMDLInt(container.getAtomNumber(bond.getAtom(0)) + 1,3);
+        			line += formatMDLInt(container.getAtomNumber(bond.getAtom(1)) + 1,3);
         		}
+        		
                 int bo = (int)bond.getOrder().ordinal()+1;
                 if (bond.getFlag(CDKConstants.ISAROMATIC)) bo = 4;
-                
-                line.append(formatMDLInt(bo,3));
-                line.append("  ");
+
+        		line += formatMDLInt(bo,3);
+        		line += "  ";
         		switch(bond.getStereo()){
-        		case CDKConstants.STEREO_BOND_UP:
-                    line.append("1");
+        		case UP:
+        			line += "1";
         			break;
-        		case CDKConstants.STEREO_BOND_UP_INV:
-                    line.append("1");
+        		case UP_INVERTED:
+        			line += "1";
         			break;
-        		case CDKConstants.STEREO_BOND_DOWN:
-                    line.append("6");
+        		case DOWN:
+        			line += "6";
         			break;
-        		case CDKConstants.STEREO_BOND_DOWN_INV:
-                    line.append("6");
+        		case DOWN_INVERTED:
+        			line += "6";
         			break;
-        		default:
-                    line.append("0");
+        		case UP_OR_DOWN:
+        			line += "4";
+        			break;
+           		case E_OR_Z:
+          			line += "3";
+          			break;
+          		default:
+        			line += "0";
         		}
-                line.append("  0  0  0 ");
-        		writer.write(line.toString());
+        		line += "  0  0  0 ";
+        		writer.write(line);
         		writer.newLine();
         	}
         }
@@ -393,7 +373,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
         for (int i = 0; i < container.getAtomCount(); i++) {
         	IAtom atom = container.getAtom(i);
             Integer charge = atom.getFormalCharge();
-            if ((charge != null) && (charge != 0)) {
+            if (charge != null && charge != 0) {
                 writer.write("M  CHG  1 ");
                 writer.write(formatMDLInt(i+1,3));
                 writer.write(" ");
@@ -406,20 +386,45 @@ public class MDLWriter extends DefaultChemObjectWriter {
         for (int i = 0; i < container.getAtomCount(); i++) {
         	IAtom atom = container.getAtom(i);
             if (!(atom instanceof IPseudoAtom)) {
-                int atomicMass = atom.getMassNumber();
-                int majorMass = IsotopeFactory.getInstance(atom.getBuilder()).getMajorIsotope(atom.getSymbol()).getMassNumber();
-                if (atomicMass != 0 && atomicMass != majorMass) {
-                    writer.write("M  ISO  1 ");
-                    writer.write(formatMDLInt(i+1,3));
-                    writer.write(" ");
-                    writer.write(formatMDLInt(atomicMass,3));
-                    writer.newLine();
+                Integer atomicMass = atom.getMassNumber();
+                if (atomicMass != null) {
+                	int majorMass = IsotopeFactory.getInstance(atom.getBuilder()).getMajorIsotope(atom.getSymbol()).getMassNumber();
+                	if (atomicMass != majorMass) {
+                		writer.write("M  ISO  1 ");
+                		writer.write(formatMDLInt(i+1,3));
+                		writer.write(" ");
+                		writer.write(formatMDLInt(atomicMass,3));
+                		writer.newLine();
+                	}
                 }
             }
+        }
+
+        //write RGP line (max occurrence is 16 data points per line)
+        if (rgroupList!=null) {
+        	StringBuffer rgpLine=new StringBuffer();
+        	int cnt=0;
+        	for (int i=1; i<= rgroupList.size(); i++) {
+        		
+        		rgpLine.append(formatMDLInt((rgroupList.get(i-1)), 4));
+        		i++;
+        		rgpLine.append(formatMDLInt((rgroupList.get(i-1)), 4));
+        		
+        		cnt++;
+        		if (i==rgroupList.size() || i==16 ) { 
+                	rgpLine.insert(0, "M  RGP"+formatMDLInt(cnt, 3));
+                	writer.write(rgpLine.toString());
+            		writer.newLine();
+            		rgpLine=new StringBuffer();
+            		cnt=0;
+        		}
+        	}
         }
         
         // close molecule
         writer.write("M  END");
+        writer.newLine();
+        
         writer.newLine();
         //write sdfields, if any
         if(sdFields!=null){
@@ -440,19 +445,19 @@ public class MDLWriter extends DefaultChemObjectWriter {
           writer.write("$$$$");
           writer.newLine();
         }
-        moleculeNumber++;
+        moleculeNumber++;        
         writer.flush();
     }
 
 	/**
-	 * Formats an int to fit into the connectiontable and changes it 
+	 * Formats an integer to fit into the connection table and changes it 
      * to a String.
 	 *
 	 * @param   i  The int to be formated
 	 * @param   l  Length of the String
 	 * @return     The String to be written into the connectiontable
 	 */
-    private String formatMDLInt(int i, int l) {
+    protected static String formatMDLInt(int i, int l) {
         String s = "", fs = "";
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
         nf.setParseIntegerOnly(true);
@@ -477,7 +482,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
 	 * @param   fl  The float to be formated
 	 * @return      The String to be written into the connectiontable
 	 */
-    private String formatMDLFloat(float fl) {
+    protected static String formatMDLFloat(float fl) {
         String s = "", fs = "";
         int l;
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
@@ -503,7 +508,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
 	 * @param   le   The length of the String
 	 * @return       The String to be written in the connectiontable
 	 */
-    private String formatMDLString(String s, int le) {
+    protected static String formatMDLString(String s, int le) {
         s = s.trim();
         if (s.length() > le)
             return s.substring(0, le);
@@ -514,6 +519,28 @@ public class MDLWriter extends DefaultChemObjectWriter {
         return s;
     }
 
+    private void initIOSettings() {
+        forceWriteAs2DCoords = new BooleanIOSetting(
+            "ForceWriteAs2DCoordinates",
+            IOSetting.LOW,
+            "Should coordinates always be written as 2D?",
+            "false"
+        );
+    }
+
+    public void customizeJob() {
+        fireIOSettingQuestion(forceWriteAs2DCoords);
+    }
+
+    public IOSetting[] getIOSettings() {
+        IOSetting[] settings = new IOSetting[1];
+        settings[0] = forceWriteAs2DCoords;
+        return settings;
+    }
+
+    public void setSdFields(Map map){
+        sdFields=map;
+      }
 }
 
 

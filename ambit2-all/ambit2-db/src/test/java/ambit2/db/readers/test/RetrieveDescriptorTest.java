@@ -41,7 +41,6 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.IRetrieval;
 import ambit2.db.readers.RetrieveDescriptor;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;

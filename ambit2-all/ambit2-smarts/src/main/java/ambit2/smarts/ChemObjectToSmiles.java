@@ -1,13 +1,11 @@
 package ambit2.smarts;
 
+import java.util.Vector;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
-
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.List;
+import org.openscience.cdk.interfaces.IBond;
 
 public class ChemObjectToSmiles 
 {

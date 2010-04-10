@@ -4,7 +4,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.openscience.cdk.CDKConstants;
 
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;

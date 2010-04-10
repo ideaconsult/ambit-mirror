@@ -7,12 +7,11 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 
 import ambit2.base.data.Property;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
-import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 
@@ -65,7 +64,7 @@ public class RetrieveFieldNamesByAliasTest extends RetrieveTest<Property> {
 		qe.setConnection(c.getConnection());
 
 		RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias();
-		q.setValue(CDKConstants.NAMES);
+		q.setValue(AmbitCONSTANTS.NAMES);
 		ResultSet rs = qe.process(q);
 		
 		int count = 0; 

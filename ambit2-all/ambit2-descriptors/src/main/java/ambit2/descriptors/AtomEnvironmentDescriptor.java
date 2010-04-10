@@ -10,8 +10,8 @@ import java.io.InputStream;
 import java.util.TreeMap;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.atomtype.HybridizationStateATMatcher;
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
+import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;
 import org.openscience.cdk.config.AtomTypeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -19,6 +19,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElectronContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -202,21 +203,37 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 	 *@return                   int[] 
 	 *@exception  CDKException  Description of the Exception
 	 */
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException {
-    	int[] result = new int[getAtomFingerprintSize()];
-
-    	doCalculation(container,result);
-    	IntegerArrayResult r = new IntegerArrayResult();
-    	for (int i : result) {
-    		r.add(i);
-    	}    	
-        return new DescriptorValue(
-                getSpecification(), 
-                getParameterNames(), 
-                getParameters(), 
-                r,
-                new String[]{AmbitCONSTANTS.AtomEnvironment});
+    public DescriptorValue calculate(IAtomContainer container)  {
+    	IntegerArrayResult r = null;
+    	try {
+	    	int[] result = new int[getAtomFingerprintSize()];
+	
+	    	doCalculation(container,result);
+	    	r = new IntegerArrayResult();
+	    	for (int i : result) r.add(i);
+	    	
+	        return new DescriptorValue(
+	                getSpecification(), 
+	                getParameterNames(), 
+	                getParameters(), 
+	                r,
+	                getDescriptorNames()
+	                );
+    	} catch (Exception e) {
+    	        return new DescriptorValue(
+    	                getSpecification(), 
+    	                getParameterNames(), 
+    	                getParameters(), 
+    	                r,
+    	                new String[]{AmbitCONSTANTS.AtomEnvironment},
+    	                e);    		 
+    	}
     }
+    public String[] getDescriptorNames() {
+    	return new String[]{AmbitCONSTANTS.AtomEnvironment};
+    }
+    
+ 
     /**
      * to hold counts of all atom types defined by factory for maxlevel
      * and one additional entry for undefined atom types 
@@ -357,8 +374,8 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
     private void initAtomTypes(AtomTypeFactory factory,IAtomTypeMatcher atm) throws CDKException {
         //the idea is not to create objects if they already exist...
         if ((atm == null) || (factory == null)) {
-            if ( (this.atm == null) || (!(this.atm instanceof HybridizationStateATMatcher))) {
-                this.atm = new HybridizationStateATMatcher();
+            if ( (this.atm == null) || (!(this.atm instanceof SybylAtomTypeMatcher))) {
+                this.atm = SybylAtomTypeMatcher.getInstance(NoNotificationChemObjectBuilder.getInstance());
                 try {
                     //InputStream ins = this.getClass().getClassLoader().getResourceAsStream("ambit/data/descriptors/hybridization_atomtypes.xml");
                 	InputStream ins = getAtomTypeFactoryStream();

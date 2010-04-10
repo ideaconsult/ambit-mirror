@@ -16,7 +16,6 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.plugin.pbt.Cell;
 import ambit2.plugin.pbt.PBTWorkBook;
 import ambit2.plugin.pbt.PBTWorksheet;
-import ambit2.plugin.pbt.PBTTableModel.NODES;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
 
 public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRecord>  {

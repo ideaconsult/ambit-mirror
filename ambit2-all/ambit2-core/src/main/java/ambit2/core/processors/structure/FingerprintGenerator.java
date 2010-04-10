@@ -5,8 +5,9 @@ import java.util.BitSet;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.tools.HydrogenAdder;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.EmptyMoleculeException;
@@ -32,7 +33,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 	protected int FPLength = 1024;
 	protected Fingerprinter fingerprinter;
     protected boolean hydrogens = false;
-    protected HydrogenAdder hAdder = null;
+    protected CDKHydrogenAdder hAdder = null;
 	protected AtomConfigurator config = new AtomConfigurator();
 	
     public FingerprintGenerator() {
@@ -53,14 +54,14 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 				long fp_time = System.currentTimeMillis();
 				IAtomContainer c = (IMolecule) object; 
                 if (hydrogens) {
-                    if (hAdder == null) hAdder = new HydrogenAdder();
+                    if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
                     c = (IMolecule) ((IMolecule) object).clone(); 
-                    hAdder.addExplicitHydrogensToSatisfyValency((IMolecule)c);
+                    hAdder.addImplicitHydrogens(c);
+                    AtomContainerManipulator.convertImplicitToExplicitHydrogens(c);
 
                 } else {
-                    MFAnalyser mfa = new MFAnalyser((IAtomContainer) object);
                     if (((IAtomContainer) object).getBondCount()>1)
-                    	c = mfa.removeHydrogensPreserveMultiplyBonded();
+                    	c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded((IAtomContainer) object);
                     else c = (IAtomContainer) object;
                 }
     			fp_time = System.currentTimeMillis() - fp_time;

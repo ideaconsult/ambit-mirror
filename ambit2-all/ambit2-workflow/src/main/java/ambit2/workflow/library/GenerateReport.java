@@ -29,9 +29,6 @@
 
 package ambit2.workflow.library;
 
-import ambit2.workflow.DBWorkflowContext;
-
-import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 
 public class GenerateReport extends Sequence {

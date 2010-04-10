@@ -94,7 +94,7 @@ public class CachedRowSetTableModel extends AbstractTableModel {
 	                if ("SDF".equals(records.getString("format")))
 	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
 	                else
-	                	m = MoleculeTools.readCMLMolecule(new InputStreamReader(s));
+	                	m = MoleculeTools.readCMLMolecule(s);
 	                s = null;
 	                return m;
             	} else {

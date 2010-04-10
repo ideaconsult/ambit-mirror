@@ -2,10 +2,10 @@ package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
+import junit.framework.Assert;
+
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
-
-import junit.framework.Assert;
 
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;

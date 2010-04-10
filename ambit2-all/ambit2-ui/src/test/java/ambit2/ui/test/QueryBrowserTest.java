@@ -29,15 +29,12 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 import javax.vecmath.Vector2d;
-
-
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;

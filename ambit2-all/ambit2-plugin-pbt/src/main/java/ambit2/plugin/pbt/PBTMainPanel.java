@@ -41,7 +41,6 @@ import javax.swing.event.ChangeListener;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 
-import org.apache.poi.hssf.model.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 
 import com.microworkflow.process.WorkflowContext;

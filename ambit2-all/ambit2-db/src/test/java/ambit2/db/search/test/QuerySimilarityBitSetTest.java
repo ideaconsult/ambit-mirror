@@ -53,8 +53,8 @@ public class QuerySimilarityBitSetTest extends QueryTest<QuerySimilarityBitset> 
 			Assert.assertEquals(10,rs.getInt(2));
 			Assert.assertEquals(100214,rs.getInt(3));
 			Assert.assertEquals(1,rs.getInt(4));
-			Assert.assertEquals(0.25,rs.getFloat(5),1E-4);	
-			Assert.assertEquals(0.25,rs.getFloat("metric"),1E-4);	
+			Assert.assertEquals(0.33,rs.getFloat(5),1E-4);	
+			Assert.assertEquals(0.33,rs.getFloat("metric"),1E-4);	
 		}
 	}	
 }

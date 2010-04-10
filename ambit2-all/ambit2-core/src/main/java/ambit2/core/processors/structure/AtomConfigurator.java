@@ -30,16 +30,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package ambit2.core.processors.structure;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
-import org.openscience.cdk.config.Symbols;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -57,26 +56,16 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
 	 * 
 	 */
 	private static final long serialVersionUID = -1245226849382037921L;
-	protected static Hashtable<String,Integer> elements = null;
+	//protected static Hashtable<String,Integer> elements = null;
 	
     /**
      * 
      */
     public AtomConfigurator() {
         super();
-        getElements();
     }
     
-    public static Hashtable<String,Integer> getElements() {
-    	if (elements != null) return elements;
-    	elements = new Hashtable<String, Integer>();
-    	for (int i=0; i < Symbols.byAtomicNumber.length; i++)
-    		elements.put(Symbols.byAtomicNumber[i], i);
-    	elements.put("R", 0);
-    	elements.put("*", 0);
-    	return elements;
-    	
-    }
+ 
     public IAtomContainer process(IAtomContainer mol) throws AmbitException {
     	if (mol==null) throw new AmbitException("Null molecule!");
     	if (mol.getAtomCount()==0) throw new AmbitException("No atoms!");
@@ -85,7 +74,7 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
     		logger.debug("Configuring atom types ...");
         	//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
     		CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
-    		Iterator<IAtom> atoms = mol.atoms();
+    		Iterator<IAtom> atoms = mol.atoms().iterator();
     		while (atoms.hasNext()) {
     			IAtom atom = atoms.next();
                 if (!(atom instanceof IPseudoAtom)) 
@@ -126,11 +115,11 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
 	        }    	   
 	        */     
 
-        	atoms = mol.atoms();
+        	atoms = mol.atoms().iterator();
 	        while (atoms.hasNext()) {
 		           IAtom atom = atoms.next();
-		           if (atom.getAtomicNumber() == 0) {
-		        	   Integer no = elements.get(atom.getSymbol());
+		           if ((atom.getAtomicNumber() == null) || (atom.getAtomicNumber() == 0)) {
+		        	   Integer no = PeriodicTable.getAtomicNumber(atom.getSymbol());
 		        	   if (no != null)
 		        		   atom.setAtomicNumber(no.intValue());
 		           }	   

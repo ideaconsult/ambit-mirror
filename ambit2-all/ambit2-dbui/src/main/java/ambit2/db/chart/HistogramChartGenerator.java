@@ -6,18 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.general.DefaultKeyedValues2DDataset;
 import org.jfree.data.jdbc.JDBCCategoryDataset;
-import org.jfree.data.xy.DefaultXYDataset;
-import org.jfree.data.xy.XYSeries;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;

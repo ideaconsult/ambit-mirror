@@ -3,12 +3,11 @@ package ambit2.db.reporters;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.openscience.cdk.CDKConstants;
-
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -25,13 +24,13 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		SMILES {
 			@Override
 			public String getTag() {
-				return CDKConstants.SMILES;
+				return AmbitCONSTANTS.SMILES;
 			}
 		},
 		InChI {
 			@Override
 			public String getTag() {
-				return CDKConstants.INCHI;
+				return AmbitCONSTANTS.INCHI;
 			}
 		};
 		public abstract String getTag();

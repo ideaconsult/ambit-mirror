@@ -40,12 +40,10 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorCreateProfileQuery;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
 
-import com.microworkflow.execution.Performer;
 import com.microworkflow.process.Sequence;
 
 /**

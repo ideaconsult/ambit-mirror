@@ -5,8 +5,6 @@ package ambit2.plugin.dbtools.test;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import junit.framework.Assert;
-
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 

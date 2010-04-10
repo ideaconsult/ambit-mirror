@@ -29,7 +29,6 @@
 
 package ambit2.descriptors;
 
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -64,15 +63,26 @@ public class PlanarityDescriptor extends SpherosityDescriptor {
                 getParameters(), new DoubleResult(planarity));        
     }
     */
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException {
-        DescriptorValue value =  getSizeDescriptorResult(container);
-        IDescriptorResult result = value.getValue();
-        //[0] is max length, [1] is max diameter [2] is min diameter - =0 if planar 
-        DoubleArrayResult eval = ((DoubleArrayResult) result);
-        
-        return new DescriptorValue(getSpecification(), getParameterNames(), 
-                getParameters(), new DoubleResult( eval.get(2)),
-                new String[] {CrossSectionalDiameterDescriptor.MIN_DIAMETER});    
+    public DescriptorValue calculate(IAtomContainer container) {
+    	try {
+	        DescriptorValue value =  getSizeDescriptorResult(container);
+	        IDescriptorResult result = value.getValue();
+	        //[0] is max length, [1] is max diameter [2] is min diameter - =0 if planar 
+	        DoubleArrayResult eval = ((DoubleArrayResult) result);
+	        
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(), new DoubleResult( eval.get(2)),getDescriptorNames()
+	               );
+    	} catch (Exception x) {
+
+            return new DescriptorValue(getSpecification(), getParameterNames(), 
+                    getParameters(), null,getDescriptorNames(),x
+                   );    
+    	}
+    }
+    @Override
+    public String[] getDescriptorNames() {
+    	return new String[] {CrossSectionalDiameterDescriptor.MIN_DIAMETER};
     }
     public String toString() {
     	return "Planarity";

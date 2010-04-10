@@ -32,13 +32,13 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.NoSuchElementException;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.IChemObjectReader;
+import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.formats.IResourceFormat;
-import org.openscience.cdk.io.formats.MDLFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 import org.openscience.cdk.io.formats.MDLV3000Format;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
@@ -115,7 +115,13 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
     public IResourceFormat getFormat() {
         return currentFormat;
     }
-
+    public void setReader(InputStream reader) throws CDKException {
+    	input = new BufferedReader(new InputStreamReader(reader));
+    	
+    }
+    public void setReader(Reader reader) throws CDKException {
+    	input = new BufferedReader(reader);
+    }
     /**
      * Returns true if another IMolecule can be read.
      */
@@ -150,7 +156,7 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                     	buffer.append(currentLine);
                     buffer.append("\n");
                     logger.debug("MDL file part read: ", buffer);
-                    IChemObjectReader reader = factory.createReader(currentFormat);
+                    ISimpleChemObjectReader reader = factory.createReader(currentFormat);
                     reader.setReader(new StringReader(buffer.toString()));
                     Object newmol = reader.read(builder.newMolecule());
                     

@@ -11,13 +11,9 @@
     dictionary*,
     src_dataset*,
     tuples*,
-    property_string*,
-    property_values*,
-    property_tuples*,
     struc_dataset*,
-    sessions*,
-    query*,
-    query_results*)>
+    fp1024*,
+    sk1024*)>
 
 <!ELEMENT users EMPTY>
 <!ATTLIST users
@@ -54,6 +50,7 @@
     idreference CDATA #REQUIRED
     title CDATA #REQUIRED
     url CDATA #REQUIRED
+    type CDATA #REQUIRED
 >
 
 <!ELEMENT chemicals EMPTY>
@@ -72,9 +69,9 @@
     idchemical CDATA #REQUIRED
     structure CDATA #REQUIRED
     format CDATA #REQUIRED
-    updated CDATA #REQUIRED
     user_name CDATA #IMPLIED
     type_structure CDATA #REQUIRED
+    atomproperties CDATA #IMPLIED
 >
 
 <!ELEMENT properties EMPTY>
@@ -112,7 +109,6 @@
     name CDATA #REQUIRED
     user_name CDATA #IMPLIED
     idreference CDATA #REQUIRED
-    created CDATA #REQUIRED
 >
 
 <!ELEMENT tuples EMPTY>
@@ -121,56 +117,57 @@
     id_srcdataset CDATA #REQUIRED
 >
 
-<!ELEMENT property_string EMPTY>
-<!ATTLIST property_string
-    idvalue_string CDATA #REQUIRED
-    value CDATA #REQUIRED
->
-
-<!ELEMENT property_values EMPTY>
-<!ATTLIST property_values
-    id CDATA #REQUIRED
-    idproperty CDATA #REQUIRED
-    idstructure CDATA #REQUIRED
-    idvalue_string CDATA #IMPLIED
-    value_num CDATA #IMPLIED
-    status CDATA #REQUIRED
-    user_name CDATA #REQUIRED
->
-
-<!ELEMENT property_tuples EMPTY>
-<!ATTLIST property_tuples
-    idtuple CDATA #REQUIRED
-    id CDATA #REQUIRED
->
-
 <!ELEMENT struc_dataset EMPTY>
 <!ATTLIST struc_dataset
     idstructure CDATA #REQUIRED
     id_srcdataset CDATA #REQUIRED
-    created CDATA #REQUIRED
 >
 
-<!ELEMENT sessions EMPTY>
-<!ATTLIST sessions
-    idsessions CDATA #REQUIRED
-    user_name CDATA #REQUIRED
->
-
-<!ELEMENT query EMPTY>
-<!ATTLIST query
-    idquery CDATA #REQUIRED
-    idsessions CDATA #REQUIRED
-    name CDATA #REQUIRED
-    content CDATA #REQUIRED
->
-
-<!ELEMENT query_results EMPTY>
-<!ATTLIST query_results
-    idquery CDATA #REQUIRED
+<!ELEMENT fp1024 EMPTY>
+<!ATTLIST fp1024
     idchemical CDATA #REQUIRED
-    idstructure CDATA #REQUIRED
-    selected CDATA #REQUIRED
-    metric CDATA #REQUIRED
+    fp1 CDATA #REQUIRED
+    fp2 CDATA #REQUIRED
+    fp3 CDATA #REQUIRED
+    fp4 CDATA #REQUIRED
+    fp5 CDATA #REQUIRED
+    fp6 CDATA #REQUIRED
+    fp7 CDATA #REQUIRED
+    fp8 CDATA #REQUIRED
+    fp9 CDATA #REQUIRED
+    fp10 CDATA #REQUIRED
+    fp11 CDATA #REQUIRED
+    fp12 CDATA #REQUIRED
+    fp13 CDATA #REQUIRED
+    fp14 CDATA #REQUIRED
+    fp15 CDATA #REQUIRED
+    fp16 CDATA #REQUIRED
+    time CDATA #IMPLIED
+    bc CDATA #REQUIRED
+    status CDATA #REQUIRED
+>
+
+<!ELEMENT sk1024 EMPTY>
+<!ATTLIST sk1024
+    idchemical CDATA #REQUIRED
+    fp1 CDATA #REQUIRED
+    fp2 CDATA #REQUIRED
+    fp3 CDATA #REQUIRED
+    fp4 CDATA #REQUIRED
+    fp5 CDATA #REQUIRED
+    fp6 CDATA #REQUIRED
+    fp7 CDATA #REQUIRED
+    fp8 CDATA #REQUIRED
+    fp9 CDATA #REQUIRED
+    fp10 CDATA #REQUIRED
+    fp11 CDATA #REQUIRED
+    fp12 CDATA #REQUIRED
+    fp13 CDATA #REQUIRED
+    fp14 CDATA #REQUIRED
+    fp15 CDATA #REQUIRED
+    fp16 CDATA #REQUIRED
+    time CDATA #IMPLIED
+    bc CDATA #REQUIRED
+    status CDATA #REQUIRED
 >
 

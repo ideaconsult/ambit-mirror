@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 import com.microworkflow.process.Activity;
-import com.microworkflow.ui.ILookAtActivity;
-import com.microworkflow.ui.WorkflowTools;
 
 public class WorkflowTableModel extends AbstractTableModel  {
     ArrayList<Activity> activities;

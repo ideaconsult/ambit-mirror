@@ -23,7 +23,6 @@ import ambit2.core.io.IteratingMolFolderReader;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.IDBProcessor;
 import ambit2.db.processors.AbstractBatchProcessor;
-import ambit2.db.processors.AbstractRepositoryWriter;
 import ambit2.db.processors.PropertyImporter;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;

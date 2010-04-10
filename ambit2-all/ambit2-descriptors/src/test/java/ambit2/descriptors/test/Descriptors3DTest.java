@@ -7,15 +7,12 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor;
 
 import ambit2.core.io.FileInputState;
-import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.descriptors.SizeDescriptor;
 import ambit2.descriptors.SpherosityDescriptor;
 

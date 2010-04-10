@@ -32,7 +32,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 
 import ambit2.ui.AbstractAmbitAction;
 import ambit2.ui.AbstractPanel;

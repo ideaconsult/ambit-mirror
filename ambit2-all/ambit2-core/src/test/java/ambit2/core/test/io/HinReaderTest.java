@@ -17,6 +17,10 @@ import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
 public class HinReaderTest {
+	/**
+	 * CDK bug https://sourceforge.net/tracker/?func=detail&aid=2984581&group_id=20024&atid=120024
+	 * @throws Exception
+	 */
 	@Test
 	public void testHIN() throws Exception {
 		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/hin/test.hin");

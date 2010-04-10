@@ -22,7 +22,8 @@ import javax.swing.JToolBar;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.HydrogenAdder;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -36,7 +37,6 @@ import ambit2.descriptors.FuncGroupsDescriptorFactory;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
 import ambit2.smarts.SmartsToChemObject;
-import ambit2.smarts.query.SMARTSException;
 import ambit2.ui.Utils;
 import ambit2.ui.editors.Panel2D;
 
@@ -221,14 +221,14 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 								boolean notfound = result.getResult().toString().equals("0");
 								status.setText((notfound)?"NOT FOUND":"FOUND");
 								status.setIcon((notfound)?Utils.createImageIcon("images/cross.png"):Utils.createImageIcon("images/tick.png"));
-								panel2D.setSelector(new IProcessor<IAtomContainer, IAtomContainer>() {
-									public IAtomContainer process(
+								panel2D.setSelector(new IProcessor<IAtomContainer, IChemObjectSelection>() {
+									public IChemObjectSelection process(
 											IAtomContainer target)
 											throws AmbitException {
 										selectionInList.getSelection().setVerboseMatch(true);
 										VerboseDescriptorResult result = selectionInList.getSelection().process(target);
 										if (result.getExplanation() instanceof IAtomContainer) 
-											return (IAtomContainer)result.getExplanation();
+											return new SingleSelection<IAtomContainer>((IAtomContainer)result.getExplanation());
 										else return null;
 									}
 									public long getID() {return 0;}

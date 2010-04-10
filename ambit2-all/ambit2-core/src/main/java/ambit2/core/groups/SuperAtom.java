@@ -68,7 +68,7 @@ public class SuperAtom extends AbstractGroup  implements IExpandable {
     public IBond addBond(IBond bond) {
         IBond newbond = getBuilder().newBond();
         newbond.setOrder(bond.getOrder());
-        Iterator<IAtom> batoms = bond.atoms();
+        Iterator<IAtom> batoms = bond.atoms().iterator();
         int position=0;
         while (batoms.hasNext()) {
             IAtom atom = batoms.next();

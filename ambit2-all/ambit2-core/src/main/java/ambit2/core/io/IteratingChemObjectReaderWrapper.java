@@ -1,6 +1,8 @@
 package ambit2.core.io;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.exception.CDKException;
@@ -49,7 +51,13 @@ public class IteratingChemObjectReaderWrapper extends
 			format = null;
 		}
 	}
-	
+	public void setReader(InputStream reader) throws CDKException {
+		throw new CDKException("Not implemented");
+		
+	}
+	public void setReader(Reader reader) throws CDKException {
+		throw new CDKException("Not implemented");
+	}
 	/* (non-Javadoc)
      * @see org.openscience.cdk.io.IChemObjectIO#getFormat()
      */
