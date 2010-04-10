@@ -9,6 +9,7 @@ import org.restlet.data.Reference;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.DbReaderStructure;
@@ -67,5 +68,18 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else throw new Exception("Can't process "+ target.toString());
+	}
+	
+	@Override
+	protected IBatchStatistics runBatch(Object target) throws Exception {
+		IBatchStatistics stats;
+		while (true) {
+			stats = batch.process(target);
+			if (stats.getRecords(RECORDS_STATS.RECORDS_PROCESSED)==0) break;
+			stats.setRecords(RECORDS_STATS.RECORDS_PROCESSED, 0);
+			stats.setRecords(RECORDS_STATS.RECORDS_ERROR, 0);
+			stats.setRecords(RECORDS_STATS.RECORDS_READ,0);
+		}
+		return stats;
 	}
 }
