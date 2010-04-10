@@ -98,7 +98,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 		hasType(typeDescriptor) || hasType(typeAppDomain) ;
 	}
 	public boolean isDataProcessing() {
-		return hasType(typeDescriptor);
+		return hasType(typeDescriptor) || hasType(typeFingerprints);
 	}
 
 	public String[] getType() {
