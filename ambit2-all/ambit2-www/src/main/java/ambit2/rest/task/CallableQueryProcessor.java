@@ -67,7 +67,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 					}
 				});
 				*/
-				batch.process(target);
+				IBatchStatistics stats = runBatch(target);
 			}
 			return createReference(connection);
 		} catch (Exception x) {
@@ -93,6 +93,9 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		}		
 		*/	
 		
+	}
+	protected IBatchStatistics runBatch(Target target) throws Exception {
+		return batch.process(target);
 	}
 	
 	protected AbstractBatchProcessor createBatch(Target target) throws Exception{
