@@ -374,7 +374,7 @@ Then, when the "get(Variant)" method calls you back,
 						Callable<Reference> task = createCallable(form,model);
 						if (async) {
 							Reference ref =  ((AmbitApplication)getApplication()).addTask(
-									String.format("Apply %s to %s",model.toString(),reference),
+									String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),									
 									task,
 									getRequest().getRootRef());		
 							getResponse().setLocationRef(ref);

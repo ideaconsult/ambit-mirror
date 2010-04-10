@@ -99,7 +99,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				T model = query.next();
 				Reference reference = getSourceReference(form,model);
 				Reference ref =  ((AmbitApplication)getApplication()).addTask(
-						String.format("Apply %s to %s",model.toString(),reference),
+						String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),
 						createCallable(form,model),
 						getRequest().getRootRef());		
 				getResponse().setLocationRef(ref);
