@@ -3,6 +3,7 @@ package ambit2.plugin.dbtools.test;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigInteger;
 
 import junit.framework.Assert;
 
@@ -49,7 +50,7 @@ public class DBUtilityWorkflowTest extends WorkflowTest<DBUtilityWorkflow> {
 		testExecuteWith(new CalculationStructuralKeys());
 		IDatabaseConnection c = getConnection();
 		ITable fp = c.createQueryTable("structure","SELECT count(*) c FROM sk1024");
-		Assert.assertEquals(4L, fp.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("4"), fp.getValue(0,"c"));
 		c.close();
 	}	
 	@Test
