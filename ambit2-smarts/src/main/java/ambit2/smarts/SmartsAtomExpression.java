@@ -157,8 +157,12 @@ public class SmartsAtomExpression extends SMARTSAtom
     		return(match_r(atomRings2, tok.param, atom));
     		
     	case SmartsConst.AP_Mass:    		
+    		//When atom mass is unspecified false is returned
+    		if (atom.getMassNumber()== null) 
+    			return(false); 
     		if (atom.getMassNumber()== 0) 
-    			return(false); //When atom mass is unspecified false is returned
+    			return(false); 
+    		
     		if (atom.getMassNumber()== tok.param)
     			return(true);
     		else
