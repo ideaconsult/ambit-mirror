@@ -107,7 +107,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 	protected QueryStructure createExactStructure(QueryInfo target) throws AmbitException {
 		if (QueryInfo.METHOD_EXACT.equals(target.getMethod())) {
 			if (target.getMolecule() == null) return null;
-			SmilesGenerator g = new SmilesGenerator();
+			SmilesGenerator g = new SmilesGenerator(true);
 			return createQueryStructure("smiles", g.createSMILES(target.getMolecule()));
 		} else return null;		
 	}

@@ -64,7 +64,7 @@ public class SmilesTest {
 	            "C(=C(Cl)Cl)(C1C=CC(=CC=1)Cl)C2=CC=C(C=C2)Cl" 
 	            };
 	    String[] newSmiles = {"","",""};
-	    SmilesGenerator gen = new SmilesGenerator();
+	    SmilesGenerator gen = new SmilesGenerator(true);
 	    gen.setUseAromaticityFlag(true);
 	    IMolecule m = getMolecule();
 	    String m_smiles = gen.createSMILES(m);

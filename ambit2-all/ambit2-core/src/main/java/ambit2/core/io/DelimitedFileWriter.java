@@ -51,7 +51,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 	protected BufferedWriter writer;
 	protected DelimitedFileFormat format;
 
-	protected SmilesGenerator sg = new SmilesGenerator();
+	protected SmilesGenerator sg = new SmilesGenerator(true);
 
 
 	/**

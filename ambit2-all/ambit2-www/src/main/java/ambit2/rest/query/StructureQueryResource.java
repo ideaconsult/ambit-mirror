@@ -287,7 +287,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				AtomConfigurator c = new AtomConfigurator();
 				mol=c.process(mol);
 				CDKHueckelAromaticityDetector.detectAromaticity(mol);   
-				SmilesGenerator g = new SmilesGenerator();
+				SmilesGenerator g = new SmilesGenerator(true);
 				g.setUseAromaticityFlag(aromatic);
 				return g.createSMILES((IMolecule)mol);
 		} catch (Exception x) {

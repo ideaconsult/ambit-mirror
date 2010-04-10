@@ -6,15 +6,19 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.log.AmbitLogger;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.smi23d.ShellMengine;
@@ -90,11 +94,17 @@ public class CommandShellTest {
 		for (int i=0; i < newmol.getAtomCount(); i++) {
 			Assert.assertNotNull(newmol.getAtom(i).getPoint3d());
 		}
-		SmilesGenerator g = new SmilesGenerator();
-		String newsmiles = g.createSMILES(newmol);
-		//assertEquals(smiles,newsmiles);
-		//isisomorph returns false if createSmiles was not run before; perhaps smth to do with atom types configuration
-		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,newmol));			
+		int aromatic = 0;
+		for (IAtom atom: mol.atoms())
+			aromatic += atom.getFlag(CDKConstants.ISAROMATIC)?1:0;
+		AtomConfigurator cfg = new AtomConfigurator();
+		cfg.process(newmol);
+		CDKHueckelAromaticityDetector.detectAromaticity(newmol);
+		int newaromatic=0;
+		for (IAtom atom: newmol.atoms())
+			newaromatic += atom.getFlag(CDKConstants.ISAROMATIC)?1:0;
+		Assert.assertEquals(aromatic,newaromatic);
+	Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,newmol));			
 	}
 	@Test	
 	public void testRunMENGINE() throws Exception {

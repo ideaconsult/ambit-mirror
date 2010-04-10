@@ -47,7 +47,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);
 	protected Header header = null;
 	protected int smilesIndex = -1;
-	protected SmilesGenerator sg = new SmilesGenerator();
+	protected SmilesGenerator sg = new SmilesGenerator(true);
 	public static String defaultSMILESHeader = "SMILES";
 	protected boolean writingStarted = false;
 

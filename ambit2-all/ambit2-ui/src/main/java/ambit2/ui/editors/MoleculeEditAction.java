@@ -132,7 +132,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 
 					m = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(m);
      
-	    	        SmilesGenerator g = new SmilesGenerator();
+	    	        SmilesGenerator g = new SmilesGenerator(true);
 	    	        molecule.setProperty(AmbitCONSTANTS.SMILES,g.createSMILES((IMolecule)m));
 	    	        m = null;
 

@@ -57,7 +57,7 @@ public class HinReaderTest {
 			System.out.println(o);
 			Assert.assertTrue(o instanceof IAtomContainer);
 			Assert.assertEquals(target.getAtomCount(),((IAtomContainer)o).getAtomCount());
-			SmilesGenerator g = new SmilesGenerator();
+			SmilesGenerator g = new SmilesGenerator(true);
 			System.out.println(g.createSMILES((IMolecule)o));			
 			Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(target,((IAtomContainer)o)));
 			count++;
