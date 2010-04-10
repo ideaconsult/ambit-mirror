@@ -104,7 +104,7 @@ public class MengineCrashTest {
 
     public void isIsomorph(IMolecule a,IMolecule b) throws  Exception {
         
-        SmilesGenerator g = new SmilesGenerator();
+        SmilesGenerator g = new SmilesGenerator(true);
         AtomConfigurator c= new AtomConfigurator();
         HydrogenAdderProcessor h = new HydrogenAdderProcessor();
         CDKHueckelAromaticityDetector.detectAromaticity(c.process(h.process(a)));

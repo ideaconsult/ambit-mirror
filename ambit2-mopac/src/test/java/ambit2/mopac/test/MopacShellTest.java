@@ -86,7 +86,7 @@ public class MopacShellTest {
 		for (int i=0; i < newmol.getAtomCount(); i++) {
 			Assert.assertNotNull(newmol.getAtom(i).getPoint3d());
 		}
-		SmilesGenerator g = new SmilesGenerator();
+		SmilesGenerator g = new SmilesGenerator(true);
 		String newsmiles = g.createSMILES(newmol);
 		//assertEquals(smiles,newsmiles);
 		//isisomorph returns false if createSmiles was not run before; perhaps smth to do with atom types configuration

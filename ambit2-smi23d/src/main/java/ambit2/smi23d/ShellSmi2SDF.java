@@ -53,7 +53,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 	public void setDropHydrogens(boolean dropHydrogens) {
 		this.dropHydrogens = dropHydrogens;
 	}
-	protected transient SmilesGenerator gen = new SmilesGenerator();
+	protected transient SmilesGenerator gen = new SmilesGenerator(true);
 	public ShellSmi2SDF() throws ShellException {
 		super();
 	}
@@ -84,7 +84,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 
                     c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(c);
                 }
-                
+                gen.setUseAromaticityFlag(true);
 			    smiles = gen.createSMILES((IMolecule)c);
             } else logger.debug("Use smiles from file\t"+smiles);
 			
