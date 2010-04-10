@@ -25,27 +25,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.smarts;
 
 
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
+
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-//import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
-
-//import java.util.TreeMap;
-import java.util.List;
-import java.util.Vector;
-import java.util.Stack;
 
 /** 
  * Implements utilities needed for handling searching with SMARTS  

@@ -35,12 +35,10 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.search.structure.QuerySimilarityStructure;
 
 public class QuerySimilarityStructureTest  extends QueryTest<QuerySimilarityStructure>{
@@ -78,8 +76,8 @@ public class QuerySimilarityStructureTest  extends QueryTest<QuerySimilarityStru
 			Assert.assertEquals(10,rs.getInt(2));
 			Assert.assertEquals(100214,rs.getInt(3));
 			Assert.assertEquals(1,rs.getInt(4));
-			Assert.assertEquals(0.25,rs.getFloat(5),1E-4);	
-			Assert.assertEquals(0.25,rs.getFloat("metric"),1E-4);	
+			Assert.assertEquals(0.33,rs.getFloat(5),1E-4);	
+			Assert.assertEquals(0.33,rs.getFloat("metric"),1E-4);	
 		}
 	}
 	

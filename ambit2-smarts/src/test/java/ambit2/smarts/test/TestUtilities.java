@@ -1,44 +1,50 @@
 package ambit2.smarts.test;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.RandomAccessFile;
+import java.io.StringWriter;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
-import java.util.BitSet;
-import java.io.FileReader;
-import java.io.RandomAccessFile;
-import java.io.FileWriter;
-import java.io.StringWriter;
-import java.io.StringReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 
-import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.smarts.*;
-
-import org.openscience.cdk.interfaces.IChemFile;
-import org.openscience.cdk.io.CMLWriter;
-import org.openscience.cdk.io.CMLReader;
-import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.fingerprint.Fingerprinter;
-import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.ringsearch.SSSRFinder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.smarts.CMLUtilities;
+import ambit2.smarts.ChemObjectFactory;
+import ambit2.smarts.ChemObjectToSmiles;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.QuerySequenceElement;
+import ambit2.smarts.Screening;
+import ambit2.smarts.ScreeningData;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsManager;
+import ambit2.smarts.SmartsParser;
+import ambit2.smarts.SmartsScreeningKeys;
+import ambit2.smarts.SmartsToChemObject;
+import ambit2.smarts.StructInfo;
+import ambit2.smarts.StructureSetAnalyzer;
 
 
 

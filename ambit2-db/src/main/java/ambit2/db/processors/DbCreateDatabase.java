@@ -39,8 +39,6 @@ import java.sql.Statement;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.StringBean;
-import ambit2.db.UpdateExecutor;
-import ambit2.db.update.property.UpdateProperty;
 import ambit2.db.update.user.CreateUser;
 
 /*

@@ -29,7 +29,6 @@
 
 package ambit2.workflow.library;
 
-import ambit2.core.io.FileInputState;
 import ambit2.core.io.FileOutputState;
 import ambit2.core.io.FileState;
 import ambit2.workflow.UserInteraction;

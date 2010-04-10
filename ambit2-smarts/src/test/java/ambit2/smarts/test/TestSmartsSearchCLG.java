@@ -1,29 +1,12 @@
 package ambit2.smarts.test;
 
-import junit.framework.*;
-//import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.mcss.RMap;
 
-import ambit2.smarts.SmartsConst;
-import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
-import ambit2.smarts.SmartsParser;
-
-import java.util.*;
 
 public class TestSmartsSearchCLG extends TestCase
 {

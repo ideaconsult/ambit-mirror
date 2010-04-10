@@ -67,7 +67,7 @@ public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomConta
 	              if ("SDF".equals(r.getFormat()))
 	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
 	              else
-	            	    m = MoleculeTools.readCMLMolecule(new InputStreamReader(s));
+	            	    m = MoleculeTools.readCMLMolecule(s);
 	                s = null;
 	                return m;
             } else {

@@ -7,7 +7,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.jdbc.JDBCCategoryDataset;
-import org.jfree.data.jdbc.JDBCXYDataset;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;

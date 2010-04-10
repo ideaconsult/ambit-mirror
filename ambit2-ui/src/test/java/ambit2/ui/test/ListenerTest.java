@@ -4,8 +4,6 @@
  */
 package ambit2.ui.test;
 
-import java.io.FileInputStream;
-
 import junit.framework.Assert;
 
 import org.junit.After;

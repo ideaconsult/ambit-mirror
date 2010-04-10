@@ -2,7 +2,6 @@ package ambit2.hashcode ;
 
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.Enumeration;
 public class Prime {	
 public static int [] createArrayWithPrimes (int number) {
 	    

@@ -1,7 +1,6 @@
 package ambit2.workflow.ui;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Hashtable;

@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -18,6 +17,7 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -460,7 +460,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						));
 		
 		b.append(String.format(
-				"<td ><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
+				"<td ><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=150&h=150\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
 				
 				w, w, 
 				w, record.getIdchemical()));
@@ -556,16 +556,16 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
-				"<a href=\"%s\"><img src=\"%s?accept-header=image/png&w=400&h=400\" width='250' height='250' alt=\"%s\" title=\"%d\"/></a>",
+				"<a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='250' height='250' alt=\"%s\" title=\"%d\"/></a>",
 				
 				w, w, 
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
 
 		String[][] s = new String[][] {
-				{PropertyValueResource.featureKey,CDKConstants.CASRN,"CAS RN"},
+				{PropertyValueResource.featureKey,AmbitCONSTANTS.CASRN,"CAS RN"},
 				{PropertyValueResource.featureKey,"EC","EINECS"},
-				{PropertyValueResource.featureKey,CDKConstants.NAMES,"Chemical name(s)"},
+				{PropertyValueResource.featureKey,AmbitCONSTANTS.NAMES,"Chemical name(s)"},
 				{PropertyValueResource.featureKey,null,"All available feature values"},
 				{"template",null,"Feature values by groups"},
 				{TupleResource.resourceTag,null,"Feature values by dataset"},

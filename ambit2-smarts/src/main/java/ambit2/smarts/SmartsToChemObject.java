@@ -6,7 +6,6 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
-import org.openscience.cdk.config.Symbols;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -16,6 +15,7 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.ringsearch.SSSRFinder;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -321,7 +321,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		if ((atType != -1)&&(isArom != -1))
 		{
 			Atom atom = new Atom();			
-			atom.setSymbol(Symbols.byAtomicNumber[atType]);			
+			atom.setSymbol(PeriodicTable.getSymbol(atType));			
 						
 			//Setting the aromaticity
 			if (isArom == 1)				

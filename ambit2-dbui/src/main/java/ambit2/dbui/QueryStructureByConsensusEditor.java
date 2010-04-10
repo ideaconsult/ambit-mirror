@@ -5,16 +5,14 @@ import javax.swing.JComponent;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.binding.list.SelectionInList;
-
-import ambit2.base.data.QLabel;
-import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStructureByQualityPairLabel;
 import ambit2.db.search.structure.QueryStructureByQualityPairLabel.CONSENSUS_LABELS;
+
+import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.list.SelectionInList;
 
 public class QueryStructureByConsensusEditor extends 
 					QueryEditor<String, String, StringCondition,IStructureRecord, QueryStructureByQualityPairLabel> {

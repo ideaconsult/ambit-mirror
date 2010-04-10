@@ -28,7 +28,6 @@ import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.While;
 import com.microworkflow.process.Workflow;
-import com.microworkflow.ui.WorkflowTools;
 
 /**
  * An attempt to export workflow as XPDL file

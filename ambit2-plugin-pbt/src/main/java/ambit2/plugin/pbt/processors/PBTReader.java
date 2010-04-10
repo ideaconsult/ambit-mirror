@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
-
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.ValuesByTemplateReader;
@@ -48,11 +47,11 @@ public class PBTReader extends ValuesByTemplateReader<PBTWorkBook> {
 			if (book == null) book = new PBTWorkBook();
 			fieldsReader.setBook(book);
 			fieldsReader.setRow(10);fieldsReader.setCol(2);			
-			fieldsReader.setAlias(CDKConstants.NAMES);
+			fieldsReader.setAlias(AmbitCONSTANTS.NAMES);
 			fieldsReader.process(target);
 			
 			fieldsReader.setRow(11);fieldsReader.setCol(2);			
-			fieldsReader.setAlias(CDKConstants.CASRN);
+			fieldsReader.setAlias(AmbitCONSTANTS.CASRN);
 			fieldsReader.process(target);			
 
 

@@ -3,13 +3,11 @@ package ambit2.db.search.property;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
-
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.property.AbstractPropertyRetrieval.SearchMode;
 import ambit2.db.update.property.ReadProperty;
 
 /**
@@ -38,7 +36,7 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStruct
 		searchMode = value?SearchMode.alias:SearchMode.name;
 	}		
 	public RetrieveFieldNamesByAlias() {
-		this(CDKConstants.NAMES);
+		this(AmbitCONSTANTS.NAMES);
 	}
 	public RetrieveFieldNamesByAlias(String alias) {
 		super();

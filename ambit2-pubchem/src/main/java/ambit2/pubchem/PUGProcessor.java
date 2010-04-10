@@ -52,6 +52,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.openscience.cdk.exception.CDKException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -535,6 +536,8 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
 	        }
 	        result.add(new StructureRecord(-1,-1,b.toString(),PCT_download_format[PCT_download_format_sdf]));
 	        */
+		} catch (CDKException x) {
+			throw new ProcessorException(null,x);
 		} catch (IOException x) {
 			throw new ProcessorException(null,x);
 		}

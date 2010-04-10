@@ -5,11 +5,9 @@ import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
-import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.processors.SMARTSPropertiesReader;

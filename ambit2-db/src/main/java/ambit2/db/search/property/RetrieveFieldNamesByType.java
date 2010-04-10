@@ -29,16 +29,12 @@
 
 package ambit2.db.search.property;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.StringCondition;
 
 /**
  * Retrieve names of string properties if setValue(0) ; 

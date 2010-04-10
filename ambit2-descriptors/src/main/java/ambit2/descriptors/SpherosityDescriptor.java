@@ -64,20 +64,29 @@ public class SpherosityDescriptor implements IMolecularDescriptor {
     /**
      * TODO this is quick and dirty - have to think how to store array results into ambit database 
      */
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException {
-        DescriptorValue value = getSizeDescriptorResult(container);
-        
-        IDescriptorResult result = value.getValue();
-        //[0] is max length, [1] is max diameter [2] is min diameter 
-        DoubleArrayResult eval = ((DoubleArrayResult) result);
-        
-        double min = eval.get(0);
-        for (int i=1; i < 3; i++ ) if (min >  eval.get(0)) min =  eval.get(0);
-        
-        double spherosity = 3*min/( eval.get(0)+ eval.get(0)+ eval.get(0)); 
-        //System.out.println(spherosity);
-        return new DescriptorValue(getSpecification(), getParameterNames(), 
-                getParameters(), new DoubleResult(spherosity),new String[] {"Spherosity"});        
+    public DescriptorValue calculate(IAtomContainer container) {
+    	try {
+	        DescriptorValue value = getSizeDescriptorResult(container);
+	        
+	        IDescriptorResult result = value.getValue();
+	        //[0] is max length, [1] is max diameter [2] is min diameter 
+	        DoubleArrayResult eval = ((DoubleArrayResult) result);
+	        
+	        double min = eval.get(0);
+	        for (int i=1; i < 3; i++ ) if (min >  eval.get(0)) min =  eval.get(0);
+	        
+	        double spherosity = 3*min/( eval.get(0)+ eval.get(0)+ eval.get(0)); 
+	        //System.out.println(spherosity);
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(), new DoubleResult(spherosity),getDescriptorNames());       
+    	} catch (Exception x) {
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(),null,getDescriptorNames(),x);  
+    	}
+    }
+    public String[] getDescriptorNames() {
+    	return
+    	new String[] {"Spherosity"};
     }
     public IDescriptorResult getDescriptorResultType() {
     	return new DoubleResult(0);

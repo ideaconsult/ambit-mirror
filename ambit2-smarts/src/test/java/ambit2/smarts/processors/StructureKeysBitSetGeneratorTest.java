@@ -5,16 +5,15 @@ import java.util.BitSet;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.HydrogenAdder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.MoleculeReader;
 
 public class StructureKeysBitSetGeneratorTest {
@@ -29,8 +28,10 @@ public class StructureKeysBitSetGeneratorTest {
 		IAtomContainer c1 = p.parseSmiles("C1=CC=CC=C1");
 		BitSet bs1 = g.process(c1);
 		Assert.assertEquals(bs,bs1);
-		HydrogenAdder hAdder = new HydrogenAdder();
-		hAdder.addExplicitHydrogensToSatisfyValency(c1);
+		CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+        hAdder.addImplicitHydrogens(c1);
+        AtomContainerManipulator.convertImplicitToExplicitHydrogens(c1);
+
 		BitSet bs2 = g.process(c1);
 		Assert.assertEquals(bs2,bs1);
 		

@@ -12,7 +12,6 @@ import ambit2.base.processors.ProcessorsChain;
 import ambit2.base.processors.StructureRecordsAppender;
 import ambit2.core.io.IInputState;
 import ambit2.db.processors.BatchDBProcessor;
-import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.workflow.DBProcessorPerformer;
 import ambit2.workflow.DBWorkflowContext;

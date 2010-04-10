@@ -22,7 +22,6 @@ import ambit2.descriptors.VerboseDescriptorResult;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.processors.StructureKeysBitSetGenerator;
-import ambit2.smarts.query.AbstractSmartsPattern;
 import ambit2.smarts.query.SmartsPatternAmbit;
 
 /**

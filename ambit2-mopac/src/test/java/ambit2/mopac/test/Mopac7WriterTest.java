@@ -32,7 +32,6 @@ package ambit2.mopac.test;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.io.StringWriter;
 
 import junit.framework.Assert;
@@ -41,16 +40,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.HydrogenAdder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
@@ -84,8 +84,10 @@ public class Mopac7WriterTest  {
             };
             SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
             IMolecule mol = p.parseSmiles("CCCCCc1cccc2cccc(c12)CCC");
-            HydrogenAdder adder = new HydrogenAdder();
-            adder.addExplicitHydrogensToSatisfyValency(mol);
+
+    		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+            adder.addImplicitHydrogens(mol);
+            AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);            
 
             StructureDiagramGenerator g = new StructureDiagramGenerator();
             g.setMolecule(mol,false);
@@ -209,18 +211,17 @@ public class Mopac7WriterTest  {
                     IMolecule m = (IMolecule) o;
                     //writer.write((org.openscience.cdk.interfaces.ChemObject)o);
                     
-                    try {
+
 	                    DescriptorValue v = shell.calculate(m);
 	                    DoubleArrayResult r = (DoubleArrayResult) v.getValue();
 	                    String[] names = v.getNames();
 	                    Assert.assertEquals(names.length,r.length());
 	                    for (int g=0; g<names.length;g++) {
 	                    	Assert.assertNotNull(r.get(g));
+	                    	Assert.assertNull(v.getException());
 	                    	//System.out.println(names[g] + "\t= "+r.get(g));
 	                    } 	
-                    } catch (CDKException x) {
-                    	System.out.println(x.getMessage());
-                    }
+              
                     /*
                     if ((m.getProperty(MopacShell.EHOMO) == null) ||
                     	m.getProperty(MopacShell.ELUMO) == null) {

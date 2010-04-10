@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Calendar;
 import java.util.Iterator;
 
 import javax.swing.Icon;
@@ -15,19 +14,18 @@ import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.applications.jchempaint.JCPPropertyHandler;
-import org.openscience.cdk.applications.jchempaint.JChemPaintEditorPanel;
-import org.openscience.cdk.applications.jchempaint.JChemPaintModel;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.application.JChemPaint;
 
 import ambit2.core.config.AmbitCONSTANTS;
 
@@ -40,7 +38,7 @@ import ambit2.core.config.AmbitCONSTANTS;
  */
 public class MoleculeEditAction extends AbstractMoleculeAction {
 	protected IMoleculeSet molecules;
-	protected JChemPaintModel jcpModel;
+	protected IChemModel jcpModel;
 	protected StructureDiagramGenerator sdg = null;
 	protected boolean query = false;
 	protected int value = -1;
@@ -65,13 +63,17 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 	}
 	protected void setJCPModel() {
 	    
-		jcpModel = new JChemPaintModel();        
-		jcpModel.setTitle("JChemPaint structure diagram editor");
-		jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
-		Package jcpPackage = Package.getPackage("org.openscience.cdk.applications.jchempaint");
-		String version = jcpPackage.getImplementationVersion();
-		jcpModel.setSoftware("JChemPaint " + version);
-		jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
+		jcpModel =  DefaultChemObjectBuilder.getInstance()
+            .newChemModel();
+		jcpModel.setMoleculeSet(jcpModel.getBuilder().newMoleculeSet());
+		jcpModel.getMoleculeSet().addAtomContainer(
+				jcpModel.getBuilder().newMolecule());			
+		//jcpModel.setTitle("JChemPaint structure diagram editor");
+		//jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
+		//Package jcpPackage = Package.getPackage("org.openscience.cdk.applications.jchempaint");
+		//String version = jcpPackage.getImplementationVersion();
+		//jcpModel.setSoftware("JChemPaint " + version);
+		//jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -86,13 +88,13 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 			setMolecule(mole);
 		
 	    	if (molecules != null) {
-				jcpModel.getChemModel().setMoleculeSet(molecules);
+				jcpModel.setMoleculeSet(molecules);
 				
 				Dimension d = new Dimension(460,450);
-	    		JChemPaintEditorPanel jcpep = new JChemPaintEditorPanel(2,d,true,"stable");
+				JChemPaintPanel jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
 	    		jcpep.setPreferredSize(d);
-	    		jcpep.registerModel(jcpModel);
-	    		jcpep.setJChemPaintModel(jcpModel,new Dimension(200,200));
+	    		//jcpep.registerModel(jcpModel);
+	    		jcpep.setChemModel(jcpModel);//,new Dimension(200,200));
 	    		
 	    		//JFrame pane = getJCPFrame(jcpep);
 	    		
@@ -110,7 +112,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 	    		int value = ((Integer) pane.getValue()).intValue();
 	    		//while (value != 0);
 	    		if (value == 0) { //ok
-	    	    	molecules = jcpep.getJChemPaintModel().getChemModel().getMoleculeSet();
+	    	    	molecules = jcpep.getChemModel().getMoleculeSet();
 	    	    	if (molecule == null)  molecule = new org.openscience.cdk.Molecule(); 
 	    	    	else 	molecule.removeAllElements();
 	    	        for (int i=0; i < molecules.getAtomContainerCount(); i++) 
@@ -121,19 +123,19 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 	    	        if (JOptionPane.showConfirmDialog(null, "Remove all properties of the molecule?\n(Yes - to remove, No - to keep)", 
 	    	        			"Structure diagram editor", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 	    	        	molecule.getProperties().clear();
-					IMolecule m = null;
+					IAtomContainer m = null;
 					try {
 					    m = (IMolecule )molecule.clone();
 					} catch (Exception x) {
 					    m = molecule;
 					}
-					MFAnalyser mfa = new MFAnalyser(m);
-					m = (Molecule)mfa.removeHydrogensPreserveMultiplyBonded();
+
+					m = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(m);
      
 	    	        SmilesGenerator g = new SmilesGenerator();
-	    	        molecule.setProperty(AmbitCONSTANTS.SMILES,g.createSMILES(m));
+	    	        molecule.setProperty(AmbitCONSTANTS.SMILES,g.createSMILES((IMolecule)m));
 	    	        m = null;
-	    	        mfa = null;
+
 	    	        g = null;
 	    	        return molecule;
 	    	        /*
@@ -166,7 +168,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 			return null;
 		}
 		
-		Iterator<IAtomContainer> t = ConnectivityChecker.partitionIntoMolecules(atomContainer).molecules();
+		Iterator<IAtomContainer> t = ConnectivityChecker.partitionIntoMolecules(atomContainer).molecules().iterator();
 		IMoleculeSet molecules = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
 		while (t.hasNext()) {
 			IMolecule a = (IMolecule)t.next();
@@ -214,7 +216,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
     public synchronized void setQuery(boolean query) {
         this.query = query;
     }
-    public JFrame getJCPFrame(JChemPaintEditorPanel jcpep) {
+    public JFrame getJCPFrame(JChemPaintPanel jcpep) {
 		JFrame frame = new JFrame();
 		frame.addWindowListener(new WindowAdapter() {
 		    /* (non-Javadoc)
@@ -227,7 +229,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 		});
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().add(jcpep);
-		frame.setTitle(jcpModel.getTitle());
+		frame.setTitle(jcpModel.toString());
 		frame.setBounds(100,100,400,400);
 		return frame;
     }

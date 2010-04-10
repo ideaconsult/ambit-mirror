@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.descriptors;
 
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -48,15 +47,25 @@ public class MaximumDiameterDescriptor extends SpherosityDescriptor {
 		    "$Id: MaximumDiameterDescriptor.java,v 0.2 2006/06/29 14:09:00 Nina Jeliazkova Exp $",
 		    "http://ambit.sourceforge.net");
     };    	
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException {
-        DescriptorValue value =  getSizeDescriptorResult(container);
-        IDescriptorResult result = value.getValue();
-        //[0] is max length, [1] is max diameter [2] is min diameter - =0 if planar 
-        DoubleArrayResult eval = ((DoubleArrayResult) result);
-        
-        return new DescriptorValue(getSpecification(), getParameterNames(), 
-                getParameters(), new DoubleResult( eval.get(0)),
-                new String[] {CrossSectionalDiameterDescriptor.MAX_DIAMETER});    
+    public DescriptorValue calculate(IAtomContainer container)  {
+    	try {
+	        DescriptorValue value =  getSizeDescriptorResult(container);
+	        IDescriptorResult result = value.getValue();
+	        //[0] is max length, [1] is max diameter [2] is min diameter - =0 if planar 
+	        DoubleArrayResult eval = ((DoubleArrayResult) result);
+	        
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(), new DoubleResult( eval.get(0)),
+	                getDescriptorNames());    
+    	} catch (Exception x) {
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(), null,
+	                getDescriptorNames(),x);
+    	}
+    }
+    @Override
+    public String[] getDescriptorNames() {
+    	 return new String[] {CrossSectionalDiameterDescriptor.MAX_DIAMETER};
     }
     public String toString() {
     	return "Molecule Length";

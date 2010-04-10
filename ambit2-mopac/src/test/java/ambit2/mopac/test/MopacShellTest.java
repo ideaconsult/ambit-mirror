@@ -12,8 +12,9 @@ import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tools.HydrogenAdder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
@@ -89,8 +90,9 @@ public class MopacShellTest {
 		String newsmiles = g.createSMILES(newmol);
 		//assertEquals(smiles,newsmiles);
 		//isisomorph returns false if createSmiles was not run before; perhaps smth to do with atom types configuration
-		HydrogenAdder adder = new HydrogenAdder();
-		adder.addExplicitHydrogensToSatisfyValency(mol);
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+        adder.addImplicitHydrogens(mol);
+        AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,newmol));			
 	}
 

@@ -14,8 +14,6 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -29,6 +27,7 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.smi23d.ShellMengine;
 
 /**
@@ -114,8 +113,8 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
 	            generate2d(a);
 	            writer.write(getMopacCommands());
 	            writer.newLine();
-	            if (a.getProperty(CDKConstants.NAMES) != null)
-	                writer.write(a.getProperty(CDKConstants.NAMES).toString());
+	            if (a.getProperty(AmbitCONSTANTS.NAMES) != null)
+	                writer.write(a.getProperty(AmbitCONSTANTS.NAMES).toString());
 	            writer.newLine();
 	            writer.write(getTitle());
 	            writer.newLine();

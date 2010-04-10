@@ -14,7 +14,6 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.AbstractPropertyRetrieval.PROPERTY_TABLE;
-import ambit2.db.search.property.AbstractPropertyRetrieval._PROPERTY_TYPE;
 
 public class QueryOntology  extends AbstractQuery<Boolean, Dictionary, StringCondition, Property> implements
 												IQueryRetrieval<Property> {

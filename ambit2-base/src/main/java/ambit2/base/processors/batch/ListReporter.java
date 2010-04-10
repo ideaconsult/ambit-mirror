@@ -1,7 +1,6 @@
 package ambit2.base.processors.batch;
 
 import java.util.Iterator;
-import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;

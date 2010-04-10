@@ -1,8 +1,10 @@
 /* (swing1.1.1) */
 package ambit2.ui;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 
 /**

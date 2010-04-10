@@ -34,14 +34,14 @@ public class StructureTypeProcessor extends DefaultAmbitProcessor<IAtomContainer
 				return STRUC_TYPE.NA;			
 	}
 	public static boolean hasHydrogens(IAtomContainer container) {
-		Iterator<IAtom> atoms = container.atoms();
+		Iterator<IAtom> atoms = container.atoms().iterator();
 	    while (atoms.hasNext()) 
 	    	if (atoms.next().getSymbol().equals("H")) return true;
 	    
 	    return false;
 	}
 	public static boolean has3DCoordinates(IAtomContainer container) {
-		Iterator<IAtom> atoms = container.atoms();
+		Iterator<IAtom> atoms = container.atoms().iterator();
 	    while (atoms.hasNext()) 
 	    	if (atoms.next().getPoint3d()!=null) return true;
 	    
@@ -54,7 +54,7 @@ public class StructureTypeProcessor extends DefaultAmbitProcessor<IAtomContainer
 		
 		boolean no2d=false;
 		boolean with2d=false;
-		Iterator<IAtom> atoms = container.atoms();
+		Iterator<IAtom> atoms = container.atoms().iterator();
 	    while (atoms.hasNext()) {
 	    	IAtom atom = atoms.next();
 	    	Point2d p = atom.getPoint2d();

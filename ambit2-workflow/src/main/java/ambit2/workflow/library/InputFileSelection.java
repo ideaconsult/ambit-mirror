@@ -1,6 +1,5 @@
 package ambit2.workflow.library;
 
-import ambit2.base.config.Preferences;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.FileState;
 import ambit2.workflow.UserInteraction;

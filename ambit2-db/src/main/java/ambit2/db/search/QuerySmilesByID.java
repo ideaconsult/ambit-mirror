@@ -33,12 +33,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
-
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
 
 public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, NumberCondition, IStructureRecord> implements IQueryRetrieval<IStructureRecord> {
@@ -97,14 +96,14 @@ public class QuerySmilesByID extends AbstractQuery<String, IStructureRecord, Num
                      	
             String smiles = rs.getString("smiles");
             if (smiles!= null)
-            	r.setProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES),smiles);
+            	r.setProperty(Property.getInstance(AmbitCONSTANTS.SMILES,AmbitCONSTANTS.SMILES),smiles);
             else
-            	r.removeProperty(Property.getInstance(CDKConstants.SMILES,CDKConstants.SMILES));
+            	r.removeProperty(Property.getInstance(AmbitCONSTANTS.SMILES,AmbitCONSTANTS.SMILES));
             String inchi = rs.getString("inchi");
             if (inchi!= null)
-            	r.setProperty(Property.getInstance(CDKConstants.INCHI,CDKConstants.INCHI),inchi);  
+            	r.setProperty(Property.getInstance(AmbitCONSTANTS.INCHI,AmbitCONSTANTS.INCHI),inchi);  
             else
-            	r.removeProperty(Property.getInstance(CDKConstants.INCHI,CDKConstants.INCHI));
+            	r.removeProperty(Property.getInstance(AmbitCONSTANTS.INCHI,AmbitCONSTANTS.INCHI));
             return r;
         } catch (Exception x){
             throw new AmbitException(x);

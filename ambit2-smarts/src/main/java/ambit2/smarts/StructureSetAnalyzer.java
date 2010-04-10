@@ -1,9 +1,9 @@
 package ambit2.smarts;
 
-import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import java.util.Vector;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 
 public class StructureSetAnalyzer 

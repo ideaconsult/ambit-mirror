@@ -3,7 +3,6 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-
 import ambit2.db.search.property.RetrieveFieldNamesByType;
 
 public class RetrieveFieldNamesByTypeTest  extends QueryTest<RetrieveFieldNamesByType>  {

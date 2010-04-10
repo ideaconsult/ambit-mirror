@@ -32,6 +32,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeSupervised = "http://www.opentox.org/algorithmTypes.owl#Supervised";
 	public static String typeUnSupervised = "http://www.opentox.org/algorithmTypes.owl#Unsupervised";
 	public static String typeAppDomain = "http://www.opentox.org/algorithmTypes.owl#ApplicabilityDomain";
+	public static String typeFingerprints = "http://www.opentox.org/algorithmTypes.owl#Fingerprints";
 	
 	public enum AlgorithmFormat {
 		JAVA_CLASS {

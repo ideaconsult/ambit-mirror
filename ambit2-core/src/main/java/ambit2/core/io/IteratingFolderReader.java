@@ -31,12 +31,13 @@ package ambit2.core.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-
-import ambit2.base.data.LiteratureEntry;
 
 /*
  * reader for multiple files in a folder
@@ -112,5 +113,12 @@ public abstract class IteratingFolderReader<T, ItemReader extends IIteratingChem
 	public String toString() {
 		return "Reads set of files";
 	}	
-
+	public void setReader(Reader reader) throws CDKException {
+		throw new CDKException("Not implemented");
+		
+	}
+	public void setReader(InputStream reader) throws CDKException {
+		throw new CDKException("Not implemented");
+		
+	}
 }

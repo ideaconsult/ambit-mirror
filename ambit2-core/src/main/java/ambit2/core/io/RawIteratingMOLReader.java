@@ -2,6 +2,7 @@ package ambit2.core.io;
 
 import java.io.Reader;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 
@@ -10,7 +11,7 @@ import ambit2.base.interfaces.IStructureRecord;
 
 public class RawIteratingMOLReader extends RawIteratingReader<IStructureRecord> {
 	protected final StructureRecord r = new StructureRecord();
-	public RawIteratingMOLReader(Reader in) {
+	public RawIteratingMOLReader(Reader in) throws CDKException {
 		super(in);
 	}
 

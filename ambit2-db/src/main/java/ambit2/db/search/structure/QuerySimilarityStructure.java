@@ -148,7 +148,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 		super.setValue(set);
 		try {
 			//if (query instanceof QuerySimilarityBitset) {
-				Iterator<IAtomContainer> i = set.molecules();
+				Iterator<IAtomContainer> i = set.molecules().iterator();
 				BitSet bitset = new BitSet();
 				while (i.hasNext()) {
 					bitset.or(g.process(i.next()));

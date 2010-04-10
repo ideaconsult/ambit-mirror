@@ -29,10 +29,10 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.external.CommandShell;
@@ -78,14 +78,14 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 			Object smiles = mol.getProperty(Preferences.getProperty(Preferences.SMILES_FIELD)); 
 			if (isGenerateSmiles() || (smiles == null)) {
                 logger.debug("Generate smiles\t");
-                IMolecule c = mol;
+                IAtomContainer c = mol;
                 if (dropHydrogens) {
                     c = (IMolecule) mol.clone();
-                    MFAnalyser mf = new MFAnalyser(c);
-                    c = (IMolecule) mf.removeHydrogensPreserveMultiplyBonded();
+
+                    c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(c);
                 }
                 
-			    smiles = gen.createSMILES(c);
+			    smiles = gen.createSMILES((IMolecule)c);
             } else logger.debug("Use smiles from file\t"+smiles);
 			
 			FileWriter writer = new FileWriter(path + File.separator + getInputFile());

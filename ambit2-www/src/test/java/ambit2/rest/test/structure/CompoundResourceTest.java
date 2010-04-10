@@ -20,7 +20,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
@@ -165,7 +164,7 @@ public class CompoundResourceTest extends ResourceTest {
 		return count ==2;
 		*/
 
-		IMolecule mol = MoleculeTools.readCMLMolecule(new InputStreamReader(in));
+		IMolecule mol = MoleculeTools.readCMLMolecule(in);
 		Assert.assertNotNull(mol);
 		Assert.assertEquals(3,mol.getAtomCount());
 		Assert.assertEquals(0,mol.getBondCount());

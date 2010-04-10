@@ -33,10 +33,8 @@ import java.sql.ResultSet;
 
 import junit.framework.Assert;
 import ambit2.db.processors.ProcessorSetQueryScope;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
-import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.QueryStructure;
 

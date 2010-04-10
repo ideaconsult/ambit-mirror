@@ -1,23 +1,4 @@
-/* $Revision: 10252 $ $Author: miguelrojasch $ $Date: 2008-02-26 16:28:01 +0200 (вторник, 26 Февруари 2008) $    
- * 
- * Copyright (C) 1997-2007  The Chemistry Development Kit (CDK) project
- * 
- * Contact: cdk-devel@lists.sourceforge.net
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1
- * of the License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA. 
- */
+
 package ambit2.core.test.groups;
 
 import java.util.Iterator;
@@ -29,7 +10,6 @@ import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -751,10 +731,8 @@ public class SuppleAtomContainerTest  {
         acetone.addAtom(c3);
         acetone.addAtom(o);
         
-        java.util.Iterator atomIter = acetone.atoms();
         int counter = 0;
-        while (atomIter.hasNext()) {
-            atomIter.next();
+        for (IAtom atom : acetone.atoms()) {
             counter++;
         }
         Assert.assertEquals(4, counter);
@@ -778,7 +756,7 @@ public class SuppleAtomContainerTest  {
         acetone.addAtom(c3);
         acetone.addAtom(o);
         
-        java.util.Iterator atomIter = acetone.atoms();
+        java.util.Iterator<IAtom> atomIter = acetone.atoms().iterator();
         Assert.assertNotNull(atomIter);
         Assert.assertTrue(atomIter.hasNext());
         IAtom next = (IAtom)atomIter.next();
@@ -819,7 +797,7 @@ public class SuppleAtomContainerTest  {
         acetone.addBond(bond2);
         acetone.addBond(bond3);
 
-        java.util.Iterator bonds = acetone.bonds();
+        java.util.Iterator<IBond> bonds = acetone.bonds().iterator();
         Assert.assertNotNull(bonds);
         Assert.assertTrue(bonds.hasNext());
 
@@ -861,7 +839,7 @@ public class SuppleAtomContainerTest  {
         acetone.addLonePair(lp1);
         acetone.addLonePair(lp2);
 
-        java.util.Iterator lonePairs = acetone.lonePairs();
+        java.util.Iterator<ILonePair> lonePairs = acetone.lonePairs().iterator();
         Assert.assertNotNull(lonePairs);
         Assert.assertTrue(lonePairs.hasNext());
 
@@ -899,7 +877,7 @@ public class SuppleAtomContainerTest  {
         acetone.addSingleElectron(se1);
         acetone.addSingleElectron(se2);
 
-        java.util.Iterator singleElectrons = acetone.singleElectrons();
+        java.util.Iterator<ISingleElectron> singleElectrons = acetone.singleElectrons().iterator();
         Assert.assertNotNull(singleElectrons);
         Assert.assertTrue(singleElectrons.hasNext());
 
@@ -941,7 +919,7 @@ public class SuppleAtomContainerTest  {
         acetone.addLonePair(lp1);
         acetone.addLonePair(lp2);
 
-        java.util.Iterator electronContainers = acetone.electronContainers();
+        java.util.Iterator<IElectronContainer> electronContainers = acetone.electronContainers().iterator();
         Assert.assertNotNull(electronContainers);
         Assert.assertTrue(electronContainers.hasNext());
         electronContainers.next();
@@ -1139,7 +1117,7 @@ public class SuppleAtomContainerTest  {
         acetone.addBond(b3);
         
         Assert.assertEquals(3, acetone.getBondCount());
-        Iterator bonds = acetone.bonds();
+        Iterator<IBond> bonds = acetone.bonds().iterator();
         while (bonds.hasNext()) Assert.assertNotNull(bonds.next());
         Assert.assertEquals(b1, acetone.getBond(0));
         Assert.assertEquals(b2, acetone.getBond(1));
@@ -1280,7 +1258,7 @@ public class SuppleAtomContainerTest  {
         acetone.addBond(1, 2, IBond.Order.SINGLE);
         
         Assert.assertEquals(3, acetone.getBondCount());
-        Iterator bonds = acetone.bonds();
+        Iterator<IBond> bonds = acetone.bonds().iterator();
         while (bonds.hasNext()) Assert.assertNotNull(bonds.next());
 
         Assert.assertEquals(c1, acetone.getBond(0).getAtom(0));
@@ -1305,26 +1283,27 @@ public class SuppleAtomContainerTest  {
         acetone.addAtom(c2);
         acetone.addAtom(c3);
         acetone.addAtom(o);
-        acetone.addBond(0, 1, IBond.Order.SINGLE, CDKConstants.STEREO_BOND_UP); // yes this is crap
-        acetone.addBond(1, 3, IBond.Order.DOUBLE, CDKConstants.STEREO_BOND_DOWN);
-        acetone.addBond(1, 2, IBond.Order.SINGLE, CDKConstants.STEREO_BOND_NONE);
+        acetone.addBond(0, 1, IBond.Order.SINGLE, IBond.Stereo.UP); // yes this is crap
+        acetone.addBond(1, 3, IBond.Order.DOUBLE, IBond.Stereo.DOWN);
+        acetone.addBond(1, 2, IBond.Order.SINGLE, IBond.Stereo.NONE);
         
         Assert.assertEquals(3, acetone.getBondCount());
-        Iterator bonds = acetone.bonds();
-        while (bonds.hasNext()) Assert.assertNotNull(bonds.next());
+
+        for (IBond bond: acetone.bonds())
+        	Assert.assertNotNull(bond);
 
         Assert.assertEquals(c1, acetone.getBond(0).getAtom(0));
         Assert.assertEquals(c2, acetone.getBond(0).getAtom(1));
         Assert.assertEquals(IBond.Order.SINGLE, acetone.getBond(0).getOrder());
-        Assert.assertEquals(CDKConstants.STEREO_BOND_UP, acetone.getBond(0).getStereo());
+        Assert.assertEquals(IBond.Stereo.UP, acetone.getBond(0).getStereo());
         Assert.assertEquals(c2, acetone.getBond(1).getAtom(0));
         Assert.assertEquals(o, acetone.getBond(1).getAtom(1));
         Assert.assertEquals(IBond.Order.DOUBLE, acetone.getBond(1).getOrder());
-        Assert.assertEquals(CDKConstants.STEREO_BOND_DOWN, acetone.getBond(1).getStereo());
+        Assert.assertEquals(IBond.Stereo.DOWN, acetone.getBond(1).getStereo());
         Assert.assertEquals(c2, acetone.getBond(2).getAtom(0));
         Assert.assertEquals(c3, acetone.getBond(2).getAtom(1));
         Assert.assertEquals(IBond.Order.SINGLE, acetone.getBond(2).getOrder());
-        Assert.assertEquals(CDKConstants.STEREO_BOND_NONE, acetone.getBond(2).getStereo());
+        Assert.assertEquals(IBond.Stereo.NONE, acetone.getBond(2).getStereo());
     }
 
     @Test public void testContains_IElectronContainer() {
@@ -1856,7 +1835,7 @@ public class SuppleAtomContainerTest  {
         mol.addSingleElectron(1);
         Assert.assertEquals(2, mol.getSingleElectronCount());
         Assert.assertNotNull(mol.getSingleElectron(1));
-        Iterator<ISingleElectron> singles = mol.singleElectrons();
+        Iterator<ISingleElectron> singles = mol.singleElectrons().iterator();
         ISingleElectron singleElectron = singles.next();
         Assert.assertNotNull(singleElectron);
         Assert.assertEquals(c1, singleElectron.getAtom());

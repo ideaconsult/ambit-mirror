@@ -34,6 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.formats.IResourceFormat;
@@ -70,34 +71,39 @@ public class IteratingDelimitedFileReader extends
 
 
 
-	public IteratingDelimitedFileReader(Reader in) {
+	public IteratingDelimitedFileReader(Reader in) throws CDKException {
 		this(in, new DelimitedFileFormat()); // default format
 	}
 
 	/**
 	 * 
 	 */
-	public IteratingDelimitedFileReader(Reader in, DelimitedFileFormat format) {
+	public IteratingDelimitedFileReader(Reader in, DelimitedFileFormat format) throws CDKException {
 		super();
 		this.format = format;
-
-		input = new BufferedReader(in);
-
+		setReader(in);
+	}
+	public void setReader(InputStream in) throws CDKException {
+		setReader(new InputStreamReader(in));
+		
+	}
+	public void setReader(Reader reader) throws CDKException {
+		input = new BufferedReader(reader);
 		nextMolecule = null;
 		nextAvailableIsKnown = false;
 		hasNext = false;
-
+		
 	}
 	@Override
 	protected LiteratureEntry getReference() {
 		return LiteratureEntry.getInstance(getClass().getName(),getClass().getName());
 	}	
 
-	public IteratingDelimitedFileReader(InputStream in) throws UnsupportedEncodingException {
+	public IteratingDelimitedFileReader(InputStream in) throws UnsupportedEncodingException, CDKException {
 		this(new InputStreamReader(in,"UTF-8"));
 	}
 
-	public IteratingDelimitedFileReader(InputStream in,DelimitedFileFormat format) throws UnsupportedEncodingException{
+	public IteratingDelimitedFileReader(InputStream in,DelimitedFileFormat format) throws UnsupportedEncodingException, CDKException {
 		this(new InputStreamReader(in,"UTF-8"), format);
 	}
 
@@ -139,7 +145,9 @@ public class IteratingDelimitedFileReader extends
 						nextMolecule = new Molecule();
 					else {
 						try {
-							//nextMolecule = sp.parseSmiles(values[smilesIndex].toString(),getTimeout());
+							if (values[smilesIndex]==null) {
+								nextMolecule = new Molecule();
+							} else 
 						    nextMolecule = sp.parseSmiles(values[smilesIndex].toString());
 						} catch (InvalidSmilesException x) {
 								// do not want to break if a record is faulty

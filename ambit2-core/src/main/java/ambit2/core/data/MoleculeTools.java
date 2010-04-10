@@ -4,6 +4,9 @@
  */
 package ambit2.core.data;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
@@ -12,6 +15,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -19,14 +23,16 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemSequence;
+import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.HydrogenAdder;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.io.MyIteratingMDLReader;
@@ -43,7 +49,7 @@ import ambit2.core.smiles.SmilesParserWrapper;
  */
 public class MoleculeTools {
 	public final static int _FPLength = 1024;
-	protected static HydrogenAdder adder = null;
+	protected static CDKHydrogenAdder adder = null;
 	protected static Fingerprinter fingerprinter = null;
 	public static final String[] substanceType = 
 	{"organic","inorganic","mixture/unknown","organometallic"};
@@ -149,35 +155,42 @@ public class MoleculeTools {
     */
 
 
-	public static boolean analyzeSubstance(IAtomContainer molecule) {
+	public static boolean analyzeSubstance(IAtomContainer molecule) throws IOException {
 		if ((molecule == null) || (molecule.getAtomCount()==0)) return false;
 		int noH = 0;
-		MFAnalyser mfa = new MFAnalyser(molecule);
-		String formula = "";
-		if (mfa.getAtomCount("H") == 0) {
+		//MFAnalyser mfa = new MFAnalyser(molecule);
+		IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(molecule);
+		
+		IElement h = IsotopeFactory.getInstance(molecule.getBuilder()).getElement("H");
+		if (MolecularFormulaManipulator.getElementCount(formula, h) == 0) {
+
 			noH = 1;
 			//TODO to insert H if necessary
 			//TODO this uses new SaturationChecker() which relies on cdk/data/config
 			if (adder == null)
-				adder = new HydrogenAdder();
+				adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
 			try {
-				adder.addImplicitHydrogensToSatisfyValency(molecule);
+				adder.addImplicitHydrogens(molecule);
 				int atomCount = molecule.getAtomCount();
-				formula = mfa.analyseAtomContainer(molecule);
+				formula = MolecularFormulaManipulator.getMolecularFormula(molecule);
 			} catch (CDKException x) {
 				x.printStackTrace();
 				//TODO exception
-				formula = "defaultError";
+				formula = null;
 			}
 			
-		} else formula = mfa.getMolecularFormula();
-		molecule.setProperty(AmbitCONSTANTS.FORMULA,formula);
-		double mass = mfa.getMass();
-		molecule.setProperty(AmbitCONSTANTS.MOLWEIGHT,new Double(mass));
-		try {
-		molecule.setProperty(AmbitCONSTANTS.STRUCTURETYPE,sp.process(molecule));
-		} catch (Exception x) {};
-		molecule.setProperty(AmbitCONSTANTS.SUBSTANCETYPE,getSubstanceType(formula));
+		} 
+		if (formula!=null) {
+			molecule.setProperty(AmbitCONSTANTS.FORMULA,MolecularFormulaManipulator.getString(formula));
+		
+			double mass = MolecularFormulaManipulator.getTotalMassNumber(formula);
+			molecule.setProperty(AmbitCONSTANTS.MOLWEIGHT,new Double(mass));
+			try {
+			molecule.setProperty(AmbitCONSTANTS.STRUCTURETYPE,sp.process(molecule));
+			} catch (Exception x) {};
+			molecule.setProperty(AmbitCONSTANTS.SUBSTANCETYPE,getSubstanceType(
+					MolecularFormulaManipulator.getString(formula)));
+		}
 		return true;
 	}
 	
@@ -210,13 +223,15 @@ public class MoleculeTools {
 		reader.close();
 		return mol;
     }    
+
     public static IMolecule readCMLMolecule(String cml) throws Exception {
         IMolecule mol = null;
-        StringReader strReader = null;
+        //StringReader strReader = null;
         try {
-            strReader= new StringReader(cml);
-            mol = readCMLMolecule(strReader);
-            strReader.close();
+            //strReader= new StringReader(cml);
+            ByteArrayInputStream in = new ByteArrayInputStream(cml.getBytes());
+            mol = readCMLMolecule(in);
+            in.close();
             return mol;
         } catch (Exception e) {
             return mol;
@@ -224,10 +239,11 @@ public class MoleculeTools {
 
         
     }     
-    public static IMolecule readCMLMolecule(Reader cmlReader) throws Exception {
+    
+    public static IMolecule readCMLMolecule(InputStream in) throws Exception {
         IMolecule mol = null;
         
-         CMLReader reader = new CMLReader(cmlReader);
+         CMLReader reader = new CMLReader(in);
          IChemFile obj = null;
          
             obj = (IChemFile) reader.read(NoNotificationChemObjectBuilder.getInstance().newChemFile());

@@ -38,8 +38,10 @@ import java.util.List;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.CommandShell;
@@ -227,8 +229,9 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
     	else mol = atomcontainer;
     		
     			
-        MFAnalyser mfa = new MFAnalyser(mol);
-        int heavy = mfa.getHeavyAtoms().size();
+        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(mol);
+        List<IElement> v = MolecularFormulaManipulator.getHeavyElements(formula);
+        int heavy = v.size();
         int light = (mol.getAtomCount()-heavy);
         if (heavy>maxHeavyAtoms) {
         	throw new ShellException(this,"Skipping - heavy atoms ("+heavy + ") > " + maxHeavyAtoms );
@@ -236,7 +239,6 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
         	throw new ShellException(this,"Skipping - all atoms ("+light + ") > " + maxAllAtoms );
         }
         
-        List v = mfa.getElements();
         for (int i=0; i < v.size();i++) {
         	
             if (Arrays.binarySearch(table, v.get(i).toString().trim())<0) {

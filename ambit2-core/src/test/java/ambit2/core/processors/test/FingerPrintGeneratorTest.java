@@ -19,7 +19,8 @@ import ambit2.core.processors.structure.MoleculeReader;
 public class FingerPrintGeneratorTest {
 	@Test
 	public void test() throws Exception {
-		BigInteger [] expected = {
+		BigInteger [] expected = 
+				/*{
 				new BigInteger("1126174803623952"), 
 				new BigInteger("1152961362175993860"), 
 				new BigInteger("2305843011903291728"),
@@ -36,6 +37,25 @@ public class FingerPrintGeneratorTest {
 				new BigInteger("310748377023266816"),
 				new BigInteger("67110400"), 
 				new BigInteger("2305843009213710336")};
+				*/
+		{
+		new BigInteger("576462128137896992"),
+		new BigInteger("10376293541473171584"),
+		new BigInteger("2305843009214747777"),
+		new BigInteger("72127962782121984"),
+		new BigInteger("52776558133248"),
+		new BigInteger("0"),
+		new BigInteger("338649581355264"),
+		new BigInteger("4366794756"),
+		new BigInteger("17730770043904"),
+		new BigInteger("2314887591865356288"),
+		new BigInteger("2305844109263241488"),
+		new BigInteger("2400709834665132544"),
+		new BigInteger("13835058125075449856"),
+		new BigInteger("10741891072"),
+		new BigInteger("9007208196998144"),
+		new BigInteger("18014398511644672")	
+		};
 		
 		MoleculeReader molreader = new MoleculeReader();
 		FingerprintGenerator gen = new FingerprintGenerator();
@@ -51,7 +71,6 @@ public class FingerPrintGeneratorTest {
 			Assert.assertEquals(bs1,bs2);
 			MoleculeTools.bitset2bigint16(bs2,64,h16);
 			for (int i=0; i <16;i++) {
-				System.out.println(h16[i]);
 				Assert.assertEquals(expected[i], h16[i]);
 			}
 		}

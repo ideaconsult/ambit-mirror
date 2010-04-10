@@ -10,7 +10,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 

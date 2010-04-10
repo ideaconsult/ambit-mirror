@@ -42,6 +42,7 @@ public class DoubleStereoBond extends SMARTSBond
 	{		 
 		if (bond.getOrder() != IBond.Order.DOUBLE)
 			return(false); 
+		/*
 		if (stereoParameter > 0)
 		{
 			switch (stereoParameter)
@@ -68,6 +69,7 @@ public class DoubleStereoBond extends SMARTSBond
 				break;	
 			}
 		}
+		*/
 		return true;
     };
 

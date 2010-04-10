@@ -1,8 +1,13 @@
 package ambit2.core.io;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
+import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.listener.IChemObjectIOListener;
@@ -18,6 +23,8 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 	protected MoleculeWriter writer ;
 	protected LiteratureEntry reference;	
 	protected final StructureRecord r = new StructureRecord();
+   // protected IChemObjectReader.Mode mode = IChemObjectReader.Mode.RELAXED;
+   // protected IChemObjectReaderErrorHandler errorHandler = null;
 	
 	public RawIteratingWrapper(R reader) {
 		this.reader = reader;
@@ -31,6 +38,12 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 	public void setReference(LiteratureEntry reference) {
 		this.reference = reference;
 	}	
+	public void setReader(InputStream reader) throws CDKException {
+		throw new CDKException("Not implemented");
+	}
+	public void setReader(Reader reader) throws CDKException {
+		throw new CDKException("Not implemented");
+	}
 	public IStructureRecord nextRecord() {
         Object o = next();
         if (o instanceof IStructureRecord) return (IStructureRecord)o;
@@ -103,5 +116,37 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 		reader.remove();
 		
 	}
+	
+
+	   public void setReaderMode(ISimpleChemObjectReader.Mode mode) {
+	    	reader.setReaderMode(mode);
+	    }
+
+	    /** {@inheritDoc} */
+	    public void setErrorHandler(IChemObjectReaderErrorHandler handler) {
+	        reader.setErrorHandler(handler);
+	    }
+
+	    /** {@inheritDoc} */
+	    public void handleError(String message) throws CDKException {
+	        reader.handleError(message);
+	    }
+
+	    /** {@inheritDoc} */
+	    public void handleError(String message, Exception exception)
+	    throws CDKException {
+	        reader.handleError(message, exception);
+	    }
+
+	    /** {@inheritDoc} */
+	    public void handleError(String message, int row, int colStart, int colEnd) throws CDKException {
+	        reader.handleError(message, row, colStart, colEnd);
+	    }
+
+	    /** {@inheritDoc} */
+	    public void handleError(String message, int row, int colStart, int colEnd, Exception exception)
+	    throws CDKException {
+	        reader.handleError(message, row, colStart, colEnd, exception);
+	    }
 	
 }

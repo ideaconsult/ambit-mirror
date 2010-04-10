@@ -11,11 +11,10 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.templates.MoleculeFactory;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.log.AmbitLogger;
-import ambit2.core.smiles.OpenBabelShell;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.smi23d.ShellMengine;
@@ -107,14 +106,14 @@ public class CommandShellTest {
 	public void testRunSMI23D() throws Exception {
 		ShellSmi2SDF smi2sdf = new ShellSmi2SDF();
 		IMolecule mol = MoleculeFactory.makeAlkane(3);
-		smi2sdf.setOutputFile("smi23d_test.sdf");
+		smi2sdf.setOutputFile("test.sdf");
 		smi2sdf.runShell(mol);
 		ShellMengine mengine = new ShellMengine();
-		mengine.setInputFile("smi23d_test.sdf");
-		mengine.setOutputFile("smi23d_test_opt.sdf");
+		mengine.setInputFile("test.sdf");
+		mengine.setOutputFile("opt.sdf");
 		IMolecule newmol = mengine.runShell(mol);
-		MFAnalyser mf = new MFAnalyser(newmol);
-		IAtomContainer c = mf.removeHydrogensPreserveMultiplyBonded();
+
+		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,c));
 		for (int i=0; i < newmol.getAtomCount(); i++) {
 			Assert.assertNotNull(newmol.getAtom(i).getPoint3d());

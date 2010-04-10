@@ -26,6 +26,7 @@ package ambit2.core.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -45,7 +47,6 @@ import org.openscience.cdk.io.setting.StringIOSetting;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.config.AmbitCONSTANTS;
 
 /**
@@ -60,19 +61,27 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 	protected HSSFSheet sheet;
 	protected Iterator iterator;
 	protected  InputStream input;
+	protected int sheetIndex = 0;
 	//protected HSSFFormulaEvaluator evaluator;
 	
-	public IteratingXLSReader(InputStream input, int sheetIndex)  throws AmbitIOException {
+	public IteratingXLSReader(InputStream input, int sheetIndex)  throws CDKException {
 		super();
+		this.sheetIndex = sheetIndex;
+		setReader(input);
+	}
+	public void setReader(InputStream input) throws CDKException {
 		try {
 			this.input = input;
 			workbook = new HSSFWorkbook(input);
 			sheet = workbook.getSheetAt(sheetIndex);
 			//evaluator = new HSSFFormulaEvaluator(sheet, workbook);
-			
 		} catch (Exception x) {
-			throw new AmbitIOException(x);
+			throw new CDKException(x.getMessage(),x);
 		}
+		
+	}
+	public void setReader(Reader reader) throws CDKException {
+		throw new CDKException("Not implemented");
 	}
 	@Override
 	protected LiteratureEntry getReference() {

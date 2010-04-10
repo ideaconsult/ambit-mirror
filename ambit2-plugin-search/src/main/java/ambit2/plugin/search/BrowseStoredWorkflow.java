@@ -2,12 +2,10 @@ package ambit2.plugin.search;
 
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.structure.QueryStoredResults;
-import ambit2.db.search.structure.SCOPE;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ExecuteAndStoreQuery;
 import ambit2.workflow.QueryInteraction;
 import ambit2.workflow.library.LoginSequence;
-import ambit2.workflow.library.ScopeSelection;
 
 import com.microworkflow.execution.Performer;
 import com.microworkflow.process.Primitive;

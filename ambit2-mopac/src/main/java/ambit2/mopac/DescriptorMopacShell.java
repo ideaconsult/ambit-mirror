@@ -114,12 +114,13 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
         	logger.error(x);
         }
     }
-    public DescriptorValue calculate(IAtomContainer arg0) throws CDKException {
+    public DescriptorValue calculate(IAtomContainer arg0) {
+    	DoubleArrayResult r = null;
     	try {
     		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
     		logger.info(toString());
 	        IAtomContainer newmol = mopac_shell.runShell(arg0);
-	        DoubleArrayResult r = new DoubleArrayResult(Mopac7Reader.parameters.length);
+	        r = new DoubleArrayResult(Mopac7Reader.parameters.length);
 	        for (int i=0; i< Mopac7Reader.parameters.length;i++) 
 	        try {
                 String result = newmol.getProperty(Mopac7Reader.parameters[i]).toString();
@@ -132,17 +133,21 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
 	       
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,Mopac7Reader.parameters);
-    	} catch (CDKException x) {
-    		throw x;
     	} catch (Exception x) {
+    		/*
     		Throwable cause = x;
     		while (cause != null) {
     			if (cause.getCause()==null) throw new CDKException(cause.getMessage());
     			cause = cause.getCause();
     		}
-    		throw new CDKException(x.getMessage());
+    		*/  
+	        return new DescriptorValue(getSpecification(),
+	                getParameterNames(),getParameters(),r,Mopac7Reader.parameters,x);    		
     	}
         
+    }
+    public String[] getDescriptorNames() {
+    	return Mopac7Reader.parameters;
     }
     public IDescriptorResult getDescriptorResultType() {
     	return new DoubleArrayResult();

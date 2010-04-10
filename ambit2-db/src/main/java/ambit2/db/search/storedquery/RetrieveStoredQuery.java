@@ -12,7 +12,6 @@ import ambit2.db.search.EQCondition;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StoredQuery;
-import ambit2.db.search.StringCondition;
 
 public class RetrieveStoredQuery extends  AbstractQuery<SessionID, IStoredQuery, EQCondition, IStoredQuery> 
 									implements IQueryRetrieval<IStoredQuery>{

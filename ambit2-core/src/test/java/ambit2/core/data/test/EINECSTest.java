@@ -35,7 +35,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.EINECS;
 
 /*

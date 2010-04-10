@@ -68,6 +68,8 @@ public class RemoteTask implements Serializable {
 		this.url = url;
 		Representation r=null;
 		try {
+			System.out.println(url);
+			System.out.println(input.getText());
 			ClientResource client = new ClientResource(url);
 			client.setChallengeResponse(authentication);
 			r = client.post(input,media);

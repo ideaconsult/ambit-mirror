@@ -33,11 +33,10 @@ import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.xindice.core.objects.Types;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
@@ -86,19 +85,19 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 				Class clazz = params.get(i).getType();
 				if (Integer.class.equals(clazz)) {
 					if (params.get(i).getValue()==null)
-						ps.setNull(i+1, Types.INT);
+						ps.setNull(i+1, Types.INTEGER);
 					else
 						ps.setInt(i+1, ((Integer)params.get(i).getValue()).intValue());
 				} else
 				if (Long.class.equals(clazz)) {
 					if (params.get(i).getValue()==null)
-						ps.setNull(i+1, Types.LONG);
+						ps.setNull(i+1, Types.BIGINT);
 					else					
 						ps.setLong(i+1, ((Number)params.get(i).getValue()).longValue());
 				} else
 				if (BigInteger.class.equals(clazz)) {
 						if (params.get(i).getValue()==null)
-							ps.setNull(i+1, Types.LONG);
+							ps.setNull(i+1, Types.BIGINT);
 						else					
 							ps.setObject(i+1, params.get(i).getValue());
 				} else					
@@ -110,7 +109,7 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 				} else
 				if (String.class.equals(clazz)) {
 					if (params.get(i).getValue()==null)
-						ps.setNull(i+1, Types.STRING);
+						ps.setNull(i+1, Types.VARCHAR);
 					else					
 						ps.setString(i+1, params.get(i).getValue().toString());
 				} else

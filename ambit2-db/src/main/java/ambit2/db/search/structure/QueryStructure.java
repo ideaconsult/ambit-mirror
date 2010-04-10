@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.Molecule;
+import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -68,11 +68,12 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 			
 		}
 		else if ("formula".equals(getFieldname())) {
-			MFAnalyser mfa = new MFAnalyser(getValue(),new Molecule());
+			
+			IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(getValue(),NoNotificationChemObjectBuilder.getInstance());
+
 			//this is to make the formula "canonical" (i.e. sorted in the right order)
-			mfa = new MFAnalyser(mfa.getAtomContainer());
-			String formula = mfa.getMolecularFormula();			
-			if (formula!=null && !"".equals(formula)) return formula;
+
+			if (formula!=null) return MolecularFormulaManipulator.getString(formula);
 		}
 		return getValue();
 

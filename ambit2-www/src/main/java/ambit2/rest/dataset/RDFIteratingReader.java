@@ -2,11 +2,14 @@ package ambit2.rest.dataset;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
@@ -70,14 +73,28 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		super();
 		this.basereference = baseReference;
 		this.rdfFormat = rdfFormat;
-		jenaModel = OT.createModel();
-		jenaModel.read(in,null,rdfFormat==null?"RDF/XML":rdfFormat);
-		compoundTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,CompoundResource.compoundID));
-		conformerTemplate = new Template(String.format("%s%s",baseReference==null?"":baseReference,ConformerResource.conformerID));
-		propertyIterator = new RDFPropertyIterator(jenaModel);
-		propertyIterator.setBaseReference(new Reference(baseReference));
+		setReader(in);
 
     }	
+	public void setReader(InputStream in) throws CDKException {
+		setReader(new InputStreamReader(in));
+
+	}
+	public void setReader(Reader reader) throws CDKException {
+		try {
+			jenaModel = OT.createModel();
+			jenaModel.read(reader,null,rdfFormat==null?"RDF/XML":rdfFormat);
+			compoundTemplate = new Template(String.format("%s%s",basereference==null?"":basereference,CompoundResource.compoundID));
+			conformerTemplate = new Template(String.format("%s%s",basereference==null?"":basereference,ConformerResource.conformerID));
+			propertyIterator = new RDFPropertyIterator(jenaModel);
+			propertyIterator.setBaseReference(new Reference(basereference));
+		} catch (CDKException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new CDKException(x.getMessage(),x);
+		}
+		
+	}
 	
 	private StmtIterator initIterator() {
 		if (recordIterator == null) {

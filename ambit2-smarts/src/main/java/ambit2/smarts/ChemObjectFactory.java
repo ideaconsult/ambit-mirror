@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
-import java.util.Random;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
@@ -14,7 +14,6 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;

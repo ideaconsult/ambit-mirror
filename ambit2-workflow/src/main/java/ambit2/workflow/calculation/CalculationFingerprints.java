@@ -16,7 +16,6 @@ import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.execution.Performer;
 import com.microworkflow.process.Primitive;
-import com.microworkflow.process.Sequence;
 
 /**
  * Fingerprints (fp1024)

@@ -27,16 +27,14 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomParity;
-import org.openscience.cdk.geometry.BondTools;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.geometry.GeometryTools;
-
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
-import org.openscience.cdk.CDKConstants;
 
 public class MoleculeAndAtomsHashing {
 	private int bonded_neighbor_atomsPrime  ;
@@ -80,14 +78,13 @@ public class MoleculeAndAtomsHashing {
     	number_of_atoms = mol.getAtomCount();
     	
     	
-        Iterator<IAtom> atoms = mol.atoms();
-        IAtom atom, neighbor;
+        IAtom neighbor;
         atomsHash = new Hash();
         
         
         int k = 0;
-        while (atoms.hasNext()) {
-        	atom = atoms.next(); 
+        for (IAtom atom: mol.atoms()) {
+
         	int atom_double_bonds = 0;
         	atomic_number = atom.getAtomicNumber();
         	neighbors = mol.getConnectedAtomsList(atom);
@@ -150,7 +147,7 @@ public class MoleculeAndAtomsHashing {
         moleculeSizeHash = new Hash(number_of_atomsPrime);
         moleculeHash = atomsHash; 
         moleculeHash = moleculeHash.sag(moleculeSizeHash);
-        Iterator bonds = mol.bonds();
+        Iterator<IBond> bonds = mol.bonds().iterator();
         
         bondsHash = new Hash();
         while (bonds.hasNext()) {
@@ -160,16 +157,17 @@ public class MoleculeAndAtomsHashing {
         		
         	} else {
         	switch(bond.getStereo()){
-			case CDKConstants.STEREO_BOND_UP:
+        	
+			case UP:
 				stereo_center = 1;
 				break;
-			case CDKConstants.STEREO_BOND_UP_INV:
+			case UP_INVERTED:
 				stereo_center = 1;
 				break;
-			case CDKConstants.STEREO_BOND_DOWN:
+			case DOWN:
 				stereo_center = -1;
 				break;
-			case CDKConstants.STEREO_BOND_DOWN_INV:
+			case DOWN_INVERTED:
 				stereo_center = -1;
 				break;
 			default:

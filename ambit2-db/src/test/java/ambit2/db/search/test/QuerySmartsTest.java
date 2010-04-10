@@ -119,7 +119,7 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 	}
 
 	@Test
-	public void testMatchNoAccelerator() {
+	public void testMatchNoAccelerator() throws Exception {
 		Preferences.setProperty(Preferences.FASTSMARTS,"false"); 
 		QuerySMARTS q = new QuerySMARTS();
 		q.setValue(new FunctionalGroup("aromatic aldehyde example","c1ccccc1[$(C(C)C(=O)),$(CC(C)C(=O))]",""));
@@ -136,7 +136,7 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 		Assert.assertEquals(2,count);
 	}
 	@Test
-	public void testMatchWithAccelerator() {
+	public void testMatchWithAccelerator() throws Exception {
 		Preferences.setProperty(Preferences.FASTSMARTS,"true");
 		QuerySMARTS q = new QuerySMARTS();
 		q.setValue(new FunctionalGroup("aromatic aldehyde example","c1ccccc1[$(C(C)C(=O)),$(CC(C)C(=O))]",""));

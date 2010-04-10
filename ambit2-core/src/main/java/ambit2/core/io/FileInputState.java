@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.io.HINReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.PDBReader;
@@ -14,7 +16,6 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.bcf.EurasBCFReader;
 
@@ -79,14 +80,16 @@ public class FileInputState extends FileState implements IInputState {
 		try {
 			String fname = filename.toLowerCase();
 			return getReader(new FileInputStream(getFile()),fname,fileFormat);
+		} catch (CDKException x) {
+			throw new AmbitIOException(x);
 		} catch (FileNotFoundException x) {
 			throw new AmbitIOException(x);
 		}
 	}
-	public static IIteratingChemObjectReader getReader(InputStream stream, String ext) throws AmbitIOException {
+	public static IIteratingChemObjectReader getReader(InputStream stream, String ext) throws AmbitIOException, CDKException {
 		return getReader(stream, ext,null);
 	}
-	public static IIteratingChemObjectReader getReader(InputStream stream, String ext, IChemFormat format) throws AmbitIOException {
+	public static IIteratingChemObjectReader getReader(InputStream stream, String ext, IChemFormat format) throws AmbitIOException, CDKException {
 		if (ext.endsWith(extensions[SDF_INDEX])) {
 			return new InteractiveIteratingMDLReader(stream,NoNotificationChemObjectBuilder.getInstance());
 		} else if (ext.endsWith(extensions[SMI_INDEX])) { 
@@ -119,7 +122,7 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[CML_INDEX])) {
 			return new IteratingChemObjectReaderWrapper(new CMLReader(stream));			
 		} else if (ext.endsWith(extensions[HIN_INDEX])) {
-			return new IteratingChemObjectReaderWrapper(new ambit2.core.io.HINReader(stream));
+			return new IteratingChemObjectReaderWrapper(new HINReader(stream));
 		} else if (ext.endsWith(extensions[PDB_INDEX])) {
 			return new IteratingChemObjectReaderWrapper(new PDBReader(stream));
 		} else if ((ext.toLowerCase().indexOf("euras")>=0) && (ext.endsWith(extensions[XLS_INDEX]))) {

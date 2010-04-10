@@ -73,7 +73,7 @@ public class TestCML
             
     }       
     @Test
-    public void xtestCML_singlePropertyForAllAtoms() throws Exception
+    public void testCML_singlePropertyForAllAtoms() throws Exception
     {       
         String smiles = "CCCC";
         IMolecule mol = parser.parseSmiles(smiles);
@@ -105,33 +105,36 @@ public class TestCML
         System.out.println(writeCML(mol2));
             
     }       
-
+    /**
+     * CDK bug closed, atom aromatic flag still not survice roundtrip
+     * https://sourceforge.net/tracker/?func=detail&aid=1709130&group_id=20024&atid=120024
+     * @throws Exception
+     */
 	@Test
-	public void xtestCML_AromaticFlag() throws Exception 
+	public void testCML_AromaticFlag() throws Exception 
 	{		
 	    String smiles = "c1ccccc1";
-	    IMolecule mol = parser.parseSmiles(smiles);			
-		printAromaticity(mol);
-		
-			String cmlcode = writeCML(mol);
-            Iterator<IAtom> atoms = mol.atoms();
-            while (atoms.hasNext()) {
-                Assert.assertTrue(atoms.next().getFlag(CDKConstants.ISAROMATIC));
-            }			
-			System.out.println(cmlcode);
+	    IMolecule mol = parser.parseSmiles(smiles);		
+		for (IBond bond : mol.bonds())
+	        Assert.assertTrue(bond.getFlag(CDKConstants.ISAROMATIC));	    
+		for (IAtom atom : mol.atoms())
+                Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
+
+		String cmlcode = writeCML(mol);
 			
-			
-			IChemFile chemFile = parseCMLString(cmlcode);			
-			IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
-			printAromaticity(mol2);
-		    atoms = mol2.atoms();
-		    while (atoms.hasNext()) {
-		        Assert.assertTrue(atoms.next().getFlag(CDKConstants.ISAROMATIC));
-	        }
+		IChemFile chemFile = parseCMLString(cmlcode);			
+		IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
+		printAromaticity(mol2);
+		System.out.println(cmlcode);
+		for (IBond bond : mol2.bonds())
+	        Assert.assertTrue(bond.getFlag(CDKConstants.ISAROMATIC));		
+		for (IAtom atom : mol2.atoms())
+		        Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
+	      
 	}	
 	
 	public static void printAtomProperties(IMolecule mol) {
-	    Iterator<IAtom> atoms = mol.atoms();
+	    Iterator<IAtom> atoms = mol.atoms().iterator();
 	    while (atoms.hasNext()) {
 	        
 	        printAtomProperties(atoms.next());

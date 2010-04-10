@@ -30,7 +30,8 @@
 package ambit2.db.processors;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.MFAnalyser;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -92,9 +93,9 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		}				
 
 		try {
-			MFAnalyser mf = new MFAnalyser(molecule);
-			structure.setFormula(mf.getMolecularFormula());
-			if ("".equals(structure.getFormula())) structure.setFormula(null);
+			IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(molecule);
+
+			structure.setFormula(formula==null?null:MolecularFormulaManipulator.getString(formula));
 		} catch (Exception x) {
 			structure.setFormula(null);
 		}		

@@ -57,6 +57,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 				try {
 		    		if ((connection==null) || connection.isClosed()) throw new Exception("SQL Connection unavailable ");			
 					batch.setConnection(connection);
+					batch.open();
 				} catch (Exception x) { connection = null;}
 				/*
 				batch.addPropertyChangeListener(AbstractBatchProcessor.PROPERTY_BATCHSTATS,new PropertyChangeListener(){

@@ -34,7 +34,6 @@ import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 import ambit2.db.IDBProcessor;
-import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.editors.IAmbitEditor;

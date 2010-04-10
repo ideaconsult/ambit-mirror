@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryToolsInternalCoordinates;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
@@ -107,15 +107,26 @@ public class SizeDescriptor implements IMolecularDescriptor {
     /* (non-Javadoc)
      * @see org.openscience.cdk.qsar.IDescriptor#calculate(org.openscience.cdk.interfaces.AtomContainer)
      */
-    public DescriptorValue calculate(IAtomContainer container) throws CDKException {
-        double[] eval = doCalculation(container);
-        //double min = eval[0];
-        DoubleArrayResult value = new DoubleArrayResult(eval.length);
-        for (int i=0; i < eval.length; i++)
-            value.add(eval[i]);
-        return new DescriptorValue(getSpecification(), getParameterNames(), 
-                getParameters(),value,new String[]{
-        	CrossSectionalDiameterDescriptor.MAX_LENGTH,CrossSectionalDiameterDescriptor.MAX_DIAMETER,CrossSectionalDiameterDescriptor.MIN_DIAMETER});        
+    public DescriptorValue calculate(IAtomContainer container) {
+    	try {
+	        double[] eval = doCalculation(container);
+	        //double min = eval[0];
+	        DoubleArrayResult value = new DoubleArrayResult(eval.length);
+	        for (int i=0; i < eval.length; i++)
+	            value.add(eval[i]);
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(),value,getDescriptorNames());
+    	} catch (Exception x) {
+	        return new DescriptorValue(getSpecification(), getParameterNames(), 
+	                getParameters(),null,getDescriptorNames(),x);
+    	}
+    }
+    public String[] getDescriptorNames() {
+    	return 
+    	new String[]{
+	        	CrossSectionalDiameterDescriptor.MAX_LENGTH,
+	        	CrossSectionalDiameterDescriptor.MAX_DIAMETER,
+	        	CrossSectionalDiameterDescriptor.MIN_DIAMETER};
     }
     /**
      * Transforms coordinates to PCA space (this making sizes invariant to rotation)
@@ -139,7 +150,7 @@ public class SizeDescriptor implements IMolecularDescriptor {
         */
 
         double[][] imat = new double[container.getAtomCount()][3];
-        Point3d centerOfMass = GeometryToolsInternalCoordinates.get3DCenter(container);
+        Point3d centerOfMass = GeometryTools.get3DCenter(container);
 
                 for (int k = 0; k < container.getAtomCount(); k++) {
                     double[] xyz = new double[3];

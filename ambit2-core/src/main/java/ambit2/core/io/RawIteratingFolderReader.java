@@ -32,13 +32,13 @@ package ambit2.core.io;
 import java.io.File;
 import java.io.FileReader;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.index.CASNumber;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
 
 /*
@@ -53,12 +53,12 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 	protected FileNameMode mode;
 	protected CASProcessor casTransformer = new CASProcessor();
 	protected Property einecsProperty = Property.getEINECSInstance();
-	protected Property casProperty = Property.getInstance(CDKConstants.CASRN,LiteratureEntry.getCASReference());
+	protected Property casProperty = Property.getInstance(AmbitCONSTANTS.CASRN,LiteratureEntry.getCASReference());
 	protected Property nameProperty = Property.getNameInstance();
 	
 	public RawIteratingFolderReader(File[] files) {
 		super(files);
-		casProperty.setLabel(CDKConstants.CASRN);
+		casProperty.setLabel(AmbitCONSTANTS.CASRN);
 	}
 	@Override
 	public void setFiles(File[] files) {
@@ -173,4 +173,5 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			
 		else throw new Exception("Unsupported format "+name); 
 	}
+
 }

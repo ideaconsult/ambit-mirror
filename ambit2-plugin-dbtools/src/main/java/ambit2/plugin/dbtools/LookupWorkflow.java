@@ -1,7 +1,6 @@
 package ambit2.plugin.dbtools;
 
 import java.io.OutputStreamWriter;
-import java.sql.SQLException;
 
 import nplugins.core.Introspection;
 import ambit2.base.data.ClassHolder;

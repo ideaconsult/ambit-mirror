@@ -27,7 +27,11 @@ package ambit2.core.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -44,7 +48,7 @@ import ambit2.base.exceptions.AmbitIOException;
 public class IteratingFileReader implements IIteratingChemObjectReader {
 	protected IIteratingChemObjectReader reader;
 	protected String filename = "";
-	
+
 	
 	public IteratingFileReader(File file) throws AmbitIOException {	
 	}
@@ -99,6 +103,52 @@ public class IteratingFileReader implements IIteratingChemObjectReader {
     public IResourceFormat getFormat() {
         return reader.getFormat();
     }
+
+
+    /** {@inheritDoc} */
+    public void setErrorHandler(IChemObjectReaderErrorHandler handler) {
+        if (reader!=null) reader.setErrorHandler(handler);
+    }
+
+    /** {@inheritDoc} */
+    public void handleError(String message) throws CDKException {
+    	if (reader!=null) {
+    		reader.handleError(message);
+    	}
+    }
+
+    /** {@inheritDoc} */
+    public void handleError(String message, Exception exception)
+    throws CDKException {
+        if (reader != null)
+            reader.handleError(message, exception);
+    }
+
+    /** {@inheritDoc} */
+    public void handleError(String message, int row, int colStart, int colEnd) throws CDKException {
+        if (this.reader != null)
+            reader.handleError(message, row, colStart, colEnd);
+    }
+
+    /** {@inheritDoc} */
+    public void handleError(String message, int row, int colStart, int colEnd, Exception exception)
+    throws CDKException {
+        if (this.reader != null)
+            this.reader.handleError(message, row, colStart, colEnd, exception);
+    }
+	public void setReader(Reader reader) throws CDKException {
+		throw new CDKException("Not implemented");
+		
+	}
+	public void setReader(InputStream reader) throws CDKException {
+		throw new CDKException("Not implemented");
+		
+	}
+	public void setReaderMode(Mode mode) {
+		if (reader != null) reader.setReaderMode(mode);
+		
+	}
+
 }
 
 

@@ -1,12 +1,14 @@
 /* (swing1.1.1) */
 package ambit2.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
-import javax.swing.plaf.basic.*;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+
+import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.basic.BasicTableHeaderUI;
+import javax.swing.table.TableColumnModel;
 
 
 /**

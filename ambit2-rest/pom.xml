@@ -3,18 +3,18 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-rest</artifactId>
   <name>ambit2-rest</name>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-base</artifactId>
-  		<version>2.0.0-SNAPSHOT</version>
+  		<version>2.1.0-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
     <dependency>
@@ -48,7 +48,7 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-model</artifactId>
-    	<version>2.0.0-SNAPSHOT</version>
+    	<version>2.1.0-SNAPSHOT</version>
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
@@ -71,6 +71,11 @@
     	<groupId>com.hp.hpl.jena</groupId>
     	<artifactId>arq-extra</artifactId>
     	<version>2.7.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>weka</groupId>
+    	<artifactId>weka</artifactId>
+    	<version>3.6.2</version>
     </dependency>
  
   </dependencies>

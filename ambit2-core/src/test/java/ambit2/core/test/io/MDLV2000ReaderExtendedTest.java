@@ -26,13 +26,13 @@ package ambit2.core.test.io;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -40,6 +40,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.core.groups.ComponentGroup;
 import ambit2.core.groups.ContainerGroup;
@@ -52,6 +53,7 @@ import ambit2.core.groups.StructureRepeatingUnit;
 import ambit2.core.groups.SuppleAtomContainer;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.MDLV2000ReaderExtended;
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.io.SGroupMDL2000Helper.SGROUP_CONNECTIVITY;
 
 public class MDLV2000ReaderExtendedTest  {
@@ -307,6 +309,7 @@ public class MDLV2000ReaderExtendedTest  {
         sca.setFiltered(false);
         Assert.assertEquals(49,sca.getBondCount());
         Assert.assertEquals(47+1,sca.getAtomCount());
+
         List<ISGroup> superatom = getGroup(sca);
         Assert.assertNotNull(superatom);
         Assert.assertEquals(1,superatom.size());
@@ -440,19 +443,32 @@ public class MDLV2000ReaderExtendedTest  {
 	}	
 	@Test
 	public void testSTY() throws Exception {
-		File[] files = new File("src/test/resources/ambit2/core/data/M__STY").listFiles();
+		String dir = getClass().getClassLoader().getResource("ambit2/core/data/M__STY").getFile();
+		File[] files = new File(dir).listFiles();
 		if (files == null) throw new Exception("Files not found");
+		int count = 0;
 		for (File file: files) {
-			MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
-			IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileInputStream(file),NoNotificationChemObjectBuilder.getInstance());
             try {
-                reader.read(mol);
+            	int records = 0;
+            	while (reader.hasNext()) {
+            		
+            		Object a = reader.next();
+            		Object title = ((IChemObject)a).getProperty(CDKConstants.TITLE);
+            		records++;
+            		if ("Rgroup bad way".equals(title) || ("Radicals".equals(title))) {
+            			//IMolecule
+            		} else Assert.assertTrue(a instanceof SuppleAtomContainer);
+            	}
+            	Assert.assertEquals(23,records);
+                count++;
             } catch (Exception x) {
-                System.out.println(file);
+                throw x;
             } finally {
                 reader.close();
             }
 		}
+		Assert.assertEquals(1,count);
 	}
 	@Test
 	public void testRGP() throws Exception {

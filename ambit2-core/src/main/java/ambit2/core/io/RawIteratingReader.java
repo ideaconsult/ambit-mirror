@@ -2,8 +2,11 @@ package ambit2.core.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
@@ -21,9 +24,18 @@ public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectRe
 	public void setReference(LiteratureEntry reference) {
 		this.reference = reference;
 	}
-	public RawIteratingReader(Reader in) {
+	public RawIteratingReader(Reader in) throws CDKException {
 		super();
+		setReader(in);
+		
+	}
+	public void setReader(InputStream in) throws CDKException {
+		setReader(new InputStreamReader(in));
+		
+	}
+	public void setReader(Reader in) throws CDKException {
 		this.input = new BufferedReader(in);
+		
 	}
 	public abstract IResourceFormat getFormat() ;
 

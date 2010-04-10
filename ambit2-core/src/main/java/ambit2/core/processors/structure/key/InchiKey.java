@@ -29,6 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
@@ -48,7 +49,7 @@ public class InchiKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 	private static final long serialVersionUID = -4957862884677389524L;
 	protected InchiProcessor inchi;
 	protected Object key;
-	public InchiKey() {
+	public InchiKey() throws CDKException {
 		inchi = new InchiProcessor();
 	}
 	public Object getKey() {

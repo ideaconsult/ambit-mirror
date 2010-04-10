@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.AmbitUser;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.exceptions.AmbitException;
