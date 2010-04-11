@@ -32,10 +32,13 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.jchempaint.renderer.font.AWTFontManager;
 import org.openscience.jchempaint.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.jchempaint.renderer.generators.SelectAtomGenerator;
+import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 
@@ -92,6 +95,9 @@ public class CompoundImageTools {
        List<IGenerator> generators = new ArrayList<IGenerator>();
        generators.add(new BasicBondGenerator());
        generators.add(new BasicAtomGenerator());
+       generators.add(new SelectAtomGenerator());
+       generators.add(new SelectBondGenerator());
+       //generators.add(new RingGenerator());
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
@@ -305,12 +311,14 @@ public class CompoundImageTools {
 	    					
 	    				}
 	            	} catch (Exception x) {
-	            		
+	            		x.printStackTrace();
 	            	}
     	    	if (highlighted != null) {
-    	    		r2dm.setSelectedPartColor(Color.red);
+    	    		r2dm.setSelectedPartColor(new Color(0,183,239,128));
+    	    		//r2dm.setSelectionRadius(10);
+    	    		r2dm.setSelectionShape(AtomShape.OVAL);
     	    		r2dm.setSelection(highlighted);
-    	    		r2dm.setColorAtomsByType(false);
+    	    		r2dm.setColorAtomsByType(true);
     	    	} 	  
 				renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
 				
