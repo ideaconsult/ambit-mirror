@@ -64,7 +64,10 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 				new String[]{"bin/smi23d/win/mmff94.prm","bin/smi23d/win/mmxconst.prm"});
         addExecutable(CommandShell.os_LINUX, "bin/smi23d/linux/smi2sdf",
     		new String[]{"bin/smi23d/linux/mmff94.prm","bin/smi23d/linux/mmxconst.prm"}
-    		);          
+    		);  
+        addExecutable(CommandShell.os_FreeBSD, "bin/smi23d/freebsd/smi2sdf",
+        		new String[]{"bin/smi23d/freebsd/mmff94.prm","bin/smi23d/freebsd/mmxconst.prm"}
+        		);         
 		setInputFile("mol.smi");
 		setOutputFile("rough.sdf");		
 		setReadOutput(false);
