@@ -46,12 +46,19 @@ public class CommandShellTest {
 */
 	@Test
 	public void testAddExecutable() throws Exception  {
+
 		String name= "bin/smi23d/win/smi2sdf.exe";
 		shell.addExecutable("nt",name,null);
 		Assert.assertTrue(shell.getExecutable("nt").endsWith("smi2sdf.exe"));
 	}
 
+
 	
+	public void testAddExecutableFreeBSD() throws Exception {
+		String name= "bin/smi23d/freebsd/smi2sdf";
+		shell.addExecutableFreeBSD(name,null);
+		Assert.assertEquals(name,shell.getExecutable(CommandShell.os_FreeBSD));
+	}	
 	public void testAddExecutableMac() throws Exception {
 		String name= "bin/smi23d/mac/smi2sdf";
 		shell.addExecutableMac(name,null);
@@ -69,11 +76,14 @@ public class CommandShellTest {
 		Assert.assertTrue(file.exists());
 	}
 
-	
+	@Test
 	public void testAddExecutableLinux() throws Exception {
 		String name= "bin/smi23d/linux/smi2sdf";
 		shell.addExecutableLinux(name,null);
-		Assert.assertEquals(name,shell.getExecutable(CommandShell.os_LINUX));
+		String exec = shell.getExecutable(CommandShell.os_LINUX);
+		File file = new File(exec);
+		System.out.println(file.getAbsolutePath());
+		Assert.assertTrue(file.exists());
 	}
 
 	@Test

@@ -62,6 +62,8 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public static final String os_WINDOWS = "Windows";
 	public static final String os_WINDOWSVISTA = "Windows Vista";
 	public static final String os_LINUX = "Linux";
+	public static final String os_FreeBSD = "FreeBSD";
+	
 	
     protected static AmbitLogger logger = new  AmbitLogger(CommandShell.class);	
 	protected Hashtable<String, Command> executables; //<os.name, executable>
@@ -114,6 +116,9 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public String addExecutableLinux(String executable, String[] morefiles) throws ShellException  {
 		return addExecutable(os_LINUX,executable,morefiles);
 	}			
+	public String addExecutableFreeBSD(String executable, String[] morefiles) throws ShellException  {
+		return addExecutable(os_FreeBSD,executable,morefiles);
+	}		
 	public String getExecutable(String osname) throws Exception {
 		
 		//ambit2/
@@ -128,6 +133,12 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 				logger.info("Writing "+exe + " to "+ file);
 				DownloadTool.download(prefix+exe, file);
 				command.setExe(file.getAbsolutePath());
+				//trying chmod +x 
+				try {
+					Runtime.getRuntime().exec(String.format("chmod +x %s",file.getAbsolutePath()));
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 			}
 			if (command.getAdditionalFiles()!=null)
 				for (String lib: command.getAdditionalFiles()) {
