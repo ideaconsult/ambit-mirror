@@ -53,7 +53,7 @@ public class ShellMengine extends ShellSDFoutput<IMolecule> {
         addExecutable(CommandShell.os_LINUX, "bin/smi23d/linux/mengine",
         		new String[]{"bin/smi23d/linux/mmff94.prm","bin/smi23d/linux/mmxconst.prm"}
         		);      
-        addExecutable(CommandShell.os_FreeBSD, "bin/freebsd/linux/mengine",
+        addExecutable(CommandShell.os_FreeBSD, "bin/smi23d/freebsd/mengine",
         		new String[]{"bin/smi23d/freebsd/mmff94.prm","bin/smi23d/freebsd/mmxconst.prm"}
         		);           
 		setInputFile("rough.sdf");
