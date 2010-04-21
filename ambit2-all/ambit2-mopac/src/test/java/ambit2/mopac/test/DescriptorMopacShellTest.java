@@ -33,11 +33,14 @@ public class DescriptorMopacShellTest {
 		//todo add hydrogens
 		IAtomContainer ac = parser.parseSmiles(smiles);
 		DescriptorValue v = (DescriptorValue) d.calculate(ac);
+		if (v.getException() != null) throw v.getException();
+		
 		Assert.assertEquals(Mopac7Reader.parameters.length,v.getNames().length);
 		Assert.assertEquals(DescriptorMopacShell.EHOMO,v.getNames()[7]);
 		Assert.assertEquals(DescriptorMopacShell.ELUMO,v.getNames()[8]);
 		
 		DoubleArrayResult r = (DoubleArrayResult) v.getValue();
+		if (v.getException() != null) throw v.getException();
 		Assert.assertEquals(-9.75051,r.get(7),1E-2); //ehomo
 		Assert.assertEquals(0.39523,r.get(8),1E-2); //elumo
 		Assert.assertEquals(78.113,r.get(6),1E-2); //Molecular weight
@@ -53,6 +56,7 @@ public class DescriptorMopacShellTest {
 		//todo add hydrogens
 		IAtomContainer ac = parser.parseSmiles(smiles);
 		DescriptorValue v = (DescriptorValue) d.calculate(ac);
+		if (v.getException() != null) throw v.getException();
 		Assert.assertEquals(Mopac7Reader.parameters.length,v.getNames().length);
 		Assert.assertEquals(DescriptorMopacShell.EHOMO,v.getNames()[7]);
 		Assert.assertEquals(DescriptorMopacShell.ELUMO,v.getNames()[8]);
@@ -84,6 +88,7 @@ public class DescriptorMopacShellTest {
 		//todo add H
 		IAtomContainer ac = parser.parseSmiles("CCCCCCCCCCC");
 		DescriptorValue v = (DescriptorValue) d.calculate(ac);
+		if (v.getException() != null) throw v.getException();
 		Assert.assertEquals(Mopac7Reader.parameters.length,v.getNames().length);
 		Assert.assertEquals(DescriptorMopacShell.EHOMO,v.getNames()[7]);
 		Assert.assertEquals(DescriptorMopacShell.ELUMO,v.getNames()[8]);

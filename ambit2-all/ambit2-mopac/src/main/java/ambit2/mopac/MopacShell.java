@@ -31,10 +31,12 @@ package ambit2.mopac;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -228,23 +230,29 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
     		}
     	else mol = atomcontainer;
     		
-    			
         IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(mol);
-        List<IElement> v = MolecularFormulaManipulator.getHeavyElements(formula);
-        int heavy = v.size();
-        int light = (mol.getAtomCount()-heavy);
-        if (heavy>maxHeavyAtoms) {
-        	throw new ShellException(this,"Skipping - heavy atoms ("+heavy + ") > " + maxHeavyAtoms );
-        } else if (light > maxAllAtoms) {
-        	throw new ShellException(this,"Skipping - all atoms ("+light + ") > " + maxAllAtoms );
-        }
         
+        List<IElement> v = MolecularFormulaManipulator.elements(formula);
         for (int i=0; i < v.size();i++) {
         	
-            if (Arrays.binarySearch(table, v.get(i).toString().trim())<0) {
-                throw new ShellException(this,MESSAGE_UNSUPPORTED_TYPE +v.get(i));
+            if (Arrays.binarySearch(table, v.get(i).getSymbol().trim())<0) {
+                throw new ShellException(this,MESSAGE_UNSUPPORTED_TYPE +v.get(i).getSymbol());
             }
         }
+        try {
+	        IElement h = IsotopeFactory.getInstance(mol.getBuilder()).getElement("H");    	
+	        int light = MolecularFormulaManipulator.getElementCount(formula,h);
+	        int heavy = (mol.getAtomCount()-light);
+	        if (heavy>maxHeavyAtoms) {
+	        	throw new ShellException(this,"Skipping - heavy atoms ("+heavy + ") > " + maxHeavyAtoms );
+	        } else if (light > maxAllAtoms) {
+	        	throw new ShellException(this,"Skipping - all atoms ("+light + ") > " + maxAllAtoms );
+	        }
+        } catch (IOException x) {
+        	throw new ShellException(this,x);
+        }
+        
+
         return true;
 	}
 	@Override
