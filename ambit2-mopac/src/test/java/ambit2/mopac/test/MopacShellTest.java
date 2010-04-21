@@ -16,6 +16,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import ambit2.base.data.Property;
 import ambit2.base.external.CommandShell;
@@ -87,12 +88,19 @@ public class MopacShellTest {
 			Assert.assertNotNull(newmol.getAtom(i).getPoint3d());
 		}
 		SmilesGenerator g = new SmilesGenerator(true);
-		String newsmiles = g.createSMILES(newmol);
+		//String newsmiles = g.createSMILES(newmol);
 		//assertEquals(smiles,newsmiles);
 		//isisomorph returns false if createSmiles was not run before; perhaps smth to do with atom types configuration
+		
+        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(newmol);
+        
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
         adder.addImplicitHydrogens(mol);
         AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+        
+
+        
 		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,newmol));			
 	}
 
