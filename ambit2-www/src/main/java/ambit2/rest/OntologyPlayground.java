@@ -77,10 +77,15 @@ public class OntologyPlayground<T extends Serializable> extends RDFGraphResource
 		print(OT.OTClass.Dataset,out);
 		print(OT.OTClass.Compound,out);
 		print(OT.OTClass.Feature,out);
+		print(OT.OTClass.NominalFeature,out);
+		print(OT.OTClass.NumericFeature,out);
+		print(OT.OTClass.StringFeature,out);
+		print(OT.OTClass.TupleFeature,out);
 		print(OT.OTClass.FeatureValue,out);
 		print(OT.OTClass.DataEntry,out);
 		print(OT.OTClass.Validation,out);
 		print(OT.OTClass.ValidationInfo,out);
+		print(OT.OTClass.Task,out);
 		
 		
 		OntClass aClass = OT.OTClass.Dataset.getOntClass(queryObject);
