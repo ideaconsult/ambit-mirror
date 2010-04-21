@@ -49,7 +49,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count == 39;
+		return count == 42;
 	}	
 	
 	@Test
