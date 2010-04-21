@@ -82,7 +82,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 	}	
 	
 	public String getSimilarityURI() {
-		return String.format("http://localhost:%d/query/similarity?search=%s&threshold=0.15&feature_uris[]=http://localhost:%d/dataset/2/feature", 
+		return String.format("http://localhost:%d/query/similarity?search=%s&threshold=0.16&feature_uris[]=http://localhost:%d/dataset/2/feature", 
 				port,
 				Reference.encode("c1ccccc1"),
 				port
@@ -113,7 +113,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
 		Assert.assertEquals(1,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());		
+		Assert.assertEquals(2,table.getRowCount());		
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery,idtemplate FROM query join sessions using(idsessions) where title='temp'");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertNotNull(table.getValue(0,"idtemplate"));		
@@ -275,7 +275,8 @@ public class QueryResultsResourceTest extends ResourceTest {
 					MediaType.APPLICATION_WWW_FORM,
 					form.getWebRepresentation());
 		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/1", port),response.getLocationRef());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/1", port),
+				response.getLocationRef().toString());
 
 		
 	}		
@@ -370,7 +371,8 @@ public class QueryResultsResourceTest extends ResourceTest {
 					MediaType.APPLICATION_WWW_FORM,
 					form.getWebRepresentation());
 		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef());
+		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),
+				response.getLocationRef().toString());
 		
 	}		
 	@Test

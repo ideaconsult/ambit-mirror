@@ -29,10 +29,12 @@ public class SimilarityResourceTest extends ResourceTest {
 			throws Exception {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
+		int count = 0;
 		while ((line = r.readLine())!= null) {
 			Assert.assertEquals(String.format("http://localhost:%d/compound/11/conformer/100215",port),line);
+			count++;
 		}
-		return true;
+		return count==1;
 	}
 	
 	@Test
