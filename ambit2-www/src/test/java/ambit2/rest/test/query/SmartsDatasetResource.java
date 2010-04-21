@@ -29,9 +29,11 @@ public class SmartsDatasetResource extends ResourceTest {
 			throws Exception {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		String line = null;
+		int count = 0;
 		while ((line = r.readLine())!= null) {
 			Assert.assertEquals("http://localhost:8181/compound/11/conformer/100215",line);
+			count++;
 		}
-		return true;
+		return count == 1;
 	}
 }
