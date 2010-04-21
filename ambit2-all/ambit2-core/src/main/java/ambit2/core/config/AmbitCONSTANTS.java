@@ -54,7 +54,7 @@ public class AmbitCONSTANTS {
 	/**
 	 * Inchi
 	 */
-	public static final String INCHI = "INChI";
+	public static final String INCHI = "InChI";
 	/**
 	 * the database field substance.idsubstance 
 	 */
