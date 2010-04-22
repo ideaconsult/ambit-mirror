@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.sql.Connection;
 
 import junit.framework.Assert;
@@ -174,7 +175,7 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(37,property.getRowCount());
 		for (int i=0; i < 37;i++) {
 			//System.out.println(property.getValue(i,"name"));
-			Assert.assertEquals(14L,property.getValue(i, "c"));
+			Assert.assertEquals(new BigInteger("14"),property.getValue(i, "c"));
 		}
 		
 		
