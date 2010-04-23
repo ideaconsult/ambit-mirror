@@ -8,6 +8,7 @@ import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.rest.AmbitResource;
+import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.Task.taskStatus;
@@ -30,7 +31,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 				output.write(String.format("<a href='?search=%s'>%s</a>&nbsp;",status,status));
 			output.write("</h4><p>");
 			output.write("<table>");
-			output.write("<tr><th>Start time</th><th>Task</th><th colspan='2'>Status</th></tr>");
+			output.write("<tr><th>Start time</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
 			
 		}
@@ -47,12 +48,16 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 			t = x.getMessage();
 		} finally {
 			try {output.write(
-					String.format("<tr><td>%s</td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>",
+					String.format("<tr><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>",
 							new Date(item.started),
+							baseReference.toString(),
+							SimpleTaskResource.resource,
+							item.getUuid(),
+							item.getUuid(),
 							t,item.getName(),
 							baseReference.toString(),
 							item.isDone()?"tick.png":"24x24_ambit.gif",
-								status
+							status
 							)); } catch (Exception x) {
 				x.printStackTrace();
 			}
