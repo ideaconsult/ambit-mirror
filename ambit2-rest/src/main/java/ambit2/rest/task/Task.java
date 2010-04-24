@@ -101,6 +101,11 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 				status = TaskStatus.Running;
 				super.run();
 			}
+			@Override
+			protected void done() {
+				super.done();
+				completed = System.currentTimeMillis();
+			}
 		};
 		/*
 		this.future = new FutureTask<Reference>(callable) {
