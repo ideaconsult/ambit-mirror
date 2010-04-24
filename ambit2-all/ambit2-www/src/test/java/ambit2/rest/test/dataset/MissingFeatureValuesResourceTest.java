@@ -90,7 +90,7 @@ public class MissingFeatureValuesResourceTest extends ResourceTest {
 		form.add(OpenTox.params.dataset_uri.toString(),ref.toString());
 		testAsyncTask(String.format("http://localhost:%d/dataset", port),
 				form,
-				Status.CLIENT_ERROR_NOT_FOUND,
+				Status.SUCCESS_OK, 
 				"http://localhost:8181/dataset/R3"
 				);
         IDatabaseConnection c = getConnection();	

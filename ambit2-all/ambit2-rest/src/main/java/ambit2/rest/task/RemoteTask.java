@@ -1,8 +1,12 @@
 package ambit2.rest.task;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.MediaType;
@@ -27,7 +31,11 @@ public class RemoteTask implements Serializable {
 	protected Status status = null;
 	protected Reference result = null;
 	protected Exception error = null;
+
 	
+	public Exception getError() {
+		return error;
+	}
 	public RemoteTask(Reference url,MediaType media, 
 			  Representation input,
 			  Method method,
@@ -36,10 +44,14 @@ public class RemoteTask implements Serializable {
 		
 		this.url = url;
 		Representation r=null;
+		ClientResource client = null;
 		try {
-			ClientResource client = new ClientResource(url);
+			client = new ClientResource(url);
 			client.setChallengeResponse(authentication);
-			if (method.equals(Method.POST))
+			client.setFollowingRedirects(false);
+			
+			
+			if (method.equals(Method.POST)) 
 				r = client.post(input,media);
 			else if (method.equals(Method.PUT))
 				r = client.put(input,media);
@@ -48,9 +60,11 @@ public class RemoteTask implements Serializable {
 			else if (method.equals(Method.GET))
 				r = client.get(media);
 			else throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			
-			result = handleOutput(client, r);
 			this.status = client.getStatus();
+			
+			if (!r.isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",url));
+			
+			result = handleOutput(r.getStream(),status);
 		} catch (ResourceException x) {
 			error = x;
 			status = x.getStatus();
@@ -59,6 +73,7 @@ public class RemoteTask implements Serializable {
 			status = null;
 		} finally {
 			try { r.release(); } catch (Exception x) {}
+			try { client.release(); } catch (Exception x) {}
 		}
 	}	
 	/*
@@ -93,9 +108,7 @@ public class RemoteTask implements Serializable {
 	public boolean isAccepted() {
 		return Status.SUCCESS_ACCEPTED.equals(status);
 	}	
-	public boolean isRedirected() {
-		return Status.REDIRECTION_SEE_OTHER.equals(status);
-	}	
+
 	public boolean isERROR() {
 		return error != null;
 	}		
@@ -120,13 +133,22 @@ public class RemoteTask implements Serializable {
 	}
 	public boolean poll() {
 		if (isDone()) return true;
-		ClientResource client = new ClientResource(result);
-		client.setFollowingRedirects(false);
-		Representation r = null;
+
+		InputStream in = null;
+		URLConnection c = null;
 		try {
-			r = client.get();
-			result = handleOutput(client, r);
-			status = client.getStatus();
+			c = new URL(result.toString()).openConnection();
+	        HttpURLConnection hc = ((HttpURLConnection)c);
+	        hc.setRequestMethod("GET");
+	        hc.setUseCaches(false);
+	        hc.setFollowRedirects(false);
+	        hc.setRequestProperty("Accept",MediaType.TEXT_URI_LIST.toString());
+	       // hc.setRequestProperty("Accept",MediaType.TEXT_HTML.toString());
+			in = hc.getInputStream();
+			status = new Status(hc.getResponseCode());
+//			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
+			result = handleOutput(in,status);
+
 		} catch (ResourceException x) {
 			error = x;
 			status = x.getStatus();
@@ -134,29 +156,29 @@ public class RemoteTask implements Serializable {
 			error = x;
 			status = null;
 		} finally {
-			try {r.release();} catch (Exception x) {}
+			try {in.close();} catch (Exception x) {}
+
+
 		}
 		return isDone();
 	}
-	protected Reference handleOutput(ClientResource client, Representation r) throws ResourceException {
-		Reference ref = client.getReference();
-		if (Status.SUCCESS_OK.equals(client.getStatus())) {
-			return ref;
-		} else if (Status.REDIRECTION_SEE_OTHER.equals(client.getStatus()) || Status.SUCCESS_ACCEPTED.equals(client.getStatus())) {
-			int count=0;;
-			if (client.getLocationRef()!= null) { count++; ref = client.getLocationRef(); }
-			else {
-				ref = null;
-				try {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
-					String line = null;
-					while ((line = reader.readLine())!=null) {
-						ref = new Reference(line);
-						count++;
-					}
-				} catch (Exception x) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
-				} 
+	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
+		Reference ref = null;
+		
+		if (Status.SUCCESS_OK.equals(status) || Status.SUCCESS_ACCEPTED.equals(status)) {
+			int count=0;
+			try {
+				
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				String line = null;
+				while ((line = reader.readLine())!=null) {
+					ref = new Reference(line.trim());
+					count++;
+				}
+			} catch (Exception x) {
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x.getMessage(),x);
+			} finally {
+				try { in.close(); } catch (Exception x) {} ;
 			}
 			if (count == 0) 
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,"No status indications!");
@@ -164,7 +186,7 @@ public class RemoteTask implements Serializable {
 			return ref;
 						
 		} else { //everything else considered an error
-			throw new ResourceException(client.getStatus());
+			throw new ResourceException(status);
 		}
 	}	
 

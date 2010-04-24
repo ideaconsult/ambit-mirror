@@ -1,168 +1,49 @@
 package ambit2.rest;
 
-import java.io.PrintWriter;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadFactory;
 
 import org.restlet.Application;
-import org.restlet.Context;
 import org.restlet.data.Reference;
 
+import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskStorage;
 
 public class TaskApplication<USERID> extends Application {
-	protected ConcurrentMap<UUID,Task<Reference,USERID>> tasks;
-	public enum pool_task  { INTERNAL, EXTERNAL};
-	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
-	protected Hashtable<pool_task,ExecutorService> pools;
+	protected ITaskStorage<USERID> taskStorage;
 	public TaskApplication() {
 		super();
-		//pool = Executors.newFixedThreadPool(5);
-		pools = new Hashtable<pool_task, ExecutorService>();
-		ExecutorService x= createExecutorService(5);
-		pools.put(pool_task.INTERNAL,x);
-		x = createExecutorService(1);
-		pools.put(pool_task.EXTERNAL,x);
-
-
-		tasks = new ConcurrentHashMap<UUID,Task<Reference,USERID>>();		
-		
-
-		TimerTask cleanUpTasks  = new TimerTask() {
-			
-			@Override
-			public void run() {
-				cleanUpTasks();
-				
-			}
-		};
-
-	    Timer timer = new Timer();
-
-	    timer.scheduleAtFixedRate(cleanUpTasks,taskCleanupRate,taskCleanupRate);		
+		taskStorage = new TaskStorage<USERID>(getName(),getLogger());
 	}
 	
-	protected ExecutorService createExecutorService(int maxThreads) {
-		return Executors.newFixedThreadPool(maxThreads,new ThreadFactory() {
-		//return Executors.newCachedThreadPool(new ThreadFactory() {
-			public Thread newThread(Runnable r) {
-				Thread thread = new Thread(r);
-				thread.setPriority(Thread.MIN_PRIORITY);
-				thread.setDaemon(true);
-				thread.setName(String.format("%s task executor",getName()));
-				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-					public void uncaughtException(Thread t, Throwable e) {
-			            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-			            e.printStackTrace(new PrintWriter(stackTraceWriter));
-						getLogger().severe(stackTraceWriter.toString());
-					}
-				});
-				return thread;
-			}
-		});
+	public Iterator<Task<Reference,USERID>> getTasks() {
+		return taskStorage.getTasks();
 	}
+
 	@Override
 	protected void finalize() throws Throwable {
-		removeTasks();
+		taskStorage.removeTasks();
 		super.finalize();
 	}
 	
-	public void cleanUpTasks() {
-		Iterator<UUID> keys = tasks.keySet().iterator();
-		while (keys.hasNext()) {
-			UUID key = keys.next();
-			Task<Reference,USERID> task = tasks.get(key);
-			try {
-				if (task.isDone() && (task.isExpired(taskCleanupRate))) tasks.remove(key);
-			} catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
-		}
-	}	
-	public void cancelTasks() {
-		Iterator<Task<Reference,USERID>> i = getTasks();
-		while (i.hasNext()) {
-			Task<Reference,USERID> task = i.next();
-			try {
-			if (!task.isDone()) task.cancel(true);
-			} catch (Exception x) {getLogger().warning(x.getMessage());}
-		}
-	}
 	public void removeTasks() {
-		cancelTasks();
-		tasks.clear();
-	}	
-	
-	
-	public Iterator<Task<Reference,USERID>> getTasks() {
-		return tasks.values().iterator();
+		taskStorage.removeTasks();
 	}
-	public synchronized Task<Reference,USERID> findTask(String id) {
-		try {
-			return tasks.get(UUID.fromString(id));
-		} catch (Exception x) {
-			System.out.println(x);
-			return null;
-		}
-	}
-	public synchronized void removeTask(String id) {
-		try {
-			tasks.remove(UUID.fromString(id));
-		} catch (Exception x) {
-			System.out.println(x);
-			return;
-		}
-	}
-	//shortcut for backward compatibility
-	//shortcut for backward compatibility
-	public synchronized Reference addTask(String taskName, 
+
+	public synchronized Task<Reference,USERID> addTask(String taskName, 
 			Callable<Reference> callable, 
 			Reference baseReference) {
-		return addTask(taskName,callable,baseReference,(USERID) "guest",true);
+		return addTask(taskName,callable,baseReference,true);
 	}
 	
-	public synchronized Reference addTask(String taskName, 
+	public synchronized Task<Reference,USERID> addTask(String taskName, 
 			Callable<Reference> callable, 
 			Reference baseReference,boolean internal) {
-		return addTask(taskName,callable,baseReference,(USERID) "guest",internal);
+		return taskStorage.addTask(taskName,callable,baseReference,(USERID) "guest",internal);
 	}
-	public synchronized Reference addTask(String taskName, 
-			Callable<Reference> callable, 
-			Reference baseReference,
-			USERID user,boolean internal) {
-		if (callable == null) return null;
-		FutureTask<Reference> futureTask = new FutureTask<Reference>(callable) {
-			@Override
-			protected void done() {
-				super.done();
-				//((AmbitApplication)getApplication()).getTasks().remove(this);
-			}
-			
-			
-		};		
-		UUID uuid = UUID.randomUUID();
-		Task<Reference,USERID> task = new Task<Reference,USERID>(futureTask,user);
-		task.setName(taskName);
-		Reference ref =	new Reference(
-				String.format("%s%s/%s", baseReference.toString(),SimpleTaskResource.resource,Reference.encode(uuid.toString())));
-		task.setUri(ref);
-		tasks.put(uuid,task);
-		//getTaskService().submit(futureTask);
-		Future future = internal?
-			pools.get(pool_task.INTERNAL).submit(futureTask):
-			pools.get(pool_task.EXTERNAL).submit(futureTask);
-		System.out.println(future);
-		return ref;
+	public synchronized Task<Reference,USERID> findTask(String id) {
+		return taskStorage.findTask(id);
 	}
 	
 }

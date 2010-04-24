@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -42,7 +43,7 @@ public class FastToxStep2 extends ModelResource {
 					Integer.parseInt(form.getFirstValue("idstructure"))
 					,null,null);
 		} catch (Exception x) {
-			throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 		getResponse().setEntity(get(new Variant(MediaType.TEXT_HTML)));
 		return getResponse().getEntity();

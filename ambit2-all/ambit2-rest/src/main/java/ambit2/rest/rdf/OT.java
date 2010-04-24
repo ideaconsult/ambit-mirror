@@ -141,6 +141,7 @@ public class OT {
     	has3Dstructure,
     	hasStatus,
     	percentageCompleted,
+    	resultURI,
     	paramScope,
     	paramValue;
 	   	public Property createProperty(OntModel jenaModel) {

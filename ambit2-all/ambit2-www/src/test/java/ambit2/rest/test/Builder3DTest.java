@@ -12,16 +12,17 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 
 public class Builder3DTest  extends ResourceTest  {
 
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/build3d?search=CCC",port);
+		return String.format("http://localhost:%d/%s?search=CCC",port,Build3DResource.resource);
 	}
 	@Test
 	public void testInvalidSmiles() throws Exception {
-		Status status = testHandleError(String.format("http://localhost:%d/build3d?search=ZZZ",port),ChemicalMediaType.CHEMICAL_MDLSDF);
+		Status status = testHandleError(String.format("http://localhost:%d/%s?search=ZZZ",port,Build3DResource.resource),ChemicalMediaType.CHEMICAL_MDLSDF);
 		Assert.assertEquals(400,status.getCode());
 	}	
 	@Test

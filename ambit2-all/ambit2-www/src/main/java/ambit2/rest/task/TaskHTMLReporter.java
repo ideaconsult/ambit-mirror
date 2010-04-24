@@ -11,7 +11,7 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.reporters.CatalogURIReporter;
-import ambit2.rest.task.Task.taskStatus;
+import ambit2.rest.task.Task.TaskStatus;
 
 public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,USERID>> {
 
@@ -27,7 +27,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
-			for (taskStatus status :taskStatus.values())
+			for (TaskStatus status :TaskStatus.values())
 				output.write(String.format("<a href='?search=%s'>%s</a>&nbsp;",status,status));
 			output.write("</h4><p>");
 			output.write("<table>");
@@ -40,7 +40,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 		String t = "";
 		String status = "Unknown";
 		try {
-			t = item.getReference().toString();
+			t = item.getUri().toString();
 			status = item.getStatus();
 		} catch (Exception x) {
 			x.printStackTrace();

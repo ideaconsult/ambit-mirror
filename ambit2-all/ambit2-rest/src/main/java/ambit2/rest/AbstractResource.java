@@ -30,7 +30,7 @@ import ambit2.base.interfaces.IProcessor;
 public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> extends ServerResource {
 	protected Q queryObject;
 	protected Exception error = null;	
-	protected Status status = Status.SUCCESS_OK;
+	protected Status response_status = Status.SUCCESS_OK;
 	public final static String search_param = "search";
 	public final static String sameas = "sameas";
 	public final static String property = "property";
@@ -44,7 +44,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		status = Status.SUCCESS_OK;
+		response_status = Status.SUCCESS_OK;
 		queryObject = createQuery(getContext(), getRequest(), getResponse());
 		error = null;
 
@@ -77,7 +77,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	        	IProcessor<Q, Representation> convertor = null;
 
 		        	try {
-		        		getResponse().setStatus(status);
+		        		getResponse().setStatus(response_status);
 		        		convertor = createConvertor(variant);
 			        	Representation r = convertor.process(queryObject);
 			        	return r;
@@ -98,7 +98,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 
 	        	
 	        } else {
-	        	getResponse().setStatus(status==null?Status.CLIENT_ERROR_BAD_REQUEST:status,error);
+	        	getResponse().setStatus(response_status==null?Status.CLIENT_ERROR_BAD_REQUEST:response_status,error);
 	        	return null;	        	
 	        }
 		} catch (Exception x) {

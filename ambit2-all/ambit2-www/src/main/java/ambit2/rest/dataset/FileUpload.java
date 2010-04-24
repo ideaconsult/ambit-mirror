@@ -25,8 +25,12 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
+import ambit2.rest.TaskApplication;
+import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;
 import ambit2.rest.task.CallableQueryResultsCreator;
+import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.Task;
 
 public class FileUpload {
 	protected Request request;
@@ -88,7 +92,7 @@ public class FileUpload {
 				null);
 		try {
 			getResponse().setLocationRef(callable.call());
-			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
+			getResponse().setStatus(Status.SUCCESS_OK);
 			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
 		} catch  (Exception x) {
 			throw new ResourceException(x);
@@ -116,13 +120,18 @@ public class FileUpload {
 	              List<FileItem> items = upload.parseRequest(getRequest());
 	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
-				  Reference ref =  ((AmbitApplication)getApplication()).addTask(
-						 "File import",
-						new CallableFileImport(getRequest().getClientInfo(),dataset,items,DatasetsHTMLReporter.fileUploadField,connection,reporter),
-						getRequest().getRootRef());		
-				  getResponse().setLocationRef(ref);
-				  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-				  getResponse().setEntity(null);
+	              
+	              
+				  Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+							 "File import",
+							new CallableFileImport(getRequest().getClientInfo(),dataset,items,DatasetsHTMLReporter.fileUploadField,connection,reporter),
+							getRequest().getRootRef());
+							
+				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+				  task.update();
+				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+	              return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
+
 				  
 	          } catch (Exception x) {
 	        	  try { connection.close(); } catch (Exception xx) {xx.printStackTrace();}
@@ -134,15 +143,18 @@ public class FileUpload {
 						DBConnection dbc = new DBConnection(getApplication().getContext());
 						connection = dbc.getConnection(getRequest());						
 			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());					
-					  Reference ref =  ((AmbitApplication)getApplication()).addTask(
+			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());		
+			          
+			          Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
 							  
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								new CallableFileImport(getRequest().getClientInfo(),dataset,(InputRepresentation)entity,connection,reporter),
 								getRequest().getRootRef());		
-						  getResponse().setLocationRef(ref);
-						  getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-						  getResponse().setEntity(null);
+			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+					  task.update();
+					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);			          
+			          return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
+			          
 					} catch (Exception x) {
 						try { connection.close(); } catch (Exception xx) {xx.printStackTrace();}
  		        	    throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
@@ -151,7 +163,7 @@ public class FileUpload {
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 				String.format("Unsupported Content-type=%s",entity.getMediaType()));
 	
-		return getResponse().getEntity();
+		
             
 	}
 	
@@ -161,7 +173,7 @@ public class FileUpload {
 		MediaType.APPLICATION_RDF_XML.equals(mediaType) ||
 		MediaType.APPLICATION_RDF_TURTLE.equals(mediaType) ||
 		MediaType.TEXT_RDF_N3.equals(mediaType) ||
-		//MediaType.TEXT_CSV.equals(mediaType) ||
+		MediaType.TEXT_CSV.equals(mediaType) ||
 		ChemicalMediaType.CHEMICAL_SMILES.equals(mediaType) ||
 		ChemicalMediaType.CHEMICAL_MDLMOL.equals(mediaType);
 		//ChemicalMediaType.CHEMICAL_CML.equals(mediaType) ||

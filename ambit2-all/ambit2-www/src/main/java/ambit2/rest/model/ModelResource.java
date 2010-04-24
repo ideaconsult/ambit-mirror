@@ -250,72 +250,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 
 		}
 	}
-	/*
-	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
-		synchronized (this) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			Object datasetURI = form.getFirstValue(dataset_uri);
-			if (datasetURI==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Empty %s", dataset_uri));
-			final Reference reference = new Reference(Reference.decode(datasetURI.toString()));
-			
-			//models
-			IQueryRetrieval<ModelQueryResults> query = createQuery(getContext(),getRequest(),getResponse());
-			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			
-			
-			Connection conn = null;
-			
-			QueryReporter<ModelQueryResults,IQueryRetrieval<ModelQueryResults>,Object> readModels = new QueryReporter<ModelQueryResults,IQueryRetrieval<ModelQueryResults>,Object>() {
-				@Override
-				public Object processItem(ModelQueryResults model) throws AmbitException {
-					try {
-						Reference ref =  ((AmbitApplication)getApplication()).addTask(
-								String.format("Apply model %s to %s",model.toString(),reference),
-								new CallableModelPredictor(
-										reference,
-										getRequest().getRootRef(),
-										(AmbitApplication)getApplication(),
-										model,
-										new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest())),	
-								getRequest().getRootRef());		
-						getResponse().setLocationRef(ref);
-						//getResponse().setStatus(Status.SUCCESS_CREATED);
-						getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-						getResponse().setEntity(null);
-					} catch (Exception x) {
-						if (x.getCause() instanceof ResourceException)
-							getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
-						else
-							getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
-					}
-					return null;
-					
-				}
-				public void open() throws DbAmbitException {};
-				@Override
-				public void header(Object output, IQueryRetrieval<ModelQueryResults> query) {};
-				@Override
-				public void footer(Object output, IQueryRetrieval<ModelQueryResults> query) {};
-					
-			};
-			try {
-	    		conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
-	    		if (conn.isClosed()) conn = ((AmbitApplication)getApplication()).getConnection(getRequest());
-	    		readModels.setConnection(conn);
-				readModels.process(query);		
-				return getResponse().getEntity();
-			} catch (AmbitException x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
-			} catch (SQLException x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
-			} finally {
-				try { conn.close();} catch  (Exception x) {}
-			}
-		}
-	}
-	*/
+
 	protected ReadModel getModelQuery(Object idmodel) throws ResourceException {
 		if (idmodel == null) return new ReadModel();
 		else if (idmodel instanceof Integer)

@@ -7,6 +7,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.Task;
 
@@ -26,9 +27,12 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 	 */
 	private static final long serialVersionUID = 3789102915378513270L;
 	protected Reference baseRef;
+	protected TaskURIReporter<USERID> urireporter;
+	
 	public TaskRDFReporter(Request request, MediaType mediaType) {
 		super(request, mediaType);
 		baseRef = request.getRootRef();
+		urireporter = new TaskURIReporter<USERID>(request);
 	}
 	@Override
 	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
@@ -38,16 +42,19 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 		getJenaModel().createAnnotationProperty(DC.identifier.getURI());
 		getJenaModel().createAnnotationProperty(DC.date.getURI());
 	}
-
+	
 	@Override
 	public void processItem(Task<Reference,USERID> item, Writer output) {
 		String ref;
 		try {
-			ref = item.getReference().toString();
+			ref = item.getUri().toString();
 		} catch (Exception x) {
 			ref = item.getUri().toString();
 		}
-		Individual task = getJenaModel().createIndividual(OT.OTClass.Task.getOntClass(getJenaModel()));
+	
+		Individual task = getJenaModel().createIndividual(String.format("%s%s/%s", baseRef,SimpleTaskResource.resource,item.getUuid()),
+													OT.OTClass.Task.getOntClass(getJenaModel()));
+													
 		task.addLiteral(DC.title,
 				 getJenaModel().createTypedLiteral(item.getName(),XSDDatatype.XSDstring));
 		task.addLiteral(DC.identifier,
@@ -57,7 +64,14 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 		task.addLiteral(OT.DataProperty.hasStatus.createProperty(getJenaModel()),
 				 getJenaModel().createTypedLiteral(item.getStatus(),XSDDatatype.XSDstring));		
 		task.addLiteral(OT.DataProperty.percentageCompleted.createProperty(getJenaModel()),
-				 getJenaModel().createTypedLiteral(item.getPercentCompleted(),XSDDatatype.XSDfloat));			
+				 getJenaModel().createTypedLiteral(item.getPercentCompleted(),XSDDatatype.XSDfloat));
+		
+		if (item.isDone()) try {
+			task.addLiteral(OT.DataProperty.resultURI.createProperty(getJenaModel()),
+				 getJenaModel().createTypedLiteral(item.getUri().toString(),XSDDatatype.XSDanyURI));
+		} catch (Exception x) {
+			x.printStackTrace(); //TODO error handling
+		}
 		
 	}
 

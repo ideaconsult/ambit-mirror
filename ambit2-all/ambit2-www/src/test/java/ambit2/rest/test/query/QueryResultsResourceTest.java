@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
@@ -31,13 +32,9 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/2", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R3", port), response.getLocationRef().toString());
-
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R3", port)));
 		
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
@@ -63,14 +60,11 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/R1", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R3", port), response.getLocationRef().toString());
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R3", port)));
 
-		
+	
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
 		Assert.assertEquals(1,table.getRowCount());
@@ -101,12 +95,9 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),getSimilarityURI());
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R3", port), response.getLocationRef().toString());
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R3", port)));
 
 		
          c = getConnection();	
@@ -131,13 +122,11 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/R1", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset/R1", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R1", port), response.getLocationRef().toString());
-
+		
+		
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/R1", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R1", port)));
 		
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) ");
@@ -158,12 +147,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/R1", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset/R2", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R2", port), response.getLocationRef().toString());
+	
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/R2", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R2", port)));
 
 		
          c = getConnection();	
@@ -186,12 +173,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/3", port));
 		
-		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/R1", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R1", port), response.getLocationRef().toString());
+	
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/R1", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.PUT,
+				new Reference(String.format("http://localhost:%d/dataset/R1", port)));
 
 		
          c = getConnection();	
@@ -214,13 +199,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/3", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset/R1", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R1", port), response.getLocationRef().toString());
-
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/R1", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R1", port)));
+		
 		
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where idquery=1");
@@ -242,12 +224,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/3", port));
 		
-		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/R1", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R1", port), response.getLocationRef().toString());
+	
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/R1", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.PUT,
+				new Reference(String.format("http://localhost:%d/dataset/R1", port)));
 
 		
          c = getConnection();	
@@ -270,13 +250,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/1", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset/1", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/1", port),
-				response.getLocationRef().toString());
+
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/1", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/1", port)));
 
 		
 	}		
@@ -292,13 +269,11 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/compound/7/conformer/100211", port));
 		
-		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/3", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef().toString());
-	
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/3", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/3", port)));
+
+		
 		c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
 		Assert.assertEquals(3,table.getRowCount());
@@ -317,13 +292,11 @@ public class QueryResultsResourceTest extends ResourceTest {
 		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/query/pubchem/50-00-0", port));
 		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/query/pubchem/50-00-0", port));
 		
-		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/3", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef().toString());
-	
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/3", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.PUT,
+				new Reference(String.format("http://localhost:%d/dataset/3", port)));
+		
+		
 		c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
 		Assert.assertEquals(4,table.getRowCount());
@@ -342,12 +315,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.compound_uris.toString(),String.format("http://localhost:%d/compound/7", port));
 		
-		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/3", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),response.getLocationRef().toString());
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/3", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.PUT,
+				new Reference(String.format("http://localhost:%d/dataset/3", port)));
+
 		
 		c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=3");
@@ -366,13 +337,11 @@ public class QueryResultsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/2", port));
 		
-		Response response =  testPut(
-					String.format("http://localhost:%d/dataset/3", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/3", port),
-				response.getLocationRef().toString());
+		
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/3", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/3", port)));
+
 		
 	}		
 	@Test

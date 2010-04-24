@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.restlet.Context;
@@ -37,8 +38,13 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.TaskApplication;
 import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskCreator;
 
 /**
  * Abstract parent class for all resources , which retrieves something from the database
@@ -355,7 +361,7 @@ Then, when the "get(Variant)" method calls you back,
 		
 	}
 	
-	protected Representation process(Representation entity, Variant variant, final boolean async)
+	protected Representation process(Representation entity, final Variant variant, final boolean async)
 			throws ResourceException {
 		synchronized (this) {
 			final Form form = new Form(entity);
@@ -366,48 +372,40 @@ Then, when the "get(Variant)" method calls you back,
 			
 			
 			Connection conn = null;
-			
-			QueryReporter<T,IQueryRetrieval<T>,Object> readModels = new QueryReporter<T,IQueryRetrieval<T>,Object>() {
-				@Override
-				public Object processItem(T model) throws AmbitException {
-					try {
-						Callable<Reference> task = createCallable(form,model);
-						if (async) {
-							Reference ref =  ((AmbitApplication)getApplication()).addTask(
-									String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),									
-									task,
-									getRequest().getRootRef());		
-							getResponse().setLocationRef(ref);
-							//getResponse().setStatus(Status.SUCCESS_CREATED);
-							getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-							getResponse().setEntity(null);
-						} else {
-							Reference ref = task.call();
-							getResponse().setLocationRef(ref);
-							getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-							getResponse().setEntity(null);
-						}
-					} catch (ResourceException x) {
-						getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
-					} catch (Exception x) {
-						getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
-					}
-					return null;
-					
-				}
-				public void open() throws DbAmbitException {};
-				@Override
-				public void header(Object output, IQueryRetrieval<T> query) {};
-				@Override
-				public void footer(Object output, IQueryRetrieval<T> query) {};
-					
-			};
 			try {
+				TaskCreator<Object,T> taskCreator = new TaskCreator<Object,T>(form,async) {
+					@Override
+					protected Callable<Reference> getCallable(Form form,
+							T item) throws ResourceException {
+						return createCallable(form,item);
+					}
+					@Override
+					protected Task<Reference, Object> createTask(
+							Callable<Reference> callable,
+							T item) throws ResourceException {
+	
+							return ((TaskApplication)getApplication()).addTask(
+								String.format("Apply %s %s %s",item.toString(),reference==null?"":"to",reference==null?"":reference),									
+								callable,
+								getRequest().getRootRef());		
+						}
+				};
+			
 				DBConnection dbc = new DBConnection(getApplication().getContext());
 				conn = dbc.getConnection(getRequest());	
-	    		readModels.setConnection(conn);
-				readModels.process(query);		
-				return getResponse().getEntity();
+				taskCreator.setConnection(conn);
+	    		List<Task<Reference,Object>> r =  taskCreator.process(query);
+				if ((r==null) || (r.size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+				else {
+					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+					if (r.size()==1) {
+						r.get(0).update();
+						setStatus(r.get(0).isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+						return tc.createTaskRepresentation(r.get(0), variant,getRequest(), getResponse());
+					} else 
+						return tc.createTaskRepresentation(r.iterator(), variant,getRequest(), getResponse());
+				}
+
 			} catch (AmbitException x) {
 				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 			} catch (SQLException x) {
@@ -422,4 +420,6 @@ Then, when the "get(Variant)" method calls you back,
 	protected CallableQueryProcessor createCallable(Form form,T item) throws ResourceException  {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
+	
+	
 }

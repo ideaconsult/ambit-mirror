@@ -320,7 +320,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			throws ResourceException {
 				
 		try {
-			System.out.println("Create callable");
+
 			if (algorithm.hasType(Algorithm.typeRules))
 				return new CallableSimpleModelCreator(
 						form,
