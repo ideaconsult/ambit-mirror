@@ -46,6 +46,9 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	protected USERID userid;
 	protected UUID uuid = UUID.randomUUID();
 	protected Exception error = null;
+	public Exception getError() {
+		return error;
+	}
 	protected TaskStatus status= TaskStatus.Running;
 	
 	public UUID getUuid() {

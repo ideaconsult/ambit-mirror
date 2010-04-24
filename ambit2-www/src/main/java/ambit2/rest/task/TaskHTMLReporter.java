@@ -28,7 +28,8 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
 			for (TaskStatus status :TaskStatus.values())
-				output.write(String.format("<a href='?search=%s'>%s</a>&nbsp;",status,status));
+				output.write(String.format("<a href='%s%s?search=%s'>%s</a>&nbsp;",
+						baseReference,SimpleTaskResource.resource,status,status));
 			output.write("</h4><p>");
 			output.write("<table>");
 			output.write("<tr><th>Start time</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
@@ -40,7 +41,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 		String t = "";
 		String status = "Unknown";
 		try {
-			t = item.getUri().toString();
+			t = item.getUri()==null?"":item.getUri().toString();
 			status = item.getStatus();
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -48,7 +49,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 			t = x.getMessage();
 		} finally {
 			try {output.write(
-					String.format("<tr><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>",
+					String.format("<tr><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td><td>%s</td></tr>",
 							new Date(item.started),
 							baseReference.toString(),
 							SimpleTaskResource.resource,
@@ -57,7 +58,8 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 							t,item.getName(),
 							baseReference.toString(),
 							item.isDone()?"tick.png":"24x24_ambit.gif",
-							status
+							status,
+							item.getError()==null?"":item.getError().getMessage()
 							)); } catch (Exception x) {
 				x.printStackTrace();
 			}
