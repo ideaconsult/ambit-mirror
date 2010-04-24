@@ -36,7 +36,7 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	 */
 	private static final long serialVersionUID = -646087833848914553L;
 
-	public enum TaskStatus {Accepted,Running,Cancelled,Completed,Error};
+	public enum TaskStatus {Running,Cancelled,Completed,Error};
 	protected FutureTask<Reference> future;
 	protected Reference uri;
 	protected String name = "Default";
@@ -46,7 +46,7 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	protected USERID userid;
 	protected UUID uuid = UUID.randomUUID();
 	protected Exception error = null;
-	protected TaskStatus status= TaskStatus.Accepted;
+	protected TaskStatus status= TaskStatus.Running;
 	
 	public UUID getUuid() {
 		return uuid;
@@ -92,12 +92,18 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	public Task(Callable<Reference> callable,USERID user) {
 		
 		this.userid = user;
-		this.future = new FutureTask<Reference>(callable);
+		this.future = new FutureTask<Reference>(callable) {
+			@Override
+			public void run() {
+				status = TaskStatus.Running;
+				super.run();
+			}
+		};
 		/*
 		this.future = new FutureTask<Reference>(callable) {
 			@Override
 			protected void done() {
-				status = TaskStatus.Completed;
+				//status = TaskStatus.Completed;
 				super.done();
 				update();
 			}
