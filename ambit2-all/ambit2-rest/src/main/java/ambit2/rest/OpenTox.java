@@ -132,7 +132,11 @@ public class OpenTox {
 			}			
 			public String getDescription() {
 				return "Feature URI, target variable for model generation of classification and regression models";
-			}			
+			}	
+			@Override
+			public String toString() {
+				return "prediction_feature";
+			}
 		},
 		parameters {
 			public boolean isMandatory() {
