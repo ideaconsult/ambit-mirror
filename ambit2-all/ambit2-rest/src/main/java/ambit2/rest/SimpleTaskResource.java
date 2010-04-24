@@ -103,7 +103,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 					if (search != null) TaskStatus.valueOf(search);
 				} catch (Exception x) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Allowed status values: %s %s, %s, %s", 
-									TaskStatus.Accepted, TaskStatus.Running, TaskStatus.Completed, TaskStatus.Cancelled));
+									TaskStatus.Running, TaskStatus.Completed, TaskStatus.Cancelled));
 				}
 				if (search == null) //all tasks
 					return ((TaskApplication)getApplication()).getTasks();
