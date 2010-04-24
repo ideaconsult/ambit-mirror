@@ -4,9 +4,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -34,15 +36,24 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	 */
 	private static final long serialVersionUID = -646087833848914553L;
 
-	public enum taskStatus {Running,Cancelled,Completed};
-	protected Future<Reference> future;
+	public enum TaskStatus {Accepted,Running,Cancelled,Completed,Error};
+	protected FutureTask<Reference> future;
 	protected Reference uri;
 	protected String name = "Default";
 	protected long started = System.currentTimeMillis();
 	protected long completed = -1;
 	protected float percentCompleted = 0;
 	protected USERID userid;
+	protected UUID uuid = UUID.randomUUID();
+	protected Exception error = null;
+	protected TaskStatus status= TaskStatus.Accepted;
 	
+	public UUID getUuid() {
+		return uuid;
+	}
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 	public USERID getUserid() {
 		return userid;
 	}
@@ -53,7 +64,8 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 		return (System.currentTimeMillis()-started) > lifetime;
 	}
 	public String getStatus() {
-		return isDone()?taskStatus.Completed.toString():taskStatus.Running.toString();
+		return status.toString();
+
 	}
 	public float getPercentCompleted() {
 		return percentCompleted;
@@ -76,28 +88,65 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	public void setUri(Reference uri) {
 		this.uri = uri;
 	}
-	public Task(Future<Reference> future,USERID user) {
-		this.future = future;
+	
+	public Task(Callable<Reference> callable,USERID user) {
+		
 		this.userid = user;
+		this.future = new FutureTask<Reference>(callable);
+		/*
+		this.future = new FutureTask<Reference>(callable) {
+			@Override
+			protected void done() {
+				status = TaskStatus.Completed;
+				super.done();
+				update();
+			}
+			
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning) {
+				boolean ok = super.cancel(mayInterruptIfRunning);
+				update();
+				status = TaskStatus.Cancelled;
+				return ok;
+			}
+			@Override
+			public void run() {
+				status = TaskStatus.Running;
+				super.run();
+			}
+			
+		};
+	*/
 	}
-	public Future<Reference> getFuture() {
+	
+
+	public FutureTask<Reference> getFuture() {
 		return future;
 	}
-	public Reference getReference() throws ExecutionException , InterruptedException, CancellationException {
+	public synchronized void update()  {
+		
 		try {
 			if (future!=null) {
 				Reference ref = future.get(100, TimeUnit.MILLISECONDS);
 				future = null;
 				completed = System.currentTimeMillis();
+				status = TaskStatus.Completed;
 				setUri(ref);
 			}
-			return uri; 
 		} catch (TimeoutException x) {
-			return uri;
+		} catch (ExecutionException x) {
+			error = x;
+			status = TaskStatus.Error;
+		} catch (InterruptedException x) {
+			error = null;
+			status = TaskStatus.Cancelled;
+		} catch (CancellationException x) {
+			error = null;
+			status = TaskStatus.Cancelled;
 		}
 	}
 	public boolean isDone() {
-		return getFuture()==null?true:getFuture().isDone();
+		return TaskStatus.Completed.equals(status) || TaskStatus.Error.equals(status);
 	}
 	public boolean cancel(boolean mayInterruptIfRunning) {
 		if (getFuture()!=null) return getFuture().cancel(mayInterruptIfRunning);
@@ -107,13 +156,14 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	@Override
 	public String toString() {
 		try {
-		return String.format("%s [%s] Started %s Completed %s [%s] [%s]",
+		return String.format("%s [%s] Started %s Completed %s [%s] [%s] %s",
 				name==null?"?":name,
-				getReference().toString(),
+				getUri(),
 				new Date(started),
 				((completed>0)?new Date(completed):"-"),
 				getStatus(),
-				userid
+				userid,
+				error==null?"":error.getMessage()
 				);
 		} catch (Exception x) {
 			return x.getMessage();

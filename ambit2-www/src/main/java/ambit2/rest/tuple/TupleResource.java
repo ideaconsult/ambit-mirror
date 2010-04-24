@@ -4,6 +4,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -73,11 +74,11 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 		IStructureRecord record = new StructureRecord();
 		tuple.setFieldname(record);
 		Object cid = getRequest().getAttributes().get(CompoundResource.idcompound);
-		if (cid == null) throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST);
+		if (cid == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		try {
 			record.setIdchemical(Integer.parseInt(cid.toString()));
 		} catch (Exception x) {
-			throw new ResourceException(status.CLIENT_ERROR_BAD_REQUEST);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		cid = getRequest().getAttributes().get(ConformerResource.idconformer);
 		try {

@@ -2,6 +2,7 @@ package ambit2.rest.algorithm;
 
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.restlet.data.Form;
@@ -18,7 +19,10 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.CatalogURIReporter;
+import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.Task;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms
@@ -26,7 +30,6 @@ import ambit2.rest.task.CallableQueryProcessor;
  *
  */
 public abstract class CatalogResource<T extends Serializable> extends AbstractResource<Iterator<T>,T,IProcessor<Iterator<T>, Representation>> {
-
 
 	@Override
 	protected void doInit() throws ResourceException {
@@ -93,26 +96,33 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			Iterator<T> query = queryObject;
 			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			
-			
+			ArrayList<Task<Reference,Object>> tasks = new ArrayList<Task<Reference,Object>>();
 			while (query.hasNext()) 
 			try {
 				T model = query.next();
 				Reference reference = getSourceReference(form,model);
-				Reference ref =  ((AmbitApplication)getApplication()).addTask(
+				Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
 						String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),
 						createCallable(form,model),
-						getRequest().getRootRef());		
-				getResponse().setLocationRef(ref);
-				//getResponse().setStatus(Status.SUCCESS_CREATED);
-				getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-				getResponse().setEntity(null);
+						getRequest().getRootRef());	
+				task.update();
+				setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+				tasks.add(task);
+
+			} catch (ResourceException x) {
+				throw x;
 			} catch (Exception x) {
-				if (x.getCause() instanceof ResourceException)
-					getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
-				else
-					getResponse().setStatus(new Status(Status.SERVER_ERROR_INTERNAL,x.getMessage()));
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 			}
-			return null;
+			if (tasks.size()==0)
+				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			else {
+				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+				if (tasks.size()==1)
+					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse());
+				else
+					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(),getResponse());				
+			}
 		}
 	}
 	

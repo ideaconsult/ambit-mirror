@@ -46,7 +46,6 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
 			count++;
 		}
 		return count == 42;
@@ -63,7 +62,6 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-		//	System.out.println(line);
 			count++;
 		}
 		return count > 0;
@@ -85,7 +83,6 @@ public class AlgorithmResourceTest extends ResourceTest {
 		RDFPropertyIterator i = new RDFPropertyIterator(ref);
 		i.setCloseModel(true);
 		while (i.hasNext()) {
-			System.out.println(i.next());
 			count++;
 		}
 		i.close();
@@ -116,7 +113,6 @@ public class AlgorithmResourceTest extends ResourceTest {
 		RDFPropertyIterator i = new RDFPropertyIterator(ref);
 		i.setCloseModel(true);
 		while (i.hasNext()) {
-			System.out.println(i.next());
 			count++;
 		}
 		i.close();
@@ -138,7 +134,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/fingerprints", port),
-				headers, Status.REDIRECTION_SEE_OTHER,
+				headers, Status.SUCCESS_OK,
 				null);		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		
@@ -467,8 +463,6 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while (taskTrain.poll()) {
 			System.out.println(taskTrain.getStatus());
 		}
-		System.out.println(taskTrain.getResult());
-		System.out.println(taskTrain.getStatus());
 
 		Form testData = new Form();  
 		testData.add(OpenTox.params.dataset_uri.toString(), 

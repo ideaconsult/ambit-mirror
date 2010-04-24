@@ -134,6 +134,11 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			*/
 			writeMoreColumns( model,output);
 			output.write("</tr>\n");
+			if (collapsed) {//single model
+				output.write(String.format(
+						"<tr ><form action=\"\" method=\"POST\"><th>Dataset URI</th><td colspan='6'><input type='text' size='80' name='dataset_uri' value=''><input type=\"submit\" value=\"Predict\"></td></form></tr>"
+						));
+			}
 		} catch (Exception x) {
 			
 		}

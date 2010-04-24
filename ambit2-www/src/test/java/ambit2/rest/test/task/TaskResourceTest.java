@@ -18,6 +18,8 @@ import org.restlet.data.Status;
 
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.TaskApplication;
+import ambit2.rest.task.Task;
 import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
@@ -116,11 +118,12 @@ public class TaskResourceTest extends ResourceTest {
 						"http://localhost:%d/compound/7", port));
 			}
 		};
-		Reference completedTaskURI = ((AmbitApplication) app).addTask(
+		Task completedTask = ((TaskApplication) app).addTask(
 				"Test task", c, new Reference(String.format(
 						"http://localhost:%d", port)));
 
-		testAsyncTask(completedTaskURI.toString(), new Form(),Status.SUCCESS_OK,String.format("http://localhost:%d/compound/7",port));
+		testAsyncTask(completedTask.getUri().toString(), 
+				new Form(),Status.SUCCESS_OK,String.format("http://localhost:%d/compound/7",port));
 
 		// ((AmbitApplication)app).removeTasks();
 

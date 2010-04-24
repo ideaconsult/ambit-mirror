@@ -18,6 +18,7 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.Server;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
@@ -39,6 +40,7 @@ import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.task.RemoteTask;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
@@ -60,8 +62,10 @@ public abstract class ResourceTest extends DbUnitTest {
         
         // Create a component
         component = new AmbitComponent(context);
-        component.getServers().add(Protocol.HTTP, port);
-        component.getServers().add(Protocol.HTTPS, port);        
+        Server server = component.getServers().add(Protocol.HTTP, port);
+        component.getServers().add(Protocol.HTTPS, port);   
+      
+        server.getContext().getParameters().set("tracing", "true",true);             
         component.start();        
 	}
 
@@ -111,20 +115,57 @@ public abstract class ResourceTest extends DbUnitTest {
 		return client.handle(request);
 	}
 	
+	protected void testAsyncPoll(Reference ref, MediaType media, Representation rep, Method method, Reference expected) throws Exception {
+		RemoteTask task = new RemoteTask(ref,media,rep,method,new ChallengeResponse(ChallengeScheme.HTTP_BASIC,"guest","guest"));
+		
+		while (!task.poll()) {
+			Thread.yield();
+			Thread.sleep(200);
+			System.out.print("poll ");
+			System.out.println(task);
+		}
+		if (task.isERROR()) throw task.getError();
+
+		Assert.assertEquals(Status.SUCCESS_OK, task.getStatus());
+		Assert.assertEquals(expected,task.getResult());
+		
+       
+	}
 	
+	public Reference testAsyncTask(String uri,Form form,Status expected, String uriExpected) throws Exception {
+		RemoteTask task = new RemoteTask(
+				new Reference(uri),
+				MediaType.TEXT_URI_LIST,
+				form.getWebRepresentation(),
+				Method.POST,
+				null);
+		if (task.isERROR()) throw task.getError();
+		Assert.assertNotNull(task.getResult());
+		while (!task.poll()) {
+			Thread.yield();
+			Thread.sleep(200);
+		}
+		Assert.assertEquals(expected, task.getStatus());
+		Assert.assertEquals(uriExpected, task.getResult().toString());
+		return task.getResult();
+		
+	}
+	/*
 	public Reference testAsyncTask(String uri,Form headers,Status expected, String uriExpected) throws Exception {
 
 		Response response  =  testPost(uri,MediaType.TEXT_URI_LIST,headers.getWebRepresentation());
 		Status status = response.getStatus();
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER,status);
+		Assert.assertEquals(Status.SUCCESS_ACCEPTED,status);
 		
-		Assert.assertNotNull(response.getLocationRef());
+		uri = response.getEntity().getText().trim();
+		Assert.assertNotNull(uri);
+		
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		request.setResourceRef(response.getLocationRef());
+		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(MediaType.TEXT_URI_LIST));
-		Reference ref = response.getLocationRef();
+		Reference ref = new Reference(uri);
 		response.release();
 		while (status.equals(Status.REDIRECTION_SEE_OTHER) || status.equals(Status.SUCCESS_ACCEPTED)) {
 			System.out.println(status);
@@ -134,8 +175,11 @@ public abstract class ResourceTest extends DbUnitTest {
 			try  {
 				response1 = client.handle(request);
 				status = response1.getStatus();
-				if (Status.REDIRECTION_SEE_OTHER.equals(status)) {
-					ref = response1.getLocationRef();
+				if (Status.SUCCESS_OK.equals(status)) {
+					ref = new Reference(response1.getEntityAsText().trim());
+					break;
+				} else 		if (Status.SUCCESS_ACCEPTED.equals(status)) {
+					ref = new Reference(response1.getEntityAsText().trim());
 					request.setResourceRef(ref);
 					if (ref == null) break;
 				} 
@@ -150,6 +194,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		Assert.assertEquals(expected, status);
 		return ref;
 	}	
+	*/
 	public Response testGet(String uri, MediaType media, Status expectedStatus) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);

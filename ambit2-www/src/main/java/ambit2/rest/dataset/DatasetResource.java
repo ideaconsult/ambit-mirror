@@ -14,6 +14,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
@@ -223,8 +224,8 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		}
 		try {
 			getResponse().setLocationRef(callable.call());
-			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-			return getResponseEntity();
+			getResponse().setStatus(Status.SUCCESS_OK);
+			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
 		} catch  (Exception x) {
 			throw new ResourceException(x);
 		}

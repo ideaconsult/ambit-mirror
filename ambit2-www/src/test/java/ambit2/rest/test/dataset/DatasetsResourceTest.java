@@ -1,9 +1,9 @@
 package ambit2.rest.test.dataset;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 import junit.framework.Assert;
 
@@ -24,6 +24,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -73,20 +74,20 @@ public class DatasetsResourceTest extends ResourceTest {
 		return count>0;
 	}		
 	public Response testPost(String uri, MediaType media, String content) throws Exception {
+
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
-		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
-		ChallengeResponse authentication = new ChallengeResponse(scheme,  
-		         "guest", "guest");  
-		request.setChallengeResponse(authentication);  		
+		  
+		request.setChallengeResponse(new ChallengeResponse( ChallengeScheme.HTTP_BASIC,"guest", "guest"));  		
 		request.setResourceRef(uri);
 		request.setMethod(Method.POST);
 		request.setEntity(content,media);
 		//request.getAttributes().put("org.restlet.http.headers", headers);		
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		return client.handle(request);
+
 	}
-	
+	/*
 	public Response testPostFile(String uri, MediaType media, Representation file) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
@@ -100,7 +101,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
 		return client.handle(request);
 	}	
-		
+	*/
 	@Test
 	public void testCreateEntry() throws Exception {
 		
@@ -113,24 +114,10 @@ public class DatasetsResourceTest extends ResourceTest {
 			b.append(line);
 			b.append('\n');
 		}
-		Response r = testPost(getTestURI(), ChemicalMediaType.CHEMICAL_MDLSDF, b.toString());
-		Reference uri = r.getLocationRef();
 		
-		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
-			//System.out.println(r.getStatus() + " " +r.getLocationRef());
-			if (r.getStatus().equals(Status.CLIENT_ERROR_BAD_REQUEST)) 
-				throw new ResourceException(r.getStatus());
-			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_ACCEPTABLE))
-				throw new ResourceException(r.getStatus());
-			Request request = new Request();
-			Client client = new Client(Protocol.HTTP);
-			request.setResourceRef(uri);
-			request.setMethod(Method.GET);
-			r = client.handle(request);
-			uri = r.getLocationRef();
-		}
-		//System.out.println(r.getLocationRef());
-	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, 
+				new StringRepresentation(b.toString(),ChemicalMediaType.CHEMICAL_MDLSDF),Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
@@ -165,14 +152,11 @@ public class DatasetsResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/R1", port));
 		
-		Response response =  testPost(
-					String.format("http://localhost:%d/dataset", port),
-					MediaType.APPLICATION_WWW_FORM,
-					form.getWebRepresentation());
-		Assert.assertEquals(Status.REDIRECTION_SEE_OTHER, response.getStatus());
-		Assert.assertEquals(String.format("http://localhost:%d/dataset/R3", port), response.getLocationRef().toString());
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/R3", port)));
 
-		
+	
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
 		Assert.assertEquals(1,table.getRowCount());
@@ -215,59 +199,29 @@ public class DatasetsResourceTest extends ResourceTest {
 			b.append(line);
 			b.append('\n');
 		}
-		Response r = testPost(getTestURI(), MediaType.APPLICATION_RDF_XML, b.toString());
-		Reference uri = r.getLocationRef();
 		
-		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
-			System.out.println(r.getStatus() + " " +r.getLocationRef());
-			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_FOUND))
-				throw new ResourceException(r.getStatus());
-			if (r.getStatus().equals(Status.CLIENT_ERROR_BAD_REQUEST)) 
-				throw new ResourceException(r.getStatus());
-			if (r.getStatus().equals(Status.CLIENT_ERROR_NOT_ACCEPTABLE))
-				throw new ResourceException(r.getStatus());
-			Request request = new Request();
-			Client client = new Client(Protocol.HTTP);
-			request.setResourceRef(uri);
-			request.setMethod(Method.GET);
-			System.out.println("read "+uri);
-			r = client.handle(request);
-			System.out.println("done "+uri);
-			uri = r.getLocationRef();
-		}
-		//System.out.println(r.getLocationRef());
-	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		testAsyncPoll(new Reference(getTestURI()),MediaType.TEXT_URI_LIST, 
+				new StringRepresentation(b.toString(),MediaType.APPLICATION_RDF_XML),Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
 
 		
 	}	
-	
+	@Test
 	public void testCreateEntryFromFileRDF() throws Exception {
-		
+		URL url = getClass().getClassLoader().getResource("input.rdf");
 		FileRepresentation rep = new FileRepresentation(
-				"E:/src/ambit2-all/ambit2-www/src/test/resources/input.rdf", 
+				url.getFile(),
 				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
 				 MediaType.APPLICATION_RDF_XML, 0);
 				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
 				
-		Response r = testPostFile(getTestURI(), MediaType.APPLICATION_RDF_XML, rep);
-		Reference uri = r.getLocationRef();
-		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
-			//System.out.println(r.getStatus() + " " +r.getLocationRef());
-			
-			Request request = new Request();
-			Client client = new Client(Protocol.HTTP);
-			request.setResourceRef(uri);
-			request.setMethod(Method.GET);
-			r = client.handle(request);
-			uri = r.getLocationRef();
-		}
-		System.out.println(r.getStatus());
-		//System.out.println(r.getLocationRef());
-	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		testAsyncPoll(new Reference(getTestURI()),MediaType.TEXT_URI_LIST,
+				rep,Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(5,table.getRowCount());
+		Assert.assertEquals(527,table.getRowCount());
 		c.close();
 		
 	}		
@@ -275,59 +229,43 @@ public class DatasetsResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntryFromFile() throws Exception {
 		
-		FileRepresentation rep = new FileRepresentation(
-				"E:/src/ambit2-all/ambit2-www/src/test/resources/input.sdf", 
-				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
-				ChemicalMediaType.CHEMICAL_MDLSDF, 0);
-				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
-				
-		Response r = testPostFile(getTestURI(), ChemicalMediaType.CHEMICAL_MDLSDF, rep);
-		Reference uri = r.getLocationRef();
-		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
-			//System.out.println(r.getStatus() + " " +r.getLocationRef());
-			
-			Request request = new Request();
-			Client client = new Client(Protocol.HTTP);
-			request.setResourceRef(uri);
-			request.setMethod(Method.GET);
-			r = client.handle(request);
-			uri = r.getLocationRef();
-		}
-		System.out.println(r.getStatus());
-		//System.out.println(r.getLocationRef());
-	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
-		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+		
+		URL url = getClass().getClassLoader().getResource("input.sdf");
+		FileRepresentation rep = new FileRepresentation(
+				url.getFile(),
+				ChemicalMediaType.CHEMICAL_MDLSDF, 0);
+
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, rep,Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(12,table.getRowCount());
 		c.close();
 		
 	}	
 	
-	
+
+	@Test
 	public void testCreateEntryFromCSVFile() throws Exception {
-		
+		URL url = getClass().getClassLoader().getResource("PK-test.csv");
 		FileRepresentation rep = new FileRepresentation(
-				"E:/src/ambit2-all/ambit2-www/src/test/resources/PK-test.csv", 
+				url.getFile(), 
 				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
 				MediaType.TEXT_CSV, 0);
 				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
 				
-		Response r = testPostFile(getTestURI(), MediaType.TEXT_CSV, rep);
-		Reference uri = r.getLocationRef();
-		while (!r.getStatus().equals(Status.SUCCESS_OK)) {
-			//System.out.println(r.getStatus() + " " +r.getLocationRef());
-			
-			Request request = new Request();
-			Client client = new Client(Protocol.HTTP);
-			request.setResourceRef(uri);
-			request.setMethod(Method.GET);
-			r = client.handle(request);
-			uri = r.getLocationRef();
-		}
-		System.out.println(r.getStatus());
-		//System.out.println(r.getLocationRef());
-	//	Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+
+		testAsyncPoll(new Reference(getTestURI()), MediaType.TEXT_URI_LIST, 
+				rep,
+				Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
+
+		
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure join struc_dataset using(idstructure) where id_srcdataset=4");
@@ -509,9 +447,9 @@ public class DatasetsResourceTest extends ResourceTest {
 	public void testAddCompoundsToDataset() throws Exception {
 		//String dataset = "http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/288";
 		String dataset = String.format("http://localhost:%d/dataset/1", port);
-		String file = "E:/src/ambit2-all/ambit2-www/src/test/resources/test.sdf";
-		Reference reference = upload(new Reference(dataset),
-		new FileRepresentation(new File(file),
+		
+		URL url = getClass().getClassLoader().getResource("test.sdf");
+		Reference reference = upload(new Reference(dataset),new FileRepresentation(url.getFile(),
 		ChemicalMediaType.CHEMICAL_MDLSDF),
 		new Variant(MediaType.TEXT_URI_LIST),
 		false);
@@ -531,6 +469,7 @@ public class DatasetsResourceTest extends ResourceTest {
 			//task.poll() returns true if completed
 			while (!task.poll()) {
 				Thread.sleep(1500);
+				System.out.println(task);
 			}
 			if (Status.SUCCESS_OK.equals(task.getStatus())) {
 				return task.getResult();

@@ -16,6 +16,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.rest.AbstractResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.TaskApplication;
 
@@ -82,14 +83,16 @@ public class LauncherResource extends ServerResource {
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		try {
-			Reference ref =  ((TaskApplication)getApplication()).addTask(
+			
+			
+			Task<Reference,Object> ref =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(new Form(entity)),
 					getRequest().getRootRef(),false);		
-			getResponse().setLocationRef(ref);
-			//getResponse().setStatus(Status.SUCCESS_CREATED);
-			getResponse().setStatus(Status.REDIRECTION_SEE_OTHER);
-			return new StringRepresentation(ref.toString());
+			
+			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>();
+			return tc.createTaskRepresentation(ref, variant,getRequest(), getResponse());
+
 		} catch (Exception x) {
 			if (x.getCause() instanceof ResourceException)
 				getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());

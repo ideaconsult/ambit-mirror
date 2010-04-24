@@ -6,13 +6,10 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.Protocol;
-import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
-import org.restlet.service.TunnelService;
 
 import ambit2.rest.AmbitStatusService;
-import ambit2.rest.AmbitTunnelFilter;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.RESTComponent;
@@ -27,12 +24,14 @@ public class LauncherApplication<USERID> extends TaskApplication<USERID>{
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
 		setStatusService(new AmbitStatusService());
+		/*
 		setTunnelService(new TunnelService(true,true) {
 			@Override
 			public Filter createInboundFilter(Context context) {
 				return new AmbitTunnelFilter(context);
 			}
 		});
+		*/
 		getTunnelService().setUserAgentTunnel(true);
 		getMetadataService().setEnabled(true);
 		getMetadataService().addExtension("sdf", ChemicalMediaType.CHEMICAL_MDLSDF, true);
