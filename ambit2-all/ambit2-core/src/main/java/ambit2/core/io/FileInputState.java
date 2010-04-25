@@ -38,10 +38,11 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int PDB_INDEX = 9;
 	public transient static final int XLS_INDEX = 10;	
 	public transient static final int EURAS_INDEX = 11;
-	public transient static final int ECHAXML_INDEX = 12;	
+	public transient static final int ECHAXML_INDEX = 12;
 	
 	//TODO support for .xlsx 
-	public transient static final String[] extensions = {".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls",".xml"};
+	public transient static final String[] extensions = {
+		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls",".xml"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -105,11 +106,13 @@ public class FileInputState extends FileState implements IInputState {
 			}
 		} else if (ext.endsWith(extensions[TXT_INDEX])) {
 			try {
-				if ((format != null) && (format instanceof DelimitedFileFormat))
-					return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
-				else
-					return new IteratingDelimitedFileReader(stream,new DelimitedFileFormat(" \t",'"'));			
-						//new DelimitedFileFormat('\t','"'));		
+				if ((format != null) && (format instanceof DelimitedFileFormat)) {
+					DelimitedFileFormat df = (DelimitedFileFormat) format;
+					if (df.fieldDelimiter.equals("\t") && (df.textDelimiter=='"'))
+						return new ToxcastAssayReader(stream);
+					else return new IteratingDelimitedFileReader(stream,(DelimitedFileFormat)format);
+				} else
+					return new ToxcastAssayReader(stream);		
 			} catch (Exception x) {
 				throw new AmbitIOException(x);
 			}
@@ -130,7 +133,7 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[XLS_INDEX])) {
 			return new IteratingXLSReader(stream,0);
 		} else if (ext.endsWith(extensions[ECHAXML_INDEX])) {
-			return new ECHAPreregistrationListReader(stream);			
+			return new ECHAPreregistrationListReader(stream);	
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
 	

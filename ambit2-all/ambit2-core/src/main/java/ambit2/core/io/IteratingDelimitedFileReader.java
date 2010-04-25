@@ -55,6 +55,15 @@ import ambit2.core.data.EINECS;
 public class IteratingDelimitedFileReader extends
 		IteratingFilesWithHeaderReader implements IIteratingChemObjectReader {
     public static String defaultSMILESHeader = "SMILES";
+    protected String commentChar = "#";
+	public String getCommentChar() {
+		return commentChar;
+	}
+
+	public void setCommentChar(String commentChar) {
+		this.commentChar = commentChar;
+	}
+
 	private BufferedReader input;
 
 	private boolean nextAvailableIsKnown;
@@ -241,11 +250,17 @@ public class IteratingDelimitedFileReader extends
         return options;
 	}
 	*/
+	protected void processComment(String line) {
+		
+	}
 	protected void processHeader(BufferedReader in) {
 		try {
 			
 			String line = in.readLine();
-
+			while (line.startsWith(commentChar)) {
+				processComment(line);
+				line = in.readLine();
+			}
 			StringTokenizer st = new StringTokenizer(line,new String(format.getFieldDelimiter()));
 			while (st.hasMoreTokens()) {
 				addHeaderColumn(st.nextToken().trim());	
@@ -262,7 +277,7 @@ public class IteratingDelimitedFileReader extends
 		}
 	}
 
-	private String removeStringDelimiters(String key) {
+	protected String removeStringDelimiters(String key) {
 		char textDelimiter = format.getTextDelimiter();
 		String k = key.trim();
 		if (k.length() == 0)
