@@ -143,6 +143,8 @@ public class Property extends Model implements Serializable {
 		if (n==null) return null;
 		n = n.toLowerCase();
 		if (n.startsWith("cas")) return opentox_CAS;
+		else if (n.contains("testsubstance_casrn")) 
+			return opentox_CAS;
 		else if (n.contains("species")) return "Species";
 		else if (n.contains("iupac")) return opentox_IupacName;	
 		else if (n.contains("name")) return opentox_Name;
