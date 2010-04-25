@@ -42,12 +42,12 @@ import ambit2.core.smiles.SmilesParserWrapper;
  * @author Nina Jeliazkova
  *
  */
-public abstract class IteratingFilesWithHeaderReader extends
+public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 		DefaultIteratingChemObjectReader {
 	protected SmilesParserWrapper sp = null;
 	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);	
 	public static String defaultSMILESHeader = "SMILES";
-	private ArrayList<Property> header;
+	private ArrayList<COLUMN> header;
 	protected int smilesIndex = -1;
 	protected long timeout = 60000; //ms
 	protected int numberOfHeaderLines = 1;
@@ -74,16 +74,21 @@ public abstract class IteratingFilesWithHeaderReader extends
 	}
 	protected abstract LiteratureEntry getReference();
 	protected void addHeaderColumn(String name) {
-		header.add(Property.getInstance(name,getReference()));
+		header.add(createPropertyByColumnName(name));
+		
 		fireIOSettingQuestion(new StringIOSetting(name,IOSetting.MEDIUM,Property.IO_QUESTION.IO_TRANSLATE_NAME.toString(),name));
 	}
 	protected void setHeaderColumn(int index,String name) {
 		header.ensureCapacity(index);
 		while (index > header.size())
-			header.add(Property.getInstance("",getReference()));
+			header.add(createPropertyByColumnName(""));
+
 		addHeaderColumn(name);
 	}	
-	protected Property getHeaderColumn(int index) {
+	
+	protected abstract COLUMN createPropertyByColumnName(String name);
+	
+	protected COLUMN getHeaderColumn(int index) {
 		return header.get(index);
 	}
 	protected int getNumberOfColumns() {
@@ -91,9 +96,10 @@ public abstract class IteratingFilesWithHeaderReader extends
 	}
 	protected boolean isHeaderEmpty() {
 		boolean ok = header==null;
-		if (ok) header = new ArrayList<Property>();
+		if (ok) header = createHeader();
 		return ok;
 	}
+	protected abstract ArrayList<COLUMN> createHeader();
 }
 
 

@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -53,7 +54,7 @@ import ambit2.core.data.EINECS;
  * @author Nina Jeliazkova <b>Modified</b> 2005-9-5
  */
 public class IteratingDelimitedFileReader extends
-		IteratingFilesWithHeaderReader implements IIteratingChemObjectReader {
+		IteratingFilesWithHeaderReader<String> implements IIteratingChemObjectReader {
     public static String defaultSMILESHeader = "SMILES";
     protected String commentChar = "#";
 	public String getCommentChar() {
@@ -172,11 +173,12 @@ public class IteratingDelimitedFileReader extends
 						if (values[i]!=null)  {
 							String cas = casTransformer.process(values[i].toString());
 							if (CASProcessor.isValidFormat(cas)) {
-								getHeaderColumn(i).setLabel(Property.CAS);
+								//if (getHeaderColumn(i) instanceof Property)
+									//getHeaderColumn(i).setLabel(Property.CAS);
 								values[i] = cas;
 							}
-							else if (EINECS.isValidFormat(values[i].toString()))
-								getHeaderColumn(i).setLabel(Property.EC);
+							//else if (EINECS.isValidFormat(values[i].toString())) 
+								//getHeaderColumn(i).setLabel(Property.EC);
 							nextMolecule.setProperty(getHeaderColumn(i), 
 									values[i].toString().trim());
 						} else  
@@ -316,5 +318,13 @@ public class IteratingDelimitedFileReader extends
     @Override
 	public String toString() {
         return "Reading compounds from " + format.toString(); 
+    }
+    @Override
+    protected ArrayList<String> createHeader() {
+    	return new ArrayList<String>();
+    }
+    @Override
+    protected String createPropertyByColumnName(String name) {
+    	return name;
     }
 }

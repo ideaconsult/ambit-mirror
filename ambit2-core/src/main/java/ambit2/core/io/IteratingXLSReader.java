@@ -27,6 +27,7 @@ package ambit2.core.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -56,7 +57,7 @@ import ambit2.core.config.AmbitCONSTANTS;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
  */
-public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
+public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property> {
 	protected HSSFWorkbook workbook;
 	protected HSSFSheet sheet;
 	protected Iterator iterator;
@@ -68,6 +69,14 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader {
 		super();
 		this.sheetIndex = sheetIndex;
 		setReader(input);
+	}
+	@Override
+	protected ArrayList<Property> createHeader() {
+		return new ArrayList<Property>();
+	}
+	@Override
+	protected Property createPropertyByColumnName(String name) {
+		return Property.getInstance(name,getReference());
 	}
 	public void setReader(InputStream input) throws CDKException {
 		try {
