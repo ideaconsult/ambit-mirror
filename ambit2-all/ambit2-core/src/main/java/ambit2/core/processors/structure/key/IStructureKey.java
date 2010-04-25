@@ -35,4 +35,99 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 	public Object getKey();
 	public Object getQueryKey();
 	public Class getType();
+	
+	public enum Matcher {
+
+		CAS {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.CASKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by CAS registry number";
+			}			
+		},
+		EINECS {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.EINECSKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by EINECS registry number";
+			}			
+		},
+		PubChemID {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.PubchemCID";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by PubChem Compound ID (PUBCHEM_COMPOUND_CID)";
+			}			
+		},
+		DSSToxCID {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.DSSToxCID";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by SSTox Chemical ID (DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files";
+			}			
+		},
+		DSSToxRID {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.DSSToxRID";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files";
+			}			
+		},
+		InChI {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.InchiPropertyKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by InChi";
+			}
+		},
+		SMILES {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.SmilesKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by SMILES";
+			}
+		},
+		None {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.NoneKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Add as a new structure";
+			}			
+		};	
+		public abstract String getClassName();
+		public abstract String getDescription();
+		public IStructureKey getMatcher() {
+			try {
+				Class classDefinition = Class.forName(getClassName());
+				return (IStructureKey) classDefinition.newInstance();
+			} catch (Exception x) {
+				return null;
+			}
+		}
+				
+	}
 }
