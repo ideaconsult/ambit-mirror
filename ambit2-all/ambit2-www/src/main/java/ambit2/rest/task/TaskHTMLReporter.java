@@ -32,7 +32,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 						baseReference,SimpleTaskResource.resource,status,status));
 			output.write("</h4><p>");
 			output.write("<table>");
-			output.write("<tr><th>Start time</th><th>End time</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
+			output.write("<tr><th>Start time</th><th>Elapsed time,ms</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
 			
 		}
@@ -51,7 +51,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 			try {output.write(
 					String.format("<tr><td>%s</td><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td><td>%s</td></tr>",
 							new Date(item.started),
-							item.completed>0?new Date(item.completed):"",
+							item.completed>0?item.completed-item.started:"",
 							baseReference.toString(),
 							SimpleTaskResource.resource,
 							item.getUuid(),
