@@ -25,6 +25,8 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
+import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.IQueryRetrieval;
@@ -37,7 +39,25 @@ import ambit2.rest.dataset.RDFIteratingReader;
 public class CallableFileImport implements	java.util.concurrent.Callable<Reference> {
 	protected SourceDataset targetDataset;
 	protected ClientInfo client;
+	protected boolean propertyOnly = false;
+	public boolean isPropertyOnly() {
+		return propertyOnly;
+	}
+
+	public void setPropertyOnly(boolean propertyOnly) {
+		this.propertyOnly = propertyOnly;
+	}
+
+	protected IStructureKey propertyKey = new CASKey();
 	
+	public IStructureKey getMatcher() {
+		return propertyKey;
+	}
+
+	public void setMatcher(IStructureKey matchByProperty) {
+		this.propertyKey = matchByProperty;
+	}
+
 	protected File file;
 	protected File getFile() {
 		return file;
@@ -71,6 +91,20 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 	
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,List<FileItem> items, String fileUploadField, Connection connection,DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
 		this(client,dataset,(File)null,connection,reporter);
+		
+        for (final Iterator<FileItem> it = items.iterator(); it.hasNext(); ) {
+        	FileItem fi = it.next();
+        	if (!fi.isFormField()) continue;
+        	if (fi.getFieldName().equals("match")) {
+        		try {
+        			setMatcher(IStructureKey.Matcher.valueOf(fi.getString()).getMatcher());
+        			break;
+        		} catch (Exception x) {
+        			setMatcher(null);
+        		}
+
+        	}
+        }			
 		upload = new CallableFileUpload(items,fileUploadField) {
 			@Override
 			public Reference createReference() {
@@ -81,6 +115,7 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 				setFile(file);
 			}
 		};
+	
 	}	
 	protected String getExtension(MediaType mediaType) {
 		if (ChemicalMediaType.CHEMICAL_MDLSDF.equals(mediaType)) return ".sdf";
@@ -196,6 +231,8 @@ public class CallableFileImport implements	java.util.concurrent.Callable<Referen
 			
 			batch.setConnection(connection);
 			final RepositoryWriter writer = new RepositoryWriter();
+			writer.setPropertiesOnly(isPropertyOnly());
+			writer.setPropertyKey(getMatcher());
 			writer.setDataset(dataset);
 			final ProcessorsChain<String, IBatchStatistics, IProcessor> chain = new ProcessorsChain<String, IBatchStatistics, IProcessor>();
 			chain.add(writer);

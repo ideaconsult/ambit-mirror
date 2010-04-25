@@ -10,8 +10,10 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ClassHolder;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;
@@ -48,6 +50,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	public final static String datasets = "/datasets";	
 	public final static String metadata = "/metadata";	
 	protected FileUpload upload;
+	protected IStructureKey matcher;
 
 	//public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
 	
@@ -75,6 +78,21 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		upload.setContext(getContext());
 		upload.setApplication(getApplication());
 		upload.setDataset(dataset);
+		
+
+		/*
+				new ClassHolder[] {
+						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.EINECSKey","EINECS registry number","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.PubchemCID","PubChem Compound ID (PUBCHEM_COMPOUND_CID)","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","DSSTox Chemical ID DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.DSSToxRID","DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files","",""),						
+						new ClassHolder("ambit2.core.processors.structure.key.InchiPropertyKey","InChi","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.SmilesKey","SMILES","",""),
+						//new ClassHolder("ambit2.core.processors.structure.key.PropertyKey","Other property - to be defined","",""),
+				},"Match chemical compounds from file and the database by:"
+				);
+		 */
 		
 	}
 	@Override
@@ -146,10 +164,17 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
-		return  upload.upload(entity,variant,true);
+		return  upload.upload(entity,variant,true,false);
 		
 	}
-	
+	/**
+	 * Creates a dataset, but if a structure is found, import only properties 
+	 */
+	@Override
+	protected Representation put(Representation entity, Variant variant)
+			throws ResourceException {
+		return  upload.upload(entity,variant,true,true);
+	}
 
 
 
