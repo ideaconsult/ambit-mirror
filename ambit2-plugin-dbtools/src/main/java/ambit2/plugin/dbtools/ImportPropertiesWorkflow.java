@@ -112,7 +112,7 @@ public class ImportPropertiesWorkflow extends Workflow  {
         	public SourceDataset execute() throws Exception {
         			SourceDataset dataset = 
         						new SourceDataset(getTarget().getFile().getName(),
-        						LiteratureEntry.getInstance(getTarget().getFilename(),"file"));
+        						LiteratureEntry.getInstance(getTarget().getFile().getName(),getTarget().getFilename()));
         			writer.setDataset(dataset);
         			return dataset;
         	};
@@ -130,6 +130,8 @@ public class ImportPropertiesWorkflow extends Workflow  {
 
 	}
 	
+	
+	
 	public Sequence getMatchKeySequence(final PropertyImporter writer) {
 		Sequence seq = new Sequence();
 		final SelectionBean<ClassHolder> selection = new SelectionBean<ClassHolder>(
@@ -137,7 +139,7 @@ public class ImportPropertiesWorkflow extends Workflow  {
 						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.EINECSKey","EINECS registry number","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.PubchemCID","PubChem Compound ID (PUBCHEM_COMPOUND_CID)","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","SSTox Chemical ID DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","DSSTox Chemical ID DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.DSSToxRID","DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files","",""),						
 						new ClassHolder("ambit2.core.processors.structure.key.InchiPropertyKey","InChi","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.SmilesKey","SMILES","",""),
