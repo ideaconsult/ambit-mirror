@@ -71,12 +71,12 @@ public class Step5Processor extends StepProcessor {
 								String launcher = String.format("%s/algorithm",getBaseReference());
 								query.add(ambit2.rest.OpenTox.params.model_uri.toString(),model);
 								task = new RemoteTask(new Reference(launcher),
-										MediaType.APPLICATION_WWW_FORM,
+										MediaType.TEXT_URI_LIST,
 										query.getWebRepresentation()
 										,Method.POST,authentication);
 							} else 
 								task = new RemoteTask(new Reference(model),
-									MediaType.APPLICATION_WWW_FORM,
+										MediaType.TEXT_URI_LIST,
 									query.getWebRepresentation()
 									,Method.POST,authentication);
 							
