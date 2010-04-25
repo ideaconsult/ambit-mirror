@@ -42,6 +42,9 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	protected String name = "Default";
 	protected long started = System.currentTimeMillis();
 	protected long completed = -1;
+	public long getCompleted() {
+		return completed;
+	}
 	protected float percentCompleted = 0;
 	protected USERID userid;
 	protected UUID uuid = UUID.randomUUID();
