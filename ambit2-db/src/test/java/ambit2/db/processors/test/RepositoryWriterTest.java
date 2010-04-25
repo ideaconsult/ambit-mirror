@@ -759,7 +759,7 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(5,strucs.getRowCount());
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='Imported properties'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
-		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset join src_dataset using(id_srcdataset) where name='Imported properties'");
 		Assert.assertEquals(2,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
@@ -823,8 +823,8 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(5,strucs.getRowCount());
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='Imported properties'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
-		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
-		Assert.assertEquals(2,struc_src.getRowCount());
+		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset join src_dataset using(id_srcdataset) where name='Imported properties'");
+		Assert.assertEquals(1,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(43,property.getRowCount());
@@ -833,9 +833,9 @@ delete from struc_dataset where idstructure>3
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
 		Assert.assertEquals(2,property_values.getRowCount());			
 		tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(5,tuples.getRowCount());			
+		Assert.assertEquals(3,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
-		Assert.assertEquals(115,p_tuples.getRowCount());				
+		Assert.assertEquals(66,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties
