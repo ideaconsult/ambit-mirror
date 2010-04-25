@@ -7,9 +7,10 @@ import java.util.Iterator;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.Task;
-import ambit2.rest.task.Task.taskStatus;
+import ambit2.rest.task.Task.TaskStatus;
 
 public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<Reference,IToxPredictUser>> {
 
@@ -24,13 +25,13 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 	public void header(Writer output, Iterator<Task<Reference,IToxPredictUser>> query) {
 		try {
 			output.write("<html><body>");
-		//mbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
-			for (taskStatus status :taskStatus.values())
-				output.write(String.format("<a href='?search=%s'>%s</a>&nbsp;",status,status));
+			for (TaskStatus status :TaskStatus.values())
+				output.write(String.format("<a href='%s%s?search=%s'>%s</a>&nbsp;",
+						baseReference,SimpleTaskResource.resource,status,status));
 			output.write("</h4><p>");
 			output.write("<table>");
-			output.write("<tr><th>Start time</th><th>Task</th><th colspan='2'>Status</th></tr>");
+			output.write("<tr><th>Start time</th><th>End time</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
 			
 		}
@@ -39,7 +40,7 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 		String t = "";
 		String status = "Unknown";
 		try {
-			t = item.getReference().toString();
+			t = item.getUri()==null?"":item.getUri().toString();
 			status = item.getStatus();
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -49,10 +50,16 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 			try {output.write(
 					String.format("<tr><td>%s</td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>",
 							new Date(item.getStarted()),
+							item.getCompleted()>0?new Date(item.getCompleted()):"",
+							baseReference.toString(),
+							SimpleTaskResource.resource,
+							item.getUuid(),
+							item.getUuid(),
 							t,item.getName(),
 							baseReference.toString(),
 							item.isDone()?"tick.png":"24x24_ambit.gif",
-								status
+							status,
+							item.getError()==null?"":item.getError().getMessage()
 							)); } catch (Exception x) {
 				x.printStackTrace();
 			}
@@ -63,7 +70,6 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 		try {
 			output.write("</table>");
 			output.write("</body></html>");
-			//AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
 			
