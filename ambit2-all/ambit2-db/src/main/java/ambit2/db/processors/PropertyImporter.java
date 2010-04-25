@@ -53,6 +53,7 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructure;
+import ambit2.db.update.dataset.DatasetAddStructure;
 
 /**
  * Imports only properties, doesn't write structures - TODO merge with repository writer
@@ -68,6 +69,7 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 	protected PropertyValuesWriter propertyWriter;
 	protected IStructureKey queryKey;
 	protected AbstractStructureQuery query_property;
+	protected DatasetAddStructure datasetAddStruc = new DatasetAddStructure();
 	
 	public PropertyImporter() {
 		propertyWriter = new PropertyValuesWriter();
@@ -144,14 +146,20 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 				else 
 					query_property.setFieldname(null);
 				rs = queryexec.process(query_property);
+				
+				IStructureRecord old_structure = null;
 				while (rs.next()) {
 					IStructureRecord structure = query_property.getObject(rs);
+					if ((old_structure!=null)
+						&& (structure.getIdchemical()==old_structure.getIdchemical())
+						&& (structure.getIdstructure()==old_structure.getIdstructure())) continue;
 					structure.setReference(getDataset().getReference());
 					structure.clearProperties();
 					structure.addProperties(molecule.getProperties());
+					writeDataset(structure);
 					propertyWriter.process(structure);
 					sr.add(structure);
-					
+					old_structure = structure;
 				}
 				if (sr.size()==0)
 					throw new AmbitException("No matching entry! "+getPropertyKey()+"="+value);	
@@ -164,4 +172,13 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 		return sr;
 	}
 	
+	
+	
+	protected void writeDataset(IStructureRecord structure) throws SQLException, AmbitException, OperationNotSupportedException {
+		if (getDataset() == null) setDataset(new SourceDataset("Default"));
+		
+		datasetAddStruc.setObject(structure);
+		datasetAddStruc.setGroup(getDataset());
+		exec.process(datasetAddStruc);
+	}
 }

@@ -35,6 +35,8 @@ import javax.naming.OperationNotSupportedException;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
+import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.SmilesKey;
@@ -45,6 +47,7 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructure;
+import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
 
 /**
 <pre>
@@ -68,7 +71,16 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
 	protected StructureNormalizer normalizer = new StructureNormalizer(); 
+	protected boolean propertiesOnly = false;
 	
+	public boolean isPropertiesOnly() {
+		return propertiesOnly;
+	}
+
+
+	public void setPropertiesOnly(boolean propertiesOnly) {
+		this.propertiesOnly = propertiesOnly;
+	}
 	protected final String idchemical_tag="idchemical";
 	
 	public RepositoryWriter() {
@@ -89,8 +101,8 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		return propertyKey;
 	}
 	public void setPropertyKey(IStructureKey propertyKey) {
-		this.propertyKey = propertyKey;
-		if ((propertyKey.getType() == Number.class) || (propertyKey.getType() == Integer.class) ||(propertyKey.getType() == Double.class))
+		this.propertyKey = propertyKey==null?new CASKey():propertyKey;
+		if ((this.propertyKey.getType() == Number.class) || (this.propertyKey.getType() == Integer.class) ||(this.propertyKey.getType() == Double.class))
 			query_property = new QueryFieldNumeric();
 		else
 			query_property = new QueryField();
@@ -126,8 +138,9 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 				query.setFieldname(key);
 			rs = queryexec.process(query);
 			while (rs.next()) {
-				record.setIdchemical(rs.getInt(2));
-
+				record.setIdchemical(rs.getInt(FIELD_NAMES.idchemical.ordinal()+1));
+				if (propertiesOnly && (record.getType().equals(STRUC_TYPE.NA))) 
+					record.setIdstructure(rs.getInt(FIELD_NAMES.idstructure.ordinal()+1));
 				break;
 			}
 		
