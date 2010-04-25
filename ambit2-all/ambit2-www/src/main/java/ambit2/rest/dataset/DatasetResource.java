@@ -242,7 +242,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			return copyDatasetToQueryResultsTable(new Form(entity),true);
 		} else {
 			upload.setDataset(null);
-			return  upload.upload(entity,variant,true);
+			return  upload.upload(entity,variant,true,false);
 		}
 	}
 	protected SourceDataset readDataset() throws ResourceException {
@@ -280,7 +280,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		} else if ((datasetID!=null) && (datasetID>0)) {
 			SourceDataset dataset = readDataset();
  			upload.setDataset(dataset);
-			return  upload.upload(entity,variant,true);
+			return  upload.upload(entity,variant,true,false);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 

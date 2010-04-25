@@ -21,6 +21,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
@@ -102,7 +103,7 @@ public class FileUpload {
 	
 	
 	
-	protected Representation upload(Representation entity, Variant variant,boolean newEntry)
+	protected Representation upload(Representation entity, Variant variant,boolean newEntry, boolean propertyOnly)
 				throws ResourceException {	
 
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
@@ -121,10 +122,14 @@ public class FileUpload {
 	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
 	              
+	              CallableFileImport callable =
+	              new CallableFileImport(getRequest().getClientInfo(),dataset,items,DatasetsHTMLReporter.fileUploadField,connection,reporter);
 	              
+	              callable.setPropertyOnly(propertyOnly);
+
 				  Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 							 "File import",
-							new CallableFileImport(getRequest().getClientInfo(),dataset,items,DatasetsHTMLReporter.fileUploadField,connection,reporter),
+							callable,
 							getRequest().getRootRef());
 							
 				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
@@ -145,10 +150,12 @@ public class FileUpload {
 			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());		
 			          
+			          CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(),dataset,(InputRepresentation)entity,connection,reporter);
+		              callable.setPropertyOnly(propertyOnly);
 			          Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
 							  
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
-								new CallableFileImport(getRequest().getClientInfo(),dataset,(InputRepresentation)entity,connection,reporter),
+								callable,
 								getRequest().getRootRef());		
 			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
 					  task.update();

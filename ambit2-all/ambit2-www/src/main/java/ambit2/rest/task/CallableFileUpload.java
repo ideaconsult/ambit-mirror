@@ -38,6 +38,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                     		it.hasNext()
                             && !found;) {
                         FileItem fi = it.next();
+                        if (fi.isFormField()) continue;
                         if (fi.getSize()>maxSize) {
                         	throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,String.format("File size %d > max allowed size %d",fi.getSize(),maxSize)));
                         }

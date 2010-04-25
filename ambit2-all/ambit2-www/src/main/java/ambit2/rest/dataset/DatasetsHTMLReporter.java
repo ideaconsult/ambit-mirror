@@ -10,6 +10,8 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.core.processors.structure.key.IStructureKey;
+import ambit2.core.processors.structure.key.IStructureKey.Matcher;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
@@ -49,12 +51,29 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				output.write("<form method=\"post\" ENCTYPE=\"multipart/form-data\">");
 
 				output.write(String.format("<label accesskey=F>%s&nbsp;<input type=\"file\" name=\"%s\" accept=\"%s\" size=\"80\"></label>",
-						"Add new dataset (SDF file)",
+						"Add new dataset (SDF, MOL, SMI, CSV, TXT file)",
 						fileUploadField,
 						ChemicalMediaType.CHEMICAL_MDLSDF.toString())); 
 				output.write("<br><input type='submit' value='Submit'>");
 				output.write("</form>");
-				output.write("</span></div>\n");		
+				output.write("</span></div>\n");	
+				
+				output.write("<div class=\"actions\"><span class=\"center\">");
+				output.write("<form method=\"post\" action=\"?method=put\" ENCTYPE=\"multipart/form-data\">");
+
+				output.write(String.format("<label accesskey=F>%s&nbsp;<input type=\"file\" name=\"%s\" accept=\"%s\" size=\"80\"></label>",
+						"Import properties (SDF, MOL, SMI, CSV, TXT file)",
+						fileUploadField,
+						ChemicalMediaType.CHEMICAL_MDLSDF.toString())); 
+				
+				output.write("<select name='match'>");
+				for (Matcher matcher : IStructureKey.Matcher.values())
+					output.write(String.format("<option value='%s'>%s</option>",matcher.toString(),matcher.getDescription()));
+				output.write("</select>");
+				
+				output.write("<br><input type='submit' value='Submit'>");
+				output.write("</form>");
+				output.write("</span></div>\n");						
 			//}
 		} catch (Exception x) {}
 		super.footer(output, query);
