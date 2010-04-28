@@ -299,6 +299,11 @@
 		<version>1.5.9</version>
 		<scope>runtime</scope>
 	</dependency>
+  	<dependency>
+  		<groupId>jmol</groupId>
+  		<artifactId>jmol</artifactId>
+  		<version>11.8.23</version>
+  	</dependency>
   </dependencies>
 	<repositories>
 	    <repository>
