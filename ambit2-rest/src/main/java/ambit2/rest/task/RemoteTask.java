@@ -165,7 +165,7 @@ public class RemoteTask implements Serializable {
 	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
 		Reference ref = null;
 		
-		if (Status.SUCCESS_OK.equals(status) || Status.SUCCESS_ACCEPTED.equals(status)) {
+		if (Status.SUCCESS_OK.equals(status) || Status.SUCCESS_ACCEPTED.equals(status) || Status.SUCCESS_CREATED.equals(status)) {
 			int count=0;
 			try {
 				
