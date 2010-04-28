@@ -1,5 +1,7 @@
 package ambit2.rest.test;
 
+import java.awt.Canvas;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.InputStream;
@@ -8,6 +10,10 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 
+import org.jmol.adapter.smarter.SmarterJmolAdapter;
+import org.jmol.api.JmolAdapter;
+import org.jmol.viewer.JmolConstants;
+import org.jmol.viewer.Viewer;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -46,5 +52,34 @@ public class CDKDepictTest extends ResourceTest {
 	}	
 	@Override
 	public void testGetJavaObject() throws Exception {
+	}
+	
+	//todo wrap as web service
+	@Test
+	public void testJMol() throws Exception {
+		java.awt.Canvas display = new Canvas();
+		JmolAdapter adapter = new SmarterJmolAdapter();
+		org.jmol.viewer.Viewer viewer = (Viewer)
+		Viewer.allocateViewer(display, adapter, null, null, null, null, null);
+		try {
+		viewer.setScreenDimension(new Dimension(1, 1));
+		//viewer.scriptWait("load 'http://apps.ideaconsult.net:8080/ambit2/compound/100?media=chemical%2Fx-mdl-sdfile' {1 1 1};");
+		String s = viewer.scriptWait("load 'http://localhost:8181/compound/7?media=chemical%2Fx-mdl-sdfile' {1 1 1};");
+		System.out.println(s);
+		//viewer.scriptWait("load 'crystal.cif' {1 1 1};");
+		// can do more scripting here...
+		viewer.setScreenDimension(new Dimension(400, 400));
+
+		// anti-aliasing enabled
+		viewer.getGraphics3D().setWindowParameters(400, 400, true);
+
+		
+		// Create image
+		viewer.getImageAs("PNG", 1, 400, 400, "e:/image.png", null);
+
+		} finally {
+		// Ensure threads are stopped
+		viewer.setModeMouse(JmolConstants.MOUSE_NONE);
+		}
 	}
 }
