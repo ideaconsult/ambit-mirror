@@ -401,7 +401,7 @@ public abstract class WizardResource extends ServerResource {
 			StepProcessor p = step.getProcessor();
 			p.setBaseReference(getRequest().getRootRef());
 			Form form = p.process(entity,session);
-			getRequest().getResourceRef().setQuery(form.getQueryString());
+			//getRequest().getResourceRef().setQuery(form.getQueryString());
 			//return get(variant);
 			getResponse().redirectSeeOther(getRequest().getResourceRef());
 			return null;
