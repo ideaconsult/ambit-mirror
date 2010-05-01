@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -20,7 +21,6 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
-import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.Task;
 
@@ -76,7 +76,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	}
 	
 	
-	protected CallableQueryProcessor createCallable(Form form, T item) throws ResourceException {
+	protected Callable<Reference> createCallable(Form form, T item) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	
