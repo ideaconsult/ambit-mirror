@@ -525,4 +525,37 @@ public class AlgorithmResourceTest extends ResourceTest {
 					String.format("http://localhost:%d/model/%s",port,"3"));
 		}
 	}
+	
+	@Test
+	public void testSkinSensModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeskinsens", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+	}
+	
+	@Test
+	public void testSmartCypModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreesmartcyp", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+	}	
+	
+	@Test
+	public void testBiodegModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreebiodeg", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+	}		
 }
