@@ -35,6 +35,7 @@ import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableFingerprintsModelCreator;
 import ambit2.rest.task.CallableMockup;
 import ambit2.rest.task.CallableNumericalModelCreator;
+import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
@@ -200,6 +201,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
 			
 			{"fingerprints","Generate fingerprints",null,null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"superservice","Calls a remote service",null,null,new String[] {Algorithm.typeSuperService},null,null},
 			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null}
 			
 			
@@ -320,6 +322,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 		if (model.hasType(Algorithm.typeRules)) return null;
 		if (model.hasType(Algorithm.typeFingerprints)) return null;
 		if (model.hasType(Algorithm.typeMockup)) return null;
+		if (model.hasType(Algorithm.typeSuperService)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -333,7 +336,9 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			throws ResourceException {
 				
 		try {
-			if (algorithm.hasType(Algorithm.typeMockup))  {
+			if (algorithm.hasType(Algorithm.typeSuperService))  {
+				return new CallablePOST(form);			
+			} else if (algorithm.hasType(Algorithm.typeMockup))  {
 				return new CallableMockup(form);
 			} else if (algorithm.hasType(Algorithm.typeRules))
 				return new CallableSimpleModelCreator(

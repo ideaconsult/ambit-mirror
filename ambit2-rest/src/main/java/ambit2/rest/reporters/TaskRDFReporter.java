@@ -57,8 +57,7 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 													
 		task.addLiteral(DC.title,
 				 getJenaModel().createTypedLiteral(item.getName(),XSDDatatype.XSDstring));
-		task.addLiteral(DC.identifier,
-				 getJenaModel().createTypedLiteral(ref,XSDDatatype.XSDanyURI));
+
 		task.addLiteral(DC.date,
 				 getJenaModel().createTypedLiteral(item.getStarted(),XSDDatatype.XSDdateTime));		
 		task.addLiteral(OT.DataProperty.hasStatus.createProperty(getJenaModel()),
@@ -66,6 +65,16 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 		task.addLiteral(OT.DataProperty.percentageCompleted.createProperty(getJenaModel()),
 				 getJenaModel().createTypedLiteral(item.getPercentCompleted(),XSDDatatype.XSDfloat));
 		
+		if (item.getError()!=null) {
+			Individual error = getJenaModel().createIndividual(OT.OTClass.ErrorReport.getOntClass(getJenaModel()));
+			error.addLiteral(OT.DataProperty.errorCode.createProperty(getJenaModel()),item.getError().getStatus().getCode());
+			//error.addLiteral(OT.DataProperty.actor.createProperty(getJenaModel()),);
+			error.addLiteral(OT.DataProperty.message.createProperty(getJenaModel()),item.getError().getMessage());
+			error.addLiteral(OT.DataProperty.errorDetails.createProperty(getJenaModel()),item.getError().getStatus().getDescription());
+			error.addLiteral(OT.DataProperty.errorCause.createProperty(getJenaModel()),item.getError().getCause());
+			
+			task.addProperty(OT.OTProperty.error.createProperty(jenaModel),error);
+		}
 		if (item.isDone()) try {
 			task.addLiteral(OT.DataProperty.resultURI.createProperty(getJenaModel()),
 				 getJenaModel().createTypedLiteral(item.getUri().toString(),XSDDatatype.XSDanyURI));

@@ -34,6 +34,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeAppDomain = "http://www.opentox.org/algorithmTypes.owl#ApplicabilityDomain";
 	public static String typeFingerprints = "http://www.opentox.org/algorithmTypes.owl#Fingerprints";
 	public static String typeMockup = "http://www.opentox.org/algorithmTypes.owl#Mockup";
+	public static String typeSuperService = "http://www.opentox.org/algorithmTypes.owl#SuperService";
 	
 	
 	public enum AlgorithmFormat {

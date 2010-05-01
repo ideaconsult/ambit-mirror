@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.MediaType;
@@ -134,6 +131,34 @@ public class RemoteTask implements Serializable {
 	public boolean poll() {
 		if (isDone()) return true;
 
+		ClientResource client = null;
+		Representation r = null;
+		
+		try {
+			client = new ClientResource(result.toString());
+	        r = client.get(MediaType.TEXT_URI_LIST);
+			status = client.getStatus();
+//			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
+			result = handleOutput(r.getStream(),status);
+			
+		} catch (ResourceException x) {
+			error = x;
+			status = x.getStatus();
+		} catch (Exception x) {
+			error = x;
+			status = null;
+		} finally {
+			try {r.release();} catch (Exception x) {}
+			try {client.release();} catch (Exception x) {}
+
+
+		}
+		return isDone();
+	}
+	/*
+public boolean poll() {
+		if (isDone()) return true;
+
 		InputStream in = null;
 		URLConnection c = null;
 		try {
@@ -148,7 +173,7 @@ public class RemoteTask implements Serializable {
 			status = new Status(hc.getResponseCode());
 //			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
 			result = handleOutput(in,status);
-
+			
 		} catch (ResourceException x) {
 			error = x;
 			status = x.getStatus();
@@ -162,6 +187,7 @@ public class RemoteTask implements Serializable {
 		}
 		return isDone();
 	}
+	 */
 	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
 		Reference ref = null;
 		
@@ -173,6 +199,7 @@ public class RemoteTask implements Serializable {
 				String line = null;
 				while ((line = reader.readLine())!=null) {
 					ref = new Reference(line.trim());
+					System.out.println(ref);
 					count++;
 				}
 			} catch (Exception x) {
