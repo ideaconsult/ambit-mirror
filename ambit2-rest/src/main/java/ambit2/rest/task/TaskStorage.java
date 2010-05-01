@@ -83,6 +83,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 			UUID key = keys.next();
 			Task<Reference,USERID> task = tasks.get(key);
 			try {
+				task.update();
 				if (task.isDone() && (task.isExpired(taskCleanupRate))) tasks.remove(key);
 			} catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}
