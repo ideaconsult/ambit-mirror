@@ -29,11 +29,12 @@ public class CDKDepict extends AbstractDepict {
 		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));		
 	}
 	@Override
-	protected BufferedImage getImage(String smiles,int w, int h) throws AmbitException {
+	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
 		try {
 			depict.setImageSize(new Dimension(w,h));
 			return depict.generateImage(smiles);
-		} catch (Exception x) { throw new AmbitException(x); }
+		} catch (ResourceException x) {throw x; 
+		} catch (Exception x) { throw new ResourceException(x); }
 	}
 	@Override
 	protected String getTitle(Reference ref, String smiles) {
