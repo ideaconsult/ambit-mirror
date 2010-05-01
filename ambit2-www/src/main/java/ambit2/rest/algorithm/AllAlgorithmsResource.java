@@ -91,7 +91,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			},
 			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {Algorithm.typeRules},
 				"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure},
-			{"toxtreeskinsens","ToxTree: Skin sensitisation alerts (Marc Cronin)","toxtree.plugins.skinsensitisationSkinSensitisationPlugin",null,new String[] {Algorithm.typeRules},
+			{"toxtreeskinsens","ToxTree: Skin sensitisation alerts (M. Cronin)","toxtree.plugins.skinsensitisation.SkinSensitisationPlugin",null,new String[] {Algorithm.typeRules},
 				"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
 				,Algorithm.requires.structure
 				},

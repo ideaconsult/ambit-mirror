@@ -11,6 +11,13 @@
   <packaging>war</packaging>
   <name>Ambit2 REST web services</name>
   <version>2.1.0-SNAPSHOT</version>
+
+  <properties>
+
+ 	<toxtree.version>2.1.0-SNAPSHOT</toxtree.version>
+ 	<ambit.version>2.1.0-SNAPSHOT</ambit.version>
+
+  </properties>  
   <build>
     <finalName>ambit2</finalName>
 	<resources>
@@ -150,7 +157,7 @@
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-db</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${ambit.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.dbunit</groupId>
@@ -161,18 +168,18 @@
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-base</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${ambit.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-pubchem</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${ambit.version}</version>
 
   	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-namestructure</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${ambit.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>net.sf.saxon</groupId>
@@ -212,58 +219,58 @@
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-cramer</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-cramer2</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-mutant</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-verhaar</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-kroes</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-michaelacceptors</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-mic</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-eye</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
   		<artifactId>toxtree-sicret</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${toxtree.version}</version>
   		<scope>compile</scope>
   	</dependency>
   	<dependency>
@@ -274,13 +281,13 @@
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-rest</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${ambit.version}</version>
 
   	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-model</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${ambit.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.restlet.jee</groupId>
@@ -303,6 +310,21 @@
   		<groupId>jmol</groupId>
   		<artifactId>jmol</artifactId>
   		<version>11.8.23</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>toxtree</groupId>
+  		<artifactId>toxtree-biodegradation</artifactId>
+  		<version>${toxtree.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>toxtree</groupId>
+  		<artifactId>toxtree-skinsensitisation</artifactId>
+  		<version>${toxtree.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>toxtree</groupId>
+  		<artifactId>toxtree-smartcyp</artifactId>
+  		<version>${toxtree.version}</version>
   	</dependency>
   </dependencies>
 	<repositories>

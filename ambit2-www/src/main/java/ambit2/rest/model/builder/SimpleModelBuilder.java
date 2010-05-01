@@ -65,6 +65,7 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 			
 			for (Property property:p) {
 				property.setEnabled(true);
+				if (property.getName()==null) continue;
 				predicted.add(property);
 				if (algorithm.getEndpoint()!=null) property.setLabel(algorithm.getEndpoint());
 				property.getReference().setType(modelHidden?_type.Algorithm:_type.Model);
@@ -74,7 +75,8 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 		} catch (AmbitException x) {
 			throw x;
 		} catch (Exception x) {
-				 throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+			
+			 throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getCause()==null?x.getMessage():x.getCause().getMessage(),x);
 		}
 	}
 }
