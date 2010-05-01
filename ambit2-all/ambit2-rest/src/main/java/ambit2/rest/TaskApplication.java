@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import org.restlet.Application;
 import org.restlet.data.Reference;
 
+import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskStorage;
@@ -17,6 +18,14 @@ public class TaskApplication<USERID> extends Application {
 		taskStorage = new TaskStorage<USERID>(getName(),getLogger());
 	}
 	
+	public ITaskStorage<USERID> getTaskStorage() {
+		return taskStorage;
+	}
+
+	public void setTaskStorage(ITaskStorage<USERID> taskStorage) {
+		this.taskStorage = taskStorage;
+	}
+
 	public Iterator<Task<Reference,USERID>> getTasks() {
 		return taskStorage.getTasks();
 	}
@@ -34,7 +43,7 @@ public class TaskApplication<USERID> extends Application {
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
 			Callable<Reference> callable, 
 			Reference baseReference) {
-		return addTask(taskName,callable,baseReference,true);
+		return addTask(taskName,callable,baseReference,!(callable instanceof CallablePOST));
 	}
 	
 	public synchronized Task<Reference,USERID> addTask(String taskName, 

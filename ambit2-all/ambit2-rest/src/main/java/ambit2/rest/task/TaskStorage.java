@@ -145,5 +145,10 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		return task;
 	}	
 	
+	public Iterator<Task<Reference,USERID>> filterTasks() {
+		return null;
+	}
+	
 	
 }
+

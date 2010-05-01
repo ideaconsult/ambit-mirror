@@ -392,15 +392,15 @@ public class AmbitApplication extends TaskApplication {
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
-		 Directory jsDir = new Directory(getContext(), "war:///js");
+		 Directory jquery = new Directory(getContext(), "war:///jquery");
 
 		 
 		 router.attach("/meta/", metaDir);
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
+		 router.attach("/jquery/", jquery);
 		 router.attach("/style/", styleDir);
-		 router.attach("/js/", jsDir);
 		 router.attach("/favicon.ico", FavIconResource.class);
 		 router.attach("/favicon.png", FavIconResource.class);
 

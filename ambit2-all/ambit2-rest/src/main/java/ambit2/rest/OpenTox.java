@@ -117,7 +117,23 @@ public class OpenTox {
 			public String getDescription() {
 				return "Compound URIs";
 			}			
+		},	
+		delay {
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "Delay,ms for /algorithm/mockup";
+			}			
 		},		
+		error {
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "Error to be thrown by /algorithm/mockup";
+			}			
+		},			
 		dataset_uri {
 			public boolean isMandatory() {
 				return true;
@@ -155,7 +171,17 @@ public class OpenTox {
 			public String getDescription() {
 				return "Destination dataset service, used by Algorithms and Models to store results";
 			}
-		}; 		
+		},
+		page {
+			public String getDescription() {
+				return "Page";
+			}
+		},
+		page_size {
+			public String getDescription() {
+				return "Page size";
+			}
+		};
 		public boolean isMandatory() {
 			return true;
 		}

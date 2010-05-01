@@ -12,6 +12,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.restlet.resource.ResourceException;
+
 public class Task<Reference,USERID> implements Serializable, PropertyChangeListener {
 	public enum TaskProperty {
 		PROPERTY_NAME {
@@ -48,8 +50,8 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	protected float percentCompleted = 0;
 	protected USERID userid;
 	protected UUID uuid = UUID.randomUUID();
-	protected Exception error = null;
-	public Exception getError() {
+	protected ResourceException error = null;
+	public ResourceException getError() {
 		return error;
 	}
 	protected TaskStatus status= TaskStatus.Running;
@@ -109,6 +111,7 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 				super.done();
 				completed = System.currentTimeMillis();
 			}
+			
 		};
 		/*
 		this.future = new FutureTask<Reference>(callable) {
@@ -152,7 +155,9 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 			}
 		} catch (TimeoutException x) {
 		} catch (ExecutionException x) {
-			error = x;
+			Throwable err = x.getCause()==null?x:x.getCause();
+			if (err instanceof ResourceException) error = (ResourceException) err;
+			else error = new ResourceException(err);
 			status = TaskStatus.Error;
 		} catch (InterruptedException x) {
 			error = null;

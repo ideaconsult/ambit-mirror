@@ -75,7 +75,8 @@ public class OT {
 		Parameter,
 		Validation,
 		ValidationInfo,
-		Task;
+		Task,
+		ErrorReport;
 		public String getNS() {
 			return String.format(_NS, toString());
 		}
@@ -125,7 +126,9 @@ public class OT {
 		    validationPredictionDataset ,
 		    validationTestDataset,
 		    //Nominal features
-		    acceptValue;
+		    acceptValue,
+		    error;
+
 		   	public Property createProperty(OntModel jenaModel) {
 		   		Property p = jenaModel.getObjectProperty(String.format(_NS, toString()));
 		   		return p!= null?p:
@@ -143,7 +146,12 @@ public class OT {
     	percentageCompleted,
     	resultURI,
     	paramScope,
-    	paramValue;
+    	paramValue,
+	    errorCode,
+	    actor,
+	    message,
+	    errorDetails,
+	    errorCause;    	
 	   	public Property createProperty(OntModel jenaModel) {
 	   		Property p = jenaModel.getDatatypeProperty(String.format(_NS, toString()));
 	   		return p!= null?p:

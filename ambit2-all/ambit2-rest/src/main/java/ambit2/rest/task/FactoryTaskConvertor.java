@@ -69,10 +69,10 @@ public class FactoryTaskConvertor<USERID> {
 			if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			IProcessor<Iterator<Task<Reference,USERID>>,Representation> p = createTaskConvertor(variant,request);
 			//task.update();
-			System.out.println("convertor" + task.getUri() + " " + task.getStatus());
+			//System.out.println("convertor" + task.getUri() + " " + task.getStatus());
 			//response.setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 			//task.update();
-			System.out.println("convertor" + response.getStatus());
+			//System.out.println("convertor" + response.getStatus());
 			return p.process(new SingleTaskIterator<USERID>(task));
 		} catch (AmbitException x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);

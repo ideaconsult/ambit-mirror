@@ -1,7 +1,6 @@
 package ambit2.rest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.UUID;
@@ -20,6 +19,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.FilteredTasksIterator;
 import ambit2.rest.task.SingleTaskIterator;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.Task.TaskStatus;
@@ -51,6 +51,9 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 	public static final String resourceKey = "idtask";
 	public static final String resourceID = String.format("/{%s}", resourceKey);
 	
+	protected String searchStatus = null;
+	protected int max = 10;
+	
 
 	@Override
 	protected void doInit() throws ResourceException {
@@ -65,8 +68,39 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT});
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		try {
+			max = Integer.parseInt(Reference.decode(form.getFirstValue(AbstractResource.search_param)));
+		} catch (Exception x) {
+			max = 0;
+		}		
+		try {
+			searchStatus = Reference.decode(form.getFirstValue(AbstractResource.search_param));
+		} catch (Exception x) { searchStatus = null; }
+		
+		try {
+			if (searchStatus != null) TaskStatus.valueOf(searchStatus);
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Allowed status values: %s %s, %s, %s", 
+							TaskStatus.Running, TaskStatus.Completed, TaskStatus.Cancelled));
+		}		
 	}
 
+	protected boolean filterTask(Task<Reference, USERID> task, int taskNumber) {
+		if ((max > 0) && (taskNumber>=max)) return false;
+		else return searchStatus==null?true:searchStatus.equals(task.getStatus());
+	}
+	protected Iterator<Task<Reference, USERID>> getTasks() {
+
+		return new FilteredTasksIterator<USERID>(((TaskApplication)getApplication()).getTaskStorage()){
+			@Override
+			protected boolean accepted(Task<Reference, USERID> task) {
+				task.update();
+				if (!task.isDone()) getResponse().setStatus(Status.SUCCESS_ACCEPTED);
+				return filterTask(task,getNum());
+			}
+		};
+	}
 	@Override
 	protected synchronized Iterator<Task<Reference,USERID>> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
@@ -90,24 +124,10 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 			 */
 			ArrayList<Task<Reference,USERID>> list = new ArrayList<Task<Reference,USERID>>();
 			if (id == null) {
-				//status = Status.SUCCESS_OK;
-				int max = 0;
-				Form form = getRequest().getResourceRef().getQueryAsForm();
-				try {
-					max = Integer.parseInt(Reference.decode(form.getFirstValue(AbstractResource.search_param)));
-				} catch (Exception x) {
-					max = 0;
-				}
-				String search = Reference.decode(form.getFirstValue(AbstractResource.search_param));
-				try {
-					if (search != null) TaskStatus.valueOf(search);
-				} catch (Exception x) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Allowed status values: %s %s, %s, %s", 
-									TaskStatus.Running, TaskStatus.Completed, TaskStatus.Cancelled));
-				}
-				if (search == null) //all tasks
-					return ((TaskApplication)getApplication()).getTasks();
-				else {
+				response_status = Status.SUCCESS_OK;
+				return getTasks();
+
+					/*
 					Iterator<Task<Reference,USERID>> tasks = ((TaskApplication)getApplication()).getTasks();
 					while (tasks.hasNext()) {
 						Task<Reference,USERID> task = tasks.next();
@@ -118,14 +138,20 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 					}
 					Collections.sort(list, new TaskComparator<USERID>());
 					return list.iterator();
-				}
+					*/
+
 			} else {
 
 				Task<Reference,USERID> task = ((TaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
 				
 				if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				task.update();
-				response_status = task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED;
+				
+				if (task.getError()==null)
+					response_status = task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED;
+				else 
+					response_status = task.getError().getStatus();
+				
 				return new SingleTaskIterator<USERID>(task);
 			}
 		} catch (ResourceException x) {
