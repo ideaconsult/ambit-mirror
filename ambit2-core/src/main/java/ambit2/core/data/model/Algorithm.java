@@ -33,6 +33,8 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeUnSupervised = "http://www.opentox.org/algorithmTypes.owl#Unsupervised";
 	public static String typeAppDomain = "http://www.opentox.org/algorithmTypes.owl#ApplicabilityDomain";
 	public static String typeFingerprints = "http://www.opentox.org/algorithmTypes.owl#Fingerprints";
+	public static String typeMockup = "http://www.opentox.org/algorithmTypes.owl#Mockup";
+	
 	
 	public enum AlgorithmFormat {
 		JAVA_CLASS {
@@ -95,10 +97,10 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public boolean isRequiresDataset() {
 		return hasType(typeClustering) || hasType(typeClassification) || hasType(typeRegression) || 
 		hasType(typeLearning) || hasType(typeLazyLearning) || hasType(typeEagerLearning) ||
-		hasType(typeDescriptor) || hasType(typeAppDomain) ;
+		hasType(typeDescriptor) || hasType(typeAppDomain) || hasType(typeMockup) ;
 	}
 	public boolean isDataProcessing() {
-		return hasType(typeDescriptor) || hasType(typeFingerprints);
+		return hasType(typeDescriptor) || hasType(typeFingerprints) || hasType(typeMockup);
 	}
 
 	public String[] getType() {

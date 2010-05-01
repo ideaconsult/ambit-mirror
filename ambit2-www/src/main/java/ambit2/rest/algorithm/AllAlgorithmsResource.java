@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -32,8 +33,8 @@ import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableFingerprintsModelCreator;
+import ambit2.rest.task.CallableMockup;
 import ambit2.rest.task.CallableNumericalModelCreator;
-import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
@@ -90,13 +91,23 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			},
 			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {Algorithm.typeRules},
 				"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure},
-			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {Algorithm.typeRules},
+			{"toxtreeskinsens","ToxTree: Skin sensitisation alerts (Marc Cronin)","toxtree.plugins.skinsensitisationSkinSensitisationPlugin",null,new String[] {Algorithm.typeRules},
 				"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
 				,Algorithm.requires.structure
 				},
+			{"toxtreesmartcyp","SmartCYP: Cytochrome P450-Mediated Drug Metabolism","toxtree.plugins.smartcyp.SMARTCYPPlugin",null,new String[] {Algorithm.typeRules},
+					"http://www.opentox.org/echaEndpoints.owl#Protein-binding"
+					,Algorithm.requires.structure
+					},				
+			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {Algorithm.typeRules},
+					"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
+					,Algorithm.requires.structure
+					},
 			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {Algorithm.typeRules},
 				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",Algorithm.requires.structure},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
+			{"toxtreebiodeg","START biodegradation and persistence plug-in","com.molecularnetworks.start.BiodgeradationRules",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",Algorithm.requires.structure},				
+			
 			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
@@ -188,7 +199,8 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			{"fptanimoto","Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
 			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
 			
-			{"fingerprints","Generate fingerprints",null,null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure}
+			{"fingerprints","Generate fingerprints",null,null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null}
 			
 			
 			
@@ -307,6 +319,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			throws ResourceException {
 		if (model.hasType(Algorithm.typeRules)) return null;
 		if (model.hasType(Algorithm.typeFingerprints)) return null;
+		if (model.hasType(Algorithm.typeMockup)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -315,13 +328,14 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 	}
 
 	@Override
-	protected CallableQueryProcessor createCallable(Form form,
+	protected Callable<Reference> createCallable(Form form,
 			Algorithm<String> algorithm)
 			throws ResourceException {
 				
 		try {
-
-			if (algorithm.hasType(Algorithm.typeRules))
+			if (algorithm.hasType(Algorithm.typeMockup))  {
+				return new CallableMockup(form);
+			} else if (algorithm.hasType(Algorithm.typeRules))
 				return new CallableSimpleModelCreator(
 						form,
 						getRequest().getRootRef(),

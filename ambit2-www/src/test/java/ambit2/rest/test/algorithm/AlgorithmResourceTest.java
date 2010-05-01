@@ -48,7 +48,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 42;
+		return count == 46;
 	}	
 	
 	@Test
