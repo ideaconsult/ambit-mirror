@@ -402,7 +402,9 @@ public abstract class WizardResource extends ServerResource {
 			p.setBaseReference(getRequest().getRootRef());
 			Form form = p.process(entity,session);
 			getRequest().getResourceRef().setQuery(form.getQueryString());
-			return get(variant);	
+			//return get(variant);
+			getResponse().redirectSeeOther(getRequest().getResourceRef());
+			return null;
 		} catch (StepException x) {
 			session.setError(x.getKey(),x);
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
