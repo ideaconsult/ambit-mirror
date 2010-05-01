@@ -38,7 +38,7 @@ public class AbstractDepict extends ServerResource {
 		super.doInit();
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 	}
-	protected BufferedImage getImage(String smiles,int width,int height) throws AmbitException {
+	protected BufferedImage getImage(String smiles,int width,int height) throws ResourceException {
 		return null;
 	}
 	protected String getTitle(Reference ref, String smiles) {
