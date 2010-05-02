@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
+import ambit2.core.config.AmbitCONSTANTS;
 
 
 /**
@@ -23,17 +25,52 @@ Methods are currently /smiles, /inchi, /inchikey, /names,/image, /ficus, /ficts,
  */
 public class NCISearchProcessor extends HTTPRequest<String, String>  {
 	public enum METHODS {
-		all,smiles,inchi,inchikey,names,image,ficus,ficts,uuuuu,
+		all {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_SMILES,Property.opentox_InChI,Property.opentox_InChIKey,Property.opentox_Name};
+			}			
+		},
+		smiles {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_SMILES};
+			}
+		},
+		stdinchi {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_InChI};
+			}
+		},
+		stdinchikey {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_InChIKey};
+			}
+		},			
+		names {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_Name};
+			}
+		},
+		image,
+		ficus,
+		ficts,
+		uuuuu,
 		sdf {
 			@Override
 			public String getMediaType() {
 				return "chemical/x-mdl-sdfile";
 			}
-		}
-		,hashisy;
+		},
+		hashisy;
 		public String getMediaType() {
 			return "text/plain";
 		}
+		public String[] getOpenToxEntry() {return null; }
+		
 		};
 	protected long wait_ms = 0;
 
@@ -115,7 +152,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 			StringBuilder b = new StringBuilder();
 			b.append(target);
 			b.append("\t");
-			METHODS[] methods = new METHODS[]{METHODS.smiles,METHODS.inchi,METHODS.inchikey,METHODS.names};
+			METHODS[] methods = new METHODS[]{METHODS.smiles,METHODS.stdinchi,METHODS.stdinchikey,METHODS.names};
 			for (METHODS m : methods) 
 				if (METHODS.all.equals(m)) continue;
 				else if ((method==null) || method.equals(METHODS.all) || method.equals(m)) {
