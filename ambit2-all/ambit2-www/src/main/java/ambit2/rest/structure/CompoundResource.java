@@ -244,11 +244,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
         	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_EQ));
         	q_by_name.setChemicalsOnly(chemicalsOnly);
         	//q_by_name.setChemicalsOnly(true);
-	        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
+	        StringCondition condition = StringCondition.getInstance(StringCondition.C_EQ);
 	        try {
-	        	condition = (cond==null)||("".equals(cond))?StringCondition.getInstance(StringCondition.C_LIKE):StringCondition.getInstance(cond);
+	        	condition = (cond==null)||("".equals(cond))?StringCondition.getInstance(StringCondition.C_EQ):StringCondition.getInstance(cond);
 	        } catch (Exception xx) {
-	        	condition = StringCondition.getInstance(StringCondition.C_LIKE);
+	        	condition = StringCondition.getInstance(StringCondition.C_EQ);
 	        } finally {
 	        	q_by_name.setCondition(condition);
 	        	q_by_name.setValue(String.format("%s%s",Reference.decode(key.toString()),condition.toString().equals(StringCondition.C_LIKE)?"%":""));
@@ -275,7 +275,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				String[] properties = form.getValuesArray(QueryResource.sameas);
 				if ((properties==null) || (properties.length==0)) {
 					properties  = form.getValuesArray(QueryResource.property);
-					condition = (condition==null)?"like":condition;
+					condition = (condition==null)?"=":condition;
 					byAlias = false;
 				} else 
 					condition = (condition==null)?"=":condition;
