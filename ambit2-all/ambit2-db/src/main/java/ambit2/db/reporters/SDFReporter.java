@@ -79,7 +79,8 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					output.write(String.format("\n> <%s>\n%s\n",p.getName().toString(),
 							value.toString()));
 			}
-			output.write("\n$$$$\n");
+			if (item.getContent().indexOf("$$$$")<0)
+				output.write("\n$$$$\n");
 		} catch (Exception x) {
 			logger.error(x);
 		}

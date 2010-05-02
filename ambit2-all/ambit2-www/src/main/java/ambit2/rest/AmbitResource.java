@@ -31,6 +31,14 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.template.OntologyResource;
 
+/**
+ * window.setInterval(function() {
+ alert('test');
+}, 1000);
+
+ * @author nina
+ *
+ */
 public class AmbitResource extends ServerResource {
 	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
@@ -193,19 +201,21 @@ public class AmbitResource extends ServerResource {
 			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
 			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
 
+			
+			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
+			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"},
+			{"/query/csls/50-00-0/smiles","Queries Chemical Identifier Resolver /query/csls/{term}/{representation} http://cactus.nci.nih.gov/chemical/structure/documentation",format,"GET","Yes"},
+			{"/query/compound/50-00-0/smiles","Queries this database /query/lookup/{term}/{representation}",format,"GET","Yes"},
+			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
+			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
 			{String.format("/query/structure?search=%s&max=100",Reference.encode("CC1=CC1")),"Search by exact structure 	CC1=CC1",format,"GET","Yes"},
 			{String.format("/query/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS [NX3][CX3](=[OX1])[#6]",format,"GET","Yes"},
 			{String.format("/dataset/2/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS [NX3][CX3](=[OX1])[#6] within /dataset/2",format,"GET","Yes"},
-					
-			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
-			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},
 			
-			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
 			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},
 			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
 			{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
-			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"},
 		
 	};
 
@@ -337,48 +347,8 @@ public class AmbitResource extends ServerResource {
 		writeSearchForm(w, title, request, meta);
 		
 	}
-	public static String js() {
-		String s = 
-		"function getURL(url, contentType) {\n"+
-		"	 var client = new XMLHttpRequest();\n"+
-		"	 client.open(\"GET\", url)\n"+
-		"	 client.setRequestHeader(\"Accept\", contentType);"+
-		"	 client.send();\n"+
-		"	client.onreadystatechange=function() {\n"+
-		"       if (client.readyState==4) {\n"+
-		"			headers.put('content-type', contentType)	\n"+
-		"			document.write(client.responseText); }"+
-		"	}\n}";
-		return s;
 
-	}
-	public static String jsHTTPObject() {
-		String s = 
-			"\nfunction getHTTPObject() {\n"+
-			"if (typeof XMLHttpRequest != 'undefined') { return new XMLHttpRequest(); }\n"+
-			"try { return new ActiveXObject(\"Msxml2.XMLHTTP\"); } catch (e) {\n"+
-			"try { return new ActiveXObject(\"Microsoft.XMLHTTP\"); } catch (e) {} } return false; }\n";
-		return s;
 
-	}
-	public static String jsLogout() {
-		String s = 
-			"\nfunction logout() { "+
-			"var http = getHTTPObject();\n"+ 
-			"var username = \"guest\";\n"+
-			"var password = \"guest\";\n"+
-			"http.open(\"get\", \"\", false, username, password);\n"+
-			"http.send(\"\"); \n"+
-			"	http.onreadystatechange=function() {\n"+
-			"       if (client.readyState==4) {\n"+
-			"			headers.put('Authorization', '')	\n"+
-			"			document.write(client.responseText); }"+
-			"	}\n}";			
-			//"if (http.status == 200) { document.location = this.action; alert(username); } \n"+
-			//"else { alert(\"Incorrect username and/or password.\"); } return false; }\n";
-		return s;
-
-	}		
 	public static String jsGoogleAnalytics() {
 		if (jsGoogleAnalytics==null) try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -396,29 +366,112 @@ public class AmbitResource extends ServerResource {
 		} catch (Exception x) { jsGoogleAnalytics = null;}
 		return jsGoogleAnalytics;
 	}
-	public static String jsLogin() {
-		String s = 
-			"\nfunction login() { "+
-			"var username = document.getElementById(this.id + \"-username\").value;\n"+
-			"var password = document.getElementById(this.id + \"-password\").value;\n"+
-			"this.http.open(\"get\", this.action, false, username, password);\n"+
-			"this.http.send(\"\"); \n"+
-			"if (http.status == 200) { document.location = this.action; } \n"+
-			"else { alert(\"Incorrect username and/or password.\"); } return false; }\n";
-		return s;
 
+	public static String js(String url, Reference baseReference) {
+		//return String.format("<script type=\"text/javascript\" src=\"%s/jquery/call.js\"></script>",baseReference);
+		/**
+window.setInterval(function() {
+ alert('test');
+}, 1000);
+		 */
+		String s = 
+		"<script language=\"JavaScript1.2\" type=\"text/javascript\">\n"+
+		"<!--\n"+
+
+		"function poll(){\n"+
+		"   $(\"#targetDiv\").text('poll');\n"+
+		"   jQuery.ajaxSetup({ Accept: \"text/uri-list;charset=utf-8\" });\n"+
+		"	$.ajax({\n"+
+		"   xhr:  (window.ActiveXObject) ?\n"+  //this is a hack for IE8
+		"		function() {\n"+
+		"				try {\n"+
+		"					return new window.ActiveXObject(\"Microsoft.XMLHTTP\");\n"+
+		"				} catch(e) {}\n"+
+	    "				} :\n"+
+		"			function() {\n"+
+		"				return new window.XMLHttpRequest();\n"+
+		"			},\n"+
+		"   beforeSend: function(xhr){\n"+
+		"      xhr.setRequestHeader(\"Accept\",\"text/uri-list;q=1.0\");\n"+
+		"   },\n"+
+		"		type: \"GET\",\n"+
+		"		dataType: \"text\",\n"+
+		"       cache: false,\n"+
+		String.format("		url: \"%s%s\",\n",url,"?media=text/uri-list")+
+		"		success: callback,\n"+
+		"		error: err,\n"+
+		"       complete: done\n"+
+		"	});\n"+
+		"}\n"+
+		"function done(xhr) {\n"+
+	    "   $(\"#statusDiv\").text(xhr.status == 200);"+
+	    "   if (xhr.status == 200) { stopPolling();} \n"+
+	    "}\n"+		
+		"function callback(data, status) {\n"+
+	    "   $(\"#targetDiv\").text('[' + status + '] ' + data);"+
+	    "}\n"+
+		"function err(xhr, reason, ex) {"+
+	    "   $(\"#targetDiv\").text(reason);\n"+
+	    "   stopPolling()\n"+  //stop polling
+	    "}"+	    
+	    "function stopPolling(){     pollInterval=window.clearInterval(pollInterval);   }\n"+
+	    
+		"var pollInterval = window.setInterval(\"poll()\",2000);\n"+	    
+	    "-->\n"+
+	    "</script>";
+		return s;
+		
+		/*
+	String s = 
+		"<script type=\"text/javascript\">\n"+
+		
+		
+		"$(document).ready(function( ){\n"+
+		"   jQuery.ajaxSetup({ Accept: \"text/uri-list;charset=utf-8\" });\n"+
+		"	$.ajax({\n"+
+		"   beforeSend: function(xhr){\n"+
+		"      xhr.setRequestHeader(\"Accept\",\"text/uri-list;q=1.0\");\n"+
+		"   },\n"+
+		"		type: \"GET\",\n"+
+		"		dataType: \"text\",\n"+
+		"       cache: false,\n"+
+		String.format("		url: \"%s%s\",\n",url,"?media=text/uri-list")+
+		"		success: callback,\n"+
+		"		error: err,\n"+
+		"       complete: done\n"+
+		"	});\n"+
+		"});\n"+
+		"function done(xhr) {\n"+
+	    "   $(\"#statusDiv\").text(xhr.status);"+
+	    "}\n"+		
+		"function callback(data, status) {\n"+
+	    "   $(\"#targetDiv\").text('[' + status + '] ' + data);"+
+	    "}\n"+
+		"function err(xhr, reason, ex) {"+
+		" alert(reason);"+
+	    "   $(\"#targetDiv\").text(reason);"+
+	    "}"+	    
+	    
+	    "</script>";
+		return s;
+		
+		 */
 	}	
 	public static void writeTopHeader(Writer w,String title,Request request,String meta) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
-		w.write(String.format("<html><head><title>%s</title>%s\n",title,meta));
+		w.write(String.format("<html><head><title>%s</title>",title));
+		
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
+		w.write(meta);
+				
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
 		w.write("<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,FOLLOW\">");
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/jquery-1.3.2.js\"></script>\n",baseReference));
+
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
 //		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
 
@@ -465,7 +518,9 @@ public class AmbitResource extends ServerResource {
 		w.write(String.format("<a href='%s/help'>Help</a>&nbsp;",baseReference));
 		w.write("</div>");
 
-	
+		w.write("\n<div id=\"targetDiv\"></div>\n");
+		w.write("\n<div id=\"statusDiv\"></div>\n");
+		//w.write("\n<textarea id=\"targetDiv\"></textarea>\n");
 	}
 	
 	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
@@ -504,6 +559,7 @@ public class AmbitResource extends ServerResource {
 	}	
 	public static void writeHTMLFooter(Writer output,String title,Request request) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
+		
 		output.write("<div class=\"footer\">");
 
 		output.write("<span class=\"right\">");

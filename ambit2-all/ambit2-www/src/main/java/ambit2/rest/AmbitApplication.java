@@ -56,6 +56,7 @@ import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.report.ReportDatasetResource;
 import ambit2.rest.similarity.SimilarityResource;
+import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.dataset.DatasetsByStructureResource;
@@ -349,6 +350,13 @@ public class AmbitApplication extends TaskApplication {
 		csls.attachDefault(CSLSResource.class);
 		csls.attach(CSLSResource.resourceID,CSLSResource.class);
 		csls.attach(CSLSResource.resourceID+CSLSResource.representationID,CSLSResource.class);
+
+		Router lookup = new MyRouter(getContext());
+		queryRouter.attach(CompoundLookup.resource,lookup);
+		lookup.attachDefault(CompoundLookup.class);
+		lookup.attach(CompoundLookup.resourceID,CompoundLookup.class);
+		lookup.attach(CompoundLookup.resourceID+CompoundLookup.representationID,CompoundLookup.class);
+
 		
 		//router.attach("/smiles/{smiles}"+fp,SimilarityResource.class);
 		//router.attach("/smiles/{smiles}"+fp_dataset,SimilarityResource.class);
