@@ -240,8 +240,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
         	QueryField q_by_name =  new QueryField();
         	q_by_name.setRetrieveProperties(true);
         	q_by_name.setSearchByAlias(byAlias);
-        	if (property != null) q_by_name.setFieldname(new Property(String.format("%s%%",property),null));
-        	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_LIKE));
+        	
         	q_by_name.setChemicalsOnly(chemicalsOnly);
         	//q_by_name.setChemicalsOnly(true);
 	        StringCondition condition = StringCondition.getInstance(StringCondition.C_LIKE);
@@ -252,6 +251,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	        } finally {
 	        	q_by_name.setCondition(condition);
 	        	q_by_name.setValue(String.format("%s%s",Reference.decode(key.toString()),condition.toString().equals(StringCondition.C_LIKE)?"%":""));
+	        	if (property != null) 
+	        		q_by_name.setFieldname(new Property(String.format("%s%s",property,condition.toString().equals(StringCondition.C_LIKE)?"%":""),null));
 	        }
 	        query = q_by_name;
         }					
