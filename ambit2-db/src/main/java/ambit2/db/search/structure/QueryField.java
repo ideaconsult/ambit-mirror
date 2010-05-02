@@ -48,13 +48,20 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	 */
 	private static final long serialVersionUID = -5810564793012596407L;
 	protected boolean retrieveProperties = false;
-	
+	protected boolean caseSensitive = true;
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
+	}
 	public boolean isRetrieveProperties() {
 		return retrieveProperties;
 	}
 	public void setRetrieveProperties(boolean retrieveProperties) {
 		this.retrieveProperties = retrieveProperties;
 	}
+	/*
 	public final static String sqlField = 
 		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text from structure\n"+
 		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
@@ -66,7 +73,34 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
 		"join properties using(idproperty) %s where %s\n"+
 		"%s %s ? and value %s ? %s";
+	*/
+	protected static String queryField = "%s %s ? and"; //name namecondition value
+	protected static String queryValueCaseSensitive = "value %s ?"; 
+	protected static String queryValueCaseInsensitive = "lower(value) %s lower(?)"; 
 	
+	public final static String sqlField = 
+		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text " +
+		"from structure " +
+		"inner join (select min(preference) p,idchemical from structure group by idchemical) ids using(idchemical) " +
+		"join (select idchemical,value from property_values " +
+		"join structure using(idstructure) " +
+		"join property_string using(idvalue_string) " +
+		"join properties using(idproperty) where %s %s) v using (idchemical) " +
+		"where structure.preference=ids.p %s" ;
+		//"group by idchemical";
+	
+	public final static String sqlFieldProperties = 
+		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text,idproperty,name,comments,value " +
+		"from structure " +
+		"inner join (select min(preference) p,idchemical from structure group by idchemical) ids using(idchemical) " +
+		"join (select idchemical,value,idproperty,name,comments from property_values " +
+		"join structure using(idstructure) " +
+		"join property_string using(idvalue_string) " +
+		"join properties using(idproperty) where %s %s) v using (idchemical) " +
+		"where structure.preference=ids.p %s" ;
+		//"group by idchemical";
+
+
 	protected StringCondition nameCondition;
 	protected SearchMode searchMode = SearchMode.name;
 	
@@ -84,12 +118,7 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	public void setSearchByAlias(boolean value) {
 		searchMode = value?SearchMode.alias:SearchMode.name;
 	}	
-	public final static String sqlAnyField = 
-		"select ? as idquery,structure.idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text from structure join property_values using(idstructure) join property_string as f using (idvalue_string) %s where %s value %s ? %s";
 
-	public final static String sqlAnyFieldProperties = 
-		"select ? as idquery,structure.idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text,idproperty,name,comments,value from structure join property_values using(idstructure) join property_string as f using (idvalue_string) join properties using(idproperty) %s where %s value %s ? %s";
-	
 	public QueryField() {
 		setFieldname(null);
 		setCondition(StringCondition.getInstance("="));
@@ -98,7 +127,15 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	}
 	public String getSQL() throws AmbitException {
 		
-		
+		String whereName = ((getFieldname() ==null) || "".equals(getFieldname().getName()))?"":
+				String.format(queryField,searchMode.getSQL(),getNameCondition().getSQL().toString());
+		return String.format(
+				isRetrieveProperties()?sqlFieldProperties:sqlField,
+				whereName,
+				String.format(isCaseSensitive()?queryValueCaseSensitive:queryValueCaseInsensitive,getCondition().getSQL()),
+				isChemicalsOnly()?"group by idchemical":""
+				);
+		/*
 		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
 			return String.format(isRetrieveProperties()?sqlAnyFieldProperties:sqlAnyField,
 					isChemicalsOnly()?group:"",
@@ -112,6 +149,7 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 					getNameCondition().getSQL().toString(),
 					getCondition().getSQL(),
 					"");
+			*/		
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");

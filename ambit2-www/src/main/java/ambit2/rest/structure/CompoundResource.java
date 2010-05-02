@@ -199,7 +199,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		return new CompoundURIReporter<QueryStructureByID>(getRequest());
 	}
 	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,
-			String cond,String key,boolean chemicalsOnly, boolean byAlias) {
+			String cond,String key,boolean chemicalsOnly, boolean byAlias, boolean caseSens) {
 		AbstractStructureQuery query;
 		
         try {
@@ -238,6 +238,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	        query= q;
         } catch (Exception x) {
         	QueryField q_by_name =  new QueryField();
+        	q_by_name.setCaseSensitive(caseSens);
         	q_by_name.setRetrieveProperties(true);
         	q_by_name.setSearchByAlias(byAlias);
         	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_EQ));
@@ -269,6 +270,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				boolean byAlias = true;
 				Form form = request.getResourceRef().getQueryAsForm();
 				String condition = form.getFirstValue(QueryResource.condition);
+				String casesens = form.getFirstValue(QueryResource.caseSensitive);
 				String[] keys = form.getValuesArray(QueryResource.search_param);
 				String[] properties = form.getValuesArray(QueryResource.sameas);
 				if ((properties==null) || (properties.length==0)) {
@@ -302,7 +304,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 								condition, 
 								theKey,
 								chemicalsOnly,
-								byAlias
+								byAlias,
+								casesens==null?false:"true".equals(casesens.toLowerCase())
 								);
 								//keys.length==1);
 						query=q;
