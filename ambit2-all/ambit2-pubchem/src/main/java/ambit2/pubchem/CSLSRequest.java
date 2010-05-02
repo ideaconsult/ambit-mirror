@@ -5,8 +5,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.exceptions.HttpException;
 
 public abstract class CSLSRequest<R> extends DefaultAmbitProcessor<String, R> {
 
@@ -40,8 +43,14 @@ public abstract class CSLSRequest<R> extends DefaultAmbitProcessor<String, R> {
 			uc =(HttpURLConnection) url.openConnection();
 			uc.setDoOutput(true);
 			uc.setRequestMethod("GET");
-			in= uc.getInputStream();
-			return read(uc.getInputStream());
+			int code = uc.getResponseCode();
+			
+			if (code==200) {
+				in= uc.getInputStream();
+				return read(uc.getInputStream());
+			} else throw new HttpException(url.toString(),code,uc.getResponseMessage());	
+		} catch (HttpException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {
