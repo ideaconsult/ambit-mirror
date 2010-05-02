@@ -11,6 +11,7 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -73,6 +74,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid representation identifier",id));
 		}
+		
 		//query
 		IQueryRetrieval<IStructureRecord>  query = null;
 		if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
@@ -99,6 +101,12 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			} 
 		}
 		if (query == null) query = getTextQuery(null,false,text);
+		
+		try {
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			query.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
+		} catch (Exception x) {}
+				
 		setTemplate(createTemplate(context, request, response));
 		return query;
 	}
