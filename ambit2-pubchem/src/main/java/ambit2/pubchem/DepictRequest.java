@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;
+import ambit2.core.exceptions.HttpException;
 
 public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {
 
@@ -55,13 +56,15 @@ public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {
 						return retrieveImage(new URL(root+line.substring(0,index)));
 				}
 			}
+		} catch (ProcessorException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ProcessorException(this,x);
 		}
 		return null;
 	}
 
-	public BufferedImage retrieveImage(URL url) throws AmbitException {
+	public BufferedImage retrieveImage(URL url) throws Exception {
 
 		InputStream in = null;
 		HttpURLConnection uc = null;
@@ -69,22 +72,21 @@ public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {
 			uc =(HttpURLConnection) url.openConnection();
 			uc.setDoOutput(true);
 			uc.setRequestMethod("GET");
-			/*
-		    ReadableByteChannel source = Channels.newChannel (uc.getInputStream());
-		    WritableByteChannel dest = Channels.newChannel (System.out);
-		    DownloadTool.channelCopy2(source, dest);
-		    source.close();
-		    dest.close();
-		    */
-			in= uc.getInputStream();
-			return ImageIO.read(uc.getInputStream());
+			
+			int code = uc.getResponseCode();
+			
+			if (code==200) {
+				in= uc.getInputStream();
+				return ImageIO.read(uc.getInputStream());
+			} else throw new HttpException(url.toString(),code,uc.getResponseMessage());
+
 		} catch (Exception x) {
-			throw new AmbitException(x);
+			throw x;
 		} finally {
 			try {
 				if (in != null) in.close();
-			} catch (Exception x) { 
-			}
+			} catch (Exception x) {} 
+			try { uc.disconnect();} catch (Exception x) {}
 		}
 	}
 	
@@ -99,8 +101,15 @@ public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {
 			bw.write("="); 
 	        bw.write(URLEncoder.encode(target));
 	        bw.flush(); bw.close();	        
-			return parseInput(uc.getInputStream());
 
+			int code = uc.getResponseCode();
+			
+			if (code==200) {
+				return parseInput(uc.getInputStream());
+			} else throw new HttpException(getServer(),code,uc.getResponseMessage());	
+			
+		} catch (HttpException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {
