@@ -39,7 +39,6 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 		super.header(output, query);
 		OT.OTClass.Task.createOntClass(getJenaModel());
 		getJenaModel().createAnnotationProperty(DC.title.getURI());
-		getJenaModel().createAnnotationProperty(DC.identifier.getURI());
 		getJenaModel().createAnnotationProperty(DC.date.getURI());
 	}
 	
