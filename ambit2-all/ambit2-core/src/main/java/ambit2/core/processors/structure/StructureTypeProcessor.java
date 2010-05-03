@@ -27,11 +27,11 @@ public class StructureTypeProcessor extends DefaultAmbitProcessor<IAtomContainer
 			if (has2DCoordinates(target)>0) return STRUC_TYPE.D2withH;
 			else if (has3DCoordinates(target)) return STRUC_TYPE.D3withH; 
 			else 
-				return STRUC_TYPE.NA;
+				return STRUC_TYPE.D1;
 		else
 			if (has2DCoordinates(target)>0) return STRUC_TYPE.D2noH;
 			else if (has3DCoordinates(target)) return STRUC_TYPE.D3noH; else 
-				return STRUC_TYPE.NA;			
+				return STRUC_TYPE.D1;			
 	}
 	public static boolean hasHydrogens(IAtomContainer container) {
 		Iterator<IAtom> atoms = container.atoms().iterator();
