@@ -65,14 +65,10 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		if ((uriReporter==null) || (uriReporter.getBaseReference()==null) || (item.getId()<0)) {
 			if (item.getClazz() == Dictionary.class) {
 				feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
-				feature.addLiteral(DC.identifier,
-						jenaModel.createTypedLiteral(id,XSDDatatype.XSDanyURI));
 			} else
 				feature = jenaModel.createIndividual(featureType.getOntClass(jenaModel));
 		} else {
 			feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
-			feature.addLiteral(DC.identifier,
-					jenaModel.createTypedLiteral(id,XSDDatatype.XSDanyURI));
 		}
 		if (item.isNominal())
 			feature.addOntClass(OTClass.NominalFeature.getOntClass(jenaModel));

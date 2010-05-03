@@ -49,7 +49,6 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 				OT.OTClass.Dataset.getOntClass(output));
 		
 		Individual ref = ReferenceRDFReporter.addToModel(output, item.getReference(), referenceReporter);
-		dataset.addProperty(DC.identifier, uriReporter.getURI(item));
 		dataset.addProperty(DC.title,item.getName());
 		dataset.addProperty(RDFS.seeAlso,ref);
 		dataset.addProperty(DC.publisher,item.getUsername());

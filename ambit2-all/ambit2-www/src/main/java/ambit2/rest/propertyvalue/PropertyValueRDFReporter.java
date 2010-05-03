@@ -52,16 +52,7 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 				propertyReporter,
 				referenceReporter
 				);
-		/*
-		Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(property),
-				OT.OTClass.Feature.getOntClass(getJenaModel()));
-		feature.addProperty(DC.title, property.getName());
-		feature.addLiteral(DC.identifier,
-				 getJenaModel().createTypedLiteral(propertyReporter.getURI(property),XSDDatatype.XSDanyURI));
-		feature.addProperty(OT.DataProperty.units.createProperty(getJenaModel()),property.getUnits());
-		feature.addProperty(OWL.sameAs,property.getLabel());
-		feature.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()), referenceReporter.getURI(property.getReference()));
-		*/
+	
 
 	}	
 	public  Individual valueProcess(Object item,Individual feature) throws AmbitException {
