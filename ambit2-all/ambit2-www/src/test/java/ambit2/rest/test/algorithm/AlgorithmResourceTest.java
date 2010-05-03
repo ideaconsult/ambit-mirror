@@ -168,7 +168,59 @@ public class AlgorithmResourceTest extends ResourceTest {
 		table = 	c.createQueryTable("EXPECTED","SELECT bc from fp1024_struc");
 		Assert.assertEquals(4,table.getRowCount());
 		c.close();			
-	}			
+	}		
+	
+	@Test
+	public void testSK1024Generator() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+        Statement t = connection.createStatement();
+        t.executeUpdate("delete from sk1024");
+        t.close();
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from sk1024");
+		Assert.assertEquals(0,table.getRowCount());
+		
+		c.close();			
+		Form headers = new Form();  
+		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/struckeys", port),
+				headers, Status.SUCCESS_NO_CONTENT,
+				null);		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT bc from sk1024");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();			
+	}		
+	
+	@Test
+	public void testSmartsAccelerator() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+        Statement t = connection.createStatement();
+        t.executeUpdate("update structure set atomproperties=null");
+        t.close();
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from structure where atomproperties=null");
+		Assert.assertEquals(0,table.getRowCount());
+		
+		c.close();			
+		Form headers = new Form();  
+		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/smartsprop", port),
+				headers, Status.SUCCESS_NO_CONTENT,
+				null);		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * from structure where atomproperties=null");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();			
+	}		
 	@Test
 	public void testCalculateBCUT() throws Exception {
 		Form headers = new Form();  

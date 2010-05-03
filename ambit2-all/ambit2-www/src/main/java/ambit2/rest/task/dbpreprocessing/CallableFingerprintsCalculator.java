@@ -28,7 +28,9 @@ import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
 import ambit2.db.update.qlabel.CreateQLabelPair;
+import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 
 /**
  * Dataset fingerprints
@@ -67,18 +69,27 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 		r.setMaxRecords(1);
 		p.add(new ProcessorStructureRetrieval(r));
 	
-		p.add(new BitSetGenerator(getFingerprintsType()));
+
+		
 		switch (getFingerprintsType()) {
 		case fp1024: {
+			p.add(new BitSetGenerator(getFingerprintsType()));
 			p.add(new FP1024Writer(getFingerprintsType()));
 			break;
 		}
 		case fp1024_struc: {
-			p.add(new FPStructureWriter());
+			p.add(new BitSetGenerator(getFingerprintsType()));
+			p.add(new FPStructureWriter());			
 			break;
 		}
 		case sk1024: {
+			p.add(new BitSetGenerator(getFingerprintsType()));
 			p.add(new FP1024Writer(getFingerprintsType()));
+			break;
+		}
+		case smarts_accelerator: {
+			p.add(new SMARTSPropertiesGenerator());
+			p.add(new SMARTSAcceleratorWriter());
 			break;
 		}
 		}
@@ -126,6 +137,12 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 		case fp1024_struc: {
 			return structureQuality(connection);
 		}
+		case sk1024: {
+			return null;
+		}
+		case smarts_accelerator: {
+			return null;
+		}		
 		default: {
 			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,getFingerprintsType().toString());
 		}
