@@ -108,7 +108,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"join\n"+
 		"(\n"+
 		"SELECT idchemical,count(distinct(id_srcdataset)) c FROM structure\n"+
-		"join struc_dataset using(idstructure) group by idchemical\n"+
+		"join struc_dataset using(idstructure) where type_structure != 'NA' and type_structure != 'MARKUSH' group by idchemical\n"+
 		") as SS\n"+
 		"using(idchemical)\n"+
 		"where c=1\n"+
@@ -116,8 +116,9 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"and type_structure != 'MARKUSH'\n",
 		//"UNLOCK TABLES"
 	
-		"insert into structure (idstructure,`preference`)\n"+
-		"select idstructure,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
+		
+		"insert into structure (idchemical,idstructure,structure,atomproperties,user_name,`preference`)\n"+
+		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
 		"on duplicate key update `preference`=values(`preference`)\n",
 
 		"delete from quality_pair"
