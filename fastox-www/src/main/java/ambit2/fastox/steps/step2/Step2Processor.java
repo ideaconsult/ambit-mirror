@@ -1,6 +1,9 @@
 package ambit2.fastox.steps.step2;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
@@ -18,6 +21,7 @@ import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.step1.Step1Resource.TABS;
 import ambit2.fastox.users.IToxPredictSession;
+import ambit2.fastox.users.ToxPredictSession.SearchMode;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
@@ -88,14 +92,14 @@ public class Step2Processor extends StepProcessor {
 				query.add(FastoxStepResource.params.max.toString(),"1");
 				Exception x = parseStructure(search);
 				if (x!=null) throw new StepException("search",x);
-
+				
 			} else if ("substructure".equals(mode)) {
 				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/smarts");
 				query.add(FastoxStepResource.params.search.toString(), search);
 				query.add(FastoxStepResource.params.text.toString(), text==null?"":text);
 				query.removeAll(FastoxStepResource.params.max.toString());
 				query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
-				
+				session.setSearchMode(SearchMode.smarts);
 			} else { /// ("similarity".equals(mode)) {
 				Exception e = parseStructure(search);
 				if (e!=null) throw new StepException("search",e);
@@ -116,31 +120,44 @@ public class Step2Processor extends StepProcessor {
 			try {
 				text = text.trim();
 				//check if this is a SMILES , otherwise search as text
-				SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-				IAtomContainer c = p.parseSmiles(text.trim());
-				if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(text.trim());
-				topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
-				query.add(FastoxStepResource.params.search.toString(), text);		
-				query.removeAll(FastoxStepResource.params.max.toString());
-				query.add(FastoxStepResource.params.max.toString(),"1");
-				
+				if (isInChI(text)) {
+					session.setSearchMode(SearchMode.inchi);
+					topRef = new Reference(String.format("%s/query/compound/%s/all",
+							 		wizard.getService(SERVICE.application),Reference.encode(text)));
+					query.removeAll(FastoxStepResource.params.max.toString());
+					query.add(FastoxStepResource.params.max.toString(),"1");					
+				} else {
+					SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+					IAtomContainer c = p.parseSmiles(text.trim());
+					if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(text.trim());
+					topRef = new Reference(wizard.getService(SERVICE.application)+"/query/structure");
+					query.add(FastoxStepResource.params.search.toString(), text);		
+					query.removeAll(FastoxStepResource.params.max.toString());
+					query.add(FastoxStepResource.params.max.toString(),"1");
+					session.setSearchMode(SearchMode.smiles);
+				}
 			} catch (Exception x) {
+				
+				
 				query.removeAll(FastoxStepResource.params.max.toString());
 				if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
 					if (!CASNumber.isValid(text)) throw new StepException("text",String.format("Invalid CAS Registry number %s",text));
 					else query.add(FastoxStepResource.params.max.toString(),"1");
+					session.setSearchMode(SearchMode.cas);
 				} else if (EINECS.isValidFormat(text)) { //this is EINECS
 					//we'd better not search for invalid numbers
 					if (!EINECS.isValid(text)) throw new StepException("text",String.format("Invalid EINECS number %s",text));
 					else query.add(FastoxStepResource.params.max.toString(),"1");
+					session.setSearchMode(SearchMode.einecs);
 				} else {
 					session.setSearch(text);
+					session.setSearchMode(SearchMode.text);
 					session.setCondition(condition);	
 					query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 				}
 				topRef = wizard.getService(SERVICE.compound);
 				query.add(FastoxStepResource.params.search.toString(), text);
-				if ((condition != null) && !("=".equals(condition)))
+				if (condition != null)
 					query.add(FastoxStepResource.params.condition.toString(),condition);	
 
 			}
@@ -149,6 +166,7 @@ public class Step2Processor extends StepProcessor {
 			topRef = new Reference(dataset);
 			query.removeAll(FastoxStepResource.params.max.toString());
 			query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
+			session.setSearchMode(SearchMode.dataset);
 			
 		} else {
 			if (TABS.Search.toString().equals(tab))
@@ -191,6 +209,17 @@ public class Step2Processor extends StepProcessor {
 		topRef.setQuery(query.getQueryString());
 	
 		return topRef;
+	}
+	
+	public boolean isInChI(String inchi) {
+		try {
+			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+			InChIToStructure c =f.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
+			return c.getAtomContainer().getAtomCount()>0;
+		} catch (Exception x) {
+			return false;
+		}
+		
 	}
 	
 	protected Exception parseStructure(String smiles) {

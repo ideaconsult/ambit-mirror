@@ -21,45 +21,53 @@ public class Wizard {
 		ontology {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ontology";
+				return "http://apps.ideaconsult.net:8080/ontology";
 			}
 		},
 		dataset {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ambit2/dataset";
+				return "http://apps.ideaconsult.net:8080/ambit2/dataset";
 			}
 		},
 		compound {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ambit2/compound";
+				return "http://apps.ideaconsult.net:8080/ambit2/compound";
 			}
-		},		
+		},	
+	
 		model {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ambit2/model";
+				return "http://apps.ideaconsult.net:8080/ambit2/model";
 			}			
 		},
 		algorithm {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ambit2/algorithm";
+				return "http://apps.ideaconsult.net:8080/ambit2/algorithm";
 			}					
 		},
 		feature {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ambit2/feature";
+				return "http://apps.ideaconsult.net:8080/ambit2/feature";
 			}					
 		},
 		application {
 			@Override
 			public String getDefaultValue() {
-				return "http://apps.ideaconsult.net:8180/ambit2";
+				return "http://apps.ideaconsult.net:8080/ambit2";
 			}					
-		};
+		},		
+		lookup {
+			@Override
+			public String getDefaultValue() {
+				return String.format("%s/query/lookup",SERVICE.application);
+			}					
+		};		
+
 		public String getKey() {
 			return String.format("toxpredict.service.%s",toString());
 		}

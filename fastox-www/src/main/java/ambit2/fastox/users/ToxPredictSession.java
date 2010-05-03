@@ -16,6 +16,14 @@ import ambit2.rest.task.RemoteTaskPool;
  *
  */
 public class ToxPredictSession implements IToxPredictSession {
+	public enum SearchMode {smiles,inchi,text,cas,einecs,dataset,mol,smarts};
+	protected SearchMode searchMode = SearchMode.text;
+	public SearchMode getSearchMode() {
+		return searchMode;
+	}
+	public void setSearchMode(SearchMode searchMode) {
+		this.searchMode = searchMode;
+	}
 	protected IToxPredictUser user;
 	protected String datasetURI;
 	protected Form features;
@@ -33,6 +41,11 @@ public class ToxPredictSession implements IToxPredictSession {
 	protected Hashtable<String, Exception> errors;
 	protected String search;
 	protected String condition;
+	protected Hashtable<String, Object> models;
+	protected Hashtable<String, Boolean> models_preprocessing;
+	
+	
+	protected RemoteTaskPool pool = null;	
 	
 	public String getPageSize() {
 		return pageSize;
@@ -59,10 +72,7 @@ public class ToxPredictSession implements IToxPredictSession {
 	public void setEndpointName(String endpointName) {
 		this.endpointName = endpointName;
 	}
-	protected Hashtable<String, Object> models;
-	protected Hashtable<String, Boolean> models_preprocessing;
-	
-	protected RemoteTaskPool pool = null;
+
 
 	public Iterator<String> getErrorKeys() {
 		if (errors == null) return null;

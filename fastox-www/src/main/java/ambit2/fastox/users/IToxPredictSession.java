@@ -5,6 +5,8 @@ import java.util.Iterator;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
+import ambit2.fastox.users.ToxPredictSession.SearchMode;
+
 
 
 public interface IToxPredictSession {
@@ -48,5 +50,7 @@ public interface IToxPredictSession {
 	public String getSearch();
 	public String getCondition();
 	public void setSearch(String s);
+	public SearchMode getSearchMode();
+	public void setSearchMode(SearchMode searchMode);
 	public void setCondition(String c);	
 }
