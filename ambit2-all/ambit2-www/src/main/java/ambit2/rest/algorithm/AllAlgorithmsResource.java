@@ -25,6 +25,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
+import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
@@ -200,7 +201,8 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			{"fptanimoto","Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
 			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
 			
-			{"fingerprints","Generate fingerprints",null,null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			{"superservice","Calls a remote service",null,null,new String[] {Algorithm.typeSuperService},null,null},
 			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null}
 			
@@ -219,7 +221,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 				System.out.println(d);
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType((String[])d[4]);
-				alg.setFormat(alg.hasType(Algorithm.typeRules)?AlgorithmFormat.JAVA_CLASS:
+				alg.setFormat(alg.hasType(Algorithm.typeRules)||alg.hasType(Algorithm.typeFingerprints)?AlgorithmFormat.JAVA_CLASS:
 						alg.hasType(Algorithm.typeAppDomain)?AlgorithmFormat.COVERAGE_SERIALIZED:AlgorithmFormat.WEKA);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());

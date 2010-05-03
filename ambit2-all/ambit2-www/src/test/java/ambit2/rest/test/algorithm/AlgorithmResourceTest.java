@@ -134,7 +134,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/fingerprints", port),
-				headers, Status.SUCCESS_OK,
+				headers, Status.SUCCESS_NO_CONTENT,
 				null);		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		
@@ -143,6 +143,32 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(4,table.getRowCount());
 		c.close();			
 	}		
+	
+	@Test
+	public void testStructureQualityWorkflow() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+        Statement t = connection.createStatement();
+        t.executeUpdate("delete from fp1024_struc");
+        t.close();
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from fp1024_struc");
+		Assert.assertEquals(0,table.getRowCount());
+		
+		c.close();			
+		Form headers = new Form();  
+		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/structurequality", port),
+				headers, Status.SUCCESS_NO_CONTENT,
+				null);		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT bc from fp1024_struc");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();			
+	}			
 	@Test
 	public void testCalculateBCUT() throws Exception {
 		Form headers = new Form();  
