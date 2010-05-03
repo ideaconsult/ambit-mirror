@@ -99,7 +99,7 @@ where s2.idchemical is null;
 	public final static String sqlField = 
 		"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text\n" +	
 		"FROM structure s1\n"+
-		"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (s1.preference+1E10*s1.idstructure) > (s2.preference+1E10*s2.idstructure)\n"+
+		"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (1E10*s1.preference+s1.idstructure) > (1E10*s2.preference+s2.idstructure)\n"+
 		"join (\n"+
 		"select distinct(structure.idchemical)\n"+
 		"from structure\n"+
@@ -113,7 +113,7 @@ where s2.idchemical is null;
 	public final static String sqlFieldProperties = 
 	"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text,-1 as idproperty,name,comments,value\n" +	
 	"FROM structure s1\n"+
-	"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (s1.preference+1E10*s1.idstructure) > (s2.preference+1E10*s2.idstructure)\n"+
+	"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (1E10*s1.preference+s1.idstructure) > (1E10*s2.preference+s2.idstructure)\n"+
 	"join (\n"+
 	"select idchemical,group_concat(distinct value SEPARATOR ';') as value,group_concat(distinct name) as name,group_concat(distinct comments) as comments\n"+
 	"from structure\n"+
