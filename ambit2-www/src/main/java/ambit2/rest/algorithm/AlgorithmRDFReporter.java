@@ -100,7 +100,6 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		*/
 		getJenaModel().createAnnotationProperty(DC.title.getURI());
 		getJenaModel().createAnnotationProperty(DC.description.getURI());
-		getJenaModel().createAnnotationProperty(DC.identifier.getURI());
 		getJenaModel().createAnnotationProperty(DC.type.getURI());
 		getJenaModel().createAnnotationProperty(DC.publisher.getURI());
 		getJenaModel().createAnnotationProperty(DC.format.getURI());

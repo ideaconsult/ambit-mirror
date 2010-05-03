@@ -52,7 +52,6 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		
 		output.createAnnotationProperty(DC.title.getURI());
 		output.createAnnotationProperty(DC.description.getURI());
-		output.createAnnotationProperty(DC.identifier.getURI());
 		output.createAnnotationProperty(DC.type.getURI());
 		output.createAnnotationProperty(DC.creator.getURI());
 		output.createAnnotationProperty(DC.format.getURI());
@@ -64,8 +63,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		Individual model = getJenaModel().createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Model.getOntClass(getJenaModel()));
 		model.addProperty(DC.title, item.getName());
-		model.addLiteral(DC.identifier,
-				 getJenaModel().createTypedLiteral(uriReporter.getURI(item),XSDDatatype.XSDanyURI));
+
 		model.addProperty(DC.creator,"N/A");
 		model.addProperty(DC.date,"N/A");
 		model.addProperty(DC.format,"N/A");
