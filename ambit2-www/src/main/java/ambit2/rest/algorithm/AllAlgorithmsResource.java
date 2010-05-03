@@ -203,6 +203,9 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			
 			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"struckeys","Generate structure keys","sk1024",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			
 			{"superservice","Calls a remote service",null,null,new String[] {Algorithm.typeSuperService},null,null},
 			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null}
 			
