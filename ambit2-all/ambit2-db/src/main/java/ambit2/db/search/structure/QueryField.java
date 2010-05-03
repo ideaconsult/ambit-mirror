@@ -61,46 +61,70 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 	public void setRetrieveProperties(boolean retrieveProperties) {
 		this.retrieveProperties = retrieveProperties;
 	}
-	/*
-	public final static String sqlField = 
-		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text from structure\n"+
-		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
-		"join properties using(idproperty) %s where %s\n"+
-		"%s %s ? and value %s ? %s";
-	
-	public final static String sqlFieldProperties = 
-		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text,idproperty,name,comments,value from structure\n"+
-		"join property_values using(idstructure) join property_string as f using (idvalue_string)"+
-		"join properties using(idproperty) %s where %s\n"+
-		"%s %s ? and value %s ? %s";
-	*/
+
 	protected static String queryField = "%s %s ? and"; //name namecondition value
 	protected static String queryValueCaseSensitive = "value %s ?"; 
 	protected static String queryValueCaseInsensitive = "lower(value) %s lower(?)"; 
 	
+	/**
+//FASTER!!!!!!
+select idchemical,idstructure from structure
+join
+(
+select distinct(s1.idchemical)
+from structure s1
+join  property_values using(idstructure)
+join property_string using (idvalue_string)
+join properties using(idproperty)
+where lower(value)='hexane'
+) a using(idchemical)
+where preferred=1
+limit 1
+
+--even faster
+SELECT s1.idchemical, s1.idstructure, s1.preference,s1.type_structure,value,name,comments
+FROM structure s1
+LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical AND s1.preference > s2.preference 
+join (
+select distinct(idchemical),group_concat(distinct value SEPARATOR ';') as value,group_concat(distinct name) as name,group_concat(distinct comments) as comments
+from structure
+join  property_values using(idstructure)
+join property_string using (idvalue_string)
+join properties using(idproperty)
+where lower(value) regexp '^benzene'
+) a on a.idchemical=s1.idchemical
+where s2.idchemical is null;
+	 */
+	//get the structure with min preference and min idstructure
 	public final static String sqlField = 
-		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text " +
-		"from structure " +
-		"inner join (select min(preference) p,idchemical from structure group by idchemical) ids using(idchemical) " +
-		"join (select idchemical,value from property_values " +
-		"join structure using(idstructure) " +
-		"join property_string using(idvalue_string) " +
-		"join properties using(idproperty) where %s %s) v using (idchemical) " +
-		"where structure.preference=ids.p %s" ;
-		//"group by idchemical";
+		"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text\n" +	
+		"FROM structure s1\n"+
+		"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (s1.preference+1E10*s1.idstructure) > (s2.preference+1E10*s2.idstructure)\n"+
+		"join (\n"+
+		"select distinct(structure.idchemical)\n"+
+		"from structure\n"+
+		"join  property_values using(idstructure)\n"+
+		"join property_string using (idvalue_string)\n"+
+		"join properties using(idproperty)\n"+
+		"where %s %s\n"+
+		") a on a.idchemical=s1.idchemical\n"+
+		"where s2.idchemical is null\n";
 	
 	public final static String sqlFieldProperties = 
-		"select ? as idquery,idchemical,structure.idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text,idproperty,name,comments,value " +
-		"from structure " +
-		"inner join (select min(preference) p,idchemical from structure group by idchemical) ids using(idchemical) " +
-		"join (select idchemical,value,idproperty,name,comments from property_values " +
-		"join structure using(idstructure) " +
-		"join property_string using(idvalue_string) " +
-		"join properties using(idproperty) where %s %s) v using (idchemical) " +
-		"where structure.preference=ids.p %s" ;
-		//"group by idchemical";
-
-
+	"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text,-1 as idproperty,name,comments,value\n" +	
+	"FROM structure s1\n"+
+	"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (s1.preference+1E10*s1.idstructure) > (s2.preference+1E10*s2.idstructure)\n"+
+	"join (\n"+
+	"select idchemical,group_concat(distinct value SEPARATOR ';') as value,group_concat(distinct name) as name,group_concat(distinct comments) as comments\n"+
+	"from structure\n"+
+	"join  property_values using(idstructure)\n"+
+	"join property_string using (idvalue_string)\n"+
+	"join properties using(idproperty)\n"+
+	"where %s %s\n"+
+	"group by idchemical\n"+
+	") a on a.idchemical=s1.idchemical\n"+
+	"where s2.idchemical is null\n";
+	
 	protected StringCondition nameCondition;
 	protected SearchMode searchMode = SearchMode.name;
 	
@@ -132,8 +156,7 @@ public class QueryField extends AbstractStructureQuery<Property,String, StringCo
 		return String.format(
 				isRetrieveProperties()?sqlFieldProperties:sqlField,
 				whereName,
-				String.format(isCaseSensitive()?queryValueCaseSensitive:queryValueCaseInsensitive,getCondition().getSQL()),
-				isChemicalsOnly()?"group by idchemical":""
+				String.format(isCaseSensitive()?queryValueCaseSensitive:queryValueCaseInsensitive,getCondition().getSQL())
 				);
 		/*
 		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
