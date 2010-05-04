@@ -116,9 +116,9 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		Instances newInstances = null;
 		try {
 	        newInstances = Filter.useFilter(instances, remove);
-	        Filter filter = new RemoveUseless();
-	        filter.setInputFormat(newInstances);
-	        newInstances = Filter.useFilter(newInstances, filter);
+	        //Filter filter = new RemoveUseless();
+	        //filter.setInputFormat(newInstances);
+	       // newInstances = Filter.useFilter(newInstances, filter);
 	       // filter = new ReplaceMissingValues();
 	       // filter.setInputFormat(newInstances);
 	       // newInstances = Filter.useFilter(newInstances, filter);    
