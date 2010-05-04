@@ -64,5 +64,16 @@ public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,I
 	public Object predict(IStructureRecord target) throws AmbitException {
 		return calculator.process(target);
 	}
+	@Override
+	public String toString() {
 
+		StringBuilder b = new StringBuilder();
+		b.append(String.format("Structures required\t%s\n",structureRequired?"YES":"NO"));
+
+		if (predictor != null) {
+			b.append(predictor.toString());
+		}
+		return b.toString();
+				
+	}	
 }

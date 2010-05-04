@@ -28,12 +28,9 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.base.processors.Reporter;
 import ambit2.db.IDBProcessor;
 import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
@@ -73,6 +70,7 @@ Then, when the "get(Variant)" method calls you back,
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
 				MediaType.TEXT_XML,
+				MediaType.TEXT_PLAIN,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				MediaType.APPLICATION_RDF_XML,

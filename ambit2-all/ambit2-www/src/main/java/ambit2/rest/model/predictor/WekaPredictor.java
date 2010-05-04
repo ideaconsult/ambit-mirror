@@ -119,4 +119,14 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 			testInstances.delete();
 		}
 	}
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("\n-- WEKA Model --\n");
+		b.append(super.toString());
+
+		return b.toString();
+				
+	}	
+	
 }
