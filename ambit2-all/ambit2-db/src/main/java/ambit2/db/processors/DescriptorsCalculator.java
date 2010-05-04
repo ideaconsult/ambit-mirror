@@ -155,5 +155,25 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 		super.setSession(sessionID);
 		writer.setSession(sessionID);
 	}
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("\n-- Descriptor calculator --\n");
+		try {
+	       if (descriptors==null)	descriptors = d.process(null);
+	    	Iterator<Property> i = descriptors.getProperties(true);
+	    	while (i.hasNext()) {
+	    		try {
+	    			Property p = i.next();
+	    			if (p.isEnabled()) 
+	    				b.append(p.getClazz().getName());
+	   			} catch (Exception x) {
+	   				x.printStackTrace();
+	    		}
+	    	} 
+		} catch (Exception x) {b.append(x.getMessage());};
+		return b.toString();
+	      	
+	}
 }
 
