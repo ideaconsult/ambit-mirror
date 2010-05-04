@@ -32,9 +32,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
-import ambit2.rest.model.predictor.NumericADPredictor;
-import ambit2.rest.model.predictor.WekaPredictor;
-import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableDescriptorCalculator;
@@ -92,6 +90,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
+		
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
@@ -106,6 +105,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 				return null;
 			}
 		},MediaType.TEXT_URI_LIST);
+	} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
+		return new StringConvertor(	new ModelTextReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+				MediaType.TEXT_PLAIN);	
+		
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -114,8 +117,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			) {
 		return new RDFJenaConvertor<ModelQueryResults,IQueryRetrieval<ModelQueryResults>>(
 				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType())
-				,variant.getMediaType());			
-	} else //html 	
+				,variant.getMediaType());	
+	} else//html
 		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	}
@@ -177,18 +180,17 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 
 
 	}
+	
+
 	@Override
 	protected CallableQueryProcessor createCallable(Form form,	ModelQueryResults model) throws ResourceException {
 
 		try {
 			readVariables(model);
 			
+			ModelPredictor predictor = ModelPredictor.getPredictor(model,getRequest());
+			
 			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
-				WekaPredictor predictor = new WekaPredictor(
-						getRequest().getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()));
-				
 				return //reads Instances, instead of IStructureRecord
 				new CallableWekaPredictor<Object>(
 						form,
@@ -198,11 +200,6 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						;
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 				if (model.getPredictors().size()== 0) { //hack for structure based AD
-					FingerprintsPredictor predictor = new FingerprintsPredictor(
-							getRequest().getRootRef(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),null,null);
-					
 					return //reads Instances, instead of IStructureRecord
 					new CallableModelPredictor<IStructureRecord,FingerprintsPredictor>(
 							form,
@@ -212,13 +209,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						
 					}	;					
 				} else {
-					NumericADPredictor predictor = new NumericADPredictor(
-							getRequest().getRootRef(),
-							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),null);
-					
-					return //reads Instances, instead of IStructureRecord
-					new CallableWekaPredictor<DataCoverage>(
+					return new CallableWekaPredictor<DataCoverage>(
 							form,
 							getRequest().getRootRef(),
 							getContext(),
@@ -226,20 +217,12 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 							;
 				}
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
-				
-				DescriptorPredictor predictor = new DescriptorPredictor(
-						getRequest().getRootRef(),
-						model,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-						new PropertyURIReporter(getRequest()),
-						null
-						);
 				return
 				new CallableDescriptorCalculator(
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						predictor
+						(DescriptorPredictor) predictor
 						);
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
 		} catch (ResourceException x) {

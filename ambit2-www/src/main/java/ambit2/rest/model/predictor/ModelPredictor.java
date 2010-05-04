@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -21,9 +22,11 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
@@ -266,4 +269,71 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		}
 		
 	}
+	
+	public static ModelPredictor getPredictor(ModelQueryResults model, Request request) throws ResourceException  {
+
+		try {
+		
+			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
+				return new WekaPredictor(
+						request.getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request));
+
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
+				if (model.getPredictors().size()== 0) { //hack for structure based AD
+					return new FingerprintsPredictor(
+							request.getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),null,null);
+				
+				} else {
+					return new NumericADPredictor(
+							request.getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),null);
+	
+				}
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
+				
+				return new DescriptorPredictor(
+						request.getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request),
+						null
+						);
+
+		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+		} finally {
+
+		}		
+	}
+	
+	@Override
+	public String toString() {
+
+		StringBuilder b = new StringBuilder();
+		b.append(String.format("Structures required\t%s\n",structureRequired?"YES":"NO"));
+		//b.append(String.format("Descriptors required\t%s\n",valuesRequired?"YES":"NO"));
+		
+		b.append("-- Data header --\n");
+		b.append(header==null?"":header.toString());
+		b.append("\n");
+		if (classIndex>=0) {
+			b.append(String.format("-- Class Index %d--\n",classIndex));
+			if (header!= null)	b.append(header.attribute(classIndex));
+			b.append("\n");
+		}
+
+		if (predictor != null) {
+			b.append(predictor.toString());
+		}
+		return b.toString();
+				
+	}	
 }

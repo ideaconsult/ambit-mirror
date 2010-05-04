@@ -48,4 +48,14 @@ public abstract class CoveragePredictor<Input,T>  extends	ModelPredictor<DataCov
 		}
 		if (count==0) throw new AmbitException("No property to assign results!!!");
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("\n-- AMBIT Coverage applicability domain assessment --\n");
+		b.append(super.toString());
+
+		return b.toString();
+				
+	}
 }

@@ -71,9 +71,14 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			uriReporter.processItem(model);
 
 			output.write(String.format(
-						"<td><a href=\"%s\">%s</a></td>",
+						"<td><a href=\"%s\">%s</a>",
 						w.toString(),
 						model.getName()));
+			
+			output.write(String.format(
+					"&nbsp;<a href=\"%s?media=text/plain\" target='_model'>%s</a></td>",
+					w.toString(),
+					"txt"));			
 			
 			output.write(String.format(
 					"<td><a href=\"%s\">%s</a></td>",
