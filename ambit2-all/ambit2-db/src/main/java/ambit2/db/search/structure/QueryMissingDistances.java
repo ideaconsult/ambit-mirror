@@ -36,11 +36,11 @@ public class QueryMissingDistances extends AbstractStructureQuery<String, IBond,
 
 		return "Structures without calculated pairwise atom distances from database";
 	}
-	public long getMaxRecords() {
+	public long getPageSize() {
 		return 0;
 	}
 	@Override
-	public void setMaxRecords(long records) {
+	public void setPageSize(long records) {
 	
 	}
 }

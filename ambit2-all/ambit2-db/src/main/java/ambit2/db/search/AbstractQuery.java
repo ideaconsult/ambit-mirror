@@ -27,13 +27,14 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	protected String name;
 	protected Integer id=-1;
 	protected long maxRecords = 1000;
+	protected int page = 0;
 
 	public AbstractQuery() {
 		super();
 		try {
-			setMaxRecords(Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS)));
+			setPageSize(Integer.parseInt(Preferences.getProperty(Preferences.MAXRECORDS)));
 		} catch (Exception x) {
-			setMaxRecords(1000);
+			setPageSize(1000);
 		}	
 	}
 	
@@ -100,12 +101,18 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 			b.append(getValue());
 		return b.toString();
 	}
-	public void setMaxRecords(long records) {
+	public void setPageSize(long records) {
 		this.maxRecords = records>0?records:1000;
 		
 	}
-	public long getMaxRecords() {
+	public long getPageSize() {
 		return maxRecords;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 	public String getKey() {
 		return null;
@@ -113,5 +120,5 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	public String getCategory() {
 		return null;
 	}
-
+	
 }

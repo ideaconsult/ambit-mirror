@@ -101,12 +101,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			} 
 		}
 		if (query == null) query = getTextQuery(null,false,text);
+
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		setPaging(form, query);
 		
-		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			query.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
-		} catch (Exception x) {}
-				
 		setTemplate(createTemplate(context, request, response));
 		return query;
 	}

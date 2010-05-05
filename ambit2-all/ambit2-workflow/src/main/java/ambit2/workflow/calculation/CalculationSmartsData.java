@@ -30,7 +30,8 @@ public class CalculationSmartsData extends CalculationSequence {
 			@Override
 			public Object execute() throws Exception {
 				MissingFingerprintsQuery q = new MissingFingerprintsQuery(FPTable.smarts_accelerator);
-				q.setMaxRecords(batchSize);
+				q.setPageSize(batchSize);
+				q.setPage(0);
 				return q;
 			}
 		});

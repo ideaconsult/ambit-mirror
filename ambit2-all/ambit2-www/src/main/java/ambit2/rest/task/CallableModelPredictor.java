@@ -50,7 +50,8 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor> 
 
 		if (predictor.isStructureRequired()) {
 			RetrieveStructure r = new RetrieveStructure(true);
-			r.setMaxRecords(1);
+			r.setPageSize(1);
+			r.setPage(0);
 			p1.add(new ProcessorStructureRetrieval(r));
 		}
 		if  ((predictor.getModel().getPredictors().size()>0) &&  (predictor.isValuesRequired())) {

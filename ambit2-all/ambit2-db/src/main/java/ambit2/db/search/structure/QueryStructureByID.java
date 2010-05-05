@@ -41,11 +41,11 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 		setCondition(NumberCondition.getInstance("="));
 	}
 	@Override
-	public long getMaxRecords() {
+	public long getPageSize() {
 		return maxRecords;
 	}
 	@Override
-	public void setMaxRecords(long records) {
+	public void setPageSize(long records) {
 		this.maxRecords = records;
 	}
 	public IStructureRecord getMaxValue() {

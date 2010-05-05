@@ -63,13 +63,16 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	}
 	public ImageReporter(Dimension dimension) {
 		super();
-		strucQuery.setMaxRecords(1);
+		strucQuery.setPageSize(1);
+		strucQuery.setPage(0);
+		
 		strucQuery.setChemicalsOnly(false);
 		depict.setImageSize(dimension);
 		getProcessors().clear();
 		RetrieveStructureImagePath q = new RetrieveStructureImagePath();
 		q.setQueryName(getQueryName());
-		q.setMaxRecords(1);
+		q.setPageSize(1);
+		q.setPage(0);
 		getProcessors().add(new ProcessorStructureRetrieval(q));
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {

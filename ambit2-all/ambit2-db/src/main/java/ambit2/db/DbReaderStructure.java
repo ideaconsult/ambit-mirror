@@ -42,7 +42,8 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 	public DbReaderStructure() {
 		super();
 		RetrieveStructure q = new RetrieveStructure();
-		q.setMaxRecords(1);
+		q.setPageSize(1);
+		q.setPage(0);
 		retriever = new ProcessorStructureRetrieval(q);
 		
 

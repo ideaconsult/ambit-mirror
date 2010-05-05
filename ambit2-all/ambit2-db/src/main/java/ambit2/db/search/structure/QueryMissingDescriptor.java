@@ -66,11 +66,11 @@ public class QueryMissingDescriptor extends AbstractStructureQuery<ILiteratureEn
 		return b.toString();
 	}
 	@Override
-	public long getMaxRecords() {
+	public long getPageSize() {
 		return 0;
 	}
 	@Override
-	public void setMaxRecords(long records) {
+	public void setPageSize(long records) {
 	
 	}
 }

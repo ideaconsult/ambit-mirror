@@ -33,7 +33,8 @@ public class CalculationStructuralKeys extends CalculationSequence {
 			@Override
 			public Object execute() throws Exception {
 				MissingFingerprintsQuery q = new MissingFingerprintsQuery(FPTable.sk1024);
-				q.setMaxRecords(batchSize);
+				q.setPageSize(batchSize);
+				q.setPage(0);
 				return q;
 			}
 		});

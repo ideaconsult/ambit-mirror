@@ -78,7 +78,8 @@ public class QuerySMARTS extends
 	public void prepareScreening() throws AmbitException {
 		try {
 			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
-				screening.setMaxRecords(0);
+				screening.setPageSize(0);
+				screening.setPage(0);
 				SmartsPatternAmbit matcher = new SmartsPatternAmbit();
 				matcher.setUseCDKIsomorphism(false);
 				value.setQuery(matcher);

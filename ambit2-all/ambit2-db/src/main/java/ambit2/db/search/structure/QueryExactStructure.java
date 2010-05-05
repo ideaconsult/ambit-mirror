@@ -116,7 +116,8 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 	public void prepareScreening() throws AmbitException {
 		try {
 			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
-				screening.setMaxRecords(0);
+				screening.setPage(0);
+				screening.setPageSize(0);
 				IAtomContainer atomContainer = getValue();
 				if (fpGenerator==null) fpGenerator = new FingerprintGenerator();
 				if (skGenerator == null) skGenerator = new StructureKeysBitSetGenerator();

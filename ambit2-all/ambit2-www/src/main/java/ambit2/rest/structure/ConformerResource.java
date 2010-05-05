@@ -86,7 +86,7 @@ public class ConformerResource extends CompoundResource {
 						);				
 			}
 			QueryStructureByID query = new QueryStructureByID();			
-			query.setMaxRecords(-1);
+			query.setPageSize(-1);
 			Object idconformer = request.getAttributes().get(ConformerResource.idconformer);
 			try {
 				record.setIdstructure(Integer.parseInt(Reference.decode(idconformer.toString())));
@@ -94,7 +94,7 @@ public class ConformerResource extends CompoundResource {
 			} catch (Exception x) {
 				record.setIdstructure(-1);
 				query.setChemicalsOnly(true);
-				query.setMaxRecords(-1);
+				query.setPageSize(-1);
 				query.setValue(record);
 			}
 			query.setValue(record);

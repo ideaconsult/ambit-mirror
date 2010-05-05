@@ -16,8 +16,10 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.db.search.IQueryObject;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
@@ -30,7 +32,27 @@ import ambit2.rest.task.Task;
  *
  */
 public abstract class CatalogResource<T extends Serializable> extends AbstractResource<Iterator<T>,T,IProcessor<Iterator<T>, Representation>> {
+	protected int page = 0;
+	public int getPage() {
+		return page;
+	}
 
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+
+	public long getPageSize() {
+		return pageSize;
+	}
+
+
+	public void setPageSize(long pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	protected long pageSize = 100;
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -124,6 +146,32 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(),getResponse());				
 			}
 		}
+	}
+	
+	protected void setPaging(Form form) {
+		String max = form.getFirstValue(max_hits);
+		String page = form.getFirstValue(OpenTox.params.page.toString());
+		String pageSize = form.getFirstValue(OpenTox.params.pagesize.toString());
+		if (max != null)
+		try {
+			setPage(0);
+			setPageSize(Long.parseLong(form.getFirstValue(max_hits).toString()));
+			return;
+		} catch (Exception x) {
+			
+		}
+		try {
+			setPage(Integer.parseInt(page));
+		} catch (Exception x) {
+			x.printStackTrace();
+			setPage(0);
+		}
+		try {
+			setPageSize(Long.parseLong(pageSize));
+		} catch (Exception x) {
+			x.printStackTrace();
+			setPageSize(1000);
+		}			
 	}
 	
 }

@@ -57,7 +57,7 @@ public class ProcessorMissingDescriptorsQuery {
 	public IQueryObject<IStructureRecord> process(Profile<Property> descriptors)
 			throws AmbitException {
 		QueryCombinedStructure query = new QueryCombinedStructure();
-		query.setMaxRecords(maxRecords);
+		query.setPageSize(maxRecords);
 		query.setCombine_as_and(false);
 		Iterator<Property> i = descriptors.getProperties(true);
 		while (i.hasNext()) {
