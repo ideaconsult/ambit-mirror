@@ -78,12 +78,11 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 				if (params == null) {
 					statement = c.createStatement(getResultType(),getResultTypeConcurency());
 					String sql = getSQL(target);
-					System.out.println(sql);
+					
 					rs = statement.executeQuery(sql);
 
 				} else {
 					String sql = getSQL(target);
-					System.out.println(sql);
 					sresults = getCachedStatement(sql);
 					if (sresults == null) {
 						sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
