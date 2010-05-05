@@ -21,7 +21,6 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
 	public static final String sqlField="select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,? as text from structure where %s %s %s order by type_structure desc";
-	protected long maxRecords = -1;
 	protected int metric = 1;
 	protected String text = null;
 	public String getText() {
@@ -39,10 +38,13 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 	
 	public QueryStructureByID() {
 		setCondition(NumberCondition.getInstance("="));
+		setPageSize(1);
+		setPage(0);
 	}
 	@Override
 	public long getPageSize() {
-		return maxRecords;
+		//return maxRecords;
+		return 1;
 	}
 	@Override
 	public void setPageSize(long records) {
