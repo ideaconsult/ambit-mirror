@@ -274,7 +274,7 @@ public class CompoundImageTools {
         r2dm.setColorAtomsByType(true);
         r2dm.setSelectedPartColor(Color.orange);
         */
-        
+    	r2dm.setShowAromaticity(true);
 		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
 //			g.setBackground(r2dm.getBackColor());
 
