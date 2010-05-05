@@ -13,6 +13,7 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import weka.classifiers.Classifier;
+import weka.classifiers.functions.LinearRegression;
 import weka.clusterers.Clusterer;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -174,6 +175,8 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 						break;
 					}
 			try {
+				if (classifier instanceof LinearRegression) //don't do feature selection!
+					classifier.setOptions(new String[] {"-S","1"});
 				classifier.buildClassifier(newInstances);
 			} catch (Exception x) {
 				throw new AmbitException(x);
