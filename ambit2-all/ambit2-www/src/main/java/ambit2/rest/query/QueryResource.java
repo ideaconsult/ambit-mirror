@@ -431,13 +431,11 @@ Then, when the "get(Variant)" method calls you back,
 		try {
 			queryObject.setPage(Integer.parseInt(page));
 		} catch (Exception x) {
-			x.printStackTrace();
 			queryObject.setPage(0);
 		}
 		try {
 			queryObject.setPageSize(Long.parseLong(pageSize));
 		} catch (Exception x) {
-			x.printStackTrace();
 			queryObject.setPageSize(1000);
 		}			
 	}

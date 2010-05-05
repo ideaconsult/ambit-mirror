@@ -212,13 +212,11 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 		try {
 			setPage(Integer.parseInt(page));
 		} catch (Exception x) {
-			x.printStackTrace();
 			setPage(0);
 		}
 		try {
 			setPageSize(Long.parseLong(pageSize));
 		} catch (Exception x) {
-			x.printStackTrace();
 			setPageSize(1000);
 		}			
 	}
