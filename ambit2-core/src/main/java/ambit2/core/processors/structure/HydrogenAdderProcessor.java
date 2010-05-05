@@ -63,7 +63,7 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
 	public IAtomContainer process(IAtomContainer mol) throws AmbitException {
 		super.process(mol);
 		try {
-	       	if (mol instanceof IMolecule) {
+	       	if ((mol instanceof IMolecule) || (mol instanceof IAtomContainer))  {
                 try {
     	            adder.addImplicitHydrogens(mol);
     	            logger.debug("Adding implicit hydrogens; atom count "+mol.getAtomCount());
@@ -73,7 +73,6 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
     	            }
 
                 } catch (Exception x) {
-                	x.printStackTrace();
                     logger.error(x);
                     if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
                         throw new AmbitException(x);
