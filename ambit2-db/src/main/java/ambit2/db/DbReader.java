@@ -123,7 +123,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 						try {
 							
 							counter++;
-							long max = (query.getMaxRecords()>0)?query.getMaxRecords():1000;
+							long max = (query.getPageSize()>0)?query.getPageSize():1000;
 							if (counter > max) return false;
 							boolean loop=getResultSet().next();
 							long attemptsStart = System.currentTimeMillis();

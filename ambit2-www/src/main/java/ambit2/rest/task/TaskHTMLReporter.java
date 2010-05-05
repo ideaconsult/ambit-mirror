@@ -22,10 +22,13 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 	public TaskHTMLReporter(Request ref) {
 		super(ref);
 	}
+	
+
 	@Override
 	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			String ajax = AmbitResource.js(getRequest().getOriginalRef().toString(),baseReference);
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),ajax);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
 			for (TaskStatus status :TaskStatus.values())
 				output.write(String.format("<a href='%s%s?search=%s'>%s</a>&nbsp;",
@@ -70,7 +73,11 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 	public void footer(Writer output, Iterator<Task<Reference,USERID>> query) {
 		try {
 			output.write("</table>");
+			//output.write("<form name=\"myForm\"><input type=BUTTON value=\"Stop polling\" onClick=\"stopPolling()\"></form>");
+						
 			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
+			
+
 			output.flush();
 		} catch (Exception x) {
 			

@@ -265,7 +265,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		setResultSet(null);
 		if (getConnection() == null) throw new AmbitException("No connection!");
 		try {
-			storedResults.setMaxRecords(maxRecords);
+			storedResults.setPageSize(maxRecords);
 			setResultSet(queryExecutor.process(storedResults));
 			
 		} catch (SQLException x) {

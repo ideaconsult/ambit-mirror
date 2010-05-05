@@ -34,7 +34,8 @@ public class CalculationFingerprints extends CalculationSequence {
 			@Override
 			public Object execute() throws Exception {
 				MissingFingerprintsQuery q = new MissingFingerprintsQuery();
-				q.setMaxRecords(batchSize);
+				q.setPage(0);
+				q.setPageSize(batchSize);
 				return q;
 			}
 		});

@@ -59,7 +59,8 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public CMLReporter() {
 		getProcessors().clear();
 		RetrieveStructure r = new RetrieveStructure();
-		r.setMaxRecords(1);
+		r.setPage(0);
+		r.setPageSize(1);
 		getProcessors().add(new ProcessorStructureRetrieval(r));		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {

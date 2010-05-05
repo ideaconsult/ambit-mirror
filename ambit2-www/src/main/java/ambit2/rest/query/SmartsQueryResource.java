@@ -103,7 +103,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					IStructureRecord record = new StructureRecord();
 					record.setIdchemical(Integer.parseInt(Reference.decode(cmpid.toString())));
 					QueryStructureByID scope = new QueryStructureByID();
-					scope.setMaxRecords(1);
+					scope.setPageSize(1);
 					scope.setChemicalsOnly(true);
 					scope.setValue(record);
 					

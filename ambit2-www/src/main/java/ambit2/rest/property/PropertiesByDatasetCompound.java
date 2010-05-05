@@ -31,12 +31,11 @@ public class PropertiesByDatasetCompound extends PropertiesByDatasetResource {
 			protected String getScopeSQL() {
 				return null;
 			}
-			public void setMaxRecords(long records) {
+			public void setPageSize(long records) {}
 				
-			}
-			public long getMaxRecords() {
-				return 0;
-			}
+			public long getPageSize() {	return 0; }
+			public int getPage() {	return 0;	}
+			public void setPage(int page) {	}
 			@Override
 			protected String joinOn() {
 				return "idproperty";

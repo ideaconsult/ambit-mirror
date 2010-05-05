@@ -33,10 +33,10 @@ public class MissingFeatureValuesResource extends DatasetStructuresResource<Quer
 		if ((getTemplate()==null) || (getTemplate().size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"No features set!");
 		
 		QueryCombinedStructure query = new QueryCombinedStructure();
-		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			query.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
-		} catch (Exception x) {}
+		
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		setPaging(form, query);
+		
 		query.setCombine_as_and(false);
 		Iterator<Property> i = getTemplate().getProperties(true);
 		while (i.hasNext()) {
@@ -53,8 +53,7 @@ public class MissingFeatureValuesResource extends DatasetStructuresResource<Quer
 			}
 			
 		}    	
-		
-		Form form  = getRequest().getResourceRef().getQueryAsForm();
+
 		Object dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		if (dataset!=null) try {
 			Object q = CallableQueryProcessor.getQueryObject(new Reference(dataset.toString()), getRequest().getRootRef());

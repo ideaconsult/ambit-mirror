@@ -28,7 +28,8 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 	protected PreparedStatement sresults=null;
 	protected Statement statement=null;
 	protected boolean cache = false;
-	protected String limit = "%s limit %d";
+	//protected String limit = "%s limit %d";
+	protected String paged_limit = "%s limit %d,%d";
 	protected String LIMIT = "limit";
 	public QueryExecutor() {
 
@@ -77,11 +78,12 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 				if (params == null) {
 					statement = c.createStatement(getResultType(),getResultTypeConcurency());
 					String sql = getSQL(target);
-
+					System.out.println(sql);
 					rs = statement.executeQuery(sql);
 
 				} else {
 					String sql = getSQL(target);
+					System.out.println(sql);
 					sresults = getCachedStatement(sql);
 					if (sresults == null) {
 						sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
@@ -127,8 +129,13 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 		String sql = target.getSQL();
 		if (sql.indexOf(LIMIT)>=0) return sql;
 		else if ((target instanceof IQueryRetrieval) && ((IQueryRetrieval)target).isPrescreen()) return sql;
-		else return (target.getMaxRecords()>0?String.format(limit,sql,target.getMaxRecords()):sql);
+		else 
+			return (target.getPageSize()>0?
+					String.format(paged_limit,sql,
+							target.getPage()==0?target.getPage():target.getPage()*target.getPageSize(),target.getPageSize()):
+					sql);
 	}
+
 	@Override
 	public void closeResults(ResultSet rs) throws SQLException {
 		if (rs != null) rs.close();

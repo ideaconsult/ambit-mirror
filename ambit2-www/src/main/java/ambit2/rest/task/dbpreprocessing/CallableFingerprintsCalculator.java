@@ -66,7 +66,8 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 		RetrieveStructure r = new RetrieveStructure(true);
-		r.setMaxRecords(1);
+		r.setPageSize(1);
+		r.setPage(0);
 		p.add(new ProcessorStructureRetrieval(r));
 	
 
@@ -102,7 +103,8 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 	protected Object createTarget(Reference reference) throws Exception {
 		//can have combined query with a dataset query if dataset_uri is present
 		MissingFingerprintsQuery q =  new MissingFingerprintsQuery(getFingerprintsType());
-		q.setMaxRecords(batchSize);
+		q.setPageSize(batchSize);
+		q.setPage(0);
 		return q;
 	}
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{

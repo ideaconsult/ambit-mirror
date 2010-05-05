@@ -177,7 +177,7 @@ public class OpenTox {
 				return "Page";
 			}
 		},
-		page_size {
+		pagesize {
 			public String getDescription() {
 				return "Page size";
 			}

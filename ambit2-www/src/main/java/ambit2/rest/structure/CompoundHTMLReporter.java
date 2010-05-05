@@ -292,6 +292,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			} catch (Exception x) {
 				maxrecords = "1000";
 			}		
+			
 			/** This determines if similarity searching will be done via smiles or via URL **/
 			String type = "";
 			try {

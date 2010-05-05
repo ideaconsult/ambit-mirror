@@ -29,6 +29,7 @@ import ambit2.base.processors.Reporter;
 import ambit2.db.IDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.IQueryObject;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.DBConnection;
@@ -82,15 +83,11 @@ Then, when the "get(Variant)" method calls you back,
 
 				
 		});		
-		if (queryObject!=null)
-				try {
-					Form form = getRequest().getResourceRef().getQueryAsForm();
-					String max = form.getFirstValue(max_hits);
-					if(max != null)
-						queryObject.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
-				} catch (Exception x) {
-					
-				}
+		if (queryObject!=null) {
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			setPaging(form, queryObject);
+		}
+
 	}	
 	/*
 	protected Connection getConnection() throws SQLException , AmbitException {
@@ -419,5 +416,29 @@ Then, when the "get(Variant)" method calls you back,
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	
-	
+	protected void setPaging(Form form, IQueryObject queryObject) {
+		String max = form.getFirstValue(max_hits);
+		String page = form.getFirstValue(OpenTox.params.page.toString());
+		String pageSize = form.getFirstValue(OpenTox.params.pagesize.toString());
+		if (max != null)
+		try {
+			queryObject.setPage(0);
+			queryObject.setPageSize(Long.parseLong(form.getFirstValue(max_hits).toString()));
+			return;
+		} catch (Exception x) {
+			
+		}
+		try {
+			queryObject.setPage(Integer.parseInt(page));
+		} catch (Exception x) {
+			x.printStackTrace();
+			queryObject.setPage(0);
+		}
+		try {
+			queryObject.setPageSize(Long.parseLong(pageSize));
+		} catch (Exception x) {
+			x.printStackTrace();
+			queryObject.setPageSize(1000);
+		}			
+	}
 }

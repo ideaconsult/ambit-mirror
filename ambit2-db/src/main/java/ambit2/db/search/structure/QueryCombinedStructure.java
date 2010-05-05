@@ -35,6 +35,7 @@ import ambit2.db.search.QueryCombined;
 public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 	
 	protected long maxRecords = 0;
+	protected int page = 0;
 	/**
 	 * 
 	 */
@@ -68,19 +69,16 @@ public class QueryCombinedStructure extends QueryCombined<IStructureRecord> {
 	protected String joinOn() {
 		return isChemicalsOnly()?"idchemical":"idstructure";
 	}
-	public void setMaxRecords(long records) {
-		try {
-			maxRecords = records;
-		} catch (Exception x) {
-			maxRecords = 2000;
-		}
-		
+	public void setPageSize(long records) {
+		maxRecords = records;
 	}
-	public long getMaxRecords() {
-		try {
-			return maxRecords;
-		} catch (Exception x) {
-			return 2000;
-		}		
+	public long getPageSize() {
+		return maxRecords;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 }

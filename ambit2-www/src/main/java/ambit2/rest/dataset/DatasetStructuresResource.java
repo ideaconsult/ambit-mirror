@@ -64,10 +64,8 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		datasetID = key;
 		QueryDatasetByID query = new QueryDatasetByID();
 		query.setValue(key);
-		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			query.setMaxRecords(Long.parseLong(form.getFirstValue(max_hits).toString()));
-		} catch (Exception x) {}
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		setPaging(form, query);
 		return (Q)query;
 	}
 	

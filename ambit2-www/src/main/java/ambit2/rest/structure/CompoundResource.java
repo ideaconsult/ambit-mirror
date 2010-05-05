@@ -321,7 +321,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				IStructureRecord record = new StructureRecord();
 				record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
 				QueryStructureByID query = new QueryStructureByID();
-				query.setMaxRecords(1);
+				query.setPageSize(1);
 				query.setChemicalsOnly(true);
 				query.setValue(record);
 				return query;

@@ -50,8 +50,13 @@ public interface IQueryObject<ResultType> extends IStatement,Serializable {
 	Integer getId();
 	void setId(Integer id);	
 	List<QueryParam> getParameters() throws AmbitException;	
-	long getMaxRecords();
-	void setMaxRecords(long records);
+
+	int getPage();
+	void setPage(int page);
+
+	long getPageSize();
+	void setPageSize(long records);
+
 	/**
 	 * Key to identify this query for caching purposes. 
 	 * @return
@@ -63,4 +68,5 @@ public interface IQueryObject<ResultType> extends IStatement,Serializable {
 	 */
 	String getCategory();
 	
+
 }
