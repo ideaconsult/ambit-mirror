@@ -102,10 +102,12 @@ CREATE TABLE  `structure` (
   KEY `idchemical` USING BTREE (`idchemical`),
   KEY `Index_4` (`label`),
   KEY `Index_5` (`idstructure`,`user_name`),
-  KEY `Index_6` USING BTREE (`preference`,`idchemical`),
+  KEY `Index_6` USING BTREE (`idchemical`,`preference`,`idstructure`),
+  KEY `Index_pref` USING BTREE (`preference`),
   CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 DELIMITER $
 CREATE TRIGGER copy_history BEFORE UPDATE ON structure
@@ -648,7 +650,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (2,10,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (3,0,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma seperated strings
