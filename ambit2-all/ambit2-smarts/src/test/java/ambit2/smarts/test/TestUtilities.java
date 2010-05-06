@@ -57,6 +57,9 @@ public class TestUtilities
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
 	
+	public TestUtilities()
+	{	
+	}
 	
 	public static void printSmartsTokens(String smarts)
 	{
@@ -1238,14 +1241,20 @@ public class TestUtilities
 		//tu.testIsomorphismTester("CC=1CC=1", "CC=1CC=1");
 		
 		
-		tu.testSmartsManagerBoolSearch("[#G6;H][i]", "[H]O[N+](=O)[O-]");
-		tu.testIsomorphismTester("[#G6;H][i]", "[H]O[N+](=O)[O-]");
-		tu.testSmartsManagerBoolSearch("[i][#G6v2]", "O[N+](=O)[O-]");
-		tu.testIsomorphismTester("[i][#G6v2]", "O[N+](=O)[O-]");
+		//tu.testSmartsManagerBoolSearch("[#G6;H][i]", "[H]O[N+](=O)[O-]");
+		//tu.testIsomorphismTester("[#G6;H][i]", "[H]O[N+](=O)[O-]");
+		//tu.testSmartsManagerBoolSearch("[i][#G6v2]", "O[N+](=O)[O-]");
+		//tu.testIsomorphismTester("[i][#G6v2]", "O[N+](=O)[O-]");
 		
 		
-		
-		//tu.printSmartsTokens("CC=1CC=1C");
+		//tu.sp.mSupportOpenBabelExtension = false;
+		//tu.printSmartsTokens("[C^3]N");
+		tu.testSmartsManagerBoolSearch("[C^1]","CCCC");
+		tu.testSmartsManagerBoolSearch("[C^2]","CCCC");
+		tu.testSmartsManagerBoolSearch("[C^3]","CCCC");
+		tu.testSmartsManagerBoolSearch("[C^2]","C1=CC=CC=1");
+		tu.testSmartsManagerBoolSearch("[C^1]","CC#CC");
+		tu.testSmartsManagerBoolSearch("[C^1]","CC=C=C");
 		
 	}
 	

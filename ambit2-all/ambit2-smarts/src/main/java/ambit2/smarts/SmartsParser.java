@@ -73,7 +73,7 @@ public class SmartsParser
 	public boolean mSupportMOEExtension = true;
 	public boolean mUseMOEvPrimitive = false;
 	public boolean mSupportOpenEyeExtension = true;
-	
+	public boolean mSupportOpenBabelExtension = true;
 	
 	//Work variables for Component Level Grouping
 	boolean FlagCLG = false;  
@@ -249,7 +249,8 @@ public class SmartsParser
 					else
 					{						
 						if ((tok.type == SmartsConst.AP_iMOE) ||
-							(tok.type == SmartsConst.AP_vMOE))	
+							(tok.type == SmartsConst.AP_vMOE) ||
+							(tok.type == SmartsConst.AP_OB_Hybr))	
 							mNeedParentMoleculeData = true;
 						else
 							if (tok.type == SmartsConst.AP_x)
@@ -540,11 +541,9 @@ public class SmartsParser
 				
 			indexes.put(i,rc1);
 			
-			//Bug fixing code -----------!
 			//After first index appearance current bond data must be reset 
 			//If not a bug is caused when ring closure is with a double bond 
 			//e.g. CC=1CC=1 is parsed like it is CC1=CC=1
-			//---------------------------
 			curBond = null; 
 			curBondType = SmartsConst.BT_UNDEFINED;
 		}
@@ -1012,6 +1011,15 @@ public class SmartsParser
 				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_ANY,0));			
 				curChar++;
 				break;
+			case '^':
+				if (mSupportOpenBabelExtension)
+					parseAP_OpenBabel_Hybridization();
+				else
+				{
+					newError("Incorrect symbol in atom expression", curChar+1,"");
+					curChar++;
+				}
+				break;
 			default:
 				newError("Incorrect symbol in atom expression", curChar+1,"");
 				curChar++;
@@ -1217,6 +1225,24 @@ public class SmartsParser
 				newError("Incorrect atomic number after #", curChar,"");
 			else
 				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_AtNum,par));
+		}	
+	}
+	
+	
+	void parseAP_OpenBabel_Hybridization()
+	{	
+		testForDefaultAND();
+		curChar++;
+		
+		int par = getInteger();
+		if (par == -1)
+			newError("Missing hybridization parameter after ^", curChar,"");
+		else
+		{	
+			if ((par < 1) || (par >3))
+				newError("Incorrect hybridization after ^", curChar,"");
+			else
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_OB_Hybr,par));
 		}	
 	}
 	

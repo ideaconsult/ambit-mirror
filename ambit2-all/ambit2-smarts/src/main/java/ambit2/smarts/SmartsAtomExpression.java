@@ -237,7 +237,10 @@ public class SmartsAtomExpression extends SMARTSAtom
     	case SmartsConst.AP_vMOE: 
     		//System.out.println("vMOE");
     		return(match_vMOE(tok.param, atom));	
-    		    		
+    	
+    	case SmartsConst.AP_OB_Hybr: 
+    		return(match_OB_Hybr(tok.param, atom));	
+    		
     	default:
     		return(true);
     	}
@@ -272,12 +275,17 @@ public class SmartsAtomExpression extends SMARTSAtom
     		case SmartsConst.AP_v:
     		case SmartsConst.AP_X:
     		case SmartsConst.AP_x:
-    		case SmartsConst.AP_vMOE:	
+    		case SmartsConst.AP_vMOE:
     			String s = Character.toString(SmartsConst.AtomPrimChars[tok.type]);
     			if (tok.param != 1)
     				s+= tok.param;
     			return(s);
     		
+    		case SmartsConst.AP_OB_Hybr:
+    			String sOBHybr = Character.toString(SmartsConst.AtomPrimChars[tok.type]);
+    			sOBHybr+= tok.param;
+    			return(sOBHybr);
+    			
     		case SmartsConst.AP_iMOE:
     			return("i");
     			
@@ -519,6 +527,52 @@ public class SmartsAtomExpression extends SMARTSAtom
     	}
     	//System.out.println("nB = " + nB);
     	return(nB == param);
+    }
+    
+    public boolean match_OB_Hybr(int param, IAtom atom)
+    {
+    	if (atom.getFlag(CDKConstants.ISAROMATIC))
+    	{	
+    		if (param == 2) //sp2
+    			return(true);
+    		else
+    			return(false); //aromatic atoms are not of sp1 nor sp3 hybridization  
+    	}	
+    	
+    	//Searching for a double or triple bond (participation in a Pi system)
+    	IAtomContainer mol = (IAtomContainer)atom.getProperty("ParentMoleculeData");
+    	List ca = mol.getConnectedAtomsList(atom);
+    	int nDB = 0;
+    	int nTB = 0;
+    	for (int i = 0; i < ca.size(); i++)
+    	{
+    		IBond b = mol.getBond(atom, (IAtom) ca.get(i));
+    		if (b.getOrder() == IBond.Order.DOUBLE)
+    			nDB++;
+    		else
+    			if (b.getOrder() == IBond.Order.TRIPLE)
+    				nTB++;
+    	}
+    	
+    	
+    	if (param == 3)  //sp3 - hybridization
+    	{
+    		if ((nDB == 0) && (nTB == 0))
+    			return(true);
+    	}
+    	else
+    		if (param == 2)  //sp2 - hybridization
+    		{
+    			if ((nDB == 1) && (nTB == 0))
+    				return(true);
+    		}
+    		else //(param == 1)  sp1 - hybridization
+    		{
+    			if ((nDB == 2) || (nTB == 1))
+    				return(true);
+    		}
+    	
+    	return(false);
     }
     
     
