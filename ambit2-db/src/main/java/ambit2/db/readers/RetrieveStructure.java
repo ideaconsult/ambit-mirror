@@ -57,12 +57,17 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
 	public void setPreferedStructure(boolean preferedStructure) {
 		this.preferedStructure = preferedStructure;
 	}
+	/*
 	protected String sql_prefered = 
     	"select structure.idstructure,idchemical,uncompress(structure) as ustructure,\n"+
     	"format,type_structure,atomproperties,preference from structure\n"+
     	"inner join (select min(preference) as p ,idchemical from structure where structure.idchemical=?) ids using(idchemical)\n"+
     	"where structure.preference=ids.p ";
-	
+	*/
+	protected String sql_prefered = 
+    	"select structure.idstructure,idchemical,uncompress(structure) as ustructure,\n"+
+    	"format,type_structure,atomproperties,preference from structure\n"+
+    	"order by idchemical,preference,idstructure ";	
 	public RetrieveStructure() {
 		this(false);//initial behaviour
 	}
