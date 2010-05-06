@@ -43,8 +43,7 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 	}
 	@Override
 	public long getPageSize() {
-		//return maxRecords;
-		return 1;
+		return maxRecords;
 	}
 	@Override
 	public void setPageSize(long records) {
