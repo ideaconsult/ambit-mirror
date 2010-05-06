@@ -181,6 +181,11 @@ public class SmartsManager
 		parser.mSupportOpenEyeExtension = support;
 	}
 	
+	public void supportOpenBabelExtension(boolean support)
+	{
+		parser.mSupportOpenBabelExtension = support;
+	}
+	
 	public void useMOEvPrimitive(boolean support)
 	{
 		parser.mUseMOEvPrimitive = support;
@@ -191,9 +196,14 @@ public class SmartsManager
 		return(parser.mSupportMOEExtension);
 	}
 	
-	public boolean getSupportOpenEyeExtension(boolean support)
+	public boolean getSupportOpenEyeExtension()
 	{
 		return(parser.mSupportOpenEyeExtension);
+	}
+	
+	public boolean getSupportOpenBabelExtension()
+	{
+		return(parser.mSupportOpenBabelExtension);
 	}
 	
 	public boolean getUseMOEvPrimitive()

@@ -45,7 +45,7 @@ public class SmartsConst
 	//Atom Primitives
 	public static char AtomPrimChars[] = {'*','a','A','D','H','h','R','r','v','X',
 										  '-','#','@','m','_','x','i','G','X','N', 
-										  'b' };
+										  'b', '^' };
 	public static final int AP_ANY = 0;
 	public static final int AP_a =  1;
 	public static final int AP_A = 2;
@@ -67,7 +67,7 @@ public class SmartsConst
 	public static final int AP_XMOE = 18;    //MOE Extension
 	public static final int AP_NMOE = 19;    //MOE Extension
 	public static final int AP_vMOE = 20;    //MOE Extension v may replace the original Daylight v
-		
+	public static final int AP_OB_Hybr = 21; //OpenBabel Extension ^1, ^2, ^3 - atom hybridization
 	
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':','@','/','\\'};
