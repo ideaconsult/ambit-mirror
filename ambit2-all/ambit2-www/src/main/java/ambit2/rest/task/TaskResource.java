@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;

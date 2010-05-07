@@ -65,7 +65,7 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
-		return new StringConvertor(new PropertyValueReporter());
+		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
@@ -83,7 +83,7 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 			return new RDFJenaConvertor<T, IQueryRetrieval<T>>(
 					new PropertyValueRDFReporter<T>(getRequest(),variant.getMediaType())
 					,variant.getMediaType());		
-		} else return new StringConvertor(new PropertyValueReporter());
+		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 					
 	}		
 	@Override

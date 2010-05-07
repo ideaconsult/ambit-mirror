@@ -46,7 +46,7 @@ public class KroesInput extends FeatureResource {
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
-		return new StringConvertor(new PropertyValueReporter());
+		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
@@ -93,7 +93,7 @@ public class KroesInput extends FeatureResource {
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
 			
-		} else return new StringConvertor(new PropertyValueReporter());
+		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST);
 					
 	}	
 	

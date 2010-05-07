@@ -42,7 +42,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 		System.out.println(getRequest().getClientInfo());
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			
-			return new StringConvertor(new PropertyValueReporter());
+			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 				return new DocumentConvertor(new UsersDOMReporter(getRequest()));
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {

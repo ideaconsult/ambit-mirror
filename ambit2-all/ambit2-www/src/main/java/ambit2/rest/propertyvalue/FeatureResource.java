@@ -97,7 +97,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
-		return new StringConvertor(new PropertyValueReporter());
+		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
@@ -106,7 +106,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 					new PropertyValueHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
-		} else return new StringConvertor(new PropertyValueReporter());
+		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST);
 					
 	}		
 	@Override
