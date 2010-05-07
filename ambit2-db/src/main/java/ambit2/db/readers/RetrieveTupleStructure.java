@@ -31,7 +31,16 @@ public class RetrieveTupleStructure extends RetrieveTuple<IStructureRecord> {
 			Property p = Property.getInstance(rs.getString(1),le); 
 			Object value = rs.getObject(5);
 			if (value == null) record.setProperty(p,rs.getFloat(6));
-			else record.setProperty(p,rs.getString(5));	
+			else {
+				if (NaN.equals(value.toString())) {
+					record.setProperty(p,Double.NaN);
+					p.setClazz(Number.class);
+				} else {
+					record.setProperty(p,rs.getString(5));
+					p.setClazz(String.class);
+				}				
+			}
+			
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

@@ -29,6 +29,16 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		"select idproperty,name,units,title,url,idreference,comments,null,islocal from properties join catalog_references using(idreference)\n"+
 		"where idproperty in (select idproperty from structure join property_values using(idstructure) where idchemical = ?) \n";
 
+	public static String propertyWithType = 
+		"select idproperty,properties.name,units,title,url,idreference,comments,idtype,islocal from properties\n"+
+		"join\n"+
+		"(\n"+
+		"select idproperty,idtype from property_values\n"+
+		"where idproperty= ?\n"+
+		"group by idproperty,idtype order by idtype desc limit 1\n"+
+		") p using(idproperty)\n"+
+		"join catalog_references using(idreference)\n";
+	
 	public ReadProperty(Integer id) {
 		setValue(id);
 	}
@@ -49,7 +59,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 	}
 	public String getSQL() throws AmbitException {
 		if (getFieldname() == null)
-			return getValue()==null?base_sql:String.format("%s where idproperty=?", base_sql);
+			return getValue()==null?base_sql:propertyWithType;
 		else {
 			String sql = isChemicalsOnly()?ReadProperty.sqlPerChemical:ReadProperty.sqlPerStructure;
 			return getValue()==null?sql:(sql + "where idproperty=?");
