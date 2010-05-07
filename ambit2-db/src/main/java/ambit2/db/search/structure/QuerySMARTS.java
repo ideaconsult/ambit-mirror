@@ -85,8 +85,13 @@ public class QuerySMARTS extends
 				value.setQuery(matcher);
 				QueryAtomContainer container = matcher.getQuery();
 				IAtomContainer atomContainer = smartsToChemObject.process(container);
-				screening.setValue(fpGenerator.process(atomContainer));
-				screening.setFieldname(skGenerator.process(atomContainer));
+				if ((atomContainer == null) || (atomContainer.getAtomCount()==0)) {
+					screening.setValue(null);
+					screening.setFieldname(null);
+				} else {
+					screening.setValue(fpGenerator.process(atomContainer));
+					screening.setFieldname(skGenerator.process(atomContainer));
+				}
 			}
 		} catch (AmbitException x) {
 			throw x;
