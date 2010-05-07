@@ -44,7 +44,7 @@ import ambit2.db.search.QueryParam;
  *
  */
 public class RetrieveFieldNamesByType extends AbstractPropertyRetrieval<String, Boolean, EQCondition>{ 
-	public static String sql = "select idproperty,name,units,title,url,idreference,comments,idtype,islocal from ( select idproperty,idtype from property_values group by idproperty,idtype) as L join properties using (idproperty) join catalog_references using(idreference) where idtype=?";
+	public static String sql = "select idproperty,name,units,title,url,idreference,comments,idtype,islocal,type from ( select idproperty,idtype from property_values group by idproperty,idtype) as L join properties using (idproperty) join catalog_references using(idreference) where idtype=?";
 		/**
 	 * 
 	 */

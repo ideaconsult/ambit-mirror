@@ -4,14 +4,14 @@
   <roles role_name="ambit_admin"/>
   <roles role_name="ambit_guest"/>
   <user_roles user_name="guest" role_name="ambit_guest"/>
-  <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
-  <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
-  <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>
-  <catalog_references idreference="4" title="XLogP another implementation" url="XLogP another implementation"/>
-  <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE"/>
-  <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
-  <catalog_references idreference="7" title="EINECS" url="EINECS"/>
-  <catalog_references idreference="8" title="PUBCHEM" url="PUBCHEM"/>
+  <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org" type="Dataset"/>
+  <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org" type="Dataset"/>
+  <catalog_references idreference="3" title="XLogP" url="XLogP reference" type="Dataset"/>
+  <catalog_references idreference="4" title="XLogP another implementation" url="XLogP another implementation" type="Dataset"/>
+  <catalog_references idreference="5" title="Jonsson G, Bechmann RK, Bamber SD, Baussant T	Bioconcentration, biotransformation, and elimination of polycyclic aromatic hydrocarbons in sheepshead minnows (Cyprinodon Variegatus) exposed to contaminated seawater	Environmental Toxicology and Chemistry	20" url="EURAS.BE" type="Dataset"/>
+  <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE" type="Dataset"/>
+  <catalog_references idreference="7" title="EINECS" url="EINECS" type="Dataset"/>
+  <catalog_references idreference="8" title="PUBCHEM" url="PUBCHEM" type="Dataset"/>
  <properties idproperty="1" idreference="1" name="Property 1" units="" comments="Names" islocal="false"/>
   <properties idproperty="2" idreference="1" name="Property 2" units="" comments="CasRN" islocal="false"/>
   <properties idproperty="3" idreference="1" name="Property 3" units="" comments="Names" islocal="false"/>
