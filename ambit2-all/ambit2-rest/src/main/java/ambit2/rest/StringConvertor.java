@@ -22,9 +22,6 @@ import ambit2.base.processors.Reporter;
  * @param <R>
  */
 public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends RepresentationConvertor<T,Q,Writer,R> {
-	public StringConvertor(R reporter) {
-		super(reporter);
-	}
 
 	/**
 	 * 
