@@ -38,7 +38,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 	public static String wherepropertyName  = " property.name = ?";
 	public static String join  = 
 		" join property_values using(idproperty) join  property_tuples using(id) join tuples using (idtuple) where %s %s %s group by idproperty";
-	public static String base_sql_type = "select idproperty,properties.name,units,title,url,idreference,comments,idtype,islocal from properties join catalog_references using(idreference)";
+	public static String base_sql_type = "select idproperty,properties.name,units,title,url,idreference,comments,idtype,islocal,type from properties join catalog_references using(idreference)";
 	
 	/**
  * 

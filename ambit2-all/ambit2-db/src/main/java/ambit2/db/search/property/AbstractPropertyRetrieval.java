@@ -32,6 +32,7 @@ package ambit2.db.search.property;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -53,7 +54,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 		title,
 		url
 	}	
-	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,null,islocal from properties join catalog_references using(idreference)";
+	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,null,islocal,type from properties join catalog_references using(idreference)";
 	/**
 	 * 
 	 */
@@ -125,6 +126,11 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 			try {
 				p.setNominal(rs.getBoolean(9));
 			} catch (Exception x) { p.setNominal(false);}
+			try {
+				String _type = rs.getString(10);
+				if (_type != null)
+				p.getReference().setType(ILiteratureEntry._type.valueOf(_type));
+			} catch (Exception x) {}			
 			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
