@@ -54,7 +54,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			
-			return new StringConvertor(new PropertyValueReporter());
+			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 				return new DocumentConvertor(new ReferenceDOMReporter(getRequest()));
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {

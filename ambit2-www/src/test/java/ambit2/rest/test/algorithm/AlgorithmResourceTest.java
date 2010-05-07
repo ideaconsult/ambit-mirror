@@ -16,6 +16,8 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -263,9 +265,50 @@ public class AlgorithmResourceTest extends ResourceTest {
 					String.format("http://localhost:%d/model/%s", port,"3"));
 	}	
 	
+
+//	http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798
+	@Test
+	public void testLocalRegressionRemoteDataset() throws Exception {
+		
+		Form headers = new Form();  
+		Reference dataset = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798");
+
+		
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+
+		headers.add(OpenTox.params.target.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510");
+		
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/LR", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
 	
-	
-	 
+		headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
+				headers, Status.SUCCESS_OK,
+				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT * from properties where name='caco2'");
+		Assert.assertEquals(2,table.getRowCount());
+		
+		ClientResource client = new ClientResource(new Reference(String.format("http://localhost:%d/model/3", port)));
+
+		Representation r = client.get(MediaType.TEXT_PLAIN);
+		System.out.println(r.getText());
+		r.release();
+		client.release();
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='caco2'");
+		Assert.assertEquals(7,table.getRowCount());
+   }	
+		
 	@Test
 	public void testLocalRegressionDescriptors() throws Exception {
 		Form headers = new Form();  
@@ -351,6 +394,13 @@ public class AlgorithmResourceTest extends ResourceTest {
 		ITable table = 	c.createQueryTable("EXPECTED",
 				"SELECT * from properties where name='Property 2'");
 		Assert.assertEquals(2,table.getRowCount());
+		
+		ClientResource client = new ClientResource(new Reference(String.format("http://localhost:%d/model/3", port)));
+
+		Representation r = client.get(MediaType.TEXT_PLAIN);
+		System.out.println(r.getText());
+		r.release();
+		client.release();
 		
 		Assert.fail("second run, try if predictions already exists");
 		testAsyncTask(
