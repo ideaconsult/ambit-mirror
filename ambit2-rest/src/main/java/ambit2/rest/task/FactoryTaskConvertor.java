@@ -25,7 +25,7 @@ public class FactoryTaskConvertor<USERID> {
 	public synchronized IProcessor<Iterator<Task<Reference,USERID>>, Representation> createTaskConvertor(
 			Variant variant, Request request) throws AmbitException, ResourceException {
 
-		return new StringConvertor(createTaskReporter(variant, request));
+		return new StringConvertor(createTaskReporter(variant, request),variant.getMediaType());
 	}
 	public synchronized Reporter<Iterator<Task<Reference,USERID>>,Writer> createTaskReporter(
 			Variant variant, Request request) throws AmbitException, ResourceException {
