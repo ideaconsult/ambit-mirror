@@ -57,10 +57,15 @@ public class RetrieveTemplateStructure extends	RetrieveTemplate<IStructureRecord
 				p.setClazz(Number.class);
 				record.setProperty(p,rs.getFloat(6));
 			}
-			else {
+			else 				
+			if (NaN.equals(value.toString())) {
+				record.setProperty(p,Double.NaN);
+				p.setClazz(Number.class);
+			} else {
+				record.setProperty(p,rs.getString(5));
 				p.setClazz(String.class);
-				record.setProperty(p,rs.getString(5));	
 			}
+			
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

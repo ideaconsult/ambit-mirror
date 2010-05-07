@@ -23,7 +23,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 	 * 
 	 */
 	private static final long serialVersionUID = 6445434992210833166L;
-
+	public static final String NaN = "NaN";
 	protected IStructureRecord record;
 	public IStructureRecord getRecord() {
 		return record;
@@ -202,14 +202,23 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = Property.getInstance(rs.getString(1),le); 
 			Object value = rs.getObject(5);
+			
 			if (value == null) {
 				record.setProperty(p,rs.getFloat(6));
 				p.setClazz(Number.class);
 			}
 			else {
-				record.setProperty(p,rs.getString(5));
-				p.setClazz(String.class);
+				if (NaN.equals(value.toString())) {
+					record.setProperty(p,Double.NaN);
+					p.setClazz(Number.class);
+				} else {
+					record.setProperty(p,rs.getString(5));
+					p.setClazz(String.class);
+				}
 			}
+			System.out.print(record.getProperties());
+			System.out.print(' ');
+			System.out.println(record.getProperty(p));
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

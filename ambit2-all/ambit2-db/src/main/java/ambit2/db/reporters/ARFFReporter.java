@@ -34,7 +34,8 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
 					((RetrieveProfileValues)getQuery()).setRecord(target);
-					return super.process(target);
+					IStructureRecord record = super.process(target);
+					return record;
 				}
 			});
 		
@@ -110,11 +111,11 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				writer.write(String.format("/conformer/%d",item.getIdstructure()));
 			for (Property p : header) {
 				Object value = item.getProperty(p);
-				if (p.getClazz()==Number.class) 
+				if (p.getClazz()==Number.class) { 
 					writer.write(String.format(",%s",
-							value==null?"?":value
+							(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
 							));
-				else
+				} else
 					writer.write(String.format(",%s%s%s",
 							value==null?"":"\"",
 							value==null?"?":
