@@ -32,7 +32,8 @@ public class RetrieveFieldStructure extends RetrieveField<IStructureRecord> {
 			p.setLabel(rs.getString(12));
 			Object value = rs.getObject(5);
 			if (value == null) {
-				record.setProperty(p,rs.getFloat(6));
+				value = rs.getObject(6);
+				record.setProperty(p,value==null?Double.NaN:rs.getFloat(6));
 				p.setClazz(Number.class);
 			}
 			else 

@@ -204,7 +204,8 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 			Object value = rs.getObject(5);
 			
 			if (value == null) {
-				record.setProperty(p,rs.getFloat(6));
+				value = rs.getObject(6);
+				record.setProperty(p,value==null?Double.NaN:rs.getFloat(6));
 				p.setClazz(Number.class);
 			}
 			else {
@@ -216,9 +217,6 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 					p.setClazz(String.class);
 				}
 			}
-			System.out.print(record.getProperties());
-			System.out.print(' ');
-			System.out.println(record.getProperty(p));
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

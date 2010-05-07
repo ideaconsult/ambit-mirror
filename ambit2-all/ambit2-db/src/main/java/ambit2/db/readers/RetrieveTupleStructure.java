@@ -30,7 +30,10 @@ public class RetrieveTupleStructure extends RetrieveTuple<IStructureRecord> {
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = Property.getInstance(rs.getString(1),le); 
 			Object value = rs.getObject(5);
-			if (value == null) record.setProperty(p,rs.getFloat(6));
+			if (value == null) {
+				value = rs.getObject(6);
+				record.setProperty(p,value==null?Double.NaN:rs.getFloat(6));
+			}
 			else {
 				if (NaN.equals(value.toString())) {
 					record.setProperty(p,Double.NaN);
