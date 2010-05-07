@@ -155,6 +155,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	return true;
     }
   
+    
     protected boolean insertValue(double value, Property property,int idtuple,mode error) throws SQLException {
     	if (structure == null) throw new SQLException("Undefined structure");
 
@@ -196,12 +197,53 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 
     }        
     
+    protected boolean insertValueNaN(Property property,int idtuple,mode error) throws SQLException {
+    	if (structure == null) throw new SQLException("Undefined structure");
+
+    	if (ps_descriptorvalue_number == null)
+    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number+onduplicate_number);
+    	
+    	//"values (null,idproperty,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?)";
+    	    	
+    	ps_descriptorvalue_number.clearParameters();
+    	ps_descriptorvalue_number.setInt(1,property.getId());
+    	ps_descriptorvalue_number.setInt(2,structure.getIdstructure());
+        ps_descriptorvalue_number.setString(3, error.toString());
+        ps_descriptorvalue_number.setNull(4, Types.DOUBLE);
+        ps_descriptorvalue_number.setNull(5, Types.DOUBLE);
+        ps_descriptorvalue_number.setString(6, error.toString());     
+        
+        if (ps_descriptorvalue_number.executeUpdate()>0) {
+        	if (idtuple >0 ) {
+    	        	if (ps_inserttuplenumber == null) 
+    	        		ps_inserttuplenumber = connection.prepareStatement(insert_tuple);
+    	        	ps_inserttuplenumber.clearParameters();
+    	        	ps_inserttuplenumber.setInt(1,idtuple);
+    	        	ps_inserttuplenumber.setInt(2,property.getId());
+    	        	ps_inserttuplenumber.setInt(3,structure.getIdstructure());
+    	        	int ok = ps_inserttuplenumber.executeUpdate();
+    	        	if (ok<=0) {
+    	        	//	logger.warn("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
+
+    	        	}
+
+        	} else {
+        		//logger.warn("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
+        	}
+       	} else {
+       		//logger.warn("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
+       		return false;
+       	}
+       	return true;
+
+    }         
+    
     protected void descriptorEntry(Target target, Property property, int propertyIndex, int idtuple) throws SQLException {
     	Object value = getValue(target,property,propertyIndex);
     	if (value instanceof Number) {
     		if (Double.isNaN( ((Number)value).doubleValue())) {
     			logger.warn(property.getName() + value);
-    			insertValue(value.toString(),property,idtuple,mode.ERROR);
+    			insertValueNaN(property,idtuple,mode.ERROR);
     		} else
     			insertValue(((Number)value).doubleValue(),property,idtuple,mode.UNKNOWN);
     	} else

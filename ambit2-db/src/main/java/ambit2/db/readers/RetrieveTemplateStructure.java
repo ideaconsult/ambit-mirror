@@ -55,7 +55,8 @@ public class RetrieveTemplateStructure extends	RetrieveTemplate<IStructureRecord
 			Object value = rs.getObject(5);
 			if (value == null) {
 				p.setClazz(Number.class);
-				record.setProperty(p,rs.getFloat(6));
+				value = rs.getObject(6);
+				record.setProperty(p,value==null?Double.NaN:rs.getFloat(6));
 			}
 			else 				
 			if (NaN.equals(value.toString())) {
