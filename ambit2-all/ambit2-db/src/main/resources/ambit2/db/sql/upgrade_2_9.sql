@@ -81,3 +81,4 @@ ALTER TABLE `models` MODIFY COLUMN `content` LONGBLOB NOT NULL;
 
 -- 3.0
 ALTER TABLE `structure` DROP INDEX `Index_6`, ADD INDEX `Index_6` USING BTREE(`idchemical`, `preference`, `idstructure`);
+ALTER TABLE `structure` DROP INDEX `Index_pref`, ADD INDEX `Index_pref` USING BTREE( `preference`, `idchemical`);
