@@ -9,6 +9,7 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
+import ambit2.rest.task.CallablePOST;
 import ambit2.rest.test.ResourceTest;
 
 public class LauncherTest extends ResourceTest {
@@ -120,4 +121,36 @@ public class LauncherTest extends ResourceTest {
 		Assert.assertEquals(4,table.getRowCount());		
 		c.close();		
 	}		
+	@Test
+	public void testModelVarsTUM() throws Exception {
+		
+		String model = "http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8";
+		Form form = CallablePOST.getFeatures(model,new Form(),"url");
+		Assert.assertEquals(264,form.getValuesArray("url").length);
+
+		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
+		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
+		form.add(OpenTox.params.dataset_service.toString(), String.format("http://194.141.0.136:%d/dataset", port));
+		form.add(OpenTox.params.dataset_uri.toString(), String.format("http://194.141.0.136:%d/compound/100", port));
+
+		String superservice = String.format("http://194.141.0.136:%d/algorithm/superservice", port);
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, null);
+
+	}
+	@Test
+	public void testModelVarsEos() throws Exception {
+		
+		String model = "http://apps.ideaconsult.net:8080/ambit2/model/33";
+		Form form = CallablePOST.getFeatures(model,new Form(),"url");
+		Assert.assertEquals(4,form.getValuesArray("url").length);
+
+		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
+		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
+		form.add(OpenTox.params.dataset_service.toString(), String.format("http://194.141.0.136:%d/dataset", port));
+		form.add(OpenTox.params.dataset_uri.toString(), String.format("http://194.141.0.136:%d/dataset/1", port));
+
+		String superservice = String.format("http://194.141.0.136:%d/algorithm/superservice", port);
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, null);
+
+	}	
 }

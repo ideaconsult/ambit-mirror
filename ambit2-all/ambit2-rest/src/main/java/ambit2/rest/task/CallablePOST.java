@@ -1,5 +1,10 @@
 package ambit2.rest.task;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.restlet.data.ChallengeResponse;
@@ -13,6 +18,16 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.rdf.OT;
+
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Wrapper for remote tasks to be used as super service
@@ -28,6 +43,7 @@ public class CallablePOST implements Callable<Reference>{
 	protected Status status;
 	protected long pollInterval = 1500;
 	protected long pollTimeout = 1000L*60L*5L; //5 min
+	protected Reference applicationRootReference;
 	
 	public long getPollTimeout() {
 		return pollTimeout;
@@ -42,26 +58,29 @@ public class CallablePOST implements Callable<Reference>{
 		this.pollInterval = pollInterval;
 	}
 	
-	public CallablePOST(Form form) throws Exception {
-		this(form.getValuesArray("url"),MediaType.TEXT_URI_LIST,form.getWebRepresentation());
+	public CallablePOST(Form form,Reference root) throws Exception {
+		this(form.getValuesArray("url"),MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root);
 	}	
 	
 	public CallablePOST(String[] url,MediaType media, 
-			  Representation input) {
-		this(url,media,input,null);
+			  Representation input,Reference root) {
+		this(url,media,input,null,root);
 	}		
 	public CallablePOST(String[] url,MediaType media, 
 			  Representation input,
-			  ChallengeResponse authentication) {
-		this(url,media,input,authentication,1500);
+			  ChallengeResponse authentication,
+			  Reference root) {
+		this(url,media,input,authentication,1500,root);
 	}
 	public CallablePOST(String[] url,MediaType media, 
 			  Representation input,
-			  ChallengeResponse authentication, long pollInterval) {
+			  ChallengeResponse authentication, long pollInterval,
+			  Reference root) {
 		this.urls = url;
 		this.media = media;
 		this.input = input;
 		this.pollInterval = pollInterval;
+		this.applicationRootReference = root;
 	}
 	public Reference call() throws Exception {
 		long now = System.currentTimeMillis();
@@ -84,6 +103,7 @@ public class CallablePOST implements Callable<Reference>{
 				for (String url:urls) {
 					Form params = new Form();
 					params.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+					params.add(OpenTox.params.dataset_service.toString(),dataset_service);
 					RemoteTask task = new RemoteTask(new Reference(url),media,params.getWebRepresentation(),Method.POST,authentication);
 					pool.add(task);
 				}
@@ -136,8 +156,67 @@ public class CallablePOST implements Callable<Reference>{
 					task.error);
 		return task;
 	}
+	public static String getSparql(String name)  throws Exception {
+		InputStream in  = CallablePOST.class.getClassLoader().getResourceAsStream(name);
+        StringBuilder sparqlQuery = new StringBuilder();
+        String line;
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            while ((line = reader.readLine()) != null) {
+            	sparqlQuery.append(line).append("\n");
+            }
+        } finally {
+            in.close();
+        }
+        return sparqlQuery.toString();
+	}
+	public static Form getFeatures(String modeluri, Form form, String varname) throws Exception {
+		List<String> features = new ArrayList<String>();
+        QueryExecution qe = null;
+        OntModel model = null;
+        try {
+        	model = OT.createModel(null, new Reference(modeluri),MediaType.APPLICATION_RDF_XML);
+			Query query = QueryFactory.create(String.format(getSparql("sparql/ModelIndependentVariables.sparql").toString(),modeluri,modeluri));
+			qe = QueryExecutionFactory.create(query,model);
+			ResultSet results = qe.execSelect();
+			
+			
+			while (results.hasNext()) {
+				QuerySolution solution = results.next();
+				Resource var = solution.getResource("vars");
+				features.add(var.getURI());
+			}
+			if (features.size()==0) return null;
 	
-	protected String[] getFeatures(String model) {
+        } catch (Exception x) {
+        	throw x;
+        } finally {
+        	try {qe.close();} catch (Exception x) {}
+        	try {model.close();} catch (Exception x) {}
+        }
 		
+        //get features & algorithm; read each feature separately, to use less memory
+        for (String feature:features) 
+	        try {
+	        	model = OT.createModel(null, new Reference(feature),MediaType.APPLICATION_RDF_XML);	
+				
+				Query query = QueryFactory.create(getSparql("sparql/FeatureAlgorithm.sparql"));
+				qe = QueryExecutionFactory.create(query,model);
+				ResultSet results = qe.execSelect();
+				while (results.hasNext()) {
+					QuerySolution solution = results.next();
+					Resource var = solution.getResource("algorithm");
+					form.add(varname,var.getURI());
+				}
+				
+	        }  catch (Exception x) {
+	        	x.printStackTrace();
+	        	throw x;
+	        } finally {
+	        	try {qe.close();} catch (Exception x) {}
+	        	try {model.close();} catch (Exception x) {}
+	        }
+	       return form;
 	}
 }
