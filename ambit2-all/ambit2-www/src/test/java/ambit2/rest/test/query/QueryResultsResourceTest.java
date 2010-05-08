@@ -344,6 +344,25 @@ public class QueryResultsResourceTest extends ResourceTest {
 
 		
 	}		
+	
+	@Test
+	public void testPutDatasetFeatures() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
+		Assert.assertEquals(0,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/2", port));
+		
+		
+		testAsyncPoll(new Reference(String.format("http://localhost:%d/dataset/3", port)),
+				MediaType.TEXT_URI_LIST, form.getWebRepresentation(), Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/3", port)));
+
+		
+	}		
 	@Test
 	public void testDeleteDataset() throws Exception {
 		

@@ -35,6 +35,7 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 	protected boolean clearPreviousContent = false;
 	protected Template template;
 	protected Reference applicationRootReference;
+	protected String[] datasets;
 	
 	public boolean isClearPreviousContent() {
 		return clearPreviousContent;
@@ -52,9 +53,9 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 			) throws ResourceException {
 		super(form, context);
 		this.applicationRootReference = applicationRootReference;
-		String dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
-		if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
-		sourceReference = new Reference(dataset);
+		datasets = form.getValuesArray(OpenTox.params.dataset_uri.toString());
+		if (datasets==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
+		sourceReference = new Reference(datasets[0]);
 		this.storedQuery = storedQuery;
 		this.template = null;
 	}
@@ -65,38 +66,47 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 	 * @return
 	 * @throws Exception
 	 */
-	protected Template retrieveTemplate() throws Exception {
-		Form form = sourceReference.getQueryAsForm();
+	protected Template retrieveTemplate(Reference reference) throws Exception {
+		Form form = reference.getQueryAsForm();
 		String max[] = form.getValuesArray(AbstractResource.max_hits);
 		if ((max != null) && (max.length>0)) 
 			form.removeAll(AbstractResource.max_hits);
 		
 		form.add(AbstractResource.max_hits,"1");
-		Reference ref = new Reference(sourceReference);
+		Reference ref = new Reference(reference);
 		ref.setQuery(form.getQueryString());
 		
 		if(template == null) template = new Template(null);
 		RDFPropertyIterator.readFeaturesRDF(ref.toString(), template, applicationRootReference);
-	
+		/*
 		Iterator<Property> properties = template.getProperties(true);
 		while (properties.hasNext()) {
 			System.out.println(properties.next());
 		}
+		*/
 		return template;
 	}
 	
 	@Override
 	public Reference call() throws Exception {
-		target = createTarget(sourceReference);
-		if (target == null) throw new Exception("");
+		Reference ref  = null;
+		for (String dataset:datasets)
+			ref = call(new Reference(dataset));
+		return ref;
+	}
+
+	public Reference call(Reference uri) throws Exception {
+	
+		Object query = getQueryObject(uri, applicationRootReference);
+		if (query == null) throw new Exception("");
 		
-		if (applicationRootReference.isParent(sourceReference)) {
-			if (target instanceof AbstractStructureQuery) {
-				template = retrieveTemplate();
-				return createQueryResults((AbstractStructureQuery)target);
-			} else if (target instanceof QueryCombinedStructure) {
-					template = retrieveTemplate();
-					return createQueryResults((QueryCombinedStructure)target);				
+		if (applicationRootReference.isParent(uri)) {
+			if (query instanceof AbstractStructureQuery) {
+				template = retrieveTemplate(uri);
+				return createQueryResults((AbstractStructureQuery)query);
+			} else if (query instanceof QueryCombinedStructure) {
+					template = retrieveTemplate(uri);
+					return createQueryResults((QueryCombinedStructure)query);				
 			} else {
 				//return new RDFStructuresReader(target.toString());
 				throw new Exception("Not implemented");

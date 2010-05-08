@@ -141,11 +141,11 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 				if (source.isURIResource()) {
 					hasSource = ((Resource)source).getURI();
 					if (hasSource.startsWith(String.format("%s/algorithm/",baseReference.toString()))) {
-						hasSource = hasSource.substring(0,baseReference.toString().length()+11);
+						hasSource = hasSource.substring(baseReference.toString().length()+11);
 					} else if (hasSource.startsWith(String.format("%s/model/",baseReference.toString()))) {
-						hasSource = hasSource.substring(0,baseReference.toString().length()+7);
+						hasSource = hasSource.substring(baseReference.toString().length()+7);
 					} if (hasSource.startsWith(String.format("%s/dataset/",baseReference.toString()))) {
-						hasSource = hasSource.substring(0,baseReference.toString().length()+9);
+						hasSource = hasSource.substring(baseReference.toString().length()+9);
 					}
 							
 				} else if (source.isLiteral()) {

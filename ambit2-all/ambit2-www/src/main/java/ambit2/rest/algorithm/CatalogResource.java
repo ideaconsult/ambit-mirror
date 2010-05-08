@@ -16,13 +16,13 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.db.search.IQueryObject;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
+import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.Task;
 
@@ -123,10 +123,13 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			try {
 				T model = query.next();
 				Reference reference = getSourceReference(form,model);
+				Callable<Reference> callable= createCallable(form,model);
 				Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
 						String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),
-						createCallable(form,model),
-						getRequest().getRootRef());	
+						callable,
+						getRequest().getRootRef(),
+						callable instanceof CallablePOST
+						);	
 				task.update();
 				setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 				tasks.add(task);
