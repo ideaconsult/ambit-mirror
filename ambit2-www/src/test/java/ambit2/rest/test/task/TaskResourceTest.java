@@ -171,7 +171,8 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation());
+				form.getWebRepresentation(),
+				null);
 		Reference ref = post.call();
 		Assert.assertEquals("dataseturi",ref.toString());
 				
@@ -189,7 +190,8 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation());
+				form.getWebRepresentation(),
+				null);
 		try {
 			Reference ref = post.call();
 			Assert.fail("Should throw an error");
@@ -212,7 +214,8 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation());
+				form.getWebRepresentation(),
+				null);
 		post.setPollTimeout(10);
 		try {
 			Reference ref = post.call();
@@ -230,7 +233,8 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation());
+				form.getWebRepresentation(),
+				null);
 		Reference ref = post.call();
 		long now = System.currentTimeMillis();
 		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/model/2",ref.toString());
@@ -246,7 +250,8 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				new String[] {String.format("http://localhost:%d/algorithm/mockup", port)},
 				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation());
+				form.getWebRepresentation(),
+				null);
 		Reference ref = post.call();
 		Assert.assertEquals("dataseturi",ref.toString());
 	}	
@@ -261,7 +266,8 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				new String[] {String.format("http://localhost:%d/algorithm/mockup", port)},
 				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation());
+				form.getWebRepresentation(),
+				null);
 		try {
 			Reference ref = post.call();
 			Assert.fail("Should throw an error");

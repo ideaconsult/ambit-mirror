@@ -143,7 +143,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		Assert.assertNotNull(task.getResult());
 		while (!task.poll()) {
 			Thread.yield();
-			Thread.sleep(200);
+			Thread.sleep(2000);
 		}
 		Assert.assertEquals(expected, task.getStatus());
 		Assert.assertEquals(uriExpected, task.getResult().toString());

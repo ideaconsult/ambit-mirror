@@ -343,7 +343,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 			if (algorithm.hasType(Algorithm.typeSuperService))  {
 				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
 					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
-				return new CallablePOST(form);			
+				return new CallablePOST(form,getRequest().getRootRef());			
 			} else if (algorithm.hasType(Algorithm.typeMockup))  {
 				return new CallableMockup(form);
 			} else if (algorithm.hasType(Algorithm.typeRules))
