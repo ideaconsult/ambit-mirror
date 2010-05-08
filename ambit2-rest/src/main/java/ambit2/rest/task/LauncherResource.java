@@ -11,12 +11,10 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import ambit2.rest.AbstractResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.TaskApplication;
 
@@ -42,7 +40,8 @@ public class LauncherResource extends ServerResource {
 
 	}
 	protected Reference getDatasetService() {
-		return getRequest().getRootRef().addSegment(OpenTox.URI.dataset.toString());
+		return new Reference(String.format("%s/%s",
+				getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
 	}
 	protected Reference getApplicationRoot() {
 		return getRequest().getRootRef();

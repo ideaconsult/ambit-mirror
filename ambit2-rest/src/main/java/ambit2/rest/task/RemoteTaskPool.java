@@ -5,6 +5,7 @@ import java.util.List;
 
 public class RemoteTaskPool {
 	protected List<RemoteTask> pool = new ArrayList<RemoteTask>();
+
 	public RemoteTaskPool() {
 		
 	}
@@ -30,7 +31,7 @@ public class RemoteTaskPool {
 		try {
 			while (running()>0) {
 				poll();
-				for (RemoteTask task : pool) System.out.println(task);
+				//for (RemoteTask task : pool) System.out.println(task);
 				Thread.sleep(1500);
 				Thread.yield();
 				

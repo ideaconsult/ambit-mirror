@@ -106,7 +106,9 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 	*/
 	public Reference call() throws Exception {
 		try {
-			return callInternal();
+			Reference result =  callInternal();
+			System.out.println("------" +result);
+			return result;
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -134,7 +136,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 				Form input = new Form();
 				input.add(OpenTox.params.dataset_uri.toString(),task.getResult().toString());
 				input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-				jobs.add(new RemoteTask(alg,MediaType.APPLICATION_WWW_FORM,input.getWebRepresentation(),Method.POST,authentication));
+				jobs.add(new RemoteTask(alg,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication));
 			}
 			
 		}
@@ -156,7 +158,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		dataset.setQuery(query.getQueryString());
 		input.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 		input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-		currentJob = new RemoteTask(datasetService,MediaType.APPLICATION_WWW_FORM,input.getWebRepresentation(),Method.POST,authentication);
+		currentJob = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
 		jobs.add(currentJob);
 		jobs.run();
 		jobs.clear();
@@ -196,15 +198,21 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			jenaModel = OT.createModel(null, modelURI,MediaType.APPLICATION_RDF_XML);
 			features =  jenaModel.listStatements(
 					new SimpleSelector(null,OT.OTProperty.independentVariables.createProperty(jenaModel),(RDFNode)null));
+			int count = 0;
 			while (features.hasNext()) {
 				Statement st = features.next();
 				RDFNode feature = st.getObject();
 				if (feature.isURIResource()) {
 					//read feature
 					jenaModel = OT.createModel(jenaModel,new Reference(((Resource)feature).getURI()),MediaType.APPLICATION_RDF_XML);
+					count++;
 				
 				}
 			}
+			if (count==0) {
+				firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("No descriptors to calcualte for model %s",modelURI));
+				return;
+			} else
 			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Prepare dataset for model %s",modelURI));
 			//everything in, do some querying
 			try {
@@ -297,7 +305,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		input.add(OpenTox.params.dataset_uri.toString(),filter.toString());
 		input.removeAll(OpenTox.params.dataset_service.toString());
 		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Missing values"));		
-		RemoteTask job = new RemoteTask(datasetService,MediaType.APPLICATION_RDF_XML,input.getWebRepresentation(),Method.POST,authentication);
+		RemoteTask job = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
 		algorithms.put(algorithm,job);
 		jobs.add(job);
 		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start descriptor calculation %s",algorithm));

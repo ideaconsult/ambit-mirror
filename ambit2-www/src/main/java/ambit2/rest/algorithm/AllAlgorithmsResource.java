@@ -25,7 +25,6 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
-import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
@@ -342,6 +341,8 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 				
 		try {
 			if (algorithm.hasType(Algorithm.typeSuperService))  {
+				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
+					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
 				return new CallablePOST(form);			
 			} else if (algorithm.hasType(Algorithm.typeMockup))  {
 				return new CallableMockup(form);

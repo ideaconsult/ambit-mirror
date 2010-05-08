@@ -169,7 +169,7 @@ public class TaskResourceTest extends ResourceTest {
 		form.add("url",String.format("http://localhost:%d/algorithm/mockup", port));
 		
 		CallablePOST post = new CallablePOST(
-				new Reference(String.format("http://localhost:%d/algorithm/superservice", port)),
+				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation());
 		Reference ref = post.call();
@@ -187,7 +187,7 @@ public class TaskResourceTest extends ResourceTest {
 		form.add("url",String.format("http://localhost:%d/algorithm/mockup", port));
 		
 		CallablePOST post = new CallablePOST(
-				new Reference(String.format("http://localhost:%d/algorithm/superservice", port)),
+				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation());
 		try {
@@ -210,7 +210,7 @@ public class TaskResourceTest extends ResourceTest {
 		form.add("url",String.format("http://localhost:%d/algorithm/mockup", port));
 		
 		CallablePOST post = new CallablePOST(
-				new Reference(String.format("http://localhost:%d/algorithm/superservice", port)),
+				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation());
 		post.setPollTimeout(10);
@@ -228,7 +228,7 @@ public class TaskResourceTest extends ResourceTest {
 		//form.add("dataset_uri","http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/J48");
 		
 		CallablePOST post = new CallablePOST(
-				new Reference(String.format("http://localhost:%d/algorithm/superservice", port)),
+				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation());
 		Reference ref = post.call();
@@ -244,7 +244,7 @@ public class TaskResourceTest extends ResourceTest {
 		form.add(OpenTox.params.delay.toString(),"1000");
 		
 		CallablePOST post = new CallablePOST(
-				new Reference(String.format("http://localhost:%d/algorithm/mockup", port)),
+				new String[] {String.format("http://localhost:%d/algorithm/mockup", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation());
 		Reference ref = post.call();
@@ -259,7 +259,7 @@ public class TaskResourceTest extends ResourceTest {
 		form.add(OpenTox.params.error.toString(),"Mockup error");
 		
 		CallablePOST post = new CallablePOST(
-				new Reference(String.format("http://localhost:%d/algorithm/mockup", port)),
+				new String[] {String.format("http://localhost:%d/algorithm/mockup", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation());
 		try {

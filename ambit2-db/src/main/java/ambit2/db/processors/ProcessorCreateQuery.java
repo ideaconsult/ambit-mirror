@@ -190,14 +190,14 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			d.setParentTemplate("Dataset");
 			d.setTemplate((template.getName()==null)?String.format("Query%d",q.getId()):template.getName());
 			addProperty.setGroup(d);
-			if ((template.getId()<=0) && (template.getName()==null)) {
+			//if ((template.getId()<=0) && (template.getName()==null)) {
 				Iterator<Property> properties = template.getProperties(true);
 				while (properties.hasNext()) {
 					addProperty.setObject(properties.next());
 					exec.process(addProperty);
 				}
 				
-			}
+			//}
 			template.setName(d.getTemplate());
 			QueryAddTemplate addTemplate = new QueryAddTemplate();
 			addTemplate.setGroup(q);

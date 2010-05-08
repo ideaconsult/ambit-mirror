@@ -38,7 +38,6 @@ public class RemoteTask implements Serializable {
 			  Method method,
 			  ChallengeResponse authentication) throws ResourceException {
 		super();
-		
 		this.url = url;
 		Representation r=null;
 		ClientResource client = null;
@@ -129,6 +128,7 @@ public class RemoteTask implements Serializable {
 		return String.format("URL: %s\tResult: %s\tStatus: %s\t%s", url,result,status,error==null?"":error.getMessage());
 	}
 	public boolean poll() {
+		//System.out.println(url);
 		if (isDone()) return true;
 
 		ClientResource client = null;

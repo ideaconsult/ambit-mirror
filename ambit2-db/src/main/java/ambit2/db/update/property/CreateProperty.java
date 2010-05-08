@@ -41,7 +41,7 @@ import ambit2.db.update.reference.CreateReference;
 public class CreateProperty extends AbstractObjectUpdate<Property> {
 	protected CreateReference createReference;
 	public static final String create_sql = 
-		"INSERT IGNORE INTO properties (idproperty,idreference,name,units,comments,islocal) SELECT null,idreference,?,?,?,? from catalog_references where title=?"
+		"INSERT IGNORE INTO properties (idproperty,idreference,name,units,comments,islocal) SELECT ?,idreference,?,?,?,? from catalog_references where title=?"
 	;
 
 	public CreateProperty(Property property) {
@@ -67,6 +67,10 @@ public class CreateProperty extends AbstractObjectUpdate<Property> {
 			return createReference.getParameters(index);
 		else {
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
+			if (getObject().getId()>0)
+				params1.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+			else
+				params1.add(new QueryParam<Integer>(Integer.class, null));
 			params1.add(new QueryParam<String>(String.class, getObject().getName()));
 			params1.add(new QueryParam<String>(String.class, getObject().getUnits()));
 			params1.add(new QueryParam<String>(String.class, getObject().getLabel()));

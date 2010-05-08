@@ -127,7 +127,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		field.setSearchByID(true);
 		field.setChemicalsOnly(true);
 		IStructureRecord record = getRecordByParameters();
-		field.setChemicalsOnly(record.getIdstructure()<=0);
+		field.setChemicalsOnly(record==null?true:record.getIdstructure()<=0);
 		field.setValue(record);
 		field.setFieldname(getPropertyByParameters()); 
 		return (IQueryRetrieval) field;
