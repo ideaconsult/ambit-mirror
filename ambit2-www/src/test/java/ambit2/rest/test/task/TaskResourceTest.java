@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -23,9 +22,19 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
+import ambit2.rest.rdf.OT;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
+
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 public class TaskResourceTest extends ResourceTest {
 	protected AmbitApplication app;
@@ -166,14 +175,12 @@ public class TaskResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
 		form.add(OpenTox.params.delay.toString(),"1000");
-		form.add("url",String.format("http://localhost:%d/algorithm/mockup", port));
+		form.add(OpenTox.params.algorithm_uri.toString(),String.format("http://localhost:%d/algorithm/mockup", port));
 		
-		CallablePOST post = new CallablePOST(
-				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
-				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation(),
-				null);
-		Reference ref = post.call();
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
+		
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, "dataseturi");
+
 		Assert.assertEquals("dataseturi",ref.toString());
 				
 		
@@ -185,22 +192,25 @@ public class TaskResourceTest extends ResourceTest {
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
 		form.add(OpenTox.params.delay.toString(),"1000");
 		form.add(OpenTox.params.error.toString(),"Mockup error");
-		form.add("url",String.format("http://localhost:%d/algorithm/mockup", port));
+		form.add(OpenTox.params.algorithm_uri.toString(),String.format("http://localhost:%d/algorithm/mockup", port));
 		
-		CallablePOST post = new CallablePOST(
-				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
-				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation(),
-				null);
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
+
 		try {
-			Reference ref = post.call();
+			Reference ref = testAsyncTask(superservice, form, Status.SERVER_ERROR_BAD_GATEWAY, "dataseturi");
 			Assert.fail("Should throw an error");
-		} catch (ResourceException x) {
-			Assert.assertEquals(Status.SERVER_ERROR_BAD_GATEWAY,x.getStatus());
-			ResourceException xx = (ResourceException) x.getCause();
-			Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,xx.getStatus());
-			Assert.assertEquals("Mockup error",xx.getMessage());
-		} 
+		} catch (Exception x) {
+			ResourceException xx = (ResourceException) x;
+			Assert.assertEquals(Status.SERVER_ERROR_BAD_GATEWAY,xx.getStatus());
+			Assert.assertTrue(xx.getMessage().indexOf("Mockup error")>0);
+		}
+		
+		
+		/*
+		ResourceException xx = (ResourceException) x.getCause();
+		Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,xx.getStatus());
+		Assert.assertEquals("Mockup error",xx.getMessage());
+		*/
 	}	
 	
 	
@@ -209,10 +219,9 @@ public class TaskResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
 		form.add(OpenTox.params.delay.toString(),"1000");
-		form.add("url",String.format("http://localhost:%d/algorithm/mockup", port));
+		form.add(OpenTox.params.algorithm_uri.toString(),String.format("http://localhost:%d/algorithm/mockup", port));
 		
 		CallablePOST post = new CallablePOST(
-				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
 				null);
@@ -224,14 +233,13 @@ public class TaskResourceTest extends ResourceTest {
 			Assert.assertEquals(Status.SERVER_ERROR_GATEWAY_TIMEOUT,x.getStatus());
 		} 
 	}	
-	@Test
+	
 	public void testSuperServiceRemote() throws Exception {
 		Form form = new Form();  
-		form.add("url","http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/toxtreecarc");
+		form.add(OpenTox.params.algorithm_uri.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/toxtreecarc");
 		//form.add("dataset_uri","http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/J48");
 		
 		CallablePOST post = new CallablePOST(
-				new String[] {String.format("http://localhost:%d/algorithm/superservice", port)},
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
 				null);
@@ -246,14 +254,11 @@ public class TaskResourceTest extends ResourceTest {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
 		form.add(OpenTox.params.delay.toString(),"1000");
+		form.add(OpenTox.params.algorithm_uri.toString(),String.format("http://localhost:%d/algorithm/mockup", port));
 		
-		CallablePOST post = new CallablePOST(
-				new String[] {String.format("http://localhost:%d/algorithm/mockup", port)},
-				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation(),
-				null);
-		Reference ref = post.call();
-		Assert.assertEquals("dataseturi",ref.toString());
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
+
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, "dataseturi");
 	}	
 
 	@Test
@@ -262,18 +267,16 @@ public class TaskResourceTest extends ResourceTest {
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
 		form.add(OpenTox.params.delay.toString(),"1000");
 		form.add(OpenTox.params.error.toString(),"Mockup error");
+		form.add(OpenTox.params.algorithm_uri.toString(),String.format("http://localhost:%d/algorithm/mockup", port));
 		
-		CallablePOST post = new CallablePOST(
-				new String[] {String.format("http://localhost:%d/algorithm/mockup", port)},
-				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation(),
-				null);
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
 		try {
-			Reference ref = post.call();
+			Reference ref = testAsyncTask(superservice, form, Status.SERVER_ERROR_BAD_GATEWAY, "dataseturi");
 			Assert.fail("Should throw an error");
 		} catch (ResourceException x) {
-			Assert.assertEquals(Status.CLIENT_ERROR_BAD_REQUEST,x.getStatus());
-			Assert.assertEquals("Mockup error",x.getMessage());
+			ResourceException xx = (ResourceException) x;
+			Assert.assertEquals(Status.SERVER_ERROR_BAD_GATEWAY,xx.getStatus());
+			Assert.assertTrue(xx.getMessage().indexOf("Mockup error")>0);
 		} 
 	}
 	@Override

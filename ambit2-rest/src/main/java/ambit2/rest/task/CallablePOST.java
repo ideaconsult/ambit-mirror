@@ -35,7 +35,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class CallablePOST implements Callable<Reference>{
-	protected String[] urls;
+	protected String[] algorithmsURI;
+	protected String modelURI;
 	protected MediaType media; 
 	protected Representation input;
 	protected ChallengeResponse authentication;
@@ -59,24 +60,24 @@ public class CallablePOST implements Callable<Reference>{
 	}
 	
 	public CallablePOST(Form form,Reference root) throws Exception {
-		this(form.getValuesArray("url"),MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root);
+		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root);
 	}	
 	
-	public CallablePOST(String[] url,MediaType media, 
+	public CallablePOST(MediaType media, 
 			  Representation input,Reference root) {
-		this(url,media,input,null,root);
+		this(media,input,null,root);
 	}		
-	public CallablePOST(String[] url,MediaType media, 
+	public CallablePOST(MediaType media, 
 			  Representation input,
 			  ChallengeResponse authentication,
 			  Reference root) {
-		this(url,media,input,authentication,1500,root);
+		this(media,input,authentication,1500,root);
 	}
-	public CallablePOST(String[] url,MediaType media, 
+	public CallablePOST(MediaType media, 
 			  Representation input,
 			  ChallengeResponse authentication, long pollInterval,
 			  Reference root) {
-		this.urls = url;
+
 		this.media = media;
 		this.input = input;
 		this.pollInterval = pollInterval;
@@ -87,10 +88,42 @@ public class CallablePOST implements Callable<Reference>{
 		Form form = new Form(input);
 		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
 		
+		Reference newdataset = new Reference(form.getFirstValue(OpenTox.params.dataset_uri.toString()));
+		if (newdataset==null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri + " not defined!");
 		try {
-			if ((urls==null) || (urls.length<1)) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"form.url not defined!");
-			} else if(urls.length>1) {
+			algorithmsURI = form.getValuesArray(OpenTox.params.algorithm_uri.toString());
+			int nonnullalg = 0;
+			for (int i=0; i < algorithmsURI.length;i++) nonnullalg += algorithmsURI[i]==null?0:1;
+			if (nonnullalg==0) algorithmsURI = null;
+			else {
+				String[] newalg = new String[nonnullalg]; int j=0;
+				for (int i=0; i < algorithmsURI.length;i++)	{
+					if (algorithmsURI[i]==null) continue;
+					newalg[j] = algorithmsURI[i]; j++;
+				}
+				algorithmsURI = newalg;
+			}
+			modelURI = form.getFirstValue(OpenTox.params.model_uri.toString());
+			if (modelURI != null) {
+				//now we retrieve descriptors from the algorithm
+				Form frm = CallablePOST.getFeatures(modelURI,new Form(),OpenTox.params.algorithm_uri.toString());
+				String[] model_descriptors = frm==null?null:frm.getValuesArray(OpenTox.params.algorithm_uri.toString());
+				if (model_descriptors!=null) 
+					if (algorithmsURI==null) algorithmsURI = model_descriptors;
+					else {
+						String[] newalg = new String[algorithmsURI.length+model_descriptors.length];
+						for (int i=0; i < algorithmsURI.length;i++)	newalg[i] = algorithmsURI[i];
+						for (int i=0; i < model_descriptors.length;i++)	newalg[i+algorithmsURI.length] = model_descriptors[i];
+						algorithmsURI = newalg;
+					}
+				
+			}
+			
+			if ((algorithmsURI==null) || (algorithmsURI.length<1)) {
+				if (modelURI == null)
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.algorithm_uri + " not defined!");
+			} else if(algorithmsURI.length>1) {
 				if (dataset_service==null)
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset service");
 
@@ -100,7 +133,7 @@ public class CallablePOST implements Callable<Reference>{
 				Reference dataset = createDataTask.getResult();
 				
 				RemoteTaskPool pool = new RemoteTaskPool();
-				for (String url:urls) {
+				for (String url:algorithmsURI) {
 					Form params = new Form();
 					params.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 					params.add(OpenTox.params.dataset_service.toString(),dataset_service);
@@ -127,13 +160,26 @@ public class CallablePOST implements Callable<Reference>{
 				params.add(OpenTox.params.dataset_service.toString(),dataset_service);
 				RemoteTask task = new RemoteTask(dataset,media,params.getWebRepresentation(),Method.PUT,authentication);
 				task = wait(task,now);
-				return task.getResult();
+				newdataset = task.getResult();
 				
 			} else {
-				RemoteTask task = new RemoteTask(new Reference(urls[0]),media,input,Method.POST,authentication);
+				RemoteTask task = new RemoteTask(new Reference(algorithmsURI[0]),media,input,Method.POST,authentication);
+				task = wait(task,now);
+				Reference result = task.getResult();
+				newdataset = result;
+			}
+			//modeluri
+			if (modelURI!=null) {
+				Form params = new Form();
+				params.add(OpenTox.params.dataset_service.toString(),dataset_service);
+				params.add(OpenTox.params.dataset_uri.toString(),newdataset.toString());
+				RemoteTask task = new RemoteTask(new Reference(modelURI),media,params.getWebRepresentation(),Method.POST,authentication);
 				task = wait(task,now);
 				return task.getResult();
-			}
+			} else return newdataset;
+		} catch (Exception x) {
+			//x.printStackTrace();
+			throw x;
 		} finally {
 			System.out.println(String.format("Elapsed %s", System.currentTimeMillis()-now));
 		}
@@ -147,12 +193,12 @@ public class CallablePOST implements Callable<Reference>{
 			Thread.yield();
 			if ((System.currentTimeMillis()-now) > pollTimeout) 
 				throw new ResourceException(Status.SERVER_ERROR_GATEWAY_TIMEOUT,
-						String.format("%s %s ms > %s ms",result==null?urls[0].toString():result,System.currentTimeMillis()-now,pollTimeout));
+						String.format("%s %s ms > %s ms",result==null?algorithmsURI[0].toString():result,System.currentTimeMillis()-now,pollTimeout));
 		}
 		
 		if (task.error!=null) 
 			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-					String.format("%s %s",result==null?urls[0].toString():result,task.error.getMessage()),
+					String.format("%s %s",result==null?algorithmsURI[0].toString():result,task.error.getMessage()),
 					task.error);
 		return task;
 	}
