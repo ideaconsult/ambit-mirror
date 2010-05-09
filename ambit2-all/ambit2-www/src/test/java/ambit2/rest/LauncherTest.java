@@ -15,7 +15,7 @@ import ambit2.rest.test.ResourceTest;
 public class LauncherTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/launcher",port);
+		return String.format("http://localhost:%d/algorithm/superservice",port);
 	}
 	
 	@Test
@@ -31,8 +31,14 @@ public class LauncherTest extends ResourceTest {
 				dataset, 
 				OpenTox.params.feature_uris.toString(),
 				Reference.encode(String
-						.format("%s/predicted", getTestURI()))));
+						.format("%s/predicted", model))));
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT value_number FROM values_all where name='pKa-SMARTS' and value_number is not null");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();			
 	}
+	
+	
 	
 	@Test
 	public void testSuperServiceSimpleModel() throws Exception {
@@ -42,7 +48,7 @@ public class LauncherTest extends ResourceTest {
 		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
 		
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
-		headers.add("url", model);
+		headers.add(OpenTox.params.model_uri.toString(), model);
 
 		testAsyncTask(superservice, headers, Status.SUCCESS_OK, String.format(
 				"%s?%s=%s",
@@ -69,10 +75,10 @@ public class LauncherTest extends ResourceTest {
 		
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 		//headers.add(OpenTox.params.dataset_service.toString(), dataset_service);
-		headers.add("url", algo1);
-		headers.add("url", algo2);
-		headers.add("url", algo3);
-		headers.add("url", algo4);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo1);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo2);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo3);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo4);
 
 		testAsyncTask(superservice, headers, Status.SUCCESS_OK, String.format(
 				"%s/%s",
@@ -104,10 +110,10 @@ public class LauncherTest extends ResourceTest {
 		
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 		headers.add(OpenTox.params.dataset_service.toString(), dataset_service);
-		headers.add("url", algo1);
-		headers.add("url", algo2);
-		headers.add("url", algo3);
-		headers.add("url", algo4);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo1);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo2);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo3);
+		headers.add(OpenTox.params.algorithm_uri.toString(), algo4);
 
 		testAsyncTask(superservice, headers, Status.SUCCESS_OK, String.format(
 				"%s/%s",
@@ -141,8 +147,8 @@ public class LauncherTest extends ResourceTest {
 	public void testModelVarsEos() throws Exception {
 		
 		String model = "http://apps.ideaconsult.net:8080/ambit2/model/33";
-		Form form = CallablePOST.getFeatures(model,new Form(),"url");
-		Assert.assertEquals(4,form.getValuesArray("url").length);
+		Form form = CallablePOST.getFeatures(model,new Form(),OpenTox.params.model_uri.toString());
+		Assert.assertEquals(4,form.getValuesArray(OpenTox.params.model_uri.toString()).length);
 
 		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
 		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
@@ -150,7 +156,8 @@ public class LauncherTest extends ResourceTest {
 		form.add(OpenTox.params.dataset_uri.toString(), String.format("http://194.141.0.136:%d/dataset/1", port));
 
 		String superservice = String.format("http://194.141.0.136:%d/algorithm/superservice", port);
-		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, null);
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, 
+				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted");
 
 	}	
 }

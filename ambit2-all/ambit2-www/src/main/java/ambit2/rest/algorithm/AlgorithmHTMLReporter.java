@@ -7,6 +7,7 @@ import org.restlet.Request;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.OpenTox;
 
 /**
  * Generates HTML output for {@link AllAlgorithmsResource}
@@ -51,7 +52,17 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 							t,item.getName(),
 							dataset,
 							target));
-
+				} else if (item.hasType(Algorithm.typeSuperService)) {
+					output.write("<tr><th>Model launcher</th><th>Calculate descriptors, prepares a dataset and runs the model</th></tr>");
+					output.write(String.format("<form action='' method='%s' name='form'>","POST"));
+					output.write(String.format("<tr><td>Dataset URI</td><td><input type='text'  size='120'  name='%s' value=''></td></tr>",OpenTox.params.dataset_uri));
+					output.write(String.format("<tr><td>Model URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.model_uri));
+					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
+					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
+					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
+					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
+					output.write(String.format("<tr><td><input type='submit' name='launch' value='%s'></td></tr>","Run"));
+					output.write("</form>");
 				} else  {//create a model
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";					
 					output.write(String.format(
