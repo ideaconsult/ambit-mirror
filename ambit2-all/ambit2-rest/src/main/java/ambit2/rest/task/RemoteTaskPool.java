@@ -9,6 +9,9 @@ public class RemoteTaskPool {
 	public RemoteTaskPool() {
 		
 	}
+	public Iterable<RemoteTask> getTasks() {
+		return pool;
+	}
 	public void add(RemoteTask task) {
 		pool.add(task);
 	}
