@@ -10,6 +10,10 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
 import ambit2.rest.task.CallablePOST;
+import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTFeatures;
+import ambit2.rest.task.dsl.OTModel;
+import ambit2.rest.task.dsl.OTSuperModel;
 import ambit2.rest.test.ResourceTest;
 
 public class LauncherTest extends ResourceTest {
@@ -130,34 +134,57 @@ public class LauncherTest extends ResourceTest {
 	@Test
 	public void testModelVarsTUM() throws Exception {
 		
-		String model = "http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8";
-		Form form = CallablePOST.getFeatures(model,new Form(),"url");
-		Assert.assertEquals(264,form.getValuesArray("url").length);
+		OTModel model = OTSuperModel.model().
+					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
+					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
+		
+		OTFeatures features = model.independentVariables().getIndependentVariables();
+		Assert.assertEquals(264,features.size());
 
-		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
-		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
-		form.add(OpenTox.params.dataset_service.toString(), String.format("http://194.141.0.136:%d/dataset", port));
-		form.add(OpenTox.params.dataset_uri.toString(), String.format("http://194.141.0.136:%d/compound/100", port));
+		OTDataset result  = model.process(OTDataset.dataset().
+					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
+					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
+		
+		result.getUri().toString().equals(
+				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted"
+				);
 
-		String superservice = String.format("http://194.141.0.136:%d/algorithm/superservice", port);
-		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, null);
+	}		
+	
+	@Test
+	public void testModelVarsNTUA() throws Exception {
+		
+		OTModel model = OTSuperModel.model().
+					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
+					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
+		
+		OTFeatures features = model.getIndependentVariables();
+		Assert.assertEquals(264,features.size());
 
-	}
+		OTDataset result  = model.process(OTDataset.dataset().
+					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
+					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
+		
+		result.getUri().toString().equals(
+				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted"
+				);
+
+	}	
 	@Test
 	public void testModelVarsEos() throws Exception {
+
+		OTModel model = OTSuperModel.model().
+					withUri("http://apps.ideaconsult.net:8080/ambit2/model/33").
+					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset");
 		
-		String model = "http://apps.ideaconsult.net:8080/ambit2/model/33";
-		Form form = CallablePOST.getFeatures(model,new Form(),OpenTox.params.model_uri.toString());
-		Assert.assertEquals(4,form.getValuesArray(OpenTox.params.model_uri.toString()).length);
+		OTFeatures features = model.independentVariables().getIndependentVariables();
+		Assert.assertEquals(4,features.size());
 
-		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
-		//form.add(OpenTox.params.dataset_service.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/compound/100");
-		form.add(OpenTox.params.dataset_service.toString(), String.format("http://194.141.0.136:%d/dataset", port));
-		form.add(OpenTox.params.dataset_uri.toString(), String.format("http://194.141.0.136:%d/dataset/1", port));
-
-		String superservice = String.format("http://194.141.0.136:%d/algorithm/superservice", port);
-		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, 
-				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted");
+		OTDataset result  = model.process(OTDataset.dataset().
+					withUri(String.format("http://apps.ideaconsult.net:8080/ambit2/compound?search=benzene", port)).
+					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset"));
+		
+		System.out.println(result.getUri().toString());
 
 	}	
 }

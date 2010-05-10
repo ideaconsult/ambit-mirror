@@ -22,19 +22,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
-
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 public class TaskResourceTest extends ResourceTest {
 	protected AmbitApplication app;
@@ -225,7 +215,6 @@ public class TaskResourceTest extends ResourceTest {
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
 				null);
-		post.setPollTimeout(10);
 		try {
 			Reference ref = post.call();
 			Assert.fail("Should throw an error");
@@ -263,14 +252,17 @@ public class TaskResourceTest extends ResourceTest {
 
 	@Test
 	public void testMockupError() throws Exception {
+		
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
 		form.add(OpenTox.params.delay.toString(),"1000");
 		form.add(OpenTox.params.error.toString(),"Mockup error");
 		form.add(OpenTox.params.algorithm_uri.toString(),String.format("http://localhost:%d/algorithm/mockup", port));
 		
+		
 		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
 		try {
+			//OTModel.model().withParams(form).withUri(superservice).process(null);
 			Reference ref = testAsyncTask(superservice, form, Status.SERVER_ERROR_BAD_GATEWAY, "dataseturi");
 			Assert.fail("Should throw an error");
 		} catch (ResourceException x) {

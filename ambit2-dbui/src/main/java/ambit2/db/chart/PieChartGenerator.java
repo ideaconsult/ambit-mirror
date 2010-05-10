@@ -29,7 +29,7 @@ public class PieChartGenerator extends ChartGenerator<IStoredQuery> {
 	}
 
 	protected static final String sql = 
-		"SELECT value,count(distinct(idchemical)) as num_chemicals\n"+
+		"SELECT value,count(distinct(query_results.idchemical)) as num_chemicals\n"+
 		"FROM query_results join property_values using(idstructure) join property_string using(idvalue_string) join properties using(idproperty)\n"+
 		"where name='%s' and idquery=%d\n"+
 		"group by value\n";
