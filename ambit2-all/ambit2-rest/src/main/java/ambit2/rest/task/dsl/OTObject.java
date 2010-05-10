@@ -8,7 +8,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.task.RemoteTask;
 
-public class OTObject {
+public class OTObject implements Comparable<OTObject>{
 	 protected Reference uri = null;
 	 protected Form form;
 	 
@@ -67,4 +67,11 @@ public class OTObject {
 		 form.add(name, value);
 		 return this;
 	 }
+	public int compareTo(OTObject o) {
+		return toString().compareTo(o.toString());
+	}
+	@Override
+	public boolean equals(Object obj) {
+		return toString().equals(obj.toString());
+	}
 }

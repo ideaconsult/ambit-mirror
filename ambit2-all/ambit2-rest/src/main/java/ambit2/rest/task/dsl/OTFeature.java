@@ -18,7 +18,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class OTFeature extends OTProcessingResource {
      protected OTAlgorithm algorithm = null;
      
-	 public static OTFeature feature() throws Exception  { 
+	 public OTAlgorithm getAlgorithm() {
+		return algorithm;
+	}
+	public static OTFeature feature() throws Exception  { 
 		    return new OTFeature();
 	 }
 	 public OTFeature withUri(String uri) throws Exception { 

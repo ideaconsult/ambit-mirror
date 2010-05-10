@@ -10,7 +10,10 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
 import ambit2.rest.task.CallablePOST;
+import ambit2.rest.task.dsl.OTAlgorithm;
+import ambit2.rest.task.dsl.OTAlgorithms;
 import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTFeature;
 import ambit2.rest.task.dsl.OTFeatures;
 import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.task.dsl.OTSuperModel;
@@ -179,12 +182,21 @@ public class LauncherTest extends ResourceTest {
 		
 		OTFeatures features = model.independentVariables().getIndependentVariables();
 		Assert.assertEquals(4,features.size());
+		
+		OTAlgorithms algorithms = OTAlgorithms.algorithms();
+		
+		for (OTFeature feature : features.getItems())
+			if (feature!=null) 
+				algorithms.add(feature.algorithm().getAlgorithm());
 
+		Assert.assertEquals(3,algorithms.size());
+		
 		OTDataset result  = model.process(OTDataset.dataset().
 					withUri(String.format("http://apps.ideaconsult.net:8080/ambit2/compound?search=benzene", port)).
 					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset"));
 		
 		System.out.println(result.getUri().toString());
+		
 
 	}	
 }
