@@ -61,6 +61,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
 					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
 					output.write(String.format("<tr><td>Algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.algorithm_uri));
+					output.write(String.format("<tr><td>Dataset service URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.dataset_service));
 					output.write(String.format("<tr><td><input type='submit' name='launch' value='%s'></td></tr>","Run"));
 					output.write("</form>");
 				} else  {//create a model

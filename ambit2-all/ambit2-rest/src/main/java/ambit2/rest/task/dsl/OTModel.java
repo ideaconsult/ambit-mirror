@@ -104,11 +104,16 @@ public class OTModel extends OTProcessingResource {
 	 
 	 public OTDataset calculateDescriptors(OTDataset inputDataset) throws Exception  {
 		independentVariables();
-		OTAlgorithms algorithms = OTAlgorithms.algorithms();
-		for (OTFeature feature : independentVariables.getItems())
-				if (feature!=null) 
-					algorithms.add(feature.algorithm().getAlgorithm());
-		 return algorithms.process(inputDataset);
+
+		
+		if (independentVariables.size()>0) {
+			OTAlgorithms algorithms = OTAlgorithms.algorithms();
+			algorithms.withDatasetService(dataset_service);
+			for (OTFeature feature : independentVariables.getItems())
+					if (feature!=null) 
+						algorithms.add(feature.algorithm().getAlgorithm());
+			return algorithms.process(inputDataset);
+		} else return inputDataset;
 	 }
 	 @Override
 	 public OTDataset process(OTDataset inputDataset) throws Exception  {
