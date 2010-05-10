@@ -9,8 +9,10 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 	protected List<T> items;
 
 	 public synchronized OTContainers<T> add(T item) throws Exception  { 
+		 	if (item==null) return this;
 			if (items==null) items = new ArrayList<T>();
-			items.add(item);
+			if (items.indexOf(item)<0)
+				items.add(item);
 			return this;
 	 }
 	 /*

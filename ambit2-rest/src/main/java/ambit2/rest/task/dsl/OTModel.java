@@ -89,6 +89,7 @@ public class OTModel extends OTProcessingResource {
 				while (results.hasNext()) {
 					QuerySolution solution = results.next();
 					Resource var = solution.getResource("vars");
+					
 					vars.add(OTFeature.feature().withUri(var.getURI()));
 				}
 	        } catch (Exception x) {
@@ -102,7 +103,12 @@ public class OTModel extends OTProcessingResource {
      }	 
 	 
 	 public OTDataset calculateDescriptors(OTDataset inputDataset) throws Exception  {
-		 return independentVariables().independentVariables.process(inputDataset);
+		independentVariables();
+		OTAlgorithms algorithms = OTAlgorithms.algorithms();
+		for (OTFeature feature : independentVariables.getItems())
+				if (feature!=null) 
+					algorithms.add(feature.algorithm().getAlgorithm());
+		 return algorithms.process(inputDataset);
 	 }
 	 @Override
 	 public OTDataset process(OTDataset inputDataset) throws Exception  {
