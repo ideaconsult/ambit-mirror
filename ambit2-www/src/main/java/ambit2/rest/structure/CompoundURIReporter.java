@@ -4,6 +4,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.DbReader;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.exceptions.DbAmbitException;
@@ -41,8 +42,13 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	}
 	@Override
 	public String getURI(String ref, IStructureRecord item) {
-	
-		return String.format("%s%s/%d%s",ref,CompoundResource.compound,item.getIdchemical(),delimiter);
+		if ((item.getIdstructure()==-1) || (item.getType().equals(STRUC_TYPE.NA)))
+			return String.format("%s%s/%d%s",ref,CompoundResource.compound,item.getIdchemical(),delimiter);
+		else
+			return String.format("%s%s/%d%s/%d%s",
+						ref,
+						CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure(),getDelimiter());				
+		
 	}
 	@Override
 	protected AbstractBatchProcessor<IQueryRetrieval<IStructureRecord>, IStructureRecord> createBatch(Q query) {
