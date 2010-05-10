@@ -56,6 +56,7 @@ public class CallablePOST implements Callable<Reference>{
 		long now = System.currentTimeMillis();
 		Form form = new Form(input);
 		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
+		if (dataset_service==null) dataset_service = String.format("%s/dataset", applicationRootReference);
 		String datasetURI = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		
 		String modelURI = form.getFirstValue(OpenTox.params.model_uri.toString());
