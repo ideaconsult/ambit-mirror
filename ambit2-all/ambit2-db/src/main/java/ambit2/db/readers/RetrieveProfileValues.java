@@ -123,23 +123,23 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units from property_values \n"+
 		"left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where status != 'ERROR and idstructure=? %s %s";
+		"where status != 'ERROR' and idstructure=? %s %s";
 	
 	protected final String sql_structure_novalue = 
 		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
 		"join  properties join catalog_references using(idreference)\n"+
-		"where status != 'ERROR and  idstructure=? %s %s";
+		"where status != 'ERROR' and  idstructure=? %s %s";
 	
 	protected final String sql_chemical = 
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units from property_values \n"+
 		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where status != 'ERROR and idchemical=? %s %s";
+		"where status != 'ERROR' and idchemical=? %s %s";
 	
 	protected final String sql_chemical_novalue = 
 		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
 		"join  properties join catalog_references using(idreference)\n"+
-		"where status != 'ERROR and  idchemical=? %s %s order by idstructure limit 1";
+		"where status != 'ERROR' and  idchemical=? %s %s order by idstructure limit 1";
 				
 
 	protected final String where = "and %s ";
