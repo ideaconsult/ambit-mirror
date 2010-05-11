@@ -108,9 +108,10 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 				source = jenaModel.createIndividual(uri,OT.OTClass.Model.createOntClass(jenaModel));
 				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
 			} else if (_type.Dataset.equals(item.getReference().getType())) {
-				uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				source = jenaModel.createIndividual(uri,OT.OTClass.Dataset.createOntClass(jenaModel));
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
+				//this seems to confuse everybody's else parsers ...
+				//uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+				//source = jenaModel.createIndividual(uri,OT.OTClass.Dataset.createOntClass(jenaModel));
+				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
 			} else {
 				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
 			}
