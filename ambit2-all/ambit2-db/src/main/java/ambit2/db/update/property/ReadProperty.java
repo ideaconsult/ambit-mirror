@@ -30,6 +30,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		"where idproperty in (select idproperty from structure join property_values using(idstructure) where idchemical = ?) \n";
 
 	public static String propertyWithType = 
+		/*
 		"select idproperty,properties.name,units,title,url,idreference,comments,idtype,islocal,type from properties\n"+
 		"join\n"+
 		"(\n"+
@@ -38,7 +39,14 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		"group by idproperty,idtype order by idtype desc limit 1\n"+
 		") p using(idproperty)\n"+
 		"join catalog_references using(idreference)\n";
-	
+		*/
+		"select p.idproperty,p.name,units,title,url,idreference,comments,idtype,islocal,type from properties p\n"+
+		"left join\n"+
+		"(select idproperty,idtype from property_values where idproperty= ? order by idtype desc limit 1) v\n"+
+		"on p.idproperty=v.idproperty\n"+
+		"join catalog_references using(idreference)\n"+
+		"where p.idproperty=?\n";
+		
 	public ReadProperty(Integer id) {
 		setValue(id);
 	}
@@ -50,7 +58,9 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		if (getFieldname()!=null)
 			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getFieldname().getIdchemical():getFieldname().getIdstructure()));				
-
+		else 
+			params.add(new QueryParam<Integer>(Integer.class, getValue()));
+		
 		if (getValue()!=null) {
 			params.add(new QueryParam<Integer>(Integer.class, getValue()));
 			return params;
