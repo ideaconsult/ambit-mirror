@@ -13,6 +13,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class OTFeature extends OTProcessingResource {
@@ -50,8 +51,9 @@ public class OTFeature extends OTProcessingResource {
 				ResultSet results = qe.execSelect();
 				while (results.hasNext()) {
 					QuerySolution solution = results.next();
-					Resource var = solution.getResource("algorithm");
-					algorithm =  OTAlgorithm.algorithm().withUri(var.getURI());
+					RDFNode var = solution.get("algorithm");
+					if (var.isResource())
+						algorithm =  OTAlgorithm.algorithm().withUri(((Resource)var).getURI());
 				}
 	        }  catch (Exception x) {
 	        	throw x;

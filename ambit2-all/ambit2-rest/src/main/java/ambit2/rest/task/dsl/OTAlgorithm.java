@@ -29,6 +29,7 @@ public class OTAlgorithm extends OTProcessingResource {
 				params.removeAll(OpenTox.params.dataset_service.toString());
 				params.add(OpenTox.params.dataset_service.toString(),dataset_service.toString());
 			}
+			params.removeAll(OpenTox.params.dataset_uri.toString());
 			params.add(OpenTox.params.dataset_uri.toString(),inputDataset.toString());
 			return new RemoteTask(new Reference(uri),MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST,authentication);
 	 }
