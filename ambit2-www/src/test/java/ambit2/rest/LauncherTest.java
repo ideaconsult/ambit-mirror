@@ -9,8 +9,6 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
-import ambit2.rest.task.CallablePOST;
-import ambit2.rest.task.dsl.OTAlgorithm;
 import ambit2.rest.task.dsl.OTAlgorithms;
 import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.task.dsl.OTFeature;
@@ -154,6 +152,44 @@ public class LauncherTest extends ResourceTest {
 
 	}		
 	
+	@Test
+	public void testModelTUM() throws Exception {
+		
+		OTModel model = OTSuperModel.model().
+					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_13").
+					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291");
+		
+		OTFeatures features = model.independentVariables().getIndependentVariables();
+		Assert.assertEquals(264,features.size());
+
+		OTDataset result  = model.process(OTDataset.dataset().
+					withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291").
+					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"));
+		
+		result.getUri().toString().equals(
+				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted"
+				);
+
+	}		
+	@Test
+	public void testTUMPrecalculatedDescriptors() throws Exception {
+		
+		OTModel model = OTModel.model().
+					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_10").
+					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
+		
+		OTFeatures features = model.independentVariables().getIndependentVariables();
+		Assert.assertEquals(264,features.size());
+
+		OTDataset result  = model.process(OTDataset.dataset().
+					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
+					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
+		
+		result.getUri().toString().equals(
+				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted"
+				);
+
+	}			
 	@Test
 	public void testModelVarsNTUA() throws Exception {
 		

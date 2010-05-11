@@ -126,7 +126,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 					record = parseRecord( newEntry,createRecord());
 					return true;
 				} catch (Exception x) {
-					x.printStackTrace();
+					//x.printStackTrace();
 					return false;
 				}
 		} else return false;
