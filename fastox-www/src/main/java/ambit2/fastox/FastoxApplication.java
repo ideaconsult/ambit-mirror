@@ -79,7 +79,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         authenticatior.setNext(AdminResource.class);        
         
         router.attach(String.format("/help/{%s}",UserResource.resourceKey),HelpResource.class);
-        router.attach(String.format("%s/{%s}",ModelsResource.resource,UserResource.resourceKey),ModelsResource.class);
+        
         
         router.attach("/{x}", WelcomeResource.class); //this is a hack to avoid not-matching if navigated to /ToxPredict/whatever
         router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
@@ -91,6 +91,8 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         router.attach(String.format("/%s/{%s}",UserResource.resource,UserResource.resourceKey),userRouter);
         //router.attach(String.format("/%s",UserResource.resource),usersRouter);
         userRouter.attachDefault(UserResource.class);
+        
+        userRouter.attach(ModelsResource.resource,ModelsResource.class);
         
         for (WizardMode mode : WizardMode.values()) {
             Wizard wizard = Wizard.getInstance(mode);
@@ -134,6 +136,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
+		 Directory jqueryDir = new Directory(getContext(), "war:///jquery");
 		 Directory metaDir = new Directory(getContext(), "war:///META-INF");
 		 
  		 router.attach("/images/", imgDir);
@@ -141,6 +144,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 //		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
 		 router.attach("/style/", styleDir);
+		 router.attach("/jquery/", jqueryDir);
 		 //router.attach("/favicon.ico", FavIconResource.class);
 		 //router.attach("/favicon.png", FavIconResource.class);      
 		 StringWriter w = new StringWriter();

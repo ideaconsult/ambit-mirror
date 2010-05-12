@@ -165,12 +165,13 @@ public abstract class WizardResource extends ServerResource {
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
-
-		
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
 		
 
 		w.write("</head>\n");
 		w.write("<body>");
+		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
 
 	}
 	public void navigator(Writer writer) throws IOException {
@@ -549,4 +550,8 @@ public abstract class WizardResource extends ServerResource {
 					selected.equals(options[i])?"selected='yes'":"",options[i],optionsTitle[i]));			
 		writer.write("</select>");
 	}		
+	
+	public static String jsTableSorter(String tableid) {
+		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); } );</script>",tableid);
+	}
 }

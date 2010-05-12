@@ -214,7 +214,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			writer.write("</table>");
+			writer.write("</tbody></table>");
 		}
 		
 		return running;

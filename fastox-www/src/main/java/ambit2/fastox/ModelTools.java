@@ -11,6 +11,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.users.IToxPredictSession;
+import ambit2.fastox.wizard.WizardResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.task.RemoteTask;
 
@@ -163,8 +164,9 @@ public class ModelTools {
 	*/
 	public static void renderModelTableCaption(Writer writer,boolean status) throws IOException {
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
-		writer.write("<table class='results'>");
-		writer.write("<tr>");
+		writer.write(WizardResource.jsTableSorter("models"));
+		writer.write("<table class='tablesorter' id='models'>");
+		writer.write("<thead><tr>");
 		writer.write("<th width='25%'>Model</th>");
 		writer.write("<th width='15%'>Endpoint</th>");
 		writer.write("<th>Descriptors</th>");
@@ -174,7 +176,7 @@ public class ModelTools {
 		writer.write("<th></th>");
 		*/
 		writer.write(String.format("<th>%s</th>",status?"Status":""));
-		writer.write("</tr>");
+		writer.write("</tr></thead><tbody>");
 	}
 	
 	public static int renderModelTableRow(String modelURI,Writer writer, QuerySolution solution,

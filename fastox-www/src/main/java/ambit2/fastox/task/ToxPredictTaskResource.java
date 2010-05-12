@@ -3,24 +3,51 @@ package ambit2.fastox.task;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.Reporter;
+import ambit2.fastox.users.UserResource;
 import ambit2.rest.SimpleTaskResource;
-import ambit2.rest.StringConvertor;
-import ambit2.rest.reporters.CatalogURIReporter;
-import ambit2.rest.reporters.TaskRDFReporter;
+import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.Task;
 
 public class ToxPredictTaskResource<IToxPredictUser> extends SimpleTaskResource<IToxPredictUser> {
 
 	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		
+	}
+	
+	protected String getUserKey() throws ResourceException {
+		Object object = getRequest().getAttributes().get(UserResource.resourceKey);
+		if (object!=null) return Reference.decode(object.toString());
+		return null;
+	}	
+	
+	@Override
+	public synchronized IProcessor<Iterator<Task<Reference,IToxPredictUser>>, Representation> createConvertor(
+			Variant variant) throws AmbitException, ResourceException {
+
+		FactoryTaskConvertor<IToxPredictUser> tc = new FactoryTaskConvertor<IToxPredictUser>() {
+			@Override
+			public synchronized Reporter<Iterator<Task<Reference, IToxPredictUser>>, Writer> createTaskReporterHTML(
+					Request request) throws AmbitException, ResourceException {
+				return new TaskHTMLReporter(getRequest());
+			}
+		};
+	
+		return tc.createTaskConvertor(variant, getRequest());
+
+	}
+	/*
 	public synchronized IProcessor<Iterator<Task<Reference,IToxPredictUser>>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
@@ -46,4 +73,5 @@ public class ToxPredictTaskResource<IToxPredictUser> extends SimpleTaskResource<
 					,variant.getMediaType());			
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
+	*/
 }
