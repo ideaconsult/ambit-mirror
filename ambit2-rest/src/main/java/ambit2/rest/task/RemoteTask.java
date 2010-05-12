@@ -67,7 +67,7 @@ public class RemoteTask implements Serializable {
 				error = new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
 						String.format("URL=%s [%s] %s",url,
 								x.getStatus(),
-								client.getResponseEntity().getText()),
+								client.getResponseEntity()==null?"":client.getResponseEntity().getText()),
 						x); 
 			}	catch (Exception xx) { error = x; }
 		} catch (Exception x) {
@@ -197,7 +197,7 @@ public boolean poll() {
 	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
 		Reference ref = null;
 		
-		if (Status.SUCCESS_OK.equals(status) || Status.SUCCESS_ACCEPTED.equals(status) || Status.SUCCESS_CREATED.equals(status)) {
+		if (Status.SUCCESS_OK.equals(status) || Status.SUCCESS_ACCEPTED.equals(status) || Status.SUCCESS_CREATED.equals(status) || Status.REDIRECTION_SEE_OTHER.equals(status)) {
 			int count=0;
 			try {
 				
