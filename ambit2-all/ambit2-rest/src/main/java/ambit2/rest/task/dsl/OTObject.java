@@ -42,6 +42,8 @@ public class OTObject implements Comparable<OTObject>{
 	}
 	 
 	protected RemoteTask wait(RemoteTask task, long now) throws Exception {
+			if (task.getError()!=null) throw task.getError();
+			if (task.getResult()==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("%s returns empty contend instead of URI"));
 			String result = task.getResult().toString();
 			while (!task.poll()) {
 				if (task.getError()!=null) throw task.getError();

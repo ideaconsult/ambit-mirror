@@ -62,8 +62,14 @@ public class RemoteTask implements Serializable {
 			
 			result = handleOutput(r.getStream(),status);
 		} catch (ResourceException x) {
-			error = x;
 			status = x.getStatus();
+			try { 
+				error = new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+						String.format("URL=%s [%s] %s",url,
+								x.getStatus(),
+								client.getResponseEntity().getText()),
+						x); 
+			}	catch (Exception xx) { error = x; }
 		} catch (Exception x) {
 			error = x;
 			status = null;
