@@ -167,6 +167,7 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.pager.js\"></script>\n",baseReference));
 		
 
 		w.write("</head>\n");
@@ -551,7 +552,30 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</select>");
 	}		
 	
-	public static String jsTableSorter(String tableid) {
-		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); } );</script>",tableid);
+	public static String jsTableSorter(String tableid,String pagerid) {
+		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
+	}
+	public String jsPager(String pagerid, String[] options) {
+		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();
+		
+		StringBuilder b = new StringBuilder();
+		b.append(String.format("\n<div id=\"%s\" class=\"pager\">",pagerid));
+		b.append("<form>\n");
+		b.append(String.format("<img src=\"%s/images/first.png\" class=\"first\"/>\n",baseReference));
+		b.append(String.format("<img src=\"%s/images/prev.png\" class=\"prev\"/>\n",baseReference));
+		b.append(String.format("<input type=\"text\" class=\"pagedisplay\"/>\n",baseReference));
+		b.append(String.format("<img src=\"%s/images/next.png\" class=\"next\"/>\n",baseReference));
+		b.append(String.format("<img src=\"%s/images/last.png\" class=\"last\"/>\n",baseReference));
+		b.append("	<select class=\"pagesize\">\n");
+		String selected = "selected";
+		for(String option : options) {
+			b.append(String.format("<option selected=\"%s\"  value=\"%s\">%s</option>\n",
+				selected,option,option));
+			selected = "";
+		}
+		b.append("	</select>\n");
+		b.append("</form>\n");
+		b.append("</div>");
+		return b.toString();
 	}
 }
