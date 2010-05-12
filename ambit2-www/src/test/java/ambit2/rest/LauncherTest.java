@@ -120,6 +120,7 @@ public class LauncherTest extends ResourceTest {
 		headers.add(OpenTox.params.algorithm_uri.toString(), algo3);
 		headers.add(OpenTox.params.algorithm_uri.toString(), algo4);
 
+
 		testAsyncTask(superservice, headers, Status.SUCCESS_OK, String.format(
 				"%s/%s",
 				dataset_service,
@@ -156,7 +157,7 @@ public class LauncherTest extends ResourceTest {
 	public void testModelTUM() throws Exception {
 		
 		OTModel model = OTSuperModel.model().
-					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_13").
+					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
 					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291");
 		
 		OTFeatures features = model.independentVariables().getIndependentVariables();
@@ -191,22 +192,29 @@ public class LauncherTest extends ResourceTest {
 
 	}			
 	@Test
+	/**
+	 * 
+1) model  (MLR)
+http://opentox.ntua.gr:3003/model/195
+training dataset
+http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798
+prediction feature
+http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510
+	 */
 	public void testModelVarsNTUA() throws Exception {
 		
 		OTModel model = OTSuperModel.model().
-					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
+					withUri("http://opentox.ntua.gr:3003/model/195").
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
 		
-		OTFeatures features = model.getIndependentVariables();
-		Assert.assertEquals(264,features.size());
+		OTFeatures features = model.independentVariables().getIndependentVariables();
+		Assert.assertEquals(4,features.size());
 
 		OTDataset result  = model.process(OTDataset.dataset().
 					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
 		
-		result.getUri().toString().equals(
-				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted"
-				);
+		System.out.println(result.getUri());
 
 	}	
 	@Test
