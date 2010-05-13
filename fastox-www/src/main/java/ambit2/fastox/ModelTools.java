@@ -31,7 +31,7 @@ public class ModelTools {
 		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm ?algName ?type \n"+
+		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm ?algName\n"+
 		"where {\n"+
 		"%s rdf:type ot:Model.\n"+
 		"OPTIONAL {%s dc:title ?title}.\n"+
@@ -169,7 +169,6 @@ public class ModelTools {
 		writer.write("<thead><tr>");
 		writer.write("<th width='25%'>Model</th>");
 		writer.write("<th width='15%'>Endpoint</th>");
-		writer.write("<th>Descriptors</th>");
 		writer.write("<th>Training dataset</th>");
 		writer.write("<th>Algorithm</th>");
 		/*	
@@ -188,7 +187,6 @@ public class ModelTools {
 		if (modelUri==null) return 0;
 
 		RDFNode algo = solution.getResource("algorithm");
-		RDFNode algoType = solution.get("type");
 		Literal algName = solution.getLiteral("algName");
 			
 		Literal name = solution.getLiteral("title");
@@ -197,9 +195,6 @@ public class ModelTools {
 		//Resource endpoint = solution.getResource("endpoint");
 		Literal endpointName = solution.getLiteral("endpointName");
 
-		String algType = algoType==null?"-":
-			algoType.isLiteral()?((Literal)algoType).getString():
-			algoType.isURIResource()?((Resource)algoType).getURI():algoType.toString();		
 		//add the model
 		boolean selected = false; 
 		if (modelUri!=null)	{
@@ -212,10 +207,6 @@ public class ModelTools {
 					selected = ((Boolean) session.getModelStatus(modelUri)).booleanValue();
 			}
 	
-			session.setPreprocessing(modelUri, 
-					(!"http://www.opentox.org/algorithmTypes.owl#Rules".equals(algType)) &&
-					(!"http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation".equals(algType))
-					);
 		}
 		
 
@@ -230,12 +221,8 @@ public class ModelTools {
 		writer.write("<td>");
 		writer.write(endpointName==null?"":endpointName.getString());
 		writer.write("</td>");
-		writer.write("<td>");
-		writer.write(session.needsPreprocessing(modelUri)?
-				String.format("<a href='%s/independent' target=_blank>YES</a>",modelUri)
-				:"-");	
-		writer.write("</td><td>"); //training dataset
-		
+		writer.write("<td>"); //training dataset
+
 		if (dataset!=null)  
 			if (dataset.isURIResource()) {
 			for (int i=0;i<mimes.length;i++) {

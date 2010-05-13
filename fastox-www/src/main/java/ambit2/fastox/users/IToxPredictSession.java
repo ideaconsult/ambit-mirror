@@ -35,8 +35,7 @@ public interface IToxPredictSession {
 	public Exception getError(String key);
 	public void setError(String key,Exception x);
 	public int pollModels();
-	public boolean needsPreprocessing(String model);
-	public void setPreprocessing(String model,Boolean required);
+
 	
 	public int getAllModels();
 	public void setAllModels(int allModels);
