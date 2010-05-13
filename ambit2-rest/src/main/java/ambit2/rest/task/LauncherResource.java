@@ -84,13 +84,14 @@ public class LauncherResource extends ServerResource {
 		try {
 			
 			
-			Task<Reference,Object> ref =  ((TaskApplication)getApplication()).addTask(
+			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(new Form(entity)),
 					getRequest().getRootRef(),false);		
-			
+			task.update();
+			setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>();
-			return tc.createTaskRepresentation(ref, variant,getRequest(), getResponse());
+			return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
 
 		} catch (Exception x) {
 			if (x.getCause() instanceof ResourceException)
@@ -104,23 +105,9 @@ public class LauncherResource extends ServerResource {
 	protected Callable<Reference> createCallable(Form form) throws ResourceException {
 				
 		try {
-
-			Form query = new Form();
-			if (form.getFirstValue(OpenTox.params.dataset_uri.toString()) == null) 
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						"Empty " + OpenTox.params.dataset_uri.toString() + " " +OpenTox.params.dataset_uri.getDescription());
-			query.add(OpenTox.params.dataset_uri.toString(), form.getFirstValue(OpenTox.params.dataset_uri.toString()));
-			if (form.getFirstValue(OpenTox.params.model_uri.toString()) == null) 
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						"Empty " + OpenTox.params.model_uri.toString() + " " +OpenTox.params.model_uri.getDescription());			
-			query.add(OpenTox.params.model_uri.toString(), form.getFirstValue(OpenTox.params.model_uri.toString()));
-
-			CallableDatasetCreator c = new CallableDatasetCreator(
-					query,
-					application_root,
-					dataset_service,
-					null);
-			return c;
+			if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
+				form.add(OpenTox.params.dataset_service.toString(), getDatasetService().toString());
+			return new CallablePOST(form,getRequest().getRootRef());		
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
