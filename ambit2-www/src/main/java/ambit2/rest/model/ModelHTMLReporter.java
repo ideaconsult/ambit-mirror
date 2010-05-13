@@ -9,6 +9,7 @@ import org.restlet.data.Reference;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
@@ -43,22 +44,23 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public void header(Writer w, IQueryRetrieval<ModelQueryResults> query) {
 		super.header(w, query);
 		try { 
-			output.write("<table width=\"90%\" >");
+			output.write(AmbitResource.jsTableSorter("models","pager"));
+			output.write("<table width='90%' class='tablesorter' id='models' ><thead>");
 			output.write("<tr align=\"left\">\n");
-			output.write("<th>Model name</th>\n");
-			output.write("<th>Algorithm</th>\n");
-			output.write("<th>Dataset</th>\n");
-			output.write("<th>Independent variables</th>\n");
-			output.write("<th>Dependent</th>\n");
-			output.write("<th>Predicted</th>\n");
-			output.write("</tr>\n");
+			output.write("<th width='30%'>Model name</th>\n");
+			output.write("<th width='30%'>Algorithm</th>\n");
+			output.write("<th width='10%'>Dataset</th>\n");
+			output.write("<th width='10%'>Independent variables</th>\n");
+			output.write("<th width='10%'>Dependent</th>\n");
+			output.write("<th width='10%'>Predicted</th>\n");
+			output.write("</tr></thead><tbody>\n");
 			cmp_reporter.setOutput(w);
 			uriReporter.setOutput(w);
 		} catch (Exception x) {}		
 	}
 	@Override
 	public void footer(Writer output, IQueryRetrieval<ModelQueryResults> query) {
-		try { output.write("</table>");} catch (Exception x) {}
+		try { output.write("</tbody></table>");} catch (Exception x) {}
 		super.footer(output, query);
 	}
 	
