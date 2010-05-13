@@ -29,7 +29,14 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void header(Writer output, Iterator<Algorithm> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
-			output.write("<table>");
+			output.write(AmbitResource.jsTableSorter("algorithms","pager"));
+			output.write("<table class='tablesorter' id='algorithms'>");
+			if (collapsed) {
+				output.write("<thead>");
+				output.write("<tr><th align=\"left\">Name</th><th>Description</th><th>Type</th></tr>"); 
+				output.write("</thead>");
+			}
+			output.write("<tbody>");
 		} catch (Exception x) {
 			
 		}
@@ -38,7 +45,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 		try {
 			String t = super.getURI(item);
 			if (collapsed)
-				output.write(String.format("<tr class='results_odd'><th align=\"left\"><a href='%s'>%s</a></th><td  class='results_col'>%s</td><td  align='right'>%s</td></tr>", 
+				output.write(String.format("<tr><td align=\"left\"><a href='%s'>%s</a></td><td>%s</td><td  align='right'>%s</td></tr>", 
 						t,item.getName(),
 						item.isDataProcessing()?"Processes a dataset":"Generates a model"
 						,item.getType()[0]));
@@ -48,7 +55,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				if (item.isDataProcessing()) {
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";
 					output.write(String.format(
-							"<tr><form action=\"\" method=\"POST\"><tr><th>Algorithm:&nbsp;<a href='%s'>%s</a></th><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Run\"></td></form></tr>",
+							"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Run\"></td></form></tr>",
 							t,item.getName(),
 							dataset,
 							target));
@@ -67,7 +74,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				} else  {//create a model
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";					
 					output.write(String.format(
-						"<tr><form action=\"\" method=\"POST\"><tr><th>Algorithm:&nbsp;<a href='%s'>%s</a></th><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
+						"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
 						t,item.getName(),
 						dataset,
 						target));
@@ -80,7 +87,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	@Override
 	public void footer(Writer output, Iterator<Algorithm> query) {
 		try {
-			output.write("</table>");
+			output.write("</tbody></table>");
 			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {

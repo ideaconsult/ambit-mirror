@@ -465,6 +465,7 @@ window.setInterval(function() {
 		w.write(String.format("<html><head><title>%s</title>",title));
 		
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
 		w.write(meta);
 				
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
@@ -478,6 +479,7 @@ window.setInterval(function() {
 
 		w.write("</head>\n");
 		w.write("<body>");
+		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
 		w.write("\n");
 		w.write("<div style= \"width: 100%; background-color: #516373;");
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
@@ -582,4 +584,7 @@ window.setInterval(function() {
 		output.write("</html>");
 
 	}	
+	public static String jsTableSorter(String tableid,String pagerid) {
+		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
+	}
 }
