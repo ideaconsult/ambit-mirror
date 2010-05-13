@@ -9,6 +9,7 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -37,8 +38,10 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	public void header(Writer w, IQueryRetrieval<Property> query) {
 		super.header(w, query);
 		try {w.write(collapsed?"<h3>Feature</h3>":"<h3>Features</h3>");
-			w.write("<table width='80%' class=\"results_odd\">");
-			w.write("<tr class=\"results_odd\"><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Nominal values</th></tr>");
+			w.write(AmbitResource.jsTableSorter("features","pager"));
+			w.write("<table width='80%' id='features' class=\"tablesorter\"><thead>");
+			w.write("<tr><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Nominal values</th></tr></thead>");
+			w.write("<tbody>");
 		} catch (Exception x) {}
 	}	
 
@@ -93,7 +96,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	@Override
 	public void footer(Writer w, IQueryRetrieval<Property> query) {
 		try {
-			w.write("</table>");
+			w.write("</tbody></table>");
 		} catch (Exception x) {}
 			super.footer(output, query);
 	}
