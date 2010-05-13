@@ -7,6 +7,6 @@ public class OTProcessingResource extends OTObject {
 		throw new Exception("Not implemented");
 	}
 	public OTDataset process(OTDataset inputDataset) throws Exception  {
-		 return process(inputDataset);	 
+		throw new Exception("Not implemented");
 	 }	
 }
