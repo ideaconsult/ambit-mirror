@@ -58,7 +58,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		if (getFieldname()!=null)
 			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getFieldname().getIdchemical():getFieldname().getIdstructure()));				
-		else 
+		else if (getValue()!=null)
 			params.add(new QueryParam<Integer>(Integer.class, getValue()));
 		
 		if (getValue()!=null) {
