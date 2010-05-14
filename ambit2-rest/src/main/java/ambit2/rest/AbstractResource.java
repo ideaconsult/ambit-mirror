@@ -32,7 +32,6 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	protected Exception error = null;	
 	protected Status response_status = Status.SUCCESS_OK;
 	public final static String search_param = "search";
-	public final static String sameas = "sameas";
 	public final static String property = "property";
 	public final static String condition = "condition";
 	public final static String caseSensitive = "casesens";

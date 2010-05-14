@@ -23,6 +23,8 @@ import org.restlet.data.Status;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -64,6 +66,14 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	protected String media;
 	protected Template template;
+	protected Profile groupProperties;
+
+	public Profile getGroupProperties() {
+		return groupProperties;
+	}
+	public void setGroupProperties(Profile groupProperties) {
+		this.groupProperties = groupProperties;
+	}
 	protected enum QueryType  {smiles,url};
 	public Template getTemplate() {
 		return template;
@@ -75,6 +85,22 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return null;//return String.format("riap://application%s/All/Identifiers/view/tree",OntologyResource.resource);
 	}
+	protected void setGroupProperties(Context context, Request request,
+			Response response) throws ResourceException {
+		Form form = request.getResourceRef().getQueryAsForm();
+		String[] gp = OpenTox.params.sameas.getValuesArray(form);
+		if (gp!=null) {
+			groupProperties = new Profile();
+			for (String g: gp) {
+				Property p = new Property(g);
+				p.setEnabled(true);
+				p.setLabel(g);
+				groupProperties.add(p);
+			}
+				
+		}
+	}
+			
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
 		Form form = request.getResourceRef().getQueryAsForm();
@@ -211,7 +237,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ARFFResourceReporter(getTemplate(),getRequest()),ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);
+					new CSVReporter(getTemplate(),groupProperties),MediaType.TEXT_CSV);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

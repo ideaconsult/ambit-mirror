@@ -2,7 +2,9 @@ package ambit2.db.reporters;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -11,6 +13,7 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
@@ -26,8 +29,11 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public CSVReporter() {
 		this(null);
 	}
-
 	public CSVReporter(Template template) {
+		this(template,null);
+	}
+	public CSVReporter(Template template, Profile groupedProperties) {
+		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
 
@@ -40,7 +46,15 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});
-
+		if (getGroupProperties()!=null) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
@@ -60,7 +74,14 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected void writeHeader(Writer writer) throws IOException {
 		if (header == null) {
 			header = template2Header(template,true);
-		
+			if (groupProperties!=null) {
+				Iterator<Property> it = groupProperties.getProperties(true);
+				while (it.hasNext()) {
+					Property t = it.next();
+					header.add(t);
+				}
+			}
+			
 			if (numberofHeaderLines == 1) {
 				writer.write("");
 				for (Property p : header) 
