@@ -370,12 +370,14 @@ public class AmbitResource extends ServerResource {
 	}
 
 	public static String js(String url, Reference baseReference) {
+		return "";
 		//return String.format("<script type=\"text/javascript\" src=\"%s/jquery/call.js\"></script>",baseReference);
 		/**
 window.setInterval(function() {
  alert('test');
 }, 1000);
 		 */
+		/*
 		String s = 
 		"<script language=\"JavaScript1.2\" type=\"text/javascript\">\n"+
 		"<!--\n"+
@@ -422,7 +424,7 @@ window.setInterval(function() {
 	    "-->\n"+
 	    "</script>";
 		return s;
-		
+		*/
 		/*
 	String s = 
 		"<script type=\"text/javascript\">\n"+
