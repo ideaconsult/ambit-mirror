@@ -90,6 +90,8 @@ public class AmbitResource extends ServerResource {
 			{"/dataset/{id}","remove dataset",format,"DELETE","Yes"},
 			{"/dataset/{id}?compound_uris[]=uri-of-a-compound-or-conformer","remove compounds from the dataset",format,"DELETE","Yes"},
 			
+			{"/filter?dataset_uri={dataset uri}&filter={features uri}&condition={yes/no}","Returns only compounds, which have/have not any values for the specified features",format,"GET","Yes"},
+			
 			{"http://opentox.org/dev/apis/api-1.1/dataset","A Dataset",formatHeader,null,"Implemented"},
 			{DatasetResource.dataset+"/8","get dataset",format,"GET","Yes"},
 			{DatasetResource.dataset+"/R100","get dataset",format,"GET","Yes"},
