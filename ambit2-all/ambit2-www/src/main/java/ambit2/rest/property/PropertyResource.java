@@ -146,7 +146,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				Form form = request.getResourceRef().getQueryAsForm();
 				IQueryRetrieval<Property> qf = getFreeTextQuery(getContext(), getRequest(), getResponse());
 				if (qf != null) return qf;
-				key = form.getFirstValue(QueryResource.sameas);
+				key = form.getFirstValue(OpenTox.params.sameas.toString());
 				String condition = form.getFirstValue(QueryResource.condition);
 				if (key != null) {
 					key = Reference.decode(key.toString());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
@@ -23,6 +24,15 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 	 * 
 	 */
 	private static final long serialVersionUID = 4653171215072211975L;
+	protected Profile groupProperties;
+	public Profile getGroupProperties() {
+		return groupProperties;
+	}
+	public void setGroupProperties(Profile gp) {
+		this.groupProperties = gp;
+	}
+
+
 	protected Template template;
 	protected List<Property> header = null;
 	

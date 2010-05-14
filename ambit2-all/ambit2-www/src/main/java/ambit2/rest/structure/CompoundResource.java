@@ -110,6 +110,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		/* workaround for clients not being able to set accept headers */
 		if (!variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			setTemplate(createTemplate(getContext(),getRequest(),getResponse()));
+			setGroupProperties(getContext(),getRequest(),getResponse());
 		}
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
@@ -179,7 +180,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new ARFFResourceReporter(getTemplate(),getRequest()),ChemicalMediaType.WEKA_ARFF);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate()),MediaType.TEXT_CSV);				
+					new CSVReporter(getTemplate(),getGroupProperties()),MediaType.TEXT_CSV);				
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -272,7 +273,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				String condition = form.getFirstValue(QueryResource.condition);
 				String casesens = form.getFirstValue(QueryResource.caseSensitive);
 				String[] keys = form.getValuesArray(QueryResource.search_param);
-				String[] properties = form.getValuesArray(QueryResource.sameas);
+				String[] properties = form.getValuesArray(OpenTox.params.sameas.toString());
 				if ((properties==null) || (properties.length==0)) {
 					properties  = form.getValuesArray(QueryResource.property);
 					condition = (condition==null)?"=":condition;

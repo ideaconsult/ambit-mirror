@@ -106,6 +106,13 @@ public class OpenTox {
 				return "Feature URI(s)";
 			}
 		},
+		sameas {
+
+			@Override
+			public String getDescription() {
+				return "sameas";
+			}
+		},		
 		model_uri {
 			@Override
 			public String getDescription() {

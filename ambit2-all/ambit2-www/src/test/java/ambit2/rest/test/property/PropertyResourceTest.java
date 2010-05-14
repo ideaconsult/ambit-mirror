@@ -76,7 +76,7 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testQuerySameAS() throws Exception {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(
 				String.format("http://localhost:%d%s?%s=%s", port,
-						PropertyResource.featuredef,QueryResource.sameas,"CasRN")
+						PropertyResource.featuredef,OpenTox.params.sameas.toString(),"CasRN")
 				));
 		iterator.setCloseModel(true);
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
@@ -454,7 +454,7 @@ public class PropertyResourceTest extends ResourceTest {
 	@Test
 	public void testGetJavaObject() throws Exception {
 		testGetJavaObject(String.format("http://localhost:%d%s?%s=%s", port,PropertyResource.featuredef,
-				QueryResource.sameas,Reference.encode(Property.opentox_CAS)),
+				OpenTox.params.sameas.toString(),Reference.encode(Property.opentox_CAS)),
 				MediaType.APPLICATION_JAVA_OBJECT,org.restlet.data.Status.SUCCESS_OK);
 	}
 	

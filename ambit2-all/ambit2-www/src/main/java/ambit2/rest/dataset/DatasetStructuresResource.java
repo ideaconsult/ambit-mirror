@@ -35,6 +35,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	protected Q createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
+			setGroupProperties(context, request, response);
 			setTemplate(createTemplate(context, request, response));
 			Object id = request.getAttributes().get(datasetKey);
 			if (id != null)  try {
