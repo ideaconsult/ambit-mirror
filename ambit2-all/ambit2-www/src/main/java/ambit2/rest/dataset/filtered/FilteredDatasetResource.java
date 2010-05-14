@@ -37,11 +37,12 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 		String[] filteruris =  OpenTox.params.filter.getValuesArray(form);
 		Object condition = form.getFirstValue(OpenTox.params.condition.toString());
 		SetCondition.conditions sc = condition==null?SetCondition.conditions.in:
-				"not".equals(condition)?SetCondition.conditions.not_in:SetCondition.conditions.in;
+				"no".equals(condition)?SetCondition.conditions.not_in:SetCondition.conditions.in;
 		if (dataset==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty dataset");
 		if (filteruris==null) 
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No features to filter");		
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No features to filter");
+		setTemplate(createTemplate(context, request, response));
 		try {
 			filter = createTemplate(context, request, response,filteruris);
 			if ((filter==null) || (filter.size()==0)) 

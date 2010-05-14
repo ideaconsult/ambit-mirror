@@ -13,11 +13,15 @@ public class QueryStructureByPropertyInCompounds  extends	QueryStructureByProper
 	 */
 	private static final long serialVersionUID = -5478831682253837878L;
 	protected static String sql_compounds =
-		"select ? as idquery,s.idchemical,s.idstructure,1 as selected,preference as metric,type_structure as text from structure s\n"+
-		"where s.idchemical %s\n"+
+
+		"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text\n" +	
+		"FROM structure s1\n"+
+		"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (1E10*s1.preference+s1.idstructure) > (1E10*s2.preference+s2.idstructure)\n"+
+		"where s2.idchemical is null\n"+	
+		"and s1.idchemical %s\n"+
 		"(select idchemical from property_values join structure using(idstructure)\n"+
 		"where idproperty in (%s))\n"+
-		"and s.idchemical in (%s)";
+		"and s1.idchemical in (%s)";	
 	@Override
 	protected void addStructureParam(List<QueryParam> params)
 			throws AmbitException {
