@@ -84,6 +84,18 @@ public class OpenTox {
 	};
 	
 	public enum params  {
+		filter {
+			@Override
+			public String getDescription() {
+				return "Filtered URI(s)";
+			}
+		},		
+		condition {
+			@Override
+			public String getDescription() {
+				return "Filtered URI(s) condition";
+			}
+		},			
 		feature_uris {
 			@Override
 			public String toString() {
