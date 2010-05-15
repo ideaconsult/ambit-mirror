@@ -43,4 +43,7 @@ public class RemoteTaskPool {
 			x.printStackTrace();
 		}
 	}
+	public int size() {
+		return pool==null?0:pool.size();
+	}
 }

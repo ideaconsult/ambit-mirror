@@ -5,13 +5,16 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
 
 public class OTDataset extends OTObject {
-	 
+	 protected enum dataset_size  {empty,nonempty,unknown};
+	 protected dataset_size isEmpty = dataset_size.unknown;
 	 public static OTDataset dataset() throws Exception  { 
 		    return new OTDataset();
 	 }
@@ -24,10 +27,7 @@ public class OTDataset extends OTObject {
 	 public OTDataset withUri(String datasetURI) throws Exception { 
 		  return withUri(new Reference(datasetURI));
 	 }		 
- 	 
-	 public OTDataset missingValues(Reference dataset) throws Exception  { 
-		 return this;
-	 }
+
 
 	 public OTDataset copy(OTDataset dataset) throws Exception  { 
 		 if (dataset_service==null) throw new Exception("No dataset_service!");
@@ -71,4 +71,73 @@ public class OTDataset extends OTObject {
 	 public OTDataset withDatasetService(String uri) throws Exception { 
 		  return withDatasetService(new Reference(uri));
 	 }	
+	 
+	 public OTDataset filterByFeature(OTFeature feature,boolean withFeatures)  throws Exception  {
+		 if (feature.getUri()==null) return null;
+		 
+		 Reference ref = new Reference(dataset_service.getParentRef()).
+		 	addSegment("filter").
+		 	addQueryParameter(OpenTox.params.dataset_uri.toString(), uri.toString()).
+		 	addQueryParameter(OpenTox.params.condition.toString(), withFeatures?"yes":"no");
+		 
+		 ref.addQueryParameter(OpenTox.params.filter.toString(), feature.getUri().toString());
+		 
+		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(ref);
+ 	 }		 
+	 protected OTDataset filterByFeatures(OTFeatures features,boolean withFeatures)  throws Exception  {
+		 Reference ref = new Reference(dataset_service.getParentRef()).
+		 	addSegment("filter").
+		 	addQueryParameter(OpenTox.params.dataset_uri.toString(), uri.toString()).
+		 	addQueryParameter(OpenTox.params.condition.toString(), withFeatures?"yes":"no");
+		 
+		 for (OTFeature feature:features.getItems())
+			 ref.addQueryParameter(OpenTox.params.filter.toString(), feature.getUri().toString());
+		 
+		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(ref);
+ 	 }	 
+	 public OTDataset filteredSubsetWithoutFeatures(OTFeatures features)  throws Exception  {
+		 return filterByFeatures(features, false);
+ 	 }
+	 public OTDataset filteredSubsetWithFeatures(OTFeatures features)  throws Exception  {
+		 return filterByFeatures(features, true);
+ 	 }	 
+	 public boolean isEmpty()  throws Exception  {
+		 return isEmpty(false);
+	 }
+	 public boolean isEmpty(boolean cachedResult)  throws Exception  {
+		 if (dataset_size.unknown.equals(isEmpty) || !cachedResult) {
+			 Reference ref = uri.clone();
+			 ref.addQueryParameter(OpenTox.params.page.toString(), "0");
+			 ref.addQueryParameter(OpenTox.params.pagesize.toString(), "1");
+			 ClientResource client = new ClientResource(ref);
+			 Representation r = null;
+			 try {
+				 r = client.get(MediaType.TEXT_URI_LIST);
+				 isEmpty = Status.CLIENT_ERROR_NOT_FOUND.equals(client.getStatus())?dataset_size.empty:
+					 Status.SUCCESS_OK.equals(client.getStatus())?dataset_size.nonempty:dataset_size.unknown;				 
+			 } catch (ResourceException x) {
+				 isEmpty = Status.CLIENT_ERROR_NOT_FOUND.equals(x.getStatus())?dataset_size.empty:
+					 Status.SUCCESS_OK.equals(x.getStatus())?dataset_size.nonempty:dataset_size.unknown;
+			 } catch (Exception x) {
+				 
+			 } finally {
+				 try { r.release(); } catch (Exception x) {}
+				 try { client.release(); } catch (Exception x) {}
+			 }
+		 } 
+		 return dataset_size.empty.equals(isEmpty);
+	 }
+	 
+	 public OTDataset addColumns(OTFeatures features) throws Exception {
+		 Reference newuri = uri.clone();
+		 for (OTFeature feature:features.getItems())
+			 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
+		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(newuri);
+	 }
+	 
+	 public OTDataset addColumn(OTFeature feature) throws Exception {
+		 Reference newuri = uri.clone();
+		 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
+		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(newuri);
+	 }
 }

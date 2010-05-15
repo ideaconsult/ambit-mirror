@@ -51,6 +51,11 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 	 public OTContainers<T>  withDatasetService(String uri) throws Exception { 
 		  return withDatasetService(new Reference(uri));
 	 }		 
+	 
+	 public OTContainers<T> remove(T dataset) throws Exception {
+		 items.remove(dataset);
+		 return this;
+	 }
 	 public int size() {
 		 return items==null?0:items.size();
 	 }

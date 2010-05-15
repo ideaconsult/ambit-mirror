@@ -33,6 +33,10 @@ public class OTFeature extends OTProcessingResource {
 		  this.uri = uri;
 		  return this; 
 	 }	 
+	 public OTFeature withAlgorithm(OTAlgorithm alg) throws Exception { 
+		  this.algorithm = alg;
+		  return this; 
+	 }		 
 	 /**
 	  * Retrieve algorithms from ot:hasSource property
 	  * @return

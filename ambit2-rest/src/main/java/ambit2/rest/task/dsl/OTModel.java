@@ -16,6 +16,7 @@ import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.RemoteTaskPool;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
@@ -50,77 +51,123 @@ public class OTModel extends OTProcessingResource {
 	 }	 
 	 public OTModel withUri(String uri) throws Exception { 
 		  return withUri(new Reference(uri)); 
-	 }	 	 
-	 public OTModel independentVariables() throws Exception  { 
-		 return variables(OTProperty.independentVariables);
-     }
-	 public OTModel predictedVariables() throws Exception  { 
-		 return variables(OTProperty.predictedVariables);
-     }
-	 protected OTModel variables(OTProperty varType) throws Exception  {
+	 }	
+	 /**
+	  * Reads RDF and initializes variables 
+	  * @return
+	  * @throws Exception
+	  */
+	 public OTModel load() throws Exception  {
 		 OTFeatures vars = null;
 		 String sparqlName = "sparql/ModelIndependentVariables.sparql";
-		 switch (varType) {
-		 case independentVariables: { 
-			 if (independentVariables == null) independentVariables = OTFeatures.features();
-			 vars = independentVariables;
-			 break;
-		 }
-		 case predictedVariables: { 
-			 if (predictedVariables == null) predictedVariables = OTFeatures.features();
-			 vars = predictedVariables;
-			 sparqlName = "sparql/ModelPredictedVariables.sparql";
-			 break;
-		 }
-		 default: throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported",varType));
-		 }
-		 vars.clear();
-		 vars.withDatasetService(dataset_service);
 		 
-	        QueryExecution qe = null;
-	        OntModel model = null;
-	        try {
-	        	model = OT.createModel(null, new Reference(uri),MediaType.APPLICATION_RDF_XML);
-				Query query = QueryFactory.create(String.format(OTModel.getSparql(sparqlName).toString(),uri,uri));
-				qe = QueryExecutionFactory.create(query,model);
-				ResultSet results = qe.execSelect();
-				
-				
-				while (results.hasNext()) {
-					QuerySolution solution = results.next();
-					Resource var = solution.getResource("vars");
-					
-					vars.add(OTFeature.feature().withUri(var.getURI()));
-				}
-	        } catch (Exception x) {
-	        	throw x;
-	        } finally {
-	        	try {qe.close();} catch (Exception x) {}
+		 OTProperty[] varTypes = new OTProperty[] {OTProperty.independentVariables,OTProperty.predictedVariables};
+		 
+		 
+		 OntModel model = OT.createModel(null, new Reference(uri),MediaType.APPLICATION_RDF_XML);
+		 try {
+			 for (OTProperty varType:varTypes) {
+				 switch (varType) {
+				 case independentVariables: { 
+					 if (independentVariables == null) independentVariables = OTFeatures.features();
+					 vars = independentVariables;
+					 break;
+				 }
+				 case predictedVariables: { 
+					 if (predictedVariables == null) predictedVariables = OTFeatures.features();
+					 vars = predictedVariables;
+					 sparqlName = "sparql/ModelPredictedVariables.sparql";
+					 break;
+				 }
+				 default: throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported",varType));
+				 }
+				 vars.clear();
+				 vars.withDatasetService(dataset_service);
+				 
+			        QueryExecution qe = null;
+			        try {
+			        	
+						Query query = QueryFactory.create(String.format(OTModel.getSparql(sparqlName).toString(),uri,uri));
+						qe = QueryExecutionFactory.create(query,model);
+						ResultSet results = qe.execSelect();
+						
+						
+						while (results.hasNext()) {
+							QuerySolution solution = results.next();
+							Resource var = solution.getResource("vars");
+							
+							vars.add(OTFeature.feature().withUri(var.getURI()));
+						}
+			        } catch (Exception x) {
+			        	throw x;
+			        } finally {
+			        	try {qe.close();} catch (Exception x) {}
+
+			        }
+			   }
+		 } catch (Exception x) {
+			 throw x;
+		 } finally {
 	        	try {model.close();} catch (Exception x) {}
-	        }
-  
+		 }
+	
 	 	return this;
      }	 
-	 
 	 public OTDataset calculateDescriptors(OTDataset inputDataset) throws Exception  {
-		independentVariables();
-
+		 if (independentVariables==null) load();
+		 return calculateDescriptors(independentVariables,inputDataset);
+	 }
+	 public  OTDataset calculateDescriptors(OTFeatures features, OTDataset inputDataset) throws Exception  {
 		
-		if (independentVariables.size()>0) {
+
+		if (features.size()>0) {
+			RemoteTaskPool pool = new RemoteTaskPool();
 			OTAlgorithms algorithms = OTAlgorithms.algorithms();
 			algorithms.withDatasetService(dataset_service);
-			for (OTFeature feature : independentVariables.getItems())
-					if (feature!=null) 
-						algorithms.add(feature.algorithm().getAlgorithm());
-			return algorithms.process(inputDataset);
+			
+			OTDatasets datasets = OTDatasets.datasets();
+			datasets.withDatasetService(dataset_service);
+			
+			for (OTFeature feature : features.getItems())
+				if (feature!=null) {
+					OTDataset subset = inputDataset.filterByFeature(feature,false);
+					if ((subset!=null) && subset.isEmpty()) {
+						//TODO logger
+						//System.out.println("Nothing to calculate");
+						datasets.add(inputDataset.addColumn(feature));
+					} else {
+						//algorithms.add(feature.algorithm().getAlgorithm());
+						RemoteTask task = feature.getAlgorithm().processAsync(subset==null?inputDataset:subset);
+						pool.add(task);
+					}
+				}
+			if (pool.size()>0) 
+				datasets = tasksCompleted(pool).taskResults(pool,datasets);
+			//ok, all datasets in place, merge into one to submit for model calculation
+			return datasets.merge();
+	
 		} else return inputDataset;
+	 }
+
+	 public OTDataset subsetWithoutPredictedValues(OTDataset inputDataset) throws Exception  {
+		 if (predictedVariables==null) load();
+		 return inputDataset.filteredSubsetWithoutFeatures(getPredictedVariables());
 	 }
 	 @Override
 	 public OTDataset process(OTDataset inputDataset) throws Exception  {
-		 long now = System.currentTimeMillis();
-		 RemoteTask task = processAsync(inputDataset);
-		 wait(task,now);
-		 return OTDataset.dataset().withUri(task.getResult());		 
+		 OTDataset subsetToCalculate = subsetWithoutPredictedValues(inputDataset);
+		 if (subsetToCalculate.isEmpty(false)) {
+			 //evertyhing is already calculated, return URI of this dataset with predicted features
+			 //TODO
+			 return inputDataset.addColumns(getPredictedVariables());
+		 } else {
+			 long now = System.currentTimeMillis();
+			 OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);
+			 RemoteTask task = processAsync(newdataset);
+			 wait(task,now);
+			 OTDataset dataset = OTDataset.dataset().withUri(task.getResult());
+			 return dataset;
+		 }
 	 }	
 	 @Override
 	 public RemoteTask processAsync(OTDataset inputDataset) throws Exception  { 
