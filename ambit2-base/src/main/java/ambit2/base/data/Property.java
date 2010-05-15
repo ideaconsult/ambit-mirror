@@ -52,6 +52,7 @@ public class Property extends Model implements Serializable {
 	public static String AMBIT_DESCRIPTORS_ONTOLOGY = "http://ambit.sourceforge.net/descriptors.owl#%s";
 	public static final String Names = "Names";
 	public static final String CAS = "CasRN";
+	public static final String opentox_REACHDATE = "http://www.opentox.org/api/1.1#REACHRegistrationDate";
 	public static final String opentox_CAS = "http://www.opentox.org/api/1.1#CASRN";
 	public static final String opentox_Name = "http://www.opentox.org/api/1.1#ChemicalName";
 	public static final String opentox_IupacName = "http://www.opentox.org/api/1.1#IUPACName";
@@ -60,6 +61,7 @@ public class Property extends Model implements Serializable {
 	public static final String opentox_InChIKey = "http://www.opentox.org/api/1.1#InChIKey";
 	public static final String opentox_SMILES = "http://www.opentox.org/api/1.1#SMILES";
 	public static final String opentox_TupleFeature = "http://www.opentox.org/api/1.1#TupleFeature";
+	
 	public static final String EC = "EC";
 	protected boolean isNominal = false;
 	public boolean isNominal() {
