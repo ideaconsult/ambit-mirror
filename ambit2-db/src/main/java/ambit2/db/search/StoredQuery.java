@@ -123,14 +123,16 @@ public class StoredQuery implements IStoredQuery {
 		return getContent()==null?String.format("R%d",getId()):getContent();
 	}
 	public long getPageSize() {
-		return 0;
+		return query==null?0:query.getPageSize();
 	}
 	public void setPageSize(long records) {
+		if (query!=null) query.setPageSize(records);
 	}
 	public void setPage(int page) {
+		if (query!=null) query.setPage(page);
 	}
 	public int getPage() {
-		return 0;
+		return query==null?0:query.getPage();
 	}
 	public String getKey() {
 		return null;

@@ -44,7 +44,7 @@ public class ProcessorCreateQueryTest extends DbUnitTest {
 	public void test() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 		IQueryObject q = new QueryStructureByID(100211,100215); 
-		
+		q.setPageSize(1000);
 		IDatabaseConnection c = getConnection();
 		ProcessorCreateSession ps = new ProcessorCreateSession();
 		ps.setConnection(c.getConnection());

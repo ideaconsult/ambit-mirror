@@ -124,7 +124,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 			return rs;
 		}
 	}
-	protected String getSQL(Q target) throws AmbitException {
+	public String getSQL(Q target) throws AmbitException {
 		String sql = target.getSQL();
 		if (sql.indexOf(LIMIT)>=0) return sql;
 		else if ((target instanceof IQueryRetrieval) && ((IQueryRetrieval)target).isPrescreen()) return sql;

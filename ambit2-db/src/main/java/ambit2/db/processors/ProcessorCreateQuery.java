@@ -73,8 +73,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	protected boolean delete = false;
 	protected Template profile;
 	protected UpdateExecutor<IQueryUpdate> exec;
-	
-	
+	protected QueryExecutor qexec = new QueryExecutor();	
     public Template getProfile() {
 		return profile;
 	}
@@ -283,7 +282,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	
 	protected int insertResults(IStoredQuery result) throws SQLException , AmbitException {
 		
-		PreparedStatement sresults = connection.prepareStatement(result.getSQL());
+		PreparedStatement sresults = connection.prepareStatement(qexec.getSQL(result));
 		List<QueryParam> params = result.getParameters();
 		QueryExecutor.setParameters(sresults, params);
 		int rows = sresults.executeUpdate();
