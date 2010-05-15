@@ -218,7 +218,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new SmilesReporter<QueryStructureByID>(false,Mode.InChI),ChemicalMediaType.CHEMICAL_INCHI);				
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
-					new PDFReporter<QueryStructureByID>(getTemplate()));				
+					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			return new StringConvertor(
 					new SmilesReporter<QueryStructureByID>(true),MediaType.TEXT_PLAIN);
@@ -231,13 +231,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getRequest(),true,getTemplate()),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getRequest(),true,null,getTemplate(),getGroupProperties()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getRequest()),ChemicalMediaType.WEKA_ARFF);			
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest()),ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate(),groupProperties),MediaType.TEXT_CSV);
+					new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString()),MediaType.TEXT_CSV);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

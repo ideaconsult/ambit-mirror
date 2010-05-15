@@ -2,6 +2,7 @@ package ambit2.rest.dataset;
 
 import org.restlet.Request;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
@@ -22,8 +23,12 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 */
 	private static final long serialVersionUID = 2627930277795024333L;
 	protected PropertyURIReporter reporter;
-	public ARFFResourceReporter(Template template,Request request) {
-		super(template);
+	
+	public ARFFResourceReporter(Template template, Request request) {
+		this(template,null,request);
+	}
+	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request) {
+		super(template,groupedProperties);
 		reporter = new PropertyURIReporter(request);
 	}
 	@Override
