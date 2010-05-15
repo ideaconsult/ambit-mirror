@@ -30,7 +30,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write(AmbitResource.jsTableSorter("algorithms","pager"));
-			output.write("<table class='tablesorter' id='algorithms'>");
+			output.write("<table class='tablesorter' id='algorithms' border='0' cellpadding='0' cellspacing='1'>");
 			if (collapsed) {
 				output.write("<thead>");
 				output.write("<tr><th align=\"left\">Name</th><th>Description</th><th>Type</th></tr>"); 
