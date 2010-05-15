@@ -216,7 +216,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		} finally {
 			writer.write("</tbody></table>");
 			writer.write("</form>");
-			writer.write(jsPager("mpager",new String[]{"10","20","30","40"}));
+			//writer.write(jsPager("mpager",new String[]{"10","20","30","40"}));
 		}
 		
 		return running;

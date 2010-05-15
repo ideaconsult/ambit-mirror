@@ -165,7 +165,7 @@ public class ModelTools {
 	public static void renderModelTableCaption(Writer writer,boolean status) throws IOException {
 		writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
 		writer.write(WizardResource.jsTableSorter("models","mpager"));
-		writer.write("<table class='tablesorter' id='models'>");
+		writer.write("<table class='tablesorter' id='models' border='0' cellpadding='0' cellspacing='1'>");
 		writer.write("<thead><tr>");
 		writer.write("<th width='25%'>Model</th>");
 		writer.write("<th width='15%'>Endpoint</th>");

@@ -555,6 +555,7 @@ public abstract class WizardResource extends ServerResource {
 	public static String jsTableSorter(String tableid,String pagerid) {
 		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
 	}
+	/*
 	public String jsPager(String pagerid, String[] options) {
 		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();
 		
@@ -578,4 +579,5 @@ public abstract class WizardResource extends ServerResource {
 		b.append("</div>");
 		return b.toString();
 	}
+	*/
 }
