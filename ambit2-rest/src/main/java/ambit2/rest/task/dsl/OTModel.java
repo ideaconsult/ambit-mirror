@@ -131,15 +131,21 @@ public class OTModel extends OTProcessingResource {
 			
 			for (OTFeature feature : features.getItems())
 				if (feature!=null) {
-					OTDataset subset = inputDataset.filterByFeature(feature,false);
-					if ((subset!=null) && subset.isEmpty()) {
-						//TODO logger
-						//System.out.println("Nothing to calculate");
-						datasets.add(inputDataset.addColumns(feature));
-					} else {
-						//algorithms.add(feature.algorithm().getAlgorithm());
-						RemoteTask task = feature.getAlgorithm().processAsync(subset==null?inputDataset:subset);
-						pool.add(task);
+					try {
+						OTDataset subset = inputDataset.filterByFeature(feature,false);
+						if ((subset!=null) && subset.isEmpty()) {
+							//TODO logger
+							//System.out.println("Nothing to calculate");
+							datasets.add(inputDataset.addColumns(feature));
+						} else {
+							//algorithms.add(feature.algorithm().getAlgorithm());
+							RemoteTask task = feature.getAlgorithm().processAsync(subset==null?inputDataset:subset);
+							pool.add(task);
+						}
+					} catch (Exception x) {
+						x.printStackTrace();
+						RemoteTask task = feature.getAlgorithm().processAsync(inputDataset);
+						pool.add(task);						
 					}
 				}
 			if (pool.size()>0) 

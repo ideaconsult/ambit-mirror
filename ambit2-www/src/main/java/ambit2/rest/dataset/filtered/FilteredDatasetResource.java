@@ -72,7 +72,7 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 				setPaging(form, qz);
 				return (Q)qz;		
 			} else 
-				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,"not implemented!");				
+				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,dataset.toString() + " " + q.getClass().getName() + " not implemented!");				
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
