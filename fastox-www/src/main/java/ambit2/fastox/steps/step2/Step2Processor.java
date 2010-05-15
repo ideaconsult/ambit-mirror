@@ -32,6 +32,7 @@ import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTDatasets;
 
 public class Step2Processor extends StepProcessor {
 
@@ -60,7 +61,14 @@ public class Step2Processor extends StepProcessor {
 	
 			Reference uri = Wizard.getInstance(WizardMode.A).getService(SERVICE.dataset);
 			Reference ref = getSearchQuery(form, wizard,max,session);
-			if (max==1) {
+			logger.info(ref);
+			if ("".equals(ref.getQuery())) {
+				
+			} else {
+
+				OTDatasets datasets = OTDatasets.datasets();
+				datasets.withDatasetService(uri);
+				
 				ClientResource resource = new ClientResource(ref);
 				Representation r=null;
 				try {
@@ -68,8 +76,8 @@ public class Step2Processor extends StepProcessor {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
 					String line = null;
 					while ((line = reader.readLine())!=null) {
-						ref = new Reference(line.trim());
-						break;
+						datasets.add(OTDataset.dataset().withUri(line.trim()).withDatasetService(uri));
+						logger.info(line.trim());
 					}					
 				} catch (Exception x) {
 					throw x;
@@ -77,11 +85,21 @@ public class Step2Processor extends StepProcessor {
 					try {r.release();} catch (Exception x) {}
 					try {resource.release();} catch (Exception x) {}
 				}
-			} else {
+				
+				if (datasets.size()==0) throw new AmbitException("No structures!");
+				else if (datasets.size()==1) for (OTDataset d: datasets.getItems()) { ref = d.getUri(); break;}
+				else {
+					OTDataset dataset = datasets.merge();
+					ref = dataset.getUri();
+				}
+			} 
+			/*
+			else {
 				OTDataset dataset = OTDataset.dataset().withUri(ref).withDatasetService(uri);
 				if (ref != null) 
 					ref = OTDataset.dataset().withDatasetService(uri).copy(dataset).getUri();
 			}
+			*/
 			if (ref != null) session.setDatasetURI(ref.toString());
 			form.clear();
 			return form;
