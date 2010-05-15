@@ -70,7 +70,7 @@ public class CallablePOST implements Callable<Reference>{
 						.withUri(modelURI)
 						.withDatasetService(dataset_service)
 						.withParams(form)
-						.process(OTDataset.dataset().withUri(datasetURI));
+						.process(OTDataset.dataset().withUri(datasetURI).withDatasetService(dataset_service));
 			else if (algoURIs != null) {
 				
 				OTAlgorithms algorithms = OTAlgorithms.algorithms();

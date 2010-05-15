@@ -64,8 +64,9 @@ public class OTModel extends OTProcessingResource {
 		 OTProperty[] varTypes = new OTProperty[] {OTProperty.independentVariables,OTProperty.predictedVariables};
 		 
 		 
-		 OntModel model = OT.createModel(null, new Reference(uri),MediaType.APPLICATION_RDF_XML);
+		 OntModel model = null;
 		 try {
+			 model =  OT.createModel(null, new Reference(uri),MediaType.APPLICATION_RDF_XML);
 			 for (OTProperty varType:varTypes) {
 				 switch (varType) {
 				 case independentVariables: { 
