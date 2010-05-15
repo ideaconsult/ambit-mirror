@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.util.List;
 
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -107,7 +108,7 @@ public class Step2Resource extends FastoxStepResource {
 		RemoteTaskPool pool = new RemoteTaskPool();
 		try {
               //factory.setSizeThreshold(100);
-			RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),variant.getMediaType(),entity,Method.POST,null);
+			RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),MediaType.TEXT_URI_LIST,entity,Method.POST,null);
 			
 			pool.add(task);
 			pool.run();
