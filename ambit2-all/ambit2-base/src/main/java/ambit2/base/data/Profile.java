@@ -4,6 +4,7 @@ package ambit2.base.data;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,11 +15,11 @@ import java.util.Iterator;
  * @author nina
  *
  */
-public class Profile<P extends Property> /*implements Collection<P> */ {
+public class Profile<P extends Property> /*implements Collection<P> */ implements Serializable {
 	static public String profile_property_change = "property_change";
 	static public String profile_property_added = "property_added";
 	static public String profile_property_removed = "property_removed";
-	PropertyChangeSupport ps = new PropertyChangeSupport(this);
+	transient PropertyChangeSupport ps = new PropertyChangeSupport(this);
 	protected ArrayList<P> container;
 	protected String name;
 
