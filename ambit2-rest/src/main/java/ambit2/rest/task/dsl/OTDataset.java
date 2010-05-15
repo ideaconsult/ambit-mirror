@@ -127,7 +127,14 @@ public class OTDataset extends OTObject {
 		 } 
 		 return dataset_size.empty.equals(isEmpty);
 	 }
-	 
+	 public OTDataset removeColumns() throws Exception {
+		 Form form = uri.getQueryAsForm();
+		 form.removeAll(OpenTox.params.feature_uris.toString());
+		 Reference ref  = new Reference(String.format("%s:%s",uri.getScheme(),uri.getHierarchicalPart()));
+		 ref.setQuery(form.getQueryString());
+		 withUri(ref);
+		 return this;
+	 }
 	 public OTDataset addColumns(OTFeatures features) throws Exception {
 		 Reference newuri = uri.clone();
 		 for (OTFeature feature:features.getItems())
@@ -135,7 +142,7 @@ public class OTDataset extends OTObject {
 		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(newuri);
 	 }
 	 
-	 public OTDataset addColumn(OTFeature feature) throws Exception {
+	 public OTDataset addColumns(OTFeature feature) throws Exception {
 		 Reference newuri = uri.clone();
 		 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
 		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(newuri);
