@@ -74,7 +74,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if (id == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No structure representation");
 			rep_id = NCISearchProcessor.METHODS.valueOf(Reference.decode(id.toString()));
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid representation identifier",id));
+			rep_id = null;
 		}
 		
 		int idcompound = isAmbitID(text);
@@ -137,6 +137,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	@Override
 	protected void setGroupProperties(Context context, Request request,
 			Response response) throws ResourceException {
+		if (rep_id==null) return;
 		String[] r = rep_id.getOpenToxEntry();
 		if (r==null) return;
 		Template gp = new Template();
