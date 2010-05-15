@@ -55,12 +55,15 @@ public class LauncherTest extends ResourceTest {
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 		headers.add(OpenTox.params.model_uri.toString(), model);
 
+		System.out.println(
 		testAsyncTask(superservice, headers, Status.SUCCESS_OK, String.format(
 				"%s?%s=%s",
 				dataset, 
 				OpenTox.params.feature_uris.toString(),
 				Reference.encode(String
-						.format("%s/predicted", model))));
+						.format("%s/predicted", model))))
+						);
+		
 	}
 	//http://apps.ideaconsult.net:8080/ambit2/model/33
 		//http://apps.ideaconsult.net:8080/ambit2/compound/100
