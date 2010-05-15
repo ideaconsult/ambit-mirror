@@ -17,6 +17,7 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
@@ -26,6 +27,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
+import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.query.StructureQueryResource;
@@ -75,6 +77,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid representation identifier",id));
 		}
 		
+		int idcompound = isAmbitID(text);
 		//query
 		IQueryRetrieval<IStructureRecord>  query = null;
 		if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
@@ -82,6 +85,14 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} else if (EINECS.isValidFormat(text)) { //this is EINECS
 			//we'd better not search for invalid numbers
 			if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),false,text);
+		} else if (idcompound>0)  {
+			IStructureRecord record = new StructureRecord();
+			record.setIdchemical(idcompound);
+			QueryStructureByID q = new QueryStructureByID();
+			q.setPageSize(1);
+			q.setChemicalsOnly(true);
+			q.setValue(record);
+			query = q;
 		} else {
 			IAtomContainer structure = null;
 			//if inchi
@@ -106,6 +117,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		setPaging(form, query);
 		
 		setTemplate(createTemplate(context, request, response));
+		setGroupProperties(context, request, response);
 		return query;
 	}
 	
@@ -123,8 +135,23 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		return q_by_name;
 	}
 	@Override
+	protected void setGroupProperties(Context context, Request request,
+			Response response) throws ResourceException {
+		String[] r = rep_id.getOpenToxEntry();
+		if (r==null) return;
+		Template gp = new Template();
+		for (int i=0; i < r.length;i++) {
+			Property p = new Property(r[i]);
+			p.setLabel(r[i]);
+			p.setEnabled(true);
+			gp.add(p);
+		}
+		setGroupProperties(gp);
+	}
+	@Override
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
+		/*
 		String[] r = rep_id.getOpenToxEntry();
 		if (r==null) return super.createTemplate(context, request, response);
 		
@@ -133,6 +160,8 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			featuresURI[i] = String.format("%s/%s?sameas=%s",getRequest().getRootRef(),OpenTox.URI.feature,Reference.encode(r[i]));
 		
 		return createTemplate(context, request, response, featuresURI);
+		*/
+		return null;
 	}
 	
 	public IAtomContainer isInChI(String inchi) throws Exception {
@@ -150,5 +179,11 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(smiles);
 		return c;
 	}	
-
+	public int isAmbitID(String text) {
+		try {
+			return Integer.parseInt(text);
+		} catch (Exception x) {
+			return 0;
+		}
+	}
 }

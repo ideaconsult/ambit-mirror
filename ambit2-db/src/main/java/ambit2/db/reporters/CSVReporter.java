@@ -25,14 +25,21 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	 */
 	private static final long serialVersionUID = -4569410787926615089L;
 	protected int numberofHeaderLines  = 1;
-	
+	protected String urlPrefix = "";
+	public String getUrlPrefix() {
+		return urlPrefix;
+	}
+	public void setUrlPrefix(String urlPrefix) {
+		this.urlPrefix = urlPrefix;
+	}
 	public CSVReporter() {
 		this(null);
 	}
 	public CSVReporter(Template template) {
-		this(template,null);
+		this(template,null,"");
 	}
-	public CSVReporter(Template template, Profile groupedProperties) {
+	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix) {
+		setUrlPrefix(urlPrefix);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
@@ -74,13 +81,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected void writeHeader(Writer writer) throws IOException {
 		if (header == null) {
 			header = template2Header(template,true);
-			if (groupProperties!=null) {
-				Iterator<Property> it = groupProperties.getProperties(true);
-				while (it.hasNext()) {
-					Property t = it.next();
-					header.add(t);
-				}
-			}
+
 			
 			if (numberofHeaderLines == 1) {
 				writer.write("");
@@ -121,7 +122,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			
 			writeHeader(writer);
 			int i = 0;
-			writer.write(String.format("/compound/%d",item.getIdchemical()));
+			writer.write(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
 			if (item.getIdstructure()>0)
 				writer.write(String.format("/conformer/%d",item.getIdstructure()));
 			for (Property p : header) {

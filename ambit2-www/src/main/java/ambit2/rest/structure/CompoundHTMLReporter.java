@@ -12,6 +12,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -21,6 +22,7 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.AmbitResource;
@@ -55,7 +57,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		this(request,collapsed,urireporter,null);
 	}
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,Template template) {
+		this(request,collapsed,urireporter,template,null);
+	}
+	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,
+				Template template,Profile groupedProperties) {
 		super(request,collapsed);
+		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		if (urireporter != null) this.uriReporter = urireporter;
 		
@@ -71,6 +78,15 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					return super.process(target);
 				}
 			});
+		if (getGroupProperties()!=null) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);

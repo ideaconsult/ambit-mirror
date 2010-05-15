@@ -53,6 +53,14 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
 				h.add(t);
 		}
+		
+		if (groupProperties!=null) {
+			it = groupProperties.getProperties(true);
+			while (it.hasNext()) {
+				Property t = it.next();
+				h.add(t);
+			}
+		}		
 		/*
 		Collections.sort(h,new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {

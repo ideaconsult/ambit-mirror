@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -18,6 +19,7 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -50,9 +52,12 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public PDFReporter() {	
 		this(new Template());
 	}
-
 	public PDFReporter(Template template) {
+		this(template,null);
+	}
+	public PDFReporter(Template template, Profile groupedPrperties) {
 		super();
+		setGroupProperties(groupedPrperties);
 		setTemplate(template==null?new Template(null):template);
 		depict.setBackground(Color.white);
 		depict.setBorderColor(Color.white);
@@ -71,7 +76,15 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});
-
+		if (getGroupProperties()!=null) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
