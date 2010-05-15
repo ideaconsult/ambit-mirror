@@ -14,8 +14,10 @@ public class OTSuperModel extends OTModel {
      @Override
     public OTDataset process(OTDataset inputDataset) throws Exception {
 		 OTDataset subsetToCalculate = subsetWithoutPredictedValues(inputDataset);
-		 if (!subsetToCalculate.isEmpty())
-			 super.predict(calculateDescriptors(subsetToCalculate));
+		 if (!subsetToCalculate.isEmpty()) {
+			 OTDataset subset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);
+			 super.predict(calculateDescriptors(subset));
+		 }
 		//else evertyhing is already calculated, return URI of this dataset with predicted features
 		 return OTDataset.dataset().withUri(inputDataset.uri).withDatasetService(dataset_service).
 	 		removeColumns().addColumns(getPredictedVariables());			 
