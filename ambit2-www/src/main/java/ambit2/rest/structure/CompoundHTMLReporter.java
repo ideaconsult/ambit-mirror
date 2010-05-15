@@ -384,7 +384,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							templates(baseReference)));
 					
 				output.write(AmbitResource.jsTableSorter("results","pager"));
-				output.write("<table class='tablesorter' id='results' >"); 
+				output.write("<table class='tablesorter' id='results' border='0' cellpadding='0' cellspacing='1'>"); 
 				
 				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
 						query.toString(),

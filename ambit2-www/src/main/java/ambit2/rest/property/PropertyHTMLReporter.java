@@ -39,7 +39,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 		super.header(w, query);
 		try {w.write(collapsed?"<h3>Feature</h3>":"<h3>Features</h3>");
 			w.write(AmbitResource.jsTableSorter("features","pager"));
-			w.write("<table width='80%' id='features' class=\"tablesorter\"><thead>");
+			w.write("<table width='80%' id='features' class=\"tablesorter\" border='0' cellpadding='0' cellspacing='1'><thead>");
 			w.write("<tr><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Nominal values</th></tr></thead>");
 			w.write("<tbody>");
 		} catch (Exception x) {}
