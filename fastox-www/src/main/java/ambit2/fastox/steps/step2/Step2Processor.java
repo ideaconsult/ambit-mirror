@@ -1,5 +1,8 @@
 package ambit2.fastox.steps.step2;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -9,8 +12,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.CASProcessor;
@@ -26,6 +31,7 @@ import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 import ambit2.rest.OpenTox;
+import ambit2.rest.task.dsl.OTDataset;
 
 public class Step2Processor extends StepProcessor {
 
@@ -50,16 +56,39 @@ public class Step2Processor extends StepProcessor {
 			session.setPageSize(Integer.toString(max));
 		}
 
-
-
-		
-		Reference ref = getSearchQuery(form, wizard,max,session);
-
-		if (ref != null) {
-			session.setDatasetURI(ref.toString());
+		try {
+	
+			Reference uri = Wizard.getInstance(WizardMode.A).getService(SERVICE.dataset);
+			Reference ref = getSearchQuery(form, wizard,max,session);
+			if (max==1) {
+				ClientResource resource = new ClientResource(ref);
+				Representation r=null;
+				try {
+					r = resource.get(MediaType.TEXT_URI_LIST);
+					BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
+					String line = null;
+					while ((line = reader.readLine())!=null) {
+						ref = new Reference(line.trim());
+						break;
+					}					
+				} catch (Exception x) {
+					throw x;
+				} finally {
+					try {r.release();} catch (Exception x) {}
+					try {resource.release();} catch (Exception x) {}
+				}
+			} else {
+				OTDataset dataset = OTDataset.dataset().withUri(ref).withDatasetService(uri);
+				if (ref != null) 
+					ref = OTDataset.dataset().withDatasetService(uri).copy(dataset).getUri();
+			}
+			if (ref != null) session.setDatasetURI(ref.toString());
+			form.clear();
+			return form;
+		} catch (Exception x) {
+			throw new AmbitException(x);
 		}
-		form.clear();
-		return form;
+		
 
 	}
 
