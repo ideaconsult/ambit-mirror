@@ -132,4 +132,21 @@ public class OTDatasetTest extends ResourceTest {
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}
+	
+	
+	@Test
+	public void testCopy() throws Exception {
+		OTFeature feature1 = OTFeature.feature().withUri(String.format("http://localhost:%d/feature/3",port));
+		OTFeature feature2 = OTFeature.feature().withUri(String.format("http://localhost:%d/feature/1",port));
+		OTDataset dataset = OTDataset.dataset().
+			withDatasetService(String.format("http://localhost:%d/dataset",port)).
+			withUri(String.format("http://localhost:%d/dataset/1?max=1",port)).
+			addColumns(feature1).
+			addColumns(feature2);
+
+		//Assert.assertEquals("http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1",dataset.toString());
+
+		OTDataset dataset1 = OTDataset.dataset().withDatasetService(String.format("http://localhost:%d/dataset",port)).copy(dataset);
+		Assert.assertEquals("http://localhost:8181/dataset/R3",dataset1.toString());
+	}		
 }
