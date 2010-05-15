@@ -76,4 +76,5 @@ public class OTObject implements Comparable<OTObject>{
 	public boolean equals(Object obj) {
 		return uri==null?false:toString().equals(obj.toString());
 	}
+	
 }

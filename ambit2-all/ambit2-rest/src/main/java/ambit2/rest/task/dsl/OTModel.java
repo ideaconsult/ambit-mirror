@@ -130,13 +130,15 @@ public class OTModel extends OTProcessingResource {
 			datasets.withDatasetService(dataset_service);
 			
 			for (OTFeature feature : features.getItems())
-				if (feature!=null) {
+				if ((feature!=null) && (feature.getAlgorithm()!=null)) {
 					try {
 						OTDataset subset = inputDataset.filterByFeature(feature,false);
 						if ((subset!=null) && subset.isEmpty()) {
 							//TODO logger
 							//System.out.println("Nothing to calculate");
-							datasets.add(inputDataset.addColumns(feature));
+							OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).
+								withUri(inputDataset.uri).addColumns(feature);
+							datasets.add(newdataset);
 						} else {
 							//algorithms.add(feature.algorithm().getAlgorithm());
 							RemoteTask task = feature.getAlgorithm().processAsync(subset==null?inputDataset:subset);
@@ -151,9 +153,11 @@ public class OTModel extends OTProcessingResource {
 			if (pool.size()>0) 
 				datasets = tasksCompleted(pool).taskResults(pool,datasets);
 			//ok, all datasets in place, merge into one to submit for model calculation
-			return datasets.merge();
+			if (datasets.size()>0)
+				return datasets.merge();
 	
-		} else return inputDataset;
+		}
+		return inputDataset;
 	 }
 
 	 public OTDataset subsetWithoutPredictedValues(OTDataset inputDataset) throws Exception  {

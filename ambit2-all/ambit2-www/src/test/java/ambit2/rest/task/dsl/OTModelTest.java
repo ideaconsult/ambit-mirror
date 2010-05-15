@@ -3,7 +3,11 @@ package ambit2.rest.task.dsl;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Reference;
 
+import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
 
 public class OTModelTest extends ResourceTest {
@@ -68,6 +72,29 @@ public class OTModelTest extends ResourceTest {
 		Assert.assertEquals("http://localhost:8181/dataset/R3?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F1%2Fpredicted", result.toString());
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2
 	}	
+	
+	@Test
+	public void testCreateAndCalculateModel() throws Exception {
+
+		RemoteTask task = new RemoteTask(new Reference(String.format("http://localhost:%d/algorithm/toxtreeskinirritation",port)),
+				MediaType.TEXT_URI_LIST,
+				null,
+				Method.POST,
+				null
+				);
+		while (!task.poll()) ;
+		
+		String dataset_service = String.format("http://localhost:%d/dataset",port);
+		OTModel model = OTSuperModel.model().withDatasetService(dataset_service).
+			withUri(task.getResult());
+		
+		OTDataset result = model.process(
+				OTDataset.dataset().withDatasetService(dataset_service).
+				withUri(String.format("http://localhost:%d/dataset/1?max=2",port))
+				);
+		Assert.assertEquals("http://localhost:8181/compound/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F12&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F11", result.toString());
+		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2
+	}		
 	
 	@Test
 	public void testCalculateModelRemote() throws Exception {
