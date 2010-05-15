@@ -134,7 +134,7 @@ public class OTModel extends OTProcessingResource {
 					if ((subset!=null) && subset.isEmpty()) {
 						//TODO logger
 						//System.out.println("Nothing to calculate");
-						datasets.add(inputDataset.addColumn(feature));
+						datasets.add(inputDataset.addColumns(feature));
 					} else {
 						//algorithms.add(feature.algorithm().getAlgorithm());
 						RemoteTask task = feature.getAlgorithm().processAsync(subset==null?inputDataset:subset);
@@ -156,19 +156,20 @@ public class OTModel extends OTProcessingResource {
 	 @Override
 	 public OTDataset process(OTDataset inputDataset) throws Exception  {
 		 OTDataset subsetToCalculate = subsetWithoutPredictedValues(inputDataset);
-		 if (subsetToCalculate.isEmpty(false)) {
-			 //evertyhing is already calculated, return URI of this dataset with predicted features
-			 //TODO
-			 return inputDataset.addColumns(getPredictedVariables());
-		 } else {
+		 if (!subsetToCalculate.isEmpty()) {
+			 predict(subsetToCalculate);
+		 }
+		 return OTDataset.dataset().withUri(inputDataset.uri).withDatasetService(dataset_service).
+		 		removeColumns().addColumns(getPredictedVariables());		 
+	 }	
+	 public OTDataset predict(OTDataset subsetToCalculate) throws Exception  {
 			 long now = System.currentTimeMillis();
 			 OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);
 			 RemoteTask task = processAsync(newdataset);
 			 wait(task,now);
-			 OTDataset dataset = OTDataset.dataset().withUri(task.getResult());
-			 return dataset;
-		 }
-	 }	
+			 return OTDataset.dataset().withUri(task.getResult());
+
+	 }		 
 	 @Override
 	 public RemoteTask processAsync(OTDataset inputDataset) throws Exception  { 
 		if (inputDataset == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No input dataset");

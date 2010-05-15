@@ -53,8 +53,8 @@ public class OTDatasetTest extends ResourceTest {
 		OTDataset dataset = OTDataset.dataset().
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			withUri(String.format("http://localhost:%d/dataset/1",port)).
-			addColumn(feature1).
-			addColumn(feature2);
+			addColumns(feature1).
+			addColumns(feature2);
 
 		Assert.assertEquals("http://localhost:8181/dataset/1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1",dataset);
 
@@ -62,18 +62,33 @@ public class OTDatasetTest extends ResourceTest {
 	}		
 	
 	@Test
+	public void testRemoveColumn() throws Exception {
+		OTFeature feature1 = OTFeature.feature().withUri(String.format("http://localhost:%d/feature/3",port));
+		OTFeature feature2 = OTFeature.feature().withUri(String.format("http://localhost:%d/feature/1",port));
+		OTDataset dataset = OTDataset.dataset().
+			withDatasetService(String.format("http://localhost:%d/dataset",port)).
+			withUri(String.format("http://localhost:%d/dataset/1",port)).
+			addColumns(feature1).
+			addColumns(feature2);
+
+		Assert.assertEquals("http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1",dataset.toString());
+
+		dataset.removeColumns();
+		Assert.assertEquals("http://localhost:8181/dataset/1",dataset.toString());
+	}		
+	@Test
 	public void testMerge() throws Exception {
 		OTFeature feature1 = OTFeature.feature().withUri(String.format("http://localhost:%d/feature/3",port));
 		OTFeature feature2 = OTFeature.feature().withUri(String.format("http://localhost:%d/feature/1",port));
 		OTDataset dataset1 = OTDataset.dataset().
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			withUri(String.format("http://localhost:%d/dataset/2",port)).
-			addColumn(feature1);
+			addColumns(feature1);
 		
 		OTDataset dataset2 = OTDataset.dataset().
 		withDatasetService(String.format("http://localhost:%d/dataset",port)).
 		withUri(String.format("http://localhost:%d/dataset/3",port)).
-		addColumn(feature2);
+		addColumns(feature2);
 		
 		OTDatasets datasets = OTDatasets.datasets();
 		datasets.withDatasetService(String.format("http://localhost:%d/dataset",port)).add(dataset1).add(dataset2);
@@ -95,17 +110,17 @@ public class OTDatasetTest extends ResourceTest {
 		OTDataset dataset1 = OTDataset.dataset().
 			withDatasetService(dataset_service).
 			withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1").
-			addColumn(feature1);
+			addColumns(feature1);
 		
 		OTDataset dataset2 = OTDataset.dataset().
 		withDatasetService(dataset_service).
 		withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/2").
-		addColumn(feature2);
+		addColumns(feature2);
 		
 		OTDataset dataset3 = OTDataset.dataset().
 		withDatasetService(dataset_service).
 		withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/200").
-		addColumn(feature1);		
+		addColumns(feature1);		
 		
 		OTDatasets datasets = OTDatasets.datasets();
 		datasets.withDatasetService(dataset_service).add(dataset1).add(dataset2).add(dataset3);
