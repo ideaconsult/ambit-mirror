@@ -167,7 +167,7 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.pager.js\"></script>\n",baseReference));
+//		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.pager.js\"></script>\n",baseReference));
 		
 
 		w.write("</head>\n");
@@ -553,7 +553,7 @@ public abstract class WizardResource extends ServerResource {
 	}		
 	
 	public static String jsTableSorter(String tableid,String pagerid) {
-		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
+		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); } );</script>",tableid,pagerid);
 	}
 	/*
 	public String jsPager(String pagerid, String[] options) {
