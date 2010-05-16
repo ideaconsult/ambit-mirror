@@ -131,7 +131,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 			{"org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor","Chi chain descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor","Chi cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},			
-			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor","Chi path cluster descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor","Chi path descriptor","org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
 			{"org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor","Largest chain","org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
