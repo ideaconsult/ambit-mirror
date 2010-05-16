@@ -119,7 +119,7 @@ public class OTModel extends OTProcessingResource {
 		 return calculateDescriptors(independentVariables,inputDataset);
 	 }
 	 public  OTDataset calculateDescriptors(OTFeatures features, OTDataset inputDataset) throws Exception  {
-		
+		 System.out.println("descriptors" + getClass().getName() + inputDataset);
 
 		if (features.size()>0) {
 			RemoteTaskPool pool = new RemoteTaskPool();
@@ -166,17 +166,20 @@ public class OTModel extends OTProcessingResource {
 	 }
 	 @Override
 	 public OTDataset process(OTDataset inputDataset) throws Exception  {
+		 System.out.println(getClass().getName() + inputDataset);
 		 OTDataset subsetToCalculate = subsetWithoutPredictedValues(inputDataset);
+		 System.out.println(getClass().getName() + subsetToCalculate);
 		 if (!subsetToCalculate.isEmpty()) {
-			 predict(subsetToCalculate);
+			 OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);
+			 predict(newdataset);
 		 }
 		 return OTDataset.dataset().withUri(inputDataset.uri).withDatasetService(dataset_service).
 		 		removeColumns().addColumns(getPredictedVariables());		 
 	 }	
 	 public OTDataset predict(OTDataset subsetToCalculate) throws Exception  {
+		 	System.out.println(getClass().getName() + subsetToCalculate);
 			 long now = System.currentTimeMillis();
-			 OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);
-			 RemoteTask task = processAsync(newdataset);
+			 RemoteTask task = processAsync(subsetToCalculate);
 			 wait(task,now);
 			 return OTDataset.dataset().withUri(task.getResult());
 

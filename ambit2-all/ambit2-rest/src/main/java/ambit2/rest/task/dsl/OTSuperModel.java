@@ -13,6 +13,7 @@ public class OTSuperModel extends OTModel {
 	 }
      @Override
     public OTDataset process(OTDataset inputDataset) throws Exception {
+    	 System.out.println(getClass().getName() + inputDataset);
 		 OTDataset subsetToCalculate = subsetWithoutPredictedValues(inputDataset);
 		 if (!subsetToCalculate.isEmpty()) {
 			 OTDataset subset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);

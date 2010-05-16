@@ -110,7 +110,7 @@ http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510
 		Assert.assertEquals(3,algorithms.size());
 		
 		OTDataset result  = model.process(OTDataset.dataset().
-					withUri(String.format("http://apps.ideaconsult.net:8080/ambit2/compound?search=benzene", port)).
+					withUri(String.format("http://apps.ideaconsult.net:8080/ambit2/compound/684", port)).
 					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset"));
 		
 		System.out.println(result.getUri().toString());
