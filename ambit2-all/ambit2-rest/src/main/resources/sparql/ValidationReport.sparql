@@ -1,0 +1,22 @@
+PREFIX ot:<http://www.opentox.org/api/1.1#>
+PREFIX owl:<http://www.w3.org/2002/07/owl#>
+PREFIX dc:<http://purl.org/dc/elements/1.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>
+	select ?dataset ?feature ?name ?num_instances ?title ?root_mean_squared_error ?mean_absolute_error ?r_square ?target_variance_predicted ?target_variance_actual
+	where {
+	    %s rdf:type ot:Validation.
+        %s  ot:validationTestDataset ?dataset.
+        %s  ot:predictedFeature ?feature.
+        OPTIONAL {?feature dc:title ?name. }. 
+      
+        %s  ot:num_instances ?num_instances.
+        %s  ot:hasValidationInfo ?info. 
+        ?info dc:title ?title.
+        OPTIONAL {?info ot:root_mean_squared_error ?root_mean_squared_error.}.
+        OPTIONAL {?info ot:target_variance_predicted ?target_variance_predicted.}.
+        OPTIONAL {?info ot:mean_absolute_error ?mean_absolute_error.}.
+        OPTIONAL {?info ot:r_square ?r_square.}.
+        OPTIONAL {?info ot:target_variance_actual ?target_variance_actual.}.
+	}
