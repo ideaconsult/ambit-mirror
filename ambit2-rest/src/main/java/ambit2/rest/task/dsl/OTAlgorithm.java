@@ -69,4 +69,13 @@ public class OTAlgorithm extends OTProcessingResource {
 	public OTAlgorithm withParams(String name, String value) throws Exception {
 		return (OTAlgorithm)super.withParams(name, value);
 	}
+	 
+	public String report(String ontologyURI) throws Exception  { 
+			String a = String.format("<%s>", uri);
+			String query = String.format(OTModel.getSparql("sparql/AlgorithmReport.sparql").toString(),"",a,a);
+					
+		    OTOntologyService<String> ontology = new OTOntologyService<String>(ontologyURI);
+		    
+		    return ontology.report(query);		
+	}	 
 }

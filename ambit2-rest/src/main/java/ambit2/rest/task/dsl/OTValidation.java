@@ -59,34 +59,8 @@ public class OTValidation extends OTObject {
 		String a = String.format("<%s>", uri);
 		String query = String.format(OTModel.getSparql("sparql/ValidationReport.sparql").toString(),a,a,a,a,a);
 				
-	    OTOntologyService<String> ontology = new OTOntologyService<String>(ontologyURI) {
-	    	protected StringBuilder w = new StringBuilder().append("<html><body>");
-	    	protected List<String> vars;
-	    	@Override
-	    	public String processSolution(QuerySolution row) throws Exception{
-				w.append("<tr>");
-				for (int i=0; i < vars.size();i++) {
-					RDFNode node = row.get(vars.get(i));
-					w.append("<td>").append(node==null?"":PrintUtil.print(node)).append("</td>");
-				}
-				w.append("</tr>");
-				return w.toString();
-	    	}
-	    	@Override
-	    	public String createObject() throws Exception {
-	    		return w.toString();
-	    	};
-	    	@Override
-	    	public void header(ResultSet results) throws Exception {
-	    		super.header(results);
-	    		vars = results.getResultVars();
-	    	}
-	    	@Override
-	    	public void footer(ResultSet results) throws Exception {
-	    		super.footer(results);
-	    		w.append("</body></html>");
-	    	}
-	    };
+	    OTOntologyService<String> ontology = new OTOntologyService<String>(ontologyURI);
+	    
 	    return ontology.report(query);		
 	}
 	

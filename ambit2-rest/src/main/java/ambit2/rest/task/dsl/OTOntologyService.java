@@ -13,7 +13,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
-public abstract class OTOntologyService<Z> extends OTObject {
+public class OTOntologyService<Z> extends OTObject {
 	public OTOntologyService(Reference ref) {
 		super(ref);
 	}
@@ -21,8 +21,12 @@ public abstract class OTOntologyService<Z> extends OTObject {
 			super(ref);
 	}
 	
-	public abstract Z processSolution(QuerySolution row) throws Exception;
-	public abstract Z createObject() throws Exception;
+	public Z processSolution(QuerySolution row) throws Exception {
+		throw new Exception("Not implemented");
+	}
+	public Z createObject() throws Exception {
+		throw new Exception("Not implemented");
+	}
 	public void header(ResultSet results) throws Exception {}
 	public void footer(ResultSet results) throws Exception {}
 	
