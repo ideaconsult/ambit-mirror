@@ -10,15 +10,13 @@ public class OTRemoteModelTest extends ResourceTest {
 	@Test
 	public void testModelVarsTUM() throws Exception {
 		
-		OTModel model = OTSuperModel.model().
-					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
+		OTModel model = OTSuperModel.model("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
 		
 		OTFeatures features = model.load().getIndependentVariables();
 		Assert.assertEquals(264,features.size());
 
-		OTDataset result  = model.process(OTDataset.dataset().
-					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
+		OTDataset result  = model.process(OTDataset.dataset(String.format("http://194.141.0.136:%d/dataset/1", port)).
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
 		
 		result.getUri().toString().equals(
@@ -30,15 +28,13 @@ public class OTRemoteModelTest extends ResourceTest {
 	@Test
 	public void testModelTUM() throws Exception {
 		
-		OTModel model = OTSuperModel.model().
-					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
+		OTModel model = OTSuperModel.model("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
 					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291");
 		
 		OTFeatures features = model.load().getIndependentVariables();
 		Assert.assertEquals(264,features.size());
 
-		OTDataset result  = model.process(OTDataset.dataset().
-					withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291").
+		OTDataset result  = model.process(OTDataset.dataset("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291").
 					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"));
 		
 		result.getUri().toString().equals(
@@ -49,15 +45,13 @@ public class OTRemoteModelTest extends ResourceTest {
 	@Test
 	public void testTUMPrecalculatedDescriptors() throws Exception {
 		
-		OTModel model = OTModel.model().
-					withUri("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_10").
+		OTModel model = OTModel.model("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_10").
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
 		
 		OTFeatures features = model.load().getIndependentVariables();
 		Assert.assertEquals(264,features.size());
 
-		OTDataset result  = model.process(OTDataset.dataset().
-					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
+		OTDataset result  = model.process(OTDataset.dataset(String.format("http://194.141.0.136:%d/dataset/1", port)).
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
 		
 		result.getUri().toString().equals(
@@ -77,15 +71,13 @@ http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510
 	 */
 	public void testModelVarsNTUA() throws Exception {
 		
-		OTModel model = OTSuperModel.model().
-					withUri("http://opentox.ntua.gr:3003/model/195").
+		OTModel model = OTSuperModel.model("http://opentox.ntua.gr:3003/model/195").
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port));
 		
 		OTFeatures features = model.load().getIndependentVariables();
 		Assert.assertEquals(4,features.size());
 
-		OTDataset result  = model.process(OTDataset.dataset().
-					withUri(String.format("http://194.141.0.136:%d/dataset/1", port)).
+		OTDataset result  = model.process(OTDataset.dataset(String.format("http://194.141.0.136:%d/dataset/1", port)).
 					withDatasetService(String.format("http://194.141.0.136:%d/dataset", port)));
 		
 		System.out.println(result.getUri());
@@ -94,8 +86,7 @@ http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510
 	@Test
 	public void testModelVarsEos() throws Exception {
 
-		OTModel model = OTSuperModel.model().
-					withUri("http://apps.ideaconsult.net:8080/ambit2/model/33").
+		OTModel model = OTSuperModel.model("http://apps.ideaconsult.net:8080/ambit2/model/33").
 					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset");
 		
 		OTFeatures features = model.load().getIndependentVariables();
@@ -109,8 +100,7 @@ http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510
 
 		Assert.assertEquals(3,algorithms.size());
 		
-		OTDataset result  = model.process(OTDataset.dataset().
-					withUri(String.format("http://apps.ideaconsult.net:8080/ambit2/compound/684", port)).
+		OTDataset result  = model.process(OTDataset.dataset(String.format("http://apps.ideaconsult.net:8080/ambit2/compound/684", port)).
 					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset"));
 		
 		System.out.println(result.getUri().toString());

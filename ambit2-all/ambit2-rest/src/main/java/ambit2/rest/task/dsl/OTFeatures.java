@@ -13,7 +13,7 @@ public class OTFeatures  extends OTProcessingContainers<OTFeature> {
 
 	@Override
 	public OTFeature createItem(Reference uri) throws Exception {
-		return OTFeature.feature().withUri(uri);
+		return OTFeature.feature(uri);
 	}
 
 	@Override

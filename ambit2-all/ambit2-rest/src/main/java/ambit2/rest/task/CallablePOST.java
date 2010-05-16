@@ -53,6 +53,7 @@ public class CallablePOST implements Callable<Reference>{
 		this.applicationRootReference = root;
 	}
 	public Reference call() throws Exception {
+		System.out.println(getClass().getName());
 		long now = System.currentTimeMillis();
 		Form form = new Form(input);
 		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
@@ -65,22 +66,23 @@ public class CallablePOST implements Callable<Reference>{
 		OTDataset results = null;
 		
 		try { 
-			if (modelURI != null) 
-				results = OTSuperModel.model()
-						.withUri(modelURI)
+			if (modelURI != null) {
+				System.out.println(modelURI);
+				System.out.println(datasetURI);
+				results = OTSuperModel.model(modelURI)
 						.withDatasetService(dataset_service)
 						.withParams(form)
-						.process(OTDataset.dataset().withUri(datasetURI).withDatasetService(dataset_service));
-			else if (algoURIs != null) {
+						.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
+			} else if (algoURIs != null) {
 				
 				OTAlgorithms algorithms = OTAlgorithms.algorithms();
 				algorithms.withDatasetService(dataset_service);
 				
 				for (String algoUri : algoURIs)
 					if (algoUri!=null) 
-						algorithms.add(OTAlgorithm.algorithm().withUri(algoUri).withParams(form));
+						algorithms.add(OTAlgorithm.algorithm(algoUri).withParams(form));
 				
-				results = algorithms.process(OTDataset.dataset().withUri(datasetURI).withDatasetService(dataset_service));
+				results = algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
 			}
 			return results.getUri();
 			

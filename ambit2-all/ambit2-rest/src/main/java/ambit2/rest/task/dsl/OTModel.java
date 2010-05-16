@@ -42,16 +42,22 @@ public class OTModel extends OTProcessingResource {
 	}
 	protected OTFeatures predictedVariables;
 	 
+	 protected OTModel(Reference ref) {
+		 super(ref);
+		 }
+	protected OTModel(String ref) {
+			this(new Reference(ref));
+	}
 	 public static OTModel model() throws Exception  { 
-		    return new OTModel();
+		    return new OTModel((Reference)null);
+}
+	 public static OTModel model(Reference datasetURI) throws Exception  { 
+			    return new OTModel(datasetURI);
+	}
+
+	public static OTModel model(String datasetURI) throws Exception  { 
+			    return new OTModel(datasetURI);
 	 }
-	 public OTModel withUri(Reference uri) throws Exception { 
-		  this.uri = uri;
-		  return this; 
-	 }	 
-	 public OTModel withUri(String uri) throws Exception { 
-		  return withUri(new Reference(uri)); 
-	 }	
 	 /**
 	  * Reads RDF and initializes variables 
 	  * @return
@@ -97,7 +103,7 @@ public class OTModel extends OTProcessingResource {
 							QuerySolution solution = results.next();
 							Resource var = solution.getResource("vars");
 							
-							vars.add(OTFeature.feature().withUri(var.getURI()));
+							vars.add(OTFeature.feature(var.getURI()));
 						}
 			        } catch (Exception x) {
 			        	throw x;
@@ -136,8 +142,8 @@ public class OTModel extends OTProcessingResource {
 						if ((subset!=null) && subset.isEmpty()) {
 							//TODO logger
 							//System.out.println("Nothing to calculate");
-							OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).
-								withUri(inputDataset.uri).addColumns(feature);
+							OTDataset newdataset = OTDataset.dataset(inputDataset.uri).withDatasetService(dataset_service).
+								addColumns(feature);
 							datasets.add(newdataset);
 						} else {
 							//algorithms.add(feature.algorithm().getAlgorithm());
@@ -170,10 +176,10 @@ public class OTModel extends OTProcessingResource {
 		 OTDataset subsetToCalculate = subsetWithoutPredictedValues(inputDataset);
 		 System.out.println(getClass().getName() + subsetToCalculate);
 		 if (!subsetToCalculate.isEmpty()) {
-			 OTDataset newdataset = OTDataset.dataset().withDatasetService(dataset_service).copy(subsetToCalculate);
+			 OTDataset newdataset = subsetToCalculate.withDatasetService(dataset_service).copy();
 			 predict(newdataset);
 		 }
-		 return OTDataset.dataset().withUri(inputDataset.uri).withDatasetService(dataset_service).
+		 return OTDataset.dataset(inputDataset.uri).withDatasetService(dataset_service).
 		 		removeColumns().addColumns(getPredictedVariables());		 
 	 }	
 	 public OTDataset predict(OTDataset subsetToCalculate) throws Exception  {
@@ -181,7 +187,7 @@ public class OTModel extends OTProcessingResource {
 			 long now = System.currentTimeMillis();
 			 RemoteTask task = processAsync(subsetToCalculate);
 			 wait(task,now);
-			 return OTDataset.dataset().withUri(task.getResult());
+			 return OTDataset.dataset(task.getResult()).withDatasetService(dataset_service);
 
 	 }		 
 	 @Override

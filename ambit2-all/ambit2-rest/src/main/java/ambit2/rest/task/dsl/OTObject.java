@@ -9,9 +9,15 @@ import org.restlet.resource.ResourceException;
 import ambit2.rest.task.RemoteTask;
 
 public class OTObject implements Comparable<OTObject>{
-	 protected Reference uri = null;
+	 protected final Reference uri ;
 	 protected Form form;
 	 
+	protected OTObject(Reference ref) {
+			this.uri = ref==null?null:ref.clone();
+	}
+	protected OTObject(String ref) {
+		this.uri = ref==null?null:new Reference(ref);
+	}	 
 	 public Reference getUri() {
 		return uri;
 	}
@@ -23,15 +29,9 @@ public class OTObject implements Comparable<OTObject>{
 		protected long pollTimeout = 1000L*60L*5L; //5 min
 	 
 	 protected OTObject() {
-		 
+		 uri = null;
 	 }
-	 public OTObject withUri(String uri) throws Exception { 
-		  return withUri(new Reference(uri));
-	 }	
-	 public OTObject withUri(Reference uri) throws Exception { 
-		  this.uri = uri;
-		  return this; 
-	 }			
+		
 	 public OTObject withAuthentication(ChallengeResponse authentication) throws Exception { 
 		  this.authentication = authentication;
 		  return this; 

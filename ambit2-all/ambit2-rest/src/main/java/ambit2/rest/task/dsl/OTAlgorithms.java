@@ -11,7 +11,7 @@ public class OTAlgorithms extends OTProcessingContainers<OTAlgorithm> {
 	 }
 	@Override
 	public OTAlgorithm createItem(Reference uri) throws Exception {
-		return OTAlgorithm.algorithm().withUri(uri);
+		return OTAlgorithm.algorithm(uri);
 	}
 
 	@Override

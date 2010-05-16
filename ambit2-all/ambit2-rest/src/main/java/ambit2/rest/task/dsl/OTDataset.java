@@ -15,29 +15,31 @@ import ambit2.rest.task.RemoteTask;
 public class OTDataset extends OTObject {
 	 protected enum dataset_size  {empty,nonempty,unknown};
 	 protected dataset_size isEmpty = dataset_size.unknown;
-	 public static OTDataset dataset() throws Exception  { 
-		    return new OTDataset();
+	 
+	 protected OTDataset(Reference ref) {
+		super(ref);
 	 }
-	 @Override
-	 public OTDataset withUri(Reference datasetURI) throws Exception { 
-		  this.uri = datasetURI;
-		  return this; 
-	 }	 
-	 @Override
-	 public OTDataset withUri(String datasetURI) throws Exception { 
-		  return withUri(new Reference(datasetURI));
-	 }		 
+	 protected OTDataset(String ref) {
+		super(ref);
+	}
+	 public static OTDataset dataset(Reference datasetURI) throws Exception  { 
+		    return new OTDataset(datasetURI);
+	 }
+
+	 public static OTDataset dataset(String datasetURI) throws Exception  { 
+		    return new OTDataset(datasetURI);
+	 }
 
 
-	 public OTDataset copy(OTDataset dataset) throws Exception  { 
+	 public OTDataset copy() throws Exception  { 
 		 if (dataset_service==null) throw new Exception("No dataset_service!");
 		long now = System.currentTimeMillis(); 
 		Form form = new Form(); 
-		form.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
+		form.add(OpenTox.params.dataset_uri.toString(),uri.toString());
 		RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST,authentication);
 		task = wait(task,now);
 		if (task.getError()!=null) throw task.getError();
-		return withUri(task.getResult());
+		return OTDataset.dataset(task.getResult()).withDatasetService(dataset_service);
 	 }
 	 /**
 	  * sends PUT request , adding datasets to the current one
@@ -60,7 +62,7 @@ public class OTDataset extends OTObject {
 			task = wait(task,now);
 			Reference ref = task.getResult();
 			datasets.clear();
-			if (ref.equals(uri)) return this; else return dataset().withUri(uri); 
+			if (ref.equals(uri)) return this; else return dataset(uri).withDatasetService(dataset_service); 
 			
 	 }	 
 
@@ -82,7 +84,7 @@ public class OTDataset extends OTObject {
 		 
 		 ref.addQueryParameter(OpenTox.params.filter.toString(), feature.getUri().toString());
 		 
-		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(ref);
+		 return dataset(ref).withDatasetService(dataset_service);
  	 }		 
 	 protected OTDataset filterByFeatures(OTFeatures features,boolean withFeatures)  throws Exception  {
 		 Reference ref = new Reference(dataset_service.getParentRef()).
@@ -93,7 +95,7 @@ public class OTDataset extends OTObject {
 		 for (OTFeature feature:features.getItems())
 			 ref.addQueryParameter(OpenTox.params.filter.toString(), feature.getUri().toString());
 		 
-		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(ref);
+		 return dataset(ref).withDatasetService(dataset_service);
  	 }	 
 	 public OTDataset filteredSubsetWithoutFeatures(OTFeatures features)  throws Exception  {
 		 return filterByFeatures(features, false);
@@ -132,19 +134,18 @@ public class OTDataset extends OTObject {
 		 form.removeAll(OpenTox.params.feature_uris.toString());
 		 Reference ref  = new Reference(String.format("%s:%s",uri.getScheme(),uri.getHierarchicalPart()));
 		 ref.setQuery(form.getQueryString());
-		 withUri(ref);
-		 return this;
+		 return dataset(ref).withDatasetService(dataset_service);
 	 }
 	 public OTDataset addColumns(OTFeatures features) throws Exception {
 		 Reference newuri = uri.clone();
 		 for (OTFeature feature:features.getItems())
 			 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
-		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(newuri);
+		 return dataset(newuri).withDatasetService(dataset_service);
 	 }
 	 
 	 public OTDataset addColumns(OTFeature feature) throws Exception {
 		 Reference newuri = uri.clone();
 		 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
-		 return OTDataset.dataset().withDatasetService(dataset_service).withUri(newuri);
+		 return dataset(newuri).withDatasetService(dataset_service);
 	 }
 }
