@@ -260,9 +260,11 @@ public class Step2Processor extends StepProcessor {
 	
 	public boolean isInChI(String inchi) {
 		try {
-			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
-			InChIToStructure c =f.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
-			return c.getAtomContainer().getAtomCount()>0;
+			if (inchi.startsWith("InChI")) {
+				InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+				InChIToStructure c =f.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
+				return c.getAtomContainer().getAtomCount()>0;
+			} else return false;
 		} catch (Exception x) {
 			return false;
 		}
