@@ -22,8 +22,9 @@ public class OTAlgorithm extends OTProcessingResource {
 	 public OTAlgorithm withUri(String uri) throws Exception { 
 		  return withUri(new Reference(uri)); 
 	 }		 
-	 @Override
-	 public RemoteTask processAsync(OTDataset inputDataset) throws Exception {
+	 
+
+	 public RemoteTask processAsync(OTDataset inputDataset,OTFeature feature) throws Exception {
 			Form params = form==null?new Form():form;
 			if (dataset_service!=null) {
 				params.removeAll(OpenTox.params.dataset_service.toString());
@@ -31,6 +32,18 @@ public class OTAlgorithm extends OTProcessingResource {
 			}
 			params.removeAll(OpenTox.params.dataset_uri.toString());
 			params.add(OpenTox.params.dataset_uri.toString(),inputDataset.toString());
+			params.removeAll(OpenTox.params.target.toString());
+			if (feature!=null)
+				params.add(OpenTox.params.target.toString(),feature.toString());
+			return processAsync(params);
+	 }
+	 @Override
+	 public RemoteTask processAsync(OTDataset inputDataset) throws Exception {
+		 return processAsync(inputDataset,null);
+	 }
+
+	 public RemoteTask processAsync(Form params) throws Exception {
+
 			return new RemoteTask(new Reference(uri),MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST,authentication);
 	 }
 	 @Override
@@ -40,6 +53,13 @@ public class OTAlgorithm extends OTProcessingResource {
 			task = wait(task,now);
 			return OTDataset.dataset().withUri(task.getResult());		 
 	 }	 
+	 
+	 public OTModel process(OTDataset inputDataset,OTFeature feature) throws Exception {
+			long now = System.currentTimeMillis();
+			RemoteTask task = processAsync(inputDataset,feature);
+			task = wait(task,now);
+			return OTModel.model().withUri(task.getResult());		 
+	 }		 
 	 @Override
 	public OTAlgorithm withParams(Form form) throws Exception {
 		return (OTAlgorithm)super.withParams(form);
