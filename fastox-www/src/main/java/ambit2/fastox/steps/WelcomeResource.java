@@ -107,7 +107,7 @@ public class WelcomeResource extends WizardResource {
 		} catch (Exception x) { session.setAllEndpoints(0);}
 		endpoints = session.getAllEndpoints()<=0?"":Integer.toString(session.getAllEndpoints());
 
-		String modelref = String.format("%s/model/%s", getRequest().getRootRef(),session.getUser().getId());
+		String modelref = String.format("%s/user/%s/model", getRequest().getRootRef(),session.getUser().getId());
 		return String.format(help,chemicals,datasets,modelref,models,endpoints);
 	}
 }
