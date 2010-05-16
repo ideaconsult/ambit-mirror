@@ -215,8 +215,19 @@ public class ModelTools {
 		
 		
 		writer.write(params.model.htmlInputCheckbox(modelUri,
-				jsJumpTo(String.format("%s?media=text/plain",modelUri), name==null?modelUri:name.getString())
+				jsJumpTo(
+						String.format("%s/user/%s/report/Model?search=%s",
+						rootReference,
+						session.getUser().getId(),
+						Reference.encode(modelUri)),	
+						name==null?modelUri:name.getString())
+				//jsJumpTo(String.format("%s?media=text/plain",modelUri), name==null?modelUri:name.getString())
+				
 				,selected));
+			
+		
+
+
 		
 		writer.write("</td>");
 		writer.write("<td>");
@@ -225,9 +236,14 @@ public class ModelTools {
 		
 		writer.write("<td>"); //algorithm
 		//?media makes use of restlet Tunnel service
-		
-		writer.write(jsJumpTo(algo==null?"":algo.isURIResource()?((Resource)algo).getURI():algo.toString(),
-				algName==null?"Algorithm":algName.getString()));
+		if (algo!= null)
+		writer.write(jsJumpTo(
+				String.format("%s/user/%s/report/Algorithm?search=%s",
+				rootReference,
+				session.getUser().getId(),
+				Reference.encode(algo.isURIResource()?((Resource)algo).getURI():algo.toString()))
+				,"Algorithm"));
+
 
 		writer.write("</td>");
 		
@@ -237,7 +253,7 @@ public class ModelTools {
 			if (node != null)
 				if (node.isURIResource())
 					writer.write(jsJumpTo(
-							String.format("%s/user/%s/report/validation?search=%s",
+							String.format("%s/user/%s/report/Validation?search=%s",
 							rootReference,
 							session.getUser().getId(),
 							Reference.encode(((Resource)node).getURI()))

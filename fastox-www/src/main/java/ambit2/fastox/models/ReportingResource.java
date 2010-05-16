@@ -9,6 +9,8 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.rest.task.dsl.OTAlgorithm;
+import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.task.dsl.OTValidation;
 
 public class ReportingResource  extends FastoxStepResource {
@@ -17,36 +19,38 @@ public class ReportingResource  extends FastoxStepResource {
 	protected String[] search;
 	
 	protected enum report_type {
-		validation {
+		Validation {
 			@Override
 			public String report(String q,String ontology) throws Exception {
 				return OTValidation.validation(q).report(ontology);
 			}
 		},
-		model {
+		Model {
 			@Override
 			public String report(String q,String ontology) throws Exception  {
-				// TODO Auto-generated method stub
-				return null;
+				return OTModel.model(q).report(ontology);
 			}
 		},
-		algorithm {
+		Algorithm {
 			@Override
 			public String report(String q,String ontology) throws Exception  {
-				// TODO Auto-generated method stub
-				return null;
+
+				return OTAlgorithm.algorithm(q).report(ontology);
 			}
 		},
-		feature {
+		Feature {
 			@Override
 			public String report(String q,String ontology) throws Exception  {
-				// TODO Auto-generated method stub
-				return null;
+				return OTModel.model(q).report(ontology);
 			}
 		};
 		public abstract String report(String q,String ontology) throws Exception ;
+
+		public String getTitle(String url) {
+			return String.format("%s&nbsp;<a href='%s'>%s</a>",toString(),url,url);
+		}
 	}
-	protected report_type type = report_type.validation;
+	protected report_type type = report_type.Validation;
 
 	
 	
@@ -62,7 +66,7 @@ public class ReportingResource  extends FastoxStepResource {
 		try {
 			type = report_type.valueOf(getRequest().getAttributes().get(resourceType).toString());
 		} catch (Exception x) {
-			type = report_type.validation;
+			type = report_type.Validation;
 		}
 	}
 	@Override
@@ -75,7 +79,7 @@ public class ReportingResource  extends FastoxStepResource {
 			for (String q : search) {
 				String s = type.report(q, String.format("%s?results=yes&title=%s",
 						wizard.getService(SERVICE.ontology).toString(),
-						Reference.encode(String.format("<a href='%s'>Validation %s</a>",q,q))));
+						Reference.encode(type.getTitle(q))));
 				writer.write(s);
 				/*
 				String s = OTValidation.validation(q).report(
