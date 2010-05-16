@@ -82,18 +82,21 @@ public class LauncherResource extends ServerResource {
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		try {
-			
-			
+			System.out.println(getClass().getName());
+			Form form = new Form(entity);
+			System.out.println(form);
 			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
-					createCallable(new Form(entity)),
+					createCallable(form),
 					getRequest().getRootRef(),false);		
 			task.update();
+			System.out.println(task);
 			setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>();
 			return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
 
 		} catch (Exception x) {
+			x.printStackTrace();
 			if (x.getCause() instanceof ResourceException)
 				getResponse().setStatus( ((ResourceException)x.getCause()).getStatus());
 			else

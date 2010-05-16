@@ -8,7 +8,7 @@ public class OTModels extends OTContainers<OTModel> {
 
 	@Override
 	public OTModel createItem(Reference uri) throws Exception {
-		return OTModel.model().withUri(uri);
+		return OTModel.model(uri);
 	}
 
 	@Override

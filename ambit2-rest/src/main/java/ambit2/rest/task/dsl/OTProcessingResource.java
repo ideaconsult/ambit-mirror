@@ -1,5 +1,6 @@
 package ambit2.rest.task.dsl;
 
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
@@ -7,6 +8,15 @@ import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
 
 public class OTProcessingResource extends OTObject {
+	public OTProcessingResource(Reference ref) {
+		super(ref);
+	}
+	public OTProcessingResource(String ref) {
+		super(ref);
+	}
+	public OTProcessingResource() {
+		super((Reference) null);
+	}	
 	public RemoteTask processAsync(OTDataset inputDataset) throws Exception  {
 		throw new Exception("Not implemented");
 	}
@@ -31,10 +41,10 @@ public class OTProcessingResource extends OTObject {
 							String.format("%s %s",task.getUrl(),task.getError().getMessage()));
 			 if (pool.size()>1) {
 				 datasets= (datasets==null)?OTDatasets.datasets():datasets;
-				 datasets.add(OTDataset.dataset().withUri(task.getResult()))	;
+				 datasets.add(OTDataset.dataset(task.getResult()))	;
 			 } else {
 				 datasets= (datasets==null)?OTDatasets.datasets():datasets;
-				 datasets.add(OTDataset.dataset().withUri(task.getResult()));
+				 datasets.add(OTDataset.dataset(task.getResult()));
 			 }
 		}		
 		return datasets;

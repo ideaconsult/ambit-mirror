@@ -19,21 +19,26 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class OTFeature extends OTProcessingResource {
      protected OTAlgorithm algorithm = null;
      
+	 protected OTFeature(Reference ref) {
+			super(ref);
+		 }
+	protected OTFeature(String ref) {
+		super(ref);
+	}
+	
 	 public OTAlgorithm getAlgorithm() {
 		return algorithm;
 	}
-	public static OTFeature feature() throws Exception  { 
-		    return new OTFeature();
+		public static OTFeature feature() throws Exception  { 
+		    return new OTFeature((Reference)null);
+	 }	 
+	public static OTFeature feature(String ref) throws Exception  { 
+		    return new OTFeature(ref);
 	 }
-	 public OTFeature withUri(String uri) throws Exception { 
-		  return withUri(new Reference(uri));
-
-	 }	 
-	 public OTFeature withUri(Reference uri) throws Exception { 
-		  this.uri = uri;
-		  return this; 
-	 }	 
-	 public OTFeature withAlgorithm(OTAlgorithm alg) throws Exception { 
+	public static OTFeature feature(Reference ref) throws Exception  { 
+	    return new OTFeature(ref);
+   }
+	public OTFeature withAlgorithm(OTAlgorithm alg) throws Exception { 
 		  this.algorithm = alg;
 		  return this; 
 	 }		 
@@ -57,7 +62,7 @@ public class OTFeature extends OTProcessingResource {
 					QuerySolution solution = results.next();
 					RDFNode var = solution.get("algorithm");
 					if (var.isResource())
-						algorithm =  OTAlgorithm.algorithm().withUri(((Resource)var).getURI());
+						algorithm =  OTAlgorithm.algorithm(((Resource)var).getURI());
 				}
 	        }  catch (Exception x) {
 	        	throw x;

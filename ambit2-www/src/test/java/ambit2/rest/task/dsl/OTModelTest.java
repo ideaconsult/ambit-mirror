@@ -20,19 +20,18 @@ public class OTModelTest extends ResourceTest {
 		String prefix = "http://ambit.uni-plovdiv.bg:8080/ambit2";
 		OTModel model = OTModel.model().withDatasetService(dataset_service);
 		
-		OTAlgorithm alg = OTAlgorithm.algorithm().withUri(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",prefix));
-		OTFeature feature = OTFeature.feature().withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11389").withAlgorithm(alg);
+		OTAlgorithm alg = OTAlgorithm.algorithm(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",prefix));
+		OTFeature feature = OTFeature.feature("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11389").withAlgorithm(alg);
 		
-		OTAlgorithm alg1 = OTAlgorithm.algorithm().withUri(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",prefix));
-		OTFeature feature1 = OTFeature.feature().withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/296298").withAlgorithm(alg1);
+		OTAlgorithm alg1 = OTAlgorithm.algorithm(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",prefix));
+		OTFeature feature1 = OTFeature.feature("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/296298").withAlgorithm(alg1);
 		
 		OTFeatures features = OTFeatures.features();
 		features.withDatasetService(dataset_service).add(feature).add(feature1);
 		
 		OTDataset result = model.calculateDescriptors(
 				features,
-				OTDataset.dataset().withDatasetService(dataset_service).
-				withUri(String.format("%s/compound/1",prefix))
+				OTDataset.dataset(String.format("%s/compound/1",prefix)).withDatasetService(dataset_service)
 				);
 		Assert.fail("verify content");
 	}	
@@ -42,10 +41,10 @@ public class OTModelTest extends ResourceTest {
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
 		OTModel model = OTModel.model().withDatasetService(dataset_service);
 		
-		OTAlgorithm alg = OTAlgorithm.algorithm().withUri(String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",port));
+		OTAlgorithm alg = OTAlgorithm.algorithm(String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",port));
 		OTFeature feature = OTFeature.feature().withAlgorithm(alg);
 		
-		OTAlgorithm alg1 = OTAlgorithm.algorithm().withUri(String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",port));
+		OTAlgorithm alg1 = OTAlgorithm.algorithm(String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",port));
 		OTFeature feature1 = OTFeature.feature().withAlgorithm(alg1);
 		
 		OTFeatures features = OTFeatures.features();
@@ -53,8 +52,7 @@ public class OTModelTest extends ResourceTest {
 		
 		OTDataset result = model.calculateDescriptors(
 				features,
-				OTDataset.dataset().withDatasetService(dataset_service).
-				withUri(String.format("http://localhost:%d/dataset/1",port))
+				OTDataset.dataset(String.format("http://localhost:%d/dataset/1",port)).withDatasetService(dataset_service)
 				);
 		Assert.assertEquals("http://localhost:8181/dataset/R3", result.toString());
 	}	
@@ -62,12 +60,11 @@ public class OTModelTest extends ResourceTest {
 	@Test
 	public void testCalculateModel() throws Exception {
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
-		OTModel model = OTModel.model().withDatasetService(dataset_service).
-			withUri(String.format("http://localhost:%d/model/1",port));
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/1",port)).withDatasetService(dataset_service);
+
 		
 		OTDataset result = model.process(
-				OTDataset.dataset().withDatasetService(dataset_service).
-				withUri(String.format("http://localhost:%d/dataset/1",port))
+				OTDataset.dataset(String.format("http://localhost:%d/dataset/1",port)).withDatasetService(dataset_service)
 				);
 		Assert.assertEquals("http://localhost:8181/dataset/R3?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F1%2Fpredicted", result.toString());
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2
@@ -79,27 +76,26 @@ public class OTModelTest extends ResourceTest {
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
 		String prefix = String.format("http://localhost:%d",port);
 		
-		OTDataset inputDataset = OTDataset.dataset().withDatasetService(dataset_service).withUri(String.format("%s/dataset/3", prefix));
-		OTAlgorithm alg1 = OTAlgorithm.algorithm().withUri(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",prefix));
+		OTDataset inputDataset = OTDataset.dataset(String.format("%s/dataset/3", prefix)).withDatasetService(dataset_service);
+		OTAlgorithm alg1 = OTAlgorithm.algorithm(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",prefix));
 		OTDataset calculated1 = alg1.process(inputDataset);
 		
-		OTAlgorithm alg2 = OTAlgorithm.algorithm().withUri(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",prefix));
+		OTAlgorithm alg2 = OTAlgorithm.algorithm(String.format("%s/algorithm/org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",prefix));
 		OTDataset calculated2 = alg2.process(inputDataset);
 		
 		OTDatasets datasets = OTDatasets.datasets();
 		datasets.withDatasetService(dataset_service).add(calculated1).add(calculated2);
 		OTDataset dataset = datasets.merge();
 
-		OTAlgorithm lr = OTAlgorithm.algorithm().withUri(String.format("%s/algorithm/LR",prefix));
-		OTModel model = lr.process(dataset, OTFeature.feature().withUri(String.format("%s/feature/4", prefix)));
+		OTAlgorithm lr = OTAlgorithm.algorithm(String.format("%s/algorithm/LR",prefix));
+		OTModel model = lr.process(dataset, OTFeature.feature(String.format("%s/feature/4", prefix)));
 		
-		OTModel supermodel = OTSuperModel.model().withUri(model.uri).withDatasetService(dataset_service);
+		OTModel supermodel = OTSuperModel.model(model.uri).withDatasetService(dataset_service);
 		
 		System.out.println(supermodel.process(dataset));
 		
 		OTDataset result = supermodel.process(
-				OTDataset.dataset().withDatasetService(dataset_service).
-				withUri(String.format("http://localhost:%d/dataset/1?max=5",port))
+				OTDataset.dataset(String.format("http://localhost:%d/dataset/1?max=5",port)).withDatasetService(dataset_service)
 				);
 		System.out.println(result);
 		
@@ -117,25 +113,23 @@ public class OTModelTest extends ResourceTest {
 		while (!task.poll()) ;
 		
 		String dataset_service = String.format("http://localhost:%d/dataset",port);
-		OTModel model = OTSuperModel.model().withDatasetService(dataset_service).
-			withUri(task.getResult());
+		OTModel model = OTSuperModel.model(task.getResult()).withDatasetService(dataset_service);
 		
 		OTDataset result = model.process(
-				OTDataset.dataset().withDatasetService(dataset_service).
-				withUri(String.format("http://localhost:%d/dataset/1?max=2",port))
+				OTDataset.dataset(String.format("http://localhost:%d/query/substructure?search=c1ccccc1",port)).withDatasetService(dataset_service)
 				);
-		Assert.assertEquals("http://localhost:8181/compound/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F12&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F11", result.toString());
+		Assert.assertEquals("http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F12&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F11", result.toString());
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2
 	}			
 	@Test
 	public void testCalculateModelRemote() throws Exception {
 		String dataset_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/dataset";
-		OTModel model = OTModel.model().withDatasetService(dataset_service).
-			withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/model/259260");
+		OTModel model = OTModel.model("http://ambit.uni-plovdiv.bg:8080/ambit2/model/259260").
+			withDatasetService(dataset_service);
+
 		
 		OTDataset result = model.process(
-				OTDataset.dataset().withDatasetService(dataset_service).
-				withUri("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/112")
+				OTDataset.dataset("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/112").withDatasetService(dataset_service)
 				);
 		System.out.println(result);
 	}		

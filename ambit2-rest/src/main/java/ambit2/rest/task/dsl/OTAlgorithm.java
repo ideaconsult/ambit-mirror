@@ -10,19 +10,20 @@ import ambit2.rest.task.RemoteTask;
 
 public class OTAlgorithm extends OTProcessingResource {
 	
-	 public static OTAlgorithm algorithm() throws Exception  { 
-		    return new OTAlgorithm();
-	 }
-	 @Override
-	 public OTAlgorithm withUri(Reference uri) throws Exception { 
-		  this.uri = uri;
-		  return this; 
-	 }	
-	 @Override
-	 public OTAlgorithm withUri(String uri) throws Exception { 
-		  return withUri(new Reference(uri)); 
-	 }		 
-	 
+	
+	protected OTAlgorithm(Reference ref) {
+		super(ref);
+	}
+	protected OTAlgorithm(String ref) {
+		super(ref);
+	}
+	 public static OTAlgorithm algorithm(Reference datasetURI) throws Exception  { 
+			    return new OTAlgorithm(datasetURI);
+	}
+
+	public static OTAlgorithm algorithm(String datasetURI) throws Exception  { 
+			    return new OTAlgorithm(datasetURI);
+	 }	 
 
 	 public RemoteTask processAsync(OTDataset inputDataset,OTFeature feature) throws Exception {
 			Form params = form==null?new Form():form;
@@ -51,14 +52,14 @@ public class OTAlgorithm extends OTProcessingResource {
 			long now = System.currentTimeMillis();
 			RemoteTask task = processAsync(inputDataset);
 			task = wait(task,now);
-			return OTDataset.dataset().withUri(task.getResult());		 
+			return OTDataset.dataset(task.getResult());		 
 	 }	 
 	 
 	 public OTModel process(OTDataset inputDataset,OTFeature feature) throws Exception {
 			long now = System.currentTimeMillis();
 			RemoteTask task = processAsync(inputDataset,feature);
 			task = wait(task,now);
-			return OTModel.model().withUri(task.getResult());		 
+			return OTModel.model(task.getResult());		 
 	 }		 
 	 @Override
 	public OTAlgorithm withParams(Form form) throws Exception {

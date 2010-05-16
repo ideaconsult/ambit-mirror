@@ -13,7 +13,7 @@ public abstract class OTProcessingContainers<T extends OTProcessingResource> ext
 		 
 		 OTDataset dataset_copy = (size()==1)?
 				inputDataset:
-			 	OTDataset.dataset().withDatasetService(dataset_service).copy(inputDataset);
+				inputDataset.withDatasetService(dataset_service).copy();
 		 
 		 
 		 RemoteTaskPool pool = new RemoteTaskPool();

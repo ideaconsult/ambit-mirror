@@ -13,7 +13,7 @@ public class OTDatasets extends OTContainers<OTDataset> {
 	 }
 	@Override
 	public OTDataset createItem(Reference uri) throws Exception {
-		return OTDataset.dataset().withUri(uri);
+		return OTDataset.dataset(uri).withDatasetService(dataset_service);
 	}
 
 	@Override
@@ -33,9 +33,9 @@ public class OTDatasets extends OTContainers<OTDataset> {
 		datasets.withDatasetService(dataset_service);
 		for (OTDataset dataset: getItems()) 
 			if (result==null) 
-				result = OTDataset.dataset().withDatasetService(dataset_service).copy(dataset);
+				result = dataset.withDatasetService(dataset_service).copy();
 			else 
-				datasets.add(dataset);
+				datasets.add(dataset.withDatasetService(dataset_service));
 		if (datasets.size()==0) return result;
 		else return result.put(datasets);
 	}

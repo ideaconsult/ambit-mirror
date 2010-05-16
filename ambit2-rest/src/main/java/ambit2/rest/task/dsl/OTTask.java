@@ -4,12 +4,10 @@ import org.restlet.data.Reference;
 
 public class OTTask extends OTObject {
 
-	 public static OTTask task() throws Exception  { 
-		    return new OTTask();
+	 public static OTTask task(Reference uri) throws Exception  { 
+		    return new OTTask(uri);
 	 }
-	 @Override
-	 public OTTask withUri(Reference uri) throws Exception { 
-		  this.uri = uri;
-		  return this; 
-	 }	 
+	 protected OTTask(Reference uri) {
+		 super(uri);
+	}
 }
