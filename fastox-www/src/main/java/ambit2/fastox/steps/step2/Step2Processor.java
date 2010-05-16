@@ -14,10 +14,13 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.EINECS;
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -76,9 +79,12 @@ public class Step2Processor extends StepProcessor {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
 					String line = null;
 					while ((line = reader.readLine())!=null) {
-						datasets.add(OTDataset.dataset().withUri(line.trim()).withDatasetService(uri));
+						datasets.add(OTDataset.dataset(line.trim()).withDatasetService(uri));
 						logger.info(line.trim());
 					}					
+				} catch (ResourceException x) {
+					if (Status.CLIENT_ERROR_NOT_FOUND.equals(x.getStatus()))
+						 throw new StepException("text","We did not find any matching entries for the search you performed in the OpenTox database. Please try again.");
 				} catch (Exception x) {
 					throw x;
 				} finally {
@@ -86,7 +92,7 @@ public class Step2Processor extends StepProcessor {
 					try {resource.release();} catch (Exception x) {}
 				}
 				
-				if (datasets.size()==0) throw new AmbitException("No structures!");
+				if (datasets.size()==0) throw new StepException("text","We did not find any matching entries for the search you performed in the OpenTox database. Please try again.");
 				else if (datasets.size()==1) for (OTDataset d: datasets.getItems()) { ref = d.getUri(); break;}
 				else {
 					OTDataset dataset = datasets.merge();

@@ -23,6 +23,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
@@ -416,9 +417,18 @@ public abstract class WizardResource extends ServerResource {
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 			return null;
 		} catch (Exception x) {
-			session.setError(step.getTitle(),x);
-			getResponse().redirectSeeOther(getRequest().getReferrerRef());
-			return null;
+			if ((x.getCause()!=null) && (x.getCause() instanceof StepException)) {
+				session.setError(
+						((StepException)x.getCause()).getKey(),
+						(Exception)x.getCause());
+				getResponse().redirectSeeOther(getRequest().getReferrerRef());
+				return null;					
+			} else {
+				session.setError(step.getTitle(),x);
+				getResponse().redirectSeeOther(getRequest().getReferrerRef());
+				return null;
+			}
+
 		}		
 	}	
 	protected Representation processMultipartForm(Representation entity, Variant variant) throws ResourceException {
