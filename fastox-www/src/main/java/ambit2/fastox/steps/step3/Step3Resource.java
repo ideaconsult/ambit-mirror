@@ -9,6 +9,7 @@ import java.util.List;
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
@@ -223,6 +224,11 @@ public class Step3Resource extends FastoxStepResource {
 	
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
+	}
+	@Override
+	public void footer(Writer output) throws IOException {
+		output.write(ModelTools.jsIFrame());
+		super.footer(output);
 	}
 }
 

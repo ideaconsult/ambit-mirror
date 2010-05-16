@@ -199,14 +199,14 @@ public abstract class FastoxStepResource extends WizardResource {
 		try {
 			if ((session.getNumberOfModels()==0) || all)  {
 				String q = "?url";
-				Query query = QueryFactory.create(String.format(ModelTools.sparql,q,q,q,q, q,q,q,q));
+				Query query = QueryFactory.create(String.format(ModelTools.sparql,q,q,q,q, q,q,q,q,q));
 				running += retrieveModels(null,query,writer,status,rootReference);
 			} else {
 				Iterator<String> models = session.getModels();
 				while (models.hasNext()) {
 					String model = models.next();
 					String q = String.format("<%s>",model);
-					Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q, q,q,q,""),null,Syntax.syntaxARQ);
+					Query query = QueryFactory.create(String.format(ModelTools.sparql,"",q,q,q,q, q,q,""),null,Syntax.syntaxARQ);
 
 					running += retrieveModels(model,query,writer,status,rootReference);
 				}

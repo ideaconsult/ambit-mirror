@@ -31,11 +31,11 @@ public class ModelTools {
 		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
 		"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
 		"PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
-		"select DISTINCT ?endpoint ?endpointName %s ?title ?TrainingDataset ?algorithm ?algName\n"+
+		"select DISTINCT ?endpoint ?endpointName %s ?title ?validation ?algorithm ?algName\n"+
 		"where {\n"+
 		"%s rdf:type ot:Model.\n"+
 		"OPTIONAL {%s dc:title ?title}.\n"+
-		"OPTIONAL {%s ot:trainingDataset ?TrainingDataset}.\n"+
+		"OPTIONAL {?validation ot:validationModel %s}.\n"+
 		"OPTIONAL {%s ot:algorithm ?algorithm}.\n"+
 		"OPTIONAL {?algorithm dc:title ?algName}.\n"+		
 		"OPTIONAL {?algorithm ot:isA ?type}.\n"+
@@ -169,8 +169,9 @@ public class ModelTools {
 		writer.write("<thead><tr>");
 		writer.write("<th width='25%'>Model</th>");
 		writer.write("<th width='15%'>Endpoint</th>");
-		writer.write("<th>Training dataset</th>");
-		writer.write("<th>Algorithm</th>");
+		writer.write("<th>Algorithm</th>");		
+		writer.write("<th>Validation</th>");
+
 		/*	
 		writer.write("<th></th>");
 		*/
@@ -211,43 +212,39 @@ public class ModelTools {
 		
 
 		writer.write("<td>");
-		writer.write(String.format("<a href='%s?media=%s' alt='%s' title='%s' target='_blank' ><img src='%s/images/chart_line.png' border='0' alt='%s' title='%s'></a>",
-				modelUri,
-				Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
-				modelUri,modelUri,rootReference.toString(),modelUri,modelUri));				
-		writer.write(params.model.htmlInputCheckbox(modelUri,name==null?modelUri:name.getString(),selected));
+		
+		
+		writer.write(params.model.htmlInputCheckbox(modelUri,
+				jsJumpTo(String.format("%s?media=text/plain",modelUri), name==null?modelUri:name.getString())
+				,selected));
 		
 		writer.write("</td>");
 		writer.write("<td>");
 		writer.write(endpointName==null?"":endpointName.getString());
 		writer.write("</td>");
-		writer.write("<td>"); //training dataset
-
-		if (dataset!=null)  
-			if (dataset.isURIResource()) {
-			for (int i=0;i<mimes.length;i++) {
-				MediaType mime = mimes[i];
-				writer.write("&nbsp;");
-				writer.write(String.format(
-						"<a href=\"%s?media=%s\" ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
-						dataset.getURI(),
-						Reference.encode(mime.toString()),
-						rootReference,
-						image[i],
-						mime,
-						mimesDescription[i]));	
-			}
-			} else writer.write(dataset.toString());
 		
-
-		writer.write("</td><td>"); //algorithm
+		writer.write("<td>"); //algorithm
 		//?media makes use of restlet Tunnel service
-		writer.write(algo==null?"":algo.isURIResource()?
-				String.format("<a href='%s?media=%s' target=_blank'>%s</a>",
-						((Resource)algo).getURI(),Reference.encode(MediaType.APPLICATION_RDF_XML.toString()),
-						algName==null?"Algorithm":algName.getString())
-				:algo.toString());		
+		
+		writer.write(jsJumpTo(algo==null?"":algo.isURIResource()?((Resource)algo).getURI():algo.toString(),
+				algName==null?"Algorithm":algName.getString()));
+
 		writer.write("</td>");
+		
+		writer.write("<td>"); //validation
+		
+			RDFNode node = solution.get("validation");
+			if (node != null)
+				if (node.isURIResource())
+					writer.write(jsJumpTo(
+							String.format("%s/user/%s/report/validation?search=%s",
+							rootReference,
+							session.getUser().getId(),
+							Reference.encode(((Resource)node).getURI()))
+							,"Model validation report"));
+		
+		writer.write("</td>"); //validation
+
 		
 		Object uris = session.getModelStatus(modelUri);
 		/*
@@ -353,5 +350,27 @@ public class ModelTools {
 				}
 
 			return null;
-	}	
+	}
+	
+	protected static String jsJumpTo(String uri,String title) {
+		return String.format("<a href=\"javascript:jumpto('%s')\">%s</a>",uri,title);
+	}
+	public static String jsIFrame() {
+		return
+		"<script language=\"javascript\">\n"+
+		"var displaymode=0\n"+
+		"var iframecode='<iframe id=\"external\" style=\"width:95%;height:200px;border:none\" src=\"\"></iframe>'\n"+
+		"if (displaymode==0) document.write(iframecode)\n"+
+		"function jumpto(inputurl){\n"+
+		"if (document.getElementById&&displaymode==0)\n"+
+		"document.getElementById(\"external\").src=inputurl\n"+
+		"else if (document.all&&displaymode==0)\n"+
+		"document.all.external.src=inputurl\n"+
+		"else{\n"+
+		"if (!window.win2||win2.closed)\n"+
+		"win2=window.open(inputurl)\n"+
+		"else{\n"+
+		"win2.location=inputurl\n"+
+		"win2.focus()}}}		//-->	</script>\n";
+	}
 }
