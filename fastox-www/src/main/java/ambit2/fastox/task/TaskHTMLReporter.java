@@ -21,9 +21,11 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 	public TaskHTMLReporter(Request ref) {
 		super(ref);
 	}
+	
 	@Override
 	public void header(Writer output, Iterator<Task<Reference,IToxPredictUser>> query) {
 		try {
+
 			output.write("<html><body>");
 			output.write("<h4>Tasks:");
 			for (TaskStatus status :TaskStatus.values())
@@ -31,11 +33,22 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 						baseReference,SimpleTaskResource.resource,status,status));
 			output.write("</h4><p>");
 			output.write("<table>");
-			output.write("<tr><th>Start time</th><th>End time</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
+			output.write("<tr><th>Start time</th><th>Elapsed time,ms</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
 		} catch (Exception x) {
 			
 		}
 	}
+	@Override
+	public void footer(Writer output, Iterator<Task<Reference,IToxPredictUser>> query) {
+		try {
+			output.write("</table>");
+			output.write("</body></html>");
+			output.flush();
+		} catch (Exception x) {
+			
+		}
+	}
+
 	public void processItem(Task<Reference,IToxPredictUser> item, Writer output) {
 		String t = "";
 		String status = "Unknown";
@@ -48,9 +61,9 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 			t = x.getMessage();
 		} finally {
 			try {output.write(
-					String.format("<tr><td>%s</td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td></tr>",
+					String.format("<tr><td>%s</td><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td><td>%s</td></tr>",
 							new Date(item.getStarted()),
-							item.getCompleted()>0?new Date(item.getCompleted()):"",
+							item.getCompleted()>0?item.getCompleted()-item.getStarted():"",
 							baseReference.toString(),
 							SimpleTaskResource.resource,
 							item.getUuid(),
@@ -65,14 +78,5 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 			}
 		}
 	};
-	@Override
-	public void footer(Writer output, Iterator<Task<Reference,IToxPredictUser>> query) {
-		try {
-			output.write("</table>");
-			output.write("</body></html>");
-			output.flush();
-		} catch (Exception x) {
-			
-		}
-	}
+
 }
