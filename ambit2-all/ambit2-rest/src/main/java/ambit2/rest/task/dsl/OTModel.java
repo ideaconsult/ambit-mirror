@@ -9,6 +9,8 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
@@ -236,4 +238,24 @@ public class OTModel extends OTProcessingResource {
 		public OTModel withParams(String name, String value) throws Exception {
 			return (OTModel)super.withParams(name, value);
 		}
+		public String report(String ontologyURI) throws Exception  { 
+			String a = String.format("<%s>", uri);
+			String query = String.format(OTModel.getSparql("sparql/ModelReport.sparql").toString(),"",a,a);
+					
+		    OTOntologyService<String> ontology = new OTOntologyService<String>(ontologyURI);
+		    
+		    StringBuilder b = new StringBuilder().append(ontology.report(query));
+		    ClientResource client = new ClientResource(uri);
+		    Representation r=null;
+		    try {
+		    	r = client.get(MediaType.TEXT_PLAIN);
+		    	b.append(r.getText().replace("\n", "<br>"));
+		    } catch (Exception x) {
+		    	
+		    } finally {
+		    	try { r.release(); }catch (Exception x) {}
+		    	try { client.release(); }catch (Exception x) {}
+		    }
+		    return b.toString();
+	}	
 }
