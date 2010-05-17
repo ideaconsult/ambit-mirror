@@ -9,7 +9,12 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.rest.OpenTox;
 import ambit2.rest.task.dsl.OTAlgorithm;
+import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTDatasetReport;
+import ambit2.rest.task.dsl.OTDatasetScrollableReport;
+import ambit2.rest.task.dsl.OTDatasetTableReport;
 import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.task.dsl.OTValidation;
 
@@ -17,6 +22,14 @@ public class ReportingResource  extends FastoxStepResource {
 	public static final String resource = "/report";
 	public static final String resourceType = "type";
 	protected String[] search;
+	protected int page = 0;
+	protected int pageSize = 10;
+	protected display_mode mode = display_mode.scrollable;
+	protected boolean header = true;
+	protected enum display_mode {
+		table,
+		scrollable
+	}
 	
 	protected enum report_type {
 		Validation {
@@ -38,6 +51,13 @@ public class ReportingResource  extends FastoxStepResource {
 				return OTAlgorithm.algorithm(q).report(ontology);
 			}
 		},
+		Dataset {
+			@Override
+			public String report(String q,String ontology) throws Exception  {
+
+				return "";
+			}
+		},		
 		Feature {
 			@Override
 			public String report(String q,String ontology) throws Exception  {
@@ -68,25 +88,102 @@ public class ReportingResource  extends FastoxStepResource {
 		} catch (Exception x) {
 			type = report_type.Validation;
 		}
+		try {
+			page = Integer.parseInt(form.getFirstValue(OpenTox.params.page.toString()));
+		} catch (Exception x) {
+			page = 0;
+		}	
+		try {
+			pageSize = Integer.parseInt(form.getFirstValue(OpenTox.params.pagesize.toString()));
+		} catch (Exception x) {
+			pageSize = 10;
+		}	
+		try {
+			mode = display_mode.valueOf(form.getFirstValue("mode"));
+		} catch (Exception x) {
+			mode = display_mode.scrollable;
+		}	
+		try {
+			header = Boolean.parseBoolean(form.getFirstValue("header"));
+		} catch (Exception x) {
+			header = false;
+		}			
 	}
 	@Override
 	protected boolean isMandatory(String param) {
 		return false;
 	}
+
+	 public String js() {
+		 return String.format(
+		 "<script type=\"text/javascript\">\n"+
+		 "function contentDisp(url,page)\n"+
+		 "{\n"+
+		 "$.ajax({\n"+
+		 "      beforeSend: function(xhr){\n"+
+		 "        xhr.setRequestHeader(\"Accept\",\"text/csv\");\n"+
+		 "      },\n"+
+		 "url : url,\n"+
+		 "success : function (data) {\n"+
+		 "$(\"#BROWSER\").html(data);\n"+
+		 "$(\"#page\").text(page);\n"+
+	 	 "}\n"+
+		 "});\n"+
+		 "}\n"+
+		 "</script>\n");
+	 }
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		try {
-			for (String q : search) {
-				String s = type.report(q, String.format("%s?results=yes&title=%s",
-						wizard.getService(SERVICE.ontology).toString(),
-						Reference.encode(type.getTitle(q))));
-				writer.write(s);
-				/*
-				String s = OTValidation.validation(q).report(
-					);
-						writer.write(s);
-						*/
-			}
+			if (report_type.Dataset.equals(type)) {
+				if (header) {
+					writer.write(
+							String.format(
+					"<html><head>\n<script src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n</head>"+
+					"\n<body>\n<link rel=\"stylesheet\" href=\"%s/style/scrollable.css\" type=\"text/css\" media=\"screen\">",
+					getRequest().getRootRef(),
+					getRequest().getRootRef()
+					));
+
+					writer.write(js());
+					
+				}
+				for (String q : search) {
+					OTDatasetReport report;
+					switch (mode) {
+					case scrollable: {
+						report = OTDatasetScrollableReport.
+						report(OTDataset.dataset(q),wizard.getService(SERVICE.application).toString(),page,pageSize).
+						setRequestref(getRequest().getResourceRef());
+						break;
+					}
+					case table : {
+						report = OTDatasetTableReport.
+						report(OTDataset.dataset(q),wizard.getService(SERVICE.application).toString(),page,pageSize).
+						setRequestref(getRequest().getResourceRef());
+						break;
+					}
+					default: {
+						report = OTDatasetScrollableReport.
+						report(OTDataset.dataset(q),wizard.getService(SERVICE.application).toString(),page,pageSize).
+						setRequestref(getRequest().getResourceRef());
+					}
+				    }
+					
+					report.write(writer);
+				}	
+				if (header) {
+					writer.write("</body></html>");
+				}
+				
+			} else 
+				for (String q : search) {
+					String s = type.report(q, String.format("%s?results=yes&title=%s",
+							wizard.getService(SERVICE.ontology).toString(),
+							Reference.encode(type.getTitle(q))));
+					writer.write(s);
+				}
+
 		} catch (Exception x) {
 			writer.write(x.getMessage());
 		}
