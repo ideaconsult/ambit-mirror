@@ -148,4 +148,14 @@ public class OTDataset extends OTObject {
 		 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
 		 return dataset(newuri).withDatasetService(dataset_service);
 	 }
+	 public OTDataset getPage(int page,int pageSize) throws Exception {
+		 Reference ref = uri.clone();
+		 Form form = ref.getQueryAsForm();
+		 form.removeAll(OpenTox.params.page.toString());
+		 form.removeAll(OpenTox.params.pagesize.toString());
+		 form.add(OpenTox.params.page.toString(),Integer.toString(page));
+		 form.add(OpenTox.params.pagesize.toString(),Integer.toString(pageSize));
+		 ref.setQuery(form.getQueryString());
+		 return dataset(ref);
+	 }
 }
