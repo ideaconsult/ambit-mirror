@@ -25,12 +25,15 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.query.StructureQueryResource;
+import ambit2.rest.task.CallableQueryProcessor;
 
 /**
  * /algorithm/lookup/{structure identifier}/{representation}
@@ -48,6 +51,8 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	public static final String representationID = String.format("/{%s}",representationKey);
 	protected String text = null;
 	protected NCISearchProcessor.METHODS rep_id = null;
+	
+	protected static String URL_as_id = "url";
 	
 
 	/**
@@ -76,40 +81,57 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} catch (Exception x) {
 			rep_id = null;
 		}
-		
-		int idcompound = isAmbitID(text);
-		//query
+		String url = null;
 		IQueryRetrieval<IStructureRecord>  query = null;
-		if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
-			if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),false,text);
-		} else if (EINECS.isValidFormat(text)) { //this is EINECS
-			//we'd better not search for invalid numbers
-			if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),false,text);
-		} else if (idcompound>0)  {
-			IStructureRecord record = new StructureRecord();
-			record.setIdchemical(idcompound);
-			QueryStructureByID q = new QueryStructureByID();
-			q.setPageSize(1);
-			q.setChemicalsOnly(true);
-			q.setValue(record);
-			query = q;
-		} else {
-			IAtomContainer structure = null;
-			//if inchi
-			try { structure = isInChI(text);
-			} catch (Exception x) { structure = null;}
-			//if smiles
-			if (structure==null)
-				try { structure = isSMILES(text);
-				} catch (Exception x) { structure = null;}
-			//exact structure
-			if (structure != null) {
-				QueryExactStructure q = new QueryExactStructure();
+		if (isURL(text)) try {
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			url = form.getFirstValue(search_param);
+			Object q = CallableQueryProcessor.getQueryObject(new Reference(url), getRequest().getRootRef());
+			if (q==null) {
+				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,"TODO: retrieve compounds from foreign urls");
+			} else if (q instanceof AbstractStructureQuery) {
+				query = (IQueryRetrieval<IStructureRecord>)q;
+			}	
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("%s %s",url,x.getMessage()),x);
+		} 
+		else {
+			int idcompound = isAmbitID(text);
+			//query
+			
+			if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
+				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),false,text);
+			} else if (EINECS.isValidFormat(text)) { //this is EINECS
+				//we'd better not search for invalid numbers
+				if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),false,text);
+			} else if (idcompound>0)  {
+				IStructureRecord record = new StructureRecord();
+				record.setIdchemical(idcompound);
+				QueryStructureByID q = new QueryStructureByID();
+				q.setPageSize(1);
 				q.setChemicalsOnly(true);
-				q.setValue(structure);
-				
+				q.setValue(record);
 				query = q;
-			} 
+			} else {
+				IAtomContainer structure = null;
+				//if inchi
+				try { structure = isInChI(text);
+				} catch (Exception x) { structure = null;}
+				//if smiles
+				if (structure==null)
+					try { structure = isSMILES(text);
+					} catch (Exception x) { structure = null;}
+				//exact structure
+				if (structure != null) {
+					QueryExactStructure q = new QueryExactStructure();
+					q.setChemicalsOnly(true);
+					q.setValue(structure);
+					
+					query = q;
+				} 
+			}
 		}
 		if (query == null) query = getTextQuery(null,false,text);
 
@@ -179,6 +201,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		IAtomContainer c = p.parseSmiles(smiles);
 		if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(smiles);
 		return c;
+	}	
+	public boolean isURL(String text) {
+		return URL_as_id.equals(text.toLowerCase());
 	}	
 	public int isAmbitID(String text) {
 		try {
