@@ -7,11 +7,11 @@ import java.util.List;
 import org.restlet.data.Reference;
 
 public class OTDatasetTableReport extends OTDatasetReport {
-	protected OTDatasetTableReport(OTDataset dataset,String application, int page, int pageSize) throws Exception {
-		super(dataset,application,page,pageSize);
+	protected OTDatasetTableReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {
+		super(dataset,features, application,page,pageSize);
 	}
-	public static OTDatasetTableReport report(OTDataset dataset, String application, int page, int pageSize) throws Exception {
-		return new OTDatasetTableReport(dataset,application,page,pageSize);
+	public static OTDatasetTableReport report(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {
+		return new OTDatasetTableReport(dataset,features,application,page,pageSize);
 	}
 	public String prev() throws Exception {
 		if (page==0) return uri.toString();

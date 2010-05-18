@@ -158,4 +158,11 @@ public class OTDataset extends OTObject {
 		 ref.setQuery(form.getQueryString());
 		 return dataset(ref);
 	 }
+	 public OTDataset getFeatures(OTFeatures features) throws Exception {
+		 Reference ref = uri.clone();
+		 Form form = ref.getQueryAsForm();
+		 form = features.getQuery(form);
+		 ref.setQuery(form.getQueryString());
+		 return dataset(ref);
+	 }	 
 }
