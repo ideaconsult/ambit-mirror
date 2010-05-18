@@ -13,6 +13,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.task.dsl.OTAlgorithm;
 import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.task.dsl.OTDatasetReport;
@@ -21,6 +22,7 @@ import ambit2.rest.task.dsl.OTDatasetTableReport;
 import ambit2.rest.task.dsl.OTFeature;
 import ambit2.rest.task.dsl.OTFeatures;
 import ambit2.rest.task.dsl.OTModel;
+import ambit2.rest.task.dsl.OTModels;
 import ambit2.rest.task.dsl.OTValidation;
 
 public class ReportingResource  extends FastoxStepResource {
@@ -134,8 +136,15 @@ public class ReportingResource  extends FastoxStepResource {
 				}
 			
 		} catch (Exception x) {
+			features =null;
+		}
+		if ((features == null) || (features.size()==0))
+		try {
+			OTModels models = getSession(getUserKey()).getSelectedModels();
+			features = models.predictedVariables();
+		} catch (Exception xx) {
 			features = null;
-		}					
+		}
 	}
 	@Override
 	protected boolean isMandatory(String param) {
@@ -182,8 +191,21 @@ public class ReportingResource  extends FastoxStepResource {
 					OTDatasetReport report;
 					switch (mode) {
 					case scrollable: {
-						report = OTDatasetScrollableReport.
-						report(OTDataset.dataset(q),features,wizard.getService(SERVICE.application).toString(),page,pageSize).
+						OTModels models = getSession(getUserKey()).getSelectedModels();
+						/*
+						OTModels models = OTModels.models();
+						models.
+							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/2")).
+							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/8")).
+							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/9")).
+							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/17"));
+							//getSession(getUserKey()).getSelectedModels()
+							 
+							 */
+						models.load(new OTProperty[] {OTProperty.predictedVariables});
+						report = ToxPredictDatasetReport.
+						report(OTDataset.dataset(q),models,
+									wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
 						break;
 					}
@@ -242,6 +264,9 @@ public class ReportingResource  extends FastoxStepResource {
 	@Override
 	public void navigator(Writer writer) throws IOException {
 	}
+	@Override
+	public void top(Writer writer) throws IOException {
+	};
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {

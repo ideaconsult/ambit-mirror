@@ -6,6 +6,7 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.fastox.users.ToxPredictSession.SearchMode;
+import ambit2.rest.task.dsl.OTModels;
 
 
 
@@ -52,4 +53,6 @@ public interface IToxPredictSession {
 	public SearchMode getSearchMode();
 	public void setSearchMode(SearchMode searchMode);
 	public void setCondition(String c);	
+	
+	public OTModels getSelectedModels();
 }

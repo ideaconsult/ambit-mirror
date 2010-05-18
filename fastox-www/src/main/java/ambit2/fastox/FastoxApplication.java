@@ -17,6 +17,7 @@ import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
 import org.restlet.util.RouteList;
 
+import ambit2.fastox.models.FeaturesResource;
 import ambit2.fastox.models.ModelsResource;
 import ambit2.fastox.models.ReportingResource;
 import ambit2.fastox.steps.WelcomeResource;
@@ -97,6 +98,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         userRouter.attach(ReportingResource.resource,ReportingResource.class);
         userRouter.attach(String.format("%s/{%s}",ReportingResource.resource,ReportingResource.resourceType),
         				ReportingResource.class);
+        userRouter.attach(FeaturesResource.resource,FeaturesResource.class);
         
         for (WizardMode mode : WizardMode.values()) {
             Wizard wizard = Wizard.getInstance(mode);

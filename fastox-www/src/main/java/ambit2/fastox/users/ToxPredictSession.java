@@ -6,8 +6,11 @@ import java.util.Iterator;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
+import ambit2.rest.task.dsl.OTModel;
+import ambit2.rest.task.dsl.OTModels;
 
 
 /**
@@ -43,8 +46,12 @@ public class ToxPredictSession implements IToxPredictSession {
 	protected String condition;
 	protected Hashtable<String, Object> models;
 	protected Hashtable<String, Boolean> models_preprocessing;
+	protected OTModels selectedModels= null; //todo - replace models var above.
 	
-	
+	public OTModels getSelectedModels() {
+		return selectedModels;
+	}
+
 	protected RemoteTaskPool pool = null;	
 	
 	public String getPageSize() {
@@ -135,9 +142,14 @@ public class ToxPredictSession implements IToxPredictSession {
 			pool.add((RemoteTask)status);
 		}
 		models.put(model,status);
+		try { 
+			selectedModels.add(OTModel.model(model).load(new OTProperty[] {OTProperty.predictedVariables})); 
+		} catch (Exception x) {}
+
 	}
 	public void removeModel(String model) {
 		if (models !=null) models.remove(model);
+		try { selectedModels.remove(model); } catch (Exception x) {}
 	}	
 	public Iterator<String> getModels() {
 		if (models == null) return null;
@@ -162,6 +174,7 @@ public class ToxPredictSession implements IToxPredictSession {
 		this.user = user;
 		this.datasetURI = null;
 		models = null;
+		try {selectedModels = OTModels.models(); } catch (Exception x) {};
 	}
 	public void clear() {
 		clearModels();
