@@ -44,15 +44,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
 
-		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveProfileValues)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});
+
 		if (getGroupProperties()!=null) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
 				@Override
@@ -62,6 +54,15 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});
+		if (getTemplate().size()>0) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
