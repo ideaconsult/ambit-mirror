@@ -23,7 +23,6 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import ambit2.base.exceptions.AmbitException;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
@@ -168,16 +167,15 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
-//		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.pager.js\"></script>\n",baseReference));
-		
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-ui-1.8.1.custom.min.js\"></script>\n",baseReference));
+		w.write(String.format("<link type=\"text/css\" href=\"%s/css/redmond/jquery-ui-1.8.1.custom.css\" rel=\"stylesheet\" />\n",baseReference));
 
 		w.write("</head>\n");
 		w.write("<body>");
 		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
 
 	}
-	public void navigator(Writer writer) throws IOException {
-		
+	public void top(Writer writer) throws IOException {
 		writer.write("<table width='99%' border='0'>");
 		writer.write("<tr>");
 		writer.write("<td align='left'>");
@@ -206,7 +204,11 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</td>");
 		writer.write("<tr>");
 		
-		writer.write("</table>");
+		writer.write("</table>");	
+	}
+	public void navigator(Writer writer) throws IOException {
+		
+
 		writer.write("<ul id=\"mainNav\" class=\"wizardStep\">\n");
 		
 		Form query = getRequest().getResourceRef().getQueryAsForm();
@@ -225,7 +227,7 @@ public abstract class WizardResource extends ServerResource {
 			
 			if (i < step.getIndex()) {
 				writer.write(String.format(
-						"<li class=\"%s\"><a href=\"%s\" title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						"<li class=\"%s\"><a href=\"%s\" title=\"\"><em>%d.&nbsp;%s</em><span>%s</span></a></li>\n",
 						(i+1)==step.getIndex()?"lastDone":"done",
 						stepRef,
 						i,
@@ -235,7 +237,7 @@ public abstract class WizardResource extends ServerResource {
 			} else 
 			if (i == step.getIndex()) {
 				writer.write(String.format(
-						"<li class=\"current %s\"><a title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						"<li class=\"current %s\"><a title=\"\"><em>%d.&nbsp;%s</em><span>%s</span></a></li>\n",
 						(i==(wizard.size()-1))?"mainNavNoBg\"":"",
 						i,
 						step.getTitle(),
@@ -243,7 +245,7 @@ public abstract class WizardResource extends ServerResource {
 						));				
 			} else if (i > step.getIndex()) {
 				writer.write(String.format(
-						"<li %s><a title=\"\"><em>Step %d: %s</em><span>%s</span></a></li>\n",
+						"<li %s><a title=\"\"><em>%d.&nbsp;%s</em><span>%s</span></a></li>\n",
 						(i==(wizard.size()-1))?"class=\"mainNavNoBg\"":"",
 						i,
 						thestep.getTitle(),
@@ -258,10 +260,13 @@ public abstract class WizardResource extends ServerResource {
 		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" onClick=\"getSmiles()\" type=\"submit\" value=\"&nbsp;NEXT\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
 
 		writer.write("</ul>\n");
+
+		//<div class="clearfloat">&nbsp;</div>
+	}
+	public void help(Writer writer)  throws IOException {
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
 
 		writer.write(String.format("<div class='help'>%s</div>",getHelp()));
-		//<div class="clearfloat">&nbsp;</div>
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
 		Iterator<String> keys = session.getErrorKeys();
@@ -368,8 +373,9 @@ public abstract class WizardResource extends ServerResource {
 					writer = new OutputStreamWriter(out,"UTF-8");	  
 					header(writer,getMeta());
 					renderFormHeader(writer,tabIndex);
-
+					top(writer);
 					navigator(writer);
+					help(writer);
 					if (tabs.size()>1) renderTabs(writer);
 					else {
 						String key = tabs.get(0);
@@ -390,7 +396,9 @@ public abstract class WizardResource extends ServerResource {
 					} else throw new ResourceException(x);
 				} finally {
 					renderErrorsTab(writer, key);
+					navigator(writer);
 					renderFormFooter(writer,key);	
+
 					footer(writer);
 					writer.flush();
 					out.close();
@@ -565,6 +573,7 @@ public abstract class WizardResource extends ServerResource {
 	public static String jsTableSorter(String tableid,String pagerid) {
 		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); } );</script>",tableid,pagerid);
 	}
+
 	/*
 	public String jsPager(String pagerid, String[] options) {
 		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();

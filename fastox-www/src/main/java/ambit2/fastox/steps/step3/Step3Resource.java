@@ -118,9 +118,7 @@ public class Step3Resource extends FastoxStepResource {
 		}
 		super.renderFormContent(writer, key);
 	}
-	@Override
-	public void renderFormFooter(Writer writer, String key) throws IOException {
-	}
+
 	
 
 	public void retrieveEndpoints(Form form,String key) throws IOException {
@@ -200,18 +198,7 @@ public class Step3Resource extends FastoxStepResource {
 			 }
 			 writer.write(String.format("<img src='%s/images/resultset_next.png'><img src='%s/images/resultset_next.png'>%s",
 					 getRootRef().toString(),getRootRef().toString(),session.getEndpointName()));
-			/*
-				writer.write(String.format("<form name='select_e' method='POST' action='' value='Find models for %s'>" +
-						"<img src='%s/images/resultset_next.png'>" +
-						"<input type='hidden' name='endpoint_name' value='%s'>" +
-						"<input type='hidden' name='endpoint' value='%s'>" +
-						"<input type='submit' name='find' class='small_button' value='%s' title='Find models for %s'></form>",
-						session.getEndpointName(),
-						getRootRef().toString(),
-					session.getEndpointName(),session.getEndpoint(),session.getEndpointName(),session.getEndpointName()));
-			*/
-			
-			//writer.write(String.format("Specific %s</h5>",session.getEndpointName()));		
+	
 			for (String subendpoint:subendpoints) {
 				writer.write(subendpoint);
 				
