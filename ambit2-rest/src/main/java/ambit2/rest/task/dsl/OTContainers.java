@@ -15,6 +15,13 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 				items.add(item);
 			return this;
 	 }
+	 public synchronized OTContainers<T> add(OTContainers<T> newitems) throws Exception  { 
+		 	if (newitems==null) return this;
+			if (items==null) items = new ArrayList<T>();
+			for (T item : newitems.items)
+				add(item);
+			return this;
+	 }	 
 	 /*
 	 public synchronized T commit() throws Exception  { 
 		    long now = System.currentTimeMillis();
@@ -56,6 +63,15 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 		 items.remove(dataset);
 		 return this;
 	 }
+	 
+	 public OTContainers<T> remove(String uri) throws Exception {
+		 for (int i=size()-1; i>=0; i--)
+			 if (items.get(i).uri.toString().equals(uri)) {
+				 items.remove(i);
+				 break;
+			 }
+		 return this;
+	 }	 
 	 public int size() {
 		 return items==null?0:items.size();
 	 }
