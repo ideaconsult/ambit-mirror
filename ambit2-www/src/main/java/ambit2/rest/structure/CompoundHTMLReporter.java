@@ -69,6 +69,15 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		pReporter = new PropertyURIReporter(request);
 		table = collapsed;
 		getProcessors().clear();
+		if (getGroupProperties()!=null) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});			
 		if (getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
@@ -78,15 +87,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					return super.process(target);
 				}
 			});
-		if (getGroupProperties()!=null) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});		
+	
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);

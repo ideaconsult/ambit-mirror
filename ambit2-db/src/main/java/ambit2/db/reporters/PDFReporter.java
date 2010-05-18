@@ -67,6 +67,15 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		r.setPage(0);
 		r.setPageSize(1);
 		getProcessors().add(new ProcessorStructureRetrieval(r));
+		if (getGroupProperties()!=null) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});		
 		if (getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
@@ -76,15 +85,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});
-		if (getGroupProperties()!=null) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});
+
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);

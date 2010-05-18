@@ -47,20 +47,22 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 	
 	protected List<Property> template2Header(Template template, boolean propertiesOnly) {
 		List<Property> h = new ArrayList<Property>();
-		Iterator<Property> it = template.getProperties(true);
-		while (it.hasNext()) {
-			Property t = it.next();
-			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
-				h.add(t);
-		}
-		
+		Iterator<Property> it;
 		if (groupProperties!=null) {
 			it = groupProperties.getProperties(true);
 			while (it.hasNext()) {
 				Property t = it.next();
 				h.add(t);
 			}
-		}		
+		}			
+		it = template.getProperties(true);
+		while (it.hasNext()) {
+			Property t = it.next();
+			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
+				h.add(t);
+		}
+		
+	
 		/*
 		Collections.sort(h,new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {

@@ -167,6 +167,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			Property p = new Property(r[i]);
 			p.setLabel(r[i]);
 			p.setEnabled(true);
+			p.setOrder(i+1);
 			gp.add(p);
 		}
 		setGroupProperties(gp);
@@ -184,7 +185,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		
 		return createTemplate(context, request, response, featuresURI);
 		*/
-		return null;
+		return super.createTemplate(context, request, response);
 	}
 	
 	public IAtomContainer isInChI(String inchi) throws Exception {
