@@ -354,7 +354,7 @@ div.user {
 }
 
 #mainNav li a em {
-	width: 120px;
+	width: 60px;
 	display: block;
 	margin: 6px 0 0 10px;
 	font-style: normal;
@@ -362,7 +362,7 @@ div.user {
 }
 
 #mainNav li a span {
-	width: 140px;
+	width: 60px;
 	display: block;
 	margin-left: 10px;
 	font-weight: normal;
