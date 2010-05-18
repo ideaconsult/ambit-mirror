@@ -334,8 +334,8 @@ public abstract class WizardResource extends ServerResource {
 		Reference baseReference = getRequest()==null?null:getRequest().getRootRef();
 		output.write("<div class=\"footer\">");
 		output.write("<span class=\"right\">");
-		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='185' height='60'></a>",baseReference));
-		output.write(String.format("<a href='http://ambit.sourceforge.net'><img src=%s/images/ambit-logo.png border='0' width='178' height='50'></a>&nbsp;",baseReference));
+		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='99' height='32'></a>",baseReference));
+		output.write(String.format("<a href='http://ambit.sourceforge.net'><img src=%s/images/ambit-logo.png border='0' width='114' height='32'></a>&nbsp;",baseReference));
 		//output.write(String.format("<a href='http://www.cefic.be'><img src=%s/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		//output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		
