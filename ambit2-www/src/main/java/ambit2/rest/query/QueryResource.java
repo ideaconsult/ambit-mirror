@@ -84,11 +84,14 @@ Then, when the "get(Variant)" method calls you back,
 				
 		});		
 		if (queryObject!=null) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getParams();
 			setPaging(form, queryObject);
 		}
 
 	}	
+	protected Form getParams() {
+		return getRequest().getResourceRef().getQueryAsForm();
+	}
 	/*
 	protected Connection getConnection() throws SQLException , AmbitException {
 		Connection connection = ((AmbitApplication)getApplication()).getConnection(getRequest());

@@ -87,7 +87,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	protected void setGroupProperties(Context context, Request request,
 			Response response) throws ResourceException {
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getParams();
 		String[] gp = OpenTox.params.sameas.getValuesArray(form);
 		if (gp!=null) {
 			groupProperties = new Profile();
@@ -100,12 +100,14 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				
 		}
 	}
-			
 	protected Template createTemplate(Context context, Request request,
 			Response response) throws ResourceException {
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getParams();
+		return createTemplate(form);
+	}			
+	protected Template createTemplate(Form form) throws ResourceException {
 		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
-		return createTemplate(context, request, response, featuresURI);
+		return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
 	}
 	protected Template createTemplate(Context context, Request request,
 			Response response,String[] featuresURI) throws ResourceException {

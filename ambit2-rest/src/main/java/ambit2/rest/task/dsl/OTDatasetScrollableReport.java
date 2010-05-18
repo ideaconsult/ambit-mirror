@@ -38,8 +38,8 @@ public class OTDatasetScrollableReport extends OTDatasetReport {
 			throws IOException {
 		writer.write("\n<div><div class=\"item\">\n");
 		writer.write(String.format(
-				"<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
-				values.get(0),row+page*pageSize));
+				"%d.<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
+				row+page*pageSize,values.get(0),values.get(0)));
 		writer.write(String.format("<h3><b>%s</b>&nbsp;<label title='%s'>%s</label></h3>",header.get(1),values.get(1),values.get(1)));
 		
 		writer.write("<strong>\n");

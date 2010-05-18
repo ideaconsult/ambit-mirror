@@ -12,8 +12,12 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
@@ -26,17 +30,15 @@ import ambit2.core.data.EINECS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.rest.OpenTox;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.task.CallableQueryProcessor;
 
 /**
- * /algorithm/lookup/{structure identifier}/{representation}
+ * /query/compound/{structure identifier}/{representation}
  * Offers same interface as Chemical Identifier Resolver 
  * http://cactus.nci.nih.gov/chemical/structure/documentation
  * http://cactus.nci.nih.gov/chemical/structure/"structure identifier"/"representation"
@@ -54,11 +56,15 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	
 	protected static String URL_as_id = "url";
 	
-
+	protected Form params;
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+	}
 	/**
 	 * SMILES, InChI, InChI key (lookup) , identifiers, names
 	 */
-	
+
 	/*
 	 */
 	@Override
@@ -84,8 +90,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		String url = null;
 		IQueryRetrieval<IStructureRecord>  query = null;
 		if (isURL(text)) try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getParams();
 			url = form.getFirstValue(search_param);
+			if (url==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No search parameter!");
 			Object q = CallableQueryProcessor.getQueryObject(new Reference(url), getRequest().getRootRef());
 			if (q==null) {
 				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,"TODO: retrieve compounds from foreign urls");
@@ -135,15 +142,23 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		}
 		if (query == null) query = getTextQuery(null,false,text);
 
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getParams();
 		setPaging(form, query);
 		
-		setTemplate(createTemplate(context, request, response));
+		setTemplate(createTemplate(form));
 		setGroupProperties(context, request, response);
 		return query;
 	}
 	
-	
+	protected Form getParams() {
+		if (params == null) 
+			if (Method.GET.equals(getRequest().getMethod()))
+				params = getRequest().getResourceRef().getQueryAsForm();
+			//if POST, the form should be already initialized
+			else 
+				params = getRequest().getEntityAsForm();
+		return params;
+	}
 	protected QueryField getTextQuery(Property property, boolean caseSensitive, String value) {
 		QueryField q_by_name = new QueryField();
 		q_by_name.setFieldname(property);
@@ -212,5 +227,20 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} catch (Exception x) {
 			return 0;
 		}
+	}
+	@Override
+	protected Representation post(Representation entity)
+			throws ResourceException {
+		return super.post(entity);
+	}
+
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			if (params==null) params = new Form(entity);
+			return get(variant);
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+				String.format("%s not supported",entity==null?"":entity.getMediaType()));
 	}
 }
