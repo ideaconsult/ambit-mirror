@@ -354,17 +354,17 @@ div.user {
 }
 
 #mainNav li a em {
-	width: 60px;
+	width: 70px;
 	display: block;
-	margin: 6px 0 0 10px;
+	margin: 2px 0 0 4px;
 	font-style: normal;
 	font-weight: bold;
 }
 
 #mainNav li a span {
-	width: 60px;
+	width: 70px;
 	display: block;
-	margin-left: 10px;
+	margin-left: 4px;
 	font-weight: normal;
 }
 
