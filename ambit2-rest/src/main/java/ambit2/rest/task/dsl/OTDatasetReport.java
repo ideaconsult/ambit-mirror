@@ -21,6 +21,7 @@ public abstract class OTDatasetReport extends OTObject {
 	protected List<String> values;
 	protected String application;
 	protected OTDataset dataset;
+	protected OTFeatures features;
 	protected int page;
 	protected int pageSize;
 	
@@ -33,16 +34,20 @@ public abstract class OTDatasetReport extends OTObject {
 		return this;
 	}
 	
-	protected OTDatasetReport(OTDataset dataset,String application, int page, int pageSize) throws Exception {
-		super(String.format("%s/query/compound/url/all?search=%s",
+	protected OTDatasetReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {
+		super(String.format("%s/query/compound/url/all?search=%s%s%s",
 				application,
-				Reference.encode(dataset.getPage(page, pageSize).uri.toString())));
+				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
+				features==null?"":"&",
+				features==null?"":features.getQuery(null).getQueryString()
+				));
 		this.application = application;
 		this.dataset = dataset;
 		header = new ArrayList<String>();
 		values = new ArrayList<String>();
 		this.page = page;
 		this.pageSize = pageSize;
+		this.features = features;
 	}
 
 	
@@ -113,6 +118,9 @@ public abstract class OTDatasetReport extends OTObject {
 	public String pageNavigator()  throws Exception  {
 		
 		StringBuilder b = new StringBuilder();
+		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
+		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
+		
 		b.append(String.format("<a href='#' onClick=\"contentDisp('%s',%d);\">&laquo;</a>&nbsp;",
 				prev(true),page-1));
 		for (int i=0; i < page;i++) {
