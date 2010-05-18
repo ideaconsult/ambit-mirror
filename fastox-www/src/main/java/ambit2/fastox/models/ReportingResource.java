@@ -131,9 +131,10 @@ public class ReportingResource  extends FastoxStepResource {
 	 public String js() {
 		 return String.format(
 		 "<script type=\"text/javascript\">\n"+
-		 "function contentDisp(url,page)\n"+
+		 "function contentDisp(url,page,data)\n"+
 		 "{\n"+
 		 "$.ajax({\n"+
+		 "      data: data, \n"+
 		 "      beforeSend: function(xhr){\n"+
 		 "        xhr.setRequestHeader(\"Accept\",\"text/csv\");\n"+
 		 "      },\n"+
