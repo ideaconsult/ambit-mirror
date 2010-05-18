@@ -4,6 +4,6 @@ import ambit2.fastox.wizard.WizardStep;
 
 public class Step6 extends WizardStep {
 	public Step6() {
-		super(5,"Results","Display results",Step6Resource.class);
+		super(5,"Display","result(s)",Step6Resource.class);
 	}
 }

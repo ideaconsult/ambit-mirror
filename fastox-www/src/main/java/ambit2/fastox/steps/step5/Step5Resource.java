@@ -35,7 +35,7 @@ public class Step5Resource extends FastoxStepResource {
 
 	@Override
 	protected String getDefaultTab() {
-		return "Estimate";
+		return "Predict";
 	}
 	@Override
 	protected void doInit() throws ResourceException {

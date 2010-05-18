@@ -20,7 +20,6 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.EINECS;
 import ambit2.core.processors.structure.AtomConfigurator;
