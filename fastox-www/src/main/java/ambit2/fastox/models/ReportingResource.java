@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
@@ -29,6 +32,7 @@ public class ReportingResource  extends FastoxStepResource {
 	protected int pageSize = 10;
 	protected display_mode mode = display_mode.scrollable;
 	protected boolean header = true;
+	protected Form params;
 	protected enum display_mode {
 		table,
 		scrollable
@@ -81,10 +85,20 @@ public class ReportingResource  extends FastoxStepResource {
 		super(0);
 		helpResource = null;
 	}
+	protected Form getParams() {
+		if (params!=null) return params;
+		if (Method.GET.equals(getRequest().getMethod())) {
+			params = getRequest().getResourceRef().getQueryAsForm();	
+		} else {
+			params = getRequest().getEntityAsForm();
+		}
+		return params;
+		
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getParams();
 		search = form.getValuesArray("search");
 		try {
 			type = report_type.valueOf(getRequest().getAttributes().get(resourceType).toString());
@@ -134,6 +148,7 @@ public class ReportingResource  extends FastoxStepResource {
 		 "function contentDisp(url,page,data)\n"+
 		 "{\n"+
 		 "$.ajax({\n"+
+		 //"      type: \"POST\", \n"+
 		 "      data: data, \n"+
 		 "      beforeSend: function(xhr){\n"+
 		 "        xhr.setRequestHeader(\"Accept\",\"text/csv\");\n"+
@@ -226,5 +241,12 @@ public class ReportingResource  extends FastoxStepResource {
 	}
 	@Override
 	public void navigator(Writer writer) throws IOException {
+	}
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+
+		if (params==null) params = new Form(entity);
+		return super.get(variant);
 	}
 }
