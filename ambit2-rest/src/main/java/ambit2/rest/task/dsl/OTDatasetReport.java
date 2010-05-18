@@ -121,17 +121,23 @@ public abstract class OTDatasetReport extends OTObject {
 		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
 		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
 		
-		b.append(String.format("<a href='#' onClick=\"contentDisp('%s',%d);\">&laquo;</a>&nbsp;",
-				prev(true),page-1));
+		b.append(String.format("\n<a href='#' onClick=\"contentDisp('%s',%d,'%s');\">&laquo;</a>&nbsp;",
+				requestref.getBaseRef(),
+				page<=1?1:page-1,prev(true)));
+		
 		for (int i=0; i < page;i++) {
-		b.append(String.format("<a href='%s' onClick=\"contentDisp('%s',%d);\">%d</a>&nbsp;",
+		b.append(String.format("\n<a href='%s' onClick=\"contentDisp('%s',%d,'%s');\">%d</a>&nbsp;",
 				"#",
+				requestref.getBaseRef(),
+				i+1,
 				getPage(i, pageSize,true),
-				i+1,i+1
+				i+1
 				));
 	   }		
-		b.append(String.format("Page&nbsp;<label id='page' title='page'>%d</label> Records per page <label id='pagesize' title='items per page'>%d</label> &nbsp;<a href='#' onClick=\"contentDisp('%s',%d);\">&raquo;</a>",
-				page+1,pageSize,next(true),page+2));		
+		b.append(String.format("\nPage&nbsp;<label id='page' title='page'>%d</label> Records per page <label id='pagesize' title='items per page'>%d</label> &nbsp;\n<a href='#' onClick=\"contentDisp('%s',%d,'%s');\">&raquo;</a>",
+				page+1,pageSize,
+				requestref.getBaseRef(),
+				page+1,next(true)));		
 		return b.toString();
 	}
 	public String prev( boolean removeHeader) throws Exception {
@@ -153,7 +159,7 @@ public abstract class OTDatasetReport extends OTObject {
 			form.add("header",Boolean.FALSE.toString());
 		 }
 		 
-		 return "?"+form.getQueryString();
+		 return form.getQueryString();
 	 }	
 	
 }
