@@ -7,7 +7,7 @@ import java.util.List;
 public class OTDatasetScrollableReport extends OTDatasetReport {
 
 	protected OTDatasetScrollableReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {
-		super(dataset,features, application,page,pageSize);
+		super(dataset,features, application,page,pageSize,"/all");
 	}
 	public static OTDatasetScrollableReport report(OTDataset dataset, OTFeatures features, String application, int page, int pageSize) throws Exception {
 		return new OTDatasetScrollableReport(dataset,features,application,page,pageSize);
@@ -54,7 +54,15 @@ public class OTDatasetScrollableReport extends OTDatasetReport {
 		}
 		writer.write("</strong>\n");
 		
+		writeData(row,values,writer);
+	
+		//writer.write(String.format("<p><b>%s</b>&nbsp;%s</p>",header.get(header.size()-1),values.get(header.size()-1)));
+		//writer.write("<a href=\"#\">More info</a> &nbsp; <a href=\"#\">Yet more info</a>");
+		writer.write("\n</div></div>\n");
 		
+	}
+	public void writeData(int row, List<String> values, Writer writer)
+	throws IOException {
 		writer.write("<table class='tablesorter'>");
 		/*
 		writer.write("<thead>");
@@ -82,10 +90,5 @@ public class OTDatasetScrollableReport extends OTDatasetReport {
 		writer.write("</tbody>");
 		writer.write("</table>");
 
-		//writer.write(String.format("<p><b>%s</b>&nbsp;%s</p>",header.get(header.size()-1),values.get(header.size()-1)));
-		//writer.write("<a href=\"#\">More info</a> &nbsp; <a href=\"#\">Yet more info</a>");
-		writer.write("\n</div></div>\n");
-		
 	}
-
 }

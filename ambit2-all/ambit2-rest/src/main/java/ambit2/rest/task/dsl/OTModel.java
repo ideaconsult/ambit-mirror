@@ -60,17 +60,17 @@ public class OTModel extends OTProcessingResource {
 	public static OTModel model(String datasetURI) throws Exception  { 
 			    return new OTModel(datasetURI);
 	 }
+	public OTModel load() throws Exception  {
+		return load(new OTProperty[] {OTProperty.independentVariables,OTProperty.predictedVariables});
+	}
 	 /**
 	  * Reads RDF and initializes variables 
 	  * @return
 	  * @throws Exception
 	  */
-	 public OTModel load() throws Exception  {
+	 public OTModel load(OTProperty[] varTypes) throws Exception  {
 		 OTFeatures vars = null;
 		 String sparqlName = "sparql/ModelIndependentVariables.sparql";
-		 
-		 OTProperty[] varTypes = new OTProperty[] {OTProperty.independentVariables,OTProperty.predictedVariables};
-		 
 		 
 		 OntModel model = null;
 		 try {

@@ -33,10 +33,15 @@ public abstract class OTDatasetReport extends OTObject {
 		this.requestref = requestref;
 		return this;
 	}
+	protected OTDatasetReport(Reference  uri) {
+		super(uri);
+		
+	}
 	
-	protected OTDatasetReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {
-		super(String.format("%s/query/compound/url/all?search=%s%s%s",
+	protected OTDatasetReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize, String representation) throws Exception {
+		super(String.format("%s/query/compound/url%s?search=%s%s%s",
 				application,
+				representation==null?"/all":representation,
 				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
 				features==null?"":"&",
 				features==null?"":features.getQuery(null).getQueryString()
@@ -52,7 +57,6 @@ public abstract class OTDatasetReport extends OTObject {
 
 	
 	public OTDatasetReport write(Writer writer) {
-		
 		ClientResource client = new ClientResource(uri);
 		Representation r = null;
 		try {
@@ -65,14 +69,16 @@ public abstract class OTDatasetReport extends OTObject {
 				extractRowKeyAndData(line,row,row==0?header:values);
 				if (row>0)
 					writeRow(row,values,writer);
-				else 
+				else {
 					for (int i=0;i < header.size();i++)
 						header.set(i, header.get(i).replace("http://www.opentox.org/api/1.1#", ""));
+					writeHeader(writer);
+				}
 				row++;
 			}
 
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		} finally {
 			try { writer.write(footer()); }catch (Exception x) {}
 			try {r.release();} catch (Exception x) {}
@@ -81,7 +87,7 @@ public abstract class OTDatasetReport extends OTObject {
 		return this;
 	}
 
-	
+	public void writeHeader(Writer writer) throws IOException {}
 	public void extractRowKeyAndData(String line, int row, List<String> values) throws Exception {
 		values.clear();
 		QuotedTokenizer st = new QuotedTokenizer(line,',');
