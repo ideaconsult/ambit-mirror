@@ -15,6 +15,8 @@ import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.task.dsl.OTDatasetReport;
 import ambit2.rest.task.dsl.OTDatasetScrollableReport;
 import ambit2.rest.task.dsl.OTDatasetTableReport;
+import ambit2.rest.task.dsl.OTFeature;
+import ambit2.rest.task.dsl.OTFeatures;
 import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.task.dsl.OTValidation;
 
@@ -22,6 +24,7 @@ public class ReportingResource  extends FastoxStepResource {
 	public static final String resource = "/report";
 	public static final String resourceType = "type";
 	protected String[] search;
+	protected OTFeatures features;
 	protected int page = 0;
 	protected int pageSize = 10;
 	protected display_mode mode = display_mode.scrollable;
@@ -107,7 +110,18 @@ public class ReportingResource  extends FastoxStepResource {
 			header = Boolean.parseBoolean(form.getFirstValue("header"));
 		} catch (Exception x) {
 			header = false;
-		}			
+		}
+		try {
+			String[] ff = form.getValuesArray(OpenTox.params.feature_uris.toString());
+			for (String f:ff) 
+				if ((f!=null) && (!"".equals(f))) {
+					if (features==null) features = OTFeatures.features();
+					features.add(OTFeature.feature(f.trim()));
+				}
+			
+		} catch (Exception x) {
+			features = null;
+		}					
 	}
 	@Override
 	protected boolean isMandatory(String param) {
@@ -144,7 +158,7 @@ public class ReportingResource  extends FastoxStepResource {
 					getRequest().getRootRef(),
 					getRequest().getRootRef()
 					));
-
+					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",getRequest().getRootRef()));
 					writer.write(js());
 					
 				}
@@ -153,19 +167,19 @@ public class ReportingResource  extends FastoxStepResource {
 					switch (mode) {
 					case scrollable: {
 						report = OTDatasetScrollableReport.
-						report(OTDataset.dataset(q),wizard.getService(SERVICE.application).toString(),page,pageSize).
+						report(OTDataset.dataset(q),features,wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
 						break;
 					}
 					case table : {
 						report = OTDatasetTableReport.
-						report(OTDataset.dataset(q),wizard.getService(SERVICE.application).toString(),page,pageSize).
+						report(OTDataset.dataset(q),features,wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
 						break;
 					}
 					default: {
 						report = OTDatasetScrollableReport.
-						report(OTDataset.dataset(q),wizard.getService(SERVICE.application).toString(),page,pageSize).
+						report(OTDataset.dataset(q),features,wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
 					}
 				    }
