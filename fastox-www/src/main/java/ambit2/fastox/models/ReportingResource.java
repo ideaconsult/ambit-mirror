@@ -35,6 +35,7 @@ public class ReportingResource  extends FastoxStepResource {
 	protected display_mode mode = display_mode.scrollable;
 	protected boolean header = true;
 	protected Form params;
+	protected OTModels models;
 	protected enum display_mode {
 		table,
 		scrollable
@@ -140,8 +141,18 @@ public class ReportingResource  extends FastoxStepResource {
 		}
 		if ((features == null) || (features.size()==0))
 		try {
-			OTModels models = getSession(getUserKey()).getSelectedModels();
+			//OTModels models = getSession(getUserKey()).getSelectedModels();
+			/*
+			models = OTModels.models();
+			models.
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/2")).
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/8")).
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/9")).
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/17"));
+				//getSession(getUserKey()).getSelectedModels()		
+			models.load(new OTProperty[] {OTProperty.predictedVariables});
 			features = models.predictedVariables();
+			*/
 		} catch (Exception xx) {
 			features = null;
 		}
@@ -151,7 +162,7 @@ public class ReportingResource  extends FastoxStepResource {
 		return false;
 	}
 
-	 public String js() {
+	 public static String js() {
 		 return String.format(
 		 "<script type=\"text/javascript\">\n"+
 		 "function contentDisp(url,page,data)\n"+
@@ -184,29 +195,19 @@ public class ReportingResource  extends FastoxStepResource {
 					getRequest().getRootRef()
 					));
 					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",getRequest().getRootRef()));
-					writer.write(js());
+					writer.write(ReportingResource.js());
 					
 				}
 				for (String q : search) {
 					OTDatasetReport report;
 					switch (mode) {
 					case scrollable: {
-						OTModels models = getSession(getUserKey()).getSelectedModels();
-						/*
-						OTModels models = OTModels.models();
-						models.
-							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/2")).
-							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/8")).
-							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/9")).
-							add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/17"));
-							//getSession(getUserKey()).getSelectedModels()
-							 
-							 */
-						models.load(new OTProperty[] {OTProperty.predictedVariables});
+
 						report = ToxPredictDatasetReport.
-						report(OTDataset.dataset(q),models,
+						report(OTDataset.dataset(q),features,
 									wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
+						((ToxPredictDatasetReport)report).setModels(models);
 						break;
 					}
 					case table : {

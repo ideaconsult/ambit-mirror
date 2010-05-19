@@ -24,6 +24,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import ambit2.fastox.ModelTools;
+import ambit2.fastox.models.ReportingResource;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
@@ -173,6 +174,8 @@ public abstract class WizardResource extends ServerResource {
 		w.write("</head>\n");
 		w.write("<body>");
 		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
+		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/scrollable.css\" type=\"text/css\" media=\"screen\">",baseReference));
+		w.write(ReportingResource.js());
 
 	}
 	public void top(Writer writer) throws IOException {
