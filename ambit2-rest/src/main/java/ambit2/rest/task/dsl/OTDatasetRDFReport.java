@@ -212,7 +212,7 @@ public class OTDatasetRDFReport extends OTObject {
 		writer.write("\n<tr class='chemicalid'><td width='200px'>\n");
 		writer.write(String.format(
 				"%d.<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
-				row+page*pageSize,compound,compound));
+				row+page*pageSize+1,compound,compound));
 		
 		writer.write("\n</td><td align='left'>\n");
 		
