@@ -29,7 +29,7 @@ public class Step4Resource extends FastoxStepResource {
 			writer.write(x.getMessage());
 		}
 
-		renderCompounds(writer,key);
+		//renderCompounds(writer,key);
 		super.renderFormContent(writer, key);
 	}
 

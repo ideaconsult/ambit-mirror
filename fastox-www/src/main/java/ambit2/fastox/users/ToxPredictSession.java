@@ -3,9 +3,6 @@ package ambit2.fastox.users;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import org.restlet.data.Form;
-import org.restlet.data.Reference;
-
 import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
@@ -29,6 +26,7 @@ public class ToxPredictSession implements IToxPredictSession {
 	}
 	protected IToxPredictUser user;
 	protected String datasetURI;
+	/*
 	protected Form features;
 	public Form getFeatures() {
 		return features;
@@ -36,6 +34,7 @@ public class ToxPredictSession implements IToxPredictSession {
 	public void setFeatures(Form features) {
 		this.features = features;
 	}
+	*/
 	protected String endpoint = "http://www.opentox.org/echaEndpoints.owl#Endpoints";
 	protected String endpointName = "Endpoints";
 	protected int allModels = 0;
@@ -203,6 +202,7 @@ public class ToxPredictSession implements IToxPredictSession {
 		search = s;
 		
 	}
+	/*
 	public Reference getSearchQuery() {
 		Reference ref = new Reference(getDatasetURI());
 		if (getFeatures()!=null)
@@ -210,6 +210,6 @@ public class ToxPredictSession implements IToxPredictSession {
 			ref.addQueryParameter("feature_uris[]", value);
 		return ref;
 	}
-	
+	*/
 	
 }

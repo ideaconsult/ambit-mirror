@@ -20,10 +20,12 @@ public interface IToxPredictSession {
 	public void setEndpointName(String endpointName);
 	
 	public String getDatasetURI();
-	public Reference getSearchQuery();
+	//public Reference getSearchQuery();
 	public void setDatasetURI(String datasetURI);
+	/*
 	public Form getFeatures();
 	public void setFeatures(Form features);	
+	*/
 	public void clearModels();
 	public void addModel(String model, Object status) ;
 	public void removeModel(String model);

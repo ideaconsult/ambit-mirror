@@ -98,7 +98,11 @@ public class Step2Processor extends StepProcessor {
 					ref = OTDataset.dataset().withDatasetService(uri).copy(dataset).getUri();
 			}
 			*/
-			if (ref != null) session.setDatasetURI(ref.toString());
+			if (ref != null) {
+				session.setDatasetURI(ref.toString());
+
+			}
+			
 			form.clear();
 			return form;
 		} catch (Exception x) {

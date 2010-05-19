@@ -154,7 +154,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		}
 		return null;
 	}	
-	
+	/*
 	protected int renderCompounds1(Writer writer,String key) throws IOException {
 		try {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
@@ -169,7 +169,7 @@ public abstract class FastoxStepResource extends WizardResource {
 			throw new IOException(x.getMessage());
 		} 		
 	}	
-
+	*/
 	protected void renderCompoundsNew(Writer writer,String key, Model jenaModel) throws IOException {
 		ClientResource client = null;
 		Representation r = null;
@@ -194,6 +194,7 @@ public abstract class FastoxStepResource extends WizardResource {
 		}
 		
 	}
+	/*
 	protected int renderCompounds(Writer writer,String key) throws IOException {
 		try {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements
@@ -208,7 +209,7 @@ public abstract class FastoxStepResource extends WizardResource {
 			throw new IOException(x.getMessage());
 		} 		
 	}
-
+	*/
 	@Override
 	protected Representation processForm(Representation entity, Variant variant)
 			throws ResourceException {

@@ -298,7 +298,7 @@ public class DatasetTools {
 			try {qe.close();} catch (Exception x) {}
 		}		
 	}	
-	
+	/*
 	public static int renderDataset1(IToxPredictSession session,Model model, Writer writer,String more,Reference rootReference,String search,String condition) throws Exception {
 		QueryExecution qe = null;
 		try {
@@ -352,9 +352,7 @@ public class DatasetTools {
 				
 				writer.write("</tr>");
 				//renderCompoundFeatures(queryCompoundFeatures,model,writer, compound,String.format(querySameAs,"<http://www.opentox.org/echaEndpoints.owl#Carcinogenicity>"),rootReference);
-				/*
-				renderCompoundDatasets(writer,compoundURI);
-				*/
+	
 				writer.write("</table></td></tr>");
 				
 				writer.write("<tr>");
@@ -374,7 +372,7 @@ public class DatasetTools {
 			try {qe.close();} catch (Exception x) {}
 		}		
 	}
-	
+	*/
 	public static int renderDataset(Model model, Writer writer,String more,Reference rootReference) throws Exception {
 		QueryExecution qe = null;
 		try {
