@@ -10,6 +10,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -22,6 +23,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryRDFReporter;
@@ -54,6 +56,13 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter;
 	protected Comparator<Property> comp;
 	
+	protected Profile groupProperties;
+	public Profile getGroupProperties() {
+		return groupProperties;
+	}
+	public void setGroupProperties(Profile gp) {
+		this.groupProperties = gp;
+	}
 	protected Template template;
 	protected List<Property> header = null;
 	public Template getTemplate() {
@@ -64,8 +73,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
 	protected Resource dataset;
 	
-	public DatasetRDFReporter(Request request,MediaType mediaType, Template template) {
+	public DatasetRDFReporter(Request request,MediaType mediaType, Template template,Profile groupedProperties) {
 		super(request,mediaType);
+		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
 		propertyReporter = new PropertyRDFReporter(request,mediaType);
@@ -86,6 +96,16 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected void initProcessors() {
 		
 		getProcessors().clear();
+		if (getGroupProperties()!=null) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});		
+		
 		if ((getTemplate()!=null) && (getTemplate().size()>0)) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
@@ -202,7 +222,16 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
 	protected List<Property> template2Header(Template template, boolean propertiesOnly) {
 		List<Property> h = new ArrayList<Property>();
-		Iterator<Property> it = template.getProperties(true);
+		Iterator<Property> it;
+		if (groupProperties!=null) {
+			it = groupProperties.getProperties(true);
+			while (it.hasNext()) {
+				Property t = it.next();
+				h.add(t);
+			}
+		}			
+		
+		it = template.getProperties(true);
 		while (it.hasNext()) {
 			Property t = it.next();
 			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
