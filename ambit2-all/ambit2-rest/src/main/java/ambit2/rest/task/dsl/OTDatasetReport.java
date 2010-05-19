@@ -57,10 +57,14 @@ public abstract class OTDatasetReport extends OTObject {
 
 	
 	public OTDatasetReport write(Writer writer) {
-		ClientResource client = new ClientResource(uri);
+		Reference ref = uri.clone();
+		Form form = ref.getQueryAsForm();;
+		ref.setQuery("");
+		ClientResource client = new ClientResource(ref);
 		Representation r = null;
 		try {
-			r = client.get(MediaType.TEXT_CSV);
+			
+			r = client.post(form.getWebRepresentation(),MediaType.TEXT_CSV);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
 			String line = null;
 			int row= 0;
@@ -124,8 +128,8 @@ public abstract class OTDatasetReport extends OTObject {
 	public String pageNavigator()  throws Exception  {
 		
 		StringBuilder b = new StringBuilder();
-		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
-		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
+		b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
+		b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
 		
 		b.append(String.format("\n<a href='#' onClick=\"contentDisp('%s',%d,'%s');\">&laquo;</a>&nbsp;",
 				requestref.getBaseRef(),

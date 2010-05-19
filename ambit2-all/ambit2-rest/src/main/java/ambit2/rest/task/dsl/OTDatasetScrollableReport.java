@@ -71,7 +71,7 @@ public class OTDatasetScrollableReport extends OTDatasetReport {
 		*/
 		writer.write("<tbody>");
 		for (int i=8; i< header.size(); i++) {
-			writer.write(i%3==0?"<thead>":""); //test
+			//writer.write(i%3==0?"<thead>":""); //test
 			writer.write("<tr>");
 
 			writer.write("<td></td>"); //test
@@ -85,7 +85,7 @@ public class OTDatasetScrollableReport extends OTDatasetReport {
 			writer.write(String.format("<label title='%s'>%s%s</label>",v,v.length()>100?v.substring(0,100):v,v.length()>100?"...":""));
 			writer.write("</td>");
 			writer.write("</tr>");
-			writer.write(i%3==0?"</thead>":""); //test
+			//writer.write(i%3==0?"</thead>":""); //test
 		}	
 		writer.write("</tbody>");
 		writer.write("</table>");
