@@ -12,7 +12,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.wizard.Wizard.SERVICE;
@@ -90,10 +89,17 @@ public class Step2Resource extends FastoxStepResource {
 		return super.createTabs();
 	}
 	public void renderFormContent(Writer writer, String key) throws IOException {
+		try {
+		renderCompoundsNew(writer, key,null);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		/*
 		if (renderCompounds1(writer,key)==0) {
 			session.setError(key,new NotFoundException("We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again."));
 			getResponse().redirectSeeOther(getRequest().getReferrerRef());
 		}
+		*/
 		super.renderFormContent(writer, key);
 	}
 

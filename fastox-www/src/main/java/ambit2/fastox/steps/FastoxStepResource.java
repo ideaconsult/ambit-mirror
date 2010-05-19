@@ -170,6 +170,30 @@ public abstract class FastoxStepResource extends WizardResource {
 		} 		
 	}	
 
+	protected void renderCompoundsNew(Writer writer,String key, Model jenaModel) throws IOException {
+		ClientResource client = null;
+		Representation r = null;
+		try {
+	
+			client = new ClientResource(
+					new Reference(
+							String.format("%s/user/%s/report/Dataset?header=false&page=0&search=%s",
+									getRequest().getRootRef(),
+									session.getUser().getId(),
+									Reference.encode(session.getDatasetURI()))
+					));
+			r = client.get(MediaType.TEXT_HTML);
+			writer.write(r.getText());
+
+		} catch (Exception x) {
+			session.setError(key,x);
+			throw new IOException(x.getMessage());
+		} finally {
+			try { r.release();} catch (Exception x) {}
+			try { client.release();} catch (Exception x) {}
+		}
+		
+	}
 	protected int renderCompounds(Writer writer,String key) throws IOException {
 		try {
 			writer.write("<br style='clear:both;' clear='all' />\n"); // Safari is not happy otherwise with floating elements

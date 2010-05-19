@@ -13,9 +13,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.task.dsl.OTAlgorithm;
 import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTDatasetRDFReport;
 import ambit2.rest.task.dsl.OTDatasetReport;
 import ambit2.rest.task.dsl.OTDatasetScrollableReport;
 import ambit2.rest.task.dsl.OTDatasetTableReport;
@@ -26,6 +26,25 @@ import ambit2.rest.task.dsl.OTModels;
 import ambit2.rest.task.dsl.OTValidation;
 
 public class ReportingResource  extends FastoxStepResource {
+	protected static OTFeatures endpoints;
+	protected static String[] endpoints_names = {
+		"http://www.opentox.org/echaEndpoints.owl#AcuteInhalationToxicity",
+		"http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",
+		"http://www.opentox.org/echaEndpoints.owl#BCF_fish",
+		"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+		"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa",
+		"http://www.opentox.org/echaEndpoints.owl#Endpoints",
+		"http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion",
+		"http://www.opentox.org/echaEndpoints.owl#Gastrointestinal_absorption",
+		"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+		"http://www.opentox.org/echaEndpoints.owl#MolecularWeight",
+		"http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+		"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+		"http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
+		"http://www.opentox.org/echaEndpoints.owl#Receptor-binding_specify_receptor",
+		"http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion",
+		"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
+	};
 	public static final String resource = "/report";
 	public static final String resourceType = "type";
 	protected String[] search;
@@ -103,6 +122,15 @@ public class ReportingResource  extends FastoxStepResource {
 		super.doInit();
 		Form form = getParams();
 		search = form.getValuesArray("search");
+		if (endpoints==null)  try {
+			endpoints = OTFeatures.features();
+			for (String name:endpoints_names) {
+				Reference featureRef = new Reference(wizard.getService(SERVICE.feature));
+				featureRef.addQueryParameter(OpenTox.params.sameas.toString(),name);
+				endpoints.read(featureRef.toString());
+			}
+		
+		} catch (Exception x) {}
 		try {
 			type = report_type.valueOf(getRequest().getAttributes().get(resourceType).toString());
 		} catch (Exception x) {
@@ -130,6 +158,7 @@ public class ReportingResource  extends FastoxStepResource {
 		}
 		try {
 			String[] ff = form.getValuesArray(OpenTox.params.feature_uris.toString());
+			if ((ff!=null) && (ff.length>0))
 			for (String f:ff) 
 				if ((f!=null) && (!"".equals(f))) {
 					if (features==null) features = OTFeatures.features();
@@ -139,23 +168,32 @@ public class ReportingResource  extends FastoxStepResource {
 		} catch (Exception x) {
 			features =null;
 		}
+		/*
 		if ((features == null) || (features.size()==0))
 		try {
-			//OTModels models = getSession(getUserKey()).getSelectedModels();
-			/*
+			
+			OTModels models = getSession(getUserKey()).getSelectedModels();
+		
 			models = OTModels.models();
 			models.
 				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/2")).
 				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/8")).
 				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/9")).
-				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/17"));
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/17")).
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/16")).
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/13")).
+				add(OTModel.model("http://apps.ideaconsult.net:8080/ambit2/model/33"));
 				//getSession(getUserKey()).getSelectedModels()		
 			models.load(new OTProperty[] {OTProperty.predictedVariables});
+			
 			features = models.predictedVariables();
-			*/
+			
+			
+
 		} catch (Exception xx) {
 			features = null;
 		}
+		*/
 	}
 	@Override
 	protected boolean isMandatory(String param) {
@@ -202,28 +240,31 @@ public class ReportingResource  extends FastoxStepResource {
 					OTDatasetReport report;
 					switch (mode) {
 					case scrollable: {
-
-						report = ToxPredictDatasetReport.
-						report(OTDataset.dataset(q),features,
+						OTModels models = getSession(getUserKey()).getSelectedModels();
+						OTDatasetRDFReport rep = OTDatasetRDFReport.
+						report(OTDataset.dataset(q),endpoints,models==null?null:models.predictedVariables(),
 									wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
-						((ToxPredictDatasetReport)report).setModels(models);
+						//((ToxPredictDatasetReport)report).setModels(models);
+						rep.write(writer);
 						break;
 					}
 					case table : {
 						report = OTDatasetTableReport.
 						report(OTDataset.dataset(q),features,wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
+						report.write(writer);
 						break;
 					}
 					default: {
 						report = OTDatasetScrollableReport.
 						report(OTDataset.dataset(q),features,wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
+						report.write(writer);
 					}
 				    }
 					
-					report.write(writer);
+					
 				}	
 				if (header) {
 					writer.write("</body></html>");
@@ -274,5 +315,8 @@ public class ReportingResource  extends FastoxStepResource {
 
 		if (params==null) params = new Form(entity);
 		return super.get(variant);
+	}
+	@Override
+	public void help(Writer writer) throws IOException {
 	}
 }

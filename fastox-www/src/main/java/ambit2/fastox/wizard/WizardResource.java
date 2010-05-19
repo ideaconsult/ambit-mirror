@@ -390,7 +390,7 @@ public abstract class WizardResource extends ServerResource {
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
-					if (x.getMessage().equals("Not Found")) {
+					if ((x.getMessage()!=null) && x.getMessage().equals("Not Found")) {
 						ResourceException xx = new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
 								"We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again.");
 						session.setError(step.getTitle(),xx);

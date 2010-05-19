@@ -8,6 +8,7 @@ import java.util.List;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.resource.ClientResource;
 
 import ambit2.fastox.DatasetTools;
 import ambit2.fastox.ModelTools;
@@ -26,6 +27,19 @@ public class Step6Resource extends FastoxStepResource {
 	@Override
 	public void renderFormHeader(Writer writer,String key) throws IOException {
 	}
+	
+
+		
+	@Override
+	public void renderFormContent(Writer writer,String key) throws IOException {
+			
+		try {
+			renderCompoundsNew(writer,key,store);
+		} catch (Exception x) {
+			session.setError(key,x);
+		}
+	}
+	/*		
 	@Override
 	public void renderFormContent(Writer writer,String key) throws IOException {
 
@@ -35,14 +49,7 @@ public class Step6Resource extends FastoxStepResource {
 			session.setError(key,x);
 		}
 	
-		/*
-		
-		try {
-			renderRDFModels(writer, session, false, getRequest().getRootRef(),false);
-		} catch (Exception x) {
-			writer.write(x.getMessage());
-		}
-		*/
+
 		try {
 			store = DatasetTools.retrieveDataset(store,session.getSearchQuery());
 		} catch (Exception x) {
@@ -68,6 +75,7 @@ public class Step6Resource extends FastoxStepResource {
 		}		
 		//super.renderFormContent(writer, key);
 	}
+	*/
 	@Override
 	public void renderResults(Writer writer,String key) throws IOException {
 	}

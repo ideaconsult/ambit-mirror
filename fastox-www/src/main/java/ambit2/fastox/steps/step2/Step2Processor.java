@@ -1,8 +1,5 @@
 package ambit2.fastox.steps.step2;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -12,12 +9,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.CASProcessor;
@@ -33,8 +26,6 @@ import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTDatasets;
 
 public class Step2Processor extends StepProcessor {
 
@@ -63,6 +54,7 @@ public class Step2Processor extends StepProcessor {
 	
 			Reference uri = Wizard.getInstance(WizardMode.A).getService(SERVICE.dataset);
 			Reference ref = getSearchQuery(form, wizard,max,session);
+			/*
 			logger.info(ref);
 			if ("".equals(ref.getQuery())) {
 				
@@ -98,6 +90,7 @@ public class Step2Processor extends StepProcessor {
 					ref = dataset.getUri();
 				}
 			} 
+			*/
 			/*
 			else {
 				OTDataset dataset = OTDataset.dataset().withUri(ref).withDatasetService(uri);
@@ -217,7 +210,7 @@ public class Step2Processor extends StepProcessor {
 		} else if (dataset != null) {
 			topRef = new Reference(dataset);
 			query.removeAll(FastoxStepResource.params.max.toString());
-			query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
+			//query.add(FastoxStepResource.params.max.toString(),Integer.toString(pageSize));
 			session.setSearchMode(SearchMode.dataset);
 			
 		} else {
@@ -229,19 +222,14 @@ public class Step2Processor extends StepProcessor {
 				throw new StepException("dataset",String.format("Please select a dataset!"));
 			}
 		}
-		
+		/*
 		String[] s= new String[] {  "ChemicalName","IUPACName","CASRN","EINECS"};//,"REACHRegistrationDate"};
 		
 		
 		if (session.getFeatures()==null) session.setFeatures(new Form());
 		
 		for (String n:s)  {
-			/*
-			Reference fquery = wizard.getService(SERVICE.feature).clone();
-			fquery.addQueryParameter("sameas",n);
-			
-			query.add("feature_uris[]",Reference.encode(fquery.toString())
-			*/
+
 			session.getFeatures().add("feature_uris[]",
 					String.format("%s?sameas=%s",wizard.getService(SERVICE.feature),
 							//Reference.encode(String.format("http://www.opentox.org/api/1.1#%s",n))));
@@ -257,6 +245,7 @@ public class Step2Processor extends StepProcessor {
 					topRef.getHierarchicalPart(),
 					OpenTox.URI.feature.getURI()));
 		}
+		*/
 
 		topRef.setQuery(query.getQueryString());
 	
