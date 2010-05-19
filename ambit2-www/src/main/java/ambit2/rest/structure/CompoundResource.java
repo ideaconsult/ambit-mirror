@@ -191,7 +191,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate()),variant.getMediaType());			
+					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
