@@ -1,9 +1,14 @@
 package ambit2.rest.task.dsl;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
 public abstract class OTContainers<T extends OTObject>  extends OTProcessingResource {
 	protected List<T> items;
@@ -91,4 +96,26 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 		}
 		return b.toString();
 	}
+	 
+		public OTContainers<T> read(String uri) throws Exception {
+			ClientResource client = null;
+			Representation r = null;
+			try {
+		
+				client = new ClientResource(new Reference(uri));
+						
+				r = client.get(MediaType.TEXT_URI_LIST);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
+				String line = null;
+				while ((line = reader.readLine())!=null) {
+					add(createItem(line.trim()));
+				}					
+				return this;
+			} catch (Exception x) {
+				throw new Exception(x.getMessage());
+			} finally {
+				try { r.release();} catch (Exception x) {}
+				try { client.release();} catch (Exception x) {}
+			}
+		}
 }
