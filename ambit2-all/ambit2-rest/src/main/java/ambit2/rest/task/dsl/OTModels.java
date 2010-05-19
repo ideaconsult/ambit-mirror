@@ -31,6 +31,7 @@ public class OTModels extends OTContainers<OTModel> {
 		 return this;
 	 }
 	 public OTFeatures predictedVariables() throws Exception  {
+		 if (items==null) return null;
 		 OTFeatures features = OTFeatures.features();
 		 for (OTModel model: items)
 			 features.add(model.predictedVariables);
