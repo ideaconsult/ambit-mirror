@@ -178,7 +178,14 @@ public class ModelTools {
 		writer.write(String.format("<th>%s</th>",status?"Status":""));
 		writer.write("</tr></thead><tbody>");
 	}
-	
+	 protected static String getString(RDFNode node)  {
+		    if (node == null) return "";
+			if (node.isLiteral()) return ((Literal)node).getString();
+			else if (node.isResource()) return ((Resource)node).getURI();
+			else if (node.isAnon()) return null;
+			else return node.toString();
+	 }
+
 	public static int renderModelTableRow(String modelURI,Writer writer, QuerySolution solution,
 			 IToxPredictSession session,
 			 boolean status,Reference rootReference, int record)  throws IOException {
@@ -188,8 +195,10 @@ public class ModelTools {
 		if (modelUri==null) return 0;
 
 		RDFNode algo = solution.getResource("algorithm");
-		Literal algName = solution.getLiteral("algName");
-			
+		
+		String algName = getString(solution.get("algName"));
+		
+		
 		Literal name = solution.getLiteral("title");
 		Resource dataset = solution.getResource("TrainingDataset");
 		
@@ -242,7 +251,7 @@ public class ModelTools {
 				rootReference,
 				session.getUser().getId(),
 				Reference.encode(algo.isURIResource()?((Resource)algo).getURI():algo.toString()))
-				,"Algorithm"));
+				,algName!=null?algName:"Algorithm"));
 
 
 		writer.write("</td>");
