@@ -27,6 +27,7 @@ public class OTFeatures  extends OTProcessingContainers<OTFeature> {
 		return OpenTox.params.feature_uris.toString();
 	}
 	public Form getQuery(Form form) throws Exception {
+		if (getItems()==null) return null;
 		for (OTFeature feature: getItems()) {
 			if (form == null) form = new Form();
 			form.add(getParamName(),feature.uri.toString());
