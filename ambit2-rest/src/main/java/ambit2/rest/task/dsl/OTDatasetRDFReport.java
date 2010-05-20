@@ -165,8 +165,8 @@ public class OTDatasetRDFReport extends OTObject {
 	
 				QuerySolution solution = results.next();
 				Resource compound = solution.getResource("c");
-				String title = solution.getLiteral("title").getString();
-				String value = solution.getLiteral("value").getString();		
+				String title = getString(solution.get("title"));
+				String value = getString(solution.get("value"));		
 				
 				title = title.replace("http://www.opentox.org/api/1.1#", "");
 				compoundURI = compound.getURI();
@@ -207,9 +207,9 @@ public class OTDatasetRDFReport extends OTObject {
 	}
 
 	public void newRow(int row, String compound,String title, String value, Writer writer) throws IOException {
-		writer.write("\n<table class='chemicalid' width='95%' border='0'>\n");
+		writer.write("\n<table class='tablesorter' width='95%' border='0'>\n");
 		
-		writer.write("\n<tr class='chemicalid'><td width='200px'>\n");
+		writer.write("\n<tr><td width='200px'>\n");
 		writer.write(String.format(
 				"%d.<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
 				row+page*pageSize+1,compound,compound));
@@ -296,7 +296,7 @@ public class OTDatasetRDFReport extends OTObject {
 			else return node.toString();
 	 }
 	 protected void writeData(String cmp, Writer writer) throws Exception {
-		    writer.write("\n<table class='tablesorter	'>\n");
+		    writer.write("\n<table class='tablesorter'>\n");
 			QueryExecution qe = null;
 			
 			try {

@@ -128,8 +128,8 @@ public abstract class OTDatasetReport extends OTObject {
 	public String pageNavigator()  throws Exception  {
 		
 		StringBuilder b = new StringBuilder();
-		b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
-		b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
+		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
+		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
 		
 		b.append(String.format("\n<a href='#' onClick=\"contentDisp('%s',%d,'%s');\">&laquo;</a>&nbsp;",
 				requestref.getBaseRef(),

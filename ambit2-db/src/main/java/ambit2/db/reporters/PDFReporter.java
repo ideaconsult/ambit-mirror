@@ -67,7 +67,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		r.setPage(0);
 		r.setPageSize(1);
 		getProcessors().add(new ProcessorStructureRetrieval(r));
-		if (getGroupProperties()!=null) 
+		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
