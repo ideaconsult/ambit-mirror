@@ -128,15 +128,22 @@ public class ReportingResource  extends FastoxStepResource {
 		super.doInit();
 		Form form = getParams();
 		search = form.getValuesArray("search");
-		if (endpoints==null)  try {
+		if (endpoints==null) try {
 			endpoints = OTFeatures.features();
 			for (String name:endpoints_names) {
+			try {				
 				Reference featureRef = new Reference(wizard.getService(SERVICE.feature));
 				featureRef.addQueryParameter(OpenTox.params.sameas.toString(),name);
 				endpoints.read(featureRef.toString());
+			} catch (Exception x) {
+				System.out.println(name);
+				x.printStackTrace();
 			}
-		
-		} catch (Exception x) {}
+			}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}	
+
 		try {
 			type = report_type.valueOf(getRequest().getAttributes().get(resourceType).toString());
 		} catch (Exception x) {
