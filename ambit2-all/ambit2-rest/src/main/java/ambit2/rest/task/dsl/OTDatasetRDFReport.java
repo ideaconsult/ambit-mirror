@@ -104,10 +104,10 @@ public class OTDatasetRDFReport extends OTObject {
 				application,
 				representation==null?"/all":representation,
 				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
-				features==null?"":"&",
-				features==null?"":features.getQuery(null).getQueryString(),
-				endpoints==null?"":"&",
-				endpoints==null?"":endpoints.getQuery(null).getQueryString()						
+				(features==null)|| (features.size()==0)?"":"&",
+				(features==null)||(features.size()==0)?"":features.getQuery(null).getQueryString(),
+				(endpoints==null)||(endpoints.size()==0)?"":"&",
+				(endpoints==null)||(endpoints.size()==0)?"":endpoints.getQuery(null).getQueryString()						
 				));
 		this.application = application;
 		this.dataset = dataset;
