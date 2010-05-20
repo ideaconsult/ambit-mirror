@@ -37,13 +37,17 @@ public class ReportingResource  extends FastoxStepResource {
 		"http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion",
 		"http://www.opentox.org/echaEndpoints.owl#Gastrointestinal_absorption",
 		"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+		"http://www.opentox.org/echaEndpoints.owl#In_vivo_pre-_peri-_post_natal_development_and_or_fertility_1_or_2_gen._Study_or_enhance",
 		"http://www.opentox.org/echaEndpoints.owl#MolecularWeight",
 		"http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
 		"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
 		"http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
 		"http://www.opentox.org/echaEndpoints.owl#Receptor-binding_specify_receptor",
+		"http://www.opentox.org/echaEndpoints.owl#Receptor_binding_and_gene_expression",
 		"http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion",
-		"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
+		"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
+		"http://www.opentox.org/echaEndpoints.owl#ToxicoKinetics"
+		
 	};
 	public static final String resource = "/report";
 	public static final String resourceType = "type";
