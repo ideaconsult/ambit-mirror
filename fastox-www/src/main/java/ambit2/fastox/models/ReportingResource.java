@@ -59,6 +59,8 @@ public class ReportingResource  extends FastoxStepResource {
 	protected boolean header = true;
 	protected Form params;
 	protected OTModels models;
+	protected boolean showEndpoints = true;
+	protected boolean showModels = true;
 	protected enum display_mode {
 		table,
 		scrollable
@@ -161,6 +163,16 @@ public class ReportingResource  extends FastoxStepResource {
 			header = false;
 		}
 		try {
+			showEndpoints = Boolean.parseBoolean(form.getFirstValue("endpoints"));
+		} catch (Exception x) {
+			showEndpoints = true;
+		}	
+		try {
+			showModels = Boolean.parseBoolean(form.getFirstValue("models"));
+		} catch (Exception x) {
+			showModels = true;
+		}			
+		try {
 			String[] ff = form.getValuesArray(OpenTox.params.feature_uris.toString());
 			if ((ff!=null) && (ff.length>0))
 			for (String f:ff) 
@@ -246,7 +258,9 @@ public class ReportingResource  extends FastoxStepResource {
 					case scrollable: {
 						OTModels models = getSession(getUserKey()).getSelectedModels();
 						OTDatasetRDFReport rep = OTDatasetRDFReport.
-						report(OTDataset.dataset(q),endpoints,models==null?null:models.predictedVariables(),
+						report(OTDataset.dataset(q),
+									showEndpoints?endpoints:null,
+									showModels?models==null?null:models.predictedVariables():null,
 									wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
 						//((ToxPredictDatasetReport)report).setModels(models);
