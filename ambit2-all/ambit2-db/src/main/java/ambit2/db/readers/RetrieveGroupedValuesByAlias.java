@@ -52,6 +52,7 @@ public class RetrieveGroupedValuesByAlias extends AbstractQuery<Profile,IStructu
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
+		if ((getFieldname()==null) || (getFieldname().size()==0)) throw new AmbitException("no params");
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class,getValue().getIdchemical()));
 		return params;	
@@ -60,11 +61,14 @@ public class RetrieveGroupedValuesByAlias extends AbstractQuery<Profile,IStructu
 	public String getSQL() throws AmbitException {
 		StringBuilder b = new StringBuilder();
 		String d = "";
+		int count = 0;
 		Iterator<Property> p = getFieldname().iterator();
 		while (p.hasNext()) {
 			b.append(String.format("%s\"%s\"",d,p.next().getLabel()));
 			d = ",";
+			count++;
 		}
+		if (count==0) throw new AmbitException("Empty params");
 		return String.format(sql_grouped,b.toString());
 	}
 
