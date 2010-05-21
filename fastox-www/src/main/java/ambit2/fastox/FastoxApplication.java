@@ -31,6 +31,7 @@ import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.toxpredict.simple.SimplePredict;
 
 public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 	
@@ -76,6 +77,8 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         router.attach(SimpleTaskResource.resource,ToxPredictTaskResource.class);
         router.attach(SimpleTaskResource.resource+SimpleTaskResource.resourceID,ToxPredictTaskResource.class);
         
+        router.attach("/simple",SimplePredict.class);
+        
         this.authenticatior = createAuthenticator();
         router.attach(String.format("/admin/{%s}",UserResource.resourceKey),authenticatior);
         authenticatior.setNext(AdminResource.class);        
@@ -99,6 +102,8 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         userRouter.attach(String.format("%s/{%s}",ReportingResource.resource,ReportingResource.resourceType),
         				ReportingResource.class);
         userRouter.attach(FeaturesResource.resource,FeaturesResource.class);
+        
+       
         
         for (WizardMode mode : WizardMode.values()) {
             Wizard wizard = Wizard.getInstance(mode);
