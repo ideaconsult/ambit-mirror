@@ -137,8 +137,8 @@ public class OTModel extends OTProcessingResource {
 			OTDatasets datasets = OTDatasets.datasets();
 			datasets.withDatasetService(dataset_service);
 			
-			for (OTFeature feature : features.getItems())
-				if ((feature!=null) && (feature.getAlgorithm()!=null)) {
+			for (OTFeature feature : features.getItems()) {
+				if ((feature!=null) && (feature.algorithm().getAlgorithm()!=null)) {
 					try {
 						OTDataset subset = inputDataset.filterByFeature(feature,false);
 						if ((subset!=null) && subset.isEmpty()) {
@@ -158,6 +158,7 @@ public class OTModel extends OTProcessingResource {
 						pool.add(task);						
 					}
 				}
+			}
 			if (pool.size()>0) 
 				datasets = tasksCompleted(pool).taskResults(pool,datasets);
 			//ok, all datasets in place, merge into one to submit for model calculation
