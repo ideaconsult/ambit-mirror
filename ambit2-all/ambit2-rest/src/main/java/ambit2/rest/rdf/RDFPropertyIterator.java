@@ -112,9 +112,12 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			try { name = getTitle(newEntry);	} catch (Exception x) {	}
 			
 			try { 
-				RDFNode resource = newEntry.getProperty(OWL.sameAs).getObject();
-				if (resource.isLiteral()) label = ((Literal)resource).getString();
-				else label = resource.isURIResource()?((Resource)resource).getURI():resource.toString();
+				Statement t = newEntry.getProperty(OWL.sameAs);
+				if (t!=null) {
+					RDFNode resource = t.getObject();
+					if (resource.isLiteral()) label = ((Literal)resource).getString();
+					else label = resource.isURIResource()?((Resource)resource).getURI():resource.toString();
+				}
 			}	catch (Exception x) {
 				label = Property.guessLabel(name);
 			}	
