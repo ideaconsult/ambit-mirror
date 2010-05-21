@@ -181,7 +181,7 @@ where s2.idchemical is null;
 		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
 			;
 		else
-			params.add(new QueryParam<String>(String.class, getFieldname().getName()));
+			params.add(new QueryParam<String>(String.class, isSearchByAlias()?getFieldname().getLabel():getFieldname().getName()));
 
 		params.add(new QueryParam<String>(String.class, getValue()));
 		return params;
