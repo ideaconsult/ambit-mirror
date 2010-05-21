@@ -96,7 +96,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected void initProcessors() {
 		
 		getProcessors().clear();
-		if (getGroupProperties()!=null) 
+		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0)) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
