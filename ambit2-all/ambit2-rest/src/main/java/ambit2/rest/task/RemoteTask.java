@@ -133,6 +133,10 @@ public class RemoteTask implements Serializable {
 	public String toString() {
 		return String.format("URL: %s\tResult: %s\tStatus: %s\t%s", url,result,status,error==null?"":error.getMessage());
 	}
+	/**
+	 * returns true if ready
+	 * @return
+	 */
 	public boolean poll() {
 		//System.out.println(url);
 		if (isDone()) return true;
