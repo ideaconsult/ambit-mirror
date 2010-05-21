@@ -109,10 +109,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			//query
 			
 			if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
-				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),false,text);
+				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),true,text);
 			} else if (EINECS.isValidFormat(text)) { //this is EINECS
 				//we'd better not search for invalid numbers
-				if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),false,text);
+				if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),true,text);
 			} else if (idcompound>0)  {
 				IStructureRecord record = new StructureRecord();
 				record.setIdchemical(idcompound);
