@@ -77,9 +77,10 @@ public class OTDatasetRDFReport extends OTObject {
 	protected Model jenaModel;
 	protected String application;
 	protected OTDataset dataset;
-	protected OTFeatures features;
 	protected int page;
 	protected int pageSize;
+	protected boolean showEndpoints = false;
+	protected boolean showFeatures = false;
 	
 	protected Reference requestref;
 	public Reference getRequestref() {
@@ -95,28 +96,55 @@ public class OTDatasetRDFReport extends OTObject {
 	}
 	
 
-	public static OTDatasetRDFReport report(OTDataset dataset, OTFeatures endpoints, OTFeatures features, String application, int page, int pageSize) throws Exception {
-		return new OTDatasetRDFReport(dataset,endpoints, features,application,page,pageSize,"/all");
+	public static OTDatasetRDFReport report(OTDataset dataset, 
+			boolean showEndpoints,
+			OTFeatures endpoints, 
+			boolean showModels,
+			OTFeatures features, 
+			String application, 
+			int page, 
+			int pageSize) throws Exception {
+		return new OTDatasetRDFReport(dataset,showEndpoints,endpoints, showModels, features, application,page,pageSize,"/all");
 	}	
 	
-	protected OTDatasetRDFReport(OTDataset dataset, OTFeatures endpoints, OTFeatures features, String application, int page, int pageSize, String representation) throws Exception {
-		super(String.format("%s/query/compound/url%s?search=%s%s%s%s%s",
-				application,
-				representation==null?"/all":representation,
-				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
-				(features==null)|| (features.size()==0)?"":"&",
-				(features==null)||(features.size()==0)?"":features.getQuery(null).getQueryString(),
-				(endpoints==null)||(endpoints.size()==0)?"":"&",
-				(endpoints==null)||(endpoints.size()==0)?"":endpoints.getQuery(null).getQueryString()						
-				));
+	protected OTDatasetRDFReport(OTDataset dataset,
+			boolean showEndpoints,
+			OTFeatures endpoints, 
+			boolean showModels,
+			OTFeatures features, 
+			String application, int page, int pageSize, String representation) throws Exception {
+		super(getQueryString(dataset, showEndpoints, endpoints, showModels, features, application, page, pageSize, representation));
 		this.application = application;
 		this.dataset = dataset;
 		jenaModel = null;
 		this.page = page;
 		this.pageSize = pageSize;
-		this.features = features;
+		this.showEndpoints = showEndpoints;
+		this.showFeatures = showModels;
+
 	}
 
+	protected static String getQueryString(OTDataset dataset, 
+			boolean showEndpoints,
+			OTFeatures endpoints, 
+			boolean showModels,
+			OTFeatures features, 
+			String application, int page, int pageSize, String representation)  throws Exception {
+		
+		boolean e = showEndpoints && (endpoints!=null) && (endpoints.size()>0);
+		boolean f = showModels && (features!=null) && (features.size()>0);
+		return
+		String.format("%s/query/compound/url%s?search=%s%s%s%s%s",
+				application,
+				representation==null?"/all":representation,
+				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
+				f?"&":"",
+				f?features.getQuery(null).getQueryString():"",
+				e?"&":"",
+				e?endpoints.getQuery(null).getQueryString():""						
+				);
+
+	}
 	
 	public OTDatasetRDFReport write(Writer writer) throws Exception {
 		writer.write(header());
@@ -207,15 +235,23 @@ public class OTDatasetRDFReport extends OTObject {
 	}
 
 	public void newRow(int row, String compound,String title, String value, Writer writer) throws IOException {
-		writer.write("\n<table class='tablesorter' width='95%' border='0'>\n");
 		
-		writer.write("\n<tr><td width='200px'>\n");
+		writer.write("\n<table width='100%' border='0'>\n");
+		
+		writer.write("\n<tr>\n");
+		writer.write("\n<td width='20px' align='left' valign='top'>\n");
 		writer.write(String.format(
-				"%d.<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
-				row+page*pageSize+1,compound,compound));
+				"<label>%d.</label></td>",
+				row+page*pageSize+1));
+		writer.write("\n<td width='200px'>\n");
+		
+		writer.write(String.format(
+				"<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
+				compound,compound));
 		
 		writer.write("\n</td><td align='left'>\n");
 		
+
 		
 		writer.write(String.format("<h3><b>%s</b>&nbsp;<label title='%s'>%s</label></h3>",title,value,value));
 		
@@ -224,10 +260,10 @@ public class OTDatasetRDFReport extends OTObject {
 	public void endRow(String compound, Writer writer) throws IOException {
 		if (compound==null) return;
 		writer.write("\n</tr>\n");
-		writer.write("\n<tr><td colspan='2'>\n");
+		writer.write("\n<tr><td colspan='3'>\n");
 		
 		
-		try { writeData(compound,writer); }catch (Exception x) {x.printStackTrace();}
+		try { if (showEndpoints||showFeatures) writeData(compound,writer); }catch (Exception x) {x.printStackTrace();}
 		writer.write("\n</td></tr></table>\n");
 		
 	}	
@@ -238,16 +274,21 @@ public class OTDatasetRDFReport extends OTObject {
 			writer.write("</b>&nbsp;&nbsp;");
 			writer.write("&nbsp;&nbsp;");
 			String v = value;
-			writer.write(String.format("<label title='%s'>%s%s</label>",v,v.length()>100?v.substring(0,100):v,v.length()>100?"...":""));
+			//writer.write(String.format("<label title='%s'>%s%s</label>",v,v.length()>100?v.substring(0,100):v,v.length()>100?"...":""));
+			writer.write(String.format("<label title='%s'>%s</label>",v,v));
 			writer.write("<br>\n");
 
 	}	
+	
 	public String pageNavigator()  throws Exception  {
 		
 		StringBuilder b = new StringBuilder();
 		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",dataset.uri));
 		//b.append(String.format("\n<input type='hidden' value='%s'/>\n",uri));
 		
+		b.append("<table width='100%' border='0'>");
+		b.append("<tr>");
+		b.append("<td align='left'>");
 		b.append(String.format("\n<a href='#' onClick=\"contentDisp('%s',%d,'%s');\">&laquo;</a>&nbsp;",
 				requestref.getBaseRef(),
 				page<=1?1:page-1,prev(true)));
@@ -264,7 +305,22 @@ public class OTDatasetRDFReport extends OTObject {
 		b.append(String.format("\nPage&nbsp;<label id='page' title='page'>%d</label> Records per page <label id='pagesize' title='items per page'>%d</label> &nbsp;\n<a href='#' onClick=\"contentDisp('%s',%d,'%s');\">&raquo;</a>",
 				page+1,pageSize,
 				requestref.getBaseRef(),
-				page+1,next(true)));		
+				page+1,next(true)));
+		b.append("</td><td align='right'>");
+		
+		
+		b.append(String.format("\n<a href='%s' onClick=\"contentDisp('%s',%d,'%s');\">%s</a>&nbsp;",
+				"#",
+				requestref.getBaseRef(),
+				page,
+				getPage(page, pageSize,true,!showEndpoints,showFeatures),
+				showEndpoints?"Structure(s) only":"Structure(s) & Data"
+				));
+
+		
+	
+		b.append("</td></tr>");
+		b.append("</table>");
 		return b.toString();
 	}
 	public String prev( boolean removeHeader) throws Exception {
@@ -275,19 +331,28 @@ public class OTDatasetRDFReport extends OTObject {
 		return getPage(page+1, pageSize,  removeHeader);
 	}	
 	 public String getPage(int page,int pageSize, boolean removeHeader) throws Exception {
+		 return getPage(page, pageSize, removeHeader,showEndpoints,showFeatures);
+	 }	
+	 public String getPage(int page,int pageSize, boolean removeHeader, boolean endpoints, boolean models) throws Exception {
 		 Reference ref = getRequestref();
 		 Form form = ref.getQueryAsForm();
 		 form.removeAll(OpenTox.params.page.toString());
 		 form.removeAll(OpenTox.params.pagesize.toString());
+		 
 		 form.add(OpenTox.params.page.toString(),Integer.toString(page));
 		 form.add(OpenTox.params.pagesize.toString(),Integer.toString(pageSize));
+		 
+		 form.removeAll("endpoints");
+		 form.add("endpoints",Boolean.toString(endpoints).toUpperCase());
+
+		 form.removeAll("models");
+		 form.add("models",Boolean.toString(models).toUpperCase());		 
 		 if (removeHeader) {
 			form.removeAll("header");
 			form.add("header",Boolean.FALSE.toString());
 		 }
-		 
 		 return form.getQueryString();
-	 }	
+	 }		 
 	
 	 protected String getString(RDFNode node) throws Exception {
 		    if (node == null) return "";
@@ -297,6 +362,8 @@ public class OTDatasetRDFReport extends OTObject {
 	 }
 	 protected void writeData(String cmp, Writer writer) throws Exception {
 		    writer.write("\n<table class='tablesorter'>\n");
+		    writer.write("\n<thead><th>Endpoint</th><th>Dataset/Model</th><th>Name</th><th>Value</th><th>Predicted/Experimental</th></thead>\n");
+		    writer.write("\n<tbody>\n");
 			QueryExecution qe = null;
 			
 			try {
@@ -320,7 +387,7 @@ public class OTDatasetRDFReport extends OTObject {
 						oldEndpoint = endpoint;
 						//if (oldEndpoint != null) writer.write("\n</thead>\n<tbody>");
 						//writer.write("\n</tbody>\n<thead>\n");
-						writer.write(String.format("\n<tr><th colspan='4'>%s</th></tr>\n",endpoint==null?"":endpoint));
+						//writer.write(String.format("\n<tr><th colspan='4'>%s</th></tr>\n",endpoint==null?"":endpoint));
 					}
 					String title = getString(solution.get("title"));
 					String value = getString(solution.get("value"));
@@ -335,7 +402,7 @@ public class OTDatasetRDFReport extends OTObject {
 					String modelName = getString(solution.get("modelName"));	
 					
 					writer.write(String.format("\n<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
-							src,title,value,type,modelName));
+							endpoint==null?"":endpoint,src,title,value,type));
 				}
 				//if (oldEndpoint != null) writer.write("\n</tbody>\n");
 			}catch (Exception x) {
@@ -343,7 +410,8 @@ public class OTDatasetRDFReport extends OTObject {
 				throw x;
 			} finally {
 				try {qe.close();} catch (Exception x) { x.printStackTrace();}
-			}	
+			}
+			writer.write("\n</tbody>");
 			writer.write("\n</table>");
 		}
 
