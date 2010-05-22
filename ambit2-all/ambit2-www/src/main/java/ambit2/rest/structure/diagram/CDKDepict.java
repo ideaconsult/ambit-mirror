@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -34,7 +35,9 @@ public class CDKDepict extends AbstractDepict {
 			depict.setImageSize(new Dimension(w,h));
 			return depict.generateImage(smiles);
 		} catch (ResourceException x) {throw x; 
-		} catch (Exception x) { throw new ResourceException(x); }
+		} catch (Exception x) { 
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x); 
+		}
 	}
 	@Override
 	protected String getTitle(Reference ref, String smiles) {
