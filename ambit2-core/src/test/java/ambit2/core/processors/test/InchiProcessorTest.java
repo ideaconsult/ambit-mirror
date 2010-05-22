@@ -36,10 +36,16 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.InchiProcessor;
 
@@ -63,7 +69,10 @@ public class InchiProcessorTest {
 
 	@Test
 	public void test() throws Exception {
+		SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+		IMolecule m = p.parseSmiles("CCCCOC");
 		
+		generate(m,"InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3");
 	}
 	@Test
 	public void testProcessBenzene() throws Exception {
@@ -83,5 +92,22 @@ public class InchiProcessorTest {
 		String auxinfo = gen.getAuxInfo();
 		Assert.assertEquals(expected, inchi);
 	}
+	@Test
+	public void parse() throws Exception {
+		InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+		
+		InChIToStructure c =f.getInChIToStructure("InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3", DefaultChemObjectBuilder.getInstance());
+		
+		System.out.println(c.getLog());
+		System.out.println(c.getWarningFlags());
+		
+		AtomConfigurator cfg = new AtomConfigurator();
+		HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
+		
+		IAtomContainer a = c.getAtomContainer();
+		a = ha.process(a);
 
+		generate(a,"InChI=1/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3");
+		// InChI=1/C5O/c1-3-4-5-6-2
+	}
 }
