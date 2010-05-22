@@ -239,8 +239,8 @@ public class ReportingResource  extends FastoxStepResource {
 		 "      },\n"+
 		 "url : url,\n"+
 		 "success : function (data) {\n"+
-		 "$(\"#BROWSER\").html(data);\n"+
-		 "$(\"#page\").text(page);\n"+
+		 "    $(\"#BROWSER\").html(data);\n"+
+		 "    $(\"#page\").text(page);\n"+
 	 	 "}\n"+
 		 "});\n"+
 		 "}\n"+
@@ -259,7 +259,9 @@ public class ReportingResource  extends FastoxStepResource {
 					getRequest().getRootRef()
 					));
 					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
+					writer.write(String.format("<script src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
 					writer.write(ReportingResource.js());
+					writer.write(" <script> $(document).ready(function() {$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);})</script>\n");
 					
 				}
 				for (String q : search) {
