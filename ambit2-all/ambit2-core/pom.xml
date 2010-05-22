@@ -55,6 +55,11 @@
     	<artifactId>jchempaint</artifactId>
     	<version>3.0.1</version>
     </dependency>
+    <dependency>
+    	<groupId>jni-inchi</groupId>
+    	<artifactId>jni-inchi</artifactId>
+    	<version>0.7-std</version>
+    </dependency>
   </dependencies>
 <licenses>
   <license>
@@ -75,4 +80,8 @@
 		</plugin>
 	</plugins>
 </build>
+<dependencyManagement>
+	<dependencies>
+	</dependencies>
+</dependencyManagement>
 </project>
