@@ -28,7 +28,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 		all {
 			@Override
 			public String[] getOpenToxEntry() {
-				return new String[] {Property.opentox_CAS,Property.opentox_EC,Property.opentox_Name,Property.opentox_SMILES,Property.opentox_InChI,Property.opentox_InChIKey,Property.opentox_REACHDATE};
+				return new String[] {Property.opentox_CAS,Property.opentox_EC,Property.opentox_IupacName, Property.opentox_Name,Property.opentox_SMILES,Property.opentox_InChI,Property.opentox_InChIKey,Property.opentox_REACHDATE};
 			}			
 		},
 		smiles {
