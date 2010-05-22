@@ -199,7 +199,7 @@ public class OTDatasetRDFReport extends OTObject {
 				title = title.replace("http://www.opentox.org/api/1.1#", "");
 				compoundURI = compound.getURI();
 				if (cmp!= compoundURI) {
-					endRow(cmp,writer);
+					endRow(records,cmp,writer);
 					cmp = compoundURI;
 					newRow(records,cmp,title,value,writer);
 					records++;
@@ -212,7 +212,7 @@ public class OTDatasetRDFReport extends OTObject {
 					columns++;
 				}
 			}
-			endRow(cmp,writer);
+			endRow(records,cmp,writer);
 		}catch (Exception x) {
 			x.printStackTrace();
 			throw x;
@@ -257,13 +257,13 @@ public class OTDatasetRDFReport extends OTObject {
 		
 	}
 	
-	public void endRow(String compound, Writer writer) throws IOException {
+	public void endRow(int row,String compound, Writer writer) throws IOException {
 		if (compound==null) return;
 		writer.write("\n</tr>\n");
 		writer.write("\n<tr><td colspan='3'>\n");
 		
 		
-		try { if (showEndpoints||showFeatures) writeData(compound,writer); }catch (Exception x) {x.printStackTrace();}
+		try { if (showEndpoints||showFeatures) writeData(row,compound,writer); }catch (Exception x) {x.printStackTrace();}
 		writer.write("\n</td></tr></table>\n");
 		
 	}	
@@ -363,8 +363,9 @@ public class OTDatasetRDFReport extends OTObject {
 			else if (node.isResource()) return String.format("<a href='%s' target=_blank>%s</a>",((Resource)node).getURI(),((Resource)node).getURI());
 			else return node.toString();
 	 }
-	 protected void writeData(String cmp, Writer writer) throws Exception {
-		    writer.write("\n<table class='tablesorter'>\n");
+	 protected void writeData(int row,String cmp, Writer writer) throws Exception {
+		 	writer.write(String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#data_%s\").tablesorter({widgets: ['zebra'] }); } );</script>",row));	
+		    writer.write(String.format("\n<table class=\"tablesorter\" id=\"data_%s\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n",row));
 		    writer.write("\n<thead><th>Endpoint</th><th>Dataset/Model</th><th>Name</th><th>Value</th><th>Predicted/Experimental</th></thead>\n");
 		    writer.write("\n<tbody>\n");
 			QueryExecution qe = null;
