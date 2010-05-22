@@ -314,7 +314,9 @@ public class OTDatasetRDFReport extends OTObject {
 				requestref.getBaseRef(),
 				page,
 				getPage(page, pageSize,true,!showEndpoints,showFeatures),
-				showEndpoints?"Structure(s) only":"Structure(s) & Data"
+				String.format("Structure(s) %s %s",
+						showFeatures?"& Model predictions":"",
+						showEndpoints?"& Experimental Data":"")
 				));
 
 		
