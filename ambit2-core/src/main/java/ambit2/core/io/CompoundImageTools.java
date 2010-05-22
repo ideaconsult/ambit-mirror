@@ -20,9 +20,12 @@ import java.util.List;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -49,6 +52,7 @@ import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 
 import ambit2.base.interfaces.IProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 
 
@@ -125,9 +129,18 @@ public class CompoundImageTools {
         else return defaultImage;
     }
 
-    public synchronized BufferedImage generateImage(String smiles) throws CDKException {
-        if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-        return getImage(parser.parseSmiles(smiles));
+
+    public synchronized BufferedImage generateImage(String value) throws CDKException {
+   		if (value.startsWith(AmbitCONSTANTS.INCHI)) {
+    			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+    			InChIToStructure c =f.getInChIToStructure(value, DefaultChemObjectBuilder.getInstance());
+    			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
+    				throw new CDKException("Invalid InChI");
+    			return getImage(c.getAtomContainer());
+    	}  else { 	
+	        if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+	        return getImage(parser.parseSmiles(value));
+    	}
     }    
     public synchronized BufferedImage getImage(String smiles) {
         ArrayList<String> m = null;
