@@ -48,17 +48,12 @@
     <dependency>
     	<groupId>org.openscience.cdk</groupId>
     	<artifactId>cdk</artifactId>
-    	<version>1.3.3</version>
+    	<version>cdk 1.3.3-jniinchi-0.7</version>
     </dependency>
     <dependency>
     	<groupId>org.openscience.cdk</groupId>
     	<artifactId>jchempaint</artifactId>
     	<version>3.0.1</version>
-    </dependency>
-    <dependency>
-    	<groupId>jni-inchi</groupId>
-    	<artifactId>jni-inchi</artifactId>
-    	<version>0.7-std</version>
     </dependency>
   </dependencies>
 <licenses>
