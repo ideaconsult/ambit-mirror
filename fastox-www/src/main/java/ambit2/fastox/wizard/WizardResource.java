@@ -170,9 +170,7 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-ui-1.8.1.custom.min.js\"></script>\n",baseReference));
 		w.write(String.format("<link type=\"text/css\" href=\"%s/css/redmond/jquery-ui-1.8.1.custom.css\" rel=\"stylesheet\" />\n",baseReference));
-
-		w.write("<script>$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);</script>\n");
-
+		w.write(String.format("<script src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
 		w.write("</head>\n");
 		w.write("<body>");
 		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
@@ -576,7 +574,7 @@ public abstract class WizardResource extends ServerResource {
 	}		
 	
 	public static String jsTableSorter(String tableid,String pagerid) {
-		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); } );</script>",tableid,pagerid);
+		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI); } );</script>",tableid,pagerid);
 	}
 
 	/*
