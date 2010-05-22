@@ -316,7 +316,7 @@ public class OTDatasetRDFReport extends OTObject {
 				getPage(page, pageSize,true,!showEndpoints,showFeatures),
 				String.format("Structure(s) %s %s",
 						showFeatures?"& Model predictions":"",
-						showEndpoints?"& Experimental Data":"")
+						showEndpoints?"":"& Experimental Data")
 				));
 
 		
@@ -349,6 +349,7 @@ public class OTDatasetRDFReport extends OTObject {
 
 		 form.removeAll("models");
 		 form.add("models",Boolean.toString(models).toUpperCase());		 
+		 
 		 if (removeHeader) {
 			form.removeAll("header");
 			form.add("header",Boolean.FALSE.toString());
