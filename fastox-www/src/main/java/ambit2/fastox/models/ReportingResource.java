@@ -11,6 +11,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
+import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.dsl.OTAlgorithm;
@@ -61,6 +62,8 @@ public class ReportingResource  extends FastoxStepResource {
 	protected OTModels models;
 	protected boolean showEndpoints = true;
 	protected boolean showModels = true;
+	
+
 	protected enum display_mode {
 		table,
 		scrollable
@@ -255,19 +258,22 @@ public class ReportingResource  extends FastoxStepResource {
 					getRequest().getRootRef(),
 					getRequest().getRootRef()
 					));
-					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",getRequest().getRootRef()));
+					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
 					writer.write(ReportingResource.js());
 					
 				}
 				for (String q : search) {
+					writer.write(WizardResource.jsTableSorter("models","mpager"));
 					OTDatasetReport report;
 					switch (mode) {
 					case scrollable: {
 						OTModels models = getSession(getUserKey()).getSelectedModels();
 						OTDatasetRDFReport rep = OTDatasetRDFReport.
 						report(OTDataset.dataset(q),
-									showEndpoints?endpoints:null,
-									showModels?models==null?null:models.predictedVariables():null,
+									showEndpoints,
+									endpoints,
+									showModels,
+									models==null?null:models.predictedVariables(),
 									wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
 						//((ToxPredictDatasetReport)report).setModels(models);

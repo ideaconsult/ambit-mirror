@@ -90,7 +90,7 @@ public class Step2Resource extends FastoxStepResource {
 	}
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		try {
-		renderCompoundsNew(writer, key,null,false);
+			renderCompoundsNew(writer, key,null,false,false);
 		} catch (Exception x) {
 			x.printStackTrace();
 		}

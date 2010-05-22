@@ -39,7 +39,7 @@ public class Step6Resource extends FastoxStepResource {
 			session.setError(key,x);
 		}			
 		try {
-			renderCompoundsNew(writer,key,store,true);
+			renderCompoundsNew(writer,key,store,true,false);
 		} catch (Exception x) {
 			session.setError(key,x);
 		}

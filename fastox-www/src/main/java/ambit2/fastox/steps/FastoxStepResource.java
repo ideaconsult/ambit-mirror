@@ -170,16 +170,17 @@ public abstract class FastoxStepResource extends WizardResource {
 		} 		
 	}	
 	*/
-	protected void renderCompoundsNew(Writer writer,String key, Model jenaModel, boolean showPredictedResults) throws IOException {
+	protected void renderCompoundsNew(Writer writer,String key, Model jenaModel, boolean showPredictedResults,boolean showEndpoints) throws IOException {
 		ClientResource client = null;
 		Representation r = null;
 		try {
 	
 			client = new ClientResource(
 					new Reference(
-							String.format("%s/user/%s/report/Dataset?header=false&page=0&endpoints=TRUE&models=%s&search=%s",
+							String.format("%s/user/%s/report/Dataset?header=false&page=0&endpoints=%s&models=%s&search=%s",
 									getRequest().getRootRef(),
 									session.getUser().getId(),
+									showEndpoints?"TRUE":"FALSE",
 									showPredictedResults?"TRUE":"FALSE",
 									Reference.encode(session.getDatasetURI()))
 					));
