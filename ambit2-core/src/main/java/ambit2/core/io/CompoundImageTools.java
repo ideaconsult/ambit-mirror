@@ -134,8 +134,9 @@ public class CompoundImageTools {
    		if (value.startsWith(AmbitCONSTANTS.INCHI)) {
     			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
     			InChIToStructure c =f.getInChIToStructure(value, DefaultChemObjectBuilder.getInstance());
+    			
     			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
-    				throw new CDKException("Invalid InChI");
+    				throw new CDKException(String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));
     			return getImage(c.getAtomContainer());
     	}  else { 	
 	        if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
