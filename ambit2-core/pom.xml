@@ -48,7 +48,7 @@
     <dependency>
     	<groupId>org.openscience.cdk</groupId>
     	<artifactId>cdk</artifactId>
-    	<version>cdk 1.3.3-jniinchi-0.7</version>
+    	<version>1.3.37</version>
     </dependency>
     <dependency>
     	<groupId>org.openscience.cdk</groupId>

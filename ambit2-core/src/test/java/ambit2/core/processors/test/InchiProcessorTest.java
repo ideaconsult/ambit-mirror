@@ -76,11 +76,11 @@ public class InchiProcessorTest {
 	}
 	@Test
 	public void testProcessBenzene() throws Exception {
-		generate(MoleculeFactory.makeBenzene(),"InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H");
+		generate(MoleculeFactory.makeBenzene(),"InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H");
 	}
 	@Test
 	public void testProcessAlkane() throws Exception {
-		generate(MoleculeFactory.makeAlkane(10),"InChI=1/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3");		
+		generate(MoleculeFactory.makeAlkane(10),"InChI=1S/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3");		
 
 	}	
 	public void generate(IAtomContainer mol,String expected) throws Exception {
@@ -107,7 +107,7 @@ public class InchiProcessorTest {
 		IAtomContainer a = c.getAtomContainer();
 		a = ha.process(a);
 
-		generate(a,"InChI=1/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3");
+		generate(a,"InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3");
 		// InChI=1/C5O/c1-3-4-5-6-2
 	}
 }
