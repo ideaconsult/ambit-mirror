@@ -169,12 +169,12 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-ui-1.8.1.custom.min.js\"></script>\n",baseReference));
-		w.write(String.format("<link type=\"text/css\" href=\"%s/css/redmond/jquery-ui-1.8.1.custom.css\" rel=\"stylesheet\" />\n",baseReference));
+		//w.write(String.format("<link type=\"text/css\" href=\"%s/css/redmond/jquery-ui-1.8.1.custom.css\" rel=\"stylesheet\" />\n",baseReference));
 		w.write(String.format("<script src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
 		w.write("</head>\n");
 		w.write("<body>");
 		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
-		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/scrollable.css\" type=\"text/css\" media=\"screen\">",baseReference));
+		//w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/scrollable.css\" type=\"text/css\" media=\"screen\">",baseReference));
 		w.write(ReportingResource.js());
 
 	}
@@ -573,8 +573,8 @@ public abstract class WizardResource extends ServerResource {
 		writer.write("</select>");
 	}		
 	
-	public static String jsTableSorter(String tableid,String pagerid) {
-		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI); } );</script>",tableid,pagerid);
+	public static String jsTableSorter(String tableid) {
+		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }); } );</script>",tableid);
 	}
 
 	/*

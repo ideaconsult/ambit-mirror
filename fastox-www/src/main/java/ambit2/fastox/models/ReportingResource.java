@@ -258,13 +258,16 @@ public class ReportingResource  extends FastoxStepResource {
 					getRequest().getRootRef(),
 					getRequest().getRootRef()
 					));
+					writer.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",getRequest().getRootRef()));
 					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
 					writer.write(String.format("<script src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
 					writer.write(ReportingResource.js());
 					
+				} else {
+					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
 				}
 				for (String q : search) {
-					writer.write(WizardResource.jsTableSorter("models","mpager"));
+					
 					OTDatasetReport report;
 					switch (mode) {
 					case scrollable: {
