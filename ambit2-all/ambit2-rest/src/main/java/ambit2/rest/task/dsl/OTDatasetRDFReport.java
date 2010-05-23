@@ -11,6 +11,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.OT;
 
@@ -136,7 +137,7 @@ public class OTDatasetRDFReport extends OTObject {
 		return
 		String.format("%s/query/compound/url%s?search=%s%s%s%s%s",
 				application,
-				representation==null?"/all":representation,
+				representation==null?"/names":representation,
 				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
 				f?"&":"",
 				f?features.getQuery(null).getQueryString():"",
@@ -196,7 +197,9 @@ public class OTDatasetRDFReport extends OTObject {
 				String title = getString(solution.get("title"));
 				String value = getString(solution.get("value"));		
 				
-				title = title.replace("http://www.opentox.org/api/1.1#", "");
+				if (title.equals(Property.opentox_IupacName)) title = "IUPAC name";
+				else if (title.equals(Property.opentox_Name)) title = "Synonym(s)";
+				else title = title.replace("http://www.opentox.org/api/1.1#", "");
 				compoundURI = compound.getURI();
 				if (cmp!= compoundURI) {
 					endRow(records,cmp,writer);
