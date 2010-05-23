@@ -536,10 +536,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					*/
 					b.append("<div>");
 					
-					value = value==null?"":
+					value = value==null?"":value.toString();
+					/*
 							value.toString().length()<40?value.toString():
 							value.toString().length()<255?value.toString().substring(0,40):
 							"See more";
+							*/
 					/* Edit link		
 					b.append(String.format("<a href=\"%s\">%s</a>",
 							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
