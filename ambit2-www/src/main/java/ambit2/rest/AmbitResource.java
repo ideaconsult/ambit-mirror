@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -528,8 +529,10 @@ window.setInterval(function() {
 		w.write("\n<div id=\"statusDiv\"></div>\n");
 		//w.write("\n<textarea id=\"targetDiv\"></textarea>\n");
 	}
-	
 	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
+		writeSearchForm(w, title, request, meta,Method.GET);
+	}
+	public static void writeSearchForm(Writer w,String title,Request request ,String meta,Method method) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
@@ -544,7 +547,7 @@ window.setInterval(function() {
 		} catch (Exception x) {
 			query_smiles = "";
 		}
-		w.write("<form action='' method='get'>\n");
+		w.write(String.format("<form action='' method='%s'>\n",method));
 		w.write(String.format("<input name='%s' size='80' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
 		w.write("<input type='submit' value='Search'><br>");
 		//w.write(baseReference.toString());
