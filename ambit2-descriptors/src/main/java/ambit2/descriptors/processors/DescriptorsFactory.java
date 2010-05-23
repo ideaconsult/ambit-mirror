@@ -90,12 +90,17 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 	
 	public static Property descriptorValue2Property(IMolecularDescriptor descriptor, String name, DescriptorValue value) throws Exception  {
 
-		LiteratureEntry le = LiteratureEntry.getInstance(value.getSpecification().getImplementationTitle(),value.getSpecification().getSpecificationReference());
+		String label = value.getSpecification().getSpecificationReference();
+		if (Property.opentox_InChI.equals(name) || Property.opentox_InChIKey.equals(name) || Property.opentox_InChIAuxInfo.equals(name) ) {
+			label = name;
+		}
+		LiteratureEntry le = LiteratureEntry.getInstance(
+						value.getSpecification().getImplementationTitle(),
+						value.getSpecification().getSpecificationReference());
 		le.setType(_type.Algorithm);
 		Property property = new Property(name,le);
 
-
-		property.setLabel(value.getSpecification().getSpecificationReference());
+		property.setLabel(label);
 		if (descriptor!=null)
 			property.setClazz(descriptor.getClass());
 
