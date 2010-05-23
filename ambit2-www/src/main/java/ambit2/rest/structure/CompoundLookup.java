@@ -55,6 +55,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected NCISearchProcessor.METHODS rep_id = null;
 	
 	protected static String URL_as_id = "url";
+	protected static String SEARCH_as_id = "search";
 	
 	protected Form params;
 	@Override
@@ -105,6 +106,11 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("%s %s",url,x.getMessage()),x);
 		} 
 		else {
+			if (isSearchParam(text)) {
+				Form form = getParams();
+				text = form.getFirstValue(search_param);
+			}
+
 			int idcompound = isAmbitID(text);
 			//query
 			
@@ -124,8 +130,11 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			} else {
 				IAtomContainer structure = null;
 				//if inchi
-				try { structure = isInChI(text);
-				} catch (Exception x) { structure = null;}
+				try { 
+					structure = isInChI(text);
+				} catch (Exception x) { 
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+				}
 				//if smiles
 				if (structure==null)
 					try { structure = isSMILES(text);
@@ -210,7 +219,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
 				throw new Exception("Invalid InChI");
 			return c.getAtomContainer();
-		} else throw new Exception("Invalid InChI");
+		} else return null;
 	}
 	public IAtomContainer isSMILES(String smiles) throws Exception {
 		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
@@ -220,6 +229,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	}	
 	public boolean isURL(String text) {
 		return URL_as_id.equals(text.toLowerCase());
+	}
+	public boolean isSearchParam(String text) {
+		return SEARCH_as_id.equals(text.toLowerCase());
 	}	
 	public int isAmbitID(String text) {
 		try {
