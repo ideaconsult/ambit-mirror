@@ -15,6 +15,7 @@ import ambit2.db.search.SetCondition;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.search.structure.byproperty.QueryStructureByProperty;
 import ambit2.db.search.structure.byproperty.QueryStructureByPropertyInCompounds;
 import ambit2.db.search.structure.byproperty.QueryStructureByPropertyInDataset;
 import ambit2.db.search.structure.byproperty.QueryStructuresByPropertyInResults;
@@ -38,8 +39,7 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 		Object condition = form.getFirstValue(OpenTox.params.condition.toString());
 		SetCondition.conditions sc = condition==null?SetCondition.conditions.in:
 				"no".equals(condition)?SetCondition.conditions.not_in:SetCondition.conditions.in;
-		if (dataset==null) 
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty dataset");
+		//if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty dataset");
 		if (filteruris==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No features to filter");
 		setTemplate(createTemplate(context, request, response));
@@ -47,6 +47,13 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 			filter = createTemplate(context, request, response,filteruris);
 			if ((filter==null) || (filter.size()==0)) 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No features to filter");
+			if (dataset==null) {
+				QueryStructureByProperty q = new QueryStructureByProperty();
+				q.setFieldname(filter);
+				q.setCondition(new SetCondition(sc));
+				setPaging(form, q);
+				return (Q)q;
+			} 
 			Object q = CallableQueryProcessor.getQueryObject(new Reference(dataset.toString()), getRequest().getRootRef());
 			if (q==null) {
 				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,"Processing foreign datasets not implemented!");
@@ -72,7 +79,8 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 				setPaging(form, qz);
 				return (Q)qz;		
 			} else 
-				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,dataset.toString() + " " + q.getClass().getName() + " not implemented!");				
+				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,dataset.toString() + " " + q.getClass().getName() + " not implemented!");
+			
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
