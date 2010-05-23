@@ -224,6 +224,27 @@ public class AlgorithmResourceTest extends ResourceTest {
 		c.close();			
 	}		
 	@Test
+	public void testGenerateInChI() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/ambit2.descriptors.InChI", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
+						));		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from properties");
+		Assert.assertEquals(6,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * from property_values");
+		Assert.assertEquals(19,table.getRowCount());		
+		c.close();			
+	}	
+	
+	@Test
 	public void testCalculateBCUT() throws Exception {
 		Form headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));

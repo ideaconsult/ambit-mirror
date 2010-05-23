@@ -144,6 +144,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
+			{"ambit2.descriptors.InChI","InChI 1.02","ambit2.descriptors.InChI",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+			
+			
 			
 			
 			
