@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
@@ -30,7 +31,7 @@ import ambit2.rest.query.QueryResource;
  *
  */
 public class AbstractDepict extends ServerResource {
-
+	protected Form params;
 	protected String smiles = null;
 
 	@Override
@@ -40,6 +41,15 @@ public class AbstractDepict extends ServerResource {
 	}
 	protected BufferedImage getImage(String smiles,int width,int height) throws ResourceException {
 		return null;
+	}
+	protected Form getParams() {
+		if (params == null) 
+			if (Method.GET.equals(getRequest().getMethod()))
+				params = getRequest().getResourceRef().getQueryAsForm();
+			//if POST, the form should be already initialized
+			else 
+				params = getRequest().getEntityAsForm();
+		return params;
 	}
 	protected String getTitle(Reference ref, String smiles) {
 		StringBuilder b = new StringBuilder();
@@ -64,10 +74,12 @@ public class AbstractDepict extends ServerResource {
 		b.append("</tr></table>");
 		return b.toString();
 	}
+	
+	
 	public Representation get(Variant variant) {
 
 		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getParams();
 			int w = 400; int h = 200;
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
@@ -78,7 +90,8 @@ public class AbstractDepict extends ServerResource {
 	    				public void close() throws Exception {};
 	    				public Writer process(String target) throws AmbitException {
 	    					try {
-	    					AmbitResource.writeHTMLHeader(output, smiles, getRequest());
+	    					AmbitResource.writeTopHeader(output, smiles, getRequest(), "");
+	    					AmbitResource.writeSearchForm(output, smiles, getRequest(), "",Method.POST);	    					
 	    					output.write(target);
 	    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
 	    					} catch (Exception x) {}
@@ -118,5 +131,14 @@ public class AbstractDepict extends ServerResource {
 			return null;
 		
 		}
-	}		
+	}	
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			if (params==null) params = new Form(entity);
+			return get(variant);
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+				String.format("%s not supported",entity==null?"":entity.getMediaType()));
+	}
 }
