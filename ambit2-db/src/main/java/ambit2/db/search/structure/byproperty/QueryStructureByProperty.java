@@ -11,16 +11,30 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.search.SetCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 
-public abstract class QueryStructureByProperty<Q extends AbstractStructureQuery>  extends AbstractStructureQuery<Profile,Q, SetCondition> {
+public class QueryStructureByProperty<Q extends AbstractStructureQuery>  extends AbstractStructureQuery<Profile,Q, SetCondition> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4056680895955934165L;
+	protected static String sql_all =
+		"select ? as idquery,s.idchemical,s.idstructure,1 as selected,preference as metric,type_structure as text from structure s\n"+
+		"where s.idchemical %s\n"+
+		"(select idchemical from property_values join structure using(idstructure)\n"+
+		"where idproperty in (%s))\n"+
+		"and type_structure != 'NA'\n";
 	
-	protected abstract String getSQLTemplate() throws AmbitException;
-	protected abstract String getSQLStructureQuery() throws AmbitException;
-	protected abstract void addStructureParam(List<QueryParam> params) throws AmbitException;
-	
+
+	protected void addStructureParam(List<QueryParam> params)
+			throws AmbitException {
+	}
+
+	protected String getSQLStructureQuery() throws AmbitException {
+		return "";
+	}
+
+	protected String getSQLTemplate() throws AmbitException {
+		return sql_all;
+	}	
 	public QueryStructureByProperty() {
 		super();
 		setCondition(new SetCondition(SetCondition.conditions.in));
@@ -30,7 +44,7 @@ public abstract class QueryStructureByProperty<Q extends AbstractStructureQuery>
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getFieldname() == null) throw new AmbitException("Properties not defined!");
-		if (getValue() == null) throw new AmbitException("Structures not defined!");
+		
 		
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));

@@ -25,6 +25,7 @@ public class QueryStructureByPropertyInCompounds  extends	QueryStructureByProper
 	@Override
 	protected void addStructureParam(List<QueryParam> params)
 			throws AmbitException {
+		if (getValue()==null) throw new AmbitException("No structures defined");
 	}
 
 	@Override
