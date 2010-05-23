@@ -18,8 +18,8 @@ public class QueryStructureByProperty<Q extends AbstractStructureQuery>  extends
 	private static final long serialVersionUID = 4056680895955934165L;
 	protected static String sql_all =
 		"select ? as idquery,s.idchemical,s.idstructure,1 as selected,preference as metric,type_structure as text from structure s\n"+
-		"where s.idchemical %s\n"+
-		"(select idchemical from property_values join structure using(idstructure)\n"+
+		"where s.idstructure %s\n"+
+		"(select idstructure from property_values join structure using(idstructure)\n"+
 		"where idproperty in (%s))\n"+
 		"and type_structure != 'NA'\n";
 	
