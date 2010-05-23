@@ -17,9 +17,9 @@ import ambit2.core.processors.structure.InchiProcessor;
 public class InChI implements IMolecularDescriptor {
 	protected InchiProcessor processor;
 	protected static final String[] names = new String[] {
-			Property.opentox_InChI,
-			Property.opentox_InChIAuxInfo,
-			Property.opentox_InChIKey
+			Property.opentox_InChI_std,
+			Property.opentox_InChIAuxInfo_std,
+			Property.opentox_InChIKey_std
 			//Property.opentox_SMILES
 	};
 	public InChI() throws CDKException {

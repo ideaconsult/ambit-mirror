@@ -57,6 +57,10 @@ public class Property extends Model implements Serializable {
 	public static final String opentox_Name = "http://www.opentox.org/api/1.1#ChemicalName";
 	public static final String opentox_IupacName = "http://www.opentox.org/api/1.1#IUPACName";
 	public static final String opentox_EC = "http://www.opentox.org/api/1.1#EINECS";
+	public static final String opentox_InChI_std = "http://www.opentox.org/api/1.1#InChI_std";
+	public static final String opentox_InChIAuxInfo_std = "http://www.opentox.org/api/1.1#InChI_AuxInfo_std";
+	public static final String opentox_InChIKey_std = "http://www.opentox.org/api/1.1#InChIKey_std";
+	
 	public static final String opentox_InChI = "http://www.opentox.org/api/1.1#InChI";
 	public static final String opentox_InChIAuxInfo = "http://www.opentox.org/api/1.1#InChI_AuxInfo";
 	public static final String opentox_InChIKey = "http://www.opentox.org/api/1.1#InChIKey";
