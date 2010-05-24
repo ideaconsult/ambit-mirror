@@ -1,6 +1,6 @@
 package ambit2.db.chart;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
@@ -41,7 +41,7 @@ public class Numeric2SimilarityChartGenerator extends ChartGenerator<IStoredQuer
 	 */
 
 
-	public Image process(IStoredQuery target) throws AmbitException {
+	public BufferedImage process(IStoredQuery target) throws AmbitException {
 		  if ((property == null) || (property == null)) throw new AmbitException("Property not defined");
 
 		  JFreeChart chart = null;

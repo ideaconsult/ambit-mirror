@@ -1,6 +1,6 @@
 package ambit2.db.chart;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -128,7 +128,7 @@ public class HistogramChartGenerator extends ChartGenerator<IStoredQuery> {
 	"select sql_dataset_xtab('%s','%s',%d,%f)";
 	
 	
-	public Image process(IStoredQuery target) throws AmbitException {
+	public BufferedImage process(IStoredQuery target) throws AmbitException {
 		  JFreeChart chart = null;
 		  
 	      try

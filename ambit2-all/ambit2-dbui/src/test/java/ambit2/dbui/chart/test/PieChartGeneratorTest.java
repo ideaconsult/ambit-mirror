@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.db.DatasourceFactory;
 import ambit2.db.chart.FuncGroupsChartGenerator;
 import ambit2.db.chart.HistogramChartGenerator;
@@ -39,12 +40,16 @@ public class PieChartGeneratorTest extends RepositoryTest  {
 		try {
 			initDatasource();
 			c = datasource.getConnection();
-			IStoredQuery q = new StoredQuery(6);
+			//IStoredQuery q = new StoredQuery(6);
+			SourceDataset dataset = new SourceDataset();
+			dataset.setId(6);
 			PieChartGenerator gen = new PieChartGenerator();
 			gen.setConnection(c);
-			gen.setProperty(Property.getInstance("toxTree.tree.cramer.CramerRules", ""));
+			Property p = Property.getInstance("toxTree.tree.cramer.CramerRules", "");
+			p.setId(12361);
+			gen.setProperty(p);
 			
-			return gen.process(q);
+			return gen.process(dataset);
 
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -59,11 +64,13 @@ public class PieChartGeneratorTest extends RepositoryTest  {
 		try {
 			initDatasource();
 			c = datasource.getConnection();
-			IStoredQuery q = new StoredQuery(9);
+			SourceDataset q = new SourceDataset(); q.setId(78);
 			PropertiesChartGenerator gen = new PropertiesChartGenerator();
 			gen.setConnection(c);
-			gen.setPropertyX(Property.getInstance("XLogP", ""));
-			gen.setPropertyY(Property.getInstance("LLNA EC3 %", ""));
+			Property p = Property.getInstance("XLogP", ""); p.setId(13993);
+			gen.setPropertyX(p);
+			p = Property.getInstance("LLNA EC3 %", ""); p.setId(13995);
+			gen.setPropertyY(p);
 			
 			return gen.process(q);
 
@@ -244,20 +251,23 @@ public class PieChartGeneratorTest extends RepositoryTest  {
 		//p.setLayout(new GridLayout(1,2));
 		p.setLayout(new BoxLayout(p,BoxLayout.PAGE_AXIS));
 		
-		
+		Image image;
+		JLabel lblChart;
 		//Image image = new PieChartGeneratorTest().testPropertyHistogramPlot();
+		/*
 		Image image = new PieChartGeneratorTest().test();
 		JLabel lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
 		lblChart.setBorder(BorderFactory.createEtchedBorder());
 		p.add(lblChart);
-		/*
+		*/
+		
 		image = new PieChartGeneratorTest().testScatterPlot();
 		lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));
 		lblChart.setBorder(BorderFactory.createEtchedBorder());
 		p.add(lblChart);
-		
+		/*
 		image = new PieChartGeneratorTest().testMetricPlot();
 		lblChart = new JLabel();
 		lblChart.setIcon(new ImageIcon(image));

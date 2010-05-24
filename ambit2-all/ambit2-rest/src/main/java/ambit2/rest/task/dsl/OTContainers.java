@@ -89,6 +89,7 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 	 }
 	 @Override
 	public String toString() {
+		if ((items==null) || (items.size()==0)) return "";
 		StringBuilder b = new StringBuilder();
 		for (T item: items) {
 			b.append(item.toString());
@@ -118,4 +119,9 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 				try { client.release();} catch (Exception x) {}
 			}
 		}
+		
+		public T getItem(int index) {
+			return items==null?null:items.get(index);
+		}
+		
 }
