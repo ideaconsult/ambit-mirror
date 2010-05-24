@@ -35,6 +35,7 @@ import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
+import ambit2.rest.dataset.filtered.StatisticsResource;
 import ambit2.rest.fastox.FastToxStep1;
 import ambit2.rest.fastox.FastToxStep2;
 import ambit2.rest.fastox.KroesInput;
@@ -142,6 +143,7 @@ public class AmbitApplication extends TaskApplication {
 		
 		
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
+		router.attach(StatisticsResource.resource,StatisticsResource.class);
 		
 		router.attach(ReportDatasetResource.resource,ReportDatasetResource.class);
 		//test
