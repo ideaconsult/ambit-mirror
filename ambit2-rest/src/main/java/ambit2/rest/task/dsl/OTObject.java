@@ -2,15 +2,31 @@ package ambit2.rest.task.dsl;
 
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.task.RemoteTask;
 
 public class OTObject implements Comparable<OTObject>{
 	 protected final Reference uri ;
-	 protected Form form;
+	 protected String name;
+	 public String getName() {
+		return name;
+	}
+	 
+	 public static OTObject object(String datasetURI) throws Exception  { 
+		    return new OTObject(datasetURI);
+	 }
+	public OTObject withName(String name) {
+		this.name = name;
+		return this;
+	}
+
+	protected Form form;
 	 
 	protected OTObject(Reference ref) {
 			this.uri = ref==null?null:ref.clone();
@@ -69,6 +85,7 @@ public class OTObject implements Comparable<OTObject>{
 		 form.add(name, value);
 		 return this;
 	 }
+	 
 	public int compareTo(OTObject o) {
 		return toString().compareTo(o.toString());
 	}
@@ -77,4 +94,18 @@ public class OTObject implements Comparable<OTObject>{
 		return uri==null?false:toString().equals(obj.toString());
 	}
 	
+	public OTObject readTextLineAsName() throws Exception {
+		ClientResource client = new ClientResource(uri);
+		Representation r=null;
+		try {
+			r =	client.get(MediaType.TEXT_PLAIN);
+			this.name = r.getText().trim();
+		} catch (Exception x) {
+			
+		} finally {
+			try {r.release();} catch (Exception x) {}
+			try {client.release();} catch (Exception x) {}
+		}
+		return this;
+	}
 }
