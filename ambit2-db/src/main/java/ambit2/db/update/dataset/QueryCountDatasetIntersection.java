@@ -22,17 +22,20 @@ public class QueryCountDatasetIntersection extends AbstractQuery<String, String,
 	 */
 	private static final long serialVersionUID = -2679397674845722288L;
 
-	protected static String sql = 
-	"SELECT count(distinct(idchemical)) FROM\n"+
-	"(%s) s1\n"+
-	"join\n"+
-	"(%s) s2\n"+
-	"using(idchemical)";
+	protected static String sql_datasets = 
+	"select count(distinct(s1.idchemical))\n"+
+	"from structure s1 join struc_dataset d1 on d1.idstructure=s1.idstructure\n"+
+	"join structure s2 on s1.idchemical=s2.idchemical\n"+
+	"join struc_dataset d2 on d2.idstructure=s2.idstructure\n"+
+	"where d1.id_srcdataset=? and d2.id_srcdataset=?\n";
 	
-	protected static String sql_dataset = "select idchemical from struc_dataset join structure using(idstructure) where id_srcdataset=?";
-	protected static String sql_query = "select idchemical from query_results where idquery=?";
 	protected String QR_PREFIX = "R";
 	
+	public QueryCountDatasetIntersection() {
+		super();
+		setPageSize(1);
+		setPage(0);
+	}
 	public double calculateMetric(String object) {
 		return 1;
 	}
@@ -63,6 +66,7 @@ public class QueryCountDatasetIntersection extends AbstractQuery<String, String,
 			throw new AmbitException("Invalid id "+key);
 		}
 	}	
+	/*
 	protected String getSubQuery(String key) throws AmbitException {
 		
 		if (key.startsWith(QR_PREFIX)) {
@@ -80,9 +84,9 @@ public class QueryCountDatasetIntersection extends AbstractQuery<String, String,
 			throw new AmbitException("Invalid id "+key);
 		}
 	}
-
+	*/
 	public String getSQL() throws AmbitException {
-		return String.format(sql, getSubQuery(getFieldname()),getSubQuery(getValue()) );
+		return sql_datasets;
 	}
 
 	public String getObject(ResultSet rs) throws AmbitException {
