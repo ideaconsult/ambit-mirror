@@ -82,3 +82,20 @@ ALTER TABLE `models` MODIFY COLUMN `content` LONGBLOB NOT NULL;
 -- 3.0
 ALTER TABLE `structure` DROP INDEX `Index_6`, ADD INDEX `Index_6` USING BTREE(`idchemical`, `preference`, `idstructure`);
 ALTER TABLE `structure` DROP INDEX `Index_pref`, ADD INDEX `Index_pref` USING BTREE( `preference`, `idchemical`);
+
+
+
+select idchemical, comments, group_concat(distinct(value_num)),group_concat(distinct(value)), 
+group_concat(distinct(title)), group_concat(distinct(url)) 
+from property_values left join property_string using(idvalue_string) 
+join structure using(idstructure)
+ join properties using(idproperty)
+  join catalog_references using(idreference) where idchemical = 684 and 
+  ( comments="http://www.opentox.org/api/1.1#ChemicalName" or 
+  comments="http://www.opentox.org/api/1.1#IUPACName" or 
+  comments="http://www.opentox.org/api/1.1#CASRN" or 
+  comments="http://www.opentox.org/api/1.1#SMILES" or 
+  comments="http://www.opentox.org/api/1.1#EINECS" or 
+  comments="http://www.opentox.org/api/1.1#InChI" or
+   comments="http://www.opentox.org/api/1.1#REACHRegistrationDate" ) 
+   group by comments order by comments\G

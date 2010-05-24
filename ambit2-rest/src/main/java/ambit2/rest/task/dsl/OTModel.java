@@ -27,6 +27,8 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -87,6 +89,29 @@ public class OTModel extends OTProcessingResource {
 					 vars = predictedVariables;
 					 sparqlName = "sparql/ModelPredictedVariables.sparql";
 					 break;
+				 }
+				 case model: {
+					 sparqlName = "sparql/Model.sparql";
+				        QueryExecution qe = null;
+				        try {
+				        	
+							Query query = QueryFactory.create(String.format(OTModel.getSparql(sparqlName).toString(),uri,uri));
+							qe = QueryExecutionFactory.create(query,model);
+							ResultSet results = qe.execSelect();
+							
+							
+							while (results.hasNext()) {
+								QuerySolution solution = results.next();
+								RDFNode var = solution.get("title");
+								withName(var.isLiteral()?((Literal)var).getString():((Resource)var).getURI());
+							}
+				        } catch (Exception x) {
+				        	throw x;
+				        } finally {
+				        	try {qe.close();} catch (Exception x) {}
+
+				        }					 
+					return this;
 				 }
 				 default: throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported",varType));
 				 }

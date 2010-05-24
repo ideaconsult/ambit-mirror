@@ -1,6 +1,6 @@
 package ambit2.db.chart;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
@@ -38,7 +38,7 @@ public class Nominal2SimilarityChartGenerator extends ChartGenerator<IStoredQuer
 	"where name='%s' and idquery=%d\n"+
 	"group by value";
 	
-	public Image process(IStoredQuery target) throws AmbitException {
+	public BufferedImage process(IStoredQuery target) throws AmbitException {
 		  JFreeChart pieChart = null;
 
 	      try

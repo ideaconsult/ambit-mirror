@@ -1,6 +1,6 @@
 package ambit2.db.chart;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
@@ -9,24 +9,24 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.jdbc.JDBCXYDataset;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.search.IStoredQuery;
 
-public class PropertiesChartGenerator extends ChartGenerator<IStoredQuery> {
+public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	protected static final String sql = 
 		"select a,b from\n"+
 		"(\n"+
-		"select value_num as a,idchemical from query_results\n"+
+		"select value_num as a,idchemical from struc_dataset join structure using(idstructure)\n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
-		"where name = '%s' and idquery=%d\n"+
+		"where idproperty = %d and id_srcdataset=%d\n"+
 		"group by idchemical,value_num\n"+
 		") as X\n"+
 		"join\n"+
 		"(\n"+
-		"select value_num as b,idchemical from query_results\n"+
+		"select value_num as b,idchemical from struc_dataset join structure using(idstructure)\n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
-		"where name = '%s' and idquery=%d\n"+
+		"where idproperty = %d and id_srcdataset=%d\n"+
 		"group by idchemical,value_num\n"+
 		") as Y\n"+
 		"using(idchemical)\n";
@@ -55,7 +55,7 @@ public class PropertiesChartGenerator extends ChartGenerator<IStoredQuery> {
 	 */
 	private static final long serialVersionUID = 81990940570873057L;
 
-	public Image process(IStoredQuery target) throws AmbitException {
+	public BufferedImage process(SourceDataset target) throws AmbitException {
 		  if ((propertyX == null) || (propertyY == null)) throw new AmbitException("Property not defined");
 
 		  JFreeChart chart = null;
@@ -65,8 +65,8 @@ public class PropertiesChartGenerator extends ChartGenerator<IStoredQuery> {
 	    	  JDBCXYDataset dataset =  new JDBCXYDataset(
 	        		 getConnection(),
 	        		 String.format(sql,
-	        				 propertyX.getName(),target.getId(),
-	        				 propertyY.getName(),target.getId()
+	        				 propertyX.getId(),target.getId(),
+	        				 propertyY.getId(),target.getId()
 	        				 )); 
 	         
 
@@ -85,11 +85,7 @@ public class PropertiesChartGenerator extends ChartGenerator<IStoredQuery> {
 	      }
 	      catch (SQLException sqlEx)    // checked exception
 	      {
-	         System.err.println("Error trying to acquire JDBCPieDataset.");
-	         System.err.println("Error Code: " + sqlEx.getErrorCode());
-	         System.err.println("SQLSTATE:   " + sqlEx.getSQLState());
-	         sqlEx.printStackTrace();
-	         return null;
+	         throw new AmbitException(sqlEx);
 	      }
 
 	}

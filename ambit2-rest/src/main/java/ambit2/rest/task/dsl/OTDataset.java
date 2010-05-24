@@ -165,4 +165,8 @@ public class OTDataset extends OTObject {
 		 ref.setQuery(form.getQueryString());
 		 return dataset(ref);
 	 }	 
+	 @Override
+	public OTDataset withName(String name) {
+		return (OTDataset) super.withName(name);
+	}
 }

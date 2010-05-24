@@ -360,7 +360,7 @@ public class OTDatasetRDFReport extends OTObject {
 		 return form.getQueryString();
 	 }		 
 	
-	 protected String getString(RDFNode node) throws Exception {
+	 public static String getString(RDFNode node) throws Exception {
 		    if (node == null) return "";
 			if (node.isLiteral()) return ((Literal)node).getString();
 			else if (node.isResource()) return String.format("<a href='%s' target=_blank>%s</a>",((Resource)node).getURI(),((Resource)node).getURI());

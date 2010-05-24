@@ -27,6 +27,8 @@ import org.restlet.util.RouteList;
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
+import ambit2.rest.algorithm.chart.ChartResource;
+import ambit2.rest.algorithm.chart.ChartResource.ChartMode;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
@@ -144,6 +146,8 @@ public class AmbitApplication extends TaskApplication {
 		
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		router.attach(StatisticsResource.resource,StatisticsResource.class);
+		router.attach(ChartResource.resource,ChartResource.class);
+		router.attach(String.format("%s/{%s}",ChartResource.resource,ChartResource.resourceKey),ChartResource.class);
 		
 		router.attach(ReportDatasetResource.resource,ReportDatasetResource.class);
 		//test

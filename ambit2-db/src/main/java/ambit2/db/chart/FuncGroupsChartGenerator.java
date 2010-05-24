@@ -1,6 +1,7 @@
 package ambit2.db.chart;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
@@ -24,13 +25,13 @@ public class FuncGroupsChartGenerator extends ChartGenerator<IStoredQuery> {
 	private static final long serialVersionUID = -2988570985723641965L;
 	protected static String sql = 
 		"SELECT * FROM ("+
-		"SELECT name,count(distinct(idchemical)) as 'Number of chemicals' FROM\n"+
+		"SELECT name,count(distinct(query_results.idchemical)) as 'Number of chemicals' FROM\n"+
 		"query_results join property_values using(idstructure) join properties using(idproperty) join catalog_references using(idreference)\n"+
 		"where title='ambit2.descriptors.FunctionalGroupDescriptor' and idquery=%d\n"+
 		"group by idproperty order by 'Number of chemicals' desc ) as M";
 	
 
-	public Image process(IStoredQuery target) throws AmbitException {
+	public BufferedImage process(IStoredQuery target) throws AmbitException {
 		  JFreeChart pieChart = null;
 
 	      try
