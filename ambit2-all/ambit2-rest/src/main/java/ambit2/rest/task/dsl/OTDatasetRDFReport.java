@@ -125,7 +125,7 @@ public class OTDatasetRDFReport extends OTObject {
 
 	}
 
-	protected static String getQueryString(OTDataset dataset, 
+	public static String getQueryString(OTDataset dataset, 
 			boolean showEndpoints,
 			OTFeatures endpoints, 
 			boolean showModels,
